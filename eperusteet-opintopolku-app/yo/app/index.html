@@ -1,0 +1,80 @@
+<!doctype html>
+
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>         <html class="no-js lt-ie10"> <![endif]-->
+<!--[if !(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript" src="/virkailija-raamit/apply-raamit.js"></script>
+    <!-- build:css(.tmp) styles/eperusteet-opintopolku.css -->
+    <link rel="stylesheet" href="styles/eperusteet-opintopolku.css">
+    <!-- endbuild -->
+  </head>
+  <body ng-app="eperusteOpintopolkuApp" style="height:100%; background-color: white">
+    <!-- build:js scripts/ieshims.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+    <!-- endbuild  -->
+    <div class="container-fluid" id="ylasivuankkuri">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="pull-right top-action">
+            <kielenvaihto></kielenvaihto>
+          </div>
+          <eperuste-navi></eperuste-navi>
+          <div class="col-md-12" ui-view></div>
+        </div>
+      </div>
+      <ep-footer></ep-footer>
+      <spinner></spinner>
+      <backtotop></backtotop>
+    </div>
+
+    <!-- build:js scripts/components.js -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.min.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
+    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/popover.js"></script>
+    <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js"></script>
+    <script src="bower_components/angular-ui-utils/ui-utils.min.js"></script>
+    <script src="bower_components/angular-elastic/elastic.js"></script>
+    <script src="bower_components/lodash/lodash.min.js"></script>
+    <script src="bower_components/angular-i18n/angular-locale_fi-fi.js"></script>
+    <script src="bower_components/momentjs/min/moment.min.js"></script>
+    <script src="bower_components/momentjs/lang/fi.js"></script>
+    <script src="bower_components/momentjs/lang/sv.js"></script>
+    <script src="bower_components/angular-cache/dist/angular-cache.min.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/constants.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/states.js"></script>
+
+    <script src="scripts/common/services/kieli.js"></script>
+    <script src="scripts/common/services/lokalisointi.js"></script>
+    <script src="scripts/common/services/kaanna.js"></script>
+    <script src="scripts/common/services/spinner.js"></script>
+    <script src="scripts/common/services/virhe.js"></script>
+
+    <script src="scripts/views/etusivu.js"></script>
+
+    <!-- endbuild -->
+  </body>
+</html>
