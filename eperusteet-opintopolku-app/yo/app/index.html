@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="styles/eperusteet-opintopolku.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="eperusteOpintopolkuApp" style="height:100%; background-color: white">
+  <body ng-app="eperusteOpintopolkuApp">
     <!-- build:js scripts/ieshims.js -->
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
@@ -25,18 +25,22 @@
     <!-- endbuild  -->
     <div class="container-fluid" id="ylasivuankkuri">
       <div class="row">
-        <div class="col-md-12">
-          <div class="pull-right top-action">
-            <kielenvaihto></kielenvaihto>
+        <div class="col-md-12 ylanavigaatio">
+          <div class="inner-container">
+            <ylanavigaatio></ylanavigaatio>
           </div>
-          <eperuste-navi></eperuste-navi>
-          <div class="col-md-12" ui-view></div>
         </div>
       </div>
-      <ep-footer></ep-footer>
-      <spinner></spinner>
-      <backtotop></backtotop>
+      <div class="row sisalto-container">
+        <div class="col-md-12">
+          <div class="inner-container">
+            <div ui-view></div>
+          </div>
+        </div>
+      </div>
     </div>
+    <spinner></spinner>
+    <backtotop></backtotop>
 
     <!-- build:js scripts/components.js -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -69,9 +73,12 @@
 
     <script src="scripts/common/services/kieli.js"></script>
     <script src="scripts/common/services/lokalisointi.js"></script>
+    <script src="scripts/common/services/iconrole.js"></script>
     <script src="scripts/common/services/kaanna.js"></script>
     <script src="scripts/common/services/spinner.js"></script>
     <script src="scripts/common/services/virhe.js"></script>
+
+    <script src="scripts/common/directives/ylanavigaatio.js"></script>
 
     <script src="scripts/views/etusivu.js"></script>
 

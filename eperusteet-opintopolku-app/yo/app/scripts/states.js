@@ -26,17 +26,22 @@ epOpintopolkuApp
     abstract: true
   })
 
-  .state('root.aloitussivu', {
+  .state('root.virhe', {
+    url: '/virhe',
+    templateUrl: 'views/virhe.html',
+    controller: 'VirheController'
+  })
+
+  .state('root.etusivu', {
     url: '',
     templateUrl: 'views/etusivu.html',
     controller: 'EtusivuController'
   })
 
-  .state('root.virhe', {
-    url: '/virhe',
-    templateUrl: 'views/virhe.html',
-    controller: 'VirheController'
+  .state('root.perusopetus', {
+    url: '/perusopetus',
+    templateUrl: 'views/perusopetus/perusopetus.html',
+    controller: function () {}
   });
-
 
 });

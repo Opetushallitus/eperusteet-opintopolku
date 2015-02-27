@@ -1,0 +1,28 @@
+.ylanavigaatio {
+  padding-left: 0;
+  padding-right: 0;
+  background-color: $ylanavi-color;
+}
+
+.ylanavi-container {
+  width: 100%;
+  & a {
+    color: white;
+    font-size: 110%;
+  }
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    li {
+      padding: 16px;
+      display: inline-block;
+      &.active {
+        background-color: $content-bg-color;
+        a {
+          color: $brand-primary;
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 /* normalisoi ie10+:n scrollbar */
-html {
+/*html {
   -ms-overflow-style: scrollbar;
 }
 
@@ -38,10 +38,10 @@ a {
   img, .glyphicon {
     margin-right: 5px;
   }
-}
+}*/
 
 /* ikoni + linkkiteksti */
-.iconlink > .glyphicon {
+/*.iconlink > .glyphicon {
   margin-right: 5px;
 }
 
@@ -59,10 +59,10 @@ label input[type=radio] {
 .modal-body .modal-data {
   margin-top: 15px;
   margin-left: 15px;
-}
+}*/
 
 /* animointia varten */
-.ng-hide-add, .ng-hide-remove {
+/*.ng-hide-add, .ng-hide-remove {
   display: block !important;
 }
 
@@ -243,4 +243,28 @@ strong.ep-match {
     font-size: 10px;
     text-align: center;
   }
+}
+*/
+
+a[href] {
+  outline: 0;
+}
+
+a:focus {
+  text-decoration: none;
+}
+
+body {
+  height: 100%;
+  background-color: $content-bg-color;
+}
+
+.sisalto-container {
+  margin-bottom: 100px;
+}
+
+.inner-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1500px;
 }
