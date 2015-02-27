@@ -1,0 +1,24 @@
+.sisalto-box {
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+$paaotsikko-logo-size: 96px;
+
+.etusivu {
+  margin-top: 40px;
+  h1, h2 {
+    margin-top: 0;
+  }
+  .paaotsikko {
+    background-image: url("http://lorempixel.com/g/96/96/cats/Logo96x96");
+    background-repeat: no-repeat;
+    background-position: 20px 20px;
+    padding-left: $paaotsikko-logo-size + 40px;
+    img {
+
+      float: right;
+    }
+  }
+}

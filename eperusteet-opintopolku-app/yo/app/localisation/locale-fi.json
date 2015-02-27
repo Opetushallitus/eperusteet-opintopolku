@@ -4,5 +4,10 @@
   "navi.perusopetus": "Perusopetus",
   "navi.lukiokoulutus": "Lukiokoulutus",
   "navi.ammatillinenperuskoulutus": "Ammatillinen peruskoulutus",
-  "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus"
+  "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus",
+
+  "etusivu.eperusteet": "ePerusteet",
+  "etusivu.eperusteet.kuvaus": "ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien ja tutkintojen perusteisiin ja tarkistettavien tutkintojen perusteiden valmisteluun kouluasteittain",
+  "etusivu.uusimmat-ammatilliset": "Uusimmat ammatillisen koulutuksen perusteet",
+  "etusivu.tiedotteet": "Tiedotteet"
 }
