@@ -17,8 +17,18 @@ $paaotsikko-logo-size: 96px;
     background-position: 20px 20px;
     padding-left: $paaotsikko-logo-size + 40px;
     img {
-
+      margin-left: 15px;
       float: right;
+    }
+  }
+}
+
+@media (max-width: 850px) {
+  .etusivu {
+    .paaotsikko {
+      img {
+        display: none;
+      }
     }
   }
 }
