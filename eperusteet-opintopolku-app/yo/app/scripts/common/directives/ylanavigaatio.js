@@ -29,11 +29,11 @@ epOpintopolkuApp
 .controller('YlanavigaatioController', function ($scope, $state) {
   $scope.osiot = [
     {label: 'navi.etusivu', state: 'root.etusivu'},
-    {label: 'navi.esiopetus'},
+    {label: 'navi.esiopetus', state: 'root.esiopetus'},
     {label: 'navi.perusopetus', state: 'root.perusopetus'},
-    {label: 'navi.lukiokoulutus'},
-    {label: 'navi.ammatillinenperuskoulutus'},
-    {label: 'navi.ammatillinenaikuiskoulutus'},
+    {label: 'navi.lukiokoulutus', state: 'root.lukiokoulutus'},
+    {label: 'navi.ammatillinenperuskoulutus', state: 'root.selaus.ammatillinenperuskoulutus'},
+    {label: 'navi.ammatillinenaikuiskoulutus', state: 'root.selaus.ammatillinenaikuiskoulutus'},
   ];
 
   $scope.$on('$stateChangeSuccess', function () {

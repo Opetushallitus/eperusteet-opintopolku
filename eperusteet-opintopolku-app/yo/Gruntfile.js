@@ -44,7 +44,7 @@ module.exports = function(grunt) {
       },
       livereload: {
         options: {
-          livereload: LIVERELOAD_PORT,
+          livereload: /*LIVERELOAD_PORT*/ true,
           open: false
         },
         files: [
@@ -74,11 +74,10 @@ module.exports = function(grunt) {
       },
       proxies: [{
         context: '/eperusteet-service',
-        host: 'localhost',
-        port: 8080,
-        https: false,
-        changeOrigin: false,
-        xforward: false
+        host: 'test-virkailija.oph.ware.fi',
+        port: 443,
+        https: true,
+        changeOrigin: true,
       },{
         context: '/virkailija-raamit',
         host: 'localhost',
@@ -377,6 +376,30 @@ module.exports = function(grunt) {
           /* Check that empty href="" are not used */
           pattern : /\s+href=""/m
         },
+      },
+      controllerNaming: {
+        files: [{src: ['<%= yeoman.app %>/scripts/**/*.js']}],
+        options: {
+          /* Enforce CamelCaseController naming */
+          pattern : /\.controller\s*\(\s*'([a-z][^']+|([^'](?!Controller))+)'/g
+        },
+      }
+    },
+    maxlines: {
+      options: {
+        limit: 500
+      },
+      javascript: {
+        options: {
+          limit: 300
+        },
+        files: [{src: ['<%= yeoman.app %>/scripts/**/*.js']}],
+      },
+      scss: {
+        options: {
+          limit: 500
+        },
+        files: [{src: ['<%= yeoman.app %>/styles/**/*.scss']}],
       }
     }
   });

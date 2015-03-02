@@ -1,4 +1,6 @@
 {
+  "tyhjenna": "Tyhjennä",
+
   "navi.etusivu": "Etusivu",
   "navi.esiopetus": "Esiopetus",
   "navi.perusopetus": "Perusopetus",
@@ -9,5 +11,27 @@
   "etusivu.eperusteet": "ePerusteet",
   "etusivu.eperusteet.kuvaus": "ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien ja tutkintojen perusteisiin ja tarkistettavien tutkintojen perusteiden valmisteluun kouluasteittain",
   "etusivu.uusimmat-ammatilliset": "Uusimmat ammatillisen koulutuksen perusteet",
-  "etusivu.tiedotteet": "Tiedotteet"
+  "etusivu.tiedotteet": "Tiedotteet",
+
+  "koulutustyyppi_1": "Ammatillinen perustutkinto",
+  "koulutustyyppi_11": "Ammattitutkinto",
+  "koulutustyyppi_12": "Erikoisammattitutkinto",
+  "koulutustyyppi_15": "Esiopetus",
+  "koulutustyyppi_16": "Perusopetus",
+  "koulutustyyppi_6": "Lisäopetus",
+
+  "haku-otsikko": "Perusteen haku",
+  "haku-koulutusala": "Koulutusala",
+  "haku-voimaantulopvm" : "Voimaantulopvm.",
+  "haku-tyyppi": "Tyyppi",
+  "haku-nimi": "Nimi",
+  "haku-kaikki-alat": "Kaikki koulutusalat",
+  "haku-kaikki-tutkinnot": "Kaikki tutkinnot",
+  "haku-nayta-siirtymaajalla-olevat": "Näytä siirtymäajalla olevat",
+  "haku-tutkinnon-nimi-placeholder": "Tutkinnon nimi",
+  "haku-tulosten-maara": "Löydettyjen perusteiden määrä:",
+  "haku-kieli": "Kieli",
+  "haku-hakuehdot" : "Hakuehdot",
+  "haku-opintoala" : "Opintoala",
+  "haku-kaikki-opintoalat" : "Kaikki opintoalat"
 }

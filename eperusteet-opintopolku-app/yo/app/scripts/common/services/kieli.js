@@ -20,6 +20,7 @@
 epOpintopolkuApp
   .service('Kieli', function ($rootScope, $state, $stateParams) {
     var sisaltokieli = 'fi';
+    var uikieli = 'fi';
 
     var SISALTOKIELET = [
       'fi',
@@ -70,8 +71,13 @@ epOpintopolkuApp
 
     this.setUiKieli = function (kielikoodi) {
       if (isValidKielikoodi(kielikoodi)) {
+        uikieli = kielikoodi;
         $state.go($state.current.name, _.merge($stateParams, {lang: kielikoodi}), {reload: true});
       }
+    };
+
+    this.getUiKieli = function () {
+      return uikieli;
     };
 
     this.isValidKielikoodi = isValidKielikoodi;
@@ -84,12 +90,12 @@ epOpintopolkuApp
       scope: {
         modal: '@modal'
       },
-      controller: 'KieliCtrl',
+      controller: 'KieliController',
       template: '<div></div>'
     };
   })
 
-  .controller('KieliCtrl', function($scope, $stateParams, $state, Kieli, $q) {
+  .controller('KieliController', function($scope, $stateParams, $state, Kieli, $q) {
     $scope.isModal = $scope.modal === 'true';
     $scope.sisaltokielet = Kieli.availableSisaltokielet;
     $scope.sisaltokieli = Kieli.getSisaltokieli();
