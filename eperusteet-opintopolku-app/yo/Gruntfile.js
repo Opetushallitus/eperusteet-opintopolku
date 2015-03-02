@@ -92,6 +92,7 @@ module.exports = function(grunt) {
             return [
               proxySnippet,
               lrSnippet,
+              mountFolder(connect, process.env.HOME +'/oph-configuration/eperusteet-opintopolku'),
               mountFolder(connect, '.tmp'),
               mountFolder(connect, yeomanConfig.app)
             ];

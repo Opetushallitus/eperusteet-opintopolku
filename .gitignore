@@ -7,3 +7,4 @@ nbproject/
 npm-debug.log
 *.iml
 .idea/
+target/
