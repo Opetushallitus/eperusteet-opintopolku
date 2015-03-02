@@ -42,6 +42,26 @@ epOpintopolkuApp
     url: '/perusopetus',
     templateUrl: 'views/perusopetus/perusopetus.html',
     controller: function () {}
+  })
+
+  .state('root.selaus', {
+    url: '/selaus',
+    template: '<div ui-view></div>'
+  })
+
+  .state('root.selaus.ammatillinenperuskoulutus', {
+    url: '/ammatillinenperuskoulutus',
+    templateUrl: 'views/haku/haku.html',
+    controller: 'HakuController',
+    resolve: {'koulutusalaService': 'Koulutusalat'}
+  })
+
+  .state('root.selaus.ammatillinenaikuiskoulutus', {
+    url: '/ammatillinenaikuiskoulutus',
+    templateUrl: 'views/haku/haku.html',
+    controller: 'HakuController',
+    resolve: {'koulutusalaService': 'Koulutusalat'}
   });
+
 
 });

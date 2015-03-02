@@ -377,6 +377,30 @@ module.exports = function(grunt) {
           /* Check that empty href="" are not used */
           pattern : /\s+href=""/m
         },
+      },
+      controllerNaming: {
+        files: [{src: ['<%= yeoman.app %>/scripts/**/*.js']}],
+        options: {
+          /* Enforce CamelCaseController naming */
+          pattern : /\.controller\s*\(\s*'([a-z][^']+|([^'](?!Controller))+)'/g
+        },
+      }
+    },
+    maxlines: {
+      options: {
+        limit: 500
+      },
+      javascript: {
+        options: {
+          limit: 300
+        },
+        files: [{src: ['<%= yeoman.app %>/scripts/**/*.js']}],
+      },
+      scss: {
+        options: {
+          limit: 500
+        },
+        files: [{src: ['<%= yeoman.app %>/styles/**/*.scss']}],
       }
     }
   });

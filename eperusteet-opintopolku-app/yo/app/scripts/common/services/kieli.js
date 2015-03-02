@@ -84,12 +84,12 @@ epOpintopolkuApp
       scope: {
         modal: '@modal'
       },
-      controller: 'KieliCtrl',
+      controller: 'KieliController',
       template: '<div></div>'
     };
   })
 
-  .controller('KieliCtrl', function($scope, $stateParams, $state, Kieli, $q) {
+  .controller('KieliController', function($scope, $stateParams, $state, Kieli, $q) {
     $scope.isModal = $scope.modal === 'true';
     $scope.sisaltokielet = Kieli.availableSisaltokielet;
     $scope.sisaltokieli = Kieli.getSisaltokieli();

@@ -32,8 +32,8 @@ epOpintopolkuApp
     {label: 'navi.esiopetus'},
     {label: 'navi.perusopetus', state: 'root.perusopetus'},
     {label: 'navi.lukiokoulutus'},
-    {label: 'navi.ammatillinenperuskoulutus'},
-    {label: 'navi.ammatillinenaikuiskoulutus'},
+    {label: 'navi.ammatillinenperuskoulutus', state: 'root.selaus.ammatillinenperuskoulutus'},
+    {label: 'navi.ammatillinenaikuiskoulutus', state: 'root.selaus.ammatillinenaikuiskoulutus'},
   ];
 
   $scope.$on('$stateChangeSuccess', function () {
