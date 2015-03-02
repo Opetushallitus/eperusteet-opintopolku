@@ -44,10 +44,11 @@ epOpintopolkuApp
     }
   };
 })
-.directive('spinner', function() {
+.directive('spinner', function(usSpinnerService) {
+  // Väri on sama kuin $ylanavi-color
   return {
     template: '<div id="global-spinner" ng-show="isSpinning">' +
-              '<span class="glyphicon glyphicon-refresh spin"></span>' +
+              '<span us-spinner="{color: \'#009FCF\', length: 12, trail: 100, corners: 1, width: 8, radius: 18, lines: 13, shadow: false}" spinner-key="globalspinner"></span>' +
               '</div>',
     restrict: 'E',
     link: function($scope) {
@@ -55,6 +56,11 @@ epOpintopolkuApp
 
       function spin(state) {
         $scope.isSpinning = state;
+        if (state) {
+          usSpinnerService.spin('globalspinner');
+        } else {
+          usSpinnerService.stop('globalspinner');
+        }
       }
 
       $scope.$on('event:spinner_on', function() {

@@ -29,7 +29,8 @@ var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
   'ui.bootstrap',
   'ui.utils',
   'monospaced.elastic',
-  'angular-data.DSCacheFactory'
+  'angular-data.DSCacheFactory',
+  'angularSpinner'
 ]);
 
 /* jshint ignore:end */
