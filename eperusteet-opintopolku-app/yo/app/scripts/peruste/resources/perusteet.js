@@ -22,6 +22,8 @@ epOpintopolkuApp
   this.SERVICE = serviceLoc;
   this.PERUSTEET_ROOT = serviceLoc + '/perusteet';
   this.PERUSTEET = this.PERUSTEET_ROOT + '/:perusteId';
+  this.PERUSTEENOSAT = serviceLoc + '/perusteenosat/:osanId';
+  this.PERUSTEENOSAVIITE = serviceLoc + '/perusteenosat/viite/:viiteId';
   this.SUORITUSTAPA = this.PERUSTEET + '/suoritustavat/:suoritustapa';
   this.SUORITUSTAPASISALTO = this.SUORITUSTAPA + '/sisalto';
   this.ARVIOINTIASTEIKOT = serviceLoc + '/arviointiasteikot/:asteikkoId';
@@ -57,8 +59,7 @@ epOpintopolkuApp
     perusteId: '@id',
     suoritustapa: '@suoritustapa'
   }, {
-    get: {method: 'GET', isArray: true},
-    update: {method: 'PUT'}
+    get: {method: 'GET', isArray: true}
   });
 })
 
@@ -70,16 +71,34 @@ epOpintopolkuApp
   });
 })
 
+.factory('PerusteTutkintonimikekoodit', function($resource, epResource) {
+  return $resource(epResource.PERUSTEET + '/tutkintonimikekoodit/:nimikeId', {
+    perusteId: '@id',
+    nimikeId: '@id'
+  }, {
+    get: {method: 'GET', isArray: true}
+  });
+})
+
+.factory('PerusteenOsat', function($resource, epResource) {
+  var loc = epResource.PERUSTEENOSAT;
+  var viite = epResource.PERUSTEENOSAVIITE;
+  return $resource(loc, {
+    osanId: '@id'
+  }, {
+    byKoodiUri: {method: 'GET', isArray: true, params: {koodi: true}},
+    versiot: {method: 'GET', isArray: true, url: loc + '/versiot'},
+    getVersio: {method: 'GET', url: loc + '/versio/:versioId'},
+    getByViite: {method: 'GET', url: viite},
+    versiotByViite: {method: 'GET', isArray: true, url: viite + '/versiot'},
+    getVersioByViite: {method: 'GET', url: viite + '/versio/:versioId'}
+  });
+})
+
 .factory('SuoritustapaSisalto', function($resource, epResource) {
   return $resource(epResource.SUORITUSTAPASISALTO, {
     perusteId: '@id',
     suoritustapa: '@suoritustapa'
-  }, {
-    add: {method: 'PUT'},
-    addChild: {
-      method: 'POST',
-      url: epResource.SUORITUSTAPASISALTO + '/:perusteenosaViiteId/lapsi/:childId'
-    }
   });
 })
 
@@ -88,4 +107,34 @@ epOpintopolkuApp
     id: '@id',
     perusteId: '@perusteId'
   });
+})
+
+.service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {
+  this.perusteellaTutkintonimikkeet = function(peruste) {
+    if (_.isObject(peruste)) {
+      peruste = peruste.koulutustyyppi;
+    }
+    return _.isString(peruste) &&
+      YleinenData.koulutustyyppiInfo[peruste] && YleinenData.koulutustyyppiInfo[peruste].hasTutkintonimikkeet;
+  };
+
+  this.get = function (perusteId, object) {
+    PerusteTutkintonimikekoodit.get({ perusteId: perusteId }, function(res) {
+      object.koodisto = _.map(res, function(osa) {
+        function parsiNimi(kentta) {
+          if (osa[kentta + 'Arvo']) {
+            var nimi = osa.b[osa[kentta + 'Arvo']].metadata;
+            osa['$' + kentta + 'Nimi'] = _.zipObject(_.map(nimi, 'kieli'), _.map(nimi, 'nimi'));
+          }
+        }
+
+        parsiNimi('osaamisala');
+        parsiNimi('tutkintonimike');
+        parsiNimi('tutkinnonOsa');
+        delete osa.b;
+        return osa;
+      });
+      object.koodisto.$resolved = true;
+    });
+  };
 });

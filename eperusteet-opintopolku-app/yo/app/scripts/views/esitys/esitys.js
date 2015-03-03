@@ -80,7 +80,6 @@ epOpintopolkuApp
     $scope.valittuSisalto = $scope.$parent.sisalto[$stateParams.osanId];
     if (!$scope.valittuSisalto) {
       var params = _.extend(_.clone($stateParams), {
-        // TODO siirry käyttämään YleinenData.koulutustyyppiInfo:a
         suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
       });
       $state.go('root.esitys.peruste.rakenne', params);
@@ -145,12 +144,15 @@ epOpintopolkuApp
     $scope.yksikko = Algoritmit.perusteenSuoritustavanYksikko(peruste, $scope.suoritustapa);
 
     $scope.vaihdaSuoritustapa = function(suoritustapa) {
-      $state.go('root.esitys.peruste', _.merge(_.clone($stateParams), { suoritustapa: suoritustapa }), { reload: true });
+      // TODO debug this
+      $state.go('root.esitys.peruste', {
+        perusteId: $stateParams.perusteId,
+        suoritustapa: suoritustapa
+      }, { reload: true });
     };
 
     if ($state.current.name === 'root.esitys.peruste') {
       var params = _.extend(_.clone($stateParams), {
-        // TODO siirry käyttämään YleinenData.koulutustyyppiInfo:a
         suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
       });
       $state.go('root.esitys.peruste.rakenne', params);
