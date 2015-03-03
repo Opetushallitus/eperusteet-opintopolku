@@ -14,19 +14,30 @@
  * European Union Public Licence for more details.
  */
 
-
 'use strict';
 
 epOpintopolkuApp
-.constant('ORGANISATION_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
-.constant('LOKALISOINTI_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
-.constant('AUTHENTICATION_SERVICE_LOC', '/authentication-service/resources')
-.constant('REQUEST_TIMEOUT', 10000)
-.constant('SPINNER_WAIT', 100)
-.constant('NOTIFICATION_DELAY_SUCCESS', 4000)
-.constant('NOTIFICATION_DELAY_WARNING', 10000)
-.constant('LUKITSIN_MINIMI', 5000)
-.constant('LUKITSIN_MAKSIMI', 20000)
-.constant('TEXT_HIERARCHY_MAX_DEPTH', 8)
-.constant('SHOW_VERSION_FOOTER', true)
-;
+.service('eperusteetConfig', function($http, $q) {
+  var serviceLocation = '/eperusteet-service/api';
+  var deferred = $q.defer();
+
+  $http({
+    url: '/config.json'
+  }).success(function (res) {
+    if (!res['eperusteet-service']) {
+      deferred.resolve('Virheellinen configuraatio: config.json: "eperusteet-service" puuttuu');
+    }
+    serviceLocation = res['eperusteet-service'] + '/api';
+    deferred.resolve(true);
+  }).error(function () {
+    deferred.resolve('Virheellinen configuraatio: config.json puuttuu');
+  });
+
+  this.init = function () {
+    return deferred.promise;
+  };
+
+  this.getServiceLocation = function () {
+    return serviceLocation;
+  };
+});

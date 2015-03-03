@@ -73,12 +73,6 @@ module.exports = function(grunt) {
         hostname: '0.0.0.0'
       },
       proxies: [{
-        context: '/eperusteet-service',
-        host: 'test-virkailija.oph.ware.fi',
-        port: 443,
-        https: true,
-        changeOrigin: true,
-      },{
         context: '/virkailija-raamit',
         host: 'localhost',
         port: 8080,

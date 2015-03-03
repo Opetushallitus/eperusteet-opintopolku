@@ -23,7 +23,17 @@ epOpintopolkuApp
   .state('root', {
     url: '/:lang',
     template: '<div ui-view></div>',
-    abstract: true
+    abstract: true,
+    resolve: {
+      serviceConfig: ['eperusteetConfig', function (eperusteetConfig) {
+        return eperusteetConfig.init();
+      }],
+      configCheck: ['serviceConfig', function (serviceConfig) {
+        if (_.isString(serviceConfig)) {
+          console.error(serviceConfig);
+        }
+      }]
+    }
   })
 
   .state('root.virhe', {

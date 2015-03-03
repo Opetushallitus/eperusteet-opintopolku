@@ -17,12 +17,13 @@
 'use strict';
 
 epOpintopolkuApp
-.factory('Perusteet', function($resource, SERVICE_LOC) {
-  return $resource(SERVICE_LOC + '/perusteet/:perusteId', {
+.factory('Perusteet', function($resource, eperusteetConfig) {
+  var serviceLoc = eperusteetConfig.getServiceLocation();
+  return $resource(serviceLoc + '/perusteet/:perusteId', {
     perusteId: '@id'
   }, {
-    info: {method: 'GET', url: SERVICE_LOC + '/perusteet/info'},
-    valittavatKielet: {method: 'GET', url: SERVICE_LOC + '/perusteet/valittavatkielet', isArray: true},
-    diaari: {method: 'GET', url: SERVICE_LOC + '/perusteet/diaari'}
+    info: {method: 'GET', url: serviceLoc + '/perusteet/info'},
+    valittavatKielet: {method: 'GET', url: serviceLoc + '/perusteet/valittavatkielet', isArray: true},
+    diaari: {method: 'GET', url: serviceLoc + '/perusteet/diaari'}
   });
 });
