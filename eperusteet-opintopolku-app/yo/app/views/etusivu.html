@@ -30,7 +30,7 @@
         <h2 kaanna="etusivu.uusimmat-ammatilliset"></h2>
         <ul class="uusimmat">
           <li ng-repeat="peruste in uusimmat">
-            <a ng-bind="peruste.nimi | kaanna"></a>
+            <a ng-href="{{peruste.url}}" ng-bind="peruste.nimi | kaanna"></a>
           </li>
         </ul>
         <div class="am-linkit">

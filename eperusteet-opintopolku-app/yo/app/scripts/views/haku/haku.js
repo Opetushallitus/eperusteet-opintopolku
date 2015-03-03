@@ -66,7 +66,7 @@ epOpintopolkuApp
 })
 
 .controller('HakuController', function($scope, $rootScope, $state, Perusteet, Haku,
-  koulutusalaService, Kieli) {
+  koulutusalaService, Kieli, YleinenData) {
   var pat = '';
   // Viive, joka odotetaan, ennen kuin haku nimi muutoksesta lähtee serverille.
   var hakuViive = 300; //ms
@@ -86,7 +86,7 @@ epOpintopolkuApp
   }
   setHakuparametrit();
 
-  $scope.koulutustyypit = ['koulutustyyppi_1', 'koulutustyyppi_11', 'koulutustyyppi_12'];
+  $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
 
   $scope.tyhjenna = function() {
     $scope.nykyinenSivu = 1;

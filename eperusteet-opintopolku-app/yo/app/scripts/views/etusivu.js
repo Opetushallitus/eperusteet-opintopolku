@@ -17,7 +17,7 @@
 'use strict';
 
 epOpintopolkuApp
-.controller('EtusivuController', function ($scope, Kieli, Perusteet) {
+.controller('EtusivuController', function ($scope, Kieli, Perusteet, $state) {
   $scope.uusimmat = [];
   var uikieli = Kieli.getUiKieli();
   var params = {
@@ -36,5 +36,11 @@ epOpintopolkuApp
   Perusteet.get(params, function (res) {
     // TODO varmista että uusimmat, pvm?
     $scope.uusimmat = res.data;
+    _.each($scope.uusimmat, function (peruste) {
+      peruste.url = $state.href('root.esitys.peruste', {
+        perusteId: peruste.id,
+        suoritustapa: params.suoritustapa
+      });
+    });
   });
 });

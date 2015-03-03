@@ -26,7 +26,7 @@ epOpintopolkuApp
   };
 })
 
-.controller('YlanavigaatioController', function ($scope, $state) {
+.controller('YlanavigaatioController', function ($scope, $state, $stateParams) {
   $scope.osiot = [
     {label: 'navi.etusivu', state: 'root.etusivu'},
     {label: 'navi.esiopetus', state: 'root.esiopetus'},
@@ -40,6 +40,7 @@ epOpintopolkuApp
     _.each($scope.osiot, function (osio) {
       // TODO parent state matching
       osio.active = $state.current.name === osio.state;
+      osio.url = $state.href(osio.state, {lang: $stateParams.lang});
     });
   });
 });

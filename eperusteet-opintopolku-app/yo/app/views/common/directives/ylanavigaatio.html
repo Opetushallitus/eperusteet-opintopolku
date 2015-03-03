@@ -1,7 +1,7 @@
 <div class="ylanavi-container" role="navigation">
   <ul>
     <li ng-repeat="osio in osiot" ng-class="{active: osio.active}">
-      <a ui-sref="{{osio.state}}" kaanna="osio.label"></a>
+      <a ng-href="{{osio.url}}" kaanna="osio.label"></a>
     </li>
   </ul>
 </div>

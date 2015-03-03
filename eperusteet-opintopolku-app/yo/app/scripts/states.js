@@ -54,6 +54,8 @@ epOpintopolkuApp
     controller: function () {}
   })
 
+  /* HAKU */
+
   .state('root.selaus', {
     url: '/selaus',
     template: '<div ui-view></div>'
@@ -71,6 +73,78 @@ epOpintopolkuApp
     templateUrl: 'views/haku/haku.html',
     controller: 'HakuController',
     resolve: {'koulutusalaService': 'Koulutusalat'}
+  })
+
+  /* ESITYS */
+
+  .state('root.esitys', {
+    url: '/esitys',
+    template: '<div ui-view></div>'
+  })
+
+  .state('root.esitys.peruste', {
+    url: '/:perusteId/:suoritustapa',
+    templateUrl: 'views/esitys/esitys.html',
+    controller: 'EsitysController',
+    resolve: {
+      peruste: function(serviceConfig, $stateParams, Perusteet) {
+        return Perusteet.get({ perusteId: $stateParams.perusteId }).$promise;
+      },
+      sisalto: function(serviceConfig, $stateParams, SuoritustapaSisalto) {
+        return SuoritustapaSisalto.get({ perusteId: $stateParams.perusteId, suoritustapa: $stateParams.suoritustapa }).$promise;
+      },
+      arviointiasteikot: function(serviceConfig, Arviointiasteikot) {
+        return Arviointiasteikot.list({}).$promise;
+      },
+      tutkinnonOsat: function(serviceConfig, $stateParams, PerusteTutkinnonosat) {
+        return PerusteTutkinnonosat.query({ perusteId: $stateParams.perusteId, suoritustapa: $stateParams.suoritustapa }).$promise;
+      },
+      koulutusalaService: function (serviceConfig, Koulutusalat) {
+        return Koulutusalat;
+      },
+      opintoalaService: function (serviceConfig, Opintoalat) {
+        return Opintoalat;
+      }
+    }
+  })
+
+  .state('root.esitys.peruste.rakenne', {
+    url: '/rakenne',
+    templateUrl: 'views/esitys/rakenne.html',
+    controller: 'EsitysRakenneController',
+    resolve: {
+      // FIXME: ui-router bug or some '$on'-callback manipulating $stateParams?
+      // $stateParams changes between config and controller
+      //
+      // Got to live third-party libs
+      realParams: function($stateParams) {
+        return _.clone($stateParams);
+      },
+    }
+  })
+
+  .state('root.esitys.peruste.tutkinnonosat', {
+    url: '/tutkinnonosat',
+    templateUrl: 'views/esitys/tutkinnonosat.html',
+    controller: 'EsitysTutkinnonOsatController'
+  })
+
+  .state('root.esitys.peruste.tutkinnonosa', {
+    url: '/tutkinnonosat/:id',
+    templateUrl: 'views/esitys/tutkinnonosa.html',
+    controller: 'EsitysTutkinnonOsaController'
+  })
+
+  .state('root.esitys.peruste.tekstikappale', {
+    url: '/sisalto/:osanId',
+    templateUrl: 'views/esitys/sisalto.html',
+    controller: 'EsitysSisaltoController'
+  })
+
+  .state('root.esitys.peruste.tiedot', {
+    url: '/tiedot',
+    templateUrl: 'views/esitys/tiedot.html',
+    controller: 'EsitysTiedotController'
   });
 
 

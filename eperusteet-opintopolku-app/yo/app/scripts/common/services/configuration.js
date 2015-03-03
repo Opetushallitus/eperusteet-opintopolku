@@ -19,21 +19,26 @@
 epOpintopolkuApp
 .service('eperusteetConfig', function($http, $q) {
   var serviceLocation = '/eperusteet-service/api';
-  var deferred = $q.defer();
-
-  $http({
-    url: '/config.json'
-  }).success(function (res) {
-    if (!res['eperusteet-service']) {
-      deferred.resolve('Virheellinen configuraatio: config.json: "eperusteet-service" puuttuu');
-    }
-    serviceLocation = res['eperusteet-service'] + '/api';
-    deferred.resolve(true);
-  }).error(function () {
-    deferred.resolve('Virheellinen configuraatio: config.json puuttuu');
-  });
+  var inited = false;
 
   this.init = function () {
+    var deferred = $q.defer();
+
+    if (!inited) {
+      inited = true;
+      $http({
+        url: '/config.json'
+      }).success(function (res) {
+        if (!res['eperusteet-service']) {
+          deferred.resolve('Virheellinen configuraatio: config.json: "eperusteet-service" puuttuu');
+        }
+        serviceLocation = res['eperusteet-service'] + '/api';
+        deferred.resolve(true);
+      }).error(function () {
+        deferred.resolve('Virheellinen configuraatio: config.json puuttuu');
+      });
+    }
+
     return deferred.promise;
   };
 
