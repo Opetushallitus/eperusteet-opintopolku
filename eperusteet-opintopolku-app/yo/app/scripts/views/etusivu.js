@@ -17,6 +17,24 @@
 'use strict';
 
 epOpintopolkuApp
-.controller('EtusivuController', function () {
-  
+.controller('EtusivuController', function ($scope, Kieli, Perusteet) {
+  $scope.uusimmat = [];
+  var uikieli = Kieli.getUiKieli();
+  var params = {
+    nimi: '',
+    koulutusala: '',
+    tyyppi: 'koulutustyyppi_1',
+    kieli: uikieli,
+    opintoala: '',
+    siirtyma: false,
+    sivu: 0,
+    sivukoko: 7,
+    suoritustapa: 'ops',
+    perusteTyyppi: 'normaali',
+    tila: 'valmis'
+  };
+  Perusteet.get(params, function (res) {
+    // TODO varmista että uusimmat, pvm?
+    $scope.uusimmat = res.data;
+  });
 });

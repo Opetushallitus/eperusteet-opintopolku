@@ -28,6 +28,21 @@
     <div class="col-lg-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="etusivu.uusimmat-ammatilliset"></h2>
+        <ul class="uusimmat">
+          <li ng-repeat="peruste in uusimmat">
+            <a ng-bind="peruste.nimi | kaanna"></a>
+          </li>
+        </ul>
+        <div class="am-linkit">
+          <ul>
+            <li>
+              <span class="link-prepend">&raquo;</span><a ui-sref="root.selaus.ammatillinenperuskoulutus"><span kaanna="'navi.ammatillinenperuskoulutus'"></span></a>
+            </li>
+            <li>
+              <span class="link-prepend">&raquo;</span><a ui-sref="root.selaus.ammatillinenaikuiskoulutus"><span kaanna="'navi.ammatillinenaikuiskoulutus'"></span></a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-lg-4 col-md-6">

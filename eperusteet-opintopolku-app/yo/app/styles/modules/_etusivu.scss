@@ -38,3 +38,30 @@ $paaotsikko-logo-size: 96px;
     }
   }
 }
+
+.uusimmat {
+  list-style-type: none;
+  padding-left: 0;
+  padding-bottom: 10px;
+  line-height: 2em;
+}
+
+.am-linkit {
+  margin-left: -20px;
+  margin-right: -20px;
+  padding-top: 20px;
+  border-top: 1px solid $content-bg-color;
+  ul {
+    list-style-type: none;
+    padding-left: 20px;
+    line-height: 2.5em;
+    li a {
+      font-size: 120%;
+    }
+  }
+}
+
+.link-prepend {
+  font-size: 120%;
+  margin-right: 10px;
+}

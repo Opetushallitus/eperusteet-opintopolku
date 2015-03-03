@@ -270,3 +270,8 @@ body {
   padding-left: 15px;
   padding-right: 15px;
 }
+
+/* aseta myös bootstrapin $font-size-base samaksi */
+body {
+  font-size: 14px !important;
+}
