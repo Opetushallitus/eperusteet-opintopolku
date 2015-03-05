@@ -38,13 +38,10 @@ a {
   img, .glyphicon {
     margin-right: 5px;
   }
-}*/
-
-/* ikoni + linkkiteksti */
-/*.iconlink > .glyphicon {
-  margin-right: 5px;
 }
+*/
 
+/*
 label input[type=radio] {
   margin-right: 5px;
   top: 0px;
@@ -161,39 +158,6 @@ $lukko-inner: 1.4em;
   .muokattu { width: 20%; }
 }
 
-$backtotop-size: 48px;
-#backtotop {
-  &.ng-hide-add, &.ng-hide-remove {
-    transition: 0.2s linear all;
-  }
-  &.ng-hide-add.ng-hide-add-active, &.ng-hide-remove {
-    opacity: 0;
-  }
-  &.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
-    opacity: 1;
-  }
-  position: fixed;
-  bottom: 5px;
-  right: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-  a {
-    .glyphicon {
-      margin-right: 2px;
-    }
-    display: block;
-    text-align: center;
-    border: 2px solid rgba(0,0,0,0.8);
-    border-radius: 5px;
-    font-size: $backtotop-size*0.6;
-    line-height: $backtotop-size;
-    width: $backtotop-size;
-    height: $backtotop-size;
-    &:hover, &:focus, &:active, & *:hover, & *:focus, & *:active {
-      text-decoration: none;
-    }
-  }
-}
-
 *[contenteditable="false"].cke_focus {
   outline: none;
 }
@@ -246,6 +210,41 @@ strong.ep-match {
 }
 */
 
+$backtotop-size: 48px;
+#backtotop {
+  &.ng-hide-add, &.ng-hide-remove {
+    transition: 0.2s linear all;
+  }
+  &.ng-hide-add.ng-hide-add-active, &.ng-hide-remove {
+    opacity: 0;
+  }
+  &.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
+    opacity: 1;
+  }
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(255, 255, 255, 0.5);
+  a {
+    cursor: pointer;
+    .glyphicon {
+      margin-right: 2px;
+    }
+    display: block;
+    text-align: center;
+    border: 2px solid rgba(0,0,0,0.8);
+    border-radius: 5px;
+    font-size: $backtotop-size*0.6;
+    line-height: $backtotop-size;
+    width: $backtotop-size;
+    height: $backtotop-size;
+    &:hover, &:focus, &:active, & *:hover, & *:focus, & *:active {
+      text-decoration: none;
+    }
+  }
+}
+
+
 a[href] {
   outline: 0;
 }
@@ -274,4 +273,9 @@ body {
 /* aseta myös bootstrapin $font-size-base samaksi */
 body {
   font-size: 14px !important;
+}
+
+/* ikoni + linkkiteksti */
+.iconlink > .glyphicon, a > *[icon-role] > .glyphicon {
+  margin-right: 5px;
 }

@@ -14,12 +14,12 @@
 @import "modules/tutkinnonosat";
 @import "modules/tutkinnonosa";
 @import "modules/tekstikappale";
+@import "modules/tutkinnonosa";
 @import "modules/perusteprojekti";
 @import "modules/notifikaatiot";
 @import "modules/koodisto";
 @import "modules/editointikontrollit";
 @import "modules/kommentit";
-@import "modules/esitys";
 @import "modules/perusopetus";
 @import "modules/sisalto";
 @import "modules/termisto";*/
@@ -28,3 +28,6 @@
 @import "modules/ylanavigaatio";
 @import "modules/etusivu";
 @import "modules/haku";
+
+@import "modules/esitys";
+@import "modules/tutkinnonosat";

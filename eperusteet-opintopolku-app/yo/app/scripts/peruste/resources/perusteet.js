@@ -109,6 +109,23 @@ epOpintopolkuApp
   });
 })
 
+.factory('TutkinnonOsanOsaAlue', function($resource, epResource) {
+  return $resource(epResource.SERVICE + '/perusteenosat/:viiteId/osaalue/:osaalueenId', {
+    osaalueenId: '@id'
+  }, {
+    list: {method: 'GET', isArray: true, url: epResource.PERUSTEENOSAT + '/osaalueet'},
+    versioList: {method: 'GET', isArray: true, url: epResource.PERUSTEENOSAT + '/osaalueet/versio/:versioId'}
+  });
+})
+
+.factory('Osaamistavoite', function($resource, epResource) {
+  return $resource(epResource.PERUSTEENOSAT + '/osaalue/:osaalueenId/osaamistavoite/:osaamistavoiteId', {
+    osaamistavoiteId: '@id'
+  }, {
+    list: {method: 'GET', isArray: true, url: epResource.PERUSTEENOSAT + '/osaalue/:osaalueenId/osaamistavoitteet'}
+  });
+})
+
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {
   this.perusteellaTutkintonimikkeet = function(peruste) {
     if (_.isObject(peruste)) {

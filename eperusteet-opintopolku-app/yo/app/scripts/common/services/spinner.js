@@ -44,7 +44,7 @@ epOpintopolkuApp
     }
   };
 })
-.directive('spinner', function(usSpinnerService) {
+.directive('spinner', function(usSpinnerService, $timeout) {
   // Väri on sama kuin $ylanavi-color
   return {
     template: '<div id="global-spinner" ng-show="isSpinning">' +
@@ -68,7 +68,9 @@ epOpintopolkuApp
       });
 
       $scope.$on('event:spinner_off', function() {
-        spin(false);
+        $timeout(function () {
+          spin(false);
+        }, 100);
       });
     }
   };

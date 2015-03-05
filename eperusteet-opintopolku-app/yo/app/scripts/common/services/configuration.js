@@ -37,6 +37,8 @@ epOpintopolkuApp
       }).error(function () {
         deferred.resolve('Virheellinen configuraatio: config.json puuttuu');
       });
+    } else {
+      deferred.resolve(true);
     }
 
     return deferred.promise;

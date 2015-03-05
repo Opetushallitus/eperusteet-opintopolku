@@ -1,5 +1,6 @@
 {
   "tyhjenna": "Tyhjennä",
+  "takaisin-ylos": "Takaisin ylös",
 
   "navi.etusivu": "Etusivu",
   "navi.esiopetus": "Esiopetus",
@@ -36,5 +37,35 @@
   "haku-kieli": "Kieli",
   "haku-hakuehdot" : "Hakuehdot",
   "haku-opintoala" : "Opintoala",
-  "haku-kaikki-opintoalat" : "Kaikki opintoalat"
+  "haku-kaikki-opintoalat" : "Kaikki opintoalat",
+  "takaisin-hakuun": "Takaisin hakuun",
+
+  "ops": "Peruskoulutus",
+  "naytto": "Näyttötutkinto",
+  "OPINTOVIIKKO": "ov",
+  "OSAAMISPISTE": "osp",
+
+  "perusteen-sisalto": "Perusteen sisältö",
+  "perusteen-tiedot": "Perusteen tiedot",
+  "perusteen-nimi": "Perusteen nimi",
+  "maarayksen-diaarinumero": "Määräyksen diaarinumero",
+  "peruste-koulutukset": "Koulutuskoodit",
+  "tutkintonimikkeet": "Tutkintonimikkeet",
+  "koulutuksen-nimi": "Koulutuksen nimi",
+  "perusteen-koodi": "Tutkinnon koodi",
+  "tiivistelma": "Tiivistelmä",
+  "voimaantulo-pvm": "Voimaantulo",
+  "voimassaolo-paattymispvm": "Voimassaolon päättyminen",
+
+  "tutkinnonosat": "Tutkinnon osat",
+  "osaamisala": "Osaamisala",
+  "ammattitaidonOsoittamistavat": "Ammattitaidon osoittamistavat",
+  "arviointi": "Arviointi",
+  "osaamisen-arviointi": "Osaamisen arviointi",
+  "opintoluokitus": "Opintoluokitus",
+  "tavoitteet": "Tavoitteet",
+  "ammattitaitovaatimukset": "Ammattitaitovaatimukset",
+  "koodi": "Koodi",
+  "pakolliset-osaamistavoitteet": "Pakolliset osaamistavoitteet",
+  "valinnaiset-osaamistavoitteet": "Valinnaiset osaamistavoitteet"
 }
