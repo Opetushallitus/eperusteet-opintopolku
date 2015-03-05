@@ -95,19 +95,6 @@ label input[type=radio] {
   top: -23px;
 }
 
-.action-link {
-  outline: 0;
-  cursor: pointer;
-  &:hover {
-    outline: 0;
-  }
-  &:active, &:focus {
-    outline: 0;
-    text-decoration: none;
-    color: $brand-primary;
-  }
-}
-
 $lukko-width: 2em;
 $lukko-inner: 1.4em;
 .lukko {
@@ -160,10 +147,6 @@ $lukko-inner: 1.4em;
 
 *[contenteditable="false"].cke_focus {
   outline: none;
-}
-
-.rajaus-clear {
-  cursor: pointer;
 }
 
 input.form-control::-ms-clear {
@@ -244,6 +227,22 @@ $backtotop-size: 48px;
   }
 }
 
+.rajaus-clear {
+  cursor: pointer;
+}
+
+.action-link {
+  outline: 0;
+  cursor: pointer;
+  &:hover {
+    outline: 0;
+  }
+  &:active, &:focus {
+    outline: 0;
+    text-decoration: none;
+    color: $brand-primary;
+  }
+}
 
 a[href] {
   outline: 0;

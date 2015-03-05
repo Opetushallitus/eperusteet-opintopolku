@@ -1,6 +1,7 @@
 {
   "tyhjenna": "Tyhjennä",
   "takaisin-ylos": "Takaisin ylös",
+  "etusivulle": "Etusivulle",
 
   "navi.etusivu": "Etusivu",
   "navi.esiopetus": "Esiopetus",
@@ -17,12 +18,19 @@
   "etusivu.perusopetuksen-peruste": "Perusopetuksen peruste",
   "etusivu.lukiokoulutuksen-peruste": "Lukiokoulutuksen peruste",
 
+  "virhe.jotain-meni-pieleen": "Oho! Jotain meni pieleen.",
+
   "koulutustyyppi_1": "Ammatillinen perustutkinto",
   "koulutustyyppi_11": "Ammattitutkinto",
   "koulutustyyppi_12": "Erikoisammattitutkinto",
   "koulutustyyppi_15": "Esiopetus",
   "koulutustyyppi_16": "Perusopetus",
   "koulutustyyppi_6": "Lisäopetus",
+
+  "tutkinnon-osa-haku-placeholder": "Rajaa tutkinnon osia...",
+  "etsi-sisallosta": "Rajaa sisältöä...",
+  "etsi-rakenteesta": "Etsi rakenteesta...",
+  "rajaa-tutkinnonosia": "Rajaa tutkinnon osia...",
 
   "haku-otsikko": "Perusteen haku",
   "haku-koulutusala": "Koulutusala",
@@ -67,5 +75,11 @@
   "ammattitaitovaatimukset": "Ammattitaitovaatimukset",
   "koodi": "Koodi",
   "pakolliset-osaamistavoitteet": "Pakolliset osaamistavoitteet",
-  "valinnaiset-osaamistavoitteet": "Valinnaiset osaamistavoitteet"
+  "valinnaiset-osaamistavoitteet": "Valinnaiset osaamistavoitteet",
+
+  "avaa-sulje-rakenne": "Avaa / sulje rakenne",
+  "tutkinnon-rakenne": "Tutkinnon rakenne",
+  "tutkinnon-rakenteen-kuvaus": "Tutkinnon rakenteen kuvaus",
+  "nayta-kuvaukset": "Näytä kuvaukset",
+  "piilota-kuvaukset": "Piilota kuvaukset"
 }
