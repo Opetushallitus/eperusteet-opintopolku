@@ -27,6 +27,7 @@ epOpintopolkuApp
   this.SUORITUSTAPA = this.PERUSTEET + '/suoritustavat/:suoritustapa';
   this.SUORITUSTAPASISALTO = this.SUORITUSTAPA + '/sisalto';
   this.ARVIOINTIASTEIKOT = serviceLoc + '/arviointiasteikot/:asteikkoId';
+  this.CACHEDGET = {method: 'GET', cache: true};
 })
 
 .factory('Arviointiasteikot', function($resource, epResource) {
@@ -41,6 +42,7 @@ epOpintopolkuApp
   return $resource(epResource.PERUSTEET, {
     perusteId: '@id'
   }, {
+    get: epResource.CACHEDGET,
     info: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/info'},
     valittavatKielet: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/valittavatkielet', isArray: true},
     diaari: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/diaari'}
@@ -51,6 +53,8 @@ epOpintopolkuApp
   return $resource(epResource.SUORITUSTAPA + '/rakenne', {
     perusteId: '@id',
     suoritustapa: '@suoritustapa'
+  }, {
+    get: epResource.CACHEDGET
   });
 })
 
@@ -59,7 +63,8 @@ epOpintopolkuApp
     perusteId: '@id',
     suoritustapa: '@suoritustapa'
   }, {
-    get: {method: 'GET', isArray: true}
+    get: {method: 'GET', isArray: true, cache: true},
+    query: {method: 'GET', isArray: true, cache: true}
   });
 })
 
@@ -68,6 +73,8 @@ epOpintopolkuApp
     perusteId: '@id',
     suoritustapa: '@suoritustapa',
     osanId: '@id'
+  }, {
+    get: epResource.CACHEDGET
   });
 })
 
@@ -86,6 +93,7 @@ epOpintopolkuApp
   return $resource(loc, {
     osanId: '@id'
   }, {
+    get: epResource.CACHEDGET,
     byKoodiUri: {method: 'GET', isArray: true, params: {koodi: true}},
     versiot: {method: 'GET', isArray: true, url: loc + '/versiot'},
     getVersio: {method: 'GET', url: loc + '/versio/:versioId'},
@@ -99,6 +107,8 @@ epOpintopolkuApp
   return $resource(epResource.SUORITUSTAPASISALTO, {
     perusteId: '@id',
     suoritustapa: '@suoritustapa'
+  }, {
+    get: epResource.CACHEDGET
   });
 })
 
@@ -113,7 +123,7 @@ epOpintopolkuApp
   return $resource(epResource.SERVICE + '/perusteenosat/:viiteId/osaalue/:osaalueenId', {
     osaalueenId: '@id'
   }, {
-    list: {method: 'GET', isArray: true, url: epResource.PERUSTEENOSAT + '/osaalueet'},
+    list: {method: 'GET', isArray: true, url: epResource.PERUSTEENOSAT + '/osaalueet', cache: true},
     versioList: {method: 'GET', isArray: true, url: epResource.PERUSTEENOSAT + '/osaalueet/versio/:versioId'}
   });
 })
@@ -122,7 +132,12 @@ epOpintopolkuApp
   return $resource(epResource.PERUSTEENOSAT + '/osaalue/:osaalueenId/osaamistavoite/:osaamistavoiteId', {
     osaamistavoiteId: '@id'
   }, {
-    list: {method: 'GET', isArray: true, url: epResource.PERUSTEENOSAT + '/osaalue/:osaalueenId/osaamistavoitteet'}
+    list: {
+      method: 'GET',
+      isArray: true,
+      url: epResource.PERUSTEENOSAT + '/osaalue/:osaalueenId/osaamistavoitteet',
+      cache: true
+    }
   });
 })
 
