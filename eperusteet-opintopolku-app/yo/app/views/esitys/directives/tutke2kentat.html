@@ -5,27 +5,6 @@
     <ul><li ng-repeat="alue in tutke2osa.osaAlueet"><a class="action-link" ng-click="osaAlue.jumpTo(alue)">{{alue.nimi | kaanna}}</a></li></ul>
   </div>
   <p class="info-placeholder" ng-show="!tutke2osa.$fetching && (!tutke2osa.osaAlueet || tutke2osa.osaAlueet.length === 0) && !mainLevelEditing" kaanna>ei-osa-alueita</p>
-  <div class="non-collapsibles" ng-if="mainLevelEditing">
-    <label class="header" kaanna>osa-alueet</label>
-    <div class="clearfix"></div>
-    <div ng-show="tutke2osa.$editing.length > 0">
-      <div class="sisalto" ui-tree data-drag-enabled="mainLevelEditing"
-           data-empty-place-holder-enabled="false" data-max-depth="1">
-        <div ui-tree-nodes class="sisalto-group" ng-model="tutke2osa.$editing">
-          <li ng-repeat="alue in tutke2osa.$editing" ui-tree-node>
-            <div class="input-group" >
-              <span class="input-group-addon"><div icon-role="resize-vertical" class="draghandle" ui-tree-handle></div></span>
-              <input type="text" ng-model="alue.nimi" class="form-control" slocalized>
-              <span class="input-group-btn">
-                <button class="btn btn-default" icon-role="remove" type="button" ng-click="osaAlue.remove(alue)" kaanna="'poista'"></button>
-              </span>
-            </div>
-          </li>
-        </div>
-      </div>
-    </div>
-    <button class="btn btn-default" icon-role="add" ng-click="osaAlue.add()" kaanna="lisaa-osa-alue"></button>
-  </div>
 
   <div ng-if="!mainLevelEditing">
 
