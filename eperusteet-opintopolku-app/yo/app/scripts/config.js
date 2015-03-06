@@ -29,7 +29,7 @@ epOpintopolkuApp
   });
 })
 .config(function($translateProvider, $urlRouterProvider) {
-  var preferred = 'fi';
+  var preferred = _.includes(window.location.host.toLowerCase(), 'egrunder') ? 'sv' : 'fi';
   $urlRouterProvider.when('/', '/' + preferred);
   $translateProvider.useLoader('LokalisointiLoader');
   $translateProvider.preferredLanguage(preferred);
@@ -144,6 +144,7 @@ epOpintopolkuApp
   });
 
   $rootScope.$on('$stateChangeError', function(event, toState) {
+    console.warn(event, toState);
     virheService.virhe({state: toState.name});
   });
 
