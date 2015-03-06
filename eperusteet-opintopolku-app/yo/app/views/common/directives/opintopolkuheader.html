@@ -1,0 +1,11 @@
+<div class="header-kielenvaihto">
+  <a ng-href="{{urls.eperusteet[other].url}}" ng-bind="kieliLabel"></a>
+</div>
+<ul>
+  <li>
+    <a ng-href="{{urls.opintopolku[kieli].url}}" ng-bind="urls.opintopolku[kieli].label"></a>
+  </li>
+  <li class="active">
+    <span ng-bind="urls.eperusteet[kieli].label"></span>
+  </li>
+</ul>

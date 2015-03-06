@@ -11,7 +11,7 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <script id="apply-raamit" type="text/javascript" src="/oppija-raamit/apply-raamit.js"></script>
+    <!-- <script id="apply-raamit" type="text/javascript" src="/oppija-raamit/apply-raamit.js"></script> -->
     <!-- build:css(.tmp) styles/eperusteet-opintopolku.css -->
     <link rel="stylesheet" href="styles/eperusteet-opintopolku.css">
     <!-- endbuild -->
@@ -24,6 +24,13 @@
     <![endif]-->
     <!-- endbuild  -->
     <div class="container-fluid" id="ylasivuankkuri">
+      <div class="row">
+        <div class="col-md-12 opintopolku-header">
+          <div class="inner-container">
+            <opintopolku-header></opintopolku-header>
+          </div>
+        </div>
+      </div>
       <div class="row">
         <div class="col-md-12 ylanavigaatio">
           <div class="inner-container">
@@ -91,6 +98,7 @@
 
     <script src="scripts/common/filters.js"></script>
 
+    <script src="scripts/common/directives/opintopolku.js"></script>
     <script src="scripts/common/directives/ylanavigaatio.js"></script>
     <script src="scripts/common/directives/highlight.js"></script>
     <script src="scripts/common/directives/sivunavigaatio.js"></script>
