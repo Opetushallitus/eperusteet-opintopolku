@@ -65,14 +65,22 @@ epOpintopolkuApp
     url: '/ammatillinenperuskoulutus',
     templateUrl: 'views/haku/haku.html',
     controller: 'HakuController',
-    resolve: {'koulutusalaService': 'Koulutusalat'}
+    resolve: {
+      koulutusalaService: ['serviceConfig', 'Koulutusalat', function (serviceConfig, Koulutusalat) {
+        return Koulutusalat;
+      }]
+    }
   })
 
   .state('root.selaus.ammatillinenaikuiskoulutus', {
     url: '/ammatillinenaikuiskoulutus',
     templateUrl: 'views/haku/haku.html',
     controller: 'HakuController',
-    resolve: {'koulutusalaService': 'Koulutusalat'}
+    resolve: {
+      koulutusalaService: ['serviceConfig', 'Koulutusalat', function (serviceConfig, Koulutusalat) {
+        return Koulutusalat;
+      }]
+    }
   })
 
   /* ESITYS */
