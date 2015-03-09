@@ -39,7 +39,7 @@ epOpintopolkuApp
   $scope.$on('$stateChangeSuccess', function () {
     _.each($scope.osiot, function (osio) {
       // TODO parent state matching
-      osio.active = $state.current.name === osio.state;
+      osio.active = _.startsWith($state.current.name, osio.state);
       osio.url = $state.href(osio.state, {lang: $stateParams.lang});
     });
   });

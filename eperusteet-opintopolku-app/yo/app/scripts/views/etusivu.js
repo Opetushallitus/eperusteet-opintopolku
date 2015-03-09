@@ -17,10 +17,10 @@
 'use strict';
 
 epOpintopolkuApp
-.controller('EtusivuController', function ($scope, Kieli, Perusteet, $state) {
-  $scope.uusimmat = [];
+.service('UusimmatPerusteetService', function ($q, Perusteet, $state, Kieli) {
   var uikieli = Kieli.getUiKieli();
-  var params = {
+  var perusteet = {};
+  var amParams = {
     nimi: '',
     koulutusala: '',
     tyyppi: 'koulutustyyppi_1',
@@ -33,14 +33,40 @@ epOpintopolkuApp
     perusteTyyppi: 'normaali',
     tila: 'valmis'
   };
-  Perusteet.get(params, function (res) {
-    // TODO varmista että uusimmat, pvm?
-    $scope.uusimmat = res.data;
-    _.each($scope.uusimmat, function (peruste) {
-      peruste.url = $state.href('root.esitys.peruste', {
-        perusteId: peruste.id,
-        suoritustapa: params.suoritustapa
+  var perusParams = {
+    tyyppi: 'koulutustyyppi_16',
+    tila: 'valmis'
+  };
+
+  function getPerusopetus() {
+    return Perusteet.get(perusParams, function (res) {
+      perusteet[perusParams.tyyppi] = res.data;
+    }).$promise;
+  }
+
+  this.fetch = function (cb) {
+    var amDeferred = Perusteet.get(amParams, function (res) {
+      // TODO varmista että uusimmat, pvm?
+      perusteet[amParams.tyyppi] = res.data;
+      _.each(perusteet[amParams.tyyppi], function (peruste) {
+        peruste.url = $state.href('root.esitys.peruste', {
+          perusteId: peruste.id,
+          suoritustapa: amParams.suoritustapa
+        });
       });
+    }).$promise;
+    var perusopetus = getPerusopetus();
+    $q.all([amDeferred, perusopetus]).then(function () {
+      cb(perusteet);
     });
+  };
+
+  this.getPerusopetus = getPerusopetus;
+})
+
+.controller('EtusivuController', function ($scope, UusimmatPerusteetService) {
+  $scope.uusimmat = {};
+  UusimmatPerusteetService.fetch(function (res) {
+    $scope.uusimmat = res;
   });
 });

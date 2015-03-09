@@ -22,12 +22,14 @@ epOpintopolkuApp
   this.SERVICE = serviceLoc;
   this.PERUSTEET_ROOT = serviceLoc + '/perusteet';
   this.PERUSTEET = this.PERUSTEET_ROOT + '/:perusteId';
+  this.PERUSOPETUS = this.PERUSTEET + '/perusopetus';
   this.PERUSTEENOSAT = serviceLoc + '/perusteenosat/:osanId';
   this.PERUSTEENOSAVIITE = serviceLoc + '/perusteenosat/viite/:viiteId';
   this.SUORITUSTAPA = this.PERUSTEET + '/suoritustavat/:suoritustapa';
   this.SUORITUSTAPASISALTO = this.SUORITUSTAPA + '/sisalto';
   this.ARVIOINTIASTEIKOT = serviceLoc + '/arviointiasteikot/:asteikkoId';
   this.CACHEDGET = {method: 'GET', cache: true};
+  this.CACHEDQUERY = {method: 'GET', isArray: true, cache: true};
 })
 
 .factory('Arviointiasteikot', function($resource, epResource) {
@@ -63,8 +65,8 @@ epOpintopolkuApp
     perusteId: '@id',
     suoritustapa: '@suoritustapa'
   }, {
-    get: {method: 'GET', isArray: true, cache: true},
-    query: {method: 'GET', isArray: true, cache: true}
+    get: epResource.CACHEDQUERY,
+    query: epResource.CACHEDQUERY
   });
 })
 
@@ -97,7 +99,7 @@ epOpintopolkuApp
     byKoodiUri: {method: 'GET', isArray: true, params: {koodi: true}},
     versiot: {method: 'GET', isArray: true, url: loc + '/versiot'},
     getVersio: {method: 'GET', url: loc + '/versio/:versioId'},
-    getByViite: {method: 'GET', url: viite},
+    getByViite: {method: 'GET', url: viite, cache: true},
     versiotByViite: {method: 'GET', isArray: true, url: viite + '/versiot'},
     getVersioByViite: {method: 'GET', url: viite + '/versio/:versioId'}
   });
@@ -116,6 +118,9 @@ epOpintopolkuApp
   return $resource(epResource.PERUSTEET + '/termisto/:id', {
     id: '@id',
     perusteId: '@perusteId'
+  }, {
+    get: epResource.CACHEDGET,
+    query: epResource.CACHEDQUERY
   });
 })
 
@@ -138,6 +143,41 @@ epOpintopolkuApp
       url: epResource.PERUSTEENOSAT + '/osaalue/:osaalueenId/osaamistavoitteet',
       cache: true
     }
+  });
+})
+
+.factory('LaajaalaisetOsaamiset', function($resource, epResource) {
+  return $resource(epResource.PERUSOPETUS + '/laajaalaisetosaamiset/:osanId', {
+    osanId: '@id'
+  }, {
+    query: epResource.CACHEDQUERY
+  });
+})
+
+.factory('Vuosiluokkakokonaisuudet', function($resource, epResource) {
+  return $resource(epResource.PERUSOPETUS + '/vuosiluokkakokonaisuudet/:osanId', {
+    osanId: '@id'
+  }, {
+    query: epResource.CACHEDQUERY
+  });
+})
+
+.factory('Oppiaineet', function($resource, epResource) {
+  var baseUrl = epResource.PERUSOPETUS + '/oppiaineet/:osanId';
+  return $resource(baseUrl, {osanId: '@id'}, {
+    oppimaarat: {method: 'GET', isArray: true, url: baseUrl + '/oppimaarat', cache: true},
+    kohdealueet: {method: 'GET', isArray: true, url: baseUrl + '/kohdealueet', cache: true}
+  }, {
+    get: epResource.CACHEDGET,
+    query: epResource.CACHEDQUERY
+  });
+})
+
+.factory('OppiaineenVuosiluokkakokonaisuudet', function($resource, epResource) {
+  return $resource(epResource.PERUSOPETUS + '/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:osanId', {
+    osanId: '@id'
+  }, {
+    query: epResource.CACHEDQUERY
   });
 })
 

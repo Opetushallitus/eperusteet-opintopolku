@@ -441,6 +441,9 @@ h4 .drag-handle {
   .tekstisisalto-active {
     background-color: #0C566E;
     color: white;
+    a {
+      color: white;
+    }
   }
 
   .oppiaine-nimi {
@@ -465,4 +468,33 @@ h4 .drag-handle {
 
 .sisaltoalueotsikko {
   margin-top: 30px;
+}
+
+.prevnext-wrapper {
+  width: 100%;
+  margin-top: 40px;
+  display: table;
+  border: 1px solid #ccc;
+  .prevnext {
+    display: table-row;
+    .prev.chevron, .next.chevron {
+      width: 30px;
+    }
+    .prev, .next {
+      display: table-cell;
+    }
+    .prev {
+      padding: 5px 15px 5px 5px;
+    }
+    .next {
+      padding: 5px 5px 5px 15px;
+      text-align: right;
+    }
+  }
+
+}
+
+.teksti-linkki {
+  margin-left: 5px;
+  font-size: 14px;
 }

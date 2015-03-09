@@ -1,0 +1,40 @@
+<h1>{{ tekstikappale.nimi | kaanna }}</h1>
+<termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
+
+<div ng-repeat="lapsi in lapset">
+  <h2>
+    {{ lapsi.$osa.nimi | kaanna }}
+    <span class="teksti-linkki"><a ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: lapsi.id})" icon-role="new-window"></a></span>
+  </h2>
+  <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
+
+  <div ng-repeat="alilapsi in lapsi.lapset">
+    <h3>
+      {{ alilapsi.$osa.nimi | kaanna }}
+      <span class="teksti-linkki"><a ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: alilapsi.id})" icon-role="new-window"></a></span>
+    </h3>
+    <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
+
+    <div ng-repeat="alialilapsi in alilapsi.lapset">
+      <h4>{{ alialilapsi.$osa.nimi | kaanna }}</h4>
+      <termisto-tekstikentta tekstikentta="alialilapsi.$osa.teksti"></termisto-tekstikentta>
+    </div>
+  </div>
+</div>
+
+<div class="prevnext-wrapper" ng-if="links.prev || links.next">
+  <div class="prevnext">
+    <a class="prev chevron" ng-if="links.prev" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
+      <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="prev" ng-if="links.prev" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
+      <span ng-bind="links.prev.label | kaanna"></span>
+    </a>
+    <a class="next" ng-if="links.next" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.next.$osa.id})">
+      <span ng-bind="links.next.label | kaanna"></span>
+    </a>
+    <a class="next chevron" ng-if="links.next" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.next.$osa.id})">
+      <span class="glyphicon glyphicon-chevron-right"></span>
+    </div>
+  </div>
+</div>

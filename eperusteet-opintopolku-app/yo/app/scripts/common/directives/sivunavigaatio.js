@@ -59,7 +59,81 @@ epOpintopolkuApp
     };
   })
 
-  .controller('SivuNaviController', function ($scope, $state, Algoritmit, Utils, $timeout, $stateParams) {
+  .service('SivunaviUtils', function ($state, $stateParams) {
+    function getChildren(items, index) {
+      var children = [];
+      var level = items[index].depth;
+      index = index + 1;
+      var depth = level + 1;
+      for (; index < items.length && depth > level; ++index) {
+        depth = items[index].depth;
+        if (depth === level + 1) {
+          children.push(index);
+        }
+      }
+      return children;
+    }
+
+    function isActive(item) {
+      if (_.has(item, '$selected')) {
+        return item.$selected;
+      }
+      if (_.isFunction(item.isActive)) {
+        return item.isActive(item);
+      }
+      return (!_.isEmpty(item.link) && _.isArray(item.link) &&
+        $state.is(item.link[0], _.extend(_.clone($stateParams), item.link[1])));
+    }
+
+    function traverse(items, index) {
+      if (index >= items.length) {
+        return;
+      }
+      var item = items[index];
+      var children = getChildren(items, index);
+      var hidden = [];
+      for (var i = 0; i < children.length; ++i) {
+        traverse(items, children[i]);
+        hidden.push(items[children[i]].$hidden);
+      }
+      item.$leaf = hidden.length === 0;
+      item.$collapsed = _.all(hidden);
+      item.$active = isActive(item);
+      if (!item.$collapsed) {
+        // Reveal all children of uncollapsed node
+        for (i = 0; i < children.length; ++i) {
+          items[children[i]].$hidden = false;
+        }
+      }
+      item.$impHidden = false;
+    }
+
+
+    function unCollapse(items, item) {
+      item.$hidden = false;
+      // Open up
+      var parent = items[item.$parent];
+      while (parent) {
+        parent.$hidden = false;
+        parent = items[parent.$parent];
+      }
+      // Open down one level
+      var index = _.indexOf(items, item);
+      if (index > 0) {
+        var children = getChildren(items, index);
+        _.each(children, function (child) {
+          items[child].$hidden = false;
+        });
+      }
+    }
+
+    this.unCollapse = unCollapse;
+    this.getChildren = getChildren;
+    this.traverse = traverse;
+    this.isActive = isActive;
+  })
+
+  .controller('SivuNaviController', function ($scope, $state, Algoritmit, Utils, SivunaviUtils) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
@@ -86,31 +160,6 @@ epOpintopolkuApp
 
     $scope.$watch('search.term', $scope.search.update);
 
-    function unCollapse(items, item) {
-      item.$hidden = false;
-      // Open up
-      var parent = items[item.$parent];
-      while (parent) {
-        parent.$hidden = false;
-        parent = items[parent.$parent];
-      }
-      // Open down one level
-      var index = _.indexOf(items, item);
-      if (index > 0) {
-        var children = getChildren(items, index);
-        _.each(children, function (child) {
-          items[child].$hidden = false;
-        });
-      }
-    }
-
-    function isActive(item) {
-      if (_.isFunction(item.isActive)) {
-        return item.isActive(item);
-      }
-      return (!_.isEmpty(item.link) && _.isArray(item.link) &&
-        $state.is(item.link[0], _.extend(_.clone($stateParams), item.link[1])));
-    }
 
     $scope.itemClasses = function (item) {
       var classes = ['level' + item.depth];
@@ -159,43 +208,6 @@ epOpintopolkuApp
       }
     };
 
-    function getChildren(items, index) {
-      var children = [];
-      var level = items[index].depth;
-      index = index + 1;
-      var depth = level + 1;
-      for (; index < items.length && depth > level; ++index) {
-        depth = items[index].depth;
-        if (depth === level + 1) {
-          children.push(index);
-        }
-      }
-      return children;
-    }
-
-    function traverse(items, index) {
-      if (index >= items.length) {
-        return;
-      }
-      var item = items[index];
-      var children = getChildren(items, index);
-      var hidden = [];
-      for (var i = 0; i < children.length; ++i) {
-        traverse(items, children[i]);
-        hidden.push(items[children[i]].$hidden);
-      }
-      item.$leaf = hidden.length === 0;
-      item.$collapsed = _.all(hidden);
-      item.$active = isActive(item);
-      if (!item.$collapsed) {
-        // Reveal all children of uncollapsed node
-        for (i = 0; i < children.length; ++i) {
-          items[children[i]].$hidden = false;
-        }
-      }
-      item.$impHidden = false;
-    }
-
     function hideNodeOrphans(items, index) {
       // If the parent is hidden, then the child is implicitly hidden
       var item = items[index];
@@ -222,13 +234,13 @@ epOpintopolkuApp
       doUncollapse = _.isUndefined(doUncollapse) ? true : doUncollapse;
       if (doUncollapse) {
         var active = _.find(items, function (item) {
-          return isActive(item);
+          return SivunaviUtils.isActive(item);
         });
         if (active) {
-          unCollapse(items, active);
+          SivunaviUtils.unCollapse(items, active);
         }
       }
-      traverse(items, 0);
+      SivunaviUtils.traverse(items, 0);
       hideOrphans(items);
     }
 

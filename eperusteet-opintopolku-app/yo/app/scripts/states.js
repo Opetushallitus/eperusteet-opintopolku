@@ -48,12 +48,6 @@ epOpintopolkuApp
     controller: 'EtusivuController'
   })
 
-  .state('root.perusopetus', {
-    url: '/perusopetus',
-    templateUrl: 'views/perusopetus/perusopetus.html',
-    controller: function () {}
-  })
-
   /* HAKU */
 
   .state('root.selaus', {
@@ -153,7 +147,51 @@ epOpintopolkuApp
     url: '/tiedot',
     templateUrl: 'views/esitys/tiedot.html',
     controller: 'EsitysTiedotController'
-  });
+  })
 
+  .state('root.perusopetus', {
+    url: '/perusopetus/:perusteId',
+    templateUrl: 'views/perusopetus/perusopetus.html',
+    controller: 'PerusopetusController',
+    resolve: {
+      perusteId: function (serviceConfig, $stateParams) {
+        return $stateParams.perusteId;
+      },
+      peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
+        return !perusteId ? UusimmatPerusteetService.getPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise;
+      },
+      sisalto: function(serviceConfig, peruste, $q, LaajaalaisetOsaamiset,
+          Oppiaineet, Vuosiluokkakokonaisuudet, SuoritustapaSisalto) {
+        if (_.isArray(peruste.data)) {
+          peruste = peruste.data[0];
+        }
+        var perusteId = peruste.id;
+        return $q.all([
+          peruste,
+          LaajaalaisetOsaamiset.query({perusteId: perusteId}).$promise,
+          Oppiaineet.query({perusteId: perusteId}).$promise,
+          Vuosiluokkakokonaisuudet.query({perusteId: perusteId}).$promise,
+          SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'perusopetus'}).$promise,
+        ]);
+      }
+    }
+  })
+
+  .state('root.perusopetus.tekstikappale', {
+    url: '/tekstikappale/:tekstikappaleId',
+    templateUrl: 'views/perusopetus/tekstikappale.html',
+    controller: 'PerusopetusTekstikappaleController',
+    resolve: {
+      tekstikappaleId: function (serviceConfig, $stateParams) {
+        return $stateParams.tekstikappaleId;
+      },
+      tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
+        return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
+      },
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
+        return TekstikappaleChildResolver.get(sisalto[4], tekstikappaleId);
+      }
+    }
+  });
 
 });

@@ -1,0 +1,9 @@
+<div class="perusopetus">
+  <div style="margin-left: {{ item.depth * 10 }}px;"
+       ng-repeat="item in section.items" class="tekstisisalto"
+       ng-class="{'tekstisisalto-active': item.$selected}" ng-hide="item.root || item.$hidden">
+    <a ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: item.$osa.id})">
+      <span>{{ item.label | kaanna }}</span>
+    </a>
+  </div>
+</div>

@@ -65,6 +65,16 @@
   "voimaantulo-pvm": "Voimaantulo",
   "voimassaolo-paattymispvm": "Voimassaolon päättyminen",
 
+  "yhteiset-osuudet": "Yhteiset osuudet",
+  "vuosiluokkakokonaisuudet": "Vuosiluokkakokonaisuudet",
+  "tavoitteiden-osaamiset": "Tavoitteiden osaamiset",
+  "oppiaineen-sisallot": "Oppiaineen sisällöt",
+  "opetuksen-sisallot": "Opetuksen sisällöt",
+  "perusopetus-tehtava" : "Oppiaineen tehtävä",
+  "perusopetus-ohjaus" : "Ohjaus ja tuki",
+  "perusopetus-tyotavat" : "Oppimisympäristöt ja työtavat",
+  "perusopetus-tavoitteet" : "Oppiaineen tavoitteet",
+
   "tutkinnonosat": "Tutkinnon osat",
   "osaamisala": "Osaamisala",
   "ammattitaidonOsoittamistavat": "Ammattitaidon osoittamistavat",
