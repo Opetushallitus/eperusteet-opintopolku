@@ -48,12 +48,6 @@ epOpintopolkuApp
     controller: 'EtusivuController'
   })
 
-  .state('root.perusopetus', {
-    url: '/perusopetus',
-    templateUrl: 'views/perusopetus/perusopetus.html',
-    controller: function () {}
-  })
-
   /* HAKU */
 
   .state('root.selaus', {
@@ -153,7 +147,26 @@ epOpintopolkuApp
     url: '/tiedot',
     templateUrl: 'views/esitys/tiedot.html',
     controller: 'EsitysTiedotController'
-  });
+  })
 
+  .state('root.perusopetus', {
+    url: '/perusopetus/:perusteId',
+    templateUrl: 'views/perusopetus/perusopetus.html',
+    controller: 'PerusopetusController',
+    resolve: {
+      perusteId: function (serviceConfig, $stateParams) {
+        return $stateParams.perusteId;
+      },
+      sisalto: function(serviceConfig, perusteId, $q, Perusteet, LaajaalaisetOsaamiset, Oppiaineet, Vuosiluokkakokonaisuudet, SuoritustapaSisalto) {
+        return $q.all([
+          Perusteet.get({perusteId: perusteId}).$promise,
+          LaajaalaisetOsaamiset.query({perusteId: perusteId}).$promise,
+          Oppiaineet.query({perusteId: perusteId}).$promise,
+          Vuosiluokkakokonaisuudet.query({perusteId: perusteId}).$promise,
+          SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'perusopetus'}).$promise,
+        ]);
+      }
+    }
+  });
 
 });
