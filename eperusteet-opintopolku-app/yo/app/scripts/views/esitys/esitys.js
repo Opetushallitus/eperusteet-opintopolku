@@ -30,7 +30,7 @@ epOpintopolkuApp
   })
 
   .controller('EsitysTutkinnonOsaController', function($scope, $state, $stateParams, PerusteenOsat, TutkinnonosanTiedotService,
-      Tutke2Osa) {
+      Tutke2Osa, Kieli) {
     $scope.tutkinnonOsaViite = _.find($scope.$parent.tutkinnonOsat, function(tosa) {
       return tosa.id === parseInt($stateParams.id, 10);
     });
@@ -52,6 +52,9 @@ epOpintopolkuApp
         osaamistavoite.arviointi.arvioinninKohdealueet.length > 0 &&
         osaamistavoite.arviointi.arvioinninKohdealueet[0].arvioinninKohteet &&
         osaamistavoite.arviointi.arvioinninKohdealueet[0].arvioinninKohteet.length > 0;
+    };
+    $scope.osaAlueFilter = function (item) {
+      return _.contains(item.$kielet, Kieli.getSisaltokieli());
     };
   })
 
