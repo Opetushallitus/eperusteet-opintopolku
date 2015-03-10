@@ -192,6 +192,18 @@ epOpintopolkuApp
         return TekstikappaleChildResolver.get(sisalto[4], tekstikappaleId);
       }
     }
+  })
+
+  .state('root.perusopetus.vuosiluokkakokonaisuus', {
+    url: '/vuosiluokkakokonaisuus/:vlkId',
+    templateUrl: 'views/perusopetus/vuosiluokkakokonaisuus.html',
+    controller: 'PerusopetusVlkController'
+  })
+
+  .state('root.perusopetus.vlkoppiaine', {
+    url: '/vuosiluokkakokonaisuus/:vlkId/oppiaine/:oppiaineId',
+    templateUrl: 'views/perusopetus/vlkoppiaine.html',
+    controller: 'PerusopetusVlkOppiaineController'
   });
 
 });

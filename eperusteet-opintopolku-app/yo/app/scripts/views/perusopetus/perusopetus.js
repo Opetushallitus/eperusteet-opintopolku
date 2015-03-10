@@ -77,4 +77,12 @@ epOpintopolkuApp
 
   $scope.$on('perusopetus:stateSet', checkPrevNext);
   checkPrevNext();
+})
+
+.controller('PerusopetusVlkController', function($scope, $stateParams, Utils) {
+  $scope.vlk = $scope.vuosiluokkakokonaisuudetMap[$stateParams.vlkId];
+
+  $scope.vlkOrder = function (item) {
+    return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
+  };
 });

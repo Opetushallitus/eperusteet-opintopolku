@@ -18,7 +18,15 @@
 
 epOpintopolkuApp
 .service('PerusopetusStateService', function ($state, $stateParams, SivunaviUtils, $rootScope) {
+  var state = {};
   this.setState = function (navi) {
+    this.state = {};
+    _.each(navi.sections, function (section) {
+      section.$open = false;
+      _.each(section.items, function (item) {
+        item.$selected = false;
+      });
+    });
     if (_.endsWith($state.current.name, 'tekstikappale')) {
       var selected = null;
       navi.sections[0].$open = true;
@@ -36,7 +44,19 @@ epOpintopolkuApp
         SivunaviUtils.traverse(navi.sections[0].items, 0);
         $rootScope.$broadcast('perusopetus:stateSet');
       }
+    } else if (_.endsWith($state.current.name, 'vuosiluokkakokonaisuus')) {
+      navi.sections[1].$open = true;
+      _.each(navi.sections[1].items, function (item) {
+        item.$selected = false;
+        if (item.$vkl) {
+          item.$selected = '' + $stateParams.vlkId === '' + item.$vkl.id;
+          state.vlk = true;
+        }
+      });
     }
+  };
+  this.getState = function () {
+    return state;
   };
 })
 
@@ -60,8 +80,9 @@ epOpintopolkuApp
   $scope.filterSisalto = {};
   $scope.filterOsaamiset = {};
   $scope.tekstisisalto = sisalto[4];
-  $scope.currentSection = 'suunnitelma';
-  $scope.activeSection = 'suunnitelma';
+  //$scope.currentSection = 'suunnitelma';
+  //$scope.activeSection = 'suunnitelma';
+  $scope.state = PerusopetusStateService.getState();
 
   TermistoService.setPeruste(peruste);
 
@@ -89,14 +110,14 @@ epOpintopolkuApp
     moodi: 'sivutus',
   };
 
-  $scope.onSectionChange = function(section) {
+  /*$scope.onSectionChange = function(section) {
     $scope.currentSection = section.id;
     $scope.activeSection = section.id;
 
     if (_.isEmpty($scope.valittuOppiaine) && section.id === 'sisalto') {
       selectOppiaine(_.first(_.keys(oppiaineet)));
     }
-  };
+  };*/
 
   $scope.valitseOppiaineenVuosiluokka = function(vuosiluokka) {
     $timeout(function() {
@@ -109,9 +130,9 @@ epOpintopolkuApp
     });
   };
 
-  function activeSection() {
+  /*function activeSection() {
     return $scope.activeSection;
-  }
+  }*/
 
   function isCurrentOppiaine(item) {
     var id = _.isObject(item) ? item.value : item;
@@ -130,12 +151,12 @@ epOpintopolkuApp
         $scope.filtterit.valittuKokonaisuus :
         _.first(_.keys($scope.valittuOppiaine.vuosiluokkakokonaisuudet));
 
-      if ($scope.currentSection === 'vlk') {
+      /*if ($scope.currentSection === 'vlk') {
         valittavaVuosiluokka = $scope.valittuVuosiluokkakokonaisuus.id;
-      }
+      }*/
 
       $scope.valitseOppiaineenVuosiluokka(valittavaVuosiluokka, true);
-      $scope.activeSection = 'sisalto';
+      //$scope.activeSection = 'sisalto';
     }, Notifikaatiot.serverCb);
   }
 
@@ -153,10 +174,10 @@ epOpintopolkuApp
       };
     });
 
-    if (!_.isEmpty(sisalto)) {
+    /*if (!_.isEmpty(sisalto)) {
       _.first(sisalto).$selected = true;
       $scope.valittuVuosiluokkakokonaisuus = _.first(sisalto).$vkl;
-    }
+    }*/
     return sisalto;
   }
 
@@ -222,16 +243,11 @@ epOpintopolkuApp
         id: 'vlk',
         items: rakennaVuosiluokkakokonaisuuksienSisalto(),
         include: 'views/perusopetus/vlk.html',
-        update: function(item, section) {
-          _.each(section.items, function(osa) { osa.$selected = false; });
-          item.$selected = true;
-          $scope.valittuVuosiluokkakokonaisuus = item.$vkl;
-          $scope.activeSection = 'vlk';
-        },
         selectOppiaine: selectOppiaine,
         isCurrentOppiaine: isCurrentOppiaine,
-        activeSection: activeSection,
-        currentSection: function() { return $scope.currentSection; },
+        //activeSection: activeSection,
+        state: $scope.state,
+        //currentSection: function() { return $scope.currentSection; },
         $oppiaineOrder: Utils.oppiaineSort
       }, {
         title: 'opetuksen-sisallot',
@@ -252,7 +268,7 @@ epOpintopolkuApp
             include: 'views/perusopetus/oppiaineetsivunavi.html',
             selectOppiaine: selectOppiaine,
             isCurrentOppiaine: isCurrentOppiaine,
-            activeSection: activeSection,
+            //activeSection: activeSection,
             $oppiaineOrder: Utils.oppiaineSort
           }, {
             id: 'sisallot',

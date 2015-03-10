@@ -1,8 +1,11 @@
 <div class="perusopetus">
   <div ng-if="item.label" ng-repeat="item in section.items">
     <div ng-click="section.update(item, section)"
-         class="tekstisisalto {{ (item.$selected && section.activeSection() === 'vlk') && 'tekstisisalto-active' }} {{ (item.$selected && section.activeSection() !== 'vlk') && 'tekstisisalto-active-header' }}">
-         <span>{{ item.label | kaanna }} {{ currentOppiaine() }}</span>
+         class="tekstisisalto",
+         ng-class="{'tekstisisalto-active': item.$selected && section.state.vlk, 'tekstisisalto-active-header': item.$selected && !section.state.vlk}">
+         <a ui-sref="root.perusopetus.vuosiluokkakokonaisuus({vlkId: item.$vkl.id})">
+           <span>{{ item.label | kaanna }}</span>
+         </a>
     </div>
     <div ng-show="item.$selected" ng-repeat="oa in item.$oppiaineet | orderBy:section.$oppiaineOrder">
       <div ng-click="section.selectOppiaine(oa.id)" style="margin-left: 20px"
