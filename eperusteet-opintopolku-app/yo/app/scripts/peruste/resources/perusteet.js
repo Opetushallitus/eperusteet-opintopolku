@@ -166,8 +166,7 @@ epOpintopolkuApp
   var baseUrl = epResource.PERUSOPETUS + '/oppiaineet/:osanId';
   return $resource(baseUrl, {osanId: '@id'}, {
     oppimaarat: {method: 'GET', isArray: true, url: baseUrl + '/oppimaarat', cache: true},
-    kohdealueet: {method: 'GET', isArray: true, url: baseUrl + '/kohdealueet', cache: true}
-  }, {
+    kohdealueet: {method: 'GET', isArray: true, url: baseUrl + '/kohdealueet', cache: true},
     get: epResource.CACHEDGET,
     query: epResource.CACHEDQUERY
   });

@@ -1,0 +1,28 @@
+<h1>{{ vlk.nimi | kaanna }}</h1>
+<div ng-if="hasContent(vlk.tehtava)">
+  <h2>{{ vlk.tehtava.otsikko | kaanna  }}</h2>
+  <termisto-tekstikentta tekstikentta="vlk.tehtava.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="hasContent(vlk.siirtymaEdellisesta)">
+  <h2>{{ vlk.siirtymaEdellisesta.otsikko | kaanna  }}</h2>
+  <termisto-tekstikentta tekstikentta="vlk.siirtymaEdellisesta.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="hasContent(vlk.siirtymaSeuraavaan)">
+  <h2>{{ vlk.siirtymaSeuraavaan.otsikko | kaanna  }}</h2>
+  <termisto-tekstikentta tekstikentta="vlk.siirtymaSeuraavaan.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="hasContent(vlk.laajaalainenOsaaminen)">
+  <h2>{{ vlk.laajaalainenOsaaminen.otsikko | kaanna  }}</h2>
+  <termisto-tekstikentta tekstikentta="vlk.laajaalainenOsaaminen.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="vlk.laajaalaisetOsaamiset">
+  <h2 kaanna="'laaja-alaiset-osaamiset'" id="vlk-laajaalaisetosaamiset"></h2>
+  <div ng-repeat="osaaminen in vlk.laajaalaisetOsaamiset | orderBy:vlkOrder">
+    <h3>{{ osaamiset[osaaminen._laajaalainenOsaaminen].nimi | kaanna }}</h3>
+    <termisto-tekstikentta tekstikentta="osaaminen.kuvaus"></termisto-tekstikentta>
+  </div>
+</div>
+<div ng-if="hasContent(vlk.paikallisestiPaatettavatAsiat)">
+  <h2>{{ vlk.paikallisestiPaatettavatAsiat.otsikko | kaanna  }}</h2>
+  <termisto-tekstikentta tekstikentta="vlk.paikallisestiPaatettavatAsiat.teksti"></termisto-tekstikentta>
+</div>

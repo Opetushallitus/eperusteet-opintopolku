@@ -77,4 +77,42 @@ epOpintopolkuApp
 
   $scope.$on('perusopetus:stateSet', checkPrevNext);
   checkPrevNext();
+})
+
+.controller('PerusopetusVlkController', function($scope, $stateParams, Utils) {
+  $scope.vlk = $scope.vuosiluokkakokonaisuudetMap[$stateParams.vlkId];
+
+  $scope.vlkOrder = function (item) {
+    return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
+  };
+})
+
+.controller('PerusopetusVlkOppiaineController', function($scope, oppiaine, $stateParams) {
+  $scope.vlkId = $stateParams.vlkId;
+  function processOppiaine() {
+    $scope.valittuOppiaine = {};
+    $scope.valittuOppiaine.oppiaine = oppiaine;
+    $scope.valittuOppiaine.vuosiluokkakokonaisuudet = _.zipBy(oppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus');
+
+    $scope.valittuOppiaine.vlks = $scope.valittuOppiaine.vuosiluokkakokonaisuudet[$scope.vlkId];
+    if ($scope.valittuOppiaine.vlks) {
+      $scope.valittuOppiaine.sisallot = $scope.sisallot[$scope.valittuOppiaine.vlks._vuosiluokkaKokonaisuus];
+    }
+
+    $scope.oppimaarat = $scope.filteredOppimaarat(oppiaine, $scope.vlkId);
+    paivitaTavoitteet();
+  }
+
+  function paivitaTavoitteet() {
+    if ($scope.valittuOppiaine.vlks) {
+      _.each($scope.valittuOppiaine.vlks.tavoitteet, function(tavoite) {
+        if (_.isEmpty(tavoite.laajattavoitteet)) {
+          tavoite.$rejected = false;
+        }
+      });
+    }
+  }
+
+  processOppiaine();
+
 });

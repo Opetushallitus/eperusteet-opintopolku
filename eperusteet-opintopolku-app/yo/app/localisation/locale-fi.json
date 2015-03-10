@@ -2,6 +2,7 @@
   "tyhjenna": "Tyhjennä",
   "takaisin-ylos": "Takaisin ylös",
   "etusivulle": "Etusivulle",
+  "avaa-sulje-kaikki": "Avaa/sulje kaikki",
 
   "navi.etusivu": "Etusivu",
   "navi.esiopetus": "Esiopetus",
@@ -74,6 +75,12 @@
   "perusopetus-ohjaus" : "Ohjaus ja tuki",
   "perusopetus-tyotavat" : "Oppimisympäristöt ja työtavat",
   "perusopetus-tavoitteet" : "Oppiaineen tavoitteet",
+  "laaja-alaiset-osaamiset": "Laaja-alaiset osaamiset",
+  "laaja-alainen-osaaminen": "Laaja-alainen osaaminen",
+  "sisaltoalueet": "Sisältöalueet",
+  "kohdealue": "Tavoitealue",
+  "vuosiluokkakokonaisuuden-osaamisalueet": "Vuosiluokkakokonaisuuden osaamisalueet",
+  "oppimaarat": "Oppimäärät",
 
   "tutkinnonosat": "Tutkinnon osat",
   "osaamisala": "Osaamisala",
