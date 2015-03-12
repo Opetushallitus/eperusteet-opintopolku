@@ -212,6 +212,20 @@ epOpintopolkuApp
         return Oppiaineet.get({ perusteId: perusteId, osanId: oppiaineId }).$promise;
       }
     }
+  })
+
+  .state('root.perusopetus.sisallot', {
+    url: '/sisallot/:oppiaineId?vlk&sisalto&osaaminen&valittu',
+    templateUrl: 'views/perusopetus/vlkoppiaine.html',
+    controller: 'PerusopetusSisallotController',
+    resolve: {
+      oppiaineId: function (serviceConfig, $stateParams) {
+        return $stateParams.oppiaineId;
+      },
+      oppiaine: function (serviceConfig, perusteId, Oppiaineet, oppiaineId) {
+        return oppiaineId ? Oppiaineet.get({ perusteId: perusteId, osanId: oppiaineId }).$promise : null;
+      }
+    }
   });
 
 });

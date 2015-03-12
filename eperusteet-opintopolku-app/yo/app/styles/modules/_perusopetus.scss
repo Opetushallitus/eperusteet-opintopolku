@@ -294,6 +294,7 @@ $tag-color: #FEE7A4;
   }
 
   .oppiaine {
+    display: block;
     margin-left: 20px;
     margin-bottom: 5px;
     padding: 3px;
@@ -377,4 +378,38 @@ $tag-color: #FEE7A4;
 .teksti-linkki {
   margin-left: 5px;
   font-size: 14px;
+}
+
+.labeled-checkboxes {
+  position: relative;
+  label {
+    margin-bottom: 0;
+  }
+  input[type=checkbox] {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+  }
+  .lc-label {
+    float: left;
+    display: inline-block;
+    padding-left: 26px;
+  }
+}
+
+.reset-filters {
+  display: block;
+  width: 100%;
+  //text-align: right;
+  margin-bottom: 10px;
+}
+
+.depth1 {
+  margin-left: 20px;
+}
+.depth2 {
+  margin-left: 40px;
+}
+.depth3 {
+  margin-left: 60px;
 }

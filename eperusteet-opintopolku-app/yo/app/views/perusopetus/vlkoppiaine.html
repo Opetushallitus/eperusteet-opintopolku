@@ -2,8 +2,11 @@
 <div class="vuosiluokkavalitsin" ng-if="valittuOppiaine.oppiaine.vuosiluokkakokonaisuudet.length > 1">
   <ul class="nav nav-pills">
     <li ng-repeat="(id, kokonaisuus) in valittuOppiaine.vuosiluokkakokonaisuudet"
-        ng-class="{active: vlkId == kokonaisuus._vuosiluokkaKokonaisuus }">
-      <a class="vlktab action-link" ui-sref="root.perusopetus.vlkoppiaine({vlkId: kokonaisuus._vuosiluokkaKokonaisuus})">
+        ng-class="{active: activeVlkId == kokonaisuus._vuosiluokkaKokonaisuus }">
+      <a ng-if="!inSisallot" class="vlktab action-link" ui-sref="root.perusopetus.vlkoppiaine({vlkId: kokonaisuus._vuosiluokkaKokonaisuus})">
+        {{ vuosiluokkakokonaisuudetMap[kokonaisuus._vuosiluokkaKokonaisuus].nimi | kaanna }}
+      </a>
+      <a ng-if="inSisallot" class="vlktab action-link" ui-sref="root.perusopetus.sisallot({valittu: kokonaisuus._vuosiluokkaKokonaisuus})">
         {{ vuosiluokkakokonaisuudetMap[kokonaisuus._vuosiluokkaKokonaisuus].nimi | kaanna }}
       </a>
     </li>
@@ -17,12 +20,13 @@
     <h2 kaanna="'oppimaarat'"></h2>
     <ul>
       <li ng-repeat="oppimaara in oppimaarat">
-        <a ui-sref="root.perusopetus.vlkoppiaine({oppiaineId: oppimaara.id})" ng-bind="oppimaara.nimi | kaanna"></a>
+        <a ng-if="!inSisallot" ui-sref="root.perusopetus.vlkoppiaine({oppiaineId: oppimaara.id})" ng-bind="oppimaara.nimi | kaanna"></a>
+        <a ng-if="inSisallot" ui-sref="root.perusopetus.sisallot({oppiaineId: oppimaara.id})" ng-bind="oppimaara.nimi | kaanna"></a>
       </li>
     </ul>
   </div>
 
-  <div ng-if="hasContent(valittuOppiaine.oppiaine.tehtava)">
+  <div ng-hide="filterSisalto.tehtava || !hasContent(valittuOppiaine.oppiaine.tehtava)">
     <h2>{{ valittuOppiaine.oppiaine.tehtava.otsikko | kaanna }}</h2>
     <termisto-tekstikentta tekstikentta="valittuOppiaine.oppiaine.tehtava.teksti || '-'"></termisto-tekstikentta>
   </div>
@@ -47,7 +51,7 @@
     <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tyotavat.teksti || '-'"></termisto-tekstikentta>
   </div>
 
-  <div ng-show="valittuOppiaine.vlks.sisaltoalueet.length > 0">
+  <div ng-hide="filterSisalto.sisaltoalueet || !valittuOppiaine.vlks.sisaltoalueet || valittuOppiaine.vlks.sisaltoalueet.length === 0">
     <h3 kaanna="'sisaltoalueet'"></h3>
     <div ng-repeat="sa in valittuOppiaine.vlks.sisaltoalueet">
       <h4 class="sparse">{{ sa.nimi | kaanna }}</h4>

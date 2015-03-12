@@ -204,6 +204,10 @@ epOpintopolkuApp
           if (section.items) {
             doRefresh(section.items);
           }
+          // hack for perusopetus sisallot
+          if (section.model && _.isArray(section.model.sections) && section.model.sections.length > 1) {
+            doRefresh(section.model.sections[1].items);
+          }
         });
       }
     };
@@ -275,8 +279,10 @@ epOpintopolkuApp
       $scope.menuCollapsed = true;
     });
 
-    $scope.$on('$stateChangeSuccess', function () {
-      Utils.scrollTo('#ylasivuankkuri');
+    $scope.$on('$stateChangeSuccess', function (event, toState) {
+      if (toState.name !== 'root.perusopetus.sisallot') {
+        Utils.scrollTo('#ylasivuankkuri');
+      }
       updateModel($scope.items);
     });
 

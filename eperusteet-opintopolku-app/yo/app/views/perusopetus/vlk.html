@@ -1,7 +1,5 @@
 <div class="perusopetus">
-  <div ng-repeat="item in section.items" style="margin-left: {{ item.depth * 20 }}px;"
-      ng-repeat="item in section.items" class="tekstisisalto"
-      ng-class="{'tekstisisalto-active': item.$selected, 'tekstisisalto-active-header': item.$header}"
+  <div ng-repeat="item in section.items" class="tekstisisalto" ng-class="section.naviClasses(item)"
       ng-hide="item.root || item.$hidden">
       <a ng-href="{{item.url}}">
         <span>{{ item.label | kaanna }}</span>

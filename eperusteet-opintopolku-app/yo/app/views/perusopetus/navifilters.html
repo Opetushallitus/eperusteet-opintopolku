@@ -1,3 +1,5 @@
+<a class="reset-filters" kaanna="'tyhjenna-valinnat'" icon-role="refresh"
+   ui-sref="root.perusopetus.sisallot({oppiaineId: '', vlk: '', valittu: '', osaaminen: '', sisalto: ''})"></a>
 <div ng-repeat="section in $parent.section.model.sections">
   <accordion ng-if="section.title && section.items && section.items.length > 0" close-others="$parent.section.model.oneAtATime">
     <accordion-group class="inner-accordion" is-open="section.$open">
@@ -7,8 +9,11 @@
       </accordion-heading>
       <div ng-if="!section.include">
         <ul>
-          <li ng-repeat="item in section.items | orderBy:orderFn">
-            <label><input type="checkbox" ng-model="item.$selected" ng-change="section.update(item, section)">{{item.label | kaanna}}</label>
+          <li ng-repeat="item in section.items | orderBy:orderFn" class="labeled-checkboxes">
+            <label>
+              <input type="checkbox" ng-model="item.$selected" ng-change="section.update(item, section)">
+              <span class="lc-label" ng-bind="item.label | kaanna"></span>
+            </label>
           </li>
         </ul>
       </div>
@@ -18,8 +23,11 @@
   <div ng-if="!section.title">
     <div ng-if="!section.include && section.items && section.items.length > 0">
       <ul>
-        <li ng-repeat="item in section.items | orderBy:orderFn">
-          <label><input type="checkbox" ng-model="item.$selected" ng-change="section.update(item, section)">{{item.label | kaanna}}</label>
+        <li ng-repeat="item in section.items | orderBy:orderFn" class="labeled-checkboxes">
+          <label>
+            <input type="checkbox" ng-model="item.$selected" ng-change="section.update(item, section)">
+            <span class="lc-label" ng-bind="item.label | kaanna"></span>
+          </label>
         </li>
       </ul>
     </div>

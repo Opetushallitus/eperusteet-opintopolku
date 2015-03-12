@@ -1,11 +1,8 @@
 <div class="perusopetus">
-  <div ng-repeat="oppiaine in section.items | orderBy:section.$oppiaineOrder">
-    <div class="oppiaine {{ section.isCurrentOppiaine(oppiaine.id) && 'oppiaine-selected' }}"
-        ng-click="section.selectOppiaine(oppiaine.id)" kaanna="oppiaine.nimi"></div>
-
-    <div ng-repeat="oppimaara in oppiaine.oppimaarat | orderBy:section.$oppiaineOrder">
-      <div class="oppiaine oppimaara {{ section.isCurrentOppiaine(oppimaara.id) && 'oppiaine-selected' }}"
-           ng-click="section.selectOppiaine(oppimaara.id)" kaanna="oppimaara.nimi"></div>
-    </div>
+  <div ng-repeat="item in section.items" class="tekstisisalto" ng-class="section.naviClasses(item)"
+      ng-hide="item.root || item.$hidden">
+      <a ng-href="{{item.url}}">
+        <span>{{ item.label | kaanna }}</span>
+      </a>
   </div>
 </div>

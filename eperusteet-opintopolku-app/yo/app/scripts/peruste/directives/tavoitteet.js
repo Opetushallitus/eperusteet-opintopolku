@@ -112,7 +112,7 @@ epOpintopolkuApp
           osaaminen.extra = '<div class="clearfix"><a class="pull-right" href="' +
             $state.href('root.perusopetus.vuosiluokkakokonaisuus', {
               perusteId: $stateParams.perusteId,
-              vlkId: $stateParams.vlkId,
+              vlkId: $stateParams.vlkId || $scope.vuosiluokka.id,
             }) + '#vlk-laajaalaisetosaamiset" kaanna="vuosiluokkakokonaisuuden-osaamisalueet"></a></div>';
         }));
       });

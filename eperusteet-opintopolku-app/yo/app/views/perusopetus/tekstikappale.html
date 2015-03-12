@@ -1,22 +1,24 @@
-<h1>{{ tekstikappale.nimi | kaanna }}</h1>
+<h1 ng-bind="tekstikappale.nimi | kaanna"></h1>
 <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
 
 <div ng-repeat="lapsi in lapset">
   <h2>
-    {{ lapsi.$osa.nimi | kaanna }}
+    <span ng-bind="lapsi.$osa.nimi | kaanna"></span>
     <span class="teksti-linkki"><a ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: lapsi.id})" icon-role="new-window"></a></span>
   </h2>
   <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset">
     <h3>
-      {{ alilapsi.$osa.nimi | kaanna }}
+      <span ng-bind="alilapsi.$osa.nimi | kaanna"></span>
       <span class="teksti-linkki"><a ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: alilapsi.id})" icon-role="new-window"></a></span>
     </h3>
     <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
 
     <div ng-repeat="alialilapsi in alilapsi.lapset">
-      <h4>{{ alialilapsi.$osa.nimi | kaanna }}</h4>
+      <h4>
+        <span ng-bind="alialilapsi.$osa.nimi | kaanna"></span>
+      </h4>
       <termisto-tekstikentta tekstikentta="alialilapsi.$osa.teksti"></termisto-tekstikentta>
     </div>
   </div>
