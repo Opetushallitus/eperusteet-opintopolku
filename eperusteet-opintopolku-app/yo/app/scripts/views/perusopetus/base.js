@@ -205,9 +205,13 @@ epOpintopolkuApp
         url: $state.href('root.perusopetus.vuosiluokkakokonaisuus', {vlkId: vlk.id})
       });
       var oaFiltered = _(oppiaineet).filter(function(oa) {
-        return _.some(oa.vuosiluokkakokonaisuudet, function(oavkl) {
+        var oppiaineHasVlk = _.some(oa.vuosiluokkakokonaisuudet, function(oavkl) {
           return _.parseInt(oavkl._vuosiluokkaKokonaisuus) === vlk.id;
         });
+        var oppimaaraVlkIds = _(oa.oppimaarat).map(function (oppimaara) {
+          return _.map(oppimaara.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus');
+        }).flatten().uniq().value();
+        return oppiaineHasVlk || _.contains(oppimaaraVlkIds, '' + vlk.id);
       }).value();
       _.each(oaFiltered, function (oa) {
         buildOppiaineItem(arr, oa, vlk, 1);
