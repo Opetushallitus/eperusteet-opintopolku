@@ -20,6 +20,7 @@ epOpintopolkuApp
 .service('PerusopetusStateService', function ($state, $stateParams, SivunaviUtils, $rootScope) {
   var state = {};
   this.setState = function (navi) {
+    console.log("setState");
     this.state = {};
     _.each(navi.sections, function (section) {
       section.$open = false;
@@ -77,6 +78,11 @@ epOpintopolkuApp
           selected = item;
         }
       });
+    } else if (_.endsWith($state.current.name, 'sisallot')) {
+      console.log("process sisallot");
+      processSection(2, function (item) {
+
+      });
     }
     if (selected && section) {
       SivunaviUtils.unCollapse(section.items, selected);
@@ -90,7 +96,7 @@ epOpintopolkuApp
 })
 
 .controller('PerusopetusController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
-  OppiaineenVuosiluokkakokonaisuudet, Utils, $state,
+  OppiaineenVuosiluokkakokonaisuudet, Utils, $state, $stateParams,
   Algoritmit, Notifikaatiot, Oppiaineet, TermistoService, Kieli, $document, $rootScope, PerusopetusStateService) {
   $scope.isNaviVisible = _.constant(true);
   $scope.hasContent = function (obj) {
@@ -259,7 +265,34 @@ epOpintopolkuApp
     installClickHandler();
   }
 
+  $scope.processOppiaine = function (oppiaine, vlkId) {
+    $scope.valittuOppiaine = {};
+    $scope.valittuOppiaine.oppiaine = oppiaine;
+    $scope.valittuOppiaine.vuosiluokkakokonaisuudet = _.zipBy(oppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus');
+
+    $scope.valittuOppiaine.vlks = $scope.valittuOppiaine.vuosiluokkakokonaisuudet[vlkId];
+    if ($scope.valittuOppiaine.vlks) {
+      $scope.valittuOppiaine.sisallot = $scope.sisallot[$scope.valittuOppiaine.vlks._vuosiluokkaKokonaisuus];
+    }
+
+    $scope.activeVlkId = vlkId;
+    $scope.oppimaarat = $scope.filteredOppimaarat(oppiaine, vlkId);
+    paivitaTavoitteet2();
+  };
+
+  function paivitaTavoitteet2() {
+    if ($scope.valittuOppiaine.vlks) {
+      _.each($scope.valittuOppiaine.vlks.tavoitteet, function(tavoite) {
+        if (_.isEmpty(tavoite.laajattavoitteet)) {
+          tavoite.$rejected = false;
+        }
+      });
+    }
+  }
+
+
   function paivitaSivunavi() {
+    console.log("paivitaSivunavi");
     var navi = {};
     navi.oppiaineet = [];
     _.forEach(_.values(oppiaineet), function(oa) {
@@ -271,6 +304,33 @@ epOpintopolkuApp
         v.items = navi[v.id];
       }
     });
+  }
+
+  $scope.onSectionChange = function (section) {
+    console.log("onSectionChange", section.$open, section);
+    if (section.id === 'sisalto' && !section.$open) {
+      var oppiaineet = _.find(section.model.sections, {id: 'oppiaineet'});
+      if (oppiaineet && oppiaineet.items && oppiaineet.items.length > 0) {
+        var params = {perusteId: $scope.peruste.id, oppiaineId: oppiaineet.items[0].id};
+        $timeout(function () {
+          $state.go('root.perusopetus.sisallot', params);
+        });
+      }
+    }
+  };
+
+  $scope.$on('navifilters:set', function (event, value) {
+    console.log("navifilters:set", value);
+    if (value.vlk) {
+      _.each($scope.navi.sections[2].model.sections[0].items, function (vlk) {
+        vlk.$selected = _.isEmpty(value.vlk) || _.contains(value.vlk, vlk.value);
+      });
+    }
+  });
+
+  function updateVlkSelection() {
+    var selected = _($scope.navi.sections[2].model.sections[0].items).filter('$selected').map('value').value();
+    $state.go($state.current.name, _.extend({vlk: selected}, $stateParams));
   }
 
   $scope.navi = {
@@ -302,7 +362,7 @@ epOpintopolkuApp
             items: _.map($scope.vuosiluokkakokonaisuudet, function(kokonaisuus) {
               return { label: kokonaisuus.nimi, value: kokonaisuus.id, $selected: true };
             }),
-            update: paivitaSivunavi
+            update: updateVlkSelection
           }, {
             title: 'oppiaineet',
             id: 'oppiaineet',

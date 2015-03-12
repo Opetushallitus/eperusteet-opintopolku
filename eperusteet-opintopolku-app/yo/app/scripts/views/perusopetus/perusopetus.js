@@ -89,30 +89,13 @@ epOpintopolkuApp
 
 .controller('PerusopetusVlkOppiaineController', function($scope, oppiaine, $stateParams) {
   $scope.vlkId = $stateParams.vlkId;
-  function processOppiaine() {
-    $scope.valittuOppiaine = {};
-    $scope.valittuOppiaine.oppiaine = oppiaine;
-    $scope.valittuOppiaine.vuosiluokkakokonaisuudet = _.zipBy(oppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus');
+  $scope.processOppiaine(oppiaine, $scope.vlkId);
 
-    $scope.valittuOppiaine.vlks = $scope.valittuOppiaine.vuosiluokkakokonaisuudet[$scope.vlkId];
-    if ($scope.valittuOppiaine.vlks) {
-      $scope.valittuOppiaine.sisallot = $scope.sisallot[$scope.valittuOppiaine.vlks._vuosiluokkaKokonaisuus];
-    }
+})
 
-    $scope.oppimaarat = $scope.filteredOppimaarat(oppiaine, $scope.vlkId);
-    paivitaTavoitteet();
-  }
-
-  function paivitaTavoitteet() {
-    if ($scope.valittuOppiaine.vlks) {
-      _.each($scope.valittuOppiaine.vlks.tavoitteet, function(tavoite) {
-        if (_.isEmpty(tavoite.laajattavoitteet)) {
-          tavoite.$rejected = false;
-        }
-      });
-    }
-  }
-
-  processOppiaine();
-
+.controller('PerusopetusSisallotController', function($scope, oppiaine, $stateParams, $rootScope) {
+  var queryVlks = _.compact(_.map(_.isArray($stateParams.vlk) ? $stateParams.vlk : [$stateParams.vlk], _.ary(parseInt, 1)));
+  $rootScope.$broadcast('navifilters:set', {vlk: queryVlks});
+  console.log(queryVlks);
+  $scope.processOppiaine(oppiaine, _.first(queryVlks));
 });
