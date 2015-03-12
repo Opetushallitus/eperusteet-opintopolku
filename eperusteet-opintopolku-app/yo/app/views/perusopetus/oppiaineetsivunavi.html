@@ -1,5 +1,14 @@
 <div class="perusopetus">
-  <div ng-repeat="oppiaine in section.items | orderBy:section.$oppiaineOrder">
+
+  <div ng-repeat="item in section.items" style="margin-left: {{ item.depth * 20 }}px;"
+      class="tekstisisalto" ng-class="{'tekstisisalto-active': item.$selected, 'tekstisisalto-active-header': item.$header}"
+      ng-hide="item.root || item.$hidden">
+      <a ng-href="{{item.url}}">
+        <span>{{ item.label | kaanna }}</span>
+      </a>
+  </div>
+
+  <!-- <div ng-repeat="oppiaine in section.items | orderBy:section.$oppiaineOrder">
     <a class="oppiaine {{ section.isCurrentOppiaine(oppiaine.id) && 'oppiaine-selected' }}"
        kaanna="oppiaine.nimi" ui-sref="root.perusopetus.sisallot({oppiaineId: oppiaine.id})"></a>
 
@@ -7,5 +16,5 @@
       <a class="oppiaine oppimaara {{ section.isCurrentOppiaine(oppimaara.id) && 'oppiaine-selected' }}"
          ui-sref="root.perusopetus.sisallot({oppiaineId: oppimaara.id})" kaanna="oppimaara.nimi"></a>
     </div>
-  </div>
+  </div> -->
 </div>
