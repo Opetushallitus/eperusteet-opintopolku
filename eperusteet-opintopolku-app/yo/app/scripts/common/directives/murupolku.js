@@ -34,9 +34,22 @@ epOpintopolkuApp
     };
     this.setTitle = function (crumbs) {
       var titleEl = angular.element('head > title');
+      var peruste = null;
+      _.each(crumbs, function (crumb, index) {
+        if (crumb.peruste && index !== crumbs.length - 1) {
+          peruste = crumb.peruste;
+        }
+      });
       var leaf = _.last(crumbs);
-      var last = leaf ? Kaanna.kaanna(leaf.label) : null;
-      var titleText = (last ? last + ' // ' : '') + Kaanna.kaanna('eperusteet-otsikko');
+      var last = leaf ? Kaanna.kaanna(leaf.label) : '';
+      var titleText = last;
+      if (peruste && last) {
+        titleText += (' / ' + Kaanna.kaanna(peruste));
+      }
+      if (titleText) {
+        titleText += ' // ';
+      }
+      titleText += Kaanna.kaanna('eperusteet-otsikko');
       titleEl.html(titleText);
     };
   })
@@ -82,6 +95,33 @@ epOpintopolkuApp
         useId: 'oppiaineId',
         customParents: true
       },
+      'root.esitys.peruste': {
+        useId: 'perusteId',
+        useData: 'perusteNimi'
+      },
+      'root.esitys.peruste.rakenne': {
+        parent: 'root.esitys.peruste',
+        label: 'tutkinnon-muodostuminen'
+      },
+      'root.esitys.peruste.tiedot': {
+        parent: 'root.esitys.peruste',
+        label: 'perusteen-tiedot'
+      },
+      'root.esitys.peruste.tutkinnonosat': {
+        parent: 'root.esitys.peruste',
+        label: 'tutkinnonosat'
+      },
+      'root.esitys.peruste.tutkinnonosa': {
+        parent: 'root.esitys.peruste.tutkinnonosat',
+        useId: 'id',
+        useData: 'tutkinnonosaNimi'
+      },
+      'root.esitys.peruste.tekstikappale': {
+        parent: 'root.esitys.peruste',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi',
+        customParents: true
+      }
     };
 
     function getPath(state) {
@@ -99,7 +139,7 @@ epOpintopolkuApp
           _.each(MurupolkuData.get('parents'), function (parent) {
             var treeItem = {state: state};
             if (parent.perusteenOsa) {
-              treeItem.params = {tekstikappaleId: parent.id};
+              treeItem.params = _.contains(state, 'perusopetus') ? {tekstikappaleId: parent.id} : {osanId: parent.id};
               treeItem.label = parent.perusteenOsa.nimi;
             } else {
               treeItem.params = {oppiaineId: parent.id};
@@ -137,10 +177,12 @@ epOpintopolkuApp
         if (item.useId) {
           params[item.useId] = MurupolkuData.get(item.useId);
         }
+        var usedData = item.useData ? MurupolkuData.get(item.useData) : null;
         $scope.crumbs.push({
           url: $state.href(item.state, params),
-          label: item.useData ? MurupolkuData.get(item.useData) :
-                 (item.label ? item.label : _.last(item.state.split('.')))
+          label: usedData ? usedData :
+                 (item.label ? item.label : _.last(item.state.split('.'))),
+          peruste: item.useId && item.useId === 'perusteId' ? usedData : null
         });
       }).value();
 

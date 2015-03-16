@@ -30,10 +30,11 @@ epOpintopolkuApp
   })
 
   .controller('EsitysTutkinnonOsaController', function($scope, $state, $stateParams, PerusteenOsat, TutkinnonosanTiedotService,
-      Tutke2Osa, Kieli) {
+      Tutke2Osa, Kieli, MurupolkuData) {
     $scope.tutkinnonOsaViite = _.find($scope.$parent.tutkinnonOsat, function(tosa) {
       return tosa.id === parseInt($stateParams.id, 10);
     });
+    MurupolkuData.set({id: $scope.tutkinnonOsaViite.id, tutkinnonosaNimi: $scope.tutkinnonOsaViite.nimi});
     $scope.osaAlueet = {};
     TutkinnonosanTiedotService.noudaTutkinnonOsa({perusteenOsaId: $scope.tutkinnonOsaViite._tutkinnonOsa}).then(function () {
       $scope.tutkinnonOsa = TutkinnonosanTiedotService.getTutkinnonOsa();
@@ -78,9 +79,15 @@ epOpintopolkuApp
     });
   })
 
-  .controller('EsitysSisaltoController', function($scope, $state, $stateParams, PerusteenOsat, YleinenData) {
+  .controller('EsitysSisaltoController', function($scope, $state, $stateParams, PerusteenOsat, YleinenData,
+    MurupolkuData, ParentFinder) {
     $scope.$parent.valittu.sisalto = $stateParams.osanId;
     $scope.valittuSisalto = $scope.$parent.sisalto[$stateParams.osanId];
+    MurupolkuData.set({
+      osanId: $scope.valittuSisalto.id,
+      tekstikappaleNimi: $scope.valittuSisalto.nimi,
+      parents: ParentFinder.find($scope.$parent.originalSisalto.lapset, parseInt($stateParams.osanId, 10))
+    });
     if (!$scope.valittuSisalto) {
       var params = _.extend(_.clone($stateParams), {
         suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
@@ -93,9 +100,10 @@ epOpintopolkuApp
 
   .controller('EsitysController', function($scope, $stateParams, sisalto, peruste,
       YleinenData, $state, Algoritmit, tutkinnonOsat, Kaanna, arviointiasteikot,
-      koulutusalaService, opintoalaService, Kieli, TermistoService) {
+      koulutusalaService, opintoalaService, Kieli, TermistoService, MurupolkuData) {
 
     TermistoService.setPeruste(peruste);
+    MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
     $scope.Koulutusalat = koulutusalaService;
     $scope.Opintoalat = opintoalaService;
     var isTutkinnonosatActive = function () {
@@ -133,6 +141,7 @@ epOpintopolkuApp
     });
     $scope.backLink = $state.href(YleinenData.koulutustyyppiInfo[$scope.peruste.koulutustyyppi].hakuState);
     $scope.sisalto = mapSisalto(sisalto);
+    $scope.originalSisalto = sisalto;
 
     $scope.arviointiasteikot = _.zipObject(_.map(arviointiasteikot, 'id'), _.map(arviointiasteikot, function(asteikko) {
       return _.zipObject(_.map(asteikko.osaamistasot, 'id'), asteikko.osaamistasot);

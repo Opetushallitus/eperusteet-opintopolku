@@ -15,12 +15,16 @@ European Union Public Licence for more details.
 -->
 
 <div class="main-content" id="main">
-<!-- esitys.html -->
+
+  <h1 class="peruste-otsikko" ng-bind="peruste.nimi | kaanna"></h1>
+
+  <murupolku></murupolku>
+
   <div class="esitys">
     <div class="sivunavi-navigaatio">
-      <div class="sivunavi-takaisin">
+      <!-- <div class="sivunavi-takaisin">
         <a ng-href="{{backLink}}" icon-role="back" kaanna="takaisin-hakuun"></a>
-      </div>
+      </div> -->
       <sivunavigaatio items="navi.items" header="navi.header">
         <select ng-show="suoritustavat.length > 1" class="form-control input-sm"
                 ng-model="suoritustapa" ng-change="vaihdaSuoritustapa(suoritustapa)"
@@ -29,12 +33,6 @@ European Union Public Licence for more details.
     </div>
     <div class="sivunavi-clear"></div>
     <div class="sivunavi-sisalto" ng-cloak>
-      <!-- <div class="painikkeet pull-right">
-        <a class="action-link" ng-click="luoPdf()" icon-role="save" kaanna="lataa-peruste-pdf-muodossa"></a>
-      </div> -->
-      <h1>
-        <span ng-bind="peruste.nimi | kaanna"></span>
-      </h1>
       <div id="esitysPrintSisalto" ui-view></div>
     </div>
   </div>

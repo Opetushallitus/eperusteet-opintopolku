@@ -42,22 +42,17 @@ epOpintopolkuApp
   };
 })
 
-.controller('PerusopetusTekstikappaleController', function($scope, tekstikappale, TekstikappaleChildResolver, MurupolkuData) {
-  $scope.tekstikappale = tekstikappale;
-  MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
-  $scope.lapset = TekstikappaleChildResolver.getSisalto();
-  $scope.links = {
-    prev: null,
-    next: null
-  };
-
-  function matcher(node, id, accumulator) {
-    if (node.perusteenOsa && node.perusteenOsa.id === id) {
+.service('ParentFinder', function () {
+  var idToMatch = null;
+  var usePerusteenOsa = false;
+  function matcher(node, accumulator) {
+    if ((usePerusteenOsa && node.perusteenOsa && node.perusteenOsa.id === idToMatch) ||
+        (!usePerusteenOsa && node.id === idToMatch)) {
       accumulator.push(node);
       return true;
     }
     var childMatch = _.some(node.lapset, function (lapsi) {
-      return matcher(lapsi, id, accumulator);
+      return matcher(lapsi, accumulator);
     });
     if (childMatch) {
       accumulator.push(node);
@@ -66,12 +61,29 @@ epOpintopolkuApp
   }
 
   function iterateFn(accumulator, value) {
-    matcher(value, tekstikappale.id, accumulator);
+    matcher(value, accumulator);
     return accumulator;
   }
 
-  var parents = _.reduce($scope.tekstisisalto.lapset, iterateFn, []);
-  MurupolkuData.set('parents', _(parents).drop(1).value());
+  this.find = function (lapset, matchId, perusteenOsaIdMatch) {
+    idToMatch = matchId;
+    usePerusteenOsa = !!perusteenOsaIdMatch;
+    var parents = _.reduce(lapset, iterateFn, []);
+    return _(parents).drop(1).value();
+  };
+})
+
+.controller('PerusopetusTekstikappaleController', function($scope, tekstikappale, TekstikappaleChildResolver,
+  MurupolkuData, ParentFinder) {
+  $scope.tekstikappale = tekstikappale;
+  MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
+  $scope.lapset = TekstikappaleChildResolver.getSisalto();
+  $scope.links = {
+    prev: null,
+    next: null
+  };
+
+  MurupolkuData.set('parents', ParentFinder.find($scope.tekstisisalto.lapset, tekstikappale.id, true));
 
   function checkPrevNext() {
     var items = $scope.navi.sections[0].items;

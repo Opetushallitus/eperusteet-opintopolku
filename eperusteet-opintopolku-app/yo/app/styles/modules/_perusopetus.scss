@@ -285,6 +285,10 @@ $tag-color: #FEE7A4;
 }
 
 .perusopetus {
+  h1 {
+    margin: 0 0 20px 0;
+    border-bottom: 1px solid #ccc;
+  }
   .tekstisisalto {
     margin-bottom: 4px;
     padding: 3px;
@@ -330,7 +334,7 @@ $tag-color: #FEE7A4;
   }
 
   .oppiaine-nimi {
-    border-bottom: 1px solid #aaa;
+    margin-bottom: 10px;
   }
   .vuosiluokkavalitsin {
     float: right;

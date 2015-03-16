@@ -290,6 +290,7 @@ h4.sparse {
 }
 
 .breadcrumb {
+  padding-left: 0;
   li {
     display: inline-block;
     max-width: 40em;
@@ -300,4 +301,9 @@ h4.sparse {
   li:not(:last-child) {
     max-width: 22em;
   }
+}
+
+.peruste-otsikko {
+  margin-top: 30px;
+  margin-bottom: 16px;
 }
