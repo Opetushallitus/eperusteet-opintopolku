@@ -288,3 +288,16 @@ body {
 h4.sparse {
   margin-top: 20px;
 }
+
+.breadcrumb {
+  li {
+    display: inline-block;
+    max-width: 40em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  li:not(:last-child) {
+    max-width: 22em;
+  }
+}

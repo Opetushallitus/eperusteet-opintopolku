@@ -42,13 +42,36 @@ epOpintopolkuApp
   };
 })
 
-.controller('PerusopetusTekstikappaleController', function($scope, tekstikappale, TekstikappaleChildResolver) {
+.controller('PerusopetusTekstikappaleController', function($scope, tekstikappale, TekstikappaleChildResolver, MurupolkuData) {
   $scope.tekstikappale = tekstikappale;
+  MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
   $scope.lapset = TekstikappaleChildResolver.getSisalto();
   $scope.links = {
     prev: null,
     next: null
   };
+
+  function matcher(node, id, accumulator) {
+    if (node.perusteenOsa && node.perusteenOsa.id === id) {
+      accumulator.push(node);
+      return true;
+    }
+    var childMatch = _.some(node.lapset, function (lapsi) {
+      return matcher(lapsi, id, accumulator);
+    });
+    if (childMatch) {
+      accumulator.push(node);
+      return true;
+    }
+  }
+
+  function iterateFn(accumulator, value) {
+    matcher(value, tekstikappale.id, accumulator);
+    return accumulator;
+  }
+
+  var parents = _.reduce($scope.tekstisisalto.lapset, iterateFn, []);
+  MurupolkuData.set('parents', _(parents).drop(1).value());
 
   function checkPrevNext() {
     var items = $scope.navi.sections[0].items;
@@ -79,21 +102,46 @@ epOpintopolkuApp
   checkPrevNext();
 })
 
-.controller('PerusopetusVlkController', function($scope, $stateParams, Utils) {
+.controller('PerusopetusVlkController', function($scope, $stateParams, Utils, MurupolkuData) {
   $scope.vlk = $scope.vuosiluokkakokonaisuudetMap[$stateParams.vlkId];
+  MurupolkuData.set({vlkId: $scope.vlk.id, vlkNimi: $scope.vlk.nimi});
 
   $scope.vlkOrder = function (item) {
     return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
   };
 })
 
-.controller('PerusopetusVlkOppiaineController', function($scope, oppiaine, $stateParams) {
+.controller('PerusopetusVlkOppiaineController', function($scope, oppiaine, $stateParams, MurupolkuData) {
   $scope.vlkId = $stateParams.vlkId;
   $scope.processOppiaine(oppiaine, [$scope.vlkId]);
+  var vlk = $scope.vuosiluokkakokonaisuudetMap[$scope.vlkId];
+  var murupolkuParams = {
+    parents: null,
+    vlkId: vlk.id,
+    vlkNimi: vlk.nimi,
+    oppiaineId: oppiaine.id,
+    oppiaineNimi: oppiaine.nimi
+  };
+  if (oppiaine._oppiaine) {
+    murupolkuParams.parents = [$scope.oppiaineetMap[oppiaine._oppiaine]];
+  }
+  MurupolkuData.set(murupolkuParams);
 })
 
-.controller('PerusopetusSisallotController', function($scope, oppiaine, $stateParams, $rootScope) {
+.controller('PerusopetusSisallotController', function($scope, oppiaine, $stateParams, $rootScope, MurupolkuData) {
   $scope.inSisallot = true;
+
+  if (oppiaine) {
+    var murupolkuParams = {
+      parents: null,
+      oppiaineId: oppiaine.id,
+      oppiaineNimi: oppiaine.nimi
+    };
+    if (oppiaine._oppiaine) {
+      murupolkuParams.parents = [$scope.oppiaineetMap[oppiaine._oppiaine]];
+    }
+    MurupolkuData.set(murupolkuParams);
+  }
 
   function makeQueryArray(param, isNumber) {
     var arr = _.isArray(param) ? param : [param];

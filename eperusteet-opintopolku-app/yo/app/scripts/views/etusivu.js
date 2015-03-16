@@ -64,7 +64,8 @@ epOpintopolkuApp
   this.getPerusopetus = getPerusopetus;
 })
 
-.controller('EtusivuController', function ($scope, UusimmatPerusteetService) {
+.controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData) {
+  MurupolkuData.setTitle(null);
   $scope.uusimmat = {};
   UusimmatPerusteetService.fetch(function (res) {
     $scope.uusimmat = res;

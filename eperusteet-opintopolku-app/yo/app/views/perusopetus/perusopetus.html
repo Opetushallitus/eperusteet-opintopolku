@@ -1,6 +1,8 @@
 <div>
   <h1 ng-bind="peruste.nimi | kaanna"></h1>
 
+  <murupolku></murupolku>
+
   <div id="sivunavi-sisalto-wrapper" ng-class="{'sivunavi-hidden': !isNaviVisible()}">
     <div class="sivunavi-navigaatio">
       <sivunavigaatio on-section-change="onSectionChange" header="navi.header" sections="navi.sections" show-one="navi.showOne"></sivunavigaatio>

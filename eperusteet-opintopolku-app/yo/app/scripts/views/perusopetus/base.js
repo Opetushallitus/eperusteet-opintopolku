@@ -18,7 +18,7 @@
 
 epOpintopolkuApp
 .controller('PerusopetusController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
-  $state, $stateParams, MenuBuilder, Utils,
+  $state, $stateParams, MenuBuilder, Utils, MurupolkuData,
   Oppiaineet, TermistoService, Kieli, $document, $rootScope, PerusopetusStateService) {
   $scope.isNaviVisible = _.constant(true);
   $scope.hasContent = function (obj) {
@@ -26,7 +26,9 @@ epOpintopolkuApp
   };
   var peruste = sisalto[0];
   $scope.peruste = peruste;
+  MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
   var oppiaineet = _.zipBy(sisalto[2], 'id');
+  $scope.oppiaineetMap = oppiaineet;
   $scope.osaamiset = _.zipBy(sisalto[1], 'id');
   $scope.sisallot = _.zipBy(sisalto[3], 'id');
   $scope.vuosiluokkakokonaisuudet = _(sisalto[3]).each(function(s) { s.vuosiluokat.sort(); })
