@@ -20,7 +20,7 @@
     "lodash": "~3.0.0",
     "momentjs": "~2.5.1",
     "angular-ui-router": "0.2.13",
-    "bootstrap-sass-official": "~3.1.1",
+    "bootstrap-sass-official": "~3.3.3",
     "angular-elastic": "~2.3.3",
     "angular-cache": "~3.2.2"
   },

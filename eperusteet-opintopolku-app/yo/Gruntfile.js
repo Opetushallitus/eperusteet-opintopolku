@@ -273,14 +273,14 @@ module.exports = function(grunt) {
           ]
         }, {
           expand: true,
-          cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap',
+          cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
           dest: '<%= yeoman.dist %>/styles/fonts',
           src: '*.{eot,svg,ttf,woff}'
         }]
       },
       fonts: {
         expand: true,
-        cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap',
+        cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
         dest: '.tmp/styles/fonts/',
         src: '*.{eot,svg,ttf,woff}'
       }
