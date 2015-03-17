@@ -41,22 +41,23 @@ epOpintopolkuApp
     'koulutustyyppi_15': {
       tyyppi: 'koulutustyyppi_15',
       tila: 'valmis'
+    },
+    'koulutustyyppi_6': {
+      tyyppi: 'koulutustyyppi_6',
+      tila: 'valmis'
     }
   };
 
-  function getPerusopetus() {
-    var params = paramMap.koulutustyyppi_16; // jshint ignore:line
+  function getGeneric(key) {
+    var params = paramMap[key];
     return Perusteet.get(params, function (res) {
       perusteet[params.tyyppi] = res.data;
     }).$promise;
   }
 
-  function getEsiopetus() {
-    var params = paramMap.koulutustyyppi_15; // jshint ignore:line
-    return Perusteet.get(params, function (res) {
-      perusteet[params.tyyppi] = res.data;
-    }).$promise;
-  }
+  var getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
+  var getEsiopetus = _.partial(getGeneric, 'koulutustyyppi_15');
+  var getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
 
   this.fetch = function (cb) {
     var params = paramMap.koulutustyyppi_1; // jshint ignore:line
@@ -70,13 +71,14 @@ epOpintopolkuApp
         });
       });
     }).$promise;
-    $q.all([amDeferred, getPerusopetus(), getEsiopetus()]).then(function () {
+    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getLisaopetus()]).then(function () {
       cb(perusteet);
     });
   };
 
   this.getPerusopetus = getPerusopetus;
   this.getEsiopetus = getEsiopetus;
+  this.getLisaopetus = getLisaopetus;
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData) {

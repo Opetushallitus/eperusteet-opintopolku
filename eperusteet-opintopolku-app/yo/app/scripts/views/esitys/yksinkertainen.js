@@ -20,6 +20,7 @@ epOpintopolkuApp
 .controller('EsiopetusController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
   $state, $stateParams, MenuBuilder, Utils, MurupolkuData,
   Oppiaineet, TermistoService, Kieli, $document, $rootScope, PerusopetusStateService) {
+  var currentRootState = _.take($state.current.name.split('.'), 2).join('.');
   $scope.isNaviVisible = _.constant(true);
   $scope.hasContent = function (obj) {
     return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
@@ -75,13 +76,13 @@ epOpintopolkuApp
     ]
   };
   _.each($scope.navi.sections[0].items, function (item) {
-    item.href = $state.href('root.esiopetus.tekstikappale', {tekstikappaleId: item.$osa.id});
+    item.href = $state.href(currentRootState + '.tekstikappale', {tekstikappaleId: item.$osa.id});
   });
 
   installClickHandler();
 
   $timeout(function () {
-    if ($state.current.name === 'root.esiopetus') {
+    if ($state.current.name === currentRootState) {
       var first = _($scope.navi.sections[0].items).filter(function (item) {
         return item.depth === 0;
       }).first();

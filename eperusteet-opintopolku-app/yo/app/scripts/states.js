@@ -269,6 +269,47 @@ epOpintopolkuApp
         return TekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
       }
     }
+  })
+
+  .state('root.lisaopetus', {
+    url: '/lisaopetus/:perusteId',
+    templateUrl: 'views/esitys/yksinkertainen.html',
+    controller: 'EsiopetusController',
+    resolve: {
+      perusteId: function (serviceConfig, $stateParams) {
+        return $stateParams.perusteId;
+      },
+      peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
+        return !perusteId ? UusimmatPerusteetService.getLisaopetus() : Perusteet.get({perusteId: perusteId}).$promise;
+      },
+      sisalto: function(serviceConfig, peruste, $q, SuoritustapaSisalto) {
+        if (_.isArray(peruste.data)) {
+          peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};
+        }
+        var perusteId = peruste.id;
+        return $q.all([
+          peruste,
+          perusteId ? SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'lisaopetus'}).$promise : {},
+        ]);
+      }
+    }
+  })
+
+  .state('root.lisaopetus.tekstikappale', {
+    url: '/tekstikappale/:tekstikappaleId',
+    templateUrl: 'views/perusopetus/tekstikappale.html',
+    controller: 'PerusopetusTekstikappaleController',
+    resolve: {
+      tekstikappaleId: function (serviceConfig, $stateParams) {
+        return $stateParams.tekstikappaleId;
+      },
+      tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
+        return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
+      },
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
+        return TekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
+      }
+    }
   });
 
 });

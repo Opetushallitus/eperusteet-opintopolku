@@ -105,6 +105,16 @@ epOpintopolkuApp
         useId: 'tekstikappaleId',
         customParents: true
       },
+      'root.lisaopetus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.lisaopetus.tekstikappale': {
+        parent: 'root.lisaopetus',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+        customParents: true
+      },
       'root.esitys.peruste': {
         useId: 'perusteId',
         useData: 'perusteNimi'
@@ -134,6 +144,12 @@ epOpintopolkuApp
       }
     };
 
+    function perusTaiYksinkertainen(state) {
+      return _.contains(state, 'perusopetus') ||
+        _.contains(state, 'esiopetus') ||
+        _.contains(state, 'lisaopetus');
+    }
+
     function getPath(state) {
       var tree = [];
       if (!state) {
@@ -149,7 +165,7 @@ epOpintopolkuApp
           _.each(MurupolkuData.get('parents'), function (parent) {
             var treeItem = {state: state};
             if (parent.perusteenOsa) {
-              treeItem.params = _.contains(state, 'perusopetus') ? {tekstikappaleId: parent.id} : {osanId: parent.id};
+              treeItem.params = perusTaiYksinkertainen(state) ? {tekstikappaleId: parent.id} : {osanId: parent.id};
               treeItem.label = parent.perusteenOsa.nimi;
             } else {
               treeItem.params = {oppiaineId: parent.id};
