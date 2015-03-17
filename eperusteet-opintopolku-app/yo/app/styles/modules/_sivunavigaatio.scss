@@ -1,4 +1,4 @@
-$sivunavi-leveys: 280px;
+$sivunavi-leveys: 330px;
 $sivunavi-takaisin-korkeus: 0;
 $sivunavi-toggle-leveys: 40px;
 $sivunavi-toggle-korkeus: 50px;
@@ -68,7 +68,8 @@ $sivunavi-level-padding: 20px;
     margin-top: -1px;
   }
   .panel-chosen > .panel-heading {
-    background-color: darken(#f5f5f5, 10%);
+    background-color: $brand-secondary;
+    color: white;
     .panel-title {
       font-weight: 700;
     }
@@ -126,18 +127,14 @@ $sivunavi-level-padding: 20px;
     margin-bottom: 20px;
   }
   .active, .active a {
-    //background-color: #e6e6e6;
-    background-color: white;
-    //color: $brand-primary;
-    color: $ep-text-default;
+    background-color: $brand-link-active-bg;
+    color: $brand-link-active;
     font-weight: 700;
   }
   .list-group-item {
     &.active, &.active:focus, &.active:hover {
-      //background-color: #e6e6e6;
-      //color: $brand-primary;
-      background-color: white;
-      color: $ep-text-default;
+      background-color: $brand-link-active-bg;
+      color: $brand-link-active;
       border-color: #ddd;
     }
   }

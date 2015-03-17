@@ -16,9 +16,24 @@
 
 'use strict';
 
+/* Sets sivunavi items active based on current state */
 epOpintopolkuApp
 .service('PerusopetusStateService', function ($state, $stateParams, SivunaviUtils, $rootScope) {
   var state = {};
+  var section = null;
+
+  function processSection(navi, index, cb) {
+    section = navi.sections[index];
+    if (index === 1) {
+      state.vlk = true;
+    }
+    section.$open = true;
+    _.each(section.items, function (item, index) {
+      (cb || angular.noop)(item, index);
+      item.$hidden = item.depth > 0;
+    });
+  }
+
   this.setState = function (navi) {
     this.state = {};
     _.each(navi.sections, function (section) {
@@ -28,70 +43,97 @@ epOpintopolkuApp
         item.$header = false;
       });
     });
-    var section = null;
+    section = null;
     var selected = null;
     var items = null;
 
-    function processSection(index, cb) {
-      section = navi.sections[index];
-      if (index === 1) {
-        state.vlk = true;
+    function setParentOppiaineHeader() {
+      if (selected && selected.$oppiaine._oppiaine) {
+        var found = _.find(items, function (item) {
+          return item.$oppiaine && '' + item.$oppiaine.id === '' + selected.$oppiaine._oppiaine;
+        });
+        if (found) {
+          found.$header = true;
+        }
       }
-      section.$open = true;
-      _.each(section.items, function (item, index) {
-        (cb || angular.noop)(item, index);
-        item.$hidden = item.depth > 0;
-      });
     }
 
-    if (_.endsWith($state.current.name, 'tekstikappale')) {
-      processSection(0, function (item) {
-        if (item.$osa) {
-          item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
-          item.$hidden = item.depth > 0;
+    var states = {
+      tekstikappale: {
+        index: 0,
+        callback: function (item) {
+          if (item.$osa) {
+            item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
+            item.$hidden = item.depth > 0;
+            if (item.$selected) {
+              selected = item;
+            }
+          }
+        }
+      },
+      vuosiluokkakokonaisuus: {
+        index: 1,
+        callback: function (item) {
+          if (item.$vkl) {
+            item.$selected = '' + $stateParams.vlkId === '' + item.$vkl.id;
+          }
           if (item.$selected) {
             selected = item;
           }
         }
-      });
-    } else if (_.endsWith($state.current.name, 'vuosiluokkakokonaisuus')) {
-      processSection(1, function (item) {
-        if (item.$vkl) {
-          item.$selected = '' + $stateParams.vlkId === '' + item.$vkl.id;
-        }
-        if (item.$selected) {
-          selected = item;
-        }
-      });
-    } else if (_.endsWith($state.current.name, 'vlkoppiaine')) {
-      var parentVlkId = null;
-      processSection(1, function (item) {
-        if (item.$vkl) {
-          item.$header = '' + $stateParams.vlkId === '' + item.$vkl.id;
-          parentVlkId = item.$vkl.id;
-        }
-        if (item.$oppiaine) {
-          item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id &&
-            $stateParams.vlkId === '' + parentVlkId;
-        }
-        if (item.$selected) {
-          selected = item;
-        }
-      });
-    } else if (_.endsWith($state.current.name, 'sisallot')) {
-      processSection(2);
-      items = section.model.sections[1].items;
-      _.each(items, function (item) {
-        if (item.$oppiaine) {
-          item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+      },
+      vlkoppiaine: {
+        index: 1,
+        callback: function (item) {
+          if (item.$vkl) {
+            item.$header = '' + $stateParams.vlkId === '' + item.$vkl.id;
+            parentVlkId = item.$vkl.id;
+          }
+          if (item.$oppiaine) {
+            item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id &&
+              $stateParams.vlkId === '' + parentVlkId;
+          }
           if (item.$selected) {
             selected = item;
           }
+        },
+        actions: function () {
+          items = section.items;
+          setParentOppiaineHeader();
         }
-      });
-    }
+      },
+      sisallot: {
+        index: 2,
+        actions: function () {
+          items = section.model.sections[1].items;
+          _.each(items, function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+              if (item.$selected) {
+                selected = item;
+              }
+            }
+          });
+          setParentOppiaineHeader();
+        }
+      }
+    };
+
+    var parentVlkId = null;
+    _.each(states, function (value, key) {
+      if (_.endsWith($state.current.name, key)) {
+        processSection(navi, value.index, value.callback || angular.noop);
+        (value.actions || angular.noop)();
+      }
+    });
+
     if (selected && section) {
       var menuItems = items || section.items;
+      var parent = selected.$parent;
+      while (_.isNumber(parent)) {
+        menuItems[parent].$header = true;
+        parent = menuItems[parent].$parent;
+      }
       SivunaviUtils.unCollapse(menuItems, selected);
       SivunaviUtils.traverse(menuItems, 0);
       $rootScope.$broadcast('perusopetus:stateSet');

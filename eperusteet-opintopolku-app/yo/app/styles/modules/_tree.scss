@@ -127,7 +127,7 @@ $tree-box-size: 31px;
 .tree-group .group-placeholder {
   background: $placeholder-vari;
   margin: 0px;
-  height: 32px;
+  height: $tree-box-size;
   width: $tree-group-width;
 }
 
@@ -403,6 +403,7 @@ $kuvausnappisize: 18px;
   }
   .kuvaus {
     margin: 0px;
+    margin-top: -2px;
     width: $tree-group-width;
     padding: 0px;
     background: $kuvaus-vari;
@@ -475,7 +476,7 @@ $kuvausnappisize: 18px;
   .bubble {
     clear: both;
     display: inline-block;
-    height: 32px;
+    height: $tree-box-size;
     .left {
       padding-top: 8px;
       padding-left: 0px;
@@ -519,10 +520,10 @@ $kuvausnappisize: 18px;
       }
     }
     .right-item {
-      min-height: $tree-box-size;
+      min-height: $tree-box-size - 2px;
       float: right;
       border-left: 1px solid #cccccc;
-      padding: 6px 8px;
+      padding: 4px 8px;
       &.valikko {
         padding: 0;
       }
@@ -530,7 +531,7 @@ $kuvausnappisize: 18px;
   }
   .bubble, .tree-list-item .textbox {
     width: $tree-group-width;
-    min-height: 32px;
+    min-height: $tree-box-size;
     border: 1px solid #ccc;
     background-color: #f2f2f2;
     text-decoration: none;
@@ -571,7 +572,7 @@ $kuvausnappisize: 18px;
 
 .bubble-osa {
   width: $tree-group-width;
-  min-height: 32px;
+  min-height: $tree-box-size;
   border: 1px solid #cccccc;
   background-color: #fff;
   padding: 5px 8px;

@@ -294,7 +294,6 @@ $tag-color: #FEE7A4;
     padding: 3px;
     cursor: pointer;
     color: $brand-primary;
-    font-weight: 700;
   }
 
   .oppiaine {
@@ -302,7 +301,6 @@ $tag-color: #FEE7A4;
     margin-left: 20px;
     margin-bottom: 5px;
     padding: 3px;
-    //color: $brand-primary;
     font-weight: 700;
   }
 
@@ -318,18 +316,20 @@ $tag-color: #FEE7A4;
   }
 
   .tekstisisalto-active-header {
-    background-color: #888888;
-    color: white;
+    background-color: $brand-link-active-header-bg;
+    color: $brand-link-active-header;
+    font-weight: 700;
     a {
-      color: white;
+      color: $brand-link-active-header;
     }
   }
 
   .tekstisisalto-active {
-    background-color: #0C566E;
-    color: white;
+    font-weight: 700;
+    background-color: $brand-link-active-bg;
+    color: $brand-link-active;
     a {
-      color: white;
+      color: $brand-link-active;
     }
   }
 
@@ -404,7 +404,6 @@ $tag-color: #FEE7A4;
 .reset-filters {
   display: block;
   width: 100%;
-  //text-align: right;
   margin-bottom: 10px;
 }
 
