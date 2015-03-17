@@ -20,48 +20,63 @@ epOpintopolkuApp
 .service('UusimmatPerusteetService', function ($q, Perusteet, $state, Kieli) {
   var uikieli = Kieli.getUiKieli();
   var perusteet = {};
-  var amParams = {
-    nimi: '',
-    koulutusala: '',
-    tyyppi: 'koulutustyyppi_1',
-    kieli: uikieli,
-    opintoala: '',
-    siirtyma: false,
-    sivu: 0,
-    sivukoko: 7,
-    suoritustapa: 'ops',
-    perusteTyyppi: 'normaali',
-    tila: 'valmis'
-  };
-  var perusParams = {
-    tyyppi: 'koulutustyyppi_16',
-    tila: 'valmis'
+  var paramMap = {
+    'koulutustyyppi_1': {
+      nimi: '',
+      koulutusala: '',
+      tyyppi: 'koulutustyyppi_1',
+      kieli: uikieli,
+      opintoala: '',
+      siirtyma: false,
+      sivu: 0,
+      sivukoko: 7,
+      suoritustapa: 'ops',
+      perusteTyyppi: 'normaali',
+      tila: 'valmis',
+    },
+    'koulutustyyppi_16': {
+      tyyppi: 'koulutustyyppi_16',
+      tila: 'valmis'
+    },
+    'koulutustyyppi_15': {
+      tyyppi: 'koulutustyyppi_15',
+      tila: 'valmis'
+    }
   };
 
   function getPerusopetus() {
-    return Perusteet.get(perusParams, function (res) {
-      perusteet[perusParams.tyyppi] = res.data;
+    var params = paramMap.koulutustyyppi_16; // jshint ignore:line
+    return Perusteet.get(params, function (res) {
+      perusteet[params.tyyppi] = res.data;
+    }).$promise;
+  }
+
+  function getEsiopetus() {
+    var params = paramMap.koulutustyyppi_15; // jshint ignore:line
+    return Perusteet.get(params, function (res) {
+      perusteet[params.tyyppi] = res.data;
     }).$promise;
   }
 
   this.fetch = function (cb) {
-    var amDeferred = Perusteet.get(amParams, function (res) {
+    var params = paramMap.koulutustyyppi_1; // jshint ignore:line
+    var amDeferred = Perusteet.get(params, function (res) {
       // TODO varmista että uusimmat, pvm?
-      perusteet[amParams.tyyppi] = res.data;
-      _.each(perusteet[amParams.tyyppi], function (peruste) {
+      perusteet[params.tyyppi] = res.data;
+      _.each(perusteet[params.tyyppi], function (peruste) {
         peruste.url = $state.href('root.esitys.peruste', {
           perusteId: peruste.id,
-          suoritustapa: amParams.suoritustapa
+          suoritustapa: params.suoritustapa
         });
       });
     }).$promise;
-    var perusopetus = getPerusopetus();
-    $q.all([amDeferred, perusopetus]).then(function () {
+    $q.all([amDeferred, getPerusopetus(), getEsiopetus()]).then(function () {
       cb(perusteet);
     });
   };
 
   this.getPerusopetus = getPerusopetus;
+  this.getEsiopetus = getEsiopetus;
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData) {

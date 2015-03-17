@@ -95,6 +95,16 @@ epOpintopolkuApp
         useId: 'oppiaineId',
         customParents: true
       },
+      'root.esiopetus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.esiopetus.tekstikappale': {
+        parent: 'root.esiopetus',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+        customParents: true
+      },
       'root.esitys.peruste': {
         useId: 'perusteId',
         useData: 'perusteNimi'

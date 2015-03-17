@@ -73,7 +73,7 @@ module.exports = function(grunt) {
         hostname: '0.0.0.0'
       },
       proxies: [{
-        context: '/oppija-raamit',
+        context: '/eperusteet-service',
         host: 'localhost',
         port: 8080,
         https: false,

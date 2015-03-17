@@ -149,6 +149,8 @@ epOpintopolkuApp
     controller: 'EsitysTiedotController'
   })
 
+  /* PERUSOPETUS */
+
   .state('root.perusopetus', {
     url: '/perusopetus/:perusteId',
     templateUrl: 'views/perusopetus/perusopetus.html',
@@ -224,6 +226,47 @@ epOpintopolkuApp
       },
       oppiaine: function (serviceConfig, perusteId, Oppiaineet, oppiaineId) {
         return oppiaineId ? Oppiaineet.get({ perusteId: perusteId, osanId: oppiaineId }).$promise : null;
+      }
+    }
+  })
+
+  .state('root.esiopetus', {
+    url: '/esiopetus/:perusteId',
+    templateUrl: 'views/esitys/yksinkertainen.html',
+    controller: 'EsiopetusController',
+    resolve: {
+      perusteId: function (serviceConfig, $stateParams) {
+        return $stateParams.perusteId;
+      },
+      peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
+        return !perusteId ? UusimmatPerusteetService.getEsiopetus() : Perusteet.get({perusteId: perusteId}).$promise;
+      },
+      sisalto: function(serviceConfig, peruste, $q, SuoritustapaSisalto) {
+        if (_.isArray(peruste.data)) {
+          peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};
+        }
+        var perusteId = peruste.id;
+        return $q.all([
+          peruste,
+          perusteId ? SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'esiopetus'}).$promise : {},
+        ]);
+      }
+    }
+  })
+
+  .state('root.esiopetus.tekstikappale', {
+    url: '/tekstikappale/:tekstikappaleId',
+    templateUrl: 'views/perusopetus/tekstikappale.html',
+    controller: 'PerusopetusTekstikappaleController',
+    resolve: {
+      tekstikappaleId: function (serviceConfig, $stateParams) {
+        return $stateParams.tekstikappaleId;
+      },
+      tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
+        return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
+      },
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
+        return TekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
       }
     }
   });

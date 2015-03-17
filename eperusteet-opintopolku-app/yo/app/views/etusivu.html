@@ -14,7 +14,7 @@
     <div class="col-lg-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="navi.esiopetus"></h2>
-        <p><a ui-sref="root.esiopetus" kaanna="etusivu.esiopetuksen-peruste"></a></p>
+        <p><a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})" ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna"></a></p>
       </div>
       <div class="sisalto-box">
         <h2 kaanna="navi.perusopetus"></h2>
