@@ -1,23 +1,23 @@
-<h1 ng-bind="tekstikappale.nimi | kaanna"></h1>
+<h1 ng-bind-html="tekstikappale.nimi | kaanna | unsafe"></h1>
 <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
 
 <div ng-repeat="lapsi in lapset">
   <h2>
-    <span ng-bind="lapsi.$osa.nimi | kaanna"></span>
+    <span ng-bind-html="lapsi.$osa.nimi | kaanna | unsafe"></span>
     <span class="teksti-linkki"><a ui-sref="^.tekstikappale({tekstikappaleId: lapsi.id})" icon-role="new-window"></a></span>
   </h2>
   <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset">
     <h3>
-      <span ng-bind="alilapsi.$osa.nimi | kaanna"></span>
+      <span ng-bind-html="alilapsi.$osa.nimi | kaanna | unsafe"></span>
       <span class="teksti-linkki"><a ui-sref="^.tekstikappale({tekstikappaleId: alilapsi.id})" icon-role="new-window"></a></span>
     </h3>
     <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
 
     <div ng-repeat="alialilapsi in alilapsi.lapset">
       <h4>
-        <span ng-bind="alialilapsi.$osa.nimi | kaanna"></span>
+        <span ng-bind-html="alialilapsi.$osa.nimi | kaanna | unsafe"></span>
       </h4>
       <termisto-tekstikentta tekstikentta="alialilapsi.$osa.teksti"></termisto-tekstikentta>
     </div>
@@ -30,10 +30,10 @@
       <span class="glyphicon glyphicon-chevron-left"></span>
     </a>
     <a class="prev" ng-if="links.prev" ui-sref="^.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
-      <span ng-bind="links.prev.label | kaanna"></span>
+      <span ng-bind-html="links.prev.label | kaanna | unsafe"></span>
     </a>
     <a class="next" ng-if="links.next" ui-sref="^.tekstikappale({tekstikappaleId: links.next.$osa.id})">
-      <span ng-bind="links.next.label | kaanna"></span>
+      <span ng-bind-html="links.next.label | kaanna | unsafe"></span>
     </a>
     <a class="next chevron" ng-if="links.next" ui-sref="^.tekstikappale({tekstikappaleId: links.next.$osa.id})">
       <span class="glyphicon glyphicon-chevron-right"></span>

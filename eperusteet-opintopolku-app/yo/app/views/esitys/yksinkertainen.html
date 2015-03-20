@@ -1,5 +1,5 @@
 <div>
-  <h1 class="peruste-otsikko" ng-bind="peruste.nimi | kaanna"></h1>
+  <h1 class="peruste-otsikko" ng-bind-html="peruste.nimi | kaanna | unsafe"></h1>
 
   <murupolku></murupolku>
   <div class="clearfix"></div>

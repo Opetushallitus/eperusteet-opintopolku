@@ -27,7 +27,7 @@
   </div>
 
   <div ng-hide="filterSisalto.tehtava || !hasContent(valittuOppiaine.oppiaine.tehtava)">
-    <h2>{{ valittuOppiaine.oppiaine.tehtava.otsikko | kaanna }}</h2>
+    <h2 ng-bind-html="valittuOppiaine.oppiaine.tehtava.otsikko | kaanna | unsafe"></h2>
     <termisto-tekstikentta tekstikentta="valittuOppiaine.oppiaine.tehtava.teksti || '-'"></termisto-tekstikentta>
   </div>
 
@@ -37,17 +37,17 @@
   </div>
 
   <div ng-hide="filterSisalto.tehtava || !hasContent(valittuOppiaine.vlks.tehtava)">
-    <h3>{{ valittuOppiaine.vlks.tehtava.otsikko | kaanna }}</h3>
+    <h3 ng-bind-html="valittuOppiaine.vlks.tehtava.otsikko | kaanna | unsafe"></h3>
     <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tehtava.teksti || '-'"></termisto-tekstikentta>
   </div>
 
   <div ng-hide="filterSisalto.ohjaus || !hasContent(valittuOppiaine.vlks.ohjaus)">
-    <h3>{{ valittuOppiaine.vlks.ohjaus.otsikko | kaanna }}</h3>
+    <h3 ng-bind-html="valittuOppiaine.vlks.ohjaus.otsikko | kaanna | unsafe"></h3>
     <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.ohjaus.teksti || '-'"></termisto-tekstikentta>
   </div>
 
   <div ng-hide="filterSisalto.tyotavat || !hasContent(valittuOppiaine.vlks.tyotavat)">
-    <h3>{{ valittuOppiaine.vlks.tyotavat.otsikko | kaanna }}</h3>
+    <h3 ng-bind-html="valittuOppiaine.vlks.tyotavat.otsikko | kaanna | unsafe"></h3>
     <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tyotavat.teksti || '-'"></termisto-tekstikentta>
   </div>
 
