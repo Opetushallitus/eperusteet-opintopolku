@@ -38,6 +38,27 @@
   padding-right: 0;
   background-color: $ylanavi-color;
 }
+.ylanavigaatio-sub {
+  padding-left: 0;
+  padding-right: 0;
+  background-color: $content-bg-color;
+}
+
+.ylanavi-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  li {
+    padding: 16px;
+    display: inline-block;
+    &.active {
+      background-color: $content-bg-color;
+      a {
+        color: black;
+      }
+    }
+  }
+}
 
 .ylanavi-container {
   width: 100%;
@@ -45,19 +66,23 @@
     color: white;
     font-size: 110%;
   }
-  ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+}
+
+.ylanavi-container-sub {
+  width: 100%;
+  .ylanavi-list {
     li {
-      padding: 16px;
-      display: inline-block;
+      padding: 11px 16px;
       &.active {
         background-color: $content-bg-color;
         a {
-          color: $brand-primary;
+          color: black;
         }
       }
     }
+  }
+  & a {
+    color: $brand-primary;
+    font-size: 100%;
   }
 }
