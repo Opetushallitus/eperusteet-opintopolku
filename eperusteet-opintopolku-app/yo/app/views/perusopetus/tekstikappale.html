@@ -4,14 +4,14 @@
 <div ng-repeat="lapsi in lapset">
   <h2>
     <span ng-bind="lapsi.$osa.nimi | kaanna"></span>
-    <span class="teksti-linkki"><a ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: lapsi.id})" icon-role="new-window"></a></span>
+    <span class="teksti-linkki"><a ui-sref="^.tekstikappale({tekstikappaleId: lapsi.id})" icon-role="new-window"></a></span>
   </h2>
   <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset">
     <h3>
       <span ng-bind="alilapsi.$osa.nimi | kaanna"></span>
-      <span class="teksti-linkki"><a ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: alilapsi.id})" icon-role="new-window"></a></span>
+      <span class="teksti-linkki"><a ui-sref="^.tekstikappale({tekstikappaleId: alilapsi.id})" icon-role="new-window"></a></span>
     </h3>
     <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
 
@@ -26,16 +26,16 @@
 
 <div class="prevnext-wrapper" ng-if="links.prev || links.next">
   <div class="prevnext">
-    <a class="prev chevron" ng-if="links.prev" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
+    <a class="prev chevron" ng-if="links.prev" ui-sref="^.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
       <span class="glyphicon glyphicon-chevron-left"></span>
     </a>
-    <a class="prev" ng-if="links.prev" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
+    <a class="prev" ng-if="links.prev" ui-sref="^.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
       <span ng-bind="links.prev.label | kaanna"></span>
     </a>
-    <a class="next" ng-if="links.next" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.next.$osa.id})">
+    <a class="next" ng-if="links.next" ui-sref="^.tekstikappale({tekstikappaleId: links.next.$osa.id})">
       <span ng-bind="links.next.label | kaanna"></span>
     </a>
-    <a class="next chevron" ng-if="links.next" ui-sref="root.perusopetus.tekstikappale({tekstikappaleId: links.next.$osa.id})">
+    <a class="next chevron" ng-if="links.next" ui-sref="^.tekstikappale({tekstikappaleId: links.next.$osa.id})">
       <span class="glyphicon glyphicon-chevron-right"></span>
     </div>
   </div>

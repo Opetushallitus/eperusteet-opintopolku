@@ -136,6 +136,9 @@ $sivunavi-level-padding: 20px;
       background-color: $brand-link-active-bg;
       color: $brand-link-active;
       border-color: #ddd;
+      .action-link:focus, .action-link:active{
+        color: $brand-link-active;
+      }
     }
   }
   .item {
