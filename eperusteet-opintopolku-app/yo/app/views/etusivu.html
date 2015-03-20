@@ -30,7 +30,7 @@
       <div class="sisalto-box">
         <h2 kaanna="etusivu.uusimmat-ammatilliset"></h2>
         <ul class="uusimmat">
-          <li ng-repeat="peruste in uusimmat['koulutustyyppi_1']">
+          <li ng-repeat="peruste in uusimmat['koulutustyyppi_1'] | orderBy:'-muokattu' | limitTo:7">
             <a ng-href="{{peruste.url}}" ng-bind="peruste.nimi | kaanna"></a>
           </li>
         </ul>

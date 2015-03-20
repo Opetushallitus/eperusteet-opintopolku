@@ -62,7 +62,6 @@ epOpintopolkuApp
   this.fetch = function (cb) {
     var params = paramMap.koulutustyyppi_1; // jshint ignore:line
     var amDeferred = Perusteet.get(params, function (res) {
-      // TODO varmista että uusimmat, pvm?
       perusteet[params.tyyppi] = res.data;
       _.each(perusteet[params.tyyppi], function (peruste) {
         peruste.url = $state.href('root.esitys.peruste', {
