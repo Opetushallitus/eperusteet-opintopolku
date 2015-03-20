@@ -27,7 +27,7 @@ epOpintopolkuApp
     if (!inited) {
       inited = true;
       $http({
-        url: '/config.json'
+        url: 'config.json'
       }).success(function (res) {
         if (!res['eperusteet-service']) {
           deferred.resolve('Virheellinen configuraatio: config.json: "eperusteet-service" puuttuu');
