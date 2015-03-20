@@ -81,10 +81,62 @@ epOpintopolkuApp
   this.getLisaopetus = getLisaopetus;
 })
 
-.controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData) {
+.controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
+  TiedotteetCRUD) {
   MurupolkuData.setTitle(null);
   $scope.uusimmat = {};
+  $scope.tiedotteet = [];
+  $scope.naytto = {limit: 5, shown: 5};
+
   UusimmatPerusteetService.fetch(function (res) {
     $scope.uusimmat = res;
   });
+
+  var MONTH_OFFSET = 6;
+  var tempDate = new Date();
+  tempDate.setMonth(tempDate.getMonth() - MONTH_OFFSET);
+  var alkaen = tempDate.getTime();
+
+  TiedotteetCRUD.query({alkaen: alkaen , vainJulkiset: true}, function (res) {
+    $scope.tiedotteet = res;
+  });
+})
+
+.controller('TiedoteViewController', function ($scope, TiedotteetCRUD, $stateParams, MurupolkuData) {
+  $scope.tiedote = null;
+
+  TiedotteetCRUD.get({tiedoteId: $stateParams.tiedoteId}, function (tiedote) {
+    $scope.tiedote = tiedote;
+    MurupolkuData.set('tiedoteNimi', tiedote.otsikko);
+  });
+})
+
+.directive('limitToggler', function () {
+  return {
+    restrict: 'AE',
+    template: '<div class="show-toggler" ng-show="isVisible">' +
+          '<a class="action-link" ng-click="toggle()">{{linktext| kaanna}}</a>' +
+          '</div>',
+    scope: {
+      'model': '=',
+      'limit': '=',
+      'limiter': '='
+    },
+    controller: function ($scope) {
+      $scope.isVisible = false;
+      $scope.linktext = 'sivupalkki-näytä-kaikki';
+      $scope.$watch('model', function () {
+        $scope.isVisible = $scope.model.length > $scope.limit;
+      });
+      $scope.toggle = function () {
+        if ($scope.limiter === $scope.limit) {
+          $scope.limiter = $scope.model.length;
+          $scope.linktext = 'sivupalkki-piilota';
+        } else {
+          $scope.limiter = $scope.limit;
+          $scope.linktext = 'sivupalkki-näytä-kaikki';
+        }
+      };
+    }
+  };
 });

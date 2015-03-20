@@ -48,6 +48,12 @@ epOpintopolkuApp
     controller: 'EtusivuController'
   })
 
+  .state('root.tiedote', {
+    url: '/tiedote/:tiedoteId',
+    templateUrl: 'views/tiedote.html',
+    controller: 'TiedoteViewController'
+  })
+
   /* HAKU */
 
   .state('root.selaus', {

@@ -68,6 +68,14 @@ epOpintopolkuApp
     var STATE_ROOTS = {};
 
     var STATES = {
+      'root.tiedotteet': {
+        state: 'root.etusivu',
+        label: 'etusivu.tiedotteet'
+      },
+      'root.tiedote': {
+        useData: 'tiedoteNimi',
+        parent: 'root.tiedotteet',
+      },
       'root.perusopetus': {
         useData: 'perusteNimi',
         useId: 'perusteId'

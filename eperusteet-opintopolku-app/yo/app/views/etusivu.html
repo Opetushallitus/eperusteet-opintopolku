@@ -49,6 +49,15 @@
     <div class="col-lg-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="etusivu.tiedotteet"></h2>
+        <p ng-show="tiedotteet.length === 0" kaanna="ei-tiedotteita"></p>
+        <ul class="tiedotteet-list">
+          <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown">
+            <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+              {{tiedote.muokattu || tiedote.luotu | date}}: {{tiedote.otsikko | kaanna}}
+            </a>
+          </li>
+        </ul>
+        <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
       </div>
     </div>
   </div>
