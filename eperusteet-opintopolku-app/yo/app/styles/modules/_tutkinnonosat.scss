@@ -29,6 +29,10 @@
   }
 }
 
+.tutkinnonosat-rajaus {
+  max-width: 450px;
+}
+
 .tosat-sort-selector {
   clear: both;
   height: 32px;
@@ -51,7 +55,7 @@ ul.tutkinnonosat {
   .tutkinnonosa-laatikko {
     float: left;
     border-radius: 0 !important;
-    width: 460px;
+    width: 450px;
     height: 80px;
     padding-top: 13px;
     padding-left: 5px;

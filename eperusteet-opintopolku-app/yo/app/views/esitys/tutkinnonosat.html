@@ -1,7 +1,9 @@
 <div>
     <h1 kaanna="'tutkinnonosat'"></h1>
 
-    <rajaus model="tosarajaus" callback="paivitaRajaus(value)" placeholder="Rajaa tutkinnon osia..."></rajaus>
+    <div class="tutkinnonosat-rajaus">
+      <rajaus model="tosarajaus" callback="paivitaRajaus(value)" placeholder="Rajaa tutkinnon osia..."></rajaus>
+    </div>
 
     <ul class="tutkinnonosat">
         <li ui-sref="root.esitys.peruste.tutkinnonosa({ id: v.id })"

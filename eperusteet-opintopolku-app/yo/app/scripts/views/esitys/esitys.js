@@ -114,7 +114,7 @@ epOpintopolkuApp
         {label: 'perusteen-tiedot', link: ['root.esitys.peruste.tiedot'], $glyph: 'list-alt'},
         {label: 'tutkinnonosat', link: ['root.esitys.peruste.tutkinnonosat'], isActive: isTutkinnonosatActive}
       ],
-      header: 'perusteen-sisalto'
+      header: null
     };
 
     function mapSisalto(sisalto) {
