@@ -50,7 +50,9 @@ epOpintopolkuApp
           deferred.resolve(translations);
           $rootScope.lokalisointiInited = true;
         }, function () {
-          deferred.reject(options.key);
+          // Ohita tyytyväisesti jos lokalisointipalvelua ei ole
+          deferred.resolve(translations);
+          $rootScope.lokalisointiInited = true;
         });
       }
     }).error(function () {
