@@ -33,7 +33,12 @@ epOpintopolkuApp
           console.error(serviceConfig);
         }
       }]
-    }
+    },
+    onEnter: ['Kieli', '$stateParams', function (Kieli, $stateParams) {
+      var kielikoodi = $stateParams.lang;
+      Kieli.setSisaltokieli(kielikoodi);
+      Kieli.setUiKieli(kielikoodi);
+    }]
   })
 
   .state('root.virhe', {

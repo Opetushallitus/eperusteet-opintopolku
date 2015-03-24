@@ -15,12 +15,11 @@
  */
 
 'use strict';
-/* global _ */
+/* global moment */
 
 epOpintopolkuApp
-  .service('Kieli', function ($rootScope, $state, $stateParams, $window) {
-    var defaultLang = _.includes($window.location.host.toLowerCase(), 'egrunder') ? 'sv' : 'fi';
-
+  .service('Kieli', function ($rootScope, $state, $stateParams, $translate, $timeout) {
+    var defaultLang = 'fi';
     var sisaltokieli = defaultLang;
     var uikieli = defaultLang;
 
@@ -75,8 +74,13 @@ epOpintopolkuApp
       if (isValidKielikoodi(kielikoodi)) {
         var current = uikieli;
         uikieli = kielikoodi;
+        moment.lang(kielikoodi);
+        $translate.use(kielikoodi);
         if (current !== kielikoodi) {
-          $state.go($state.current.name, _.merge($stateParams, {lang: kielikoodi}), {reload: true});
+          $timeout(function () {
+            $state.go($state.current.name, _.merge($stateParams, {lang: kielikoodi}), {reload: true});
+            $rootScope.$broadcast('changed:uikieli', kielikoodi);
+          });
         }
       }
     };

@@ -17,7 +17,8 @@
 'use strict';
 
 epOpintopolkuApp
-.directive('opintopolkuHeader', function () {
+.directive('opintopolkuHeader', function (MurupolkuData) {
+  MurupolkuData.noop(); // remove unused warning
   return {
     scope: {},
     restrict: 'E',
@@ -48,6 +49,12 @@ epOpintopolkuApp
         }
       };
       $scope.kieliLabel = $scope.kieli === 'fi' ? 'På svenska' : 'Suomeksi';
+
+      $scope.$on('changed:sisaltokieli', function () {
+        $scope.kieli = Kieli.getSisaltokieli();
+        $scope.other = $scope.kieli === 'fi' ? 'sv' : 'fi';
+        $scope.kieliLabel = $scope.kieli === 'fi' ? 'På svenska' : 'Suomeksi';
+      });
     }
   };
 });

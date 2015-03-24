@@ -29,7 +29,7 @@ epOpintopolkuApp
   });
 })
 .config(function($translateProvider, $urlRouterProvider) {
-  var preferred = _.includes(window.location.host.toLowerCase(), 'egrunder') ? 'sv' : 'fi';
+  var preferred = 'fi';
   $urlRouterProvider.when('/', '/' + preferred);
   $translateProvider.useLoader('LokalisointiLoader');
   $translateProvider.preferredLanguage(preferred);

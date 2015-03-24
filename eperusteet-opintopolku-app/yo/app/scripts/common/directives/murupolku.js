@@ -17,8 +17,10 @@
 'use strict';
 
 epOpintopolkuApp
-  .service('MurupolkuData', function ($rootScope, Kaanna) {
+  .service('MurupolkuData', function ($rootScope, Kaanna, $timeout) {
+    this.noop = angular.noop;
     var data = {};
+    var latest = null;
     this.set = function (key, value) {
       if (_.isObject(key)) {
         _.each(key, function (item, k) {
@@ -33,6 +35,7 @@ epOpintopolkuApp
       return data[key];
     };
     this.setTitle = function (crumbs) {
+      latest = crumbs;
       var titleEl = angular.element('head > title');
       var peruste = null;
       _.each(crumbs, function (crumb, index) {
@@ -52,6 +55,14 @@ epOpintopolkuApp
       titleText += Kaanna.kaanna('eperusteet-otsikko');
       titleEl.html(titleText);
     };
+
+    var self = this;
+    $rootScope.$on('changed:uikieli', function () {
+      // To set correct document title on first load
+      $timeout(function () {
+        self.setTitle(latest);
+      }, 500);
+    });
   })
 
   .directive('murupolku', function () {
