@@ -141,20 +141,27 @@ epOpintopolkuApp
       term: '',
       update: function () {
         var matchCount = 0;
-        _.each($scope.items, function (item) {
+        var items = $scope.items;
+        if (_.isUndefined(items)) {
+          var section = _.find($scope.sections, '$open');
+          if (section) {
+            items = section.items;
+          }
+        }
+        _.each(items, function (item) {
           item.$matched = _.isEmpty($scope.search.term) || _.isEmpty(item.label) ? true :
             Algoritmit.match($scope.search.term, item.label);
           if (item.$matched) {
             matchCount++;
-            var parent = $scope.items[item.$parent];
+            var parent = items[item.$parent];
             while (parent) {
               parent.$matched = true;
-              parent = $scope.items[parent.$parent];
+              parent = items[parent.$parent];
             }
           }
         });
         $scope.hasResults = matchCount > 1; // root matches always
-        updateModel($scope.items);
+        updateModel(items);
       }
     };
 
