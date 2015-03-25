@@ -30,7 +30,9 @@ var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
   'ui.utils',
   'monospaced.elastic',
   'angular-data.DSCacheFactory',
-  'angularSpinner'
+  'angularSpinner',
+  'angulartics',
+  'angulartics.piwik'
 ]);
 
 /* jshint ignore:end */
