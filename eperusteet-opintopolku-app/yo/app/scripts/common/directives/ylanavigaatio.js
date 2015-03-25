@@ -38,7 +38,7 @@ epOpintopolkuApp
         {label: 'navi.lisaopetus', state: 'root.lisaopetus'}
       ]
     },
-    {label: 'navi.lukiokoulutus', state: 'root.lukiokoulutus'},
+    //{label: 'navi.lukiokoulutus', state: 'root.lukiokoulutus'},
     {label: 'navi.ammatillinenperuskoulutus', state: 'root.selaus.ammatillinenperuskoulutus'},
     {label: 'navi.ammatillinenaikuiskoulutus', state: 'root.selaus.ammatillinenaikuiskoulutus'},
   ];
