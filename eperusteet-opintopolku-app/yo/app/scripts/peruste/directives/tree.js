@@ -40,7 +40,7 @@ epOpintopolkuApp
         '  </span>' +
         '</span>' +
         '<span ng-if="!onOsa(rakenne) && rakenne.nimi">' +
-        '  <strong>{{ rakenne.nimi || "nimetön" | kaanna }}</strong>' +
+        '  <strong ng-attr-title="{{rakenne.nimi | kaanna}}">{{ rakenne.nimi || "nimetön" | kaanna }}</strong>' +
         '</span>';
     }
 
