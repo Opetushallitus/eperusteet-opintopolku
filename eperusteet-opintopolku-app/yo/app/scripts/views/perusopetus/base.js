@@ -229,7 +229,7 @@ epOpintopolkuApp
             title: 'oppiaineen-sisallot',
             $all: true,
             $open: true,
-            items: _.map(['tehtava', 'ohjaus', 'tyotavat', 'sisaltoalueet', 'tavoitteet'], function(item, index) {
+            items: _.map(['tehtava', 'tyotavat', 'ohjaus', 'arviointi', 'sisaltoalueet', 'tavoitteet'], function(item, index) {
               return { label: 'perusopetus-' + item, value: item, depth: 0, $selected: true, order: index };
             }),
             update: _.partial(updateSelection, 2)

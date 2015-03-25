@@ -41,14 +41,19 @@
     <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tehtava.teksti || '-'"></termisto-tekstikentta>
   </div>
 
+  <div ng-hide="filterSisalto.tyotavat || !hasContent(valittuOppiaine.vlks.tyotavat)">
+    <h3 ng-bind-html="valittuOppiaine.vlks.tyotavat.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tyotavat.teksti || '-'"></termisto-tekstikentta>
+  </div>
+
   <div ng-hide="filterSisalto.ohjaus || !hasContent(valittuOppiaine.vlks.ohjaus)">
     <h3 ng-bind-html="valittuOppiaine.vlks.ohjaus.otsikko | kaanna | unsafe"></h3>
     <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.ohjaus.teksti || '-'"></termisto-tekstikentta>
   </div>
 
-  <div ng-hide="filterSisalto.tyotavat || !hasContent(valittuOppiaine.vlks.tyotavat)">
-    <h3 ng-bind-html="valittuOppiaine.vlks.tyotavat.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tyotavat.teksti || '-'"></termisto-tekstikentta>
+  <div ng-hide="filterSisalto.arviointi || !hasContent(valittuOppiaine.vlks.arviointi)">
+    <h3 ng-bind-html="valittuOppiaine.vlks.arviointi.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.arviointi.teksti || '-'"></termisto-tekstikentta>
   </div>
 
   <div ng-hide="filterSisalto.sisaltoalueet || !valittuOppiaine.vlks.sisaltoalueet || valittuOppiaine.vlks.sisaltoalueet.length === 0">
