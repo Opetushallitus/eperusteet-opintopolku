@@ -26,7 +26,7 @@ European Union Public Licence for more details.
       <!-- <div class="sivunavi-takaisin">
         <a ng-href="{{backLink}}" icon-role="back" kaanna="takaisin-hakuun"></a>
       </div> -->
-      <sivunavigaatio items="navi.items" header="navi.header">
+      <sivunavigaatio items="navi.items" header="navi.header" disable-rajaus="true">
         <select ng-show="suoritustavat.length > 1" class="form-control input-sm"
                 ng-model="suoritustapa" ng-change="vaihdaSuoritustapa(suoritustapa)"
                 ng-options="kaanna(st) for st in suoritustavat"></select>

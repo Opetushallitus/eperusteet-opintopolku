@@ -41,9 +41,10 @@ epOpintopolkuApp
       },
       controller: 'SivuNaviController',
       transclude: true,
-      link: function (scope, element) {
+      link: function (scope, element, attrs) {
         var transcluded = element.find('#sivunavi-tc').contents();
         scope.hasTransclude = transcluded.length > 0;
+        scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
 
         function updateFooter() {
           scope.footerContent = scope.footer ? $compile(scope.footer)(scope) : '';

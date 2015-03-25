@@ -17,7 +17,7 @@
         <div class="sivunavi-tc-item">
           <div id="sivunavi-tc" ng-transclude></div>
         </div>
-        <rajaus ng-if="!sections" size="small" model="search.term" placeholder="etsi-sisallosta"></rajaus>
+        <rajaus ng-if="!sections && !disableRajaus" size="small" model="search.term" placeholder="etsi-sisallosta"></rajaus>
       </div>
 
       <div ng-if="sections">
