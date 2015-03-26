@@ -6,7 +6,7 @@
 <div class="sisalto-box">
   <h1 ng-bind-html="tiedote.otsikko | kaanna | unsafe"></h1>
   <div class="tiedote-tiedot">
-    {{ tiedote.nimi || tiedote.muokkaaja }}, {{tiedote.muokattu | date:'d.M.yyyy H:mm'}}
+    {{tiedote.muokattu | date:'d.M.yyyy H:mm'}}
   </div>
   <div class="tiedote-leipateksti" ng-bind-html="tiedote.sisalto | kaanna | unsafe"></div>
 </div>
