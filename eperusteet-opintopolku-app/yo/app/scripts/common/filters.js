@@ -43,4 +43,20 @@ epOpintopolkuApp
   return function(text) {
     return text.split('\n');
   };
+})
+
+.directive('pvm', function (Kaanna, $filter) {
+  return {
+    restrict: 'A',
+    link: function (scope, element, attrs) {
+      scope.$watch(attrs.pvm, function (value) {
+        if (!value) {
+          element.text(Kaanna.kaanna('ei-asetettu'));
+          return;
+        }
+        var date = new Date(value);
+        element.text($filter('date')(date, 'd.M.yyyy'));
+      });
+    }
+  };
 });

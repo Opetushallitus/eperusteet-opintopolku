@@ -92,7 +92,7 @@ epOpintopolkuApp
       var params = _.extend(_.clone($stateParams), {
         suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
       });
-      $state.go('root.esitys.peruste.rakenne', params);
+      $state.go('root.esitys.peruste.tiedot', params);
     } else {
       PerusteenOsat.get({ osanId: $scope.valittuSisalto.id }, _.setWithCallback($scope, 'valittuSisalto'));
     }
@@ -167,7 +167,7 @@ epOpintopolkuApp
       var params = _.extend(_.clone($stateParams), {
         suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
       });
-      $state.go('root.esitys.peruste.rakenne', params);
+      $state.go('root.esitys.peruste.tiedot', params);
     }
 
     $scope.rajaaSisaltoa = function() {

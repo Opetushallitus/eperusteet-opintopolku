@@ -47,7 +47,7 @@ epOpintopolkuApp
     get: epResource.CACHEDGET,
     info: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/info'},
     valittavatKielet: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/valittavatkielet', isArray: true},
-    diaari: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/diaari'}
+    diaari: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/diaari', cache: true}
   });
 })
 
@@ -85,7 +85,7 @@ epOpintopolkuApp
     perusteId: '@id',
     nimikeId: '@id'
   }, {
-    get: {method: 'GET', isArray: true}
+    get: {method: 'GET', isArray: true, cache: true}
   });
 })
 
