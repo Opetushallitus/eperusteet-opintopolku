@@ -198,10 +198,16 @@ $sivunavi-level-padding: 20px;
 }
 .sivunavi-sisalto {
  background-color: white;
- padding: 10px 20px 20px 20px;
+ padding: 10px $sisalto-padding $sisalto-padding $sisalto-padding;
  h1 {
    margin-top: 0;
  }
+}
+
+@media (max-width: 800px) {
+  .sivunavi-sisalto {
+    padding: 10px $sisalto-padding*0.75 $sisalto-padding*0.75 $sisalto-padding*0.75;
+  }
 }
 
 /* Pienellä näytöllä sivunavista tulee kelluva ja kollapsoituva */

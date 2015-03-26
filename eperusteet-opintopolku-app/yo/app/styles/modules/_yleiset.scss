@@ -271,6 +271,13 @@ body {
   position: relative;
 }
 
+@media (max-width: 600px) {
+  .inner-container {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+}
+
 /* aseta myös bootstrapin $font-size-base samaksi */
 body {
   font-size: 14px !important;

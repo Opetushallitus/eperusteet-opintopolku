@@ -1,13 +1,19 @@
 .sisalto-box {
   background-color: white;
   border: 1px solid $brand-border-color;
-  padding: 20px;
+  padding: $sisalto-padding;
   margin-bottom: 20px;
   &.topmost {
     margin-top: 40px;
   }
   & > h1:first-child {
     margin-top: 0;
+  }
+}
+@media (max-width: 800px) {
+  .sisalto-box {
+    padding-left: $sisalto-padding*0.75;
+    padding-right: $sisalto-padding*0.75;
   }
 }
 

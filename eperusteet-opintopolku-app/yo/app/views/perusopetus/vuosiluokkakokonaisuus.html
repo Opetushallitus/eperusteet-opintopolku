@@ -16,7 +16,7 @@
   <termisto-tekstikentta tekstikentta="vlk.laajaalainenOsaaminen.teksti"></termisto-tekstikentta>
 </div>
 <div ng-if="vlk.laajaalaisetOsaamiset">
-  <h2 kaanna="'laaja-alaiset-osaamiset'" id="vlk-laajaalaisetosaamiset"></h2>
+  <h2 kaanna="'laaja-alaisen-osaamisen-alueet'" id="vlk-laajaalaisetosaamiset"></h2>
   <div ng-repeat="osaaminen in vlk.laajaalaisetOsaamiset | orderBy:vlkOrder">
     <h3 ng-bind-html="osaamiset[osaaminen._laajaalainenOsaaminen].nimi | kaanna | unsafe"></h3>
     <termisto-tekstikentta tekstikentta="osaaminen.kuvaus"></termisto-tekstikentta>

@@ -39,6 +39,9 @@
   "etsi-sisallosta": "Rajaa sisältöä...",
   "etsi-rakenteesta": "Etsi rakenteesta...",
   "rajaa-tutkinnonosia": "Rajaa tutkinnon osia...",
+  "sivunavigointi-avaa-menu": "Avaa navigointimenu",
+  "sivunavigointi-sulje-menu": "Sulje navigointimenu",
+  "ei-tuloksia": "Ei tuloksia rajauksellasi",
 
   "haku-otsikko": "Perusteen haku",
   "haku-koulutusala": "Koulutusala",
@@ -67,6 +70,8 @@
   "maarayksen-diaarinumero": "Määräyksen diaarinumero",
   "peruste-koulutukset": "Koulutuskoodit",
   "tutkintonimikkeet": "Tutkintonimikkeet",
+  "tutkintonimike": "Tutkintonimike",
+
   "ei-tutkintonimikkeita": "Ei tutkintonimikkeitä",
   "korvattavat-perusteet": "Korvattavat perusteet",
   "koulutuksen-nimi": "Koulutuksen nimi",
@@ -88,6 +93,7 @@
   "perusopetus-sisaltoalueet" : "Sisältöalueet",
   "perusopetus-arviointi": "Oppimisen arviointi",
   "laaja-alaiset-osaamiset": "Laaja-alaiset osaamiset",
+  "laaja-alaisen-osaamisen-alueet": "Laaja-alaisen osaamisen alueet",
   "laaja-alainen-osaaminen": "Laaja-alainen osaaminen",
   "sisaltoalueet": "Sisältöalueet",
   "kohdealue": "Tavoitealue",
@@ -98,6 +104,7 @@
   "ei-asetettu": "Ei asetettu",
 
   "tutkinnonosat": "Tutkinnon osat",
+  "tutkinnonosa": "Tutkinnon osa",
   "osaamisala": "Osaamisala",
   "ammattitaidonOsoittamistavat": "Ammattitaidon osoittamistavat",
   "arviointi": "Arviointi",
