@@ -36,18 +36,12 @@
                   </div>
                 </div>
               </div>
-              <div class="muokkausnappi" ng-if="editMode" ng-show="tavoite.$editing">
-                <button class="btn btn-default" kaanna="peruuta" ng-click="tavoiteFn.cancel()"></button>
-                <button class="btn btn-primary" ng-click="tavoiteFn.ok()">{{tavoite.$new ? 'lisaa' : 'ok' | kaanna}}</button>
-              </div>
             </div>
           </div>
         </div>
 
       </div> <!-- panel-group -->
 
-      <button ng-show="editMode && !currentEditable" class="btn btn-default" ng-click="tavoiteFn.add()" icon-role="add"
-        kaanna="lisaa-opetuksen-tavoite"></button>
     </div>
   </div>
 </div>

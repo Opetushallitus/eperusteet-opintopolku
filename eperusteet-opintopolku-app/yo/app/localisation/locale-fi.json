@@ -4,6 +4,8 @@
   "etusivulle": "Etusivulle",
   "avaa-sulje-kaikki": "Avaa/sulje kaikki",
   "eperusteet-otsikko": "ePerusteet",
+  "nimi": "Nimi",
+  "diaarinumero-label": "Diaarinumero",
 
   "sivupalkki-näytä-kaikki": "Näytä enemmän",
   "sivupalkki-piilota": "Näytä vähemmän",
@@ -42,6 +44,8 @@
   "sivunavigointi-avaa-menu": "Avaa navigointimenu",
   "sivunavigointi-sulje-menu": "Sulje navigointimenu",
   "ei-tuloksia": "Ei tuloksia rajauksellasi",
+  "tyhjenna-rajaus-tooltip": "Tyhjennä rajaus (Esc)",
+  "rajaa-tutkinnonosia": "Rajaa tutkinnon osia...",
 
   "haku-otsikko": "Perusteen haku",
   "haku-koulutusala": "Koulutusala",
@@ -102,6 +106,8 @@
   "oppiaineet": "Oppiaineet",
   "tyhjenna-valinnat": "Palauta valinnat alkutilaan",
   "ei-asetettu": "Ei asetettu",
+  "arvioinnin-kohde": "Arvioinnin kohde",
+  "arvion-hyva-osaaminen": "Arvion \"hyvä\" osaaminen",
 
   "tutkinnonosat": "Tutkinnon osat",
   "tutkinnonosa": "Tutkinnon osa",

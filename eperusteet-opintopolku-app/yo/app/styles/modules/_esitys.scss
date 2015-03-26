@@ -84,6 +84,9 @@ $border-color: #0C566E;
 }
 
 .esitys-perusteen-tiedot {
+  h2 {
+    border-bottom: none !important;
+  }
   width: 100%;
   th {
     width: 25%;
