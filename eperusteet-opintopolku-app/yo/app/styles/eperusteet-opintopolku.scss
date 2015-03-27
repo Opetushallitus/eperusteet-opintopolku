@@ -1,5 +1,5 @@
 @import "modules/variables";
-@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap";
+@import "../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap";
 @import "modules/bootstrap-overrides";
 @import "vendor/virkailija";
 
@@ -14,17 +14,23 @@
 @import "modules/tutkinnonosat";
 @import "modules/tutkinnonosa";
 @import "modules/tekstikappale";
+@import "modules/tutkinnonosa";
 @import "modules/perusteprojekti";
-@import "modules/sivunavigaatio";
 @import "modules/notifikaatiot";
 @import "modules/koodisto";
 @import "modules/editointikontrollit";
 @import "modules/kommentit";
-@import "modules/esitys";
-@import "modules/perusopetus";
 @import "modules/sisalto";
 @import "modules/termisto";*/
 
+@import "modules/sivunavigaatio";
 @import "modules/ylanavigaatio";
 @import "modules/etusivu";
 @import "modules/haku";
+
+@import "modules/esitys";
+@import "modules/tutkinnonosat";
+@import "modules/tree";
+@import "modules/perusopetus";
+@import "modules/ohje";
+@import "modules/tiedote";

@@ -11,7 +11,7 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <script type="text/javascript" src="/virkailija-raamit/apply-raamit.js"></script>
+    <!-- <script id="apply-raamit" type="text/javascript" src="/oppija-raamit/apply-raamit.js"></script> -->
     <!-- build:css(.tmp) styles/eperusteet-opintopolku.css -->
     <link rel="stylesheet" href="styles/eperusteet-opintopolku.css">
     <!-- endbuild -->
@@ -25,12 +25,13 @@
     <!-- endbuild  -->
     <div class="container-fluid" id="ylasivuankkuri">
       <div class="row">
-        <div class="col-md-12 ylanavigaatio">
+        <div class="col-md-12 opintopolku-header">
           <div class="inner-container">
-            <ylanavigaatio></ylanavigaatio>
+            <opintopolku-header></opintopolku-header>
           </div>
         </div>
       </div>
+      <ylanavigaatio></ylanavigaatio>
       <div class="row sisalto-container">
         <div class="col-md-12">
           <div class="inner-container">
@@ -40,7 +41,7 @@
       </div>
     </div>
     <spinner></spinner>
-    <backtotop></backtotop>
+    <backtotop ng-if="lokalisointiInited"></backtotop>
 
     <!-- build:js scripts/components.js -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -52,8 +53,8 @@
     <script src="bower_components/angular-translate/angular-translate.min.js"></script>
     <script src="bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
-    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/tooltip.js"></script>
-    <script src="bower_components/bootstrap-sass-official/vendor/assets/javascripts/bootstrap/popover.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js"></script>
+    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>
     <script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.min.js"></script>
     <script src="bower_components/angular-ui-utils/ui-utils.min.js"></script>
     <script src="bower_components/angular-elastic/elastic.js"></script>
@@ -65,6 +66,8 @@
     <script src="bower_components/angular-cache/dist/angular-cache.min.js"></script>
     <script src="bower_components/spin.js/spin.js"></script>
     <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+    <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
+    <script src="bower_components/angulartics/dist/angulartics-piwik.min.js"></script>
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -73,6 +76,7 @@
     <script src="scripts/config.js"></script>
     <script src="scripts/states.js"></script>
 
+    <script src="scripts/common/services/configuration.js"></script>
     <script src="scripts/common/services/kieli.js"></script>
     <script src="scripts/common/services/lokalisointi.js"></script>
     <script src="scripts/common/services/iconrole.js"></script>
@@ -80,17 +84,76 @@
     <script src="scripts/common/services/spinner.js"></script>
     <script src="scripts/common/services/virhe.js"></script>
     <script src="scripts/common/services/pagination.js"></script>
+    <script src="scripts/common/services/notifikaatiot.js"></script>
+    <script src="scripts/common/services/yleinendata.js"></script>
+    <script src="scripts/common/services/algoritmit.js"></script>
+    <script src="scripts/common/services/utils.js"></script>
 
     <script src="scripts/common/resources/koulutusalat.js"></script>
-    <script src="scripts/common/resources/perusteet.js"></script>
+    <script src="scripts/common/resources/opintoalat.js"></script>
+    <script src="scripts/common/resources/tiedotteet.js"></script>
 
+    <script src="scripts/common/filters.js"></script>
+
+    <script src="scripts/common/directives/opintopolku.js"></script>
     <script src="scripts/common/directives/ylanavigaatio.js"></script>
     <script src="scripts/common/directives/highlight.js"></script>
+    <script src="scripts/common/directives/sivunavigaatio.js"></script>
+    <script src="scripts/common/directives/termistoviitteet.js"></script>
+    <script src="scripts/common/directives/rajaus.js"></script>
+    <script src="scripts/common/directives/murupolku.js"></script>
+
+    <script src="scripts/peruste/resources/perusteet.js"></script>
+    <script src="scripts/peruste/services/tutkinnonosa.js"></script>
+    <script src="scripts/peruste/services/termisto.js"></script>
+    <script src="scripts/peruste/services/tutke2osa.js"></script>
+    <script src="scripts/peruste/services/perusteenrakenne.js"></script>
+    <script src="scripts/peruste/services/muodostumissaannot.js"></script>
+    <script src="scripts/peruste/services/stateservice.js"></script>
+    <script src="scripts/peruste/services/menubuilder.js"></script>
+
+    <script src="scripts/peruste/directives/tree.js"></script>
+    <script src="scripts/peruste/directives/tavoitteet.js"></script>
+    <script src="scripts/peruste/directives/tagcloud.js"></script>
+    <script src="scripts/peruste/directives/ohje.js"></script>
 
     <script src="scripts/views/etusivu.js"></script>
 
     <script src="scripts/views/haku/haku.js"></script>
-
+    <script src="scripts/views/esitys/esitys.js"></script>
+    <script src="scripts/views/esitys/yksinkertainen.js"></script>
+    <script src="scripts/views/perusopetus/base.js"></script>
+    <script src="scripts/views/perusopetus/perusopetus.js"></script>
     <!-- endbuild -->
+
+    <!-- Piwik -->
+    <script type="text/javascript">
+    var siteDomain = document.domain;
+    var piwikSiteId = 2;
+    if(siteDomain=='opintopolku.fi'){
+        piwikSiteId = 4;
+    }else if(siteDomain=='virkailija.opintopolku.fi'){
+        piwikSiteId = 3;
+    }else if(siteDomain=='testi.opintopolku.fi'){
+        piwikSiteId = 1;
+    }else if(siteDomain=='testi.virkailija.opintopolku.fi'){
+        piwikSiteId = 5;
+    }else if(siteDomain=='eperusteet.opintopolku.fi'){
+        piwikSiteId = 2; //TODO
+    }else{
+        piwikSiteId = 2;
+    }
+    var _paq = _paq || [];
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+    (function() {
+     var u=(("https:" == document.location.protocol) ? "https" : "http") + "://analytiikka.opintopolku.fi/piwik/";
+     _paq.push(["setTrackerUrl", u+"piwik.php"]);_paq.push(["setSiteId", piwikSiteId]);
+     var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+     g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+    })();
+    </script>
+    <!-- End Piwik Code -->
   </body>
 </html>

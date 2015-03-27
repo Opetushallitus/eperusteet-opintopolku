@@ -1,7 +1,64 @@
+.opintopolku-header {
+  a:hover {
+    text-decoration: none;
+  }
+  background-color: $brand-secondary;
+  line-height: 20px;
+  font-size: 15px;
+  color: white;
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    li {
+      padding: 5px 20px;
+      display: inline-block;
+      a {
+        color: white;
+      }
+      &.active {
+        background-color: $ylanavi-color;
+      }
+    }
+  }
+  .header-kielenvaihto {
+    position: absolute;
+    right: 15px;
+    bottom: 5px;
+    font-weight: 700;
+    font-size: 13px;
+    a {
+      color: white;
+    }
+  }
+}
+
 .ylanavigaatio {
   padding-left: 0;
   padding-right: 0;
   background-color: $ylanavi-color;
+}
+.ylanavigaatio-sub {
+  padding-left: 0;
+  padding-right: 0;
+  background-color: $content-bg-color;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.1);
+}
+
+.ylanavi-list {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  li {
+    padding: 16px;
+    display: inline-block;
+    &.active {
+      background-color: $content-bg-color;
+      a {
+        color: black;
+      }
+    }
+  }
 }
 
 .ylanavi-container {
@@ -10,19 +67,23 @@
     color: white;
     font-size: 110%;
   }
-  ul {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
+}
+
+.ylanavi-container-sub {
+  width: 100%;
+  .ylanavi-list {
     li {
-      padding: 16px;
-      display: inline-block;
+      padding: 11px 16px;
       &.active {
         background-color: $content-bg-color;
         a {
-          color: $brand-primary;
+          color: black;
         }
       }
     }
+  }
+  & a {
+    color: $brand-primary;
+    font-size: 100%;
   }
 }

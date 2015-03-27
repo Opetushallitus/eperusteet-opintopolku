@@ -26,20 +26,48 @@ epOpintopolkuApp
   };
 })
 
-.controller('YlanavigaatioController', function ($scope, $state) {
+.controller('YlanavigaatioController', function ($scope, $state, $stateParams) {
   $scope.osiot = [
     {label: 'navi.etusivu', state: 'root.etusivu'},
     {label: 'navi.esiopetus', state: 'root.esiopetus'},
-    {label: 'navi.perusopetus', state: 'root.perusopetus'},
-    {label: 'navi.lukiokoulutus', state: 'root.lukiokoulutus'},
+    {
+      label: 'navi.perusopetus',
+      state: 'root.perusopetus',
+      osiot: [
+        {label: 'navi.perusopetus', state: 'root.perusopetus'},
+        {label: 'navi.lisaopetus', state: 'root.lisaopetus'}
+      ]
+    },
+    //{label: 'navi.lukiokoulutus', state: 'root.lukiokoulutus'},
     {label: 'navi.ammatillinenperuskoulutus', state: 'root.selaus.ammatillinenperuskoulutus'},
     {label: 'navi.ammatillinenaikuiskoulutus', state: 'root.selaus.ammatillinenaikuiskoulutus'},
   ];
 
+  function stateMatch(osio) {
+    return _.startsWith($state.current.name, osio.state);
+  }
+
+  function isStateActive(osio) {
+    if (!_.isEmpty(osio.osiot)) {
+      _.each(osio.osiot, function (child) {
+        child.active = stateMatch(child);
+        child.url = $state.href(child.state, {lang: $stateParams.lang});
+      });
+      return stateMatch(osio) || _.some(osio.osiot, stateMatch);
+    }
+    return stateMatch(osio);
+  }
+
+  $scope.activeOsio = null;
   $scope.$on('$stateChangeSuccess', function () {
+    $scope.activeOsio = null;
     _.each($scope.osiot, function (osio) {
       // TODO parent state matching
-      osio.active = $state.current.name === osio.state;
+      osio.active = isStateActive(osio);
+      if (osio.active) {
+        $scope.activeOsio = osio;
+      }
+      osio.url = $state.href(osio.state, {lang: $stateParams.lang});
     });
   });
 });

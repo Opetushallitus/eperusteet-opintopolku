@@ -38,13 +38,10 @@ a {
   img, .glyphicon {
     margin-right: 5px;
   }
-}*/
-
-/* ikoni + linkkiteksti */
-/*.iconlink > .glyphicon {
-  margin-right: 5px;
 }
+*/
 
+/*
 label input[type=radio] {
   margin-right: 5px;
   top: 0px;
@@ -98,19 +95,6 @@ label input[type=radio] {
   top: -23px;
 }
 
-.action-link {
-  outline: 0;
-  cursor: pointer;
-  &:hover {
-    outline: 0;
-  }
-  &:active, &:focus {
-    outline: 0;
-    text-decoration: none;
-    color: $brand-primary;
-  }
-}
-
 $lukko-width: 2em;
 $lukko-inner: 1.4em;
 .lukko {
@@ -161,49 +145,8 @@ $lukko-inner: 1.4em;
   .muokattu { width: 20%; }
 }
 
-$backtotop-size: 48px;
-#backtotop {
-  &.ng-hide-add, &.ng-hide-remove {
-    transition: 0.2s linear all;
-  }
-  &.ng-hide-add.ng-hide-add-active, &.ng-hide-remove {
-    opacity: 0;
-  }
-  &.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
-    opacity: 1;
-  }
-  position: fixed;
-  bottom: 5px;
-  right: 5px;
-  background-color: rgba(255, 255, 255, 0.5);
-  a {
-    .glyphicon {
-      margin-right: 2px;
-    }
-    display: block;
-    text-align: center;
-    border: 2px solid rgba(0,0,0,0.8);
-    border-radius: 5px;
-    font-size: $backtotop-size*0.6;
-    line-height: $backtotop-size;
-    width: $backtotop-size;
-    height: $backtotop-size;
-    &:hover, &:focus, &:active, & *:hover, & *:focus, & *:active {
-      text-decoration: none;
-    }
-  }
-}
-
 *[contenteditable="false"].cke_focus {
   outline: none;
-}
-
-.rajaus-clear {
-  cursor: pointer;
-}
-
-input.form-control::-ms-clear {
-  display: none;
 }
 
 .ep-sisalto-inner {
@@ -246,6 +189,62 @@ strong.ep-match {
 }
 */
 
+input.form-control::-ms-clear {
+  display: none;
+}
+
+$backtotop-size: 48px;
+#backtotop {
+  &.ng-hide-add, &.ng-hide-remove {
+    transition: 0.2s linear all;
+  }
+  &.ng-hide-add.ng-hide-add-active, &.ng-hide-remove {
+    opacity: 0;
+  }
+  &.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
+    opacity: 1;
+  }
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  a {
+    cursor: pointer;
+    .glyphicon {
+      margin-right: 2px;
+    }
+    display: block;
+    text-align: center;
+    border: 2px solid rgba(0,0,0,0.8);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    background-clip: padding-box;
+    font-size: $backtotop-size*0.6;
+    line-height: $backtotop-size;
+    width: $backtotop-size;
+    height: $backtotop-size;
+    &:hover, &:focus, &:active, & *:hover, & *:focus, & *:active {
+      text-decoration: none;
+    }
+  }
+}
+
+.rajaus-clear {
+  cursor: pointer;
+}
+
+.action-link {
+  outline: 0;
+  cursor: pointer;
+  &:hover {
+    outline: 0;
+  }
+  &:active, &:focus {
+    outline: 0;
+    text-decoration: none;
+    color: $brand-primary;
+  }
+}
+
 a[href] {
   outline: 0;
 }
@@ -266,7 +265,63 @@ body {
 .inner-container {
   margin-left: auto;
   margin-right: auto;
-  max-width: 1500px;
+  max-width: 1350px;
   padding-left: 15px;
   padding-right: 15px;
+  position: relative;
+}
+
+@media (max-width: 600px) {
+  .inner-container {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+}
+
+/* aseta myös bootstrapin $font-size-base samaksi */
+body {
+  font-size: 14px !important;
+  color: $ep-text-default;
+}
+
+/* ikoni + linkkiteksti */
+.iconlink > .glyphicon, a > *[icon-role] > .glyphicon {
+  margin-right: 5px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+h4.sparse {
+  margin-top: 20px;
+}
+
+.breadcrumb {
+  padding-left: 0;
+  li {
+    display: inline-block;
+    max-width: 40em;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    a {
+      color: darken($brand-primary, 5%);
+      &:hover {
+        color: $brand-secondary;
+      }
+    }
+  }
+  li:not(:last-child) {
+    max-width: 22em;
+  }
+}
+
+.peruste-otsikko {
+  margin-top: 30px;
+  margin-bottom: 16px;
+}
+
+hr {
+  color: $brand-primary;
 }

@@ -14,22 +14,50 @@
     <div class="col-lg-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="navi.esiopetus"></h2>
+        <p><a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})" ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna"></a></p>
       </div>
       <div class="sisalto-box">
         <h2 kaanna="navi.perusopetus"></h2>
+        <p><a ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_16'][0].id})" ng-bind="uusimmat['koulutustyyppi_16'][0].nimi | kaanna"></a></p>
+        <p><a ui-sref="root.lisaopetus({perusteId: uusimmat['koulutustyyppi_6'][0].id})" ng-bind="uusimmat['koulutustyyppi_6'][0].nimi | kaanna"></a></p>
       </div>
-      <div class="sisalto-box">
+      <!-- <div class="sisalto-box">
         <h2 kaanna="navi.lukiokoulutus"></h2>
-      </div>
+        <p><a ui-sref="root.lukiokoulutus" kaanna="etusivu.lukiokoulutuksen-peruste"></a></p>
+      </div> -->
     </div>
     <div class="col-lg-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="etusivu.uusimmat-ammatilliset"></h2>
+        <ul class="uusimmat">
+          <li ng-repeat="peruste in uusimmat['koulutustyyppi_1'] | orderBy:'-muokattu' | limitTo:7">
+            <a ng-href="{{peruste.url}}" ng-bind="peruste.nimi | kaanna"></a>
+          </li>
+        </ul>
+        <div class="am-linkit">
+          <ul>
+            <li>
+              <span class="link-prepend">&raquo;</span><a ui-sref="root.selaus.ammatillinenperuskoulutus"><span kaanna="'navi.ammatillinenperuskoulutus'"></span></a>
+            </li>
+            <li>
+              <span class="link-prepend">&raquo;</span><a ui-sref="root.selaus.ammatillinenaikuiskoulutus"><span kaanna="'navi.ammatillinenaikuiskoulutus'"></span></a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="col-lg-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="etusivu.tiedotteet"></h2>
+        <p ng-show="tiedotteet.length === 0" kaanna="ei-tiedotteita"></p>
+        <ul class="tiedotteet-list">
+          <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown">
+            <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+              {{tiedote.muokattu || tiedote.luotu | date}}: {{tiedote.otsikko | kaanna}}
+            </a>
+          </li>
+        </ul>
+        <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
       </div>
     </div>
   </div>

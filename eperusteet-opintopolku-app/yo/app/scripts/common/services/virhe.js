@@ -22,6 +22,9 @@ epOpintopolkuApp
   $scope.$watch(virheService.getData, function (value) {
     $scope.data = value;
   });
+  $scope.hasData = function () {
+    return !_.isEmpty($scope.data);
+  };
 })
 .service('virheService', function ($state) {
   var data = {};

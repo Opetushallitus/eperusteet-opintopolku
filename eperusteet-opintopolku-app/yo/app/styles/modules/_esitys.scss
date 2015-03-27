@@ -18,7 +18,8 @@ $border-color: #0C566E;
     }
 
     h1 {
-      margin: 0 0 10px 0;
+      margin: 0 0 20px 0;
+      border-bottom: 1px solid #ccc;
     }
 
     h2 {
@@ -83,7 +84,9 @@ $border-color: #0C566E;
 }
 
 .esitys-perusteen-tiedot {
-  font-size: 14px;
+  h2 {
+    border-bottom: none !important;
+  }
   width: 100%;
   th {
     width: 25%;
@@ -92,11 +95,36 @@ $border-color: #0C566E;
     vertical-align: top;
     padding: 7px 10px 5px 0;
   }
+  & > tbody > tr > td, & > tbody > tr > th {
+    padding-bottom: 15px;
+  }
   .tutkintonimikkeet {
-    font-size: 13px;
+    thead {
+      th {
+        font-style: italic;
+        border-bottom: 1px solid #ccc;
+      }
+      tr:first-child {
+        & th, & td {
+          padding-top: 0;
+        }
+      }
+    }
   }
   .koulutukset {
-    font-size: 13px;
+    .koulutus {
+      tbody {
+        tr:first-child {
+          & th, & td {
+            padding-top: 0;
+          }
+        }
+      }
+      th {
+        padding-right: 20px;
+        font-style: italic;
+      }
+    }
   }
 }
 

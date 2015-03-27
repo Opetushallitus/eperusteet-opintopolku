@@ -1,5 +1,5 @@
 'use strict';
-var LIVERELOAD_PORT = 35729;
+var LIVERELOAD_PORT = 35739;
 var lrSnippet = require('connect-livereload')({
   port: LIVERELOAD_PORT
 });
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
       },
       livereload: {
         options: {
-          livereload: /*LIVERELOAD_PORT*/ true,
+          livereload: LIVERELOAD_PORT,
           open: false
         },
         files: [
@@ -74,17 +74,15 @@ module.exports = function(grunt) {
       },
       proxies: [{
         context: '/eperusteet-service',
-        host: 'test-virkailija.oph.ware.fi',
-        port: 443,
-        https: true,
-        changeOrigin: true,
-      },{
-        context: '/virkailija-raamit',
-        host: 'localhost',
+        /*host: 'localhost',
         port: 8080,
         https: false,
         changeOrigin: false,
-        xforward: false
+        xforward: false*/
+        host: 'itest-virkailija.oph.ware.fi',
+        port: 443,
+        https: true,
+        changeOrigin: true,
       }],
       livereload: {
         options: {
@@ -279,14 +277,14 @@ module.exports = function(grunt) {
           ]
         }, {
           expand: true,
-          cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap',
+          cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
           dest: '<%= yeoman.dist %>/styles/fonts',
           src: '*.{eot,svg,ttf,woff}'
         }]
       },
       fonts: {
         expand: true,
-        cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap',
+        cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
         dest: '.tmp/styles/fonts/',
         src: '*.{eot,svg,ttf,woff}'
       }

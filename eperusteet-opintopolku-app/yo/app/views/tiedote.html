@@ -1,0 +1,12 @@
+<!-- tiedote.html -->
+<h1 class="peruste-otsikko" kaanna="'tiedote'"></h1>
+<murupolku></murupolku>
+<div class="clearfix"></div>
+
+<div class="sisalto-box">
+  <h1 ng-bind-html="tiedote.otsikko | kaanna | unsafe"></h1>
+  <div class="tiedote-tiedot">
+    {{tiedote.muokattu | date:'d.M.yyyy H:mm'}}
+  </div>
+  <div class="tiedote-leipateksti" ng-bind-html="tiedote.sisalto | kaanna | unsafe"></div>
+</div>

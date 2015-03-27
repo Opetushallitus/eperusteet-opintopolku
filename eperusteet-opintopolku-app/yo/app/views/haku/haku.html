@@ -72,7 +72,7 @@
     <tbody>
       <tr ng-repeat="peruste in perusteet.data">
         <td>
-          <a ui-sref="root.esitys.peruste({ perusteId: peruste.id, suoritustapa:  hakuparametrit.suoritustapa})" ep-highlight="hakuparametrit.nimi">
+          <a ui-sref="root.esitys.peruste({ perusteId: peruste.id, suoritustapa: hakuparametrit.suoritustapa})" ep-highlight="hakuparametrit.nimi">
             <span ng-bind="peruste.nimi | kaanna"></span>
           </a>
         </td>

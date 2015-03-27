@@ -17,12 +17,28 @@
 'use strict';
 
 epOpintopolkuApp
-.factory('Perusteet', function($resource, SERVICE_LOC) {
-  return $resource(SERVICE_LOC + '/perusteet/:perusteId', {
-    perusteId: '@id'
-  }, {
-    info: {method: 'GET', url: SERVICE_LOC + '/perusteet/info'},
-    valittavatKielet: {method: 'GET', url: SERVICE_LOC + '/perusteet/valittavatkielet', isArray: true},
-    diaari: {method: 'GET', url: SERVICE_LOC + '/perusteet/diaari'}
+  .directive('tagCloud', function () {
+    return {
+      templateUrl: 'views/perusopetus/directives/tagcloud.html',
+      restrict: 'A',
+      scope: {
+        model: '=tagCloud',
+        openable: '@',
+        editMode: '=',
+        addLabel: '@'
+      },
+      controller: 'TagCloudController'
+    };
+  })
+  .controller('TagCloudController', function ($scope, Utils) {
+    $scope.notHidden = function (item) {
+      return !item.$hidden;
+    };
+
+    $scope.orderFn = Utils.nameSort;
+
+    $scope.showEmptyPlaceholder = function () {
+      return !$scope.editMode && (!$scope.model || $scope.model.length === 0  ||
+        !_.some($scope.model, function (item) { return !item.$hidden; }));
+    };
   });
-});

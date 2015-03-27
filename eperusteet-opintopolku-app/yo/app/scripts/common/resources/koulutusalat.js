@@ -18,8 +18,8 @@
 /*global _*/
 
 epOpintopolkuApp
-  .factory('KoulutusalatResource', function ($resource, SERVICE_LOC) {
-    return $resource(SERVICE_LOC + '/koulutusalat/:koulutusalaId', {
+  .factory('KoulutusalatResource', function ($resource, epResource) {
+    return $resource(epResource.SERVICE + '/koulutusalat/:koulutusalaId', {
       koulutusalaId: '@id'
     }, {
       query: { method: 'GET', isArray: true, cache: true }

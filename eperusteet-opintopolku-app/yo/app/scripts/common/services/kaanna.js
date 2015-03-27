@@ -28,11 +28,7 @@ epOpintopolkuApp
       return primary;
     }
     var secondaryKey = key === 'fi' || key === 'FI' ? 'sv' : 'fi';
-    var secondary = getTranslation(obj, secondaryKey);
-    if (secondary) {
-      return '[' + secondary + ']';
-    }
-    return secondary;
+    return getTranslation(obj, secondaryKey);
   }
 
   function kaannaSisalto(input) {

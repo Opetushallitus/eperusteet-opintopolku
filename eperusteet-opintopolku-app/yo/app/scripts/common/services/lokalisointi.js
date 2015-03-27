@@ -27,7 +27,7 @@ epOpintopolkuApp
     }
   });
 })
-.factory('LokalisointiLoader', function ($q, $http, LokalisointiResource, $window) {
+.factory('LokalisointiLoader', function ($q, $http, LokalisointiResource, $window, $rootScope) {
   var PREFIX = 'localisation/locale-',
       SUFFIX = '.json',
       BYPASS_REMOTE = $window.location.host.indexOf('localhost') === 0;
@@ -42,13 +42,17 @@ epOpintopolkuApp
       _.extend(translations, data);
       if (BYPASS_REMOTE) {
         deferred.resolve(translations);
+        $rootScope.lokalisointiInited = true;
       } else {
         LokalisointiResource.get({locale: options.key}, function (res) {
           var remotes = _.zipObject(_.map(res, 'key'), _.map(res, 'value'));
           _.extend(translations, remotes);
           deferred.resolve(translations);
+          $rootScope.lokalisointiInited = true;
         }, function () {
-          deferred.reject(options.key);
+          // Ohita tyytyväisesti jos lokalisointipalvelua ei ole
+          deferred.resolve(translations);
+          $rootScope.lokalisointiInited = true;
         });
       }
     }).error(function () {

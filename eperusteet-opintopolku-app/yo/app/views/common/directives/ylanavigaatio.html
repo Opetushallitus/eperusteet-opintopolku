@@ -1,7 +1,26 @@
-<div class="ylanavi-container" role="navigation">
-  <ul>
-    <li ng-repeat="osio in osiot" ng-class="{active: osio.active}">
-      <a ui-sref="{{osio.state}}" kaanna="osio.label"></a>
-    </li>
-  </ul>
+<div class="row">
+  <div class="col-md-12 ylanavigaatio">
+    <div class="inner-container">
+      <div class="ylanavi-container" role="navigation">
+        <ul class="ylanavi-list">
+          <li ng-repeat="osio in osiot" ng-class="{active: osio.active}">
+            <a ng-href="{{osio.url}}" kaanna="osio.label"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" ng-if="activeOsio.osiot.length > 0">
+  <div class="col-md-12 ylanavigaatio-sub">
+    <div class="inner-container">
+      <div class="ylanavi-container-sub" role="navigation">
+        <ul class="ylanavi-list">
+          <li ng-repeat="osio in activeOsio.osiot" ng-class="{active: osio.active}">
+            <a ng-href="{{osio.url}}" kaanna="osio.label"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>

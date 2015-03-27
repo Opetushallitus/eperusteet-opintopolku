@@ -144,6 +144,7 @@ epOpintopolkuApp
   });
 
   $rootScope.$on('$stateChangeError', function(event, toState) {
+    console.warn(event, toState);
     virheService.virhe({state: toState.name});
   });
 

@@ -66,8 +66,10 @@ epOpintopolkuApp
 })
 
 .controller('HakuController', function($scope, $rootScope, $state, Perusteet, Haku,
-  koulutusalaService, Kieli) {
+  koulutusalaService, Kieli, YleinenData, MurupolkuData) {
   var pat = '';
+  var otsikko = 'navi.' + _.last($state.current.name.split('.'));
+  MurupolkuData.setTitle([{label: otsikko}]);
   // Viive, joka odotetaan, ennen kuin haku nimi muutoksesta lähtee serverille.
   var hakuViive = 300; //ms
   // Huom! Sivu alkaa UI:lla ykkösestä, serverillä nollasta.
@@ -76,7 +78,7 @@ epOpintopolkuApp
   $scope.kokonaismaara = 0;
   $scope.koulutusalat = koulutusalaService.haeKoulutusalat();
   $scope.sivu = {
-    otsikko: 'navi.' + _.last($state.current.name.split('.'))
+    otsikko: otsikko
   };
 
   function setHakuparametrit() {
@@ -86,7 +88,7 @@ epOpintopolkuApp
   }
   setHakuparametrit();
 
-  $scope.koulutustyypit = ['koulutustyyppi_1', 'koulutustyyppi_11', 'koulutustyyppi_12'];
+  $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
 
   $scope.tyhjenna = function() {
     $scope.nykyinenSivu = 1;

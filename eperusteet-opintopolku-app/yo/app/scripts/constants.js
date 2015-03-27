@@ -18,11 +18,6 @@
 'use strict';
 
 epOpintopolkuApp
-.factory('SERVICE_LOC', function ($window) {
-  return $window.location.host.indexOf('localhost') === 0 ?
-    '/eperusteet-service/api' :
-    ''; // TODO service location for production
-})
 .constant('ORGANISATION_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
 .constant('LOKALISOINTI_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
 .constant('AUTHENTICATION_SERVICE_LOC', '/authentication-service/resources')

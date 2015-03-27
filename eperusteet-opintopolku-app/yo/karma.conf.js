@@ -31,6 +31,8 @@ module.exports = function(config) {
       'app/bower_components/angular-cache/dist/angular-cache.min.js',
       'app/bower_components/spin.js/spin.js',
       'app/bower_components/angular-spinner/angular-spinner.js',
+      'app/bower_components/angulartics/src/angulartics.js',
+      'app/bower_components/angulartics/src/angulartics-piwik.js',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/spec/**/*.spec.js',
