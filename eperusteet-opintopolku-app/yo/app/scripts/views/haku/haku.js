@@ -49,6 +49,7 @@ epOpintopolkuApp
     }
   };
 
+  this.osio = null;
   this.hakuparametrit = _.clone(DEFAULTS);
 
   this.getHakuparametrit = function (stateName) {
@@ -68,7 +69,10 @@ epOpintopolkuApp
 .controller('HakuController', function($scope, $rootScope, $state, Perusteet, Haku,
   koulutusalaService, Kieli, YleinenData, MurupolkuData) {
   var pat = '';
-  var otsikko = 'navi.' + _.last($state.current.name.split('.'));
+  var osio = _.last($state.current.name.split('.'));
+  Haku.osio = osio;
+  var otsikko = 'navi.' + osio;
+
   MurupolkuData.setTitle([{label: otsikko}]);
   // Viive, joka odotetaan, ennen kuin haku nimi muutoksesta lähtee serverille.
   var hakuViive = 300; //ms
