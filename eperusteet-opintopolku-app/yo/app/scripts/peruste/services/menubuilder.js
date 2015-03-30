@@ -94,6 +94,13 @@ epOpintopolkuApp
       levels[item.depth] = index;
       item.$parent = levels[item.depth - 1] || null;
     });
+    suunnitelma.push({
+      label: 'laaja-alaiset-osaamiset',
+      id: 'laajaalaiset',
+      link: ['root.perusopetus.laajaalaiset'],
+      depth: 0,
+      $hidden: false
+    });
     return suunnitelma;
   }
 
