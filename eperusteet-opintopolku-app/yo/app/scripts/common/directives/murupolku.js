@@ -102,6 +102,10 @@ epOpintopolkuApp
         useData: 'vlkNimi',
         useId: 'vlkId'
       },
+      'root.perusopetus.laajaalaiset': {
+        parent: 'root.perusopetus',
+        label: 'laaja-alaiset-osaamiset'
+      },
       'root.perusopetus.vlkoppiaine': {
         parent: 'root.perusopetus.vuosiluokkakokonaisuus',
         useData: 'oppiaineNimi',

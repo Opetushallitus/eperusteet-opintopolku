@@ -58,18 +58,26 @@ epOpintopolkuApp
       }
     }
 
+    function textCallback(item)  {
+      if (item.$osa) {
+        item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
+        item.$hidden = item.depth > 0;
+      } else if (item.id === 'laajaalaiset') {
+        item.$selected = $state.is('root.perusopetus.laajaalaiset');
+      }
+      if (item.$selected) {
+        selected = item;
+      }
+    }
+
     var states = {
+      laajaalaiset: {
+        index: 0,
+        callback: textCallback
+      },
       tekstikappale: {
         index: 0,
-        callback: function (item) {
-          if (item.$osa) {
-            item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
-            item.$hidden = item.depth > 0;
-            if (item.$selected) {
-              selected = item;
-            }
-          }
-        }
+        callback: textCallback
       },
       vuosiluokkakokonaisuus: {
         index: 1,

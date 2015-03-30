@@ -56,8 +56,12 @@
     <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.arviointi.teksti || '-'"></termisto-tekstikentta>
   </div>
 
+  <div ng-hide="filterSisalto.sisaltoalueet || !valittuOppiaine.vlks.sisaltoalueinfo">
+      <h3>{{ valittuOppiaine.vlks.sisaltoalueinfo.otsikko | kaanna }}</h3>
+      <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.sisaltoalueinfo.teksti || '-'"></termisto-tekstikentta>
+  </div>
+  
   <div ng-hide="filterSisalto.sisaltoalueet || !valittuOppiaine.vlks.sisaltoalueet || valittuOppiaine.vlks.sisaltoalueet.length === 0">
-    <h3 kaanna="'sisaltoalueet'"></h3>
     <div ng-repeat="sa in valittuOppiaine.vlks.sisaltoalueet">
       <h4 class="sparse">{{ sa.nimi | kaanna }}</h4>
       <termisto-tekstikentta tekstikentta="sa.kuvaus || '-'"></termisto-tekstikentta>

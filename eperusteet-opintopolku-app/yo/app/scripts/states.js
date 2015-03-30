@@ -213,6 +213,12 @@ epOpintopolkuApp
     controller: 'PerusopetusVlkController'
   })
 
+  .state('root.perusopetus.laajaalaiset', {
+    url: '/laajaalaisetosaamiset',
+    templateUrl: 'views/perusopetus/laajaalaiset.html',
+    controller: 'LaajaalaisetOsaamisetController'
+  })
+
   .state('root.perusopetus.vlkoppiaine', {
     url: '/vuosiluokkakokonaisuus/:vlkId/oppiaine/:oppiaineId',
     templateUrl: 'views/perusopetus/vlkoppiaine.html',

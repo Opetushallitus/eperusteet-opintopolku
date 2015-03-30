@@ -100,7 +100,7 @@ epOpintopolkuApp
         break;
       }
     }
-    $scope.links.next = i < items.length ? items[i] : null;
+    $scope.links.next = i < items.length && items[i].id !== 'laajaalaiset' ? items[i] : null;
     i = me - 1;
     for (; i >= 0; --i) {
       if (items[i].depth <= meDepth) {
@@ -138,6 +138,10 @@ epOpintopolkuApp
     murupolkuParams.parents = [$scope.oppiaineetMap[oppiaine._oppiaine]];
   }
   MurupolkuData.set(murupolkuParams);
+})
+
+.controller('LaajaalaisetOsaamisetController', function ($scope, Utils) {
+  $scope.osaaminenSort = Utils.nameSort;
 })
 
 .controller('PerusopetusSisallotController', function($scope, oppiaine, $stateParams, $rootScope, MurupolkuData) {

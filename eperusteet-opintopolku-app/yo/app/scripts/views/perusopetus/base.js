@@ -30,6 +30,7 @@ epOpintopolkuApp
   var oppiaineet = _.zipBy(sisalto[2], 'id');
   $scope.oppiaineetMap = oppiaineet;
   $scope.osaamiset = _.zipBy(sisalto[1], 'id');
+  $scope.laajaalaiset = sisalto[1];
   $scope.sisallot = _.zipBy(sisalto[3], 'id');
   $scope.vuosiluokkakokonaisuudet = _(sisalto[3]).each(function(s) { s.vuosiluokat.sort(); })
                                                  .sortBy(function(s) { return _.first(s.vuosiluokat); })

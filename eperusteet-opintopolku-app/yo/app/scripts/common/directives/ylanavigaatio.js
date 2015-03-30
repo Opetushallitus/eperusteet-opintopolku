@@ -26,7 +26,26 @@ epOpintopolkuApp
   };
 })
 
-.controller('YlanavigaatioController', function ($scope, $state, $stateParams) {
+.controller('YlanavigaatioController', function ($scope, $state, $stateParams, Haku) {
+
+  function updateOsiot() {
+    $scope.activeOsio = null;
+    _.each($scope.osiot, function (osio) {
+      osio.active = isStateActive(osio);
+      if (osio.active) {
+        $scope.activeOsio = osio;
+      }
+      osio.url = $state.href(osio.state, {lang: $stateParams.lang});
+    });
+  }
+
+  var amOsio = null;
+  $scope.$watch(function () {
+    return Haku.osio;
+  }, function (value) {
+    amOsio = value;
+    updateOsiot();
+  });
   $scope.osiot = [
     {label: 'navi.etusivu', state: 'root.etusivu'},
     {label: 'navi.esiopetus', state: 'root.esiopetus'},
@@ -44,6 +63,14 @@ epOpintopolkuApp
   ];
 
   function stateMatch(osio) {
+    if (_.contains(osio.state, 'ammatillinen')) {
+      // Jos on navigoitu aikuiskoulutuksen haun puolelta, näytetään se aktiivisena
+      var defined = !_.isEmpty(amOsio);
+      var definedMatch = _.contains(osio.state, amOsio);
+      var inAmState = _.startsWith($state.current.name, 'root.esitys') || _.startsWith($state.current.name, 'root.selaus');
+      var perus = _.contains(osio.state, 'ammatillinenperus');
+      return inAmState && ((defined && definedMatch) || (!defined && perus));
+    }
     return _.startsWith($state.current.name, osio.state);
   }
 
@@ -59,15 +86,5 @@ epOpintopolkuApp
   }
 
   $scope.activeOsio = null;
-  $scope.$on('$stateChangeSuccess', function () {
-    $scope.activeOsio = null;
-    _.each($scope.osiot, function (osio) {
-      // TODO parent state matching
-      osio.active = isStateActive(osio);
-      if (osio.active) {
-        $scope.activeOsio = osio;
-      }
-      osio.url = $state.href(osio.state, {lang: $stateParams.lang});
-    });
-  });
+  $scope.$on('$stateChangeSuccess', updateOsiot);
 });
