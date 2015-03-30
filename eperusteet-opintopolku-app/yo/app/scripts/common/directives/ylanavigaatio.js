@@ -67,9 +67,9 @@ epOpintopolkuApp
       // Jos on navigoitu aikuiskoulutuksen haun puolelta, näytetään se aktiivisena
       var defined = !_.isEmpty(amOsio);
       var definedMatch = _.contains(osio.state, amOsio);
-      var inEsitys = _.startsWith($state.current.name, 'root.esitys');
+      var inAmState = _.startsWith($state.current.name, 'root.esitys') || _.startsWith($state.current.name, 'root.selaus');
       var perus = _.contains(osio.state, 'ammatillinenperus');
-      return (defined && definedMatch) || (!defined && inEsitys && perus);
+      return inAmState && ((defined && definedMatch) || (!defined && perus));
     }
     return _.startsWith($state.current.name, osio.state);
   }
