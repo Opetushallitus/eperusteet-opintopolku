@@ -99,5 +99,21 @@
 "etsi-rakenteesta": "Sök i strukturen...",
 "etsi-sisallosta": "Avgränsa innehållet...",
 "rajaa-tutkinnonosia": "Avgränsa examensdelarna...",
-"tutkinnon-osa-haku-placeholder": "Avgränsa examensdelarna..."
+"tutkinnon-osa-haku-placeholder": "Avgränsa examensdelarna...",
+"ei-tuloksia": "Avgränsningen gav inga resultat",
+"diaarinumero-label": "Diarienummer",
+"piilota-ryhman-kuvaus": "Dölj gruppens beskrivning",
+"ei-tutkintonimikkeita ": "Inga examensbenämningar",
+"tutkintonimike": "Examensbenämning",
+"tyhjenna-rajaus-tooltip": "Töm avgränsningen (Esc)",
+"nimi": "Namn",
+"laaja-alaisen-osaamisen-alueet": "Mångsidiga kompetensområden",
+"rajaa-tutkinnonosia": "Avgränsa examensdelarna",
+"korvattavat-perusteet": "Föreskrifter som ersätts",
+"arvion-hyva-osaaminen": "Kunskapskrav för goda kunskaper/vitsordet åtta",
+"nayta-ryhman-kuvaus": "Visa gruppens beskrivning",
+"tutkinnonosa": "Examensdel",
+"sivunavigointi-avaa-menu": "Öppna navigeringsmenyn",
+"sivunavigointi-sulje-menu": "Stäng navigeringsmenyn ",
+"arvioinnin-kohde": "Föremål för bedömningen"
 }
