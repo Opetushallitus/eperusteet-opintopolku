@@ -1,4 +1,4 @@
-<h1 ng-bind="'laaja-alaiset-osaamiset' | kaanna"></h1>
+<h1 kaanna="'laaja-alaisen-osaamisen-alueet'"></h1>
 
 <div ng-repeat="osaaminen in laajaalaiset | orderBy:osaaminenSort">
   <h2 ng-bind-html="osaaminen.nimi | kaanna | unsafe"></h2>

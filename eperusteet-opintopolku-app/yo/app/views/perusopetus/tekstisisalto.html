@@ -7,7 +7,7 @@
       <span ep-highlight="search.term" ng-bind="item.label | kaanna"></span>
     </a>
     <a ng-if="item.href" ng-href="{{item.href}}">
-      <span ep-highlight="search.term" ng-bind="item.label | kaanna"></span>
+      <span ep-highlight="search.term" ng-bind="item.label | kaanna" ng-class="{uppercase: item.$uppercase}"></span>
     </a>
   </div>
 </div>
