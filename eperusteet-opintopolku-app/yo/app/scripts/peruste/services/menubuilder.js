@@ -80,6 +80,7 @@ epOpintopolkuApp
   }
 
   function rakennaTekstisisalto(sisalto) {
+    console.log('state', $state);
     var suunnitelma = [];
     Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function(osa, depth) {
       suunnitelma.push({
@@ -94,14 +95,16 @@ epOpintopolkuApp
       levels[item.depth] = index;
       item.$parent = levels[item.depth - 1] || null;
     });
-    suunnitelma.push({
-      label: 'laaja-alaisen-osaamisen-alueet',
-      id: 'laajaalaiset',
-      link: ['root.perusopetus.laajaalaiset'],
-      depth: 0,
-      $hidden: false,
-      $uppercase: true
-    });
+      if ($state.current.name.indexOf('root.perusopetus') >= 0) {
+        suunnitelma.push({
+          label: 'laaja-alaisen-osaamisen-alueet',
+          id: 'laajaalaiset',
+          link: ['root.perusopetus.laajaalaiset'],
+          depth: 0,
+          $hidden: false,
+          $uppercase: true
+        });
+      }
     return suunnitelma;
   }
 
