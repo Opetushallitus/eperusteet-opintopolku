@@ -71,6 +71,7 @@ epOpintopolkuApp
     sections: [
       {
         id: 'sisalto',
+        $open: true,
         items: MenuBuilder.rakennaTekstisisalto($scope.tekstisisalto)
       }
     ]
