@@ -30,7 +30,7 @@ epOpintopolkuApp
 .factory('LokalisointiLoader', function ($q, $http, LokalisointiResource, $window, $rootScope) {
   var PREFIX = 'localisation/locale-',
       SUFFIX = '.json',
-      BYPASS_REMOTE = $window.location.host.indexOf('localhost') === 0;
+      BYPASS_REMOTE = true;
   return function (options) {
     var deferred = $q.defer();
     var translations = {};
