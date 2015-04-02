@@ -80,9 +80,11 @@ epOpintopolkuApp
   })
 
   .controller('EsitysSisaltoController', function($scope, $state, $stateParams, PerusteenOsat, YleinenData,
-    MurupolkuData, ParentFinder) {
+    MurupolkuData, ParentFinder, TekstikappaleChildResolver) {
     $scope.$parent.valittu.sisalto = $stateParams.osanId;
     $scope.valittuSisalto = $scope.$parent.sisalto[$stateParams.osanId];
+    $scope.tekstikappale = $scope.valittuSisalto;
+    $scope.lapset = TekstikappaleChildResolver.getSisalto();
     MurupolkuData.set({
       osanId: $scope.valittuSisalto.id,
       tekstikappaleNimi: $scope.valittuSisalto.nimi,

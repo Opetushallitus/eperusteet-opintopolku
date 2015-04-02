@@ -150,8 +150,16 @@ epOpintopolkuApp
 
   .state('root.esitys.peruste.tekstikappale', {
     url: '/sisalto/:osanId',
-    templateUrl: 'views/esitys/sisalto.html',
-    controller: 'EsitysSisaltoController'
+    templateUrl: 'views/perusopetus/tekstikappale.html',
+    controller: 'EsitysSisaltoController',
+    resolve: {
+      tekstikappaleId: function (serviceConfig, $stateParams) {
+        return $stateParams.osanId;
+      },
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
+        return TekstikappaleChildResolver.get(sisalto, tekstikappaleId);
+      }
+    }
   })
 
   .state('root.esitys.peruste.tiedot', {
