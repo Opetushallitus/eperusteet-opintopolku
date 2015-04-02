@@ -39,7 +39,7 @@
         </accordion>
       </div>
 
-      <a class="list-group-item item" ng-repeat="item in items" ng-class="itemClasses(item)" ng-href="{{item.href}}"
+      <a class="list-group-item item items-item" ng-repeat="item in items" ng-class="itemClasses(item)" ng-href="{{item.href}}"
         ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
         <div class="toggler">
           <span ng-show="!item.$leaf" ng-click="toggle(items, item, $event)" class="glyphicon"

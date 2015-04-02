@@ -5,6 +5,14 @@ $sivunavi-toggle-korkeus: 50px;
 $sivunavi-valinta-korkeus: $sivunavi-toggle-korkeus;
 $sivunavi-shadow: 6px;
 
+.sivunavi-simple {
+  .sivunavi-box {
+    .list-group {
+      border-bottom: 2px solid #d2d2d2;
+    }
+  }
+}
+
 .sivunavi-outer {
   clear: both;
   width: $sivunavi-leveys;
@@ -101,7 +109,7 @@ $sivunavi-level-padding: 20px;
     .level#{$i} { @include sn-padding($i); }
   }
   .matched {
-    background-color: lighten($nappi-vari, 5);
+    //background-color: lighten($nappi-vari, 5);
   }
   .input-group {
     margin-bottom: 15px;
@@ -303,5 +311,40 @@ $sivunavi-level-padding: 20px;
   border-right: 1px solid #ddd;
   button {
     margin: 10px 0px;
+  }
+}
+
+.items-item {
+  &.list-group-item {
+    border-top: none !important;
+    border-bottom: none !important;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    &:hover:not(.active) {
+      background-color: white;
+      color: $brand-secondary;
+    }
+    &.active, &.active:hover, &.active:focus {
+      background-color: white;
+    }
+    &.active {
+      .linktext {
+        background-color: $brand-primary;
+      }
+    }
+    &.tekstisisalto-active-header {
+      .linktext {
+        background-color: $brand-link-active-header-bg;
+        color: $brand-link-active-header;
+        font-weight: 700;
+      }
+    }
+  }
+  .toggler {
+    display: none !important;
+  }
+  .linktext {
+    padding: 5px;
+    margin-left: 0 !important;
   }
 }

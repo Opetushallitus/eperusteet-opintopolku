@@ -100,6 +100,13 @@ epOpintopolkuApp
       item.$leaf = hidden.length === 0;
       item.$collapsed = _.all(hidden);
       item.$active = isActive(item);
+      if (item.$active) {
+        var parent = items[item.$parent];
+        while (parent) {
+          parent.$header = true;
+          parent = items[parent.$parent];
+        }
+      }
       if (!item.$collapsed) {
         // Reveal all children of uncollapsed node
         for (i = 0; i < children.length; ++i) {
@@ -180,6 +187,9 @@ epOpintopolkuApp
       }
       if (item.$active) {
         classes.push('active');
+      }
+      if (item.$header) {
+        classes.push('tekstisisalto-active-header');
       }
       return classes;
     };
