@@ -80,7 +80,6 @@ epOpintopolkuApp
   }
 
   function rakennaTekstisisalto(sisalto) {
-    console.log('state', $state);
     var suunnitelma = [];
     Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function(osa, depth) {
       suunnitelma.push({

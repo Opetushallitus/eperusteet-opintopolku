@@ -166,7 +166,11 @@ epOpintopolkuApp
       }
     };
 
-    $scope.$watch('search.term', $scope.search.update);
+    $scope.$watch('search.term', _.debounce(function () {
+      $scope.$apply(function () {
+        $scope.search.update();
+      });
+    }, 100));
 
 
     $scope.itemClasses = function (item) {

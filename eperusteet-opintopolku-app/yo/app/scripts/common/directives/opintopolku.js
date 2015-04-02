@@ -17,7 +17,7 @@
 'use strict';
 
 epOpintopolkuApp
-.directive('opintopolkuHeader', function (MurupolkuData) {
+.directive('opintopolkuHeader', function (MurupolkuData, $window, $timeout) {
   MurupolkuData.noop(); // remove unused warning
   return {
     scope: {},
@@ -48,12 +48,24 @@ epOpintopolkuApp
           }
         }
       };
-      $scope.kieliLabel = $scope.kieli === 'fi' ? 'På svenska' : 'Suomeksi';
+      $scope.kieliLabel = {
+        fi: 'På svenska',
+        sv: 'Suomeksi'
+      };
+
+      $scope.switch = function () {
+        var newKieli = Kieli.getSisaltokieli() === 'fi' ? 'sv' : 'fi';
+        Kieli.setSisaltokieli(newKieli);
+        Kieli.setUiKieli(newKieli);
+        $timeout(function () {
+          // Ensure everything is refreshed by reloading the whole thing with the selected language
+          $window.location.reload();
+        }, 100);
+      };
 
       $scope.$on('changed:sisaltokieli', function () {
         $scope.kieli = Kieli.getSisaltokieli();
         $scope.other = $scope.kieli === 'fi' ? 'sv' : 'fi';
-        $scope.kieliLabel = $scope.kieli === 'fi' ? 'På svenska' : 'Suomeksi';
       });
     }
   };

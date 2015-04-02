@@ -1,6 +1,6 @@
 <!-- partials/esitys/tiedot.html -->
 
-<h1 ng-bind="'perusteen-tiedot' | kaanna"></h1>
+<h1 kaanna="'perusteen-tiedot'"></h1>
 
 <table class="esitys-perusteen-tiedot">
   <tr>
@@ -20,19 +20,19 @@
         <div class="koulutus" ng-repeat="koulutus in peruste.koulutukset">
           <table class="aligned">
             <tr>
-              <th>{{'koulutuksen-nimi' | kaanna}}</th>
+              <th kaanna="'koulutuksen-nimi'"></th>
               <td>{{koulutus.nimi| kaanna}}</td>
             </tr>
             <tr>
-              <th>{{'perusteen-koodi' | kaanna}}</th>
+              <th kaanna="'perusteen-koodi'"></th>
               <td>{{koulutus.koulutuskoodiArvo}}</td>
             </tr>
             <tr>
-              <th>{{'haku-koulutusala' | kaanna}}</th>
+              <th kaanna="'haku-koulutusala'"></th>
               <td>{{koulutusalaNimi(koulutus.koulutusalakoodi).nimi | kaanna}}</td>
             </tr>
             <tr>
-              <th>{{'haku-opintoala' | kaanna}}</th>
+              <th kaanna="'haku-opintoala'"></th>
               <td>{{opintoalaNimi(koulutus.opintoalakoodi).nimi | kaanna}}</td>
             </tr>
           </table>
