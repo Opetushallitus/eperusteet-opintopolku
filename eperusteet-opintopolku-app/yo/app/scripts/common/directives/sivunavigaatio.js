@@ -257,6 +257,13 @@ epOpintopolkuApp
       if (!items) {
         return;
       }
+      _.each(items, function (item) {
+        if (item.depth > 0) {
+          item.$hidden = true;
+        }
+        item.$collapsed = true;
+        item.$header = false;
+      });
       doUncollapse = _.isUndefined(doUncollapse) ? true : doUncollapse;
       if (doUncollapse) {
         var active = _.find(items, function (item) {

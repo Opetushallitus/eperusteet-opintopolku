@@ -2,23 +2,15 @@
 <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
 
 <div ng-repeat="lapsi in lapset">
-  <h2>
-    <span ng-bind-html="lapsi.$osa.nimi | kaanna | unsafe"></span>
-    <span class="teksti-linkki"><a ui-sref="^.tekstikappale({tekstikappaleId: lapsi.id})" icon-role="new-window"></a></span>
-  </h2>
+  <tekstiotsikko level="2" model="lapsi" link-var="linkVar"></tekstiotsikko>
   <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset">
-    <h3>
-      <span ng-bind-html="alilapsi.$osa.nimi | kaanna | unsafe"></span>
-      <span class="teksti-linkki"><a ui-sref="^.tekstikappale({tekstikappaleId: alilapsi.id})" icon-role="new-window"></a></span>
-    </h3>
+    <tekstiotsikko level="3" model="alilapsi" link-var="linkVar"></tekstiotsikko>
     <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
 
     <div ng-repeat="alialilapsi in alilapsi.lapset">
-      <h4>
-        <span ng-bind-html="alialilapsi.$osa.nimi | kaanna | unsafe"></span>
-      </h4>
+      <tekstiotsikko level="4" model="alialilapsi" link-var="linkVar"></tekstiotsikko>
       <termisto-tekstikentta tekstikentta="alialilapsi.$osa.teksti"></termisto-tekstikentta>
     </div>
   </div>

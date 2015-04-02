@@ -1,5 +1,5 @@
 <!-- partials/esitys/tutkinnonOsa.html -->
-
+<div class="tutkinnonosa-wrapper">
 <h1>
   {{ tutkinnonOsa.nimi | kaanna }} <span ng-show="tutkinnonOsaViite.laajuus">{{ tutkinnonOsaViite.laajuus }} {{ yksikko | kaanna }}</span>
 </h1>
@@ -58,4 +58,5 @@
     </div>
     <div ng-repeat="tavoite in osaalue.$groups.ungrouped" ng-include="'views/esitys/osaamistavoite.html'"></div>
   </div>
+</div>
 </div>

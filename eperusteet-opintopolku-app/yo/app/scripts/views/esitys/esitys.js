@@ -80,9 +80,11 @@ epOpintopolkuApp
   })
 
   .controller('EsitysSisaltoController', function($scope, $state, $stateParams, PerusteenOsat, YleinenData,
-    MurupolkuData, ParentFinder) {
+    MurupolkuData, ParentFinder, TekstikappaleChildResolver) {
     $scope.$parent.valittu.sisalto = $stateParams.osanId;
     $scope.valittuSisalto = $scope.$parent.sisalto[$stateParams.osanId];
+    $scope.tekstikappale = $scope.valittuSisalto;
+    $scope.lapset = TekstikappaleChildResolver.getSisalto();
     MurupolkuData.set({
       osanId: $scope.valittuSisalto.id,
       tekstikappaleNimi: $scope.valittuSisalto.nimi,
@@ -94,8 +96,12 @@ epOpintopolkuApp
       });
       $state.go('root.esitys.peruste.tiedot', params);
     } else {
-      PerusteenOsat.get({ osanId: $scope.valittuSisalto.id }, _.setWithCallback($scope, 'valittuSisalto'));
+      PerusteenOsat.get({ osanId: $scope.valittuSisalto.id }, function (res) {
+        $scope.valittuSisalto = res;
+        $scope.tekstikappale = res;
+      });
     }
+    $scope.linkVar = 'osanId';
   })
 
   .controller('EsitysController', function($scope, $stateParams, sisalto, peruste,
@@ -198,4 +204,25 @@ epOpintopolkuApp
         element.append(compiled);
       }
     };
-  });
+  })
+
+.directive('tekstiotsikko', function () {
+  return {
+    restrict: 'E',
+    scope: {
+      model: '=',
+      level: '@',
+      linkVar: '='
+    },
+    template: '<span class="otsikko-wrap"><span ng-bind-html="model.$osa.nimi | kaanna | unsafe"></span>' +
+    '  <span class="teksti-linkki">' +
+    '    <a ng-if="amEsitys" ui-sref="^.tekstikappale({osanId: model.id})" icon-role="new-window"></a>' +
+    '    <a ng-if="!amEsitys" ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
+    '  </span></span>',
+    link: function (scope, element) {
+      var headerEl = angular.element('<h' + scope.level + '>');
+      element.find('.otsikko-wrap').wrap(headerEl);
+      scope.amEsitys = scope.linkVar === 'osanId';
+    }
+  };
+});
