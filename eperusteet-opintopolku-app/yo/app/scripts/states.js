@@ -123,8 +123,8 @@ epOpintopolkuApp
 
   .state('root.esitys.peruste.rakenne', {
     url: '/rakenne',
-    templateUrl: 'views/esitys/rakenne.html',
-    controller: 'EsitysRakenneController',
+    templateUrl: 'eperusteet-esitys/views/rakenne.html',
+    controller: 'epEsitysRakenneController',
     resolve: {
       // FIXME: ui-router bug or some '$on'-callback manipulating $stateParams?
       // $stateParams changes between config and controller
@@ -138,42 +138,42 @@ epOpintopolkuApp
 
   .state('root.esitys.peruste.tutkinnonosat', {
     url: '/tutkinnonosat',
-    templateUrl: 'views/esitys/tutkinnonosat.html',
-    controller: 'EsitysTutkinnonOsatController'
+    templateUrl: 'eperusteet-esitys/views/tutkinnonosat.html',
+    controller: 'epEsitysTutkinnonOsatController'
   })
 
   .state('root.esitys.peruste.tutkinnonosa', {
     url: '/tutkinnonosat/:id',
-    templateUrl: 'views/esitys/tutkinnonosa.html',
-    controller: 'EsitysTutkinnonOsaController'
+    templateUrl: 'eperusteet-esitys/views/tutkinnonosa.html',
+    controller: 'epEsitysTutkinnonOsaController'
   })
 
   .state('root.esitys.peruste.tekstikappale', {
     url: '/sisalto/:osanId',
-    templateUrl: 'views/perusopetus/tekstikappale.html',
-    controller: 'EsitysSisaltoController',
+    templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+    controller: 'epEsitysSisaltoController',
     resolve: {
       tekstikappaleId: function (serviceConfig, $stateParams) {
         return $stateParams.osanId;
       },
-      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
-        return TekstikappaleChildResolver.get(sisalto, tekstikappaleId);
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, epTekstikappaleChildResolver) {
+        return epTekstikappaleChildResolver.get(sisalto, tekstikappaleId);
       }
     }
   })
 
   .state('root.esitys.peruste.tiedot', {
     url: '/tiedot',
-    templateUrl: 'views/esitys/tiedot.html',
-    controller: 'EsitysTiedotController'
+    templateUrl: 'eperusteet-esitys/views/tiedot.html',
+    controller: 'epEsitysTiedotController'
   })
 
   /* PERUSOPETUS */
 
   .state('root.perusopetus', {
     url: '/perusopetus/:perusteId',
-    templateUrl: 'views/perusopetus/perusopetus.html',
-    controller: 'PerusopetusController',
+    templateUrl: 'eperusteet-esitys/views/perusopetus.html',
+    controller: 'epPerusopetusController',
     resolve: {
       perusteId: function (serviceConfig, $stateParams) {
         return $stateParams.perusteId;
@@ -200,8 +200,8 @@ epOpintopolkuApp
 
   .state('root.perusopetus.tekstikappale', {
     url: '/tekstikappale/:tekstikappaleId',
-    templateUrl: 'views/perusopetus/tekstikappale.html',
-    controller: 'PerusopetusTekstikappaleController',
+    templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+    controller: 'epPerusopetusTekstikappaleController',
     resolve: {
       tekstikappaleId: function (serviceConfig, $stateParams) {
         return $stateParams.tekstikappaleId;
@@ -209,28 +209,28 @@ epOpintopolkuApp
       tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
         return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
       },
-      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
-        return TekstikappaleChildResolver.get(sisalto[4], tekstikappaleId);
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, epTekstikappaleChildResolver) {
+        return epTekstikappaleChildResolver.get(sisalto[4], tekstikappaleId);
       }
     }
   })
 
   .state('root.perusopetus.vuosiluokkakokonaisuus', {
     url: '/vuosiluokkakokonaisuus/:vlkId',
-    templateUrl: 'views/perusopetus/vuosiluokkakokonaisuus.html',
-    controller: 'PerusopetusVlkController'
+    templateUrl: 'eperusteet-esitys/views/vuosiluokkakokonaisuus.html',
+    controller: 'epPerusopetusVlkController'
   })
 
   .state('root.perusopetus.laajaalaiset', {
     url: '/laajaalaisetosaamiset',
-    templateUrl: 'views/perusopetus/laajaalaiset.html',
-    controller: 'LaajaalaisetOsaamisetController'
+    templateUrl: 'eperusteet-esitys/views/laajaalaiset.html',
+    controller: 'epLaajaalaisetOsaamisetController'
   })
 
   .state('root.perusopetus.vlkoppiaine', {
     url: '/vuosiluokkakokonaisuus/:vlkId/oppiaine/:oppiaineId',
-    templateUrl: 'views/perusopetus/vlkoppiaine.html',
-    controller: 'PerusopetusVlkOppiaineController',
+    templateUrl: 'eperusteet-esitys/views/vlkoppiaine.html',
+    controller: 'epPerusopetusVlkOppiaineController',
     resolve: {
       oppiaineId: function (serviceConfig, $stateParams) {
         return $stateParams.oppiaineId;
@@ -243,8 +243,8 @@ epOpintopolkuApp
 
   .state('root.perusopetus.sisallot', {
     url: '/sisallot/:oppiaineId?vlk&sisalto&osaaminen&valittu',
-    templateUrl: 'views/perusopetus/vlkoppiaine.html',
-    controller: 'PerusopetusSisallotController',
+    templateUrl: 'eperusteet-esitys/views/vlkoppiaine.html',
+    controller: 'epPerusopetusSisallotController',
     resolve: {
       oppiaineId: function (serviceConfig, $stateParams) {
         return $stateParams.oppiaineId;
@@ -257,8 +257,8 @@ epOpintopolkuApp
 
   .state('root.esiopetus', {
     url: '/esiopetus/:perusteId',
-    templateUrl: 'views/esitys/yksinkertainen.html',
-    controller: 'EsiopetusController',
+    templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',
+    controller: 'epYksinkertainenPerusteController',
     resolve: {
       perusteId: function (serviceConfig, $stateParams) {
         return $stateParams.perusteId;
@@ -281,8 +281,8 @@ epOpintopolkuApp
 
   .state('root.esiopetus.tekstikappale', {
     url: '/tekstikappale/:tekstikappaleId',
-    templateUrl: 'views/perusopetus/tekstikappale.html',
-    controller: 'PerusopetusTekstikappaleController',
+    templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+    controller: 'epEsitysSisaltoController',
     resolve: {
       tekstikappaleId: function (serviceConfig, $stateParams) {
         return $stateParams.tekstikappaleId;
@@ -290,16 +290,16 @@ epOpintopolkuApp
       tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
         return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
       },
-      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
-        return TekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, epTekstikappaleChildResolver) {
+        return epTekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
       }
     }
   })
 
   .state('root.lisaopetus', {
     url: '/lisaopetus/:perusteId',
-    templateUrl: 'views/esitys/yksinkertainen.html',
-    controller: 'EsiopetusController',
+    templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',
+    controller: 'epYksinkertainenPerusteController',
     resolve: {
       perusteId: function (serviceConfig, $stateParams) {
         return $stateParams.perusteId;
@@ -322,8 +322,8 @@ epOpintopolkuApp
 
   .state('root.lisaopetus.tekstikappale', {
     url: '/tekstikappale/:tekstikappaleId',
-    templateUrl: 'views/perusopetus/tekstikappale.html',
-    controller: 'PerusopetusTekstikappaleController',
+    templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+    controller: 'epEsitysSisaltoController',
     resolve: {
       tekstikappaleId: function (serviceConfig, $stateParams) {
         return $stateParams.tekstikappaleId;
@@ -331,8 +331,8 @@ epOpintopolkuApp
       tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
         return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
       },
-      lapset: function (serviceConfig, sisalto, tekstikappaleId, TekstikappaleChildResolver) {
-        return TekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
+      lapset: function (serviceConfig, sisalto, tekstikappaleId, epTekstikappaleChildResolver) {
+        return epTekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
       }
     }
   });

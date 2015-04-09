@@ -17,93 +17,6 @@
 'use strict';
 
 epOpintopolkuApp
-  .controller('EsitysRakenneController', function($scope, $state, $stateParams, PerusteenRakenne, realParams) {
-    $scope.$parent.valittu.sisalto = 'rakenne';
-    $scope.muodostumisOtsikko = _.find($scope.$parent.sisalto, function (item) {
-      return item.tunniste === 'rakenne';
-    });
-    PerusteenRakenne.hae(realParams.perusteId, realParams.suoritustapa, function(rakenne) {
-      $scope.rakenne = rakenne;
-      $scope.rakenne.$suoritustapa = realParams.suoritustapa;
-      $scope.rakenne.$resolved = true;
-    });
-  })
-
-  .controller('EsitysTutkinnonOsaController', function($scope, $state, $stateParams, PerusteenOsat, TutkinnonosanTiedotService,
-      Tutke2Osa, Kieli, MurupolkuData) {
-    $scope.tutkinnonOsaViite = _.find($scope.$parent.tutkinnonOsat, function(tosa) {
-      return tosa.id === parseInt($stateParams.id, 10);
-    });
-    MurupolkuData.set({id: $scope.tutkinnonOsaViite.id, tutkinnonosaNimi: $scope.tutkinnonOsaViite.nimi});
-    $scope.osaAlueet = {};
-    TutkinnonosanTiedotService.noudaTutkinnonOsa({perusteenOsaId: $scope.tutkinnonOsaViite._tutkinnonOsa}).then(function () {
-      $scope.tutkinnonOsa = TutkinnonosanTiedotService.getTutkinnonOsa();
-      $scope.fieldKeys = _.intersection(_.keys($scope.tutkinnonOsa), TutkinnonosanTiedotService.keys());
-      if ($scope.tutkinnonOsa.tyyppi === 'tutke2') {
-        Tutke2Osa.kasitteleOsaAlueet($scope.tutkinnonOsa);
-      }
-    });
-
-    $scope.fieldOrder = function (item) {
-      return TutkinnonosanTiedotService.order(item);
-    };
-    $scope.hasArviointi = function (osaamistavoite) {
-      return osaamistavoite.arviointi &&
-        osaamistavoite.arviointi.arvioinninKohdealueet &&
-        osaamistavoite.arviointi.arvioinninKohdealueet.length > 0 &&
-        osaamistavoite.arviointi.arvioinninKohdealueet[0].arvioinninKohteet &&
-        osaamistavoite.arviointi.arvioinninKohdealueet[0].arvioinninKohteet.length > 0;
-    };
-    $scope.osaAlueFilter = function (item) {
-      return _.contains(item.$kielet, Kieli.getSisaltokieli());
-    };
-  })
-
-  .controller('EsitysTutkinnonOsatController', function($scope, $state, $stateParams, Algoritmit) {
-    $scope.$parent.valittu.sisalto = 'tutkinnonosat';
-    $scope.tosarajaus = '';
-    $scope.rajaaTutkinnonOsia = function(haku) { return Algoritmit.rajausVertailu($scope.tosarajaus, haku, 'nimi'); };
-  })
-
-  .controller('EsitysTiedotController', function($scope, $q, $state, YleinenData, PerusteenTutkintonimikkeet, Perusteet) {
-    $scope.showKoulutukset = _.constant(YleinenData.showKoulutukset($scope.peruste));
-    $scope.koulutusalaNimi = $scope.Koulutusalat.haeKoulutusalaNimi;
-    $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
-
-    PerusteenTutkintonimikkeet.get($scope.peruste.id, $scope);
-
-    $q.all(_.map($scope.peruste.korvattavatDiaarinumerot, function(diaari) {
-      return Perusteet.diaari({ diaarinumero: diaari }).$promise;
-    })).then(function(korvattavatPerusteet) {
-      $scope.korvattavatPerusteet = korvattavatPerusteet;
-    });
-  })
-
-  .controller('EsitysSisaltoController', function($scope, $state, $stateParams, PerusteenOsat, YleinenData,
-    MurupolkuData, ParentFinder, TekstikappaleChildResolver) {
-    $scope.$parent.valittu.sisalto = $stateParams.osanId;
-    $scope.valittuSisalto = $scope.$parent.sisalto[$stateParams.osanId];
-    $scope.tekstikappale = $scope.valittuSisalto;
-    $scope.lapset = TekstikappaleChildResolver.getSisalto();
-    MurupolkuData.set({
-      osanId: $scope.valittuSisalto.id,
-      tekstikappaleNimi: $scope.valittuSisalto.nimi,
-      parents: ParentFinder.find($scope.$parent.originalSisalto.lapset, parseInt($stateParams.osanId, 10))
-    });
-    if (!$scope.valittuSisalto) {
-      var params = _.extend(_.clone($stateParams), {
-        suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
-      });
-      $state.go('root.esitys.peruste.tiedot', params);
-    } else {
-      PerusteenOsat.get({ osanId: $scope.valittuSisalto.id }, function (res) {
-        $scope.valittuSisalto = res;
-        $scope.tekstikappale = res;
-      });
-    }
-    $scope.linkVar = 'osanId';
-  })
-
   .controller('EsitysController', function($scope, $stateParams, sisalto, peruste,
       YleinenData, $state, Algoritmit, tutkinnonOsat, Kaanna, arviointiasteikot,
       koulutusalaService, opintoalaService, Kieli, TermistoService, MurupolkuData) {
@@ -193,16 +106,10 @@ epOpintopolkuApp
 
   })
 
-  .directive('esitysSivuOtsikko', function ($compile) {
-    var TEMPLATE = '<div class="painikkeet pull-right">' +
-      '<a class="action-link left-space" ng-click="printSisalto()" icon-role="print" kaanna="\'tulosta-sivu\'"></a>' +
-      '</div>';
+  .directive('esitysSivuOtsikko', function () {
+    // dummy directive because we don't need action buttons in text titles
     return {
-      restrict: 'AE',
-      link: function (scope, element) {
-        var compiled = $compile(TEMPLATE)(scope);
-        element.append(compiled);
-      }
+      restrict: 'A'
     };
   })
 

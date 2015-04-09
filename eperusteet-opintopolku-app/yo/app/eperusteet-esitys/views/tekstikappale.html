@@ -1,16 +1,18 @@
-<h1 ng-bind-html="tekstikappale.nimi | kaanna | unsafe"></h1>
+<h1 esitys-sivu-otsikko="tekstikappale.nimi">
+  <span ng-bind-html="tekstikappale.nimi | kaanna | unsafe"></span>
+</h1>
 <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
 
 <div ng-repeat="lapsi in lapset">
-  <tekstiotsikko level="2" model="lapsi" link-var="linkVar"></tekstiotsikko>
+  <ep-tekstiotsikko level="2" model="lapsi" link-var="linkVar"></ep-tekstiotsikko>
   <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset">
-    <tekstiotsikko level="3" model="alilapsi" link-var="linkVar"></tekstiotsikko>
+    <ep-tekstiotsikko level="3" model="alilapsi" link-var="linkVar"></ep-tekstiotsikko>
     <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
 
     <div ng-repeat="alialilapsi in alilapsi.lapset">
-      <tekstiotsikko level="4" model="alialilapsi" link-var="linkVar"></tekstiotsikko>
+      <ep-tekstiotsikko level="4" model="alialilapsi" link-var="linkVar"></ep-tekstiotsikko>
       <termisto-tekstikentta tekstikentta="alialilapsi.$osa.teksti"></termisto-tekstikentta>
     </div>
   </div>

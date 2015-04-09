@@ -1,11 +1,11 @@
 <!-- partials/esitys/tiedot.html -->
 
-<h1 kaanna="'perusteen-tiedot'"></h1>
+<h1 esitys-sivu-otsikko="'perusteen-tiedot'"><span kaanna="'perusteen-tiedot'"></span></h1>
 
 <table class="esitys-perusteen-tiedot">
   <tr>
     <th kaanna="'perusteen-nimi'"></th>
-    <td kaanna="peruste.nimi"></td>
+    <td kaanna="peruste.nimi || 'nimetön'">></td>
   </tr>
   <tr>
     <th kaanna="'maarayksen-diaarinumero'"></th>

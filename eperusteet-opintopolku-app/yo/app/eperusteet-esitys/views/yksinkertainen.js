@@ -16,11 +16,14 @@
 
 'use strict';
 
-epOpintopolkuApp
-.controller('EsiopetusController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
-  $state, $stateParams, MenuBuilder, Utils, MurupolkuData,
-  Oppiaineet, TermistoService, Kieli, $document, $rootScope, PerusopetusStateService) {
-  var currentRootState = _.take($state.current.name.split('.'), 2).join('.');
+angular.module('eperusteet.esitys')
+.controller('epYksinkertainenPerusteController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
+  $state, $stateParams, epMenuBuilder, Algoritmit, Utils, MurupolkuData,
+  Oppiaineet, TermistoService, Kieli, $document, $rootScope, epPerusopetusStateService) {
+  function getRootState(current) {
+    return current.replace(/\.(esiopetus|lisaopetus)(.*)/, '.$1');
+  }
+  var currentRootState = getRootState($state.current.name);
   $scope.isNaviVisible = _.constant(true);
   $scope.hasContent = function (obj) {
     return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
@@ -30,7 +33,16 @@ epOpintopolkuApp
   MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
   $scope.sisallot = _.zipBy(sisalto[1], 'id');
   $scope.tekstisisalto = sisalto[1];
-  $scope.state = PerusopetusStateService.getState();
+  $scope.state = epPerusopetusStateService.getState();
+  function mapSisalto(sisalto) {
+    sisalto = _.clone(sisalto);
+    var flattened = {};
+    Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function(lapsi) {
+      flattened[lapsi.id] = lapsi.perusteenOsa;
+    });
+    return flattened;
+  }
+  $scope.sisalto = mapSisalto($scope.tekstisisalto);
 
   TermistoService.setPeruste(peruste);
 
@@ -62,7 +74,7 @@ epOpintopolkuApp
   });
 
   $scope.$on('$stateChangeSuccess', function () {
-    PerusopetusStateService.setState($scope.navi);
+    epPerusopetusStateService.setState($scope.navi);
   });
 
 
@@ -72,7 +84,7 @@ epOpintopolkuApp
       {
         id: 'sisalto',
         $open: true,
-        items: MenuBuilder.rakennaTekstisisalto($scope.tekstisisalto)
+        items: epMenuBuilder.rakennaTekstisisalto($scope.tekstisisalto)
       }
     ]
   };

@@ -26,10 +26,10 @@
  * @param footer Sisältö lisätään menun alapuolelle
  * Valinnainen transclude sijoitetaan ensimmäiseksi otsikon alle.
  */
-epOpintopolkuApp
-  .directive('sivunavigaatio', function ($window, $document, $timeout, $compile) {
+ angular.module('eperusteet.esitys')
+  .directive('epSivunavigaatio', function ($window, $document, $timeout, $compile) {
     return {
-      templateUrl: 'views/common/directives/sivunavi.html',
+      templateUrl: 'eperusteet-esitys/directives/sivunavi.html',
       restrict: 'AE',
       scope: {
         items: '=',
@@ -39,7 +39,7 @@ epOpintopolkuApp
         showOne: '=',
         onSectionChange: '=?'
       },
-      controller: 'SivuNaviController',
+      controller: 'epSivuNaviController',
       transclude: true,
       link: function (scope, element, attrs) {
         var transcluded = element.find('#sivunavi-tc').contents();
@@ -60,7 +60,7 @@ epOpintopolkuApp
     };
   })
 
-  .service('SivunaviUtils', function ($state, $stateParams) {
+  .service('epSivunaviUtils', function ($state, $stateParams) {
     function getChildren(items, index) {
       var children = [];
       var level = items[index].depth;
@@ -141,7 +141,8 @@ epOpintopolkuApp
     this.isActive = isActive;
   })
 
-  .controller('SivuNaviController', function ($scope, $state, Algoritmit, Utils, SivunaviUtils) {
+  .controller('epSivuNaviController', function ($scope, $state, Algoritmit, Utils, epSivunaviUtils,
+    epEsitysSettings) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
@@ -267,13 +268,13 @@ epOpintopolkuApp
       doUncollapse = _.isUndefined(doUncollapse) ? true : doUncollapse;
       if (doUncollapse) {
         var active = _.find(items, function (item) {
-          return SivunaviUtils.isActive(item);
+          return epSivunaviUtils.isActive(item);
         });
         if (active) {
-          SivunaviUtils.unCollapse(items, active);
+          epSivunaviUtils.unCollapse(items, active);
         }
       }
-      SivunaviUtils.traverse(items, 0);
+      epSivunaviUtils.traverse(items, 0);
       hideOrphans(items);
     }
 
@@ -309,7 +310,7 @@ epOpintopolkuApp
     });
 
     $scope.$on('$stateChangeSuccess', function (event, toState) {
-      if (toState.name !== 'root.perusopetus.sisallot') {
+      if (toState.name !== epEsitysSettings.perusopetusState + '.sisallot') {
         Utils.scrollTo('#ylasivuankkuri');
       }
       updateModel($scope.items);
