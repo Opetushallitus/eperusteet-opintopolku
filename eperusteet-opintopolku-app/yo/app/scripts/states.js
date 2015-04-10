@@ -275,8 +275,20 @@ epOpintopolkuApp
           peruste,
           perusteId ? SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'esiopetus'}).$promise : {},
         ]);
+      },
+      koulutusalaService: function (serviceConfig, Koulutusalat) {
+        return Koulutusalat;
+      },
+      opintoalaService: function (serviceConfig, Opintoalat) {
+        return Opintoalat;
       }
     }
+  })
+
+  .state('root.esiopetus.tiedot', {
+    url: '/tiedot',
+    templateUrl: 'eperusteet-esitys/views/tiedot.html',
+    controller: 'epEsitysTiedotController'
   })
 
   .state('root.esiopetus.tekstikappale', {
@@ -316,8 +328,20 @@ epOpintopolkuApp
           peruste,
           perusteId ? SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'lisaopetus'}).$promise : {},
         ]);
+      },
+      koulutusalaService: function (serviceConfig, Koulutusalat) {
+        return Koulutusalat;
+      },
+      opintoalaService: function (serviceConfig, Opintoalat) {
+        return Opintoalat;
       }
     }
+  })
+
+  .state('root.lisaopetus.tiedot', {
+    url: '/tiedot',
+    templateUrl: 'eperusteet-esitys/views/tiedot.html',
+    controller: 'epEsitysTiedotController'
   })
 
   .state('root.lisaopetus.tekstikappale', {
