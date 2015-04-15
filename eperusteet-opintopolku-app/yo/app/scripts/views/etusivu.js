@@ -33,6 +33,7 @@ epOpintopolkuApp
       suoritustapa: 'ops',
       perusteTyyppi: 'normaali',
       tila: 'valmis',
+      jarjestys: 'muokattu'
     },
     'koulutustyyppi_16': {
       tyyppi: 'koulutustyyppi_16',
