@@ -135,17 +135,9 @@
     <script type="text/javascript">
     var siteDomain = document.domain;
     var piwikSiteId = 2;
-    if(siteDomain=='opintopolku.fi'){
-        piwikSiteId = 4;
-    }else if(siteDomain=='virkailija.opintopolku.fi'){
-        piwikSiteId = 3;
-    }else if(siteDomain=='testi.opintopolku.fi'){
-        piwikSiteId = 1;
-    }else if(siteDomain=='testi.virkailija.opintopolku.fi'){
-        piwikSiteId = 5;
-    }else if(siteDomain=='eperusteet.opintopolku.fi'){
-        piwikSiteId = 2; //TODO
-    }else{
+    if (siteDomain=='eperusteet.opintopolku.fi') {
+        piwikSiteId = 11;
+    } else {
         piwikSiteId = 2;
     }
     var _paq = _paq || [];
