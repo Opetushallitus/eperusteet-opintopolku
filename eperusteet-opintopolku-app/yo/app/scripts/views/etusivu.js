@@ -21,16 +21,15 @@ epOpintopolkuApp
   var uikieli = Kieli.getUiKieli();
   var perusteet = {};
   var paramMap = {
-    'koulutustyyppi_1': {
+    'koulutustyyppi_1x': {
       nimi: '',
       koulutusala: '',
-      tyyppi: 'koulutustyyppi_1',
+      tyyppi: 'koulutustyyppi_11,koulutustyyppi_11,koulutustyyppi_12',
       kieli: uikieli,
       opintoala: '',
       siirtyma: false,
       sivu: 0,
       sivukoko: 7,
-      suoritustapa: 'ops',
       perusteTyyppi: 'normaali',
       tila: 'valmis',
       jarjestys: 'muokattu'
@@ -61,13 +60,14 @@ epOpintopolkuApp
   var getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
 
   this.fetch = function (cb) {
-    var params = paramMap.koulutustyyppi_1; // jshint ignore:line
+    var key = 'koulutustyyppi_1x';
+    var params = paramMap[key]; // jshint ignore:line
     var amDeferred = Perusteet.get(params, function (res) {
-      perusteet[params.tyyppi] = res.data;
-      _.each(perusteet[params.tyyppi], function (peruste) {
+      perusteet[key] = res.data;
+      _.each(perusteet[key], function (peruste) {
         peruste.url = $state.href('root.esitys.peruste', {
           perusteId: peruste.id,
-          suoritustapa: params.suoritustapa
+          suoritustapa: peruste.koulutustyyppi==='koulutustyyppi_1' ? 'ops':'naytto'
         });
       });
     }).$promise;
