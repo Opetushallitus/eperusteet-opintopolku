@@ -35,7 +35,7 @@ module.exports = function(grunt) {
     },
     watch: {
       css: {
-        files: ['<%= yeoman.app %>/styles/{,*/}*.scss'],
+        files: ['<%= yeoman.app %>/styles/{,*/}*.scss', '<%= yeoman.app %>/eperusteet-esitys/styles/{,*/}*.scss'],
         tasks: ['sass', 'copy:fonts', 'autoprefixer'],
       },
       test: {
@@ -142,7 +142,8 @@ module.exports = function(grunt) {
       },
       all: [
         'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/**/*.js'
+        '<%= yeoman.app %>/scripts/**/*.js',
+        '<%= yeoman.app %>/eperusteet-esitys/**/*.js'
       ]
     },
     // not used since Uglify task does concat,
@@ -182,6 +183,7 @@ module.exports = function(grunt) {
       css: ['<%= yeoman.dist %>/styles/{,*/}*.css'],
       js: [
         '<%= yeoman.dist %>/scripts/*.scripts.js',
+        '<%= yeoman.dist %>/scripts/*.esitys.js',
         '<%= yeoman.dist %>/scripts/*.templates.js'
       ],
       options: {
@@ -350,6 +352,17 @@ module.exports = function(grunt) {
         options:    {
           module: 'eperusteOpintopolkuApp',
           usemin: 'scripts/scripts.js',
+          htmlmin: { collapseWhitespace: true, removeComments: true }
+        }
+      },
+      esitys: {
+        cwd: '<%= yeoman.app %>/eperusteet-esitys',
+        src: '**/*.html',
+        dest: '<%= yeoman.dist %>/scripts/esitys.js',
+        options:    {
+          module: 'eperusteet.esitys',
+          prefix: 'eperusteet-esitys/',
+          usemin: 'scripts/esitys.js',
           htmlmin: { collapseWhitespace: true, removeComments: true }
         }
       }

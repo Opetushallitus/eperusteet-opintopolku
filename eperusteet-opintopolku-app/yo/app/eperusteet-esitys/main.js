@@ -14,26 +14,25 @@
  * European Union Public Licence for more details.
  */
 
-
 'use strict';
 
-/* jshint ignore:start */
+/**
+ * Esityspuolen moduuli. Yhteistä koodia eperusteet ja eperusteet-opintopolku
+ * -projektien välillä.
+ * Käyttää joko omia ep-alkuisia komponentteja tai yleisiä komponentteja, jotka täytyy
+ * määritellä moduulin ulkopuolella.
+ */
+angular.module('eperusteet.esitys', [
+]).provider('epEsitysSettings', function() {
+  var settings = {
+    'perusopetusState': 'root.perusopetus'
+  };
 
-var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
-  'ngRoute',
-  'ngSanitize',
-  'ui.router',
-  'ngResource',
-  'ngAnimate',
-  'pascalprecht.translate',
-  'ui.bootstrap',
-  'ui.utils',
-  'monospaced.elastic',
-  'angular-data.DSCacheFactory',
-  'angularSpinner',
-  'angulartics',
-  'angulartics.piwik',
-  'eperusteet.esitys'
-]);
+  this.setValue = function(key, value) {
+    settings[key] = value;
+  };
 
-/* jshint ignore:end */
+  this.$get = function() {
+    return settings;
+  };
+});

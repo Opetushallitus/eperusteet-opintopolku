@@ -28,6 +28,9 @@ epOpintopolkuApp
     $injector.get('$state').go('root.virhe');
   });
 })
+.config(function (epEsitysSettingsProvider) {
+  epEsitysSettingsProvider.setValue('perusopetusState', 'root.perusopetus');
+})
 .config(function($translateProvider, $urlRouterProvider) {
   var preferred = 'fi';
   $urlRouterProvider.when('/', '/' + preferred);

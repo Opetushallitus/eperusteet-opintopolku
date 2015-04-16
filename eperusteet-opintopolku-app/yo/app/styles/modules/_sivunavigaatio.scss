@@ -101,7 +101,7 @@ $sivunavi-level-padding: 20px;
     .level#{$i} { @include sn-padding($i); }
   }
   .matched {
-    background-color: lighten($nappi-vari, 5);
+    //background-color: lighten($nappi-vari, 5);
   }
   .input-group {
     margin-bottom: 15px;

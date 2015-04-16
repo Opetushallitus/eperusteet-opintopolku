@@ -17,8 +17,9 @@
 'use strict';
 
 /* Sets sivunavi items active based on current state */
-epOpintopolkuApp
-.service('PerusopetusStateService', function ($state, $stateParams, SivunaviUtils, $rootScope) {
+angular.module('eperusteet.esitys')
+.service('epPerusopetusStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope,
+  epEsitysSettings) {
   var state = {};
   var section = null;
 
@@ -63,7 +64,7 @@ epOpintopolkuApp
         item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
         item.$hidden = item.depth > 0;
       } else if (item.id === 'laajaalaiset') {
-        item.$selected = $state.is('root.perusopetus.laajaalaiset');
+        item.$selected = $state.is(epEsitysSettings.perusopetusState + '.laajaalaiset');
       }
       if (item.$selected) {
         selected = item;
@@ -78,6 +79,12 @@ epOpintopolkuApp
       tekstikappale: {
         index: 0,
         callback: textCallback
+      },
+      tiedot: {
+        index: 0,
+        callback: function (item) {
+          item.$selected = _.isArray(item.link) && item.link.length > 0 && _.last(item.link[0].split('.')) === 'tiedot';
+        }
       },
       vuosiluokkakokonaisuus: {
         index: 1,
@@ -142,8 +149,8 @@ epOpintopolkuApp
         menuItems[parent].$header = true;
         parent = menuItems[parent].$parent;
       }
-      SivunaviUtils.unCollapse(menuItems, selected);
-      SivunaviUtils.traverse(menuItems, 0);
+      epSivunaviUtils.unCollapse(menuItems, selected);
+      epSivunaviUtils.traverse(menuItems, 0);
       $rootScope.$broadcast('perusopetus:stateSet');
     }
   };

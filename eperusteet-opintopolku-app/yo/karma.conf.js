@@ -33,6 +33,8 @@ module.exports = function(config) {
       'app/bower_components/angular-spinner/angular-spinner.js',
       'app/bower_components/angulartics/src/angulartics.js',
       'app/bower_components/angulartics/src/angulartics-piwik.js',
+      'app/eperusteet-esitys/**/*.js',
+      'app/eperusteet-esitys/**/*.html',
       'app/scripts/*.js',
       'app/scripts/**/*.js',
       'test/spec/**/*.spec.js',

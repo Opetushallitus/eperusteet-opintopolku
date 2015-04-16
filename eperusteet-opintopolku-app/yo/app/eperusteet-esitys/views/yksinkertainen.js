@@ -16,11 +16,18 @@
 
 'use strict';
 
-epOpintopolkuApp
-.controller('EsiopetusController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
-  $state, $stateParams, MenuBuilder, Utils, MurupolkuData,
-  Oppiaineet, TermistoService, Kieli, $document, $rootScope, PerusopetusStateService) {
-  var currentRootState = _.take($state.current.name.split('.'), 2).join('.');
+angular.module('eperusteet.esitys')
+.controller('epYksinkertainenPerusteController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
+  $state, $stateParams, epMenuBuilder, Algoritmit, Utils, MurupolkuData,
+  Oppiaineet, TermistoService, Kieli, $document, $rootScope, epPerusopetusStateService,
+  koulutusalaService, opintoalaService, epEsitysSettings) {
+  $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
+  function getRootState(current) {
+    return current.replace(/\.(esiopetus|lisaopetus)(.*)/, '.$1');
+  }
+  $scope.Koulutusalat = koulutusalaService;
+  $scope.Opintoalat = opintoalaService;
+  var currentRootState = getRootState($state.current.name);
   $scope.isNaviVisible = _.constant(true);
   $scope.hasContent = function (obj) {
     return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
@@ -30,7 +37,16 @@ epOpintopolkuApp
   MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
   $scope.sisallot = _.zipBy(sisalto[1], 'id');
   $scope.tekstisisalto = sisalto[1];
-  $scope.state = PerusopetusStateService.getState();
+  $scope.state = epPerusopetusStateService.getState();
+  function mapSisalto(sisalto) {
+    sisalto = _.clone(sisalto);
+    var flattened = {};
+    Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function(lapsi) {
+      flattened[lapsi.id] = lapsi.perusteenOsa;
+    });
+    return flattened;
+  }
+  $scope.sisalto = mapSisalto($scope.tekstisisalto);
 
   TermistoService.setPeruste(peruste);
 
@@ -62,7 +78,7 @@ epOpintopolkuApp
   });
 
   $scope.$on('$stateChangeSuccess', function () {
-    PerusopetusStateService.setState($scope.navi);
+    epPerusopetusStateService.setState($scope.navi);
   });
 
 
@@ -72,24 +88,23 @@ epOpintopolkuApp
       {
         id: 'sisalto',
         $open: true,
-        items: MenuBuilder.rakennaTekstisisalto($scope.tekstisisalto)
+        items: epMenuBuilder.rakennaTekstisisalto($scope.tekstisisalto)
       }
     ]
   };
+  $scope.navi.sections[0].items.unshift({depth: 0, label: 'perusteen-tiedot', link: [currentRootState + '.tiedot']});
+
   _.each($scope.navi.sections[0].items, function (item) {
-    item.href = $state.href(currentRootState + '.tekstikappale', {tekstikappaleId: item.$osa.id});
+    if (item.$osa) {
+      item.href = $state.href(currentRootState + '.tekstikappale', {tekstikappaleId: item.$osa.id});
+    }
   });
 
   installClickHandler();
 
   $timeout(function () {
     if ($state.current.name === currentRootState) {
-      var first = _($scope.navi.sections[0].items).filter(function (item) {
-        return item.depth === 0;
-      }).first();
-      if (first) {
-        $state.go('.tekstikappale', {tekstikappaleId: first.$osa.id, perusteId: $scope.peruste.id});
-      }
+      $state.go('.tiedot', {}, {location: 'replace'});
     }
   });
 });
