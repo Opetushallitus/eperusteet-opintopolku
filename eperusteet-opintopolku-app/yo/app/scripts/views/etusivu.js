@@ -24,7 +24,7 @@ epOpintopolkuApp
     'koulutustyyppi_1x': {
       nimi: '',
       koulutusala: '',
-      tyyppi: 'koulutustyyppi_11,koulutustyyppi_11,koulutustyyppi_12',
+      tyyppi: 'koulutustyyppi_1,koulutustyyppi_11,koulutustyyppi_12',
       kieli: uikieli,
       opintoala: '',
       siirtyma: false,
