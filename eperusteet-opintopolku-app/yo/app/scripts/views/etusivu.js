@@ -82,7 +82,7 @@ epOpintopolkuApp
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
-  TiedotteetCRUD) {
+  TiedotteetCRUD, Utils) {
   MurupolkuData.setTitle(null);
   $scope.uusimmat = {};
   $scope.tiedotteet = [];
@@ -91,6 +91,8 @@ epOpintopolkuApp
   UusimmatPerusteetService.fetch(function (res) {
     $scope.uusimmat = res;
   });
+
+  $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
 
   var MONTH_OFFSET = 6;
   var tempDate = new Date();
