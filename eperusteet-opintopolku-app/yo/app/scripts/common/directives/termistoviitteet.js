@@ -22,11 +22,9 @@ epOpintopolkuApp
     return {
       restrict: 'E',
       scope: { model: '=tekstikentta' },
-      template: '<p ng-if="hasContent()" ng-bind-html="model | kaanna | unsafe" termisto-viitteet="model"></p>',
-      controller: function ($scope, Kieli) {
-        $scope.hasContent = function () {
-          return $scope.model && !_.isEmpty($scope.model[Kieli.getSisaltokieli()]);
-        };
+      template: '<p ng-if="hasContent(model)" ng-bind-html="model | kaanna | unsafe" termisto-viitteet="model"></p>',
+      controller: function ($scope, Utils) {
+        $scope.hasContent = Utils.hasContentOnCurrentLang;
       }
     };
   })

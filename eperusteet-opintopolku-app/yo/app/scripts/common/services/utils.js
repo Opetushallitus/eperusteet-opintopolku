@@ -40,6 +40,10 @@ epOpintopolkuApp
     return hasContent;
   };
 
+  this.hasContentOnCurrentLang = function (item) {
+      return item && !_.isEmpty(item[Kieli.getSisaltokieli()]);
+  };
+
   this.oppiaineSort = function(oa) {
     return oa.jnro ? oa.jnro : Kaanna.kaanna(oa.nimi).toLowerCase();
   };
