@@ -6,9 +6,7 @@
 <div ng-if="tutkinnonOsa.koodiArvo">
   <strong kaanna="'koodi'"></strong>: {{ tutkinnonOsa.koodiArvo }}
 </div>
-<div ng-if="tutkinnonOsa.opintoluokitus">
-  <strong kaanna="'opintoluokitus'"></strong>: {{ tutkinnonOsa.opintoluokitus }}
-</div>
+
 <div ng-if="tutkinnonOsaViite.jarjestys">
   <strong kaanna="'tutkinnonosa-jarjestysnumero'"></strong>: {{ tutkinnonOsaViite.jarjestys }}
 </div>
@@ -25,6 +23,7 @@
               <div class="arviointi-sisalto">
                   <div ng-repeat="kohde in kohdealue.arvioinninKohteet">
                       <h4>{{ kohde.otsikko | kaanna }}</h4>
+                      <h5>{{ kohde.selite || '' | kaanna }}</h5>
                       <table class="table table-striped">
                           <tr ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy: '_osaamistaso'">
                               <td class="arviointi-okriteeri">

@@ -45,6 +45,10 @@ epOpintopolkuApp
     'koulutustyyppi_6': {
       tyyppi: 'koulutustyyppi_6',
       tila: 'valmis'
+    },
+    'koulutustyyppi_20': {
+      tyyppi: 'koulutustyyppi_20',
+      tila: 'valmis'
     }
   };
 
@@ -58,6 +62,7 @@ epOpintopolkuApp
   var getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
   var getEsiopetus = _.partial(getGeneric, 'koulutustyyppi_15');
   var getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
+  var getVarhaiskasvatus = _.partial(getGeneric, 'koulutustyyppi_20');
 
   this.fetch = function (cb) {
     var key = 'koulutustyyppi_1x';
@@ -71,7 +76,7 @@ epOpintopolkuApp
         });
       });
     }).$promise;
-    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getLisaopetus()]).then(function () {
+    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getLisaopetus(), getVarhaiskasvatus()]).then(function () {
       cb(perusteet);
     });
   };
@@ -79,14 +84,16 @@ epOpintopolkuApp
   this.getPerusopetus = getPerusopetus;
   this.getEsiopetus = getEsiopetus;
   this.getLisaopetus = getLisaopetus;
+  this.getVarhaiskasvatus = getVarhaiskasvatus;
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
-  TiedotteetCRUD, Utils) {
+  TiedotteetCRUD, Utils, Kieli) {
   MurupolkuData.setTitle(null);
   $scope.uusimmat = {};
   $scope.tiedotteet = [];
   $scope.naytto = {limit: 5, shown: 5};
+  $scope.kieli = Kieli.getSisaltokieli();
 
   UusimmatPerusteetService.fetch(function (res) {
     $scope.uusimmat = res;

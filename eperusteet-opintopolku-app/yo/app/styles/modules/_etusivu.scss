@@ -77,3 +77,33 @@ $paaotsikko-logo-size: 96px;
   list-style-type: none;
   padding-left: 0;
 }
+
+.banneri-container {
+  border: 1px solid #dddddd;
+  border-radius: 3px;
+
+  .banneri {
+    padding: 20px;
+    overflow: auto;
+    background: #dcdcdc;
+    margin: 4px;
+
+    .banneri-kuva {
+      float: left;
+      margin-right: 40px;
+    }
+
+    .banneri-linkit {
+      float: left;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      line-height: 20px;
+
+      a {
+        color: #333;
+        text-decoration: none;
+      }
+    }
+  }
+}
