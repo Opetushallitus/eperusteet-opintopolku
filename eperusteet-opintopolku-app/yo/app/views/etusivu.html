@@ -68,4 +68,20 @@
       </div>
     </div>
   </div>
+
+  <footer>
+    <div class="banneri-container">
+      <div class="banneri">
+        <a class="banneri-kuva">
+          <img src="images/opintopolku_large-{{ kieli }}.png" alt="">
+        </a>
+        <ul class="banneri-linkit">
+          <li ng-if="kieli === 'fi'"><a href="mailto:eperusteet@opintopolku.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
+          <li ng-if="kieli === 'se'"><a href="mailto:egrunder@studieinfo.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
+          <li><a href="" kaanna="'eperusteet-virkailija-linkki'"></a></li>
+          <li><a href="https://opintopolku.fi/wp/tietosuojaseloste" kaanna="'tietosuojaseloste'"></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 </div>
