@@ -88,15 +88,15 @@ epOpintopolkuApp
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
-  TiedotteetCRUD, Utils) {
+  TiedotteetCRUD, Utils, Kieli) {
   MurupolkuData.setTitle(null);
   $scope.uusimmat = {};
   $scope.tiedotteet = [];
   $scope.naytto = {limit: 5, shown: 5};
+  $scope.kieli = Kieli.getSisaltokieli();
 
   UusimmatPerusteetService.fetch(function (res) {
     $scope.uusimmat = res;
-    console.log(res);
   });
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;

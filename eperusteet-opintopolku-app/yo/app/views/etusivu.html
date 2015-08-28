@@ -12,22 +12,30 @@
 
   <div class="row">
     <div class="col-lg-4 col-md-6">
-      <div class="sisalto-box">
-        <h2 kaanna="navi.esiopetus"></h2>
-        <p><a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})" ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna"></a></p>
-        <p ng-if="uusimmat['koulutustyyppi_20']">
+      <div class="sisalto-box" ng-if="uusimmat['koulutustyyppi_20'].length !== 0">
+        <h2 kaanna="'navi.varhaiskasvatus'"></h2>
+        <p>
           <a ui-sref="root.varhaiskasvatus({perusteId: uusimmat['koulutustyyppi_20'][0].id})"
-             ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna">
+             ng-bind="uusimmat['koulutustyyppi_20'][0].nimi | kaanna">
           </a>
         </p>
       </div>
+
       <div class="sisalto-box">
-        <h2 kaanna="navi.perusopetus"></h2>
+        <h2 kaanna="'navi.esiopetus'"></h2>
+        <p>
+          <a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})" ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna">
+          </a>
+        </p>
+      </div>
+
+      <div class="sisalto-box">
+        <h2 kaanna="'navi.perusopetus'"></h2>
         <p><a ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_16'][0].id})" ng-bind="uusimmat['koulutustyyppi_16'][0].nimi | kaanna"></a></p>
         <p><a ui-sref="root.lisaopetus({perusteId: uusimmat['koulutustyyppi_6'][0].id})" ng-bind="uusimmat['koulutustyyppi_6'][0].nimi | kaanna"></a></p>
       </div>
       <!-- <div class="sisalto&#45;box"> -->
-      <!--   <h2 kaanna="navi.lukiokoulutus"></h2> -->
+      <!--   <h2 kaanna="'navi.lukiokoulutus'"></h2> -->
       <!--   <p><a ui&#45;sref="root.lukiokoulutus" kaanna="etusivu.lukiokoulutuksen&#45;peruste"></a></p> -->
       <!-- </div> -->
     </div>
@@ -68,4 +76,20 @@
       </div>
     </div>
   </div>
+
+  <footer>
+    <div class="banneri-container">
+      <div class="banneri">
+        <a class="banneri-kuva">
+          <img src="images/opintopolku_large-{{ kieli }}.png" alt="">
+        </a>
+        <ul class="banneri-linkit">
+          <li ng-if="kieli === 'fi'"><a href="mailto:eperusteet@opintopolku.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
+          <li ng-if="kieli === 'se'"><a href="mailto:egrunder@studieinfo.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
+          <li><a href="https://virkailija.opintopolku.fi/eperusteet-app" kaanna="'eperusteet-virkailija-linkki'"></a></li>
+          <li><a href="https://opintopolku.fi/wp/tietosuojaseloste" kaanna="'tietosuojaseloste'"></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 </div>

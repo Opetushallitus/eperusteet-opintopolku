@@ -17,6 +17,7 @@
   "navi.perusopetus": "Perusopetus",
   "navi.lisaopetus": "Lisäopetus",
   "navi.lukiokoulutus": "Lukiokoulutus",
+  "navi.varhaiskasvatus": "Varhaiskasvatus",
   "navi.ammatillinenperuskoulutus": "Ammatillinen peruskoulutus",
   "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus",
 
@@ -130,6 +131,10 @@
   "nayta-ryhman-kuvaus": "Näytä ryhmän kuvaus",
   "nayta-kuvaukset": "Näytä kuvaukset",
   "piilota-kuvaukset": "Piilota kuvaukset",
+
+  "eperusteet-virkailija-linkki": "Virkailijanäkymään",
+  "kysy-neuvoa-anna-palautetta": "Kysy neuvoa - Anna palautetta",
+  "tietosuojaseloste": "Tietosuojaseloste",
   
   "osaamisalat": "Osaamisalat"
 }

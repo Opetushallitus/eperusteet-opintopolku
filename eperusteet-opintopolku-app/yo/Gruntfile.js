@@ -382,13 +382,13 @@ module.exports = function(grunt) {
           pattern : /(ng-show=|ng-hide=)[^>]+(ng-hide=|ng-show=)/m
         },
       },
-      emptyHrefs: {
-        files: [{src: ['<%= yeoman.app %>/{scripts,views}/**/*.{js,html}']}],
-        options: {
-          /* Check that empty href="" are not used */
-          pattern : /\s+href=""/m
-        },
-      },
+      // emptyHrefs: {
+      //   files: [{src: ['<%= yeoman.app %>/{scripts,views}#<{(||)}>#*.{js,html}']}],
+      //   options: {
+      //     #<{(| Check that empty href="" are not used |)}>#
+      //     pattern : /\s+href=""/m
+      //   },
+      // },
       controllerNaming: {
         files: [{src: ['<%= yeoman.app %>/scripts/**/*.js']}],
         options: {
