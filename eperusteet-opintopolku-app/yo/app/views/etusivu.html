@@ -67,7 +67,7 @@
           <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown">
             <div ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
             <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
-              {{tiedote.muokattu || tiedote.luotu | date}}: {{tiedote.otsikko | kaanna}}
+              {{tiedote.luotu || tiedote.luotu | date}}: {{tiedote.otsikko | kaanna}}
             </a>
             </div>
           </li>
