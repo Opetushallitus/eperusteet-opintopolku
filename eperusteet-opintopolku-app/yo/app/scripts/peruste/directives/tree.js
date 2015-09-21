@@ -106,10 +106,10 @@ epOpintopolkuApp
     };
 
     var optiot = '' +
-      '<span ng-click="rakenne.$collapsed = rakenne.osat.length > 0 ? !rakenne.$collapsed : false" ng-if="!onOsa(rakenne)" class="colorbox" ' + varivalinta + '>' +
+      '<span ng-click="rakenne.$collapsed = rakenne.osat.length > 0 ? (!rakenne.$collapsed || rakenne.$searchitem) : false" ng-if="!onOsa(rakenne)" class="colorbox" ' + varivalinta + '>' +
       '  <span ng-if="rakenne.rooli !== \'määrittelemätön\'">' +
-      '    <span ng-hide="rakenne.$collapsed" class="glyphicon glyphicon-chevron-down"></span>' +
-      '    <span ng-show="rakenne.$collapsed" class="glyphicon glyphicon-chevron-right"></span>' +
+      '    <span ng-hide="rakenne.$collapsed || !rakenne.$searchitem" class="glyphicon glyphicon-chevron-down"></span>' +
+      '    <span ng-show="rakenne.$collapsed || !rakenne.$searchitem" class="glyphicon glyphicon-chevron-right"></span>' +
       '  </span>' +
       '</span>' +
       '<div class="right">' +
@@ -142,7 +142,7 @@ epOpintopolkuApp
     };
 
     this.leafChildren = function () {
-      return '<div ng-if="rakenne.rooli !== \'määrittelemätön\'" class="collapser" ng-show="!rakenne.$collapsed">' +
+      return '<div ng-if="rakenne.rooli !== \'määrittelemätön\'" class="collapser" ng-show="!rakenne.$collapsed || rakenne.$searchitem">' +
       '  <ul ng-if="rakenne.osat !== undefined" ui-sortable="sortableOptions" class="tree-group" ng-model="rakenne.osat" id="tree-sortable">' +
       '    <li ng-repeat="osa in rakenne.osat track by trackingFunction(osa, $index)" class="tree-list-item">' +
       '      <tree apumuuttujat="apumuuttujat" muokkaus="muokkaus" rakenne="osa" vanhempi="rakenne" tutkinnon-osa-viitteet="tutkinnonOsaViitteet" uusi-tutkinnon-osa="uusiTutkinnonOsa" ng-init="notfirst = true" callbacks="callbacks"></tree>' +
@@ -171,7 +171,7 @@ epOpintopolkuApp
       '  <div><div class="tree-yliviiva"></div></div>' +
       '</div>' +
       '<div ng-if="vanhempi">' + kentta + '</div>' +
-      '<div ng-if="rakenne.rooli !== \'määrittelemätön\'" class="collapser" ng-show="!rakenne.$collapsed">' +
+      '<div ng-if="rakenne.rooli !== \'määrittelemätön\'" class="collapser" ng-show="!rakenne.$collapsed || !rakenne.$searchitem">' +
       '  <ul ng-if="rakenne.osat !== undefined" id="tree-sortable" class="tree-group" ng-model="rakenne.osat">' +
       '    <li ng-repeat="osa in rakenne.osat" class="tree-list-item">' +
       '      <tree apumuuttujat="apumuuttujat" muokkaus="muokkaus" rakenne="osa" vanhempi="rakenne" tutkinnon-osa-viitteet="tutkinnonOsaViitteet" uusi-tutkinnon-osa="uusiTutkinnonOsa" ng-init="notfirst = true" callbacks="callbacks"></tree>' +
@@ -289,9 +289,11 @@ epOpintopolkuApp
     };
 
     $scope.togglaaPolut = function() {
-      var avaamattomat = _($scope.rakenne.osat).reject(function(osa) {
-        return osa._tutkinnonOsaViite || osa.$collapsed || osa.osat.length === 0;
-      }).size();
+      var avaamattomat = _($scope.rakenne.osat)
+        .reject(function(osa) {
+          return osa._tutkinnonOsaViite || osa.$collapsed || osa.osat.length === 1;
+        })
+        .size();
 
       _.forEach($scope.rakenne.osat, function(r) {
         if (r.osat && _.size(r.osat) > 0) {
@@ -340,11 +342,17 @@ epOpintopolkuApp
       sivu: 1
     };
 
+    // Alkutilanteessa puun solmut suljetuiksi
+    PerusteenRakenne.kaikilleRakenteille($scope.rakenne.rakenne, function(item) {
+      item.$collapsed = true;
+      item.$searchitem = false;
+    });
+
     $scope.paivitaTekstiRajaus = function (value) {
       if (!_.isEmpty(value)) {
         PerusteenRakenne.kaikilleRakenteille($scope.rakenne.rakenne, function(item) {
           // 1. Find matches
-          item.$collapsed = true;
+          item.$searchitem = false;
           var osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
           if (osa) {
             osa.$matched = Algoritmit.rajausVertailu(value, osa, 'nimi');
@@ -357,7 +365,7 @@ epOpintopolkuApp
             var parent = item.$parent;
             while (parent) {
               if (parent.$parent) {
-                parent.$collapsed = false;
+                parent.$searchitem = true;
               }
               parent = parent.$parent;
             }
@@ -366,7 +374,7 @@ epOpintopolkuApp
       } else {
         // Uncollapse all when search is cleared
         PerusteenRakenne.kaikilleRakenteille($scope.rakenne.rakenne, function(item) {
-          item.$collapsed = false;
+          item.$searchitem = false;
         });
       }
     };
