@@ -198,6 +198,12 @@ epOpintopolkuApp
     }
   })
 
+  .state('root.perusopetus.tiedot', {
+    url: '/tiedot',
+    templateUrl: 'eperusteet-esitys/views/tiedot.html',
+    controller: 'epEsitysTiedotController'
+  })
+
   .state('root.perusopetus.tekstikappale', {
     url: '/tekstikappale/:tekstikappaleId',
     templateUrl: 'eperusteet-esitys/views/tekstikappale.html',

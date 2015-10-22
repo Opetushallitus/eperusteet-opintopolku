@@ -31,7 +31,9 @@
       <nav class="navbar navbar-ylanavigaatio-mobile navbar-static-top" role="navigation">
         <div class="navbar-header">
 
-          <div ng-if="!menuActive" class="navbar-brand">{{activeOsio.label | kaanna}}</div>
+          <div class="navbar-brand">
+            {{activeOsio.label | kaanna}}
+          </div>
 
           <button type="button"
                   class="navbar-toggle collapsed"

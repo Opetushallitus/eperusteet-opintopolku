@@ -47,7 +47,7 @@ epOpintopolkuApp
     updateOsiot();
   });
 
-    $scope.getMobileOsiot = function() {
+    $scope.getMobileOsiot = function () {
     var osiot = [];
     _.each($scope.osiot, function (osio) {
       if (!osio.osiot) {
@@ -60,7 +60,7 @@ epOpintopolkuApp
     });
 
     return osiot;
-  }
+  };
 
   $scope.osiot = [
     {label: 'navi.etusivu', state: 'root.etusivu'},
@@ -83,9 +83,9 @@ epOpintopolkuApp
     sv: 'Suomeksi'
   };
 
-  $scope.switch = function() {
+  $scope.switch = function () {
     $rootScope.$broadcast('vaihda-kieli');
-  }
+  };
 
   function stateMatch(osio) {
     if (_.contains(osio.state, 'ammatillinen')) {

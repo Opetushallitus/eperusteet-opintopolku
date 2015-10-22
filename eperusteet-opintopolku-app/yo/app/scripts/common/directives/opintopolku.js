@@ -53,7 +53,7 @@ epOpintopolkuApp
         sv: 'Suomeksi'
       };
 
-      $scope.$on('vaihda-kieli', function(event, args) {
+      $scope.$on('vaihda-kieli', function() {
         $scope.switch();
       });
 
