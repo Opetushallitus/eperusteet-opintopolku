@@ -37,6 +37,7 @@ epOpintopolkuApp
       }
       osio.url = $state.href(osio.state, {lang: $stateParams.lang});
     });
+    console.log($scope.activeOsio);
   }
 
   var amOsio = null;
@@ -46,6 +47,22 @@ epOpintopolkuApp
     amOsio = value;
     updateOsiot();
   });
+
+    $scope.getMobileOsiot = function() {
+    var osiot = [];
+    _.each($scope.osiot, function (osio) {
+      if (!osio.osiot) {
+        osiot.push(osio);
+      } else {
+        _.each(osio.osiot, function (aliosio) {
+          osiot.push(aliosio);
+        });
+      }
+    });
+
+    return osiot;
+  }
+
   $scope.osiot = [
     {label: 'navi.etusivu', state: 'root.etusivu'},
     {label: 'navi.esiopetus', state: 'root.esiopetus'},

@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-12 ylanavigaatio">
+  <div class="col-md-12 hidden-xs ylanavigaatio">
     <div class="inner-container">
       <div class="ylanavi-container" role="navigation">
         <ul class="ylanavi-list">
@@ -11,8 +11,9 @@
     </div>
   </div>
 </div>
+
 <div class="row" ng-if="activeOsio.osiot.length > 0">
-  <div class="col-md-12 ylanavigaatio-sub">
+  <div class="col-md-12 hidden-xs ylanavigaatio-sub">
     <div class="inner-container">
       <div class="ylanavi-container-sub" role="navigation">
         <ul class="ylanavi-list">
@@ -22,5 +23,35 @@
         </ul>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 visible-xs-block ylanavigaatio">
+      <nav class="navbar navbar-ylanavigaatio-mobile navbar-static-top" role="navigation">
+        <div class="navbar-header">
+
+          <div ng-if="!menuActive" class="navbar-brand">{{activeOsio.label | kaanna}}</div>
+
+          <button type="button"
+                  class="navbar-toggle collapsed"
+                  data-toggle="collapse"
+                  data-target="#ylanavigaatio-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+
+        <div id="ylanavigaatio-collapse" class="collapse navbar-collapse">
+          <div class="container-fluid">
+            <ul class="nav navbar-nav">
+              <li ng-repeat="osio in getMobileOsiot()" ng-class="{active: osio.active}">
+                <a ng-href="{{osio.url}}" kaanna="osio.label" data-toggle="collapse" data-target="#ylanavigaatio-collapse"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
   </div>
 </div>

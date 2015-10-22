@@ -20,6 +20,7 @@
   "navi.varhaiskasvatus": "Varhaiskasvatus",
   "navi.ammatillinenperuskoulutus": "Ammatillinen peruskoulutus",
   "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus",
+  "navi.valikkon-otsikko": "ePerusteet valikko",
 
   "etusivu.eperusteet": "ePerusteet",
   "etusivu.eperusteet.kuvaus": "ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien ja tutkintojen perusteisiin. Perusteita julkaistaan palvelussa vaiheittain.",
@@ -46,7 +47,6 @@
   "sivunavigointi-sulje-menu": "Sulje navigointimenu",
   "ei-tuloksia": "Ei tuloksia rajauksellasi",
   "tyhjenna-rajaus-tooltip": "Tyhjennä rajaus (Esc)",
-  "rajaa-tutkinnonosia": "Rajaa tutkinnon osia...",
 
   "haku-otsikko": "Perusteen haku",
   "haku-koulutusala": "Koulutusala",
@@ -135,6 +135,6 @@
   "eperusteet-virkailija-linkki": "Virkailijanäkymään",
   "kysy-neuvoa-anna-palautetta": "Kysy neuvoa - Anna palautetta",
   "tietosuojaseloste": "Tietosuojaseloste",
-  
+
   "osaamisalat": "Osaamisalat"
 }
