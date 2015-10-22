@@ -49,6 +49,9 @@
               <li ng-repeat="osio in getMobileOsiot()" ng-class="{active: osio.active}">
                 <a ng-href="{{osio.url}}" kaanna="osio.label" data-toggle="collapse" data-target="#ylanavigaatio-collapse"></a>
               </li>
+              <li>
+                <a ng-click="switch()" kaanna="kieliLabel" class="kieli"></a>
+              </li>
             </ul>
           </div>
         </div>

@@ -26,7 +26,7 @@ epOpintopolkuApp
   };
 })
 
-.controller('YlanavigaatioController', function ($scope, $state, $stateParams, Haku) {
+.controller('YlanavigaatioController', function ($rootScope, $scope, $state, $stateParams, Haku) {
 
   function updateOsiot() {
     $scope.activeOsio = null;
@@ -37,7 +37,6 @@ epOpintopolkuApp
       }
       osio.url = $state.href(osio.state, {lang: $stateParams.lang});
     });
-    console.log($scope.activeOsio);
   }
 
   var amOsio = null;
@@ -78,6 +77,15 @@ epOpintopolkuApp
     {label: 'navi.ammatillinenperuskoulutus', state: 'root.selaus.ammatillinenperuskoulutus'},
     {label: 'navi.ammatillinenaikuiskoulutus', state: 'root.selaus.ammatillinenaikuiskoulutus'},
   ];
+
+  $scope.kieliLabel = {
+    fi: 'På svenska',
+    sv: 'Suomeksi'
+  };
+
+  $scope.switch = function() {
+    $rootScope.$broadcast('vaihda-kieli');
+  }
 
   function stateMatch(osio) {
     if (_.contains(osio.state, 'ammatillinen')) {

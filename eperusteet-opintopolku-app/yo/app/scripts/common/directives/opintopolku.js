@@ -53,6 +53,10 @@ epOpintopolkuApp
         sv: 'Suomeksi'
       };
 
+      $scope.$on('vaihda-kieli', function(event, args) {
+        $scope.switch();
+      });
+
       $scope.switch = function () {
         var newKieli = Kieli.getSisaltokieli() === 'fi' ? 'sv' : 'fi';
         Kieli.setSisaltokieli(newKieli);

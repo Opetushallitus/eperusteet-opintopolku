@@ -145,6 +145,11 @@
             color: white;
             background-color: $brand-primary;
           }
+          .kieli {
+            color: $ep-text-default;
+            font-weight: bold;
+            cursor: pointer;
+          }
         }
       }
     }
