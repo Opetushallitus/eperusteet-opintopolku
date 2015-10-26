@@ -180,6 +180,16 @@ epOpintopolkuApp
   });
 })
 
+.factory('LukioPerusteenOsat', function($resource) {
+  return $resource('/eperusteet-service/api/perusteet/:perusteId/suoritustavat/lukiokoulutus/sisalto', {
+    perusteId: '@id'
+  }, {
+    list: {
+      method: 'GET'
+    }
+  });
+})
+
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {
   this.perusteellaTutkintonimikkeet = function(peruste) {
     if (_.isObject(peruste)) {

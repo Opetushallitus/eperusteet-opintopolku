@@ -255,6 +255,22 @@ epOpintopolkuApp
     }
   })
 
+    /* LUKIO */
+
+    .state('root.lukio', {
+      url: '/lukio/:perusteId',
+      templateUrl: 'eperusteet-esitys/views/lukio.html',
+      controller: 'epLukioController',
+      resolve: {
+        perusteId: function (serviceConfig, $stateParams) {
+          return $stateParams.perusteId;
+        },
+        data: function(LukioPerusteenOsat, perusteId) {
+          return LukioPerusteenOsat.list({perusteId: perusteId}).$promise;
+        }
+      }
+    })
+
   .state('root.esiopetus', {
     url: '/esiopetus/:perusteId',
     templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',
