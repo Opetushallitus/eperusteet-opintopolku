@@ -82,7 +82,8 @@
       <div class="banneri">
         <a class="banneri-kuva">
           <!-- <img src="images/opintopolku_large&#45;{{ kieli }}.png" alt=""> -->
-          <img src="../images/opintopolku_large-fi.png">
+          <img src="images/opintopolku_large-fi.png" width="225px" height="50px" ng-show="kieli === 'fi'">
+          <img src="images/opintopolku_large-sv.png" width="225px" height="50px" ng-show="kieli === 'sv'">
         </a>
         <ul class="banneri-linkit">
           <span ng-show="kieli === 'fi'">

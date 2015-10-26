@@ -22,7 +22,7 @@ epOpintopolkuApp
 
   .state('root', {
     url: '/:lang',
-    template: '<div ui-view></div>',
+    templateUrl: 'views/navisisalto.html',
     abstract: true,
     resolve: {
       serviceConfig: ['eperusteetConfig', function (eperusteetConfig) {
@@ -196,12 +196,6 @@ epOpintopolkuApp
         ]);
       }
     }
-  })
-
-  .state('root.perusopetus.tiedot', {
-    url: '/tiedot',
-    templateUrl: 'eperusteet-esitys/views/tiedot.html',
-    controller: 'epEsitysTiedotController'
   })
 
   .state('root.perusopetus.tekstikappale', {
