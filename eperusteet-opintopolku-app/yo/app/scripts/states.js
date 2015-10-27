@@ -265,8 +265,38 @@ epOpintopolkuApp
         perusteId: function (serviceConfig, $stateParams) {
           return $stateParams.perusteId;
         },
-        data: function(LukioPerusteenOsat, perusteId) {
-          return LukioPerusteenOsat.list({perusteId: perusteId}).$promise;
+        data: function (LukioPerusteenOsat, perusteId) {
+          return LukioPerusteenOsat.query({perusteId: perusteId}).$promise
+            .then(function (res) {
+              var lapset = _.filter(res.lapset, function (lapsi) {
+                return lapsi['perusteenOsa']['osanTyyppi'] === 'tekstikappale'
+              });
+              return {'lapset': lapset};
+            });
+        },
+        lukioOppiaineet: function (LukioOppiaineet, perusteId) {
+          return LukioOppiaineet.query({perusteId: perusteId}).$promise
+            .then(function (res) {
+              return res;
+            })
+        },
+        lukioKurssit: function(LukioKurssit, perusteId) {
+          return LukioKurssit.list({perusteId: perusteId}).$promise
+            .then(function (res) {
+              console.log(res);
+              return res;
+          })
+        }
+      }
+    })
+
+    .state('root.lukio.tekstikappale', {
+      url: '/tekstikappale/:tekstikappaleId',
+      templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+      controller: 'epLukioTekstikappaleController',
+      resolve: {
+        tekstikappaleId: function(){
+          return "teksti";
         }
       }
     })

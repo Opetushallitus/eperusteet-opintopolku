@@ -55,6 +55,37 @@ angular.module('eperusteet.esitys')
     });
   }
 
+  function buildLukioOppiaineMenu(oppiaineet) {
+      var opMenu = [];
+       console.log(oppiaineet);
+      _.each(oppiaineet, function(oppiaine) {
+        opMenu.push({
+          depth: 0,
+          $jnro: oppiaine.jnro,
+          $hidden: false,
+          $oppiaine: oppiaine,
+          label: oppiaine.nimi,
+          url: $state.href('')
+        });
+        if (oppiaine.koosteinen) {
+          _(oppiaine.oppimaarat).filter(function (oppimaara) {
+            return oppimaara.nimi[Kieli.getSisaltokieli()];
+          }).each(function(oppimaara){
+            opMenu.push({
+              depth: 1,
+              $jrno: oppimaara.jrno,
+              $hidden: false,
+              $oppiaine: oppimaara._oppiaine,
+              label: oppimaara.nimi[Kieli.getSisaltokieli()],
+              url: $state.href('')
+            })
+          })
+        }
+      });
+      console.log("LOGGING", opMenu);
+      return opMenu;
+    }
+
   function traverseOppiaineet(aineet, arr, vlk, startingDepth) {
     startingDepth = startingDepth || 0;
     var isSisalto = startingDepth === 0;
@@ -112,6 +143,7 @@ angular.module('eperusteet.esitys')
   }
 
   function rakennaSisallotOppiaineet(aineet, sections, selected) {
+    console.log("aineet", aineet, "sections", sections, "selected", selected)
     var navi = {};
     navi.oppiaineet = [];
     traverseOppiaineet(aineet, navi.oppiaineet, selected);
@@ -123,6 +155,7 @@ angular.module('eperusteet.esitys')
   }
 
   this.filteredOppimaarat = filteredOppimaarat;
+  this.buildLukioOppiaineMenu = buildLukioOppiaineMenu;
   this.rakennaTekstisisalto = rakennaTekstisisalto;
   this.rakennaVuosiluokkakokonaisuuksienSisalto = rakennaVuosiluokkakokonaisuuksienSisalto;
   this.rakennaSisallotOppiaineet = rakennaSisallotOppiaineet;

@@ -184,10 +184,32 @@ epOpintopolkuApp
   return $resource('/eperusteet-service/api/perusteet/:perusteId/suoritustavat/lukiokoulutus/sisalto', {
     perusteId: '@id'
   }, {
-    list: {
+    query: {
       method: 'GET'
     }
   });
+})
+
+.factory('LukioOppiaineet', function($resource) {
+    return $resource('/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/oppiaineet', {
+      perusteId: '@id'
+    }, {
+      list: {
+        method: 'GET',
+        isArray: true
+    }
+  });
+})
+
+.factory('LukioKurssit', function($resource) {
+    return $resource('/eperusteet-service/api/perusteet/8620010/lukiokoulutus/kurssit', {
+      peruste: '@id'
+    }, {
+      list: {
+      method: 'GET',
+      isArray: true
+    }
+  })
 })
 
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {
