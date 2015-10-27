@@ -265,7 +265,7 @@ epOpintopolkuApp
         perusteId: function (serviceConfig, $stateParams) {
           return $stateParams.perusteId;
         },
-        data: function (LukioPerusteenOsat, perusteId) {
+        perusData: function (LukioPerusteenOsat, perusteId) {
           return LukioPerusteenOsat.query({perusteId: perusteId}).$promise
             .then(function (res) {
               var lapset = _.filter(res.lapset, function (lapsi) {
@@ -281,11 +281,11 @@ epOpintopolkuApp
             })
         },
         lukioKurssit: function(LukioKurssit, perusteId) {
-          return LukioKurssit.list({perusteId: perusteId}).$promise
+          return ""; /*LukioKurssit.list({perusteId: perusteId}).$promise
             .then(function (res) {
               console.log(res);
               return res;
-          })
+          })*/
         }
       }
     })
@@ -295,8 +295,15 @@ epOpintopolkuApp
       templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
       controller: 'epLukioTekstikappaleController',
       resolve: {
-        tekstikappaleId: function(){
-          return "teksti";
+        tekstikappaleId: function (serviceConfig, $stateParams) {
+          return $stateParams.tekstikappaleId;
+        },
+        tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
+          return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
+            .then(function(res){
+              console.log(res);
+              return res;
+            })
         }
       }
     })

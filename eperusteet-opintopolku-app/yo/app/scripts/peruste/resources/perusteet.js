@@ -185,8 +185,20 @@ epOpintopolkuApp
     perusteId: '@id'
   }, {
     query: {
-      method: 'GET'
+      method: 'GET',
+      cache: true
     }
+  });
+})
+
+
+.factory('LukioTekstikappale', function($resource, epResource) {
+    return $resource('/eperusteet-service/api/perusteenosat/viite/:viiteId', {
+    viiteId: '@id'
+  }, {
+    getByViite: {
+      method: 'GET', cache: true
+    },
   });
 })
 

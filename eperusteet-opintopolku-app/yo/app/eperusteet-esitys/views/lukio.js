@@ -25,17 +25,17 @@ angular.module('eperusteet.esitys')
     $document,
     $timeout,
     $stateParams,
-    data,
+    perusData,
     lukioOppiaineet,
     lukioKurssit,
     epEsitysSettings,
     epMenuBuilder) {
 
     $scope.isNaviVisible = _.constant(true);
-    $scope.perusteenSisalto = data;
+    $scope.perusteenSisalto = perusData;
     $scope.oppiaineet = lukioOppiaineet;
-    $scope.lukioKurssit = lukioKurssit;
-    console.log($scope.oppiaineet,$scope.perusteenSisalto, $scope.lukioKurssit);
+    //$scope.lukioKurssit = lukioKurssit;
+    //console.log($scope.oppiaineet,$scope.perusteenSisalto, $scope.lukioKurssit);
 
     function selectedFilters(sectionId) {
       return _($scope.navi.sections[1].model.sections[sectionId].items).filter('$selected').map('value').value();
@@ -223,6 +223,7 @@ angular.module('eperusteet.esitys')
       term: '',
       update: function () {
         var matchCount = 0;
+        console.log("ITEMS", $scope.items);
         var items = $scope.items;
         if (_.isUndefined(items)) {
           var section = _.find($scope.sections, '$open');
@@ -255,6 +256,7 @@ angular.module('eperusteet.esitys')
 
 
     $scope.itemClasses = function (item) {
+      console.log("for itemClasses", item);
       var classes = ['level' + item.depth];
       if (item.$matched && $scope.search.term) {
         classes.push('matched');
@@ -265,6 +267,7 @@ angular.module('eperusteet.esitys')
       if (item.$header) {
         classes.push('tekstisisalto-active-header');
       }
+      console.log("With new itemClasses", classes);
       return classes;
     };
 
@@ -328,6 +331,7 @@ angular.module('eperusteet.esitys')
     }
 
     function updateModel(items, doUncollapse) {
+      console.log("updateModel", items, doUncollapse);
       if (!items) {
         return;
       }
@@ -397,20 +401,21 @@ angular.module('eperusteet.esitys')
     }, true);
   })
 
-  .controller('epLukioTekstikappaleController', function($scope, tekstikappale, epTekstikappaleChildResolver,
+  .controller('epLukioTekstikappaleController', function($scope, $stateParams, tekstikappale, epLukioTekstikappaleChildResolver,
                                                                MurupolkuData, epParentFinder) {
     $scope.tekstikappale = tekstikappale;
     MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
-    $scope.lapset = epTekstikappaleChildResolver.getSisalto();
+    $scope.lapset = epLukioTekstikappaleChildResolver.getSisalto();
     $scope.links = {
       prev: null,
       next: null
     };
 
-    MurupolkuData.set('parents', epParentFinder.find($scope.tekstisisalto.lapset, tekstikappale.id, true));
+    //MurupolkuData.set('parents', epParentFinder.find($scope.tekstisisalto.lapset, tekstikappale.id, true));
 
     function checkPrevNext() {
       var items = $scope.navi.sections[0].items;
+      console.log("NAVI ITEMS", items);
       var me = _.findIndex(items, function (item) {
         return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
       });
