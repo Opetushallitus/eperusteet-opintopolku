@@ -68,8 +68,9 @@
   this.selection = {};
 })
 
-.controller('epEsitysTutkinnonOsaController', function($scope, $state, $stateParams, PerusteenOsat, TutkinnonosanTiedotService,
-    Tutke2Osa, Kieli, MurupolkuData) {
+.controller('epEsitysTutkinnonOsaController', function($scope, $state, $stateParams, PerusteenOsat,
+                                                       TutkinnonosanTiedotService, $anchorScroll, $location,
+                                                       Tutke2Osa, Kieli, MurupolkuData) {
   $scope.tutkinnonOsaViite = _.find($scope.$parent.tutkinnonOsat, function(tosa) {
     return tosa.id === parseInt($stateParams.id, 10);
   });
@@ -82,7 +83,13 @@
       Tutke2Osa.kasitteleOsaAlueet($scope.tutkinnonOsa);
     }
   });
-
+  $scope.goToAnchor = function (pre, id) {
+    if ($location.hash() !== pre + id) {
+      $location.hash(pre + id);
+    } else {
+      $anchorScroll();
+    }
+  };
   $scope.fieldOrder = function (item) {
     return TutkinnonosanTiedotService.order(item);
   };
