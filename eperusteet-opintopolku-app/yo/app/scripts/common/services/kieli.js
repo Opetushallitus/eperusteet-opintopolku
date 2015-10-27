@@ -18,7 +18,7 @@
 /* global moment */
 
 epOpintopolkuApp
-  .service('Kieli', function ($rootScope, $state, $stateParams, $translate) {
+  .service('Kieli', function ($rootScope, $state, $stateParams, $translate, $timeout) {
     var defaultLang = $stateParams.lang || 'fi';
     var sisaltokieli = defaultLang;
     var uikieli = defaultLang;
@@ -73,11 +73,15 @@ epOpintopolkuApp
     this.setUiKieli = function (kielikoodi) {
       if (isValidKielikoodi(kielikoodi)) {
         var current = uikieli;
-        uikieli = kielikoodi;
-        moment.lang(kielikoodi);
-        $translate.use(kielikoodi);
         if (current !== kielikoodi) {
-          $state.transitionTo($state.current.name, _.merge($stateParams, {lang: kielikoodi}), {reload: true});
+          uikieli = kielikoodi;
+          moment.lang(kielikoodi);
+          $translate.use(kielikoodi);
+
+          // Ilman timeoutia lang ei ehdi päivittyä tilaparametreihin
+          $timeout(function () {
+            $state.transitionTo($state.current.name, _.merge($stateParams, {lang: kielikoodi}), {reload: true});
+          });
         }
       }
     };

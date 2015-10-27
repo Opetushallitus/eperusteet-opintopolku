@@ -79,7 +79,8 @@ module.exports = function(grunt) {
         https: false,
         changeOrigin: false,
         xforward: false*/
-        host: 'itest-virkailija.oph.ware.fi',
+        //host: 'testi.virkailija.opintopolku.fi',
+        host: 'eperusteet.opintopolku.fi',
         port: 443,
         https: true,
         changeOrigin: true,
@@ -288,7 +289,7 @@ module.exports = function(grunt) {
         expand: true,
         cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
         dest: '.tmp/styles/fonts/',
-        src: '*.{eot,svg,ttf,woff}'
+        src: '*.{eot,svg,ttf,woff,woff2}'
       }
     },
     concurrent: {
