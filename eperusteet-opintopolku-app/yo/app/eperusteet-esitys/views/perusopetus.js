@@ -30,7 +30,6 @@
    };
    var peruste = sisalto[0];
    $scope.peruste = peruste;
-   console.log($scope.peruste);
    MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
    var oppiaineet = _.zipBy(sisalto[2], 'id');
    $scope.oppiaineetMap = oppiaineet;
