@@ -35,6 +35,8 @@ epOpintopolkuApp
         return 'navi.ammatillinenperuskoulutus';
       } else if ($scope.isAmAikuis()) {
         return 'navi.ammatillinenaikuiskoulutus';
+      } else if ($state.includes('root.tiedote.**')) {
+        return 'navi.tiedote';
       }
     };
 
