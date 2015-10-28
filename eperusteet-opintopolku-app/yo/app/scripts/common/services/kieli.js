@@ -18,7 +18,7 @@
 /* global moment */
 
 epOpintopolkuApp
-  .service('Kieli', function ($rootScope, $state, $stateParams, $translate, $timeout) {
+  .service('Kieli', function ($rootScope, $state, $stateParams, $translate) {
     var defaultLang = $stateParams.lang || 'fi';
     var sisaltokieli = defaultLang;
     var uikieli = defaultLang;
