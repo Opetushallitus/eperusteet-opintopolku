@@ -96,7 +96,10 @@ angular.module('eperusteet.esitys')
 
   _.each($scope.navi.sections[0].items, function (item) {
     if (item.$osa) {
-      item.href = $state.href(currentRootState + '.tekstikappale', {tekstikappaleId: item.$osa.id});
+      item.href = $state.href(currentRootState + '.tekstikappale', {
+        perusteId: $scope.peruste.id,
+        tekstikappaleId: item.$osa.id
+      });
     }
   });
 
@@ -104,7 +107,7 @@ angular.module('eperusteet.esitys')
 
   $timeout(function () {
     if ($state.current.name === currentRootState) {
-      $state.go('.tiedot', {}, {location: 'replace'});
+      $state.go('.tiedot', {perusteId: $scope.peruste.id}, {location: 'replace'});
     }
   });
 });

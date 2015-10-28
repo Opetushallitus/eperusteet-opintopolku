@@ -1,7 +1,7 @@
 'use strict';
 
 epOpintopolkuApp
-  .controller('YlanavigaatioController', function ($scope, $state, Kieli, Haku) {
+  .controller('YlanavigaatioController', function ($scope, $state, Kieli, Haku, $stateParams) {
     $scope.kieli = Kieli.getUiKieli();
     $scope.nykyinenTila = $state;
     $scope.navCollapsed = true;
@@ -70,6 +70,9 @@ epOpintopolkuApp
         Kieli.setUiKieli(uusiKieli);
         Kieli.setSisaltokieli(uusiKieli);
         $scope.kieli = uusiKieli;
+
+        $state.go($state.current.name, _.merge($stateParams, {lang: uusiKieli}), {});
       }
     };
+
   });

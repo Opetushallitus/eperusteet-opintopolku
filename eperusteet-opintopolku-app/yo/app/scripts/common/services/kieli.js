@@ -77,11 +77,6 @@ epOpintopolkuApp
           uikieli = kielikoodi;
           moment.lang(kielikoodi);
           $translate.use(kielikoodi);
-
-          // Ilman timeoutia lang ei ehdi päivittyä tilaparametreihin
-          $timeout(function () {
-            $state.transitionTo($state.current.name, _.merge($stateParams, {lang: kielikoodi}), {reload: true});
-          });
         }
       }
     };

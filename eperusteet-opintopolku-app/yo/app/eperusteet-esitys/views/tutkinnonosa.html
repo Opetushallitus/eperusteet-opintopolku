@@ -56,7 +56,7 @@
     <termisto-tekstikentta tekstikentta="tutkinnonOsa.kuvaus"></termisto-tekstikentta>
 
     <div>
-      <span kaanna="'osa-alueet'"></span>
+      <span kaanna="'osa-alueet'"></span><span>:</span>
       <span ng-repeat="osaalue in tutkinnonOsa.osaAlueet | filter:osaAlueFilter">
         <span ng-if="!$first">&nbsp;&#124;&nbsp;</span>
         <a class="action-link" ng-click="goToAnchor('osaalue', osaalue.id)">{{ osaalue.nimi | kaanna }}</a>

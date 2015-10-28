@@ -20,6 +20,7 @@
         <rajaus ng-if="!sections && !disableRajaus" size="small" model="search.term" placeholder="etsi-sisallosta"></rajaus>
       </div>
 
+      <!-- Perusopetus valikko -->
       <div ng-if="sections">
         <accordion close-others="showOne">
           <accordion-group ng-repeat="section in sections" is-open="section.$open" ng-class="{'panel-chosen': section.$open, 'menu': !section.include}">
@@ -41,6 +42,7 @@
         </accordion>
       </div>
 
+      <!-- Yksinkertainen valikko -->
       <a class="list-group-item item items-item" ng-repeat="item in items" ng-class="itemClasses(item)" ng-href="{{item.href}}"
         ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
         <div class="toggler">
@@ -54,7 +56,9 @@
       <div class="list-group-item" ng-if="!sections" ng-show="!hasResults && search.term">
         <p class="no-results">{{ 'ei-tuloksia' | kaanna }}</p>
       </div>
+
     </div>
+
     <div id="sivunavi-footer-content"></div>
   </div>
 </div>

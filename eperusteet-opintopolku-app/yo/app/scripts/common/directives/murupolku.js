@@ -91,6 +91,10 @@ epOpintopolkuApp
         useData: 'perusteNimi',
         useId: 'perusteId'
       },
+      'root.perusopetus.tiedot': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
       'root.perusopetus.tekstikappale': {
         parent: 'root.perusopetus',
         useData: 'tekstikappaleNimi',
@@ -122,6 +126,10 @@ epOpintopolkuApp
         useData: 'perusteNimi',
         useId: 'perusteId'
       },
+      'root.esiopetus.tiedot': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
       'root.esiopetus.tekstikappale': {
         parent: 'root.esiopetus',
         useData: 'tekstikappaleNimi',
@@ -129,6 +137,10 @@ epOpintopolkuApp
         customParents: true
       },
       'root.lisaopetus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.lisaopetus.tiedot': {
         useData: 'perusteNimi',
         useId: 'perusteId'
       },

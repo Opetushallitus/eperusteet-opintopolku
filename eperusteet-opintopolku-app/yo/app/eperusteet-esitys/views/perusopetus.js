@@ -19,8 +19,11 @@
  angular.module('eperusteet.esitys')
  .controller('epPerusopetusController', function($q, $scope, $timeout, sisalto, PerusteenOsat,
    $state, $stateParams, epMenuBuilder, Utils, MurupolkuData,
-   Oppiaineet, TermistoService, Kieli, $document, $rootScope, epPerusopetusStateService, epEsitysSettings) {
+   Oppiaineet, TermistoService, Kieli, $document, $rootScope, epPerusopetusStateService,
+   koulutusalaService, opintoalaService, epEsitysSettings) {
    $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
+   $scope.Koulutusalat = koulutusalaService;
+   $scope.Opintoalat = opintoalaService;
    $scope.isNaviVisible = _.constant(true);
    $scope.hasContent = function (obj) {
      return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
@@ -77,7 +80,7 @@
    });
 
    $scope.filtterit = {
-     moodi: 'sivutus',
+     moodi: 'sivutus'
    };
 
    $scope.valitseOppiaineenVuosiluokka = function(vuosiluokka) {
@@ -207,7 +210,7 @@
          items: epMenuBuilder.rakennaVuosiluokkakokonaisuuksienSisalto($scope.vuosiluokkakokonaisuudet, oppiaineet),
          naviClasses: $scope.naviClasses,
          include: 'eperusteet-esitys/views/vlk.html',
-         state: $scope.state,
+         state: $scope.state
        }, {
          title: 'opetuksen-sisallot',
          id: 'sisalto',
