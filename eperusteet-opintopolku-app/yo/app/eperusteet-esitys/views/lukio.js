@@ -26,22 +26,37 @@ angular.module('eperusteet.esitys')
     $timeout,
     $stateParams,
     perusData,
+    peruste,
     lukioOppiaineet,
     lukioKurssit,
     epEsitysSettings,
-    epMenuBuilder) {
+    epMenuBuilder,
+    MurupolkuData,
+    epLukioStateService,
+    Kieli) {
 
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenSisalto = perusData;
     $scope.oppiaineet = lukioOppiaineet;
-    //$scope.lukioKurssit = lukioKurssit;
-    //console.log($scope.oppiaineet,$scope.perusteenSisalto, $scope.lukioKurssit);
+    $scope.hasContent = function (obj) {
+      return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
+    };
+    $scope.lukioKurssit = lukioKurssit;
 
-    function selectedFilters(sectionId) {
+    /*function selectedFilters(sectionId) {
       return _($scope.navi.sections[1].model.sections[sectionId].items).filter('$selected').map('value').value();
-    }
+    }*/
+    //FIX
+    MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
 
-    function clickHandler(event) {
+    //CHANGE FOR LUKIO
+    $scope.state = epLukioStateService.getState();
+
+    $scope.$on('$stateChangeSuccess', function () {
+      epLukioStateService.setState($scope.navi);
+    });
+
+ /*   function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
       if (ohjeEl.length === 0) {
         $rootScope.$broadcast('ohje:closeAll');
@@ -55,7 +70,7 @@ angular.module('eperusteet.esitys')
     }
     $scope.$on('$destroy', function () {
       $document.off('click', clickHandler);
-    });
+    });*/
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
@@ -63,22 +78,23 @@ angular.module('eperusteet.esitys')
         classes.push('tekstisisalto-active');
       }
       if (item.$header) {
-        classes.push('tekstisisalto-active-header');
+         classes.push('tekstisisalto-active-header');
       }
       return classes;
     };
 
-    function updateSelection(sectionId) {
+    //check this out...
+    /*function updateSelection(sectionId) {
       var MAP = {
         0: 'vlk',
         2: 'sisalto',
         3: 'osaaminen'
       };
-      var selected = selectedFilters(sectionId);
+      //var selected = selectedFilters(sectionId);
       var params = {};
       params[MAP[sectionId]] = selected;
       $state.go($state.current.name, _.extend(params, $stateParams));
-    }
+    }*/
 
     $scope.navi = {
       header: 'perusteen-sisalto',
@@ -93,11 +109,12 @@ angular.module('eperusteet.esitys')
         title: 'opetuksen-sisallot',
         id: 'sisalto',
         include: 'eperusteet-esitys/views/tekstisisalto.html',
-        items: epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineet)
+        items: epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineet,$scope.lukioKurssit),
+        naviClasses: $scope.naviClasses
       }]
     };
-
-    installClickHandler();
+    //what is this for?
+    //installClickHandler();
 })
 
   .directive('epLukioSivunavigaatio', function ($window, $document, $timeout, $compile) {
@@ -133,87 +150,6 @@ angular.module('eperusteet.esitys')
     };
   })
 
-  .service('epSivunaviUtils', function ($state, $stateParams) {
-    function getChildren(items, index) {
-      var children = [];
-      var level = items[index].depth;
-      index = index + 1;
-      var depth = level + 1;
-      for (; index < items.length && depth > level; ++index) {
-        depth = items[index].depth;
-        if (depth === level + 1) {
-          children.push(index);
-        }
-      }
-      return children;
-    }
-
-    function isActive(item) {
-      if (_.has(item, '$selected')) {
-        return item.$selected;
-      }
-      if (_.isFunction(item.isActive)) {
-        return item.isActive(item);
-      }
-      return (!_.isEmpty(item.link) && _.isArray(item.link) &&
-      $state.is(item.link[0], _.extend(_.clone($stateParams), item.link[1])));
-    }
-
-    function traverse(items, index) {
-      if (index >= items.length) {
-        return;
-      }
-      var item = items[index];
-      var children = getChildren(items, index);
-      var hidden = [];
-      for (var i = 0; i < children.length; ++i) {
-        traverse(items, children[i]);
-        hidden.push(items[children[i]].$hidden);
-      }
-      item.$leaf = hidden.length === 0;
-      item.$collapsed = _.all(hidden);
-      item.$active = isActive(item);
-      if (item.$active) {
-        var parent = items[item.$parent];
-        while (parent) {
-          parent.$header = true;
-          parent = items[parent.$parent];
-        }
-      }
-      if (!item.$collapsed) {
-        // Reveal all children of uncollapsed node
-        for (i = 0; i < children.length; ++i) {
-          items[children[i]].$hidden = false;
-        }
-      }
-      item.$impHidden = false;
-    }
-
-
-    function unCollapse(items, item) {
-      item.$hidden = false;
-      // Open up
-      var parent = items[item.$parent];
-      while (parent) {
-        parent.$hidden = false;
-        parent = items[parent.$parent];
-      }
-      // Open down one level
-      var index = _.indexOf(items, item);
-      if (index > 0) {
-        var children = getChildren(items, index);
-        _.each(children, function (child) {
-          items[child].$hidden = false;
-        });
-      }
-    }
-
-    this.unCollapse = unCollapse;
-    this.getChildren = getChildren;
-    this.traverse = traverse;
-    this.isActive = isActive;
-  })
-
   .controller('epLukioSivuNaviController', function ($scope, $state, Algoritmit, Utils, epSivunaviUtils,
                                                 epEsitysSettings) {
     $scope.menuCollapsed = true;
@@ -223,7 +159,6 @@ angular.module('eperusteet.esitys')
       term: '',
       update: function () {
         var matchCount = 0;
-        console.log("ITEMS", $scope.items);
         var items = $scope.items;
         if (_.isUndefined(items)) {
           var section = _.find($scope.sections, '$open');
@@ -256,7 +191,6 @@ angular.module('eperusteet.esitys')
 
 
     $scope.itemClasses = function (item) {
-      console.log("for itemClasses", item);
       var classes = ['level' + item.depth];
       if (item.$matched && $scope.search.term) {
         classes.push('matched');
@@ -267,7 +201,6 @@ angular.module('eperusteet.esitys')
       if (item.$header) {
         classes.push('tekstisisalto-active-header');
       }
-      console.log("With new itemClasses", classes);
       return classes;
     };
 
@@ -331,7 +264,6 @@ angular.module('eperusteet.esitys')
     }
 
     function updateModel(items, doUncollapse) {
-      console.log("updateModel", items, doUncollapse);
       if (!items) {
         return;
       }
@@ -359,6 +291,7 @@ angular.module('eperusteet.esitys')
       if ($event) {
         $event.preventDefault();
       }
+
       var index = _.indexOf(items, item);
       state = _.isUndefined(state) ? !item.$collapsed : state;
       if (index >= 0 && index < (items.length - 1)) {
@@ -401,21 +334,21 @@ angular.module('eperusteet.esitys')
     }, true);
   })
 
-  .controller('epLukioTekstikappaleController', function($scope, $stateParams, tekstikappale, epLukioTekstikappaleChildResolver,
-                                                               MurupolkuData, epParentFinder) {
+  .controller('epLukioTekstikappaleController', function($scope, $stateParams, tekstikappale, epTekstikappaleChildResolver,
+                                                               MurupolkuData) {
     $scope.tekstikappale = tekstikappale;
     MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
-    $scope.lapset = epLukioTekstikappaleChildResolver.getSisalto();
+    $scope.lapset = epTekstikappaleChildResolver.getSisalto();
     $scope.links = {
       prev: null,
       next: null
     };
 
+    //FIXME or EVEN needed?
     //MurupolkuData.set('parents', epParentFinder.find($scope.tekstisisalto.lapset, tekstikappale.id, true));
 
     function checkPrevNext() {
       var items = $scope.navi.sections[0].items;
-      console.log("NAVI ITEMS", items);
       var me = _.findIndex(items, function (item) {
         return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
       });
@@ -424,11 +357,12 @@ angular.module('eperusteet.esitys')
       }
       var i = me + 1;
       var meDepth = items[me].depth;
-      for (; i < items.length; ++i) {
+      //Why not include children?
+      /*for (; i < items.length; ++i) {
         if (items[i].depth <= meDepth) {
           break;
         }
-      }
+      }*/
       $scope.links.next = i < items.length && items[i].id !== 'laajaalaiset' ? items[i] : null;
       i = me - 1;
       for (; i >= 0; --i) {
@@ -439,7 +373,7 @@ angular.module('eperusteet.esitys')
       $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
     }
 
-    $scope.$on('perusopetus:stateSet', checkPrevNext);
+    $scope.$on('lukio:stateSet', checkPrevNext);
     checkPrevNext();
   })
 

@@ -265,27 +265,32 @@ epOpintopolkuApp
         perusteId: function (serviceConfig, $stateParams) {
           return $stateParams.perusteId;
         },
+        peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
+          return !perusteId ? UusimmatPerusteetService.getPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise
+            .then(function(res){
+              return res;
+            });
+        },
         perusData: function (LukioPerusteenOsat, perusteId) {
           return LukioPerusteenOsat.query({perusteId: perusteId}).$promise
             .then(function (res) {
               var lapset = _.filter(res.lapset, function (lapsi) {
-                return lapsi['perusteenOsa']['osanTyyppi'] === 'tekstikappale'
+                return lapsi.perusteenOsa.osanTyyppi === 'tekstikappale';
               });
-              return {'lapset': lapset};
+              return {'lapset': lapset, 'id': perusteId};
             });
         },
         lukioOppiaineet: function (LukioOppiaineet, perusteId) {
           return LukioOppiaineet.query({perusteId: perusteId}).$promise
             .then(function (res) {
               return res;
-            })
+            });
         },
         lukioKurssit: function(LukioKurssit, perusteId) {
-          return ""; /*LukioKurssit.list({perusteId: perusteId}).$promise
+          return LukioKurssit.list({perusteId: perusteId}).$promise
             .then(function (res) {
-              console.log(res);
               return res;
-          })*/
+          })
         }
       }
     })
@@ -301,9 +306,22 @@ epOpintopolkuApp
         tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
           return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
             .then(function(res){
-              console.log(res);
               return res;
-            })
+            });
+        }
+      }
+    })
+
+    .state('root.lukio.oppiaine', {
+      url: '/oppiaine/:oppiaineId',
+      templateUrl: 'eperusteet-esitys/views/vlkoppiaine.html',
+      controller: 'epLukioOppiaineController',
+      resolve: {
+        oppiaineId: function (serviceConfig, $stateParams) {
+          return $stateParams.oppiaineId;
+        },
+        oppiaine: function (serviceConfig, perusteId, Oppiaineet, oppiaineId) {
+          return Oppiaineet.get({ perusteId: perusteId, osanId: oppiaineId }).$promise;
         }
       }
     })

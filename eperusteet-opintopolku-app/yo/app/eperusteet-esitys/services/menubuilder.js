@@ -55,36 +55,72 @@ angular.module('eperusteet.esitys')
     });
   }
 
-  function buildLukioOppiaineMenu(oppiaineet) {
-      var opMenu = [];
-       console.log(oppiaineet);
-      _.each(oppiaineet, function(oppiaine) {
+  function buildLukioOppiaineMenu(oppiaineet, kurssit) {
+    console.log(oppiaineet);
+    var opMenu = [];
+
+    function addOppimaaraToMenu(oppimaarat) {
+      _.each(oppimaarat, function(oppimaara) {
         opMenu.push({
-          depth: 0,
-          $jnro: oppiaine.jnro,
-          $hidden: false,
-          $oppiaine: oppiaine,
-          label: oppiaine.nimi,
-          url: $state.href('')
-        });
-        if (oppiaine.koosteinen) {
-          _(oppiaine.oppimaarat).filter(function (oppimaara) {
-            return oppimaara.nimi[Kieli.getSisaltokieli()];
-          }).each(function(oppimaara){
-            opMenu.push({
-              depth: 1,
-              $jrno: oppimaara.jrno,
-              $hidden: false,
-              $oppiaine: oppimaara._oppiaine,
-              label: oppimaara.nimi[Kieli.getSisaltokieli()],
-              url: $state.href('')
-            })
-          })
-        }
+          $id: oppimaara.id,
+          depth: 1,
+          $jnro: oppimaara.jnro,
+          $hidden: true,
+          $vanhempiId: oppimaara._oppiaine,
+          label: oppimaara.nimi[Kieli.getSisaltokieli()],
+          url: $state.href('root.lukio.oppiaine', {oppiaineId: oppimaara.id})
       });
-      console.log("LOGGING", opMenu);
-      return opMenu;
-    }
+    });
+  }
+
+    _.each(oppiaineet, function(oppiaine) {
+      if (_.isArray(oppiaine.oppimaarat) && !_.isEmpty(oppiaine.oppimaarat)) {
+        addOppimaaraToMenu(oppiaine.oppimaarat)
+      }
+      opMenu.push({
+        $id: oppiaine.id,
+        depth: 0,
+        $jnro: oppiaine.jnro,
+        $hidden: false,
+        $oppiaine: oppiaine,
+        label: oppiaine.nimi[Kieli.getSisaltokieli()],
+        url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
+      });
+    });
+
+    var lastDepth = 2;
+    var menuWithKurssit = _(opMenu).map(function(menuItem) {
+        return [ menuItem,
+            _.filter(kurssit, function(kurssi){
+              var menuTarget = _.pick(menuItem, "$id");
+              var targets = _.map(kurssi.oppiaineet, function(op) { return op.oppiaineId });
+              return _.indexOf(targets, menuTarget.$id) > -1;
+          })
+        ]
+      })
+      .filter(function(obj){
+        return !_.isEmpty(obj);
+      })
+      .flatten()
+      .flatten()
+      .map(function(obj){
+        console.log(obj);
+        if(obj.label){
+          lastDepth = obj.depth;
+          return obj
+        }
+        var newObj = {
+          $id: obj.id,
+          depth: lastDepth + 1,
+          label: obj.nimi,
+          url: $state.href('root.lukio.kurssi', {kurssiId: obj.id})
+        };
+        return newObj;
+      })
+      .value();
+    console.log(menuWithKurssit);
+    return menuWithKurssit;
+  }
 
   function traverseOppiaineet(aineet, arr, vlk, startingDepth) {
     startingDepth = startingDepth || 0;
@@ -143,7 +179,6 @@ angular.module('eperusteet.esitys')
   }
 
   function rakennaSisallotOppiaineet(aineet, sections, selected) {
-    console.log("aineet", aineet, "sections", sections, "selected", selected)
     var navi = {};
     navi.oppiaineet = [];
     traverseOppiaineet(aineet, navi.oppiaineet, selected);

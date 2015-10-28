@@ -191,8 +191,7 @@ epOpintopolkuApp
   });
 })
 
-
-.factory('LukioTekstikappale', function($resource, epResource) {
+.factory('LukioTekstikappale', function($resource) {
     return $resource('/eperusteet-service/api/perusteenosat/viite/:viiteId', {
     viiteId: '@id'
   }, {
@@ -203,25 +202,34 @@ epOpintopolkuApp
 })
 
 .factory('LukioOppiaineet', function($resource) {
-    return $resource('/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/oppiaineet', {
+    var baseUrl = '/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/oppiaineet';
+    return $resource(baseUrl, {
       perusteId: '@id'
     }, {
-      list: {
-        method: 'GET',
-        isArray: true
-    }
+      list: {method: 'GET', url: baseUrl, isArray: true, cache: true},
+      getOppiaine: {method: 'GET', url: baseUrl + '/:oppiaineId', cache: true}
   });
 })
 
+  .factory('Oppiaineet', function($resource, epResource) {
+    var baseUrl = epResource.PERUSOPETUS + '/oppiaineet/:osanId';
+    return $resource(baseUrl, {osanId: '@id'}, {
+      oppimaarat: {method: 'GET', isArray: true, url: baseUrl + '/oppimaarat', cache: true},
+      kohdealueet: {method: 'GET', isArray: true, url: baseUrl + '/kohdealueet', cache: true},
+      get: epResource.CACHEDGET,
+      query: epResource.CACHEDQUERY
+    });
+  })
+
 .factory('LukioKurssit', function($resource) {
-    return $resource('/eperusteet-service/api/perusteet/8620010/lukiokoulutus/kurssit', {
+    return $resource('/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/kurssit', {
       peruste: '@id'
     }, {
       list: {
       method: 'GET',
       isArray: true
     }
-  })
+  });
 })
 
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {

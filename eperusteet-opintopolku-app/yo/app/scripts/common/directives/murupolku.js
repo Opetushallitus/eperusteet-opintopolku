@@ -118,6 +118,16 @@ epOpintopolkuApp
         useId: 'oppiaineId',
         customParents: true
       },
+      'root.lukio':{
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.lukio.tekstikappale': {
+        parent: 'root.perusopetus',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+        customParents: true
+      },
       'root.esiopetus': {
         useData: 'perusteNimi',
         useId: 'perusteId'
