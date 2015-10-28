@@ -57,11 +57,9 @@ epOpintopolkuApp
     };
 
     var self = this;
-    $rootScope.$on('changed:uikieli', function () {
-      // To set correct document title on first load
-      $timeout(function () {
-        self.setTitle(latest);
-      }, 500);
+
+    $timeout(function () {
+      self.setTitle(latest);
     });
   })
 
@@ -88,6 +86,10 @@ epOpintopolkuApp
         parent: 'root.tiedotteet',
       },
       'root.perusopetus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.perusopetus.tiedot': {
         useData: 'perusteNimi',
         useId: 'perusteId'
       },
@@ -122,6 +124,10 @@ epOpintopolkuApp
         useData: 'perusteNimi',
         useId: 'perusteId'
       },
+      'root.esiopetus.tiedot': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
       'root.esiopetus.tekstikappale': {
         parent: 'root.esiopetus',
         useData: 'tekstikappaleNimi',
@@ -129,6 +135,10 @@ epOpintopolkuApp
         customParents: true
       },
       'root.lisaopetus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.lisaopetus.tiedot': {
         useData: 'perusteNimi',
         useId: 'perusteId'
       },

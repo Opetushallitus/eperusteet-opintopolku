@@ -1,6 +1,6 @@
 <!-- haku.html -->
 <div class="sisalto-box topmost">
-  <h1 kaanna="sivu.otsikko | kaanna"></h1>
+  <h1 kaanna="sivu.otsikko"></h1>
 
   <div class="panel panel-default">
     <div class="clearfix"></div>
@@ -9,16 +9,16 @@
       <div class="row">
         <div class="col-md-6 col-xs-12">
           <div class="form-group">
-            <label for="tutkinnon-nimi" kaanna>haku-nimi</label>
-            <input id="tutkinnon-nimi" type="text" class="form-control" placeholder="{{'haku-tutkinnon-nimi-placeholder'| kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()">
+            <label for="tutkinnon-nimi" kaanna="'haku-nimi'"></label>
+            <input id="tutkinnon-nimi" type="text" class="form-control" placeholder="{{kaanna('haku-tutkinnon-nimi-placeholder')}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()">
           </div>
         </div>
         <div class="col-md-6 col-xs-12" ng-hide="piilotaKoulutustyyppi()">
           <div class="form-group">
-            <label for="haku-tyyppi" kaanna>haku-tyyppi</label>
+            <label for="haku-tyyppi" kaanna="'haku-tyyppi'"></label>
             <select id="haku-tyyppi" ng-model="hakuparametrit.tyyppi" class="form-control" ng-change="hakuMuuttui()">
-              <option value="" kaanna>haku-kaikki-tutkinnot</option>
-              <option ng-repeat="koodi in koulutustyypit" value="{{koodi}}" ng-selected="hakuparametrit.tyyppi === koodi">{{koodi| kaanna}}</option>
+              <option value="" kaanna="'haku-kaikki-tutkinnot'"></option>
+              <option ng-repeat="koodi in koulutustyypit" value="{{koodi}}" ng-selected="hakuparametrit.tyyppi === koodi" kaanna="koodi"></option>
             </select>
           </div>
         </div>
@@ -26,18 +26,18 @@
       <div class="row">
         <div class="col-md-6 col-xs-12">
           <div class="form-group">
-            <label for="haku-ala" kaanna>haku-koulutusala</label>
+            <label for="haku-ala" kaanna="'haku-koulutusala'"></label>
             <select id="haku-ala" ng-model="hakuparametrit.koulutusala" class="form-control" ng-change="koulutusalaMuuttui()">
-              <option value="" kaanna>haku-kaikki-alat</option>
-              <option ng-repeat="ala in koulutusalat" value="{{ala.koodi}}" ng-selected="hakuparametrit.koulutusala === ala.koodi">{{ala.nimi|kaanna}}</option>
+              <option value="" kaanna="'haku-kaikki-alat'"></option>
+              <option ng-repeat="ala in koulutusalat" value="{{ala.koodi}}" ng-selected="hakuparametrit.koulutusala === ala.koodi" kaanna="ala.nimi"></option>
             </select>
           </div>
         </div>
         <div class="col-md-6 col-xs-12" ng-show="hakuparametrit.koulutusala !== ''">
           <div class="form-group">
-            <label for="haku-opintoala" kaanna>haku-opintoala</label>
+            <label for="haku-opintoala" kaanna="'haku-opintoala'"></label>
             <select id="haku-opintoala" ng-model="hakuparametrit.opintoala" class="form-control" ng-change="hakuMuuttui()">
-              <option value="" kaanna>haku-kaikki-opintoalat</option>
+              <option value="" kaanna="'haku-kaikki-opintoalat'"></option>
               <option ng-repeat="ala in opintoalat" value="{{ala.koodi}}" ng-selected="hakuparametrit.opintoala === ala.koodi">{{ala.nimi|kaanna}}</option>
             </select>
           </div>
@@ -47,7 +47,7 @@
         <div class="col-md-6 col-xs-12">
           <div class="checkbox">
             <label>
-              <input type="checkbox" ng-model="hakuparametrit.siirtyma" ng-change="hakuMuuttui()"></input>{{ 'haku-nayta-siirtymaajalla-olevat' | kaanna }}
+              <input type="checkbox" ng-model="hakuparametrit.siirtyma" ng-change="hakuMuuttui()"></input><span kaanna="'haku-nayta-siirtymaajalla-olevat'"></span>
             </label>
           </div>
         </div>
@@ -59,7 +59,7 @@
     </form>
   </div>
 
-  <p>{{'haku-tulosten-maara'| kaanna}} {{kokonaismaara}}</p>
+  <p><span kaanna="'haku-tulosten-maara'"></span> {{kokonaismaara}}</p>
 
   <table class="table table-condensed table-striped" ng-show="kokonaismaara > 0">
     <thead>

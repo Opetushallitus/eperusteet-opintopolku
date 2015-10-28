@@ -4,6 +4,7 @@
   "etusivulle": "Etusivulle",
   "avaa-sulje-kaikki": "Avaa/sulje kaikki",
   "eperusteet-otsikko": "ePerusteet",
+  "opintopolku": "Opintopolku",
   "nimi": "Nimi",
   "diaarinumero-label": "Diaarinumero",
 
@@ -11,15 +12,6 @@
   "sivupalkki-piilota": "Näytä vähemmän",
   "ei-tiedotteita": "Ei tiedotteita",
   "tiedote": "Tiedote",
-
-  "navi.etusivu": "Etusivu",
-  "navi.esiopetus": "Esiopetus",
-  "navi.perusopetus": "Perusopetus",
-  "navi.lisaopetus": "Lisäopetus",
-  "navi.lukiokoulutus": "Lukiokoulutus",
-  "navi.varhaiskasvatus": "Varhaiskasvatus",
-  "navi.ammatillinenperuskoulutus": "Ammatillinen peruskoulutus",
-  "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus",
 
   "etusivu.eperusteet": "ePerusteet",
   "etusivu.eperusteet.kuvaus": "ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien ja tutkintojen perusteisiin. Perusteita julkaistaan palvelussa vaiheittain.",
@@ -46,7 +38,6 @@
   "sivunavigointi-sulje-menu": "Sulje navigointimenu",
   "ei-tuloksia": "Ei tuloksia rajauksellasi",
   "tyhjenna-rajaus-tooltip": "Tyhjennä rajaus (Esc)",
-  "rajaa-tutkinnonosia": "Rajaa tutkinnon osia...",
 
   "haku-otsikko": "Perusteen haku",
   "haku-koulutusala": "Koulutusala",
@@ -135,6 +126,16 @@
   "eperusteet-virkailija-linkki": "Virkailijanäkymään",
   "kysy-neuvoa-anna-palautetta": "Kysy neuvoa - Anna palautetta",
   "tietosuojaseloste": "Tietosuojaseloste",
-  
-  "osaamisalat": "Osaamisalat"
+
+  "osaamisalat": "Osaamisalat",
+
+  "navi.etusivu": "Etusivu",
+  "navi.esiopetus": "Esiopetus",
+  "navi.perusopetus": "Perusopetus",
+  "navi.lisaopetus": "Lisäopetus",
+  "navi.lukiokoulutus": "Lukiokoulutus",
+  "navi.varhaiskasvatus": "Varhaiskasvatus",
+  "navi.ammatillinenperuskoulutus": "Ammatillinen peruskoulutus",
+  "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus",
+  "navi.valikkon-otsikko": "ePerusteet valikko"
 }

@@ -242,7 +242,7 @@ $sivunavi-level-padding: 20px;
     top: 40px;
     left: -20px;
     width: $sivunavi-leveys;
-    z-index: 1030;
+    z-index: 999;
     box-shadow: 0 0 $sivunavi-shadow black;
     #sivunavi-footer-content.has-content button {
       margin: 10px 15px;

@@ -124,7 +124,7 @@ epOpintopolkuApp
   return {
     restrict: 'AE',
     template: '<div class="show-toggler" ng-show="isVisible">' +
-          '<a class="action-link" ng-click="toggle()">{{linktext| kaanna}}</a>' +
+          '<a class="action-link" ng-click="toggle()" kaanna="linktext"></a>' +
           '</div>',
     scope: {
       'model': '=',
