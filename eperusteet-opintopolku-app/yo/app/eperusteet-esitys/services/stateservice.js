@@ -213,41 +213,30 @@ angular.module('eperusteet.esitys')
     }
 
     var states = {
-      laajaalaiset: {
-        index: 0,
-        callback: textCallback
-      },
       tekstikappale: {
         index: 0,
         callback: textCallback
       },
-      tiedot: {
-        index: 0,
-        callback: function (item) {
-          item.$selected = _.isArray(item.link) && item.link.length > 0 && _.last(item.link[0].split('.')) === 'tiedot';
-        }
-      },
-      vuosiluokkakokonaisuus: {
+      oppiaine: {
         index: 1,
         callback: function (item) {
-          if (item.$vkl) {
-            item.$selected = '' + $stateParams.vlkId === '' + item.$vkl.id;
+          if (item.$oppiaine) {
+            item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
           }
           if (item.$selected) {
             selected = item;
           }
+        },
+        actions: function () {
+          items = section.items;
+          setParentOppiaineHeader();
         }
       },
-      vlkoppiaine: {
+      kurssi: {
         index: 1,
         callback: function (item) {
-          if (item.$vkl) {
-            item.$header = '' + $stateParams.vlkId === '' + item.$vkl.id;
-            parentVlkId = item.$vkl.id;
-          }
           if (item.$oppiaine) {
-            item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id &&
-              $stateParams.vlkId === '' + parentVlkId;
+            item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
           }
           if (item.$selected) {
             selected = item;
@@ -292,7 +281,7 @@ angular.module('eperusteet.esitys')
       }
       epSivunaviUtils.unCollapse(menuItems, selected);
       epSivunaviUtils.traverse(menuItems, 0);
-      $rootScope.$broadcast('perusopetus:stateSet');
+      $rootScope.$broadcast('lukio:stateSet');
     }
   };
   this.getState = function () {

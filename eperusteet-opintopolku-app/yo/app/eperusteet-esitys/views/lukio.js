@@ -108,7 +108,7 @@ angular.module('eperusteet.esitys')
       }, {
         title: 'opetuksen-sisallot',
         id: 'sisalto',
-        include: 'eperusteet-esitys/views/tekstisisalto.html',
+        include: 'eperusteet-esitys/views/oppiaineetsivunavi.html',
         items: epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineet,$scope.lukioKurssit),
         naviClasses: $scope.naviClasses
       }]
@@ -377,9 +377,9 @@ angular.module('eperusteet.esitys')
     checkPrevNext();
   })
 
-  .controller('epPerusopetusVlkController', function($scope, $stateParams, Utils, MurupolkuData) {
-    $scope.vlk = $scope.vuosiluokkakokonaisuudetMap[$stateParams.vlkId];
-    MurupolkuData.set({vlkId: $scope.vlk.id, vlkNimi: $scope.vlk.nimi});
+  .controller('epLukioKurssiController', function($scope, kurssi, $stateParams, Utils, MurupolkuData) {
+    //$scope.vlk = $scope.vuosiluokkakokonaisuudetMap[$stateParams.vlkId];
+    //MurupolkuData.set({vlkId: $scope.vlk.id, vlkNimi: $scope.vlk.nimi});
 
     $scope.vlkOrder = function (item) {
       return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
@@ -407,21 +407,57 @@ angular.module('eperusteet.esitys')
     $scope.osaaminenSort = Utils.nameSort;
   })
 
-  .controller('epPerusopetusSisallotController', function($scope, oppiaine, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, oppiaine, Kieli, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
+    console.log(oppiaine);
 
     if (oppiaine) {
       var murupolkuParams = {
-        parents: null,
         oppiaineId: oppiaine.id,
-        oppiaineNimi: oppiaine.nimi
+        oppiaineNimi: oppiaine.nimi[Kieli.getSisaltokieli()]
       };
-      if (oppiaine._oppiaine) {
-        murupolkuParams.parents = [$scope.oppiaineetMap[oppiaine._oppiaine]];
-      }
+      //MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
       MurupolkuData.set(murupolkuParams);
-    }
+      $scope.tekstikappale = oppiaine;
+      $scope.lapset = epTekstikappaleChildResolver.getSisalto();
+      $scope.links = {
+        prev: null,
+        next: null
+      };
 
+      //FIXME or EVEN needed?
+      //MurupolkuData.set('parents', epParentFinder.find($scope.tekstisisalto.lapset, tekstikappale.id, true));
+
+      function checkPrevNext() {
+        var items = $scope.navi.sections[1].items;
+        var me = _.findIndex(items, function (item) {
+          return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
+        });
+        if (me === -1) {
+          return;
+        }
+        var i = me + 1;
+        var meDepth = items[me].depth;
+        //Why not include children?
+        /*for (; i < items.length; ++i) {
+         if (items[i].depth <= meDepth) {
+         break;
+         }
+         }*/
+        $scope.links.next = i < items.length && items[i].id !== 'laajaalaiset' ? items[i] : null;
+        i = me - 1;
+        for (; i >= 0; --i) {
+          if (items[i].depth <= meDepth) {
+            break;
+          }
+        }
+        $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
+      }
+
+      $scope.$on('lukio:stateSet', checkPrevNext);
+      checkPrevNext();
+    }
+/*
     function makeQueryArray(param, isNumber) {
       var arr = _.isArray(param) ? param : [param];
       return _.compact(isNumber ? _.map(arr, _.ary(parseInt, 1)) : arr);
@@ -440,4 +476,5 @@ angular.module('eperusteet.esitys')
     } else {
       $scope.processOppiaine(oppiaine, vlks, $stateParams.valittu || true);
     }
+    */
   });

@@ -314,16 +314,26 @@ epOpintopolkuApp
 
     .state('root.lukio.oppiaine', {
       url: '/oppiaine/:oppiaineId',
-      templateUrl: 'eperusteet-esitys/views/vlkoppiaine.html',
+      templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
       controller: 'epLukioOppiaineController',
       resolve: {
         oppiaineId: function (serviceConfig, $stateParams) {
           return $stateParams.oppiaineId;
         },
-        oppiaine: function (serviceConfig, perusteId, Oppiaineet, oppiaineId) {
-          return Oppiaineet.get({ perusteId: perusteId, osanId: oppiaineId }).$promise;
+        oppiaine: function (serviceConfig, perusteId, LukioOppiaineet, oppiaineId) {
+          return LukioOppiaineet.getOppiaine({ perusteId: perusteId, oppiaineId: oppiaineId }).$promise
+            .then(function(res){
+              console.log("OP", res);
+              return res;
+            })
         }
       }
+    })
+
+    .state('root.lukio.kurssi', {
+      url: '/kurssi/:kurssiId',
+      templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+      controller: 'epLukioKurssiController'
     })
 
   .state('root.esiopetus', {

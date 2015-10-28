@@ -56,7 +56,6 @@ angular.module('eperusteet.esitys')
   }
 
   function buildLukioOppiaineMenu(oppiaineet, kurssit) {
-    console.log(oppiaineet);
     var opMenu = [];
 
     function addOppimaaraToMenu(oppimaarat) {
@@ -92,9 +91,9 @@ angular.module('eperusteet.esitys')
     var menuWithKurssit = _(opMenu).map(function(menuItem) {
         return [ menuItem,
             _.filter(kurssit, function(kurssi){
-              var menuTarget = _.pick(menuItem, "$id");
-              var targets = _.map(kurssi.oppiaineet, function(op) { return op.oppiaineId });
-              return _.indexOf(targets, menuTarget.$id) > -1;
+              var oppiaineTarget = _.pick(menuItem, "$id");
+              var kursinOppiaineet = _.map(kurssi.oppiaineet, function(op) { return op.oppiaineId });
+              return _.indexOf(kursinOppiaineet, oppiaineTarget.$id) > -1;
           })
         ]
       })
@@ -104,18 +103,17 @@ angular.module('eperusteet.esitys')
       .flatten()
       .flatten()
       .map(function(obj){
-        console.log(obj);
         if(obj.label){
           lastDepth = obj.depth;
           return obj
         }
-        var newObj = {
+        return {
           $id: obj.id,
+          $hidden: true,
           depth: lastDepth + 1,
           label: obj.nimi,
           url: $state.href('root.lukio.kurssi', {kurssiId: obj.id})
         };
-        return newObj;
       })
       .value();
     console.log(menuWithKurssit);
