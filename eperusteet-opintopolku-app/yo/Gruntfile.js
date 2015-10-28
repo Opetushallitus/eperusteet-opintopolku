@@ -79,8 +79,7 @@ module.exports = function(grunt) {
         https: false,
         changeOrigin: false,
         xforward: false*/
-        //host: 'testi.virkailija.opintopolku.fi',
-        host: 'eperusteet.opintopolku.fi',
+        host: 'testi.virkailija.opintopolku.fi',
         port: 443,
         https: true,
         changeOrigin: true,
