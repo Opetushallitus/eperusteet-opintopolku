@@ -57,11 +57,9 @@ epOpintopolkuApp
     };
 
     var self = this;
-    $rootScope.$on('changed:uikieli', function () {
-      // To set correct document title on first load
-      $timeout(function () {
-        self.setTitle(latest);
-      }, 500);
+
+    $timeout(function () {
+      self.setTitle(latest);
     });
   })
 

@@ -41,6 +41,7 @@ epOpintopolkuApp
 
   return {
     kaanna: function(input, config) {
+      console.log(input);
       if (_.isObject(input)) {
         return kaannaSisalto(input);
       } else if (_.isString(input)) {
