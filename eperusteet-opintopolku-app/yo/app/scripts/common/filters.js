@@ -45,13 +45,16 @@ epOpintopolkuApp
   };
 })
 
-.directive('pvm', function (Kaanna, $filter) {
+.directive('pvm', function (Kaanna, $filter, $timeout) {
   return {
     restrict: 'A',
     link: function (scope, element, attrs) {
       scope.$watch(attrs.pvm, function (value) {
         if (!value) {
-          element.text(Kaanna.kaanna('ei-asetettu'));
+          // Jonkin takia kääntäminen ei toimi suoraan ilman timeoutia
+          $timeout(function () {
+            element.text(Kaanna.kaanna('ei-asetettu'));
+          });
           return;
         }
         var date = new Date(value);

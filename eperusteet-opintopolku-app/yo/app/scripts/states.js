@@ -38,7 +38,6 @@ epOpintopolkuApp
           var kielikoodi = $stateParams.lang;
           Kieli.setSisaltokieli(kielikoodi);
           Kieli.setUiKieli(kielikoodi);
-          console.log(kielikoodi);
         }]
       })
 

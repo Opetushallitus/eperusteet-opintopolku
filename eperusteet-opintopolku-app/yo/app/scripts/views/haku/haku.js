@@ -67,7 +67,7 @@ epOpintopolkuApp
 })
 
 .controller('HakuController', function($scope, $rootScope, $state, Perusteet, Haku,
-  koulutusalaService, Kieli, YleinenData, MurupolkuData) {
+  koulutusalaService, Kieli, YleinenData, MurupolkuData, Kaanna) {
   var pat = '';
   var osio = _.last($state.current.name.split('.'));
   Haku.osio = osio;
@@ -83,6 +83,10 @@ epOpintopolkuApp
   $scope.koulutusalat = koulutusalaService.haeKoulutusalat();
   $scope.sivu = {
     otsikko: otsikko
+  };
+
+  $scope.kaanna = function (text) {
+    return Kaanna.kaanna(text);
   };
 
   function setHakuparametrit() {

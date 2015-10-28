@@ -64,7 +64,6 @@ epOpintopolkuApp
       scope.backToTop = function () {
         Utils.scrollTo('#ylasivuankkuri');
       };
-
       scope.hidden = true;
       var window = angular.element($window);
       var document = angular.element($document);

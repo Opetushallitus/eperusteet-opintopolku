@@ -10,7 +10,7 @@
         <div class="col-md-6 col-xs-12">
           <div class="form-group">
             <label for="tutkinnon-nimi" kaanna="'haku-nimi'"></label>
-            <input id="tutkinnon-nimi" type="text" class="form-control" placeholder="{{'haku-tutkinnon-nimi-placeholder' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()">
+            <input id="tutkinnon-nimi" type="text" class="form-control" placeholder="{{kaanna('haku-tutkinnon-nimi-placeholder')}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()">
           </div>
         </div>
         <div class="col-md-6 col-xs-12" ng-hide="piilotaKoulutustyyppi()">
