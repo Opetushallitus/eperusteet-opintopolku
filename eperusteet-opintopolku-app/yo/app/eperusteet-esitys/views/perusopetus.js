@@ -30,6 +30,7 @@
    };
    var peruste = sisalto[0];
    $scope.peruste = peruste;
+   console.log($scope.peruste);
    MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
    var oppiaineet = _.zipBy(sisalto[2], 'id');
    $scope.oppiaineetMap = oppiaineet;
@@ -198,7 +199,8 @@
    $scope.navi = {
      header: 'perusteen-sisalto',
      showOne: true,
-     sections: [{
+     sections: [
+       {
          id: 'suunnitelma',
          include: 'eperusteet-esitys/views/tekstisisalto.html',
          items: epMenuBuilder.rakennaTekstisisalto($scope.tekstisisalto),
@@ -256,17 +258,18 @@
      ]
    };
 
+   $scope.navi.sections[0].items.unshift({
+     depth: 0,
+     label: 'perusteen-tiedot',
+     link: [epEsitysSettings.perusopetusState + '.tiedot']
+   });
+
    epMenuBuilder.rakennaSisallotOppiaineet(oppiaineet, $scope.navi.sections[2].model.sections, selectedFilters(0));
    installClickHandler();
 
    $timeout(function () {
      if ($state.current.name === epEsitysSettings.perusopetusState) {
-       var first = _($scope.navi.sections[0].items).filter(function (item) {
-         return item.depth === 0;
-       }).first();
-       if (first) {
-         $state.go('.tekstikappale', {tekstikappaleId: first.$osa.id, perusteId: $scope.peruste.id}, {location: 'replace'});
-       }
+       $state.go('.tiedot', {perusteId: $scope.peruste.id}, {location: 'replace'});
      }
    });
  })
