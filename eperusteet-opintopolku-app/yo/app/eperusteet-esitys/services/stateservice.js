@@ -235,6 +235,7 @@ angular.module('eperusteet.esitys')
       kurssi: {
         index: 1,
         callback: function (item) {
+          console.log("kurssi state", item);
           if (item.$oppiaine) {
             item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
           }

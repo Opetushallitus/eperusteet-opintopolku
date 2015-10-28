@@ -381,9 +381,7 @@ angular.module('eperusteet.esitys')
     //$scope.vlk = $scope.vuosiluokkakokonaisuudetMap[$stateParams.vlkId];
     //MurupolkuData.set({vlkId: $scope.vlk.id, vlkNimi: $scope.vlk.nimi});
 
-    $scope.vlkOrder = function (item) {
-      return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
-    };
+    $scope.tekstikappale = kurssi;
   })
 
   .controller('epPerusopetusVlkOppiaineController', function($scope, oppiaine, $stateParams, MurupolkuData) {

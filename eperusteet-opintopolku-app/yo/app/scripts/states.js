@@ -333,7 +333,19 @@ epOpintopolkuApp
     .state('root.lukio.kurssi', {
       url: '/kurssi/:kurssiId',
       templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
-      controller: 'epLukioKurssiController'
+      controller: 'epLukioKurssiController',
+      resolve: {
+        oppiaineId: function($stateParams) {
+          return $stateParams.oppiaineId;
+        },
+        kurssi: function(LukioKurssit, kurssiId){
+          return LukioKurssit.getKurssi({ kurssiId: kurssiId }).$promise
+            .then(function(res) {
+              console.log("COURSE", res);
+              return res;
+            })
+        }
+      }
     })
 
   .state('root.esiopetus', {

@@ -222,13 +222,12 @@ epOpintopolkuApp
   })
 
 .factory('LukioKurssit', function($resource) {
-    return $resource('/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/kurssit', {
+    var baseUrl = '/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/kurssit';
+    return $resource(baseUrl, {
       peruste: '@id'
     }, {
-      list: {
-      method: 'GET',
-      isArray: true
-    }
+      list: {method: 'GET', isArray: true, cache:true},
+      getKurssi: {method: 'GET', url: baseUrl + '/kurssiId', cache: true}
   });
 })
 
