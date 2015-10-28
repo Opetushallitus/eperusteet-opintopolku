@@ -266,7 +266,7 @@
    epMenuBuilder.rakennaSisallotOppiaineet(oppiaineet, $scope.navi.sections[2].model.sections, selectedFilters(0));
    installClickHandler();
 
-   $timeout(function () {
+   $scope.$on('$stateChangeSuccess', function () {
      if ($state.current.name === epEsitysSettings.perusopetusState) {
        $state.go('.tiedot', {perusteId: $scope.peruste.id}, {location: 'replace'});
      }
