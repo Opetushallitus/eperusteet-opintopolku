@@ -18,8 +18,8 @@
 
 /* Sets sivunavi items active based on current state */
 angular.module('eperusteet.esitys')
-.service('epPerusopetusStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope,
-  epEsitysSettings) {
+.service('epLukioStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope,
+                                          epEsitysSettings, epPerusopetusStateService) {
   var state = {};
   var section = null;
 
@@ -59,12 +59,22 @@ angular.module('eperusteet.esitys')
       }
     }
 
+    function setParentOppiaineHeaderForKurssi() {
+      console.log("ITEMS", items);
+      if(selected && selected.$kurssi) {
+        var found = _.find(items, function(item) {
+          return item.$kurssi && '' + item.$kurssi.id === '' + $stateParams.kurssiId;
+        })
+      }
+      if (found) {
+        found.$header = true;
+      }
+    }
+
     function textCallback(item)  {
       if (item.$osa) {
         item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
         item.$hidden = item.depth > 0;
-      } else if (item.id === 'laajaalaiset') {
-        item.$selected = $state.is(epEsitysSettings.perusopetusState + '.laajaalaiset');
       }
       if (item.$selected) {
         selected = item;
@@ -72,41 +82,24 @@ angular.module('eperusteet.esitys')
     }
 
     var states = {
-      laajaalaiset: {
-        index: 0,
-        callback: textCallback
-      },
       tekstikappale: {
         index: 0,
         callback: textCallback
       },
-      tiedot: {
-        index: 0,
-        callback: function (item) {
-          item.$selected = _.isArray(item.link) && item.link.length > 0 && _.last(item.link[0].split('.')) === 'tiedot';
-        }
-      },
-      vuosiluokkakokonaisuus: {
+      yleisetTavoitteet: {
         index: 1,
-        callback: function (item) {
-          if (item.$vkl) {
-            item.$selected = '' + $stateParams.vlkId === '' + item.$vkl.id;
-          }
-          if (item.$selected) {
-            selected = item;
-          }
-        }
+        callback: textCallback
       },
-      vlkoppiaine: {
-        index: 1,
+      oppiaine: {
+
+        index: 2,
         callback: function (item) {
-          if (item.$vkl) {
-            item.$header = '' + $stateParams.vlkId === '' + item.$vkl.id;
-            parentVlkId = item.$vkl.id;
-          }
           if (item.$oppiaine) {
-            item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id &&
-              $stateParams.vlkId === '' + parentVlkId;
+            item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+          }
+          if (item.$kurssi) {
+            item.$selected = '' + $stateParams.kurssiId === '' + item.$id;
+            item.$hidden = item.depth > 0;
           }
           if (item.$selected) {
             selected = item;
@@ -117,24 +110,24 @@ angular.module('eperusteet.esitys')
           setParentOppiaineHeader();
         }
       },
-      sisallot: {
+      kurssi: {
         index: 2,
+        callback: function (item) {
+          console.log("kurssi state", item);
+          if (item.$kurssi) {
+            item.$selected = '' + $stateParams.kurssiId === '' + item.$kurssi.id;
+          }
+          if (item.$selected) {
+            selected = item;
+          }
+        },
         actions: function () {
-          items = section.model.sections[1].items;
-          _.each(items, function (item) {
-            if (item.$oppiaine) {
-              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
-              if (item.$selected) {
-                selected = item;
-              }
-            }
-          });
-          setParentOppiaineHeader();
+          items = section.items;
+          setParentOppiaineHeaderForKurssi();
         }
       }
     };
 
-    var parentVlkId = null;
     _.each(states, function (value, key) {
       if (_.endsWith($state.current.name, key)) {
         processSection(navi, value.index, value.callback || angular.noop);
@@ -151,7 +144,7 @@ angular.module('eperusteet.esitys')
       }
       epSivunaviUtils.unCollapse(menuItems, selected);
       epSivunaviUtils.traverse(menuItems, 0);
-      $rootScope.$broadcast('perusopetus:stateSet');
+      $rootScope.$broadcast('lukio:stateSet');
     }
   };
   this.getState = function () {

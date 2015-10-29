@@ -106,6 +106,12 @@ angular.module('eperusteet.esitys')
         naviClasses: $scope.naviClasses,
         title: 'yhteiset-osuudet'
       }, {
+        id: 'yleiset-tavoitteet',
+        include: 'eperusteet-esitys/views/yhteisetosuudet.html',
+        items: epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto),
+        naviClasses: $scope.naviClasses,
+        title: 'yleiset-tavoitteet'
+      },{
         title: 'opetuksen-sisallot',
         id: 'sisalto',
         include: 'eperusteet-esitys/views/oppiaineetsivunavi.html',
