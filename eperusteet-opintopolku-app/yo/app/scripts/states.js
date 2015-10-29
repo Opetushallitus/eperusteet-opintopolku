@@ -335,13 +335,12 @@ epOpintopolkuApp
       templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
       controller: 'epLukioKurssiController',
       resolve: {
-        oppiaineId: function($stateParams) {
-          return $stateParams.oppiaineId;
+        kurssiId: function($stateParams) {
+          return $stateParams.kurssiId;
         },
-        kurssi: function(LukioKurssit, kurssiId){
-          return LukioKurssit.getKurssi({ kurssiId: kurssiId }).$promise
+        kurssi: function(LukioKurssit, perusteId, kurssiId){
+          return LukioKurssit.getKurssi({ perusteId: perusteId, kurssiId: kurssiId }).$promise
             .then(function(res) {
-              console.log("COURSE", res);
               return res;
             })
         }

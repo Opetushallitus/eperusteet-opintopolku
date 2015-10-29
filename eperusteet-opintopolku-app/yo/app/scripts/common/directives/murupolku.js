@@ -123,9 +123,21 @@ epOpintopolkuApp
         useId: 'perusteId'
       },
       'root.lukio.tekstikappale': {
-        parent: 'root.perusopetus',
+        parent: 'root.lukio',
         useData: 'tekstikappaleNimi',
         useId: 'tekstikappaleId',
+        customParents: true
+      },
+      'root.lukio.oppiaine': {
+        parent: 'root.lukio',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      },
+      'root.lukio.kurssi': {
+        parent: 'root.lukio',
+        useData: 'kurssiNimi',
+        useId: 'kurssiId',
         customParents: true
       },
       'root.esiopetus': {

@@ -160,7 +160,7 @@ angular.module('eperusteet.esitys')
 })
 
 .service('epLukioStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope,
-                                                epEsitysSettings) {
+                                                epEsitysSettings, epPerusopetusStateService) {
   var state = {};
   var section = null;
 
@@ -200,6 +200,18 @@ angular.module('eperusteet.esitys')
       }
     }
 
+    function setParentOppiaineHeaderForKurssi() {
+      console.log("ITEMS", items);
+      if(selected && selected.$kurssi) {
+        var found = _.find(items, function(item) {
+          return item.$kurssi && '' + item.$kurssi.id === '' + $stateParams.kurssiId;
+        })
+      }
+      if (found) {
+        found.$header = true;
+      }
+    }
+
     function textCallback(item)  {
       if (item.$osa) {
         item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
@@ -216,12 +228,13 @@ angular.module('eperusteet.esitys')
         callback: textCallback
       },
       oppiaine: {
+
         index: 1,
         callback: function (item) {
           if (item.$oppiaine) {
             item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
           }
-          if (item.$osa) {
+          if (item.$kurssi) {
             item.$selected = '' + $stateParams.kurssiId === '' + item.$id;
             item.$hidden = item.depth > 0;
           }
@@ -238,8 +251,8 @@ angular.module('eperusteet.esitys')
         index: 1,
         callback: function (item) {
           console.log("kurssi state", item);
-          if (item.$oppiaine) {
-            item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+          if (item.$kurssi) {
+            item.$selected = '' + $stateParams.kurssiId === '' + item.$kurssi.id;
           }
           if (item.$selected) {
             selected = item;
@@ -247,27 +260,11 @@ angular.module('eperusteet.esitys')
         },
         actions: function () {
           items = section.items;
-          setParentOppiaineHeader();
-        }
-      },
-      sisallot: {
-        index: 2,
-        actions: function () {
-          items = section.model.sections[1].items;
-          _.each(items, function (item) {
-            if (item.$oppiaine) {
-              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
-              if (item.$selected) {
-                selected = item;
-              }
-            }
-          });
-          setParentOppiaineHeader();
+          setParentOppiaineHeaderForKurssi();
         }
       }
     };
 
-    var parentVlkId = null;
     _.each(states, function (value, key) {
       if (_.endsWith($state.current.name, key)) {
         processSection(navi, value.index, value.callback || angular.noop);

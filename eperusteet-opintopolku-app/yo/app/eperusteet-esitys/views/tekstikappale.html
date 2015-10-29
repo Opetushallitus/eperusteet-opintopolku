@@ -1,7 +1,7 @@
 <h1 esitys-sivu-otsikko="tekstikappale.nimi">
   <span ng-bind-html="tekstikappale.nimi | kaanna | unsafe"></span>
 </h1>
-<pre>{{ tekstikappale }} </pre>
+<pre>{{ tekstikappale | json }} </pre>
 <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
 
 <div ng-repeat="lapsi in lapset">

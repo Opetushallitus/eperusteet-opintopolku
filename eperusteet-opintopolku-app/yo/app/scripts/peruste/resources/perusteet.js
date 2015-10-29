@@ -207,7 +207,7 @@ epOpintopolkuApp
       perusteId: '@id'
     }, {
       list: {method: 'GET', url: baseUrl, isArray: true, cache: true},
-      getOppiaine: {method: 'GET', url: baseUrl + '/:oppiaineId', cache: true}
+      getOppiaine: {method: 'GET', url: baseUrl + '/:oppiaineId'}
   });
 })
 
@@ -227,7 +227,7 @@ epOpintopolkuApp
       peruste: '@id'
     }, {
       list: {method: 'GET', isArray: true, cache:true},
-      getKurssi: {method: 'GET', url: baseUrl + '/kurssiId', cache: true}
+      getKurssi: {method: 'GET', isArray: false, url: baseUrl + '/:kurssiId', cache: true}
   });
 })
 

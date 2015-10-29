@@ -65,7 +65,8 @@ angular.module('eperusteet.esitys')
           depth: 1,
           $jnro: oppimaara.jnro,
           $hidden: true,
-          $oppiaine: oppimaara._oppiaine,
+          $oppimaara: oppimaara,
+          $oppiaine: oppimaara,
           label: oppimaara.nimi[Kieli.getSisaltokieli()],
           url: $state.href('root.lukio.oppiaine', {oppiaineId: oppimaara.id})
       });
@@ -90,11 +91,14 @@ angular.module('eperusteet.esitys')
     var lastDepth = 2;
     var menuWithKurssit = _(opMenu).map(function(menuItem) {
         return [ menuItem,
-            _.filter(kurssit, function(kurssi){
-              var oppiaineTarget = _.pick(menuItem, "$id");
+            _(kurssit).filter(function(kurssi){
+              var oppiaineTarget = _.pick(menuItem, '$id');
               var kursinOppiaineet = _.map(kurssi.oppiaineet, function(op) { return op.oppiaineId });
               return _.indexOf(kursinOppiaineet, oppiaineTarget.$id) > -1;
           })
+          .sortBy('oppiaineet[0].jarjestys')
+          .reverse()
+          .value()
         ]
       })
       .filter(function(obj){
@@ -112,6 +116,7 @@ angular.module('eperusteet.esitys')
           $hidden: true,
           depth: lastDepth + 1,
           label: obj.nimi,
+          $kurssi: obj,
           url: $state.href('root.lukio.kurssi', {kurssiId: obj.id})
         };
       })
