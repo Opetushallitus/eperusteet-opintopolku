@@ -65,7 +65,7 @@ angular.module('eperusteet.esitys')
           depth: 1,
           $jnro: oppimaara.jnro,
           $hidden: true,
-          $vanhempiId: oppimaara._oppiaine,
+          $oppiaine: oppimaara._oppiaine,
           label: oppimaara.nimi[Kieli.getSisaltokieli()],
           url: $state.href('root.lukio.oppiaine', {oppiaineId: oppimaara.id})
       });
@@ -73,9 +73,6 @@ angular.module('eperusteet.esitys')
   }
 
     _.each(oppiaineet, function(oppiaine) {
-      if (_.isArray(oppiaine.oppimaarat) && !_.isEmpty(oppiaine.oppimaarat)) {
-        addOppimaaraToMenu(oppiaine.oppimaarat)
-      }
       opMenu.push({
         $id: oppiaine.id,
         depth: 0,
@@ -85,6 +82,9 @@ angular.module('eperusteet.esitys')
         label: oppiaine.nimi[Kieli.getSisaltokieli()],
         url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
       });
+      if (_.isArray(oppiaine.oppimaarat) && !_.isEmpty(oppiaine.oppimaarat)) {
+        addOppimaaraToMenu(oppiaine.oppimaarat)
+      }
     });
 
     var lastDepth = 2;
@@ -116,6 +116,7 @@ angular.module('eperusteet.esitys')
         };
       })
       .value();
+
     console.log(menuWithKurssit);
     return menuWithKurssit;
   }

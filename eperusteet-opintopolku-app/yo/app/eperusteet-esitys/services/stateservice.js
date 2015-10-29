@@ -204,8 +204,6 @@ angular.module('eperusteet.esitys')
       if (item.$osa) {
         item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
         item.$hidden = item.depth > 0;
-      } else if (item.id === 'laajaalaiset') {
-        item.$selected = $state.is(epEsitysSettings.perusopetusState + '.laajaalaiset');
       }
       if (item.$selected) {
         selected = item;
@@ -222,6 +220,10 @@ angular.module('eperusteet.esitys')
         callback: function (item) {
           if (item.$oppiaine) {
             item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+          }
+          if (item.$osa) {
+            item.$selected = '' + $stateParams.kurssiId === '' + item.$id;
+            item.$hidden = item.depth > 0;
           }
           if (item.$selected) {
             selected = item;
