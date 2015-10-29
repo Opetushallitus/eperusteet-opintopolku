@@ -180,37 +180,6 @@ epOpintopolkuApp
   });
 })
 
-.factory('LukioPerusteenOsat', function($resource) {
-  return $resource('/eperusteet-service/api/perusteet/:perusteId/suoritustavat/lukiokoulutus/sisalto', {
-    perusteId: '@id'
-  }, {
-    query: {
-      method: 'GET',
-      cache: true
-    }
-  });
-})
-
-.factory('LukioTekstikappale', function($resource) {
-    return $resource('/eperusteet-service/api/perusteenosat/viite/:viiteId', {
-    viiteId: '@id'
-  }, {
-    getByViite: {
-      method: 'GET', cache: true
-    },
-  });
-})
-
-.factory('LukioOppiaineet', function($resource) {
-    var baseUrl = '/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/oppiaineet';
-    return $resource(baseUrl, {
-      perusteId: '@id'
-    }, {
-      list: {method: 'GET', url: baseUrl, isArray: true, cache: true},
-      getOppiaine: {method: 'GET', url: baseUrl + '/:oppiaineId'}
-  });
-})
-
   .factory('Oppiaineet', function($resource, epResource) {
     var baseUrl = epResource.PERUSOPETUS + '/oppiaineet/:osanId';
     return $resource(baseUrl, {osanId: '@id'}, {
@@ -220,16 +189,6 @@ epOpintopolkuApp
       query: epResource.CACHEDQUERY
     });
   })
-
-.factory('LukioKurssit', function($resource) {
-    var baseUrl = '/eperusteet-service/api/perusteet/:perusteId/lukiokoulutus/kurssit';
-    return $resource(baseUrl, {
-      peruste: '@id'
-    }, {
-      list: {method: 'GET', isArray: true, cache:true},
-      getKurssi: {method: 'GET', isArray: false, url: baseUrl + '/:kurssiId', cache: true}
-  });
-})
 
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {
   this.perusteellaTutkintonimikkeet = function(peruste) {
