@@ -33,6 +33,7 @@ angular.module('eperusteet.esitys')
     epMenuBuilder,
     MurupolkuData,
     epLukioStateService,
+    tavoitteet,
     Kieli) {
 
     $scope.isNaviVisible = _.constant(true);
@@ -42,6 +43,8 @@ angular.module('eperusteet.esitys')
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
     $scope.lukioKurssit = lukioKurssit;
+    $scope.tavoitteet = tavoitteet;
+    console.log(tavoitteet)
 
     /*function selectedFilters(sectionId) {
       return _($scope.navi.sections[1].model.sections[sectionId].items).filter('$selected').map('value').value();
@@ -108,7 +111,13 @@ angular.module('eperusteet.esitys')
       }, {
         id: 'yleiset-tavoitteet',
         include: 'eperusteet-esitys/views/yhteisetosuudet.html',
-        items: epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto),
+        items: [{
+          $id: $scope.tavoitteet.id,
+          $hidden: false,
+          depth: 0,
+          label: $scope.tavoitteet.otsikko[Kieli.getSisaltokieli()],
+          url: $state.href('root.lukio.tavoitteet')
+        }],
         naviClasses: $scope.naviClasses,
         title: 'yleiset-tavoitteet'
       },{
@@ -212,6 +221,10 @@ angular.module('eperusteet.esitys')
     }
 
     MurupolkuData.set(murupolkuParams);
+  })
+
+  .controller('epLukioTavoitteetController', function($scope, tavoitteet) {
+    $scope.tavoitteet = tavoitteet;
   })
 
   .controller('epLukioOppiaineController', function($scope, oppiaine, Kieli, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {

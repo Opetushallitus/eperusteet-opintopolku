@@ -24,7 +24,7 @@ epOpintopolkuApp
   })
 
   .factory('LukioPerusteenOsat', function($resource, epLukioResource) {
-    return $resource(this.LUKIO_PERUSTEET + '/:perusteId/suoritustavat/lukiokoulutus/sisalto', {
+    return $resource(epLukioResource.LUKIO_PERUSTEET + '/:perusteId/suoritustavat/lukiokoulutus/sisalto', {
       perusteId: '@id'
     }, {
       query: {
@@ -44,8 +44,8 @@ epOpintopolkuApp
     });
   })
 
-  .factory('LukioOppiaineet', function($resource) {
-    var baseUrl = this.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus/oppiaineet';
+  .factory('LukioOppiaineet', function($resource, epLukioResource) {
+    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus/oppiaineet';
     return $resource(baseUrl, {
       perusteId: '@id'
     }, {
@@ -54,12 +54,21 @@ epOpintopolkuApp
     });
   })
 
-  .factory('LukioKurssit', function($resource) {
-    var baseUrl = this.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus/kurssit';
+  .factory('LukioKurssit', function($resource, epLukioResource) {
+    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus/kurssit';
     return $resource(baseUrl, {
       peruste: '@id'
     }, {
       list: {method: 'GET', isArray: true, cache:true},
       getKurssi: {method: 'GET', isArray: false, url: baseUrl + '/:kurssiId', cache: true}
+    });
+  })
+
+  .factory('LukioTavoitteet', function($resource, epLukioResource) {
+    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus/yleisettavoitteet';
+    return $resource(baseUrl, {
+      peruste: '@id'
+    }, {
+      get: {method: 'GET', cache:true}
     });
   });

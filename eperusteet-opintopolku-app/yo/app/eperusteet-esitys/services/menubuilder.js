@@ -122,7 +122,6 @@ angular.module('eperusteet.esitys')
       })
       .value();
 
-    console.log(menuWithKurssit);
     return menuWithKurssit;
   }
 

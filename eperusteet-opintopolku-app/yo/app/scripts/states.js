@@ -291,6 +291,13 @@ epOpintopolkuApp
             .then(function (res) {
               return res;
           })
+        },
+        tavoitteet: function(LukioTavoitteet, perusteId){
+          return LukioTavoitteet.get({perusteId: perusteId}).$promise
+            .then(function(res){
+              console.log(res);
+              return res;
+            })
         }
       }
     })
@@ -328,6 +335,12 @@ epOpintopolkuApp
             })
         }
       }
+    })
+
+    .state('root.lukio.tavoitteet', {
+      url: '/tavoitteet',
+      templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+      controller: 'epLukioTavoitteetController'
     })
 
     .state('root.lukio.kurssi', {
