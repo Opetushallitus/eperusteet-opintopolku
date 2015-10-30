@@ -1,3 +1,12 @@
+.tab-container {
+  background: #F8f8f8;
+  width: 105%;
+
+  .nav-tabs {
+    border-bottom: 0 !important;
+  }
+}
+
 .sivunavi-sisalto {
   padding: 0px;
 }
@@ -6,27 +15,33 @@
   margin-bottom: 15px;
   margin-left: -25px;
   margin-top: -12px;
-  background: red;
   li > a {
-    border-radius: 0;
+    font-size: 13px;
     border: 0px;
-    padding-top: 15px;
+    border-radius: 0px;
+    padding-top: 17px;
     padding-right: 20px;
     padding-left: 20px;
-    padding-bottom: 15px;
+    padding-bottom: 17px;
+    //background: #ffffff;
+    background: #149ecb;
+    color: #F8f8f8;
 
     &:hover {
       border-color: rgb(146, 204, 224);
-      font-size: 13px;
-      background: #149ecb;
+      background: #2abdea;
       color: white;
     }
 
     &:active {
       border-color: rgb(146, 204, 224);
-      font-size: 13px;
       background: #149ecb;
       color: white;
+    }
+
+    & > .selected {
+      background: #149ecb;
+      color: #F8f8f8;
     }
   }
 }
