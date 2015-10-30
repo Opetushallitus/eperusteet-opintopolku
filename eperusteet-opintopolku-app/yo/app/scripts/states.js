@@ -295,7 +295,6 @@ epOpintopolkuApp
         tavoitteet: function(LukioTavoitteet, perusteId){
           return LukioTavoitteet.get({perusteId: perusteId}).$promise
             .then(function(res){
-              console.log(res);
               return res;
             })
         }
@@ -314,7 +313,10 @@ epOpintopolkuApp
           return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
             .then(function(res){
               return res;
-            });
+            })
+        },
+        lapset: function (serviceConfig, perusData, tekstikappaleId, epLukioTekstikappaleChildResolver) {
+          return epLukioTekstikappaleChildResolver.get(perusData, tekstikappaleId);
         }
       }
     })

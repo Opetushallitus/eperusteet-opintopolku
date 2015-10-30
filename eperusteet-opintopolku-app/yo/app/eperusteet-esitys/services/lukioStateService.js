@@ -86,13 +86,8 @@ angular.module('eperusteet.esitys')
         index: 0,
         callback: textCallback
       },
-      yleisetTavoitteet: {
-        index: 1,
-        callback: textCallback
-      },
       oppiaine: {
-
-        index: 2,
+        index: 1,
         callback: function (item) {
           if (item.$oppiaine) {
             item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
@@ -111,7 +106,7 @@ angular.module('eperusteet.esitys')
         }
       },
       kurssi: {
-        index: 2,
+        index: 1,
         callback: function (item) {
           console.log("kurssi state", item);
           if (item.$kurssi) {

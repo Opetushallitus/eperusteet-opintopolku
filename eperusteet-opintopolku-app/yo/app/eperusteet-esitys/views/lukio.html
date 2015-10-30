@@ -19,10 +19,15 @@
       <div class="sivunavi-sisalto perusopetus">
         <div class="row">
           <div class="col-md-12">
+            <div>
+            <ul class="nav nav-tabs" id="ep-tabs">
+              <li ng-repeat="tab in tabs" ng-class="tabClass('{{tab.title}}')"><a href="#">{{tab.title}}</a></li>
+            </ul>
+          </div>
             <div id="esitysPrintSisalto" ui-view></div>
           </div>
         </div>
-      </div>
+      </div>git
     </div>
   </div>
 </div>

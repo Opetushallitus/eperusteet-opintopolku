@@ -34,7 +34,8 @@ angular.module('eperusteet.esitys')
     MurupolkuData,
     epLukioStateService,
     tavoitteet,
-    Kieli) {
+    Kieli,
+    PerusteenOsat) {
 
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenSisalto = perusData;
@@ -44,7 +45,16 @@ angular.module('eperusteet.esitys')
     };
     $scope.lukioKurssit = lukioKurssit;
     $scope.tavoitteet = tavoitteet;
-    console.log(tavoitteet)
+
+      $scope.tabs = [
+        { title: "Oppimäärän sisalto"},
+        { title: "Opetuksen yleiset tavoitteet"},
+        { title: "Aihekokonaisuudet"}
+      ];
+
+    $scope.navClass = function (title) {
+      return active;
+    };
 
     /*function selectedFilters(sectionId) {
       return _($scope.navi.sections[1].model.sections[sectionId].items).filter('$selected').map('value').value();
@@ -109,18 +119,6 @@ angular.module('eperusteet.esitys')
         naviClasses: $scope.naviClasses,
         title: 'yhteiset-osuudet'
       }, {
-        id: 'yleiset-tavoitteet',
-        include: 'eperusteet-esitys/views/yhteisetosuudet.html',
-        items: [{
-          $id: $scope.tavoitteet.id,
-          $hidden: false,
-          depth: 0,
-          label: $scope.tavoitteet.otsikko[Kieli.getSisaltokieli()],
-          url: $state.href('root.lukio.tavoitteet')
-        }],
-        naviClasses: $scope.naviClasses,
-        title: 'yleiset-tavoitteet'
-      },{
         title: 'opetuksen-sisallot',
         id: 'sisalto',
         include: 'eperusteet-esitys/views/oppiaineetsivunavi.html',
@@ -165,11 +163,11 @@ angular.module('eperusteet.esitys')
     };
   })
 
-  .controller('epLukioTekstikappaleController', function($scope, $stateParams, tekstikappale, epTekstikappaleChildResolver,
+  .controller('epLukioTekstikappaleController', function($scope, $stateParams, tekstikappale, epLukioTekstikappaleChildResolver,
                                                                MurupolkuData) {
     $scope.tekstikappale = tekstikappale;
     MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
-    $scope.lapset = epTekstikappaleChildResolver.getSisalto();
+    $scope.lapset = epLukioTekstikappaleChildResolver.getSisalto();
     $scope.links = {
       prev: null,
       next: null
@@ -227,7 +225,7 @@ angular.module('eperusteet.esitys')
     $scope.tavoitteet = tavoitteet;
   })
 
-  .controller('epLukioOppiaineController', function($scope, oppiaine, Kieli, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, oppiaine, Kieli, epLukioTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
 
     if (oppiaine) {
@@ -239,7 +237,8 @@ angular.module('eperusteet.esitys')
       //MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
       MurupolkuData.set(murupolkuParams);
       $scope.tekstikappale = oppiaine;
-      $scope.lapset = epTekstikappaleChildResolver.getSisalto();
+      $scope.lapset = epLukioTekstikappaleChildResolver.getSisalto();
+      console.log($scope.lapset);
       $scope.links = {
         prev: null,
         next: null
