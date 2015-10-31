@@ -8,7 +8,7 @@
 }
 
 .sivunavi-sisalto {
-  padding: 0px;
+  padding: 0;
 }
 
 #ep-tabs {
@@ -16,19 +16,21 @@
   margin-left: -25px;
   margin-top: -12px;
   li > a {
+    border-bottom: none;
     font-size: 13px;
-    border: 0px;
     border-radius: 0px;
-    padding-top: 17px;
-    padding-right: 20px;
-    padding-left: 20px;
-    padding-bottom: 17px;
-    //background: #ffffff;
-    background: #149ecb;
-    color: #F8f8f8;
+    padding-top: 16px;
+    padding-right: 19px;
+    padding-left: 19px;
+    padding-bottom: 16px;
+    background: #ffffff;
+    color: #000000;
 
     &:hover {
-      border-color: rgb(146, 204, 224);
+      padding-top: 17px;
+      padding-right: 20px;
+      padding-left: 20px;
+      border: 0;
       background: #2abdea;
       color: white;
     }
@@ -38,10 +40,55 @@
       background: #149ecb;
       color: white;
     }
-
-    & > .selected {
-      background: #149ecb;
-      color: #F8f8f8;
-    }
   }
 }
+
+.tab-active > a {
+  padding-top: 17px !important;
+  padding-right: 20px !important;
+  padding-left: 20px !important;
+  border: 0px !important;
+  background: #149ecb !important;
+  color: white !important;
+}
+
+//color legend
+
+  .legend-container {
+    padding-top: 15px;
+    width: 400px;
+  }
+
+  .legend-label {
+    vertical-align: top;
+    margin-left: 10px;
+    font-size: 12px;
+    padding-bottom: 3px;
+    display: inline-block;
+    position: relative;
+  }
+
+  .colorbox {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border-left: 8px;
+    border-right: 20px;
+    display: inline-block;
+    position: relative;
+  }
+  .spacer {
+    width: 40px;
+    display: inline-block;
+  }
+  .syventava {
+    background-color: #bcda89;
+  }
+
+  .pakollinen {
+    background-color: #88d3e4;
+  }
+
+  .soveltava {
+    background-color: #fcf281;
+  }
