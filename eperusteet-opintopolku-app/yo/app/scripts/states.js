@@ -291,12 +291,6 @@ epOpintopolkuApp
             .then(function (res) {
               return res;
           })
-        },
-        tavoitteet: function(LukioTavoitteet, perusteId){
-          return LukioTavoitteet.get({perusteId: perusteId}).$promise
-            .then(function(res){
-              return res;
-            })
         }
       }
     })
@@ -342,7 +336,31 @@ epOpintopolkuApp
     .state('root.lukio.tavoitteet', {
       url: '/tavoitteet',
       templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
-      controller: 'epLukioTavoitteetController'
+      controller: 'epLukioTavoitteetController',
+      resolve: {
+        tavoitteet: function(LukioYleistiedot, perusteId){
+          return LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
+            .then(function(res){
+              console.log("RES",res);
+              return res;
+            })
+        }
+      }
+    })
+
+    .state('root.lukio.aihekokonaisuudet',{
+      url: '/aihekokonaisuudet',
+      templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+      controller: 'epLukioAihekokonaisuudetController',
+      resolve: {
+        aihekokonaisuudet: function (LukioYleistiedot, perusteId) {
+          return LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise
+            .then(function (res) {
+              console.log("RES",res);
+              return res;
+            })
+        }
+      }
     })
 
     .state('root.lukio.kurssi', {

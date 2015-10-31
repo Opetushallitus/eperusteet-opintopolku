@@ -57,18 +57,19 @@ epOpintopolkuApp
   .factory('LukioKurssit', function($resource, epLukioResource) {
     var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus/kurssit';
     return $resource(baseUrl, {
-      peruste: '@id'
+      perusteId: '@id'
     }, {
       list: {method: 'GET', isArray: true, cache:true},
       getKurssi: {method: 'GET', isArray: false, url: baseUrl + '/:kurssiId', cache: true}
     });
   })
 
-  .factory('LukioTavoitteet', function($resource, epLukioResource) {
-    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus/yleisettavoitteet';
+  .factory('LukioYleistiedot', function($resource, epLukioResource) {
+    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/:perusteId/lukiokoulutus';
     return $resource(baseUrl, {
-      peruste: '@id'
+      perusteId: '@id'
     }, {
-      get: {method: 'GET', cache:true}
+      getTavoitteet: {method: 'GET', url: baseUrl + '/yleisettavoitteet', cache:true},
+      getAihekokonaisuudet: {method: 'GET', url: baseUrl + '/aihekokonaisuudet/yleiskuvaus', cache:true}
     });
   });

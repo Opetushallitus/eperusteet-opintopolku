@@ -33,7 +33,6 @@ angular.module('eperusteet.esitys')
     epMenuBuilder,
     MurupolkuData,
     epLukioStateService,
-    tavoitteet,
     Kieli,
     PerusteenOsat) {
 
@@ -44,12 +43,18 @@ angular.module('eperusteet.esitys')
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
     $scope.lukioKurssit = lukioKurssit;
-    $scope.tavoitteet = tavoitteet;
 
       $scope.tabs = [
-        { title: "Oppimäärän sisalto"},
-        { title: "Opetuksen yleiset tavoitteet"},
-        { title: "Aihekokonaisuudet"}
+        { title: "Oppimäärän sisalto",
+          url: $state.href('root.lukio')
+        },
+        {
+          title: "Opetuksen yleiset tavoitteet",
+          url: $state.href('root.lukio.tavoitteet')
+        },
+        { title: "Aihekokonaisuudet",
+        url: $state.href('root.lukio.aihekokonaisuudet')
+        }
       ];
 
     $scope.navClass = function (title) {
@@ -223,6 +228,12 @@ angular.module('eperusteet.esitys')
 
   .controller('epLukioTavoitteetController', function($scope, tavoitteet) {
     $scope.tavoitteet = tavoitteet;
+    $scope.tekstikappale = tavoitteet;
+  })
+
+  .controller('epLukioAihekokonaisuudetController', function($scope, aihekokonaisuudet) {
+    $scope.aihekokonaisuudet = aihekokonaisuudet;
+    $scope.tavoitteet = null;
   })
 
   .controller('epLukioOppiaineController', function($scope, oppiaine, Kieli, epLukioTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
