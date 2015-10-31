@@ -257,12 +257,10 @@ angular.module('eperusteet.esitys')
 
   .controller('epLukioTavoitteetController', function($scope, tavoitteet) {
     $scope.tavoitteet = tavoitteet;
-    $scope.tekstikappale = tavoitteet;
   })
 
   .controller('epLukioAihekokonaisuudetController', function($scope, aihekokonaisuudet) {
     $scope.aihekokonaisuudet = aihekokonaisuudet;
-    $scope.tavoitteet = null;
   })
 
   .controller('epLukioOppiaineController', function($scope, oppiaine, Kieli, epLukioTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
