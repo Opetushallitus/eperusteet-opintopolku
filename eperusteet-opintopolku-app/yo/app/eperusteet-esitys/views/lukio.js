@@ -44,48 +44,6 @@ angular.module('eperusteet.esitys')
     };
     $scope.lukioKurssit = lukioKurssit;
 
-      $scope.tabs = [
-        {
-          title: "Oppimäärän sisalto",
-          name: "sisalto",
-          url: $state.href('root.lukio')
-        },
-        {
-          title: "Opetuksen yleiset tavoitteet",
-          name: "tavoitteet",
-          url: $state.href('root.lukio.tavoitteet')
-        },
-        { title: "Aihekokonaisuudet",
-          name: "aihekokonaisuudet",
-          url: $state.href('root.lukio.aihekokonaisuudet')
-        }
-      ];
-
-      $scope.tabClass = function(tabName) {
-        var params = _.words($state.current.name);
-        var className = null;
-        switch(tabName) {
-          case "tavoitteet":
-            className = _.indexOf(params, tabName) > -1 ? true : null;
-            break;
-          case "aihekokonaisuudet":
-            className = _.indexOf(params, tabName) > -1 ? true : null;
-            break;
-          case "sisalto":
-            className =  (_.indexOf(params, "tavoitteet") === -1 && _.indexOf(params, "aihekokonaisuudet") === -1)
-              ? true : null;
-            break;
-          default:
-            className = null;
-        }
-        console.log("tabName", className, tabName, params);
-        return className;
-    }
-
-      $scope.t = _.words($state.current.name);
-      console.log($scope.t);
-
-
     $scope.navClass = function (title) {
       return active;
     };
@@ -103,22 +61,6 @@ angular.module('eperusteet.esitys')
       epLukioStateService.setState($scope.navi);
     });
 
- /*   function clickHandler(event) {
-      var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
-      if (ohjeEl.length === 0) {
-        $rootScope.$broadcast('ohje:closeAll');
-      }
-    }
-    function installClickHandler() {
-      $document.off('click', clickHandler);
-      $timeout(function () {
-        $document.on('click', clickHandler);
-      });
-    }
-    $scope.$on('$destroy', function () {
-      $document.off('click', clickHandler);
-    });*/
-
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
       if (item.$selected) {
@@ -129,19 +71,6 @@ angular.module('eperusteet.esitys')
       }
       return classes;
     };
-
-    //check this out...
-    /*function updateSelection(sectionId) {
-      var MAP = {
-        0: 'vlk',
-        2: 'sisalto',
-        3: 'osaaminen'
-      };
-      //var selected = selectedFilters(sectionId);
-      var params = {};
-      params[MAP[sectionId]] = selected;
-      $state.go($state.current.name, _.extend(params, $stateParams));
-    }*/
 
     $scope.navi = {
       header: 'perusteen-sisalto',
@@ -160,8 +89,7 @@ angular.module('eperusteet.esitys')
         naviClasses: $scope.naviClasses
       }]
     };
-    //what is this for?
-    //installClickHandler();
+
 })
 
   .directive('epLukioSivunavigaatio', function ($window, $document, $timeout, $compile) {
@@ -254,6 +182,49 @@ angular.module('eperusteet.esitys')
 
     MurupolkuData.set(murupolkuParams);
   })
+
+  .controller('tabController', function($scope, $state) {
+
+    $scope.tabs = [
+      {
+        title: "Oppimäärän sisalto",
+        name: "sisalto",
+        url: $state.href('root.lukio')
+      },
+      {
+        title: "Opetuksen yleiset tavoitteet",
+        name: "tavoitteet",
+        url: $state.href('root.lukio.tavoitteet')
+      },
+      { title: "Aihekokonaisuudet",
+        name: "aihekokonaisuudet",
+        url: $state.href('root.lukio.aihekokonaisuudet')
+      }
+    ];
+
+    $scope.tabClass = function(tabName) {
+      var params = _.words($state.current.name);
+      var className = null;
+      switch(tabName) {
+        case "tavoitteet":
+          className = _.indexOf(params, tabName) > -1 ? true : null;
+          break;
+        case "aihekokonaisuudet":
+          className = _.indexOf(params, tabName) > -1 ? true : null;
+          break;
+        case "sisalto":
+          className =  (_.indexOf(params, "tavoitteet") === -1 && _.indexOf(params, "aihekokonaisuudet") === -1)
+            ? true : null;
+          break;
+        default:
+          className = null;
+      }
+      console.log("tabName", className, tabName, params);
+      return className;
+    }
+
+  })
+
 
   .controller('epLukioTavoitteetController', function($scope, tavoitteet) {
     $scope.tavoitteet = tavoitteet;
