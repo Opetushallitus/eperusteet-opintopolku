@@ -44,13 +44,49 @@ angular.module('eperusteet.esitys')
     };
     $scope.lukioKurssit = lukioKurssit;
 
+      $scope.tabs = [
+        {
+          title: "Oppimäärän sisalto",
+          name: "sisalto",
+          url: $state.href('root.lukio')
+        },
+        {
+          title: "Opetuksen yleiset tavoitteet",
+          name: "tavoitteet",
+          url: $state.href('root.lukio.tavoitteet')
+        },
+        { title: "Aihekokonaisuudet",
+          name: "aihekokonaisuudet",
+          url: $state.href('root.lukio.aihekokonaisuudet')
+        }
+      ];
+
+      $scope.tabClass = function(tabName) {
+        var params = _.words($state.current.name);
+        var className = null;
+        switch(tabName) {
+          case "tavoitteet":
+            className = _.indexOf(params, tabName) > -1 ? true : null;
+            break;
+          case "aihekokonaisuudet":
+            className = _.indexOf(params, tabName) > -1 ? true : null;
+            break;
+          case "sisalto":
+            className =  (_.indexOf(params, "tavoitteet") === -1 && _.indexOf(params, "aihekokonaisuudet") === -1)
+              ? true : null;
+            break;
+          default:
+            className = null;
+        }
+        console.log("tabName", className, tabName, params);
+        return className;
+    };
+
+
     $scope.navClass = function (title) {
       return active;
     };
-
-    /*function selectedFilters(sectionId) {
-      return _($scope.navi.sections[1].model.sections[sectionId].items).filter('$selected').map('value').value();
-    }*/
+    
     //FIX
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
 
@@ -182,49 +218,6 @@ angular.module('eperusteet.esitys')
 
     MurupolkuData.set(murupolkuParams);
   })
-
-  .controller('tabController', function($scope, $state) {
-
-    $scope.tabs = [
-      {
-        title: "Oppimäärän sisalto",
-        name: "sisalto",
-        url: $state.href('root.lukio')
-      },
-      {
-        title: "Opetuksen yleiset tavoitteet",
-        name: "tavoitteet",
-        url: $state.href('root.lukio.tavoitteet')
-      },
-      { title: "Aihekokonaisuudet",
-        name: "aihekokonaisuudet",
-        url: $state.href('root.lukio.aihekokonaisuudet')
-      }
-    ];
-
-    $scope.tabClass = function(tabName) {
-      var params = _.words($state.current.name);
-      var className = null;
-      switch(tabName) {
-        case "tavoitteet":
-          className = _.indexOf(params, tabName) > -1 ? true : null;
-          break;
-        case "aihekokonaisuudet":
-          className = _.indexOf(params, tabName) > -1 ? true : null;
-          break;
-        case "sisalto":
-          className =  (_.indexOf(params, "tavoitteet") === -1 && _.indexOf(params, "aihekokonaisuudet") === -1)
-            ? true : null;
-          break;
-        default:
-          className = null;
-      }
-      console.log("tabName", className, tabName, params);
-      return className;
-    }
-
-  })
-
 
   .controller('epLukioTavoitteetController', function($scope, tavoitteet) {
     $scope.tavoitteet = tavoitteet;

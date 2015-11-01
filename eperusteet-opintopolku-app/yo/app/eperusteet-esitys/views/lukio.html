@@ -19,15 +19,13 @@
       <div class="sivunavi-sisalto">
         <div class="row">
           <div class="col-md-12">
-            <div class="tab-container" ng-controller="tabController">
+            <div class="tab-container">
               <ul class="nav nav-tabs" id="ep-tabs">
                 <li ng-repeat="tab in tabs" ng-class="{'tab-active': tabClass('{{tab.name}}')}">
                   <a href="{{tab.url}}">{{tab.title}}</a></li>
                 <li ng-show="tabClass('sisalto')" class="legend legend-container">
                   <span ng-repeat="tyyppi in ['pakollinen', 'syventava', 'soveltava']">
-                    <span class="spacer"></span>
-                    <span class="colorbox" ng-class="'{{tyyppi}}'">
-                  </span><span class="legend-label">{{tyyppi}}</span>
+                    <span class="spacer"></span><span class="colorbox" ng-class="'{{tyyppi}}'"></span><span class="legend-label">{{tyyppi}}</span>
                   </span>
                 </li>
               </ul>
