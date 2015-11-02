@@ -60,7 +60,6 @@ angular.module('eperusteet.esitys')
     }
 
     function setParentOppiaineHeaderForKurssi() {
-      console.log("ITEMS", items);
       if(selected && selected.$kurssi) {
         var found = _.find(items, function(item) {
           return item.$kurssi && '' + item.$kurssi.id === '' + $stateParams.kurssiId;
@@ -108,7 +107,6 @@ angular.module('eperusteet.esitys')
       kurssi: {
         index: 1,
         callback: function (item) {
-          console.log("kurssi state", item);
           if (item.$kurssi) {
             item.$selected = '' + $stateParams.kurssiId === '' + item.$kurssi.id;
           }

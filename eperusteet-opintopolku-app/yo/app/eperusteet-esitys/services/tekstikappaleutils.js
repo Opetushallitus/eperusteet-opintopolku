@@ -17,9 +17,11 @@
 'use strict';
 
 angular.module('eperusteet.esitys')
-  .service('epTekstikappaleChildResolver', function (Algoritmit, $q, PerusteenOsat) {
+  .service('epTekstikappaleChildResolver', function (Algoritmit, $q, PerusteenOsat, LukioTekstikappale) {
     var lapset = null;
-    this.get = function (sisalto, viiteId) {
+    var resource;
+    this.get = function (sisalto, viiteId, lukio) {
+      lukio ? resource = PerusteenOsat : resource = LukioTekstikappale;
       var promises = [];
       var viite = null;
       Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function (item) {
@@ -30,7 +32,7 @@ angular.module('eperusteet.esitys')
       });
       if (viite) {
         Algoritmit.kaikilleLapsisolmuille(viite, 'lapset', function (lapsi) {
-          lapsi.$osa = PerusteenOsat.getByViite({viiteId: lapsi.id});
+          lapsi.$osa = resource.getByViite({viiteId: lapsi.id});
           promises.push(lapsi.$osa.$promise);
         });
         lapset = viite.lapset;
@@ -91,31 +93,5 @@ angular.module('eperusteet.esitys')
         element.find('.otsikko-wrap').wrap(headerEl);
         scope.amEsitys = scope.linkVar === 'osanId';
       }
-    };
-  })
-
-  .service('epLukioTekstikappaleChildResolver', function (Algoritmit, $q, LukioTekstikappale) {
-    var lapset = null;
-    this.get = function (sisalto, viiteId) {
-      console.log("SISALTO", sisalto);
-      var promises = [];
-      var viite = null;
-      Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function (item) {
-        if ('' + item.id === '' + viiteId) {
-          viite = item;
-          return false;
-        }
-      });
-      if (viite) {
-        Algoritmit.kaikilleLapsisolmuille(viite, 'lapset', function (lapsi) {
-          lapsi.$osa = LukioTekstikappale.getByViite({viiteId: lapsi.id});
-          promises.push(lapsi.$osa.$promise);
-        });
-        lapset = viite.lapset;
-      }
-      return $q.all(promises);
-    };
-    this.getSisalto = function () {
-      return lapset;
     };
   });

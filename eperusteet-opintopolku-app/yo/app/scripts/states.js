@@ -309,8 +309,8 @@ epOpintopolkuApp
               return res;
             })
         },
-        lapset: function (serviceConfig, perusData, tekstikappaleId, epLukioTekstikappaleChildResolver) {
-          return epLukioTekstikappaleChildResolver.get(perusData, tekstikappaleId);
+        lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
+          return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
         }
       }
     })
@@ -326,7 +326,6 @@ epOpintopolkuApp
         oppiaine: function (serviceConfig, perusteId, LukioOppiaineet, oppiaineId) {
           return LukioOppiaineet.getOppiaine({ perusteId: perusteId, oppiaineId: oppiaineId }).$promise
             .then(function(res){
-              console.log("OP", res);
               return res;
             })
         }

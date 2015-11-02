@@ -138,5 +138,11 @@
 
   "osaamisalat": "Osaamisalat",
 
-  "yleiset-tavoitteet": "Yleiset tavoitteet"
+  "yleiset-tavoitteet": "Yleiset tavoitteet",
+  "soveltava": "soveltava",
+  "pakollinen": "pakollinen",
+  "syventava": "syventävä",
+  "oppimaaran-sisalto" : "Oppimäärän sisaalto",
+  "opetuksen-yleiset-tavoitteet": "Opetuksen yleiset tavoitteet",
+  "aihekokonaisuudet": "Aihekokonaisuudet"
 }

@@ -135,10 +135,20 @@ epOpintopolkuApp
         customParents: true
       },
       'root.lukio.kurssi': {
-        parent: 'root.lukio',
+        parent: 'root.lukio.oppiaine',
         useData: 'kurssiNimi',
         useId: 'kurssiId',
         customParents: true
+      },
+      'root.lukio.tavoitteet': {
+        parent: 'root.lukio',
+        useData: 'tekstiNimi',
+        useId: 'tekstiId'
+      },
+      'root.lukio.aihekokonaisuudet': {
+        parent: 'root.lukio',
+        useData: 'tekstiNimi',
+        useId: 'tekstiId'
       },
       'root.esiopetus': {
         useData: 'perusteNimi',

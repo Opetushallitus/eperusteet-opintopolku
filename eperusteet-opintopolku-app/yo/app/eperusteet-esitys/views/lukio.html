@@ -22,10 +22,11 @@
             <div class="tab-container">
               <ul class="nav nav-tabs" id="ep-tabs">
                 <li ng-repeat="tab in tabs" ng-class="{'tab-active': tabClass('{{tab.name}}')}">
-                  <a href="{{tab.url}}">{{tab.title}}</a></li>
+                  <a href="{{tab.url}}" ng-bind="tab.title | kaanna"></a></li>
                 <li ng-show="tabClass('sisalto')" class="legend legend-container">
-                  <span ng-repeat="tyyppi in ['pakollinen', 'syventava', 'soveltava']">
-                    <span class="spacer"></span><span class="colorbox" ng-class="'{{tyyppi}}'"></span><span class="legend-label">{{tyyppi}}</span>
+                  <span ng-repeat="tyyppi in kurssiTyypit">
+                    <span class="spacer"></span><span class="colorbox" ng-class="'{{tyyppi}}'"></span>
+                    <span class="legend-label" ng-bind="tyyppi | kaanna"></span>
                   </span>
                 </li>
               </ul>
