@@ -21,7 +21,7 @@ angular.module('eperusteet.esitys')
     var lapset = null;
     var resource;
     this.get = function (sisalto, viiteId, lukio) {
-      lukio ? resource = PerusteenOsat : resource = LukioTekstikappale;
+      resource = lukio ? PerusteenOsat : LukioTekstikappale;
       var promises = [];
       var viite = null;
       Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function (item) {

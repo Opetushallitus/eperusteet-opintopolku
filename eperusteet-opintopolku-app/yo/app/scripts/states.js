@@ -290,7 +290,7 @@ epOpintopolkuApp
           return LukioKurssit.list({perusteId: perusteId}).$promise
             .then(function (res) {
               return res;
-          })
+          });
         }
       }
     })
@@ -307,7 +307,7 @@ epOpintopolkuApp
           return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
             .then(function(res){
               return res;
-            })
+            });
         },
         lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
           return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
@@ -327,7 +327,7 @@ epOpintopolkuApp
           return LukioOppiaineet.getOppiaine({ perusteId: perusteId, oppiaineId: oppiaineId }).$promise
             .then(function(res){
               return res;
-            })
+            });
         }
       }
     })
@@ -340,9 +340,8 @@ epOpintopolkuApp
         tavoitteet: function(LukioYleistiedot, perusteId){
           return LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
             .then(function(res){
-              console.log("RES",res);
               return res;
-            })
+            });
         }
       }
     })
@@ -355,9 +354,8 @@ epOpintopolkuApp
         aihekokonaisuudet: function (LukioYleistiedot, perusteId) {
           return LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise
             .then(function (res) {
-              console.log("RES",res);
               return res;
-            })
+            });
         }
       }
     })
@@ -374,7 +372,7 @@ epOpintopolkuApp
           return LukioKurssit.getKurssi({ perusteId: perusteId, kurssiId: kurssiId }).$promise
             .then(function(res) {
               return res;
-            })
+            });
         }
       }
     })

@@ -18,8 +18,7 @@
 
 /* Sets sivunavi items active based on current state */
 angular.module('eperusteet.esitys')
-.service('epLukioStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope,
-                                          epEsitysSettings, epPerusopetusStateService) {
+.service('epLukioStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope) {
   var state = {};
   var section = null;
 
@@ -60,10 +59,11 @@ angular.module('eperusteet.esitys')
     }
 
     function setParentOppiaineHeaderForKurssi() {
+      var found = null;
       if(selected && selected.$kurssi) {
-        var found = _.find(items, function(item) {
+        found = _.find(items, function(item) {
           return item.$kurssi && '' + item.$kurssi.id === '' + $stateParams.kurssiId;
-        })
+        });
       }
       if (found) {
         found.$header = true;

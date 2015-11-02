@@ -84,7 +84,7 @@ angular.module('eperusteet.esitys')
         url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
       });
       if (_.isArray(oppiaine.oppimaarat) && !_.isEmpty(oppiaine.oppimaarat)) {
-        addOppimaaraToMenu(oppiaine.oppimaarat)
+        addOppimaaraToMenu(oppiaine.oppimaarat);
       }
     });
 
@@ -93,13 +93,13 @@ angular.module('eperusteet.esitys')
         return [ menuItem,
             _(kurssit).filter(function(kurssi){
               var oppiaineTarget = _.pick(menuItem, '$id');
-              var kursinOppiaineet = _.map(kurssi.oppiaineet, function(op) { return op.oppiaineId });
+              var kursinOppiaineet = _.map(kurssi.oppiaineet, function(op) { return op.oppiaineId; });
               return _.indexOf(kursinOppiaineet, oppiaineTarget.$id) > -1;
           })
           .sortBy('oppiaineet[0].jarjestys')
           .reverse()
           .value()
-        ]
+        ];
       })
       .filter(function(obj){
         return !_.isEmpty(obj);
@@ -109,7 +109,7 @@ angular.module('eperusteet.esitys')
       .map(function(obj){
         if(obj.label){
           lastDepth = obj.depth;
-          return obj
+          return obj;
         }
         return {
           $id: obj.id,
