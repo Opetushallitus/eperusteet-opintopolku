@@ -149,7 +149,7 @@ angular.module('eperusteet.esitys')
       link: function (scope, element, attrs) {
         var transcluded = element.find('#sivunavi-tc').contents();
         scope.hasTransclude = transcluded.length > 0;
-        scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
+        //scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
 
         function updateFooter() {
           scope.footerContent = scope.footer ? $compile(scope.footer)(scope) : '';
@@ -235,8 +235,6 @@ angular.module('eperusteet.esitys')
 
   .controller('epLukioOppiaineController', function($scope, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
-
-    console.log(oppiaine, $scope.oppiaineet, $stateParams);
 
     if (oppiaine) {
       var murupolkuParams = {
@@ -373,10 +371,6 @@ angular.module('eperusteet.esitys')
           if (section.items) {
             doRefresh(section.items);
           }
-          // hack for perusopetus sisallot
-          if (section.model && _.isArray(section.model.sections) && section.model.sections.length > 1) {
-            doRefresh(section.model.sections[1].items);
-          }
         });
       }
     };
@@ -455,8 +449,10 @@ angular.module('eperusteet.esitys')
       $scope.menuCollapsed = true;
     });
 
+
+    //Is this needed??
     $scope.$on('$stateChangeSuccess', function (event, toState) {
-      if (toState.name !== epEsitysSettings.perusopetusState + '.sisallot') {
+      if (toState.name !== epEsitysSettings.lukioState) {
         Utils.scrollTo('#ylasivuankkuri');
       }
       updateModel($scope.items);
