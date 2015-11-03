@@ -271,10 +271,15 @@ body {
   position: relative;
 }
 
-@media (max-width: 600px) {
+@media (max-width: $screen-sm) {
+  .sisalto-container {
+    margin-bottom: 15px;
+  }
   .inner-container {
-    padding-left: 3px;
-    padding-right: 3px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
   }
 }
 
@@ -324,4 +329,17 @@ h4.sparse {
 
 hr {
   color: $brand-primary;
+}
+
+
+@media (max-width: $screen-sm) {
+  .breadcrumb {
+    li {
+      white-space: normal;
+    }
+  }
+  .peruste-otsikko {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
 }

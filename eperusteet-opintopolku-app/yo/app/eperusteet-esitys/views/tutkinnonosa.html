@@ -24,18 +24,20 @@
                     <div ng-repeat="kohde in kohdealue.arvioinninKohteet">
                         <h4>{{ kohde.otsikko | kaanna }}</h4>
                         <h5>{{ kohde.selite || '' | kaanna }}</h5>
-                        <table class="table table-striped">
-                            <tr ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy: '_osaamistaso'">
-                                <td class="arviointi-okriteeri">
-                                  <span>{{ arviointiasteikot[kohde._arviointiAsteikko][okriteeri._osaamistaso].otsikko | kaanna }}</span>
-                                </td>
-                                <td>
-                                    <ul>
-                                        <li ng-repeat="kriteeri in okriteeri.kriteerit">{{ kriteeri | kaanna }}</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </table>
+                        <div class="table-responsive">
+                          <table class="table table-striped">
+                              <tr ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy: '_osaamistaso'">
+                                  <td class="arviointi-okriteeri">
+                                    <span>{{ arviointiasteikot[kohde._arviointiAsteikko][okriteeri._osaamistaso].otsikko | kaanna }}</span>
+                                  </td>
+                                  <td>
+                                      <ul>
+                                          <li ng-repeat="kriteeri in okriteeri.kriteerit">{{ kriteeri | kaanna }}</li>
+                                      </ul>
+                                  </td>
+                              </tr>
+                          </table>
+                        </div>
                     </div>
                 </div>
             </div>
