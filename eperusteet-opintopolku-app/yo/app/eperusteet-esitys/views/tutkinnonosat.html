@@ -20,7 +20,7 @@
     <ul class="tutkinnonosat">
         <li ui-sref="root.esitys.peruste.tutkinnonosa({ id: v.id })"
             class="tutkinnonosa-laatikko list-group-item" ng-repeat="v in tutkinnonOsat | mapFilter:rajaaTutkinnonOsia | orderBy:jarjestysFn:jarjestysOrder">
-            <div ng-hide="editoi" class="muokkaus" icon-role="forward"></div>
+            <div ng-hide="editoi" class="muokkaus"></div>
             <div class="numero-wrapper">
               <span class="badge jarjestysnumero" ng-show="v.jarjestys">{{v.jarjestys || '-' }}</span>
             </div>

@@ -126,6 +126,15 @@ ul.tutkinnonosat {
   }
 }
 
+@media (max-width: $screen-sm) {
+  ul.tutkinnonosat {
+    .tutkinnonosa-laatikko {
+      width: 100%;
+    }
+  }
+
+}
+
 .tuotutkinnonosat-table {
   margin-top: 10px;
 }
