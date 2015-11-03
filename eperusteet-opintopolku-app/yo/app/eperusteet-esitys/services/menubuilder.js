@@ -55,74 +55,53 @@ angular.module('eperusteet.esitys')
     });
   }
 
-  function buildLukioOppiaineMenu(oppiaineet, kurssit) {
-    var opMenu = [];
-
-    function addOppimaaraToMenu(oppimaarat) {
-      _.each(oppimaarat, function(oppimaara) {
-        opMenu.push({
-          $id: oppimaara.id,
-          depth: 1,
-          $jnro: oppimaara.jnro,
-          $hidden: true,
-          $oppimaara: oppimaara,
-          $oppiaine: oppimaara,
-          label: oppimaara.nimi[Kieli.getSisaltokieli()],
-          url: $state.href('root.lukio.oppiaine', {oppiaineId: oppimaara.id})
-      });
-    });
+  function createOppiaineItem(oppiaine, depth) {
+    return {
+      $id: oppiaine.id,
+      depth: depth,
+      $jnro: oppiaine.jarjestys,
+      $oppiaine: oppiaine,
+      $hidden: false,
+      label: oppiaine.nimi,
+      url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
+    }
   }
 
-    _.each(oppiaineet, function(oppiaine) {
-      opMenu.push({
-        $id: oppiaine.id,
-        depth: 0,
-        $jnro: oppiaine.jnro,
-        $hidden: false,
-        $oppiaine: oppiaine,
-        label: oppiaine.nimi[Kieli.getSisaltokieli()],
-        url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
-      });
-      if (_.isArray(oppiaine.oppimaarat) && !_.isEmpty(oppiaine.oppimaarat)) {
-        addOppimaaraToMenu(oppiaine.oppimaarat);
-      }
-    });
+  function createKurssiItem(kurssi, depth) {
+    return {
+      $id: kurssi.id,
+      depth: depth,
+      tyyppi: kurssi.tyyppi,
+      $jnro: kurssi.jarjestys,
+      $kurssi: kurssi,
+      $hidden: true,
+      label: kurssi.nimi,
+      url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
+    }
+  }
 
-    var lastDepth = 2;
-    var menuWithKurssit = _(opMenu).map(function(menuItem) {
-        return [ menuItem,
-            _(kurssit).filter(function(kurssi){
-              var oppiaineTarget = _.pick(menuItem, '$id');
-              var kursinOppiaineet = _.map(kurssi.oppiaineet, function(op) { return op.oppiaineId; });
-              return _.indexOf(kursinOppiaineet, oppiaineTarget.$id) > -1;
+
+  function buildLukioOppiaineMenu(oppiaineet){
+    return _.reduce(oppiaineet, function(menu, oppiaine){
+        menu.push(createOppiaineItem(oppiaine, 0));
+        if(!_.isEmpty(oppiaine.oppimaarat)) {
+          _.each(oppiaine.oppimaarat, function(oppimaara){
+            menu.push(createOppiaineItem(oppimaara, 1));
+            if(!_.isEmpty(oppimaara.kurssit)) {
+              _.each(oppimaara.kurssit, function(kurssi) {
+                console.log("KURSSI", kurssi);
+                menu.push(createKurssiItem(kurssi, 2));
+              })
+            }
           })
-          .sortBy('oppiaineet[0].jarjestys')
-          .reverse()
-          .value()
-        ];
-      })
-      .filter(function(obj){
-        return !_.isEmpty(obj);
-      })
-      .flatten()
-      .flatten()
-      .map(function(obj){
-        if(obj.label){
-          lastDepth = obj.depth;
-          return obj;
         }
-        return {
-          $id: obj.id,
-          $hidden: true,
-          depth: lastDepth + 1,
-          label: obj.nimi,
-          $kurssi: obj,
-          url: $state.href('root.lukio.kurssi', {kurssiId: obj.id})
-        };
-      })
-      .value();
-
-    return menuWithKurssit;
+        if(!_.isEmpty(oppiaine.kurssit)){
+          _.each(oppiaine.kurssit, function(kurssi){
+            menu.push(createKurssiItem(kurssi, 1));
+          })
+        }
+          return menu;
+        }, []);
   }
 
   function traverseOppiaineet(aineet, arr, vlk, startingDepth) {

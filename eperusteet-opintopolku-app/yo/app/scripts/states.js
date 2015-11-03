@@ -271,6 +271,13 @@ epOpintopolkuApp
               return res;
             });
         },
+        oppiaineRakenne: function(LukioYleistiedot, perusteId){
+            return LukioYleistiedot.getOppiaineRakenne({perusteId: perusteId}).$promise
+              .then(function(res){
+                console.log(res);
+                return res;
+              });
+        },
         perusData: function (LukioPerusteenOsat, perusteId) {
           return LukioPerusteenOsat.query({perusteId: perusteId}).$promise
             .then(function (res) {

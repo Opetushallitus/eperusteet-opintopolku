@@ -25,7 +25,7 @@ angular.module('eperusteet.esitys')
   function processSection(navi, index, cb) {
     section = navi.sections[index];
     if (index === 1) {
-      state.vlk = true;
+      state.oppiaine = true;
     }
     section.$open = true;
     _.each(section.items, function (item, index) {

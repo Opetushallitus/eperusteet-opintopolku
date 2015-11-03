@@ -33,8 +33,10 @@ angular.module('eperusteet.esitys')
     epMenuBuilder,
     MurupolkuData,
     epLukioStateService,
+    oppiaineRakenne,
     Kieli) {
 
+    $scope.oppiaineRakenne = oppiaineRakenne;
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenSisalto = perusData;
     $scope.oppiaineet = lukioOppiaineet;
@@ -125,7 +127,7 @@ angular.module('eperusteet.esitys')
         title: 'opetuksen-sisallot',
         id: 'sisalto',
         include: 'eperusteet-esitys/views/oppiaineetsivunavi.html',
-        items: epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineet,$scope.lukioKurssit),
+        items: epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
         naviClasses: $scope.naviClasses
       }]
     };
@@ -280,7 +282,7 @@ angular.module('eperusteet.esitys')
         $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
       };
 
-      $scope.$on('lukio:stateSet', checkPrevNext);
+      $scope.$on('oppiaine:stateSet', checkPrevNext);
       checkPrevNext();
     }
   })
