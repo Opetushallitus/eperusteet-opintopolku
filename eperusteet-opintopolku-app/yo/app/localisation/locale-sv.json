@@ -62,6 +62,7 @@
   "navi.valikkon-otsikko" : "eGrunder meny",
   "navi.varhaiskasvatus" : "eGrunder meny",
   "navi.tiedote": "Information",
+  "navi.peruste": "Grunder",
   "nayta-kuvaukset" : "Visa beskrivningarna",
   "nayta-ryhman-kuvaus" : "Visa gruppens beskrivning",
   "naytto" : "Fristående examen",
@@ -122,6 +123,8 @@
   "vuosiluokkakokonaisuudet" : "Årskurshelheterna",
   "yhteiset-osuudet" : "Gemensamma delar",
   "eperusteet-virkailija-linkki": "Virkailijanäkymään",
-  "kysy-neuvoa-anna-palautetta": "Kysy neuvoa - Anna palautetta",
-  "tietosuojaseloste": "Tietosuojaseloste"
+  "kysy-neuvoa-anna-palautetta": "Fråga råd - ge feedback",
+  "tietosuojaseloste": "Dataskyddsbeskrivning",
+
+  "siirtyman-paattyminen": "Övergångstiden upphör"
 }

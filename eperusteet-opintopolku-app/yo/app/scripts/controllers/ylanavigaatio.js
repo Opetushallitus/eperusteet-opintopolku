@@ -1,5 +1,7 @@
 'use strict';
 
+
+/*jshint maxcomplexity:false */
 epOpintopolkuApp
   .controller('YlanavigaatioController', function ($scope, $state, Kieli, Haku, $stateParams) {
     $scope.kieli = Kieli.getUiKieli();
@@ -37,6 +39,8 @@ epOpintopolkuApp
         return 'navi.ammatillinenaikuiskoulutus';
       } else if ($state.includes('root.tiedote.**')) {
         return 'navi.tiedote';
+      } else if ($state.includes('root.esitys.peruste.**')) {
+        return 'navi.peruste';
       }
     };
 

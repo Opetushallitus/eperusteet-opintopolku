@@ -138,5 +138,8 @@
   "navi.ammatillinenperuskoulutus": "Ammatillinen peruskoulutus",
   "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus",
   "navi.valikkon-otsikko": "ePerusteet valikko",
-  "navi.tiedote": "Tiedote"
+  "navi.tiedote": "Tiedote",
+  "navi.peruste": "Peruste",
+
+  "siirtyman-paattyminen": "Siirtymän päättyminen"
 }
