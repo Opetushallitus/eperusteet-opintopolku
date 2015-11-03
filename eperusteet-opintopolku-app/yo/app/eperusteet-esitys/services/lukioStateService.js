@@ -18,7 +18,7 @@
 
 /* Sets sivunavi items active based on current state */
 angular.module('eperusteet.esitys')
-.service('epLukioStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope) {
+.service('epLukioStateService', function ($state, $stateParams, $location, epSivunaviUtils, $rootScope) {
   var state = {};
   var section = null;
 
@@ -49,12 +49,21 @@ angular.module('eperusteet.esitys')
     var items = null;
 
     function setParentOppiaineHeader() {
-      if (selected && selected.$oppiaine._oppiaine) {
-        var found = _.find(items, function (item) {
-          return item.$oppiaine && '' + item.$oppiaine.id === '' + selected.$oppiaine._oppiaine;
-        });
-        if (found) {
-          found.$header = true;
+        if (selected && selected.$kurssi) {
+          found = _.find(items, function (item) {
+            return item.$kurssi && '' + item.$kurssi.id === '' + $location.hash();
+          });
+          if (found) {
+            found.$header = true;
+          }
+        } else {
+        if (selected && selected.$oppiaine._oppiaine) {
+          var found = _.find(items, function (item) {
+            return item.$oppiaine && '' + item.$oppiaine.id === '' + selected.$oppiaine._oppiaine;
+          });
+          if (found) {
+            found.$header = true;
+          }
         }
       }
     }
@@ -63,7 +72,7 @@ angular.module('eperusteet.esitys')
       var found = null;
       if(selected && selected.$kurssi) {
         found = _.find(items, function(item) {
-          return item.$kurssi && '' + item.$kurssi.id === '' + $stateParams.kurssiId;
+          return item.$kurssi && '' + item.$kurssi.id === '' + $location.hash();
         });
       }
       if (found) {
@@ -89,11 +98,11 @@ angular.module('eperusteet.esitys')
       oppiaine: {
         index: 1,
         callback: function (item) {
-          if (item.$oppiaine) {
+          if (item.$oppiaine && !$location.hash()) {
             item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
           }
           if (item.$kurssi) {
-            item.$selected = '' + $stateParams.kurssiId === '' + item.$id;
+            item.$selected = '' + $location.hash() === '' + item.$id;
             item.$hidden = item.depth > 0;
           }
           if (item.$selected) {

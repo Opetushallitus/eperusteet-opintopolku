@@ -25,6 +25,7 @@ angular.module('eperusteet.esitys')
     $document,
     $timeout,
     $stateParams,
+    $location,
     perusData,
     peruste,
     lukioOppiaineet,
@@ -50,6 +51,11 @@ angular.module('eperusteet.esitys')
       if ($state.current.name === epEsitysSettings.lukioState) {
         $state.go('.tekstikappale', {tekstikappaleId: $scope.perusteenSisalto.lapset[0].id});
       }
+    });
+
+    $rootScope.$on('$locationChangeSuccess', function () {
+      console.log("changed");
+      epLukioStateService.setState($scope.navi);
     });
 
     $scope.tabs = [
@@ -123,6 +129,7 @@ angular.module('eperusteet.esitys')
 
     var t = epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet);
     setTimeout(function(){console.log(t)}, 500);
+
     $scope.navi = {
       header: 'perusteen-sisalto',
       showOne: true,
@@ -245,7 +252,7 @@ angular.module('eperusteet.esitys')
     MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
   })
 
-  .controller('epLukioOppiaineController', function($scope, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
 
     $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
@@ -275,6 +282,10 @@ angular.module('eperusteet.esitys')
           list = "undefined";
       }
       return list;
+    };
+
+    $scope.scrollToKurssi = function(id) {
+      return id ? $location.hash(id) : null;
     };
 
     if (oppiaine) {
@@ -326,10 +337,15 @@ angular.module('eperusteet.esitys')
     }
   })
 
-  .controller('epLukioSivuNaviController', function ($scope, $state, Algoritmit, Utils, epSivunaviUtils,
+  .controller('epLukioSivuNaviController', function ($rootScope, $scope, $location, $state, Algoritmit, Utils, epSivunaviUtils,
                                                 epEsitysSettings, epLukioStateService) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
+
+    $scope.scrollToKurssi = function(id){
+      $rootScope.$broadcast('$locationChangeSuccess');
+      return id ? $location.hash(id) : null;
+    };
 
     $scope.search = {
       term: '',
@@ -490,8 +506,6 @@ angular.module('eperusteet.esitys')
       $scope.menuCollapsed = true;
     });
 
-
-    //Is this needed??
     $scope.$on('$stateChangeSuccess', function (event, toState) {
       if (toState.name !== epEsitysSettings.lukioState) {
         Utils.scrollTo('#ylasivuankkuri');

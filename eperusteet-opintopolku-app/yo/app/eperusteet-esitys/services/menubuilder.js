@@ -76,8 +76,8 @@ angular.module('eperusteet.esitys')
       $jnro: kurssi.jarjestys,
       $kurssi: kurssi,
       $hidden: true,
-      label: kurssi.nimi,
-      url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
+      label: kurssi.nimi
+      //url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
     }
   }
 

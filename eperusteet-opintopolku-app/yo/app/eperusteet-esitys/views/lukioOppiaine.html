@@ -9,7 +9,8 @@
   <div ng-repeat="kurssi in filterKurssit(kurssit, 0)">
     <span class="colorlabel pakollinen"></span>
     <span class="spacer-small"></span>
-    <span class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></span>
+    <a ng-click="scrollToKurssi(kurssi.id)"
+       class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
   </div>
 </div>
 
@@ -18,7 +19,8 @@
   <div ng-repeat="kurssi in filterKurssit(kurssit, 1)">
     <span class="colorlabel syventava"></span>
     <span class="spacer-small"></span>
-    <a class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+    <a ng-click="scrollToKurssi(kurssi.id)"
+       class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
   </div>
 </div>
 
@@ -27,7 +29,8 @@
   <div ng-repeat="kurssi in filterKurssit(kurssit, 2)">
     <span class="colorlabel soveltava"></span>
     <span class="spacer-small"></span>
-    <a class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+    <a ng-click="scrollToKurssi(kurssi.id)"
+       class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
   </div>
 </div>
 
@@ -78,7 +81,8 @@
     <div ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 0)">
       <span class="colorlabel pakollinen"></span>
       <span class="spacer-small"></span>
-      <span class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></span>
+      <a ng-click="scrollToKurssi(kurssi.id)"
+         class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
     </div>
   </div>
 
@@ -87,7 +91,9 @@
     <div ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 1)">
       <span class="colorlabel syventava"></span>
       <span class="spacer-small"></span>
-      <a class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+      <a ng-click="scrollToKurssi(kurssi.id)"
+        class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna">
+      </a>
     </div>
   </div>
 
@@ -96,7 +102,9 @@
     <div ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 2)">
       <span class="colorlabel soveltava"></span>
       <span class="spacer-small"></span>
-      <a class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+      <a ng-click="scrollToKurssi(kurssi.id)"
+         class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna">
+      </a>
     </div>
   </div>
 
@@ -142,7 +150,7 @@
 </h1>
 
 <div ng-repeat="kurssi in kurssit" class="lukio-kurssi-list">
-  <h3 id="kurssi.id" esitys-sivu-otsikko="kurssi.nimi">
+  <h3 id="{{kurssi.id}}" esitys-sivu-otsikko="kurssi.nimi">
     <span ng-bind-html="kurssi.nimi | kaanna | unsafe"></span>
   </h3>
 
