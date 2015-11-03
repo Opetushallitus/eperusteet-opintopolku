@@ -343,3 +343,9 @@ hr {
     margin-bottom: 0px;
   }
 }
+
+@media (max-width: $screen-sm) {
+  .table-responsive {
+    border: none;
+  }
+}
