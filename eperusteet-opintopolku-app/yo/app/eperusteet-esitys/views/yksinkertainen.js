@@ -105,7 +105,7 @@ angular.module('eperusteet.esitys')
 
   installClickHandler();
 
-  $timeout(function () {
+  $scope.$on('$stateChangeSuccess', function () {
     if ($state.current.name === currentRootState) {
       $state.go('.tiedot', {perusteId: $scope.peruste.id}, {location: 'replace'});
     }

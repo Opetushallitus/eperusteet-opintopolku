@@ -1,6 +1,6 @@
 <div class="etusivu">
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 hidden-xs">
       <div class="sisalto-box paaotsikko">
         <img src="images/keyboard-694709_130.jpg" width="352" height="130">
         <h1 kaanna="'etusivu.eperusteet'"></h1>
@@ -8,10 +8,33 @@
         <div class="clearfix"></div>
       </div>
     </div>
+    <div class="col-md-12 visible-xs">
+      <div class="sisalto-box">
+        <h1 kaanna="'etusivu.eperusteet'"></h1>
+        <p kaanna="'etusivu.eperusteet.kuvaus'"></p>
+      </div>
+    </div>
   </div>
 
   <div class="row">
-    <div class="col-lg-4 col-md-6">
+    <div class="col-lg-4 col-lg-push-8 col-md-6 hidden-md">
+      <div class="sisalto-box">
+        <h2 kaanna="'etusivu.tiedotteet'"></h2>
+        <p ng-show="tiedotteet.length === 0" kaanna="'ei-tiedotteita'"></p>
+        <ul class="tiedotteet-list">
+          <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown">
+            <div ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
+              <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+                {{tiedote.luotu || tiedote.luotu | date}}: <span kaanna="tiedote.otsikko"></span>
+              </a>
+            </div>
+          </li>
+        </ul>
+        <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-lg-pull-4 col-md-6">
       <div class="sisalto-box" ng-if="uusimmat['koulutustyyppi_20'].length !== 0">
         <h2 kaanna="'navi.varhaiskasvatus'"></h2>
         <p>
@@ -38,8 +61,23 @@
       <!--   <h2 kaanna="'navi.lukiokoulutus'"></h2> -->
       <!--   <p><a ui&#45;sref="root.lukiokoulutus" kaanna="'etusivu.lukiokoulutuksen&#45;peruste'"></a></p> -->
       <!-- </div> -->
+
+      <div class="sisalto-box visible-md">
+        <h2 kaanna="'etusivu.tiedotteet'"></h2>
+        <p ng-show="tiedotteet.length === 0" kaanna="'ei-tiedotteita'"></p>
+        <ul class="tiedotteet-list">
+          <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown">
+            <div ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
+              <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+                {{tiedote.luotu || tiedote.luotu | date}}: <span kaanna="tiedote.otsikko"></span>
+              </a>
+            </div>
+          </li>
+        </ul>
+        <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
+      </div>
     </div>
-    <div class="col-lg-4 col-md-6">
+    <div class="col-lg-4 col-lg-pull-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="'etusivu.uusimmat-ammatilliset'"></h2>
         <ul class="uusimmat">
@@ -65,22 +103,6 @@
         </div>
       </div>
     </div>
-    <div class="col-lg-4 col-md-6">
-      <div class="sisalto-box">
-        <h2 kaanna="'etusivu.tiedotteet'"></h2>
-        <p ng-show="tiedotteet.length === 0" kaanna="'ei-tiedotteita'"></p>
-        <ul class="tiedotteet-list">
-          <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown">
-            <div ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
-            <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
-              {{tiedote.luotu || tiedote.luotu | date}}: <span kaanna="tiedote.otsikko"></span>
-            </a>
-            </div>
-          </li>
-        </ul>
-        <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
-      </div>
-    </div>
   </div>
 
   <footer>
@@ -93,11 +115,11 @@
         </a>
         <ul class="banneri-linkit">
           <span ng-show="kieli === 'fi'">
-            <!-- <li><a href="http://osaan.fi" kaanna="'osaan.fi'"></a></li> -->
+            <li><a href="http://osaan.fi" kaanna="'osaan-linkki'"></a></li>
             <li><a href="mailto:eperusteet@opintopolku.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
           </span>
           <span ng-show="kieli === 'sv'">
-            <!-- <li><a href="http://jagkan.fi" kaanna="'jagkan.fi'"></a></li> -->
+            <li><a href="http://jagkan.fi" kaanna="'osaan-linkki'"></a></li>
             <li><a href="mailto:egrunder@studieinfo.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
           </span>
           <li><a href="https://virkailija.opintopolku.fi/eperusteet-app" kaanna="'eperusteet-virkailija-linkki'"></a></li>

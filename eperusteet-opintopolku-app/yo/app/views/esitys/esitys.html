@@ -21,20 +21,24 @@ European Union Public Licence for more details.
   <murupolku></murupolku>
   <div class="clearfix"></div>
 
-  <div class="esitys">
-    <div class="sivunavi-navigaatio sivunavi-simple">
-      <!-- <div class="sivunavi-takaisin">
-        <a ng-href="{{backLink}}" icon-role="back" kaanna="takaisin-hakuun"></a>
-      </div> -->
-      <ep-sivunavigaatio items="navi.items" header="navi.header" disable-rajaus="true">
-        <select ng-show="suoritustavat.length > 1" class="form-control input-sm"
-                ng-model="suoritustapa" ng-change="vaihdaSuoritustapa(suoritustapa)"
-                ng-options="kaanna(st) for st in suoritustavat"></select>
-      </ep-sivunavigaatio>
-    </div>
-    <div class="sivunavi-clear"></div>
-    <div class="sivunavi-sisalto" ng-cloak>
-      <div id="esitysPrintSisalto" ui-view></div>
+  <div id="sivunavi-sisalto-wrapper">
+    <div class="esitys">
+      <div class="sivunavi-navigaatio sivunavi-simple">
+        <ep-sivunavigaatio items="navi.items" header="navi.header" disable-rajaus="true">
+          <select ng-show="suoritustavat.length > 1" class="form-control input-sm"
+                  ng-model="suoritustapa" ng-change="vaihdaSuoritustapa(suoritustapa)"
+                  ng-options="kaanna(st) for st in suoritustavat"></select>
+        </ep-sivunavigaatio>
+      </div>
+
+      <div class="sivunavi-clear"></div>
+      <div class="sivunavi-sisalto">
+        <div class="row">
+          <div class="col-md-12">
+            <div id="esitysPrintSisalto" ui-view></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
