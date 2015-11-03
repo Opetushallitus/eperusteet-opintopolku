@@ -199,16 +199,15 @@ $sivunavi-level-padding: 20px;
 .sivunavi-sisalto {
   background-color: white;
   padding: 10px $sisalto-padding $sisalto-padding $sisalto-padding;
-  /*word-wrap: break-word;*/
   h1 {
     margin-top: 0;
   }
 }
 
 @media (max-width: 800px) {
-  .sivunavi-sisalto {
+/*  .sivunavi-sisalto {
     padding: 10px $sisalto-padding*0.75 $sisalto-padding*0.75 $sisalto-padding*0.75;
-  }
+  }*/
 }
 
 /* Pienellä näytöllä sivunavista tulee kelluva ja kollapsoituva */
@@ -219,7 +218,7 @@ $sivunavi-level-padding: 20px;
       width: $sivunavi-toggle-leveys;
       height: $sivunavi-toggle-korkeus;
       left: $sivunavi-leveys;
-      top: 40px;
+      top: 0px;
       display: block;
       background-color: white;
       box-shadow: 0 0 $sivunavi-shadow black;
@@ -261,10 +260,6 @@ $sivunavi-level-padding: 20px;
     &.sivunavi-open-add, &.sivunavi-collapsed-add {
       transition: left 0.2s;
     }
-  }
-  .sivunavi-sisalto {
-    margin-top: 15px;
-    margin-left: 10px;
   }
   .sivunavi-takaisin {
     margin-top: 0;
@@ -315,4 +310,11 @@ $sivunavi-level-padding: 20px;
   border-bottom: solid 1px #ccc;
 }
 
-
+.row-no-padding {
+  margin-left: 0;
+  margin-right: 0;
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}

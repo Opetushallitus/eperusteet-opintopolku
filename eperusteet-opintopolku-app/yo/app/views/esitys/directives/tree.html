@@ -1,3 +1,4 @@
+
 <div>
   <!-- tree.html -->
   <div ng-if="!lisataanUuttaOsaa" class="tree">
@@ -9,9 +10,11 @@
       <div ng-show="rakenne.$resolved && rakenne.rakenne.osat.length === 0" class="tree-con-empty">
         <div ng-show="esitys" class="empty-bubble distance" kaanna>rakennetta-ei-ole</div>
       </div>
-      <tree id="editointiPuuJuuri" apumuuttujat="apumuuttujat" muokkaus="muokkaus" ng-if="rakenne.$resolved"
-            rakenne="rakenne.rakenne" tutkinnon-osa-viitteet="rakenne.tutkinnonOsaViitteet"
-            uusi-tutkinnon-osa="uusiTutkinnonOsa" callbacks="callbacks"></tree>
+      <div class="table-responsive">
+        <tree id="editointiPuuJuuri" apumuuttujat="apumuuttujat" muokkaus="muokkaus" ng-if="rakenne.$resolved"
+              rakenne="rakenne.rakenne" tutkinnon-osa-viitteet="rakenne.tutkinnonOsaViitteet"
+              uusi-tutkinnon-osa="uusiTutkinnonOsa" callbacks="callbacks"></tree>
+      </div>
     </div>
   </div>
 

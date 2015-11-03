@@ -10,10 +10,13 @@
     margin-top: 0;
   }
 }
-@media (max-width: 800px) {
+@media (max-width: $screen-sm) {
   .sisalto-box {
     padding-left: $sisalto-padding*0.75;
     padding-right: $sisalto-padding*0.75;
+    &.topmost {
+      margin-top: 0px;
+    }
   }
 }
 

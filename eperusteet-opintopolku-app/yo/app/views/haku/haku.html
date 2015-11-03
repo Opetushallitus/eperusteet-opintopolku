@@ -60,31 +60,32 @@
   </div>
 
   <p><span kaanna="'haku-tulosten-maara'"></span> {{kokonaismaara}}</p>
-
-  <table class="table table-condensed table-striped" ng-show="kokonaismaara > 0">
-    <thead>
-      <tr>
-        <th class="haku-th-nimi" kaanna>haku-nimi</th>
-        <th class="haku-th-koulutusala" kaanna>haku-koulutusala</th>
-        <th class="haku-th-pvm" kaanna>haku-voimaantulopvm</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr ng-repeat="peruste in perusteet.data">
-        <td>
-          <a ui-sref="root.esitys.peruste({ perusteId: peruste.id, suoritustapa: hakuparametrit.suoritustapa})" ep-highlight="hakuparametrit.nimi">
-            <span ng-bind="peruste.nimi | kaanna"></span>
-          </a>
-        </td>
-        <td>
-          <ul style="list-style:none; padding-left:0; margin-bottom: 0;" ng-repeat="koulutus in peruste.koulutukset">
-            <li>{{koulutusalaNimi(koulutus.koulutusalakoodi).nimi|kaanna}}</li>
-          </ul>
-        </td>
-        <td>{{peruste.voimassaoloAlkaa|date:'dd.MM.yyyy'}}</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-condensed table-striped" ng-show="kokonaismaara > 0">
+      <thead>
+        <tr>
+          <th class="haku-th-nimi" kaanna>haku-nimi</th>
+          <th class="haku-th-koulutusala" kaanna>haku-koulutusala</th>
+          <th class="haku-th-pvm bootstrap " kaanna>haku-voimaantulopvm</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="peruste in perusteet.data">
+          <td>
+            <a ui-sref="root.esitys.peruste({ perusteId: peruste.id, suoritustapa: hakuparametrit.suoritustapa})" ep-highlight="hakuparametrit.nimi">
+              <span ng-bind="peruste.nimi | kaanna"></span>
+            </a>
+          </td>
+          <td>
+            <ul style="list-style:none; padding-left:0; margin-bottom: 0;" ng-repeat="koulutus in peruste.koulutukset">
+              <li>{{koulutusalaNimi(koulutus.koulutusalakoodi).nimi|kaanna}}</li>
+            </ul>
+          </td>
+          <td>{{peruste.voimassaoloAlkaa|date:'dd.MM.yyyy'}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
   <pagination ng-model="nykyinenSivu" ng-change="pageChanged()"
               total-items="kokonaismaara" items-per-page="hakuparametrit.sivukoko"></pagination>
 </div>

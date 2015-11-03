@@ -120,26 +120,25 @@
     </strong>
   </div>
   <div class="col-xs-12 col-sm-8">
-    <div class="row row-bottom-line">
-      <div class="col-xs-6">
-        <strong>
-          <span kaanna="'nimi'"></span>
-        </strong>
-      </div>
-      <div class="col-xs-6">
-        <strong>
-          <span kaanna="'koodi'"></span>
-        </strong>
-      </div>
-    </div>
-
-    <div class="row row-margin" ng-repeat="oa in peruste.osaamisalat">
-      <div class="col-xs-6">
-        <span kaanna="oa.nimi"></span>
-      </div>
-      <div class="col-xs-6">
-        <span ng-bind="oa.arvo"></span>
-      </div>
+    <div class="table-responsive">
+      <table class="table aligned tutkintonimikkeet">
+        <thead>
+          <tr>
+            <th>
+              <span kaanna="'nimi'">Nimi</span>
+            </th>
+            <th>
+              <span kaanna="'koodi'" >Koodi</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="oa in peruste.osaamisalat" class="ng-scope">
+            <td kaanna="oa.nimi"></td>
+            <td ng-bind="oa.arvo"></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -151,38 +150,24 @@
     </strong>
   </div>
   <div class="col-xs-12 col-sm-8">
-    <div ng-if="koodisto.length > 0" class="aligned tutkintonimikkeet">
-      <div class="row row-bottom-line">
-        <div class="col-xs-4">
-          <strong>
-            <span kaanna="'osaamisala'"></span>
-          </strong>
-        </div>
-        <div class="col-xs-4">
-          <strong>
-            <span kaanna="'tutkintonimike'"></span>
-          </strong>
-        </div>
-        <div class="col-xs-4">
-          <strong>
-            <span kaanna="'tutkinnonosa'"></span>
-          </strong>
-        </div>
-      </div>
-
-      <div class="row row-margin" ng-repeat="koodi in koodisto">
-        <div class="col-xs-4">
-          <span ng-show="koodi.osaamisalaArvo">{{ koodi.$osaamisalaNimi | kaanna }} ({{ koodi.osaamisalaArvo }})</span>
-        </div>
-        <div class="col-xs-4">
-          <span>{{ koodi.$tutkintonimikeNimi | kaanna }} ({{ koodi.tutkintonimikeArvo }})</span>
-        </div>
-        <div class="col-xs-4">
-          <span ng-show="koodi.tutkinnonOsaArvo">{{ koodi.$tutkinnonOsaNimi | kaanna }} ({{ koodi.tutkinnonOsaArvo }})</span>
-        </div>
-      </div>
+    <div class="table-responsive">
+      <table ng-if="koodisto.length > 0" class="table aligned tutkintonimikkeet">
+        <thead>
+          <tr>
+            <th kaanna="osaamisala"></th>
+            <th kaanna="tutkintonimike"></th>
+            <th kaanna="tutkinnonosa"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="koodi in koodisto">
+            <td><span ng-show="koodi.osaamisalaArvo">{{ koodi.$osaamisalaNimi | kaanna }} ({{ koodi.osaamisalaArvo }})</span></td>
+            <td>{{ koodi.$tutkintonimikeNimi | kaanna }} ({{ koodi.tutkintonimikeArvo }})</td>
+            <td><span ng-show="koodi.tutkinnonOsaArvo">{{ koodi.$tutkinnonOsaNimi | kaanna }} ({{ koodi.tutkinnonOsaArvo }})</span></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-
     <div ng-if="koodisto.length === 0" kaanna="'ei-tutkintonimikkeita'"></div>
   </div>
 </div>
@@ -200,23 +185,23 @@
 
 
 <div class="row row-margin">
-  <div class="col-xs-4">
+  <div class="col-xs-6 col-sm-4">
     <strong>
       <span kaanna="'voimaantulo-pvm'"></span>
     </strong>
   </div>
-  <div class="col-xs-8">
+  <div class="col-xs-6 col-sm-8">
     <span pvm="peruste.voimassaoloAlkaa"></span>
   </div>
 </div>
 
 <div class="row row-margin">
-  <div class="col-xs-4">
+  <div class="col-xs-6 col-sm-4">
     <strong>
       <span kaanna="'voimassaolo-paattymispvm'"></span>
     </strong>
   </div>
-  <div class="col-xs-8">
+  <div class="col-xs-6 col-sm-8">
     <span pvm="peruste.voimassaoloLoppuu"></span>
   </div>
 </div>

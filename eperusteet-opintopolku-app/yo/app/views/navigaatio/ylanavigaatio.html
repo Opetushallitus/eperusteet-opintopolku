@@ -6,7 +6,7 @@
         <!-- opintopolku päävalikko -->
         <ul>
           <li>
-            <a ng-href="{{urls.opintopolku[kieli]}}">{{'opintopolku' | kaanna}}</a>
+            <a ng-href="{{urls.opintopolku[kieli]}}" kaanna="'opintopolku'"></a>
           </li>
           <li class="active">
             <span kaanna="eperusteet-otsikko"></span>
@@ -74,20 +74,19 @@
       <nav class="navbar navbar-ylanavigaatio-mobile navbar-static-top" role="navigation">
         <div class="navbar-header">
 
-          <div class="navbar-brand" ng-show="navCollapsed">
-            {{valittuOsio() | kaanna}}
+          <div class="navbar-brand" ng-show="navCollapsed" kaanna="valittuOsio()">
           </div>
-          <div class="navbar-brand" ng-show="!navCollapsed">
-            {{'navi.valikkon-otsikko' | kaanna}}
+          <div class="navbar-brand" ng-show="!navCollapsed" kaanna="'navi.valikkon-otsikko'">
           </div>
 
-          <button type="button" class="navbar-toggle collapsed" ng-click="navCollapse()">
+          <button id="valikko-nappi" type="button" class="navbar-toggle collapsed" ng-click="navCollapse()">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
         </div>
-        <div id="ylanavigaatio-collapse" class="collapse navbar-collapse" collapse="navCollapsed">
+        <div id="ylanavigaatio-collapse" class="collapse navbar-collapse" collapse="navCollapsed"
+             off-click="navCollapse()" off-click-filter="#valikko-nappi" off-click-if="!navCollapsed">
           <div class="container-fluid">
             <ul class="nav navbar-nav">
               <li ui-sref-active="active">
