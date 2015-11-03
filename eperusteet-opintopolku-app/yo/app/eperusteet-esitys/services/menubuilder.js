@@ -55,13 +55,14 @@ angular.module('eperusteet.esitys')
     });
   }
 
-  function createOppiaineItem(oppiaine, depth) {
+  function createOppiaineItem(oppiaine, depth, idx) {
     return {
       $id: oppiaine.id,
       depth: depth,
       $jnro: oppiaine.jarjestys,
       $oppiaine: oppiaine,
       $hidden: false,
+      idx: idx,
       label: oppiaine.nimi,
       url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
     }
@@ -82,14 +83,15 @@ angular.module('eperusteet.esitys')
 
 
   function buildLukioOppiaineMenu(oppiaineet){
+    var idx = 0;
     return _.reduce(oppiaineet, function(menu, oppiaine){
-        menu.push(createOppiaineItem(oppiaine, 0));
+        menu.push(createOppiaineItem(oppiaine, 0, idx));
+        idx++;
         if(!_.isEmpty(oppiaine.oppimaarat)) {
           _.each(oppiaine.oppimaarat, function(oppimaara){
             menu.push(createOppiaineItem(oppimaara, 1));
             if(!_.isEmpty(oppimaara.kurssit)) {
               _.each(oppimaara.kurssit, function(kurssi) {
-                console.log("KURSSI", kurssi);
                 menu.push(createKurssiItem(kurssi, 2));
               })
             }

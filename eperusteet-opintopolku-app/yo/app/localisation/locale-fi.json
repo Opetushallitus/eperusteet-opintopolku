@@ -144,5 +144,8 @@
   "syventava": "syventävä",
   "oppimaaran-sisalto" : "Oppimäärän sisaalto",
   "opetuksen-yleiset-tavoitteet": "Opetuksen yleiset tavoitteet",
-  "aihekokonaisuudet": "Aihekokonaisuudet"
+  "aihekokonaisuudet": "Aihekokonaisuudet",
+  "syventava-kurssit": "Syventävä kurssit",
+  "pakolliset-kurssit": "Pakolliset kurssit",
+  "soveltava-kurssit": "Soveltava kurssit"
 }

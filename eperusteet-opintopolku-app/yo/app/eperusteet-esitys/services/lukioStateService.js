@@ -22,6 +22,7 @@ angular.module('eperusteet.esitys')
   var state = {};
   var section = null;
 
+
   function processSection(navi, index, cb) {
     section = navi.sections[index];
     if (index === 1) {

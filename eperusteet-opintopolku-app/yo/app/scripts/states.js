@@ -324,7 +324,7 @@ epOpintopolkuApp
 
     .state('root.lukio.oppiaine', {
       url: '/oppiaine/:oppiaineId',
-      templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+      templateUrl: 'eperusteet-esitys/views/lukioOppiaine.html',
       controller: 'epLukioOppiaineController',
       resolve: {
         oppiaineId: function (serviceConfig, $stateParams) {

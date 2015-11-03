@@ -39,11 +39,18 @@ angular.module('eperusteet.esitys')
     $scope.oppiaineRakenne = oppiaineRakenne;
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenSisalto = perusData;
-    $scope.oppiaineet = lukioOppiaineet;
+    $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
     $scope.lukioKurssit = lukioKurssit;
+
+    //by default load first textkappale
+    $scope.$on('$stateChangeSuccess', function () {
+      if ($state.current.name === epEsitysSettings.lukioState) {
+        $state.go('.tekstikappale', {tekstikappaleId: $scope.perusteenSisalto.lapset[0].id});
+      }
+    });
 
     $scope.tabs = [
       {
@@ -114,6 +121,8 @@ angular.module('eperusteet.esitys')
       return classes;
     };
 
+    var t = epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet);
+    setTimeout(function(){console.log(t)}, 500);
     $scope.navi = {
       header: 'perusteen-sisalto',
       showOne: true,
@@ -169,6 +178,7 @@ angular.module('eperusteet.esitys')
 
   .controller('epLukioTekstikappaleController', function($scope, $stateParams, tekstikappale, epTekstikappaleChildResolver,
                                                                MurupolkuData, epParentFinder) {
+
     $scope.tekstikappale = tekstikappale;
     MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
@@ -235,8 +245,37 @@ angular.module('eperusteet.esitys')
     MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
   })
 
-  .controller('epLukioOppiaineController', function($scope, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
+
+    $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
+
+    $scope.kurssit = _.pick($scope.valittuOppiaine, 'kurssit').kurssit;
+    $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
+
+    $scope.filterKurssit = function(kurssit, tyyppi){
+      var list = [];
+      switch(tyyppi) {
+        case 0:
+          list = _.filter(kurssit, function (kurssi) {
+            return kurssi.tyyppi === 'PAKOLLINEN';
+          });
+          break;
+        case 1:
+          list = _.filter(kurssit, function (kurssi) {
+            return kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA';
+          });
+          break;
+        case 2:
+          list = _.filter(kurssit, function (kurssi) {
+            return kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA';
+          });
+          break;
+        default:
+          list = "undefined";
+      }
+      return list;
+    };
 
     if (oppiaine) {
       var murupolkuParams = {
@@ -288,7 +327,7 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioSivuNaviController', function ($scope, $state, Algoritmit, Utils, epSivunaviUtils,
-                                                epEsitysSettings) {
+                                                epEsitysSettings, epLukioStateService) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
