@@ -3,7 +3,7 @@
   width: 105%;
 
   .nav-tabs {
-    border-bottom: 0 !important;
+    border: 0 !important;
   }
 }
 
@@ -16,8 +16,9 @@
   margin-left: -25px;
   margin-top: -12px;
   li > a {
-    border-bottom: none;
+    border: 0px;
     font-size: 13px;
+    font-weight: 550;
     border-radius: 0px;
     padding-top: 16px;
     padding-right: 19px;
@@ -82,13 +83,13 @@
     display: inline-block;
   }
   .syventava {
-    background-color: rgb(178, 155, 202);
+    background-color: #997bb6;
   }
 
   .pakollinen {
-    background-color: rgb(136, 211, 228);
+    background-color: #bddb8a;
   }
 
   .soveltava {
-    background-color: rgb(252, 242, 129);
+    background-color: #f8a35e;
   }
