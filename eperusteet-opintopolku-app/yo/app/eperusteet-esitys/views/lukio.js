@@ -28,8 +28,6 @@ angular.module('eperusteet.esitys')
     $location,
     perusData,
     peruste,
-    lukioOppiaineet,
-    //lukioKurssit,
     epEsitysSettings,
     epMenuBuilder,
     MurupolkuData,
@@ -44,7 +42,6 @@ angular.module('eperusteet.esitys')
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
-    //$scope.lukioKurssit = lukioKurssit;
 
     $timeout(function () {
       if ($state.current.name === epEsitysSettings.lukioState) {
@@ -60,46 +57,78 @@ angular.module('eperusteet.esitys')
     $scope.state = epLukioStateService.getState();
 
     $scope.$on('$stateChangeSuccess', function () {
-      console.log("called", $scope.navi);
      epLukioStateService.setState($scope.navi);
      });
 
-    $rootScope.$on('$locationChangeSuccess', function () {
-      epLukioStateService.setState($scope.navi);
-    });
+    $scope.currentUrl = $state.current.name;
 
 
     $scope.tabs = [
       {
         title: 'oppimaaran-sisalto',
         name: 'sisalto',
-        url: $state.href('root.lukio')
+        url: function(){
+          /*if($scope.currentUrl === 'root.lukio.oppiaine') {
+            return $scope.currentUrl;
+          }
+          else if($scope.currentUrl === 'root.lukio.kurssi') {
+            return $scope.currentUrl;
+          }
+          else if(_.endsWith($scope.currentUrl, 'tavoitteet')) {
+            return _.omit($scope.currentUrl, 'tavoitteet');
+          }
+          else if(_.endsWith($scope.currentUrl, 'aihekokonaisuudet')) {
+            return $scope.currentUrl.replace('.aihekokonaisuudet','');
+          }*/
+        }
       },
       {
         title: 'opetuksen-yleiset-tavoitteet',
         name: 'tavoitteet',
-        url: $state.href('root.lukio.tavoitteet')
+        url: function() {
+         /* if(_.endsWith($scope.currentUrl, 'tavoitteet')){
+            return $scope.currentUrl;
+          }
+          else if(_.endsWith($scope.currentUrl, 'aihekokonaisuudet')){
+            return $scope.currentUrl.replace('.aihekokonaisuudet','');
+          }
+          return $scope.currentUrl + '' + '.tavoitteet';
+        }*/
       },
-      { title: 'aihekokonaisuudet',
+      {
+        title: 'aihekokonaisuudet',
         name: 'aihekokonaisuudet',
-        url: $state.href('root.lukio.aihekokonaisuudet')
+        url: function () {
+          /*if(_.endsWith($scope.currentUrl, 'aihekokonaisuudet')){
+            return $scope.currentUrl;
+          }
+          else if (_.endsWith($scope.currentUrl, 'tavoitteet')){
+            return $scope.currentUrl.replace('.tavoitteet','');
+          }
+          return $scope.currentUrl + '' + '.aihekokonaisuudet';
+        }*/
+          return ''
       }
     ];
+
+    $state.checkState = function(){
+      console.log("check", !_.endsWith($stateParams, 'tekstikappale'));
+      return true; //!_.endsWith($stateParams, 'tekstikappale');
+    };
 
     $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
 
     $scope.tabClass = function(tabName) {
-      var param = _.words($state.current.name)[2];
       var className = null;
       switch(tabName) {
         case 'tavoitteet':
-          className = (param === tabName) ? true : null;
+          className = _.endsWith($state.current.name, tabName) ? true : null;
           break;
         case 'aihekokonaisuudet':
-          className = (param === tabName) ? true : null;
+          className = _.endsWith($state.current.name, tabName) ? true : null;
           break;
         case 'sisalto':
-          className = (param !== 'tavoitteet') && (param !== 'aihekokonaisuudet') ? true : null;
+          className = !_.endsWith($state.current.name, 'tavoitteet') && !_.endsWith($state.current.name, 'aihekokonaisuudet') ? true : null;
           break;
         default:
           className = null;
@@ -133,7 +162,6 @@ angular.module('eperusteet.esitys')
     };
 
     var t = epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet);
-    setTimeout(function(){console.log(t)}, 500);
 
     $scope.navi = {
       header: 'perusteen-sisalto',
@@ -231,16 +259,55 @@ angular.module('eperusteet.esitys')
     checkPrevNext();
   })
 
-  .controller('epLukioKurssiController', function($scope, Kieli, kurssi, $stateParams, Utils, MurupolkuData) {
+  .controller('epLukioKurssiController', function($scope, Kieli, $stateParams, Utils, MurupolkuData) {
 
-    $scope.tekstikappale = kurssi;
+    $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
+
+    function reduceKurssit() {
+      return _.reduce($scope.oppiaineRakenne.oppiaineet, function(kaikkiKurssit, oppiaine){
+        if(!_.isEmpty(oppiaine.oppimaarat)) {
+          _.each(oppiaine.oppimaarat, function(oppimaara){
+            if(!_.isEmpty(oppimaara.kurssit)) {
+              _(oppimaara.kurssit)
+                .map(function(kurssi){
+                kurssi.oppiaineNimi = oppimaara.nimi;
+                return kurssi;
+                })
+                .each(function(kurssi) {
+                kaikkiKurssit.push(kurssi);
+              }).value()
+            }
+          })
+        }
+        if(!_.isEmpty(oppiaine.kurssit)){
+            _(oppiaine.kurssit)
+              .map(function(kurssi) {
+                kurssi.oppiaineNimi = oppiaine.nimi;
+                return kurssi
+              })
+              .each(function(kurssi){
+              kaikkiKurssit.push(kurssi);
+              }).value()
+        }
+        return kaikkiKurssit;
+      }, []);
+    }
+    var kurssit = reduceKurssit();
+    function filterKurssit(id){
+      return _.filter(kurssit, function(kurssi) {
+        console.log(kurssi);
+        return '' + kurssi.id === '' + id })
+      }
+
+    $scope.kurssi = filterKurssit($stateParams.kurssiId)[0];
+    console.log($scope.kurssi);
 
     var murupolkuParams = {
       parents: null,
-      kurssiId: $scope.tekstikappale._id,
-      kurssiNimi: $scope.tekstikappale.nimi,
-      oppiaineId: $scope.tekstikappale.oppiaineet[0].oppiaineId,
-      oppiaineNimi: $scope.tekstikappale.oppiaineet[0].oppiaineNimi[Kieli.getSisaltokieli()]
+      kurssiId: $scope.kurssi.id,
+      kurssiNimi: $scope.kurssi.nimi,
+      oppiaineId: $scope.kurssi.oppiaineId,
+      oppiaineNimi: $scope.kurssi.oppiaineNimi
     };
 
     MurupolkuData.set(murupolkuParams);
@@ -289,13 +356,12 @@ angular.module('eperusteet.esitys')
       return list;
     };
 
-    $scope.scrollToKurssi = function(id) {
+   /* $scope.scrollToKurssi = function(id) {
       id ? $location.hash(id) : null;
       id ? anchorSmoothScroll.scrollTo(id) : null;
       id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
-    };
+    };*/
 
-    if (oppiaine) {
       var murupolkuParams = {
         //parents: null,
         oppiaineId: oppiaine.id,
@@ -313,35 +379,6 @@ angular.module('eperusteet.esitys')
 
       MurupolkuData.set('parents', epParentFinder.find($scope.oppiaineet.lapset, $scope.tekstikappale.id, true));
 
-      var checkPrevNext = function() {
-        var items = $scope.navi.sections[1].items;
-        var me = _.findIndex(items, function (item) {
-          return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
-        });
-        if (me === -1) {
-          return;
-        }
-        var i = me + 1;
-        var meDepth = items[me].depth;
-        //Why not include children?
-        for (; i < items.length; ++i) {
-         if (items[i].depth <= meDepth) {
-          break;
-         }
-        }
-        $scope.links.next = i < items.length && items[i].id !== 'laajaalaiset' ? items[i] : null;
-        i = me - 1;
-        for (; i >= 0; --i) {
-          if (items[i].depth <= meDepth) {
-            break;
-          }
-        }
-        $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
-      };
-
-      $scope.$on('oppiaine:stateSet', checkPrevNext);
-      checkPrevNext();
-    }
   })
 
   .controller('epLukioSivuNaviController', function ($rootScope, $scope, $location, $state, Algoritmit, Utils, epSivunaviUtils,
@@ -349,11 +386,11 @@ angular.module('eperusteet.esitys')
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
-    $scope.scrollToKurssi = function(id){
+    /*$scope.scrollToKurssi = function(id){
       id ? $location.hash(id) : null;
       id ? anchorSmoothScroll.scrollTo(id) : null;
       id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
-    };
+    };*/
 
     $scope.search = {
       term: '',
