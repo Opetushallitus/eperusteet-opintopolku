@@ -74,7 +74,7 @@
   <h2 kaanna="'oppimaarat'"></h2>
 
 <div ng-repeat="oppimaara in oppimaarat">
-  <h2 ng-bind-html="oppimaara.nimi | kaanna | unsafe"></h2>
+  <h2 id="{{oppimaara.$id}}" ng-bind-html="oppimaara.nimi | kaanna | unsafe"></h2>
 
   <div ng-if="filterKurssit(oppimaara.kurssit,0).length" class="kurssi-list">
     <h2 ng-bind-html="'pakolliset-kurssit' | kaanna | unsafe"></h2>
@@ -145,7 +145,7 @@
 </div>
 </div>
 
-<h1 class="oppiaine-nimi" esitys-sivu-otsikko="kurssit">
+<h1 class="oppiaine-nimi kurssi-title" esitys-sivu-otsikko="kurssit">
   <span ng-bind="'Kurssit' | kaanna"></span>
 </h1>
 

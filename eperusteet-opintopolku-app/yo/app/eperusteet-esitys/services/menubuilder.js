@@ -81,6 +81,18 @@ angular.module('eperusteet.esitys')
     }
   }
 
+  function createOppimaaraItem(oppimaara, depth) {
+    return {
+      $id: oppimaara.id,
+      depth: depth,
+      $oppimaara: oppimaara,
+      $jnro: oppimaara.jarjestys,
+      $hidden: true,
+      label: oppimaara.nimi
+      //url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
+    }
+  }
+
 
   function buildLukioOppiaineMenu(oppiaineet){
     var idx = 0;
@@ -89,7 +101,7 @@ angular.module('eperusteet.esitys')
         idx++;
         if(!_.isEmpty(oppiaine.oppimaarat)) {
           _.each(oppiaine.oppimaarat, function(oppimaara){
-            menu.push(createOppiaineItem(oppimaara, 1));
+            menu.push(createOppimaaraItem(oppimaara, 1));
             if(!_.isEmpty(oppimaara.kurssit)) {
               _.each(oppimaara.kurssit, function(kurssi) {
                 menu.push(createKurssiItem(kurssi, 2));

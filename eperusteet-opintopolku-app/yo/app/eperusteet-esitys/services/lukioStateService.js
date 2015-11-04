@@ -42,6 +42,9 @@ angular.module('eperusteet.esitys')
       _.each(section.items, function (item) {
         item.$selected = false;
         item.$header = false;
+        if (item.depth > 0) {
+          item.$hidden = true;
+        }
       });
     });
     section = null;
@@ -52,6 +55,13 @@ angular.module('eperusteet.esitys')
         if (selected && selected.$kurssi) {
           found = _.find(items, function (item) {
             return item.$kurssi && '' + item.$kurssi.id === '' + $location.hash();
+          });
+          if (found) {
+            found.$header = true;
+          }
+        } else if (selected && selected.$oppimaara) {
+          found = _.find(items, function (item) {
+            return item.$oppimaara && '' + item.$oppimaara.id === '' + $location.hash();
           });
           if (found) {
             found.$header = true;
@@ -101,6 +111,10 @@ angular.module('eperusteet.esitys')
           if (item.$oppiaine && !$location.hash()) {
             item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
           }
+          if (item.$oppimaara) {
+            item.$selected = '' + $location.hash() === '' + item.$id;
+            item.$hidden = item.depth > 0;
+          }
           if (item.$kurssi) {
             item.$selected = '' + $location.hash() === '' + item.$id;
             item.$hidden = item.depth > 0;
@@ -112,21 +126,6 @@ angular.module('eperusteet.esitys')
         actions: function () {
           items = section.items;
           setParentOppiaineHeader();
-        }
-      },
-      kurssi: {
-        index: 1,
-        callback: function (item) {
-          if (item.$kurssi) {
-            item.$selected = '' + $stateParams.kurssiId === '' + item.$kurssi.id;
-          }
-          if (item.$selected) {
-            selected = item;
-          }
-        },
-        actions: function () {
-          items = section.items;
-          setParentOppiaineHeaderForKurssi();
         }
       }
     };

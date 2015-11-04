@@ -7,5 +7,9 @@
       <a ng-if="item.$kurssi" ng-click="scrollToKurssi(item.$id)">
       <span ep-highlight="search.term" ng-bind="item.label | kaanna"></span>
       </a>
+      <a ng-if="item.$oppimaara" ng-click="scrollToKurssi(item.$id)">
+        <span ep-highlight="search.term" ng-bind="item.label | kaanna"></span>
+      </a>
+  </div>
   </div>
 </div>

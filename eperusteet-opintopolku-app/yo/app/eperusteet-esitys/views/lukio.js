@@ -29,7 +29,7 @@ angular.module('eperusteet.esitys')
     perusData,
     peruste,
     lukioOppiaineet,
-    lukioKurssit,
+    //lukioKurssit,
     epEsitysSettings,
     epMenuBuilder,
     MurupolkuData,
@@ -44,19 +44,30 @@ angular.module('eperusteet.esitys')
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
-    $scope.lukioKurssit = lukioKurssit;
+    //$scope.lukioKurssit = lukioKurssit;
 
-    //by default load first textkappale
-    $scope.$on('$stateChangeSuccess', function () {
+    $timeout(function () {
       if ($state.current.name === epEsitysSettings.lukioState) {
-        $state.go('.tekstikappale', {tekstikappaleId: $scope.perusteenSisalto.lapset[0].id});
+        var first = _($scope.navi.sections[0].items).filter(function (item) {
+          return item.depth === 0;
+        }).first();
+        if (first) {
+          $state.go('.tekstikappale', {tekstikappaleId: $scope.perusteenSisalto.lapset[0].id}, {location: 'replace'});
+        }
       }
     });
 
+    $scope.state = epLukioStateService.getState();
+
+    $scope.$on('$stateChangeSuccess', function () {
+      console.log("called", $scope.navi);
+     epLukioStateService.setState($scope.navi);
+     });
+
     $rootScope.$on('$locationChangeSuccess', function () {
-      console.log("changed");
       epLukioStateService.setState($scope.navi);
     });
+
 
     $scope.tabs = [
       {
@@ -97,12 +108,6 @@ angular.module('eperusteet.esitys')
     };
 
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
-
-    $scope.state = epLukioStateService.getState();
-
-    $scope.$on('$stateChangeSuccess', function () {
-      epLukioStateService.setState($scope.navi);
-    });
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
