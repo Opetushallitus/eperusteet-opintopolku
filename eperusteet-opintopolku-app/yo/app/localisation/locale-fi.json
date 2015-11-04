@@ -142,10 +142,12 @@
   "soveltava": "soveltava",
   "pakollinen": "pakollinen",
   "syventava": "syventävä",
-  "oppimaaran-sisalto" : "Oppimäärän sisaalto",
+  "oppimaaran-sisalto" : "Oppimäärän sisäältö",
   "opetuksen-yleiset-tavoitteet": "Opetuksen yleiset tavoitteet",
   "aihekokonaisuudet": "Aihekokonaisuudet",
-  "syventava-kurssit": "Syventävä kurssit",
+  "syventavat-kurssit": "Syventävät kurssit",
   "pakolliset-kurssit": "Pakolliset kurssit",
-  "soveltava-kurssit": "Soveltava kurssit"
+  "soveltavat-kurssit": "Soveltavat kurssit",
+  "keskeiset-sisallot": "Keskeiset sisällöt",
+  "tavoitteet-ja-keskeiset-sisallot": "Tavoitteet ja keskeiset sisällöt"
 }

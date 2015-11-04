@@ -257,7 +257,7 @@ angular.module('eperusteet.esitys')
     MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
   })
 
-  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, $location, anchorSmoothScroll, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
 
     $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
@@ -290,7 +290,9 @@ angular.module('eperusteet.esitys')
     };
 
     $scope.scrollToKurssi = function(id) {
-      return id ? $location.hash(id) : null;
+      id ? $location.hash(id) : null;
+      id ? anchorSmoothScroll.scrollTo(id) : null;
+      id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
     };
 
     if (oppiaine) {
@@ -343,13 +345,14 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioSivuNaviController', function ($rootScope, $scope, $location, $state, Algoritmit, Utils, epSivunaviUtils,
-                                                epEsitysSettings, epLukioStateService) {
+                                                epEsitysSettings, anchorSmoothScroll) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
     $scope.scrollToKurssi = function(id){
-      $rootScope.$broadcast('$locationChangeSuccess');
-      return id ? $location.hash(id) : null;
+      id ? $location.hash(id) : null;
+      id ? anchorSmoothScroll.scrollTo(id) : null;
+      id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
     };
 
     $scope.search = {

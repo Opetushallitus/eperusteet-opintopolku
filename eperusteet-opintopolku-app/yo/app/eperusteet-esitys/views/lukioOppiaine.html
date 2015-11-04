@@ -4,6 +4,13 @@
 
 <div class="clearfix"></div>
 
+<div ng-if="valittuOppiaine.pakollinenKurssiKuvaus">
+  <h2 kaanna="'pakolliset-kurssit'"></h2>
+  <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
+    <termisto-tekstikentta tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
+  </div>
+</div>
+
 <div ng-if="filterKurssit(kurssit,0).length" class="kurssi-list">
   <h2 ng-bind-html="'pakolliset-kurssit' | kaanna | unsafe"></h2>
   <div ng-repeat="kurssi in filterKurssit(kurssit, 0)">
@@ -14,8 +21,15 @@
   </div>
 </div>
 
+<div ng-if="valittuOppiaine.syventavaKurssiKuvaus">
+  <h2 kaanna="'syventavat-kurssit'"></h2>
+  <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
+    <termisto-tekstikentta tekstikentta="valittuOppiaine.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
+  </div>
+</div>
+
 <div ng-if="filterKurssit(kurssit,1).length" class="kurssi-list">
-  <h2 ng-bind-html="'syventava-kurssit' | kaanna | unsafe"></h2>
+  <h2 ng-bind-html="'syventavat-kurssit' | kaanna | unsafe"></h2>
   <div ng-repeat="kurssi in filterKurssit(kurssit, 1)">
     <span class="colorlabel syventava"></span>
     <span class="spacer-small"></span>
@@ -24,34 +38,20 @@
   </div>
 </div>
 
-<div ng-if="filterKurssit(kurssit,2).length" class="kurssi-list">
-  <h2 ng-bind-html="'soveltava-kurssit' | kaanna | unsafe"></h2>
-  <div ng-repeat="kurssi in filterKurssit(kurssit, 2)">
-    <span class="colorlabel soveltava"></span>
-    <span class="spacer-small"></span>
-    <a ng-click="scrollToKurssi(kurssi.id)"
-       class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
-  </div>
-</div>
-
-<div ng-if="valittuOppiaine.pakollinenKurssiKuvaus">
-  <h2 kaanna="'pakolliset-kurssit'"></h2>
-  <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
-  </div>
-</div>
-
 <div ng-if="valittuOppiaine.soveltavaKurssiKuvaus">
-  <h2 kaanna="'soveltava-kurssit'"></h2>
+  <h2 kaanna="'soveltavat-kurssit'"></h2>
   <div ng-hide="!valittuOppiaine.soveltavaKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
     <termisto-tekstikentta tekstikentta="valittuOppiaine.soveltavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
   </div>
 </div>
 
-<div ng-if="valittuOppiaine.syventavaKurssiKuvaus">
-  <h2 kaanna="'syventava-kurssit'"></h2>
-  <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
+<div ng-if="filterKurssit(kurssit,2).length" class="kurssi-list">
+  <h2 ng-bind-html="'soveltavat-kurssit' | kaanna | unsafe"></h2>
+  <div ng-repeat="kurssi in filterKurssit(kurssit, 2)">
+    <span class="colorlabel soveltava"></span>
+    <span class="spacer-small"></span>
+    <a ng-click="scrollToKurssi(kurssi.id)"
+       class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
   </div>
 </div>
 
@@ -76,6 +76,13 @@
 <div ng-repeat="oppimaara in oppimaarat">
   <h2 id="{{oppimaara.$id}}" ng-bind-html="oppimaara.nimi | kaanna | unsafe"></h2>
 
+  <div ng-if="oppimaara.pakollinenKurssiKuvaus">
+    <h2 kaanna="'pakolliset-kurssit'"></h2>
+    <div ng-hide="!oppimaara.pakollinenKurssiKuvaus || !hasContent(oppimaara.pakollinenKurssiKuvaus)">
+      <termisto-tekstikentta tekstikentta="oppimaara.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
+    </div>
+  </div>
+
   <div ng-if="filterKurssit(oppimaara.kurssit,0).length" class="kurssi-list">
     <h2 ng-bind-html="'pakolliset-kurssit' | kaanna | unsafe"></h2>
     <div ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 0)">
@@ -86,8 +93,15 @@
     </div>
   </div>
 
+  <div ng-if="oppimaara.syventavaKurssiKuvaus">
+    <h2 kaanna="'syventavat-kurssit'"></h2>
+    <div ng-hide="!oppimaara.pakollinenKurssiKuvaus || !hasContent(oppimaara.pakollinenKurssiKuvaus)">
+      <termisto-tekstikentta tekstikentta="oppimaara.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
+    </div>
+  </div>
+
   <div ng-if="filterKurssit(oppimaara.kurssit,1).length" class="kurssi-list">
-    <h2 ng-bind-html="'syventava-kurssit' | kaanna | unsafe"></h2>
+    <h2 ng-bind-html="'syventavat-kurssit' | kaanna | unsafe"></h2>
     <div ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 1)">
       <span class="colorlabel syventava"></span>
       <span class="spacer-small"></span>
@@ -97,35 +111,21 @@
     </div>
   </div>
 
+  <div ng-if="oppimaara.soveltavaKurssiKuvaus">
+    <h2 kaanna="'soveltavat-kurssit'"></h2>
+    <div ng-hide="!oppimaara.soveltavaKurssiKuvaus || !hasContent(oppimaara.pakollinenKurssiKuvaus)">
+      <termisto-tekstikentta tekstikentta="oppimaara.soveltavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
+    </div>
+  </div>
+
   <div ng-if="filterKurssit(oppimaara.kurssit,2).length"class="kurssi-list">
-    <h2 ng-bind-html="'soveltava-kurssit' | kaanna | unsafe"></h2>
+    <h2 ng-bind-html="'soveltavat-kurssit' | kaanna | unsafe"></h2>
     <div ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 2)">
       <span class="colorlabel soveltava"></span>
       <span class="spacer-small"></span>
       <a ng-click="scrollToKurssi(kurssi.id)"
          class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna">
       </a>
-    </div>
-  </div>
-
-  <div ng-if="oppimaara.pakollinenKurssiKuvaus">
-    <h2 kaanna="'pakolliset-kurssit'"></h2>
-    <div ng-hide="!oppimaara.pakollinenKurssiKuvaus || !hasContent(oppimaara.pakollinenKurssiKuvaus)">
-      <termisto-tekstikentta tekstikentta="oppimaara.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
-    </div>
-  </div>
-
-  <div ng-if="oppimaara.soveltavaKurssiKuvaus">
-    <h2 kaanna="'soveltava-kurssit'"></h2>
-    <div ng-hide="!oppimaara.soveltavaKurssiKuvaus || !hasContent(oppimaara.pakollinenKurssiKuvaus)">
-      <termisto-tekstikentta tekstikentta="oppimaara.soveltavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
-    </div>
-  </div>
-
-  <div ng-if="oppimaara.syventavaKurssiKuvaus">
-    <h2 kaanna="'syventava-kurssit'"></h2>
-    <div ng-hide="!oppimaara.pakollinenKurssiKuvaus || !hasContent(oppimaara.pakollinenKurssiKuvaus)">
-      <termisto-tekstikentta tekstikentta="oppimaara.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
     </div>
   </div>
 
@@ -154,15 +154,25 @@
     <span ng-bind-html="kurssi.nimi | kaanna | unsafe"></span>
   </h3>
 
-  <h4 ng-bind="'keskeiset-sisallot' | kaanna"></h4>
-  <termisto-tekstikentta tekstikentta="kurssi.keskeisetSisallot"></termisto-tekstikentta>
+  <div ng-if="kurssi.kuvaus | kaanna">
+    <h3 class="panel-title osio-otsikko"> <!--ng-bind="'kurssi-kuvaus-header' | kaanna"--></h3>
+    <div ng-bind-html="kurssi.kuvaus | kaanna"></div>
+  </div>
 
-  <h4 ng-bind="'tavoitteet-ja-keskeiset-sisallot' | kaanna"></h4>
-  <termisto-tekstikentta tekstikentta="kurssi.tavoitteetJaKeskeisetSisallot"></termisto-tekstikentta>
+  <div ng-if="kurssi.tavoitteet.teksti | kaanna">
+    <h3 class="panel-title osio-otsikko" ng-bind="kurssi.tavoitteet.otsikko | kaanna"></h3>
+    <div ng-bind-html="kurssi.tavoitteet.teksti | kaanna"></div>
+  </div>
 
-  <h4 ng-bind="'tavoitteet' | kaanna"></h4>
-  <termisto-tekstikentta tekstikentta="kurssi.tavoitteet"></termisto-tekstikentta>
+  <div ng-if="kurssi.keskeinenSisalto.teksti | kaanna">
+    <h3 class="panel-title osio-otsikko" ng-bind="kurssi.keskeinenSisalto.otsikko | kaanna"></h3>
+    <div ng-bind-html="kurssi.keskeinenSisalto.teksti | kaanna"></div>
+  </div>
 
+  <div ng-if="kurssi.tavoitteetJaKeskeinenSisalto.teksti | kaanna">
+    <h3 class="panel-title osio-otsikko" ng-bind="kurssi.tavoitteetJaKeskeinenSisalto.otsikko | kaanna"></h3>
+    <div ng-bind-html="kurssi.tavoitteetJaKeskeinenSisalto.teksti | kaanna"></div>
+  </div>
 </div>
 
 
