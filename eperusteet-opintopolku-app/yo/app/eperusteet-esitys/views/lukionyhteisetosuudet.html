@@ -2,8 +2,11 @@
   <div ng-repeat="item in section.items" class="tekstisisalto"
     ng-class="section.naviClasses(item)"
     ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
-  <a ng-click="scrollToHash(item.$osa._perusteenOsa)">
+  <a ng-if="item.depth > 0" ng-click="scrollToHash(item.$osa._perusteenOsa)">
   <span ep-highlight="search.term" ng-bind="item.label | kaanna"></span>
+  </a>
+  <a ng-if="item.depth === 0" ui-sref=".tekstikappale({tekstikappaleId: item.$osa.id})">
+    <span ep-highlight="search.term" ng-bind="item.label | kaanna" ng-class="{uppercase: item.$uppercase}"></span>
   </a>
   </div>
 </div>

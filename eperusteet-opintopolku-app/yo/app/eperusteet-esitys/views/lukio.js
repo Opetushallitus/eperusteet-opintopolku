@@ -102,7 +102,7 @@ angular.module('eperusteet.esitys')
        epLukioStateService.setState($scope.navi);
     });
 
-    $scope.$on('$locationChangeSuccess', function () {
+    $rootScope.$on('$locationChangeSuccess', function () {
       epLukioStateService.setState($scope.navi);
     });
 
@@ -265,23 +265,28 @@ angular.module('eperusteet.esitys')
           }
         }
         scope.$watch('footer', updateFooter);
-
       }
     };
   })
 
-  .controller('epLukioTekstikappaleController', function($scope, $stateParams, epTekstikappaleChildResolver,
-                                                               tekstikappaleet, MurupolkuData, epParentFinder) {
+  .controller('epLukioTekstikappaleController', function($scope, $stateParams, $location, epTekstikappaleChildResolver,
+                                                               tekstikappale, tekstikappaleId, MurupolkuData, epParentFinder) {
 
-    $scope.tekstikappaleet = tekstikappaleet;
+    $scope.tekstikappale = tekstikappale;
+    $scope.lapset = epTekstikappaleChildResolver.getSisalto();
 
-
-   /*MurupolkuData.set({tekstikappaleId: $location.hash(), tekstikappaleNimi: ""});
+    MurupolkuData.set('parents', epParentFinder.find($scope.perusteenSisalto.lapset, tekstikappale.id, true));
+    if (!$location.hash) {
+      MurupolkuData.set({tekstikappaleId: tekstikappaleId, tekstikappaleNimi: tekstikappale.nimi});
+    } else {
+      MurupolkuData.set({tekstikappaleId: $location.hash(), tekstikappaleNimi:
+        epParentFinder.find($scope.perusteenSisalto.lapset, $location.hash(), true)});
+    }
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
     $scope.links = {
       prev: null,
       next: null
-    };*/
+    };
 
     //MurupolkuData.set('parents', epParentFinder.find($scope.perusteenSisalto.lapset, tekstikappale.id, true));
 
@@ -296,11 +301,11 @@ angular.module('eperusteet.esitys')
       var i = me + 1;
       var meDepth = items[me].depth;
       //Why not include children?
-      /*for (; i < items.length; ++i) {
+      for (; i < items.length; ++i) {
         if (items[i].depth <= meDepth) {
           break;
         }
-      }*/
+      }
       $scope.links.next = i < items.length && items[i].id !== 'laajaalaiset' ? items[i] : null;
       i = me - 1;
       for (; i >= 0; --i) {
@@ -311,8 +316,8 @@ angular.module('eperusteet.esitys')
       $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
     }
 
-    //$scope.$on('lukio:stateSet', checkPrevNext);
-    //checkPrevNext();
+    $scope.$on('lukio:stateSet', checkPrevNext);
+    checkPrevNext();
   })
 
   .controller('epLukioKurssiController', function($scope, Kieli, $stateParams, Utils, MurupolkuData) {

@@ -290,29 +290,25 @@ epOpintopolkuApp
     }
   })
 
-  .state('root.lukio.tekstikappale', {
-    url: '/tekstikappale',
-    templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
-    controller: 'epLukioTekstikappaleController',
-    resolve: {
-      tekstikappaleet: function (Algoritmit, serviceConfig, perusData, $q, LukioTekstikappale) {
-        var promises = [];
-        _.each(perusData.lapset, function (item) {
-          promises.push(LukioTekstikappale.getByViite({viiteId: item.id}).$promise.then(function(res){
-            res.depth = 0;
-            return res;
-          }));
-          Algoritmit.kaikilleLapsisolmuille(item, 'lapset', function (lapsi, depth) {
-            promises.push(LukioTekstikappale.getByViite({viiteId: lapsi.id}).$promise.then(function(res){
-              res.depth = depth;
+    .state('root.lukio.tekstikappale', {
+      url: '/tekstikappale/:tekstikappaleId',
+      templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
+      controller: 'epLukioTekstikappaleController',
+      resolve: {
+        tekstikappaleId: function (serviceConfig, $stateParams) {
+          return $stateParams.tekstikappaleId;
+        },
+        tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
+          return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
+            .then(function(res){
               return res;
-            }));
-          },1);
-        });
-        return $q.all(promises);
+            });
+        },
+        lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
+          return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
+        }
       }
-    }
-  })
+    })
 
   .state('root.lukio.oppiaine', {
     url: '/oppiaine/:oppiaineId',

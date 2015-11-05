@@ -22,7 +22,6 @@ angular.module('eperusteet.esitys')
   var state = {};
   var section = null;
 
-
   function processSection(navi, index, cb) {
     section = navi.sections[index];
     if (index === 1) {
@@ -72,20 +71,22 @@ angular.module('eperusteet.esitys')
       }
     }
 
-    function textCallback(item)  {
-      if (item.$osa) {
-        item.$selected = '' + $location.hash() === '' + item.$osa._perusteenOsa;
-        item.$hidden = item.depth > 0;
-      }
-      if (item.$selected) {
-        selected = item;
-      }
-    }
-
     var states = {
       tekstikappale: {
         index: 0,
-        callback: textCallback
+        callback: function(item) {
+          if (item.$osa && item.depth === 0 && !$location.hash()) {
+            item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
+            item.$hidden = item.depth > 0;
+          }
+          if (item.$osa && $location.hash()) {
+            item.$selected = '' + $location.hash() === '' + item.$osa._perusteenOsa;
+            item.$hidden = item.depth > 0;
+          }
+          if (item.$selected) {
+            selected = item;
+          }
+        }
       },
       oppiaine: {
         index: 1,
