@@ -274,7 +274,6 @@ epOpintopolkuApp
       oppiaineRakenne: function(LukioYleistiedot, perusteId){
           return LukioYleistiedot.getOppiaineRakenne({perusteId: perusteId}).$promise
             .then(function(res){
-              console.log(res);
               return res;
             });
       },
@@ -284,6 +283,7 @@ epOpintopolkuApp
             var lapset = _.filter(res.lapset, function (lapsi) {
               return lapsi.perusteenOsa.osanTyyppi === 'tekstikappale';
             });
+            console.log({'lapset': lapset, 'id': perusteId});
             return {'lapset': lapset, 'id': perusteId};
           });
       }

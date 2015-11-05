@@ -38,10 +38,45 @@ angular.module('eperusteet.esitys')
     $scope.oppiaineRakenne = oppiaineRakenne;
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenSisalto = perusData;
+    $scope.peruste = peruste;
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
+    $scope.oppiaineetJaOppimaarat = flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
+
+    function flattenAndZipOppiaineet(oppiaineet) {
+      return _.reduce(oppiaineet, function (all, oppiaine, index) {
+          if (!_.isEmpty(oppiaine.oppimaarat)) {
+            _.each(oppiaine.oppimaarat, function (oppimaara) {
+              all.push(oppimaara)
+            })
+          }
+          all.push(oppiaine);
+          if (oppiaineet.length - 1 === index) {
+            return _.zipBy(all, 'id');
+          }
+          return all;
+        }, []);
+    }
+
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
+
+    function clickHandler(event) {
+      var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
+      if (ohjeEl.length === 0) {
+        $rootScope.$broadcast('ohje:closeAll');
+      }
+    }
+    function installClickHandler() {
+      $document.off('click', clickHandler);
+      $timeout(function () {
+        $document.on('click', clickHandler);
+      });
+    }
+
+    $scope.$on('$destroy', function () {
+      $document.off('click', clickHandler);
+    });
 
     $timeout(function () {
       if ($state.current.name === epEsitysSettings.lukioState) {
@@ -69,11 +104,11 @@ angular.module('eperusteet.esitys')
         return 'kurssi';
       }
       return null;
-    }
+    };
 
     $scope.wrongState = function(){
       return _.intersection(_.words($state.current.name), ['tavoitteet', 'aihekokonaisuudet']).length;
-    }
+    };
 
 
     $scope.tabs = [
@@ -324,7 +359,6 @@ angular.module('eperusteet.esitys')
 
   .controller('epLukioTavoitteetController', function($scope, tavoitteet, MurupolkuData) {
     $scope.tavoitteet = tavoitteet;
-
     MurupolkuData.set({tekstiNimi: tavoitteet.otsikko, tekstiId: tavoitteet.id});
   })
 
@@ -336,8 +370,8 @@ angular.module('eperusteet.esitys')
   .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
 
-    $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
-
+    $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
+    $scope.valittuOppiaine = $scope.oppiaineetJaOppimaarat[$stateParams.oppiaineId];
     $scope.kurssit = _.pick($scope.valittuOppiaine, 'kurssit').kurssit;
     $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
 

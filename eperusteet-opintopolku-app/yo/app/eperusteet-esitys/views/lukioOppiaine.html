@@ -17,7 +17,7 @@
     <div ng-repeat="kurssi in filterKurssit(kurssit, 0)">
       <span class="colorlabel pakollinen"></span>
       <span class="spacer-small"></span>
-      <a href="{{kurssi.url}}" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+      <a ui-sref="root.lukio.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
     </div>
   </div>
 
@@ -33,7 +33,7 @@
     <div ng-repeat="kurssi in filterKurssit(kurssit, 1)">
       <span class="colorlabel syventava"></span>
       <span class="spacer-small"></span>
-      <a href="{{kurssi.url}}" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+      <a ui-sref="root.lukio.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
     </div>
   </div>
 
@@ -49,8 +49,9 @@
     <div ng-repeat="kurssi in filterKurssit(kurssit, 2)">
       <span class="colorlabel soveltava"></span>
       <span class="spacer-small"></span>
-      <a href="{{kurssi.url}}" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+      <a ui-sref="root.lukio.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
     </div>
+
   </div>
 
   <div ng-if="valittuOppiaine.tavoitteet">
@@ -67,7 +68,7 @@
     </div>
   </div>
 
-
+<!--
   <div ng-if="oppimaarat.length > 0" class="oppimaarat">
     <h2 kaanna="'oppimaarat'"></h2>
 
@@ -138,9 +139,6 @@
     </div>
   </div>
   </div>
-</div>
+</div> -->
 <div class="tavoitteet-aihekokonaisuudet" ui-view></div>
-
-<pre>{{valittuOppiaine | json}}</pre>
-<pre>{{oppimaarat | json}}</pre>
 
