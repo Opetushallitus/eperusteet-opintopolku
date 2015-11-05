@@ -338,7 +338,7 @@ hr {
 }
 
 // Mobiilissa marginaalit poistettu vasemmalta ja oikealta
-@media (max-width: $screen-sm) {
+@media (max-width: $screen-sm-max) {
   [class*="col-"] {
     padding-left: 0;
     padding-right: 0;

@@ -257,7 +257,7 @@ $sivunavi-level-padding: 20px;
       box-shadow: none;
     }
     &.sivunavi-open {
-      left: 0px;
+      left: 0;
     }
     &.sivunavi-open-add, &.sivunavi-collapsed-add {
       transition: left 0.2s;
@@ -275,6 +275,18 @@ $sivunavi-level-padding: 20px;
     height: 1px;
   }
 }
+
+@media (min-width: $screen-md) and (max-width: $screen-md-max) {
+  .sivunavi-outer {
+    .sivunavi-box {
+      &.sivunavi-open {
+        left: -$pager-border-radius;
+      }
+    }
+  }
+}
+
+
 /* Suurella näytöllä sivunavi näytetään vasemmassa laidassa */
 @media (min-width: $screen-lg-min) {
   .sivunavi-outer {
