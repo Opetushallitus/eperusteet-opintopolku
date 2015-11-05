@@ -291,21 +291,25 @@ epOpintopolkuApp
   })
 
   .state('root.lukio.tekstikappale', {
-    url: '/tekstikappale/:tekstikappaleId',
-    templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+    url: '/tekstikappale',
+    templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
     controller: 'epLukioTekstikappaleController',
     resolve: {
-      tekstikappaleId: function (serviceConfig, $stateParams) {
-        return $stateParams.tekstikappaleId;
-      },
-      tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
-        return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
-          .then(function(res){
+      tekstikappaleet: function (Algoritmit, serviceConfig, perusData, $q, LukioTekstikappale) {
+        var promises = [];
+        _.each(perusData.lapset, function (item) {
+          promises.push(LukioTekstikappale.getByViite({viiteId: item.id}).$promise.then(function(res){
+            res.depth = 0;
             return res;
-          });
-      },
-      lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
-        return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
+          }));
+          Algoritmit.kaikilleLapsisolmuille(item, 'lapset', function (lapsi, depth) {
+            promises.push(LukioTekstikappale.getByViite({viiteId: lapsi.id}).$promise.then(function(res){
+              res.depth = depth;
+              return res;
+            }));
+          },1);
+        });
+        return $q.all(promises);
       }
     }
   })

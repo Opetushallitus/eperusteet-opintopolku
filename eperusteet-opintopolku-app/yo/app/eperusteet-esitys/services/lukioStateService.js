@@ -74,7 +74,7 @@ angular.module('eperusteet.esitys')
 
     function textCallback(item)  {
       if (item.$osa) {
-        item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
+        item.$selected = '' + $location.hash() === '' + item.$osa._perusteenOsa;
         item.$hidden = item.depth > 0;
       }
       if (item.$selected) {

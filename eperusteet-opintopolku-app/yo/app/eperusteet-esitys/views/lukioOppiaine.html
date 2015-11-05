@@ -6,7 +6,7 @@
   <div class="clearfix"></div>
 
   <div ng-if="valittuOppiaine.pakollinenKurssiKuvaus">
-    <h2 kaanna="'pakolliset-kurssit'"></h2>
+    <h2 ng-bind="'pakolliset-kurssit' | kaanna"></h2>
     <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
       <termisto-tekstikentta tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
     </div>
@@ -67,6 +67,8 @@
       <termisto-tekstikentta tekstikentta="valittuOppiaine.arviointi.teksti  || '-'"></termisto-tekstikentta>
     </div>
   </div>
+</div>
+  <div class="tavoitteet-aihekokonaisuudet" ui-view></div>
 
 <!--
   <div ng-if="oppimaarat.length > 0" class="oppimaarat">
@@ -140,5 +142,4 @@
   </div>
   </div>
 </div> -->
-<div class="tavoitteet-aihekokonaisuudet" ui-view></div>
 

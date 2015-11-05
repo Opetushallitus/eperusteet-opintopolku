@@ -1,0 +1,6 @@
+<div ng-repeat="tekstikappale in tekstikappaleet" id="{{tekstikappale.id}}">
+  <span ng-class="addTekstiKappaleTitleClass(tekstikappale.depth)" esitys-sivu-otsikko="tekstikappale.nimi">
+    <span ng-bind-html="tekstikappale.nimi | kaanna | unsafe"></span>
+  </span>
+  <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
+</div>

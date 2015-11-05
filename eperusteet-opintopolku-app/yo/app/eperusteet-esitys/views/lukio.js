@@ -57,9 +57,16 @@ angular.module('eperusteet.esitys')
         }, []);
     }
 
+    $scope.addTekstiKappaleTitleClass = function(id) {
+      var titleClasses = { 0: "title-h1", 1: "title-h2", 2: "title-h3", 3: "title-h4", 4: "title-h5", 5: "title-h5"};
+      return titleClasses[id];
+    };
+
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
+
+
 
     function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
@@ -92,8 +99,12 @@ angular.module('eperusteet.esitys')
     $scope.state = epLukioStateService.getState();
 
     $scope.$on('$stateChangeSuccess', function () {
-     epLukioStateService.setState($scope.navi);
-     });
+       epLukioStateService.setState($scope.navi);
+    });
+
+    $scope.$on('$locationChangeSuccess', function () {
+      epLukioStateService.setState($scope.navi);
+    });
 
     $scope.currentState = function(){
       var parts = _.words($state.current.name);
@@ -204,14 +215,15 @@ angular.module('eperusteet.esitys')
       return classes;
     };
 
-    var t = epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet);
+    var t = epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto);
+      console.log(t);
 
     $scope.navi = {
       header: 'perusteen-sisalto',
       showOne: true,
       sections: [{
         id: 'suunnitelma',
-        include: 'eperusteet-esitys/views/yhteisetosuudet.html',
+        include: 'eperusteet-esitys/views/lukionyhteisetosuudet.html',
         items: epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto),
         naviClasses: $scope.naviClasses,
         title: 'yhteiset-osuudet'
@@ -223,7 +235,6 @@ angular.module('eperusteet.esitys')
         naviClasses: $scope.naviClasses
       }]
     };
-
 })
 
   .directive('epLukioSivunavigaatio', function ($window, $document, $timeout, $compile) {
@@ -259,18 +270,20 @@ angular.module('eperusteet.esitys')
     };
   })
 
-  .controller('epLukioTekstikappaleController', function($scope, $stateParams, tekstikappale, epTekstikappaleChildResolver,
-                                                               MurupolkuData, epParentFinder) {
+  .controller('epLukioTekstikappaleController', function($scope, $stateParams, epTekstikappaleChildResolver,
+                                                               tekstikappaleet, MurupolkuData, epParentFinder) {
 
-    $scope.tekstikappale = tekstikappale;
-    MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
+    $scope.tekstikappaleet = tekstikappaleet;
+
+
+   /*MurupolkuData.set({tekstikappaleId: $location.hash(), tekstikappaleNimi: ""});
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
     $scope.links = {
       prev: null,
       next: null
-    };
+    };*/
 
-    MurupolkuData.set('parents', epParentFinder.find($scope.perusteenSisalto.lapset, tekstikappale.id, true));
+    //MurupolkuData.set('parents', epParentFinder.find($scope.perusteenSisalto.lapset, tekstikappale.id, true));
 
     function checkPrevNext() {
       var items = $scope.navi.sections[0].items;
@@ -298,8 +311,8 @@ angular.module('eperusteet.esitys')
       $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
     }
 
-    $scope.$on('lukio:stateSet', checkPrevNext);
-    checkPrevNext();
+    //$scope.$on('lukio:stateSet', checkPrevNext);
+    //checkPrevNext();
   })
 
   .controller('epLukioKurssiController', function($scope, Kieli, $stateParams, Utils, MurupolkuData) {
@@ -399,12 +412,6 @@ angular.module('eperusteet.esitys')
       return list;
     };
 
-   /* $scope.scrollToKurssi = function(id) {
-      id ? $location.hash(id) : null;
-      id ? anchorSmoothScroll.scrollTo(id) : null;
-      id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
-    };*/
-
       var murupolkuParams = {
         //parents: null,
         oppiaineId: oppiaine.id,
@@ -425,15 +432,18 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioSivuNaviController', function ($rootScope, $scope, $location, $state, Algoritmit, Utils, epSivunaviUtils,
-                                                epEsitysSettings) {
+                                                epEsitysSettings, anchorSmoothScroll) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
-    /*$scope.scrollToKurssi = function(id){
-      id ? $location.hash(id) : null;
-      id ? anchorSmoothScroll.scrollTo(id) : null;
-      id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
-    };*/
+    $scope.scrollToHash = function(id){
+      if(id && _.isString(id)) {
+        $state.go('root.lukio.tekstikappale');
+        id ? $location.hash(id) : null;
+        //id ? anchorSmoothScroll.scrollTo(id) : null;
+        id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
+      }
+    };
 
     $scope.search = {
       term: '',
