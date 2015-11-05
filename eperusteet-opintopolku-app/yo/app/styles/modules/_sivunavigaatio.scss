@@ -213,6 +213,7 @@ $sivunavi-level-padding: 20px;
       height: $sivunavi-toggle-korkeus;
       left: 0;
       top: 101px;
+      z-index: 999;
       display: block;
       background-color: white;
       box-shadow: 0 0 $sivunavi-shadow black;
@@ -256,7 +257,7 @@ $sivunavi-level-padding: 20px;
       box-shadow: none;
     }
     &.sivunavi-open {
-
+      left: 0px;
     }
     &.sivunavi-open-add, &.sivunavi-collapsed-add {
       transition: left 0.2s;
