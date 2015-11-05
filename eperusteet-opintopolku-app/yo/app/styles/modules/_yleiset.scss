@@ -331,9 +331,36 @@ hr {
   color: $brand-primary;
 }
 
-
 @media (max-width: $screen-sm) {
+  .table-responsive {
+    border: none;
+  }
+}
+
+// Mobiilissa marginaalit poistettu vasemmalta ja oikealta
+@media (max-width: $screen-sm) {
+  [class*="col-"] {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .container {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+  .container-fluid {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+
   .breadcrumb {
+    padding: $sisalto-padding;
     li {
       white-space: normal;
     }
@@ -341,11 +368,6 @@ hr {
   .peruste-otsikko {
     margin-top: 0px;
     margin-bottom: 0px;
-  }
-}
-
-@media (max-width: $screen-sm) {
-  .table-responsive {
-    border: none;
+    padding: $sisalto-padding;
   }
 }
