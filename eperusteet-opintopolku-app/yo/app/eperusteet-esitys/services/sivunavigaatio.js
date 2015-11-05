@@ -142,7 +142,7 @@
   })
 
   .controller('epSivuNaviController', function ($scope, $state, Algoritmit, Utils, epSivunaviUtils,
-    epEsitysSettings) {
+    epEsitysSettings, $window) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
@@ -297,8 +297,13 @@
       updateModel(items, false);
     };
 
+    $scope.scrollTop = angular.element($window).scrollTop();
+
     $scope.toggleSideMenu = function () {
       $scope.menuCollapsed = !$scope.menuCollapsed;
+      if (!$scope.menuCollapsed) {
+        $scope.scrollTop = angular.element($window).scrollTop();
+      }
     };
 
     $scope.orderFn = function (item) {

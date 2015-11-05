@@ -34,7 +34,7 @@ epOpintopolkuApp
           scope.$apply(scope.offClick());
         }
       }
-      
+
       if (attr.offClickIf) {
         scope.$watch(scope.offClickIf, function (newVal, oldVal) {
             if (newVal && !oldVal) {

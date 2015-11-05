@@ -1,18 +1,28 @@
 <div class="sivunavi-outer">
-  <!-- partials/sivunavi2.html -->
-  <div class="sivunavi-box" ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}">
 
-    <div class="sivunavi-toggler-wrapper">
-      <div id="sivunavi-valikko-nappi" class="sivunavi-toggler" ng-click="toggleSideMenu()"
-        ng-attr-title="{{menuCollapsed && ('sivunavigointi-avaa-menu'|kaanna) || ('sivunavigointi-sulje-menu'|kaanna)}}">
-        <div class="sivunavi-valinta">
-          <span class="glyphicon glyphicon-align-justify"></span>
-        </div>
+  <div class="sivunavi-toggler-wrapper">
+    <div id="sivunavi-valikko-nappi" class="sivunavi-toggler" ng-click="toggleSideMenu()"
+         ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'"
+         ng-attr-title="{{menuCollapsed && ('sivunavigointi-avaa-menu'|kaanna) || ('sivunavigointi-sulje-menu'|kaanna)}}">
+      <div class="sivunavi-valinta">
+        <span class="glyphicon glyphicon-align-justify"></span>
       </div>
     </div>
+  </div>
+
+  <!-- partials/sivunavi2.html -->
+  <div class="sivunavi-box" ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}"
+       ng-style="{top: scrollTop}">
 
     <div class="list-group" off-click="toggleSideMenu()" off-click-filter="#sivunavi-valikko-nappi" off-click-if="!menuCollapsed">
-      <div class="list-group-item header" ng-class="{'empty-header': !header}" kaanna="header"></div>
+        <div class="list-group-item header" ng-if="header">
+            <span kaanna="header"></span>
+            <span class="glyphicon glyphicon glyphicon-remove pull-right" ng-click="toggleSideMenu()"></span>
+        </div>
+      <div class="list-group-item header" ng-if="!header">
+        <span class="glyphicon glyphicon-remove pull-right" ng-click="toggleSideMenu()"></span>
+        <div class="clearfix"></div>
+      </div>
       <div class="list-group-item" ng-show="hasTransclude">
         <div class="sivunavi-tc-item">
           <div id="sivunavi-tc" ng-transclude></div>
