@@ -120,6 +120,48 @@ epOpintopolkuApp
         useId: 'oppiaineId',
         customParents: true
       },
+      'root.lukio':{
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.lukio.tekstikappale': {
+        parent: 'root.lukio',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+        customParents: true
+      },
+      'root.lukio.oppiaine': {
+        parent: 'root.lukio',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      },
+      'root.lukio.kurssi': {
+        parent: 'root.lukio.oppiaine',
+        useData: 'kurssiNimi',
+        useId: 'kurssiId',
+        customParents: true
+      },
+      'root.lukio.kurssi.tavoitteet': {
+        parent: 'root.lukio.kurssi',
+        useData: 'tekstiNimi',
+        useId: 'tekstiId'
+      },
+      'root.lukio.kurssi.aihekokonaisuudet': {
+        parent: 'root.lukio.kurssi',
+        useData: 'tekstiNimi',
+        useId: 'tekstiId'
+      },
+      'root.lukio.oppiaine.tavoitteet': {
+        parent: 'root.lukio.oppiaine',
+        useData: 'tekstiNimi',
+        useId: 'tekstiId'
+      },
+      'root.lukio.oppiaine.aihekokonaisuudet': {
+        parent: 'root.lukio.oppiaine',
+        useData: 'tekstiNimi',
+        useId: 'tekstiId'
+      },
       'root.esiopetus': {
         useData: 'perusteNimi',
         useId: 'perusteId'

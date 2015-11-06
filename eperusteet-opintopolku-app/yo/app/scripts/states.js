@@ -267,6 +267,141 @@ epOpintopolkuApp
         }
       })
 
+      /* LUKIO */
+
+      .state('root.lukio', {
+        url: '/lukio/:perusteId',
+        templateUrl: 'eperusteet-esitys/views/lukio.html',
+        controller: 'epLukioController',
+        resolve: {
+          perusteId: function (serviceConfig, $stateParams) {
+            return $stateParams.perusteId;
+          },
+          peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
+            return !perusteId ? UusimmatPerusteetService.getPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise
+              .then(function(res){
+                return res;
+              });
+          },
+          oppiaineRakenne: function(LukioYleistiedot, perusteId){
+            return LukioYleistiedot.getOppiaineRakenne({perusteId: perusteId}).$promise
+              .then(function(res){
+                return res;
+              });
+          },
+          perusData: function (LukioPerusteenOsat, perusteId) {
+            return LukioPerusteenOsat.query({perusteId: perusteId}).$promise
+              .then(function (res) {
+                var lapset = _.filter(res.lapset, function (lapsi) {
+                  return lapsi.perusteenOsa.osanTyyppi === 'tekstikappale';
+                });
+                console.log({'lapset': lapset, 'id': perusteId});
+                return {'lapset': lapset, 'id': perusteId};
+              });
+          }
+        }
+      })
+
+      .state('root.lukio.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
+        controller: 'epLukioTekstikappaleController',
+        resolve: {
+          tekstikappaleId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
+            return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
+              .then(function(res){
+                return res;
+              });
+          },
+          lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
+            return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
+          }
+        }
+      })
+
+      .state('root.lukio.oppiaine', {
+        url: '/oppiaine/:oppiaineId',
+        templateUrl: 'eperusteet-esitys/views/lukioOppiaine.html',
+        controller: 'epLukioOppiaineController',
+        resolve: {
+          oppiaineId: function (serviceConfig, $stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (serviceConfig, perusteId, LukioOppiaineet, oppiaineId) {
+            return LukioOppiaineet.getOppiaine({ perusteId: perusteId, oppiaineId: oppiaineId }).$promise
+              .then(function(res){
+                return res;
+              });
+          }
+        }
+      })
+
+      .state('root.lukio.oppiaine.tavoitteet', {
+        url: '/yleiset-tavoitteet',
+        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        controller: 'epLukioTavoitteetController',
+        resolve: {
+          tavoitteet: function (LukioYleistiedot, perusteId) {
+            return LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
+              .then(function (res) {
+                return res;
+              });
+          }
+        }
+      })
+
+      .state('root.lukio.oppiaine.aihekokonaisuudet', {
+        url: '/aihekokonaisuudet',
+        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        controller: 'epLukioAihekokonaisuudetController',
+        resolve: {
+          aihekokonaisuudet: function (LukioYleistiedot, perusteId) {
+            return LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise
+              .then(function (res) {
+                return res;
+              });
+          }
+        }
+      })
+
+      .state('root.lukio.kurssi', {
+        url: '/kurssi/:kurssiId',
+        templateUrl: 'eperusteet-esitys/views/lukiokurssi.html',
+        controller: 'epLukioKurssiController'
+      })
+
+      .state('root.lukio.kurssi.tavoitteet', {
+        url: '/yleiset-tavoitteet',
+        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        controller: 'epLukioTavoitteetController',
+        resolve: {
+          tavoitteet: function (LukioYleistiedot, perusteId) {
+            return LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
+              .then(function (res) {
+                return res;
+              });
+          }
+        }
+      })
+
+      .state('root.lukio.kurssi.aihekokonaisuudet', {
+        url: '/aihekokonaisuudet',
+        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        controller: 'epLukioAihekokonaisuudetController',
+        resolve: {
+          aihekokonaisuudet: function (LukioYleistiedot, perusteId) {
+            return LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise
+              .then(function (res) {
+                return res;
+              });
+          }
+        }
+      })
+
+
       .state('root.esiopetus', {
         url: '/esiopetus/:perusteId',
         templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',

@@ -130,6 +130,22 @@ ul.tutkinnonosat {
   ul.tutkinnonosat {
     .tutkinnonosa-laatikko {
       width: 100%;
+      height: auto;
+      padding-top: 10px;
+      .numero-wrapper {
+        width: auto;
+        height: auto;
+      }
+      .otsikko {
+        h3 {
+          margin: 0;
+          max-width: 420px;
+          text-overflow: clip;
+          overflow: visible;
+          white-space: normal;
+          color: rgb(51,51,51);
+        }
+      }
     }
   }
 

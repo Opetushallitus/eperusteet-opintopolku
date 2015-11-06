@@ -1,6 +1,9 @@
 <div class="murupolku">
   <ol class="breadcrumb pull-left">
     <li><a ui-sref="root.etusivu" icon-role="home"></a></li>
-    <li ng-repeat="crumb in crumbs"><a ng-if="!$last" ng-href="{{crumb.url}}" ng-bind="crumb.label | kaanna"></a><a class="active" ng-if="$last" ng-bind="crumb.label | kaanna"></a></li>
+    <li ng-repeat="crumb in crumbs">
+      <a ng-if="!$last" ng-href="{{crumb.url}}" ng-bind="crumb.label | kaanna"></a>
+      <span class="active" ng-if="$last" ng-bind="crumb.label | kaanna"></span>
+    </li>
   </ol>
 </div>

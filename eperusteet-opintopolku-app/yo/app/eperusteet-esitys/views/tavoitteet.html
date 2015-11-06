@@ -1,0 +1,13 @@
+<div ng-show="tabClass('tavoitteet')" class="perusopetus">
+  <h1 esitys-sivu-otsikko="tavoitteet.otsikko">
+    <span ng-bind-html="tavoitteet.otsikko | kaanna | unsafe"></span>
+  </h1>
+  <termisto-tekstikentta tekstikentta="tavoitteet.kuvaus"></termisto-tekstikentta>
+</div>
+
+<div ng-show="tabClass('aihekokonaisuudet')" class="perusopetus">
+  <h1 esitys-sivu-otsikko="aihekokonaisuudet.otsikko">
+    <span ng-bind-html="aihekokonaisuudet.otsikko | kaanna | unsafe"></span>
+  </h1>
+  <termisto-tekstikentta tekstikentta="aihekokonaisuudet.yleiskuvaus"></termisto-tekstikentta>
+</div>

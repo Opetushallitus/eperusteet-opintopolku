@@ -18,7 +18,35 @@
   </div>
 </div>
 
-<div class="prevnext-wrapper" ng-if="links.prev || links.next">
+<div class="visible-xs">
+  <div class="row">
+    <div class="col-xs-6">
+      <a class="prev" ng-if="links.prev" ui-sref="^.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
+        <span ng-bind-html="links.prev.label | kaanna | unsafe"></span>
+      </a>
+    </div>
+    <div class="col-xs-6">
+      <a class="next" ng-if="links.next" ui-sref="^.tekstikappale({tekstikappaleId: links.next.$osa.id})">
+        <span ng-bind-html="links.next.label | kaanna | unsafe"></span>
+      </a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-6">
+      <a class="prev chevron" ng-if="links.prev" ui-sref="^.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      </a>
+    </div>
+    <div class="col-xs-6">
+      <a class="next chevron" ng-if="links.next" ui-sref="^.tekstikappale({tekstikappaleId: links.next.$osa.id})">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="prevnext-wrapper hidden-xs" ng-if="links.prev || links.next">
   <div class="prevnext">
     <a class="prev chevron" ng-if="links.prev" ui-sref="^.tekstikappale({tekstikappaleId: links.prev.$osa.id})">
       <span class="glyphicon glyphicon-chevron-left"></span>
@@ -31,6 +59,11 @@
     </a>
     <a class="next chevron" ng-if="links.next" ui-sref="^.tekstikappale({tekstikappaleId: links.next.$osa.id})">
       <span class="glyphicon glyphicon-chevron-right"></span>
+<<<<<<< HEAD
+    </a>
+||||||| merged common ancestors
     </div>
+=======
+>>>>>>> origin/lukioEsikatselu
   </div>
 </div>
