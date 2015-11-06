@@ -82,12 +82,14 @@ epOpintopolkuApp
       }, { reload: true });
     };
 
-    if ($state.current.name === 'root.esitys.peruste') {
-      var params = _.extend(_.clone($stateParams), {
-        suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
-      });
-      $state.go('root.esitys.peruste.tiedot', params);
-    }
+    $scope.$on('$stateChangeSuccess', function () {
+      if ($state.current.name === 'root.esitys.peruste') {
+        var params = _.extend(_.clone($stateParams), {
+          suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
+        });
+        $state.go('root.esitys.peruste.tiedot', params);
+      }
+    });
 
     $scope.rajaaSisaltoa = function() {
       _.forEach($scope.sisaltoRakenne, function(r) {
