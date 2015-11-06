@@ -99,7 +99,8 @@ module.exports = function(grunt) {
         https: false,
         changeOrigin: false,
         xforward: false*/
-        host: 'itest-virkailija.oph.ware.fi',
+        // host: 'itest-virkailija.oph.ware.fi',
+        host: 'testi.virkailija.opintopolku.fi',
         port: 443,
         https: true,
         changeOrigin: true
