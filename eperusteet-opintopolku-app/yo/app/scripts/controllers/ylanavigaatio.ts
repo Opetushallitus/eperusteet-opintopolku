@@ -41,6 +41,10 @@ epOpintopolkuApp
         return 'navi.tiedote';
       } else if ($state.includes('root.esitys.peruste.**')) {
         return 'navi.peruste';
+      } else if ($state.includes('root.lukio.**')) {
+        return 'navi.lukio';
+      } else {
+        return '';
       }
     };
 

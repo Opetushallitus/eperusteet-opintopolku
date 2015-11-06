@@ -238,7 +238,7 @@ epOpintopolkuApp
         var parents = getPath(current.parent);
         if (current.customParents) {
           _.each(MurupolkuData.get('parents'), function (parent) {
-            var treeItem = {state: state};
+            var treeItem: any = {state: state};
             if (parent.perusteenOsa) {
               treeItem.params = perusTaiYksinkertainen(state) ? {tekstikappaleId: parent.id} : {osanId: parent.id};
               treeItem.label = parent.perusteenOsa.nimi;
