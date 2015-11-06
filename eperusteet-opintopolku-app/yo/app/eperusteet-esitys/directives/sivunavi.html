@@ -19,10 +19,6 @@
             <span kaanna="header"></span>
             <span class="glyphicon glyphicon glyphicon-remove pull-right action-link hidden-lg" ng-click="toggleSideMenu()"></span>
         </div>
-      <div class="list-group-item header" ng-if="!header">
-        <span class="glyphicon glyphicon glyphicon-remove pull-right action-link hidden-lg" ng-click="toggleSideMenu()"></span>
-        <div class="clearfix"></div>
-      </div>
       <div class="list-group-item" ng-show="hasTransclude">
         <div class="sivunavi-tc-item">
           <div id="sivunavi-tc" ng-transclude></div>
@@ -61,7 +57,6 @@
           <span ng-show="item.$leaf && !item.$glyph" class="ep-icon" ng-class="item.$type ? item.$type : 'ep-text'"></span>
           <span ng-show="item.$leaf && item.$glyph" icon-role="{{item.$glyph}}"></span>
         </div>
-        <!--<span icon-role="glyphicon glyphicon-plus">asd</span>-->
         <span class="linktext" ng-class="{'action-link': !!item.href}" ep-highlight="search.term" ng-bind="item.label|kaanna"></span>
       </a>
       <div class="list-group-item" ng-if="!sections" ng-show="!hasResults && search.term">

@@ -29,11 +29,11 @@ epOpintopolkuApp
       return $state.is('root.esitys.peruste.tutkinnonosat') || $state.is('root.esitys.peruste.tutkinnonosa');
     };
     $scope.navi = {
+      header: 'perusteen-sisalto',
       items: [
         {label: 'perusteen-tiedot', link: ['root.esitys.peruste.tiedot'], $glyph: 'list-alt'},
         {label: 'tutkinnonosat', link: ['root.esitys.peruste.tutkinnonosat'], isActive: isTutkinnonosatActive}
-      ],
-      header: null
+      ]
     };
 
     function mapSisalto(sisalto) {
