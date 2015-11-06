@@ -110,3 +110,14 @@ $paaotsikko-logo-size: 96px;
     }
   }
 }
+
+
+@media (max-width: $screen-xs-max) {
+  .banneri-container {
+    .banneri {
+      .banneri-linkit {
+        font-size: 20px;
+      }
+    }
+  }
+}
