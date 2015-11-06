@@ -142,5 +142,22 @@
   "navi.peruste": "Peruste",
 
   "siirtyman-paattyminen": "Siirtymän päättyminen",
-  "osaan-linkki" : "osaan.fi"
+  "osaan-linkki" : "osaan.fi",
+  
+  "osaamisalat": "Osaamisalat",
+
+  "yleiset-tavoitteet": "Yleiset tavoitteet",
+  "soveltava": "soveltava",
+  "pakollinen": "pakollinen",
+  "syventava": "syventävä",
+  "sisalto" : "Sisältö",
+  "opetuksen-yleiset-tavoitteet": "Opetuksen yleiset tavoitteet",
+  "aihekokonaisuudet": "Aihekokonaisuudet",
+  "syventavat-kurssit": "Syventävät kurssit",
+  "pakolliset-kurssit": "Pakolliset kurssit",
+  "soveltavat-kurssit": "Soveltavat kurssit",
+  "keskeiset-sisallot": "Keskeiset sisällöt",
+  "tavoitteet-ja-keskeiset-sisallot": "Tavoitteet ja keskeiset sisällöt",
+  "oppiaine-sisalto": "Oppiaine sisältö",
+  "kurssi-sisalto": "Kurssi sisältö"
 }

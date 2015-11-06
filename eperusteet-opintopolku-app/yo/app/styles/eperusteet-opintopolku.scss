@@ -11,6 +11,7 @@
 @import "modules/ylanavigaatio";
 @import "modules/etusivu";
 @import "modules/haku";
+@import "modules/lukiosivunavi";
 
 @import "modules/tutkinnonosat";
 @import "modules/tree";
@@ -19,3 +20,5 @@
 @import "modules/tiedote";
 
 @import "../eperusteet-esitys/styles/esitys";
+@import "modules/tabbedmenu";
+@import "modules/lukio-oppiaine";

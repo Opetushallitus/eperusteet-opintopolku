@@ -55,6 +55,56 @@ angular.module('eperusteet.esitys')
     });
   }
 
+  function createOppiaineItem(oppiaine, depth, idx) {
+    return {
+      $id: oppiaine.id,
+      depth: depth,
+      $jnro: oppiaine.jarjestys,
+      $oppiaine: oppiaine,
+      $hidden: false,
+      idx: idx,
+      label: oppiaine.nimi,
+      url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
+    };
+  }
+
+  function createKurssiItem(kurssi, depth) {
+    return {
+      $id: kurssi.id,
+      depth: depth,
+      tyyppi: kurssi.tyyppi,
+      $jnro: kurssi.jarjestys,
+      $kurssi: kurssi,
+      $hidden: true,
+      label: kurssi.nimi,
+      url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
+    };
+  }
+
+  function buildLukioOppiaineMenu(oppiaineet){
+    var idx = 0;
+    return _.reduce(oppiaineet, function(menu, oppiaine){
+        menu.push(createOppiaineItem(oppiaine, 0, idx));
+        idx++;
+        if(!_.isEmpty(oppiaine.oppimaarat)) {
+          _.each(oppiaine.oppimaarat, function(oppimaara){
+            menu.push(createOppiaineItem(oppimaara, 1));
+            if(!_.isEmpty(oppimaara.kurssit)) {
+              _.each(oppimaara.kurssit, function(kurssi) {
+                menu.push(createKurssiItem(kurssi, 2));
+              });
+            }
+          });
+        }
+        if(!_.isEmpty(oppiaine.kurssit)){
+          _.each(oppiaine.kurssit, function(kurssi){
+            menu.push(createKurssiItem(kurssi, 1));
+          });
+        }
+          return menu;
+        }, []);
+  }
+
   function traverseOppiaineet(aineet, arr, vlk, startingDepth) {
     startingDepth = startingDepth || 0;
     var isSisalto = startingDepth === 0;
@@ -123,6 +173,7 @@ angular.module('eperusteet.esitys')
   }
 
   this.filteredOppimaarat = filteredOppimaarat;
+  this.buildLukioOppiaineMenu = buildLukioOppiaineMenu;
   this.rakennaTekstisisalto = rakennaTekstisisalto;
   this.rakennaVuosiluokkakokonaisuuksienSisalto = rakennaVuosiluokkakokonaisuuksienSisalto;
   this.rakennaSisallotOppiaineet = rakennaSisallotOppiaineet;
