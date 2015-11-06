@@ -67,8 +67,7 @@ epOpintopolkuApp
       $scope.mapModel();
     });
 
-    function generateArraySetter(findFrom, manipulator) {
-      manipulator = manipulator || angular.noop;
+    function generateArraySetter(findFrom, manipulator = _.noop) {
       return function(item) {
         var found = _.find(findFrom, function(findItem) { return parseInt(findItem, 10) === item.id; });
         item = _.clone(item);

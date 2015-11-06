@@ -31,7 +31,7 @@ epOpintopolkuApp
 
     function kaannaSaanto(ms) {
       if (!ms) { return; }
-      var fraasi = {
+      var fraasi: any = {
         kaannos: '',
         muuttujat: {}
       };
@@ -73,7 +73,7 @@ epOpintopolkuApp
         return buckets;
       }
 
-      function asetaVirhe(virhe, ms) {
+      function asetaVirhe(virhe, ms?) {
         rakenne.$virhe = {
           virhe: virhe,
           selite: kaannaSaanto(ms)
@@ -119,7 +119,7 @@ epOpintopolkuApp
         } else if (msl) {
           // Validoidaan maksimi
           if (msl.maksimi) {
-            if (osienLaajuudenSumma(rakenne.osat, viitteet) < msl.maksimi) {
+            if (osienLaajuudenSumma(rakenne.osat) < msl.maksimi) {
               asetaVirhe('muodostumis-rakenne-validointi-laajuus', ms);
             }
           }
@@ -165,7 +165,7 @@ epOpintopolkuApp
             rakenne.$vaadittuLaajuus = msl.maksimi || msl.minimi;
           }
         }
-        rakenne.$laajuus = rakenne.rooli === 'määritelty' ? osienLaajuudenSumma(rakenne.osat, viitteet) : rakenne.$vaadittuLaajuus;
+        rakenne.$laajuus = rakenne.rooli === 'määritelty' ? osienLaajuudenSumma(rakenne.osat) : rakenne.$vaadittuLaajuus;
       }
     }
 
