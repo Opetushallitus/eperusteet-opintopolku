@@ -65,7 +65,7 @@ angular.module('eperusteet.esitys')
       idx: idx,
       label: oppiaine.nimi,
       url: $state.href('root.lukio.oppiaine', {oppiaineId: oppiaine.id})
-    }
+    };
   }
 
   function createKurssiItem(kurssi, depth) {
@@ -78,7 +78,7 @@ angular.module('eperusteet.esitys')
       $hidden: true,
       label: kurssi.nimi,
       url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
-    }
+    };
   }
 
   function buildLukioOppiaineMenu(oppiaineet){
@@ -92,14 +92,14 @@ angular.module('eperusteet.esitys')
             if(!_.isEmpty(oppimaara.kurssit)) {
               _.each(oppimaara.kurssit, function(kurssi) {
                 menu.push(createKurssiItem(kurssi, 2));
-              })
+              });
             }
-          })
+          });
         }
         if(!_.isEmpty(oppiaine.kurssit)){
           _.each(oppiaine.kurssit, function(kurssi){
             menu.push(createKurssiItem(kurssi, 1));
-          })
+          });
         }
           return menu;
         }, []);

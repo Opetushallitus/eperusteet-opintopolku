@@ -41,6 +41,9 @@ angular.module('eperusteet.esitys')
       _.each(section.items, function (item) {
         item.$selected = false;
         item.$header = false;
+        if (item.depth > 0) {
+          item.$hidden = true;
+        }
       });
     });
     section = null;

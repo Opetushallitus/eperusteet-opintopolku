@@ -33,6 +33,8 @@ angular.module('eperusteet.esitys')
     MurupolkuData,
     epLukioStateService,
     oppiaineRakenne,
+    epLukioUtils,
+    epLukioTabService,
     Kieli) {
 
     $scope.oppiaineRakenne = oppiaineRakenne;
@@ -40,50 +42,19 @@ angular.module('eperusteet.esitys')
     $scope.perusteenSisalto = perusData;
     $scope.peruste = peruste;
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
-    $scope.oppiaineetJaOppimaarat = flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
+    var utils = epLukioUtils;
+    var tabService = epLukioTabService;
+    $scope.oppiaineetJaOppimaarat = utils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
 
-    function flattenAndZipOppiaineet(oppiaineet) {
-      return _.reduce(oppiaineet, function (all, oppiaine, index) {
-          if (!_.isEmpty(oppiaine.oppimaarat)) {
-            _.each(oppiaine.oppimaarat, function (oppimaara) {
-              all.push(oppimaara)
-            })
-          }
-          all.push(oppiaine);
-          if (oppiaineet.length - 1 === index) {
-            return _.zipBy(all, 'id');
-          }
-          return all;
-        }, []);
-    }
 
     $scope.addTekstiKappaleTitleClass = function(id) {
-      var titleClasses = { 0: "title-h1", 1: "title-h2", 2: "title-h3", 3: "title-h4", 4: "title-h5", 5: "title-h5"};
+      var titleClasses = { 0: 'title-h1', 1: 'title-h2', 2: 'title-h3', 3: 'title-h4', 4: 'title-h5', 5: 'title-h5'};
       return titleClasses[id];
     };
 
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
-
-
-
-    function clickHandler(event) {
-      var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
-      if (ohjeEl.length === 0) {
-        $rootScope.$broadcast('ohje:closeAll');
-      }
-    }
-    function installClickHandler() {
-      $document.off('click', clickHandler);
-      $timeout(function () {
-        $document.on('click', clickHandler);
-      });
-    }
-
-    $scope.$on('$destroy', function () {
-      $document.off('click', clickHandler);
-    });
 
     $timeout(function () {
       if ($state.current.name === epEsitysSettings.lukioState) {
@@ -98,11 +69,11 @@ angular.module('eperusteet.esitys')
 
     $scope.state = epLukioStateService.getState();
 
-    $scope.$on('$stateChangeSuccess', function () {
-       epLukioStateService.setState($scope.navi);
+    $rootScope.$on('$locationChangeSuccess', function () {
+      epLukioStateService.setState($scope.navi);
     });
 
-    $rootScope.$on('$locationChangeSuccess', function () {
+    $scope.$on('$stateChangeSuccess', function () {
       epLukioStateService.setState($scope.navi);
     });
 
@@ -122,73 +93,9 @@ angular.module('eperusteet.esitys')
     };
 
 
-    $scope.tabs = [
-      {
-        title: {
-          oppiaine: 'oppiaine-sisalto',
-          kurssi: 'kurssi-sisalto'
-        },
-        name: 'sisalto',
-        url: function(name){
-          if (name === 'kurssi') {
-            return 'root.lukio.kurssi'
-          }
-          if (name === 'oppiaine') {
-            return 'root.lukio.oppiaine'
-          }
-        }
-      },
-      {
-        title: {
-          oppiaine: 'opetuksen-yleiset-tavoitteet',
-          kurssi: 'opetuksen-yleiset-tavoitteet'
-        },
-        name: 'tavoitteet',
-        url: function (name) {
-          if (name === 'kurssi') {
-            return 'root.lukio.kurssi.tavoitteet'
-          }
-          if (name === 'oppiaine') {
-            return 'root.lukio.oppiaine.tavoitteet'
-          }
-        }
-      },
-      {
-        title:  {
-          oppiaine: 'aihekokonaisuudet',
-          kurssi: 'aihekokonaisuudet'
-        },
-        name: 'aihekokonaisuudet',
-        url: function (name) {
-          if (name === 'kurssi') {
-            return 'root.lukio.kurssi.aihekokonaisuudet'
-          }
-          if (name === 'oppiaine') {
-            return 'root.lukio.oppiaine.aihekokonaisuudet'
-          }
-        }
-      }
-    ];
-
+    $scope.tabs = tabService.tabs;
     $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
-
-    $scope.tabClass = function(tabName) {
-      var className = null;
-      switch(tabName) {
-        case 'tavoitteet':
-          className = _.endsWith($state.current.name, tabName) ? true : null;
-          break;
-        case 'aihekokonaisuudet':
-          className = _.endsWith($state.current.name, tabName) ? true : null;
-          break;
-        case 'sisalto':
-          className = !_.endsWith($state.current.name, 'tavoitteet') && !_.endsWith($state.current.name, 'aihekokonaisuudet') ? true : null;
-          break;
-        default:
-          className = null;
-      }
-      return className;
-    };
+    $scope.tabClass = tabService.tabClassSelector;
 
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
 
@@ -214,9 +121,6 @@ angular.module('eperusteet.esitys')
       }
       return classes;
     };
-
-    var t = epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto);
-      console.log(t);
 
     $scope.navi = {
       header: 'perusteen-sisalto',
@@ -251,7 +155,7 @@ angular.module('eperusteet.esitys')
       },
       controller: 'epLukioSivuNaviController',
       transclude: true,
-      link: function (scope, element, attrs) {
+      link: function (scope, element) {
         var transcluded = element.find('#sivunavi-tc').contents();
         scope.hasTransclude = transcluded.length > 0;
         //scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
@@ -269,26 +173,39 @@ angular.module('eperusteet.esitys')
     };
   })
 
-  .controller('epLukioTekstikappaleController', function($scope, $stateParams, $location, epTekstikappaleChildResolver,
-                                                               tekstikappale, tekstikappaleId, MurupolkuData, epParentFinder) {
+  .controller('epLukioTekstikappaleController', function($scope, $rootScope, $stateParams, $location, epTekstikappaleChildResolver,
+                                                               $q, Kieli, epLukioUtils, tekstikappale, tekstikappaleId, MurupolkuData, epParentFinder) {
 
     $scope.tekstikappale = tekstikappale;
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
 
-    MurupolkuData.set('parents', epParentFinder.find($scope.perusteenSisalto.lapset, tekstikappale.id, true));
-    if (!$location.hash) {
-      MurupolkuData.set({tekstikappaleId: tekstikappaleId, tekstikappaleNimi: tekstikappale.nimi});
-    } else {
-      MurupolkuData.set({tekstikappaleId: $location.hash(), tekstikappaleNimi:
-        epParentFinder.find($scope.perusteenSisalto.lapset, $location.hash(), true)});
+    var lastenNimet = epLukioUtils.flattenNames($scope.lapset);
+
+    function getName(names, id){
+      return _(names).filter(function(name) { return name._id === id; }).value().pop();
     }
+
+    $rootScope.$on('$locationChangeSuccess', function () {
+      var hash = $location.hash();
+      var lapsi = getName(lastenNimet, hash);
+      if (lapsi) {
+        MurupolkuData.set('parents', {tekstikappaleNimi: tekstikappale.nimi});
+        MurupolkuData.set({
+          tekstikappaleId: hash,
+          tekstikappaleNimi: lapsi.name[Kieli.getSisaltokieli()]
+        });
+      }
+      else {
+        MurupolkuData.set('parents', epParentFinder.find($scope.perusteenSisalto.lapset, tekstikappale.id, true));
+        MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
+      }
+    });
+
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
     $scope.links = {
       prev: null,
       next: null
     };
-
-    //MurupolkuData.set('parents', epParentFinder.find($scope.perusteenSisalto.lapset, tekstikappale.id, true));
 
     function checkPrevNext() {
       var items = $scope.navi.sections[0].items;
@@ -320,48 +237,19 @@ angular.module('eperusteet.esitys')
     checkPrevNext();
   })
 
-  .controller('epLukioKurssiController', function($scope, Kieli, $stateParams, Utils, MurupolkuData) {
+  .controller('epLukioKurssiController', function($scope, epLukioUtils, Kieli, $stateParams, Utils, MurupolkuData) {
 
     $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
 
-    function reduceKurssit() {
-      return _.reduce($scope.oppiaineRakenne.oppiaineet, function(kaikkiKurssit, oppiaine){
-        if(!_.isEmpty(oppiaine.oppimaarat)) {
-          _.each(oppiaine.oppimaarat, function(oppimaara){
-            if(!_.isEmpty(oppimaara.kurssit)) {
-              _(oppimaara.kurssit)
-                .map(function(kurssi){
-                kurssi.oppiaineNimi = oppimaara.nimi;
-                return kurssi;
-                })
-                .each(function(kurssi) {
-                kaikkiKurssit.push(kurssi);
-              }).value()
-            }
-          })
-        }
-        if(!_.isEmpty(oppiaine.kurssit)){
-            _(oppiaine.kurssit)
-              .map(function(kurssi) {
-                kurssi.oppiaineNimi = oppiaine.nimi;
-                return kurssi
-              })
-              .each(function(kurssi){
-              kaikkiKurssit.push(kurssi);
-              }).value()
-        }
-        return kaikkiKurssit;
-      }, []);
-    }
-    var kurssit = reduceKurssit();
+    var kurssit = epLukioUtils.reduceKurssit($scope.oppiaineRakenne.oppiaineet);
+
     function filterKurssit(id){
       return _.filter(kurssit, function(kurssi) {
-        console.log(kurssi);
-        return '' + kurssi.id === '' + id })
-      }
+        return '' + kurssi.id === '' + id;
+      });
+    }
 
     $scope.kurssi = filterKurssit($stateParams.kurssiId)[0];
-    console.log($scope.kurssi);
 
     var murupolkuParams = {
       parents: null,
@@ -412,7 +300,7 @@ angular.module('eperusteet.esitys')
           });
           break;
         default:
-          list = "undefined";
+          list = 'undefined';
       }
       return list;
     };
@@ -437,16 +325,15 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioSivuNaviController', function ($rootScope, $scope, $location, $state, Algoritmit, Utils, epSivunaviUtils,
-                                                epEsitysSettings, anchorSmoothScroll) {
+                                                epEsitysSettings) {
     $scope.menuCollapsed = true;
     $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
     $scope.scrollToHash = function(id){
       if(id && _.isString(id)) {
         $state.go('root.lukio.tekstikappale');
-        id ? $location.hash(id) : null;
-        //id ? anchorSmoothScroll.scrollTo(id) : null;
-        id ? $rootScope.$broadcast('$locationChangeSuccess') : null;
+        $location.hash(id);
+        $rootScope.$broadcast('$locationChangeSuccess');
       }
     };
 
