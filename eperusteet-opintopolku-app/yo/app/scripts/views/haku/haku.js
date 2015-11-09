@@ -68,7 +68,7 @@ epOpintopolkuApp
 
 .controller('HakuController', function($scope, $rootScope, $state, Perusteet, Haku,
   koulutusalaService, Kieli, YleinenData, MurupolkuData, Kaanna) {
-  var pat: any = '';
+  var pat = '';
   var osio = _.last($state.current.name.split('.'));
   Haku.osio = osio;
   var otsikko = 'navi.' + osio;

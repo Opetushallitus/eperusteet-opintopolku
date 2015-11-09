@@ -33,6 +33,7 @@
 <spinner></spinner>
 <backtotop ng-if="lokalisointiInited"></backtotop>
 
+<!-- build:js scripts/components.js -->
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
@@ -56,7 +57,9 @@
 <script src="bower_components/angular-spinner/angular-spinner.js"></script>
 <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
 <script src="bower_components/angulartics/dist/angulartics-piwik.min.js"></script>
+<!-- endbuild -->
 
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
 <script src="scripts/app.js"></script>
 <script src="scripts/constants.js"></script>
 <script src="scripts/config.js"></script>
@@ -107,7 +110,9 @@
 
 <script src="scripts/views/haku/haku.js"></script>
 <script src="scripts/views/esitys/esitys.js"></script>
+<!-- endbuild -->
 
+<!-- build:js({.tmp,app}) scripts/esitys.js -->
 <script src="eperusteet-esitys/main.js"></script>
 <script src="eperusteet-esitys/services/lukioStateService.js"></script>
 <script src="eperusteet-esitys/services/lukioUtils.js"></script>
@@ -119,18 +124,7 @@
 <script src="eperusteet-esitys/views/perusopetus.js"></script>
 <script src="eperusteet-esitys/views/sisallot.js"></script>
 <script src="eperusteet-esitys/views/yksinkertainen.js"></script>
-
-<script src="eperusteet-esitys/main.js"></script>
-<script src="eperusteet-esitys/services/lukioUtils.js"></script>
-<script src="eperusteet-esitys/views/sisallot.js"></script>
-<script src="eperusteet-esitys/views/yksinkertainen.js"></script>
-<script src="eperusteet-esitys/views/perusopetus.js"></script>
-<script src="eperusteet-esitys/views/lukio.js"></script>
-<script src="eperusteet-esitys/services/menubuilder.js"></script>
-<script src="eperusteet-esitys/services/tekstikappaleutils.js"></script>
-<script src="eperusteet-esitys/services/sivunavigaatio.js"></script>
-<script src="eperusteet-esitys/services/stateservice.js"></script>
-<script src="eperusteet-esitys/services/lukioStateService.js"></script>
+<!-- endbuild -->
 
 
 <!-- Piwik -->
