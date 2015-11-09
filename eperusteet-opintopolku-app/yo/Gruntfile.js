@@ -440,7 +440,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', [
     'clean:server',
-    'ts',
     'copy:fonts', // needed if testing while "grunt dev" is running :)
     'concurrent:test',
     'autoprefixer',
@@ -451,7 +450,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'ts',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
