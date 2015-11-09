@@ -457,7 +457,6 @@ module.exports = function(grunt) {
     'autoprefixer',
 //  'connect:test',
     'regex-check',
-    'jshint',
     'karma'
   ]);
 
