@@ -20,7 +20,7 @@ epOpintopolkuApp
 .service('eperusteetConfigTemplator', function($http, $q) {
   return function(serviceLocation) {
     var inited = false;
-    var obj: any = {};
+    var obj = {};
 
     obj.init = function() {
       var deferred = $q.defer();

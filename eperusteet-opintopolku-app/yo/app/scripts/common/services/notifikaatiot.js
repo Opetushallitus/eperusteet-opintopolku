@@ -35,7 +35,7 @@ epOpintopolkuApp
       }, NOTIFICATION_DELAY_SUCCESS);
     }
 
-    var uusiViesti = function (tyyppi, viesti, ilmanKuvaa = false) {
+    var uusiViesti = function (tyyppi, viesti, ilmanKuvaa) {
       if (_.isObject(viesti) && viesti.data && viesti.data.syy) {
         viesti = viesti.data.syy;
       }
@@ -53,7 +53,7 @@ epOpintopolkuApp
 
       viestit.push({
         viesti: viesti ? viesti : tyyppi === 1 ? 'tallennus-onnistui' : '',
-        ilmanKuvaa: ilmanKuvaa,
+        ilmanKuvaa: ilmanKuvaa || false,
         tyyppi: tyyppi,
         luotu: new Date()
       });

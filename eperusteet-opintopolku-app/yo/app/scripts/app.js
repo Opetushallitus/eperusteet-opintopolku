@@ -14,6 +14,11 @@
  * European Union Public Licence for more details.
  */
 
+
+'use strict';
+
+/* jshint ignore:start */
+
 var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
   'ngRoute',
   'ngSanitize',

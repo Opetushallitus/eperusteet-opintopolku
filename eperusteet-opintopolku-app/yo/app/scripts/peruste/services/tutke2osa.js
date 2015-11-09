@@ -223,7 +223,7 @@ epOpintopolkuApp
     }
 
     function groupTavoitteet(tavoitteet, tavoiteMap) {
-      var groups: any = {
+      var groups = {
         grouped: {},
         ungrouped: {}
       };

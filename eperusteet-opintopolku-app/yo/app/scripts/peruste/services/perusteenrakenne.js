@@ -62,7 +62,7 @@ epOpintopolkuApp
   }*/
 
   function rakennaPalaute(rakenne, peruste, tutkinnonOsat) {
-    var response: any = {};
+    var response = {};
     rakenne.kuvaus = rakenne.kuvaus || {};
     response.rakenne = rakenne;
     response.$peruste = peruste;
