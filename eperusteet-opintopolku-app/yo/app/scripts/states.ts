@@ -295,7 +295,6 @@ epOpintopolkuApp
                 var lapset = _.filter(res.lapset, function (lapsi) {
                   return lapsi.perusteenOsa.osanTyyppi === 'tekstikappale';
                 });
-                console.log({'lapset': lapset, 'id': perusteId});
                 return {'lapset': lapset, 'id': perusteId};
               });
           }
@@ -506,6 +505,42 @@ epOpintopolkuApp
             return epTekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
           }
         }
-      });
+      })
+
+      .state('root.esikatselu', {
+        url: '/esikatselu/:perusteId',
+        templateUrl: 'eperusteet-esitys/views/esiopetus.html',
+        controller: 'epEsiopetusController',
+        resolve: {
+          perusteId: function ($stateParams) {
+            return $stateParams.perusteId;
+          },
+          perusteenOsat: function (perusteId, EsiopetusPerusteenOsat) {
+           return EsiopetusPerusteenOsat.query({perusteId: perusteId}).$promise.then(function(res){
+             var lapset = _.filter(res.lapset, function (lapsi) {
+               return lapsi.perusteenOsa.osanTyyppi === 'tekstikappale';
+             });
+             return {'lapset': lapset, 'id': perusteId};
+           })
+           }
+        }
+      })
+
+      .state('root.esikatselu.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+        controller: 'epEsitysSisaltoController',
+        resolve: {
+          tekstikappaleId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
+            return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
+          },
+          lapset: function (serviceConfig, sisalto, tekstikappaleId, epTekstikappaleChildResolver) {
+            return epTekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
+          }
+        }
+      })
 
   });

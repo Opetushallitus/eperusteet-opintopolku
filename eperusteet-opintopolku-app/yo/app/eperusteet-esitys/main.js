@@ -26,7 +26,8 @@ angular.module('eperusteet.esitys', [
 ]).provider('epEsitysSettings', function() {
   var settings = {
     'perusopetusState': 'root.perusopetus',
-    'lukioState': 'root.lukio'
+    'lukioState': 'root.lukio',
+    'esikatseluState': 'root.esikatselu'
   };
 
   this.setValue = function(key, value) {

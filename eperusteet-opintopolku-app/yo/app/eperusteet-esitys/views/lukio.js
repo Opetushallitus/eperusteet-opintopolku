@@ -42,9 +42,7 @@ angular.module('eperusteet.esitys')
     $scope.perusteenSisalto = perusData;
     $scope.peruste = peruste;
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
-    var utils = epLukioUtils;
-    var tabService = epLukioTabService;
-    $scope.oppiaineetJaOppimaarat = utils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
+    $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
 
 
     $scope.addTekstiKappaleTitleClass = function(id) {
@@ -93,9 +91,9 @@ angular.module('eperusteet.esitys')
     };
 
 
-    $scope.tabs = tabService.tabs;
+    $scope.tabs = epLukioTabService.tabs;
     $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
-    $scope.tabClass = tabService.tabClassSelector;
+    $scope.tabClass = epLukioTabService.tabClassSelector;
 
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
 
