@@ -400,7 +400,6 @@ epOpintopolkuApp
         }
       })
 
-
       .state('root.esiopetus', {
         url: '/esiopetus/:perusteId',
         templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',
@@ -507,8 +506,15 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.esikatselu', {
-        url: '/esikatselu/:perusteId',
+      /* OPETUSSUUNNITELMAT */
+
+      .state('root.ops', {
+        url: '/ops',
+        template: '<div ui-view></div>'
+      })
+
+      .state('root.ops.esiopetus', {
+        url: '/esiopetus/:perusteId',
         templateUrl: 'eperusteet-esitys/views/esiopetus.html',
         controller: 'epEsiopetusController',
         resolve: {
@@ -516,17 +522,12 @@ epOpintopolkuApp
             return $stateParams.perusteId;
           },
           perusteenOsat: function (perusteId, EsiopetusPerusteenOsat) {
-           return EsiopetusPerusteenOsat.query({perusteId: perusteId}).$promise.then(function(res){
-             var lapset = _.filter(res.lapset, function (lapsi) {
-               return lapsi.perusteenOsa.osanTyyppi === 'tekstikappale';
-             });
-             return {'lapset': lapset, 'id': perusteId};
-           })
+           return "";
            }
         }
       })
 
-      .state('root.esikatselu.tekstikappale', {
+      .state('root.ops.esiopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
         controller: 'epEsitysSisaltoController',
