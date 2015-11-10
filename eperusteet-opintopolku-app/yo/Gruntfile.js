@@ -1,4 +1,5 @@
 'use strict';
+
 var LIVERELOAD_PORT = 35739;
 var lrSnippet = require('connect-livereload')({
   port: LIVERELOAD_PORT
@@ -11,13 +12,15 @@ var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-connect-proxy');
   grunt.loadNpmTasks('grunt-angular-templates');
+  grunt.loadNpmTasks('grunt-ts');
   require('load-grunt-tasks')(grunt);
 //require('time-grunt')(grunt);
 
   // configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
+    test: 'test'
   };
 
   try {
@@ -28,6 +31,21 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     yeoman: yeomanConfig,
+    ts: {
+      default: {
+        src: [
+          '<%= yeoman.app %>/*.ts',
+          '<%= yeoman.app %>/scripts/**/*.ts',
+          '<%= yeoman.app %>/eperusteet-esitys/**/*.ts',
+          '<%= yeoman.test %>/**/*.ts'
+        ],
+        options: {
+          module: 'amd',
+          target: 'es5',
+          sourceMap: true
+        }
+      }
+    },
     focus: {
       dev: {
         exclude: ['test']
@@ -36,22 +54,24 @@ module.exports = function(grunt) {
     watch: {
       css: {
         files: ['<%= yeoman.app %>/styles/{,*/}*.scss', '<%= yeoman.app %>/eperusteet-esitys/styles/{,*/}*.scss'],
-        tasks: ['sass', 'copy:fonts', 'autoprefixer'],
+        tasks: ['sass', 'copy:fonts', 'autoprefixer']
       },
       test: {
         files: ['<%= yeoman.app %>/**/*.{js,html}', 'test/**/*.js','!<%= yeoman.app %>/bower_components/**'],
-        tasks: ['karma:unit', 'jshint', 'regex-check']
+        tasks: ['ts', 'karma:unit', 'regex-check']
       },
       livereload: {
         options: {
           livereload: LIVERELOAD_PORT,
           open: false
         },
+        tasks: ['ts'],
         files: [
-          '<%= yeoman.app %>/**/*.{html,js}',
+          '<%= yeoman.app %>/**/*.{html,ts}',
           '!<%= yeoman.app %>/bower_components/**',
+          '<%= yeoman.app %>/localisation/*.json',
           '.tmp/styles/**/*.css',
-          '{.tmp,<%= yeoman.app %>}/scripts/**/*.js',
+          '{.tmp,<%= yeoman.app %>}/scripts/**/*.ts',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
       }
@@ -83,7 +103,7 @@ module.exports = function(grunt) {
         // host: 'testi.virkailija.opintopolku.fi',
         port: 443,
         https: true,
-        changeOrigin: true,
+        changeOrigin: true
       }],
       livereload: {
         options: {
@@ -136,16 +156,6 @@ module.exports = function(grunt) {
         }]
       },
       server: '.tmp'
-    },
-    jshint: {
-      options: {
-        jshintrc: '.jshintrc'
-      },
-      all: [
-        'Gruntfile.js',
-        '<%= yeoman.app %>/scripts/**/*.js',
-        '<%= yeoman.app %>/eperusteet-esitys/**/*.js'
-      ]
     },
     // not used since Uglify task does concat,
     // but still available if needed
@@ -282,7 +292,7 @@ module.exports = function(grunt) {
           expand: true,
           cwd: '<%= yeoman.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
           dest: '<%= yeoman.dist %>/styles/fonts',
-          src: '*.{eot,svg,ttf,woff}'
+          src: '*.{eot,svg,ttf,woff,woff2}'
         }]
       },
       fonts: {
@@ -328,7 +338,7 @@ module.exports = function(grunt) {
       }
     },
     uglify: {
-      options: { mangle: false },
+      options: { mangle: false }
 //      dist: {
 //        files: {
 //          '.tmp/concat/scripts/scripts.js': [
@@ -374,14 +384,14 @@ module.exports = function(grunt) {
         options: {
           /* Check that templateUrls don't start with slash */
           pattern : /templateUrl:\s*['"]\//m
-        },
+        }
       },
       showhide: {
         files: [{src: ['<%= yeoman.app %>/{scripts,views}/**/*.{js,html}']}],
         options: {
           /* Check that ng-show/ng-hide are not used in same element */
           pattern : /(ng-show=|ng-hide=)[^>]+(ng-hide=|ng-show=)/m
-        },
+        }
       },
       // emptyHrefs: {
       //   files: [{src: ['<%= yeoman.app %>/{scripts,views}#<{(||)}>#*.{js,html}']}],
@@ -395,7 +405,7 @@ module.exports = function(grunt) {
         options: {
           /* Enforce CamelCaseController naming */
           pattern : /\.controller\s*\(\s*'([a-z][^']+|([^'](?!Controller))+)'/g
-        },
+        }
       }
     },
     maxlines: {
@@ -406,13 +416,13 @@ module.exports = function(grunt) {
         options: {
           limit: 300
         },
-        files: [{src: ['<%= yeoman.app %>/scripts/**/*.js']}],
+        files: [{src: ['<%= yeoman.app %>/scripts/**/*.ts']}]
       },
       scss: {
         options: {
           limit: 500
         },
-        files: [{src: ['<%= yeoman.app %>/styles/**/*.scss']}],
+        files: [{src: ['<%= yeoman.app %>/styles/**/*.scss']}]
       }
     }
   });
@@ -424,6 +434,7 @@ module.exports = function(grunt) {
       }
 
       grunt.task.run([
+        'ts',
         'clean:server',
         'concurrent:server',
         'copy:fonts',
@@ -464,6 +475,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('default', [
+    'ts',
     'test',
     'build'
   ]);

@@ -401,7 +401,7 @@ epOpintopolkuApp
           return osa.jarjestys;
         }
       }
-      return Number.MAX_SAFE_INTEGER;
+      return 9007199254740991; // todo: ES6 Number.MAX_SAFE_INTEGER
     };
 
     $scope.nimiSorter = function (item) {
