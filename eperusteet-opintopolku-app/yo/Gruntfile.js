@@ -450,6 +450,7 @@ module.exports = function(grunt) {
   grunt.registerTask('dev', devTask(true));
 
   grunt.registerTask('test', [
+    'ts',
     'clean:server',
     'copy:fonts', // needed if testing while "grunt dev" is running :)
     'concurrent:test',
@@ -460,6 +461,7 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
+    'ts',
     'clean:dist',
     'useminPrepare',
     'concurrent:dist',
