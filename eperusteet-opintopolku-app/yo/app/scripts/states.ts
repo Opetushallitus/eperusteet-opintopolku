@@ -527,7 +527,7 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.esiopetus.tekstikappale', {
+     /* .state('root.ops.esiopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
         controller: 'epEsitysSisaltoController',
@@ -542,6 +542,6 @@ epOpintopolkuApp
             return epTekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
           }
         }
-      })
+      })*/
 
   });
