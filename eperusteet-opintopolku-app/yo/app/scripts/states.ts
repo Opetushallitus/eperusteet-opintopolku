@@ -515,8 +515,8 @@ epOpintopolkuApp
 
       .state('root.ops.esiopetus', {
         url: '/esiopetus/:perusteId',
-        templateUrl: 'eperusteet-esitys/views/esiopetus.html',
-        controller: 'epEsiopetusController',
+        templateUrl: 'views/ops/esiopetus.html',
+        controller: 'opsEsiopetusController',
         resolve: {
           perusteId: function ($stateParams) {
             return $stateParams.perusteId;
