@@ -521,16 +521,30 @@ epOpintopolkuApp
           perusteId: function ($stateParams) {
             return $stateParams.perusteId;
           },
-          perusteenOsat: function (perusteId /*fakeEsiopetusOPS*/) {
-           return "";
+          perusteenOsat: function (perusteId, EsiopetusPerusteenOsat) {
+           return EsiopetusPerusteenOsat.query({perusteId: perusteId}).$promise
+             .then(function(res){
+               return res;
+           })
            }
         }
       })
 
-      /*.state('root.ops.esiopetus.tekstikappale', {
+      .state('root.ops.esiopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
-        controller: 'epEsitysSisaltoController'
-      })*/
+        controller: 'opsTekstiKappaleController',
+        resolve: {
+          tekstikappaleId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
+            return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
+          },
+          lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
+            return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
+          }
+        }
+      })
 
   });

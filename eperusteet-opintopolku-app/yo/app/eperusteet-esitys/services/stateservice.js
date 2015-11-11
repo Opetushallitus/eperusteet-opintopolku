@@ -36,6 +36,7 @@ angular.module('eperusteet.esitys')
   }
 
   this.setState = function (navi) {
+
     this.state = {};
     _.each(navi.sections, function (section) {
       section.$open = false;
