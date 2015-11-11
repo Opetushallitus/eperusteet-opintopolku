@@ -30,6 +30,7 @@ angular.module('eperusteet.esitys')
     peruste,
     epEsitysSettings,
     epMenuBuilder,
+    TermistoService,
     MurupolkuData,
     epLukioStateService,
     oppiaineRakenne,
@@ -45,12 +46,25 @@ angular.module('eperusteet.esitys')
     var utils = epLukioUtils;
     var tabService = epLukioTabService;
     $scope.oppiaineetJaOppimaarat = utils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
-    console.log("peruste",
-      $scope.peruste,
-      "perusteenSisalto",
-      $scope.perusteenSisalto,
-      "oppiaineRakenne",
-      $scope.oppiaineRakenne);
+    TermistoService.setPeruste(peruste);
+
+    function clickHandler(event) {
+      var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
+      if (ohjeEl.length === 0) {
+        $rootScope.$broadcast('ohje:closeAll');
+      }
+    }
+    function installClickHandler() {
+      $document.off('click', clickHandler);
+      $timeout(function () {
+        $document.on('click', clickHandler);
+      });
+    }
+    $scope.$on('$destroy', function () {
+      $document.off('click', clickHandler);
+    });
+
+    installClickHandler();
 
     $scope.addTekstiKappaleTitleClass = function(id) {
       var titleClasses = { 0: 'title-h1', 1: 'title-h2', 2: 'title-h3', 3: 'title-h4', 4: 'title-h5', 5: 'title-h5'};
