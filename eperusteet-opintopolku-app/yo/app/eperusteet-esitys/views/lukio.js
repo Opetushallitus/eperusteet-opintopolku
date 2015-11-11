@@ -45,7 +45,12 @@ angular.module('eperusteet.esitys')
     var utils = epLukioUtils;
     var tabService = epLukioTabService;
     $scope.oppiaineetJaOppimaarat = utils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
-
+    console.log("peruste",
+      $scope.peruste,
+      "perusteenSisalto",
+      $scope.perusteenSisalto,
+      "oppiaineRakenne",
+      $scope.oppiaineRakenne);
 
     $scope.addTekstiKappaleTitleClass = function(id) {
       var titleClasses = { 0: 'title-h1', 1: 'title-h2', 2: 'title-h3', 3: 'title-h4', 4: 'title-h5', 5: 'title-h5'};

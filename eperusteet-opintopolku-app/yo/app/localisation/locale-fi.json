@@ -157,6 +157,8 @@
   "soveltavat-kurssit": "Soveltavat kurssit",
   "keskeiset-sisallot": "Keskeiset sisällöt",
   "tavoitteet-ja-keskeiset-sisallot": "Tavoitteet ja keskeiset sisällöt",
-  "oppiaine-sisalto": "Oppiaine sisältö",
-  "kurssi-sisalto": "Kurssi sisältö"
+  "oppiainen-sisalto": "Oppiainen sisältö",
+  "kurssin-sisalto": "Kurssin sisältö",
+  "perusteen-esikatselu": "Perusteen esikatselu",
+  "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa"
 }
