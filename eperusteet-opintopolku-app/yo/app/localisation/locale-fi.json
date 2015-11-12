@@ -160,5 +160,17 @@
   "oppiainen-sisalto": "Oppiainen sisältö",
   "kurssin-sisalto": "Kurssin sisältö",
   "perusteen-esikatselu": "Perusteen esikatselu",
-  "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa"
+  "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa",
+
+  "opetussuunnitelman-tiedot": "Opetussuunnitelman tiedöt",
+  "opetussuunnitelman-nimi": "Opetussuunnitelman nimi",
+  "koulutus-tyyppi": "Koulutus tyyppi",
+  "kunnat": "Kunnat",
+  "organisaatiot": "Organisaatiot",
+  "luotu": "Luotu",
+  "muokattu": "Muokattu",
+  "tila": "Tila",
+  "Paatospaivamaara": "Päätöspäivämäärä",
+  "pohja": "Pohja"
+
 }

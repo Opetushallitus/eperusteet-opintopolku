@@ -509,109 +509,129 @@ epOpintopolkuApp
       /* OPETUSSUUNNITELMAT */
 
       .state('root.ops', {
-        url: '/ops',
-        template: '<div ui-view></div>'
+        url: '/ops/:opsId',
+        template: '<div ui-view></div>',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          }
+        }
       })
 
       .state('root.ops.esiopetus', {
-        url: '/esiopetus/:perusteId',
+        url: '/esiopetus',
         templateUrl: 'views/ops/yksinkertainen.html',
         controller: 'opsYksinkertainenController',
         resolve: {
-          perusteId: function ($stateParams) {
-            return $stateParams.perusteId;
-          },
-          perusteenOsat: function (perusteId, EsiopetusPerusteenOsat) {
-           return EsiopetusPerusteenOsat.query({perusteId: perusteId}).$promise
-             .then(function(res){
-               return res;
-           })
-           }
+          otsikot: function (opsId, EsiopetusOPS) {
+            return EsiopetusOPS.otsikot;
+          }
+        }
+      })
+
+      .state('root.ops.esiopetus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'opsYksinkertainenTiedotController',
+        resolve: {
+          ops: function(opsResource) {
+            return opsResource.OPS.ops;
+          }
         }
       })
 
       .state('root.ops.esiopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
-        templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
-        controller: 'opsTekstiKappaleController',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'opsTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
-            return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
-          },
-          lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
-            return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
+          tekstikappale: function (tekstikappaleId, opsResource) {
+            return opsResource.OPS.tekstikappale;
           }
+          /*lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
+            return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
+          }*/
         }
       })
 
       .state('root.ops.lisaopetus', {
-        url: '/lisaopetus/:perusteId',
+        url: '/lisaopetus',
         templateUrl: 'views/ops/yksinkertainen.html',
         controller: 'opsYksinkertainenController',
         resolve: {
-          perusteId: function ($stateParams) {
-            return $stateParams.perusteId;
-          },
-          perusteenOsat: function (perusteId, EsiopetusPerusteenOsat) {
-            return EsiopetusPerusteenOsat.query({perusteId: perusteId}).$promise
-              .then(function(res){
-                return res;
-              })
+          otsikot: function (opsId, EsiopetusOPS) {
+            return EsiopetusOPS.otsikot;
+          }
+        }
+      })
+
+      .state('root.ops.lisaopetus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'opsYksinkertainenTiedotController',
+        resolve: {
+          ops: function(opsResource) {
+            return opsResource.OPS.ops;
           }
         }
       })
 
       .state('root.ops.lisaopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
-        templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
-        controller: 'opsTekstiKappaleController',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'opsTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
-            return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
-          },
-          lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
-            return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
+          tekstikappale: function (tekstikappaleId, opsResource) {
+            return opsResource.OPS.tekstikappale;
           }
+          /*lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
+           return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
+           }*/
         }
       })
 
       .state('root.ops.varhaiskasvatus', {
-        url: '/varhaiskasvatus/:perusteId',
+        url: '/varhaiskasvatus',
         templateUrl: 'views/ops/yksinkertainen.html',
         controller: 'opsYksinkertainenController',
         resolve: {
-          perusteId: function ($stateParams) {
-            return $stateParams.perusteId;
-          },
-          perusteenOsat: function (perusteId, EsiopetusPerusteenOsat) {
-            return EsiopetusPerusteenOsat.query({perusteId: perusteId}).$promise
-              .then(function(res){
-                return res;
-              })
+          otsikot: function (opsId, EsiopetusOPS) {
+            return EsiopetusOPS.otsikot;
+          }
+        }
+      })
+
+      .state('root.ops.varhaiskasvatus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'opsYksinkertainenTiedotController',
+        resolve: {
+          ops: function(opsResource) {
+            return opsResource.OPS.ops;
           }
         }
       })
 
       .state('root.ops.varhaiskasvatus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
-        templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
-        controller: 'opsTekstiKappaleController',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'opsTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
-            return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
-          },
-          lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
-            return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
+          tekstikappale: function (tekstikappaleId, opsResource) {
+            return opsResource.OPS.tekstikappale;
           }
+          /*lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
+           return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
+           }*/
         }
       })
 

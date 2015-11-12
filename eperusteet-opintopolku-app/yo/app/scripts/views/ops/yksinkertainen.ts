@@ -15,9 +15,10 @@
  */
 'use strict';
 epOpintopolkuApp
-  .controller('opsYksinkertainenController', function ($q, $scope, $state, TermistoService, perusteenOsat, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, perusteId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
+  .controller('opsYksinkertainenController', function ($q, $scope, $state, TermistoService, otsikot, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, opsId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
     $scope.isNaviVisible = _.constant(true);
-    $scope.perusteenOsat = perusteenOsat;
+    $scope.otsikot = otsikot;
+
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
@@ -44,12 +45,12 @@ epOpintopolkuApp
       epPerusopetusStateService.setState($scope.navi);
     });
     $scope.navi = {
-      header: 'ops-sisalto',
+      header: 'opetussuunnitelma',
       sections: [
         {
           id: 'tekstikappale',
           $open: true,
-          items: epMenuBuilder.rakennaTekstisisalto($scope.perusteenOsat)
+          items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot)
         }
       ]
     };
@@ -64,8 +65,22 @@ epOpintopolkuApp
         });
       }
     });
+
+    $scope.navi.sections[0].items.unshift({depth: 0, label: 'opetussuunnitelman-tiedot', link: [currentRootState + '.tiedot']});
   })
-  .controller('opsTekstiKappaleController', function ($scope, $state, $stateParams, PerusteenOsat, tekstikappale, lapset, MurupolkuData, epParentFinder, epTekstikappaleChildResolver) {
-    $scope.tekstikappale = tekstikappale;
-    $scope.lapset = epTekstikappaleChildResolver.getSisalto();
+  .controller('opsYksinkertainenTiedotController', function($scope, ops) {
+    console.log("OPS", ops);
+    $scope.ops = ops;
+  })
+  .controller('opsTekstikappaleController', function (
+    $scope,
+    $state,
+    $stateParams,
+    tekstikappale,
+    MurupolkuData,
+    epParentFinder,
+    epTekstikappaleChildResolver) {
+    console.log(tekstikappale);
+    $scope.tekstikappale = tekstikappale.tekstiKappale;
+    //$scope.lapset = epTekstikappaleChildResolver.getSisalto();
   });

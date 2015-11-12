@@ -105,6 +105,25 @@ angular.module('eperusteet.esitys')
         }, []);
   }
 
+
+  function rakennaYksinkertainenMenu(otsikot){
+    var menu = [];
+    Algoritmit.kaikilleLapsisolmuille(otsikot, 'lapset', function(osa, depth) {
+      menu.push({
+        $osa: osa,
+        label: osa.tekstiKappale ? osa.tekstiKappale.nimi : '',
+        depth: depth,
+        $hidden: depth > 0
+      });
+    });
+    var levels = {};
+    _.each(menu, function (item, index) {
+      levels[item.depth] = index;
+      item.$parent = levels[item.depth - 1] || null;
+    });
+    return menu;
+  }
+
   function traverseOppiaineet(aineet, arr, vlk, startingDepth) {
     startingDepth = startingDepth || 0;
     var isSisalto = startingDepth === 0;
@@ -175,6 +194,7 @@ angular.module('eperusteet.esitys')
   this.filteredOppimaarat = filteredOppimaarat;
   this.buildLukioOppiaineMenu = buildLukioOppiaineMenu;
   this.rakennaTekstisisalto = rakennaTekstisisalto;
+  this.rakennaYksinkertainenMenu = rakennaYksinkertainenMenu;
   this.rakennaVuosiluokkakokonaisuuksienSisalto = rakennaVuosiluokkakokonaisuuksienSisalto;
   this.rakennaSisallotOppiaineet = rakennaSisallotOppiaineet;
 });
