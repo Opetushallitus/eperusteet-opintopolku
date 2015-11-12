@@ -216,6 +216,37 @@ epOpintopolkuApp
         useId: 'osanId',
         useData: 'tekstikappaleNimi',
         customParents: true
+      },
+      'root.ops': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.ops.esiopetus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.ops.esiopetus.tekstikappale': {
+        parent: 'root.ops.esiopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi'
+      },
+      'root.ops.lisaopetus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.ops.lisaopetus.tekstikappale': {
+        parent: 'root.ops.lisaopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi'
+      },
+      'root.ops.varhaiskasvatus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.ops.varhaiskasvatus.tekstikappale': {
+        parent: 'root.ops.lisaopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi'
       }
     };
 

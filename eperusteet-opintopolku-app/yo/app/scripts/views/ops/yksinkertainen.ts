@@ -15,14 +15,20 @@
  */
 'use strict';
 epOpintopolkuApp
-  .controller('opsEsiopetusController', function ($q, $scope, $state, TermistoService, perusteenOsat, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, perusteId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
+  .controller('opsYksinkertainenController', function ($q, $scope, $state, TermistoService, perusteenOsat, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, perusteId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenOsat = perusteenOsat;
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
 
+    function getRootState(current) {
+      return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus)(.*)/, '.$1');
+    }
+
     TermistoService.setPeruste($stateParams.perusteId);
+
+    //MurupolkuData.set({perusteId: perusteId, perusteNimi: peruste.nimi});
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
@@ -47,7 +53,9 @@ epOpintopolkuApp
         }
       ]
     };
-    var currentRootState = $state.current.name;
+
+    var currentRootState = getRootState($state.current.name);
+
     _.each($scope.navi.sections[0].items, function (item) {
       if (item.$osa) {
         item.href = $state.href(currentRootState + '.tekstikappale', {
@@ -60,5 +68,4 @@ epOpintopolkuApp
   .controller('opsTekstiKappaleController', function ($scope, $state, $stateParams, PerusteenOsat, tekstikappale, lapset, MurupolkuData, epParentFinder, epTekstikappaleChildResolver) {
     $scope.tekstikappale = tekstikappale;
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
-    console.log($scope.tekstikappale);
   });
