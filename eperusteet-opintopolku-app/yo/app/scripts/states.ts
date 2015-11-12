@@ -525,6 +525,9 @@ epOpintopolkuApp
         resolve: {
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
+          },
+          ops: function(opsResource) {
+            return opsResource.OPS.ops;
           }
         }
       })
@@ -564,6 +567,9 @@ epOpintopolkuApp
         resolve: {
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
+          },
+          ops: function(opsResource) {
+            return opsResource.OPS.ops;
           }
         }
       })
@@ -603,6 +609,9 @@ epOpintopolkuApp
         resolve: {
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
+          },
+          ops: function(opsResource) {
+            return opsResource.OPS.ops;
           }
         }
       })

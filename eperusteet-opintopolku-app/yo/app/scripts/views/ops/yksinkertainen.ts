@@ -15,9 +15,10 @@
  */
 'use strict';
 epOpintopolkuApp
-  .controller('opsYksinkertainenController', function ($q, $scope, $state, TermistoService, otsikot, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, opsId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
+  .controller('opsYksinkertainenController', function ($q, $scope, $state, ops, TermistoService, otsikot, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, opsId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
     $scope.isNaviVisible = _.constant(true);
     $scope.otsikot = otsikot;
+    $scope.ops = ops;
 
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
@@ -29,7 +30,7 @@ epOpintopolkuApp
 
     TermistoService.setPeruste($stateParams.perusteId);
 
-    //MurupolkuData.set({perusteId: perusteId, perusteNimi: peruste.nimi});
+    MurupolkuData.set({opsId: ops.id, opsNimi: ops.nimi});
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
@@ -80,7 +81,7 @@ epOpintopolkuApp
     MurupolkuData,
     epParentFinder,
     epTekstikappaleChildResolver) {
-    console.log(tekstikappale);
     $scope.tekstikappale = tekstikappale.tekstiKappale;
     //$scope.lapset = epTekstikappaleChildResolver.getSisalto();
+    MurupolkuData.set({tekstikappaleId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
   });
