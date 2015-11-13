@@ -44,7 +44,7 @@ angular.module('eperusteet.esitys')
     $scope.peruste = peruste;
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
     $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
-    $scope.oppiaineetJaOppimaarat = utils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
+    $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
     TermistoService.setPeruste(peruste);
 
     function clickHandler(event) {

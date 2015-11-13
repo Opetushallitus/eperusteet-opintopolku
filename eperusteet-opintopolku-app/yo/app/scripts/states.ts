@@ -644,4 +644,15 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.ops.perusopetus', {
+        url: '/perusopetus',
+        templateUrl: 'views/ops/yksinkertainen.html',
+        controller: 'opsYksinkertainenController',
+        resolve: {
+          perusOps: function(opsResource) {
+            return opsResource.OPS.perusOps;
+          }
+        }
+      })
+
   });

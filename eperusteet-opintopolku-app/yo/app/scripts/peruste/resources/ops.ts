@@ -24,6 +24,7 @@ epOpintopolkuApp
     return {
       'otsikot': opsResource.OPS.otsikot,
       'ops': opsResource.OPS.ops,
-      'tekstikappale': opsResource.OPS.tekstikappale
+      'tekstikappale': opsResource.OPS.tekstikappale,
+      'perusOps': opsResource.OPS.perusOps
     };
   });
