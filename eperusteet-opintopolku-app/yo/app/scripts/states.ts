@@ -644,13 +644,44 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perusopetus', {
-        url: '/perusopetus',
-        templateUrl: 'views/ops/yksinkertainen.html',
-        controller: 'opsYksinkertainenController',
+      .state('root.ops.perus', {
+        url: '/perus',
+        templateUrl: 'views/ops/perusopetus.html',
+        controller: 'opsPerusopetusController',
         resolve: {
+          otsikot: function (opsId, EsiopetusOPS) {
+            return EsiopetusOPS.otsikot;
+          },
           perusOps: function(opsResource) {
             return opsResource.OPS.perusOps;
+          }
+        }
+      })
+
+      .state('root.ops.perus.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'opsPerusopetusTekstikappaleController',
+        resolve: {
+          tekstikappaleId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappale: function (tekstikappaleId, opsResource) {
+            return opsResource.OPS.tekstikappale;
+          }
+        }
+      })
+
+      .state('root.ops.perus.oppiaine', {
+        url: '/oppiaine/:oppiaineId',
+        templateUrl: 'views/ops/vlkoppiaine.html',
+        controller: 'opsPerusopetusVlkoppiaineController',
+        resolve: {
+          oppiaineId: function (serviceConfig, $stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          tekstikappale: function (oppiaineId, opsResource) {
+            return opsResource.OPS.tekstikappale;
           }
         }
       })
