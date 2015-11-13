@@ -325,7 +325,7 @@ epOpintopolkuApp
       "_tekstiKappale" : null
     };
 
-    var ops = {
+    var perusOps = {
       "id" : 14400,
       "julkaisukielet" : [ "fi" ],
       "organisaatiot" : [ {
@@ -402,7 +402,7 @@ epOpintopolkuApp
       "lapset" : [ ]
     };
 
-    var perusOps = {
+    var ops = {
       id: 451200,
       julkaisukielet: [
         "fi"
@@ -516,6 +516,9 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451228,
+            vuosiluokat: [
+
+            ],
             tunniste: "16219794-bd9f-436b-8eae-66c017f6c78b",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -528,8 +531,12 @@ epOpintopolkuApp
               _id: "447336"
             },
             abstrakti: null,
-            oppimaarat: [ ],
-            vuosiluokkakokonaisuudet: [ ],
+            oppimaarat: [
+
+            ],
+            vuosiluokkakokonaisuudet: [
+
+            ],
             koodiUri: "oppiaineetyleissivistava2_vk",
             koodiArvo: "VK"
           }
@@ -538,6 +545,11 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451220,
+            vuosiluokat: [
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "e2f19be6-004b-4aaf-9660-3316c6cc6a3d",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -566,6 +578,16 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451388,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "752ca235-8e9a-4a9c-ad6c-8bb80e1e0be9",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -604,6 +626,10 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451389,
+            vuosiluokat: [
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "faca48f7-2a19-409e-b973-afbabb019ffd",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -632,6 +658,17 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451380,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "046a6ea5-5402-4f7c-aa8a-79e25d61873b",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -643,7 +680,9 @@ epOpintopolkuApp
               _id: "446882"
             },
             abstrakti: null,
-            oppimaarat: [ ],
+            oppimaarat: [
+
+            ],
             vuosiluokkakokonaisuudet: [
               {
                 id: 451362,
@@ -669,6 +708,16 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451382,
+            vuosiluokat: [
+              "vuosiluokka_2",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "dc7c6c2d-5b41-42e5-876b-dc8242e3fd66",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -707,6 +756,11 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451381,
+            vuosiluokat: [
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "823e4670-1810-40c3-89d0-e7f0b90b1171",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -735,6 +789,10 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451386,
+            vuosiluokat: [
+              "vuosiluokka_7",
+              "vuosiluokka_8"
+            ],
             tunniste: "59abd9fb-03f4-4e5c-a9b8-3d61c824c6c2",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -762,6 +820,17 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451383,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "92025e4c-05f6-4179-8416-947cf05fcb7d",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -800,6 +869,13 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451223,
+            vuosiluokat: [
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "d498c2f5-e737-47b1-86c1-f861a8ef8e16",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -833,6 +909,13 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451229,
+            vuosiluokat: [
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "fde32105-6415-405a-aa30-3911d4754394",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -866,6 +949,13 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451221,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_5"
+            ],
             tunniste: "f27a8e8a-3215-424e-98f1-861d2b9b5654",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -899,6 +989,10 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 462314,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2"
+            ],
             tunniste: "671dcd8e-f022-4034-bff6-c7130d69f0e5",
             tila: "luonnos",
             tyyppi: "muu_valinnainen",
@@ -926,6 +1020,17 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451224,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "89fd3a52-94f0-4898-a2f6-3e457eee65af",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -941,6 +1046,11 @@ epOpintopolkuApp
             oppimaarat: [
               {
                 id: 462318,
+                vuosiluokat: [
+                  "vuosiluokka_3",
+                  "vuosiluokka_4",
+                  "vuosiluokka_5"
+                ],
                 tunniste: "f35cbbb1-af67-4bf2-93df-4990e011c12c",
                 tila: "luonnos",
                 tyyppi: "yhteinen",
@@ -999,6 +1109,13 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451226,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "0aab037c-a9e6-4816-8350-2a76e428b8ff",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1037,6 +1154,17 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451227,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "b28889b0-97bf-45e4-91ff-a5c5822ea0b3",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1075,6 +1203,9 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451384,
+            vuosiluokat: [
+              "vuosiluokka_9"
+            ],
             tunniste: "ae9cd11f-219a-4a58-ace8-0aeae63ae94d",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1103,6 +1234,13 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451222,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_5",
+              "vuosiluokka_6"
+            ],
             tunniste: "2050e4d4-b64a-44af-beae-79e1142269cc",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1141,6 +1279,10 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 459933,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2"
+            ],
             tunniste: "7f5ee40c-e25b-41bf-a429-c9fc5f4e90c4",
             tila: "luonnos",
             tyyppi: "muu_valinnainen",
@@ -1168,6 +1310,13 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451225,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_2",
+              "vuosiluokka_5",
+              "vuosiluokka_6",
+              "vuosiluokka_7"
+            ],
             tunniste: "7e9d81d0-9106-479f-8959-d912df43378e",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1179,7 +1328,9 @@ epOpintopolkuApp
               _id: "446684"
             },
             abstrakti: null,
-            oppimaarat: [ ],
+            oppimaarat: [
+
+            ],
             vuosiluokkakokonaisuudet: [
               {
                 id: 451303,
@@ -1205,6 +1356,10 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451387,
+            vuosiluokat: [
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "5c748064-6f04-4455-bd51-c70504e176af",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1233,6 +1388,15 @@ epOpintopolkuApp
           oma: true,
           oppiaine: {
             id: 451385,
+            vuosiluokat: [
+              "vuosiluokka_1",
+              "vuosiluokka_3",
+              "vuosiluokka_4",
+              "vuosiluokka_6",
+              "vuosiluokka_7",
+              "vuosiluokka_8",
+              "vuosiluokka_9"
+            ],
             tunniste: "a7cf2f77-3cce-4aa4-89ab-e64a84e25105",
             tila: "luonnos",
             tyyppi: "yhteinen",
