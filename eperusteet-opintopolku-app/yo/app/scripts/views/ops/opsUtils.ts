@@ -25,7 +25,7 @@ epOpintopolkuApp
           $vkl: vlk,
           label: vlk.nimi,
           depth: 0
-         // add url for vlk??
+          url: $state.href('root.ops.perus.vuosiluokkakokonaisuus', {vlkId: vlk.id})
         });
         traverseOppiaineet(aineet, arr, vlk._tunniste, 1);
       });

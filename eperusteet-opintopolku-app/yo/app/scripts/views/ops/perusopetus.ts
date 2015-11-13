@@ -30,7 +30,7 @@ epOpintopolkuApp
     Kieli,
     $document,
     $rootScope,
-    epPerusopetusStateService,
+    opsStateService,
     epEsitysSettings,
     opsUtils,
     otsikot,
@@ -74,7 +74,7 @@ epOpintopolkuApp
     };
 
     $scope.$on('$stateChangeSuccess', function () {
-      epPerusopetusStateService.setState($scope.navi);
+      opsStateService.setState($scope.navi);
     });
 
    /* function clickHandler(event) {
@@ -137,8 +137,8 @@ epOpintopolkuApp
     $scope.tekstikappale = tekstikappale.tekstiKappale;
   })
 
-  .controller('opsPerusopetusVlkController', function($scope, $stateParams, MurupolkuData) {
-
+  .controller('opsPerusopetusVlkController', function($scope, $stateParams, vlkTeksti, MurupolkuData) {
+     $scope.teksti = vlkTeksti;
   })
 
   .controller('opsPerusopetusVlkoppiaineController', function($scope, tekstikappale) {

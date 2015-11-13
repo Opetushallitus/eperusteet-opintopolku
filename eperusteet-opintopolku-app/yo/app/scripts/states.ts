@@ -677,11 +677,25 @@ epOpintopolkuApp
         templateUrl: 'views/ops/vlkoppiaine.html',
         controller: 'opsPerusopetusVlkoppiaineController',
         resolve: {
-          oppiaineId: function (serviceConfig, $stateParams) {
+          oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
           tekstikappale: function (oppiaineId, opsResource) {
             return opsResource.OPS.tekstikappale;
+          }
+        }
+      })
+
+      .state('root.ops.perus.vuosiluokkakokonaisuus', {
+        url:'/vuosiluokkakokonaisuus/:vlkId',
+        templateUrl: 'eperusteet-esitys/views/vuosiluokkakokonaisuus.html',
+        controller: 'opsPerusopetusVlkController',
+        resolve: {
+          vlkId: function($stateParams){
+            return $stateParams.vlkId;
+          },
+          vlkTeksti: function(){
+            return "vlk teksti";
           }
         }
       })
