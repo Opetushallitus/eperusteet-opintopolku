@@ -18,37 +18,119 @@
 
 epOpintopolkuApp
   .factory('opsUtils', function (Algoritmit, $state, Kieli, Utils, epEsitysSettings) {
+
+    function sortVlk(vlk){
+      return _(vlk)
+        .map('vuosiluokkakokonaisuus')
+        .sortBy(function(vlk){
+          return _.reduce(vlk.nimi.fi.replace(/\D/g, '').split(''), function(sum, num){
+            return sum + parseInt(num);
+          },0);
+        })
+        .value();
+    }
+
+    function createMenuByYear(vlk){
+      let menu = [];
+
+      function createYears(numbs, tunniste){
+        let start = parseInt(numbs[0]);
+        let stop = numbs[1] ? parseInt(numbs[1])+1 : start+1;
+        for (let i = start; i < stop; i++) {
+          menu.push({
+            vuosi: "vuosiluokka_" + i,
+            _tunniste: tunniste
+          });
+        }
+      }
+      _.each(vlk, function(v){
+        menu.push(v);
+        let nimi = v.nimi.fi || v.nimi.sv;
+        let numbs = nimi.replace(/\D/g, '').split('');
+        createYears(numbs, v._tunniste);
+      });
+
+      return menu;
+    }
+
     function rakennaVuosiluokkakokonaisuuksienMenu(vlkt, aineet) {
+
+      let vlkWithYears = createMenuByYear(vlkt);
+
       var arr = [];
-      _.each(vlkt, function (vlk) {
+      var lastVlk = null;
+      var currentVuosi = null;
+      _.each(vlkWithYears, function (vlk) {
+        if (!vlk.vuosi) {
+          lastVlk = vlk;
+          arr.push({
+            $vkl: vlk,
+            label: vlk.nimi,
+            depth: 0,
+            url: $state.href('root.ops.perus.vuosiluokkakokonaisuus', {vlkId: vlk.id})
+          });
+          return arr;
+        }
         arr.push({
-          $vkl: vlk,
-          label: vlk.nimi,
-          depth: 0
-          url: $state.href('root.ops.perus.vuosiluokkakokonaisuus', {vlkId: vlk.id})
+          vuosi: vlk.vuosi,
+          label: vlk.vuosi,
+          $hidden: true,
+          vlk: lastVlk.nimi,
+          depth: 1,
+          url: $state.href('root.ops.perus', {vuosi: vlk.vuosi})
         });
-        traverseOppiaineet(aineet, arr, vlk._tunniste, 1);
+        currentVuosi = vlk.vuosi
+        traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi);
       });
       return arr;
     }
 
-    function traverseOppiaineet(aineet, arr, vlk, startingDepth) {
+    function traverseOppiaineet(aineet, arr, vlk, startingDepth, currentVuosi) {
       startingDepth = startingDepth || 0;
-      var isSisalto = startingDepth === 0;
-      var vlks = _.isArray(vlk) ? vlk : [vlk];
-      var oaFiltered = _(aineet).filter(function(oa) {
-        var oppiaineHasVlk = _.some(oa.vuosiluokkakokonaisuudet, function(oavkl) {
+      let currentVlkt = [];
+      let currentYears = arr[arr.length-1].vlk.fi.replace(/\D/g, '').split('')
+                            || arr[arr.length-1].vlk.svreplace(/\D/g, '').split('');
+      let start = parseInt(currentYears[0]);
+      let stop = currentYears[1] ? parseInt(currentYears[1])+1 : start+1;
+      for (let i = start; i < stop; i++) {
+        currentVlkt.push("vuosiluokka_" + i);
+      }
+      let isSisalto = startingDepth === 0;
+      let vlks = _.isArray(vlk) ? vlk : [vlk];
+      let oaFiltered = _(aineet).filter(function(oa) {
+        let oppiaineHasVlk = _.some(oa.vuosiluokkakokonaisuudet, function(oavkl) {
           return _.some(vlks, function (oneVlk) {
             return '' + oavkl._vuosiluokkakokonaisuus === '' + oneVlk;
           });
         });
-        var oppimaaraVlkIds = _(oa.oppimaarat).map(function (oppimaara) {
+        let oppimaaraVlkIds = _(oa.oppimaarat).map(function (oppimaara) {
           return _.map(oppimaara.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus');
         }).flatten().uniq().value();
-        var vlkIds = _.map(vlks, String);
+        let vlkIds = _.map(vlks, String);
         return oppiaineHasVlk || !_.isEmpty(_.intersection(oppimaaraVlkIds, vlkIds));
       }).value();
-      _.each(oppiaineSort(oaFiltered), function (oa) {
+
+      function hasVuosiluoka(vuodet){
+        return _.indexOf(vuodet, currentVuosi) > -1;
+      }
+
+      function hasNoVuosiluoka(vuodet){
+        return _.isEmpty(_.intersection(currentVlkt, vuodet));
+      }
+
+      function oppimaaratHasVuosiLuoka(opmt){
+        return _.filter(opmt, function(op){
+          return _.indexOf(op.vuosiluokat, currentVuosi) > -1
+        });
+      }
+
+      let belongsInCurrentYear = _(oaFiltered).filter(function(oa){
+                                  return hasVuosiluoka(oa.vuosiluokat)
+                                    || hasNoVuosiluoka(oa.vuosiluokat)
+                                    || (oa.oppimaarat && oppimaaratHasVuosiLuoka(oa.oppimaarat));
+                                  }).value();
+
+      _.each(oppiaineSort(belongsInCurrentYear), function (oa) {
         buildOppiaineItem(arr, oa, vlks, startingDepth, isSisalto);
         _.each(filteredOppimaarat(oa, vlks), function (oppimaara) {
           buildOppiaineItem(arr, oppimaara, vlks, startingDepth + 1, isSisalto);
@@ -94,6 +176,7 @@ epOpintopolkuApp
     }
 
     return {
+      sortVlk: sortVlk,
       rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu
     }
   });

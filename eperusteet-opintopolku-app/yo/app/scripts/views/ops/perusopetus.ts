@@ -44,15 +44,7 @@ epOpintopolkuApp
     $scope.otsikot = otsikot;
     $scope.perusOps = perusOps;
     $scope.oppiaineet = _.map($scope.perusOps.oppiaineet, 'oppiaine');
-    $scope.vlk = _(perusOps.vuosiluokkakokonaisuudet)
-                  .map('vuosiluokkakokonaisuus')
-                  .sortBy(function(vlk){
-                    return _.reduce(vlk.nimi.fi.replace(/\D/g, '').split(''), function(sum, num){
-                              return sum + parseInt(num);
-                          },0);
-                    })
-                  .value();
-
+    $scope.vlk = opsUtils.sortVlk($scope.perusOps.vuosiluokkakokonaisuudet);
 
     var t = opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlk,  $scope.oppiaineet);
     console.log("menu", t);

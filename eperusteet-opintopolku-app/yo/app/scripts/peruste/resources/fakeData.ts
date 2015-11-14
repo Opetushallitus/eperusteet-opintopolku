@@ -325,7 +325,7 @@ epOpintopolkuApp
       "_tekstiKappale" : null
     };
 
-    var perusOps = {
+    var ops = {
       "id" : 14400,
       "julkaisukielet" : [ "fi" ],
       "organisaatiot" : [ {
@@ -402,7 +402,7 @@ epOpintopolkuApp
       "lapset" : [ ]
     };
 
-    var ops = {
+    var perusOps = {
       id: 451200,
       julkaisukielet: [
         "fi"
