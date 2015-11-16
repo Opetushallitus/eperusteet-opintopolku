@@ -700,4 +700,8 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.ops.perus.vuosiluokka', {
+        url:'/vuosiluokka/:vuosi',
+        template: '<div ui-router></div>'
+      })
   });

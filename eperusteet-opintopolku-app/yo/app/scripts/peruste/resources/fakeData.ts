@@ -1078,10 +1078,49 @@ epOpintopolkuApp
                     id: 462459,
                     _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
                     jnro: null
-                  }
+                  },
                 ],
                 koodiUri: "oppiaineetyleissivistava2_ai1",
                 koodiArvo: "AI1"
+              },
+              {
+                id: 4623418,
+                vuosiluokat: [
+                  "vuosiluokka_3",
+                  "vuosiluokka_4",
+                  "vuosiluokka_5"
+                ],
+                tunniste: "f35cbbb1-af67-4bf2-93df-4990e011c12c",
+                tila: "luonnos",
+                tyyppi: "yhteinen",
+                jnro: null,
+                laajuus: null,
+                koosteinen: false,
+                nimi: {
+                  fi: "VIRON KIELI JA KIRJALLISUUS",
+                  _id: "462971"
+                },
+                abstrakti: null,
+                oppimaarat: null,
+                vuosiluokkakokonaisuudet: [
+                  {
+                    id: 463020,
+                    _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                    jnro: null
+                  },
+                  {
+                    id: 462458,
+                    _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                    jnro: null
+                  },
+                  {
+                    id: 462459,
+                    _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                    jnro: null
+                  },
+                ],
+                koodiUri: "oppiaineetyleissivistava2_vi1",
+                koodiArvo: "VI1"
               }
             ],
             vuosiluokkakokonaisuudet: [

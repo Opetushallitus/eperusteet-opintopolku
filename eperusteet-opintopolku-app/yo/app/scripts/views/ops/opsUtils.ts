@@ -39,7 +39,8 @@ epOpintopolkuApp
         for (let i = start; i < stop; i++) {
           menu.push({
             vuosi: "vuosiluokka_" + i,
-            _tunniste: tunniste
+            _tunniste: tunniste,
+            vuosi_num : i
           });
         }
       }
@@ -72,23 +73,24 @@ epOpintopolkuApp
           return arr;
         }
         arr.push({
-          vuosi: vlk.vuosi,
+          $vuosi: vlk.vuosi,
           label: vlk.vuosi,
+          $vuosi_num: vlk.vuosi_num,
           $hidden: true,
           vlk: lastVlk.nimi,
           depth: 1,
-          url: $state.href('root.ops.perus', {vuosi: vlk.vuosi})
+          url: $state.href('root.ops.perus.vuosiluokka', {vuosi: vlk.vuosi_num})
         });
-        currentVuosi = vlk.vuosi
+        currentVuosi = vlk.vuosi;
         traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi);
       });
       return arr;
     }
 
-    function traverseOppiaineet(aineet, arr, vlk, startingDepth, currentVuosi) {
+    function traverseOppiaineet(aineet, arr, vlk, startingDepth, currentVuosi, years) {
       startingDepth = startingDepth || 0;
       let currentVlkt = [];
-      let currentYears = arr[arr.length-1].vlk.fi.replace(/\D/g, '').split('')
+      let currentYears = years || arr[arr.length-1].vlk.fi.replace(/\D/g, '').split('')
                             || arr[arr.length-1].vlk.svreplace(/\D/g, '').split('');
       let start = parseInt(currentYears[0]);
       let stop = currentYears[1] ? parseInt(currentYears[1])+1 : start+1;
@@ -131,14 +133,17 @@ epOpintopolkuApp
                                   }).value();
 
       _.each(oppiaineSort(belongsInCurrentYear), function (oa) {
-        buildOppiaineItem(arr, oa, vlks, startingDepth, isSisalto);
-        _.each(filteredOppimaarat(oa, vlks), function (oppimaara) {
+        buildOppiaineItem(arr, oa, vlks, startingDepth, isSisalto, currentVuosi);
+        if(oa.koosteinen && oa.oppimaarat.length > 0) {
+          traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
+        }
+        /*_.each(filteredOppimaarat(oa, vlks), function (oppimaara) {
           buildOppiaineItem(arr, oppimaara, vlks, startingDepth + 1, isSisalto);
-        });
+        });*/
       });
     }
 
-    function filteredOppimaarat(oppiaine, vlks) {
+    /*function filteredOppimaarat(oppiaine, vlks) {
       var ret = [];
       if (oppiaine.koosteinen) {
         ret = _(oppiaine.oppimaarat).filter(function (oppimaara) {
@@ -151,9 +156,9 @@ epOpintopolkuApp
         }).value();
       }
       return oppiaineSort(ret);
-    }
+    }*/
 
-    function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto) {
+    function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto, currentVuosi) {
       if (!oppiaine.nimi[Kieli.getSisaltokieli()]) {
         return;
       }
@@ -162,6 +167,7 @@ epOpintopolkuApp
         $hidden: depth > 0,
         $oppiaine: oppiaine,
         label: oppiaine.nimi,
+        $parent_vuosi: currentVuosi,
         url: isSisalto ? $state.href('root.ops.perus.sisallot', {oppiaineId: oppiaine.id}) :
           $state.href('root.ops.perus.vlkoppiaine', {vlkId: vlk[0], oppiaineId: oppiaine.id})
       });
@@ -170,7 +176,7 @@ epOpintopolkuApp
     function oppiaineSort(aineet) {
       // Handle mixed jnro + no jnro situations
       function jnroSort(item) {
-        return _.isNumber(item.jnro) ? item.jnro : Number.MAX_SAFE_INTEGER;
+        return _.isNumber(item.jnro) ? item.jnro : 10000000;
       }
       return _(aineet).sortBy(jnroSort).sortBy(Utils.nameSort).sortBy(jnroSort).value();
     }

@@ -25,9 +25,9 @@ epOpintopolkuApp
 
     function processSection(navi, index, cb) {
       section = navi.sections[index];
-      if (index === 1) {
+      /*if (index === 1) {
         state.vlk = true;
-      }
+      }*/
       section.$open = true;
       _.each(section.items, function (item, index) {
         (cb || angular.noop)(item, index);
@@ -36,6 +36,8 @@ epOpintopolkuApp
     }
 
     this.setState = function (navi) {
+
+      console.log("NAVI", navi);
 
       this.state = {};
       _.each(navi.sections, function (section) {
@@ -90,6 +92,7 @@ epOpintopolkuApp
         vuosiluokkakokonaisuus: {
           index: 1,
           callback: function (item) {
+            console.log("HERE", item);
             if (item.$vkl) {
               item.$selected = '' + $stateParams.vlkId === '' + item.$vkl.id;
             }
@@ -101,9 +104,13 @@ epOpintopolkuApp
         vlkoppiaine: {
           index: 1,
           callback: function (item) {
+            console.log("HERE", item);
             if (item.$vkl) {
               item.$header = '' + $stateParams.vlkId === '' + item.$vkl.id;
               parentVlkId = item.$vkl.id;
+            }
+            if (item.$vuosi) {
+              item.$header = '' + $stateParams.vuosi === '' + item.$vuosi_num;
             }
             if (item.$oppiaine) {
               item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id &&
