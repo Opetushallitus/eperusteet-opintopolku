@@ -672,36 +672,44 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perus.oppiaine', {
-        url: '/oppiaine/:oppiaineId',
-        templateUrl: 'views/ops/vlkoppiaine.html',
-        controller: 'opsPerusopetusVlkoppiaineController',
-        resolve: {
-          oppiaineId: function ($stateParams) {
-            return $stateParams.oppiaineId;
-          },
-          tekstikappale: function (oppiaineId, opsResource) {
-            return opsResource.OPS.tekstikappale;
-          }
-        }
-      })
-
       .state('root.ops.perus.vuosiluokkakokonaisuus', {
         url:'/vuosiluokkakokonaisuus/:vlkId',
-        templateUrl: 'eperusteet-esitys/views/vuosiluokkakokonaisuus.html',
-        controller: 'opsPerusopetusVlkController',
+        templateUrl: 'views/ops/vlk.html',
+        controller: 'opsVlkController',
         resolve: {
           vlkId: function($stateParams){
             return $stateParams.vlkId;
           },
-          vlkTeksti: function(){
-            return "vlk teksti";
+          vlkt: function (vlkId, opsResource) {
+            console.log("RESOLVING", opsResource.OPS.vlk);
+            return opsResource.OPS.vlk;
           }
         }
       })
 
       .state('root.ops.perus.vuosiluokka', {
         url:'/vuosiluokka/:vuosi',
-        template: '<div ui-router></div>'
+        controller: 'opsVuosiluokkaController',
+        template: '<div ui-view></div>',
+        resolve: {
+          vuosi: function($state){
+            return $state.params.vuosi;
+          }
+        }
+      })
+
+      .state('root.ops.perus.vuosiluokka.oppiaine', {
+        url:'/oppiaine/:oppiaineId',
+        templateUrl: 'views/ops/opsPerusopetusOppiaine.html',
+        controller: 'opsVlkOppiaineController',
+        resolve: {
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (oppiaineId, opsResource) {
+            console.log("RESOLVE", opsResource.OPS.oppiaine);
+            return opsResource.OPS.oppiaine;
+          }
+        }
       })
   });

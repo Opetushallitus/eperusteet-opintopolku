@@ -171,6 +171,16 @@
   "muokattu": "Muokattu",
   "tila": "Tila",
   "Paatospaivamaara": "Päätöspäivämäärä",
-  "pohja": "Pohja"
+  "pohja": "Pohja",
+
+  "vuosiluokka_1": "Vuosiluokka 1",
+  "vuosiluokka_2": "Vuosiluokka 2",
+  "vuosiluokka_3": "Vuosiluokka 3",
+  "vuosiluokka_4": "Vuosiluokka 4",
+  "vuosiluokka_5": "Vuosiluokka 5",
+  "vuosiluokka_6": "Vuosiluokka 6",
+  "vuosiluokka_7": "Vuosiluokka 7",
+  "vuosiluokka_8": "Vuosiluokka 8",
+  "vuosiluokka_9": "Vuosiluokka 9"
 
 }

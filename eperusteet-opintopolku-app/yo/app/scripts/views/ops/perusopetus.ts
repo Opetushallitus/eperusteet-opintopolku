@@ -46,11 +46,18 @@ epOpintopolkuApp
     $scope.oppiaineet = _.map($scope.perusOps.oppiaineet, 'oppiaine');
     $scope.vlk = opsUtils.sortVlk($scope.perusOps.vuosiluokkakokonaisuudet);
 
-    var t = opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlk,  $scope.oppiaineet);
-    console.log("menu", t);
+    $timeout(function () {
+      if ($state.current.name === 'root.ops') {
+        var first = _($scope.navi.sections[0].items).filter(function (item) {
+          return item.depth === 0;
+        }).first();
+        if (first) {
+          $state.go('.tekstikappale', {tekstikappaleId: $scope.otsikot.lapset[0].id}, {location: 'replace'});
+        }
+      }
+    });
 
     //MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
-    //var oppiaineet = _.zipBy(sisalto[2], 'id')
 
     //TermistoService.setPeruste(peruste);
 
@@ -92,7 +99,6 @@ epOpintopolkuApp
     };
 */
 
-
     $scope.navi = {
       header: 'opetussuunnitelma',
       showOne: true,
@@ -125,15 +131,31 @@ epOpintopolkuApp
   })
 
   .controller('opsPerusopetusTekstikappaleController', function($scope, tekstikappale) {
-    console.log("TEXT", tekstikappale);
     $scope.tekstikappale = tekstikappale.tekstiKappale;
   })
 
-  .controller('opsPerusopetusVlkController', function($scope, $stateParams, vlkTeksti, MurupolkuData) {
-     $scope.teksti = vlkTeksti;
+  .controller('opsVuosiluokkaController', function($scope, $state, $timeout, vuosi){
+    $timeout(function () {
+      if ($state.current.name === 'root.ops.perus.vuosiluokka') {
+        var index = null;
+        var selectedIndex = _.reduce($scope.navi.sections[1].items, function (result, item, index) {
+          console.log(result, item, index);
+          return result += item.$selected === true ? index : '';
+        }, '');
+        if (selectedIndex) {
+          $state.go('root.ops.perus.vuosiluokka.oppiaine', {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
+        }
+      }
+    });
   })
 
-  .controller('opsPerusopetusVlkoppiaineController', function($scope, tekstikappale) {
-     $scope.oppiaine = "This is it";
+  .controller('opsVlkController', function($scope, vlkId, vlkt) {
+     console.log(vlkId);
+     $scope.vlkTeksti = vlkt;
+  })
+
+  .controller('opsVlkOppiaineController', function($scope, oppiaineId, oppiaine) {
+     console.log("OP", oppiaine, oppiaineId);
+     $scope.oppiaine = oppiaine;
   });
 

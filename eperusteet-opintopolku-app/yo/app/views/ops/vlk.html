@@ -1,0 +1,28 @@
+<h1>{{ vlkTeksti.nimi | kaanna }}</h1>
+<div ng-if="hasContent(vlkTeksti.tehtava)">
+  <h2 ng-bind-html="vlkTeksti.tehtava.otsikko | kaanna | unsafe"></h2>
+  <termisto-tekstikentta tekstikentta="vlkTeksti.tehtava.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="hasContent(vlkTeksti.siirtymaEdellisesta)">
+  <h2 ng-bind-html="vlkTeksti.siirtymaEdellisesta.otsikko | kaanna | unsafe"></h2>
+  <termisto-tekstikentta tekstikentta="vlkTeksti.siirtymaEdellisesta.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="hasContent(vlkTeksti.siirtymaSeuraavaan)">
+  <h2 ng-bind-html="vlkTeksti.siirtymaSeuraavaan.otsikko | kaanna | unsafe"></h2>
+  <termisto-tekstikentta tekstikentta="vlkTeksti.siirtymaSeuraavaan.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="hasContent(vlkTeksti.laajaalainenOsaaminen)">
+  <h2 ng-bind-html="vlkTeksti.laajaalainenOsaaminen.otsikko | kaanna | unsafe"></h2>
+  <termisto-tekstikentta tekstikentta="vlkTeksti.laajaalainenOsaaminen.teksti"></termisto-tekstikentta>
+</div>
+<div ng-if="vlkTeksti.laajaalaisetOsaamiset">
+  <h2 kaanna="'laaja-alaisen-osaamisen-alueet'" id="vlkTeksti-laajaalaisetosaamiset"></h2>
+  <div ng-repeat="osaaminen in vlkTeksti.laajaalaisetOsaamiset | orderBy:vlkOrder">
+    <h3 ng-bind-html="osaamiset[osaaminen._laajaalainenOsaaminen].nimi | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="osaaminen.kuvaus"></termisto-tekstikentta>
+  </div>
+</div>
+<div ng-if="hasContent(vlkTeksti.paikallisestiPaatettavatAsiat)">
+  <h2 ng-bind-html="vlkTeksti.paikallisestiPaatettavatAsiat.otsikko | kaanna | unsafe"></h2>
+  <termisto-tekstikentta tekstikentta="vlkTeksti.paikallisestiPaatettavatAsiat.teksti"></termisto-tekstikentta>
+</div>

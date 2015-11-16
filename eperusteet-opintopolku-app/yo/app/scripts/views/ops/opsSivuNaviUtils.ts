@@ -37,14 +37,15 @@ epOpintopolkuApp
 
     this.setState = function (navi) {
 
-      console.log("NAVI", navi);
-
       this.state = {};
       _.each(navi.sections, function (section) {
         section.$open = false;
         _.each(section.items, function (item) {
           item.$selected = false;
           item.$header = false;
+          if (item.depth > 0) {
+            item.$hidden = true;
+          }
         });
       });
       section = null;
@@ -52,9 +53,9 @@ epOpintopolkuApp
       var items = null;
 
       function setParentOppiaineHeader() {
-        if (selected && selected.$oppiaine._oppiaine) {
+        if (selected && selected.$oppiaine) {
           var found = _.find(items, function (item) {
-            return item.$oppiaine && '' + item.$oppiaine.id === '' + selected.$oppiaine._oppiaine;
+            return item.$vuosi === '' + selected.$parent_vuosi;
           });
           if (found) {
             found.$header = true;
@@ -75,10 +76,10 @@ epOpintopolkuApp
       }
 
       var states = {
-        laajaalaiset: {
+       /* laajaalaiset: {
           index: 0,
           callback: textCallback
-        },
+        },*/
         tekstikappale: {
           index: 0,
           callback: textCallback
@@ -92,7 +93,6 @@ epOpintopolkuApp
         vuosiluokkakokonaisuus: {
           index: 1,
           callback: function (item) {
-            console.log("HERE", item);
             if (item.$vkl) {
               item.$selected = '' + $stateParams.vlkId === '' + item.$vkl.id;
             }
@@ -101,10 +101,24 @@ epOpintopolkuApp
             }
           }
         },
+        vuosiluokka: {
+          index: 1,
+          callback: function (item) {
+            if (item.$vuosi) {
+              item.$selected = '' + $stateParams.vuosi === '' + item.$vuosi_num;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        },
         vlkoppiaine: {
           index: 1,
           callback: function (item) {
-            console.log("HERE", item);
             if (item.$vkl) {
               item.$header = '' + $stateParams.vlkId === '' + item.$vkl.id;
               parentVlkId = item.$vkl.id;
@@ -125,6 +139,22 @@ epOpintopolkuApp
             setParentOppiaineHeader();
           }
         },
+        oppiaine: {
+          index: 1,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id
+                && _.endsWith(item.$parent_vuosi, $stateParams.vuosi);
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        }/*,
         sisallot: {
           index: 2,
           actions: function () {
@@ -139,10 +169,11 @@ epOpintopolkuApp
             });
             setParentOppiaineHeader();
           }
-        }
+        }*/
       };
 
       var parentVlkId = null;
+      var parentVuosi = null;
       _.each(states, function (value, key) {
         if (_.endsWith($state.current.name, key)) {
           processSection(navi, value.index, value.callback || angular.noop);
@@ -159,7 +190,7 @@ epOpintopolkuApp
         }
         epSivunaviUtils.unCollapse(menuItems, selected);
         epSivunaviUtils.traverse(menuItems, 0);
-        $rootScope.$broadcast('perusopetus:stateSet');
+        $rootScope.$broadcast('ops:stateSet');
       }
     };
     this.getState = function () {

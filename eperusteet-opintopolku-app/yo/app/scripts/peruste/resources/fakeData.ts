@@ -1471,10 +1471,198 @@ epOpintopolkuApp
           }
         }
       ]
-    }
+    };
+      var oppiaine = {
+        "oma" : true,
+        "id" : 15166,
+        "tunniste" : "92025e4c-05f6-4179-8416-947cf05fcb7d",
+        "tila" : "luonnos",
+        "tyyppi" : "yhteinen",
+        "jnro" : null,
+        "laajuus" : null,
+        "koosteinen" : false,
+        "nimi" : {
+          "fi" : "MATEMATIIKKA",
+          "sv" : "MATEMATIK",
+          "_id" : "2940"
+          },
+        "abstrakti" : null,
+        "tehtava" : null,
+        "oppimaarat" : null,
+        "kohdealueet" : [ {
+          "id" : 15218,
+          "nimi" : {
+            "fi" : "Käsitteelliset ja tiedonalakohtaiset tavoitteet",
+            "sv" : "Begreppsliga och ämnesspecifika mål",
+            "_id" : "2941"
+            }
+          }, {
+          "id" : 15217,
+          "nimi" : {
+            "fi" : "Työskentelyn taidot",
+            "sv" : "Arbetsfärdigheter",
+            "_id" : "2943"
+            }
+          }, {
+          "id" : 15216,
+          "nimi" : {
+            "fi" : "Merkitys, arvot, asenteet",
+            "sv" : "Betydelse, värderingar och attityder",
+            "_id" : "2942"
+            }
+          } ],
+        "vuosiluokkakokonaisuudet" : [ {
+          "id" : 15223,
+          "_vuosiluokkakokonaisuus" : "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+          "tehtava" : {
+            "id" : 15244,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "yleistavoitteet" : null,
+          "tyotavat" : {
+            "id" : 15245,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "ohjaus" : {
+            "id" : 15243,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "arviointi" : {
+            "id" : 15242,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "sisaltoalueinfo" : null,
+          "jnro" : null,
+          "vuosiluokat" : [ ]
+          }, {
+          "id" : 15222,
+          "_vuosiluokkakokonaisuus" : "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+          "tehtava" : {
+            "id" : 15240,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "yleistavoitteet" : null,
+          "tyotavat" : {
+            "id" : 15241,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "ohjaus" : {
+            "id" : 15239,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "arviointi" : {
+            "id" : 15238,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "sisaltoalueinfo" : null,
+          "jnro" : null,
+          "vuosiluokat" : [ ]
+          }, {
+          "id" : 15224,
+          "_vuosiluokkakokonaisuus" : "5dcac804-6631-405e-8aa0-22ad532c2766",
+          "tehtava" : {
+            "id" : 15248,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "yleistavoitteet" : null,
+          "tyotavat" : {
+            "id" : 15249,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "ohjaus" : {
+            "id" : 15247,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "arviointi" : {
+            "id" : 15246,
+            "otsikko" : null,
+            "teksti" : null
+            },
+          "sisaltoalueinfo" : null,
+          "jnro" : null,
+          "vuosiluokat" : [ ]
+          } ],
+        "koodiUri" : "oppiaineetyleissivistava_ma",
+        "koodiArvo" : "MA"
+        };
+
+    var vlk = {
+      "oma" : true,
+      "id" : 15302,
+      "_tunniste" : "5dcac804-6631-405e-8aa0-22ad532c2766",
+      "nimi" : {
+        "fi" : "VUOSILUOKAT 1-2",
+        "sv" : "Årskurs 1-2",
+        "_id" : "3508"
+      },
+      "siirtymaEdellisesta" : {
+        "id" : 15400,
+        "otsikko" : null,
+        "teksti" : null
+      },
+      "tehtava" : {
+        "id" : 15402,
+        "otsikko" : null,
+        "teksti" : {
+          "fi" : "<p>vkhvkh</p>",
+          "_id" : "15410"
+        }
+      },
+      "siirtymaSeuraavaan" : {
+        "id" : 15401,
+        "otsikko" : null,
+        "teksti" : null
+      },
+      "laajaalainenosaaminen" : null,
+      "tila" : "luonnos",
+      "laajaalaisetosaamiset" : [ {
+        "id" : 15340,
+        "_laajaalainenosaaminen" : "499721cd-2f71-437b-aa23-32c5e55c6bdc",
+        "kuvaus" : null
+      }, {
+        "id" : 15337,
+        "_laajaalainenosaaminen" : "df9d98ec-09a3-42c3-90fd-718374a30ab5",
+        "kuvaus" : null
+      }, {
+        "id" : 15338,
+        "_laajaalainenosaaminen" : "5b71811c-7a85-4731-84bd-1428cd69dd7a",
+        "kuvaus" : null
+      }, {
+        "id" : 15334,
+        "_laajaalainenosaaminen" : "9bf8d526-cf43-4a3f-b417-33ecee389990",
+        "kuvaus" : null
+      }, {
+        "id" : 15339,
+        "_laajaalainenosaaminen" : "2ef6c7aa-cfa8-46a3-8768-e7f543e4748d",
+        "kuvaus" : null
+      }, {
+        "id" : 15335,
+        "_laajaalainenosaaminen" : "9500296f-fb4e-4d65-b0b0-e95ee5b1e381",
+        "kuvaus" : null
+      }, {
+        "id" : 15336,
+        "_laajaalainenosaaminen" : "8e67bc03-0487-47a4-8c86-d49c661fabf4",
+        "kuvaus" : null
+      } ]
+    };
+
+
 
     return {
+      oppiaine: oppiaine,
       tekstikappale: tekstikappale,
+      vlk: vlk,
       ops: ops,
       otsikot: OPSotsikot,
       perusOps: perusOps

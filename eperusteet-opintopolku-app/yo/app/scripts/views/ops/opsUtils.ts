@@ -82,7 +82,7 @@ epOpintopolkuApp
           url: $state.href('root.ops.perus.vuosiluokka', {vuosi: vlk.vuosi_num})
         });
         currentVuosi = vlk.vuosi;
-        traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi);
+        traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi, null);
       });
       return arr;
     }
@@ -137,39 +137,21 @@ epOpintopolkuApp
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
           traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
         }
-        /*_.each(filteredOppimaarat(oa, vlks), function (oppimaara) {
-          buildOppiaineItem(arr, oppimaara, vlks, startingDepth + 1, isSisalto);
-        });*/
       });
     }
-
-    /*function filteredOppimaarat(oppiaine, vlks) {
-      var ret = [];
-      if (oppiaine.koosteinen) {
-        ret = _(oppiaine.oppimaarat).filter(function (oppimaara) {
-          return oppimaara.nimi[Kieli.getSisaltokieli()] &&
-            _.some(oppimaara.vuosiluokkakokonaisuudet, function (omVlk) {
-              return _.some(vlks, function (oneVlk) {
-                return '' + omVlk._vuosiluokkaKokonaisuus === '' + oneVlk;
-              });
-            });
-        }).value();
-      }
-      return oppiaineSort(ret);
-    }*/
 
     function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto, currentVuosi) {
       if (!oppiaine.nimi[Kieli.getSisaltokieli()]) {
         return;
       }
+      let currentYear = currentVuosi[currentVuosi.length-1];
       arr.push({
         depth: depth,
         $hidden: depth > 0,
         $oppiaine: oppiaine,
         label: oppiaine.nimi,
         $parent_vuosi: currentVuosi,
-        url: isSisalto ? $state.href('root.ops.perus.sisallot', {oppiaineId: oppiaine.id}) :
-          $state.href('root.ops.perus.vlkoppiaine', {vlkId: vlk[0], oppiaineId: oppiaine.id})
+        url: $state.href('root.ops.perus.vuosiluokka.oppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id})
       });
     }
 
