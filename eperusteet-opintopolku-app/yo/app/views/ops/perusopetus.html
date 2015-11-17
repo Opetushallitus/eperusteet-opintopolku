@@ -15,12 +15,7 @@ European Union Public Licence for more details.
 -->
 
 <div>
-  <h1 class="peruste-otsikko" ng-bind-html="peruste.nimi | kaanna | unsafe"></h1>
-
-  <!--<div ng-if="showPreviewNote && peruste.tila !== 'valmis'" class="alert alert-info">
-    <h4 kaanna="'perusteen-esikatselu'"></h4>
-    <p kaanna="'laadinnan-esikatselu-info'"></p>
-  </div>-->
+  <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
 
   <murupolku></murupolku>
   <div class="clearfix"></div>

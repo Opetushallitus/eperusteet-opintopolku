@@ -228,7 +228,8 @@ epOpintopolkuApp
       'root.ops.esiopetus.tekstikappale': {
         parent: 'root.ops.esiopetus',
         useId: 'osanId',
-        useData: 'tekstikappaleNimi'
+        useData: 'tekstikappaleNimi',
+        customParents: true
       },
       'root.ops.lisaopetus': {
         useData: 'opsNimi',
@@ -246,7 +247,8 @@ epOpintopolkuApp
       'root.ops.varhaiskasvatus.tekstikappale': {
         parent: 'root.ops.lisaopetus',
         useId: 'osanId',
-        useData: 'tekstikappaleNimi'
+        useData: 'tekstikappaleNimi',
+        customParents: true
       },
       'root.ops.perus':{
         useData: 'opsNimi',
@@ -260,6 +262,7 @@ epOpintopolkuApp
         parent: 'root.ops.perus',
         useId: 'osanId',
         useData: 'tekstikappaleNimi',
+        customParents: true
       },
       'root.ops.perus.vuosiluokkakokonaisuus': {
         parent: 'root.ops.perus',
