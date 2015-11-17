@@ -247,6 +247,29 @@ epOpintopolkuApp
         parent: 'root.ops.lisaopetus',
         useId: 'osanId',
         useData: 'tekstikappaleNimi'
+      },
+      'root.ops.perus':{
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.ops.perus.tiedot': {
+        parent: 'root.ops.perus',
+        label: 'opetussuunnitelman-tiedot'
+      },
+      'root.ops.perus.tekstikappale': {
+        parent: 'root.ops.perus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi',
+      },
+      'root.ops.perus.oppiaine': {
+        parent: 'root.ops.perus',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+      },
+      'root.ops.perus.vuosiluokkakokonaisuus': {
+        parent: 'root.ops.perus',
+        useData: 'vlkNimi',
+        useId: 'vlkId'
       }
     };
 

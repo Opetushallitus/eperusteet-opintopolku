@@ -672,6 +672,17 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.ops.perus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'opsPerusopetusTiedotController',
+        resolve: {
+          opsTiedot: function(opsResource) {
+            return opsResource.OPS.ops;
+          }
+        }
+      })
+
       .state('root.ops.perus.vuosiluokkakokonaisuus', {
         url:'/vuosiluokkakokonaisuus/:vlkId',
         templateUrl: 'views/ops/vlk.html',
@@ -707,7 +718,6 @@ epOpintopolkuApp
             return $stateParams.oppiaineId;
           },
           oppiaine: function (oppiaineId, opsResource) {
-            console.log("RESOLVE", opsResource.OPS.oppiaine);
             return opsResource.OPS.oppiaine;
           }
         }
