@@ -521,7 +521,7 @@ epOpintopolkuApp
       .state('root.ops.esiopetus', {
         url: '/esiopetus',
         templateUrl: 'views/ops/yksinkertainen.html',
-        controller: 'opsYksinkertainenController',
+        controller: 'OpsYksinkertainenController',
         resolve: {
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
@@ -535,7 +535,7 @@ epOpintopolkuApp
       .state('root.ops.esiopetus.tiedot', {
         url: '/tiedot',
         templateUrl: 'views/ops/tiedot.html',
-        controller: 'opsYksinkertainenTiedotController',
+        controller: 'OpsYksinkertainenTiedotController',
         resolve: {
           ops: function(opsResource) {
             return opsResource.OPS.ops;
@@ -546,7 +546,7 @@ epOpintopolkuApp
       .state('root.ops.esiopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'views/ops/tekstikappale.html',
-        controller: 'opsTekstikappaleController',
+        controller: 'OpsTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
@@ -563,7 +563,7 @@ epOpintopolkuApp
       .state('root.ops.lisaopetus', {
         url: '/lisaopetus',
         templateUrl: 'views/ops/yksinkertainen.html',
-        controller: 'opsYksinkertainenController',
+        controller: 'OpsYksinkertainenController',
         resolve: {
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
@@ -577,7 +577,7 @@ epOpintopolkuApp
       .state('root.ops.lisaopetus.tiedot', {
         url: '/tiedot',
         templateUrl: 'views/ops/tiedot.html',
-        controller: 'opsYksinkertainenTiedotController',
+        controller: 'OpsYksinkertainenTiedotController',
         resolve: {
           ops: function(opsResource) {
             return opsResource.OPS.ops;
@@ -588,7 +588,7 @@ epOpintopolkuApp
       .state('root.ops.lisaopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'views/ops/tekstikappale.html',
-        controller: 'opsTekstikappaleController',
+        controller: 'OpsTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
@@ -605,7 +605,7 @@ epOpintopolkuApp
       .state('root.ops.varhaiskasvatus', {
         url: '/varhaiskasvatus',
         templateUrl: 'views/ops/yksinkertainen.html',
-        controller: 'opsYksinkertainenController',
+        controller: 'OpsYksinkertainenController',
         resolve: {
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
@@ -619,7 +619,7 @@ epOpintopolkuApp
       .state('root.ops.varhaiskasvatus.tiedot', {
         url: '/tiedot',
         templateUrl: 'views/ops/tiedot.html',
-        controller: 'opsYksinkertainenTiedotController',
+        controller: 'OpsYksinkertainenTiedotController',
         resolve: {
           ops: function(opsResource) {
             return opsResource.OPS.ops;
@@ -630,7 +630,7 @@ epOpintopolkuApp
       .state('root.ops.varhaiskasvatus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'views/ops/tekstikappale.html',
-        controller: 'opsTekstikappaleController',
+        controller: 'OpsTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
@@ -647,7 +647,7 @@ epOpintopolkuApp
       .state('root.ops.perus', {
         url: '/perus',
         templateUrl: 'views/ops/perusopetus.html',
-        controller: 'opsPerusopetusController',
+        controller: 'OpsPerusopetusController',
         resolve: {
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
@@ -661,7 +661,7 @@ epOpintopolkuApp
       .state('root.ops.perus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'views/ops/tekstikappale.html',
-        controller: 'opsPerusopetusTekstikappaleController',
+        controller: 'OpsPerusopetusTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
@@ -675,7 +675,7 @@ epOpintopolkuApp
       .state('root.ops.perus.tiedot', {
         url: '/tiedot',
         templateUrl: 'views/ops/tiedot.html',
-        controller: 'opsPerusopetusTiedotController',
+        controller: 'OpsPerusopetusTiedotController',
         resolve: {
           opsTiedot: function(opsResource) {
             return opsResource.OPS.ops;
@@ -686,13 +686,12 @@ epOpintopolkuApp
       .state('root.ops.perus.vuosiluokkakokonaisuus', {
         url:'/vuosiluokkakokonaisuus/:vlkId',
         templateUrl: 'views/ops/vlk.html',
-        controller: 'opsVlkController',
+        controller: 'OpsVlkController',
         resolve: {
           vlkId: function($stateParams){
             return $stateParams.vlkId;
           },
           vlkt: function (vlkId, opsResource) {
-            console.log("RESOLVING", opsResource.OPS.vlk);
             return opsResource.OPS.vlk;
           }
         }
@@ -700,11 +699,11 @@ epOpintopolkuApp
 
       .state('root.ops.perus.vuosiluokka', {
         url:'/vuosiluokka/:vuosi',
-        controller: 'opsVuosiluokkaController',
+        controller: 'OpsVuosiluokkaController',
         template: '<div ui-view></div>',
         resolve: {
-          vuosi: function($state){
-            return $state.params.vuosi;
+          vuosi: function($stateParams){
+            return $stateParams.vuosi;
           }
         }
       })
@@ -712,7 +711,7 @@ epOpintopolkuApp
       .state('root.ops.perus.vuosiluokka.oppiaine', {
         url:'/oppiaine/:oppiaineId',
         templateUrl: 'views/ops/opsPerusopetusOppiaine.html',
-        controller: 'opsVlkOppiaineController',
+        controller: 'OpsVlkOppiaineController',
         resolve: {
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;

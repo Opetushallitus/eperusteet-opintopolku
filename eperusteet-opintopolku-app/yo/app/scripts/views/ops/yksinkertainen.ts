@@ -14,8 +14,9 @@
  * European Union Public Licence for more details.
  */
 'use strict';
+
 epOpintopolkuApp
-  .controller('opsYksinkertainenController', function ($q, $scope, $state, ops, TermistoService, otsikot, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, opsId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
+  .controller('OpsYksinkertainenController', function ($q, $scope, $state, ops, TermistoService, otsikot, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, opsId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
     $scope.isNaviVisible = _.constant(true);
     $scope.otsikot = otsikot;
     $scope.ops = ops;
@@ -69,11 +70,11 @@ epOpintopolkuApp
 
     $scope.navi.sections[0].items.unshift({depth: 0, label: 'opetussuunnitelman-tiedot', link: [currentRootState + '.tiedot']});
   })
-  .controller('opsYksinkertainenTiedotController', function($scope, ops) {
+  .controller('OpsYksinkertainenTiedotController', function($scope, ops) {
     console.log("OPS", ops);
     $scope.ops = ops;
   })
-  .controller('opsTekstikappaleController', function (
+  .controller('OpsTekstikappaleController', function (
     $scope,
     $state,
     $stateParams,

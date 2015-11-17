@@ -261,16 +261,22 @@ epOpintopolkuApp
         useId: 'osanId',
         useData: 'tekstikappaleNimi',
       },
-      'root.ops.perus.oppiaine': {
-        parent: 'root.ops.perus',
-        useData: 'oppiaineNimi',
-        useId: 'oppiaineId',
-      },
       'root.ops.perus.vuosiluokkakokonaisuus': {
         parent: 'root.ops.perus',
         useData: 'vlkNimi',
         useId: 'vlkId'
-      }
+      },
+      'root.ops.perus.vuosiluokka':{
+        parent: 'root.ops.perus.vuosiluokkakokonaisuus',
+        useId: 'vuosiId',
+        useData: 'vuosi'
+      },
+      'root.ops.perus.vuosiluokka.oppiaine': {
+        parent: 'root.ops.perus.vuosiluokka',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      },
     };
 
     function perusTaiYksinkertainen(state) {
@@ -297,6 +303,7 @@ epOpintopolkuApp
               treeItem.params = perusTaiYksinkertainen(state) ? {tekstikappaleId: parent.id} : {osanId: parent.id};
               treeItem.label = parent.perusteenOsa.nimi;
             } else {
+              console.log("PARENT", parent);
               treeItem.params = {oppiaineId: parent.id};
               treeItem.label = parent.nimi;
             }

@@ -17,7 +17,7 @@
 'use strict';
 
 epOpintopolkuApp
-  .controller('opsPerusopetusController', function(
+  .controller('OpsPerusopetusController', function(
     $q,
     $scope,
     $timeout,
@@ -51,8 +51,6 @@ epOpintopolkuApp
           $state.go('.tiedot', {location: 'replace'});
         }
     });
-
-    console.log("opsId", $scope.perusOps.id, "opsNimi:", $scope.perusOps.nimi);
 
     MurupolkuData.set({opsId: $scope.perusOps.id, opsNimi: $scope.perusOps.nimi});
 
@@ -95,13 +93,16 @@ epOpintopolkuApp
       }
     };*/
 
+    //app/scripts/views/ops/perusopetus.ts
+    //yo/app/views/ops/opsTekstisisalto.html
+
     $scope.navi = {
       header: 'opetussuunnitelma',
       showOne: true,
       sections: [
         {
           id: 'tekstikappale',
-          include: 'eperusteet-esitys/views/tekstisisalto.html',
+          include: 'views/ops/opsTekstisisalto.html',
           items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
           naviClasses: $scope.naviClasses,
           title: 'yhteiset-osuudet'
@@ -110,7 +111,7 @@ epOpintopolkuApp
           id: 'vlkoppiaine',
           items: opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlk, $scope.oppiaineet),
           naviClasses: $scope.naviClasses,
-          include: 'eperusteet-esitys/views/vlk.html',
+          include: 'views/ops/opsVlk.html',
           state: $scope.state
         }
       ]
@@ -127,20 +128,19 @@ epOpintopolkuApp
 
   })
 
-  .controller('opsPerusopetusTekstikappaleController', function($scope, tekstikappale, MurupolkuData) {
+  .controller('OpsPerusopetusTekstikappaleController', function($scope, tekstikappale, MurupolkuData) {
     $scope.tekstikappale = tekstikappale.tekstiKappale;
     MurupolkuData.set({osanId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
   })
 
-  .controller('opsPerusopetusTiedotController', function($scope) {
+  .controller('OpsPerusopetusTiedotController', function($scope) {
   })
 
-  .controller('opsVuosiluokkaController', function($scope, $state, $timeout, vuosi){
+  .controller('OpsVuosiluokkaController', function($scope, $state, $timeout, Kieli, vuosi, MurupolkuData){
     $timeout(function () {
       if ($state.current.name === 'root.ops.perus.vuosiluokka') {
         var index = null;
         var selectedIndex = _.reduce($scope.navi.sections[1].items, function (result, item, index) {
-          console.log(result, item, index);
           return result += item.$selected === true ? index : '';
         }, '');
         if (selectedIndex) {
@@ -148,15 +148,52 @@ epOpintopolkuApp
         }
       }
     });
+
+    MurupolkuData.set({vuosiId: vuosi, vuosi: 'Vuosiluokka' + " " + vuosi});
   })
 
-  .controller('opsVlkController', function($scope, vlkId, vlkt, MurupolkuData) {
+  .controller('OpsVlkController', function($scope, vlkId, vlkt, MurupolkuData) {
      $scope.vlkTeksti = vlkt;
+
      MurupolkuData.set({vlkId: vlkId, vlkNimi: $scope.vlkTeksti.nimi});
   })
 
-  .controller('opsVlkOppiaineController', function($scope, oppiaineId, oppiaine, MurupolkuData) {
+  .controller('OpsVlkOppiaineController', function($scope,  $timeout, $state, oppiaineId, oppiaine, MurupolkuData) {
      $scope.oppiaine = oppiaine;
-     MurupolkuData.set({osanId: $scope.oppiaineId, tekstikappaleNimi: $scope.oppiaine.nimi});
+
+    $scope.item = _.reduce($scope.navi.sections[1].items, function (result, item, index) {
+      if(item.$selected === true){
+        item.index = index;
+        result = item;
+      }
+      return result;
+    }, '');
+
+    function findParents(set, index) {
+      var slicedSet = _.take(set, parseInt(index));
+      var found = _.findLast(slicedSet, function(item) {
+        return item.depth === 2;
+      });
+      return found.$oppiaine;
+    }
+
+    var murupolkuParams = {};
+    if ($scope.item && $scope.item.depth === 2) {
+      murupolkuParams = {
+        parents: null,
+        oppiaineId: oppiaine.id,
+        oppiaineNimi: oppiaine.nimi
+      };
+    }
+    if ($scope.item.depth === 3) {
+      murupolkuParams = {
+        parents: [findParents($scope.navi.sections[1].items, $scope.item.index)],
+        oppiaineId: oppiaine.id,
+        oppiaineNimi: oppiaine.nimi
+      };
+    }
+
+    MurupolkuData.set(murupolkuParams);
+
   });
 
