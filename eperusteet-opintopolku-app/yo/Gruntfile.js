@@ -102,7 +102,7 @@ module.exports = function(grunt) {
         context: '/eperusteet-ylops-service',
         host: 'itest-virkailija.oph.ware.fi',
         port: 443,
-        htpps: true,
+        https: true,
         changeOrigin: true
       }],
       livereload: {
