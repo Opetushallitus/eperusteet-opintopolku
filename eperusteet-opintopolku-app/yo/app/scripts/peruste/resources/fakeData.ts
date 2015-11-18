@@ -329,49 +329,49 @@ epOpintopolkuApp
       "id" : 14400,
       "julkaisukielet" : [ "fi" ],
       "organisaatiot" : [ {
-      "oid" : "1.2.246.562.10.22840843613",
-      "tyypit" : [ "Oppilaitos" ],
-      "nimi" : {
-        "fi" : "Askolan koulu"
-      }
-    }, {
-      "oid" : "1.2.246.562.10.20516711478",
-      "tyypit" : [ "Koulutustoimija" ],
-      "nimi" : {
-        "fi" : "Askolan kunta"
-      }
-    } ],
+        "oid" : "1.2.246.562.10.22840843613",
+        "tyypit" : [ "Oppilaitos" ],
+        "nimi" : {
+          "fi" : "Askolan koulu"
+        }
+      }, {
+        "oid" : "1.2.246.562.10.20516711478",
+        "tyypit" : [ "Koulutustoimija" ],
+        "nimi" : {
+          "fi" : "Askolan kunta"
+        }
+      } ],
       "kunnat" : [ {
-      "id" : 8770,
-      "koodiUri" : "kunta_018",
-      "koodiArvo" : "018",
-      "nimi" : {
-        "fi" : "Askola",
-        "sv" : "Askola"
-      }
-    } ],
+        "id" : 8770,
+        "koodiUri" : "kunta_018",
+        "koodiArvo" : "018",
+        "nimi" : {
+          "fi" : "Askola",
+          "sv" : "Askola"
+        }
+      } ],
       "kuvaus" : null,
       "luoja" : "test",
       "luotu" : 1447317650009,
       "muokattu" : 1447317650009,
       "muokkaaja" : "test",
       "nimi" : {
-      "fi" : "Esiopetus test",
+        "fi" : "Esiopetus test",
         "_id" : "14410"
-    },
+      },
       "perusteenDiaarinumero" : "102/011/2014",
       "tila" : "luonnos",
       "tyyppi" : "ops",
       "koulutustyyppi" : "koulutustyyppi_15",
       "paatospaivamaara" : 1447884000000,
       "pohja" : {
-      "id" : 20,
+        "id" : 20,
         "nimi" : {
-        "fi" : "test1",
+          "fi" : "test1",
           "_id" : "30"
+        },
+        "_pohja" : null
       },
-      "_pohja" : null
-    },
       "vuosiluokkakokonaisuudet" : [ ],
       "oppiaineet" : [ ]
     };
@@ -403,11 +403,20 @@ epOpintopolkuApp
     };
 
     var perusOps = {
-      id: 451200,
+      id: 58405,
       julkaisukielet: [
         "fi"
       ],
       organisaatiot: [
+        {
+          oid: "1.2.246.562.10.79499343246",
+          tyypit: [
+            "Koulutustoimija"
+          ],
+          nimi: {
+            fi: "Tampereen kaupunki"
+          }
+        },
         {
           oid: "1.2.246.562.10.83037752777",
           tyypit: [
@@ -416,29 +425,20 @@ epOpintopolkuApp
           nimi: {
             fi: "Kaarinan kaupunki"
           }
-        },
-        {
-          oid: "1.2.246.562.10.97280283009",
-          tyypit: [
-            "Koulutustoimija"
-          ],
-          nimi: {
-            fi: "PAIMION KAUPUNKI"
-          }
         }
       ],
       kunnat: [
         {
-          id: 40843,
-          koodiUri: "kunta_577",
-          koodiArvo: "577",
+          id: 840,
+          koodiUri: "kunta_837",
+          koodiArvo: "837",
           nimi: {
-            fi: "Paimio",
-            sv: "Pemar"
+            fi: "Tampere",
+            sv: "Tammerfors"
           }
         },
         {
-          id: 3418,
+          id: 8350,
           koodiUri: "kunta_202",
           koodiArvo: "202",
           nimi: {
@@ -448,25 +448,25 @@ epOpintopolkuApp
         }
       ],
       kuvaus: null,
-      luoja: "1.2.246.562.24.77925329174",
-      luotu: 1446233421666,
-      muokattu: 1446233421666,
-      muokkaaja: "1.2.246.562.24.77925329174",
+      luoja: "1.2.246.562.24.70394191147",
+      luotu: 1445243023337,
+      muokattu: 1447779498119,
+      muokkaaja: "1.2.246.562.24.95817990758",
       nimi: {
-        fi: "Ulla uuden rakenteen seutuops",
-        _id: "451210"
+        fi: "Nikon testi - seutukunta",
+        _id: "58903"
       },
       perusteenDiaarinumero: "104/011/2014",
-      tila: "luonnos",
+      tila: "julkaistu",
       tyyppi: "ops",
       koulutustyyppi: "koulutustyyppi_16",
       paatospaivamaara: null,
+      esikatseltavissa: false,
       pohja: {
-        id: 23450,
+        id: 34995,
         nimi: {
-          fi: "Perusopetuksen paikallinen opetussuunnitelma (2015)",
           sv: "Den lokala läroplanen för den grundläggande utbildningen (2015)",
-          _id: "126765"
+          _id: "39748"
         },
         _pohja: null
       },
@@ -474,12 +474,12 @@ epOpintopolkuApp
         {
           oma: true,
           vuosiluokkakokonaisuus: {
-            id: 451522,
+            id: 58845,
             _tunniste: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
             nimi: {
               fi: "VUOSILUOKAT 7-9",
               sv: "Årskurs 7-9",
-              _id: "447549"
+              _id: "54186"
             },
             tila: "luonnos"
           }
@@ -487,12 +487,12 @@ epOpintopolkuApp
         {
           oma: true,
           vuosiluokkakokonaisuus: {
-            id: 451521,
+            id: 58844,
             _tunniste: "5dcac804-6631-405e-8aa0-22ad532c2766",
             nimi: {
               fi: "VUOSILUOKAT 1-2",
               sv: "Årskurs 1-2",
-              _id: "447547"
+              _id: "54187"
             },
             tila: "luonnos"
           }
@@ -500,12 +500,12 @@ epOpintopolkuApp
         {
           oma: true,
           vuosiluokkakokonaisuus: {
-            id: 451520,
+            id: 58843,
             _tunniste: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
             nimi: {
               fi: "VUOSILUOKAT 3-6",
               sv: "Årskurs 3-6",
-              _id: "447548"
+              _id: "54188"
             },
             tila: "luonnos"
           }
@@ -515,10 +515,48 @@ epOpintopolkuApp
         {
           oma: true,
           oppiaine: {
-            id: 451228,
-            vuosiluokat: [
-
+            id: 59121,
+            tunniste: "a7cf2f77-3cce-4aa4-89ab-e64a84e25105",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "KÄSITYÖ",
+              sv: "SLÖJD",
+              _id: "53949"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 59140,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 9,
+                vuosiluokat: ['vuosiluokka_1']
+              },
+              {
+                id: 59141,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_5']
+              },
+              {
+                id: 59089,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_8']
+              }
             ],
+            koodiUri: "oppiaineetyleissivistava_ks",
+            koodiArvo: "KS"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59017,
             tunniste: "16219794-bd9f-436b-8eae-66c017f6c78b",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -528,15 +566,11 @@ epOpintopolkuApp
             nimi: {
               fi: "Vieraat kielet",
               sv: "FRÄMMANDE SPRÅK",
-              _id: "447336"
+              _id: "53990"
             },
             abstrakti: null,
-            oppimaarat: [
-
-            ],
-            vuosiluokkakokonaisuudet: [
-
-            ],
+            oppimaarat: [ ],
+            vuosiluokkakokonaisuudet: [ ],
             koodiUri: "oppiaineetyleissivistava2_vk",
             koodiArvo: "VK"
           }
@@ -544,255 +578,36 @@ epOpintopolkuApp
         {
           oma: true,
           oppiaine: {
-            id: 451220,
-            vuosiluokat: [
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "e2f19be6-004b-4aaf-9660-3316c6cc6a3d",
+            id: 59010,
+            tunniste: "5c748064-6f04-4455-bd51-c70504e176af",
             tila: "luonnos",
             tyyppi: "yhteinen",
             jnro: null,
             laajuus: null,
             koosteinen: false,
             nimi: {
-              fi: "FYSIIKKA",
-              sv: "FYSIK",
-              _id: "446631"
+              fi: "SAIRAUSTIETO",
+              sv: "HÄLSOKUNSKAP",
+              _id: "54182"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451240,
+                id: 58822,
                 _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_8']
               }
             ],
-            koodiUri: "oppiaineetyleissivistava_fy",
-            koodiArvo: "FY"
+            koodiUri: "oppiaineetyleissivistava_te",
+            koodiArvo: "TE"
           }
         },
         {
           oma: true,
           oppiaine: {
-            id: 451388,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "752ca235-8e9a-4a9c-ad6c-8bb80e1e0be9",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "MUSIIKKI",
-              sv: "MUSIK",
-              _id: "446594"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451438,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              },
-              {
-                id: 451500,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              },
-              {
-                id: 451439,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_mu",
-            koodiArvo: "MU"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451389,
-            vuosiluokat: [
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "faca48f7-2a19-409e-b973-afbabb019ffd",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "KOTITALOUS",
-              sv: "HUSLIG EKONOMI",
-              _id: "447019"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451501,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_ko",
-            koodiArvo: "KO"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451380,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "046a6ea5-5402-4f7c-aa8a-79e25d61873b",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: true,
-            nimi: {
-              fi: "Toinen kotimainen kieli",
-              _id: "446882"
-            },
-            abstrakti: null,
-            oppimaarat: [
-
-            ],
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451362,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              },
-              {
-                id: 451363,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              },
-              {
-                id: 451364,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava2_tk",
-            koodiArvo: "TK"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451382,
-            vuosiluokat: [
-              "vuosiluokka_2",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "dc7c6c2d-5b41-42e5-876b-dc8242e3fd66",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "LIIKUNTA",
-              sv: "GYMNASTIK",
-              _id: "447519"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451367,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              },
-              {
-                id: 451366,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              },
-              {
-                id: 451368,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_li",
-            koodiArvo: "LI"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451381,
-            vuosiluokat: [
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "823e4670-1810-40c3-89d0-e7f0b90b1171",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "MAANTIETO",
-              sv: "GEOGRAFI",
-              _id: "447543"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451365,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_ge",
-            koodiArvo: "GE"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451386,
-            vuosiluokat: [
-              "vuosiluokka_7",
-              "vuosiluokka_8"
-            ],
+            id: 59011,
             tunniste: "59abd9fb-03f4-4e5c-a9b8-3d61c824c6c2",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -800,16 +615,18 @@ epOpintopolkuApp
             laajuus: null,
             koosteinen: false,
             nimi: {
-              fi: "Biologia",
-              _id: "446811"
+              fi: "BIOLOGIA",
+              sv: "BIOLOGI",
+              _id: "53945"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451436,
+                id: 58823,
                 _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_7']
               }
             ],
             koodiUri: "oppiaineetyleissivistava_bi",
@@ -819,18 +636,7 @@ epOpintopolkuApp
         {
           oma: true,
           oppiaine: {
-            id: 451383,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
+            id: 59123,
             tunniste: "92025e4c-05f6-4179-8416-947cf05fcb7d",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -840,25 +646,28 @@ epOpintopolkuApp
             nimi: {
               fi: "MATEMATIIKKA",
               sv: "MATEMATIK",
-              _id: "447332"
+              _id: "54143"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451369,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              },
-              {
-                id: 451431,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              },
-              {
-                id: 451430,
+                id: 59146,
                 _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
+                jnro: 5,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59147,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_4', 'vuosiluokka_5']
+              },
+              {
+                id: 59145,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_8']
               }
             ],
             koodiUri: "oppiaineetyleissivistava_ma",
@@ -868,94 +677,48 @@ epOpintopolkuApp
         {
           oma: true,
           oppiaine: {
-            id: 451223,
-            vuosiluokat: [
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "d498c2f5-e737-47b1-86c1-f861a8ef8e16",
+            id: 59129,
+            tunniste: "0aab037c-a9e6-4816-8350-2a76e428b8ff",
             tila: "luonnos",
             tyyppi: "yhteinen",
             jnro: null,
             laajuus: null,
             koosteinen: false,
             nimi: {
-              fi: "HISTORIA",
-              sv: "HISTORIA",
-              _id: "446515"
+              fi: "ELÄMÄNKATSOMUSTIETO",
+              sv: "LIVSÅSKÅDNINGSKUNSKAP",
+              _id: "53553"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451247,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
+                id: 59262,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 3,
+                vuosiluokat: ['vuosiluokka_1']
               },
               {
-                id: 451246,
+                id: 59263,
                 _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_5']
+              },
+              {
+                id: 59261,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_9']
               }
             ],
-            koodiUri: "oppiaineetyleissivistava_hi",
-            koodiArvo: "HI"
+            koodiUri: "oppiaineetyleissivistava_kt",
+            koodiArvo: "KT"
           }
         },
         {
           oma: true,
           oppiaine: {
-            id: 451229,
-            vuosiluokat: [
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "fde32105-6415-405a-aa30-3911d4754394",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "YHTEISKUNTAOPPI",
-              sv: "SAMHÄLLSLÄRA",
-              _id: "446680"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451360,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              },
-              {
-                id: 451361,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_yh",
-            koodiArvo: "YH"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451221,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_5"
-            ],
+            id: 59127,
             tunniste: "f27a8e8a-3215-424e-98f1-861d2b9b5654",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -965,51 +728,22 @@ epOpintopolkuApp
             nimi: {
               fi: "YMPÄRISTÖOPPI",
               sv: "OMGIVNINGSLÄRA",
-              _id: "446590"
+              _id: "53554"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451241,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
+                id: 59207,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 8,
+                vuosiluokat: ['vuosiluokka_1']
               },
               {
-                id: 451242,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava2_yl",
-            koodiArvo: "YL"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 462314,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2"
-            ],
-            tunniste: "671dcd8e-f022-4034-bff6-c7130d69f0e5",
-            tila: "luonnos",
-            tyyppi: "muu_valinnainen",
-            jnro: null,
-            laajuus: "1515",
-            koosteinen: false,
-            nimi: {
-              fi: "asdfasdf",
-              _id: "461966"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 462450,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
+                id: 59206,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_4']
               }
             ],
             koodiUri: null,
@@ -1019,18 +753,292 @@ epOpintopolkuApp
         {
           oma: true,
           oppiaine: {
-            id: 451224,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
+            id: 59013,
+            tunniste: "2050e4d4-b64a-44af-beae-79e1142269cc",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "KUVATAIDE",
+              sv: "BILDKONST",
+              _id: "54147"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 58827,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_8', 'vuosiluokka_9']
+              },
+              {
+                id: 58825,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 1,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 58826,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_5']
+              }
             ],
+            koodiUri: "oppiaineetyleissivistava_ku",
+            koodiArvo: "KU"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59120,
+            tunniste: "d498c2f5-e737-47b1-86c1-f861a8ef8e16",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "HISTORIA",
+              sv: "HISTORIA",
+              _id: "53886"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 59088,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: ['vuosiluokka_4', 'vuosiluokka_5']
+              },
+              {
+                id: 59087,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
+            ],
+            koodiUri: "oppiaineetyleissivistava_hi",
+            koodiArvo: "HI"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59015,
+            tunniste: "ae9cd11f-219a-4a58-ace8-0aeae63ae94d",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "KEMIA",
+              sv: "KEMI",
+              _id: "52838"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 58829,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
+            ],
+            koodiUri: "oppiaineetyleissivistava_ke",
+            koodiArvo: "KE"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59125,
+            tunniste: "7e9d81d0-9106-479f-8959-d912df43378e",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: true,
+            nimi: {
+              fi: "Uskonto",
+              _id: "52832"
+            },
+            abstrakti: null,
+            oppimaarat: [ ],
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 59201,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 0,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59202,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59200,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
+            ],
+            koodiUri: "oppiaineetyleissivistava_kt",
+            koodiArvo: "KT"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59014,
+            tunniste: "faca48f7-2a19-409e-b973-afbabb019ffd",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "KOTITALOUS",
+              sv: "HUSLIG EKONOMI",
+              _id: "53465"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 58828,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
+            ],
+            koodiUri: "oppiaineetyleissivistava_ko",
+            koodiArvo: "KO"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59012,
+            tunniste: "823e4670-1810-40c3-89d0-e7f0b90b1171",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "MAANTIETO!",
+              sv: "GEOGRAFI",
+              _id: "53469"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 58824,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
+            ],
+            koodiUri: "oppiaineetyleissivistava_ge",
+            koodiArvo: "GE"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59126,
+            tunniste: "752ca235-8e9a-4a9c-ad6c-8bb80e1e0be9",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "MUSIIKKI",
+              sv: "MUSIK",
+              _id: "53517"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 59204,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 2,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59205,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59203,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
+            ],
+            koodiUri: "oppiaineetyleissivistava_mu",
+            koodiArvo: "MU"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59018,
+            tunniste: "046a6ea5-5402-4f7c-aa8a-79e25d61873b",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: true,
+            nimi: {
+              fi: "TOINEN KOTIMAINEN KIELI testi",
+              sv: "DET ANDRA INHEMSKA SPRÅKET",
+              _id: "53386"
+            },
+            abstrakti: null,
+            oppimaarat: [ ],
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 59083,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 4,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59084,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59085,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
+            ],
+            koodiUri: "oppiaineetyleissivistava2_tk",
+            koodiArvo: "TK"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59122,
             tunniste: "89fd3a52-94f0-4898-a2f6-3e457eee65af",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1038,58 +1046,57 @@ epOpintopolkuApp
             laajuus: null,
             koosteinen: true,
             nimi: {
-              fi: "Äidinkieli ja kirjallisuus",
+              fi: "ÄIDINKIELI JA KIRJALLISUUS",
               sv: "MODERSMÅL OCH LITTERATUR",
-              _id: "447063"
+              _id: "53607"
             },
             abstrakti: null,
-            oppimaarat: [
-              {
-                id: 462318,
-                vuosiluokat: [
-                  "vuosiluokka_3",
-                  "vuosiluokka_4",
-                  "vuosiluokka_5"
-                ],
-                tunniste: "f35cbbb1-af67-4bf2-93df-4990e011c12c",
-                tila: "luonnos",
-                tyyppi: "yhteinen",
-                jnro: null,
-                laajuus: null,
-                koosteinen: false,
-                nimi: {
-                  fi: "SUOMEN KIELI JA KIRJALLISUUS",
-                  _id: "462971"
-                },
-                abstrakti: null,
-                oppimaarat: null,
-                vuosiluokkakokonaisuudet: [
-                  {
-                    id: 463020,
-                    _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                    jnro: null
-                  },
-                  {
-                    id: 462458,
-                    _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                    jnro: null
-                  },
-                  {
-                    id: 462459,
-                    _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                    jnro: null
-                  },
-                ],
-                koodiUri: "oppiaineetyleissivistava2_ai1",
-                koodiArvo: "AI1"
+            oppimaarat: [ {
+              id: 462318,
+              tunniste: "f35cbbb1-af67-4bf2-93df-4990e011c12c",
+              tila: "luonnos",
+              tyyppi: "yhteinen",
+              jnro: null,
+              laajuus: null,
+              koosteinen: false,
+              nimi: {
+                fi: "SUOMEN KIELI JA KIRJALLISUUS",
+                _id: "462971"
               },
+              abstrakti: null,
+              oppimaarat: null,
+              vuosiluokkakokonaisuudet: [
+                {
+                  id: 463020,
+                  _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                  jnro: null,
+                  vuosiluokat: [
+                    "vuosiluokka_5"
+                  ],
+                },
+                {
+                  id: 462458,
+                  _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                  jnro: null,
+                  vuosiluokat: [
+                    "vuosiluokka_8"
+                  ],
+                },
+                {
+                  id: 462459,
+                  _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                  jnro: null,
+                  vuosiluokat: [
+                    "vuosiluokka_1",
+                    "vuosiluokka_2"
+                  ],
+                },
+              ],
+              koodiUri: "oppiaineetyleissivistava2_ai1",
+              koodiArvo: "AI1"
+            },
               {
                 id: 4623418,
-                vuosiluokat: [
-                  "vuosiluokka_3",
-                  "vuosiluokka_4",
-                  "vuosiluokka_5"
-                ],
                 tunniste: "f35cbbb1-af67-4bf2-93df-4990e011c12c",
                 tila: "luonnos",
                 tyyppi: "yhteinen",
@@ -1106,12 +1113,20 @@ epOpintopolkuApp
                   {
                     id: 463020,
                     _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                    jnro: null
+                    jnro: null,
+                    vuosiluokat: [
+                      "vuosiluokka_4",
+                      "vuosiluokka_5"
+                    ],
                   },
                   {
                     id: 462458,
                     _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                    jnro: null
+                    jnro: null,
+                    vuosiluokat: [
+                      "vuosiluokka_8",
+                      "vuosiluokka_9"
+                    ],
                   },
                   {
                     id: 462459,
@@ -1121,23 +1136,25 @@ epOpintopolkuApp
                 ],
                 koodiUri: "oppiaineetyleissivistava2_vi1",
                 koodiArvo: "VI1"
-              }
-            ],
+              }],
             vuosiluokkakokonaisuudet: [
               {
-                id: 451248,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              },
-              {
-                id: 451300,
+                id: 59142,
                 _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
+                jnro: null,
+                vuosiluokat: [ ]
               },
               {
-                id: 451249,
+                id: 59143,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 10,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59144,
                 _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
+                jnro: null,
+                vuosiluokat: [ ]
               }
             ],
             koodiUri: "oppiaineetyleissivistava_ai",
@@ -1147,63 +1164,83 @@ epOpintopolkuApp
         {
           oma: true,
           oppiaine: {
-            id: 451226,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "0aab037c-a9e6-4816-8350-2a76e428b8ff",
+            id: 59124,
+            tunniste: "fde32105-6415-405a-aa30-3911d4754394",
             tila: "luonnos",
             tyyppi: "yhteinen",
             jnro: null,
             laajuus: null,
             koosteinen: false,
             nimi: {
-              fi: "ELÄMÄNKATSOMUSTIETO",
-              sv: "LIVSÅSKÅDNINGSKUNSKAP",
-              _id: "446630"
+              fi: "YHTEISKUNTAOPPI",
+              sv: "SAMHÄLLSLÄRA",
+              _id: "53941"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451304,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              },
-              {
-                id: 451306,
+                id: 59148,
                 _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
+                jnro: null,
+                vuosiluokat: [ ]
               },
               {
-                id: 451305,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
+                id: 59149,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: [ ]
               }
             ],
-            koodiUri: "oppiaineetyleissivistava_kt",
-            koodiArvo: "KT"
+            koodiUri: "oppiaineetyleissivistava_yh",
+            koodiArvo: "YH"
           }
         },
         {
           oma: true,
           oppiaine: {
-            id: 451227,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
+            id: 59128,
+            tunniste: "dc7c6c2d-5b41-42e5-876b-dc8242e3fd66",
+            tila: "luonnos",
+            tyyppi: "yhteinen",
+            jnro: null,
+            laajuus: null,
+            koosteinen: false,
+            nimi: {
+              fi: "LIIKUNTA muokattu",
+              sv: "GYMNASTIK",
+              _id: "53513"
+            },
+            abstrakti: null,
+            oppimaarat: null,
+            vuosiluokkakokonaisuudet: [
+              {
+                id: 59208,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 6,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59260,
+                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+                jnro: null,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59209,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
+              }
             ],
+            koodiUri: "oppiaineetyleissivistava_li",
+            koodiArvo: "LI"
+          }
+        },
+        {
+          oma: true,
+          oppiaine: {
+            id: 59016,
             tunniste: "b28889b0-97bf-45e4-91ff-a5c5822ea0b3",
             tila: "luonnos",
             tyyppi: "yhteinen",
@@ -1213,25 +1250,28 @@ epOpintopolkuApp
             nimi: {
               fi: "OPPILAANOHJAUS",
               sv: "ELEVHANDLEDNING",
-              _id: "446819"
+              _id: "53558"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451307,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              },
-              {
-                id: 451309,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              },
-              {
-                id: 451308,
+                id: 59082,
                 _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
+                jnro: null,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59081,
+                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
+                jnro: 7,
+                vuosiluokat: [ ]
+              },
+              {
+                id: 59080,
+                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+                jnro: null,
+                vuosiluokat: [ ]
               }
             ],
             koodiUri: "oppiaineetyleissivistava2_op",
@@ -1241,361 +1281,158 @@ epOpintopolkuApp
         {
           oma: true,
           oppiaine: {
-            id: 451384,
-            vuosiluokat: [
-              "vuosiluokka_9"
-            ],
-            tunniste: "ae9cd11f-219a-4a58-ace8-0aeae63ae94d",
+            id: 59019,
+            tunniste: "e2f19be6-004b-4aaf-9660-3316c6cc6a3d",
             tila: "luonnos",
             tyyppi: "yhteinen",
             jnro: null,
             laajuus: null,
             koosteinen: false,
             nimi: {
-              fi: "KEMIA",
-              sv: "KEMI",
-              _id: "446815"
+              fi: "FYSIIKKA",
+              sv: "FYSIK",
+              _id: "53382"
             },
             abstrakti: null,
             oppimaarat: null,
             vuosiluokkakokonaisuudet: [
               {
-                id: 451432,
+                id: 59086,
                 _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
+                jnro: null,
+                vuosiluokat: [ ]
               }
             ],
-            koodiUri: "oppiaineetyleissivistava_ke",
-            koodiArvo: "KE"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451222,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_5",
-              "vuosiluokka_6"
-            ],
-            tunniste: "2050e4d4-b64a-44af-beae-79e1142269cc",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "KUVATAIDE",
-              sv: "BILDKONST",
-              _id: "446635"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451245,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              },
-              {
-                id: 451244,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              },
-              {
-                id: 451243,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_ku",
-            koodiArvo: "KU"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 459933,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2"
-            ],
-            tunniste: "7f5ee40c-e25b-41bf-a429-c9fc5f4e90c4",
-            tila: "luonnos",
-            tyyppi: "muu_valinnainen",
-            jnro: null,
-            laajuus: "15",
-            koosteinen: false,
-            nimi: {
-              fi: "Voi moro",
-              _id: "459997"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 459975,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              }
-            ],
-            koodiUri: null,
-            koodiArvo: null
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451225,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_2",
-              "vuosiluokka_5",
-              "vuosiluokka_6",
-              "vuosiluokka_7"
-            ],
-            tunniste: "7e9d81d0-9106-479f-8959-d912df43378e",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: true,
-            nimi: {
-              fi: "Uskonto",
-              _id: "446684"
-            },
-            abstrakti: null,
-            oppimaarat: [
-
-            ],
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451303,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              },
-              {
-                id: 451301,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              },
-              {
-                id: 451302,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_kt",
-            koodiArvo: "KT"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451387,
-            vuosiluokat: [
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "5c748064-6f04-4455-bd51-c70504e176af",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "TERVEYSTIETO",
-              sv: "HÄLSOKUNSKAP",
-              _id: "446848"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451437,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_te",
-            koodiArvo: "TE"
-          }
-        },
-        {
-          oma: true,
-          oppiaine: {
-            id: 451385,
-            vuosiluokat: [
-              "vuosiluokka_1",
-              "vuosiluokka_3",
-              "vuosiluokka_4",
-              "vuosiluokka_6",
-              "vuosiluokka_7",
-              "vuosiluokka_8",
-              "vuosiluokka_9"
-            ],
-            tunniste: "a7cf2f77-3cce-4aa4-89ab-e64a84e25105",
-            tila: "luonnos",
-            tyyppi: "yhteinen",
-            jnro: null,
-            laajuus: null,
-            koosteinen: false,
-            nimi: {
-              fi: "KÄSITYÖ",
-              sv: "SLÖJD",
-              _id: "446810"
-            },
-            abstrakti: null,
-            oppimaarat: null,
-            vuosiluokkakokonaisuudet: [
-              {
-                id: 451435,
-                _vuosiluokkakokonaisuus: "5dcac804-6631-405e-8aa0-22ad532c2766",
-                jnro: null
-              },
-              {
-                id: 451433,
-                _vuosiluokkakokonaisuus: "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-                jnro: null
-              },
-              {
-                id: 451434,
-                _vuosiluokkakokonaisuus: "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-                jnro: null
-              }
-            ],
-            koodiUri: "oppiaineetyleissivistava_ks",
-            koodiArvo: "KS"
+            koodiUri: "oppiaineetyleissivistava_fy",
+            koodiArvo: "FY"
           }
         }
       ]
     };
-      var oppiaine = {
-        "oma" : true,
-        "id" : 15166,
-        "tunniste" : "92025e4c-05f6-4179-8416-947cf05fcb7d",
-        "tila" : "luonnos",
-        "tyyppi" : "yhteinen",
-        "jnro" : null,
-        "laajuus" : null,
-        "koosteinen" : false,
+    var oppiaine = {
+      "oma" : true,
+      "id" : 15166,
+      "tunniste" : "92025e4c-05f6-4179-8416-947cf05fcb7d",
+      "tila" : "luonnos",
+      "tyyppi" : "yhteinen",
+      "jnro" : null,
+      "laajuus" : null,
+      "koosteinen" : false,
+      "nimi" : {
+        "fi" : "MATEMATIIKKA",
+        "sv" : "MATEMATIK",
+        "_id" : "2940"
+      },
+      "abstrakti" : null,
+      "tehtava" : null,
+      "oppimaarat" : null,
+      "kohdealueet" : [ {
+        "id" : 15218,
         "nimi" : {
-          "fi" : "MATEMATIIKKA",
-          "sv" : "MATEMATIK",
-          "_id" : "2940"
-          },
-        "abstrakti" : null,
-        "tehtava" : null,
-        "oppimaarat" : null,
-        "kohdealueet" : [ {
-          "id" : 15218,
-          "nimi" : {
-            "fi" : "Käsitteelliset ja tiedonalakohtaiset tavoitteet",
-            "sv" : "Begreppsliga och ämnesspecifika mål",
-            "_id" : "2941"
-            }
-          }, {
-          "id" : 15217,
-          "nimi" : {
-            "fi" : "Työskentelyn taidot",
-            "sv" : "Arbetsfärdigheter",
-            "_id" : "2943"
-            }
-          }, {
-          "id" : 15216,
-          "nimi" : {
-            "fi" : "Merkitys, arvot, asenteet",
-            "sv" : "Betydelse, värderingar och attityder",
-            "_id" : "2942"
-            }
-          } ],
-        "vuosiluokkakokonaisuudet" : [ {
-          "id" : 15223,
-          "_vuosiluokkakokonaisuus" : "5b8ee13b-4d18-416b-8626-cdcff1361f55",
-          "tehtava" : {
-            "id" : 15244,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "yleistavoitteet" : null,
-          "tyotavat" : {
-            "id" : 15245,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "ohjaus" : {
-            "id" : 15243,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "arviointi" : {
-            "id" : 15242,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "sisaltoalueinfo" : null,
-          "jnro" : null,
-          "vuosiluokat" : [ ]
-          }, {
-          "id" : 15222,
-          "_vuosiluokkakokonaisuus" : "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
-          "tehtava" : {
-            "id" : 15240,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "yleistavoitteet" : null,
-          "tyotavat" : {
-            "id" : 15241,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "ohjaus" : {
-            "id" : 15239,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "arviointi" : {
-            "id" : 15238,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "sisaltoalueinfo" : null,
-          "jnro" : null,
-          "vuosiluokat" : [ ]
-          }, {
-          "id" : 15224,
-          "_vuosiluokkakokonaisuus" : "5dcac804-6631-405e-8aa0-22ad532c2766",
-          "tehtava" : {
-            "id" : 15248,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "yleistavoitteet" : null,
-          "tyotavat" : {
-            "id" : 15249,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "ohjaus" : {
-            "id" : 15247,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "arviointi" : {
-            "id" : 15246,
-            "otsikko" : null,
-            "teksti" : null
-            },
-          "sisaltoalueinfo" : null,
-          "jnro" : null,
-          "vuosiluokat" : [ ]
-          } ],
-        "koodiUri" : "oppiaineetyleissivistava_ma",
-        "koodiArvo" : "MA"
-        };
+          "fi" : "Käsitteelliset ja tiedonalakohtaiset tavoitteet",
+          "sv" : "Begreppsliga och ämnesspecifika mål",
+          "_id" : "2941"
+        }
+      }, {
+        "id" : 15217,
+        "nimi" : {
+          "fi" : "Työskentelyn taidot",
+          "sv" : "Arbetsfärdigheter",
+          "_id" : "2943"
+        }
+      }, {
+        "id" : 15216,
+        "nimi" : {
+          "fi" : "Merkitys, arvot, asenteet",
+          "sv" : "Betydelse, värderingar och attityder",
+          "_id" : "2942"
+        }
+      } ],
+      "vuosiluokkakokonaisuudet" : [ {
+        "id" : 15223,
+        "_vuosiluokkakokonaisuus" : "5b8ee13b-4d18-416b-8626-cdcff1361f55",
+        "tehtava" : {
+          "id" : 15244,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "yleistavoitteet" : null,
+        "tyotavat" : {
+          "id" : 15245,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "ohjaus" : {
+          "id" : 15243,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "arviointi" : {
+          "id" : 15242,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "sisaltoalueinfo" : null,
+        "jnro" : null,
+        "vuosiluokat" : [ ]
+      }, {
+        "id" : 15222,
+        "_vuosiluokkakokonaisuus" : "20eb717e-7c3a-4e40-8e78-3a9cedcaaeef",
+        "tehtava" : {
+          "id" : 15240,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "yleistavoitteet" : null,
+        "tyotavat" : {
+          "id" : 15241,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "ohjaus" : {
+          "id" : 15239,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "arviointi" : {
+          "id" : 15238,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "sisaltoalueinfo" : null,
+        "jnro" : null,
+        "vuosiluokat" : [ ]
+      }, {
+        "id" : 15224,
+        "_vuosiluokkakokonaisuus" : "5dcac804-6631-405e-8aa0-22ad532c2766",
+        "tehtava" : {
+          "id" : 15248,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "yleistavoitteet" : null,
+        "tyotavat" : {
+          "id" : 15249,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "ohjaus" : {
+          "id" : 15247,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "arviointi" : {
+          "id" : 15246,
+          "otsikko" : null,
+          "teksti" : null
+        },
+        "sisaltoalueinfo" : null,
+        "jnro" : null,
+        "vuosiluokat" : [ ]
+      } ],
+      "koodiUri" : "oppiaineetyleissivistava_ma",
+      "koodiArvo" : "MA"
+    };
 
     var vlk = {
       "oma" : true,
@@ -1668,4 +1505,4 @@ epOpintopolkuApp
       perusOps: perusOps
     }
 
-});
+  });

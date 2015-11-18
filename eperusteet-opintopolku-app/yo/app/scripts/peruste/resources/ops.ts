@@ -15,18 +15,27 @@
  */
 'use strict';
 epOpintopolkuApp
-  .service('opsResource', function (eperusteetConfig, fakeData) {
-    this.OPS = fakeData;
-    console.log(this.OPS);
+  .service('opsBase', function (eperusteetConfig, fakeData) {
+    this.OPS2 = fakeData;
+    this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId'
   })
-  .factory('EsiopetusOPS', function (opsResource) {
-    console.log(opsResource);
+
+  .factory('PerusopetusOPS', function ($resource, opsBase) {
+    return $resource(opsBase.OPS, {opsId: '@id'}, {
+      get: {method: 'GET', cache: true},
+      getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: true}
+    })
+  })
+
+  .factory('EsiopetusOPS', function (opsBase) {
     return {
-      'otsikot': opsResource.OPS.otsikot,
-      'ops': opsResource.OPS.ops,
-      'tekstikappale': opsResource.OPS.tekstikappale,
-      'perusOps': opsResource.OPS.perusOps,
-      'oppiaine': opsResource.OPS.oppiaine,
-      'vlk': opsResource.OPS.vlk
+      'otsikot': opsBase.OPS2.otsikot,
+      'ops': opsBase.OPS2.ops,
+      'tekstikappale': opsBase.OPS2.tekstikappale,
+      'perusOps': opsBase.OPS2.perusOps,
+      'oppiaine': opsBase.OPS2.oppiaine,
+      'vlk': opsBase.OPS2.vlk
     };
   });
+
+///eperusteet-ylops-service/api/opetussuunnitelmat/58405/vuosiluokkakokonaisuudet/58845

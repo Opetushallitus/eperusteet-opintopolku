@@ -52,7 +52,8 @@ epOpintopolkuApp
         {
           id: 'tekstikappale',
           $open: true,
-          items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot)
+          items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
+          include: 'views/ops/opsVlk.html'
         }
       ]
     };

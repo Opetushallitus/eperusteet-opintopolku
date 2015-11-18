@@ -46,15 +46,19 @@ epOpintopolkuApp
     $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
     $scope.vlk = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
 
-    $timeout(function () {
+    console.log("OPPI", $scope.oppiaineet, "VLK", $scope.vlk);
+
+    /*$timeout(function () {
       if ($state.current.name === 'root.ops.perus') {
           $state.go('.tiedot', {location: 'replace'});
         }
-    });
+    });*/
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
     //TermistoService.setPeruste(peruste);
+
+    console.log(opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlk, $scope.oppiaineet));
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];

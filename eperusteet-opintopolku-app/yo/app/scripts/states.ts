@@ -526,8 +526,8 @@ epOpintopolkuApp
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
           },
-          ops: function(opsResource) {
-            return opsResource.OPS.ops;
+          ops: function(opsBase) {
+            return opsBase.OPS2.ops;
           }
         }
       })
@@ -537,8 +537,8 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tiedot.html',
         controller: 'OpsYksinkertainenTiedotController',
         resolve: {
-          ops: function(opsResource) {
-            return opsResource.OPS.ops;
+          ops: function(opsBase) {
+            return opsBase.OPS2.ops;
           }
         }
       })
@@ -551,8 +551,8 @@ epOpintopolkuApp
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (tekstikappaleId, opsResource) {
-            return opsResource.OPS.tekstikappale;
+          tekstikappale: function (tekstikappaleId, opsBase) {
+            return opsBase.OPS2.tekstikappale;
           }
           /*lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
             return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
@@ -568,8 +568,8 @@ epOpintopolkuApp
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
           },
-          ops: function(opsResource) {
-            return opsResource.OPS.ops;
+          ops: function(opsBase) {
+            return opsBase.OPS2.ops;
           }
         }
       })
@@ -579,8 +579,8 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tiedot.html',
         controller: 'OpsYksinkertainenTiedotController',
         resolve: {
-          ops: function(opsResource) {
-            return opsResource.OPS.ops;
+          ops: function(opsBase) {
+            return opsBase.OPS2.ops;
           }
         }
       })
@@ -593,8 +593,8 @@ epOpintopolkuApp
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (tekstikappaleId, opsResource) {
-            return opsResource.OPS.tekstikappale;
+          tekstikappale: function (tekstikappaleId, opsBase) {
+            return opsBase.OPS2.tekstikappale;
           }
           /*lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
            return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
@@ -610,8 +610,8 @@ epOpintopolkuApp
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
           },
-          ops: function(opsResource) {
-            return opsResource.OPS.ops;
+          ops: function(opsBase) {
+            return opsBase.OPS2.ops;
           }
         }
       })
@@ -621,8 +621,8 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tiedot.html',
         controller: 'OpsYksinkertainenTiedotController',
         resolve: {
-          ops: function(opsResource) {
-            return opsResource.OPS.ops;
+          ops: function(opsBase) {
+            return opsBase.OPS2.ops;
           }
         }
       })
@@ -635,8 +635,8 @@ epOpintopolkuApp
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (tekstikappaleId, opsResource) {
-            return opsResource.OPS.tekstikappale;
+          tekstikappale: function (tekstikappaleId, opsBase) {
+            return opsBase.OPS2.tekstikappale;
           }
           /*lapset: function (serviceConfig, perusteenOsat, tekstikappaleId, epTekstikappaleChildResolver) {
            return epTekstikappaleChildResolver.get(perusteenOsat, tekstikappaleId);
@@ -649,12 +649,18 @@ epOpintopolkuApp
         templateUrl: 'views/ops/perusopetus.html',
         controller: 'OpsPerusopetusController',
         resolve: {
+          opsId: function($stateParams){
+            return $stateParams.opsId;
+          },
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
           },
-          perusOps: function(opsResource) {
-            return opsResource.OPS.perusOps;
+          perusOps: function(PerusopetusOPS, opsId) {
+            return PerusopetusOPS.get({opsId: opsId}).$promise.then(function(res){
+              return res;
+            });
           }
+
         }
       })
 
@@ -666,8 +672,8 @@ epOpintopolkuApp
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (tekstikappaleId, opsResource) {
-            return opsResource.OPS.tekstikappale;
+          tekstikappale: function (tekstikappaleId, opsBase) {
+            return opsBase.OPS2.tekstikappale;
           }
         }
       })
@@ -677,8 +683,8 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tiedot.html',
         controller: 'OpsPerusopetusTiedotController',
         resolve: {
-          opsTiedot: function(opsResource) {
-            return opsResource.OPS.ops;
+          opsTiedot: function(opsBase) {
+            return opsBase.OPS2.ops;
           }
         }
       })
@@ -688,11 +694,17 @@ epOpintopolkuApp
         templateUrl: 'views/ops/vlk.html',
         controller: 'OpsVlkController',
         resolve: {
+          opsId: function($stateParams){
+            return $stateParams.opsId;
+          },
           vlkId: function($stateParams){
             return $stateParams.vlkId;
           },
-          vlkt: function (vlkId, opsResource) {
-            return opsResource.OPS.vlk;
+          vlkt: function (opsId, vlkId, PerusopetusOPS) {
+            return PerusopetusOPS.getVlk({opsId: opsId, vlkId: vlkId}).$promise.then(function(res){
+              console.log(res);
+              return res;
+            })
           }
         }
       })
@@ -716,8 +728,8 @@ epOpintopolkuApp
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
-          oppiaine: function (oppiaineId, opsResource) {
-            return opsResource.OPS.oppiaine;
+          oppiaine: function (oppiaineId, opsBase) {
+            return opsBase.OPS2.oppiaine;
           }
         }
       })

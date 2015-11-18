@@ -49,6 +49,9 @@
       </div>
 
       <!-- Yksinkertainen valikko -->
+      <div class="list-group-item rajaus">
+        <rajaus ng-if="!sections && !disableRajaus" size="small" model="search.term" placeholder="etsi-sisallosta"></rajaus>
+      </div>
       <a class="list-group-item item items-item" ng-repeat="item in items" ng-class="itemClasses(item)" ng-href="{{item.href}}"
         ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
         <div class="toggler">

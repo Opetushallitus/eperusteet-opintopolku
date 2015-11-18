@@ -62,7 +62,7 @@ epOpintopolkuApp
       var lastVlk = null;
       var currentVuosi = null;
       _.each(vlkWithYears, function (vlk) {
-        if (!vlk.vuosi) {
+              if (!vlk.vuosi) {
           lastVlk = vlk;
           arr.push({
             $vkl: vlk,
@@ -83,12 +83,13 @@ epOpintopolkuApp
         });
         currentVuosi = vlk.vuosi;
         traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi, null);
-      });
+});
       return arr;
     }
 
     function traverseOppiaineet(aineet, arr, vlk, startingDepth, currentVuosi, years) {
       startingDepth = startingDepth || 0;
+      console.log("CURRENT", currentVuosi);
       let currentVlkt = [];
       let currentYears = years || arr[arr.length-1].vlk.fi.replace(/\D/g, '').split('')
                             || arr[arr.length-1].vlk.svreplace(/\D/g, '').split('');
@@ -102,7 +103,10 @@ epOpintopolkuApp
       let oaFiltered = _(aineet).filter(function(oa) {
         let oppiaineHasVlk = _.some(oa.vuosiluokkakokonaisuudet, function(oavkl) {
           return _.some(vlks, function (oneVlk) {
-            return '' + oavkl._vuosiluokkakokonaisuus === '' + oneVlk;
+            return '' + oavkl._vuosiluokkakokonaisuus === '' + oneVlk &&
+              (_.isEmpty(oavkl.vuosiluokat) || _.some(oavkl.vuosiluokat, function(v){
+                return '' + currentVuosi === '' + v;
+              }));
           });
         });
         let oppimaaraVlkIds = _(oa.oppimaarat).map(function (oppimaara) {
@@ -112,7 +116,7 @@ epOpintopolkuApp
         return oppiaineHasVlk || !_.isEmpty(_.intersection(oppimaaraVlkIds, vlkIds));
       }).value();
 
-      function hasVuosiluoka(vuodet){
+      /*function hasVuosiluoka(vuodet){
         return _.indexOf(vuodet, currentVuosi) > -1;
       }
 
@@ -130,9 +134,9 @@ epOpintopolkuApp
                                   return hasVuosiluoka(oa.vuosiluokat)
                                     || hasNoVuosiluoka(oa.vuosiluokat)
                                     || (oa.oppimaarat && oppimaaratHasVuosiLuoka(oa.oppimaarat));
-                                  }).value();
+                                  }).value();*/
 
-      _.each(oppiaineSort(belongsInCurrentYear), function (oa) {
+      _.each(oppiaineSort(oaFiltered), function (oa) {
         buildOppiaineItem(arr, oa, vlks, startingDepth, isSisalto, currentVuosi);
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
           traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
