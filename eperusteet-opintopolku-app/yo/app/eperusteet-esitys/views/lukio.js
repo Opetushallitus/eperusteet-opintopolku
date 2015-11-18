@@ -45,6 +45,7 @@ angular.module('eperusteet.esitys')
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
     $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
     TermistoService.setPeruste(peruste);
+    console.log("peruste", peruste);
 
     function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
@@ -156,7 +157,24 @@ angular.module('eperusteet.esitys')
         naviClasses: $scope.naviClasses
       }]
     };
+<<<<<<< Updated upstream
 })
+=======
+
+    $scope.navi.sections[0].items.unshift({
+      depth: 0,
+      label: 'perusteen-tiedot',
+      link: ['root.lukio.tiedot']
+    });
+
+    $scope.$on('$stateChangeSuccess', function () {
+      if ($state.current.name === epEsitysSettings.lukioState) {
+        $state.go('.tiedot', {perusteId: $scope.peruste.id}, {location: 'replace'});
+      }
+    });
+    setInterval(function(){ console.log("NOW", $scope.navi.sections[0].items[1])}, 5000);
+  })
+>>>>>>> Stashed changes
 
   .directive('epLukioSivunavigaatio', function ($window, $document, $timeout, $compile) {
     return {
@@ -289,6 +307,8 @@ angular.module('eperusteet.esitys')
     $scope.aihekokonaisuudet = aihekokonaisuudet;
     MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
   })
+
+  .controller('epLukioTiedotController', function(){})
 
   .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;

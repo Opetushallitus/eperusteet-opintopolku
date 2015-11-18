@@ -302,6 +302,12 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.lukio.tiedot', {
+          url: '/tiedot',
+          templateUrl: 'eperusteet-esitys/views/tiedot.html',
+          controller: 'epLukioTiedotController'
+        })
+
       .state('root.lukio.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',

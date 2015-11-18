@@ -124,6 +124,10 @@ epOpintopolkuApp
         useData: 'perusteNimi',
         useId: 'perusteId'
       },
+      'root.lukio.tiedot':{
+        parent: 'root.lukio',
+        label: 'perusteen-tiedot'
+      },
       'root.lukio.tekstikappale': {
         parent: 'root.lukio',
         useData: 'tekstikappaleNimi',

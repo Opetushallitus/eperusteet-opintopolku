@@ -91,6 +91,12 @@ angular.module('eperusteet.esitys')
           }
         }
       },
+      tiedot: {
+        index: 0,
+        callback: function (item) {
+          item.$selected = _.isArray(item.link) && item.link.length > 0 && _.last(item.link[0].split('.')) === 'tiedot';
+        }
+      },
       oppiaine: {
         index: 1,
         callback: function (item) {
