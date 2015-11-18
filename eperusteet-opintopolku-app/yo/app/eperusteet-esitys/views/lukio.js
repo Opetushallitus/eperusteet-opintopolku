@@ -157,14 +157,11 @@ angular.module('eperusteet.esitys')
         naviClasses: $scope.naviClasses
       }]
     };
-<<<<<<< Updated upstream
-})
-=======
 
     $scope.navi.sections[0].items.unshift({
       depth: 0,
       label: 'perusteen-tiedot',
-      link: ['root.lukio.tiedot']
+      link: [epEsitysSettings.lukioState + '.tiedot']
     });
 
     $scope.$on('$stateChangeSuccess', function () {
@@ -172,9 +169,23 @@ angular.module('eperusteet.esitys')
         $state.go('.tiedot', {perusteId: $scope.peruste.id}, {location: 'replace'});
       }
     });
-    setInterval(function(){ console.log("NOW", $scope.navi.sections[0].items[1])}, 5000);
+
+    $scope.chooseFirstOppiaine = function (section) {
+      var oppiaine = '' + section.id === 'sisalto';
+      var aine = _.find($scope.navi.sections[1].items, {depth: 0});
+      if (aine && oppiaine) {
+        var params = {perusteId: $scope.peruste.id, oppiaineId: aine.$oppiaine.id};
+        $timeout(function () {
+          $state.go(epEsitysSettings.lukioState + '.oppiaine', params);
+        });
+      }
+    };
+
+    $scope.onSectionChange = function (section) {
+      return !section.$open ? $scope.chooseFirstOppiaine(section) : null;
+      }
   })
->>>>>>> Stashed changes
+
 
   .directive('epLukioSivunavigaatio', function ($window, $document, $timeout, $compile) {
     return {
