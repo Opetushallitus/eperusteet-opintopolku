@@ -225,6 +225,10 @@ epOpintopolkuApp
         useData: 'opsNimi',
         useId: 'opsId'
       },
+      'root.ops.esiopetus.tiedot': {
+        parent: 'root.ops.esiopetus',
+        label: 'opetussuunnitelman-tiedot'
+      },
       'root.ops.esiopetus.tekstikappale': {
         parent: 'root.ops.esiopetus',
         useId: 'osanId',

@@ -48,11 +48,11 @@ epOpintopolkuApp
 
     console.log("OPPI", $scope.oppiaineet, "VLK", $scope.vlk);
 
-    /*$timeout(function () {
+    $timeout(function () {
       if ($state.current.name === 'root.ops.perus') {
           $state.go('.tiedot', {location: 'replace'});
         }
-    });*/
+    });
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 

@@ -72,7 +72,6 @@ epOpintopolkuApp
     $scope.navi.sections[0].items.unshift({depth: 0, label: 'opetussuunnitelman-tiedot', link: [currentRootState + '.tiedot']});
   })
   .controller('OpsYksinkertainenTiedotController', function($scope, ops) {
-    console.log("OPS", ops);
     $scope.ops = ops;
   })
   .controller('OpsTekstikappaleController', function (
