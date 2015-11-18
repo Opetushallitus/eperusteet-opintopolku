@@ -337,7 +337,9 @@ $sivunavi-level-padding: 20px;
   }
 }
 
-.sivunavi-box .input-group.rajauslaatikko {
-  margin-bottom: 0 !important;
+
+.list-group-item.rajaus {
+  padding-bottom: 0;
+  margin-top: 2px;
 }
 
