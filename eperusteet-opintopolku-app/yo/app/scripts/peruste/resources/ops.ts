@@ -23,7 +23,10 @@ epOpintopolkuApp
   .factory('PerusopetusOPS', function ($resource, opsBase) {
     return $resource(opsBase.OPS, {opsId: '@id'}, {
       get: {method: 'GET', cache: true},
-      getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: true}
+      getOtsikot: {method: 'GET', url: opsBase.OPS + '/otsikot', cache: true},
+      getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: true},
+      getOppiaine: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId', cache: true},
+      getTekstikappale: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId', cache: true}
     })
   })
 

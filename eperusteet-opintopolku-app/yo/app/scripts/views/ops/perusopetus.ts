@@ -46,8 +46,6 @@ epOpintopolkuApp
     $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
     $scope.vlk = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
 
-    console.log("OPPI", $scope.oppiaineet, "VLK", $scope.vlk);
-
     $timeout(function () {
       if ($state.current.name === 'root.ops.perus') {
           $state.go('.tiedot', {location: 'replace'});
@@ -57,8 +55,6 @@ epOpintopolkuApp
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
     //TermistoService.setPeruste(peruste);
-
-    console.log(opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlk, $scope.oppiaineet));
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
@@ -133,7 +129,8 @@ epOpintopolkuApp
     $scope,
     tekstikappale,
     MurupolkuData,
-    epTekstikappaleChildResolver) {
+    lapset,
+    opsTekstikappaleChildResolver) {
 
     $scope.tekstikappale = tekstikappale.tekstiKappale;
 
@@ -143,7 +140,8 @@ epOpintopolkuApp
 
     function setMurupolku() {
       MurupolkuData.set({osanId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
-      //$scope.lapset = epTekstikappaleChildResolver.getSisalto();
+      $scope.lapset = opsTekstikappaleChildResolver.getSisalto();
+      console.log(lapset);
 
       $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item, index) {
         if (item.$selected === true) {

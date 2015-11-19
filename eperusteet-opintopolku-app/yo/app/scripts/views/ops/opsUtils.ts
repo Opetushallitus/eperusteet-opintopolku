@@ -89,7 +89,6 @@ epOpintopolkuApp
 
     function traverseOppiaineet(aineet, arr, vlk, startingDepth, currentVuosi, years) {
       startingDepth = startingDepth || 0;
-      console.log("CURRENT", currentVuosi);
       let currentVlkt = [];
       let currentYears = years || arr[arr.length-1].vlk.fi.replace(/\D/g, '').split('')
                             || arr[arr.length-1].vlk.svreplace(/\D/g, '').split('');

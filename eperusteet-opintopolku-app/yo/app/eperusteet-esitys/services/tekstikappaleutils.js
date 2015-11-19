@@ -44,6 +44,31 @@ angular.module('eperusteet.esitys')
     };
   })
 
+  .service('opsTekstikappaleChildResolver', function (Algoritmit, $q, PerusopetusOPS) {
+    var lapset = null;
+    this.get = function (sisalto, viiteId) {
+      var promises = [];
+      var viite = null;
+      Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function (item) {
+        if ('' + item.id === '' + viiteId) {
+          viite = item;
+          return false;
+        }
+      });
+      if (viite) {
+        Algoritmit.kaikilleLapsisolmuille(viite, 'lapset', function (lapsi) {
+          lapsi.$osa = PerusopetusOPS.getTekstikappale({viiteId: lapsi.id});
+          promises.push(lapsi.$osa.$promise);
+        });
+        lapset = viite.lapset;
+      }
+      return $q.all(promises);
+    };
+    this.getSisalto = function () {
+      return lapset;
+    };
+  })
+
   .service('epParentFinder', function () {
     var idToMatch = null;
     var usePerusteenOsa = false;

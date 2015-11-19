@@ -652,15 +652,16 @@ epOpintopolkuApp
           opsId: function($stateParams){
             return $stateParams.opsId;
           },
-          otsikot: function (opsId, EsiopetusOPS) {
-            return EsiopetusOPS.otsikot;
-          },
           perusOps: function(PerusopetusOPS, opsId) {
             return PerusopetusOPS.get({opsId: opsId}).$promise.then(function(res){
               return res;
             });
+          },
+          otsikot: function (PerusopetusOPS, opsId) {
+            return PerusopetusOPS.getOtsikot({opsId: opsId}).$promise.then(function(res){
+              return res;
+            });
           }
-
         }
       })
 
@@ -669,24 +670,24 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tekstikappale.html',
         controller: 'OpsPerusopetusTekstikappaleController',
         resolve: {
-          tekstikappaleId: function (serviceConfig, $stateParams) {
+          viiteId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (tekstikappaleId, opsBase) {
-            return opsBase.OPS2.tekstikappale;
-          }
+          tekstikappale: function (PerusopetusOPS, viiteId, opsId) {
+            return PerusopetusOPS.getTekstikappale({opsId: opsId, viiteId: viiteId}).$promise.then(function(res){
+              return res;
+            })
+          },
+          lapset: function (tekstikappale, viiteId, opsTekstikappaleChildResolver) {
+           return opsTekstikappaleChildResolver.get(tekstikappale, viiteId);
+           }
         }
       })
 
       .state('root.ops.perus.tiedot', {
         url: '/tiedot',
         templateUrl: 'views/ops/tiedot.html',
-        controller: 'OpsPerusopetusTiedotController',
-        resolve: {
-          opsTiedot: function(opsBase) {
-            return opsBase.OPS2.ops;
-          }
-        }
+        controller: 'OpsPerusopetusTiedotController'
       })
 
       .state('root.ops.perus.vuosiluokkakokonaisuus', {
@@ -694,15 +695,11 @@ epOpintopolkuApp
         templateUrl: 'views/ops/vlk.html',
         controller: 'OpsVlkController',
         resolve: {
-          opsId: function($stateParams){
-            return $stateParams.opsId;
-          },
           vlkId: function($stateParams){
             return $stateParams.vlkId;
           },
           vlkt: function (opsId, vlkId, PerusopetusOPS) {
             return PerusopetusOPS.getVlk({opsId: opsId, vlkId: vlkId}).$promise.then(function(res){
-              console.log(res);
               return res;
             })
           }
@@ -725,11 +722,17 @@ epOpintopolkuApp
         templateUrl: 'views/ops/opsPerusopetusOppiaine.html',
         controller: 'OpsVlkOppiaineController',
         resolve: {
+          opsId: function($stateParams){
+            return $stateParams.opsId;
+          },
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
-          oppiaine: function (oppiaineId, opsBase) {
-            return opsBase.OPS2.oppiaine;
+          oppiaine: function (PerusopetusOPS, oppiaineId, opsId) {
+            return PerusopetusOPS.getOppiaine({opsId: opsId, oppiaineId: oppiaineId}).$promise.then(function(res){
+              console.log(res);
+              return res;
+            })
           }
         }
       })
