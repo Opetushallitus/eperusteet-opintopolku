@@ -46,7 +46,7 @@ angular.module('eperusteet.esitys')
 
   .service('opsTekstikappaleChildResolver', function (Algoritmit, $q, PerusopetusOPS) {
     var lapset = null;
-    this.get = function (sisalto, viiteId) {
+    this.get = function (sisalto, viiteId, opsId) {
       var promises = [];
       var viite = null;
       Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function (item) {
@@ -57,7 +57,7 @@ angular.module('eperusteet.esitys')
       });
       if (viite) {
         Algoritmit.kaikilleLapsisolmuille(viite, 'lapset', function (lapsi) {
-          lapsi.$osa = PerusopetusOPS.getTekstikappale({viiteId: lapsi.id});
+          lapsi.$osa = PerusopetusOPS.getTekstikappale({opsId: opsId, viiteId: lapsi.id});
           promises.push(lapsi.$osa.$promise);
         });
         lapset = viite.lapset;

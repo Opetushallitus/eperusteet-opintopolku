@@ -42,6 +42,7 @@ epOpintopolkuApp
     };
 
     $scope.otsikot = otsikot;
+    console.log("OTS", otsikot);
     $scope.ops = perusOps;
     $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
     $scope.vlk = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
@@ -129,10 +130,17 @@ epOpintopolkuApp
     $scope,
     tekstikappale,
     MurupolkuData,
-    lapset,
     opsTekstikappaleChildResolver) {
 
     $scope.tekstikappale = tekstikappale.tekstiKappale;
+
+    $scope.lapset = _.map(opsTekstikappaleChildResolver.getSisalto(), function(each){
+      return {
+        id: each.id,
+        $osa: each.tekstiKappale,
+        lapset: each.lapset
+      }
+    });
 
     $scope.$on('$stateChangeSuccess', function () {
       setMurupolku();
@@ -140,8 +148,6 @@ epOpintopolkuApp
 
     function setMurupolku() {
       MurupolkuData.set({osanId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
-      $scope.lapset = opsTekstikappaleChildResolver.getSisalto();
-      console.log(lapset);
 
       $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item, index) {
         if (item.$selected === true) {

@@ -678,8 +678,8 @@ epOpintopolkuApp
               return res;
             })
           },
-          lapset: function (tekstikappale, viiteId, opsTekstikappaleChildResolver) {
-           return opsTekstikappaleChildResolver.get(tekstikappale, viiteId);
+          lapset: function (otsikot, viiteId, opsId, opsTekstikappaleChildResolver) {
+           return opsTekstikappaleChildResolver.get(otsikot, viiteId, opsId);
            }
         }
       })
