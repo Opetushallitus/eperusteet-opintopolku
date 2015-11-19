@@ -100,7 +100,7 @@ angular.module('eperusteet.esitys')
       tabs: [
       {
         title: {
-          oppiaine: 'oppiainen-sisalto',
+          oppiaine: 'oppiaineen-sisalto',
           kurssi: 'kurssin-sisalto'
         },
         name: 'sisalto',
