@@ -43,7 +43,7 @@
 </div>
 
 
-<div class="row row-margin" ng-if="peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0">
+<div class="row row-margin" ng-if="peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0 && !!peruste.siirtymaPaattyy">
   <div class="col-xs-6 col-sm-4">
     <strong>
       <span kaanna="'siirtyman-paattyminen'"></span>
@@ -195,7 +195,7 @@
   </div>
 </div>
 
-<div class="row row-margin">
+<div class="row row-margin" ng-show="!!peruste.voimassaoloLoppuu">
   <div class="col-xs-6 col-sm-4">
     <strong>
       <span kaanna="'voimassaolo-paattymispvm'"></span>
