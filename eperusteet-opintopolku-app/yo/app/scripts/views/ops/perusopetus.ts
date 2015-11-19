@@ -182,10 +182,20 @@ epOpintopolkuApp
     MurupolkuData.set({vuosiId: vuosi, vuosi: 'Vuosiluokka' + " " + vuosi});
   })
 
-  .controller('OpsVlkController', function($scope, vlkId, vlkt, MurupolkuData) {
+  .controller('OpsVlkController', function(
+    $scope,
+    vlkId,
+    vlkt,
+    MurupolkuData,
+    Utils) {
+
      $scope.vlkTeksti = vlkt;
+     $scope.vlkOrder = function (item) {
+      return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
+      };
 
      MurupolkuData.set({vlkId: vlkId, vlkNimi: $scope.vlkTeksti.nimi});
+
   })
 
   .controller('OpsVlkOppiaineController', function($scope,  $timeout, $state, oppiaineId, oppiaine, MurupolkuData) {
