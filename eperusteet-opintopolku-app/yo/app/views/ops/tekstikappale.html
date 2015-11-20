@@ -4,16 +4,16 @@
 <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
 
 <div ng-repeat="lapsi in lapset">
-  <ep-tekstiotsikko level="2" model="lapsi" link-var="linkVar"></ep-tekstiotsikko>
-  <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
+  <ops-tekstiotsikko level="2" model="lapsi" link-var="linkVar"></ops-tekstiotsikko>
+  <termisto-tekstikentta tekstikentta="lapsi.tekstiKappele.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset">
-    <ep-tekstiotsikko level="3" model="alilapsi" link-var="linkVar"></ep-tekstiotsikko>
-    <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
+    <ops-tekstiotsikko level="3" model="alilapsi" link-var="linkVar"></ops-tekstiotsikko>
+    <termisto-tekstikentta tekstikentta="alilapsi.tekstiKappele.teksti"></termisto-tekstikentta>
 
     <div ng-repeat="alialilapsi in alilapsi.lapset">
-      <ep-tekstiotsikko level="4" model="alialilapsi" link-var="linkVar"></ep-tekstiotsikko>
-      <termisto-tekstikentta tekstikentta="alialilapsi.$osa.teksti"></termisto-tekstikentta>
+      <ops-tekstiotsikko level="4" model="alialilapsi" link-var="linkVar"></ops-tekstiotsikko>
+      <termisto-tekstikentta tekstikentta="alialilapsi.tekstiKappele.teksti"></termisto-tekstikentta>
     </div>
   </div>
 </div>

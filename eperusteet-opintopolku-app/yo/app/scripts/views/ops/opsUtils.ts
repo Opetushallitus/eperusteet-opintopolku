@@ -68,7 +68,7 @@ epOpintopolkuApp
             $vkl: vlk,
             label: vlk.nimi,
             depth: 0,
-            url: $state.href('root.ops.perus.vuosiluokkakokonaisuus', {vlkId: vlk.id})
+            url: $state.href('root.ops.perusopetus.vuosiluokkakokonaisuus', {vlkId: vlk.id})
           });
           return arr;
         }
@@ -79,7 +79,7 @@ epOpintopolkuApp
           $hidden: true,
           vlk: lastVlk.nimi,
           depth: 1,
-          url: $state.href('root.ops.perus.vuosiluokka', {vuosi: vlk.vuosi_num})
+          url: $state.href('root.ops.perusopetus.vuosiluokka', {vuosi: vlk.vuosi_num})
         });
         currentVuosi = vlk.vuosi;
         traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi, null);
@@ -115,26 +115,6 @@ epOpintopolkuApp
         return oppiaineHasVlk || !_.isEmpty(_.intersection(oppimaaraVlkIds, vlkIds));
       }).value();
 
-      /*function hasVuosiluoka(vuodet){
-        return _.indexOf(vuodet, currentVuosi) > -1;
-      }
-
-      function hasNoVuosiluoka(vuodet){
-        return _.isEmpty(_.intersection(currentVlkt, vuodet));
-      }
-
-      function oppimaaratHasVuosiLuoka(opmt){
-        return _.filter(opmt, function(op){
-          return _.indexOf(op.vuosiluokat, currentVuosi) > -1
-        });
-      }
-
-      let belongsInCurrentYear = _(oaFiltered).filter(function(oa){
-                                  return hasVuosiluoka(oa.vuosiluokat)
-                                    || hasNoVuosiluoka(oa.vuosiluokat)
-                                    || (oa.oppimaarat && oppimaaratHasVuosiLuoka(oa.oppimaarat));
-                                  }).value();*/
-
       _.each(oppiaineSort(oaFiltered), function (oa) {
         buildOppiaineItem(arr, oa, vlks, startingDepth, isSisalto, currentVuosi);
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
@@ -154,7 +134,7 @@ epOpintopolkuApp
         $oppiaine: oppiaine,
         label: oppiaine.nimi,
         $parent_vuosi: currentVuosi,
-        url: $state.href('root.ops.perus.vuosiluokka.oppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id})
+        url: $state.href('root.ops.perusopetus.vuosiluokka.oppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id})
       });
     }
 

@@ -118,29 +118,20 @@ epOpintopolkuApp
     $scope.navi.sections[0].items.unshift({
       depth: 0,
       label: 'opetussuunnitelman-tiedot',
-      link: ['root.ops.perus.tiedot']
+      link: ['root.ops.perusopetus.tiedot']
     });
 
-    //installClickHandler();
-
+    installClickHandler();
 
   })
 
   .controller('OpsPerusopetusTekstikappaleController', function(
     $scope,
-    tekstikappale,
-    MurupolkuData,
-    opsTekstikappaleChildResolver) {
+    tekstikappaleWithChildren,
+    MurupolkuData) {
 
-    $scope.tekstikappale = tekstikappale.tekstiKappale;
-
-    $scope.lapset = _.map(opsTekstikappaleChildResolver.getSisalto(), function(each){
-      return {
-        id: each.id,
-        $osa: each.tekstiKappale,
-        lapset: each.lapset
-      }
-    });
+    $scope.tekstikappale = tekstikappaleWithChildren.tekstiKappale;
+    $scope.lapset = tekstikappaleWithChildren.lapset;
 
     $scope.$on('$stateChangeSuccess', function () {
       setMurupolku();
@@ -172,13 +163,13 @@ epOpintopolkuApp
 
   .controller('OpsVuosiluokkaController', function($scope, $state, $timeout, Kieli, vuosi, MurupolkuData){
     $timeout(function () {
-      if ($state.current.name === 'root.ops.perus.vuosiluokka') {
+      if ($state.current.name === 'root.ops.perusopetus.vuosiluokka') {
         var index = null;
         var selectedIndex = _.reduce($scope.navi.sections[1].items, function (result, item, index) {
           return result += item.$selected === true ? index : '';
         }, '');
         if (selectedIndex) {
-          $state.go('root.ops.perus.vuosiluokka.oppiaine', {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
+          $state.go('root.ops.perusopetus.vuosiluokka.oppiaine', {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
         }
       }
     });

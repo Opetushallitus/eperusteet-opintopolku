@@ -509,20 +509,18 @@ epOpintopolkuApp
       /* OPETUSSUUNNITELMAT */
 
       .state('root.ops', {
-        url: '/ops/:opsId',
-        template: '<div ui-view></div>',
-        resolve: {
-          opsId: function ($stateParams) {
-            return $stateParams.opsId;
-          }
-        }
+        url: '/ops',
+        template: '<div ui-view></div>'
       })
 
       .state('root.ops.esiopetus', {
-        url: '/esiopetus',
+        url: '/esiopetus/:opsId',
         templateUrl: 'views/ops/yksinkertainen.html',
         controller: 'OpsYksinkertainenController',
         resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
           },
@@ -561,10 +559,13 @@ epOpintopolkuApp
       })
 
       .state('root.ops.lisaopetus', {
-        url: '/lisaopetus',
+        url: '/lisaopetus/:opsId',
         templateUrl: 'views/ops/yksinkertainen.html',
         controller: 'OpsYksinkertainenController',
         resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
           },
@@ -603,10 +604,13 @@ epOpintopolkuApp
       })
 
       .state('root.ops.varhaiskasvatus', {
-        url: '/varhaiskasvatus',
+        url: '/varhaiskasvatus/:opsId',
         templateUrl: 'views/ops/yksinkertainen.html',
         controller: 'OpsYksinkertainenController',
         resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
           otsikot: function (opsId, EsiopetusOPS) {
             return EsiopetusOPS.otsikot;
           },
@@ -644,28 +648,28 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perus', {
-        url: '/perus',
+      .state('root.ops.perusopetus', {
+        url: '/perusopetus/:opsId',
         templateUrl: 'views/ops/perusopetus.html',
         controller: 'OpsPerusopetusController',
         resolve: {
           opsId: function($stateParams){
             return $stateParams.opsId;
           },
-          perusOps: function(PerusopetusOPS, opsId) {
-            return PerusopetusOPS.get({opsId: opsId}).$promise.then(function(res){
+          perusOps: function(opsResource, opsId) {
+            return opsResource.get({opsId: opsId}).$promise.then(function(res){
               return res;
             });
           },
-          otsikot: function (PerusopetusOPS, opsId) {
-            return PerusopetusOPS.getOtsikot({opsId: opsId}).$promise.then(function(res){
+          otsikot: function (opsResource, opsId) {
+            return opsResource.getOtsikot({opsId: opsId}).$promise.then(function(res){
               return res;
             });
           }
         }
       })
 
-      .state('root.ops.perus.tekstikappale', {
+      .state('root.ops.perusopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'views/ops/tekstikappale.html',
         controller: 'OpsPerusopetusTekstikappaleController',
@@ -673,24 +677,21 @@ epOpintopolkuApp
           viiteId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (PerusopetusOPS, viiteId, opsId) {
-            return PerusopetusOPS.getTekstikappale({opsId: opsId, viiteId: viiteId}).$promise.then(function(res){
+          tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
+            return opsResource.getTekstikappaleWithChildren({opsId: opsId, viiteId: viiteId}).$promise.then(function (res) {
+              console.log(res);
               return res;
             })
-          },
-          lapset: function (otsikot, viiteId, opsId, opsTekstikappaleChildResolver) {
-           return opsTekstikappaleChildResolver.get(otsikot, viiteId, opsId);
-           }
-        }
+          }
       })
 
-      .state('root.ops.perus.tiedot', {
+      .state('root.ops.perusopetus.tiedot', {
         url: '/tiedot',
         templateUrl: 'views/ops/tiedot.html',
         controller: 'OpsPerusopetusTiedotController'
       })
 
-      .state('root.ops.perus.vuosiluokkakokonaisuus', {
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus', {
         url:'/vuosiluokkakokonaisuus/:vlkId',
         templateUrl: 'views/ops/vlk.html',
         controller: 'OpsVlkController',
@@ -698,15 +699,15 @@ epOpintopolkuApp
           vlkId: function($stateParams){
             return $stateParams.vlkId;
           },
-          vlkt: function (opsId, vlkId, PerusopetusOPS) {
-            return PerusopetusOPS.getVlk({opsId: opsId, vlkId: vlkId}).$promise.then(function(res){
+          vlkt: function (opsId, vlkId, opsResource) {
+            return opsResource.getVlk({opsId: opsId, vlkId: vlkId}).$promise.then(function(res){
               return res;
             })
           }
         }
       })
 
-      .state('root.ops.perus.vuosiluokka', {
+      .state('root.ops.perusopetus.vuosiluokka', {
         url:'/vuosiluokka/:vuosi',
         controller: 'OpsVuosiluokkaController',
         template: '<div ui-view></div>',
@@ -717,7 +718,7 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perus.vuosiluokka.oppiaine', {
+      .state('root.ops.perusopetus.vuosiluokka.oppiaine', {
         url:'/oppiaine/:oppiaineId',
         templateUrl: 'views/ops/opsPerusopetusOppiaine.html',
         controller: 'OpsVlkOppiaineController',
@@ -728,9 +729,8 @@ epOpintopolkuApp
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
-          oppiaine: function (PerusopetusOPS, oppiaineId, opsId) {
-            return PerusopetusOPS.getOppiaine({opsId: opsId, oppiaineId: oppiaineId}).$promise.then(function(res){
-              console.log(res);
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({opsId: opsId, oppiaineId: oppiaineId}).$promise.then(function(res){
               return res;
             })
           }

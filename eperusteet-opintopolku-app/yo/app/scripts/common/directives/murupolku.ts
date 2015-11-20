@@ -217,10 +217,6 @@ epOpintopolkuApp
         useData: 'tekstikappaleNimi',
         customParents: true
       },
-      'root.ops': {
-        useData: 'opsNimi',
-        useId: 'opsId'
-      },
       'root.ops.esiopetus': {
         useData: 'opsNimi',
         useId: 'opsId'
@@ -254,32 +250,32 @@ epOpintopolkuApp
         useData: 'tekstikappaleNimi',
         customParents: true
       },
-      'root.ops.perus':{
+      'root.ops.perusopetus':{
         useData: 'opsNimi',
         useId: 'opsId'
       },
-      'root.ops.perus.tiedot': {
-        parent: 'root.ops.perus',
+      'root.ops.perusopetus.tiedot': {
+        parent: 'root.ops.perusopetus',
         label: 'opetussuunnitelman-tiedot'
       },
-      'root.ops.perus.tekstikappale': {
-        parent: 'root.ops.perus',
+      'root.ops.perusopetus.tekstikappale': {
+        parent: 'root.ops.perusopetus',
         useId: 'osanId',
         useData: 'tekstikappaleNimi',
         customParents: true
       },
-      'root.ops.perus.vuosiluokkakokonaisuus': {
-        parent: 'root.ops.perus',
+      'root.ops.perusopetus.vuosiluokkakokonaisuus': {
+        parent: 'root.ops.perusopetus',
         useData: 'vlkNimi',
         useId: 'vlkId'
       },
-      'root.ops.perus.vuosiluokka':{
-        parent: 'root.ops.perus.vuosiluokkakokonaisuus',
+      'root.ops.perusopetus.vuosiluokka':{
+        parent: 'root.ops.perusopetus.vuosiluokkakokonaisuus',
         useId: 'vuosiId',
         useData: 'vuosi'
       },
-      'root.ops.perus.vuosiluokka.oppiaine': {
-        parent: 'root.ops.perus.vuosiluokka',
+      'root.ops.perusopetus.vuosiluokka.oppiaine': {
+        parent: 'root.ops.perusopetus.vuosiluokka',
         useData: 'oppiaineNimi',
         useId: 'oppiaineId',
         customParents: true

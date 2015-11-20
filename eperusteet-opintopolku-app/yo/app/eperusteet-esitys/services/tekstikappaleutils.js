@@ -44,31 +44,6 @@ angular.module('eperusteet.esitys')
     };
   })
 
-  .service('opsTekstikappaleChildResolver', function (Algoritmit, $q, PerusopetusOPS) {
-    var lapset = null;
-    this.get = function (sisalto, viiteId, opsId) {
-      var promises = [];
-      var viite = null;
-      Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function (item) {
-        if ('' + item.id === '' + viiteId) {
-          viite = item;
-          return false;
-        }
-      });
-      if (viite) {
-        Algoritmit.kaikilleLapsisolmuille(viite, 'lapset', function (lapsi) {
-          lapsi.$osa = PerusopetusOPS.getTekstikappale({opsId: opsId, viiteId: lapsi.id});
-          promises.push(lapsi.$osa.$promise);
-        });
-        lapset = viite.lapset;
-      }
-      return $q.all(promises);
-    };
-    this.getSisalto = function () {
-      return lapset;
-    };
-  })
-
   .service('epParentFinder', function () {
     var idToMatch = null;
     var usePerusteenOsa = false;
@@ -112,6 +87,26 @@ angular.module('eperusteet.esitys')
       '  <span class="teksti-linkki">' +
       '    <a ng-if="amEsitys" ui-sref="^.tekstikappale({osanId: model.id})" icon-role="new-window"></a>' +
       '    <a ng-if="!amEsitys" ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
+      '  </span></span>',
+      link: function (scope, element) {
+        var headerEl = angular.element('<h' + scope.level + '>');
+        element.find('.otsikko-wrap').wrap(headerEl);
+        scope.amEsitys = scope.linkVar === 'osanId';
+      }
+    };
+  })
+
+  .directive('opsTekstiotsikko', function () {
+    return {
+      restrict: 'E',
+      scope: {
+        model: '=',
+        level: '@',
+        linkVar: '='
+      },
+      template: '<span class="otsikko-wrap"><span ng-bind-html="model.tekstiKappale.nimi | kaanna | unsafe"></span>' +
+      '  <span class="teksti-linkki">' +
+      '    <a ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
       '  </span></span>',
       link: function (scope, element) {
         var headerEl = angular.element('<h' + scope.level + '>');
