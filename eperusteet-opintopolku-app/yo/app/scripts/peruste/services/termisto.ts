@@ -23,7 +23,7 @@ epOpintopolkuApp
   var loading = false;
   var Resource = {
     CRUD: TermistoCRUD,
-    params: {perusteId: null}
+    params: null
   };
   this.preload = function () {
     if (!cached[peruste.id] && !loading) {

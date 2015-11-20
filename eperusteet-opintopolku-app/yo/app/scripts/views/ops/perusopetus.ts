@@ -211,12 +211,10 @@ epOpintopolkuApp
   .controller('OpsVlkOppiaineController', function($scope,  $timeout, $state, oppiaineId, oppiaine, MurupolkuData) {
     $scope.oppiaine = oppiaine;
 
-    console.log("PARAMS", $state.params, $scope.vlkMap);
     var currentVlk = _($scope.vlkMap)
                       .filter(function(vlk){
                         var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
                         vuodet = _.map(vuodet, function(v) { return parseInt(v); });
-                        console.log(vuodet);
                         return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
                       })
                       .map(function(v){
@@ -225,8 +223,9 @@ epOpintopolkuApp
                       .value()
                       .pop();
 
-    console.log("C", currentVlk);
-    //filter out the correct vlk!
+    $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, function(vlk){
+      return vlk._vuosiluokkakokonaisuus == currentVlk;
+    }).pop();
 
     $scope.$on('$stateChangeSuccess', function () {
       setMurupolku();
