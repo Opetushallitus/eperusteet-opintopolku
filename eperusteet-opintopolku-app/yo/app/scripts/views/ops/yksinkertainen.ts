@@ -16,7 +16,22 @@
 'use strict';
 
 epOpintopolkuApp
-  .controller('OpsYksinkertainenController', function ($q, $scope, $state, ops, TermistoService, otsikot, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, opsId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) {
+  .controller('OpsYksinkertainenController', function (
+    $q,
+    $scope,
+    $state,
+    ops,
+    TermistoService,
+    otsikot,
+    epMenuBuilder,
+    $timeout, $rootScope,
+    epPerusopetusStateService,
+    opsId,
+    Kieli,
+    epEsitysSettings,
+    MurupolkuData,
+    $stateParams) {
+
     $scope.isNaviVisible = _.constant(true);
     $scope.otsikot = otsikot;
     $scope.ops = ops;
@@ -71,18 +86,17 @@ epOpintopolkuApp
 
     $scope.navi.sections[0].items.unshift({depth: 0, label: 'opetussuunnitelman-tiedot', link: [currentRootState + '.tiedot']});
   })
-  .controller('OpsYksinkertainenTiedotController', function($scope, ops) {
-    $scope.ops = ops;
+  .controller('OpsYksinkertainenTiedotController', function($scope) {
   })
   .controller('OpsTekstikappaleController', function (
     $scope,
     $state,
     $stateParams,
-    tekstikappale,
-    MurupolkuData,
-    epParentFinder,
-    epTekstikappaleChildResolver) {
-    $scope.tekstikappale = tekstikappale.tekstiKappale;
-    //$scope.lapset = epTekstikappaleChildResolver.getSisalto();
+    tekstikappaleWithChildren,
+    MurupolkuData) {
+
+    $scope.tekstikappale = tekstikappaleWithChildren.tekstiKappale;
+    $scope.lapset = tekstikappaleWithChildren.lapset;
+
     MurupolkuData.set({tekstikappaleId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
   });

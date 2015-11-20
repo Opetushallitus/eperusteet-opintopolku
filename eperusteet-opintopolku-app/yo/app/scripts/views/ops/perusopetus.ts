@@ -42,20 +42,19 @@ epOpintopolkuApp
     };
 
     $scope.otsikot = otsikot;
-    console.log("OTS", otsikot);
     $scope.ops = perusOps;
     $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
     $scope.vlk = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
 
     $timeout(function () {
-      if ($state.current.name === 'root.ops.perus') {
+      if ($state.current.name === 'root.ops.perusopetus') {
           $state.go('.tiedot', {location: 'replace'});
         }
     });
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
-    //TermistoService.setPeruste(peruste);
+    TermistoService.setPeruste(perusOps, true);
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
@@ -88,11 +87,15 @@ epOpintopolkuApp
       $document.off('click', clickHandler);
     });
 
-   /* $scope.onSectionChange = function (section) {
-      if (section.id === 'sisalto' && !section.$open) {
-        $scope.chooseFirstOppiaine(section);
+    $scope.onSectionChange = function (section) {
+      if (section.id === 'vlkoppiaine' && !section.$open) {
+        $scope.chooseFirstVlk(section);
       }
-    };*/
+    };
+
+    $scope.chooseFirstVlk = function(section) {
+     return _.find(section.items, {$vuosi: 'vuosiluokka_1'}) ? $state.go('root.ops.perusopetus.vuosiluokka', {opsId: $state.params.opsId, vuosi: 1}) : null;
+    };
 
     $scope.navi = {
       header: 'opetussuunnitelma',

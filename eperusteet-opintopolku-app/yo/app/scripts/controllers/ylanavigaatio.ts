@@ -49,7 +49,8 @@ epOpintopolkuApp
     };
 
     $scope.isPerusopetus = function () {
-      if ($state.includes('**.perusopetus.**') || $state.includes('**.lisaopetus.**')) {
+      if (($state.includes('**.perusopetus.**') && !$state.includes('**.perusopetus.**'))
+        || ($state.includes('**.lisaopetus.**') && !$state.includes('**.ops.**'))) {
         return true;
       }
     };

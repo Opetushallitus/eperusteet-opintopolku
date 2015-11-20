@@ -15,9 +15,9 @@
  */
 'use strict';
 epOpintopolkuApp
-  .service('opsBase', function (eperusteetConfig, fakeData) {
-    this.OPS2 = fakeData;
-    this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId'
+  .service('opsBase', function () {
+    this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId',
+    this.CACHEDQUERY = { method: 'GET', isArray: true, cache: true };
   })
 
   .factory('opsResource', function ($resource, opsBase) {
@@ -31,15 +31,10 @@ epOpintopolkuApp
     })
   })
 
-  .factory('EsiopetusOPS', function (opsBase) {
-    return {
-      'otsikot': opsBase.OPS2.otsikot,
-      'ops': opsBase.OPS2.ops,
-      'tekstikappale': opsBase.OPS2.tekstikappale,
-      'perusOps': opsBase.OPS2.perusOps,
-      'oppiaine': opsBase.OPS2.oppiaine,
-      'vlk': opsBase.OPS2.vlk
-    };
+  .factory('opsTermisto', function ($resource, opsBase) {
+    return $resource(opsBase.OPS + '/termisto/:opsId', {
+      opsId: '@id',
+    }, {
+      query: opsBase.CACHEDQUERY;
+    })
   });
-
-///eperusteet-ylops-service/api/opetussuunnitelmat/58405/vuosiluokkakokonaisuudet/58845
