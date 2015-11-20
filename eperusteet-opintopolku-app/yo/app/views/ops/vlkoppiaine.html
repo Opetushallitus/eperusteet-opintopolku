@@ -1,5 +1,5 @@
 <h1 class="oppiaine-nimi" esitys-sivu-otsikko="valittuOppiaine.oppiaine.nimi">
-  <span kaanna="valittuOppiaine.oppiaine.nimi"></span>
+  <span kaanna="oppiaine.nimi"></span>
 </h1>
 
 <div>
@@ -12,46 +12,43 @@
     </ul>
   </div>
 
-  <div ng-hide="!hasContent(valittuOppiaine.oppiaine.tehtava)">
-    <h2 ng-bind-html="valittuOppiaine.oppiaine.tehtava.otsikko | kaanna | unsafe"></h2>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.oppiaine.tehtava.teksti || '-'"></termisto-tekstikentta>
+  <div ng-hide="!hasContent(oppiaine.tehtava)">
+    <h2 ng-bind-html="oppiaine.tehtava.otsikko | kaanna | unsafe"></h2>
+    <termisto-tekstikentta tekstikentta="oppiaine.tehtava.teksti || '-'"></termisto-tekstikentta>
   </div>
 
-  <div ng-hide="!hasContent(valittuOppiaine.vlks.tehtava)">
-    <h3 ng-bind-html="valittuOppiaine.vlks.tehtava.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tehtava.teksti || '-'"></termisto-tekstikentta>
+  <div ng-hide="!hasContent(oppiaine.tyotavat)">
+    <h3 ng-bind-html="oppiaine.tyotavat.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="oppiaine.tyotavat.teksti || '-'"></termisto-tekstikentta>
   </div>
 
-  <div ng-hide="!hasContent(valittuOppiaine.vlks.tyotavat)">
-    <h3 ng-bind-html="valittuOppiaine.vlks.tyotavat.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.tyotavat.teksti || '-'"></termisto-tekstikentta>
+  <div ng-hide="!hasContent(oppiaine.ohjaus)">
+    <h3 ng-bind-html="ohjaus.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="oppiaine.ohjaus.teksti || '-'"></termisto-tekstikentta>
   </div>
 
-  <div ng-hide="!hasContent(valittuOppiaine.vlks.ohjaus)">
-    <h3 ng-bind-html="valittuOppiaine.vlks.ohjaus.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.ohjaus.teksti || '-'"></termisto-tekstikentta>
+  <div ng-hide="!hasContent(oppiaine.arviointi)">
+    <h3 ng-bind-html="oppiaine.arviointi.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="oppiaine.arviointi.teksti || '-'"></termisto-tekstikentta>
   </div>
 
-  <div ng-hide="!hasContent(valittuOppiaine.vlks.arviointi)">
-    <h3 ng-bind-html="valittuOppiaine.vlks.arviointi.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.arviointi.teksti || '-'"></termisto-tekstikentta>
+  <div ng-hide="!oppiaine.sisaltoalueinfo">
+    <h3>{{ oppiaine.sisaltoalueinfo.otsikko | kaanna }}</h3>
+    <termisto-tekstikentta tekstikentta="oppiaine.sisaltoalueinfo.teksti || '-'"></termisto-tekstikentta>
   </div>
 
-  <div ng-hide="!valittuOppiaine.vlks.sisaltoalueinfo">
-    <h3>{{ valittuOppiaine.vlks.sisaltoalueinfo.otsikko | kaanna }}</h3>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.vlks.sisaltoalueinfo.teksti || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-hide="!valittuOppiaine.vlks.sisaltoalueet || valittuOppiaine.vlks.sisaltoalueet.length === 0">
-    <div ng-repeat="sa in valittuOppiaine.vlks.sisaltoalueet">
+  <div ng-hide="!oppiaine.sisaltoalueet || valittuOppiaine.oppiaine.sisaltoalueet.length === 0">
+    <div ng-repeat="sa in oppiaine.sisaltoalueet">
       <h4 class="sparse">{{ sa.nimi | kaanna }}</h4>
       <termisto-tekstikentta tekstikentta="sa.kuvaus || '-'"></termisto-tekstikentta>
     </div>
   </div>
 
-  <div ng-hide="valittuOppiaine.vlks.tavoitteet.length === 0"
-       ng-if="valittuOppiaine.vlks._vuosiluokkaKokonaisuus">
+  <div ng-hide="oppiaine.tavoitteet.length === 0"
+       ng-if="oppiaine._vuosiluokkaKokonaisuus">
     <h3 kaanna="'perusopetus-tavoitteet'"></h3>
-    <div tavoitteet="valittuOppiaine.vlks" oppiaine="valittuOppiaine" osaamiset="osaamiset" vuosiluokka="valittuOppiaine.sisallot"></div>
+    <div tavoitteet="oppiaine" oppiaine="oppiaine" osaamiset="osaamiset" vuosiluokka="oppiaine.sisallot"></div>
   </div>
 </div>
+
+<pre>{{oppiaine | json}}</pre>

@@ -727,7 +727,7 @@ epOpintopolkuApp
 
       .state('root.ops.perusopetus.vuosiluokkakokonaisuus', {
         url: '/vuosiluokkakokonaisuus/:vlkId',
-        templateUrl: 'views/ops/vlk.html',
+        templateUrl: 'views/ops/vuosikuokkakokonaisuudet.html',
         controller: 'OpsVlkController',
         resolve: {
           vlkId: function ($stateParams) {
@@ -739,6 +739,14 @@ epOpintopolkuApp
               vlkId: vlkId
             }).$promise.then(function (res) {
               return res;
+            })
+          },
+          laajaalaisetosaamiset: function (opsId, opsResource) {
+            return opsResource.getLaajaalaisetosaamiset({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              console.log(res);
+              return res
             })
           }
         }
@@ -757,7 +765,7 @@ epOpintopolkuApp
 
       .state('root.ops.perusopetus.vuosiluokka.oppiaine', {
         url: '/oppiaine/:oppiaineId',
-        templateUrl: 'views/ops/opsPerusopetusOppiaine.html',
+        templateUrl: 'views/ops/vlkoppiaine.html',
         controller: 'OpsVlkOppiaineController',
         resolve: {
           opsId: function ($stateParams) {

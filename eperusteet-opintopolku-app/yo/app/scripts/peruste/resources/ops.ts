@@ -27,7 +27,8 @@ epOpintopolkuApp
       getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: true},
       getOppiaine: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId', cache: true},
       getTekstikappale: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId', cache: true},
-      getTekstikappaleWithChildren: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId/kaikki', cache: true}
+      getTekstikappaleWithChildren: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId/kaikki', cache: true},
+      getLaajaalaisetosaamiset: {method: 'GET', isArray: true, url: opsBase.OPS + '/laajaalaisetosaamiset', cache: true}
     })
   })
 
@@ -35,6 +36,6 @@ epOpintopolkuApp
     return $resource(opsBase.OPS + '/termisto/:opsId', {
       opsId: '@id',
     }, {
-      query: opsBase.CACHEDQUERY;
+      query: opsBase.CACHEDQUERY
     })
   });

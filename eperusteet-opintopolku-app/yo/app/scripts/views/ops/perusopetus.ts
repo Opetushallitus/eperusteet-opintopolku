@@ -43,8 +43,15 @@ epOpintopolkuApp
 
     $scope.otsikot = otsikot;
     $scope.ops = perusOps;
+    $scope.vlkMap = _.map($scope.ops.vuosiluokkakokonaisuudet, function(v){
+      return {
+        nimi: v.vuosiluokkakokonaisuus.nimi,
+        tunniste: v.vuosiluokkakokonaisuus._tunniste
+      };
+    });
+
     $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
-    $scope.vlk = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
+    $scope.vlkt = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
 
     $timeout(function () {
       if ($state.current.name === 'root.ops.perusopetus') {
@@ -94,7 +101,9 @@ epOpintopolkuApp
     };
 
     $scope.chooseFirstVlk = function(section) {
-     return _.find(section.items, {$vuosi: 'vuosiluokka_1'}) ? $state.go('root.ops.perusopetus.vuosiluokka', {opsId: $state.params.opsId, vuosi: 1}) : null;
+     return _.find(section.items, {$vuosi: 'vuosiluokka_1'})
+       ? $state.go('root.ops.perusopetus.vuosiluokka', {opsId: $state.params.opsId, vuosi: 1})
+       : null;
     };
 
     $scope.navi = {
@@ -110,7 +119,7 @@ epOpintopolkuApp
         }, {
           title: 'vuosiluokkakokonaisuudet',
           id: 'vlkoppiaine',
-          items: opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlk, $scope.oppiaineet),
+          items: opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlkt, $scope.oppiaineet),
           naviClasses: $scope.naviClasses,
           include: 'views/ops/opsVlk.html',
           state: $scope.state
@@ -184,26 +193,47 @@ epOpintopolkuApp
     $scope,
     vlkId,
     vlkt,
+    laajaalaisetosaamiset,
     MurupolkuData,
     Utils) {
 
-     $scope.vlkTeksti = vlkt;
-     $scope.vlkOrder = function (item) {
-      return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
+    $scope.vlk = vlkt;
+    $scope.osaamiset = _.zipBy(laajaalaisetosaamiset, 'tunniste');
+
+    $scope.vlkOrder = function (item) {
+      return Utils.nameSort($scope.osaamiset[item._laajaalainenosaaminen]);
       };
 
-     MurupolkuData.set({vlkId: vlkId, vlkNimi: $scope.vlkTeksti.nimi});
+     MurupolkuData.set({vlkId: vlkId, vlkNimi: $scope.vlk.nimi});
 
   })
 
   .controller('OpsVlkOppiaineController', function($scope,  $timeout, $state, oppiaineId, oppiaine, MurupolkuData) {
-     $scope.oppiaine = oppiaine;
+    $scope.oppiaine = oppiaine;
+
+    console.log("PARAMS", $state.params, $scope.vlkMap);
+    var currentVlk = _($scope.vlkMap)
+                      .filter(function(vlk){
+                        var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
+                        vuodet = _.map(vuodet, function(v) { return parseInt(v); });
+                        console.log(vuodet);
+                        return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
+                      })
+                      .map(function(v){
+                        return v.tunniste
+                      })
+                      .value()
+                      .pop();
+
+    console.log("C", currentVlk);
+    //filter out the correct vlk!
 
     $scope.$on('$stateChangeSuccess', function () {
       setMurupolku();
     });
 
     function setMurupolku() {
+
       $scope.item = _.reduce($scope.navi.sections[1].items, function (result, item, index) {
         if (item.$selected === true) {
           item.index = index;
