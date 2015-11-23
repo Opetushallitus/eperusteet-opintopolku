@@ -783,4 +783,35 @@ epOpintopolkuApp
           }
         }
       })
+
+      .state('root.ops.lukioopetus', {
+        url: '/lukioopetus/:opsId',
+        templateUrl: 'views/ops/lukioopetus.html',
+        controller: 'OpsLukioopetusController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          }/*,
+          lukioOps: function (opsResource, opsId) {
+            return opsResource.get({opsId: opsId}).$promise.then(function (res) {
+              return res;
+            });
+          },
+          otsikot: function (opsResource, opsId) {
+            return opsResource.getOtsikot({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            });
+          }*/
+        }
+      })
+
+      .state('root.ops.lukioopetus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'OpsPerusopetusTiedotController'
+      })
+
   });
+
