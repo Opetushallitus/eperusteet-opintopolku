@@ -44,7 +44,8 @@ epOpintopolkuApp
       return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus)(.*)/, '.$1');
     }
 
-    TermistoService.setPeruste($stateParams.perusteId);
+    //TODO adjust for ops
+    //TermistoService.setPeruste($stateParams.perusteId);
 
     MurupolkuData.set({opsId: ops.id, opsNimi: ops.nimi});
 
@@ -58,9 +59,11 @@ epOpintopolkuApp
       }
       return classes;
     };
+
     $scope.$on('$stateChangeSuccess', function () {
       epPerusopetusStateService.setState($scope.navi);
     });
+
     $scope.navi = {
       header: 'opetussuunnitelma',
       sections: [
