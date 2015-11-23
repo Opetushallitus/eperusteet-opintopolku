@@ -88,6 +88,17 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.selaus.valmentavakoulutus', {
+        url: '/valmentavakoulutus',
+        templateUrl: 'views/haku/haku.html',
+        controller: 'HakuController',
+        resolve: {
+          koulutusalaService: ['serviceConfig', 'Koulutusalat', function (serviceConfig, Koulutusalat) {
+            return Koulutusalat;
+          }]
+        }
+      })
+
       /* ESITYS */
 
       .state('root.esitys', {

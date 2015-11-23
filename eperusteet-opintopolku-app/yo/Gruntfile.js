@@ -94,16 +94,18 @@ module.exports = function(grunt) {
       },
       proxies: [{
         context: '/eperusteet-service',
-        /*host: 'localhost',
+
+        host: 'localhost',
         port: 8080,
         https: false,
-        changeOrigin: false,
-        xforward: false*/
-        host: 'itest-virkailija.oph.ware.fi',
+        changeOrigin: true,
+        xforward: false
+
+        /*host: 'itest-virkailija.oph.ware.fi',
         // host: 'testi.virkailija.opintopolku.fi',
         port: 443,
         https: true,
-        changeOrigin: true
+        changeOrigin: true*/
       }],
       livereload: {
         options: {
