@@ -88,6 +88,25 @@ epOpintopolkuApp
         hakuState: 'root.selaus.lisaopetuslista',
         sisaltoTunniste: 'losisalto',
         hasPdfCreation: true
+      },
+      'koulutustyyppi_18': {
+        nimi: 'valmentavakoulutus',
+        //oletusSuoritustapa: 'naytto',
+        //hasTutkintonimikkeet: false
+        //hakuState: 'root.selaus.lisaopetuslista',
+        //sisaltoTunniste: 'losisalto',
+        //hasPdfCreation: true
+        //oletusSuoritustapa: 'naytto',
+        //hasTutkintonimikkeet: false,
+        //hakuState: 'root.selaus.ammatillinenaikuiskoulutus',
+        //sisaltoTunniste: 'sisalto'
+        oletusSuoritustapa: 'ops',
+        hasTutkintonimikkeet: true,
+        hakuState: 'root.selaus.valmentavakoulutus',
+        sisaltoTunniste: 'sisalto',
+        hasPdfCreation: true
+
+
       }
     };
 
@@ -106,6 +125,10 @@ epOpintopolkuApp
 
     this.isEsiopetus = function (peruste) {
       return peruste.koulutustyyppi === 'koulutustyyppi_15';
+    };
+
+    this.isValmatelma = function (peruste) {
+      return peruste.koulutustyyppi === 'koulutustyyppi_18';
     };
 
     this.isSimple = function (peruste) {

@@ -77,14 +77,12 @@
         <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
       </div>
     </div>
+
+
     <div class="col-lg-4 col-lg-pull-4 col-md-6">
       <div class="sisalto-box">
-        <h2 kaanna="'etusivu.uusimmat-ammatilliset'"></h2>
-        <ul class="uusimmat">
-          <li ng-repeat="peruste in uusimmat['koulutustyyppi_1x']">
-            <a ng-href="{{peruste.url}}" ng-bind="peruste.nimi | kaanna"></a>
-          </li>
-        </ul>
+        <h2 kaanna="'etusivu.ammatilliset'"></h2>
+
         <div class="am-linkit">
           <ul>
             <li>
@@ -97,6 +95,12 @@
               <span class="link-prepend">&raquo;</span>
               <a ui-sref="root.selaus.ammatillinenaikuiskoulutus">
                 <span kaanna="'navi.ammatillinenaikuiskoulutus'"></span>
+              </a>
+            </li>
+            <li>
+              <span class="link-prepend">&raquo;</span>
+              <a ui-sref="root.selaus.valmentavakoulutus">
+                <span kaanna="'navi.valmentavakoulutus'"></span>
               </a>
             </li>
           </ul>
