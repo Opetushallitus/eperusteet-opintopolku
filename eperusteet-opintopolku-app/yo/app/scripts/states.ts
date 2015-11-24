@@ -87,6 +87,17 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.selaus.ops', {
+        url: '/ops',
+        templateUrl: 'views/ops/listaus.html',
+        controller: 'ListausController',
+        resolve: {
+          opsit: function (JulkisetOps) {
+            return JulkisetOps.query({}).$promise;
+          }
+        }
+      })
+
       /* ESITYS */
 
       .state('root.esitys', {

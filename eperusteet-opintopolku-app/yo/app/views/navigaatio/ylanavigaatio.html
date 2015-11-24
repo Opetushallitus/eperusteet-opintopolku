@@ -44,6 +44,9 @@
             <li ng-class="isAmAikuis() ? 'active' : ''">
               <a ui-sref="root.selaus.ammatillinenaikuiskoulutus" kaanna="'navi.ammatillinenaikuiskoulutus'"></a>
             </li>
+            <li ng-class="isOps() ? 'active' : ''">
+              <a ui-sref="root.selaus.ops" kaanna="'navi.opetussuunnitelmat'"></a>
+            </li>
           </ul>
         </div>
       </div>
@@ -110,6 +113,9 @@
                 <a ui-sref="root.selaus.ammatillinenaikuiskoulutus"
                    kaanna="'navi.ammatillinenaikuiskoulutus'"
                    ng-click="navCollapse()"></a>
+              </li>
+              <li ui-sref-active="active">
+                <a ui-sref="root.selaus.ops" kaanna="'navi.opetussuunnitelmat'" ng-click="navCollapse()"></a>
               </li>
               <li>
                 <a href="" ng-click="vaihdaKieli('sv')" ng-show="kieli === 'fi'" class="kieli">På svenska</a>

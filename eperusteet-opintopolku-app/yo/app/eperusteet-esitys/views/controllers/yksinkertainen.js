@@ -34,7 +34,6 @@ angular.module('eperusteet.esitys')
   };
   var peruste = sisalto[0];
   $scope.peruste = peruste;
-  console.log("sisalto", sisalto, 'peruste', peruste);
   MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
   $scope.sisallot = _.zipBy(sisalto[1], 'id');
   $scope.tekstisisalto = sisalto[1];
