@@ -813,5 +813,11 @@ epOpintopolkuApp
         controller: 'OpsPerusopetusTiedotController'
       })
 
+      .state('root.ops.lukioopetus.aihekokonaisuudet', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'OpsLukioopetusController'
+      })
+
   });
 

@@ -162,6 +162,7 @@
   "perusteen-esikatselu": "Perusteen esikatselu",
   "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa",
 
+  "opetussuunnitelma": "Opetussuunnitelma",
   "opetussuunnitelman-tiedot": "Opetussuunnitelman tiedöt",
   "opetussuunnitelman-nimi": "Opetussuunnitelman nimi",
   "kohdealueet": "Kohdealueet",
@@ -173,6 +174,10 @@
   "tila": "Tila",
   "paatospaivamaara": "Päätöspäivämäärä",
   "pohja": "Pohja",
+  "oppiaineet-ja-oppimaarat": "Oppiaineet ja oppimaarat",
+  "opetus": "Opetus",
+  "ops:-tiedot": "Ops: tiedot",
+  "kasitteet": "Käsitteet",
 
   "vuosiluokka_1": "Vuosiluokka 1",
   "vuosiluokka_2": "Vuosiluokka 2",

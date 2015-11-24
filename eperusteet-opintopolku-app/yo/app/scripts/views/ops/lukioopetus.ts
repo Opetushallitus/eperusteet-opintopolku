@@ -31,12 +31,35 @@ epOpintopolkuApp
     opsStateService,
     epEsitysSettings,
     opsUtils,
-    opsLukioTabService) {
+    epLukioTabService) {
 
-    $scope.stuff = "STUFF";
+    $scope.isNaviVisible = _.constant(true);
+    $scope.tabs = epLukioTabService.tabs;
+    $scope.tabClass = epLukioTabService.tabClassSelector;
+    $scope.currentState = function() { return 'a' };
 
-    $scope.tabs = opsLukioTabService.tabs;
-    $scope.tabClass = opsLukioTabService.tabClassSelector;
+    $scope.naviClasses = function (item) {
+      var classes = ['depth' + item.depth];
+      if (item.$selected) {
+        classes.push('tekstisisalto-active');
+      }
+      if (item.$header) {
+        classes.push('tekstisisalto-active-header');
+      }
+      if (item.$kurssi && item.$kurssi.tyyppi) {
+        classes.push('kurssi');
+      }
+      if (item.$kurssi && item.$kurssi.tyyppi === 'PAKOLLINEN') {
+        classes.push('kurssi-pakollinen');
+      }
+      if (item.$kurssi && item.$kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA') {
+        classes.push('kurssi-soveltava');
+      }
+      if (item.$kurssi && item.$kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA') {
+        classes.push('kurssi-syventava');
+      }
+      return classes;
+    };
 
     $scope.currentState = function(){
       var parts = _.words($state.current.name);
@@ -55,86 +78,16 @@ epOpintopolkuApp
       sections: [{
         id: 'suunnitelma',
         include: 'eperusteet-esitys/views/lukionyhteisetosuudet.html',
-        items: "",//epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto),
+        items: [], //epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto),
         naviClasses: $scope.naviClasses,
         title: 'yhteiset-osuudet'
       }, {
         title: 'opetuksen-sisallot',
         id: 'sisalto',
         include: 'eperusteet-esitys/views/oppiaineetsivunavi.html',
-        items: "",//epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
+        items: [],// epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
         naviClasses: $scope.naviClasses
       }]
     };
 
-
-  })
-
-.factory('opsLukioTabService', function ($state) {
-  return {
-    tabClassSelector: function(tabName) {
-      var className = null;
-      switch(tabName) {
-        case 'tavoitteet':
-          className = _.endsWith($state.current.name, tabName) ? true : null;
-          break;
-        case 'aihekokonaisuudet':
-          className = _.endsWith($state.current.name, tabName) ? true : null;
-          break;
-        case 'sisalto':
-          className = !_.endsWith($state.current.name, 'tavoitteet') && !_.endsWith($state.current.name, 'aihekokonaisuudet') ? true : null;
-          break;
-        default:
-          className = null;
-      }
-      return className;
-    },
-    tabs: [
-      {
-        title: {
-          oppiaine: 'oppiainen-sisalto',
-          kurssi: 'kurssin-sisalto'
-        },
-        name: 'sisalto',
-        url: function(name){
-          if (name === 'kurssi') {
-            return 'root.lukio.kurssi';
-          }
-          if (name === 'oppiaine') {
-            return 'root.lukio.oppiaine';
-          }
-        }
-      },
-      {
-        title: {
-          oppiaine: 'opetuksen-yleiset-tavoitteet',
-          kurssi: 'opetuksen-yleiset-tavoitteet'
-        },
-        name: 'tavoitteet',
-        url: function (name) {
-          if (name === 'kurssi') {
-            return 'root.lukio.kurssi.tavoitteet';
-          }
-          if (name === 'oppiaine') {
-            return 'root.lukio.oppiaine.tavoitteet';
-          }
-        }
-      },
-      {
-        title:  {
-          oppiaine: 'aihekokonaisuudet',
-          kurssi: 'aihekokonaisuudet'
-        },
-        name: 'aihekokonaisuudet',
-        url: function (name) {
-          if (name === 'kurssi') {
-            return 'root.lukio.kurssi.aihekokonaisuudet';
-          }
-          if (name === 'oppiaine') {
-            return 'root.lukio.oppiaine.aihekokonaisuudet';
-          }
-        }
-      }
-    ]
-  };
-});
+  });
