@@ -28,7 +28,8 @@ var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
   'angularSpinner',
   'angulartics',
   'angulartics.piwik',
-  'eperusteet.esitys'
+  'eperusteet.esitys',
+  'ngStorage'
 ]);
 
 /* jshint ignore:end */

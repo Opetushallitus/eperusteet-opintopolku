@@ -1,7 +1,6 @@
 'use strict';
 
 
-/*jshint maxcomplexity:false */
 epOpintopolkuApp
   .controller('YlanavigaatioController', function ($scope, $state, Kieli, Haku, $stateParams) {
     $scope.kieli = Kieli.getUiKieli();
@@ -36,7 +35,9 @@ epOpintopolkuApp
       } else if ($scope.isAmPerus()) {
         return 'navi.ammatillinenperuskoulutus';
       } else if ($scope.isAmAikuis()) {
-        return 'navi.ammatillinenaikuiskoulutus';
+        return 'navi.ammatillinenperuskoulutus';
+      } else if ($scope.isOps()) {
+        return 'navi.opetussuunnitelmat';
       } else if ($state.includes('root.tiedote.**')) {
         return 'navi.tiedote';
       } else if ($state.includes('root.esitys.peruste.**')) {
@@ -65,6 +66,12 @@ epOpintopolkuApp
     $scope.isAmAikuis = function () {
       if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenaikuiskoulutus' ||
         $state.includes('root.selaus.ammatillinenaikuiskoulutus')) {
+        return true;
+      }
+    };
+
+    $scope.isOps = function () {
+      if ($state.includes('root.ops.**') || $state.includes('root.selaus.ops.**')) {
         return true;
       }
     };
