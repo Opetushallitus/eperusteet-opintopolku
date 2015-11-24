@@ -100,9 +100,9 @@ module.exports = function(grunt) {
         changeOrigin: true
       }, {
         context: '/eperusteet-ylops-service',
-        host: 'localhost',
-        port: 8080,
-        https: false,
+        host: 'itest-virkailija.oph.ware.fi',
+        port: 443,
+        https: true,
         changeOrigin: true
       }],
       livereload: {
