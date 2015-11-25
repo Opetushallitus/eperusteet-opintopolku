@@ -140,7 +140,6 @@
     this.traverse = traverse;
     this.isActive = isActive;
   })
-
   .controller('epSivuNaviController', function ($scope, $state, Algoritmit, Utils, epSivunaviUtils,
     epEsitysSettings, $window) {
     $scope.menuCollapsed = true;

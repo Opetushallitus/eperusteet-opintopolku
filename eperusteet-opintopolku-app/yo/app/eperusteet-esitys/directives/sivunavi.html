@@ -3,7 +3,7 @@
   <div class="sivunavi-toggler-wrapper">
     <div id="sivunavi-valikko-nappi" class="sivunavi-toggler" ng-click="toggleSideMenu()"
          ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'"
-         ng-attr-title="{{menuCollapsed && ('sivunavigointi-avaa-menu'|kaanna) || ('sivunavigointi-sulje-menu'|kaanna)}}">
+         ng-attr-title="{{menuCollapsed && ('sivunavigointi-avaa-menu' | kaanna) || ('sivunavigointi-sulje-menu' | kaanna)}}">
       <div class="sivunavi-valinta">
         <span class="glyphicon glyphicon-align-justify"></span>
       </div>
@@ -12,7 +12,7 @@
 
   <!-- partials/sivunavi2.html -->
   <div class="sivunavi-box" ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}"
-       ng-style="{top: scrollTop}" ng-show="!menuCollapsed">
+       ng-style="{top: scrollTop}">
 
     <div class="list-group" off-click="toggleSideMenu()" off-click-filter="#sivunavi-valikko-nappi" off-click-if="!menuCollapsed">
         <div class="list-group-item header" ng-if="header">
@@ -41,7 +41,7 @@
                   <span ng-show="!item.$leaf" ng-click="toggle(section.items, item, $event)" class="glyphicon"
                     ng-class="{'glyphicon-chevron-right': item.$collapsed, 'glyphicon-chevron-down': !item.$collapsed}"></span>
                 </div>
-                <span class="linktext" ng-class="{'action-link': !!item.href}" ep-highlight="search.term" ng-bind="item.label|kaanna"></span>
+                <span class="linktext" ng-class="{'action-link': !!item.href}" ep-highlight="search.term" ng-bind="item.label | kaanna"></span>
               </a>
             </div>
           </accordion-group>
