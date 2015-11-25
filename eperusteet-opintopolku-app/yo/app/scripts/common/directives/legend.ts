@@ -22,11 +22,11 @@ epOpintopolkuApp
       restrict: 'EA',
       scope: {},
       templateUrl: 'views/common/directives/legend.html',
-      controller: 'legendController'
+      controller: 'LegendController'
     };
   })
 
- .controller('legendController', function($scope, $state){
+ .controller('LegendController', function($scope, $state){
    $scope.tyypit = ['valtakunnallinen','paikallinen','pakollinen', 'syventava', 'soveltava'];
    $scope.stateParams = _.words($state.current.name);
    $scope.isOppiaineState = function() {
