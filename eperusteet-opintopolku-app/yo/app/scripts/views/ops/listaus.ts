@@ -120,14 +120,14 @@ epOpintopolkuApp
           var loydetty = false;
 
           _.each(ops.organisaatiot, function (org) {
-            if (org.nimi[$scope.kieli] && _.includes(org.nimi[$scope.kieli].toLowerCase(),
+            if (org.nimi && org.nimi[$scope.kieli] && _.includes(org.nimi[$scope.kieli].toLowerCase(),
                 avainsana.toLowerCase())) {
               loydetty = true;
             }
           });
 
           _.each(ops.kunnat, function (kunta) {
-            if (kunta.nimi[$scope.kieli] && _.includes(kunta.nimi[$scope.kieli].toLowerCase(),
+            if (kunta.nimi && kunta.nimi[$scope.kieli] && _.includes(kunta.nimi[$scope.kieli].toLowerCase(),
                 avainsana.toLowerCase()))
               loydetty = true;
           });
