@@ -2,7 +2,7 @@
 
 
 epOpintopolkuApp
-  .controller('YlanavigaatioController', function ($scope, $state, Kieli, Haku, $stateParams) {
+  .controller('YlanavigaatioController', function ($rootScope, $scope, $state, Kieli, Haku, $stateParams, Kaanna) {
     $scope.kieli = Kieli.getUiKieli();
     $scope.nykyinenTila = $state;
     $scope.navCollapsed = true;
@@ -20,32 +20,6 @@ epOpintopolkuApp
       opintopolku: {
         fi: 'https://opintopolku.fi/',
         sv: 'https://studieinfo.fi/'
-      }
-    };
-
-    $scope.valittuOsio = function () {
-      if ($state.includes('root.etusivu.**')) {
-        return 'navi.etusivu';
-      } else if ($state.includes('root.esiopetus.**')) {
-        return 'navi.esiopetus';
-      } else if ($state.includes('root.perusopetus.**')) {
-        return 'navi.perusopetus';
-      } else if ($state.includes('root.lisaopetus.**')) {
-        return 'navi.lisaopetus';
-      } else if ($scope.isAmPerus()) {
-        return 'navi.ammatillinenperuskoulutus';
-      } else if ($scope.isAmAikuis()) {
-        return 'navi.ammatillinenperuskoulutus';
-      } else if ($scope.isOps()) {
-        return 'navi.opetussuunnitelmat';
-      } else if ($state.includes('root.tiedote.**')) {
-        return 'navi.tiedote';
-      } else if ($state.includes('root.esitys.peruste.**')) {
-        return 'navi.peruste';
-      } else if ($state.includes('root.lukio.**')) {
-        return 'navi.lukio';
-      } else {
-        return '';
       }
     };
 
@@ -75,6 +49,38 @@ epOpintopolkuApp
         return true;
       }
     };
+
+    $scope.valittuOsio = function () {
+      if ($state.includes('root.etusivu.**')) {
+        return 'navi.etusivu';
+      } else if ($state.includes('root.esiopetus.**')) {
+        return 'navi.esiopetus';
+      } else if ($state.includes('root.perusopetus.**')) {
+        return 'navi.perusopetus';
+      } else if ($state.includes('root.lisaopetus.**')) {
+        return 'navi.lisaopetus';
+      } else if ($scope.isAmPerus()) {
+        return 'navi.ammatillinenperuskoulutus';
+      } else if ($scope.isAmAikuis()) {
+        return 'navi.ammatillinenperuskoulutus';
+      } else if ($scope.isOps()) {
+        return 'navi.opetussuunnitelmat';
+      } else if ($state.includes('root.tiedote.**')) {
+        return 'navi.tiedote';
+      } else if ($state.includes('root.esitys.peruste.**')) {
+        return 'navi.peruste';
+      } else if ($state.includes('root.lukio.**')) {
+        return 'navi.lukio';
+      } else {
+        return '';
+      }
+    };
+
+    $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
+
+    $rootScope.$on('$stateChangeSuccess', function () {
+      $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
+    });
 
     var amOsio = null;
     $scope.$watch(function () {

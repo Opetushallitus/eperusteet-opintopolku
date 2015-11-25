@@ -62,6 +62,8 @@ epOpintopolkuApp
     };
     $scope.koulutustyypit = Object.keys($scope.koulutustyypitLinkit);
 
+    $scope.hakuparametrit = {};
+
     // Sivunvaihto
     $scope.nykyinenSivu = 1; // Alkaa ykkösestä, mutta serverillä nollasta
     $scope.sivukoko = 1;
