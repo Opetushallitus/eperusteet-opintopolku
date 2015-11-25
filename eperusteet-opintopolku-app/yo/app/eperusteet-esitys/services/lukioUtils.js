@@ -100,8 +100,8 @@ angular.module('eperusteet.esitys')
       tabs: [
       {
         title: {
-          oppiaine: 'oppiaine-sisalto',
-          kurssi: 'kurssi-sisalto'
+          oppiaine: 'oppiaineen-sisalto',
+          kurssi: 'kurssin-sisalto'
         },
         name: 'sisalto',
         url: function(name){

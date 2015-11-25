@@ -20,6 +20,7 @@
   "etusivu.esiopetuksen-peruste": "Esiopetuksen peruste",
   "etusivu.perusopetuksen-peruste": "Perusopetuksen peruste",
   "etusivu.lukiokoulutuksen-peruste": "Lukiokoulutuksen peruste",
+  "etusivu.ammatilliset": "Ammatillinen koulutus",
 
   "virhe.jotain-meni-pieleen": "Oho! Jotain meni pieleen.",
 
@@ -137,6 +138,7 @@
   "navi.varhaiskasvatus": "Varhaiskasvatus",
   "navi.ammatillinenperuskoulutus": "Ammatillinen peruskoulutus",
   "navi.ammatillinenaikuiskoulutus": "Ammatillinen aikuiskoulutus",
+  "navi.valmentavakoulutus": "Valmentava koulutus",
   "navi.valikkon-otsikko": "ePerusteet valikko",
   "navi.tiedote": "Tiedote",
   "navi.peruste": "Peruste",
@@ -157,6 +159,11 @@
   "soveltavat-kurssit": "Soveltavat kurssit",
   "keskeiset-sisallot": "Keskeiset sisällöt",
   "tavoitteet-ja-keskeiset-sisallot": "Tavoitteet ja keskeiset sisällöt",
-  "oppiaine-sisalto": "Oppiaine sisältö",
-  "kurssi-sisalto": "Kurssi sisältö"
+  "oppiaineen-sisalto": "Oppiaineen sisältö",
+  "kurssin-sisalto": "Kurssin sisältö",
+  "perusteen-esikatselu": "Perusteen esikatselu",
+  "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa",
+
+  "osaamistavoitteet": "Osaamistavoitteet",
+  "osaamisen-arviointi": "Osaamisen arviointi"
 }

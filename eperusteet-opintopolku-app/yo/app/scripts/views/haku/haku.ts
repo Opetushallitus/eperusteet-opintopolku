@@ -46,6 +46,19 @@ epOpintopolkuApp
       suoritustapa: 'naytto',
       perusteTyyppi: 'normaali',
       tila: 'valmis'
+    },
+    'root.selaus.valmentavakoulutus': {
+      nimi: '',
+      koulutusala: '',
+      tyyppi: 'koulutustyyppi_18',
+      kieli: uikieli,
+      opintoala: '',
+      siirtyma: false,
+      sivu: 0,
+      sivukoko: 20,
+      suoritustapa: 'ops',
+      perusteTyyppi: 'normaali',
+      tila: 'valmis'
     }
   };
 
@@ -68,7 +81,7 @@ epOpintopolkuApp
 
 .controller('HakuController', function($scope, $rootScope, $state, Perusteet, Haku,
   koulutusalaService, Kieli, YleinenData, MurupolkuData, Kaanna) {
-  var pat = '';
+  var pat: any = '';
   var osio = _.last($state.current.name.split('.'));
   Haku.osio = osio;
   var otsikko = 'navi.' + osio;
@@ -162,7 +175,11 @@ epOpintopolkuApp
   };
 
   $scope.piilotaKoulutustyyppi = function() {
-    return $state.current.name === 'root.selaus.ammatillinenperuskoulutus';
+    return $state.current.name === 'root.selaus.ammatillinenperuskoulutus' || $scope.isValma();
+  };
+
+  $scope.isValma = function () {
+    return $state.current.name === 'root.selaus.valmentavakoulutus';
   };
 
   $scope.$on('changed:sisaltokieli', $scope.tyhjenna);

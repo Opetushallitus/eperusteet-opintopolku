@@ -49,6 +49,10 @@ epOpintopolkuApp
     'koulutustyyppi_20': {
       tyyppi: 'koulutustyyppi_20',
       tila: 'valmis'
+    },
+    'koulutustyyppi_18': {
+      tyyppi: 'koulutustyyppi_18',
+      tila: 'valmis'
     }
   };
 
@@ -62,6 +66,7 @@ epOpintopolkuApp
   var getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
   var getEsiopetus = _.partial(getGeneric, 'koulutustyyppi_15');
   var getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
+  var getValma = _.partial(getGeneric, 'koulutustyyppi_18');
   var getVarhaiskasvatus = _.partial(getGeneric, 'koulutustyyppi_20');
 
   this.fetch = function (cb) {
@@ -76,7 +81,7 @@ epOpintopolkuApp
         });
       });
     }).$promise;
-    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getLisaopetus(), getVarhaiskasvatus()]).then(function () {
+    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getLisaopetus(), getVarhaiskasvatus(), getValma()]).then(function () {
       cb(perusteet);
     });
   };
@@ -85,6 +90,7 @@ epOpintopolkuApp
   this.getEsiopetus = getEsiopetus;
   this.getLisaopetus = getLisaopetus;
   this.getVarhaiskasvatus = getVarhaiskasvatus;
+  this.getValma = getValma;
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
