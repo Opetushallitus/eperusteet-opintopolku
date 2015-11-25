@@ -11,7 +11,7 @@
       <div class="row">
         <div class="col-md-6 col-xs-12">
           <div class="form-group">
-            <label for="ops-nimi" kaanna="'opetussuunnitelma-haku'"></label>
+            <label for="ops-nimi" kaanna="'opetussuunnitelman-nimi'"></label>
             <div class="input-group">
               <div class="input-group-addon" icon-role="search"></div>
               <input id="ops-nimi" type="text" class="form-control"
@@ -108,13 +108,15 @@
         <td class="ops-td-oppilaitos">
           <!--<span kaanna="palautaAlinOrganisaatio(ops.organisaatiot)"></span>-->
           <div ng-repeat="org in ops.organisaatiot | filter:{tyypit:'oppilaitos'} | orderBy:nimiSort">
-            <span kaanna="org.nimi"></span><br ng-if="!$last">
+            <span kaanna="org.nimi"></span>
+            <br ng-if="!$last">
           </div>
         </td>
         <td class="ops-td-organisaatio">
           <!--<span kaanna="palautaAlinOrganisaatio(ops.organisaatiot)"></span>-->
           <div ng-repeat="org in ops.organisaatiot | filter:{tyypit:'koulutustoimija'} | orderBy:nimiSort">
-            <span kaanna="org.nimi"></span><br ng-if="!$last">
+            <span kaanna="org.nimi"></span>
+            <br ng-if="!$last">
           </div>
         </td>
         <td class="ops-td-paikkakunta">
@@ -122,7 +124,8 @@
             <span kaanna="kunta.nimi"></span>
           </div>-->
           <div ng-repeat="kunta in ops.kunnat | orderBy:nimiSort">
-            <span ng-bind="kunta.nimi | kaanna"></span><br ng-if="!$last">
+            <span kaanna="kunta.nimi"></span>
+            </span><br ng-if="!$last">
           </div>
         </td>
       </tr>
