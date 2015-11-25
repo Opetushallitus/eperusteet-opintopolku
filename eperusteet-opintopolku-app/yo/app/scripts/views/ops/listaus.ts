@@ -66,7 +66,7 @@ epOpintopolkuApp
 
     // Sivunvaihto
     $scope.nykyinenSivu = 1; // Alkaa ykkösestä, mutta serverillä nollasta
-    $scope.sivukoko = 1;
+    $scope.sivukoko = 20;
     $scope.opsitAlku = 0;
     $scope.opsitLoppu = $scope.sivukoko;
 
