@@ -23,6 +23,33 @@ epOpintopolkuApp
       }
     };
 
+    $scope.isPerusopetus = function () {
+      if (($state.includes('**.perusopetus.**') && !$state.includes('**.perusopetus.**'))
+        || ($state.includes('**.lisaopetus.**') && !$state.includes('**.ops.**'))) {
+        return true;
+      }
+    };
+
+    $scope.isAmPerus = function () {
+      if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenperuskoulutus' ||
+        $state.includes('root.selaus.ammatillinenperuskoulutus')) {
+        return true;
+      }
+    };
+
+    $scope.isAmAikuis = function () {
+      if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenaikuiskoulutus' ||
+        $state.includes('root.selaus.ammatillinenaikuiskoulutus')) {
+        return true;
+      }
+    };
+
+    $scope.isOps = function () {
+      if ($state.includes('root.ops.**') || $state.includes('root.selaus.ops.**')) {
+        return true;
+      }
+    };
+
     $scope.valittuOsio = function () {
       if ($state.includes('root.etusivu.**')) {
         return 'navi.etusivu';
@@ -54,33 +81,6 @@ epOpintopolkuApp
     $rootScope.$on('$stateChangeSuccess', function () {
       $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
     });
-
-    $scope.isPerusopetus = function () {
-      if (($state.includes('**.perusopetus.**') && !$state.includes('**.perusopetus.**'))
-        || ($state.includes('**.lisaopetus.**') && !$state.includes('**.ops.**'))) {
-        return true;
-      }
-    };
-
-    $scope.isAmPerus = function () {
-      if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenperuskoulutus' ||
-        $state.includes('root.selaus.ammatillinenperuskoulutus')) {
-        return true;
-      }
-    };
-
-    $scope.isAmAikuis = function () {
-      if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenaikuiskoulutus' ||
-        $state.includes('root.selaus.ammatillinenaikuiskoulutus')) {
-        return true;
-      }
-    };
-
-    $scope.isOps = function () {
-      if ($state.includes('root.ops.**') || $state.includes('root.selaus.ops.**')) {
-        return true;
-      }
-    };
 
     var amOsio = null;
     $scope.$watch(function () {
