@@ -17,10 +17,14 @@
 'use strict';
 
 epOpintopolkuApp
-.service('TermistoService', function (TermistoCRUD, $q, $timeout) {
+.service('TermistoService', function (TermistoCRUD, $q, $timeout, opsTermisto) {
   var peruste = null;
   var cached = {};
   var loading = false;
+  var Resource = {
+    CRUD: TermistoCRUD,
+    params: null
+  };
   this.preload = function () {
     if (!cached[peruste.id] && !loading) {
       loading = true;
@@ -33,18 +37,27 @@ epOpintopolkuApp
     }
   };
   this.getAll = function () {
-    return TermistoCRUD.query({perusteId: peruste.id}, function (res) {
+    return Resource.CRUD.query(Resource.params, function (res) {
       cached[peruste.id] = res;
     }).$promise;
   };
-  this.setPeruste = function (value) {
+  this.setPeruste = function (value, isOps = false) {
     peruste = value;
+    if (!isOps) {
+      Resource.params = {perusteId: peruste.id};
+    }
+    if (isOps) {
+      Resource.CRUD = opsTermisto;
+      Resource.params = {opsId: peruste.id};
+    }
   };
+
   function findTermi(avain) {
     return _.find(cached[peruste.id], function (item) {
       return item.avain === avain;
     });
   }
+
   this.getWithAvain = function (avain, cached) {
     if (cached) {
       return findTermi(avain);

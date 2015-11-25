@@ -47,6 +47,9 @@
             <li ng-class="isValmatelma() ? 'active' : ''">
               <a ui-sref="root.selaus.valmentavakoulutus" kaanna="'navi.valmentavakoulutus'"></a>
             </li>
+            <!--<li ng-class="isOps() ? 'active' : ''">
+              <a ui-sref="root.selaus.ops" kaanna="'navi.opetussuunnitelmat'"></a>
+            </li>-->
           </ul>
         </div>
       </div>
@@ -77,7 +80,7 @@
       <nav class="navbar navbar-ylanavigaatio-mobile navbar-static-top" role="navigation">
         <div class="navbar-header">
 
-          <div class="navbar-brand" ng-show="navCollapsed" kaanna="valittuOsio()">
+          <div class="navbar-brand" ng-show="navCollapsed" ng-bind="valittuOsioNimi">
           </div>
           <div class="navbar-brand" ng-show="!navCollapsed" kaanna="'navi.valikkon-otsikko'">
           </div>
@@ -114,6 +117,9 @@
                    kaanna="'navi.ammatillinenaikuiskoulutus'"
                    ng-click="navCollapse()"></a>
               </li>
+              <!--<li ui-sref-active="active">
+                <a ui-sref="root.selaus.ops" kaanna="'navi.opetussuunnitelmat'" ng-click="navCollapse()"></a>
+              </li>-->
               <li>
                 <a href="" ng-click="vaihdaKieli('sv')" ng-show="kieli === 'fi'" class="kieli">På svenska</a>
                 <a href="" ng-click="vaihdaKieli('fi')" ng-show="kieli === 'sv'" class="kieli">Suomeksi</a>

@@ -94,4 +94,24 @@ angular.module('eperusteet.esitys')
         scope.amEsitys = scope.linkVar === 'osanId';
       }
     };
+  })
+
+  .directive('opsTekstiotsikko', function () {
+    return {
+      restrict: 'E',
+      scope: {
+        model: '=',
+        level: '@',
+        linkVar: '='
+      },
+      template: '<span class="otsikko-wrap"><span ng-bind-html="model.tekstiKappale.nimi | kaanna | unsafe"></span>' +
+      '  <span class="teksti-linkki">' +
+      '    <a ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
+      '  </span></span>',
+      link: function (scope, element) {
+        var headerEl = angular.element('<h' + scope.level + '>');
+        element.find('.otsikko-wrap').wrap(headerEl);
+        scope.amEsitys = scope.linkVar === 'osanId';
+      }
+    };
   });

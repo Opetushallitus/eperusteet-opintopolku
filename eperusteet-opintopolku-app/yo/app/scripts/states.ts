@@ -17,9 +17,8 @@
 'use strict';
 
 epOpintopolkuApp
-  .config(function($stateProvider) {
+  .config(function ($stateProvider) {
     $stateProvider
-
       .state('root', {
         url: '/:lang',
         templateUrl: 'views/navisisalto.html',
@@ -99,6 +98,17 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.selaus.ops', {
+        url: '/ops',
+        templateUrl: 'views/ops/listaus.html',
+        controller: 'ListausController',
+        resolve: {
+          opsit: function (JulkisetOps) {
+            return JulkisetOps.query({}).$promise;
+          }
+        }
+      })
+
       /* ESITYS */
 
       .state('root.esitys', {
@@ -111,17 +121,23 @@ epOpintopolkuApp
         templateUrl: 'views/esitys/esitys.html',
         controller: 'EsitysController',
         resolve: {
-          peruste: function(serviceConfig, $stateParams, Perusteet) {
-            return Perusteet.get({ perusteId: $stateParams.perusteId }).$promise;
+          peruste: function (serviceConfig, $stateParams, Perusteet) {
+            return Perusteet.get({perusteId: $stateParams.perusteId}).$promise;
           },
-          sisalto: function(serviceConfig, $stateParams, SuoritustapaSisalto) {
-            return SuoritustapaSisalto.get({ perusteId: $stateParams.perusteId, suoritustapa: $stateParams.suoritustapa }).$promise;
+          sisalto: function (serviceConfig, $stateParams, SuoritustapaSisalto) {
+            return SuoritustapaSisalto.get({
+              perusteId: $stateParams.perusteId,
+              suoritustapa: $stateParams.suoritustapa
+            }).$promise;
           },
-          arviointiasteikot: function(serviceConfig, Arviointiasteikot) {
+          arviointiasteikot: function (serviceConfig, Arviointiasteikot) {
             return Arviointiasteikot.list({}).$promise;
           },
-          tutkinnonOsat: function(serviceConfig, $stateParams, PerusteTutkinnonosat) {
-            return PerusteTutkinnonosat.query({ perusteId: $stateParams.perusteId, suoritustapa: $stateParams.suoritustapa }).$promise;
+          tutkinnonOsat: function (serviceConfig, $stateParams, PerusteTutkinnonosat) {
+            return PerusteTutkinnonosat.query({
+              perusteId: $stateParams.perusteId,
+              suoritustapa: $stateParams.suoritustapa
+            }).$promise;
           },
           koulutusalaService: function (serviceConfig, Koulutusalat) {
             return Koulutusalat;
@@ -141,7 +157,7 @@ epOpintopolkuApp
           // $stateParams changes between config and controller
           //
           // Got to live third-party libs
-          realParams: function($stateParams) {
+          realParams: function ($stateParams) {
             return _.clone($stateParams);
           }
         }
@@ -192,8 +208,8 @@ epOpintopolkuApp
           peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
             return !perusteId ? UusimmatPerusteetService.getPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise;
           },
-          sisalto: function(serviceConfig, peruste, $q, LaajaalaisetOsaamiset,
-                            Oppiaineet, Vuosiluokkakokonaisuudet, SuoritustapaSisalto) {
+          sisalto: function (serviceConfig, peruste, $q, LaajaalaisetOsaamiset,
+                             Oppiaineet, Vuosiluokkakokonaisuudet, SuoritustapaSisalto) {
             if (_.isArray(peruste.data)) {
               peruste = peruste.data[0];
             }
@@ -259,7 +275,7 @@ epOpintopolkuApp
             return $stateParams.oppiaineId;
           },
           oppiaine: function (serviceConfig, perusteId, Oppiaineet, oppiaineId) {
-            return Oppiaineet.get({ perusteId: perusteId, osanId: oppiaineId }).$promise;
+            return Oppiaineet.get({perusteId: perusteId, osanId: oppiaineId}).$promise;
           }
         }
       })
@@ -273,7 +289,9 @@ epOpintopolkuApp
             return $stateParams.oppiaineId;
           },
           oppiaine: function (serviceConfig, perusteId, Oppiaineet, oppiaineId) {
-            return oppiaineId ? Oppiaineet.get({ perusteId: perusteId, osanId: oppiaineId }).$promise : null;
+            return oppiaineId ? Oppiaineet.get({
+              perusteId: perusteId, osanId: oppiaineId
+            }).$promise : null;
           }
         }
       })
@@ -290,13 +308,15 @@ epOpintopolkuApp
           },
           peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
             return !perusteId ? UusimmatPerusteetService.getPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise
-              .then(function(res){
+              .then(function (res) {
                 return res;
               });
           },
-          oppiaineRakenne: function(LukioYleistiedot, perusteId){
-            return LukioYleistiedot.getOppiaineRakenne({perusteId: perusteId}).$promise
-              .then(function(res){
+          oppiaineRakenne: function (LukioYleistiedot, perusteId) {
+            return LukioYleistiedot.getOppiaineRakenne({
+                perusteId: perusteId
+              }).$promise
+              .then(function (res) {
                 return res;
               });
           },
@@ -306,7 +326,6 @@ epOpintopolkuApp
                 var lapset = _.filter(res.lapset, function (lapsi) {
                   return lapsi.perusteenOsa.osanTyyppi === 'tekstikappale';
                 });
-                console.log({'lapset': lapset, 'id': perusteId});
                 return {'lapset': lapset, 'id': perusteId};
               });
           }
@@ -328,8 +347,10 @@ epOpintopolkuApp
             return $stateParams.tekstikappaleId;
           },
           tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
-            return LukioTekstikappale.getByViite({viiteId: tekstikappaleId}).$promise
-              .then(function(res){
+            return LukioTekstikappale.getByViite({
+              viiteId: tekstikappaleId
+              }).$promise
+              .then(function (res) {
                 return res;
               });
           },
@@ -348,8 +369,11 @@ epOpintopolkuApp
             return $stateParams.oppiaineId;
           },
           oppiaine: function (serviceConfig, perusteId, LukioOppiaineet, oppiaineId) {
-            return LukioOppiaineet.getOppiaine({ perusteId: perusteId, oppiaineId: oppiaineId }).$promise
-              .then(function(res){
+            return LukioOppiaineet.getOppiaine({
+              perusteId: perusteId,
+              oppiaineId: oppiaineId
+              }).$promise
+              .then(function (res) {
                 return res;
               });
           }
@@ -418,7 +442,6 @@ epOpintopolkuApp
         }
       })
 
-
       .state('root.esiopetus', {
         url: '/esiopetus/:perusteId',
         templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',
@@ -430,7 +453,7 @@ epOpintopolkuApp
           peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
             return !perusteId ? UusimmatPerusteetService.getEsiopetus() : Perusteet.get({perusteId: perusteId}).$promise;
           },
-          sisalto: function(serviceConfig, peruste, $q, SuoritustapaSisalto) {
+          sisalto: function (serviceConfig, peruste, $q, SuoritustapaSisalto) {
             if (_.isArray(peruste.data)) {
               peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};
             }
@@ -483,7 +506,7 @@ epOpintopolkuApp
           peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
             return !perusteId ? UusimmatPerusteetService.getLisaopetus() : Perusteet.get({perusteId: perusteId}).$promise;
           },
-          sisalto: function(serviceConfig, peruste, $q, SuoritustapaSisalto) {
+          sisalto: function (serviceConfig, peruste, $q, SuoritustapaSisalto) {
             if (_.isArray(peruste.data)) {
               peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};
             }
@@ -523,6 +546,355 @@ epOpintopolkuApp
             return epTekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
           }
         }
+      })
+
+      /* OPETUSSUUNNITELMAT */
+
+      .state('root.ops', {
+        url: '/ops',
+        template: '<div ui-view></div>'
+      })
+
+      .state('root.ops.esiopetus', {
+        url: '/esiopetus/:opsId',
+        templateUrl: 'views/ops/yksinkertainen.html',
+        controller: 'OpsYksinkertainenController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          otsikot: function (opsResource, opsId) {
+            return opsResource.getOtsikot({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            });
+          },
+          ops: function (opsResource, opsId) {
+            return opsResource.get({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            });
+          },
+        }
+      })
+
+      .state('root.ops.esiopetus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'OpsYksinkertainenTiedotController'
+      })
+
+      .state('root.ops.esiopetus.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'OpsTekstikappaleController',
+        resolve: {
+          viiteId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
+            return opsResource.getTekstikappaleWithChildren({
+              opsId: opsId,
+              viiteId: viiteId
+            }).$promise.then(function (res) {
+              console.log("SHOW", res);
+              return res;
+            })
+          }
+        }
+      })
+
+      .state('root.ops.lisaopetus', {
+        url: '/lisaopetus/:opsId',
+        templateUrl: 'views/ops/yksinkertainen.html',
+        controller: 'OpsYksinkertainenController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          otsikot: function (opsResource, opsId) {
+            return opsResource.getOtsikot({opsId: opsId}).$promise.then(function (res) {
+              return res;
+            });
+          },
+          ops: function (opsResource, opsId) {
+            return opsResource.get({opsId: opsId}).$promise.then(function (res) {
+              return res;
+            });
+          }
+        }
+      })
+
+      .state('root.ops.lisaopetus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'OpsYksinkertainenTiedotController'
+      })
+
+      .state('root.ops.lisaopetus.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'OpsTekstikappaleController',
+        resolve: {
+          viiteId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
+            return opsResource.getTekstikappaleWithChildren({
+              opsId: opsId,
+              viiteId: viiteId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          }
+        }
+      })
+
+      .state('root.ops.varhaiskasvatus', {
+        url: '/varhaiskasvatus/:opsId',
+        templateUrl: 'views/ops/yksinkertainen.html',
+        controller: 'OpsYksinkertainenController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          otsikot: function (opsResource, opsId) {
+            return opsResource.getOtsikot({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            });
+          },
+          ops: function (opsResource, opsId) {
+            return opsResource.get({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            });
+          }
+        }
+      })
+
+      .state('root.ops.varhaiskasvatus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'OpsYksinkertainenTiedotController'
+      })
+
+      .state('root.ops.varhaiskasvatus.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'OpsTekstikappaleController',
+        resolve: {
+          viiteId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
+            return opsResource.getTekstikappaleWithChildren({
+              opsId: opsId,
+              viiteId: viiteId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus', {
+        url: '/perusopetus/:opsId',
+        templateUrl: 'views/ops/perusopetus.html',
+        controller: 'OpsPerusopetusController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          perusOps: function (opsResource, opsId) {
+            return opsResource.get({opsId: opsId}).$promise.then(function (res) {
+              return res;
+            });
+          },
+          otsikot: function (opsResource, opsId) {
+            return opsResource.getOtsikot({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            });
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'OpsPerusopetusTekstikappaleController',
+        resolve: {
+          viiteId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          },
+          tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
+            return opsResource.getTekstikappaleWithChildren({
+              opsId: opsId,
+              viiteId: viiteId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'OpsPerusopetusTiedotController'
+      })
+
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus', {
+        url: '/vuosiluokkakokonaisuus/:vlkId',
+        templateUrl: 'views/ops/vuosikuokkakokonaisuudet.html',
+        controller: 'OpsVlkController',
+        resolve: {
+          vlkId: function ($stateParams) {
+            return $stateParams.vlkId;
+          },
+          vlkt: function (opsId, vlkId, opsResource) {
+            return opsResource.getVlk({
+              opsId: opsId,
+              vlkId: vlkId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          laajaalaisetosaamiset: function (opsId, opsResource) {
+            return opsResource.getLaajaalaisetosaamiset({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              console.log(res);
+              return res
+            })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.vuosiluokka', {
+        url: '/vuosiluokka/:vuosi',
+        controller: 'OpsVuosiluokkaController',
+        template: '<div ui-view></div>',
+        resolve: {
+          vuosi: function ($stateParams) {
+            return $stateParams.vuosi;
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.vuosiluokka.oppiaine', {
+        url: '/oppiaine/:oppiaineId',
+        templateUrl: 'views/ops/vlkoppiaine.html',
+        controller: 'OpsVlkOppiaineController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          }
+        }
+      })
+
+      .state('root.ops.lukioopetus', {
+        url: '/lukioopetus/:opsId',
+        templateUrl: 'views/ops/lukioopetus.html',
+        controller: 'OpsLukioopetusController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          }/*,
+          lukioOps: function (opsResource, opsId) {
+            return opsResource.get({opsId: opsId}).$promise.then(function (res) {
+              return res;
+            });
+          },
+          otsikot: function (opsResource, opsId) {
+            return opsResource.getOtsikot({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            });
+          }*/
+        }
+      })
+
+      .state('root.ops.lukioopetus.tiedot', {
+        url: '/tiedot',
+        templateUrl: 'views/ops/tiedot.html',
+        controller: 'OpsPerusopetusTiedotController'
+      })
+
+      .state('root.ops.lukioopetus.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
+        controller: 'epLukioTekstikappaleController',
+        resolve: {
+          tekstikappaleId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          }/*,
+          tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
+            return LukioTekstikappale.getByViite({
+              viiteId: tekstikappaleId
+            }).$promise
+              .then(function (res) {
+                return res;
+              });
+          },
+          lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
+            return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
+          }*/
+        }
+      })
+
+      .state('root.ops.lukioopetus.oppiaine', {
+      url: '/oppiaine',
+      templateUrl: '',
+      controller: 'OpsLukioOppiaineController'
+      })
+
+      .state('root.ops.lukioopetus.oppiaine.aihekokonaisuudet', {
+        url: '/aihekokonaisuudet',
+        templateUrl: '',
+        controller: 'OpsLukioAihekokonaisuudetController'
+      })
+
+      .state('root.ops.lukioopetus.oppiaine.tavoitteet', {
+        url: '/yleiset-tavoitteet',
+        templateUrl: '',
+        controller: 'OpsLukioTavoitteetController'
+      })
+
+      .state('root.ops.lukioopetus.kurssi', {
+        url: '/kurssi',
+        templateUrl: '',
+        controller: 'OpsLukioOppiaineController'
+      })
+
+      .state('root.ops.lukioopetus.kurssi.aihekokonaisuudet', {
+        url: '/aihekokonaisuudet',
+        templateUrl: '',
+        controller: 'OpsLukioAihekokonaisuudetController'
+      })
+
+      .state('root.ops.lukioopetus.kurssi.tavoitteet', {
+        url: '/yleiset-tavoitteet',
+        templateUrl: '',
+        controller: 'OpsLukioTavoitteetController'
       });
 
   });

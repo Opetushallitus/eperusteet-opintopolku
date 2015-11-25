@@ -140,7 +140,6 @@
     this.traverse = traverse;
     this.isActive = isActive;
   })
-
   .controller('epSivuNaviController', function ($scope, $state, Algoritmit, Utils, epSivunaviUtils,
     epEsitysSettings, $window) {
     $scope.menuCollapsed = true;
@@ -310,13 +309,11 @@
       return _.isNumber(item.order) ? item.order : Utils.nameSort(item, 'label');
     };
 
-    $scope.$on('$stateChangeStart', function () {
-      $scope.menuCollapsed = true;
-    });
-
     $scope.$on('$stateChangeSuccess', function (event, toState) {
       if (toState.name !== epEsitysSettings.perusopetusState + '.sisallot') {
         Utils.scrollTo('#ylasivuankkuri');
+        // Piilotetaan navi aina myös kun tila vaihtuu
+        $scope.menuCollapsed = true;
       }
       updateModel($scope.items);
     });

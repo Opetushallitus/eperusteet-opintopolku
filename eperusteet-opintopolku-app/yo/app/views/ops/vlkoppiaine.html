@@ -1,0 +1,60 @@
+<h1 class="oppiaine-nimi" esitys-sivu-otsikko="valittuOppiaine.oppiaine.nimi">
+  <span kaanna="oppiaine.nimi"></span>
+</h1>
+
+<div>
+  <div ng-if="oppiaine.oppimaarat.length > 0">
+    <h2 kaanna="'oppimaarat'"></h2>
+    <ul>
+      <li ng-repeat="oppimaara in oppiaine.oppimaarat">
+        <a ui-sref="root.ops.perus.vuosiluokka.oppiaine({oppiaineId: oppimaara.id})" ng-bind="oppimaara.nimi | kaanna"></a>
+      </li>
+    </ul>
+  </div>
+
+  <div ng-if="oppiaine.kohdealueet.length > 0">
+    <h2 kaanna="'kohdealueet'"></h2>
+    <ul>
+      <li ng-repeat="ka in oppiaine.kohdealueet">
+        <span ng-bind="ka.nimi | kaanna"></span>
+      </li>
+    </ul>
+  </div>
+
+  <div ng-hide="!hasContent(valittuVlk.tehtava)">
+    <h2 ng-bind-html="valittuVlk.tehtava.otsikko | kaanna | unsafe"></h2>
+    <termisto-tekstikentta tekstikentta="valittuVlk.tehtava.teksti || '-'"></termisto-tekstikentta>
+  </div>
+
+  <div ng-hide="!hasContent(valittuVlk.yleistavoitteet)">
+    <h2 ng-bind-html="valittuVlk.yleistavoitteet.otsikko | kaanna | unsafe"></h2>
+    <termisto-tekstikentta tekstikentta="valittuVlk.yleistavoitteet.teksti || '-'"></termisto-tekstikentta>
+  </div>
+
+  <div ng-hide="!hasContent(valittuVlk.tyotavat)">
+    <h3 ng-bind-html="valittuVlk.tyotavat.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="valittuVlk.tyotavat.teksti || '-'"></termisto-tekstikentta>
+  </div>
+
+  <div ng-hide="!hasContent(valittuVlk.ohjaus)">
+    <h3 ng-bind-html="valittuVlk.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="valittuVlk.ohjaus.teksti || '-'"></termisto-tekstikentta>
+  </div>
+
+  <div ng-hide="!hasContent(valittuVlk.arviointi)">
+    <h3 ng-bind-html="valittuVlk.arviointi.otsikko | kaanna | unsafe"></h3>
+    <termisto-tekstikentta tekstikentta="valittuVlk.arviointi.teksti || '-'"></termisto-tekstikentta>
+  </div>
+
+  <div ng-hide="!valittuVlk.sisaltoalueinfo">
+    <h3>{{ valittuVlk.sisaltoalueinfo.otsikko | kaanna }}</h3>
+    <termisto-tekstikentta tekstikentta="valittuVlk.sisaltoalueinfo.teksti || '-'"></termisto-tekstikentta>
+  </div>
+
+  <div ng-hide="!valittuVlk.sisaltoalueet || valittuOppiaine.oppiaine.sisaltoalueet.length === 0">
+    <div ng-repeat="sa in valittuVlk.sisaltoalueet">
+      <h4 class="sparse">{{ sa.nimi | kaanna }}</h4>
+      <termisto-tekstikentta tekstikentta="sa.kuvaus || '-'"></termisto-tekstikentta>
+    </div>
+  </div>
+</div>
