@@ -306,7 +306,6 @@ epOpintopolkuApp
               treeItem.params = perusTaiYksinkertainen(state) ? {tekstikappaleId: parent.id} : {osanId: parent.id};
               treeItem.label = parent.perusteenOsa.nimi;
             } else {
-              console.log("PARENT", parent);
               treeItem.params = {oppiaineId: parent.id};
               treeItem.label = parent.nimi;
             }
