@@ -30,18 +30,7 @@ European Union Public Licence for more details.
       <div class="sivunavi-sisalto perusopetus">
         <div class="row">
           <div class="col-md-12">
-            <div ng-show="currentState() !== 'a'"class="tab-container">
-              <ul class="nav nav-tabs" id="ep-tabs1">
-                <li ng-repeat="tab in tabs" ng-class="{'tab-active': tabClass('{{tab.name}}')}">
-                  <a ui-sref="{{tab.url('oppiaine')}}" ng-bind="tab.title.oppiaine | kaanna"></a></li>
-              </ul>
-            </div>
-            <div ng-show="currentState() === 'b'" class="tab-container">
-              <ul class="nav nav-tabs" id="ep-tabs2">
-                <li ng-repeat="tab in tabs" ng-class="{'tab-active': tabClass('{{tab.name}}')}">
-                  <a ui-sref="{{tab.url('kurssi')}}" ng-bind="tab.title.kurssi | kaanna"></a></li>
-              </ul>
-            </div>
+            <ep-lukio-tabs simple-legend="false"></ep-lukio-tabs>
             <oppiaine-legend></oppiaine-legend>
             <div id="esitysPrintSisalto" ui-view></div>
           </div>

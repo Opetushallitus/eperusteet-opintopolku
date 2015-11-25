@@ -30,13 +30,9 @@ epOpintopolkuApp
     $rootScope,
     opsStateService,
     epEsitysSettings,
-    opsUtils,
-    epLukioTabService) {
+    opsUtils) {
 
     $scope.isNaviVisible = _.constant(true);
-    $scope.tabs = epLukioTabService.tabs;
-    $scope.tabClass = epLukioTabService.tabClassSelector;
-    $scope.currentState = function() { return 'a' };
 
     $scope.naviClasses = function (item) {
       var classes = ['depth' + item.depth];
@@ -59,17 +55,6 @@ epOpintopolkuApp
         classes.push('kurssi-syventava');
       }
       return classes;
-    };
-
-    $scope.currentState = function(){
-      var parts = _.words($state.current.name);
-      if (_.indexOf(parts, 'oppiaine') > -1){
-        return 'oppiaine';
-      }
-      if (_.indexOf(parts, 'kurssi') > -1){
-        return 'kurssi';
-      }
-      return null;
     };
 
     $scope.navi = {

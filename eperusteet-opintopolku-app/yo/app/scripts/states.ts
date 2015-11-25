@@ -824,11 +824,63 @@ epOpintopolkuApp
         controller: 'OpsPerusopetusTiedotController'
       })
 
-      .state('root.ops.lukioopetus.aihekokonaisuudet', {
-        url: '/tiedot',
-        templateUrl: 'views/ops/tiedot.html',
-        controller: 'OpsLukioopetusController'
+      .state('root.ops.lukioopetus.tekstikappale', {
+        url: '/tekstikappale/:tekstikappaleId',
+        templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
+        controller: 'epLukioTekstikappaleController',
+        resolve: {
+          tekstikappaleId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+          }/*,
+          tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
+            return LukioTekstikappale.getByViite({
+              viiteId: tekstikappaleId
+            }).$promise
+              .then(function (res) {
+                return res;
+              });
+          },
+          lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
+            return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
+          }*/
+        }
       })
+
+      .state('root.ops.lukioopetus.oppiaine', {
+      url: '/oppiaine',
+      templateUrl: '',
+      controller: 'OpsLukioOppiaineController'
+      })
+
+      .state('root.ops.lukioopetus.oppiaine.aihekokonaisuudet', {
+        url: '/aihekokonaisuudet',
+        templateUrl: '',
+        controller: 'OpsLukioAihekokonaisuudetController'
+      })
+
+      .state('root.ops.lukioopetus.oppiaine.tavoitteet', {
+        url: '/yleiset-tavoitteet',
+        templateUrl: '',
+        controller: 'OpsLukioTavoitteetController'
+      })
+
+      .state('root.ops.lukioopetus.kurssi', {
+        url: '/kurssi',
+        templateUrl: '',
+        controller: 'OpsLukioOppiaineController'
+      })
+
+      .state('root.ops.lukioopetus.kurssi.aihekokonaisuudet', {
+        url: '/aihekokonaisuudet',
+        templateUrl: '',
+        controller: 'OpsLukioAihekokonaisuudetController'
+      })
+
+      .state('root.ops.lukioopetus.kurssi.tavoitteet', {
+        url: '/yleiset-tavoitteet',
+        templateUrl: '',
+        controller: 'OpsLukioTavoitteetController'
+      });
 
   });
 

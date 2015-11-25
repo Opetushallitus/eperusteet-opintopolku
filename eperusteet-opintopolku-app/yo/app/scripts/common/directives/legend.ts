@@ -26,6 +26,10 @@ epOpintopolkuApp
     };
   })
 
- .controller('legendController', function($scope){
+ .controller('legendController', function($scope, $state){
    $scope.tyypit = ['valtakunnallinen','paikallinen','pakollinen', 'syventava', 'soveltava'];
+   $scope.stateParams = _.words($state.current.name);
+   $scope.isOppiaineState = function() {
+     return !!_.intersection($scope.stateParams, ['oppiaine', 'kurssi']).length;
+   };
  });

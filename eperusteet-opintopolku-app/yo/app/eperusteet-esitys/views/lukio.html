@@ -18,30 +18,7 @@
       <div class="sivunavi-sisalto">
         <div class="row">
           <div class="col-md-12">
-            <div ng-show="currentState() === 'oppiaine'"class="tab-container">
-              <ul class="nav nav-tabs" id="ep-tabs1">
-                <li ng-repeat="tab in tabs" ng-class="{'tab-active': tabClass('{{tab.name}}')}">
-                  <a ui-sref="{{tab.url('oppiaine')}}" ng-bind="tab.title.oppiaine | kaanna"></a></li>
-                <li ng-show="tabClass('sisalto')" class="legend legend-container">
-                  <span ng-repeat="tyyppi in kurssiTyypit">
-                    <span class="spacer"></span><span class="colorbox" ng-class="'{{tyyppi}}'"></span>
-                    <span class="legend-label" ng-bind="tyyppi | kaanna"></span>
-                  </span>
-                </li>
-              </ul>
-            </div>
-            <div ng-show="currentState() === 'kurssi'" class="tab-container">
-              <ul class="nav nav-tabs" id="ep-tabs2">
-                <li ng-repeat="tab in tabs" ng-class="{'tab-active': tabClass('{{tab.name}}')}">
-                  <a ui-sref="{{tab.url('kurssi')}}" ng-bind="tab.title.kurssi | kaanna"></a></li>
-                <li ng-show="tabClass('sisalto')" class="legend legend-container">
-                  <span ng-repeat="tyyppi in kurssiTyypit">
-                    <span class="spacer"></span><span class="colorbox" ng-class="'{{tyyppi}}'"></span>
-                    <span class="legend-label" ng-bind="tyyppi | kaanna"></span>
-                  </span>
-                </li>
-              </ul>
-            </div>
+            <ep-lukio-tabs simple-legend="true"></ep-lukio-tabs>
             <div id="esitysPrintSisalto" ui-view></div>
           </div>
         </div>
