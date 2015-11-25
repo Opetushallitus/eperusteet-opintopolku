@@ -141,6 +141,7 @@
   "navi.tiedote": "Tiedote",
   "navi.peruste": "Peruste",
   "navi.lukio": "Lukio",
+  "navi.opetussuunnitelmat": "Opetussuunnitelmat",
 
   "siirtyman-paattyminen": "Siirtymän päättyminen",
   "osaan-linkki" : "osaan.fi",
@@ -165,6 +166,12 @@
   "opetussuunnitelma": "Opetussuunnitelma",
   "opetussuunnitelman-tiedot": "Opetussuunnitelman tiedot",
   "opetussuunnitelman-nimi": "Opetussuunnitelman nimi",
+  "paikalliset-opetussuunnitelmat": "Paikalliset Opetussuunnitelmat",
+  "opetussuunnitelma-haku": "Opetussuunnitelma haku",
+  "koulutustyyppi": "Koulutustyyppi",
+  "kaikki-koulutustyypit": "Kaikki koulutustyypit",
+  "oppilaitos-organisaatio-paikkakunta": "Oppilaitos / Organisaatio / Paikkakunta",
+  "tarkennettu-haku": "Tarkennettu haku",
   "kohdealueet": "Kohdealueet",
   "koulutus-tyyppi": "Koulutus tyyppi",
   "kunnat": "Kunnat",
@@ -188,5 +195,6 @@
   "vuosiluokka_7": "Vuosiluokka 7",
   "vuosiluokka_8": "Vuosiluokka 8",
   "vuosiluokka_9": "Vuosiluokka 9"
+
 
 }
