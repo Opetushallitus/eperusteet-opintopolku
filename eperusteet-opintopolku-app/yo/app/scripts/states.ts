@@ -574,7 +574,7 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tekstikappale.html',
         controller: 'OpsTekstikappaleController',
         resolve: {
-          tekstikappaleId: function (serviceConfig, $stateParams) {
+          viiteId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
           tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
@@ -582,7 +582,6 @@ epOpintopolkuApp
               opsId: opsId,
               viiteId: viiteId
             }).$promise.then(function (res) {
-              console.log(res);
               return res;
             })
           }
@@ -621,7 +620,7 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tekstikappale.html',
         controller: 'OpsTekstikappaleController',
         resolve: {
-          tekstikappaleId: function (serviceConfig, $stateParams) {
+          viiteId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
           tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
@@ -629,7 +628,6 @@ epOpintopolkuApp
               opsId: opsId,
               viiteId: viiteId
             }).$promise.then(function (res) {
-              console.log(res);
               return res;
             })
           }
@@ -672,7 +670,7 @@ epOpintopolkuApp
         templateUrl: 'views/ops/tekstikappale.html',
         controller: 'OpsTekstikappaleController',
         resolve: {
-          tekstikappaleId: function (serviceConfig, $stateParams) {
+          viiteId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
           tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
@@ -680,7 +678,6 @@ epOpintopolkuApp
               opsId: opsId,
               viiteId: viiteId
             }).$promise.then(function (res) {
-              console.log(res);
               return res;
             })
           }
