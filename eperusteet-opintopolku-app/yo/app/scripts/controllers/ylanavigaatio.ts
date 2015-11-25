@@ -2,7 +2,7 @@
 
 
 epOpintopolkuApp
-  .controller('YlanavigaatioController', function ($scope, $state, Kieli, Haku, $stateParams) {
+  .controller('YlanavigaatioController', function ($rootScope, $scope, $state, Kieli, Haku, $stateParams, Kaanna) {
     $scope.kieli = Kieli.getUiKieli();
     $scope.nykyinenTila = $state;
     $scope.navCollapsed = true;
@@ -48,6 +48,12 @@ epOpintopolkuApp
         return '';
       }
     };
+
+    $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
+
+    $rootScope.$on('$stateChangeSuccess', function () {
+      $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
+    });
 
     $scope.isPerusopetus = function () {
       if (($state.includes('**.perusopetus.**') && !$state.includes('**.perusopetus.**'))
