@@ -5,15 +5,15 @@
 
 <div ng-repeat="lapsi in lapset">
   <ops-tekstiotsikko level="2" model="lapsi" link-var="linkVar"></ops-tekstiotsikko>
-  <termisto-tekstikentta tekstikentta="lapsi.tekstiKappele.teksti"></termisto-tekstikentta>
+  <termisto-tekstikentta tekstikentta="lapsi.tekstiKappale.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset">
     <ops-tekstiotsikko level="3" model="alilapsi" link-var="linkVar"></ops-tekstiotsikko>
-    <termisto-tekstikentta tekstikentta="alilapsi.tekstiKappele.teksti"></termisto-tekstikentta>
+    <termisto-tekstikentta tekstikentta="alilapsi.tekstiKappale.teksti"></termisto-tekstikentta>
 
     <div ng-repeat="alialilapsi in alilapsi.lapset">
       <ops-tekstiotsikko level="4" model="alialilapsi" link-var="linkVar"></ops-tekstiotsikko>
-      <termisto-tekstikentta tekstikentta="alialilapsi.tekstiKappele.teksti"></termisto-tekstikentta>
+      <termisto-tekstikentta tekstikentta="alialilapsi.tekstiKappale.teksti"></termisto-tekstikentta>
     </div>
   </div>
 </div>

@@ -53,10 +53,15 @@ epOpintopolkuApp
     $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
     $scope.vlkt = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
 
-    $timeout(function () {
+    $scope.$on('$stateChangeSuccess', function () {
+      opsStateService.setState($scope.navi);
       if ($state.current.name === 'root.ops.perusopetus') {
-          $state.go('.tiedot', {location: 'replace'});
-        }
+        $state.go('.tiedot', {location: 'replace'});
+      }
+      if (_.endsWith(_.keys($state.params), 'vuosi')){
+        var vuosi = $state.params.vuosi;
+        moveToOppiaine(vuosi);
+      }
     });
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
@@ -74,10 +79,6 @@ epOpintopolkuApp
       return classes;
     };
 
-    $scope.$on('$stateChangeSuccess', function () {
-      opsStateService.setState($scope.navi);
-    });
-
     function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
       if (ohjeEl.length === 0) {
@@ -93,6 +94,13 @@ epOpintopolkuApp
     $scope.$on('$destroy', function () {
       $document.off('click', clickHandler);
     });
+
+    console.log("ENDS", _.endsWith(_.keys($state.params), 'vuosi'));
+
+    function moveToOppiaine(vuosi) {
+      var vlk = 'vuosiluokka_' + vuosi;
+      console.log(_.find($scope.navi.sections[1].items, vlk));
+    }
 
     $scope.onSectionChange = function (section) {
       if (section.id === 'vlkoppiaine' && !section.$open) {
@@ -212,16 +220,16 @@ epOpintopolkuApp
     $scope.oppiaine = oppiaine;
 
     var currentVlk = _($scope.vlkMap)
-                      .filter(function(vlk){
-                        var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
-                        vuodet = _.map(vuodet, function(v) { return parseInt(v); });
-                        return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
-                      })
-                      .map(function(v){
-                        return v.tunniste
-                      })
-                      .value()
-                      .pop();
+      .filter(function(vlk){
+        var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
+        vuodet = _.map(vuodet, function(v) { return parseInt(v); });
+        return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
+      })
+      .map(function(v){
+        return v.tunniste
+      })
+      .value()
+      .pop();
 
     $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, function(vlk){
       return vlk._vuosiluokkakokonaisuus == currentVlk;

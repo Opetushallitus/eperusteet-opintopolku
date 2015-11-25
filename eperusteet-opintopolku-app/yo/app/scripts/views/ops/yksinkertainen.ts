@@ -64,6 +64,12 @@ epOpintopolkuApp
       epPerusopetusStateService.setState($scope.navi);
     });
 
+    $scope.$on('$stateChangeSuccess', function () {
+      if ($state.current.name === ('root.ops.esiopetus' || 'root.ops.varhaiskasvatus' || 'root.ops.lisaopetus')) {
+        $state.go('.tiedot', {location: 'replace'});
+      }
+    });
+
     $scope.navi = {
       header: 'opetussuunnitelma',
       sections: [

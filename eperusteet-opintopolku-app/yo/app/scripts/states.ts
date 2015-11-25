@@ -582,6 +582,7 @@ epOpintopolkuApp
               opsId: opsId,
               viiteId: viiteId
             }).$promise.then(function (res) {
+              console.log("SHOW", res);
               return res;
             })
           }
