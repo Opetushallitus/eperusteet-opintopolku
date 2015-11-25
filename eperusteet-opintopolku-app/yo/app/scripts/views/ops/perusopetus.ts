@@ -95,23 +95,17 @@ epOpintopolkuApp
       $document.off('click', clickHandler);
     });
 
-    console.log("ENDS", _.endsWith(_.keys($state.params), 'vuosi'));
-
     function moveToOppiaine(vuosi) {
       var vlk = 'vuosiluokka_' + vuosi;
-      console.log(_.find($scope.navi.sections[1].items, vlk));
+      var firstOppiaine = _.find($scope.navi.sections[1].items, {$parent_vuosi: vlk});
+      return firstOppiaine ? $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
+        {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id}) : null;
     }
 
     $scope.onSectionChange = function (section) {
       if (section.id === 'vlkoppiaine' && !section.$open) {
-        $scope.chooseFirstVlk(section);
+        moveToOppiaine(section);
       }
-    };
-
-    $scope.chooseFirstVlk = function(section) {
-     return _.find(section.items, {$vuosi: 'vuosiluokka_1'})
-       ? $state.go('root.ops.perusopetus.vuosiluokka', {opsId: $state.params.opsId, vuosi: 1})
-       : null;
     };
 
     $scope.navi = {
