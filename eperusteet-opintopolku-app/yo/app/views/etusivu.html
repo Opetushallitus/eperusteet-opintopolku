@@ -110,25 +110,38 @@
   </div>
 
   <footer>
-    <div class="banneri-container">
-      <div class="banneri">
-        <a class="banneri-kuva">
-          <!-- <img src="images/opintopolku_large&#45;{{ kieli }}.png" alt=""> -->
-          <img src="images/opintopolku_large-fi.png" width="225px" height="50px" ng-show="kieli === 'fi'">
-          <img src="images/opintopolku_large-sv.png" width="225px" height="50px" ng-show="kieli === 'sv'">
-        </a>
-        <ul class="banneri-linkit">
+    <div class="alatunniste">
+      <div class="alatunniste-tausta"></div>
+
+      <div class="alatunniste-sisalto">
+        <ul class="alatunniste-linkit">
           <span ng-show="kieli === 'fi'">
-            <li><a href="http://osaan.fi" kaanna="'osaan-linkki'"></a></li>
             <li><a href="mailto:eperusteet@opintopolku.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
           </span>
           <span ng-show="kieli === 'sv'">
-            <li><a href="http://jagkan.fi" kaanna="'osaan-linkki'"></a></li>
             <li><a href="mailto:egrunder@studieinfo.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
           </span>
-          <li><a href="https://virkailija.opintopolku.fi/eperusteet-app" kaanna="'eperusteet-virkailija-linkki'"></a></li>
           <li><a href="https://opintopolku.fi/wp/tietosuojaseloste" kaanna="'tietosuojaseloste'"></a></li>
         </ul>
+
+        <ul class="alatunniste-linkit">
+          <span ng-show="kieli === 'fi'">
+            <li><a href="http://osaan.fi" kaanna="'osaan-linkki'"></a></li>
+          </span>
+          <span ng-show="kieli === 'sv'">
+            <li><a href="http://jagkan.fi" kaanna="'osaan-linkki'"></a></li>
+          </span>
+          <li><a href="https://virkailija.opintopolku.fi/eperusteet-app" kaanna="'eperusteet-virkailija-linkki'"></a></li>
+        </ul>
+      </div>
+
+      <div class="opetushallitus-logo"></div>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 text-center">
+          <span kaanna="'copyright-opetushallitus'"></span> | <a href="http://www.oph.fi"><span>www.oph.fi</span></a>
+        </div>
       </div>
     </div>
   </footer>

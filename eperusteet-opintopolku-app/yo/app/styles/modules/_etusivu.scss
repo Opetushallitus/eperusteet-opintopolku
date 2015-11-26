@@ -81,32 +81,65 @@ $paaotsikko-logo-size: 96px;
   padding-left: 0;
 }
 
-.banneri-container {
-  border: 1px solid #dddddd;
-  border-radius: 3px;
+@mixin vertical-align($position: relative) {
+  position: $position;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
 
-  .banneri {
-    padding: 20px;
-    overflow: auto;
-    background: #dcdcdc;
-    margin: 4px;
+.alatunniste {
+  height: 80px;
+  background-color: #e1e4e5;
+  margin-bottom: 10px;
 
-    .banneri-kuva {
-      float: left;
-      margin-right: 40px;
-    }
+  .alatunniste-tausta {
+    float: left;
+    background-image: url("../images/alatunniste_tausta.svg");
+    background-color: $content-bg-color;
+    width: 112px;
+    height: 80px;
+  }
 
-    .banneri-linkit {
+  .alatunniste-sisalto {
+    float: left;
+    @include vertical-align();
+
+    .alatunniste-linkit {
       float: left;
       list-style-type: none;
-      margin: 0;
-      padding: 0;
-      line-height: 20px;
-
-      a {
-        color: #333;
-        text-decoration: none;
+      margin-bottom: 0;
+      li {
+        line-height: 150%;
       }
+    }
+  }
+
+  .opetushallitus-logo {
+    float: right;
+    background-image: url("../images/opetushallitus_logo.svg");
+    width: 200px;
+    height: 50px;
+    margin-right: 60px;
+    @include vertical-align();
+  }
+}
+
+@media (max-width: $screen-sm-max) {
+  .alatunniste {
+    .opetushallitus-logo {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: $screen-xs-max) {
+  .alatunniste {
+    height: 100px;
+
+    .alatunniste-tausta {
+      display: none;
     }
   }
 }

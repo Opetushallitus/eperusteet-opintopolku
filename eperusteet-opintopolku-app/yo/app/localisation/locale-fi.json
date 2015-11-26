@@ -22,6 +22,8 @@
   "etusivu.lukiokoulutuksen-peruste": "Lukiokoulutuksen peruste",
   "etusivu.ammatilliset": "Ammatillinen koulutus",
 
+  "copyright-opetushallitus" : "Copyright © Opetushallitus 2015",
+
   "virhe.jotain-meni-pieleen": "Oho! Jotain meni pieleen.",
 
   "koulutustyyppi_1": "Ammatillinen perustutkinto",
@@ -107,7 +109,6 @@
   "osaamisala": "Osaamisala",
   "ammattitaidonOsoittamistavat": "Ammattitaidon osoittamistavat",
   "arviointi": "Arviointi",
-  "osaamisen-arviointi": "Osaamisen arviointi",
   "opintoluokitus": "Opintoluokitus",
   "tavoitteet": "Tavoitteet",
   "ammattitaitovaatimukset": "Ammattitaitovaatimukset",
@@ -163,7 +164,6 @@
   "oppiaineen-sisalto": "Oppiaineen sisältö",
   "kurssin-sisalto": "Kurssin sisältö",
   "perusteen-esikatselu": "Perusteen esikatselu",
-  "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa",
 
   "opetussuunnitelma": "Opetussuunnitelma",
   "opetussuunnitelman-tiedot": "Opetussuunnitelman tiedot",
