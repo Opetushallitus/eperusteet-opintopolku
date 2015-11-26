@@ -60,6 +60,17 @@
       }
     }
   }
+  li:first-child {
+    padding: 4px 8px 1px 8px;
+    display: inline-block;
+
+    &.active {
+      background-color: $content-bg-color;
+      a {
+        color: black;
+      }
+    }
+  }
 }
 
 .ylanavi-container {

@@ -30,7 +30,12 @@
         <div class="ylanavi-container" role="navigation">
           <ul class="ylanavi-list">
             <li ui-sref-active="active">
-              <a ui-sref="root.etusivu" kaanna="'navi.etusivu'" ng-click="valittuTila = 1"></a>
+              <a ui-sref="root.etusivu">
+                <img src="bower_components/eperusteet-frontend-utils/png/sm/ikoni-eperusteet.png"
+                     ng-if="state.includes('root.etusivu.**')">
+                <img src="bower_components/eperusteet-frontend-utils/png/sm/ikoni-eperusteet-valkoinen.png"
+                     ng-if="!state.includes('root.etusivu.**')">
+              </a>
             </li>
             <li ui-sref-active="active">
               <a ui-sref="root.esiopetus" kaanna="'navi.esiopetus'"></a>
