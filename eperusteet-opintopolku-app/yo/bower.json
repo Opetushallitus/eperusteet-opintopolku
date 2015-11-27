@@ -23,7 +23,9 @@
     "bootstrap-sass-official": "3.3.3",
     "angular-elastic": "~2.3.3",
     "angular-cache": "~3.2.2",
-    "angulartics": "~0.17.2"
+    "angulartics": "~0.17.2",
+    "ngstorage": "~0.3.10",
+    "eperusteet-frontend-utils": "git@github.com:Opetushallitus/eperusteet-frontend-utils.git"
   },
   "devDependencies": {
     "angular-mocks": "1.3.14",

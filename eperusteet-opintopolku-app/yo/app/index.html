@@ -57,6 +57,7 @@
 <script src="bower_components/angular-spinner/angular-spinner.js"></script>
 <script src="bower_components/angulartics/dist/angulartics.min.js"></script>
 <script src="bower_components/angulartics/dist/angulartics-piwik.min.js"></script>
+<script src="bower_components/ngstorage/ngStorage.min.js"></script>
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
@@ -88,13 +89,22 @@
 <script src="scripts/common/directives/termistoviitteet.js"></script>
 <script src="scripts/common/directives/rajaus.js"></script>
 <script src="scripts/common/directives/murupolku.js"></script>
-<script src="scripts/common/directives/sulje-valikko.js"></script>
+<script src="scripts/common/directives/suljevalikko.js"></script>
+<script src="scripts/common/directives/legend.js"></script>
+<script src="scripts/views/ops/opsutils.js"></script>
+<script src="scripts/views/ops/opssivunaviutils.js"></script>
+
+<script src="scripts/views/ops/yksinkertainen.js"></script>
+<script src="scripts/views/ops/perusopetus.js"></script>
+<script src="scripts/views/ops/lukioopetus.js"></script>
+<script src="scripts/views/ops/listaus.js"></script>
 
 <script src="scripts/controllers/ylanavigaatio.js"></script>
 
 <script src="scripts/peruste/resources/ylops.js"></script>
 <script src="scripts/peruste/resources/perusteet.js"></script>
 <script src="scripts/peruste/resources/esikatselut.js"></script>
+<script src="scripts/peruste/resources/ops.js"></script>
 <script src="scripts/peruste/services/tutkinnonosa.js"></script>
 <script src="scripts/peruste/services/termisto.js"></script>
 <script src="scripts/peruste/services/tutke2osa.js"></script>
@@ -114,16 +124,18 @@
 
 <!-- build:js({.tmp,app}) scripts/esitys.js -->
 <script src="eperusteet-esitys/main.js"></script>
-<script src="eperusteet-esitys/services/lukioStateService.js"></script>
-<script src="eperusteet-esitys/services/lukioUtils.js"></script>
+<script src="eperusteet-esitys/services/lukiosivunavigaatio.js"></script>
+<script src="eperusteet-esitys/services/lukiotabservice.js"></script>
+<script src="eperusteet-esitys/services/lukiostateservice.js"></script>
+<script src="eperusteet-esitys/services/lukioutils.js"></script>
 <script src="eperusteet-esitys/services/menubuilder.js"></script>
 <script src="eperusteet-esitys/services/sivunavigaatio.js"></script>
 <script src="eperusteet-esitys/services/stateservice.js"></script>
 <script src="eperusteet-esitys/services/tekstikappaleutils.js"></script>
-<script src="eperusteet-esitys/views/lukio.js"></script>
-<script src="eperusteet-esitys/views/perusopetus.js"></script>
-<script src="eperusteet-esitys/views/sisallot.js"></script>
-<script src="eperusteet-esitys/views/yksinkertainen.js"></script>
+<script src="eperusteet-esitys/views/controllers/lukio.js"></script>
+<script src="eperusteet-esitys/views/controllers/perusopetus.js"></script>
+<script src="eperusteet-esitys/views/controllers/sisallot.js"></script>
+<script src="eperusteet-esitys/views/controllers/yksinkertainen.js"></script>
 <!-- endbuild -->
 
 

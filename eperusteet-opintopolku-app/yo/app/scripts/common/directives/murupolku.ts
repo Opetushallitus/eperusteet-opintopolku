@@ -220,7 +220,70 @@ epOpintopolkuApp
         useId: 'osanId',
         useData: 'tekstikappaleNimi',
         customParents: true
-      }
+      },
+      'root.ops.esiopetus': {
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.ops.esiopetus.tiedot': {
+        parent: 'root.ops.esiopetus',
+        label: 'opetussuunnitelman-tiedot'
+      },
+      'root.ops.esiopetus.tekstikappale': {
+        parent: 'root.ops.esiopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi',
+        customParents: true
+      },
+      'root.ops.lisaopetus': {
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.ops.lisaopetus.tekstikappale': {
+        parent: 'root.ops.lisaopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi'
+      },
+      'root.ops.varhaiskasvatus': {
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.ops.varhaiskasvatus.tekstikappale': {
+        parent: 'root.ops.lisaopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi',
+        customParents: true
+      },
+      'root.ops.perusopetus':{
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.ops.perusopetus.tiedot': {
+        parent: 'root.ops.perusopetus',
+        label: 'opetussuunnitelman-tiedot'
+      },
+      'root.ops.perusopetus.tekstikappale': {
+        parent: 'root.ops.perusopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi',
+        customParents: true
+      },
+      'root.ops.perusopetus.vuosiluokkakokonaisuus': {
+        parent: 'root.ops.perusopetus',
+        useData: 'vlkNimi',
+        useId: 'vlkId'
+      },
+      'root.ops.perusopetus.vuosiluokka':{
+        parent: 'root.ops.perusopetus.vuosiluokkakokonaisuus',
+        useId: 'vuosiId',
+        useData: 'vuosi'
+      },
+      'root.ops.perusopetus.vuosiluokka.oppiaine': {
+        parent: 'root.ops.perusopetus.vuosiluokka',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      },
     };
 
     function perusTaiYksinkertainen(state) {

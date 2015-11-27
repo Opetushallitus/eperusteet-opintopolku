@@ -1,0 +1,12 @@
+<div class="perusopetus">
+  <div ng-repeat="item in section.items" class="tekstisisalto" ng-class="section.naviClasses(item)"
+    ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
+  <a ng-if="item.$vlk" ng-click="getVlk(item.$vlk)" ng-href="{{item.url}}">
+  <span>{{ item.label | kaanna }}</span>
+    <pre>{{item | json}}</pre>
+  </a>
+    <a ng-if="!item.$vlk" ng-href="{{item.url}}">
+      <span>{{ item.label | kaanna }}</span>
+    </a>
+  </div>
+</div>

@@ -94,13 +94,13 @@ module.exports = function(grunt) {
       },
       proxies: [{
         context: '/eperusteet-service',
-        /*host: 'localhost',
-         port: 8080,
-         https: false,
-         changeOrigin: false,
-         xforward: false*/
         host: 'itest-virkailija.oph.ware.fi',
-        // host: 'testi.virkailija.opintopolku.fi',
+        port: 443,
+        https: true,
+        changeOrigin: true
+      }, {
+        context: '/eperusteet-ylops-service',
+        host: 'itest-virkailija.oph.ware.fi',
         port: 443,
         https: true,
         changeOrigin: true
@@ -461,8 +461,8 @@ module.exports = function(grunt) {
   ]);
 
   grunt.registerTask('build', [
-    'ts',
     'clean:dist',
+    'ts',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',

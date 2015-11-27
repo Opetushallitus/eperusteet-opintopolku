@@ -92,6 +92,7 @@ angular.module('eperusteet.esitys')
       }
     ]
   };
+
   $scope.navi.sections[0].items.unshift({depth: 0, label: 'perusteen-tiedot', link: [currentRootState + '.tiedot']});
 
   _.each($scope.navi.sections[0].items, function (item) {

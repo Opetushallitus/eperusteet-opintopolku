@@ -22,6 +22,8 @@
   "etusivu.lukiokoulutuksen-peruste": "Lukiokoulutuksen peruste",
   "etusivu.ammatilliset": "Ammatillinen koulutus",
 
+  "copyright-opetushallitus" : "Copyright © Opetushallitus 2015",
+
   "virhe.jotain-meni-pieleen": "Oho! Jotain meni pieleen.",
 
   "koulutustyyppi_1": "Ammatillinen perustutkinto",
@@ -107,7 +109,6 @@
   "osaamisala": "Osaamisala",
   "ammattitaidonOsoittamistavat": "Ammattitaidon osoittamistavat",
   "arviointi": "Arviointi",
-  "osaamisen-arviointi": "Osaamisen arviointi",
   "opintoluokitus": "Opintoluokitus",
   "tavoitteet": "Tavoitteet",
   "ammattitaitovaatimukset": "Ammattitaitovaatimukset",
@@ -143,6 +144,7 @@
   "navi.tiedote": "Tiedote",
   "navi.peruste": "Peruste",
   "navi.lukio": "Lukio",
+  "navi.opetussuunnitelmat": "Opetussuunnitelmat",
 
   "siirtyman-paattyminen": "Siirtymän päättyminen",
   "osaan-linkki" : "osaan.fi",
@@ -162,6 +164,40 @@
   "oppiaineen-sisalto": "Oppiaineen sisältö",
   "kurssin-sisalto": "Kurssin sisältö",
   "perusteen-esikatselu": "Perusteen esikatselu",
+
+  "opetussuunnitelma": "Opetussuunnitelma",
+  "opetussuunnitelman-tiedot": "Opetussuunnitelman tiedot",
+  "opetussuunnitelman-nimi": "Opetussuunnitelman nimi",
+  "paikalliset-opetussuunnitelmat": "Paikalliset Opetussuunnitelmat",
+  "koulutustyyppi": "Koulutustyyppi",
+  "kaikki-koulutustyypit": "Kaikki koulutustyypit",
+  "oppilaitos-organisaatio-paikkakunta": "Oppilaitos / Organisaatio / Paikkakunta",
+  "tarkennettu-haku": "Tarkennettu haku",
+  "kohdealueet": "Kohdealueet",
+  "koulutus-tyyppi": "Koulutus tyyppi",
+  "kunnat": "Kunnat",
+  "organisaatiot": "Organisaatiot",
+  "luotu": "Luotu",
+  "muokattu": "Muokattu",
+  "tila": "Tila",
+  "paatospaivamaara": "Päätöspäivämäärä",
+  "pohja": "Pohja",
+  "oppiaineet-ja-oppimaarat": "Oppiaineet ja oppimaarat",
+  "opetus": "Opetus",
+  "ops:-tiedot": "Ops: tiedot",
+  "kasitteet": "Käsitteet",
+
+  "vuosiluokka_1": "Vuosiluokka 1",
+  "vuosiluokka_2": "Vuosiluokka 2",
+  "vuosiluokka_3": "Vuosiluokka 3",
+  "vuosiluokka_4": "Vuosiluokka 4",
+  "vuosiluokka_5": "Vuosiluokka 5",
+  "vuosiluokka_6": "Vuosiluokka 6",
+  "vuosiluokka_7": "Vuosiluokka 7",
+  "vuosiluokka_8": "Vuosiluokka 8",
+  "vuosiluokka_9": "Vuosiluokka 9",
+
+
   "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa",
 
   "osaamistavoitteet": "Osaamistavoitteet",

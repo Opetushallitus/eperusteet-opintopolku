@@ -45,7 +45,6 @@ angular.module('eperusteet.esitys')
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
     $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
     TermistoService.setPeruste(peruste);
-    console.log("peruste", peruste);
 
     function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
@@ -123,7 +122,7 @@ angular.module('eperusteet.esitys')
         classes.push('tekstisisalto-active');
       }
       if (item.$header) {
-         classes.push('tekstisisalto-active-header');
+        classes.push('tekstisisalto-active-header');
       }
       if (item.$kurssi && item.$kurssi.tyyppi) {
         classes.push('kurssi');
@@ -156,7 +155,7 @@ angular.module('eperusteet.esitys')
         items: epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
         naviClasses: $scope.naviClasses
       }]
-    };
+    }
 
     $scope.navi.sections[0].items.unshift({
       depth: 0,
@@ -220,7 +219,7 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioTekstikappaleController', function($scope, $rootScope, $stateParams, $location, epTekstikappaleChildResolver,
-                                                               $q, Kieli, epLukioUtils, tekstikappale, tekstikappaleId, MurupolkuData, epParentFinder) {
+                                                         $q, Kieli, epLukioUtils, tekstikappale, tekstikappaleId, MurupolkuData, epParentFinder) {
 
     $scope.tekstikappale = tekstikappale;
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
@@ -319,7 +318,9 @@ angular.module('eperusteet.esitys')
     MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
   })
 
-  .controller('epLukioTiedotController', function(){})
+  .controller('epLukioTiedotController', function () {
+
+  })
 
   .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
@@ -353,110 +354,22 @@ angular.module('eperusteet.esitys')
       return list;
     };
 
-      var murupolkuParams = {
-        //parents: null,
-        oppiaineId: oppiaine.id,
-        oppiaineNimi: oppiaine.nimi[Kieli.getSisaltokieli()]
-      };
-
-      MurupolkuData.set(murupolkuParams);
-
-      $scope.tekstikappale = oppiaine;
-      $scope.lapset = epTekstikappaleChildResolver.getSisalto();
-      $scope.links = {
-        prev: null,
-        next: null
-      };
-
-      MurupolkuData.set('parents', epParentFinder.find($scope.oppiaineet.lapset, $scope.tekstikappale.id, true));
-
-  })
-
-  .controller('epLukioSivuNaviController', function ($rootScope, $scope, $location, $state, Algoritmit, Utils, epSivunaviUtils,
-                                                epEsitysSettings) {
-    $scope.menuCollapsed = true;
-    $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
-
-    $scope.scrollToHash = function(id){
-      if(id && _.isString(id)) {
-        $state.go('root.lukio.tekstikappale');
-        $location.hash(id);
-        $rootScope.$broadcast('$locationChangeSuccess');
-      }
+    var murupolkuParams = {
+      //parents: null,
+      oppiaineId: oppiaine.id,
+      oppiaineNimi: oppiaine.nimi[Kieli.getSisaltokieli()]
     };
 
-    $scope.search = {
-      term: '',
-      update: function () {
-        var matchCount = 0;
-        var items = $scope.items;
-        if (_.isUndefined(items)) {
-          var section = _.find($scope.sections, '$open');
-          if (section) {
-            items = section.items;
-          }
-        }
-        _.each(items, function (item) {
-          item.$matched = _.isEmpty($scope.search.term) || _.isEmpty(item.label) ? true :
-            Algoritmit.match($scope.search.term, item.label);
-          if (item.$matched) {
-            matchCount++;
-            var parent = items[item.$parent];
-            while (parent) {
-              parent.$matched = true;
-              parent = items[parent.$parent];
-            }
-          }
-        });
-        $scope.hasResults = matchCount > 1; // root matches always
-        updateModel(items);
-      }
+    MurupolkuData.set(murupolkuParams);
+
+    $scope.tekstikappale = oppiaine;
+    $scope.lapset = epTekstikappaleChildResolver.getSisalto();
+    $scope.links = {
+      prev: null,
+      next: null
     };
 
-    $scope.$watch('search.term', _.debounce(function () {
-      $scope.$apply(function () {
-        $scope.search.update();
-      });
-    }, 100));
-
-
-    $scope.itemClasses = function (item) {
-      var classes = ['level' + item.depth];
-      if (item.$matched && $scope.search.term) {
-        classes.push('matched');
-      }
-      if (item.$active) {
-        classes.push('active');
-      }
-      if (item.$header) {
-        classes.push('tekstisisalto-active-header');
-      }
-      return classes;
-    };
-
-    var doRefresh = function (items) {
-      var levels = {};
-      if (items.length && !items[0].root) {
-        items.unshift({root: true, depth: -1});
-      }
-      _.each(items, function (item, index) {
-        item.depth = item.depth || 0;
-        levels[item.depth] = index;
-        if (_.isArray(item.link)) {
-          item.href = $state.href.apply($state, item.link);
-          if (item.link.length > 1) {
-            // State is matched with string parameters
-            _.each(item.link[1], function (value, key) {
-              item.link[1][key] = value === null ? '' : ('' + value);
-            });
-          }
-        }
-        item.$parent = levels[item.depth - 1] || null;
-        item.$hidden = item.depth > 0;
-        item.$matched = true;
-      });
-      updateModel(items);
-    };
+    MurupolkuData.set('parents', epParentFinder.find($scope.oppiaineet.lapset, $scope.tekstikappale.id, true));
 
     $scope.refresh = function () {
       if (_.isArray($scope.items)) {

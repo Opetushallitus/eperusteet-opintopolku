@@ -30,7 +30,12 @@
         <div class="ylanavi-container" role="navigation">
           <ul class="ylanavi-list">
             <li ui-sref-active="active">
-              <a ui-sref="root.etusivu" kaanna="'navi.etusivu'" ng-click="valittuTila = 1"></a>
+              <a ui-sref="root.etusivu">
+                <img src="bower_components/eperusteet-frontend-utils/png/sm/ikoni-eperusteet.png"
+                     ng-if="state.includes('root.etusivu.**')">
+                <img src="bower_components/eperusteet-frontend-utils/png/sm/ikoni-eperusteet-valkoinen.png"
+                     ng-if="!state.includes('root.etusivu.**')">
+              </a>
             </li>
             <li ui-sref-active="active">
               <a ui-sref="root.esiopetus" kaanna="'navi.esiopetus'"></a>
@@ -44,9 +49,12 @@
             <li ng-class="isAmAikuis() ? 'active' : ''">
               <a ui-sref="root.selaus.ammatillinenaikuiskoulutus" kaanna="'navi.ammatillinenaikuiskoulutus'"></a>
             </li>
-            <li ng-class="isValmatelma() ? 'active' : ''">
+            <!--<li ng-class="isValmatelma() ? 'active' : ''">
               <a ui-sref="root.selaus.valmentavakoulutus" kaanna="'navi.valmentavakoulutus'"></a>
-            </li>
+            </li>-->
+            <!--<li ng-class="isOps() ? 'active' : ''">
+              <a ui-sref="root.selaus.ops" kaanna="'navi.opetussuunnitelmat'"></a>
+            </li>-->
           </ul>
         </div>
       </div>
@@ -77,7 +85,7 @@
       <nav class="navbar navbar-ylanavigaatio-mobile navbar-static-top" role="navigation">
         <div class="navbar-header">
 
-          <div class="navbar-brand" ng-show="navCollapsed" kaanna="valittuOsio()">
+          <div class="navbar-brand" ng-show="navCollapsed" ng-bind="valittuOsioNimi">
           </div>
           <div class="navbar-brand" ng-show="!navCollapsed" kaanna="'navi.valikkon-otsikko'">
           </div>
@@ -114,6 +122,9 @@
                    kaanna="'navi.ammatillinenaikuiskoulutus'"
                    ng-click="navCollapse()"></a>
               </li>
+              <!--<li ui-sref-active="active">
+                <a ui-sref="root.selaus.ops" kaanna="'navi.opetussuunnitelmat'" ng-click="navCollapse()"></a>
+              </li>-->
               <li>
                 <a href="" ng-click="vaihdaKieli('sv')" ng-show="kieli === 'fi'" class="kieli">På svenska</a>
                 <a href="" ng-click="vaihdaKieli('fi')" ng-show="kieli === 'sv'" class="kieli">Suomeksi</a>

@@ -14,23 +14,22 @@
  * European Union Public Licence for more details.
  */
 
-var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
-  'ngRoute',
-  'ngSanitize',
-  'ui.router',
-  'ngResource',
-  'ngAnimate',
-  'pascalprecht.translate',
-  'ui.bootstrap',
-  'ui.utils',
-  'monospaced.elastic',
-  'angular-data.DSCacheFactory',
-  'angularSpinner',
-  'angulartics',
-  'angulartics.piwik',
-  'eperusteet.esitys',
-  'ngStorage'
-]);
+'use strict';
 
+epOpintopolkuApp
+  .directive('oppiaineLegend', function(){
+    return {
+      restrict: 'EA',
+      scope: {},
+      templateUrl: 'views/common/directives/legend.html',
+      controller: 'LegendController'
+    };
+  })
 
-/* jshint ignore:end */
+ .controller('LegendController', function($scope, $state){
+   $scope.tyypit = ['valtakunnallinen','paikallinen','pakollinen', 'syventava', 'soveltava'];
+   $scope.stateParams = _.words($state.current.name);
+   $scope.isOppiaineState = function() {
+     return !!_.intersection($scope.stateParams, ['oppiaine', 'kurssi']).length;
+   };
+ });
