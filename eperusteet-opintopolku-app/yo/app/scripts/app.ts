@@ -32,4 +32,5 @@ var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
   'ngStorage'
 ]);
 
+
 /* jshint ignore:end */
