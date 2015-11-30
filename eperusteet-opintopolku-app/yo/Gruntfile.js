@@ -262,6 +262,14 @@ module.exports = function(grunt) {
     },
     // Put files not handled in other tasks here
     copy: {
+      utilsimg: {
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.app %>/bower_components/eperusteet-frontend-utils/png',
+          dest: '<%= yeoman.app %>/images',
+          src: '**'
+        }]
+      },
       dist: {
         files: [{
           expand: true,
@@ -434,8 +442,9 @@ module.exports = function(grunt) {
       }
 
       grunt.task.run([
-        'ts',
         'clean:server',
+        'ts',
+        'copy:utilsimg',
         'concurrent:server',
         'copy:fonts',
         'autoprefixer',
@@ -463,6 +472,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'ts',
+    'copy:utilsimg',
     'useminPrepare',
     'concurrent:dist',
     'autoprefixer',
