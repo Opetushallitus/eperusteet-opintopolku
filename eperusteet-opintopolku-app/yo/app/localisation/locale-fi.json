@@ -201,5 +201,7 @@
   "peruste-ei-ole-katseltavissa": "Peruste ei ole katseltavissa",
 
   "osaamistavoitteet": "Osaamistavoitteet",
-  "osaamisen-arviointi": "Osaamisen arviointi"
+  "osaamisen-arviointi": "Osaamisen arviointi",
+  "ops-esikatselu": "Opetussuunnitelman esikatselu",
+  "esikatselu-varoitus": "Opetussuunnitelma on vielä kesken."
 }

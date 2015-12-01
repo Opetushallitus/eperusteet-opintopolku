@@ -362,7 +362,7 @@ epOpintopolkuApp
 
       .state('root.lukio.oppiaine', {
         url: '/oppiaine/:oppiaineId',
-        templateUrl: 'eperusteet-esitys/views/lukioOppiaine.html',
+        templateUrl: 'eperusteet-esitys/views/lukiooppiaine.html',
         controller: 'epLukioOppiaineController',
         resolve: {
           oppiaineId: function (serviceConfig, $stateParams) {
@@ -599,7 +599,6 @@ epOpintopolkuApp
               opsId: opsId,
               viiteId: viiteId
             }).$promise.then(function (res) {
-              console.log("SHOW", res);
               return res;
             })
           }
@@ -760,6 +759,14 @@ epOpintopolkuApp
           },
           vlkt: function (opsId, vlkId, opsResource) {
             return opsResource.getVlk({
+              opsId: opsId,
+              vlkId: vlkId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          vlkPeruste: function(opsPerusteResource, opsId, vlkId) {
+            return opsPerusteResource.getVlkPeruste({
               opsId: opsId,
               vlkId: vlkId
             }).$promise.then(function (res) {

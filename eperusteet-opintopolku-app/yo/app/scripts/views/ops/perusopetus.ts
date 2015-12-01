@@ -197,10 +197,17 @@ epOpintopolkuApp
     vlkt,
     laajaalaisetosaamiset,
     MurupolkuData,
-    Utils) {
+    Utils,
+    vlkPeruste,
+    VuosiluokkakokonaisuusMapper) {
 
     $scope.vlk = vlkt;
+    $scope.peruste = vlkPeruste;
+    console.log(vlkPeruste);
     $scope.osaamiset = _.zipBy(laajaalaisetosaamiset, 'tunniste');
+
+    VuosiluokkakokonaisuusMapper.init($scope, laajaalaisetosaamiset, vlkPeruste);
+
 
     $scope.vlkOrder = function (item) {
       return Utils.nameSort($scope.osaamiset[item._laajaalainenosaaminen]);
@@ -210,7 +217,8 @@ epOpintopolkuApp
 
   })
 
-  .controller('OpsVlkOppiaineController', function($scope,  $timeout, $state, oppiaineId, oppiaine, MurupolkuData) {
+
+.controller('OpsVlkOppiaineController', function($scope,  $timeout, $state, oppiaineId, oppiaine, MurupolkuData) {
     $scope.oppiaine = oppiaine;
 
     var currentVlk = _($scope.vlkMap)

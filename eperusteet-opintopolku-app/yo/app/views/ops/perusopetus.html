@@ -16,7 +16,10 @@ European Union Public Licence for more details.
 
 <div>
   <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
-
+  <div ng-if="ops.tila !== 'julkaistu'" class="alert alert-info">
+    <h4 kaanna="'ops-esikatselu'"></h4>
+    <p kaanna="'esikatselu-varoitus'"></p>
+  </div>
   <murupolku></murupolku>
   <div class="clearfix"></div>
 

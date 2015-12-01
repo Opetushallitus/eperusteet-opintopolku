@@ -32,6 +32,15 @@ epOpintopolkuApp
     })
   })
 
+  .factory('opsPerusteResource', function ($resource, opsBase) {
+    return $resource(opsBase.OPS, {opsId: '@id'}, {
+      getVlkPeruste: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId/peruste', cache: true},
+      getOppiainePeruste: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/peruste', cache: true}
+    })
+  })
+
+  //eperusteet-ylops-service/api/opetussuunnitelmat/480841/vuosiluokkakokonaisuudet/480777/peruste
+
   .factory('opsTermisto', function ($resource, opsBase) {
     return $resource(opsBase.OPS + '/termisto/:opsId', {
       opsId: '@id',
