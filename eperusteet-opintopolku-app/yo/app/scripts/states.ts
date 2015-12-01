@@ -773,7 +773,7 @@ epOpintopolkuApp
               return res;
             })
           },
-          laajaalaisetosaamiset: function (opsId, opsResource) {
+          baseLaajaalaiset: function (opsId, opsResource) {
             return opsResource.getLaajaalaisetosaamiset({
               opsId: opsId
             }).$promise.then(function (res) {

@@ -17,15 +17,3 @@
     <div esitys-teksti="paikalliset[tunniste]" esitys-peruste="laajaalaiset[tunniste]"></div>
   </div>
 
-
-<div ng-if="vlk.laajaalaisetosaamiset">
-  <h2 kaanna="'laaja-alaisen-osaamisen-alueet'" id="vlk-laajaalaisetosaamiset"></h2>
-  <div ng-show="osaaminen.kuvaus" ng-repeat="osaaminen in vlk.laajaalaisetosaamiset | orderBy:vlkOrder">
-    <h3 ng-bind-html="osaamiset[osaaminen._laajaalainenosaaminen].nimi | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="osaaminen.kuvaus"></termisto-tekstikentta>
-  </div>
-</div>
-<div ng-if="hasContent(vlk.paikallisestiPaatettavatAsiat)">
-  <h2 ng-bind-html="vlk.paikallisestiPaatettavatAsiat.otsikko | kaanna | unsafe"></h2>
-  <termisto-tekstikentta tekstikentta="vlk.paikallisestiPaatettavatAsiat.teksti"></termisto-tekstikentta>
-</div>

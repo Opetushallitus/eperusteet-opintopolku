@@ -42,7 +42,7 @@ epOpintopolkuApp
     }
   })
 
-  .service('VuosiluokkakokonaisuusMapper', function ($stateParams) {
+  .service('VuosiluokkakokonaisuusMapper', function () {
     this.init = function (scope, laajaalaisetosaamiset, vlkPeruste) {
       scope.peruste = vlkPeruste;
       scope.tunnisteet = _.map(scope.peruste.laajaalaisetosaamiset, '_laajaalainenosaaminen');

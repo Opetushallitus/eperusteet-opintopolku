@@ -195,7 +195,7 @@ epOpintopolkuApp
     $scope,
     vlkId,
     vlkt,
-    laajaalaisetosaamiset,
+    baseLaajaalaiset,
     MurupolkuData,
     Utils,
     vlkPeruste,
@@ -203,17 +203,19 @@ epOpintopolkuApp
 
     $scope.vlk = vlkt;
     $scope.peruste = vlkPeruste;
-    console.log(vlkPeruste);
-    $scope.osaamiset = _.zipBy(laajaalaisetosaamiset, 'tunniste');
+    console.log("peruste", vlkPeruste, "lajaa", baseLaajaalaiset, "vlk", vlkt);
+    $scope.osaamiset = _.zipBy(baseLaajaalaiset, 'tunniste');
+
+    var laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+    var laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
+
+    $scope.orderFn = function (tunniste) {
+      return laajaalaisetOrder.indexOf(tunniste);
+    };
 
     VuosiluokkakokonaisuusMapper.init($scope, laajaalaisetosaamiset, vlkPeruste);
 
-
-    $scope.vlkOrder = function (item) {
-      return Utils.nameSort($scope.osaamiset[item._laajaalainenosaaminen]);
-      };
-
-     MurupolkuData.set({vlkId: vlkId, vlkNimi: $scope.vlk.nimi});
+    MurupolkuData.set({vlkId: vlkId, vlkNimi: $scope.vlk.nimi});
 
   })
 
