@@ -40,7 +40,6 @@ epOpintopolkuApp
     $scope.hasContent = function (obj) {
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
-
     $scope.otsikot = otsikot;
     $scope.ops = perusOps;
     $scope.vlkMap = _.map($scope.ops.vuosiluokkakokonaisuudet, function(v){
@@ -203,8 +202,7 @@ epOpintopolkuApp
 
     $scope.vlk = vlkt;
     $scope.peruste = vlkPeruste;
-    console.log("peruste", vlkPeruste, "lajaa", baseLaajaalaiset, "vlk", vlkt);
-    $scope.osaamiset = _.zipBy(baseLaajaalaiset, 'tunniste');
+    //$scope.osaamiset = _.zipBy(baseLaajaalaiset, 'tunniste');
 
     var laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
     var laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
