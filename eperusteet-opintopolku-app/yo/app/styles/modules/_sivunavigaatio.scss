@@ -131,6 +131,20 @@ $sivunavi-level-padding: 20px;
     color: $brand-link-active;
     font-weight: 700;
   }
+  span.perusopetus-paikallinen-active {
+    background-image: url('../../images/ikoni_paikallinen_white.svg');
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    float: right;
+  }
+  span.perusopetus-paikallinen {
+    background-image: url('../../images/ikoni_paikallinen.svg');
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    float: right;
+  }
   .list-group-item {
     &.active, &.active:focus, &.active:hover {
       background-color: $brand-link-active-bg;

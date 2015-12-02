@@ -3,10 +3,12 @@
     ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
   <a ng-if="item.$vlk" ng-click="getVlk(item.$vlk)" ng-href="{{item.url}}">
   <span>{{ item.label | kaanna }}</span>
-    <pre>{{item | json}}</pre>
   </a>
     <a ng-if="!item.$vlk" ng-href="{{item.url}}">
       <span>{{ item.label | kaanna }}</span>
+      <span ng-class="section.naviClasses(item)"></span>
     </a>
   </div>
 </div>
+
+<!--ng-class="{'perusopetus-paikallinen': !!item.$tyyppi.length && item.$tyyppi !== 'yhteinen'}"-->

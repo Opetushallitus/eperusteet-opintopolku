@@ -75,6 +75,12 @@ epOpintopolkuApp
       if (item.$header) {
         classes.push('tekstisisalto-active-header');
       }
+      if (!item.$selected && item.$tyyppi && (item.$tyyppi !== 'yhteinen')) {
+        classes.push('perusopetus-paikallinen')
+      }
+      if (item.$selected && item.$tyyppi && (item.$tyyppi !== 'yhteinen')) {
+        classes.push('perusopetus-paikallinen-active')
+      }
       return classes;
     };
 
@@ -113,7 +119,7 @@ epOpintopolkuApp
       sections: [
         {
           id: 'tekstikappale',
-          include: 'views/ops/opsTekstisisalto.html',
+          include: 'views/ops/opstekstisisalto.html',
           items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
           naviClasses: $scope.naviClasses,
           title: 'yhteiset-osuudet'
@@ -122,7 +128,7 @@ epOpintopolkuApp
           id: 'vlkoppiaine',
           items: opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlkt, $scope.oppiaineet),
           naviClasses: $scope.naviClasses,
-          include: 'views/ops/opsVlk.html',
+          include: 'views/ops/opsvlk.html',
           state: $scope.state
         }
       ]
