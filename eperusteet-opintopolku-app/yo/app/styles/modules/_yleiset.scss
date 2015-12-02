@@ -133,7 +133,7 @@ h4.sparse {
 
 .peruste-otsikko {
   margin-top: 30px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 hr {
@@ -171,9 +171,6 @@ hr {
   .breadcrumb {
     padding-left: $sisalto-padding;
     padding-right: $sisalto-padding;
-    li {
-      white-space: normal;
-    }
   }
   .peruste-otsikko {
     padding-left: $sisalto-padding;
