@@ -1,0 +1,139 @@
+<div class="etusivu">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="banneri-box">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="banneri-sisalto">
+              <h2>ePerusteet -palvelusta</h2>
+              <span>
+                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Sed posuere interdum sem. Quisque ligula eros ullamcorper quis, lacinia quis facilisis sed sapien. Mauris varius diam vitae arcu. Sed arcu lectus auctor vitae, consectetuer et venenatis eget velit. Sed augue orci, lacinia eu tincidunt et eleifend nec lacus. Donec ultricies nisl ut felis, suspendisse potenti. Lorem ipsum ligula ut hendrerit mollis, ipsum erat vehicula risus, eu suscipit sem libero nec erat. Aliquam erat volutpat.
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4">
+      <div class="sisalto-box">
+        <h2 kaanna="'etusivu.valtakunnalliset-perusteet'"></h2>
+        <div class="linkit">
+          <ul>
+            <li class="peruste-linkki">
+              <a ui-sref="root.selaus.ammatillinenperuskoulutus">
+                <span kaanna="'navi.ammatillinenperuskoulutus'"></span>
+              </a>
+            </li>
+            <li class="peruste-linkki">
+              <a ui-sref="root.selaus.ammatillinenaikuiskoulutus">
+                <span kaanna="'navi.ammatillinenaikuiskoulutus'"></span>
+              </a>
+            </li>
+            <!--<li class="peruste-linkki">
+              <a ui-sref="root.selaus.valmentavakoulutus">
+                <span kaanna="'navi.valmentavakoulutus'"></span>
+              </a>
+            </li>-->
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="sisalto-box">
+        <h2 kaanna="'etusivu.paikalliset-opsit'"></h2>
+        <div class="linkit">
+          <ul>
+            <li class="ops-lista-elementti">
+              <a>
+                <span>Könninkankaan OPS</span>
+              </a>
+              <p>
+                <span>19.11.2015 Perusopetus</span>
+              </p>
+            </li>
+            <li class="ops-lista-elementti">
+              <a>
+                <span>Keskustan luokion opetussuunnitelma 2015</span>
+              </a>
+              <p>
+                <span>11.11.2015 Lukiokoulutus</span>
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="sisalto-box">
+        <h2 kaanna="'etusivu.uutisia'"></h2>
+        <div class="linkit">
+          <ul>
+            <li class="ops-lista-elementti">
+              <a>
+                <span>Paikalliset opetussuunnitelmat lötyvät nyt ePerusteet palvelusta.</span>
+              </a>
+              <p>
+                <span>8.5.2015</span>
+              </p>
+            </li>
+            <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown" class="ops-lista-elementti">
+              <div ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
+                <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+                  <span kaanna="tiedote.otsikko"></span>
+                </a>
+                <p>
+                  <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
+                </p>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="alatunniste">
+      <div class="alatunniste-tausta"></div>
+
+      <div class="alatunniste-sisalto">
+        <ul class="alatunniste-linkit">
+          <span ng-show="kieli === 'fi'">
+            <li><a href="mailto:eperusteet@opintopolku.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
+          </span>
+          <span ng-show="kieli === 'sv'">
+            <li><a href="mailto:egrunder@studieinfo.fi" kaanna="'kysy-neuvoa-anna-palautetta'"></a></li>
+          </span>
+          <li><a href="https://opintopolku.fi/wp/tietosuojaseloste" kaanna="'tietosuojaseloste'"></a></li>
+        </ul>
+
+        <ul class="alatunniste-linkit">
+          <span ng-show="kieli === 'fi'">
+            <li><a href="http://osaan.fi" kaanna="'osaan-linkki'"></a></li>
+          </span>
+          <span ng-show="kieli === 'sv'">
+            <li><a href="http://jagkan.fi" kaanna="'osaan-linkki'"></a></li>
+          </span>
+          <li><a href="https://virkailija.opintopolku.fi/eperusteet-app" kaanna="'eperusteet-virkailija-linkki'"></a></li>
+        </ul>
+      </div>
+
+      <div class="opetushallitus-logo"></div>
+    </div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 text-center">
+          <p class="alatunniste-copyright">
+            <span kaanna="'copyright-opetushallitus'"></span> | <a href="http://www.oph.fi"><span>www.oph.fi</span></a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>

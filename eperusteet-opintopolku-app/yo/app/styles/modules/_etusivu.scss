@@ -1,7 +1,9 @@
 .sisalto-box {
   background-color: white;
   border: 1px solid $brand-border-color;
-  padding: $sisalto-padding;
+  padding-top: 10px;
+  padding-left: $sisalto-padding;
+  padding-right: $sisalto-padding;
   margin-bottom: 20px;
   &.topmost {
     margin-top: 40px;
@@ -10,12 +12,66 @@
     margin-top: 0;
   }
 }
+
+
+.banneri-box {
+  background-color: white;
+  background-image: url("../images/banneri-tausta.jpg");
+  background-position: 50% 32%;
+  background-size: cover;
+  border: 1px solid $brand-border-color;
+  margin-bottom: 20px;
+  h2 {
+    font-weight: 900;
+  }
+  .banneri-sisalto {
+    background-color: rgba(6, 82, 107, 0.6);
+    padding: $sisalto-padding;
+    color: white;
+    line-height: 1.6em;
+  }
+}
+
+.linkit {
+  margin-left: -$sisalto-padding;
+  margin-right: -$sisalto-padding;
+  border-top: 1px solid $brand-border-color;
+  ul {
+    list-style-type: none;
+    padding-left: $sisalto-padding;
+    padding-right: $sisalto-padding;
+    li.peruste-linkki {
+      background: url("../images/xs/ikoni-peruste.png") no-repeat left top;
+      background-size: 18px 10px;
+      background-position: 0 16px;
+      padding-left: 32px;
+      padding-top: 10px;
+    }
+  }
+}
+
+.ops-lista-elementti {
+  padding-top: 10px;
+  p {
+    color: #A3A5A7;
+    margin: 0;
+  }
+}
+
 @media (max-width: $screen-sm) {
   .sisalto-box {
-    padding-left: $sisalto-padding*0.75;
-    padding-right: $sisalto-padding*0.75;
+    padding-left: $sisalto-padding * 0.75;
+    padding-right: $sisalto-padding * 0.75;
     &.topmost {
-      margin-top: 0px;
+      margin-top: 0;
+    }
+  }
+  .linkit {
+    margin-left: -$sisalto-padding * 0.75;
+    margin-right: -$sisalto-padding * 0.75;
+    ul {
+      padding-left: $sisalto-padding * 0.75;
+      padding-right: $sisalto-padding * 0.75;
     }
   }
 }
@@ -23,7 +79,7 @@
 $paaotsikko-logo-size: 96px;
 
 .etusivu {
-  margin-top: 40px;
+  margin-top: 20px;
   h1, h2 {
     margin-top: 0;
   }
@@ -39,8 +95,10 @@ $paaotsikko-logo-size: 96px;
   }
 }
 
-@media (max-width: 850px) {
+@media (max-width: $screen-xs-max) {
   .etusivu {
+    margin-top: 0;
+
     .paaotsikko {
       img {
         display: none;
@@ -98,6 +156,7 @@ $paaotsikko-logo-size: 96px;
     float: left;
     background-image: url("../images/alatunniste_tausta.svg");
     background-color: $content-bg-color;
+    background-size: 112px 80px;
     width: 112px;
     height: 80px;
   }
@@ -142,6 +201,10 @@ $paaotsikko-logo-size: 96px;
       display: none;
     }
   }
+}
+
+.alatunniste-copyright {
+  font-size: 12px;
 }
 
 
