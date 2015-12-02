@@ -11,165 +11,92 @@
 
 <div esitys-teksti="oppiaine.tehtava" esitys-peruste="perusteOppiaine.tehtava" show-peruste="true"></div>
 
-<p class="vuosiluokkailmoitus alert alert-info" ng-if="!activeVuosiluokka" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
+<p class="vuosiluokkailmoitus alert alert-info" ng-show="!missingVlk" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
 
-  <h2 class="vlk-otsikko" kaanna="vuosiluokka.vuosiluokka"></h2>
+<h2 class="vlk-otsikko" ng-bind="vuosi | kaanna"></h2>FIXME
 
-  <div ng-if="oppiaine.tyyppi === 'yhteinen'">
-    <div esitys-teksti="valittuVlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[currentVlk].tehtava"></div>
-    <div esitys-teksti="valittuVlk.tyotavat" esitys-peruste="perusteOppiaineVlkMap[currentVlk].tyotavat"></div>
-    <div esitys-teksti="valittuVlk.ohjaus" esitys-peruste="perusteOppiaineVlkMap[currentVlk].ohjaus"></div>
-    <div esitys-teksti="valittuVlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[currentVlk].arviointi"></div>
-  </div>
+<div ng-if="oppiaine.tyyppi === 'yhteinen'">
+  <div esitys-teksti="valittuVlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[currentVlk].tehtava"></div>
+  <div esitys-teksti="valittuVlk.tyotavat" esitys-peruste="perusteOppiaineVlkMap[currentVlk].tyotavat"></div>
+  <div esitys-teksti="valittuVlk.ohjaus" esitys-peruste="perusteOppiaineVlkMap[currentVlk].ohjaus"></div>
+  <div esitys-teksti="valittuVlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[currentVlk].arviointi"></div>
+</div>
 
-  <div ng-if="oppiaine.tyyppi !== 'yhteinen'">
-    <h3 ng-bind-html="valittuVlk.tehtava.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.tehtava.teksti" ng-bind-html="valittuVlk.tehtava.teksti | kaanna | unsafe"></div>
-    <h3 ng-bind-html="valittuVlk.tyotavat.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.tyotavat.teksti" ng-bind-html="valittuVlk.tyotavat.teksti | kaanna | unsafe"></div>
-    <h3 ng-bind-html="valittuVlk.ohjaus.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.ohjaus.teksti" ng-bind-html="valittuVlk.ohjaus.teksti | kaanna | unsafe"></div>
-    <h3 ng-bind-html="valittuVlk.arviointi.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.arviointi.teksti" ng-bind-html="valittuVlk.arviointi.teksti | kaanna | unsafe"></div>
-  </div>
+<div ng-if="oppiaine.tyyppi !== 'yhteinen'">
+  <h3 ng-bind-html="valittuVlk.tehtava.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="valittuVlk.tehtava.teksti" ng-bind-html="valittuVlk.tehtava.teksti | kaanna | unsafe"></div>
+  <h3 ng-bind-html="valittuVlk.tyotavat.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="valittuVlk.tyotavat.teksti" ng-bind-html="valittuVlk.tyotavat.teksti | kaanna | unsafe"></div>
+  <h3 ng-bind-html="valittuVlk.ohjaus.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="valittuVlk.ohjaus.teksti" ng-bind-html="valittuVlk.ohjaus.teksti | kaanna | unsafe"></div>
+  <h3 ng-bind-html="valittuVlk.arviointi.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="valittuVlk.arviointi.teksti" ng-bind-html="valittuVlk.arviointi.teksti | kaanna | unsafe"></div>
+</div>
 
-  <div ng-repeat="vuosiluokka in vlk.vuosiluokat | filter:vuosiluokkaFilter | orderBy:'vuosiluokka' track by vuosiluokka.vuosiluokka">
-    <h2 class="vuosiluokka-otsikko" ng-bind="('vuosiluokka' | kaanna) + ' ' + vuosiluokka.$numero"></h2>
+<h2 class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
 
-    <div ng-if="oppiaine.tyyppi === 'yhteinen'">
-      <h3 kaanna="'tavoitteet'"></h3>
+<div ng-if="oppiaine.tyyppi === 'yhteinen'">
+  <h3 kaanna="'tavoitteet'"></h3>
 
-      <div ng-repeat="tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].tunnisteet"
-           ng-init="vs = vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]" class="tavoite">
-        <h4 class="tavoite-otsikko" ng-bind-html="vs.tavoiteMap[tunniste].$tavoite | kaanna | unsafe"></h4>
-        <div class="esitys-peruste peruste-body">
+  <div ng-repeat="tunniste in vuosiluokkaSisallot[currentVlk][vuosi].tunnisteet"
+       ng-init="vs = vuosiluokkaSisallot[currentVlk][vuosi]" class="tavoite">
+    <h4 class="tavoite-otsikko" ng-bind-html="vs.tavoiteMap[tunniste].$tavoite | kaanna | unsafe"></h4>
+    <div class="esitys-peruste peruste-body">
 
-          <div class="listat">
-            <div class="lista">
-              <h4 kaanna="'sisaltoalueet'"></h4>
-              <ul>
-                <li ng-repeat="sisaltoalue in vs.tavoiteMap[tunniste].$sisaltoalueet | orderBy:nimiOrder">
-                  <span ng-bind="sisaltoalue.nimi | kaanna"></span>
-                </li>
-              </ul>
-            </div>
-            <div class="lista">
-              <h4 kaanna="'laaja-alaiset-osaamiset'"></h4>
-              <ul>
-                <li ng-repeat="laajaalainen in vs.tavoiteMap[tunniste].$laajaalaiset | orderBy:nimiOrder">
-                  <span ng-bind="laajaalainen.nimi | kaanna"></span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="arviointi" ng-if="vs.tavoiteMap[tunniste].$arvioinninkohteet.length > 0">
-            <h4 kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
-            <table class="table table-bordered kriteerit">
-              <tr>
-                <th width="30%" kaanna="'arvioinnin-kohde'"></th>
-                <th kaanna="'arvion-hyva-osaaminen'"></th>
-              </tr>
-              <tr ng-repeat="kohde in vs.tavoiteMap[tunniste].$arvioinninkohteet">
-                <td ng-bind="kohde.arvioinninKohde | kaanna"></td>
-                <td ng-bind="kohde.hyvanOsaamisenKuvaus | kaanna"></td>
-              </tr>
-            </table>
-          </div>
-
+      <div class="listat">
+        <div class="lista">
+          <h4 kaanna="'sisaltoalueet'"></h4>
+          <ul>
+            <li ng-repeat="sisaltoalue in vs.tavoiteMap[tunniste].$sisaltoalueet | orderBy:nimiOrder">
+              <span ng-bind="sisaltoalue.nimi | kaanna"></span>
+            </li>
+          </ul>
         </div>
-        <div class="esitys-paikallinen" termisto-viitteet="vs.muokattavat[tunniste].teksti" ng-bind-html="vs.muokattavat[tunniste].teksti | kaanna | unsafe"></div>
+        <div class="lista">
+          <h4 kaanna="'laaja-alaiset-osaamiset'"></h4>
+          <ul>
+            <li ng-repeat="laajaalainen in vs.tavoiteMap[tunniste].$laajaalaiset | orderBy:nimiOrder">
+              <span ng-bind="laajaalainen.nimi | kaanna"></span>
+            </li>
+          </ul>
+        </div>
       </div>
-
-      <h3 ng-if="!vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko"
-          kaanna="'sisaltoalueet'"></h3>
-      <h3 ng-if="vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko"
-          kaanna="vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko"></h3>
-
-      <div esitys-teksti="" esitys-peruste="vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo" show-peruste="true" hide-otsikko="true"></div>
-      <div ng-repeat="tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].sisaltoaluetunnisteet"
-           ng-init="vs = vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]" class="tavoite">
-        <h4 class="tavoite-otsikko" ng-bind-html="vs.perusteSisaltoalueet[tunniste].nimi | kaanna | unsafe"></h4>
-        <div class="esitys-peruste" termisto-viitteet="vs.perusteSisaltoalueet[tunniste].kuvaus" ng-bind-html="vs.perusteSisaltoalueet[tunniste].kuvaus | kaanna | unsafe"></div>
-        <div class="esitys-paikallinen" termisto-viitteet="vs.sisaltoaluemuokattavat[tunniste].teksti" ng-bind-html="vs.sisaltoaluemuokattavat[tunniste].teksti | kaanna | unsafe"></div>
+      <div class="arviointi" ng-if="vs.tavoiteMap[tunniste].$arvioinninkohteet.length > 0">
+        <h4 kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
+        <table class="table table-bordered kriteerit">
+          <tr>
+            <th width="30%" kaanna="'arvioinnin-kohde'"></th>
+            <th kaanna="'arvion-hyva-osaaminen'"></th>
+          </tr>
+          <tr ng-repeat="kohde in vs.tavoiteMap[tunniste].$arvioinninkohteet">
+            <td ng-bind="kohde.arvioinninKohde | kaanna"></td>
+            <td ng-bind="kohde.hyvanOsaamisenKuvaus | kaanna"></td>
+          </tr>
+        </table>
       </div>
 
     </div>
+    <div class="esitys-paikallinen" termisto-viitteet="vs.muokattavat[tunniste].teksti" ng-bind-html="vs.muokattavat[tunniste].teksti | kaanna | unsafe"></div>
+  </div>
 
-    <div ng-if="oppiaine.tyyppi !== 'yhteinen'">
-      <div ng-repeat="tavoite in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].valinnaisenTekstiosat">
-        <h4 ng-bind-html="tavoite.otsikko | kaanna | unsafe"></h4>
-        <div termisto-vitteet="tavoite.teksti" ng-bind-html="tavoite.teksti | kaanna | unsafe"></div>
-      </div>
-    </div>
+  <h3 ng-if="!vuosiluokkaSisallot[currentVlk][vuosi].perusteOpVlk.sisaltoalueinfo.otsikko"
+      kaanna="'sisaltoalueet'"></h3>
+  <h3 ng-if="vuosiluokkaSisallot[currentVlk][vuosi].perusteOpVlk.sisaltoalueinfo.otsikko"
+      kaanna="vuosiluokkaSisallot[currentVlk][vuosi].perusteOpVlk.sisaltoalueinfo.otsikko"></h3>
 
+  <div esitys-teksti="" esitys-peruste="vuosiluokkaSisallot[currentVlk][vuosi].perusteOpVlk.sisaltoalueinfo" show-peruste="true" hide-otsikko="true"></div>
+  <div ng-repeat="tunniste in vuosiluokkaSisallot[currentVlk][vuosi].sisaltoaluetunnisteet"
+       ng-init="vs = vuosiluokkaSisallot[currentVlk][vuosi]" class="tavoite">
+    <h4 class="tavoite-otsikko" ng-bind-html="vs.perusteSisaltoalueet[tunniste].nimi | kaanna | unsafe"></h4>
+    <div class="esitys-peruste" termisto-viitteet="vs.perusteSisaltoalueet[tunniste].kuvaus" ng-bind-html="vs.perusteSisaltoalueet[tunniste].kuvaus | kaanna | unsafe"></div>
+    <div class="esitys-paikallinen" termisto-viitteet="vs.sisaltoaluemuokattavat[tunniste].teksti" ng-bind-html="vs.sisaltoaluemuokattavat[tunniste].teksti | kaanna | unsafe"></div>
   </div>
 
 </div>
 
-
-
-
-
-<h1 class="oppiaine-nimi" esitys-sivu-otsikko="valittuOppiaine.oppiaine.nimi">
-  <span kaanna="oppiaine.nimi"></span>
-</h1>
-
-<pre>{{oppiaine | json}}</pre>
-<pre>{{perusteOppiaine | json}}</pre>
-
-<div>
-  <div ng-if="oppiaine.oppimaarat.length > 0">
-    <h2 kaanna="'oppimaarat'"></h2>
-    <ul>
-      <li ng-repeat="oppimaara in oppiaine.oppimaarat">
-        <a ui-sref="root.ops.perus.vuosiluokka.oppiaine({oppiaineId: oppimaara.id})" ng-bind="oppimaara.nimi | kaanna"></a>
-      </li>
-    </ul>
-  </div>
-
-  <div ng-if="oppiaine.kohdealueet.length > 0">
-    <h2 kaanna="'kohdealueet'"></h2>
-    <ul>
-      <li ng-repeat="ka in oppiaine.kohdealueet">
-        <span ng-bind="ka.nimi | kaanna"></span>
-      </li>
-    </ul>
-  </div>
-
-  <div ng-hide="!hasContent(valittuVlk.tehtava)">
-    <h2 ng-bind-html="valittuVlk.tehtava.otsikko | kaanna | unsafe"></h2>
-    <termisto-tekstikentta tekstikentta="valittuVlk.tehtava.teksti || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-hide="!hasContent(valittuVlk.yleistavoitteet)">
-    <h2 ng-bind-html="valittuVlk.yleistavoitteet.otsikko | kaanna | unsafe"></h2>
-    <termisto-tekstikentta tekstikentta="valittuVlk.yleistavoitteet.teksti || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-hide="!hasContent(valittuVlk.tyotavat)">
-    <h3 ng-bind-html="valittuVlk.tyotavat.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuVlk.tyotavat.teksti || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-hide="!hasContent(valittuVlk.ohjaus)">
-    <h3 ng-bind-html="valittuVlk.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuVlk.ohjaus.teksti || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-hide="!hasContent(valittuVlk.arviointi)">
-    <h3 ng-bind-html="valittuVlk.arviointi.otsikko | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="valittuVlk.arviointi.teksti || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-hide="!valittuVlk.sisaltoalueinfo">
-    <h3>{{ valittuVlk.sisaltoalueinfo.otsikko | kaanna }}</h3>
-    <termisto-tekstikentta tekstikentta="valittuVlk.sisaltoalueinfo.teksti || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-hide="!valittuVlk.sisaltoalueet || valittuOppiaine.oppiaine.sisaltoalueet.length === 0">
-    <div ng-repeat="sa in valittuVlk.sisaltoalueet">
-      <h4 class="sparse">{{ sa.nimi | kaanna }}</h4>
-      <termisto-tekstikentta tekstikentta="sa.kuvaus || '-'"></termisto-tekstikentta>
-    </div>
+<div ng-if="oppiaine.tyyppi !== 'yhteinen'">
+  <div ng-repeat="tavoite in vuosiluokkaSisallot[currentVlk][vuosi].valinnaisenTekstiosat">
+    <h4 ng-bind-html="tavoite.otsikko | kaanna | unsafe"></h4>
+    <termisto-tekstikentta tekstikentta="tavoite.teksti" ng-bind-html="tavoite.teksti | kaanna | unsafe"></termisto-tekstikentta>
   </div>
 </div>
