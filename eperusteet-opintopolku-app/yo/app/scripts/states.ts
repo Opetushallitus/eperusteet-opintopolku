@@ -813,6 +813,22 @@ epOpintopolkuApp
             }).$promise.then(function (res) {
               return res;
             })
+          },
+          oppiainePeruste: function(opsPerusteResource, opsId, oppiaineId) {
+            return opsPerusteResource.getOppiainePeruste({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          baseLaajaalaiset: function (opsId, opsResource) {
+            return opsResource.getLaajaalaisetosaamiset({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              console.log(res);
+              return res
+            })
           }
         }
       })
