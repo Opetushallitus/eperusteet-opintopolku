@@ -17,7 +17,29 @@
   </div>
 
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-lg-4 col-lg-push-8 col-md-12">
+      <div class="sisalto-box">
+        <h2 kaanna="'etusivu.uutisia'"></h2>
+        <div class="linkit">
+          <ul>
+            <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown" class="lista-elementti"
+                ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
+              <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+                <span kaanna="tiedote.otsikko"></span>
+              </a>
+              <p>
+                <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
+              </p>
+            </li>
+            <li class="lista-elementti-lisaa">
+              <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 col-lg-pull-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="'etusivu.valtakunnalliset-perusteet'"></h2>
         <div class="linkit">
@@ -54,7 +76,7 @@
       </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-lg-4 col-lg-pull-4 col-md-6">
       <div class="sisalto-box">
         <h2 kaanna="'etusivu.paikalliset-opsit'"></h2>
         <div class="linkit">
@@ -87,28 +109,6 @@
               <a ui-sref="root.selaus.ops">
                 <span kaanna="'etusivu.hae-muita-opseja'"></span>
               </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-4">
-      <div class="sisalto-box">
-        <h2 kaanna="'etusivu.uutisia'"></h2>
-        <div class="linkit">
-          <ul>
-            <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown" class="lista-elementti"
-                ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
-              <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
-                <span kaanna="tiedote.otsikko"></span>
-              </a>
-              <p>
-                <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
-              </p>
-            </li>
-            <li class="lista-elementti-lisaa">
-              <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
             </li>
           </ul>
         </div>
