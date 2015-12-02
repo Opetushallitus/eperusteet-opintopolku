@@ -23,6 +23,18 @@
         <div class="linkit">
           <ul>
             <li class="peruste-linkki">
+              <a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})" ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna"></a>
+            </li>
+            <li class="peruste-linkki">
+              <a ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_16'][0].id})" ng-bind="uusimmat['koulutustyyppi_16'][0].nimi | kaanna"></a>
+            </li>
+            <li class="peruste-linkki">
+              <a ui-sref="root.lisaopetus({perusteId: uusimmat['koulutustyyppi_6'][0].id})" ng-bind="uusimmat['koulutustyyppi_6'][0].nimi | kaanna"></a>
+            </li>
+            <!--<li class="peruste-linkki">
+              <a ui-sref="root.lukiokoulutus" kaanna="'etusivu.lukiokoulutuksen-peruste'"></a>
+            </li>-->
+            <li class="peruste-linkki">
               <a ui-sref="root.selaus.ammatillinenperuskoulutus">
                 <span kaanna="'navi.ammatillinenperuskoulutus'"></span>
               </a>
@@ -47,7 +59,7 @@
         <h2 kaanna="'etusivu.paikalliset-opsit'"></h2>
         <div class="linkit">
           <ul>
-            <li class="ops-lista-elementti">
+            <li class="lista-elementti">
               <a>
                 <span>Könninkankaan OPS</span>
               </a>
@@ -55,13 +67,26 @@
                 <span>19.11.2015 Perusopetus</span>
               </p>
             </li>
-            <li class="ops-lista-elementti">
+            <li class="lista-elementti">
               <a>
                 <span>Keskustan luokion opetussuunnitelma 2015</span>
               </a>
               <p>
                 <span>11.11.2015 Lukiokoulutus</span>
               </p>
+            </li>
+            <li class="lista-elementti">
+              <a>
+                <span>TODO TODO TODO</span>
+              </a>
+              <p>
+                <span>LISTAA OPSIT</span>
+              </p>
+            </li>
+            <li class="lista-elementti">
+              <a ui-sref="root.selaus.ops">
+                <span kaanna="'etusivu.hae-muita-opseja'"></span>
+              </a>
             </li>
           </ul>
         </div>
@@ -73,27 +98,20 @@
         <h2 kaanna="'etusivu.uutisia'"></h2>
         <div class="linkit">
           <ul>
-            <li class="ops-lista-elementti">
-              <a>
-                <span>Paikalliset opetussuunnitelmat lötyvät nyt ePerusteet palvelusta.</span>
+            <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown" class="lista-elementti"
+                ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
+              <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+                <span kaanna="tiedote.otsikko"></span>
               </a>
               <p>
-                <span>8.5.2015</span>
+                <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
               </p>
             </li>
-            <li ng-repeat="tiedote in tiedotteet|limitTo:naytto.shown" class="ops-lista-elementti">
-              <div ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
-                <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
-                  <span kaanna="tiedote.otsikko"></span>
-                </a>
-                <p>
-                  <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
-                </p>
-              </div>
+            <li class="lista-elementti-lisaa">
+              <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
             </li>
           </ul>
         </div>
-        <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
       </div>
     </div>
   </div>

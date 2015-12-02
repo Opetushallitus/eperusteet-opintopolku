@@ -50,12 +50,15 @@
   }
 }
 
-.ops-lista-elementti {
+.lista-elementti {
   padding-top: 10px;
   p {
     color: #A3A5A7;
     margin: 0;
   }
+}
+.lista-elementti-lisaa {
+  padding-top: 10px;
 }
 
 @media (max-width: $screen-sm) {
