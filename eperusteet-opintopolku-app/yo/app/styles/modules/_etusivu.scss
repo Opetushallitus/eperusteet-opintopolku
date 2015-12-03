@@ -25,7 +25,7 @@
     font-weight: 900;
   }
   .banneri-sisalto {
-    background-color: rgba(6, 82, 107, 0.6);
+    background-color: rgba(6, 82, 107, 0.7);
     padding: $sisalto-padding;
     color: white;
     line-height: 1.6em;
@@ -162,7 +162,7 @@ $paaotsikko-logo-size: 96px;
 
   .alatunniste-tausta {
     float: left;
-    background-image: url("../images/alatunniste_tausta.svg");
+    background-image: url("../images/alatunniste_tausta.png");
     background-color: $content-bg-color;
     background-size: 112px 80px;
     width: 112px;
