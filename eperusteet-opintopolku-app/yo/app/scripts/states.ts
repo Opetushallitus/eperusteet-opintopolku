@@ -826,8 +826,29 @@ epOpintopolkuApp
             return opsResource.getLaajaalaisetosaamiset({
               opsId: opsId
             }).$promise.then(function (res) {
-              console.log(res);
               return res
+            })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+        url: '/valinainenoppiaine/:oppiaineId',
+        templateUrl: 'views/ops/valinainenoppiaine.html',
+        controller: 'OpsValinainenoppiaineController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
             })
           }
         }

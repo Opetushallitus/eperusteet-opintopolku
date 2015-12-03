@@ -148,6 +148,10 @@ epOpintopolkuApp
         return;
       }
       let currentYear = currentVuosi[currentVuosi.length-1];
+      let type = oppiaine.tyyppi === 'yhteinen';
+      let oppiaineUrl = type ? $state.href('root.ops.perusopetus.vuosiluokka.oppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id})
+        : $state.href('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id});
+
       arr.push({
         depth: depth,
         $hidden: depth > 0,
@@ -155,7 +159,7 @@ epOpintopolkuApp
         label: oppiaine.nimi,
         $parent_vuosi: currentVuosi,
         $tyyppi: oppiaine.tyyppi,
-        url: $state.href('root.ops.perusopetus.vuosiluokka.oppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id})
+        url: oppiaineUrl
       });
     };
 

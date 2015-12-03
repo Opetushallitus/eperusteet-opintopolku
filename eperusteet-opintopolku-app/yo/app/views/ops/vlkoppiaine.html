@@ -13,7 +13,7 @@
 
 <p class="vuosiluokkailmoitus alert alert-info" ng-show="!missingVlk" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
 
-<h2 class="vlk-otsikko" ng-bind="vuosi | kaanna"></h2>FIXME
+<h2 class="vlk-otsikko" ng-bind="currentVlkCategory | kaanna"></h2>
 
 <div ng-if="oppiaine.tyyppi === 'yhteinen'">
   <div esitys-teksti="valittuVlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[currentVlk].tehtava"></div>
