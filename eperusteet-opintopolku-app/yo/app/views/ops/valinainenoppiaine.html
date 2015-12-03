@@ -1,29 +1,39 @@
 <h1 kaanna="oppiaine.nimi"></h1>
 <div esitys-teksti="oppiaine.tehtava"></div>
 
+<div>
+  <h3 ng-bind-html="vlkSisalto.tehtava.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="vlkSisalto.tehtava.teksti" ng-bind-html="vlkSisalto.tehtava.teksti | kaanna | unsafe"></div>
+  <h3 ng-bind-html="vlkSisalto.tyotavat.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="vlkSisalto.tyotavat.teksti" ng-bind-html="vlkSisalto.tyotavat.teksti | kaanna | unsafe"></div>
+  <h3 ng-bind-html="vlkSisalto.ohjaus.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="vlkSisalto.ohjaus.teksti" ng-bind-html="vlkSisalto.ohjaus.teksti | kaanna | unsafe"></div>
+  <h3 ng-bind-html="vlkSisalto.arviointi.otsikko | kaanna | unsafe"></h3>
+  <div termisto-viitteet="vlkSisalto.arviointi.teksti" ng-bind-html="vlkSisalto.arviointi.teksti | kaanna | unsafe"></div>
+</div>
+
 <h2 class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
 
-<div class="lista">
-  <h4 kaanna="'sisaltoalueet'"></h4>
-  <ul>
-    <li ng-repeat="sisaltoalue in sisalto.sisaltoalueet">
-      <span ng-bind="sisaltoalue.nimi | kaanna"></span>
-      <div termisto-viitteet="sisaltoalue.kuvaus" ng-bind-html="sisaltoalue.kuvaus | kaanna | unsafe"></div>
-    </li>
-  </ul>
-</div>
+<h3 kaanna="'tavoitteet'"></h3>
 
-<div>
-  <div ng-repeat="tavoite in sisalto.tavoitteet">
-    <h4 ng-bind-html="tavoite.tavoite | kaanna | unsafe"></h4>
-    <div class="lista">
-      <h4 kaanna="'sisaltoalueet'"></h4>
-      <ul>
-        <li ng-repeat="sa in tavoite.sisaltoalueet">
-          <span ng-bind="sa.sisaltoalueet.nimi | kaanna"></span>
-          <div termisto-viitteet="sa.sisaltoalueet.kuvaus" ng-bind-html="sa.sisaltoalueet.kuvaus | kaanna | unsafe"></div>
-        </li>
-      </ul>
+<accordion ng-repeat="tavoite in sisalto.tavoitteet" class="sivunavi-box ">
+  <accordion-group is-open="status.open">
+    <accordion-heading>
+      <div ng-class="{'opened-oppiaine': status.open}">
+        <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+        <h4 class="tavoite-otsikko" ng-bind-html="tavoite.tavoite | kaanna | unsafe"></h4>
+      </div>
+    </accordion-heading>
+    <div class="listat">
+      <div class="lista">
+        <h4 kaanna="'sisaltoalueet'"></h4>
+        <ul>
+          <li ng-repeat="sa in tavoite.sisaltoalueet | orderBy:nimiOrder">
+            <span ng-bind="sa.sisaltoalueet.nimi | kaanna"></span>
+            <div termisto-viitteet="sa.sisaltoalueet.kuvaus" ng-bind-html="sa.sisaltoalueet.kuvaus | kaanna | unsafe"></div>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</div>
+  </accordion-group>
+</accordion>
