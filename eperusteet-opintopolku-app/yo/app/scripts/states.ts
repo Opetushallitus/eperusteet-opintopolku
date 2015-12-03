@@ -362,7 +362,7 @@ epOpintopolkuApp
 
       .state('root.lukio.oppiaine', {
         url: '/oppiaine/:oppiaineId',
-        templateUrl: 'eperusteet-esitys/views/lukioOppiaine.html',
+        templateUrl: 'eperusteet-esitys/views/lukiooppiaine.html',
         controller: 'epLukioOppiaineController',
         resolve: {
           oppiaineId: function (serviceConfig, $stateParams) {
@@ -599,7 +599,6 @@ epOpintopolkuApp
               opsId: opsId,
               viiteId: viiteId
             }).$promise.then(function (res) {
-              console.log("SHOW", res);
               return res;
             })
           }
@@ -766,7 +765,15 @@ epOpintopolkuApp
               return res;
             })
           },
-          laajaalaisetosaamiset: function (opsId, opsResource) {
+          vlkPeruste: function(opsPerusteResource, opsId, vlkId) {
+            return opsPerusteResource.getVlkPeruste({
+              opsId: opsId,
+              vlkId: vlkId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          baseLaajaalaiset: function (opsId, opsResource) {
             return opsResource.getLaajaalaisetosaamiset({
               opsId: opsId
             }).$promise.then(function (res) {
@@ -792,6 +799,43 @@ epOpintopolkuApp
         url: '/oppiaine/:oppiaineId',
         templateUrl: 'views/ops/vlkoppiaine.html',
         controller: 'OpsVlkOppiaineController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          oppiainePeruste: function(opsPerusteResource, opsId, oppiaineId) {
+            return opsPerusteResource.getOppiainePeruste({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          baseLaajaalaiset: function (opsId, opsResource) {
+            return opsResource.getLaajaalaisetosaamiset({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res
+            })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+        url: '/valinainenoppiaine/:oppiaineId',
+        templateUrl: 'views/ops/valinainenoppiaine.html',
+        controller: 'OpsValinainenoppiaineController',
         resolve: {
           opsId: function ($stateParams) {
             return $stateParams.opsId;

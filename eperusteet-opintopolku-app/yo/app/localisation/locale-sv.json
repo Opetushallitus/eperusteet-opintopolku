@@ -52,6 +52,7 @@
   "laaja-alaisen-osaamisen-alueet" : "Mångsidiga kompetensområden",
   "laaja-alaiset-osaamiset" : "Mångsidig kompetens",
   "maarayksen-diaarinumero" : "Föreskriftens diarienummer",
+  "maarayskirje" : "Brev om föreskrift",
   "navi.ammatillinenaikuiskoulutus" : "Yrkesinriktad vuxenutbildning",
   "navi.ammatillinenperuskoulutus" : "Grundläggande yrkesutbildning",
   "navi.esiopetus" : "Förskoleundervisning",
@@ -128,5 +129,10 @@
   "kysy-neuvoa-anna-palautetta": "Fråga råd - ge feedback",
   "tietosuojaseloste": "Dataskyddsbeskrivning",
   "siirtyman-paattyminen": "Övergångstiden upphör",
-  "osaan-linkki" : "jagkan.fi"
+  "osaan-linkki" : "jagkan.fi",
+  "etusivu.valtakunnalliset-perusteet": "Grunder",
+  "etusivu.paikalliset-opsit": "Lokal undervisningsplaner",
+  "etusivu.uutisia": "Nyhet",
+  "copyright-opetushallitus": "Copyright © Utbildningsstyrelsen 2015",
+  "tulossa-kohta": "På väg punkt"
 }

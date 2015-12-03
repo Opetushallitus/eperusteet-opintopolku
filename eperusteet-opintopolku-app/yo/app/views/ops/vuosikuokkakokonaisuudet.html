@@ -1,29 +1,19 @@
-<h1>{{ vlk.nimi | kaanna }}</h1>
-<div ng-if="hasContent(vlk.tehtava)">
-  <h2 ng-bind-html="vlk.tehtava.otsikko | kaanna | unsafe"></h2>
-  <termisto-tekstikentta tekstikentta="vlk.tehtava.teksti"></termisto-tekstikentta>
-</div>
-<div ng-if="hasContent(vlk.siirtymaEdellisesta)">
-  <h2 ng-bind-html="vlk.siirtymaEdellisesta.otsikko | kaanna | unsafe"></h2>
-  <termisto-tekstikentta tekstikentta="vlk.siirtymaEdellisesta.teksti"></termisto-tekstikentta>
-</div>
-<div ng-if="hasContent(vlk.siirtymaSeuraavaan)">
-  <h2 ng-bind-html="vlk.siirtymaSeuraavaan.otsikko | kaanna | unsafe"></h2>
-  <termisto-tekstikentta tekstikentta="vlk.siirtymaSeuraavaan.teksti"></termisto-tekstikentta>
-</div>
-<div ng-if="hasContent(vlk.laajaalainenOsaaminen)">
-  <h2 ng-bind-html="vlk.laajaalainenOsaaminen.otsikko | kaanna | unsafe"></h2>
-  <termisto-tekstikentta tekstikentta="vlk.laajaalainenOsaaminen.teksti"></termisto-tekstikentta>
-</div>
-<div ng-if="vlk.laajaalaisetosaamiset">
-  <h2 kaanna="'laaja-alaisen-osaamisen-alueet'" id="vlk-laajaalaisetosaamiset"></h2>
-  <div ng-show="osaaminen.kuvaus" ng-repeat="osaaminen in vlk.laajaalaisetosaamiset | orderBy:vlkOrder">
-    <h3 ng-bind-html="osaamiset[osaaminen._laajaalainenosaaminen].nimi | kaanna | unsafe"></h3>
-    <termisto-tekstikentta tekstikentta="osaaminen.kuvaus"></termisto-tekstikentta>
+<h1 ng-bind-html="vlk.nimi | kaanna | unsafe"></h1>
+
+<div esitys-teksti="vlk.tehtava" esitys-peruste="peruste.tehtava"></div>
+
+<h1 ng-bind-html="'siirtymavaiheet' | kaanna"></h1>
+
+<div esitys-teksti="vlk.siirtymaEdellisesta" esitys-peruste="peruste.siirtymaEdellisesta"></div>
+
+<div esitys-teksti="vlk.siirtymaSeuraavaan" esitys-peruste="peruste.siirtymaSeuraavaan"></div>
+
+<h1 ng-bind-html="'laaja-alainen-osaaminen' | kaanna"></h1>
+
+<div esitys-teksti="" esitys-peruste="peruste.laajaalainenOsaaminen"></div>
+
+<h2 ng-if="tunnisteet.length > 0" kaanna="'laaja-alaiset-osaamiset'"></h2>
+  <div ng-repeat="tunniste in tunnisteet | orderBy:orderFn" id="{{tunniste}}">
+    <div esitys-teksti="paikalliset[tunniste]" esitys-peruste="laajaalaiset[tunniste]"></div>
   </div>
-</div>
-<div ng-if="hasContent(vlk.paikallisestiPaatettavatAsiat)">
-  <h2 ng-bind-html="vlk.paikallisestiPaatettavatAsiat.otsikko | kaanna | unsafe"></h2>
-  <termisto-tekstikentta tekstikentta="vlk.paikallisestiPaatettavatAsiat.teksti"></termisto-tekstikentta>
-</div>
 

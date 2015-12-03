@@ -1,0 +1,29 @@
+<h1 kaanna="oppiaine.nimi"></h1>
+<div esitys-teksti="oppiaine.tehtava"></div>
+
+<h2 class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
+
+<div class="lista">
+  <h4 kaanna="'sisaltoalueet'"></h4>
+  <ul>
+    <li ng-repeat="sisaltoalue in sisalto.sisaltoalueet">
+      <span ng-bind="sisaltoalue.nimi | kaanna"></span>
+      <div termisto-viitteet="sisaltoalue.kuvaus" ng-bind-html="sisaltoalue.kuvaus | kaanna | unsafe"></div>
+    </li>
+  </ul>
+</div>
+
+<div>
+  <div ng-repeat="tavoite in sisalto.tavoitteet">
+    <h4 ng-bind-html="tavoite.tavoite | kaanna | unsafe"></h4>
+    <div class="lista">
+      <h4 kaanna="'sisaltoalueet'"></h4>
+      <ul>
+        <li ng-repeat="sa in tavoite.sisaltoalueet">
+          <span ng-bind="sa.sisaltoalueet.nimi | kaanna"></span>
+          <div termisto-viitteet="sa.sisaltoalueet.kuvaus" ng-bind-html="sa.sisaltoalueet.kuvaus | kaanna | unsafe"></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

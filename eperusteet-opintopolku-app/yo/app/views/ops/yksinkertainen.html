@@ -1,11 +1,9 @@
 <div>
   <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
-<!--
-  <div ng-if="ops.tila !== 'valmis'" class="alert alert-info">
-    <h4 kaanna="'perusteen-esikatselu'"></h4>
-    <p kaanna="'laadinnan-esikatselu-info'"></p>
-  </div> -->
-
+  <div ng-if="ops.tila !== 'julkaistu'" class="alert alert-info">
+    <h4 kaanna="'ops-esikatselu'"></h4>
+    <p kaanna="'esikatselu-varoitus'"></p>
+  </div>
   <murupolku></murupolku>
 
   <div class="clearfix"></div>
