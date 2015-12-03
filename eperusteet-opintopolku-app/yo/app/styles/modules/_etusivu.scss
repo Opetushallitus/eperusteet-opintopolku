@@ -100,13 +100,18 @@ $paaotsikko-logo-size: 96px;
 
 @media (max-width: $screen-xs-max) {
   .etusivu {
-    margin-top: 0;
+    margin-top: 10px;
 
     .paaotsikko {
       img {
         display: none;
       }
     }
+  }
+  .sisalto-box {
+    border-style: solid;
+    border-color: $brand-border-color;
+    border-width: 1px 0 1px 0;
   }
 }
 
