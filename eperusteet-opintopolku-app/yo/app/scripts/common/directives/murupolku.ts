@@ -284,6 +284,12 @@ epOpintopolkuApp
         useId: 'oppiaineId',
         customParents: true
       },
+      'root.ops.perusopetus.vuosiluokka.valinainenoppiaine': {
+        parent: 'root.ops.perusopetus.vuosiluokka',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      }
     };
 
     function perusTaiYksinkertainen(state) {

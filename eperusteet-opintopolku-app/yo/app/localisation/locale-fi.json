@@ -67,6 +67,7 @@
   "ops": "Peruskoulutus",
   "naytto": "Näyttötutkinto",
   "OPINTOVIIKKO": "ov",
+  "oppiaineella-ei-vuosiluokkasisaltoja": "Oppiaineelle ei ole määritetty vuosiluokkakohtaisia sisältöjä.",
   "OSAAMISPISTE": "osp",
 
   "perusteen-sisalto": "Perusteen sisältö",
@@ -110,6 +111,7 @@
   "ei-asetettu": "Ei asetettu",
   "arvioinnin-kohde": "Arvioinnin kohde",
   "arvion-hyva-osaaminen": "Hyvä / arvosanan kahdeksan osaaminen",
+  "tavoitteet-ja-sisallot": "Tavoitteet ja sisallöt",
 
   "tutkinnonosat": "Tutkinnon osat",
   "tutkinnonosa": "Tutkinnon osa",
@@ -119,6 +121,7 @@
   "opintoluokitus": "Opintoluokitus",
   "tavoitteet": "Tavoitteet",
   "ammattitaitovaatimukset": "Ammattitaitovaatimukset",
+  "keskeiset-sisaltoalueet": "Keskeiset sisältöalueet",
   "koodi": "Koodi",
   "tutkinnonosa-jarjestysnumero": "Järjestysnumero",
   "pakolliset-osaamistavoitteet": "Pakolliset osaamistavoitteet",

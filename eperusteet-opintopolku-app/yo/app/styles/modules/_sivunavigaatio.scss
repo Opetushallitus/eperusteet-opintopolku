@@ -145,6 +145,12 @@ $sivunavi-level-padding: 20px;
     height: 16px;
     float: right;
   }
+  span.depth3.perusopetus-paikallinen) {
+    position: relative !important;
+  }
+  span.depth3.perusopetus-paikallinen-active) {
+    position: relative !important;
+  }
   .list-group-item {
     &.active, &.active:focus, &.active:hover {
       background-color: $brand-link-active-bg;
@@ -356,3 +362,10 @@ $sivunavi-level-padding: 20px;
   padding-bottom: 0;
 }
 
+.panel-group .panel-heading {
+  background-color: #eaf2f4;
+}
+
+.opened-oppiaine {
+  background-color: #eaf2f4;
+}
