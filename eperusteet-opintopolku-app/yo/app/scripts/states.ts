@@ -777,7 +777,6 @@ epOpintopolkuApp
             return opsResource.getLaajaalaisetosaamiset({
               opsId: opsId
             }).$promise.then(function (res) {
-              console.log(res);
               return res
             })
           }
