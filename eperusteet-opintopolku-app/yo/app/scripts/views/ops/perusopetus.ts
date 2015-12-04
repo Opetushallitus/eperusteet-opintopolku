@@ -103,7 +103,7 @@ epOpintopolkuApp
 
     function getFirstOppiaine(vlk){
       var dfd = $q.defer();
-      var promise = _.find($scope.navi.sections[1].items, {$parent_vuosi: vlk});
+      var promise = dfd.resolve(_.find($scope.navi.sections[1].items, {$parent_vuosi: vlk}));
       return dfd.promise;
     }
 
