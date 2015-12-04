@@ -17,6 +17,7 @@
   "etusivu.eperusteet": "ePerusteet",
   "etusivu.eperusteet.kuvaus": "ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien ja tutkintojen perusteisiin. Perusteita julkaistaan palvelussa vaiheittain.",
   "etusivu.uusimmat-ammatilliset": "Uusimmat ammatillisen koulutuksen perusteet",
+  "etusivu.uusimmat-perusteet": "Uusimmat ePerusteet",
   "etusivu.tiedotteet": "Tiedotteet",
   "etusivu.esiopetuksen-peruste": "Esiopetuksen peruste",
   "etusivu.perusopetuksen-peruste": "Perusopetuksen peruste",
@@ -67,6 +68,7 @@
   "ops": "Peruskoulutus",
   "naytto": "Näyttötutkinto",
   "OPINTOVIIKKO": "ov",
+  "oppiaineella-ei-vuosiluokkasisaltoja": "Oppiaineelle ei ole määritetty vuosiluokkakohtaisia sisältöjä.",
   "OSAAMISPISTE": "osp",
 
   "perusteen-sisalto": "Perusteen sisältö",
@@ -110,6 +112,7 @@
   "ei-asetettu": "Ei asetettu",
   "arvioinnin-kohde": "Arvioinnin kohde",
   "arvion-hyva-osaaminen": "Hyvä / arvosanan kahdeksan osaaminen",
+  "tavoitteet-ja-sisallot": "Tavoitteet ja sisallöt",
 
   "tutkinnonosat": "Tutkinnon osat",
   "tutkinnonosa": "Tutkinnon osa",
@@ -119,6 +122,7 @@
   "opintoluokitus": "Opintoluokitus",
   "tavoitteet": "Tavoitteet",
   "ammattitaitovaatimukset": "Ammattitaitovaatimukset",
+  "keskeiset-sisaltoalueet": "Keskeiset sisältöalueet",
   "koodi": "Koodi",
   "tutkinnonosa-jarjestysnumero": "Järjestysnumero",
   "pakolliset-osaamistavoitteet": "Pakolliset osaamistavoitteet",
@@ -154,7 +158,6 @@
   "navi.opetussuunnitelmat": "Opetussuunnitelmat",
 
   "siirtyman-paattyminen": "Siirtymän päättyminen",
-  "osaan-linkki" : "osaan.fi",
 
   "yleiset-tavoitteet": "Yleiset tavoitteet",
   "soveltava": "soveltava",
@@ -211,5 +214,10 @@
   "osaamistavoitteet": "Osaamistavoitteet",
   "osaamisen-arviointi": "Osaamisen arviointi",
   "ops-esikatselu": "Opetussuunnitelman esikatselu",
-  "esikatselu-varoitus": "Opetussuunnitelma on vielä kesken."
+  "esikatselu-varoitus": "Opetussuunnitelma on vielä kesken.",
+
+  "osaatko-jo": "Osaatko jo?",
+  "arvio-itse": "Arvioi itse.",
+  "osaan-linkki": "Osaan.fi",
+  "osaan-kuvaus": "Näyttötutkinnot ja ammatillinen peruskoulutus"
 }
