@@ -43,7 +43,7 @@
     li.peruste-linkki {
       background: url("../images/xs/ikoni-peruste.png") no-repeat left top;
       background-size: 18px 10px;
-      background-position: 0 16px;
+      background-position: 0 14px;
       padding-left: 32px;
       padding-top: 10px;
     }
@@ -61,6 +61,41 @@
   padding-top: 10px;
 }
 
+
+.osaan-banneri {
+  background-color: #e1f2dd;
+  min-height: 140px;
+}
+.osaan-tekstit {
+  position: absolute;
+  z-index: 1;
+}
+.osaan-otsikko {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 0;
+  line-height: 1;
+}
+.osaan-teksti {
+  margin-top: 5px;
+  font-size: 12px;
+}
+.osaan-vihrea {
+  color: #327B1F;
+}
+
+.osaan-pollo {
+  background-color: #e1f2dd;
+  background: url("../images/osaan-pollo.png") no-repeat right top;
+  background-size: 150px 150px;
+  width: 90px;
+  height: 130px;
+  top: -10px;
+  left: $sisalto-padding;
+  position: relative;
+  background-position: 0 100%;
+}
+
 @media (max-width: $screen-sm) {
   .sisalto-box {
     padding-left: $sisalto-padding * 0.75;
@@ -76,6 +111,9 @@
       padding-left: $sisalto-padding * 0.75;
       padding-right: $sisalto-padding * 0.75;
     }
+  }
+  .osaan-pollo {
+    left: $sisalto-padding * 0.75;
   }
 }
 

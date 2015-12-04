@@ -17,6 +17,7 @@
   "etusivu.eperusteet": "ePerusteet",
   "etusivu.eperusteet.kuvaus": "ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien ja tutkintojen perusteisiin. Perusteita julkaistaan palvelussa vaiheittain.",
   "etusivu.uusimmat-ammatilliset": "Uusimmat ammatillisen koulutuksen perusteet",
+  "etusivu.uusimmat-perusteet": "Uusimmat ePerusteet",
   "etusivu.tiedotteet": "Tiedotteet",
   "etusivu.esiopetuksen-peruste": "Esiopetuksen peruste",
   "etusivu.perusopetuksen-peruste": "Perusopetuksen peruste",
@@ -157,7 +158,6 @@
   "navi.opetussuunnitelmat": "Opetussuunnitelmat",
 
   "siirtyman-paattyminen": "Siirtymän päättyminen",
-  "osaan-linkki" : "osaan.fi",
 
   "yleiset-tavoitteet": "Yleiset tavoitteet",
   "soveltava": "soveltava",
@@ -214,5 +214,10 @@
   "osaamistavoitteet": "Osaamistavoitteet",
   "osaamisen-arviointi": "Osaamisen arviointi",
   "ops-esikatselu": "Opetussuunnitelman esikatselu",
-  "esikatselu-varoitus": "Opetussuunnitelma on vielä kesken."
+  "esikatselu-varoitus": "Opetussuunnitelma on vielä kesken.",
+
+  "osaatko-jo": "Osaatko jo?",
+  "arvio-itse": "Arvioi itse.",
+  "osaan-linkki": "Osaan.fi",
+  "osaan-kuvaus": "Näyttötutkinnot ja ammatillinen peruskoulutus"
 }

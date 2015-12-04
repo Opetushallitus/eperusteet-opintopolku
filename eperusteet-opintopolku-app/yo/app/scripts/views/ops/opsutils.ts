@@ -104,14 +104,14 @@ epOpintopolkuApp
       return _(aineet).sortBy(jnroSort).sortBy(Utils.nameSort).sortBy(jnroSort).value();
     };
 
-    const traverseOppiaineet = (aineet, arr, vlk, startingDepth, currentVuosi, years) => {
-      let startingDepth = startingDepth || 0;
+    function traverseOppiaineet(aineet, arr, vlk, startingDepth, currentVuosi, years) {
+      let depth = startingDepth || 0;
       let currentYears = years
         || arr[arr.length-1].vlk.fi.replace(/\D/g, '').split('')
         || arr[arr.length-1].vlk.sv.replace(/\D/g, '').split('');
 
       let currentVlkt = createEachYearLabel(arr, currentYears);
-      let isSisalto = startingDepth === 0;
+      let isSisalto = depth === 0;
 
       /**
        * 1. include in a VLK, e.g. 'Vuosiluokat 1-2', if an oppiaine/oppimaara contains the TUNNISTE of that set of years
@@ -136,14 +136,14 @@ epOpintopolkuApp
         }).value();
 
       _.each(oppiaineSort(filteredAineet), function (oa) {
-        buildOppiaineItem(arr, oa, vlk, startingDepth, isSisalto, currentVuosi);
+        buildOppiaineItem(arr, oa, vlk, depth, isSisalto, currentVuosi);
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
           traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
         }
       });
     };
 
-    const buildOppiaineItem = (arr, oppiaine, vlk, depth, isSisalto, currentVuosi) => {
+    function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto, currentVuosi) {
       if (!oppiaine.nimi[Kieli.getSisaltokieli()]) {
         return;
       }
