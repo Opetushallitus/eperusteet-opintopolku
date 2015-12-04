@@ -118,9 +118,6 @@ epOpintopolkuApp
          return $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
            {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id});
        })
-      .finally(function(){
-        console.log("Oh shit!")
-      })
     }
 
     $scope.onSectionChange = function (section) {
