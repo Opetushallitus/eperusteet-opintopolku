@@ -32,27 +32,45 @@ epOpintopolkuApp
       sivukoko: 7,
       perusteTyyppi: 'normaali',
       tila: 'valmis',
-      jarjestys: 'muokattu'
+      jarjestys: 'muokattu',
+      stateTila: ''
+    },
+    'koulutustyyppi_1': {
+      tyyppi: 'koulutustyyppi_1',
+      stateTila: 'root.esitys.peruste'
+    },
+    'koulutustyyppi_11': {
+      tyyppi: 'koulutustyyppi_11',
+      stateTila: 'root.esitys.peruste'
+    },
+    'koulutustyyppi_12': {
+      tyyppi: 'koulutustyyppi_12',
+      stateTila: 'root.esitys.peruste'
     },
     'koulutustyyppi_16': {
       tyyppi: 'koulutustyyppi_16',
-      tila: 'valmis'
+      tila: 'valmis',
+      stateTila: 'root.perusopetus.tiedot'
     },
     'koulutustyyppi_15': {
       tyyppi: 'koulutustyyppi_15',
-      tila: 'valmis'
+      tila: 'valmis',
+      stateTila: 'root.esiopetus.tiedot'
     },
     'koulutustyyppi_6': {
       tyyppi: 'koulutustyyppi_6',
-      tila: 'valmis'
+      tila: 'valmis',
+      stateTila: 'root.lisaopetus.tiedot'
     },
     'koulutustyyppi_20': {
       tyyppi: 'koulutustyyppi_20',
-      tila: 'valmis'
+      tila: 'valmis',
+      stateTila: ''
     },
     'koulutustyyppi_18': {
       tyyppi: 'koulutustyyppi_18',
-      tila: 'valmis'
+      tila: 'valmis',
+      stateTila: ''
     }
   };
 
@@ -86,23 +104,46 @@ epOpintopolkuApp
     });
   };
 
+  var getStateTila = function (tyyppi) {
+    return paramMap[tyyppi].stateTila;
+  };
+
   this.getPerusopetus = getPerusopetus;
   this.getEsiopetus = getEsiopetus;
   this.getLisaopetus = getLisaopetus;
   this.getVarhaiskasvatus = getVarhaiskasvatus;
   this.getValma = getValma;
+  this.getStateTila = getStateTila;
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
   TiedotteetCRUD, Utils, Kieli) {
   MurupolkuData.setTitle(null);
   $scope.uusimmat = {};
+  $scope.uusimmatLista = [];
   $scope.tiedotteet = [];
   $scope.naytto = {limit: 5, shown: 5};
   $scope.kieli = Kieli.getSisaltokieli();
+  $scope.UusimmatPerusteetService = UusimmatPerusteetService;
 
   UusimmatPerusteetService.fetch(function (res) {
     $scope.uusimmat = res;
+
+    var uusimmatLista = [];
+
+    _.each(res, function (n) {
+      _.each(n, function (m) {
+        uusimmatLista.push(m);
+      });
+    });
+
+    // järjestetään uusimman mukaan
+    uusimmatLista =_(uusimmatLista).chain()
+      .sortBy("muokattu")
+      .reverse() // desc
+      .value();
+
+    $scope.uusimmatLista = uusimmatLista;
   });
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
