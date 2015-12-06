@@ -91,7 +91,7 @@ epOpintopolkuApp
 
     function getFirstOppiaine(vlk){
       var dfd = $q.defer();
-      var promise = dfd.resolve(_.find($scope.navi.sections[1].items, {$parent_vuosi: vlk}));
+      dfd.resolve(_.find($scope.navi.sections[1].items, {$parent_vuosi: vlk}));
       return dfd.promise;
     }
 
@@ -100,13 +100,13 @@ epOpintopolkuApp
       return getFirstOppiaine(vlk)
        .then(function(firstOppiaine) {
          if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' === "yhteinen") {
-          return $state.go('.oppiaine',
-            {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+          return $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
+            {vuosi: vuosi, opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
             {location: 'replace'});
         }
          else if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' !== "yhteinen") {
-           return $state.go('.valinainenoppiaine',
-             {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+           return $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
+             {vuosi: vuosi, opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
              {location: 'replace'});
          }
          return;
@@ -151,10 +151,13 @@ epOpintopolkuApp
       }
     });
 
+    //FIXME
     $scope.onSectionChange = function (section) {
-      if (section.id === 'vlkoppiaine' && !section.$open) {
-        moveToOppiaine(section);
-      }
+      /*if (section.id === 'vlkoppiaine' && !section.$open) {
+        var vlkId = $scope.navi.sections[1].items[1].$vkl.id;
+        $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus',
+          {opsId: $scope.ops.id, vlkId: vlkId });
+      }*/
     };
 
     installClickHandler();
@@ -197,24 +200,40 @@ epOpintopolkuApp
   .controller('OpsPerusopetusTiedotController', function($scope) {
   })
 
-  .controller('OpsVuosiluokkaController', function($scope, $state, $timeout, Kieli, vuosi, MurupolkuData){
-    $timeout(function () {
-      if ($state.current.name === 'root.ops.perusopetus.vuosiluokka') {
-        var index = null;
-        var selectedIndex = _.reduce($scope.navi.sections[1].items, function (result, item, index) {
-          return result += item.$selected === true ? index : '';
-        }, '');
-        if ($scope.navi.sections[1].items[parseInt(selectedIndex) + 1].tyyppi === "yhteiset") {
-          $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
-            {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
-        } else {
-          $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
-            {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
-        }
-      }
-    });
+  .controller('OpsVuosiluokkaController', function(
+    $scope,
+    $q,
+    $state,
+    $timeout,
+    Kieli,
+    vuosi,
+    MurupolkuData){
 
     MurupolkuData.set({vuosiId: vuosi, vuosi: 'Vuosiluokka' + " " + vuosi});
+
+    function getIndexOfNextOppiaine() {
+      return _.reduce($scope.navi.sections[1].items, function (result, item, index) {
+        return result += item.$selected === true ? index : '';
+      }, '');
+    }
+
+    function changeToOppiaine() {
+      if ($state.current.name === 'root.ops.perusopetus.vuosiluokka' && $scope.navi.sections[1].items) {
+        var selectedIndex = getIndexOfNextOppiaine();
+        var nextIndex = parseInt(selectedIndex) + 1;
+        if ($scope.navi.sections[1].items[nextIndex].$tyyppi === "yhteinen") {
+          $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
+            {vuosi: $state.params.vuosi, oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
+        } else if (selectedIndex) {
+          $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
+            {vuosi: $state.params.vuosi, oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
+        }
+        return;
+      }
+      return;
+    }
+
+    $timeout(changeToOppiaine,50);
   })
 
   .controller('OpsVlkController', function(
@@ -259,13 +278,11 @@ epOpintopolkuApp
 
     $scope.oppiaine = oppiaine;
     $scope.perusteOppiaine = oppiainePeruste;
-    $scope.perusteOppiaineVlkMap = _.indexBy($scope.perusteOppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus');
+    $scope.perusteOppiaineVlkMap = $scope.perusteOppiaine ?
+      _.indexBy($scope.perusteOppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
     $scope.laajaalaiset = _.indexBy(baseLaajaalaiset, 'tunniste');
     $scope.nimiOrder = Utils.sort;
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
-   /* $scope.vlkMap = _.indexBy($scope.vuosiluokkakokonaisuudet, (vlk) => {
-      return vlk.vuosiluokkakokonaisuus._tunniste;
-    });*/
 
     $scope.item = _.reduce($scope.navi.sections[1].items, (result, item, index) => {
       if (item.$selected === true) {
@@ -340,9 +357,6 @@ epOpintopolkuApp
 
     $scope.vuosiluokat = getVuosiluokat();
 
-    $scope.perusteOppiaineVlkMap = $scope.perusteOppiaine ?
-      _.indexBy($scope.perusteOppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
-
     const vuosiLuokaNums = (vuosiluokkaEnum) => {
       if (!vuosiluokkaEnum) {
         return undefined;
@@ -371,17 +385,18 @@ epOpintopolkuApp
           'sisaltoaluetunnisteet', 'sisaltoaluemuokattavat');
       });
     });
+
     $scope.missingVlk = () => {
       return _.isEmpty($scope.vuosiluokkaSisallot) || (_.isEmpty($scope.vuosiluokkaSisallot[$scope.currentVlk][$scope.vuosi]) &&
         !$scope.vuosiluokkaSisallot[$scope.currentVlk].yleistavoitteet);
     };
 
-    $scope.isEmpty = (obj) => {
-      return _.isEmpty(obj);
+    $scope.isEmpty = () => {
+      return _.isEmpty($scope.vuosiluokkaSisallot);
     };
 
     $scope.missingVlk();
-
+    $scope.isEmpty();
   })
 
   .controller('OpsValinainenoppiaineController', function(
@@ -512,7 +527,6 @@ epOpintopolkuApp
         };
       });
     }
-
 
     this.mapModel = function (scope) {
       scope.muokattavat = {};
