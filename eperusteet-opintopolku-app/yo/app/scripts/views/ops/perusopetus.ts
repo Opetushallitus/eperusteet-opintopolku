@@ -52,18 +52,6 @@ epOpintopolkuApp
     $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
     $scope.vlkt = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
 
-    $scope.$on('$stateChangeSuccess', function () {
-      opsStateService.setState($scope.navi);
-      if ($state.current.name === 'root.ops.perusopetus') {
-        $state.go('.tiedot', {location: 'replace'});
-      }
-      if (_.endsWith(_.keys($state.params), 'vuosi')){
-        var vuosi = $state.params.vuosi;
-        console.log("called with", vuosi);
-        moveToOppiaine(vuosi);
-      }
-    });
-
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
     TermistoService.setPeruste(perusOps, true);
@@ -111,20 +99,19 @@ epOpintopolkuApp
       var vlk = 'vuosiluokka_' + vuosi;
       return getFirstOppiaine(vlk)
        .then(function(firstOppiaine) {
-         if (firstOppiaine && firstOppiaine.$tyyppi === "yhteinen") {
-          return $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
-            {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id});
+         if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' === "yhteinen") {
+          return $state.go('.oppiaine',
+            {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+            {location: 'replace'});
         }
-         return $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
-           {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id});
+         else if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' !== "yhteinen") {
+           return $state.go('.valinainenoppiaine',
+             {opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+             {location: 'replace'});
+         }
+         return;
        })
     }
-
-    $scope.onSectionChange = function (section) {
-      if (section.id === 'vlkoppiaine' && !section.$open) {
-        moveToOppiaine(section);
-      }
-    };
 
     $scope.navi = {
       header: 'opetussuunnitelma',
@@ -152,6 +139,23 @@ epOpintopolkuApp
       label: 'opetussuunnitelman-tiedot',
       link: ['root.ops.perusopetus.tiedot']
     });
+
+    $scope.$on('$stateChangeSuccess', function () {
+      opsStateService.setState($scope.navi);
+      if ($state.current.name === 'root.ops.perusopetus') {
+        $state.go('.tiedot', {location: 'replace'});
+      }
+      else if (_.endsWith(_.keys($state.params), 'vuosi')){
+        var vuosi = $state.params.vuosi;
+        moveToOppiaine(vuosi);
+      }
+    });
+
+    $scope.onSectionChange = function (section) {
+      if (section.id === 'vlkoppiaine' && !section.$open) {
+        moveToOppiaine(section);
+      }
+    };
 
     installClickHandler();
 
@@ -200,8 +204,12 @@ epOpintopolkuApp
         var selectedIndex = _.reduce($scope.navi.sections[1].items, function (result, item, index) {
           return result += item.$selected === true ? index : '';
         }, '');
-        if (selectedIndex) {
-          $state.go('root.ops.perusopetus.vuosiluokka.oppiaine', {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
+        if ($scope.navi.sections[1].items[parseInt(selectedIndex) + 1].tyyppi === "yhteiset") {
+          $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
+            {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
+        } else {
+          $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
+            {oppiaineId: $scope.navi.sections[1].items[parseInt(selectedIndex) + 1].$oppiaine.id}, {location: 'replace'});
         }
       }
     });
