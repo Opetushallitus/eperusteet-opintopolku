@@ -394,9 +394,10 @@ epOpintopolkuApp
     $scope.isEmpty = () => {
       return _.isEmpty($scope.vuosiluokkaSisallot);
     };
-
     $scope.missingVlk();
     $scope.isEmpty();
+
+    // $scope.hasVuosiluokkakohtaisiaTavoitteita = !_.isEmpty($scope.vuosiluokkaSisallot[$scope.currentVlk][$scope.vuosi].tavoitteet);
   })
 
   .controller('OpsValinainenoppiaineController', function(
