@@ -783,6 +783,43 @@ epOpintopolkuApp
         }
       })
 
+      .state('root.ops.perusopetus.oppiaine', {
+        url: '/oppiaine/:oppiaineId',
+        templateUrl: 'views/ops/vlkoppiaine.html',
+        controller: 'OpsOppiaineController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          oppiainePeruste: function(opsPerusteResource, opsId, oppiaineId) {
+            return opsPerusteResource.getOppiainePeruste({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          baseLaajaalaiset: function (opsId, opsResource) {
+            return opsResource.getLaajaalaisetosaamiset({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res
+            })
+          }
+        }
+      })
+
       .state('root.ops.perusopetus.vuosiluokka', {
         url: '/vuosiluokka/:vuosi',
         controller: 'OpsVuosiluokkaController',

@@ -154,11 +154,11 @@ epOpintopolkuApp
             items = section.items;
             setParentOppiaineHeader();
           }
-        }/*,
-        sisallot: {
+        },
+        oppiaineet: {
           index: 2,
           actions: function () {
-            items = section.model.sections[1].items;
+            items = section.model.sections[2].items;
             _.each(items, function (item) {
               if (item.$oppiaine) {
                 item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
@@ -169,7 +169,7 @@ epOpintopolkuApp
             });
             setParentOppiaineHeader();
           }
-        }*/
+        }
       };
 
       var parentVlkId = null;

@@ -136,21 +136,38 @@ epOpintopolkuApp
         }).value();
 
       _.each(oppiaineSort(filteredAineet), function (oa) {
-        buildOppiaineItem(arr, oa, vlk, depth, isSisalto, currentVuosi);
+        buildOppiaineItem(arr, oa, vlk, depth, isSisalto, currentVuosi, {'menuType': 'vuosiluokittain'});
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
           traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
         }
       });
-    };
+    }
 
-    function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto, currentVuosi) {
+    function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto, currentVuosi, opts) {
       if (!oppiaine.nimi[Kieli.getSisaltokieli()]) {
         return;
       }
-      let currentYear = currentVuosi[currentVuosi.length-1];
+      let currentYear = currentVuosi ? currentVuosi[currentVuosi.length-1] : null;
       let type = oppiaine.tyyppi === 'yhteinen';
-      let oppiaineUrl = type ? $state.href('root.ops.perusopetus.vuosiluokka.oppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id})
-        : $state.href('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id});
+      let oppiaineUrl;
+      if (opts['menuType'] === 'vuosiluokittain') {
+        oppiaineUrl = type ? $state.href('root.ops.perusopetus.vuosiluokka.oppiaine', {
+          vuosi: currentYear,
+          oppiaineId: oppiaine.id
+        })
+          : $state.href('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+          vuosi: currentYear,
+          oppiaineId: oppiaine.id
+        });
+      }
+      if (opts['menuType'] === 'oppiaineetMenu') {
+        oppiaineUrl = type ? $state.href('root.ops.perusopetus.oppiaine', {
+          oppiaineId: oppiaine.id
+        })
+          : $state.href('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+          oppiaineId: oppiaine.id
+        });
+      }
 
       arr.push({
         depth: depth,
@@ -161,10 +178,24 @@ epOpintopolkuApp
         $tyyppi: oppiaine.tyyppi,
         url: oppiaineUrl
       });
+    }
+
+    const rakennaOppiaineetMenu = (oppiaineet) => {
+      let menu = [];
+      _.each(oppiaineSort(oppiaineet), function (oa) {
+        buildOppiaineItem(menu, oa, null, 0, null, null, {'menuType': 'oppiaineetMenu'});
+        if(oa.koosteinen && oa.oppimaarat.length > 0) {
+        _.each(oppiaineSort(oa.oppimaarat), function (om) {
+          buildOppiaineItem(menu, om, null, 1, null, null, {'menuType': 'oppiaineetMenu'});
+        });
+      });
+      return menu;
     };
+
 
     return {
       sortVlk: sortVlk,
+      rakennaOppiaineetMenu: rakennaOppiaineetMenu,
       rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu
     }
   });
