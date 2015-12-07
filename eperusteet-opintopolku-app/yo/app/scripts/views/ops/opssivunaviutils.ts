@@ -75,6 +75,17 @@ epOpintopolkuApp
         }
       }
 
+      function setParent(){
+        if (selected && selected.$oppiaine) {
+          var found = _.find(items, function (item) {
+            return item.$vuosi === '' + selected.$parent_vuosi;
+          });
+          if (found) {
+            found.$header = true;
+          }
+        }
+      }
+
       var states = {
        /* laajaalaiset: {
           index: 0,
@@ -152,21 +163,36 @@ epOpintopolkuApp
           },
           actions: function () {
             items = section.items;
-            setParentOppiaineHeader();
+            setParent();
           }
         },
         oppiaineet: {
           index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
           actions: function () {
-            items = section.model.sections[2].items;
-            _.each(items, function (item) {
-              if (item.$oppiaine) {
-                item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
-                if (item.$selected) {
-                  selected = item;
-                }
-              }
-            });
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        },
+        valinnaisetoppiaineet: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
             setParentOppiaineHeader();
           }
         }

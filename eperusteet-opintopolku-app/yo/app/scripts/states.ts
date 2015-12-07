@@ -783,10 +783,10 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perusopetus.oppiaine', {
-        url: '/oppiaine/:oppiaineId',
-        templateUrl: 'views/ops/vlkoppiaine.html',
-        controller: 'OpsOppiaineController',
+      .state('root.ops.perusopetus.oppiaineet', {
+        url: '/oppiaineet/:oppiaineId',
+        templateUrl: 'views/ops/oppiaineet.html',
+        controller: 'OpsOppiaineetController',
         resolve: {
           opsId: function ($stateParams) {
             return $stateParams.opsId;
@@ -815,6 +815,36 @@ epOpintopolkuApp
               opsId: opsId
             }).$promise.then(function (res) {
               return res
+            })
+          }
+        }
+      })
+
+
+
+      .state('root.ops.perusopetus.oppiaineet.vuosiluokat', {
+        url: '/vuosiluokat/:vlktId',
+        templateUrl: 'views/ops/oppiaine.html',
+        controller: 'OpsOppiaineetVlktController',
+      })
+
+      .state('root.ops.perusopetus.valinnaisetoppiaineet', {
+        url: '/valinnaisetnoppiaineet/:oppiaineId',
+        templateUrl: 'views/ops/vlkoppiaine.html',
+        //controller: 'OpsValinainenoppiaineController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
             })
           }
         }

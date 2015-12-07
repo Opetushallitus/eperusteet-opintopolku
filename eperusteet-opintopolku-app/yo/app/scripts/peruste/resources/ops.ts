@@ -39,8 +39,6 @@ epOpintopolkuApp
     })
   })
 
-  //eperusteet-ylops-service/api/opetussuunnitelmat/480841/vuosiluokkakokonaisuudet/480777/peruste
-
   .factory('opsTermisto', function ($resource, opsBase) {
     return $resource(opsBase.OPS + '/termisto/:opsId', {
       opsId: '@id',

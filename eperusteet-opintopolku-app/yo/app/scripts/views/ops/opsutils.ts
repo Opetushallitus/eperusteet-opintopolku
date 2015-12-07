@@ -161,10 +161,10 @@ epOpintopolkuApp
         });
       }
       if (opts['menuType'] === 'oppiaineetMenu') {
-        oppiaineUrl = type ? $state.href('root.ops.perusopetus.oppiaine', {
+        oppiaineUrl = type ? $state.href('root.ops.perusopetus.oppiaineet', {
           oppiaineId: oppiaine.id
         })
-          : $state.href('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+          : $state.href('root.ops.perusopetus.vuosiluokka.valinnaisetnoppiaineet', {
           oppiaineId: oppiaine.id
         });
       }
@@ -185,9 +185,10 @@ epOpintopolkuApp
       _.each(oppiaineSort(oppiaineet), function (oa) {
         buildOppiaineItem(menu, oa, null, 0, null, null, {'menuType': 'oppiaineetMenu'});
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
-        _.each(oppiaineSort(oa.oppimaarat), function (om) {
-          buildOppiaineItem(menu, om, null, 1, null, null, {'menuType': 'oppiaineetMenu'});
-        });
+          _.each(oppiaineSort(oa.oppimaarat), function (om) {
+            buildOppiaineItem(menu, om, null, 1, null, null, {'menuType': 'oppiaineetMenu'});
+          });
+        }
       });
       return menu;
     };
