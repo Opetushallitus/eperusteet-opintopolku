@@ -394,7 +394,6 @@ epOpintopolkuApp
     $scope.isEmpty = () => {
       return _.isEmpty($scope.vuosiluokkaSisallot);
     };
-
     $scope.missingVlk();
     $scope.isEmpty();
   })

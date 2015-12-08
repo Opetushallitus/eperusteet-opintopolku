@@ -75,9 +75,10 @@ epOpintopolkuApp
         }, function (value) {
           el.text(kaannaValue(value));
         });
-        scope.$on('changed:sisaltokieli', function () {
+        // Tämä rikkoo filterin kieltä vaihdettaessa
+        /*scope.$on('changed:sisaltokieli', function () {
           el.text(kaannaValue(getAttr(attrs.kaanna, scope)));
-        });
+        });*/
       } else {
         var textEl = angular.element('<span>').attr('translate', original);
         if (attrs.kaannaValues) {
