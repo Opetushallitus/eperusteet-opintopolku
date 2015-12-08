@@ -335,6 +335,7 @@ epOpintopolkuApp
       $scope.valittuVlk = getValittuVlk();
       $scope.currentVlk = currentVlk();
       $scope.currentVlkCategory = currentVlkCategory();
+      $scope.vuosiluokat = getVuosiluokat();
     });
 
 
@@ -354,7 +355,7 @@ epOpintopolkuApp
     };
 
     const currentVlkCategory = () => {
-      _($scope.vlkMap)
+      return _($scope.vlkMap)
         .filter(getCurrentVlk)
         .map('nimi')
         .value()
@@ -367,18 +368,33 @@ epOpintopolkuApp
       }).pop();
     };
 
+    const stripYears = (name) => {
+      if (name['fi'] || name['sv']) {
+        return name.fi.replace(/\D/g, '').split('')
+          || name.currentVlkCategory.sv.replace(/\D/g, '').split('');
+      }
+      return name.replace(/\D/g, '').split('');
+    };
+
     $scope.valittuVlk = getValittuVlk();
     $scope.currentVlk = currentVlk();
     $scope.currentVlkCategory = currentVlkCategory();
 
     const getVuosiluokat = () => {
-      var vuosiluokat = {};
+      let currentRange = $scope.currentVlk;
+      let vuodet = stripYears($scope.currentVlkCategory);
+      let vuosiluokat = {};
       _.each($scope.oppiaine.vuosiluokkakokonaisuudet, function (opVlk) {
         _.each(opVlk.vuosiluokat, function (vl) {
           vuosiluokat[vl.vuosiluokka] = vl;
         });
       });
-      return _.values(vuosiluokat);
+      if(vuodet.length === 2) {
+        return _.values(_.filter(vuosiluokat, function (vl) {
+          let vuosiluokka = stripYears(vl.vuosiluokka).pop();
+          return vuosiluokka >= vuodet[0] && vuosiluokka <= vuodet[1];
+        }));
+      } else return _.values(vuosiluokat);
     };
 
     $scope.vuosiluokat = getVuosiluokat();

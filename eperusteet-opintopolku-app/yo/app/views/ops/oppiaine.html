@@ -18,14 +18,16 @@
   <div esitys-teksti="valittuVlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[currentVlk].arviointi"></div>
 </div>
 
-  <div ng-if="vuosiluokat.length > 0" class="vuosiluokka-valinta">
-    <span kaanna="'vuosiluokka'"></span>
-    <ul>
-      <li ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'" ng-class="{active: isActive(vuosiluokka)}">
-        <a ui-sref="^.oppiaine({vuosiluokka: vuosiluokka.vuosiluokka})" kaanna="vuosiluokka.vuosiluokka"></a>
-      </li>
-    </ul>
-  </div>
+<h2 class="vlk-otsikko" ng-bind="'opetus-vuosiluokkittain' | kaanna"></h2>
+
+<div ng-if="vuosiluokat.length > 0" class="vuosiluokka-valinta">
+  <span kaanna="'vuosiluokka'"></span>
+  <ul>
+    <li ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'" ng-class="{active: isActive(vuosiluokka)}">
+      <a ui-sref="^.oppiaine({vuosiluokka: vuosiluokka.vuosiluokka})" kaanna="vuosiluokka.vuosiluokka"></a>
+    </li>
+  </ul>
+</div>
 
   <div ng-repeat="vuosiluokka in vlk.vuosiluokat | filter:vuosiluokkaFilter | orderBy:'vuosiluokka' track by vuosiluokka.vuosiluokka">
     <h2 class="vuosiluokka-otsikko" ng-bind="('vuosiluokka' | kaanna) + ' ' + vuosiluokka.$numero"></h2>
