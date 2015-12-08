@@ -61,7 +61,6 @@
   padding-top: 10px;
 }
 
-
 .osaan-banneri {
   background-color: #e1f2dd;
   min-height: 140px;
@@ -69,8 +68,11 @@
 .osaan-tekstit {
   position: absolute;
   z-index: 1;
+  margin-right: 100px;
 }
+
 .osaan-otsikko {
+  color: black;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 0;
@@ -78,7 +80,8 @@
 }
 .osaan-teksti {
   margin-top: 5px;
-  font-size: 12px;
+  margin-bottom: 5px;
+  font-size: 14px;
 }
 .osaan-vihrea {
   color: #327B1F;
@@ -183,14 +186,6 @@ $paaotsikko-logo-size: 96px;
 .tiedotteet-list {
   list-style-type: none;
   padding-left: 0;
-}
-
-@mixin vertical-align($position: relative) {
-  position: $position;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
 }
 
 .alatunniste {

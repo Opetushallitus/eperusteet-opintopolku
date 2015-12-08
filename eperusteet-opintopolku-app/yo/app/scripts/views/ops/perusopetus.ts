@@ -54,9 +54,10 @@ epOpintopolkuApp
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
+    //FIXME to work with ops
     TermistoService.setPeruste(perusOps, true);
 
-    $scope.naviClasses = function (item) {
+    $scope.naviClasses = (item) => {
       var classes = ['depth' + item.depth];
       if (item.$selected) {
         classes.push('tekstisisalto-active');
@@ -73,32 +74,34 @@ epOpintopolkuApp
       return classes;
     };
 
-    function clickHandler(event) {
+    const clickHandler = (event) => {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
       if (ohjeEl.length === 0) {
         $rootScope.$broadcast('ohje:closeAll');
       }
-    }
-    function installClickHandler() {
+    };
+
+    const installClickHandler = () => {
       $document.off('click', clickHandler);
-      $timeout(function () {
+      $timeout(() => {
         $document.on('click', clickHandler);
       });
-    }
+    };
+
     $scope.$on('$destroy', function () {
       $document.off('click', clickHandler);
     });
 
-    function getFirstOppiaine(vlk){
-      var dfd = $q.defer();
+    const getFirstOppiaine = (vlk) => {
+      let dfd = $q.defer();
       dfd.resolve(_.find($scope.navi.sections[1].items, {$parent_vuosi: vlk}));
       return dfd.promise;
-    }
+    };
 
-    function moveToOppiaine(vuosi) {
-      var vlk = 'vuosiluokka_' + vuosi;
+    const moveToOppiaine = (vuosi) => {
+      let vlk = 'vuosiluokka_' + vuosi;
       return getFirstOppiaine(vlk)
-       .then(function(firstOppiaine) {
+       .then((firstOppiaine) => {
          if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' === "yhteinen") {
           return $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
             {vuosi: vuosi, opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
@@ -111,7 +114,7 @@ epOpintopolkuApp
          }
          return;
        })
-    }
+    };
 
     $scope.navi = {
       header: 'opetussuunnitelma',
@@ -151,13 +154,12 @@ epOpintopolkuApp
       }
     });
 
-    //FIXME
     $scope.onSectionChange = function (section) {
-      /*if (section.id === 'vlkoppiaine' && !section.$open) {
+      if (section.id === 'vlkoppiaine' && !section.$open) {
         var vlkId = $scope.navi.sections[1].items[1].$vkl.id;
-        $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus',
-          {opsId: $scope.ops.id, vlkId: vlkId });
-      }*/
+        $timeout(() => { return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus',
+          {opsId: $scope.ops.id, vlkId: vlkId })},10)
+      }
     };
 
     installClickHandler();
@@ -190,7 +192,6 @@ epOpintopolkuApp
       function findParent(set, child) {
         return set[child.$parent].$osa.tekstiKappale;
       }
-
       if ($scope.sectionItem && $scope.sectionItem.depth > 1) {
         MurupolkuData.set('parents', [findParent($scope.navi.sections[0].items, $scope.sectionItem)]);
       }
@@ -211,16 +212,16 @@ epOpintopolkuApp
 
     MurupolkuData.set({vuosiId: vuosi, vuosi: 'Vuosiluokka' + " " + vuosi});
 
-    function getIndexOfNextOppiaine() {
+    const getIndexOfNextOppiaine = () =>{
       return _.reduce($scope.navi.sections[1].items, function (result, item, index) {
         return result += item.$selected === true ? index : '';
       }, '');
     }
 
-    function changeToOppiaine() {
+    const changeToOppiaine = () => {
       if ($state.current.name === 'root.ops.perusopetus.vuosiluokka' && $scope.navi.sections[1].items) {
-        var selectedIndex = getIndexOfNextOppiaine();
-        var nextIndex = parseInt(selectedIndex) + 1;
+        let selectedIndex = getIndexOfNextOppiaine();
+        let  nextIndex = parseInt(selectedIndex) + 1;
         if ($scope.navi.sections[1].items[nextIndex].$tyyppi === "yhteinen") {
           $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
             {vuosi: $state.params.vuosi, oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
@@ -231,9 +232,9 @@ epOpintopolkuApp
         return;
       }
       return;
-    }
+    };
 
-    $timeout(changeToOppiaine,50);
+    $timeout(changeToOppiaine,30);
   })
 
   .controller('OpsVlkController', function(
@@ -339,7 +340,6 @@ epOpintopolkuApp
       .map('nimi')
       .value()
       .pop();
-
 
     const getVuosiluokat = () => {
       var vuosiluokat = {};
