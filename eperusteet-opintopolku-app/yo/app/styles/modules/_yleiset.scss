@@ -115,7 +115,6 @@ h4.sparse {
   padding-left: 0;
   li {
     display: inline-block;
-    max-width: 40em;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -127,7 +126,7 @@ h4.sparse {
     }
   }
   li:not(:last-child) {
-    max-width: 22em;
+    max-width: 40em;
   }
 }
 
@@ -175,5 +174,14 @@ hr {
   .peruste-otsikko {
     padding-left: $sisalto-padding;
     padding-right: $sisalto-padding;
+  }
+
+  .breadcrumb {
+    li {
+      max-width: 80vw;
+    }
+    li:not(:last-child) {
+      max-width: 80vw;
+    }
   }
 }
