@@ -200,10 +200,25 @@ epOpintopolkuApp
       return menu;
     };
 
+    const getVlkId = (vlkt, oppiaine) => {
+      return _(oppiaine.vuosiluokkakokonaisuudet).filter((v) => {
+          return vlkt._tunniste === v._vuosiluokkakokonaisuus;
+        }).map('id').first();
+    };
+
+    const getVuosiId = (vlk, vuosi) => {
+      let year = 'vuosiluokka_' + vuosi;
+      return _(vlk.vuosiluokat).filter((v) => {
+        return v.vuosiluokka === year;
+      }).map('id').first();
+    };
+
 
     return {
       sortVlk: sortVlk,
       rakennaOppiaineetMenu: rakennaOppiaineetMenu,
-      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu
+      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu,
+      getVlkId: getVlkId,
+      getVuosiId: getVuosiId
     }
   });

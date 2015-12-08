@@ -782,18 +782,20 @@ epOpintopolkuApp
             }).$promise.then(function (res) {
               return res;
             })
-          }/*,
-          vuosiluokkakokonaisuus: function(opsId, oppiaine, oppiaineId, opsResource) {
-
-            return opsResource.getOppiaineVlk({
+          },
+          vuosiluokkakokonaisuus: function(vlkt, vlkPeruste, oppiaine, oppiaineId, opsResource, opsUtils) {
+            console.log(vlkt, vlkPeruste);
+            let vlkId = opsUtils.getVlkIds(vlkt, vlkPeruste, oppiaine);
+           /* return opsResource.getOppiaineVlk({
               opsId: opsId,
               oppiaineId: oppiaineId,
               vlkId: vlkId
             }).$promise.then(function (res) {
               console.log(res);
               return res;
-            })
-          }*/
+            })*/
+            return 'Yes';
+          }
         }
       })
 
@@ -872,6 +874,31 @@ epOpintopolkuApp
             }).$promise.then(function (res) {
               return res
             })
+          },
+          vuosiluokkakokonaisuus: function(vlkt, opsId, oppiaine, oppiaineId, opsResource, opsUtils) {
+             let vId = opsUtils.getVlkId(vlkt, oppiaine);
+             return opsResource.getOppiaineVlk({
+             opsId: opsId,
+             oppiaineId: oppiaineId,
+             vlkId: vId
+             }).$promise.then(function (res) {
+             return res;
+             });
+          },
+          vuosiluokkaSisalto: function(vlkt, oppiaine, vuosiluokkakokonaisuus, vuosi,
+                                       opsId, oppiaineId, opsResource, opsUtils){
+            let vuosiluokkaId = opsUtils.getVuosiId(vuosiluokkakokonaisuus, vuosi);
+            let vId = opsUtils.getVlkId(vlkt, oppiaine);
+            if(vuosiluokkaId) {
+              return opsResource.getOppiaineVlkByVuosiluokka({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vId,
+                vuosi: vuosiluokkaId
+              }).$promise.then(function (res) {
+                return res;
+              })
+            } else return null;
           }
         }
       })

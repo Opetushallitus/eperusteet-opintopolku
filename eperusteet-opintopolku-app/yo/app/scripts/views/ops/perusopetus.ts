@@ -452,7 +452,6 @@ epOpintopolkuApp
     $scope.vlk = vlkt;
     $scope.peruste = vlkPeruste;
     //$scope.osaamiset = _.zipBy(baseLaajaalaiset, 'tunniste');
-
     const laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
     const laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
     $scope.isVlkState = () => {
@@ -479,16 +478,29 @@ epOpintopolkuApp
     oppiaine,
     oppiainePeruste,
     baseLaajaalaiset,
+    vuosiluokkakokonaisuus,
+    vuosiluokkaSisalto,
     MurupolkuData,
     VuosiluokkaMapper) {
 
     $scope.oppiaine = oppiaine;
+    const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus');
     $scope.perusteOppiaine = oppiainePeruste;
+    //get rid of?
     $scope.perusteOppiaineVlkMap = $scope.perusteOppiaine ?
       _.indexBy($scope.perusteOppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
     $scope.laajaalaiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+    $scope.vlk = vuosiluokkakokonaisuus;
+    $scope.vuosiluokkaSisalto =  vuosiluokkaSisalto ? vuosiluokkaSisalto.sisaltoalueet : [];
+    const perusteSisalto = perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus].sisaltoalueet || [];
+    const tavoitteet = _.indexBy(vuosiluokkaSisalto.tavoitteet, 'tunniste');
+    console.log(vuosiluokkakokonaisuus, vuosiluokkaSisalto, "H", perusteSisalto, "T", tavoitteet);
     $scope.nimiOrder = Utils.sort;
+   //get rid of?
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
+
+    $scope.sisalto = _.zip(perusteSisalto, $scope.vuosiluokkaSisalto);
+
 
     $scope.item = _.reduce($scope.navi.sections[1].items, (result, item, index) => {
       if (item.$selected === true) {
@@ -582,8 +594,7 @@ epOpintopolkuApp
           perusteOpVlk: perusteOpVlk,
           perusteSisaltoalueet: perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : [],
           laajaalaiset: $scope.laajaalaiset,
-          sisaltoalueet: vuosiluokka.sisaltoalueet,
-          onValinnaiselle: $scope.oppiaine.tyyppi !== 'yhteinen'
+          sisaltoalueet: vuosiluokka.sisaltoalueet
         };
         VuosiluokkaMapper.mapModel($scope.vuosiluokkaSisallot[opVlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]);
         VuosiluokkaMapper.mapSisaltoalueet($scope.vuosiluokkaSisallot[opVlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka],
@@ -596,8 +607,8 @@ epOpintopolkuApp
         !$scope.vuosiluokkaSisallot[$scope.currentVlk].yleistavoitteet);
     };
 
-    $scope.isEmpty = () => {
-      return _.isEmpty($scope.vuosiluokkaSisallot);
+    $scope.isEmpty = (obj) => {
+      return _.isEmpty(obj);
     };
     $scope.missingVlk();
     $scope.isEmpty();
