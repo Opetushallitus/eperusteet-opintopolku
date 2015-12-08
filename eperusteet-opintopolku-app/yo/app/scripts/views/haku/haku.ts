@@ -183,10 +183,10 @@ epOpintopolkuApp
     };
 
     $scope.onkoHakuTyhja = function () {
-      return $scope.hakuparametrit.nimi !== ""
-        || $scope.hakuparametrit.koulutusala !== ""
+      return $scope.hakuparametrit.nimi !== ''
+        || $scope.hakuparametrit.koulutusala !== ''
         || $scope.hakuparametrit.siirtyma === true
-        || $scope.hakuparametrit.tyyppi !== "";
+        || ($scope.hakuparametrit.tyyppi !== '' && osio === 'ammatillinenaikuiskoulutus');
     };
 
     $scope.$on('changed:sisaltokieli', $scope.tyhjenna);
