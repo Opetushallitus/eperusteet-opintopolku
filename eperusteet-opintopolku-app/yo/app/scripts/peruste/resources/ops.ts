@@ -20,16 +20,16 @@ epOpintopolkuApp
     this.CACHEDQUERY = { method: 'GET', isArray: true, cache: true };
   })
 
-  .factory('opsResource', function ($resource, opsBase) {
-    return $resource(opsBase.OPS, {opsId: '@id'}, {
-      get: {method: 'GET', cache: true},
-      getOtsikot: {method: 'GET', url: opsBase.OPS + '/otsikot', cache: true},
-      getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: true},
-      getOppiaine: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId', cache: true},
-      getTekstikappale: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId', cache: true},
-      getTekstikappaleWithChildren: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId/kaikki', cache: true},
-      getLaajaalaisetosaamiset: {method: 'GET', isArray: true, url: opsBase.OPS + '/laajaalaisetosaamiset', cache: true}
-    })
+  .factory('OpsResource', function ($resource, opsBase) {
+    return (useCache = false) => ($resource(opsBase.OPS, {opsId: '@id'}, {
+      get: {method: 'GET', cache: false},
+      getOtsikot: {method: 'GET', url: opsBase.OPS + '/otsikot', cache: useCache},
+      getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: useCache},
+      getOppiaine: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId', cache: useCache},
+      getTekstikappale: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId', cache: useCache},
+      getTekstikappaleWithChildren: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId/kaikki', cache: useCache},
+      getLaajaalaisetosaamiset: {method: 'GET', isArray: true, url: opsBase.OPS + '/laajaalaisetosaamiset', cache: useCache}
+    }));
   })
 
   .factory('opsPerusteResource', function ($resource, opsBase) {

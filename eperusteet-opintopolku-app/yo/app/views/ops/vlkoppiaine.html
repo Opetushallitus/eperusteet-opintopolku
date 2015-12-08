@@ -31,16 +31,14 @@
   <div termisto-viitteet="valittuVlk.arviointi.teksti" ng-bind-html="valittuVlk.arviointi.teksti | kaanna | unsafe"></div>
 </div>
 
-<h2 ng-show="!isEmpty()" class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
-
-<p class="vuosiluokkailmoitus alert alert-info" ng-show="missingVlk() && !isEmpty(vuosiluokkaSisallot)" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
-
-<div ng-show="!!vuosiluokkaSisallot[currentVlk].yleistavoitteet">
+<div ng-show="missingVlk()">
   <h3 ng-bind-html="'tavoitteet-ja-sisallot' | kaanna | unsafe"></h3>
   <div termisto-viitteet="vuosiluokkaSisallot[currentVlk].yleistavoitteet.teksti" ng-bind-html="vuosiluokkaSisallot[currentVlk].yleistavoitteet.teksti | kaanna | unsafe"></div>
 </div>
 
-<div ng-show="!missingVlk() && !vuosiluokkaSisallot[currentVlk].yleistavoitteet">
+<h2 ng-show="!isEmpty() && !missingVlk()" class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
+
+<div ng-hide="missingVlk()">
   <h3 kaanna="'tavoitteet'"></h3>
 
   <accordion ng-repeat="tunniste in vuosiluokkaSisallot[currentVlk][vuosi].tunnisteet"
@@ -89,8 +87,7 @@
 
 <div class="esitys-paikallinen" termisto-viitteet="vs.muokattavat[tunniste].teksti" ng-bind-html="vs.muokattavat[tunniste].teksti | kaanna | unsafe"></div>
 
-<h2 ng-if="vuosiluokkaSisallot[currentVlk][vuosi].perusteOpVlk.sisaltoalueinfo"
-    ng-bind-html="'keskeiset-sisaltoalueet' | kaanna"></h2>
+<h2 ng-if="vuosiluokkaSisallot[currentVlk][vuosi].perusteOpVlk.sisaltoalueinfo" ng-bind-html="'keskeiset-sisaltoalueet' | kaanna"></h2>
 
 <div ng-repeat="tunniste in vuosiluokkaSisallot[currentVlk][vuosi].sisaltoaluetunnisteet"
      ng-init="vs = vuosiluokkaSisallot[currentVlk][vuosi]" class="tavoite">
