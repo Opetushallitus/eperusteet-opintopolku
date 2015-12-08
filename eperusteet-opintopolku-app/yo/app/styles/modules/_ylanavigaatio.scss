@@ -34,10 +34,16 @@
 }
 
 .ylanavigaatio {
+  a:hover {
+    text-decoration: none;
+  }
   background-color: $ylanavi-color;
 }
 
 .ylanavigaatio-sub {
+  a:hover {
+    text-decoration: none;
+  }
   background-color: $content-bg-color;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
 }
@@ -91,10 +97,13 @@
   .ylanavi-list {
     li {
       padding: 16px;
+      a {
+        color: black;
+      }
       &.active {
         background-color: $content-bg-color;
         a {
-          color: black;
+          border-bottom: 2px solid $ylanavi-color;
         }
       }
     }
