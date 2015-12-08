@@ -170,12 +170,12 @@ epOpintopolkuApp
         var tyyppi = $scope.navi.sections[2].items[1].$oppiaine.$tyyppi;
         if (tyyppi === 'yhteinen') {
           $timeout(() => {
-            return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.oppiaineet',
+            return $state.go('root.ops.perusopetus.oppiaineet',
               {opsId: $scope.ops.id, oppiaineId: oppiaineId})
           }, 10)
         } else {
           $timeout(() => {
-            return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.valinnaisetoppiaineet',
+            return $state.go('root.ops.perusopetus.valinnaisetoppiaineet',
               {opsId: $scope.ops.id, oppiaineId: oppiaineId})
           }, 10)
         }
@@ -369,9 +369,10 @@ epOpintopolkuApp
     };
 
     const stripYears = (name) => {
+      console.log(name);
       if (name['fi'] || name['sv']) {
         return name.fi.replace(/\D/g, '').split('')
-          || name.currentVlkCategory.sv.replace(/\D/g, '').split('');
+          || name.sv.replace(/\D/g, '').split('');
       }
       return name.replace(/\D/g, '').split('');
     };

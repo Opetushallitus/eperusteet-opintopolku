@@ -754,6 +754,9 @@ epOpintopolkuApp
           opsId: function ($stateParams) {
             return $stateParams.opsId;
           },
+          vuosiluokka: function($stateParams) {
+            return "vuosiluokka_" + $stateParams.vuosiId;
+          },
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
@@ -777,16 +780,27 @@ epOpintopolkuApp
             return opsResource.getLaajaalaisetosaamiset({
               opsId: opsId
             }).$promise.then(function (res) {
-              return res
+              return res;
             })
-          }
+          }/*,
+          vuosiluokkakokonaisuus: function(opsId, oppiaine, oppiaineId, opsResource) {
+
+            return opsResource.getOppiaineVlk({
+              opsId: opsId,
+              oppiaineId: oppiaineId,
+              vlkId: vlkId
+            }).$promise.then(function (res) {
+              console.log(res);
+              return res;
+            })
+          }*/
         }
       })
 
       .state('root.ops.perusopetus.valinnaisetoppiaineet', {
         url: '/valinnaisetnoppiaineet/:oppiaineId',
         templateUrl: 'views/ops/vlkoppiaine.html',
-        //controller: 'OpsValinainenoppiaineController',
+        controller: 'OpsValinainenoppiaineController',
         resolve: {
           opsId: function ($stateParams) {
             return $stateParams.opsId;
@@ -832,6 +846,9 @@ epOpintopolkuApp
         resolve: {
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
+          },
+          vlkId: function ($stateParams) {
+            return $stateParams.vlkId;
           },
           oppiaine: function (opsResource, oppiaineId, opsId) {
             return opsResource.getOppiaine({

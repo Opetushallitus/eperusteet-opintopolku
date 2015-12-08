@@ -22,9 +22,9 @@ epOpintopolkuApp
     ops) {
     const koulutustyyppi = ops.koulutustyyppi;
     const kltMap = {
-      "koulutustyyppi_15": ".esiopetus",
-      "koulutustyyppi_16": ".perusopetus",
-      "koulutustyyppi_6": ".lisaopetus"
+      "koulutustyyppi_15": "root.ops.esiopetus",
+      "koulutustyyppi_16": "root.ops.perusopetus",
+      "koulutustyyppi_6": "root.ops.lisaopetus"
     };
-    $state.go(kltMap[koulutustyyppi])
+    $state.go(kltMap[koulutustyyppi],{location: 'replace'})
   });

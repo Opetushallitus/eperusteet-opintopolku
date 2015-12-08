@@ -171,7 +171,7 @@ epOpintopolkuApp
         oppiaineUrl = type ? $state.href('root.ops.perusopetus.oppiaineet', {
           oppiaineId: oppiaine.id
         })
-          : $state.href('root.ops.perusopetus.vuosiluokka.valinnaisetnoppiaineet', {
+          : $state.href('root.ops.perusopetus.valinnaisetnoppiaineet', {
           oppiaineId: oppiaine.id
         });
       }
