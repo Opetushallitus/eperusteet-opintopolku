@@ -553,6 +553,7 @@ epOpintopolkuApp
       .state('root.ops', {
         url: '/ops/:opsId',
         template: '<div ui-view></div>',
+        controller: 'OpsController',
         resolve: {
           opsId: ($stateParams) => {
             return $stateParams.opsId;
@@ -782,14 +783,6 @@ epOpintopolkuApp
         }
       })
 
-
-
-      .state('root.ops.perusopetus.oppiaineet.vuosiluokat', {
-        url: '/vuosiluokat/:vlktId',
-        templateUrl: 'views/ops/oppiaine.html',
-        controller: 'OpsOppiaineetVlktController',
-      })
-
       .state('root.ops.perusopetus.valinnaisetoppiaineet', {
         url: '/valinnaisetnoppiaineet/:oppiaineId',
         templateUrl: 'views/ops/vlkoppiaine.html',
@@ -812,7 +805,16 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perusopetus.vuosiluokka', {
+
+
+      .state('root.ops.perusopetus.oppiaineet.vuosiluokkakokonaisuus.vuosiluokat', {
+        url: '/vuosiluokat/:vlktId',
+        templateUrl: 'views/ops/oppiaine.html',
+        controller: 'OpsOppiaineetVlktController',
+      })
+
+
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka', {
         url: '/vuosiluokka/:vuosi',
         controller: 'OpsVuosiluokkaController',
         template: '<div ui-view></div>',
@@ -823,7 +825,7 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perusopetus.vuosiluokka.oppiaine', {
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.oppiaine', {
         url: '/oppiaine/:oppiaineId',
         templateUrl: 'views/ops/vlkoppiaine.html',
         controller: 'OpsVlkOppiaineController',
@@ -857,7 +859,7 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine', {
         url: '/valinainenoppiaine/:oppiaineId',
         templateUrl: 'views/ops/valinainenoppiaine.html',
         controller: 'OpsValinainenoppiaineController',

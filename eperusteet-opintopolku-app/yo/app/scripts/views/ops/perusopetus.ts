@@ -103,13 +103,13 @@ epOpintopolkuApp
       return getFirstOppiaine(vlk)
        .then((firstOppiaine) => {
          if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' === "yhteinen") {
-          return $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
-            {vuosi: vuosi, opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+          return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.oppiaine',
+            {vuosi: vuosi, opsId: $state.params.opsId, vlkId: $state.params.vlkId, oppiaineId: firstOppiaine.$oppiaine.id},
             {location: 'replace'});
         }
          else if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' !== "yhteinen") {
-           return $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
-             {vuosi: vuosi, opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+           return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine',
+             {vuosi: vuosi, opsId: $state.params.opsId, vlkId: $state.params.vlkId, oppiaineId: firstOppiaine.$oppiaine.id},
              {location: 'replace'});
          }
          return;
@@ -170,12 +170,12 @@ epOpintopolkuApp
         var tyyppi = $scope.navi.sections[2].items[1].$oppiaine.$tyyppi;
         if (tyyppi === 'yhteinen') {
           $timeout(() => {
-            return $state.go('root.ops.perusopetus.oppiaineet',
+            return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.oppiaineet',
               {opsId: $scope.ops.id, oppiaineId: oppiaineId})
           }, 10)
         } else {
           $timeout(() => {
-            return $state.go('root.ops.perusopetus.valinnaisetoppiaineet',
+            return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.valinnaisetoppiaineet',
               {opsId: $scope.ops.id, oppiaineId: oppiaineId})
           }, 10)
         }
@@ -239,15 +239,15 @@ epOpintopolkuApp
     };
 
     const changeToOppiaine = () => {
-      if ($state.current.name === 'root.ops.perusopetus.vuosiluokka' && $scope.navi.sections[1].items) {
+      if ($state.current.name === 'root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka' && $scope.navi.sections[1].items) {
         let selectedIndex = getIndexOfNextOppiaine();
         let  nextIndex = parseInt(selectedIndex) + 1;
         if ($scope.navi.sections[1].items[nextIndex].$tyyppi === "yhteinen") {
-          $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
-            {vuosi: $state.params.vuosi, oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
+          $state.go('.oppiaine',
+            {oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
         } else if (selectedIndex) {
-          $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
-            {vuosi: $state.params.vuosi, oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
+          $state.go('.valinainenoppiaine',
+            {oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
         }
         return;
       }
@@ -439,6 +439,7 @@ epOpintopolkuApp
 
   .controller('OpsVlkController', function(
     $scope,
+    $state,
     vlkId,
     vlkt,
     baseLaajaalaiset,
@@ -451,8 +452,11 @@ epOpintopolkuApp
     $scope.peruste = vlkPeruste;
     //$scope.osaamiset = _.zipBy(baseLaajaalaiset, 'tunniste');
 
-    var laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
-    var laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
+    const laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+    const laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
+    $scope.isVlkState = () => {
+      return !_.contains(_.words($state.current.name), 'vuosiluokka');
+    };
 
     $scope.orderFn = function (tunniste) {
       return laajaalaisetOrder.indexOf(tunniste);

@@ -52,14 +52,18 @@ epOpintopolkuApp
       return menu;
     };
 
+    var vlkMap = {};
+
     const rakennaVuosiluokkakokonaisuuksienMenu = (vlkt, aineet) => {
 
+      vlkMap = _.indexBy(vlkt, '_tunniste');
       let vlkWithYears = createMenuByYear(vlkt);
       let arr = [];
       let lastVlk = null;
       let currentVuosi = null;
 
       _.each(vlkWithYears, function (vlk) {
+        let vlkId = vlkMap[vlk._tunniste]['id'];
         if (!vlk.vuosi) {
           lastVlk = vlk;
           arr.push({
@@ -77,7 +81,7 @@ epOpintopolkuApp
           $hidden: true,
           vlk: lastVlk.nimi,
           depth: 1,
-          url: $state.href('root.ops.perusopetus.vuosiluokka', {vuosi: vlk.vuosi_num})
+          url: $state.href('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka', {vlkId: vlkId, vuosi: vlk.vuosi_num})
         });
         currentVuosi = vlk.vuosi;
         traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi, null);
@@ -147,15 +151,18 @@ epOpintopolkuApp
       if (!oppiaine.nimi[Kieli.getSisaltokieli()]) {
         return;
       }
+      let vlkId = vlk ? vlkMap[vlk]['id'] : null;
       let currentYear = currentVuosi ? currentVuosi[currentVuosi.length-1] : null;
       let type = oppiaine.tyyppi === 'yhteinen';
       let oppiaineUrl;
       if (opts['menuType'] === 'vuosiluokittain') {
-        oppiaineUrl = type ? $state.href('root.ops.perusopetus.vuosiluokka.oppiaine', {
+        oppiaineUrl = type ? $state.href('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.oppiaine', {
+          vlkId: vlkId,
           vuosi: currentYear,
           oppiaineId: oppiaine.id
         })
-          : $state.href('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+          : $state.href('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine', {
+          vlkId: vlkId,
           vuosi: currentYear,
           oppiaineId: oppiaine.id
         });
