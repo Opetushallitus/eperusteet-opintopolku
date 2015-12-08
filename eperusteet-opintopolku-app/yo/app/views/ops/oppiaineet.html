@@ -1,13 +1,15 @@
 <h1 kaanna="oppiaine.nimi"></h1>
 
-<div ng-if="vlkt.length > 0" class="vuosiluokka-valinta">
+<div ng-if="vlktTabit.length > 0" class="vuosiluokka-valinta">
   <ul>
-    <li ng-repeat="vlk in vlkt" ng-class="{active: isActive(vuosiluokka)}">
+    <li ng-repeat="vlk in vlktTabit" ng-class="{active: tabIsActive(vlk.id)}">
       <a ui-sref="root.ops.perusopetus.oppiaineet.vuosiluokat({vlktId: vlk.id})"
          kaanna="vlk.nimi"></a>
     </li>
   </ul>
 </div>
-<pre>{{vuosiluokat | json}}</pre>
+<div ng-if="vlktTabit.length === 0" class="vuosiluokka-valinta">
+  <p class="vuosiluokkailmoitus alert alert-info" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
+</div>
 
 <div ui-view></div>

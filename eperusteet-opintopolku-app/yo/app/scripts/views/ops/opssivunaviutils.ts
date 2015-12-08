@@ -181,6 +181,21 @@ epOpintopolkuApp
             setParentOppiaineHeader();
           }
         },
+        vuosiluokat: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        },
         valinnaisetoppiaineet: {
           index: 2,
           callback: function (item) {

@@ -1,28 +1,22 @@
+<div ng-show="oppiaine.kohdealueet.length > 0">
+  <h2 kaanna="'kohdealueet'"></h2>
+  <ul>
+    <li ng-repeat="ka in oppiaine.kohdealueet">
+      <span ng-bind="ka.nimi | kaanna"></span>
+    </li>
+  </ul>
+</div>
+
 <div esitys-teksti="oppiaine.tehtava" esitys-peruste="perusteOppiaine.tehtava" show-peruste="true"></div>
 
-<p class="vuosiluokkailmoitus alert alert-info" ng-if="!activeVuosiluokka" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
+<h2 class="vlk-otsikko" ng-show="!isEmpty(valittuVlk)" ng-bind="currentVlkCategory | kaanna"></h2>
 
-<div ng-repeat="vlk in oppiaine.vuosiluokkakokonaisuudet | filter:vlkFilter | orderBy:vlkSort track by vlk._vuosiluokkakokonaisuus">
-  <h2 class="vlk-otsikko" kaanna="vlkMap[vlk._vuosiluokkakokonaisuus].vuosiluokkakokonaisuus.nimi"></h2>
-
-  <div ng-if="oppiaine.tyyppi === 'yhteinen'">
-    <div esitys-teksti="vlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tehtava" show-peruste="true"></div>
-
-    <div esitys-teksti="vlk.tyotavat" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tyotavat" show-peruste="true"></div>
-    <div esitys-teksti="vlk.ohjaus" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].ohjaus" show-peruste="true"></div>
-    <div esitys-teksti="vlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].arviointi" show-peruste="true"></div>
-  </div>
-
-  <div ng-if="oppiaine.tyyppi !== 'yhteinen'">
-    <h3 ng-bind-html="vlk.tehtava.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.tehtava.teksti" ng-bind-html="vlk.tehtava.teksti | kaanna | unsafe"></div>
-    <h3 ng-bind-html="vlk.tyotavat.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.tyotavat.teksti" ng-bind-html="vlk.tyotavat.teksti | kaanna | unsafe"></div>
-    <h3 ng-bind-html="vlk.ohjaus.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.ohjaus.teksti" ng-bind-html="vlk.ohjaus.teksti | kaanna | unsafe"></div>
-    <h3 ng-bind-html="vlk.arviointi.otsikko | kaanna | unsafe"></h3>
-    <div termisto-viitteet="vlk.arviointi.teksti" ng-bind-html="vlk.arviointi.teksti | kaanna | unsafe"></div>
-  </div>
+<div ng-show="oppiaine.tyyppi === 'yhteinen'">
+  <div esitys-teksti="valittuVlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[currentVlk].tehtava"></div>
+  <div esitys-teksti="valittuVlk.tyotavat" esitys-peruste="perusteOppiaineVlkMap[currentVlk].tyotavat"></div>
+  <div esitys-teksti="valittuVlk.ohjaus" esitys-peruste="perusteOppiaineVlkMap[currentVlk].ohjaus"></div>
+  <div esitys-teksti="valittuVlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[currentVlk].arviointi"></div>
+</div>
 
   <div ng-if="vuosiluokat.length > 0" class="vuosiluokka-valinta">
     <span kaanna="'vuosiluokka'"></span>
