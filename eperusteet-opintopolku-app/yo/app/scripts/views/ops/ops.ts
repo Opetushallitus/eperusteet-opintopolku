@@ -26,5 +26,7 @@ epOpintopolkuApp
       "koulutustyyppi_16": "root.ops.perusopetus",
       "koulutustyyppi_6": "root.ops.lisaopetus"
     };
-    $state.go(kltMap[koulutustyyppi],{location: 'replace'})
+    if ($state.is('root.ops')) {
+      $state.go(kltMap[koulutustyyppi], {location: 'replace'})
+    }
   });

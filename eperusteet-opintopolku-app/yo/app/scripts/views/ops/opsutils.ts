@@ -213,12 +213,36 @@ epOpintopolkuApp
       }).map('id').first();
     };
 
+    const makeSisalto = (perusteOpVlk, tavoitteet, perusteOppiaine, laajaalaiset) => {
+      return _(tavoitteet).each(function (item) {
+        var perusteSisaltoAlueet = perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : {};
+        var perusteKohdealueet = perusteOppiaine ? _.indexBy(perusteOppiaine.kohdealueet, 'id') : [];
+        if (perusteOpVlk) {
+          var perusteTavoite = _.find(perusteOpVlk.tavoitteet, function (pTavoite) {
+            return pTavoite.tunniste === item.tunniste;
+          });
+          item.$tavoite = perusteTavoite.tavoite;
+          item.$sisaltoalueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste) {
+            return perusteSisaltoAlueet[tunniste] || {};
+          });
+          item.$kohdealue = perusteKohdealueet[_.first(perusteTavoite.kohdealueet)];
+          item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste) {
+            return laajaalaiset[tunniste];
+          });
+          item.$arvioinninkohteet = perusteTavoite.arvioinninkohteet;
+        }
+      })
+       .sortBy('$tavoite')
+       .value()
+    };
+
 
     return {
       sortVlk: sortVlk,
       rakennaOppiaineetMenu: rakennaOppiaineetMenu,
       rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu,
       getVlkId: getVlkId,
-      getVuosiId: getVuosiId
+      getVuosiId: getVuosiId,
+      makeSisalto: makeSisalto
     }
   });

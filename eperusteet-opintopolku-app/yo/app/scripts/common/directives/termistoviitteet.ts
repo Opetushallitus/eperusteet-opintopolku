@@ -21,8 +21,9 @@ epOpintopolkuApp
   .directive('termistoTekstikentta', function() {
     return {
       restrict: 'E',
-      scope: { model: '=tekstikentta' },
-      template: '<p ng-if="hasContent(model)" ng-bind-html="model | kaanna | unsafe" termisto-viitteet="model"></p>',
+      scope: { model: '=tekstikentta', perusteModel: '=perusteteksti'},
+      template: '<p ng-if="hasContent(model)" ng-bind-html="model | kaanna | unsafe" termisto-viitteet="model"></p>' +
+                '<p ng-if="perusteModel" class="esitys-peruste" termisto-viitteet="perusteModel" ng-bind-html="perusteModel | kaanna | unsafe"></p>',
       controller: function ($scope, Utils) {
         $scope.hasContent = Utils.hasContentOnCurrentLang;
       }
