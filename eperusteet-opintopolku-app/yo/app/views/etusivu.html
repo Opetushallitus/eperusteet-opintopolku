@@ -86,7 +86,7 @@
         <h2 kaanna="'etusivu.uusimmat-perusteet'"></h2>
         <div class="linkit">
           <ul>
-            <li ng-repeat="peruste in uusimmatLista | limitTo:naytto.shown" class="lista-elementti">
+            <li ng-repeat="peruste in uusimmatLista | limitTo:5" class="lista-elementti">
               <a ui-sref="{{UusimmatPerusteetService.getStateTila(peruste.koulutustyyppi)}}
               ({perusteId: peruste.id, suoritustapa: peruste.suoritustavat[0].suoritustapakoodi})" >
                 <span ng-bind="peruste.nimi | kaanna"></span>
