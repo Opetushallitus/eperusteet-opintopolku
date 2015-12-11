@@ -273,21 +273,45 @@ epOpintopolkuApp
         useData: 'vlkNimi',
         useId: 'vlkId'
       },
-      'root.ops.perusopetus.vuosiluokka':{
+      'root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka':{
         parent: 'root.ops.perusopetus.vuosiluokkakokonaisuus',
         useId: 'vuosiId',
         useData: 'vuosi'
       },
-      'root.ops.perusopetus.vuosiluokka.oppiaine': {
-        parent: 'root.ops.perusopetus.vuosiluokka',
+      'root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.oppiaine': {
+        parent: 'root.ops.perusopetus.vuosiluokkakokonaisuus',
         useData: 'oppiaineNimi',
         useId: 'oppiaineId',
         customParents: true
       },
-      'root.ops.perusopetus.vuosiluokka.valinainenoppiaine': {
-        parent: 'root.ops.perusopetus.vuosiluokka',
+      'root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine': {
+        parent: 'root.ops.perusopetus.vuosiluokkakokonaisuus',
         useData: 'oppiaineNimi',
         useId: 'oppiaineId',
+        customParents: true
+      },
+      'root.ops.perusopetus.oppiaineet': {
+        parent: 'root.ops.perusopetus',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      },
+      'root.ops.perusopetus.valinnaisetoppiaineet': {
+        parent: 'root.ops.perusopetus',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      },
+      'root.ops.perusopetus.oppiaineet.vlk': {
+        parent: 'root.ops.perusopetus.oppiaineet',
+        label: 'vuosiluokkakokonaisuus',
+        useId: 'vlkId',
+        customParents: true
+      },
+      'root.ops.perusopetus.oppiaineet.vlk.vuosiluokat': {
+        parent: 'root.ops.perusopetus.oppiaineet.vlk',
+        useDate: 'vuosiLabel',
+        useId: 'vlkId',
         customParents: true
       }
     };

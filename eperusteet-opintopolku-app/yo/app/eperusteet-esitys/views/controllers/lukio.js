@@ -155,7 +155,7 @@ angular.module('eperusteet.esitys')
         items: epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
         naviClasses: $scope.naviClasses
       }]
-    }
+    };
 
     $scope.navi.sections[0].items.unshift({
       depth: 0,
