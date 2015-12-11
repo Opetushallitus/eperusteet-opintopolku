@@ -1,4 +1,7 @@
 <h1 kaanna="oppiaine.nimi"></h1>
+
+<div esitys-teksti="oppiaine.tehtava" esitys-peruste="peruste.tehtava" show-peruste="true"></div>
+
 <div ng-show="vlkTabit.length" class="vuosiluokka-valinta">
   <ul>
     <li ng-repeat="vlk in vlkTabit" ng-class="{active: addActiveClass(vlk.id)}">
@@ -6,11 +9,6 @@
          kaanna="vlk.nimi"></a>
     </li>
   </ul>
-</div>
-
-<!-- hack to show Vieraatkielet tehtava which should have true as an abstract entity but does not -->
-<div ng-show="oppiaine.koodiArvo === 'VK'">
-  <div esitys-teksti="oppiaine.tehtava" esitys-peruste="peruste.tehtava" show-peruste="true"></div>
 </div>
 
 <div ng-show="vlktTabit.length === 0" class="vuosiluokka-valinta">
