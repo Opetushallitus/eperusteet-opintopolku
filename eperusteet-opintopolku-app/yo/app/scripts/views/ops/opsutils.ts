@@ -171,7 +171,7 @@ epOpintopolkuApp
         oppiaineUrl = type ? $state.href('root.ops.perusopetus.oppiaineet', {
           oppiaineId: oppiaine.id
         })
-          : $state.href('root.ops.perusopetus.valinnaisetnoppiaineet', {
+          : $state.href('root.ops.perusopetus.valinnaisetoppiaineet', {
           oppiaineId: oppiaine.id
         });
       }
@@ -213,7 +213,8 @@ epOpintopolkuApp
       }).map('id').first();
     };
 
-    const makeSisalto = (perusteOpVlk, tavoitteet, perusteOppiaine, laajaalaiset) => {
+    const makeSisalto = (perusteOpVlk, tavoitteet, perusteOppiaine, laajaalaiset, sortHelper) => {
+
       return _(tavoitteet).each(function (item) {
         var perusteSisaltoAlueet = perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : {};
         var perusteKohdealueet = perusteOppiaine ? _.indexBy(perusteOppiaine.kohdealueet, 'id') : [];
@@ -222,9 +223,29 @@ epOpintopolkuApp
             return pTavoite.tunniste === item.tunniste;
           });
           item.$tavoite = perusteTavoite.tavoite;
-          item.$sisaltoalueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste) {
+          let alueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste) {
             return perusteSisaltoAlueet[tunniste] || {};
           });
+          if(!_.isEmpty(alueet)) {
+            item.$sisaltoalueet = alueet.sort((a, b) => {
+              if (sortHelper.indexOf(a.nimi.fi) > sortHelper.indexOf(b.nimi.fi)) {
+                return 1;
+              }
+              if (sortHelper.indexOf(a.nimi.fi) < sortHelper.indexOf(b.nimi.fi)) {
+                return -1;
+              }
+              return 0;
+            });
+            item.sisaltoalueet = item.sisaltoalueet.sort((a, b) => {
+              if (sortHelper.indexOf(a.sisaltoalueet.nimi.fi) > sortHelper.indexOf(b.sisaltoalueet.nimi.fi)) {
+                return 1;
+              }
+              if (sortHelper.indexOf(a.sisaltoalueet.nimi.fi) < sortHelper.indexOf(b.sisaltoalueet.nimi.fi)) {
+                return -1;
+              }
+              return 0;
+            });
+          }
           item.$kohdealue = perusteKohdealueet[_.first(perusteTavoite.kohdealueet)];
           item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste) {
             return laajaalaiset[tunniste];

@@ -1,0 +1,21 @@
+<div esitys-teksti="oppiaine.tehtava" esitys-peruste="perusteOppiaine.tehtava" show-peruste="true"></div>
+
+<h2 class="vlk-otsikko" ng-bind="currentVlkCategory | kaanna"></h2>
+
+<div ng-show="oppiaine.tyyppi === 'yhteinen'">
+  <div esitys-teksti="vuosiluokkakokonaisuus.tehtava" esitys-peruste="perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].tehtava"></div>
+  <div esitys-teksti="vuosiluokkakokonaisuus.tyotavat" esitys-peruste="perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].tyotavat"></div>
+  <div esitys-teksti="vuosiluokkakokonaisuus.ohjaus" esitys-peruste="perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].ohjaus"></div>
+  <div esitys-teksti="vuosiluokkakokonaisuus.arviointi" esitys-peruste="perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].arviointi"></div>
+</div>
+
+<div ng-show="vlk.length" class="vuosiluokka-valinta">
+  <ul>
+    <li ng-repeat="vuosi in vlk" ng-class="{active: addActiveClass(vuosi.id, true)}">
+      <a ui-sref=".vuosiluokat({vuosiId: vuosi.id, location: replace, notify: true})"
+         kaanna="vuosi.vuosiluokka"></a>
+    </li>
+  </ul>
+</div>
+
+<div ui-view></div>

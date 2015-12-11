@@ -708,8 +708,7 @@ epOpintopolkuApp
 
       .state('root.ops.perusopetus.tiedot', {
         url: '/tiedot',
-        templateUrl: 'views/ops/tiedot.html',
-        controller: 'OpsPerusopetusTiedotController'
+        templateUrl: 'views/ops/tiedot.html'
       })
 
       .state('root.ops.perusopetus.vuosiluokkakokonaisuus', {
@@ -754,9 +753,6 @@ epOpintopolkuApp
           opsId: function ($stateParams) {
             return $stateParams.opsId;
           },
-          vuosiluokka: function($stateParams) {
-            return "vuosiluokka_" + $stateParams.vuosiId;
-          },
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
@@ -768,7 +764,7 @@ epOpintopolkuApp
               return res;
             })
           },
-          oppiainePeruste: function(opsPerusteResource, opsId, oppiaineId) {
+          oppiainePeruste: function (opsPerusteResource, opsId, oppiaineId) {
             return opsPerusteResource.getOppiainePeruste({
               opsId: opsId,
               oppiaineId: oppiaineId
@@ -782,31 +778,62 @@ epOpintopolkuApp
             }).$promise.then(function (res) {
               return res;
             })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.oppiaineet.vlk', {
+        url: '/vlk/:vlkId',
+        templateUrl: 'views/ops/vlkView.html',
+        controller: 'OpsOppiaineetVlkController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
           },
-          vuosiluokkakokonaisuus: function(vlkt, vlkPeruste, oppiaine, oppiaineId, opsResource, opsUtils) {
-            console.log(vlkt, vlkPeruste);
-            let vlkId = opsUtils.getVlkIds(vlkt, vlkPeruste, oppiaine);
-           /* return opsResource.getOppiaineVlk({
-              opsId: opsId,
-              oppiaineId: oppiaineId,
-              vlkId: vlkId
-            }).$promise.then(function (res) {
-              console.log(res);
-              return res;
-            })*/
-            return 'Yes';
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          vlkId: function ($stateParams) {
+            return $stateParams.vlkId;
+          },
+          vuosiluokkakokonaisuus: function (opsId, vlkId, oppiaineId, oppiaine, opsResource) {
+              return opsResource.getOppiaineVlk({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vlkId
+              }).$promise.then(function (res) {
+                return res;
+              });
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.oppiaineet.vlk.vuosiluokat', {
+        url: '/vuosi/:vuosiId',
+        templateUrl: 'views/ops/op.html',
+        controller: 'OpsOppiaineController',
+        resolve: {
+          vuosiluokkaId: function ($stateParams) {
+            return $stateParams.vuosiId;
+          },
+          vuosiluokkaSisalto: function(vlkId, opsId, oppiaineId, opsResource, vuosiluokkaId){
+              return opsResource.getOppiaineVlkByVuosiluokka({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vlkId,
+                vuosiId: vuosiluokkaId
+              }).$promise.then(function (res) {
+                return res;
+              })
           }
         }
       })
 
       .state('root.ops.perusopetus.valinnaisetoppiaineet', {
         url: '/valinnaisetnoppiaineet/:oppiaineId',
-        templateUrl: 'views/ops/vlkoppiaine.html',
-        controller: 'OpsValinainenoppiaineController',
+        templateUrl: 'views/ops/vlnoppiaine.html',
+        controller: 'OpsVlnOppiaineController',
         resolve: {
-          opsId: function ($stateParams) {
-            return $stateParams.opsId;
-          },
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
@@ -820,15 +847,6 @@ epOpintopolkuApp
           }
         }
       })
-
-
-
-      .state('root.ops.perusopetus.oppiaineet.vuosiluokkakokonaisuus.vuosiluokat', {
-        url: '/vuosiluokat/:vlktId',
-        templateUrl: 'views/ops/oppiaine.html',
-        controller: 'OpsOppiaineetVlktController',
-      })
-
 
       .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka', {
         url: '/vuosiluokka/:vuosi',
@@ -877,13 +895,16 @@ epOpintopolkuApp
           },
           vuosiluokkakokonaisuus: function(vlkt, opsId, oppiaine, oppiaineId, opsResource, opsUtils) {
              let vId = opsUtils.getVlkId(vlkt, oppiaine);
-             return opsResource.getOppiaineVlk({
-             opsId: opsId,
-             oppiaineId: oppiaineId,
-             vlkId: vId
-             }).$promise.then(function (res) {
-             return res;
-             });
+            if(vId) {
+              return opsResource.getOppiaineVlk({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vId
+              }).$promise.then(function (res) {
+                return res;
+              });
+            }
+            return {};
           },
           vuosiluokkaSisalto: function(vlkt, oppiaine, vuosiluokkakokonaisuus, vuosi,
                                        opsId, oppiaineId, opsResource, opsUtils){
@@ -894,7 +915,7 @@ epOpintopolkuApp
                 opsId: opsId,
                 oppiaineId: oppiaineId,
                 vlkId: vId,
-                vuosi: vuosiluokkaId
+                vuosiId: vuosiluokkaId
               }).$promise.then(function (res) {
                 return res;
               })

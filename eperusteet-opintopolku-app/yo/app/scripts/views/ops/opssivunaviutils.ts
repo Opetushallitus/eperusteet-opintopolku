@@ -63,6 +63,17 @@ epOpintopolkuApp
         }
       }
 
+      const goToFirstChild= (selected, items) => {
+        let nextIndex = _.indexOf(items, selected) + 1;
+        if (items[nextIndex].$tyyppi === "yhteinen") {
+          $state.go('.oppiaine',
+            {oppiaineId: items[nextIndex].$oppiaine.id}, {location: 'replace'});
+        } else if (nextIndex) {
+          $state.go('.valinainenoppiaine',
+            {oppiaineId: items[nextIndex].$oppiaine.id}, {location: 'replace'});
+        }
+      };
+
       function textCallback(item)  {
         if (item.$osa) {
           item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
@@ -87,10 +98,6 @@ epOpintopolkuApp
       }
 
       var states = {
-       /* laajaalaiset: {
-          index: 0,
-          callback: textCallback
-        },*/
         tekstikappale: {
           index: 0,
           callback: textCallback
@@ -124,7 +131,7 @@ epOpintopolkuApp
           },
           actions: function () {
             items = section.items;
-            setParentOppiaineHeader();
+            goToFirstChild(selected, items);
           }
         },
         vlkoppiaine: {
@@ -193,10 +200,39 @@ epOpintopolkuApp
           },
           actions: function () {
             items = section.items;
-            setParentOppiaineHeader();
           }
         },
         valinnaisetoppiaineet: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        },
+        vlk: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        },
+        vuosi: {
           index: 2,
           callback: function (item) {
             if (item.$oppiaine) {

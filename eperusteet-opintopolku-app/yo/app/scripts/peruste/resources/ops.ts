@@ -16,7 +16,7 @@
 'use strict';
 epOpintopolkuApp
   .service('opsBase', function () {
-    this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId',
+    this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId';
     this.CACHEDQUERY = { method: 'GET', isArray: true, cache: true };
   })
 
@@ -27,7 +27,7 @@ epOpintopolkuApp
       getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: useCache},
       getOppiaine: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId', cache: useCache},
       getOppiaineVlk: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:vlkId', cache: useCache},
-      getOppiaineVlkByVuosiluokka: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:vlkId/vuosiluokat/:vuosi', cache: useCache},
+      getOppiaineVlkByVuosiluokka: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:vlkId/vuosiluokat/:vuosiId', cache: useCache},
       getTekstikappale: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId', cache: useCache},
       getTekstikappaleWithChildren: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId/kaikki', cache: useCache},
       getLaajaalaisetosaamiset: {method: 'GET', isArray: true, url: opsBase.OPS + '/laajaalaisetosaamiset', cache: useCache}
