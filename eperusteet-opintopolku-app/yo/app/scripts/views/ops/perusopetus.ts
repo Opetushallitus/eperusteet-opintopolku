@@ -26,7 +26,6 @@ epOpintopolkuApp
     epMenuBuilder,
     Utils,
     MurupolkuData,
-    TermistoService,
     Kieli,
     $document,
     $rootScope,
@@ -55,7 +54,7 @@ epOpintopolkuApp
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
     //FIXME to work with ops
-    TermistoService.setPeruste(perusOps, true);
+    //TermistoService.setPeruste(perusOps, true);
 
     $scope.naviClasses = (item) => {
       var classes = ['depth' + item.depth];
@@ -103,13 +102,13 @@ epOpintopolkuApp
       return getFirstOppiaine(vlk)
        .then((firstOppiaine) => {
          if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' === "yhteinen") {
-          return $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
-            {vuosi: vuosi, opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+          return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.oppiaine',
+            {vuosi: vuosi, opsId: $state.params.opsId, vlkId: $state.params.vlkId, oppiaineId: firstOppiaine.$oppiaine.id},
             {location: 'replace'});
         }
          else if (_.isObject(firstOppiaine) && firstOppiaine.$tyyppi + '' !== "yhteinen") {
-           return $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
-             {vuosi: vuosi, opsId: $state.params.opsId, oppiaineId: firstOppiaine.$oppiaine.id},
+           return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine',
+             {vuosi: vuosi, opsId: $state.params.opsId, vlkId: $state.params.vlkId, oppiaineId: firstOppiaine.$oppiaine.id},
              {location: 'replace'});
          }
          return;
@@ -133,7 +132,13 @@ epOpintopolkuApp
           naviClasses: $scope.naviClasses,
           include: 'views/ops/opsvlk.html',
           state: $scope.state
-        }
+        }, {
+          title: 'oppiaineet',
+          id: 'oppiaineet',
+          items: opsUtils.rakennaOppiaineetMenu($scope.oppiaineet),
+          naviClasses: $scope.naviClasses,
+          include: 'views/ops/opsvlk.html'
+          }
       ]
     };
 
@@ -144,11 +149,12 @@ epOpintopolkuApp
     });
 
     $scope.$on('$stateChangeSuccess', function () {
+      var id = _.intersection(_.keys($state.params), ['oppiaineId', 'vlkId']);
       opsStateService.setState($scope.navi);
-      if ($state.current.name === 'root.ops.perusopetus') {
+      if ($state.is('root.ops.perusopetus') && !id.length) {
         $state.go('.tiedot', {location: 'replace'});
       }
-      else if (_.endsWith(_.keys($state.params), 'vuosi')){
+      else if (_.endsWith(_.keys($stateParams), 'vuosi')){
         var vuosi = $state.params.vuosi;
         moveToOppiaine(vuosi);
       }
@@ -159,6 +165,20 @@ epOpintopolkuApp
         var vlkId = $scope.navi.sections[1].items[1].$vkl.id;
         $timeout(() => { return $state.go('root.ops.perusopetus.vuosiluokkakokonaisuus',
           {opsId: $scope.ops.id, vlkId: vlkId })},10)
+      } else if (section.id === 'oppiaineet' && !section.$open) {
+        var oppiaineId = $scope.navi.sections[2].items[1].$oppiaine.id;
+        var tyyppi = $scope.navi.sections[2].items[1].$tyyppi;
+        if (tyyppi === 'yhteinen') {
+          $timeout(() => {
+            return $state.go('root.ops.perusopetus.oppiaineet',
+              {opsId: $scope.ops.id, oppiaineId: oppiaineId})
+          }, 10)
+        } else {
+          $timeout(() => {
+            return $state.go('root.ops.perusopetus.valinnaisetoppiaineet',
+              {opsId: $scope.ops.id, oppiaineId: oppiaineId})
+          }, 10)
+        }
       }
     };
 
@@ -198,47 +218,21 @@ epOpintopolkuApp
     }
   })
 
-  .controller('OpsPerusopetusTiedotController', function($scope) {
-  })
-
   .controller('OpsVuosiluokkaController', function(
     $scope,
-    $q,
-    $state,
-    $timeout,
-    Kieli,
     vuosi,
     MurupolkuData){
 
     MurupolkuData.set({vuosiId: vuosi, vuosi: 'Vuosiluokka' + " " + vuosi});
-
-    const getIndexOfNextOppiaine = () =>{
-      return _.reduce($scope.navi.sections[1].items, function (result, item, index) {
-        return result += item.$selected === true ? index : '';
-      }, '');
-    }
-
-    const changeToOppiaine = () => {
-      if ($state.current.name === 'root.ops.perusopetus.vuosiluokka' && $scope.navi.sections[1].items) {
-        let selectedIndex = getIndexOfNextOppiaine();
-        let  nextIndex = parseInt(selectedIndex) + 1;
-        if ($scope.navi.sections[1].items[nextIndex].$tyyppi === "yhteinen") {
-          $state.go('root.ops.perusopetus.vuosiluokka.oppiaine',
-            {vuosi: $state.params.vuosi, oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
-        } else if (selectedIndex) {
-          $state.go('root.ops.perusopetus.vuosiluokka.valinainenoppiaine',
-            {vuosi: $state.params.vuosi, oppiaineId: $scope.navi.sections[1].items[nextIndex].$oppiaine.id}, {location: 'replace'});
-        }
-        return;
-      }
-      return;
-    };
-
-    $timeout(changeToOppiaine,30);
   })
+
+  /*
+   root.ops.perusopetus.vuosiluokkakokonaisuus
+   */
 
   .controller('OpsVlkController', function(
     $scope,
+    $state,
     vlkId,
     vlkt,
     baseLaajaalaiset,
@@ -250,9 +244,11 @@ epOpintopolkuApp
     $scope.vlk = vlkt;
     $scope.peruste = vlkPeruste;
     //$scope.osaamiset = _.zipBy(baseLaajaalaiset, 'tunniste');
-
-    var laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
-    var laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
+    const laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+    const laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
+    $scope.isVlkState = () => {
+      return !_.contains(_.words($state.current.name), 'vuosiluokka');
+    };
 
     $scope.orderFn = function (tunniste) {
       return laajaalaisetOrder.indexOf(tunniste);
@@ -264,6 +260,9 @@ epOpintopolkuApp
 
   })
 
+  /*
+   'root.ops.perusopetus.oppiaineet'
+   */
 
   .controller('OpsVlkOppiaineController', function(
     $scope,
@@ -274,26 +273,44 @@ epOpintopolkuApp
     oppiaine,
     oppiainePeruste,
     baseLaajaalaiset,
+    vuosiluokkakokonaisuus,
+    vuosiluokkaSisalto,
     MurupolkuData,
-    VuosiluokkaMapper) {
+    opsUtils) {
 
     $scope.oppiaine = oppiaine;
+    $scope.vlk = vuosiluokkakokonaisuus;
+    const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus');
     $scope.perusteOppiaine = oppiainePeruste;
-    $scope.perusteOppiaineVlkMap = $scope.perusteOppiaine ?
-      _.indexBy($scope.perusteOppiaine.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
-    $scope.laajaalaiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+    $scope.perusteOppiaineVlkMap = oppiainePeruste ?
+      _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
+    const laajaalaiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+    //keskeiset sisaltoaluet
+    const perusteSisalto = perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus] ? perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus].sisaltoalueet : [];
+    const sortMapHelper = _(perusteSisalto).pluck('nimi').map('fi').value();
+    $scope.perustenSisaltoMap = perusteSisalto ? _.indexBy(perusteSisalto, 'tunniste') : {};
+    const vlkSisalto =  vuosiluokkaSisalto ? vuosiluokkaSisalto.sisaltoalueet : [];
+    $scope.sisaltoAlueet = _.zip(perusteSisalto, vlkSisalto);
+    const tavoitteet = vuosiluokkaSisalto ? _.indexBy(vuosiluokkaSisalto.tavoitteet, 'tunniste') : [];
+
+    //map model
+    var perusteOpVlk = $scope.vlk._vuosiluokkakokonaisuus
+      ? $scope.perusteOppiaineVlkMap[$scope.vlk._vuosiluokkakokonaisuus] : {};
+    $scope.sisalto = opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper);
+
     $scope.nimiOrder = Utils.sort;
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
 
-    $scope.item = _.reduce($scope.navi.sections[1].items, (result, item, index) => {
-      if (item.$selected === true) {
-        item.index = index;
-        result = item;
-      }
-      return result;
-    }, '');
-
     function setMurupolku() {
+
+      let item = _.reduce($scope.navi.sections[1].items, (result, item, index) => {
+        if (item.$selected === true) {
+          item.index = index;
+          result = item;
+        }
+        return result;
+      }, '');
+
       function findParents(set, index) {
         var slicedSet = _.take(set, parseInt(index));
         var found = _.findLast(slicedSet, function (item) {
@@ -302,26 +319,27 @@ epOpintopolkuApp
         return found.$oppiaine;
       }
       var murupolkuParams = {};
-      if ($scope.item && $scope.item.depth === 2) {
+      if (item && item.depth === 2) {
         murupolkuParams = {
           parents: null,
-          oppiaineId: oppiaine.id,
-          oppiaineNimi: oppiaine.nimi
+          oppiaineId: $scope.oppiaine.id,
+          oppiaineNimi: $scope.oppiaine.nimi
         };
       }
-      if ($scope.item.depth === 3) {
+      if (item.depth === 3) {
         murupolkuParams = {
-          parents: [findParents($scope.navi.sections[1].items, $scope.item.index)],
-          oppiaineId: oppiaine.id,
-          oppiaineNimi: oppiaine.nimi
+          parents: [findParents($scope.navi.sections[1].items, item.index)],
+          oppiaineId: $scope.oppiaine.id,
+          oppiaineNimi: $scope.oppiaine.nimi
         };
       }
 
       MurupolkuData.set(murupolkuParams);
     }
 
-    $scope.$on('$stateChangeSuccess', setMurupolku);
+    setMurupolku();
 
+    $scope.$on('$stateChangeSuccess', setMurupolku);
 
     const getCurrentVlk = (vlk) => {
       var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
@@ -329,74 +347,113 @@ epOpintopolkuApp
       return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
     };
 
-    $scope.currentVlk = _($scope.vlkMap)
-      .filter(getCurrentVlk)
-      .map('tunniste')
-      .value()
-      .pop();
-
     $scope.currentVlkCategory = _($scope.vlkMap)
       .filter(getCurrentVlk)
       .map('nimi')
-      .value()
-      .pop();
-
-    const getVuosiluokat = () => {
-      var vuosiluokat = {};
-      _.each($scope.oppiaine.vuosiluokkakokonaisuudet, function (opVlk) {
-        _.each(opVlk.vuosiluokat, function (vl) {
-          vuosiluokat[vl.vuosiluokka] = vl;
-        });
-      });
-      return _.values(vuosiluokat);
-    };
+      .first();
 
     $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, (vlk) => {
       return vlk._vuosiluokkakokonaisuus == $scope.currentVlk;
     }).pop();
 
-    $scope.vuosiluokat = getVuosiluokat();
-
-    const vuosiLuokaNums = (vuosiluokkaEnum) => {
-      if (!vuosiluokkaEnum) {
-        return undefined;
-      }
-      return parseInt(_.last(vuosiluokkaEnum.split('_')), 10);
-    };
-
-    $scope.vuosiluokkaSisallot = {};
-
-    _.each($scope.oppiaine.vuosiluokkakokonaisuudet, function (opVlk) {
-      $scope.vuosiluokkaSisallot[opVlk._vuosiluokkakokonaisuus] = {};
-      $scope.vuosiluokkaSisallot[opVlk._vuosiluokkakokonaisuus].yleistavoitteet = opVlk.yleistavoitteet;
-      _.each(opVlk.vuosiluokat, function (vuosiluokka) {
-        vuosiluokka.$numero = vuosiLuokaNums(vuosiluokka.vuosiluokka);
-        var perusteOpVlk = $scope.perusteOppiaineVlkMap[opVlk._vuosiluokkakokonaisuus];
-        $scope.vuosiluokkaSisallot[opVlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka] = {
-          vuosiluokka: vuosiluokka,
-          perusteOpVlk: perusteOpVlk,
-          perusteSisaltoalueet: perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : [],
-          laajaalaiset: $scope.laajaalaiset,
-          sisaltoalueet: vuosiluokka.sisaltoalueet,
-          onValinnaiselle: $scope.oppiaine.tyyppi !== 'yhteinen'
-        };
-        VuosiluokkaMapper.mapModel($scope.vuosiluokkaSisallot[opVlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]);
-        VuosiluokkaMapper.mapSisaltoalueet($scope.vuosiluokkaSisallot[opVlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka],
-          'sisaltoaluetunnisteet', 'sisaltoaluemuokattavat');
-      });
-    });
 
     $scope.missingVlk = () => {
-      return _.isEmpty($scope.vuosiluokkaSisallot) || (_.isEmpty($scope.vuosiluokkaSisallot[$scope.currentVlk][$scope.vuosi]) &&
-        !$scope.vuosiluokkaSisallot[$scope.currentVlk].yleistavoitteet);
+      return  _.isEmpty(tavoitteet) || _.isEmpty($scope.sisalto);
     };
 
-    $scope.isEmpty = () => {
-      return _.isEmpty($scope.vuosiluokkaSisallot);
-    };
-    $scope.missingVlk();
-    $scope.isEmpty();
+    $scope.noYleistavoitteet = () => {
+      if ($scope.vlk && $scope.vlk.yleistavoitteet) {
+       return $scope.vlk.yleistavoitteet.teksti === null;
+      }
+      return true;
+    }
   })
+
+  /*
+   'root.ops.perusopetus.oppiaineet.vlk.vuosiluokat'
+   */
+
+  .controller('OpsOppiaineController', function(
+    $scope,
+    $timeout,
+    $state,
+    Utils,
+    oppiaineId,
+    oppiaine,
+    oppiainePeruste,
+    baseLaajaalaiset,
+    vuosiluokkakokonaisuus,
+    vuosiluokkaSisalto,
+    opsUtils,
+    MurupolkuData){
+
+    $scope.oppiaine = oppiaine;
+    $scope.vlk = vuosiluokkakokonaisuus;
+    $scope.vuosiluokka = vuosiluokkaSisalto.vuosiluokka;
+
+    const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus');
+    $scope.perusteOppiaine = oppiainePeruste;
+    $scope.perusteOppiaineVlkMap = oppiainePeruste ?
+      _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
+    const laajaalaiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+
+//keskeiset sisaltoaluet
+    const perusteSisalto = perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus]
+      ? perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus].sisaltoalueet : [];
+    const sortMapHelper = _(perusteSisalto).pluck('nimi').map('fi').value();
+    $scope.perustenSisaltoMap = perusteSisalto ? _.indexBy(perusteSisalto, 'tunniste') : {};
+    const vlkSisalto =  vuosiluokkaSisalto ? vuosiluokkaSisalto.sisaltoalueet : [];
+    $scope.sisaltoAlueet = _.zip(perusteSisalto, vlkSisalto);
+
+    const tavoitteet = vuosiluokkaSisalto ? _.indexBy(vuosiluokkaSisalto.tavoitteet, 'tunniste') : [];
+
+//map model
+    var perusteOpVlk = $scope.vlk._vuosiluokkakokonaisuus
+      ? $scope.perusteOppiaineVlkMap[$scope.vlk._vuosiluokkakokonaisuus] : {};
+    $scope.sisalto = opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper);
+    $scope.nimiOrder = Utils.sort;
+
+    MurupolkuData.set({
+      vuosiId: $state.params.vuosiId,
+      vuosiLabel: $scope.vuosiluokka
+    });
+
+    const getCurrentVlk = (vlk) => {
+      var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
+      vuodet = _.map(vuodet, function(v) { return parseInt(v); });
+      return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
+    };
+
+    $scope.currentVlkCategory = _($scope.vlkMap)
+      .filter(getCurrentVlk)
+      .map('nimi')
+      .first();
+
+    $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, (vlk) => {
+      return vlk._vuosiluokkakokonaisuus == $scope.currentVlk;
+    }).pop();
+
+
+    $scope.missingVlk = () => {
+      return  _.isEmpty(tavoitteet) || _.isEmpty($scope.sisalto);
+    };
+
+    $scope.noYleistavoitteet = () => {
+      if ($scope.vlk && $scope.vlk.yleistavoitteet) {
+        return $scope.vlk.yleistavoitteet.teksti === null;
+      }
+      return true;
+    };
+
+    $scope.activeClass = (id) => {
+      return id + ''=== $state.params.vuosiId + '';
+    };
+
+  })
+
+  /*
+   'root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine'
+   */
 
   .controller('OpsValinainenoppiaineController', function(
     $scope,
@@ -465,90 +522,4 @@ epOpintopolkuApp
     }
 
     setMurupolku();
-  })
-
-  .service('VuosiluokkaMapper', function ($state, $stateParams, Utils) {
-    function processTavoitteet(scope) {
-      var perusteKohdealueet = scope.perusteOppiaine ? _.indexBy(scope.perusteOppiaine.kohdealueet, 'id') : [];
-      _.each(scope.tavoitteet, function (item) {
-        if (scope.perusteOpVlk) {
-          var perusteTavoite = _.find(scope.perusteOpVlk.tavoitteet, function (pTavoite) {
-            return pTavoite.tunniste === item.tunniste;
-          });
-          item.$tavoite = perusteTavoite.tavoite;
-          item.$sisaltoalueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste) {
-            var sisaltoalue = scope.perusteSisaltoalueet[tunniste] || {};
-            //sisaltoalue.$url = $state.href('^.sisaltoalueet') + '#' + tunniste;
-            return sisaltoalue;
-          });
-          item.$kohdealue = perusteKohdealueet[_.first(perusteTavoite.kohdealueet)];
-          item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste) {
-            var laajaalainen = scope.laajaalaiset[tunniste];
-            /*laajaalainen.$url = $state.href('root.opetussuunnitelmat.yksi.opetus.vuosiluokkakokonaisuus',
-                {vlkId: $stateParams.vlkId}) + '#' + tunniste;*/
-            return laajaalainen;
-          });
-          item.$arvioinninkohteet = perusteTavoite.arvioinninkohteet;
-        }
-      });
-      scope.tavoiteMap = _.indexBy(scope.tavoitteet, 'tunniste');
-
-      if (scope.onValinnaiselle) {
-        const otsikot = _.map(scope.tavoitteet, 'tavoite');
-        const tekstit = _(scope.tavoitteet)
-          .map('sisaltoalueet')
-          .flatten()
-          .map(_.property('sisaltoalueet.id'))
-          .map((id) => {
-            return scope.sisaltoAlueetMap[id].kuvaus;
-          })
-          .value();
-        scope.valinnaisenTekstiosat = _.map(_.zip(otsikot, tekstit), function(values) {
-          return _.zipObject(['otsikko', 'teksti'], values);
-        });
-      }
-
-      scope.tunnisteet = _.keys(scope.tavoiteMap);
-      _.each(scope.tunnisteet, function (tunniste) {
-        var paikallinen = _.find(scope.tavoitteet, function (tavoite) {
-          return tavoite.tunniste === tunniste;
-        });
-        scope.muokattavat[tunniste] = (paikallinen && _.isObject(paikallinen.tavoite)) ?
-        { teksti: paikallinen.tavoite,
-          sisaltoalue: scope.sisaltoAlueetMap[paikallinen.sisaltoalueet[0]] } :
-        { teksti: {}, sisaltoalue: {} };
-      });
-
-      scope.valinnaisenTavoitteet = _.map(scope.muokattavat, function(tavoite) {
-        return {
-          otsikko: tavoite.teksti,
-          teksti: tavoite.sisaltoalue ? tavoite.sisaltoalue.kuvaus : {}
-        };
-      });
-    }
-
-    this.mapModel = function (scope) {
-      scope.muokattavat = {};
-      scope.tavoitteet = scope.vuosiluokka.tavoitteet;
-      scope.sisaltoAlueetMap = _.indexBy(scope.vuosiluokka.sisaltoalueet, 'id');
-      processTavoitteet(scope);
-    };
-
-    this.mapSisaltoalueet = function (scope, tunnisteVar, muokattavaVar) {
-      scope[tunnisteVar] = _(scope.sisaltoalueet)
-        .sortBy(Utils.sort)
-        .map('tunniste')
-        .value();
-
-      _.each(scope[tunnisteVar], function (tunniste) {
-        var paikallinen = _.find(scope.sisaltoalueet, function (alue) {
-          return alue.tunniste === tunniste;
-        });
-        if (!scope[muokattavaVar]) {
-          scope[muokattavaVar] = {};
-        }
-        scope[muokattavaVar][tunniste] = (paikallinen && _.isObject(paikallinen.kuvaus)) ? {teksti: paikallinen.kuvaus} : {teksti: {}};
-      });
-    };
   });
-

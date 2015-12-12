@@ -63,6 +63,17 @@ epOpintopolkuApp
         }
       }
 
+      const goToFirstChild= (selected, items) => {
+        let nextIndex = _.indexOf(items, selected) + 1;
+        if (items[nextIndex].$tyyppi === "yhteinen") {
+          $state.go('.oppiaine',
+            {oppiaineId: items[nextIndex].$oppiaine.id}, {location: 'replace'});
+        } else if (nextIndex) {
+          $state.go('.valinainenoppiaine',
+            {oppiaineId: items[nextIndex].$oppiaine.id}, {location: 'replace'});
+        }
+      };
+
       function textCallback(item)  {
         if (item.$osa) {
           item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
@@ -75,11 +86,18 @@ epOpintopolkuApp
         }
       }
 
+      function setParent(){
+        if (selected && selected.$oppiaine) {
+          var found = _.find(items, function (item) {
+            return item.$vuosi === '' + selected.$parent_vuosi;
+          });
+          if (found) {
+            found.$header = true;
+          }
+        }
+      }
+
       var states = {
-       /* laajaalaiset: {
-          index: 0,
-          callback: textCallback
-        },*/
         tekstikappale: {
           index: 0,
           callback: textCallback
@@ -113,7 +131,7 @@ epOpintopolkuApp
           },
           actions: function () {
             items = section.items;
-            setParentOppiaineHeader();
+            goToFirstChild(selected, items);
           }
         },
         vlkoppiaine: {
@@ -152,24 +170,83 @@ epOpintopolkuApp
           },
           actions: function () {
             items = section.items;
-            setParentOppiaineHeader();
+            setParent();
           }
-        }/*,
-        sisallot: {
+        },
+        oppiaineet: {
           index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
           actions: function () {
-            items = section.model.sections[1].items;
-            _.each(items, function (item) {
-              if (item.$oppiaine) {
-                item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
-                if (item.$selected) {
-                  selected = item;
-                }
-              }
-            });
+            items = section.items;
             setParentOppiaineHeader();
           }
-        }*/
+        },
+        vuosiluokat: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+          }
+        },
+        valinnaisetoppiaineet: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        },
+        vlk: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        },
+        vuosi: {
+          index: 2,
+          callback: function (item) {
+            if (item.$oppiaine) {
+              item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
+            }
+            if (item.$selected) {
+              selected = item;
+            }
+          },
+          actions: function () {
+            items = section.items;
+            setParentOppiaineHeader();
+          }
+        }
       };
 
       var parentVlkId = null;

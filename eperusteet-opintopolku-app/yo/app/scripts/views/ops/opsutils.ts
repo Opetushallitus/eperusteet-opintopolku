@@ -52,14 +52,18 @@ epOpintopolkuApp
       return menu;
     };
 
+    var vlkMap = {};
+
     const rakennaVuosiluokkakokonaisuuksienMenu = (vlkt, aineet) => {
 
+      vlkMap = _.indexBy(vlkt, '_tunniste');
       let vlkWithYears = createMenuByYear(vlkt);
       let arr = [];
       let lastVlk = null;
       let currentVuosi = null;
 
       _.each(vlkWithYears, function (vlk) {
+        let vlkId = vlkMap[vlk._tunniste]['id'];
         if (!vlk.vuosi) {
           lastVlk = vlk;
           arr.push({
@@ -77,7 +81,7 @@ epOpintopolkuApp
           $hidden: true,
           vlk: lastVlk.nimi,
           depth: 1,
-          url: $state.href('root.ops.perusopetus.vuosiluokka', {vuosi: vlk.vuosi_num})
+          url: $state.href('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka', {vlkId: vlkId, vuosi: vlk.vuosi_num})
         });
         currentVuosi = vlk.vuosi;
         traverseOppiaineet(aineet, arr, vlk._tunniste, 2, currentVuosi, null);
@@ -136,21 +140,41 @@ epOpintopolkuApp
         }).value();
 
       _.each(oppiaineSort(filteredAineet), function (oa) {
-        buildOppiaineItem(arr, oa, vlk, depth, isSisalto, currentVuosi);
+        buildOppiaineItem(arr, oa, vlk, depth, isSisalto, currentVuosi, {'menuType': 'vuosiluokittain'});
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
           traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
         }
       });
-    };
+    }
 
-    function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto, currentVuosi) {
+    function buildOppiaineItem(arr, oppiaine, vlk, depth, isSisalto, currentVuosi, opts) {
       if (!oppiaine.nimi[Kieli.getSisaltokieli()]) {
         return;
       }
-      let currentYear = currentVuosi[currentVuosi.length-1];
+      let vlkId = vlk ? vlkMap[vlk]['id'] : null;
+      let currentYear = currentVuosi ? currentVuosi[currentVuosi.length-1] : null;
       let type = oppiaine.tyyppi === 'yhteinen';
-      let oppiaineUrl = type ? $state.href('root.ops.perusopetus.vuosiluokka.oppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id})
-        : $state.href('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {vuosi: currentYear, oppiaineId: oppiaine.id});
+      let oppiaineUrl;
+      if (opts['menuType'] === 'vuosiluokittain') {
+        oppiaineUrl = type ? $state.href('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.oppiaine', {
+          vlkId: vlkId,
+          vuosi: currentYear,
+          oppiaineId: oppiaine.id
+        })
+          : $state.href('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine', {
+          vlkId: vlkId,
+          vuosi: currentYear,
+          oppiaineId: oppiaine.id
+        });
+      }
+      if (opts['menuType'] === 'oppiaineetMenu') {
+        oppiaineUrl = type ? $state.href('root.ops.perusopetus.oppiaineet', {
+          oppiaineId: oppiaine.id
+        })
+          : $state.href('root.ops.perusopetus.valinnaisetoppiaineet', {
+          oppiaineId: oppiaine.id
+        });
+      }
 
       arr.push({
         depth: depth,
@@ -161,10 +185,85 @@ epOpintopolkuApp
         $tyyppi: oppiaine.tyyppi,
         url: oppiaineUrl
       });
+    }
+
+    const rakennaOppiaineetMenu = (oppiaineet) => {
+      let menu = [];
+      _.each(oppiaineSort(oppiaineet), function (oa) {
+        buildOppiaineItem(menu, oa, null, 0, null, null, {'menuType': 'oppiaineetMenu'});
+        if(oa.koosteinen && oa.oppimaarat.length > 0) {
+          _.each(oppiaineSort(oa.oppimaarat), function (om) {
+            buildOppiaineItem(menu, om, null, 1, null, null, {'menuType': 'oppiaineetMenu'});
+          });
+        }
+      });
+      return menu;
     };
+
+    const getVlkId = (vlkt, oppiaine) => {
+      return _(oppiaine.vuosiluokkakokonaisuudet).filter((v) => {
+          return vlkt._tunniste === v._vuosiluokkakokonaisuus;
+        }).map('id').first();
+    };
+
+    const getVuosiId = (vlk, vuosi) => {
+      let year = 'vuosiluokka_' + vuosi;
+      return _(vlk.vuosiluokat).filter((v) => {
+        return v.vuosiluokka === year;
+      }).map('id').first();
+    };
+
+    const makeSisalto = (perusteOpVlk, tavoitteet, perusteOppiaine, laajaalaiset, sortHelper) => {
+
+      return _(tavoitteet).each(function (item) {
+        var perusteSisaltoAlueet = perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : {};
+        var perusteKohdealueet = perusteOppiaine ? _.indexBy(perusteOppiaine.kohdealueet, 'id') : [];
+        if (perusteOpVlk) {
+          var perusteTavoite = _.find(perusteOpVlk.tavoitteet, function (pTavoite) {
+            return pTavoite.tunniste === item.tunniste;
+          });
+          item.$tavoite = perusteTavoite.tavoite;
+          let alueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste) {
+            return perusteSisaltoAlueet[tunniste] || {};
+          });
+          if(!_.isEmpty(alueet)) {
+            item.$sisaltoalueet = alueet.sort((a, b) => {
+              if (sortHelper.indexOf(a.nimi.fi) > sortHelper.indexOf(b.nimi.fi)) {
+                return 1;
+              }
+              if (sortHelper.indexOf(a.nimi.fi) < sortHelper.indexOf(b.nimi.fi)) {
+                return -1;
+              }
+              return 0;
+            });
+            item.sisaltoalueet = item.sisaltoalueet.sort((a, b) => {
+              if (sortHelper.indexOf(a.sisaltoalueet.nimi.fi) > sortHelper.indexOf(b.sisaltoalueet.nimi.fi)) {
+                return 1;
+              }
+              if (sortHelper.indexOf(a.sisaltoalueet.nimi.fi) < sortHelper.indexOf(b.sisaltoalueet.nimi.fi)) {
+                return -1;
+              }
+              return 0;
+            });
+          }
+          item.$kohdealue = perusteKohdealueet[_.first(perusteTavoite.kohdealueet)];
+          item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste) {
+            return laajaalaiset[tunniste];
+          });
+          item.$arvioinninkohteet = perusteTavoite.arvioinninkohteet;
+        }
+      })
+       .sortBy('$tavoite')
+       .value()
+    };
+
 
     return {
       sortVlk: sortVlk,
-      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu
+      rakennaOppiaineetMenu: rakennaOppiaineetMenu,
+      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu,
+      getVlkId: getVlkId,
+      getVuosiId: getVuosiId,
+      makeSisalto: makeSisalto
     }
   });

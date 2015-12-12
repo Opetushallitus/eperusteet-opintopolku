@@ -553,6 +553,7 @@ epOpintopolkuApp
       .state('root.ops', {
         url: '/ops/:opsId',
         template: '<div ui-view></div>',
+        controller: 'OpsController',
         resolve: {
           opsId: ($stateParams) => {
             return $stateParams.opsId;
@@ -707,8 +708,7 @@ epOpintopolkuApp
 
       .state('root.ops.perusopetus.tiedot', {
         url: '/tiedot',
-        templateUrl: 'views/ops/tiedot.html',
-        controller: 'OpsPerusopetusTiedotController'
+        templateUrl: 'views/ops/tiedot.html'
       })
 
       .state('root.ops.perusopetus.vuosiluokkakokonaisuus', {
@@ -745,7 +745,110 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perusopetus.vuosiluokka', {
+      .state('root.ops.perusopetus.oppiaineet', {
+        url: '/oppiaineet/:oppiaineId',
+        templateUrl: 'views/ops/oppiaineet.html',
+        controller: 'OpsOppiaineetController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          oppiainePeruste: function (opsPerusteResource, opsId, oppiaineId) {
+            return opsPerusteResource.getOppiainePeruste({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          },
+          baseLaajaalaiset: function (opsId, opsResource) {
+            return opsResource.getLaajaalaisetosaamiset({
+              opsId: opsId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.oppiaineet.vlk', {
+        url: '/vlk/:vlkId',
+        templateUrl: 'views/ops/vlkView.html',
+        controller: 'OpsOppiaineetVlkController',
+        resolve: {
+          opsId: function ($stateParams) {
+            return $stateParams.opsId;
+          },
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          vlkId: function ($stateParams) {
+            return $stateParams.vlkId;
+          },
+          vuosiluokkakokonaisuus: function (opsId, vlkId, oppiaineId, oppiaine, opsResource) {
+              return opsResource.getOppiaineVlk({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vlkId
+              }).$promise.then(function (res) {
+                return res;
+              });
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.oppiaineet.vlk.vuosiluokat', {
+        url: '/vuosi/:vuosiId',
+        templateUrl: 'views/ops/op.html',
+        controller: 'OpsOppiaineController',
+        resolve: {
+          vuosiluokkaId: function ($stateParams) {
+            return $stateParams.vuosiId;
+          },
+          vuosiluokkaSisalto: function(vlkId, opsId, oppiaineId, opsResource, vuosiluokkaId){
+              return opsResource.getOppiaineVlkByVuosiluokka({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vlkId,
+                vuosiId: vuosiluokkaId
+              }).$promise.then(function (res) {
+                return res;
+              })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.valinnaisetoppiaineet', {
+        url: '/valinnaisetnoppiaineet/:oppiaineId',
+        templateUrl: 'views/ops/vlnoppiaine.html',
+        controller: 'OpsVlnOppiaineController',
+        resolve: {
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (opsResource, oppiaineId, opsId) {
+            return opsResource.getOppiaine({
+              opsId: opsId,
+              oppiaineId: oppiaineId
+            }).$promise.then(function (res) {
+              return res;
+            })
+          }
+        }
+      })
+
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka', {
         url: '/vuosiluokka/:vuosi',
         controller: 'OpsVuosiluokkaController',
         template: '<div ui-view></div>',
@@ -756,13 +859,16 @@ epOpintopolkuApp
         }
       })
 
-      .state('root.ops.perusopetus.vuosiluokka.oppiaine', {
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.oppiaine', {
         url: '/oppiaine/:oppiaineId',
         templateUrl: 'views/ops/vlkoppiaine.html',
         controller: 'OpsVlkOppiaineController',
         resolve: {
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
+          },
+          vlkId: function ($stateParams) {
+            return $stateParams.vlkId;
           },
           oppiaine: function (opsResource, oppiaineId, opsId) {
             return opsResource.getOppiaine({
@@ -786,11 +892,39 @@ epOpintopolkuApp
             }).$promise.then(function (res) {
               return res
             })
+          },
+          vuosiluokkakokonaisuus: function(vlkt, opsId, oppiaine, oppiaineId, opsResource, opsUtils) {
+             let vId = opsUtils.getVlkId(vlkt, oppiaine);
+            if(vId) {
+              return opsResource.getOppiaineVlk({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vId
+              }).$promise.then(function (res) {
+                return res;
+              });
+            }
+            return {};
+          },
+          vuosiluokkaSisalto: function(vlkt, oppiaine, vuosiluokkakokonaisuus, vuosi,
+                                       opsId, oppiaineId, opsResource, opsUtils){
+            let vuosiluokkaId = opsUtils.getVuosiId(vuosiluokkakokonaisuus, vuosi);
+            let vId = opsUtils.getVlkId(vlkt, oppiaine);
+            if(vuosiluokkaId) {
+              return opsResource.getOppiaineVlkByVuosiluokka({
+                opsId: opsId,
+                oppiaineId: oppiaineId,
+                vlkId: vId,
+                vuosiId: vuosiluokkaId
+              }).$promise.then(function (res) {
+                return res;
+              })
+            } else return null;
           }
         }
       })
 
-      .state('root.ops.perusopetus.vuosiluokka.valinainenoppiaine', {
+      .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine', {
         url: '/valinainenoppiaine/:oppiaineId',
         templateUrl: 'views/ops/valinainenoppiaine.html',
         controller: 'OpsValinainenoppiaineController',

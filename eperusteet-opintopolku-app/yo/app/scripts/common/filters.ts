@@ -33,6 +33,12 @@ epOpintopolkuApp
   };
 })
 
+.filter('reverse', function(){
+  return function(input){
+    return input.reverse();
+  }
+})
+
 .filter('unsafe', ['$sce', function ($sce) {
   return function (val) {
     return $sce.trustAsHtml(val);

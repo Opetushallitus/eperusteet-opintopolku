@@ -1,26 +1,4 @@
-<h1 kaanna="oppiaine.nimi"></h1>
-
-<div ng-show="oppiaine.kohdealueet.length > 0">
-  <h2 kaanna="'kohdealueet'"></h2>
-  <ul>
-    <li ng-repeat="ka in oppiaine.kohdealueet">
-      <span ng-bind="ka.nimi | kaanna"></span>
-    </li>
-  </ul>
-</div>
-
-<div esitys-teksti="oppiaine.tehtava" esitys-peruste="perusteOppiaine.tehtava" show-peruste="true"></div>
-
-<h2 class="vlk-otsikko" ng-bind="currentVlkCategory | kaanna"></h2>
-
-<div ng-show="oppiaine.tyyppi === 'yhteinen'">
-  <div esitys-teksti="vlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tehtava"></div>
-  <div esitys-teksti="vlk.tyotavat" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tyotavat"></div>
-  <div esitys-teksti="vlk.ohjaus" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].ohjaus"></div>
-  <div esitys-teksti="vlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].arviointi"></div>
-</div>
-
-<p class="vuosiluokkailmoitus alert alert-info" ng-show="!oppiaine.koosteinen && noYleistavoitteet() && missingVlk()" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
+<p class="vuosiluokkailmoitus alert alert-info" ng-show="noYleistavoitteet() && missingVlk()" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
 
 <div ng-show="!vlk.vuosiluokat.length && !noYleistavoitteet()">
   <h3 ng-bind-html="'tavoitteet-ja-sisallot' | kaanna | unsafe"></h3>
@@ -29,7 +7,7 @@
 
 <div ng-show="!missingVlk()">
 
-  <h2 class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
+  <h2 class="vuosiluokka-otsikko" ng-bind="vuosiluokka | kaanna"></h2>
 
   <h3 kaanna="'tavoitteet'"></h3>
   <accordion ng-repeat="sa in sisalto" class="sivunavi-box">
@@ -52,7 +30,7 @@
                   <termisto-tekstikentta tekstikentta="sisaltoalue.omaKuvaus"></termisto-tekstikentta>
                   <termisto-tekstikentta ng-show="!sisaltoalue.omaKuvaus" tekstikentta="sisaltoalue.sisaltoalueet.kuvaus"></termisto-tekstikentta>
                   <termisto-tekstikentta ng-show="!sisaltoalue.omaKuvaus && !sisaltoalue.sisaltoalueet.kuvaus"
-                   perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
+                                         perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
                 </div>
               </div>
             </li>
