@@ -52,6 +52,12 @@ epOpintopolkuApp
         controller: 'EtusivuController'
       })
 
+      .state('root.uutiset', {
+        url: '/uutiset',
+        templateUrl: 'views/uutiset.html',
+        controller: 'UutisetController'
+      })
+
       .state('root.tiedote', {
         url: '/tiedote/:tiedoteId',
         templateUrl: 'views/tiedote.html',
