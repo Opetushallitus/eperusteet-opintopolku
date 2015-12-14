@@ -52,6 +52,12 @@ epOpintopolkuApp
         controller: 'EtusivuController'
       })
 
+      .state('root.uutiset', {
+        url: '/uutiset',
+        templateUrl: 'views/uutiset.html',
+        controller: 'UutisetController'
+      })
+
       .state('root.tiedote', {
         url: '/tiedote/:tiedoteId',
         templateUrl: 'views/tiedote.html',
@@ -333,10 +339,10 @@ epOpintopolkuApp
       })
 
       .state('root.lukio.tiedot', {
-          url: '/tiedot',
-          templateUrl: 'eperusteet-esitys/views/tiedot.html',
-          controller: 'epLukioTiedotController'
-        })
+        url: '/tiedot',
+        templateUrl: 'eperusteet-esitys/views/tiedot.html',
+        controller: 'epLukioTiedotController'
+      })
 
       .state('root.lukio.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',

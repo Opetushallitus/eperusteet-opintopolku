@@ -15,7 +15,7 @@
   </div>
 
   <div class="row">
-    <!-- Uutiset -->
+    <!-- Uutiset / Tiedotteet -->
     <div class="col-lg-4 col-lg-push-8 col-md-12">
       <div class="sisalto-box">
         <h2 kaanna="'etusivu.uutisia'"></h2>
@@ -32,6 +32,9 @@
             </li>
             <li class="lista-elementti-lisaa">
               <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
+            </li>
+            <li class="lista-elementti">
+              <a ui-sref="root.uutiset">Näytä kaikki uutiset</a>
             </li>
           </ul>
         </div>

@@ -319,7 +319,6 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioTiedotController', function () {
-
   })
 
   .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {

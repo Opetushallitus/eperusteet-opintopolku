@@ -78,7 +78,7 @@ epOpintopolkuApp
 
     var STATES = {
       'root.tiedotteet': {
-        state: 'root.etusivu',
+        state: 'root.uutiset',
         label: 'etusivu.tiedotteet'
       },
       'root.tiedote': {

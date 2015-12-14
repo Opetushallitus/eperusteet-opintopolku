@@ -32,6 +32,7 @@ epOpintopolkuApp
     opsStateService,
     epEsitysSettings,
     opsUtils,
+    opsMenuBuilders,
     otsikot,
     perusOps) {
 
@@ -128,14 +129,14 @@ epOpintopolkuApp
         }, {
           title: 'vuosiluokkakokonaisuudet',
           id: 'vlkoppiaine',
-          items: opsUtils.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlkt, $scope.oppiaineet),
+          items: opsMenuBuilders.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlkt, $scope.oppiaineet),
           naviClasses: $scope.naviClasses,
           include: 'views/ops/opsvlk.html',
           state: $scope.state
         }, {
           title: 'oppiaineet',
           id: 'oppiaineet',
-          items: opsUtils.rakennaOppiaineetMenu($scope.oppiaineet),
+          items: opsMenuBuilders.rakennaOppiaineetMenu($scope.oppiaineet),
           naviClasses: $scope.naviClasses,
           include: 'views/ops/opsvlk.html'
           }
@@ -218,6 +219,10 @@ epOpintopolkuApp
     }
   })
 
+  /*
+   root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka
+   */
+
   .controller('OpsVuosiluokkaController', function(
     $scope,
     vuosi,
@@ -298,11 +303,13 @@ epOpintopolkuApp
       ? $scope.perusteOppiaineVlkMap[$scope.vlk._vuosiluokkakokonaisuus] : {};
     $scope.sisalto = opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper);
 
+
+    console.log("HERE", $scope.sisalto, $scope.vlkSisalto, $scope.perusteOppiaine, oppiaine);
+
     $scope.nimiOrder = Utils.sort;
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
 
     function setMurupolku() {
-
       let item = _.reduce($scope.navi.sections[1].items, (result, item, index) => {
         if (item.$selected === true) {
           item.index = index;

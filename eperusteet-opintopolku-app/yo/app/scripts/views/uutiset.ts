@@ -13,21 +13,25 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
  */
+
 'use strict';
 
 epOpintopolkuApp
-  .controller('OpsController', function(
-    $scope,
-    $state,
-    ops) {
-    const koulutustyyppi = ops.koulutustyyppi;
-    const kltMap = {
-      "koulutustyyppi_2": "root.ops.luokioopetus",
-      "koulutustyyppi_6": "root.ops.lisaopetus",
-      "koulutustyyppi_15": "root.ops.esiopetus",
-      "koulutustyyppi_16": "root.ops.perusopetus"
-    };
-    if ($state.is('root.ops')) {
-      $state.go(kltMap[koulutustyyppi], {location: 'replace'})
-    }
+.controller('UutisetController', function ($scope, UusimmatPerusteetService, MurupolkuData,
+  TiedotteetCRUD, Utils, Kieli) {
+  MurupolkuData.setTitle(null);
+  $scope.tiedotteet = [];
+  $scope.naytto = {limit: 50, shown: 10};
+  $scope.kieli = Kieli.getSisaltokieli();
+
+  $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
+
+  var MONTH_OFFSET = 6;
+  var tempDate = new Date();
+  tempDate.setMonth(tempDate.getMonth() - MONTH_OFFSET);
+  var alkaen = tempDate.getTime();
+
+  TiedotteetCRUD.query({alkaen: alkaen , vainJulkiset: true}, function (res) {
+    $scope.tiedotteet = res;
   });
+});

@@ -77,6 +77,7 @@
   "maarayksen-diaarinumero": "Määräyksen diaarinumero",
   "maarayskirje": "Määräyskirje",
   "peruste-koulutukset": "Koulutuskoodit",
+  "palata-ops-tyokaluun": "Palata Ops-työkaluun",
   "tutkintonimikkeet": "Tutkintonimikkeet",
   "tutkintonimike": "Tutkintonimike",
 
@@ -111,7 +112,7 @@
   "tyhjenna-valinnat": "Palauta valinnat alkutilaan",
   "ei-asetettu": "Ei asetettu",
   "arvioinnin-kohde": "Arvioinnin kohde",
-  "arvion-hyva-osaaminen": "Hyvä / arvosanan kahdeksan osaaminen",
+  "arvion-hyva-osaaminen": "Arvion \"hyvä\" / arvosanan 8 osaaminen",
   "tavoitteet-ja-sisallot": "Tavoitteet ja sisallöt",
 
   "tutkinnonosat": "Tutkinnon osat",
