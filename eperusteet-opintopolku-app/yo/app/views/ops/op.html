@@ -52,7 +52,7 @@
             <th width="30%" kaanna="'arvioinnin-kohde'"></th>
             <th kaanna="'arvion-hyva-osaaminen'"></th>
           </tr>
-          <tr ng-repeat="kohde in vs.tavoiteMap[tunniste].$arvioinninkohteet">
+          <tr ng-repeat="kohde in sa.$arvioinninkohteet">
             <td ng-bind="kohde.arvioinninKohde | kaanna"></td>
             <td ng-bind="kohde.hyvanOsaamisenKuvaus | kaanna"></td>
           </tr>
