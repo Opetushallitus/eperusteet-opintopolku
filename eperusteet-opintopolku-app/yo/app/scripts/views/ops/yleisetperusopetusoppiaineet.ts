@@ -139,7 +139,13 @@ epOpintopolkuApp
     $scope.perusteOppiaineVlkMap = oppiainePeruste ?
       _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
 
-    $scope.vlk = vuosiluokkakokonaisuus.vuosiluokat;
+
+    const vuosiTabSort = (tab1) => {
+      return tab1.vuosiluokka.replace(/\D/g, '').split('') || tab1.vuosiluokka;
+    };
+
+    $scope.vlk = _.sortBy(vuosiluokkakokonaisuus.vuosiluokat, vuosiTabSort);
+
     $scope.nameSort = Utils.nameSort;
     $scope.perusteOppiaine = oppiainePeruste;
     $scope.perusteOppiaineVlkMap = oppiainePeruste ?

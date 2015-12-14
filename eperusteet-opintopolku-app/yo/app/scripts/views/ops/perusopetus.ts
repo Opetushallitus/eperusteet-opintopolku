@@ -303,6 +303,9 @@ epOpintopolkuApp
       ? $scope.perusteOppiaineVlkMap[$scope.vlk._vuosiluokkakokonaisuus] : {};
     $scope.sisalto = opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper);
 
+
+    console.log("HERE", $scope.sisalto, $scope.vlkSisalto, $scope.perusteOppiaine, oppiaine);
+
     $scope.nimiOrder = Utils.sort;
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
 
