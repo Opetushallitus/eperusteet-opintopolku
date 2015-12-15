@@ -32,7 +32,7 @@
   <h2 class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
 
   <h3 kaanna="'tavoitteet'"></h3>
-  <accordion ng-repeat="sa in sisalto" class="sivunavi-box">
+  <accordion ng-repeat="sa in sisalto" class="tavoitteet-box">
     <accordion-group is-open="status.open">
       <accordion-heading>
         <div ng-class="{'opened-oppiaine': status.open}">
@@ -67,14 +67,14 @@
           </ul>
         </div>
       </div>
-      <div class="arviointi" ng-show="sa.$arvioinninkohteet.length > 0">
-        <h4 class="arviointi-title" kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
+      <div class="tavoitteet-arviointi" ng-show="sa.$arvioinninkohteet.length > 0">
+        <h4 kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
         <table class="table table-bordered kriteerit">
           <tr>
             <th width="30%" kaanna="'arvioinnin-kohde'"></th>
             <th kaanna="'arvion-hyva-osaaminen'"></th>
           </tr>
-          <tr ng-repeat="kohde in sa.$arvioinninkohteet">
+          <tr class="peruste-arviointi-text" ng-repeat="kohde in sa.$arvioinninkohteet">
             <td ng-bind="kohde.arvioinninKohde | kaanna"></td>
             <td ng-bind="kohde.hyvanOsaamisenKuvaus | kaanna"></td>
           </tr>
