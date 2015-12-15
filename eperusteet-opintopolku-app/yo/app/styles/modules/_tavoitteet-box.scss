@@ -1,0 +1,65 @@
+.tavoitteet-box {
+  .panel-chosen > .panel-heading {
+    background-color: $brand-secondary;
+    color: white;
+    .panel-title {
+      font-weight: 700;
+    }
+  }
+  .list-group-item {
+    border-top: none;
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0px;
+  }
+  label {
+    font-weight: 300;
+  }
+  label > input {
+    top: 0px;
+    margin-right: 5px;
+  }
+  .list-group {
+    margin-bottom: 0px;
+  }
+  .inner-accordion {
+    border: 0;
+    .panel-heading {
+      background-color: inherit;
+      padding-left: 0;
+    }
+    .panel-collapse .panel-body {
+      border-top: 0;
+    }
+  }
+  .menu .panel-body {
+    padding: 0px;
+    margin: -1px;
+  }
+  .panel-group {
+    margin-bottom: 0px;
+  }
+  .panel {
+    box-shadow: none;
+  }
+  .panel + .panel {
+    margin-top: -1px;
+  }
+  .panel-chosen > .panel-heading {
+    background-color: $brand-secondary;
+    color: white;
+    .panel-title {
+      font-weight: 700;
+    }
+  }
+  .accordion-toggle {
+    &:hover, &:focus, &:hover *, &:focus * {
+      text-decoration: none;
+    }
+    cursor: pointer;
+  }
+  .input-group {
+    margin-bottom: 15px;
+  }
+}

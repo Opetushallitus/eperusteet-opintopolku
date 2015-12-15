@@ -790,7 +790,7 @@ epOpintopolkuApp
 
       .state('root.ops.perusopetus.oppiaineet.vlk', {
         url: '/vlk/:vlkId',
-        templateUrl: 'views/ops/vlkView.html',
+        templateUrl: 'views/ops/vlkview.html',
         controller: 'OpsOppiaineetVlkController',
         resolve: {
           opsId: function ($stateParams) {
