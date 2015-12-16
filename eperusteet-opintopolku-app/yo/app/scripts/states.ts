@@ -559,7 +559,7 @@ epOpintopolkuApp
       .state('root.ops', {
         url: '/ops/:opsId',
         template: '<div ui-view></div>',
-        controller: 'OpsController',
+        //controller: 'OpsController',
         resolve: {
           opsId: ($stateParams) => {
             return $stateParams.opsId;
@@ -954,19 +954,18 @@ epOpintopolkuApp
         templateUrl: 'views/ops/lukioopetus.html',
         controller: 'OpsLukioopetusController',
         resolve: {
-          /*,
-          lukioOps: function (opsResource, opsId) {
-            return opsResource.get({opsId: opsId}).$promise.then(function (res) {
-              return res;
-            });
+          lukioOps: function (LukioData, opsId) {
+            return LukioData.ops;
           },
-          otsikot: function (opsResource, opsId) {
-            return opsResource.getOtsikot({
-              opsId: opsId
-            }).$promise.then(function (res) {
-              return res;
-            });
-          }*/
+          otsikot: function (LukioData, opsId) {
+            return LukioData.otsikot;
+          },
+          yleisetTavoitteet: function (LukioData) {
+            return LukioData.yleisetTavoitteet;
+          },
+          rakenne: function (LukioData, opsId) {
+            return LukioData.lukioRakenne;
+          }
         }
       })
 

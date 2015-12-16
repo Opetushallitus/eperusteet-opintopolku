@@ -27,10 +27,20 @@ epOpintopolkuApp
     TermistoService,
     Kieli,
     $document,
-    $rootScope,
     opsStateService,
     epEsitysSettings,
-    opsUtils) {
+    opsUtils,
+    lukioOps,
+    yleisetTavoitteet,
+    otsikot,
+    rakenne) {
+
+    $scope.ops = lukioOps;
+    $scope.otsikot = otsikot;
+    $scope.rakenne = rakenne;
+    $scope.tavoitteet = yleisetTavoitteet;
+
+    console.log(lukioOps, otsikot, rakenne, yleisetTavoitteet);
 
     $scope.isNaviVisible = _.constant(true);
 
@@ -58,16 +68,22 @@ epOpintopolkuApp
     };
 
     $scope.navi = {
-      header: 'perusteen-sisalto',
+      header: 'opetussuunnitelma',
       showOne: true,
       sections: [{
         id: 'suunnitelma',
         include: 'eperusteet-esitys/views/lukionyhteisetosuudet.html',
         items: [], //epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto),
         naviClasses: $scope.naviClasses,
-        title: 'yhteiset-osuudet'
+        title: 'yhteiset-tavoitteet'
       }, {
-        title: 'opetuksen-sisallot',
+        title: 'aihekokonaisuudet',
+        id: 'aihekokonaisuudet',
+        include: 'views/ops/lukionyhteisetosuudet.html',
+        items: [],// epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
+        naviClasses: $scope.naviClasses
+      }, {
+        title: 'oppiaineet-ja-oppimaarat',
         id: 'sisalto',
         include: 'eperusteet-esitys/views/oppiaineetsivunavi.html',
         items: [],// epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
