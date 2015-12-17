@@ -21,26 +21,34 @@ epOpintopolkuApp
     $timeout,
     $state,
     $stateParams,
-    epMenuBuilder,
+    $rootScope,
+    LukioOpsMenuBuilder,
     Utils,
     MurupolkuData,
     TermistoService,
     Kieli,
     $document,
-    opsStateService,
+    epLukioStateService,
     epEsitysSettings,
     opsUtils,
     lukioOps,
-    yleisetTavoitteet,
     otsikot,
+    epMenuBuilder,
+    epLukioTabService,
     rakenne) {
 
     $scope.ops = lukioOps;
     $scope.otsikot = otsikot;
-    $scope.rakenne = rakenne;
-    $scope.tavoitteet = yleisetTavoitteet;
+    $scope.oppiaineet = rakenne.oppiaineet;
+   /* $scope.tavoitteet = yleisetTavoitteet;
+    $scope.aihekokonaisuudet = aihekokonaisuudet;*/
+    console.log($scope.oppiaineet);
 
-    console.log(lukioOps, otsikot, rakenne, yleisetTavoitteet);
+    $scope.state = epLukioStateService.getState();
+
+    $rootScope.$on('$locationChangeSuccess', function () {
+      epLukioStateService.setState($scope.navi);
+    });
 
     $scope.isNaviVisible = _.constant(true);
 
@@ -55,17 +63,22 @@ epOpintopolkuApp
       if (item.$kurssi && item.$kurssi.tyyppi) {
         classes.push('kurssi');
       }
-      if (item.$kurssi && item.$kurssi.tyyppi === 'PAKOLLINEN') {
-        classes.push('kurssi-pakollinen');
-      }
-      if (item.$kurssi && item.$kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA') {
-        classes.push('kurssi-soveltava');
-      }
-      if (item.$kurssi && item.$kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA') {
-        classes.push('kurssi-syventava');
-      }
       return classes;
     };
+
+    $scope.addIconClass = (item) => {
+      const convertToClassName = (item) => {
+        var t = ["kurssi" + item.toLowerCase().replace("_", "-")];
+        console.log(t);
+        return t;
+      };
+      let kurssiWithTyyppi = item.$kurssi && item.$kurssi.tyyppi;
+      console.log(item, kurssiWithTyyppi);
+      return kurssiWithTyyppi ? convertToClassName(item) : null;
+      };
+
+    $scope.tabs = epLukioTabService.tabs;
+    $scope.tabClass = epLukioTabService.tabClassSelector;
 
     $scope.navi = {
       header: 'opetussuunnitelma',
@@ -73,22 +86,138 @@ epOpintopolkuApp
       sections: [{
         id: 'suunnitelma',
         include: 'eperusteet-esitys/views/lukionyhteisetosuudet.html',
-        items: [], //epMenuBuilder.rakennaTekstisisalto($scope.perusteenSisalto),
+        items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
         naviClasses: $scope.naviClasses,
-        title: 'yhteiset-tavoitteet'
-      }, {
-        title: 'aihekokonaisuudet',
-        id: 'aihekokonaisuudet',
-        include: 'views/ops/lukionyhteisetosuudet.html',
-        items: [],// epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
-        naviClasses: $scope.naviClasses
+        title: 'yhteiset-osuudet'
       }, {
         title: 'oppiaineet-ja-oppimaarat',
         id: 'sisalto',
-        include: 'eperusteet-esitys/views/oppiaineetsivunavi.html',
-        items: [],// epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet),
+        include: 'views/ops/lukio/oppiaineetsivunavi.html',
+        items: LukioOpsMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineet),
         naviClasses: $scope.naviClasses
       }]
     };
 
+    $scope.navi.sections[0].items.unshift({
+      depth: 0,
+      label: 'opetussuunnitelman-tiedot',
+      link: ['root.ops.lukioopetus.tiedot']
+    });
+
+    console.log($scope.navi.sections);
+
+  })
+
+  .controller('opsLukioTekstikappaleController', function(
+    $scope,
+    tekstikappale) {
+    $scope.tekstikappale = tekstikappale;
+
+    $scope.links = {
+      prev: null,
+      next: null
+    };
+
+    function checkPrevNext() {
+      var items = $scope.navi.sections[0].items;
+      var me = _.findIndex(items, function (item) {
+        return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
+      });
+      if (me === -1) {
+        return;
+      }
+      var i = me + 1;
+      var meDepth = items[me].depth;
+      //Why not include children?
+      for (; i < items.length; ++i) {
+        if (items[i].depth <= meDepth) {
+          break;
+        }
+      }
+      $scope.links.next = i < items.length && items[i].id !== 'laajaalaiset' ? items[i] : null;
+      i = me - 1;
+      for (; i >= 0; --i) {
+        if (items[i].depth <= meDepth) {
+          break;
+        }
+      }
+      $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
+    }
+
+    $scope.$on('lukio:stateSet', checkPrevNext);
+    checkPrevNext();
+
+  })
+
+  .controller('OpsLukioAihekokonaisuudetController', function(
+    $scope) {
+
+  })
+
+  .controller('OpsLukioOppiaineController', function(
+    $scope) {
+
+  })
+
+  .service('LukioOpsMenuBuilder', function (Algoritmit, $state, Kieli, Utils, epEsitysSettings) {
+    function oppiaineSort(aineet) {
+      // Handle mixed jnro + no jnro situations
+      function jnroSort(item) {
+        return _.isNumber(item.jnro) ? item.jnro : 100000000;
+      }
+      return _(aineet).sortBy(jnroSort).sortBy(Utils.nameSort).sortBy(jnroSort).value();
+    }
+
+    function createOppiaineItem(oppiaine, depth, idx) {
+      return {
+        $id: oppiaine.id,
+        depth: depth,
+        $jnro: oppiaine.jarjestys,
+        $oppiaine: oppiaine,
+        $hidden: false,
+        idx: idx,
+        label: oppiaine.nimi,
+        url: $state.href('root.ops.lukioopetus.oppiaine', {oppiaineId: oppiaine.id})
+      };
+    }
+
+    function createKurssiItem(kurssi, depth) {
+      return {
+        $id: kurssi.id,
+        depth: depth,
+        tyyppi: kurssi.tyyppi,
+        $jnro: kurssi.jarjestys,
+        $kurssi: kurssi,
+        $hidden: true,
+        label: kurssi.nimi,
+        url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
+      };
+    }
+
+    function buildLukioOppiaineMenu(oppiaineet){
+      var idx = 0;
+      return _.reduce(oppiaineet, function(menu, oppiaine){
+        menu.push(createOppiaineItem(oppiaine, 0, idx));
+        idx++;
+        if(!_.isEmpty(oppiaine.oppimaarat)) {
+          _.each(oppiaine.oppimaarat, function(oppimaara){
+            menu.push(createOppiaineItem(oppimaara, 1));
+            if(!_.isEmpty(oppimaara.kurssit)) {
+              _.each(oppimaara.kurssit, function(kurssi) {
+                menu.push(createKurssiItem(kurssi, 2));
+              });
+            }
+          });
+        }
+        if(!_.isEmpty(oppiaine.kurssit)){
+          _.each(oppiaine.kurssit, function(kurssi){
+            menu.push(createKurssiItem(kurssi, 1));
+          });
+        }
+        return menu;
+      }, []);
+    }
+
+    this.buildLukioOppiaineMenu = buildLukioOppiaineMenu;
+    console.log()
   });

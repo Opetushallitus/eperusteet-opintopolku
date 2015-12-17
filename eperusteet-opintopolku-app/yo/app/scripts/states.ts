@@ -563,21 +563,22 @@ epOpintopolkuApp
         resolve: {
           opsId: ($stateParams) => {
             return $stateParams.opsId;
-          },
-          ops: (OpsResource, opsId) => {
-            return OpsResource().get({
-              opsId: opsId
-            }).$promise.then(function (res) {
-              return res;
-            });
-          },
-          opsResource: (OpsResource, ops) => OpsResource(ops.tila === "julkaistu"),
-          otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({
-            opsId: opsId
-          }).$promise.then(function (res) {
-            return res;
-          })
-        },
+          }/*,
+           ops: (OpsResource, opsId) => {
+           return OpsResource().get({
+           opsId: opsId
+           }).$promise.then(function (res) {
+           return res;
+           });
+           },
+           opsResource: (OpsResource, ops) => OpsResource(ops.tila === "julkaistu"),
+           otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({
+           opsId: opsId
+           }).$promise.then(function (res) {
+           return res;
+           })
+           },*/
+        }
       })
 
       .state('root.ops.esiopetus', {
@@ -672,6 +673,8 @@ epOpintopolkuApp
           }
         }
       })
+
+      /* PERUSOPETUS OPS */
 
       .state('root.ops.perusopetus', {
         url: '/perusopetus',
@@ -949,9 +952,11 @@ epOpintopolkuApp
         }
       })
 
+      /* LUKIO OPS */
+
       .state('root.ops.lukioopetus', {
         url: '/lukioopetus',
-        templateUrl: 'views/ops/lukioopetus.html',
+        templateUrl: 'views/ops/lukio/lukioopetus.html',
         controller: 'OpsLukioopetusController',
         resolve: {
           lukioOps: function (LukioData, opsId) {
@@ -963,6 +968,9 @@ epOpintopolkuApp
           yleisetTavoitteet: function (LukioData) {
             return LukioData.yleisetTavoitteet;
           },
+          aihekokonaisuudet: function (LukioData) {
+            return LukioData.aihekokonaisuudet;
+          },
           rakenne: function (LukioData, opsId) {
             return LukioData.lukioRakenne;
           }
@@ -971,26 +979,20 @@ epOpintopolkuApp
 
       .state('root.ops.lukioopetus.tiedot', {
         url: '/tiedot',
-        templateUrl: 'views/ops/tiedot.html',
-        controller: 'OpsPerusopetusTiedotController'
+        templateUrl: 'views/ops/tiedot.html'
       })
 
       .state('root.ops.lukioopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
         templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
-        controller: 'epLukioTekstikappaleController',
+        controller: 'opsLukioTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
-          }/*,
-          tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
-            return LukioTekstikappale.getByViite({
-              viiteId: tekstikappaleId
-            }).$promise
-              .then(function (res) {
-                return res;
-              });
           },
+          tekstikappale: function (LukioData) {
+            return LukioData.tekstikappale;
+          }/*,
           lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
             return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
           }*/
@@ -998,39 +1000,67 @@ epOpintopolkuApp
       })
 
       .state('root.ops.lukioopetus.oppiaine', {
-        url: '/oppiaine',
-        templateUrl: '',
-        controller: 'OpsLukioOppiaineController'
+        url: '/oppiaineet/:oppiaineId',
+        templateUrl: 'views/ops/lukio/oppiaineet.html',
+        controller: 'OpsLukioOppiaineController',
+        resolve: {
+          oppiaineId: function($stateParams){
+            return $stateParams.oppiaineId;
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.oppiaine.aihekokonaisuudet', {
-        url: '/aihekokonaisuudet',
-        templateUrl: '',
-        controller: 'OpsLukioAihekokonaisuudetController'
+        url: '/aihekokonaisuudet/:aihekokonaisuusId',
+        templateUrl: 'views/ops/lukio/aihekokonaisuudet.html',
+        controller: 'OpsLukioAihekokonaisuudetController',
+        resolve: {
+          aihekokonaisuusId: function($stateParams){
+            return $stateParams.aihekokonaisuusId;
+          },
+          aihekokonaisuudet: function (LukioData) {
+            return LukioData.aihekokonaisuudet;
+          },
+        }
       })
 
       .state('root.ops.lukioopetus.oppiaine.tavoitteet', {
         url: '/yleiset-tavoitteet',
-        templateUrl: '',
-        controller: 'OpsLukioTavoitteetController'
+        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        controller: 'OpsLukioTavoitteetController',
+        resolve: {
+          tavoitteet: function (LukioData) {
+            return LukioData.yleisetTavoitteet;
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.kurssi', {
-        url: '/kurssi',
-        templateUrl: '',
+        url: '/kurssit/kurssiId',
+        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
         controller: 'OpsLukioOppiaineController'
       })
 
       .state('root.ops.lukioopetus.kurssi.aihekokonaisuudet', {
         url: '/aihekokonaisuudet',
-        templateUrl: '',
-        controller: 'OpsLukioAihekokonaisuudetController'
+        templateUrl: 'views/ops/lukio/aihekokonaisuudet.html',
+        controller: 'OpsLukioAihekokonaisuudetController',
+        resolve: {
+          aihekokonaisuudet: function (LukioData) {
+            return LukioData.yleisetTavoitteet;
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.kurssi.tavoitteet', {
         url: '/yleiset-tavoitteet',
-        templateUrl: '',
-        controller: 'OpsLukioTavoitteetController'
+        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        controller: 'OpsLukioTavoitteetController',
+        resolve: {
+          tavoitteet: function (LukioData) {
+            return LukioData.yleisetTavoitteet;
+          }
+        }
       });
 
   });
