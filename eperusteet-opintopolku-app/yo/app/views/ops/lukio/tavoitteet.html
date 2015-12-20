@@ -1,4 +1,6 @@
+<pre>{{getCurrentEndState()}}</pre>
 <div ng-show="getCurrentEndState() === 'tavoitteet'" class="perusopetus">
+  <pre>{{tavoitteet | json}}</pre>
   <h1 esitys-sivu-otsikko="tavoitteet.otsikko">
     <span ng-bind-html="tavoitteet.otsikko | kaanna | unsafe"></span>
   </h1>
@@ -6,6 +8,7 @@
 </div>
 
 <div ng-show="getCurrentEndState() === 'aihekokonaisuudet'" class="perusopetus">
+  <pre>{{aihekokonaisuudet | json}}</pre>
   <div ng-repeat="aihe in aihekokonaisuudet">
     <h1 esitys-sivu-otsikko="aihe.nimi">
       <span ng-bind-html="aihe.nimi | kaanna | unsafe"></span>

@@ -21,33 +21,34 @@ epOpintopolkuApp
     $timeout,
     $state,
     $stateParams,
-    $rootScope,
     LukioOpsMenuBuilder,
+    epMenuBuilder,
     Utils,
     MurupolkuData,
     TermistoService,
     Kieli,
     $document,
-    epLukioStateService,
-    epEsitysSettings,
+    OpsLukioStateService,
     opsUtils,
     lukioOps,
     otsikot,
-    epMenuBuilder,
-    epLukioTabService,
     rakenne) {
 
     $scope.ops = lukioOps;
     $scope.otsikot = otsikot;
     $scope.oppiaineet = rakenne.oppiaineet;
-   /* $scope.tavoitteet = yleisetTavoitteet;
-    $scope.aihekokonaisuudet = aihekokonaisuudet;*/
-    console.log($scope.oppiaineet);
+    $scope.state = OpsLukioStateService.getState();
+    $scope.omitLegend = function() {
+      let omitLegendStates = ['tekstikappale', 'tiedot', 'tavoitteet', 'aihekokonaisuudet'];
+      let currentState = _.last(_.words($state.current.name));
+      return _.contains(omitLegendStates, currentState);
+    };
+    $scope.getCurrentEndState = () => {
+      return _.last(_.words($state.current.name));
+    };
 
-    $scope.state = epLukioStateService.getState();
-
-    $rootScope.$on('$locationChangeSuccess', function () {
-      epLukioStateService.setState($scope.navi);
+    $scope.$on('$stateChangeSuccess', function () {
+      OpsLukioStateService.setState($scope.navi);
     });
 
     $scope.isNaviVisible = _.constant(true);
@@ -66,26 +67,17 @@ epOpintopolkuApp
       return classes;
     };
 
-    $scope.addIconClass = (item) => {
-      const convertToClassName = (item) => {
-        var t = ["kurssi" + item.toLowerCase().replace("_", "-")];
-        console.log(t);
-        return t;
-      };
-      let kurssiWithTyyppi = item.$kurssi && item.$kurssi.tyyppi;
-      console.log(item, kurssiWithTyyppi);
-      return kurssiWithTyyppi ? convertToClassName(item) : null;
-      };
-
-    $scope.tabs = epLukioTabService.tabs;
-    $scope.tabClass = epLukioTabService.tabClassSelector;
+    $scope.tabConfig = {oppiaineUrl: 'root.ops.lukioopetus.oppiaine', kurssiUrl: 'root.ops.lukioopetus.kurssi'};
+    $scope.wrongState = function(){
+      return _.intersection(_.words($state.current.name), ['tavoitteet', 'aihekokonaisuudet']).length;
+    };
 
     $scope.navi = {
       header: 'opetussuunnitelma',
       showOne: true,
       sections: [{
         id: 'suunnitelma',
-        include: 'eperusteet-esitys/views/lukionyhteisetosuudet.html',
+        include: 'views/ops/opstekstisisalto.html',
         items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
         naviClasses: $scope.naviClasses,
         title: 'yhteiset-osuudet'
@@ -103,8 +95,6 @@ epOpintopolkuApp
       label: 'opetussuunnitelman-tiedot',
       link: ['root.ops.lukioopetus.tiedot']
     });
-
-    console.log($scope.navi.sections);
 
   })
 
@@ -149,17 +139,41 @@ epOpintopolkuApp
 
   })
 
-  .controller('OpsLukioAihekokonaisuudetController', function(
+  .controller('OpsLukioTavoitteetController', function(
+    tavoitteet,
     $scope) {
-
+    $scope.tavoitteet = tavoitteet;
   })
+
+  .controller('OpsLukioAihekokonaisuudetController', function(
+    aihekokonaisuudet,
+    $scope) {
+    $scope.aihekokonaisuudet = aihekokonaisuudet;
+  })
+
 
   .controller('OpsLukioOppiaineController', function(
-    $scope) {
-
+    $scope,
+    $timeout,
+    $stateParams,
+    epLukioUtils) {
+    const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineet);
+    $scope.valittuOppiaine = oppiaineetList[$stateParams.oppiaineId];
   })
 
-  .service('LukioOpsMenuBuilder', function (Algoritmit, $state, Kieli, Utils, epEsitysSettings) {
+  .controller('OpsLukioKurssiController', function(
+    $scope,
+    $timeout,
+    $stateParams,
+    epLukioUtils) {
+    const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineet);
+    console.log(oppiaineetList);
+
+    var kurssit = _.indexBy(epLukioUtils.reduceKurssit($scope.oppiaineet), 'id');
+    $scope.kurssi = kurssit[$stateParams.kurssiId];
+  })
+
+  .service('LukioOpsMenuBuilder', function (Algoritmit, $state, Kieli, Utils) {
     function oppiaineSort(aineet) {
       // Handle mixed jnro + no jnro situations
       function jnroSort(item) {
@@ -190,7 +204,7 @@ epOpintopolkuApp
         $kurssi: kurssi,
         $hidden: true,
         label: kurssi.nimi,
-        url: $state.href('root.lukio.kurssi', {kurssiId: kurssi.id})
+        url: $state.href('root.ops.lukioopetus.kurssi', {kurssiId: kurssi.id})
       };
     }
 
@@ -219,5 +233,4 @@ epOpintopolkuApp
     }
 
     this.buildLukioOppiaineMenu = buildLukioOppiaineMenu;
-    console.log()
   });

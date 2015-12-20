@@ -1000,24 +1000,24 @@ epOpintopolkuApp
       })
 
       .state('root.ops.lukioopetus.oppiaine', {
-        url: '/oppiaineet/:oppiaineId',
+        url: '/oppiaine/:oppiaineId',
         templateUrl: 'views/ops/lukio/oppiaineet.html',
         controller: 'OpsLukioOppiaineController',
         resolve: {
           oppiaineId: function($stateParams){
             return $stateParams.oppiaineId;
-          }
+          },
+          oppiaine: function(LukioData){
+            return LukioData.oppiaine;
+          },
         }
       })
 
       .state('root.ops.lukioopetus.oppiaine.aihekokonaisuudet', {
-        url: '/aihekokonaisuudet/:aihekokonaisuusId',
-        templateUrl: 'views/ops/lukio/aihekokonaisuudet.html',
+        url: '/aihekokonaisuudet',
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
         controller: 'OpsLukioAihekokonaisuudetController',
         resolve: {
-          aihekokonaisuusId: function($stateParams){
-            return $stateParams.aihekokonaisuusId;
-          },
           aihekokonaisuudet: function (LukioData) {
             return LukioData.aihekokonaisuudet;
           },
@@ -1026,7 +1026,7 @@ epOpintopolkuApp
 
       .state('root.ops.lukioopetus.oppiaine.tavoitteet', {
         url: '/yleiset-tavoitteet',
-        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
         controller: 'OpsLukioTavoitteetController',
         resolve: {
           tavoitteet: function (LukioData) {
@@ -1036,9 +1036,9 @@ epOpintopolkuApp
       })
 
       .state('root.ops.lukioopetus.kurssi', {
-        url: '/kurssit/kurssiId',
-        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
-        controller: 'OpsLukioOppiaineController'
+        url: '/kurssi/:kurssiId',
+        templateUrl: 'views/ops/lukio/lukiokurssi.html',
+        controller: 'OpsLukioKurssiController'
       })
 
       .state('root.ops.lukioopetus.kurssi.aihekokonaisuudet', {
@@ -1047,7 +1047,7 @@ epOpintopolkuApp
         controller: 'OpsLukioAihekokonaisuudetController',
         resolve: {
           aihekokonaisuudet: function (LukioData) {
-            return LukioData.yleisetTavoitteet;
+            return LukioData.aihekokonaisuudet;
           }
         }
       })

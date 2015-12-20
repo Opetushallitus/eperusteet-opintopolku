@@ -16,9 +16,8 @@
 
 'use strict';
 
-/* Sets sivunavi items active based on current state */
-angular.module('eperusteet.esitys')
-  .service('epLukioStateService', function ($state, $stateParams, $location, epSivunaviUtils, $rootScope) {
+epOpintopolkuApp
+  .service('OpsLukioStateService', function ($state, $stateParams, $location, epSivunaviUtils, $rootScope) {
     var state = {};
     var section = null;
 
@@ -61,12 +60,22 @@ angular.module('eperusteet.esitys')
         }
       }
 
+      function textCallback(item)  {
+        if (item.$osa) {
+          item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
+          item.$hidden = item.depth > 0;
+        }
+        if (item.$selected) {
+          selected = item;
+        }
+      }
 
       function setParentOppiaineHeaderForKurssi() {
         var found = null;
         if(selected && selected.$kurssi) {
           found = _.find(items, function(item) {
-            return item.$kurssi && '' + item.$kurssi.id === '' + $location.hash();
+            return (item.$oppiaine && !!item.$oppiaine.kurssit.length
+            && _.contains(_.pluck(item.$oppiaine.kurssit, 'id'), selected.$id))
           });
         }
         if (found) {
@@ -75,21 +84,9 @@ angular.module('eperusteet.esitys')
       }
 
       var states = {
-        yleisetTavoitteet: {
+        tekstikappale: {
           index: 0,
-          callback: function(item) {
-            if (item.$osa && item.depth === 0 && !$location.hash()) {
-              item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
-              item.$hidden = item.depth > 0;
-            }
-            if (item.$osa && $location.hash()) {
-              item.$selected = '' + $location.hash() === '' + item.$osa._perusteenOsa;
-              item.$hidden = item.depth > 0;
-            }
-            if (item.$selected) {
-              selected = item;
-            }
-          }
+          callback: textCallback
         },
         tiedot: {
           index: 0,

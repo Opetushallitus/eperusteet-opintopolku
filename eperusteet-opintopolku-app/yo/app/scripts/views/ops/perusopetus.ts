@@ -30,7 +30,6 @@ epOpintopolkuApp
     $document,
     $rootScope,
     opsStateService,
-    epEsitysSettings,
     opsUtils,
     opsMenuBuilders,
     otsikot,

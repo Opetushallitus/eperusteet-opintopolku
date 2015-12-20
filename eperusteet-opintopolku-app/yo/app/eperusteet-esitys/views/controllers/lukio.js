@@ -35,7 +35,6 @@ angular.module('eperusteet.esitys')
     epLukioStateService,
     oppiaineRakenne,
     epLukioUtils,
-    epLukioTabService,
     Kieli) {
 
     $scope.oppiaineRakenne = oppiaineRakenne;
@@ -109,10 +108,11 @@ angular.module('eperusteet.esitys')
       return _.intersection(_.words($state.current.name), ['tavoitteet', 'aihekokonaisuudet']).length;
     };
 
+    $scope.getCurrentEndState = function() {
+      return _.last(_.words($state.current.name));
+    };
 
-    $scope.tabs = epLukioTabService.tabs;
-    $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
-    $scope.tabClass = epLukioTabService.tabClassSelector;
+    $scope.tabConfig = {oppiaineUrl: 'root.lukio.oppiaine', kurssiUrl: 'root.lukio.kurssi'};
 
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
 
