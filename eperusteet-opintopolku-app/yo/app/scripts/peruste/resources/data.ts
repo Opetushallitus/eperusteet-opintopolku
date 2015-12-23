@@ -6879,15 +6879,27 @@ epOpintopolkuApp
           "parent" : null,
           "uuidTunniste" : "9b33b40a-3f8d-4874-9d7e-1771475dbd78",
           "id" : 68094,
-          "otsikko" : null,
-          "kuvaus" : null,
+          "otsikko" :  {
+            "fi" : "Opetuksen yleiset tavoitteet - paikallinen otsikko",
+            "_id" : "8624116"
+          },
+          "kuvaus" : {
+            "fi" : "<p>Opetuksessa on paljon tavoitteita ja muuta - paikallinen SISÄLTÖ</p>",
+            "_id" : "8624115"
+          },
           "muokattu" : 1449680959538,
           "muokkaaja" : "1.2.246.562.24.60388320264"
         },
         "uuidTunniste" : "9b33b40a-3f8d-4874-9d7e-1771475dbd78",
         "id" : 69800,
-        "otsikko" : null,
-        "kuvaus" : null,
+        "otsikko" : {
+          "fi" : "Opetuksen yleiset tavoitteet - paikallinen otsikko",
+          "_id" : "8624116"
+        },
+        "kuvaus" : {
+          "fi" : "<p>Opetuksessa on paljon tavoitteita ja muuta - paikallinen SISÄLTÖ</p>",
+          "_id" : "8624115"
+        },
         "muokattu" : 1450102758892,
         "muokkaaja" : "1.2.246.562.24.15005182044",
         "perusteen" : null
@@ -7282,7 +7294,31 @@ epOpintopolkuApp
       "omistussuhde" : "oma",
       "pakollinen" : false,
       "valmis" : false,
-      "lapset" : [ "71044" ]
+      "lapset" : [ {
+        "id" : 71045,
+        "tekstiKappale" : {
+          "id" : 71074,
+          "luotu" : 1450361544885,
+          "muokattu" : 1450361556991,
+          "muokkaaja" : "1.2.246.562.24.15005182044",
+          "nimi" : {
+            "fi" : "Uusi tekstikappale 1",
+            "_id" : "71246"
+          },
+          "teksti" : {
+            "fi" : "<p>asdasd DASDD asd adasdasdasd adsadasdad</p>",
+            "_id" : "71247"
+          },
+          "tila" : "luonnos",
+          "tunniste" : "d44bd2b0-529b-4e50-b873-398a7b44210e",
+          "pakollinen" : null,
+          "valmis" : null
+        },
+        "omistussuhde" : "oma",
+        "pakollinen" : false,
+        "valmis" : false,
+        "lapset" : []
+      } ]
     };
 
     return { lukioRakenne, aihekokonaisuudet, otsikot, yleisetTavoitteet, ops, tekstikappale, teksti1, teksti2 }

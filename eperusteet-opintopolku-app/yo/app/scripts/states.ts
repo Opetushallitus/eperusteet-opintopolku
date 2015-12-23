@@ -559,26 +559,25 @@ epOpintopolkuApp
       .state('root.ops', {
         url: '/ops/:opsId',
         template: '<div ui-view></div>',
-        //controller: 'OpsController',
+        controller: 'OpsController',
         resolve: {
           opsId: ($stateParams) => {
             return $stateParams.opsId;
-          }/*,
-           ops: (OpsResource, opsId) => {
-           return OpsResource().get({
-           opsId: opsId
-           }).$promise.then(function (res) {
-           return res;
-           });
+          },
+          ops: (OpsResource, opsId) => {
+              return OpsResource().get({
+              opsId: opsId
+             }).$promise.then(function (res) {
+              return res;
+             });
            },
            opsResource: (OpsResource, ops) => OpsResource(ops.tila === "julkaistu"),
            otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({
-           opsId: opsId
+            opsId: opsId
            }).$promise.then(function (res) {
-           return res;
+            return res;
            })
-           },*/
-        }
+         }
       })
 
       .state('root.ops.esiopetus', {
@@ -984,18 +983,15 @@ epOpintopolkuApp
 
       .state('root.ops.lukioopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
-        templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
+        templateUrl: 'views/ops/tekstikappale.html',
         controller: 'opsLukioTekstikappaleController',
         resolve: {
           tekstikappaleId: function (serviceConfig, $stateParams) {
             return $stateParams.tekstikappaleId;
           },
-          tekstikappale: function (LukioData) {
+          tekstikappaleWithChildren: function (LukioData) {
             return LukioData.tekstikappale;
-          }/*,
-          lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
-            return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
-          }*/
+          }
         }
       })
 
@@ -1043,7 +1039,7 @@ epOpintopolkuApp
 
       .state('root.ops.lukioopetus.kurssi.aihekokonaisuudet', {
         url: '/aihekokonaisuudet',
-        templateUrl: 'views/ops/lukio/aihekokonaisuudet.html',
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
         controller: 'OpsLukioAihekokonaisuudetController',
         resolve: {
           aihekokonaisuudet: function (LukioData) {
@@ -1054,7 +1050,7 @@ epOpintopolkuApp
 
       .state('root.ops.lukioopetus.kurssi.tavoitteet', {
         url: '/yleiset-tavoitteet',
-        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
         controller: 'OpsLukioTavoitteetController',
         resolve: {
           tavoitteet: function (LukioData) {

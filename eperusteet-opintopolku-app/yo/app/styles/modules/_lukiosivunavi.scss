@@ -3,7 +3,7 @@ $pakollinen: #bddb8a;
 $syventava: #997bb6;
 
 @mixin kurssi-tyyppi-icon {
-  background-size: 11px 14px;
+  background-size: 10px 14px;
   width: 16px;
   height: 16px;
   float: right;
@@ -73,17 +73,14 @@ $syventava: #997bb6;
         @include kurssi-tyyppi-icon;
       }
       .kurssi-valtakunnallinen-pakollinen {
-        background: url('../../images/ikoni_paikallinen_white.png') no-repeat center;
         background-color: $pakollinen;
         @include kurssi-tyyppi-icon;
       }
       .kurssi-valtakunnallinen-soveltava {
-        background: url('../../images/ikoni_paikallinen_white.png') no-repeat center;
         background-color: $soveltava;
         @include kurssi-tyyppi-icon;
       }
       .kurssi-valtakunnallinen-syventava {
-        background: url('../../images/ikoni_paikallinen_white.png') no-repeat center;
         background-color: $syventava;
         @include kurssi-tyyppi-icon;
       }

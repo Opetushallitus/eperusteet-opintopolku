@@ -38,13 +38,21 @@ epOpintopolkuApp
     $scope.otsikot = otsikot;
     $scope.oppiaineet = rakenne.oppiaineet;
     $scope.state = OpsLukioStateService.getState();
-    $scope.omitLegend = function() {
-      let omitLegendStates = ['tekstikappale', 'tiedot', 'tavoitteet', 'aihekokonaisuudet'];
-      let currentState = _.last(_.words($state.current.name));
-      return _.contains(omitLegendStates, currentState);
-    };
+
     $scope.getCurrentEndState = () => {
       return _.last(_.words($state.current.name));
+    };
+
+    $scope.hasContent = function (obj) {
+      return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
+    };
+
+
+    $scope.addkurssityyppiIcon = function(item){
+      var convertToClassName = function(item){
+        return ["lg-kurssi-" + item.toLowerCase().replace("_", "-")];
+      };
+      return !!item.tyyppi ? convertToClassName(item.tyyppi) : null;
     };
 
     $scope.$on('$stateChangeSuccess', function () {
@@ -66,6 +74,8 @@ epOpintopolkuApp
       }
       return classes;
     };
+
+    MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
     $scope.tabConfig = {oppiaineUrl: 'root.ops.lukioopetus.oppiaine', kurssiUrl: 'root.ops.lukioopetus.kurssi'};
     $scope.wrongState = function(){
@@ -96,59 +106,79 @@ epOpintopolkuApp
       link: ['root.ops.lukioopetus.tiedot']
     });
 
+    $scope.$on('$stateChangeSuccess', function () {
+      var id = _.intersection(_.keys($state.params), ['oppiaineId', 'kurssiId']);
+      OpsLukioStateService.setState($scope.navi);
+      if ($state.is('root.ops.lukioopetus') && !id.length) {
+        $state.go('.tiedot', {location: 'replace'});
+      }
+    });
+
+    $scope.chooseFirstOppiaine = function (section) {
+      var oppiaine = '' + section.id === 'sisalto';
+      var tiedot = '' + section.id === 'suunnitelma';
+      var states = _.words($state.current.name);
+      var suunnitelmaEndStates = ['tekstikappale', 'tiedot'];
+      var aine = _.find($scope.navi.sections[1].items, {depth: 0});
+      if (aine && oppiaine) {
+        var params = {opsId: $scope.ops.id, oppiaineId: aine.$oppiaine.id};
+        $timeout(function () {
+          $state.go('root.ops.lukioopetus.oppiaine', params);
+        });
+      }
+      if (tiedot && !_.intersection(states, suunnitelmaEndStates).length){
+        $timeout(function () {
+          $state.go('root.ops.lukioopetus.tiedot', {location: 'replace'});
+        });
+      }
+    };
+
+    $scope.onSectionChange = function (section) {
+      return !section.$open ? $scope.chooseFirstOppiaine(section) : null;
+    }
+
   })
 
   .controller('opsLukioTekstikappaleController', function(
     $scope,
-    tekstikappale) {
-    $scope.tekstikappale = tekstikappale;
+    tekstikappaleWithChildren,
+    MurupolkuData) {
 
-    $scope.links = {
-      prev: null,
-      next: null
-    };
+    /* this assumes there will there be a tekstikappale with children endpoint available as in perusopetus */
+    $scope.tekstikappale = tekstikappaleWithChildren.tekstiKappale;
+    $scope.lapset = tekstikappaleWithChildren.lapset;
 
-    function checkPrevNext() {
-      var items = $scope.navi.sections[0].items;
-      var me = _.findIndex(items, function (item) {
-        return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
-      });
-      if (me === -1) {
-        return;
-      }
-      var i = me + 1;
-      var meDepth = items[me].depth;
-      //Why not include children?
-      for (; i < items.length; ++i) {
-        if (items[i].depth <= meDepth) {
-          break;
+    $scope.$on('$stateChangeSuccess', function () {
+      setMurupolku();
+    });
+
+    function setMurupolku() {
+      MurupolkuData.set({osanId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
+
+      $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item, index) {
+        if (item.$selected === true) {
+          item.index = index;
+          result = item;
         }
+        return result;
+      }, '');
+
+      function findParent(set, child) {
+        return set[child.$parent].$osa.tekstiKappale;
       }
-      $scope.links.next = i < items.length && items[i].id !== 'laajaalaiset' ? items[i] : null;
-      i = me - 1;
-      for (; i >= 0; --i) {
-        if (items[i].depth <= meDepth) {
-          break;
-        }
+      if ($scope.sectionItem && $scope.sectionItem.depth > 1) {
+        MurupolkuData.set('parents', [findParent($scope.navi.sections[0].items, $scope.sectionItem)]);
       }
-      $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
     }
-
-    $scope.$on('lukio:stateSet', checkPrevNext);
-    checkPrevNext();
 
   })
 
-  .controller('OpsLukioTavoitteetController', function(
-    tavoitteet,
-    $scope) {
+  .controller('OpsLukioTavoitteetController', function($scope, tavoitteet) {
     $scope.tavoitteet = tavoitteet;
   })
 
-  .controller('OpsLukioAihekokonaisuudetController', function(
-    aihekokonaisuudet,
-    $scope) {
-    $scope.aihekokonaisuudet = aihekokonaisuudet;
+  .controller('OpsLukioAihekokonaisuudetController', function($scope, aihekokonaisuudet) {
+    $scope.aihekokonaisuudet = aihekokonaisuudet.paikallinen.aihekokonaisuudet;
   })
 
 
@@ -156,21 +186,45 @@ epOpintopolkuApp
     $scope,
     $timeout,
     $stateParams,
+    MurupolkuData,
     epLukioUtils) {
     const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineet);
     $scope.valittuOppiaine = oppiaineetList[$stateParams.oppiaineId];
+    $scope.oppimaarat = $scope.valittuOppiaine.oppimaarat;
+    $scope.filterKurssit = function(kurssit, tyyppi){
+      var tyyppiList = [
+        'VALTAKUNNALLINEN_PAKOLLINEN',
+        "PAIKALLINEN_PAKOLLINEN",
+        "VALTAKUNNALLINEN_SYVENTAVA",
+        "PAIKALLINEN_SYVENTAVA",
+        "VALTAKUNNALLINEN_SOVELTAVA",
+        "PAIKALLINEN_SOVELTAVA"
+      ];
+      return _.filter(kurssit, (kurssi) => kurssi.tyyppi === tyyppiList[parseInt(tyyppi)])
+    };
+    MurupolkuData.set({oppiaineId: $stateParams.oppiaineId, oppiaineNimi: $scope.valittuOppiaine.nimi});
   })
 
   .controller('OpsLukioKurssiController', function(
     $scope,
     $timeout,
     $stateParams,
+    MurupolkuData,
     epLukioUtils) {
     const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineet);
-    console.log(oppiaineetList);
-
-    var kurssit = _.indexBy(epLukioUtils.reduceKurssit($scope.oppiaineet), 'id');
+    const kurssit = _.indexBy(epLukioUtils.reduceKurssit($scope.oppiaineet), 'id');
     $scope.kurssi = kurssit[$stateParams.kurssiId];
+    /*const createParentList = () => {
+      return _.map(oppiaineetList, function(op, id){
+        return {id: id, nimi: op.nimi, kurssit: _.pluck(op.kurssit, 'id')};
+      })
+    };
+    const parentList = createParentList();
+    const parent = _.filter(parentList, (op) => {
+      return _.includes(op.kurssit, $scope.kurssi.id);
+    });
+    MurupolkuData.set('parents', parent);*/
+    MurupolkuData.set({kurssiId: $stateParams.kurssiId, kurssiNimi: $scope.kurssi.nimi});
   })
 
   .service('LukioOpsMenuBuilder', function (Algoritmit, $state, Kieli, Utils) {
