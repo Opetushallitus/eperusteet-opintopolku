@@ -25,11 +25,11 @@ epOpintopolkuApp
         simpleLegend: '=',
         tabUrls: '='
       },
-      controller: 'epLukioTabController'
+      controller: 'LukioTabController'
     }
   })
 
-  .controller('epLukioTabController', function($scope, $state) {
+  .controller('LukioTabController', function($scope, $state) {
 
     $scope.currentState = function(){
       var parts = _.words($state.current.name);

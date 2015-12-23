@@ -139,7 +139,7 @@ epOpintopolkuApp
 
   })
 
-  .controller('opsLukioTekstikappaleController', function(
+  .controller('OpsLukioTekstikappaleController', function(
     $scope,
     tekstikappaleWithChildren,
     MurupolkuData) {
