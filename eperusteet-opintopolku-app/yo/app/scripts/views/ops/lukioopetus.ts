@@ -30,12 +30,8 @@ epOpintopolkuApp
     $document,
     OpsLukioStateService,
     opsUtils,
-    lukioOps,
-    otsikot,
     rakenne) {
 
-    $scope.ops = lukioOps;
-    $scope.otsikot = otsikot;
     $scope.oppiaineet = rakenne.oppiaineet;
     $scope.state = OpsLukioStateService.getState();
 
@@ -143,8 +139,6 @@ epOpintopolkuApp
     $scope,
     tekstikappaleWithChildren,
     MurupolkuData) {
-
-    /* this assumes there will there be a tekstikappale with children endpoint available as in perusopetus */
     $scope.tekstikappale = tekstikappaleWithChildren.tekstiKappale;
     $scope.lapset = tekstikappaleWithChildren.lapset;
 

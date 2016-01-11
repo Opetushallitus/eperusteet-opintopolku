@@ -94,13 +94,13 @@ module.exports = function(grunt) {
       },
       proxies: [{
         context: '/eperusteet-service',
-        host: 'testi-eperusteet.opintopolku.fi',
+        host: 'itest-virkailija.oph.ware.fi',
         port: 443,
         https: true,
         changeOrigin: true
       }, {
         context: '/eperusteet-ylops-service',
-        host: 'testi-eperusteet.opintopolku.fi',
+        host: 'itest-virkailija.oph.ware.fi',
         port: 443,
         https: true,
         changeOrigin: true

@@ -17,7 +17,7 @@
 epOpintopolkuApp
   .service('opsBase', function () {
     this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId';
-    this.LUKIO_OPS_RAKENNE = '/eperusteet-ylops-service/api/opetussuunnitelmat/lukio/:opsId';
+    this.LUKIO_OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/lukio/:opsId';
     this.CACHEDQUERY = { method: 'GET', isArray: true, cache: true };
   })
 
@@ -35,9 +35,11 @@ epOpintopolkuApp
     }));
   })
 
-  .factory('OpsLukioRakenne', function ($resource, opsBase) {
-    return $resource(opsBase.LUKIO_OPS_RAKENNE, {opsId: '@id'}, {
-      getRakenne: {method: 'GET'}
+  .factory('OpsLukioResource', function ($resource, opsBase) {
+    return $resource(opsBase.LUKIO_OPS, {opsId: '@id'}, {
+      getRakenne: {method: 'GET', url: opsBase.LUKIO_OPS + '/rakenne'},
+      getTavoitteet: {method: 'GET', url: opsBase.LUKIO_OPS + '/opetuksenYleisetTavoitteet'},
+      getAihekokonaisuudet: {method: 'GET', url: opsBase.LUKIO_OPS + '/aihekokonaisuudet'},
     })
   })
 
