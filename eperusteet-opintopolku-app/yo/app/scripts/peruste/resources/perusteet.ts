@@ -114,14 +114,21 @@ epOpintopolkuApp
   });
 })
 
-.factory('TermistoCRUD', function ($resource, epResource) {
-  return $resource(epResource.PERUSTEET + '/termisto/:id', {
+.factory('TermistoCRUD', function ($resource, $state, epResource) {
+  let baseURL = '';
+  //this allows the termisto to work for opetussuunnitelmat
+  if ($state.includes("root.ops.**")){
+    baseURL = '/eperusteet-ylops-service/api/opetussuunnitelmat/:resourceId';
+  } else {
+    baseURL = epResource.PERUSTEET;
+  }
+  return $resource(baseURL + '/termisto/:id', {
     id: '@id',
-    perusteId: '@perusteId'
+    resourceId: '@resourceId'
   }, {
     get: epResource.CACHEDGET,
     query: epResource.CACHEDQUERY
-  });
+  })
 })
 
 .factory('TutkinnonOsanOsaAlue', function($resource, epResource) {

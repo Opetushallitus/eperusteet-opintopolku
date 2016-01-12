@@ -43,7 +43,7 @@ angular.module('eperusteet.esitys')
     $scope.peruste = peruste;
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
     $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
-    TermistoService.setPeruste(peruste);
+    TermistoService.setResource(peruste);
 
     function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');

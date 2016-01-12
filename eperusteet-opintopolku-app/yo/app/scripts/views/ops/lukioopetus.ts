@@ -18,6 +18,7 @@
 epOpintopolkuApp
   .controller('OpsLukioopetusController', function(
     $scope,
+    $rootScope,
     $timeout,
     $state,
     $stateParams,
@@ -43,13 +44,32 @@ epOpintopolkuApp
       return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
     };
 
-
     $scope.addkurssityyppiIcon = function(item){
       var convertToClassName = function(item){
         return ["lg-kurssi-" + item.toLowerCase().replace("_", "-")];
       };
       return !!item.tyyppi ? convertToClassName(item.tyyppi) : null;
     };
+
+    const clickHandler = (event) => {
+      var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
+      if (ohjeEl.length === 0) {
+        $rootScope.$broadcast('ohje:closeAll');
+      }
+    };
+
+    const installClickHandler = () => {
+      $document.off('click', clickHandler);
+      $timeout(() => {
+        $document.on('click', clickHandler);
+      });
+    };
+
+    $scope.$on('$destroy', function () {
+      $document.off('click', clickHandler);
+    });
+
+    installClickHandler();
 
     $scope.$on('$stateChangeSuccess', function () {
       OpsLukioStateService.setState($scope.navi);

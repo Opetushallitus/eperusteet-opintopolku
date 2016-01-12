@@ -19,12 +19,14 @@ epOpintopolkuApp
   .controller('OpsYksinkertainenController', function (
     $q,
     $scope,
+    $document,
     $state,
     ops,
     TermistoService,
     otsikot,
     epMenuBuilder,
-    $timeout, $rootScope,
+    $timeout,
+    $rootScope,
     epPerusopetusStateService,
     opsId,
     Kieli,
@@ -44,8 +46,27 @@ epOpintopolkuApp
       return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus)(.*)/, '.$1');
     }
 
-    //TODO adjust for ops
-    //TermistoService.setPeruste($stateParams.perusteId);
+    TermistoService.setResource(ops);
+
+    const clickHandler = (event) => {
+      var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
+      if (ohjeEl.length === 0) {
+        $rootScope.$broadcast('ohje:closeAll');
+      }
+    };
+
+    const installClickHandler = () => {
+      $document.off('click', clickHandler);
+      $timeout(() => {
+        $document.on('click', clickHandler);
+      });
+    };
+
+    $scope.$on('$destroy', function () {
+      $document.off('click', clickHandler);
+    });
+
+    installClickHandler();
 
     MurupolkuData.set({opsId: ops.id, opsNimi: ops.nimi});
 
