@@ -566,10 +566,15 @@ epOpintopolkuApp
           },
           ops: (OpsResource, opsId) => {
             return OpsResource().get({opsId})
-              .$promise.then((res) => res)
+              .$promise.then((res) => {
+                 return res;
+              })
           },
           opsResource: (OpsResource, ops) => OpsResource(ops.tila === "julkaistu"),
           otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({opsId})
+            .$promise.then((res) => {
+              return res;
+            })
          }
       })
 
