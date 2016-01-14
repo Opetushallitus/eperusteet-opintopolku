@@ -29,6 +29,12 @@ epOpintopolkuApp
       }
     };
 
+    $scope.isLukioopetus = function () {
+      if ($state.includes('**.lukio.**') && !$state.includes('**.ops.**')) {
+        return true;
+      }
+    };
+
     $scope.isAmPerus = function () {
       if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenperuskoulutus' ||
         $state.includes('root.selaus.ammatillinenperuskoulutus')) {
@@ -58,6 +64,8 @@ epOpintopolkuApp
         return 'navi.perusopetus';
       } else if ($state.includes('root.lisaopetus.**')) {
         return 'navi.lisaopetus';
+      } else if ($state.includes('root.lukio.**')) {
+        return 'navi.lukio';
       } else if ($scope.isAmPerus()) {
         return 'navi.ammatillinenperuskoulutus';
       } else if ($scope.isAmAikuis()) {

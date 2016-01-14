@@ -40,7 +40,7 @@
         </div>
         <ul ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 0)">
           <li>
-            <a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+            <a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{oppimaara.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
           </li>
         </ul>
       </div>
@@ -55,7 +55,7 @@
                       || !hasContent(oppimaara.kurssiTyyppiKuvaukset.PAIKALLINEN_PAKOLLINEN)"></div>
         <ul ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 1)">
           <li>
-            <a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+            <a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{oppimaara.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
           </li>
         </ul>
       </div>
@@ -71,7 +71,7 @@
           <termisto-tekstikentta tekstikentta="oppimaara.kurssiTyyppiKuvaukset.VALTAKUNNALLINEN_SYVENTAVA  || '-'"></termisto-tekstikentta>
         </div>
         <ul ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 2)">
-          <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a></li>
+          <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{oppimaara.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a></li>
         </ul>
       </div>
 
@@ -86,7 +86,7 @@
           <termisto-tekstikentta tekstikentta="oppimaara.kurssiTyyppiKuvaukset.PAIKALLINEN_SYVENTAVA  || '-'"></termisto-tekstikentta>
         </div>
         <ul ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 3)">
-          <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
+          <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{oppimaara.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
         </ul>
       </div>
 
@@ -101,7 +101,7 @@
           <termisto-tekstikentta tekstikentta="oppimaara.kurssiTyyppiKuvaukset.VALTAKUNNALLINEN_SOVELTAVA  || '-'"></termisto-tekstikentta>
         </div>
         <ul ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 4)">
-          <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
+          <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{oppimaara.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
         </ul>
       </div>
 
@@ -116,7 +116,7 @@
           <termisto-tekstikentta tekstikentta="oppimaara.kurssiTyyppiKuvaukset.PAIKALLINEN_SOVELTAVA  || '-'"></termisto-tekstikentta>
         </div>
         <ul ng-repeat="kurssi in filterKurssit(oppimaara.kurssit, 5)">
-          <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
+          <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{oppimaara.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
         </ul>
       </div>
 
@@ -149,7 +149,7 @@
     </div>
     <ul ng-repeat="kurssi in filterKurssit(valittuOppiaine.kurssit, 0)">
       <li>
-        <a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+        <a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{valittuOppiaine.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
       </li>
     </ul>
   </div>
@@ -164,7 +164,7 @@
                   || !hasContent(valittuOppiaine.kurssiTyyppiKuvaukset.PAIKALLINEN_PAKOLLINEN)"></div>
     <ul ng-repeat="kurssi in filterKurssit(valittuOppiaine.kurssit, 1)">
       <li>
-        <a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+        <a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{valittuOppiaine.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
       </li>
     </ul>
   </div>
@@ -180,7 +180,7 @@
       <termisto-tekstikentta tekstikentta="valittuOppiaine.kurssiTyyppiKuvaukset.VALTAKUNNALLINEN_SYVENTAVA  || '-'"></termisto-tekstikentta>
     </div>
     <ul ng-repeat="kurssi in filterKurssit(valittuOppiaine.kurssit, 2)">
-      <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a></li>
+      <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{valittuOppiaine.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a></li>
     </ul>
   </div>
 
@@ -195,7 +195,7 @@
       <termisto-tekstikentta tekstikentta="valittuOppiaine.kurssiTyyppiKuvaukset.PAIKALLINEN_SYVENTAVA  || '-'"></termisto-tekstikentta>
     </div>
     <ul ng-repeat="kurssi in filterKurssit(valittuOppiaine.kurssit, 3)">
-      <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
+      <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{valittuOppiaine.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
     </ul>
   </div>
 
@@ -210,7 +210,7 @@
       <termisto-tekstikentta tekstikentta="valittuOppiaine.kurssiTyyppiKuvaukset.VALTAKUNNALLINEN_SOVELTAVA  || '-'"></termisto-tekstikentta>
     </div>
     <ul ng-repeat="kurssi in filterKurssit(valittuOppiaine.kurssit, 4)">
-      <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
+      <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{valittuOppiaine.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
     </ul>
   </div>
 
@@ -225,7 +225,7 @@
       <termisto-tekstikentta tekstikentta="valittuOppiaine.kurssiTyyppiKuvaukset.PAIKALLINEN_SOVELTAVA  || '-'"></termisto-tekstikentta>
     </div>
     <ul ng-repeat="kurssi in filterKurssit(valittuOppiaine.kurssit, 5)">
-      <li><a ui-sref="root.ops.lukioopetus.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
+      <li><a ui-sref="root.ops.lukioopetus.kurssi({oppiaineId: '{{valittuOppiaine.id}}', kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></li></a>
     </ul>
   </div>
 

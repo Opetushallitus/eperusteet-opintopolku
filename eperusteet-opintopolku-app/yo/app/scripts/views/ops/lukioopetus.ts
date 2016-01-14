@@ -187,12 +187,14 @@ epOpintopolkuApp
 
   })
 
-  .controller('OpsLukioTavoitteetController', function($scope, tavoitteet) {
+  .controller('OpsLukioTavoitteetController', function($scope, Utils, tavoitteet) {
     $scope.tavoitteet = tavoitteet;
+    $scope.hasContent = Utils.hasContentOnCurrentLang;
   })
 
-  .controller('OpsLukioAihekokonaisuudetController', function($scope, aihekokonaisuudet) {
+  .controller('OpsLukioAihekokonaisuudetController', function($scope, Utils, aihekokonaisuudet) {
     $scope.aihekokonaisuudet = aihekokonaisuudet.paikallinen.aihekokonaisuudet;
+    $scope.hasContent = Utils.hasContentOnCurrentLang;
   })
 
 
@@ -201,9 +203,9 @@ epOpintopolkuApp
     $timeout,
     $stateParams,
     MurupolkuData,
+    oppiaine,
     epLukioUtils) {
-    const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineet);
-    $scope.valittuOppiaine = oppiaineetList[$stateParams.oppiaineId];
+    $scope.valittuOppiaine = oppiaine;
     $scope.oppimaarat = $scope.valittuOppiaine.oppimaarat;
     $scope.filterKurssit = function(kurssit, tyyppi){
       var tyyppiList = [
@@ -223,10 +225,11 @@ epOpintopolkuApp
     $scope,
     $timeout,
     $stateParams,
+    oppiaine,
     MurupolkuData,
     epLukioUtils) {
-    const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineet);
-    const kurssit = _.indexBy(epLukioUtils.reduceKurssit($scope.oppiaineet), 'id');
+    //const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet([oppiaine]);
+    const kurssit = _.indexBy(epLukioUtils.reduceKurssit([oppiaine]), 'id');
     $scope.kurssi = kurssit[$stateParams.kurssiId];
     /*const createParentList = () => {
       return _.map(oppiaineetList, function(op, id){
@@ -263,7 +266,7 @@ epOpintopolkuApp
       };
     }
 
-    function createKurssiItem(kurssi, depth) {
+    function createKurssiItem(kurssi, oppiaineId, depth) {
       return {
         $id: kurssi.id,
         depth: depth,
@@ -272,7 +275,7 @@ epOpintopolkuApp
         $kurssi: kurssi,
         $hidden: true,
         label: kurssi.nimi,
-        url: $state.href('root.ops.lukioopetus.kurssi', {kurssiId: kurssi.id})
+        url: $state.href('root.ops.lukioopetus.kurssi', {oppiaineId: oppiaineId, kurssiId: kurssi.id})
       };
     }
 
@@ -286,14 +289,14 @@ epOpintopolkuApp
             menu.push(createOppiaineItem(oppimaara, 1));
             if(!_.isEmpty(oppimaara.kurssit)) {
               _.each(oppimaara.kurssit, function(kurssi) {
-                menu.push(createKurssiItem(kurssi, 2));
+                menu.push(createKurssiItem(kurssi, oppimaara.id, 2));
               });
             }
           });
         }
         if(!_.isEmpty(oppiaine.kurssit)){
           _.each(oppiaine.kurssit, function(kurssi){
-            menu.push(createKurssiItem(kurssi, 1));
+            menu.push(createKurssiItem(kurssi, oppiaine.id, 1));
           });
         }
         return menu;

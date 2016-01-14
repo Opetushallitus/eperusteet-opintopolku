@@ -40,6 +40,7 @@ epOpintopolkuApp
       getRakenne: {method: 'GET', url: opsBase.LUKIO_OPS + '/rakenne'},
       getTavoitteet: {method: 'GET', url: opsBase.LUKIO_OPS + '/opetuksenYleisetTavoitteet'},
       getAihekokonaisuudet: {method: 'GET', url: opsBase.LUKIO_OPS + '/aihekokonaisuudet'},
+      getOppiaine: {method: 'GET', url: opsBase.LUKIO_OPS + '/oppiaine/:oppiaineId'}
     })
   })
 

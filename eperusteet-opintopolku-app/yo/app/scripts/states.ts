@@ -313,12 +313,13 @@ epOpintopolkuApp
             return $stateParams.perusteId;
           },
           peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
-            return !perusteId ? UusimmatPerusteetService.getPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise
-              .then(function (res) {
-                return res;
-              });
+            return !perusteId ? UusimmatPerusteetService.getLukioopetus() : Perusteet.get({perusteId: perusteId}).$promise;
           },
-          oppiaineRakenne: function (LukioYleistiedot, perusteId) {
+          oppiaineRakenne: function (LukioYleistiedot, peruste) {
+            if (_.isArray(peruste.data)) {
+              peruste = peruste.data[0];
+            }
+            var perusteId = peruste.id;
             return LukioYleistiedot.getOppiaineRakenne({
                 perusteId: perusteId
               }).$promise
@@ -326,7 +327,11 @@ epOpintopolkuApp
                 return res;
               });
           },
-          perusData: function (LukioPerusteenOsat, perusteId) {
+          perusData: function (LukioPerusteenOsat, peruste) {
+            if (_.isArray(peruste.data)) {
+              peruste = peruste.data[0];
+            }
+            let perusteId = peruste.id;
             return LukioPerusteenOsat.query({perusteId: perusteId}).$promise
               .then(function (res) {
                 var lapset = _.filter(res.lapset, function (lapsi) {
@@ -334,6 +339,12 @@ epOpintopolkuApp
                 });
                 return {'lapset': lapset, 'id': perusteId};
               });
+          },
+          koulutusalaService: function (serviceConfig, Koulutusalat) {
+            return Koulutusalat;
+          },
+          opintoalaService: function (serviceConfig, Opintoalat) {
+            return Opintoalat;
           }
         }
       })
@@ -1004,8 +1015,8 @@ epOpintopolkuApp
           oppiaineId: function ($stateParams) {
             return $stateParams.oppiaineId;
           },
-          oppiaine: function (opsResource, oppiaineId, opsId) {
-            return opsResource.getOppiaine({opsId, oppiaineId})
+          oppiaine: function (OpsLukioResource, oppiaineId, opsId) {
+            return OpsLukioResource.getOppiaine({opsId, oppiaineId})
               .$promise.then(function (res) {
                 return res;
               })
@@ -1042,9 +1053,20 @@ epOpintopolkuApp
       })
 
       .state('root.ops.lukioopetus.kurssi', {
-        url: '/kurssi/:kurssiId',
+        url: '/oppiaine/:oppiaineId/kurssi/:kurssiId',
         templateUrl: 'views/ops/lukio/lukiokurssi.html',
-        controller: 'OpsLukioKurssiController'
+        controller: 'OpsLukioKurssiController',
+        resolve: {
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (OpsLukioResource, oppiaineId, opsId) {
+            return OpsLukioResource.getOppiaine({opsId, oppiaineId})
+              .$promise.then(function (res) {
+                return res;
+              })
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.kurssi.aihekokonaisuudet', {

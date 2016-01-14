@@ -1,9 +1,8 @@
 <div ng-show="getCurrentEndState() === 'tavoitteet'" class="lukioopetus">
   <h1 esitys-sivu-otsikko="tavoitteet.paikallinen.otsikko">
-    <span ng-bind-html="tavoitteet.paikallinen.otsikko | kaanna | unsafe"></span>
+    <span ng-bind-html="tavoitteet.perusteen.otsikko | kaanna | unsafe"></span>
   </h1>
-  <termisto-tekstikentta tekstikentta="tavoitteet.paikallinen.kuvaus"></termisto-tekstikentta>
-  <accordion class="peruste-box">
+  <accordion ng-show="hasContent(tavoitteet.paikallinen.kuvaus)" class="peruste-box">
     <accordion-group is-open="status.open">
       <accordion-heading>
         <div>
@@ -15,6 +14,10 @@
       <termisto-tekstikentta perusteteksti="tavoitteet.perusteen.kuvaus"></termisto-tekstikentta>
     </accordion-group>
   </accordion>
+  <div ng-show="!hasContent(tavoitteet.paikallinen.kuvaus)">
+    <termisto-tekstikentta perusteteksti="tavoitteet.perusteen.kuvaus"></termisto-tekstikentta>
+  </div>
+  <termisto-tekstikentta tekstikentta="tavoitteet.paikallinen.kuvaus"></termisto-tekstikentta>
 </div>
 
 
@@ -23,8 +26,7 @@
     <h1 esitys-sivu-otsikko="aihe.nimi">
       <span ng-bind-html="aihe.otsikko | kaanna | unsafe"></span>
     </h1>
-    <termisto-tekstikentta tekstikentta="aihe.yleiskuvaus"></termisto-tekstikentta>
-    <div ng-show="aihe.perusteen">
+    <div ng-show="aihe.perusteen && hasContent(aihe.yleiskuvaus)">
       <accordion class="peruste-box">
         <accordion-group is-open="status.open">
           <accordion-heading>
@@ -38,5 +40,10 @@
         </accordion-group>
       </accordion>
     </div>
+    <div ng-show="!hasContent(aihe.yleiskuvaus)">
+      <h5 ng-bind-html="tavoitteet.perusteen.otsikko | kaanna"></h5>
+      <termisto-tekstikentta perusteteksti="aihe.perusteen.yleiskuvaus"></termisto-tekstikentta>
+    </div>
+    <termisto-tekstikentta tekstikentta="aihe.yleiskuvaus"></termisto-tekstikentta>
   </div>
 </div>

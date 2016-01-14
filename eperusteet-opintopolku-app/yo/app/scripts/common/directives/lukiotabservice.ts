@@ -33,11 +33,11 @@ epOpintopolkuApp
 
     $scope.currentState = function(){
       var parts = _.words($state.current.name);
-      if (_.indexOf(parts, 'oppiaine') > -1){
-        return 'oppiaine';
-      }
       if (_.indexOf(parts, 'kurssi') > -1){
         return 'kurssi';
+      }
+      if (_.indexOf(parts, 'oppiaine') > -1){
+        return 'oppiaine';
       }
       return null;
     };

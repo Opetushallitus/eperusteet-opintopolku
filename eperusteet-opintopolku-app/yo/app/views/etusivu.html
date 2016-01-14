@@ -58,9 +58,9 @@
             <li class="peruste-linkki">
               <a ui-sref="root.lisaopetus({perusteId: uusimmat['koulutustyyppi_6'][0].id})" ng-bind="uusimmat['koulutustyyppi_6'][0].nimi | kaanna"></a>
             </li>
-            <!--<li class="peruste-linkki">
-              <a ui-sref="root.lukiokoulutus" kaanna="'etusivu.lukiokoulutuksen-peruste'"></a>
-            </li>-->
+            <li class="peruste-linkki">
+              <a ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_2'][0].id})" ng-bind="uusimmat['koulutustyyppi_2'][0].nimi | kaanna"></a>
+            </li>
             <li class="peruste-linkki">
               <a ui-sref="root.selaus.ammatillinenperuskoulutus">
                 <span kaanna="'navi.ammatillinenperuskoulutus'"></span>

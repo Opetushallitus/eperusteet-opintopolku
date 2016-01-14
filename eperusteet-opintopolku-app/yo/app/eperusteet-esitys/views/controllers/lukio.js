@@ -40,9 +40,10 @@ angular.module('eperusteet.esitys')
     $scope.oppiaineRakenne = oppiaineRakenne;
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenSisalto = perusData;
-    $scope.peruste = peruste;
+    $scope.peruste = _.isArray(peruste.data) ? peruste.data[0] : peruste;
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
     $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
+    $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
     TermistoService.setResource(peruste);
 
     function clickHandler(event) {

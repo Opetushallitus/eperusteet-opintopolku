@@ -94,13 +94,13 @@ module.exports = function(grunt) {
       },
       proxies: [{
         context: '/eperusteet-service',
-        host: 'testi-eperusteet.opintopolku.fi',
+        host: 'itest-virkailija.oph.ware.fi',
         port: 443,
         https: true,
         changeOrigin: true
       }, {
         context: '/eperusteet-ylops-service',
-        host: 'testi-eperusteet.opintopolku.fi',
+        host: 'itest-virkailija.oph.ware.fi',
         port: 443,
         https: true,
         changeOrigin: true
@@ -206,12 +206,12 @@ module.exports = function(grunt) {
         }
       }
     },
-    imagemin: {
-      dist: {
+    image: {
+      dynamic: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg}',
+          src: '**/*.{png,jpg,jpeg}',
           dest: '<%= yeoman.dist %>/images'
         }]
       }
@@ -319,7 +319,7 @@ module.exports = function(grunt) {
       ],
       dist: [
         'sass',
-        'imagemin',
+        'image',
         'svgmin',
         'htmlmin'
       ]
