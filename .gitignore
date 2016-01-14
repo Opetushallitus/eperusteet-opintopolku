@@ -8,3 +8,4 @@ npm-debug.log
 *.iml
 .idea/
 target/
+data.js

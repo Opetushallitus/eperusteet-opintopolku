@@ -21,7 +21,7 @@ epOpintopolkuApp
       YleinenData, $state, Algoritmit, tutkinnonOsat, Kaanna, arviointiasteikot,
       koulutusalaService, opintoalaService, Kieli, TermistoService, MurupolkuData) {
 
-    TermistoService.setPeruste(peruste);
+    TermistoService.setResource(peruste);
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
     $scope.Koulutusalat = koulutusalaService;
     $scope.Opintoalat = opintoalaService;

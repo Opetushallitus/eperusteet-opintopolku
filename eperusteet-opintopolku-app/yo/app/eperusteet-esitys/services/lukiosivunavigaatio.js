@@ -31,6 +31,14 @@ angular.module('eperusteet.esitys')
     }
   };
 
+  $scope.addIconClass = function(item){
+    var convertToClassName = function(item){
+      return ["kurssi-" + item.toLowerCase().replace("_", "-")];
+    };
+    var kurssiWithTyyppi = !!item.$kurssi && !!item.$kurssi.tyyppi;
+    return kurssiWithTyyppi ? convertToClassName(item.$kurssi.tyyppi) : null;
+  };
+
   $scope.search = {
     term: '',
     update: function () {

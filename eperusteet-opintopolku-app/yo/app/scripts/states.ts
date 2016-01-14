@@ -313,12 +313,13 @@ epOpintopolkuApp
             return $stateParams.perusteId;
           },
           peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
-            return !perusteId ? UusimmatPerusteetService.getPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise
-              .then(function (res) {
-                return res;
-              });
+            return !perusteId ? UusimmatPerusteetService.getLukioopetus() : Perusteet.get({perusteId: perusteId}).$promise;
           },
-          oppiaineRakenne: function (LukioYleistiedot, perusteId) {
+          oppiaineRakenne: function (LukioYleistiedot, peruste) {
+            if (_.isArray(peruste.data)) {
+              peruste = peruste.data[0];
+            }
+            var perusteId = peruste.id;
             return LukioYleistiedot.getOppiaineRakenne({
                 perusteId: perusteId
               }).$promise
@@ -326,7 +327,11 @@ epOpintopolkuApp
                 return res;
               });
           },
-          perusData: function (LukioPerusteenOsat, perusteId) {
+          perusData: function (LukioPerusteenOsat, peruste) {
+            if (_.isArray(peruste.data)) {
+              peruste = peruste.data[0];
+            }
+            let perusteId = peruste.id;
             return LukioPerusteenOsat.query({perusteId: perusteId}).$promise
               .then(function (res) {
                 var lapset = _.filter(res.lapset, function (lapsi) {
@@ -334,6 +339,12 @@ epOpintopolkuApp
                 });
                 return {'lapset': lapset, 'id': perusteId};
               });
+          },
+          koulutusalaService: function (serviceConfig, Koulutusalat) {
+            return Koulutusalat;
+          },
+          opintoalaService: function (serviceConfig, Opintoalat) {
+            return Opintoalat;
           }
         }
       })
@@ -565,19 +576,17 @@ epOpintopolkuApp
             return $stateParams.opsId;
           },
           ops: (OpsResource, opsId) => {
-            return OpsResource().get({
-              opsId: opsId
-            }).$promise.then(function (res) {
-              return res;
-            });
+            return OpsResource().get({opsId})
+              .$promise.then((res) => {
+                 return res;
+              })
           },
           opsResource: (OpsResource, ops) => OpsResource(ops.tila === "julkaistu"),
-          otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({
-            opsId: opsId
-          }).$promise.then(function (res) {
-            return res;
-          })
-        },
+          otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({opsId})
+            .$promise.then((res) => {
+              return res;
+            })
+         }
       })
 
       .state('root.ops.esiopetus', {
@@ -672,6 +681,8 @@ epOpintopolkuApp
           }
         }
       })
+
+      /* PERUSOPETUS OPS */
 
       .state('root.ops.perusopetus', {
         url: '/perusopetus',
@@ -949,89 +960,141 @@ epOpintopolkuApp
         }
       })
 
+      /* LUKIO OPS */
+
       .state('root.ops.lukioopetus', {
         url: '/lukioopetus',
-        templateUrl: 'views/ops/lukioopetus.html',
+        templateUrl: 'views/ops/lukio/lukioopetus.html',
         controller: 'OpsLukioopetusController',
         resolve: {
-          /*,
-          lukioOps: function (opsResource, opsId) {
-            return opsResource.get({opsId: opsId}).$promise.then(function (res) {
-              return res;
-            });
+          opsId: ($stateParams) => {
+            return $stateParams.opsId;
           },
-          otsikot: function (opsResource, opsId) {
-            return opsResource.getOtsikot({
-              opsId: opsId
-            }).$promise.then(function (res) {
+          yleisetTavoitteet: function (OpsLukioResource, opsId) {
+            return OpsLukioResource.getTavoitteet({opsId})
+              .$promise.then(function (res) {
               return res;
-            });
-          }*/
+            })
+          },
+          rakenne: function (OpsLukioResource, opsId) {
+            return OpsLukioResource.getRakenne({opsId})
+              .$promise.then(function (res) {
+                return res;
+              })
+          }
         }
       })
 
       .state('root.ops.lukioopetus.tiedot', {
         url: '/tiedot',
-        templateUrl: 'views/ops/tiedot.html',
-        controller: 'OpsPerusopetusTiedotController'
+        templateUrl: 'views/ops/tiedot.html'
       })
 
       .state('root.ops.lukioopetus.tekstikappale', {
         url: '/tekstikappale/:tekstikappaleId',
-        templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
-        controller: 'epLukioTekstikappaleController',
-        resolve: {
-          tekstikappaleId: function (serviceConfig, $stateParams) {
-            return $stateParams.tekstikappaleId;
-          }/*,
-          tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
-            return LukioTekstikappale.getByViite({
-              viiteId: tekstikappaleId
-            }).$promise
-              .then(function (res) {
-                return res;
-              });
-          },
-          lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
-            return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
-          }*/
-        }
+        templateUrl: 'views/ops/tekstikappale.html',
+        controller: 'OpsLukioTekstikappaleController',
+          resolve: {
+            tekstikappaleId: function (serviceConfig, $stateParams) {
+              return $stateParams.tekstikappaleId;
+            },
+            tekstikappaleWithChildren: function (opsResource, tekstikappaleId, opsId) {
+              return opsResource.getTekstikappaleWithChildren({opsId: opsId, viiteId: tekstikappaleId})
+                .$promise.then(function (res) {
+                  return res;
+                })
+            }
+         }
       })
 
       .state('root.ops.lukioopetus.oppiaine', {
-        url: '/oppiaine',
-        templateUrl: '',
-        controller: 'OpsLukioOppiaineController'
+        url: '/oppiaine/:oppiaineId',
+        templateUrl: 'views/ops/lukio/oppiaineet.html',
+        controller: 'OpsLukioOppiaineController',
+        resolve: {
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (OpsLukioResource, oppiaineId, opsId) {
+            return OpsLukioResource.getOppiaine({opsId, oppiaineId})
+              .$promise.then(function (res) {
+                return res;
+              })
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.oppiaine.aihekokonaisuudet', {
         url: '/aihekokonaisuudet',
-        templateUrl: '',
-        controller: 'OpsLukioAihekokonaisuudetController'
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
+        controller: 'OpsLukioAihekokonaisuudetController',
+        resolve: {
+          aihekokonaisuudet: (OpsLukioResource, opsId) => {
+            return OpsLukioResource.getAihekokonaisuudet({opsId})
+              .$promise.then(function(res) {
+                return res
+              })
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.oppiaine.tavoitteet', {
         url: '/yleiset-tavoitteet',
-        templateUrl: '',
-        controller: 'OpsLukioTavoitteetController'
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
+        controller: 'OpsLukioTavoitteetController',
+        resolve: {
+          tavoitteet: (OpsLukioResource, opsId) => {
+            return OpsLukioResource.getTavoitteet({ opsId })
+              .$promise.then(function (res) {
+                return res;
+              })
+          },
+        }
       })
 
       .state('root.ops.lukioopetus.kurssi', {
-        url: '/kurssi',
-        templateUrl: '',
-        controller: 'OpsLukioOppiaineController'
+        url: '/oppiaine/:oppiaineId/kurssi/:kurssiId',
+        templateUrl: 'views/ops/lukio/lukiokurssi.html',
+        controller: 'OpsLukioKurssiController',
+        resolve: {
+          oppiaineId: function ($stateParams) {
+            return $stateParams.oppiaineId;
+          },
+          oppiaine: function (OpsLukioResource, oppiaineId, opsId) {
+            return OpsLukioResource.getOppiaine({opsId, oppiaineId})
+              .$promise.then(function (res) {
+                return res;
+              })
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.kurssi.aihekokonaisuudet', {
         url: '/aihekokonaisuudet',
-        templateUrl: '',
-        controller: 'OpsLukioAihekokonaisuudetController'
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
+        controller: 'OpsLukioAihekokonaisuudetController',
+        resolve: {
+          aihekokonaisuudet: (OpsLukioResource, opsId) => {
+            return OpsLukioResource.getAihekokonaisuudet({opsId})
+              .$promise.then(function(res) {
+                return res
+            })
+          }
+        }
       })
 
       .state('root.ops.lukioopetus.kurssi.tavoitteet', {
         url: '/yleiset-tavoitteet',
-        templateUrl: '',
-        controller: 'OpsLukioTavoitteetController'
+        templateUrl: 'views/ops/lukio/tavoitteet.html',
+        controller: 'OpsLukioTavoitteetController',
+        resolve: {
+          tavoitteet: (OpsLukioResource, opsId) => {
+            return OpsLukioResource.getTavoitteet({ opsId })
+              .$promise.then(function (res) {
+                return res;
+              })
+          },
+        }
       });
 
   });

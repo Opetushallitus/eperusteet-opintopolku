@@ -30,7 +30,6 @@ epOpintopolkuApp
     $document,
     $rootScope,
     opsStateService,
-    epEsitysSettings,
     opsUtils,
     opsMenuBuilders,
     otsikot,
@@ -54,8 +53,6 @@ epOpintopolkuApp
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
-    //FIXME to work with ops
-    //TermistoService.setPeruste(perusOps, true);
 
     $scope.naviClasses = (item) => {
       var classes = ['depth' + item.depth];

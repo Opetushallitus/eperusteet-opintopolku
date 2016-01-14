@@ -17,6 +17,8 @@ European Union Public Licence for more details.
 <div>
   <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
   <div ng-if="ops.tila !== 'julkaistu'" class="alert alert-info">
+    <a class="palata-btn btn btn-primary pull-right" ng-href="https://virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/{{ops.id}}/tiedot"
+       ng-bind="'palata-ops-tyokaluun' | kaanna"></a>
     <h4 kaanna="'ops-esikatselu'"></h4>
     <p kaanna="'esikatselu-varoitus'"></p>
   </div>
@@ -33,8 +35,7 @@ European Union Public Licence for more details.
       <div class="sivunavi-sisalto perusopetus">
         <div class="row">
           <div class="col-md-12">
-            <ep-lukio-tabs simple-legend="false"></ep-lukio-tabs>
-            <oppiaine-legend></oppiaine-legend>
+            <ep-lukio-tabs simple-legend="false" tab-urls="tabConfig"></ep-lukio-tabs>
             <div id="esitysPrintSisalto" ui-view></div>
           </div>
         </div>
