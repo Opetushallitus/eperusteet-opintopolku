@@ -322,7 +322,7 @@ angular.module('eperusteet.esitys')
   .controller('epLukioTiedotController', function () {
   })
 
-  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, epEsitysSettings, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, Utils, epEsitysSettings, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
 
     $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
