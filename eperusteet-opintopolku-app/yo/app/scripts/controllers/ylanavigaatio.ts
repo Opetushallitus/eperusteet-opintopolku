@@ -2,11 +2,17 @@
 
 
 epOpintopolkuApp
-  .controller('YlanavigaatioController', function ($rootScope, $scope, $state, Kieli, Haku, $stateParams, Kaanna) {
+  .controller('YlanavigaatioController', function ($rootScope, $timeout, $scope, $state, Kieli,
+                                                   UusimmatPerusteetService, Haku, $stateParams, Kaanna) {
     $scope.kieli = Kieli.getUiKieli();
     $scope.nykyinenTila = $state;
     $scope.navCollapsed = true;
     $scope.state = $state;
+
+    UusimmatPerusteetService.getLukioopetus()
+      .then((res) =>
+        $scope.lukioPerusteExists = !!res.data.length);
+
 
     $scope.navCollapse = function () {
       $scope.navCollapsed = !$scope.navCollapsed;

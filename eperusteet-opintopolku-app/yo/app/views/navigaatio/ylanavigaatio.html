@@ -43,7 +43,7 @@
             <li ng-class="isPerusopetus() ? 'active' : ''">
               <a ui-sref="root.perusopetus" kaanna="'navi.perusopetus'"></a>
             </li>
-            <li ng-class="isLukioopetus() ? 'active' : ''">
+            <li ng-show="lukioPerusteExists" ng-class="isLukioopetus() ? 'active' : ''">
               <a ui-sref="root.lukio" kaanna="'navi.lukio'"></a>
             </li>
             <li ng-class="isAmPerus() ? 'active' : ''">
@@ -112,7 +112,7 @@
               <li ui-sref-active="active">
                 <a ui-sref="root.perusopetus" kaanna="'navi.perusopetus'" ng-click="navCollapse()"></a>
               </li>
-              <li ui-sref-active="active">
+              <li ng-show="lukioPerusteExists" ui-sref-active="active">
                 <a ui-sref="root.lukio" kaanna="'navi.lukio'"></a>
               </li>
               <li ui-sref-active="active">
