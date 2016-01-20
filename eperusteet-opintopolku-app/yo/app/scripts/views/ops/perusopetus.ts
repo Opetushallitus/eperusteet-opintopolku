@@ -299,7 +299,8 @@ epOpintopolkuApp
     var perusteOpVlk = $scope.vlk._vuosiluokkakokonaisuus
       ? $scope.perusteOppiaineVlkMap[$scope.vlk._vuosiluokkakokonaisuus] : {};
     $scope.sisalto = opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper);
-
+    console.log(laajaalaiset);
+    console.log(opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper));
     $scope.nimiOrder = Utils.sort;
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
 
@@ -413,6 +414,8 @@ epOpintopolkuApp
       ? $scope.perusteOppiaineVlkMap[$scope.vlk._vuosiluokkakokonaisuus] : {};
     $scope.sisalto = opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper);
     $scope.nimiOrder = Utils.sort;
+
+    console.log(opsUtils.makeSisalto(perusteOpVlk, tavoitteet, $scope.perusteOppiaine, laajaalaiset, sortMapHelper));
 
     MurupolkuData.set({
       vuosiId: $state.params.vuosiId,
