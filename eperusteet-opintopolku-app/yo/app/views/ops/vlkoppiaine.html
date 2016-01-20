@@ -53,20 +53,20 @@
                   <termisto-tekstikentta ng-show="!sisaltoalue.omaKuvaus" tekstikentta="sisaltoalue.sisaltoalueet.kuvaus"></termisto-tekstikentta>
                   <termisto-tekstikentta ng-show="!sisaltoalue.omaKuvaus && !sisaltoalue.sisaltoalueet.kuvaus"
                    perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
-                  <div ng-show="sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus">
-                    <accordion class="peruste-box">
-                      <accordion-group is-open="status.open">
-                        <accordion-heading>
-                          <div>
-                            <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
-                            <h4 ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe"></h4>
-                          </div>
-                        </accordion-heading>
-                        <termisto-tekstikentta perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
-                      </accordion-group>
-                    </accordion>
-                  </div>
                 </div>
+              </div>
+              <div ng-show="sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus">
+                <accordion class="peruste-box">
+                  <accordion-group is-open="status.avoin">
+                    <accordion-heading>
+                      <div>
+                        <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.avoin, 'glyphicon-chevron-right': !status.avoin}"></i>
+                        <h4 ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe"></h4>
+                      </div>
+                    </accordion-heading>
+                    <termisto-tekstikentta perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
+                  </accordion-group>
+                </accordion>
               </div>
             </li>
           </ul>
