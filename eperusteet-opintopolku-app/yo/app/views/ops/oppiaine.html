@@ -50,6 +50,7 @@
               <ul>
                 <li ng-repeat="sisaltoalue in vs.tavoiteMap[tunniste].$sisaltoalueet | orderBy:nimiOrder">
                   <span ng-bind="sisaltoalue.nimi | kaanna"></span>
+                  <!-- <pre>sisaltoalue | json</pre> -->
                 </li>
               </ul>
             </div>
