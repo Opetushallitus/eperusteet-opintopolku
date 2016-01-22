@@ -24,8 +24,8 @@ epOpintopolkuApp
         perusteModel: '=esitysPeruste'
       },
       template: '<div ng-if="hasText()"><h2 ng-bind-html="perusteModel.otsikko | kaanna | unsafe"></h2>' +
-      '<div class="esitys-peruste" ng-show="showPeruste()" ng-bind-html="perusteModel.teksti | kaanna | unsafe"></div>' +
-      '<div class="esitys-paikallinen" ng-bind-html="model.teksti | kaanna | unsafe"></div></div>',
+      '<div class="esitys-peruste" ng-show="showPeruste()" ng-bind-html="perusteModel.teksti | kaanna | kuvalinkit | unsafe"></div>' +
+      '<div class="esitys-paikallinen" ng-bind-html="model.teksti | kaanna | kuvalinkit | unsafe"></div></div>',
       controller: function ($scope, Kieli) {
 
         $scope.showPeruste = function () {
