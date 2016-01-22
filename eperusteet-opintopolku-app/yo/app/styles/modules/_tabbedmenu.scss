@@ -7,6 +7,13 @@
   }
 }
 
+.op-legend {
+  .panel-body {
+    padding-left: 70px !important;
+    padding-right: 0px !important;
+  }
+}
+
 .sivunavi-sisalto {
   padding: 0;
 }
@@ -61,12 +68,25 @@
 
   .legend-container {
     padding-top: 15px;
-    width: 400px;
+    width: 300px;
   }
+
+.big-legend-container {
+  padding-top: 15px;
+  width: 300px;
+}
 
   .legend-label {
     vertical-align: middle;
     margin-left: 0px;
+    font-size: 12px;
+    display: inline-block;
+    position: relative;
+  }
+
+  .ops-legend-label {
+    vertical-align: top;
+    margin-left: 5px;
     font-size: 12px;
     display: inline-block;
     position: relative;
@@ -82,7 +102,12 @@
     position: relative;
   }
   .spacer {
-    width: 30px;
+    width: 15px;
+    display: inline-block;
+  }
+
+  .big-spacer {
+    width: 25px;
     display: inline-block;
   }
 
