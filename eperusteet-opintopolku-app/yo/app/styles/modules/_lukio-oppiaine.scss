@@ -119,6 +119,11 @@ $peruste: #f0ebe5;
 
 .legend-container {
   padding-top: 15px;
+  width: 300px;
+}
+
+.big-legend-container {
+  padding-top: 15px;
   width: 400px;
 }
 
@@ -131,8 +136,22 @@ $peruste: #f0ebe5;
   position: relative;
 }
 
+.op-legend-label {
+  vertical-align: top;
+  margin-left: 5px;
+  font-size: 12px;
+  padding-bottom: 3px;
+  display: inline-block;
+  position: relative;
+}
+
 .spacer-small {
   width: 15px;
+  display: inline-block;
+}
+
+.big-spacer {
+  width: 25px;
   display: inline-block;
 }
 
