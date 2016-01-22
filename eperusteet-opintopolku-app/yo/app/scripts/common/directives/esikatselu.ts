@@ -21,11 +21,21 @@ epOpintopolkuApp
       restrict: 'EA',
       scope: {
         model: '=esitysTeksti',
-        perusteModel: '=esitysPeruste'
+        perusteModel: '=esitysPeruste',
+        showAll: '=showAll'
       },
       template: '<div ng-if="hasText()"><h2 ng-bind-html="perusteModel.otsikko | kaanna | unsafe"></h2>' +
-      '<div class="esitys-peruste" ng-show="showPeruste()" ng-bind-html="perusteModel.teksti | kaanna | kuvalinkit | unsafe"></div>' +
-      '<div class="esitys-paikallinen" ng-bind-html="model.teksti | kaanna | kuvalinkit | unsafe"></div></div>',
+        '<div ng-show="showAll === true && model.teksti && hasText(perusteModel.teksti)">' +
+        '<accordion class="peruste-box">' +
+        '<accordion-group is-open="status.avoin">' +
+        '<accordion-heading>' +
+        '<div><i class="pull-left glyphicon" ng-class="{\'glyphicon-chevron-down\': status.avoin, \'glyphicon-chevron-right\': !status.avoin}"></i>' +
+        '<h4 ng-bind-html="\'nayta-perusteen-teksti\' | kaanna | unsafe"></h4>' +
+        '</div></accordion-heading><termisto-tekstikentta perusteteksti="perusteModel.teksti"></termisto-tekstikentta></accordion-group>' +
+        '</accordion></div>' +
+        '<div class="esitys-peruste" ng-show="showPeruste()" ng-bind-html="perusteModel.teksti | kaanna | kuvalinkit | unsafe"></div>' +
+        '<div class="esitys-paikallinen" ng-bind-html="model.teksti | kaanna | kuvalinkit | unsafe"></div></div>',
+
       controller: function ($scope, Kieli) {
 
         $scope.showPeruste = function () {
