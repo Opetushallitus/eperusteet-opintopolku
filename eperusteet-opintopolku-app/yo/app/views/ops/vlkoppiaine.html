@@ -75,7 +75,9 @@
           <h4 kaanna="'laaja-alaiset-osaamiset'"></h4>
           <ul>
             <li ng-repeat="laajaalainen in sa.$laajaalaiset | orderBy:nimiOrder">
-              <span ng-bind="laajaalainen.nimi | kaanna"></span>
+              <span ohje="false" ohje-click-anywhere="false" teksti="laajaalainen.kuvaus" otsikko="laajaalainen.nimi" suunta="bottom">
+                <span ng-bind="laajaalainen.nimi | kaanna"></span><span class="ohje badge badge-mini">?</span>
+              </span>
             </li>
           </ul>
         </div>
