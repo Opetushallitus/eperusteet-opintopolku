@@ -44,7 +44,7 @@
               <a ui-sref="root.perusopetus" kaanna="'navi.perusopetus'"></a>
             </li>
             <li ng-show="lukioPerusteExists" ng-class="isLukioopetus() ? 'active' : ''">
-              <a ui-sref="root.lukio" kaanna="'navi.lukio'"></a>
+              <a ui-sref="root.lukio" kaanna="'navi.lukiokoulutus'"></a>
             </li>
             <li ng-class="isAmPerus() ? 'active' : ''">
               <a ui-sref="root.selaus.ammatillinenperuskoulutus" kaanna="'navi.ammatillinenperuskoulutus'"></a>
@@ -113,7 +113,7 @@
                 <a ui-sref="root.perusopetus" kaanna="'navi.perusopetus'" ng-click="navCollapse()"></a>
               </li>
               <li ng-show="lukioPerusteExists" ui-sref-active="active">
-                <a ui-sref="root.lukio" kaanna="'navi.lukio'"></a>
+                <a ui-sref="root.lukio" kaanna="'navi.lukiokoulutus'"></a>
               </li>
               <li ui-sref-active="active">
                 <a ui-sref="root.lisaopetus" kaanna="'navi.lisaopetus'" ng-click="navCollapse()"></a>

@@ -89,10 +89,13 @@ epOpintopolkuApp
       return currentVlkt;
     };
 
-    const oppiaineSort = (aineet) => {
+    const oppiaineSort = (aineet, vlk=null) => {
       // Handle mixed jnro + no jnro situations
       const jnroSort= (item) => {
-        return _.isNumber(item.jnro) ? item.jnro : 10000000;
+        let target = _(item.vuosiluokkakokonaisuudet).filter((v) => {
+          return v._vuosiluokkakokonaisuus === vlk;
+        }).map('jnro').first();
+        return _.isNumber(target) ? target : 10000000;
       };
       return _(aineet).sortBy(jnroSort).sortBy(Utils.nameSort).sortBy(jnroSort).value();
     };
@@ -128,7 +131,7 @@ epOpintopolkuApp
           }, [])
         }).value();
 
-      _.each(oppiaineSort(filteredAineet), function (oa) {
+      _.each(oppiaineSort(filteredAineet, vlk), function (oa) {
         buildOppiaineItem(arr, oa, vlk, depth, isSisalto, currentVuosi, {'menuType': 'vuosiluokittain'});
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
           traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
