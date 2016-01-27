@@ -1,6 +1,6 @@
 <div ng-if="!wrongState()">
   <h1 class="oppiaine-nimi" esitys-sivu-otsikko="kurssit">
-    <span ng-bind="'Kurssit' | kaanna"></span>
+    <span ng-bind="'Kurssi' | kaanna"></span>
   </h1>
 
   <div class="lukio-kurssi-list">
@@ -18,14 +18,14 @@
       <termisto-tekstikentta tekstikentta="kurssi.tavoitteet.teksti"></termisto-tekstikentta>
     </div>
 
-    <div ng-if="kurssi.keskeinenSisalto.teksti | kaanna">
+    <div ng-if="kurssi.keskeisetSisallot.teksti | kaanna">
       <h3 class="panel-title osio-otsikko" ng-bind="kurssi.keskeinenSisalto.otsikko | kaanna"></h3>
-      <termisto-tekstikentta tekstikentta="kurssi.keskeinenSisalto.teksti"></termisto-tekstikentta>
+      <termisto-tekstikentta tekstikentta="kurssi.keskeisetSisallot.teksti"></termisto-tekstikentta>
     </div>
 
-    <div ng-if="kurssi.tavoitteetJaKeskeinenSisalto.teksti | kaanna">
+    <div ng-if="kurssi.tavoitteetJaKeskeisetSisallot.teksti | kaanna">
       <h3 class="panel-title osio-otsikko" ng-bind="kurssi.tavoitteetJaKeskeinenSisalto.otsikko | kaanna"></h3>
-      <termisto-tekstikentta tekstikentta="kurssi.tavoitteetJaKeskeinenSisalto.teksti"></termisto-tekstikentta>
+      <termisto-tekstikentta tekstikentta="kurssi.tavoitteetJaKeskeisetSisallot.teksti"></termisto-tekstikentta>
     </div>
   </div>
 </div>
