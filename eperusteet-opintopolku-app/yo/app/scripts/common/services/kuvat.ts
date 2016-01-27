@@ -21,8 +21,15 @@ epOpintopolkuApp
     this.getOpsId = function() {
       return $stateParams.opsId;
     };
+    this.getPerusteId = function() {
+      return $stateParams.perusteId;
+    };
     this.getUrl = function (image) {
-      return (opsBase.OPS + '/kuvat').replace(':opsId', '' + this.getOpsId()) + '/' + image.id;
+      if (this.getOpsId()) {
+        return (opsBase.OPS + '/kuvat').replace(':opsId', '' + this.getOpsId()) + '/' + image.id;
+      } else {
+        return ('eperusteet-service/api/perusteet/:perusteId/kuvat').replace(':perusteId', '' + this.getPerusteId()) + '/' + image.id;
+      }
     };
   })
 

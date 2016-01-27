@@ -9,11 +9,10 @@
 
   <div show-all=true esitys-teksti="vlk.siirtymaSeuraavaan" esitys-peruste="peruste.siirtymaSeuraavaan"></div>
 
-  <h1 show-all=true ng-bind-html="'laaja-alainen-osaaminen' | kaanna"></h1>
+  <h1 show-all=true ng-bind-html="'laaja-alaisen-osaamisen-alueet' | kaanna"></h1>
 
   <div esitys-teksti="" esitys-peruste="peruste.laajaalainenOsaaminen"></div>
-
-  <h2 ng-if="tunnisteet.length > 0" kaanna="'laaja-alaiset-osaamiset'"></h2>
+  <h2 ng-if="tunnisteet.length > 0" kaanna="'laaja-alaisen-osaamisen-alueet'"></h2>
     <div ng-repeat="tunniste in tunnisteet | orderBy:orderFn" id="{{tunniste}}">
       <div show-all=true esitys-teksti="paikalliset[tunniste]" esitys-peruste="laajaalaiset[tunniste]"></div>
     </div>
