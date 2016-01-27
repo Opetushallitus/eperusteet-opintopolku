@@ -1,5 +1,4 @@
 <h1>{{ vlk.nimi | kaanna }}</h1>
-{{vlk | json}}
 <div ng-if="hasContent(vlk.tehtava)">
   <h2 ng-bind-html="vlk.tehtava.otsikko | kaanna | unsafe"></h2>
   <termisto-tekstikentta tekstikentta="vlk.tehtava.teksti"></termisto-tekstikentta>

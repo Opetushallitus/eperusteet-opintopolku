@@ -17,7 +17,7 @@
 'use strict';
 
 epOpintopolkuApp
-  .service('OpsImageService', function ($stateParams, $state, opsBase) {
+  .service('OpsImageService', function ($stateParams, opsBase) {
     this.getOpsId = function() {
       return $stateParams.opsId;
     };
