@@ -29,6 +29,8 @@ epOpintopolkuApp
     $scope.oppiaine = oppiaine;
     $scope.peruste = oppiainePeruste;
 
+    //Todo: add local laajaalaiset teksit
+
     const createTabs = () => {
       let tabs = [];
       _.each(ops.vuosiluokkakokonaisuudet, function (vlk) {
@@ -38,11 +40,12 @@ epOpintopolkuApp
         if(match.length) {
           tabs.push({
             nimi: vlk.vuosiluokkakokonaisuus.nimi,
+            vlkId: vlk.vuosiluokkakokonaisuus.id,
             id: match.pop().id
           })
         }
       });
-      return _.sortBy(tabs, Utils.nameSort);
+      return  _.sortBy(tabs, Utils.nameSort);
     }
 
     $scope.vlkTabit = createTabs();
@@ -117,7 +120,7 @@ epOpintopolkuApp
 
   })
 
-  /*
+  /*OpsVlkOppiaineController
    'root.ops.perusopetus.oppiaineet.vlk'
    */
 
@@ -126,13 +129,18 @@ epOpintopolkuApp
     $state,
     $rootScope,
     oppiainePeruste,
+    baseLaajaalaiset,
+    //VuosiluokkakokonaisuusMapper,
     MurupolkuData,
     $stateParams,
+    //vlkPeruste,
     $timeout,
     Utils,
     $scope){
 
     $scope.vuosiluokkakokonaisuus = vuosiluokkakokonaisuus;
+    //const laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
+    //VuosiluokkakokonaisuusMapper.init($scope, laajaalaisetosaamiset, vlkPeruste);
 
     const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus');
     $scope.perusteOppiaine = oppiainePeruste;

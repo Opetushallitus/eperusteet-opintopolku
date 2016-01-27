@@ -1,5 +1,4 @@
 <h1 kaanna="oppiaine.nimi"></h1>
-
 <div ng-show="oppiaine.kohdealueet.length > 0">
   <h2 kaanna="'kohdealueet'"></h2>
   <ul>
@@ -72,11 +71,15 @@
           </ul>
         </div>
         <div class="lista">
-          <h4 kaanna="'laaja-alaiset-osaamiset'"></h4>
+          <h4 kaanna="'laaja-alaisen-osaamisen-alueet'"></h4>
           <ul>
             <li ng-repeat="laajaalainen in sa.$laajaalaiset | orderBy:nimiOrder">
-              <span ohje="false" ohje-click-anywhere="false" teksti="laajaalainen.kuvaus" otsikko="laajaalainen.nimi" suunta="bottom">
-                <span ng-bind="laajaalainen.nimi | kaanna"></span><span class="ohje badge badge-mini">?</span>
+              <span ng-bind="laajaalainen.nimi | kaanna"></span>
+              <span ohje="false" ohje-click-anywhere="false" teksti="laajaalaiset[laajaalainen.tunniste].kuvaus" otsikko="laajaalainen.nimi" suunta="bottom">
+                <span class="label label-default">Peruste</span>
+              </span>
+              <span ng-show="paikalliset[laajaalainen.tunniste].teksti" ohje="false" ohje-click-anywhere="false" teksti="paikalliset[laajaalainen.tunniste].teksti" otsikko="laajaalainen.nimi" suunta="bottom">
+                <span class="label label-warning">Paikallinen</span>
               </span>
             </li>
           </ul>
