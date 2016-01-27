@@ -324,9 +324,8 @@ angular.module('eperusteet.esitys')
 
   .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, Utils, epEsitysSettings, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
-
     $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
-    $scope.valittuOppiaine = $scope.oppiaineetJaOppimaarat[$stateParams.oppiaineId];
+    $scope.valittuOppiaine = oppiaine;
     $scope.kurssit = _.pick($scope.valittuOppiaine, 'kurssit').kurssit;
     $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
 

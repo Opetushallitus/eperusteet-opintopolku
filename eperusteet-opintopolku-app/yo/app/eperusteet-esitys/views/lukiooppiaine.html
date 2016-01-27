@@ -4,7 +4,6 @@
   </h1>
 
   <div class="clearfix"></div>
-
   <div ng-if="valittuOppiaine.pakollinenKurssiKuvaus">
     <h2 ng-bind="'pakolliset-kurssit' | kaanna"></h2>
     <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
@@ -52,6 +51,13 @@
       <a ui-sref="root.lukio.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
     </div>
 
+  </div>
+
+  <div ng-if="valittuOppiaine.tehtava">
+    <h2 ng-bind-html="valittuOppiaine.tehtava.otsikko | kaanna | unsafe"></h2>
+    <div ng-hide="!valittuOppiaine.tehtava || !hasContent(valittuOppiaine.tehtava)">
+      <termisto-tekstikentta tekstikentta="valittuOppiaine.tehtava.teksti  || '-'"></termisto-tekstikentta>
+    </div>
   </div>
 
   <div ng-if="valittuOppiaine.tavoitteet">
