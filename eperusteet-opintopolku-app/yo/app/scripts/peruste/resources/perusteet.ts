@@ -187,16 +187,6 @@ epOpintopolkuApp
   });
 })
 
-.factory('Oppiaineet', function($resource, epResource) {
-  var baseUrl = epResource.PERUSOPETUS + '/oppiaineet/:osanId';
-  return $resource(baseUrl, {osanId: '@id'}, {
-    oppimaarat: {method: 'GET', isArray: true, url: baseUrl + '/oppimaarat', cache: true},
-    kohdealueet: {method: 'GET', isArray: true, url: baseUrl + '/kohdealueet', cache: true},
-    get: epResource.CACHEDGET,
-    query: epResource.CACHEDQUERY
-  });
-})
-
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {
   this.perusteellaTutkintonimikkeet = function(peruste) {
     if (_.isObject(peruste)) {

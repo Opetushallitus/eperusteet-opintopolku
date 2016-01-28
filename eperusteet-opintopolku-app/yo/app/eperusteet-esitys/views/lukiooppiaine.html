@@ -4,11 +4,10 @@
   </h1>
 
   <div class="clearfix"></div>
-  <div ng-if="valittuOppiaine.pakollinenKurssiKuvaus">
+
+  <div ng-show="valittuOppiaine.pakollinenKurssiKuvaus">
     <h2 ng-bind="'pakolliset-kurssit' | kaanna"></h2>
-    <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
-      <termisto-tekstikentta tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
-    </div>
+    <termisto-tekstikentta tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
   </div>
 
   <div ng-if="filterKurssit(kurssit,0).length" class="kurssi-list">
@@ -20,11 +19,9 @@
     </div>
   </div>
 
-  <div ng-if="valittuOppiaine.syventavaKurssiKuvaus">
+  <div ng-show="valittuOppiaine.syventavaKurssiKuvaus">
     <h2 kaanna="'syventavat-kurssit'"></h2>
-    <div ng-hide="!valittuOppiaine.pakollinenKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
-      <termisto-tekstikentta tekstikentta="valittuOppiaine.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
-    </div>
+    <termisto-tekstikentta tekstikentta="valittuOppiaine.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
   </div>
 
   <div ng-if="filterKurssit(kurssit,1).length" class="kurssi-list">
@@ -36,9 +33,8 @@
     </div>
   </div>
 
-  <div ng-if="valittuOppiaine.soveltavaKurssiKuvaus">
+  <div ng-show="valittuOppiaine.soveltavaKurssiKuvaus">
     <h2 kaanna="'soveltavat-kurssit'"></h2>
-    <div ng-hide="!valittuOppiaine.soveltavaKurssiKuvaus || !hasContent(valittuOppiaine.pakollinenKurssiKuvaus)">
       <termisto-tekstikentta tekstikentta="valittuOppiaine.soveltavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
     </div>
   </div>
