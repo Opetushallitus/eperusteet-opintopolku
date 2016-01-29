@@ -6,9 +6,9 @@
   <div esitys-teksti="vuosiluokkakokonaisuus.arviointi" esitys-peruste="perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].arviointi"></div>
 </div>
 
-<div ng-show="vlk.length" class="vuosiluokka-valinta">
+<div ng-show="vlkst.length" class="vuosiluokka-valinta">
   <ul>
-    <li ng-repeat="vuosi in vlk" ng-class="{active: addActiveClass(vuosi.id, true)}">
+    <li ng-repeat="vuosi in vlkst" ng-class="{active: addActiveClass(vuosi.id, true)}">
       <a ui-sref=".vuosiluokat({vuosiId: vuosi.id, location: replace, notify: true})"
          kaanna="vuosi.vuosiluokka"></a>
     </li>

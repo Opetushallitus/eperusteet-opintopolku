@@ -245,7 +245,6 @@ epOpintopolkuApp
 
     $scope.vlk = vlkt;
     $scope.peruste = vlkPeruste;
-    //$scope.osaamiset = _.zipBy(baseLaajaalaiset, 'tunniste');
     const laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
     const laajaalaisetOrder = _(baseLaajaalaiset).sortBy(Utils.sort).map('tunniste').value();
     $scope.isVlkState = () => {
@@ -274,7 +273,6 @@ epOpintopolkuApp
     oppiaine,
     oppiainePeruste,
     baseLaajaalaiset,
-    vlkPeruste,
     vuosiluokkakokonaisuus,
     vuosiluokkaSisalto,
     MurupolkuData,
@@ -287,8 +285,6 @@ epOpintopolkuApp
     $scope.perusteOppiaineVlkMap = oppiainePeruste ?
       _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
     const laajaalaiset = _.indexBy(baseLaajaalaiset, 'tunniste');
-    //console.log($scope.perusteOppiaine, laajaalaiset, $scope.perusteOppiaineVlkMap);
-    //keskeiset sisaltoaluet
     const perusteSisalto = perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus] ? perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus].sisaltoalueet : [];
     const sortMapHelper = _(perusteSisalto).pluck('nimi').map('fi').value();
     $scope.perustenSisaltoMap = perusteSisalto ? _.indexBy(perusteSisalto, 'tunniste') : {};

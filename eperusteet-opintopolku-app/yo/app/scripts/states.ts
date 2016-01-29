@@ -781,17 +781,27 @@ epOpintopolkuApp
               return res;
             })
           },
+          vlksuudet: function(ops, opsResource, opsId, $q) {
+            let promises = _.map(ops.vuosiluokkakokonaisuudet, (v) => {
+              return opsResource.getVlk({opsId: opsId, vlkId: v.vuosiluokkakokonaisuus.id}).$promise
+            });
+            return $q.all(promises).then((res) => res);
+          },
+          vlkPerusteet: function(opsPerusteResource, opsId, vlksuudet, $q) {
+            let promises = _.map(vlksuudet, (v) => {
+              return opsPerusteResource.getVlkPeruste({
+                opsId: opsId,
+                vlkId: v.id
+              }).$promise
+            });
+            return $q.all(promises).then((res) => {
+              return res;
+            })
+          },
           oppiainePeruste: function (opsPerusteResource, opsId, oppiaineId) {
             return opsPerusteResource.getOppiainePeruste({
               opsId: opsId,
               oppiaineId: oppiaineId
-            }).$promise.then(function (res) {
-              return res;
-            })
-          },
-          baseLaajaalaiset: function (opsId, opsResource) {
-            return opsResource.getLaajaalaisetosaamiset({
-              opsId: opsId
             }).$promise.then(function (res) {
               return res;
             })
@@ -802,6 +812,7 @@ epOpintopolkuApp
       .state('root.ops.perusopetus.oppiaineet.vlk', {
         url: '/vlk/:vlkId',
         templateUrl: 'views/ops/vlkview.html',
+        params: { vluokkakokonaisuus: null },
         controller: 'OpsOppiaineetVlkController',
         resolve: {
           opsId: function ($stateParams) {
@@ -813,13 +824,6 @@ epOpintopolkuApp
           vlkId: function ($stateParams) {
             return $stateParams.vlkId;
           },
-          baseLaajaalaiset: function (opsId, opsResource) {
-            return opsResource.getLaajaalaisetosaamiset({
-              opsId: opsId
-            }).$promise.then(function (res) {
-              return res
-            })
-          },
           vuosiluokkakokonaisuus: function (opsId, vlkId, oppiaineId, oppiaine, opsResource) {
               return opsResource.getOppiaineVlk({
                 opsId: opsId,
@@ -829,14 +833,13 @@ epOpintopolkuApp
                 return res;
               });
           },
-         /* vlkPeruste: function(opsPerusteResource, opsId, vuosiluokkakokonaisuus) {
-              return opsPerusteResource.getVlkPeruste({
-                opsId: opsId,
-                vlkId: vuosiluokkakokonaisuus.id
+          baseLaajaalaiset: function (opsId, opsResource) {
+            return opsResource.getLaajaalaisetosaamiset({
+              opsId: opsId
             }).$promise.then(function (res) {
               return res;
-           })
-           }*/
+            })
+          }
         }
       })
 
@@ -910,14 +913,6 @@ epOpintopolkuApp
               return res;
             })
           },
-          /*vlkPeruste: function(opsPerusteResource, opsId, vlkId) {
-            return opsPerusteResource.getVlkPeruste({
-              opsId: opsId,
-              vlkId: vlkId
-            }).$promise.then(function (res) {
-              return res;
-            })
-          },*/
           oppiainePeruste: function(opsPerusteResource, opsId, oppiaineId) {
             return opsPerusteResource.getOppiainePeruste({
               opsId: opsId,
