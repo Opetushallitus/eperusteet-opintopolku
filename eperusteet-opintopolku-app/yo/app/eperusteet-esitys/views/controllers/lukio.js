@@ -313,7 +313,6 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioAihekokonaisuudetController', function($scope, MurupolkuData, yleiskuvaus, aihekokonaisuudet) {
-    console.log(yleiskuvaus);
     $scope.yleiskuvaus = yleiskuvaus;
     $scope.aihekokonaisuudet = aihekokonaisuudet;
     MurupolkuData.set({
