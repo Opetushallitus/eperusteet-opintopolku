@@ -801,8 +801,8 @@ epOpintopolkuApp
         controller: 'OpsOppiaineController',
         resolve: {
           vuosiluokkaId: ($stateParams) => $stateParams.vuosiId,
-          vuosiluokkaSisalto: (vlkId, opsId, oppiaineId, opsResource, vuosiluokkaId) =>
-            opsResource.getOppiaineVlkByVuosiluokka({ opsId, oppiaineId, vlkId, vuosiId }).$promise,
+          vuosiluokkaSisalto: (opsResource, vlkId, opsId, oppiaineId, vuosiluokkaId) =>
+            opsResource.getOppiaineVlkByVuosiluokka({ opsId, oppiaineId, vlkId, vuosiId: vuosiluokkaId }).$promise,
         }
       })
 

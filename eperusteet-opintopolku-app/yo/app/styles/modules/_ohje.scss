@@ -2,6 +2,8 @@ $ohje-badge-size: 22px;
 $badge-font-size: 15px;
 $padding-badge: 3px 6px;
 .ohje {
+  cursor: pointer;
+  user-select: none;
   text-transform: none;
   text-shadow: none;
   margin-left: 5px;
