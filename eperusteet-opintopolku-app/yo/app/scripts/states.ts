@@ -882,8 +882,8 @@ epOpintopolkuApp
 
       .state('root.ops.perusopetus.vuosiluokkakokonaisuus.vuosiluokka.valinainenoppiaine', {
         url: '/valinainenoppiaine/:oppiaineId',
-        templateUrl: 'views/ops/valinainenoppiaine.html',
-        controller: 'OpsValinainenoppiaineController',
+        templateUrl: 'views/ops/vlnoppiaine.html',
+        controller: 'OpsVlnOppiaineController',
         resolve: {
           oppiaineId: ($stateParams) => $stateParams.oppiaineId,
           oppiaine: (opsResource, oppiaineId, opsId) =>
