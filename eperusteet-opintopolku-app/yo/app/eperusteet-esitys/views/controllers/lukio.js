@@ -105,7 +105,7 @@ angular.module('eperusteet.esitys')
       return null;
     };
 
-    $scope.wrongState = function(){
+    $scope.wrongState = function() {
       return _.intersection(_.words($state.current.name), ['tavoitteet', 'aihekokonaisuudet']).length;
     };
 
@@ -113,7 +113,7 @@ angular.module('eperusteet.esitys')
       return _.last(_.words($state.current.name));
     };
 
-    $scope.tabConfig = {oppiaineUrl: 'root.lukio.oppiaine', kurssiUrl: 'root.lukio.kurssi'};
+    $scope.tabConfig = {oppiaineUrl: 'root.lukio.oppiaine', kurssiUrl: 'root.lukio.oppiaine.kurssi'};
 
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
 
@@ -183,7 +183,7 @@ angular.module('eperusteet.esitys')
 
     $scope.onSectionChange = function (section) {
       return !section.$open ? $scope.chooseFirstOppiaine(section) : null;
-      }
+    };
   })
 
 
@@ -283,9 +283,9 @@ angular.module('eperusteet.esitys')
     checkPrevNext();
   })
 
-  .controller('epLukioKurssiController', function($scope, epLukioUtils, Kieli, $stateParams, Utils, MurupolkuData) {
-
+  .controller('epLukioKurssiController', function($scope, $stateParams, epLukioUtils, Kieli, Utils, MurupolkuData, oppiaine) {
     $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
+    $scope.oppiaine = oppiaine;
 
     var kurssit = epLukioUtils.reduceKurssit($scope.oppiaineRakenne.oppiaineet);
 
@@ -306,7 +306,6 @@ angular.module('eperusteet.esitys')
     };
 
     MurupolkuData.set(murupolkuParams);
-
   })
 
   .controller('epLukioTavoitteetController', function($scope, tavoitteet, MurupolkuData) {
@@ -329,21 +328,22 @@ angular.module('eperusteet.esitys')
     $scope.kurssit = _.map($scope.valittuOppiaine, 'kurssit');
 
     $scope.filterKurssit = function(kurssit, tyyppi){
+      kurssit = kurssit || [];
       var list = [];
       switch(tyyppi) {
         case 0:
           list = _.filter(kurssit, function (kurssi) {
-            return kurssi.tyyppi === 'PAKOLLINEN';
+            return kurssi && kurssi.tyyppi === 'PAKOLLINEN';
           });
           break;
         case 1:
           list = _.filter(kurssit, function (kurssi) {
-            return kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA';
+            return kurssi && kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA';
           });
           break;
         case 2:
           list = _.filter(kurssit, function (kurssi) {
-            return kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA';
+            return kurssi && kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA';
           });
           break;
         default:

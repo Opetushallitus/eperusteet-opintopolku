@@ -1,28 +1,28 @@
-<div ng-if="!wrongState()">
+<div class="tavoitteet-aihekokonaisuudet" ui-view></div>
+
+<div ng-show="stateIs('root.lukio.oppiaine.kurssi')">
   <h1 class="oppiaine-nimi" id="{{kurssi.id}}" esitys-sivu-otsikko="kurssi.nimi">
     <span ng-bind-html="kurssi.nimi | kaanna | unsafe"></span>
   </h1>
   <div class="lukio-kurssi-list">
     <div ng-if="kurssi.kuvaus | kaanna">
-      <h3 class="panel-title osio-otsikko"> <!--ng-bind="'kurssi-kuvaus-header' | kaanna"--></h3>
+      <h2 class="osio-otsikko"> <!--ng-bind="'kurssi-kuvaus-header' | kaanna"--></h3>
       <termisto-tekstikentta tekstikentta="kurssi.kuvaus"></termisto-tekstikentta>
     </div>
 
     <div ng-if="kurssi.tavoitteet.teksti | kaanna">
-      <h3 class="panel-title osio-otsikko" ng-bind="kurssi.tavoitteet.otsikko | kaanna"></h3>
+      <h2 class="osio-otsikko" ng-bind="kurssi.tavoitteet.otsikko | kaanna"></h3>
       <termisto-tekstikentta tekstikentta="kurssi.tavoitteet.teksti"></termisto-tekstikentta>
     </div>
 
     <div ng-if="kurssi.keskeisetSisallot.teksti | kaanna">
-      <h3 class="panel-title osio-otsikko" ng-bind="kurssi.keskeisetSisallot.otsikko | kaanna"></h3>
+      <h2 class="osio-otsikko" ng-bind="kurssi.keskeisetSisallot.otsikko | kaanna"></h3>
       <termisto-tekstikentta tekstikentta="kurssi.keskeisetSisallot.teksti"></termisto-tekstikentta>
     </div>
 
     <div ng-if="kurssi.tavoitteetJaKeskeisetSisallot.teksti | kaanna">
-      <h3 class="panel-title osio-otsikko" ng-bind="kurssi.tavoitteetJaKeskeisetSisallot.otsikko | kaanna"></h3>
+      <h2 class="osio-otsikko" ng-bind="kurssi.tavoitteetJaKeskeisetSisallot.otsikko | kaanna"></h3>
       <termisto-tekstikentta tekstikentta="kurssi.tavoitteetJaKeskeisetSisallot.teksti"></termisto-tekstikentta>
     </div>
   </div>
 </div>
-
-<div class="tavoitteet-aihekokonaisuudet" ui-view></div>

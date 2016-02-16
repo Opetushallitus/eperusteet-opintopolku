@@ -18,7 +18,7 @@
 
 epOpintopolkuApp
   .service('OpsLukioStateService', function ($state, $stateParams, $location, epSivunaviUtils, $rootScope) {
-    var state = {};
+    var state: any = {};
     var section = null;
 
     function processSection(navi, index, cb) {

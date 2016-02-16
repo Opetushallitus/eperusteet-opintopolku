@@ -62,49 +62,6 @@ $peruste: #f0ebe5;
   padding-top: 20px;
 }
 
-
-#ep-tabs1, #ep-tabs2 {
-  margin-bottom: 15px;
-  margin-left: -25px;
-  margin-top: -12px;
-
-  li > a {
-    border-bottom: none;
-    font-size: 13px;
-    border-radius: 0px;
-    padding-top: 16px;
-    padding-right: 19px;
-    padding-left: 19px;
-    padding-bottom: 16px;
-    background: #ffffff;
-    color: #000000;
-
-    &:hover {
-      padding-top: 17px;
-      padding-right: 20px;
-      padding-left: 20px;
-      border: 0;
-      background: #2abdea;
-      color: white;
-    }
-
-    &:active {
-      border-color: rgb(146, 204, 224);
-      background: #149ecb;
-      color: white;
-    }
-  }
-}
-
-.tab-active > a {
-  padding-top: 17px !important;
-  padding-right: 20px !important;
-  padding-left: 20px !important;
-  border: 0px !important;
-  background: #149ecb !important;
-  color: white !important;
-}
-
 //color legend
 
 .colorlabel {
@@ -129,9 +86,10 @@ $peruste: #f0ebe5;
 
 .legend-label {
   vertical-align: top;
-  margin-left: 10px;
+  margin-left: 0px;
+  top: -1px;
   font-size: 12px;
-  padding-bottom: 3px;
+  padding-bottom: 4px;
   display: inline-block;
   position: relative;
 }

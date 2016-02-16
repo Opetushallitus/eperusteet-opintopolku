@@ -228,19 +228,8 @@ epOpintopolkuApp
     oppiaine,
     MurupolkuData,
     epLukioUtils) {
-    //const oppiaineetList = epLukioUtils.flattenAndZipOppiaineet([oppiaine]);
     const kurssit = _.indexBy(epLukioUtils.reduceKurssit([oppiaine]), 'id');
     $scope.kurssi = kurssit[$stateParams.kurssiId];
-    /*const createParentList = () => {
-      return _.map(oppiaineetList, function(op, id){
-        return {id: id, nimi: op.nimi, kurssit: _.pluck(op.kurssit, 'id')};
-      })
-    };
-    const parentList = createParentList();
-    const parent = _.filter(parentList, (op) => {
-      return _.includes(op.kurssit, $scope.kurssi.id);
-    });
-    MurupolkuData.set('parents', parent);*/
     MurupolkuData.set({kurssiId: $stateParams.kurssiId, kurssiNimi: $scope.kurssi.nimi});
   })
 
@@ -253,7 +242,7 @@ epOpintopolkuApp
       return _(aineet).sortBy(jnroSort).sortBy(Utils.nameSort).sortBy(jnroSort).value();
     }
 
-    function createOppiaineItem(oppiaine, depth, idx) {
+    function createOppiaineItem(oppiaine, depth, idx = undefined) {
       return {
         $id: oppiaine.id,
         depth: depth,

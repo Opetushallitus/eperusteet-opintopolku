@@ -155,4 +155,9 @@ epOpintopolkuApp
     virheService.virhe({state: toState.to});
   });
 
+})
+
+// Inject common scope utilities
+.run(($rootScope, $state) => {
+  $rootScope.stateIs = $state.is;
 });
