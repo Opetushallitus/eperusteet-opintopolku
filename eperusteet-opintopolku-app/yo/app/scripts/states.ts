@@ -408,17 +408,27 @@ epOpintopolkuApp
         }
       })
 
+      // FIXME Yhdistä:
       .state('root.lukio.oppiaine.aihekokonaisuudet', {
         url: '/aihekokonaisuudet',
-        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
+        templateUrl: 'eperusteet-esitys/views/aihekokonaisuudet.html',
         controller: 'epLukioAihekokonaisuudetController',
         resolve: {
-          aihekokonaisuudet: function (LukioYleistiedot, perusteId) {
-            return LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise
-              .then(function (res) {
-                return res;
-              });
-          }
+          yleiskuvaus: (LukioYleistiedot, perusteId) =>
+            LukioYleistiedot.getAihekokonaisuuksienYleinen({perusteId: perusteId}).$promise,
+          aihekokonaisuudet: (LukioYleistiedot, perusteId) =>
+            LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise,
+        }
+      })
+      .state('root.lukio.oppiaine.kurssi.aihekokonaisuudet', {
+        url: '/aihekokonaisuudet',
+        templateUrl: 'eperusteet-esitys/views/aihekokonaisuudet.html',
+        controller: 'epLukioAihekokonaisuudetController',
+        resolve: {
+          yleiskuvaus: (LukioYleistiedot, perusteId) =>
+            LukioYleistiedot.getAihekokonaisuuksienYleinen({perusteId: perusteId}).$promise,
+          aihekokonaisuudet: (LukioYleistiedot, perusteId) =>
+            LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise,
         }
       })
 
@@ -435,20 +445,6 @@ epOpintopolkuApp
         resolve: {
           tavoitteet: function (LukioYleistiedot, perusteId) {
             return LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
-              .then(function (res) {
-                return res;
-              });
-          }
-        }
-      })
-
-      .state('root.lukio.oppiaine.kurssi.aihekokonaisuudet', {
-        url: '/aihekokonaisuudet',
-        templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
-        controller: 'epLukioAihekokonaisuudetController',
-        resolve: {
-          aihekokonaisuudet: function (LukioYleistiedot, perusteId) {
-            return LukioYleistiedot.getAihekokonaisuudet({perusteId: perusteId}).$promise
               .then(function (res) {
                 return res;
               });

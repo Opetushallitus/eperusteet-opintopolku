@@ -313,7 +313,9 @@ angular.module('eperusteet.esitys')
     MurupolkuData.set({tekstiNimi: tavoitteet.otsikko, tekstiId: tavoitteet.id});
   })
 
-  .controller('epLukioAihekokonaisuudetController', function($scope, aihekokonaisuudet, MurupolkuData) {
+  .controller('epLukioAihekokonaisuudetController', function($scope, MurupolkuData, yleiskuvaus, aihekokonaisuudet) {
+    console.log(yleiskuvaus);
+    $scope.yleiskuvaus = yleiskuvaus;
     $scope.aihekokonaisuudet = aihekokonaisuudet;
     MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
   })

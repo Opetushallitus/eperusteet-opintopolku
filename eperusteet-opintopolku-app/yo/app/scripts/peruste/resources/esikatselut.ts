@@ -54,6 +54,7 @@ epOpintopolkuApp
       perusteId: '@id'
     }, {
       getTavoitteet: { method: 'GET', url: baseUrl + '/yleisettavoitteet', cache: true },
+      getAihekokonaisuuksienYleinen: { method: 'GET', url: baseUrl + '/aihekokonaisuudet/yleiskuvaus', cache: true },
       getAihekokonaisuudet: { method: 'GET', isArray: true, url: baseUrl + '/aihekokonaisuudet', cache: true },
       getOppiaineRakenne: { method: 'GET', url: baseUrl + '/julkinen/oppiainerakenne', cache: true }
     });
