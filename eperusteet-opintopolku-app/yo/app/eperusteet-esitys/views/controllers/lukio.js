@@ -317,7 +317,9 @@ angular.module('eperusteet.esitys')
     console.log(yleiskuvaus);
     $scope.yleiskuvaus = yleiskuvaus;
     $scope.aihekokonaisuudet = aihekokonaisuudet;
-    MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
+    MurupolkuData.set({
+      tekstiNimi: aihekokonaisuudet.otsikko,
+      tekstiId: aihekokonaisuudet.id });
   })
 
   .controller('epLukioTiedotController', function () {
