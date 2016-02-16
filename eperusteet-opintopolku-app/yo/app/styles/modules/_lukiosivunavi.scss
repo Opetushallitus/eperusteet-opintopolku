@@ -14,12 +14,14 @@ $syventava: #997bb6;
   content: "";
   width: 5px;
   height: 5px;
+  margin: 0 3px 0 3px;
   border-radius: 2px;
   border-style: solid;
   border-width: 0.35em 0 0.35em 0.60em;
   display: block;
-  left: -1em;
-  top: 1.1em;
+  left: -1px;
+  top: 6px;
+  float: left;
   position: relative;
 }
 
@@ -38,11 +40,8 @@ $syventava: #997bb6;
     }
 
     .kurssi {
-      &:active > a{
-        vertical-align: middle;
-        color: blue;
-        //font-weight: bold;
-        background-color: white !important;
+      & > a {
+        font-weight: normal !important;
       }
 
       &.kurssi-soveltava:before {

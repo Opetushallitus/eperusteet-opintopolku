@@ -1,11 +1,11 @@
-<p class="vuosiluokkailmoitus alert alert-info" ng-show="noYleistavoitteet() && missingVlk()" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
+<p class="vuosiluokkailmoitus alert alert-info" ng-if="noYleistavoitteet() && missingVlk()" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
 
-<div ng-show="!vlk.vuosiluokat.length && !noYleistavoitteet()">
+<div ng-if="!vlk.vuosiluokat.length && !noYleistavoitteet()">
   <h3 ng-bind-html="'tavoitteet-ja-sisallot' | kaanna | unsafe"></h3>
   <div termisto-viitteet="vlk.yleistavoitteet.teksti" ng-bind-html="vlk.yleistavoitteet.teksti | kaanna | unsafe"></div>
 </div>
 
-<div ng-show="!missingVlk()">
+<div ng-if="!missingVlk()">
 
   <h2 class="vuosiluokka-otsikko" ng-bind="vuosiluokka | kaanna"></h2>
 
@@ -21,19 +21,19 @@
       <termisto-tekstikentta tekstikentta="sa.tavoite"></termisto-tekstikentta>
       <div class="listat">
         <div class="lista">
-          <h4 kaanna="'sisaltoalueet'"></h4>
+          <h3 kaanna="'sisaltoalueet'"></h3>
           <ul>
-            <li ng-repeat="sisaltoalue in sa.sisaltoalueet | orderBy:nimiOrder">
-              <h5 class="sisaltoalue-label" ng-bind="sisaltoalue.sisaltoalueet.nimi | kaanna"></h5>
+            <li ng-if="!sisaltoalue.sisaltoalueet.piilotettu" ng-repeat="sisaltoalue in sa.sisaltoalueet | orderBy:nimiOrder">
+              <h3 class="sisaltoalue-label" ng-bind="sisaltoalue.sisaltoalueet.nimi | kaanna"></h3>
               <div class="panel panel-default">
                 <div class="panel-body" ng-class="{'esitys-peruste':!sisaltoalue.omaKuvaus && !sisaltoalue.sisaltoalueet.kuvaus}">
                   <termisto-tekstikentta tekstikentta="sisaltoalue.omaKuvaus"></termisto-tekstikentta>
-                  <termisto-tekstikentta ng-show="!sisaltoalue.omaKuvaus" tekstikentta="sisaltoalue.sisaltoalueet.kuvaus"></termisto-tekstikentta>
-                  <termisto-tekstikentta ng-show="!sisaltoalue.omaKuvaus && !sisaltoalue.sisaltoalueet.kuvaus"
+                  <termisto-tekstikentta ng-if="!sisaltoalue.omaKuvaus" tekstikentta="sisaltoalue.sisaltoalueet.kuvaus"></termisto-tekstikentta>
+                  <termisto-tekstikentta ng-if="!sisaltoalue.omaKuvaus && !sisaltoalue.sisaltoalueet.kuvaus"
                                          perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
                 </div>
               </div>
-              <div ng-show="sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus">
+              <div ng-if="sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus">
                 <accordion class="peruste-box">
                   <accordion-group is-open="status.avoin">
                     <accordion-heading>
@@ -50,21 +50,21 @@
           </ul>
         </div>
         <div class="lista">
-          <h4 kaanna="'laaja-alaisen-osaamisen-alueet'"></h4>
+          <h3 kaanna="'laaja-alaisen-osaamisen-alueet'"></h3>
           <ul>
             <li ng-repeat="laajaalainen in sa.$laajaalaiset | orderBy:nimiOrder">
               <span ng-bind="laajaalainen.nimi | kaanna"></span>
               <span ohje="false" ohje-click-anywhere="false" teksti="laajaalaiset[laajaalainen.tunniste].kuvaus" otsikko="laajaalainen.nimi" suunta="bottom">
-                <span class="label label-default">Peruste</span>
+                <span class="label label-default" kaanna="'peruste'"></span>
               </span>
-              <span ng-show="paikalliset[laajaalainen.tunniste].teksti" ohje="false" ohje-click-anywhere="false" teksti="paikalliset[laajaalainen.tunniste].teksti" otsikko="laajaalainen.nimi" suunta="bottom">
-                <span class="label label-warning">Paikallinen</span>
+              <span ng-if="paikalliset[laajaalainen.tunniste].teksti" ohje="false" ohje-click-anywhere="false" teksti="paikalliset[laajaalainen.tunniste].teksti" otsikko="laajaalainen.nimi" suunta="bottom">
+                <span class="label label-warning" kaanna="'paikallinen'"></span>
               </span>
             </li>
           </ul>
         </div>
       </div>
-      <div class="tavoitteet-arviointi" ng-show="sa.$arvioinninkohteet.length > 0">
+      <div class="tavoitteet-arviointi" ng-if="sa.$arvioinninkohteet.length > 0">
         <h4 kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
         <table class="table table-bordered kriteerit">
           <tr>
@@ -80,9 +80,9 @@
   </accordion-group>
 </div>
 
-<h2 ng-show="sisaltoAlueet.length" ng-bind-html="'keskeiset-sisaltoalueet' | kaanna"></h2>
+<h2 ng-if="sisaltoAlueet.length" ng-bind-html="'keskeiset-sisaltoalueet' | kaanna"></h2>
 <div ng-repeat="alue in sisaltoAlueet" class="tavoite">
-  <h4 class="tavoite-otsikko" ng-bind-html="alue[0].nimi | kaanna | unsafe"></h4>
+  <h3 class="tavoite-otsikko" ng-bind-html="alue[0].nimi | kaanna | unsafe"></h3>
   <div class="esitys-peruste" termisto-viitteet="alue[0].kuvaus" ng-bind-html="alue[0].kuvaus | kaanna | unsafe"></div>
   <div class="esitys-paikallinen" termisto-viitteet="alue[1].kuvaus" ng-bind-html="alue[1].kuvaus | kaanna | unsafe"></div>
 </div>

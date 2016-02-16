@@ -192,25 +192,26 @@ epOpintopolkuApp
     $timeout(goToFirstVuosi);
 
   })
-
-  /*
-   'root.ops.perusopetus.valinnaisetoppiaineet'
-   */
-
   .controller('OpsVlnOppiaineController', function(
     $scope,
     $timeout,
     $state,
+    $stateParams,
     Utils,
     oppiaineId,
     oppiaine,
     MurupolkuData){
 
     $scope.oppiaine = oppiaine;
-    $scope.vuosiluokat = _($scope.oppiaine.vuosiluokkakokonaisuudet).map('vuosiluokat').reverse().flatten().value();
+    $scope.vuosiluokat = _($scope.oppiaine.vuosiluokkakokonaisuudet)
+      .map('vuosiluokat')
+      .reverse()
+      .flatten()
+      .reject(vl => $stateParams.vuosi && "vuosiluokka_" + $stateParams.vuosi !== vl.vuosiluokka)
+      .value();
 
-    $scope.currentVuosiluokka = $scope.vuosiluokat[0].vuosiluokka;
-    $scope.currentVuosiId = $scope.vuosiluokat[0].id;
+    $scope.currentVuosiluokka = _.first(_.sortBy($scope.vuosiluokat, 'vuosiluokka')).vuosiluokka;
+    $scope.currentVuosiId = _.first($scope.vuosiluokat).id;
 
     $scope.showVuosi = (vuosiluokka) => {
       $scope.currentVuosiluokka = vuosiluokka;
@@ -222,19 +223,5 @@ epOpintopolkuApp
         })
       }).pop();
 
-
-    //tried to make oppiane as parent and vuosi as child in path but not working and probably not needed
-    /*  const getCurrentVuosiId = () => {
-     return _($scope.vuosiluokat).filter((vl) => {
-     return vl.vuosiluokka === $scope.currentVuosiluokka;
-     }).first().id;
-     };
-     */
     MurupolkuData.set({oppiaineId: $scope.oppiaine.id, oppiaineNimi: $scope.oppiaine.nimi});
-
-    //MurupolkuData.set('parents', [$scope.oppiaine.nimi, $scope.oppiaine.id]);
-
   });
-
-
-

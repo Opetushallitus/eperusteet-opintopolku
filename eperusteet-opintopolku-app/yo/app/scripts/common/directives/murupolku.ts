@@ -140,19 +140,19 @@ epOpintopolkuApp
         useId: 'oppiaineId',
         customParents: true
       },
-      'root.lukio.kurssi': {
+      'root.lukio.oppiaine.kurssi': {
         parent: 'root.lukio.oppiaine',
         useData: 'kurssiNimi',
         useId: 'kurssiId',
         customParents: true
       },
-      'root.lukio.kurssi.tavoitteet': {
-        parent: 'root.lukio.kurssi',
+      'root.lukio.oppiaine.kurssi.tavoitteet': {
+        parent: 'root.lukio.oppiaine.kurssi',
         useData: 'tekstiNimi',
         useId: 'tekstiId'
       },
-      'root.lukio.kurssi.aihekokonaisuudet': {
-        parent: 'root.lukio.kurssi',
+      'root.lukio.oppiaine.kurssi.aihekokonaisuudet': {
+        parent: 'root.lukio.oppiaine.kurssi',
         useData: 'tekstiNimi',
         useId: 'tekstiId'
       },

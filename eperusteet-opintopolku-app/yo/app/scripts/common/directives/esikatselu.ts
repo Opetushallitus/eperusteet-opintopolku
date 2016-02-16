@@ -55,7 +55,6 @@ epOpintopolkuApp
   .service('VuosiluokkakokonaisuusMapper', function () {
     this.init = function (scope, laajaalaisetosaamiset, vlkPeruste) {
       scope.peruste = vlkPeruste;
-      console.log(scope, laajaalaisetosaamiset, vlkPeruste)
       scope.tunnisteet = _.map(scope.peruste.laajaalaisetosaamiset, '_laajaalainenosaaminen');
       var decorated = _.map(scope.peruste.laajaalaisetosaamiset, function (item) {
         var base = laajaalaisetosaamiset[item._laajaalainenosaaminen];

@@ -14,15 +14,15 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
-/* global _ */
 
 epOpintopolkuApp
 .service('Utils', function ($window, Kieli, Kaanna) {
   this.scrollTo = function (selector, offset) {
     var element = angular.element(selector);
     if (element.length) {
-      $window.scrollTo(0, element.eq(0).offset().top + (offset || 0));
+      $('html, body').animate({
+        scrollTop: element.eq(0).offset().top + (offset || 0)
+      }, 400);
     }
   };
 

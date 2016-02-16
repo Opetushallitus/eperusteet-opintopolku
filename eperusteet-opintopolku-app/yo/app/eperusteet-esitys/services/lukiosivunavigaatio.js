@@ -33,7 +33,7 @@ angular.module('eperusteet.esitys')
 
   $scope.addIconClass = function(item){
     var convertToClassName = function(item){
-      return ["kurssi-" + item.toLowerCase().replace("_", "-")];
+      return ['kurssi-' + item.toLowerCase().replace('_', '-')];
     };
     var kurssiWithTyyppi = !!item.$kurssi && !!item.$kurssi.tyyppi;
     return kurssiWithTyyppi ? convertToClassName(item.$kurssi.tyyppi) : null;
@@ -105,6 +105,7 @@ angular.module('eperusteet.esitys')
           });
         }
       }
+
       item.$parent = levels[item.depth - 1] || null;
       item.$hidden = item.depth > 0;
       item.$matched = true;
@@ -200,7 +201,7 @@ angular.module('eperusteet.esitys')
 
   $scope.$on('$stateChangeSuccess', function (event, toState) {
     if (toState.name !== epEsitysSettings.lukioState) {
-      Utils.scrollTo('#ylasivuankkuri');
+      // Utils.scrollTo('#ylasivuankkuri');
     }
     updateModel($scope.items);
   });
