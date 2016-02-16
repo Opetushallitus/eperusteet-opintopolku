@@ -309,25 +309,21 @@ epOpintopolkuApp
         templateUrl: 'eperusteet-esitys/views/lukio.html',
         controller: 'epLukioController',
         resolve: {
-          perusteId: function (serviceConfig, $stateParams) {
-            return $stateParams.perusteId;
-          },
-          peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
-            return !perusteId ? UusimmatPerusteetService.getLukioopetus() : Perusteet.get({perusteId: perusteId}).$promise;
-          },
-          oppiaineRakenne: function (LukioYleistiedot, peruste) {
+          perusteId: (serviceConfig, $stateParams) => $stateParams.perusteId,
+
+          peruste: (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) =>
+            !perusteId ? UusimmatPerusteetService.getLukioopetus() : Perusteet.get({perusteId: perusteId}).$promise,
+
+          oppiaineRakenne: (LukioYleistiedot, peruste) => {
             if (_.isArray(peruste.data)) {
               peruste = peruste.data[0];
             }
             var perusteId = peruste.id;
             return LukioYleistiedot.getOppiaineRakenne({
                 perusteId: perusteId
-              }).$promise
-              .then(function (res) {
-                return res;
-              });
+              }).$promise;
           },
-          perusData: function (LukioPerusteenOsat, peruste) {
+          perusData: (LukioPerusteenOsat, peruste) => {
             if (_.isArray(peruste.data)) {
               peruste = peruste.data[0];
             }
@@ -340,12 +336,8 @@ epOpintopolkuApp
                 return {'lapset': lapset, 'id': perusteId};
               });
           },
-          koulutusalaService: function (serviceConfig, Koulutusalat) {
-            return Koulutusalat;
-          },
-          opintoalaService: function (serviceConfig, Opintoalat) {
-            return Opintoalat;
-          }
+          koulutusalaService: (serviceConfig, Koulutusalat) => Koulutusalat,
+          opintoalaService: (serviceConfig, Opintoalat) => Opintoalat
         }
       })
 
@@ -360,20 +352,13 @@ epOpintopolkuApp
         templateUrl: 'eperusteet-esitys/views/lukiotekstikappale.html',
         controller: 'epLukioTekstikappaleController',
         resolve: {
-          tekstikappaleId: function (serviceConfig, $stateParams) {
-            return $stateParams.tekstikappaleId;
-          },
-          tekstikappale: function (serviceConfig, tekstikappaleId, LukioTekstikappale) {
-            return LukioTekstikappale.getByViite({
-              viiteId: tekstikappaleId
-              }).$promise
-              .then(function (res) {
-                return res;
-              });
-          },
-          lapset: function (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) {
-            return epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true);
-          }
+          tekstikappaleId: (serviceConfig, $stateParams) => $stateParams.tekstikappaleId,
+
+          tekstikappale: (serviceConfig, tekstikappaleId, LukioTekstikappale) =>
+            LukioTekstikappale.getByViite({ viiteId: tekstikappaleId }).$promise,
+
+          lapset: (serviceConfig, perusData, tekstikappaleId, epTekstikappaleChildResolver) =>
+            epTekstikappaleChildResolver.get(perusData, tekstikappaleId, true)
         }
       })
 
@@ -382,15 +367,9 @@ epOpintopolkuApp
         templateUrl: 'eperusteet-esitys/views/lukiooppiaine.html',
         controller: 'epLukioOppiaineController',
         resolve: {
-          oppiaineId: function (serviceConfig, $stateParams) {
-            return $stateParams.oppiaineId;
-          },
-          oppiaine: function (serviceConfig, perusteId, LukioOppiaineet, oppiaineId) {
-            return LukioOppiaineet.getOppiaine({
-              perusteId: perusteId,
-              oppiaineId: oppiaineId
-            }).$promise;
-          }
+          oppiaineId: (serviceConfig, $stateParams) => $stateParams.oppiaineId,
+          oppiaine: (serviceConfig, perusteId, LukioOppiaineet, oppiaineId) =>
+            LukioOppiaineet.getOppiaine({ perusteId, oppiaineId }).$promise
         }
       })
 
@@ -399,12 +378,8 @@ epOpintopolkuApp
         templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
         controller: 'epLukioTavoitteetController',
         resolve: {
-          tavoitteet: function (LukioYleistiedot, perusteId) {
-            return LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
-              .then(function (res) {
-                return res;
-              });
-          }
+          tavoitteet: (LukioYleistiedot, perusteId) =>
+            LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
         }
       })
 
@@ -443,12 +418,8 @@ epOpintopolkuApp
         templateUrl: 'eperusteet-esitys/views/tavoitteet.html',
         controller: 'epLukioTavoitteetController',
         resolve: {
-          tavoitteet: function (LukioYleistiedot, perusteId) {
-            return LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
-              .then(function (res) {
-                return res;
-              });
-          }
+          tavoitteet: (LukioYleistiedot, perusteId) =>
+            LukioYleistiedot.getTavoitteet({perusteId: perusteId}).$promise
         }
       })
 

@@ -284,7 +284,6 @@ angular.module('eperusteet.esitys')
   })
 
   .controller('epLukioKurssiController', function($scope, $stateParams, epLukioUtils, Kieli, Utils, MurupolkuData, oppiaine) {
-    $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
     $scope.oppiaine = oppiaine;
 
     var kurssit = epLukioUtils.reduceKurssit($scope.oppiaineRakenne.oppiaineet);
@@ -325,7 +324,8 @@ angular.module('eperusteet.esitys')
   .controller('epLukioTiedotController', function () {
   })
 
-  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, Utils, epEsitysSettings, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, Utils,
+        epEsitysSettings, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
     $scope.valittuOppiaine = oppiaine;
     $scope.oppimaarat = _.map($scope.valittuOppiaine, 'oppimaarat');
@@ -463,13 +463,6 @@ angular.module('eperusteet.esitys')
       if (toState.name !== epEsitysSettings.lukioState) {
         Utils.scrollTo('#ylasivuankkuri');
       }
-      updateModel($scope.items);
     });
-
-    $scope.$watch('items', function () {
-      $scope.refresh();
-    }, true);
-    $scope.$watch('sections', function () {
-      $scope.refresh();
-    }, true);
+    updateModel($scope.items);
   });

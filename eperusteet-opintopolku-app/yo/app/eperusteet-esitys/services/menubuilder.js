@@ -77,7 +77,10 @@ angular.module('eperusteet.esitys')
       $kurssi: kurssi,
       $hidden: true,
       label: kurssi.nimi,
-      url: $state.href('root.lukio.oppiaine.kurssi', {kurssiId: kurssi.id})
+      url: $state.href('root.lukio.oppiaine.kurssi', {
+        oppiaineId: kurssi.oppiaineId,
+        kurssiId: kurssi.id
+      })
     };
   }
 
