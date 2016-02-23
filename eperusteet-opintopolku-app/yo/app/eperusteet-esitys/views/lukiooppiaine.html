@@ -4,38 +4,7 @@
   </h1>
   <div class="clearfix"></div>
 
-  <div ng-show="valittuOppiaine.pakollinenKurssiKuvaus">
-    <h2 ng-bind="'pakolliset-kurssit' | kaanna"></h2>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
-  </div>
 
-  <div ng-if="filterKurssit(kurssit,0).length" class="kurssi-list">
-    <h2 ng-bind-html="'pakolliset-kurssit' | kaanna | unsafe"></h2>
-    <div ng-repeat="kurssi in filterKurssit(kurssit, 0)">
-      <span class="colorlabel pakollinen"></span>
-      <span class="spacer-small"></span>
-      <a ui-sref="root.lukio.oppiaine.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
-    </div>
-  </div>
-
-  <div ng-show="valittuOppiaine.syventavaKurssiKuvaus">
-    <h2 kaanna="'syventavat-kurssit'"></h2>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
-  </div>
-
-  <div ng-if="filterKurssit(kurssit,1).length" class="kurssi-list">
-    <h2 ng-bind-html="'syventavat-kurssit' | kaanna | unsafe"></h2>
-    <div ng-repeat="kurssi in filterKurssit(kurssit, 1)">
-      <span class="colorlabel syventava"></span>
-      <span class="spacer-small"></span>
-      <a ui-sref="root.lukio.oppiaine.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
-    </div>
-  </div>
-
-  <div ng-show="valittuOppiaine.soveltavaKurssiKuvaus">
-    <h2 kaanna="'soveltavat-kurssit'"></h2>
-    <termisto-tekstikentta tekstikentta="valittuOppiaine.soveltavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
-  </div>
 
   <div ng-if="filterKurssit(kurssit,2).length" class="kurssi-list">
     <h2 ng-bind-html="'soveltavat-kurssit' | kaanna | unsafe"></h2>
@@ -65,6 +34,46 @@
     <h2 ng-bind-html="valittuOppiaine.arviointi.otsikko | kaanna | unsafe"></h2>
     <div ng-hide="!valittuOppiaine.arviointi || !hasContent(valittuOppiaine.arviointi)">
       <termisto-tekstikentta tekstikentta="valittuOppiaine.arviointi.teksti  || '-'"></termisto-tekstikentta>
+    </div>
+  </div>
+  <div>
+    <div ng-show="valittuOppiaine.pakollinenKurssiKuvaus">
+      <h2 ng-bind="'pakolliset-kurssit' | kaanna"></h2>
+      <div class="kurssikuvaus-pakollinen">
+        <termisto-tekstikentta tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'"></termisto-tekstikentta>
+      </div>
+    </div>
+
+    <div ng-if="filterKurssit(kurssit,0).length" class="kurssi-list">
+      <h2 ng-bind-html="'pakolliset-kurssit' | kaanna | unsafe"></h2>
+      <div ng-repeat="kurssi in filterKurssit(kurssit, 0)">
+        <span class="colorlabel pakollinen"></span>
+        <span class="spacer-small"></span>
+        <a ui-sref="root.lukio.oppiaine.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+      </div>
+    </div>
+
+    <div ng-show="valittuOppiaine.syventavaKurssiKuvaus">
+      <h2 kaanna="'syventavat-kurssit'"></h2>
+      <div class="kurssikuvaus-syventava">
+        <termisto-tekstikentta tekstikentta="valittuOppiaine.syventavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
+      </div>
+    </div>
+
+    <div ng-if="filterKurssit(kurssit,1).length" class="kurssi-list">
+      <h2 ng-bind-html="'syventavat-kurssit' | kaanna | unsafe"></h2>
+      <div ng-repeat="kurssi in filterKurssit(kurssit, 1)">
+        <span class="colorlabel syventava"></span>
+        <span class="spacer-small"></span>
+        <a ui-sref="root.lukio.oppiaine.kurssi({kurssiId: '{{kurssi.id}}'})" class="kurssi-soveltava oppiaine-kurssi-list" ng-bind="kurssi.nimi | kaanna"></a>
+      </div>
+    </div>
+
+    <div ng-show="valittuOppiaine.soveltavaKurssiKuvaus">
+      <h2 kaanna="'soveltavat-kurssit'"></h2>
+      <div class="kurssikuvaus-soveltava">
+        <termisto-tekstikentta tekstikentta="valittuOppiaine.soveltavaKurssiKuvaus  || '-'"></termisto-tekstikentta>
+      </div>
     </div>
   </div>
 </div>

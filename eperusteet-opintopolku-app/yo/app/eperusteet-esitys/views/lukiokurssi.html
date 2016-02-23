@@ -7,12 +7,15 @@
   </h1>
 
   <!-- FIXME: Tyylit omaan tiedostoon -->
-  <div style="padding: 3px; background-color: #e9ffe9"
+  <div class="kurssikuvaus-pakollinen"
        ng-show="kurssi.tyyppi === 'PAKOLLINEN' && oppiaine.pakollinenKurssiKuvaus"
        ng-bind-html="oppiaine.pakollinenKurssiKuvaus | kaanna | unsafe"></div>
-  <div style="padding: 3px; background-color: #f1e8f9"
+  <div class="kurssikuvaus-syventava"
        ng-show="kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA' && oppiaine.syventavaKurssiKuvaus"
        ng-bind-html="oppiaine.syventavaKurssiKuvaus | kaanna | unsafe"></div>
+  <!-- <div class="kurssikuvaus&#45;soveltava" -->
+  <!--      ng&#45;show="kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA' &#38;&#38; oppiaine.syventavaKurssiKuvaus" -->
+  <!--      ng&#45;bind&#45;html="oppiaine.syventavaKurssiKuvaus | kaanna | unsafe"></div> -->
   <div style="margin-bottom: 10px"></div>
 
   <div class="lukio-kurssi-list">

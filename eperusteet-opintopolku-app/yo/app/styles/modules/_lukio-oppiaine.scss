@@ -3,6 +3,21 @@ $pakollinen: #bddb8a;
 $syventava: #997bb6;
 $peruste: #f0ebe5;
 
+.kurssikuvaus-pakollinen {
+ padding: 1px 3px 0 3px;
+ background-color: #e9ffe9;
+}
+
+.kurssikuvaus-syventava {
+ padding: 1px 3px 0 3px;
+ background-color: #f1e8f9;
+}
+
+.kurssikuvaus-soveltava {
+ padding: 1px 3px 0 3px;
+ background-color: #f8c3ce;
+}
+
 @mixin lg-kurssi-tyyppi-icon {
   margin-bottom: -2px;
   margin-left: 5px;
