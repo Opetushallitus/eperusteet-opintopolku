@@ -194,6 +194,13 @@
       return classes;
     };
 
+    //for Lukio  ops navi
+    $scope.addIconClass = function(item){
+      var convertToClassName = function(item){
+        return ["kurssi" + item.toLowerCase().replace("_", "-")];
+      };
+      var kurssiWithTyyppi = item.$kurssi && item.$kurssi.tyyppi};
+
     var doRefresh = function (items) {
       var levels = {};
       if (items.length && !items[0].root) {

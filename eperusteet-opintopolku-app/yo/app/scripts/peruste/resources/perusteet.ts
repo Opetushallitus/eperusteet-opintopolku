@@ -114,14 +114,21 @@ epOpintopolkuApp
   });
 })
 
-.factory('TermistoCRUD', function ($resource, epResource) {
-  return $resource(epResource.PERUSTEET + '/termisto/:id', {
+.factory('TermistoCRUD', function ($resource, $state, epResource) {
+  let baseURL = '';
+  //this allows the termisto to work for opetussuunnitelmat
+  if ($state.includes("root.ops.**")){
+    baseURL = '/eperusteet-ylops-service/api/opetussuunnitelmat/:resourceId';
+  } else {
+    baseURL = epResource.PERUSTEET;
+  }
+  return $resource(baseURL + '/termisto/:id', {
     id: '@id',
-    perusteId: '@perusteId'
+    resourceId: '@resourceId'
   }, {
     get: epResource.CACHEDGET,
     query: epResource.CACHEDQUERY
-  });
+  })
 })
 
 .factory('TutkinnonOsanOsaAlue', function($resource, epResource) {
@@ -176,16 +183,6 @@ epOpintopolkuApp
   return $resource(epResource.PERUSOPETUS + '/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:osanId', {
     osanId: '@id'
   }, {
-    query: epResource.CACHEDQUERY
-  });
-})
-
-.factory('Oppiaineet', function($resource, epResource) {
-  var baseUrl = epResource.PERUSOPETUS + '/oppiaineet/:osanId';
-  return $resource(baseUrl, {osanId: '@id'}, {
-    oppimaarat: {method: 'GET', isArray: true, url: baseUrl + '/oppimaarat', cache: true},
-    kohdealueet: {method: 'GET', isArray: true, url: baseUrl + '/kohdealueet', cache: true},
-    get: epResource.CACHEDGET,
     query: epResource.CACHEDQUERY
   });
 })

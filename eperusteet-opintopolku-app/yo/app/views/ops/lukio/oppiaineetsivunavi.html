@@ -1,0 +1,9 @@
+<div class="perusopetus">
+  <div ng-repeat="item in section.items" class="tekstisisalto" ng-class="section.naviClasses(item)"
+       ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
+    <a ng-href="{{item.url}}">
+      <span class="truncate" ep-highlight="search.term" ng-bind="item.label | kaanna">{{ item.label | kaanna }}</span>
+      <span ng-class="addIconClass(item)" class="pull-right"></span>
+    </a>
+  </div>
+</div>

@@ -21,7 +21,7 @@
                   <p ng-if="tavoite.$valittuKohdealue && !tavoite.$editing">{{ tavoite.$valittuKohdealue ? tavoite.$valittuKohdealue.nimi : '' | kaanna }}</p>
 
                   <div ng-if="tavoite.$editing || tavoite.laajattavoitteet">
-                    <h4 kaanna="laaja-alainen-osaaminen"></h4>
+                    <h4 kaanna="laaja-alaisen-osaamisen-alueet"></h4>
                     <div tag-cloud="tavoite.$osaaminen" openable="true" edit-mode="tavoite.$editing" add-label="lisaa-laaja-alainen-osaaminen"></div>
                   </div>
 

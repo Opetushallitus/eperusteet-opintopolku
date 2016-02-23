@@ -19,12 +19,19 @@ epOpintopolkuApp
   .controller('OpsController', function(
     $scope,
     $state,
+    TermistoService,
+    otsikot,
     ops) {
-    const koulutustyyppi = ops.koulutustyyppi;
+
+    $scope.ops = ops;
+    $scope.otsikot = otsikot;
+    TermistoService.setResource(ops);
+    const koulutustyyppi = $scope.ops.koulutustyyppi;
     const kltMap = {
-      "koulutustyyppi_15": "root.ops.esiopetus",
-      "koulutustyyppi_16": "root.ops.perusopetus",
-      "koulutustyyppi_6": "root.ops.lisaopetus"
+      "koulutustyyppi_2": ".lukioopetus",
+      "koulutustyyppi_6": ".lisaopetus",
+      "koulutustyyppi_15": ".esiopetus",
+      "koulutustyyppi_16": ".perusopetus"
     };
     if ($state.is('root.ops')) {
       $state.go(kltMap[koulutustyyppi], {location: 'replace'})

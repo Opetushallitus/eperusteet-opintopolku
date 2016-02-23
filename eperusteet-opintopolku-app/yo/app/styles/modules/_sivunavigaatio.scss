@@ -129,16 +129,20 @@ $sivunavi-level-padding: 20px;
     font-weight: 700;
   }
   i.perusopetus-paikallinen-active {
-    background-image: url('../../images/ikoni_paikallinen_white.svg');
+    background-image: url('../images/ikoni_paikallinen_white.png');
+    background-size: 10px 13px;
+    margin-top:2px;
     background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
   i.perusopetus-paikallinen {
-    background-image: url('../../images/ikoni_paikallinen.svg');
+    background-image: url('../images/ikoni_paikallinen.png');
+    background-size: 10px 13px;
     background-repeat: no-repeat;
-    width: 16px;
-    height: 16px;
+    margin-top:2px;
+    width: 14px;
+    height: 14px;
   }
   .list-group-item {
     &.active, &.active:focus, &.active:hover {

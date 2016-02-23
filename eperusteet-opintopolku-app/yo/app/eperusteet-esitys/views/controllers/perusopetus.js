@@ -46,7 +46,7 @@
    $scope.tekstisisalto = sisalto[4];
    $scope.state = epPerusopetusStateService.getState();
 
-   TermistoService.setPeruste(peruste);
+   TermistoService.setResource(peruste);
 
    $scope.naviClasses = function (item) {
      var classes = ['depth' + item.depth];

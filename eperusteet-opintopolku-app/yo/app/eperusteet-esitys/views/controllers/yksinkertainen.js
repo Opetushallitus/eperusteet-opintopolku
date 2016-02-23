@@ -48,7 +48,7 @@ angular.module('eperusteet.esitys')
   }
   $scope.sisalto = mapSisalto($scope.tekstisisalto);
 
-  TermistoService.setPeruste(peruste);
+  TermistoService.setResource(peruste);
 
   $scope.naviClasses = function (item) {
     var classes = ['depth' + item.depth];

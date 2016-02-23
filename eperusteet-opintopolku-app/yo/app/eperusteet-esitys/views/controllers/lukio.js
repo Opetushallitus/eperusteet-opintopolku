@@ -35,16 +35,16 @@ angular.module('eperusteet.esitys')
     epLukioStateService,
     oppiaineRakenne,
     epLukioUtils,
-    epLukioTabService,
     Kieli) {
 
     $scope.oppiaineRakenne = oppiaineRakenne;
     $scope.isNaviVisible = _.constant(true);
     $scope.perusteenSisalto = perusData;
-    $scope.peruste = peruste;
+    $scope.peruste = _.isArray(peruste.data) ? peruste.data[0] : peruste;
     $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, 'id');
     $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
-    TermistoService.setPeruste(peruste);
+    $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
+    TermistoService.setResource(peruste);
 
     function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
@@ -105,14 +105,15 @@ angular.module('eperusteet.esitys')
       return null;
     };
 
-    $scope.wrongState = function(){
+    $scope.wrongState = function() {
       return _.intersection(_.words($state.current.name), ['tavoitteet', 'aihekokonaisuudet']).length;
     };
 
+    $scope.getCurrentEndState = function() {
+      return _.last(_.words($state.current.name));
+    };
 
-    $scope.tabs = epLukioTabService.tabs;
-    $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
-    $scope.tabClass = epLukioTabService.tabClassSelector;
+    $scope.tabConfig = {oppiaineUrl: 'root.lukio.oppiaine', kurssiUrl: 'root.lukio.oppiaine.kurssi'};
 
     MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
 
@@ -182,7 +183,7 @@ angular.module('eperusteet.esitys')
 
     $scope.onSectionChange = function (section) {
       return !section.$open ? $scope.chooseFirstOppiaine(section) : null;
-      }
+    };
   })
 
 
@@ -282,9 +283,8 @@ angular.module('eperusteet.esitys')
     checkPrevNext();
   })
 
-  .controller('epLukioKurssiController', function($scope, epLukioUtils, Kieli, $stateParams, Utils, MurupolkuData) {
-
-    $scope.valittuOppiaine = $scope.oppiaineet[$stateParams.oppiaineId];
+  .controller('epLukioKurssiController', function($scope, $stateParams, epLukioUtils, Kieli, Utils, MurupolkuData, oppiaine) {
+    $scope.oppiaine = oppiaine;
 
     var kurssit = epLukioUtils.reduceKurssit($scope.oppiaineRakenne.oppiaineet);
 
@@ -305,7 +305,6 @@ angular.module('eperusteet.esitys')
     };
 
     MurupolkuData.set(murupolkuParams);
-
   })
 
   .controller('epLukioTavoitteetController', function($scope, tavoitteet, MurupolkuData) {
@@ -313,39 +312,41 @@ angular.module('eperusteet.esitys')
     MurupolkuData.set({tekstiNimi: tavoitteet.otsikko, tekstiId: tavoitteet.id});
   })
 
-  .controller('epLukioAihekokonaisuudetController', function($scope, aihekokonaisuudet, MurupolkuData) {
+  .controller('epLukioAihekokonaisuudetController', function($scope, MurupolkuData, yleiskuvaus, aihekokonaisuudet) {
+    $scope.yleiskuvaus = yleiskuvaus;
     $scope.aihekokonaisuudet = aihekokonaisuudet;
-    MurupolkuData.set({tekstiNimi: aihekokonaisuudet.otsikko, tekstiId: aihekokonaisuudet.id});
+    MurupolkuData.set({
+      tekstiNimi: aihekokonaisuudet.otsikko,
+      tekstiId: aihekokonaisuudet.id });
   })
 
   .controller('epLukioTiedotController', function () {
-
   })
 
-  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
+  .controller('epLukioOppiaineController', function($scope, $location, epLukioStateService, Utils,
+        epEsitysSettings, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData) {
     $scope.inSisallot = true;
-
-    $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
-    $scope.valittuOppiaine = $scope.oppiaineetJaOppimaarat[$stateParams.oppiaineId];
-    $scope.kurssit = _.pick($scope.valittuOppiaine, 'kurssit').kurssit;
-    $scope.oppimaarat = _.pick($scope.valittuOppiaine, 'oppimaarat').oppimaarat;
+    $scope.valittuOppiaine = oppiaine;
+    $scope.oppimaarat = _.map($scope.valittuOppiaine, 'oppimaarat');
+    $scope.kurssit = _.map($scope.valittuOppiaine, 'kurssit');
 
     $scope.filterKurssit = function(kurssit, tyyppi){
+      kurssit = kurssit || [];
       var list = [];
       switch(tyyppi) {
         case 0:
           list = _.filter(kurssit, function (kurssi) {
-            return kurssi.tyyppi === 'PAKOLLINEN';
+            return kurssi && kurssi.tyyppi === 'PAKOLLINEN';
           });
           break;
         case 1:
           list = _.filter(kurssit, function (kurssi) {
-            return kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA';
+            return kurssi && kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA';
           });
           break;
         case 2:
           list = _.filter(kurssit, function (kurssi) {
-            return kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA';
+            return kurssi && kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA';
           });
           break;
         default:
@@ -461,13 +462,6 @@ angular.module('eperusteet.esitys')
       if (toState.name !== epEsitysSettings.lukioState) {
         Utils.scrollTo('#ylasivuankkuri');
       }
-      updateModel($scope.items);
     });
-
-    $scope.$watch('items', function () {
-      $scope.refresh();
-    }, true);
-    $scope.$watch('sections', function () {
-      $scope.refresh();
-    }, true);
+    updateModel($scope.items);
   });

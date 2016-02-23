@@ -1,21 +1,20 @@
 <div ng-show="isVlkState()">
   <h1 ng-bind-html="vlk.nimi | kaanna | unsafe"></h1>
 
-  <div esitys-teksti="vlk.tehtava" esitys-peruste="peruste.tehtava"></div>
+  <div show-all=true esitys-teksti="vlk.tehtava" esitys-peruste="peruste.tehtava"></div>
 
   <h1 ng-bind-html="'siirtymavaiheet' | kaanna"></h1>
 
-  <div esitys-teksti="vlk.siirtymaEdellisesta" esitys-peruste="peruste.siirtymaEdellisesta"></div>
+  <div show-all=true esitys-teksti="vlk.siirtymaEdellisesta" esitys-peruste="peruste.siirtymaEdellisesta"></div>
 
-  <div esitys-teksti="vlk.siirtymaSeuraavaan" esitys-peruste="peruste.siirtymaSeuraavaan"></div>
+  <div show-all=true esitys-teksti="vlk.siirtymaSeuraavaan" esitys-peruste="peruste.siirtymaSeuraavaan"></div>
 
-  <h1 ng-bind-html="'laaja-alainen-osaaminen' | kaanna"></h1>
+  <h1 show-all=true ng-bind-html="'laaja-alaisen-osaamisen-alueet' | kaanna"></h1>
 
   <div esitys-teksti="" esitys-peruste="peruste.laajaalainenOsaaminen"></div>
-
-  <h2 ng-if="tunnisteet.length > 0" kaanna="'laaja-alaiset-osaamiset'"></h2>
+  <h2 ng-if="tunnisteet.length > 0" kaanna="'laaja-alaisen-osaamisen-alueet'"></h2>
     <div ng-repeat="tunniste in tunnisteet | orderBy:orderFn" id="{{tunniste}}">
-      <div esitys-teksti="paikalliset[tunniste]" esitys-peruste="laajaalaiset[tunniste]"></div>
+      <div show-all=true esitys-teksti="paikalliset[tunniste]" esitys-peruste="laajaalaiset[tunniste]"></div>
     </div>
 </div>
 

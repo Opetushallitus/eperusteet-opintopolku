@@ -2,11 +2,17 @@
 
 
 epOpintopolkuApp
-  .controller('YlanavigaatioController', function ($rootScope, $scope, $state, Kieli, Haku, $stateParams, Kaanna) {
+  .controller('YlanavigaatioController', function ($rootScope, $timeout, $scope, $state, Kieli,
+                                                   UusimmatPerusteetService, Haku, $stateParams, Kaanna) {
     $scope.kieli = Kieli.getUiKieli();
     $scope.nykyinenTila = $state;
     $scope.navCollapsed = true;
     $scope.state = $state;
+
+    UusimmatPerusteetService.getLukioopetus()
+      .then((res) =>
+        $scope.lukioPerusteExists = !!res.data.length);
+
 
     $scope.navCollapse = function () {
       $scope.navCollapsed = !$scope.navCollapsed;
@@ -25,6 +31,12 @@ epOpintopolkuApp
 
     $scope.isPerusopetus = function () {
       if (($state.includes('**.perusopetus.**') || $state.includes('**.lisaopetus.**')) && !$state.includes('**.ops.**')) {
+        return true;
+      }
+    };
+
+    $scope.isLukioopetus = function () {
+      if ($state.includes('**.lukio.**') && !$state.includes('**.ops.**')) {
         return true;
       }
     };
@@ -58,6 +70,8 @@ epOpintopolkuApp
         return 'navi.perusopetus';
       } else if ($state.includes('root.lisaopetus.**')) {
         return 'navi.lisaopetus';
+      } else if ($state.includes('root.lukio.**')) {
+        return 'navi.lukio';
       } else if ($scope.isAmPerus()) {
         return 'navi.ammatillinenperuskoulutus';
       } else if ($scope.isAmAikuis()) {
