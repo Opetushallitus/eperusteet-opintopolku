@@ -45,8 +45,9 @@
 .btn[disabled] {
   cursor: default;
   color: #333333;
-  background-image:url("../img/disabled-pat.png");
-  background-repeat: repeat;
+  // Kuva puuttuu
+  //background-image:url("../img/disabled-pat.png");
+  //background-repeat: repeat;
   border: 1px solid #ababab;
   box-shadow: none;
 }
@@ -370,4 +371,9 @@ input[type="radio"] {
   -webkit-border-bottom-right-radius:3px;
   -moz-border-radius-bottomright:3px;
   border-bottom-right-radius:3px;
+}
+
+/* Murupolku */
+.breadcrumb {
+  margin-bottom: 0;
 }
