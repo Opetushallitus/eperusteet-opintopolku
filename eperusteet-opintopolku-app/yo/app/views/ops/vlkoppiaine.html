@@ -1,5 +1,4 @@
 <h1 kaanna="oppiaine.nimi"></h1>
-
 <div ng-show="oppiaine.kohdealueet.length > 0">
   <h2 kaanna="'kohdealueet'"></h2>
   <ul>
@@ -32,7 +31,7 @@
   <h2 class="vuosiluokka-otsikko" ng-bind="vuosi | kaanna"></h2>
 
   <h3 kaanna="'tavoitteet'"></h3>
-  <accordion ng-repeat="sa in sisalto" class="sivunavi-box">
+  <accordion ng-repeat="sa in sisalto" class="tavoitteet-box">
     <accordion-group is-open="status.open">
       <accordion-heading>
         <div ng-class="{'opened-oppiaine': status.open}">
@@ -55,26 +54,45 @@
                    perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
                 </div>
               </div>
+              <div ng-show="sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus">
+                <accordion class="peruste-box">
+                  <accordion-group is-open="status.avoin">
+                    <accordion-heading>
+                      <div>
+                        <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.avoin, 'glyphicon-chevron-right': !status.avoin}"></i>
+                        <h4 ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe"></h4>
+                      </div>
+                    </accordion-heading>
+                    <termisto-tekstikentta perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
+                  </accordion-group>
+                </accordion>
+              </div>
             </li>
           </ul>
         </div>
         <div class="lista">
-          <h4 kaanna="'laaja-alaiset-osaamiset'"></h4>
+          <h4 kaanna="'laaja-alaisen-osaamisen-alueet'"></h4>
           <ul>
             <li ng-repeat="laajaalainen in sa.$laajaalaiset | orderBy:nimiOrder">
               <span ng-bind="laajaalainen.nimi | kaanna"></span>
+              <span ohje="false" ohje-click-anywhere="false" teksti="laajaalaiset[laajaalainen.tunniste].kuvaus" otsikko="laajaalainen.nimi" suunta="bottom">
+                <span class="label label-default">Peruste</span>
+              </span>
+              <span ng-show="paikalliset[laajaalainen.tunniste].teksti" ohje="false" ohje-click-anywhere="false" teksti="paikalliset[laajaalainen.tunniste].teksti" otsikko="laajaalainen.nimi" suunta="bottom">
+                <span class="label label-warning">Paikallinen</span>
+              </span>
             </li>
           </ul>
         </div>
       </div>
-      <div class="arviointi" ng-show="sa.$arvioinninkohteet.length > 0">
+      <div class="tavoitteet-arviointi" ng-show="sa.$arvioinninkohteet.length > 0">
         <h4 kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
         <table class="table table-bordered kriteerit">
           <tr>
             <th width="30%" kaanna="'arvioinnin-kohde'"></th>
             <th kaanna="'arvion-hyva-osaaminen'"></th>
           </tr>
-          <tr ng-repeat="kohde in vs.tavoiteMap[tunniste].$arvioinninkohteet">
+          <tr class="peruste-arviointi-text" ng-repeat="kohde in sa.$arvioinninkohteet">
             <td ng-bind="kohde.arvioinninKohde | kaanna"></td>
             <td ng-bind="kohde.hyvanOsaamisenKuvaus | kaanna"></td>
           </tr>

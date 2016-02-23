@@ -1,60 +1,88 @@
+$soveltava: #f8a35e;
+$pakollinen: #bddb8a;
+$syventava: #997bb6;
+
+@mixin kurssi-tyyppi-icon {
+  background-size: 10px 14px;
+  width: 16px;
+  height: 16px;
+  float: right;
+  border-radius: 2px;
+}
+
+@mixin navi-color-patch {
+  content: "";
+  width: 5px;
+  height: 5px;
+  margin: 0 3px 0 3px;
+  border-radius: 2px;
+  border-style: solid;
+  border-width: 0.35em 0 0.35em 0.60em;
+  display: block;
+  left: -1px;
+  top: 6px;
+  float: left;
+  position: relative;
+}
+
 .lukio-sivunavi {
+
+  .truncate {
+    display: inline-block;
+    width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   .sivunavi-box {
     .rajaus-container {
       padding-bottom: 0;
     }
 
     .kurssi {
-
-      &:active > a{
-        vertical-align: middle;
-        color: blue;
-        //font-weight: bold;
-        background-color: white !important;
+      & > a {
+        font-weight: normal !important;
       }
 
       &.kurssi-soveltava:before {
-        content: "";
-        width: 5px;
-        height: 5px;
-        border-radius: 32x;
-        border-style: solid;
-        border-width: 0.35em 0 0.35em 0.60em;
-        display: block;
-        left: -1em;
-        top: 1.1em;
-        position: relative;
-        color: #f8a35e;
+        @include navi-color-patch;
+        color: $soveltava;
       }
 
       &.kurssi-pakollinen:before {
-        content: "";
-        width: 5px;
-        height: 5px;
-        border-radius: 2px;
-        border-style: solid;
-        border-width: 0.35em 0 0.35em 0.60em;
-        display: block;
-        left: -1em;
-        top: 1.1em;
-        position: relative;
-        color: #bddb8a;
+        @include navi-color-patch;
+        color: $pakollinen;
       }
 
       &.kurssi-syventava:before {
-        content: "";
-        width: 5px;
-        height: 5px;
-        border-radius: 2px;
-        border-style: solid;
-        border-width: 0.35em 0 0.35em 0.60em;
-        display: block;
-        left: -1em;
-        top: 1.1em;
-        position: relative;
-        color: #f8a35e;
+        @include navi-color-patch;
+        color: $syventava;
       }
 
+      .kurssi-paikallinen-pakollinen {
+        background: url('../../images/ikoni_paikallinen-pakollinen.png') no-repeat center;
+        @include kurssi-tyyppi-icon;
+      }
+      .kurssi-paikallinen-soveltava {
+        background: url('../../images/ikoni_paikallinen_soveltava.png') no-repeat center;
+        @include kurssi-tyyppi-icon;
+      }
+      .kurssi-paikallinen-syventava {
+        background: url('../../images/ikoni_paikallinen-syventava.png') no-repeat center;
+        @include kurssi-tyyppi-icon;
+      }
+      .kurssi-valtakunnallinen-pakollinen {
+        background-color: $pakollinen;
+        @include kurssi-tyyppi-icon;
+      }
+      .kurssi-valtakunnallinen-soveltava {
+        background-color: $soveltava;
+        @include kurssi-tyyppi-icon;
+      }
+      .kurssi-valtakunnallinen-syventava {
+        background-color: $syventava;
+        @include kurssi-tyyppi-icon;
+      }
 
     }
   }

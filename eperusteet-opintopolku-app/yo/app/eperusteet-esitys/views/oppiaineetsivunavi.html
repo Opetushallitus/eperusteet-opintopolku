@@ -2,8 +2,8 @@
   <div ng-repeat="item in section.items" class="tekstisisalto" ng-class="section.naviClasses(item)"
       ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))">
       <a ng-href="{{item.url}}">
-        <span ep-highlight="search.term" ng-bind="item.label | kaanna">{{ item.label | kaanna }}</span>
+        <span ep-highlight="search.term" kaanna="item.label"></span>
+        <span ng-if="item.$kurssi">({{ item.$kurssi.koodiArvo }})</span>
       </a>
-  </div>
   </div>
 </div>

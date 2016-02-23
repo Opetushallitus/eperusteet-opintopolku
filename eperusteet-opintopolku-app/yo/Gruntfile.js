@@ -71,6 +71,7 @@ module.exports = function(grunt) {
           '!<%= yeoman.app %>/bower_components/**',
           '<%= yeoman.app %>/localisation/*.json',
           '.tmp/styles/**/*.css',
+          '<%= yeoman.app %>/eperusteet-esitys/**/*.js',
           '{.tmp,<%= yeoman.app %>}/scripts/**/*.ts',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
@@ -94,13 +95,19 @@ module.exports = function(grunt) {
       },
       proxies: [{
         context: '/eperusteet-service',
-        host: 'testi-eperusteet.opintopolku.fi',
+        host: 'virkailija.opintopolku.fi',
         port: 443,
         https: true,
         changeOrigin: true
+      // }, {
+      //   context: '/eperusteet-service',
+      //   host: 'testi.virkailija.opintopolku.fi',
+      //   port: 443,
+      //   https: true,
+      //   changeOrigin: true
       }, {
         context: '/eperusteet-ylops-service',
-        host: 'testi-eperusteet.opintopolku.fi',
+        host: 'testi.virkailija.opintopolku.fi',
         port: 443,
         https: true,
         changeOrigin: true
@@ -206,12 +213,12 @@ module.exports = function(grunt) {
         }
       }
     },
-    imagemin: {
-      dist: {
+    image: {
+      dynamic: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg}',
+          src: '**/*.{png,jpg,jpeg}',
           dest: '<%= yeoman.dist %>/images'
         }]
       }
@@ -319,7 +326,7 @@ module.exports = function(grunt) {
       ],
       dist: [
         'sass',
-        'imagemin',
+        'image',
         'svgmin',
         'htmlmin'
       ]

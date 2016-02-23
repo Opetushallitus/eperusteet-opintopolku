@@ -78,7 +78,7 @@ epOpintopolkuApp
 
     var STATES = {
       'root.tiedotteet': {
-        state: 'root.etusivu',
+        state: 'root.uutiset',
         label: 'etusivu.tiedotteet'
       },
       'root.tiedote': {
@@ -140,19 +140,19 @@ epOpintopolkuApp
         useId: 'oppiaineId',
         customParents: true
       },
-      'root.lukio.kurssi': {
+      'root.lukio.oppiaine.kurssi': {
         parent: 'root.lukio.oppiaine',
         useData: 'kurssiNimi',
         useId: 'kurssiId',
         customParents: true
       },
-      'root.lukio.kurssi.tavoitteet': {
-        parent: 'root.lukio.kurssi',
+      'root.lukio.oppiaine.kurssi.tavoitteet': {
+        parent: 'root.lukio.oppiaine.kurssi',
         useData: 'tekstiNimi',
         useId: 'tekstiId'
       },
-      'root.lukio.kurssi.aihekokonaisuudet': {
-        parent: 'root.lukio.kurssi',
+      'root.lukio.oppiaine.kurssi.aihekokonaisuudet': {
+        parent: 'root.lukio.oppiaine.kurssi',
         useData: 'tekstiNimi',
         useId: 'tekstiId'
       },
@@ -313,6 +313,48 @@ epOpintopolkuApp
         useDate: 'vuosiLabel',
         useId: 'vlkId',
         customParents: true
+      },
+      'root.ops.lukioopetus': {
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.ops.lukioopetus.tiedot': {
+        parent: 'root.ops.lukioopetus',
+        label: 'opetussuunnitelman-tiedot'
+      },
+      'root.ops.lukioopetus.tekstikappale': {
+        parent: 'root.ops.lukioopetus',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi',
+        customParents: true
+      },
+      'root.ops.lukioopetus.oppiaine': {
+        parent: 'root.ops.lukioopetus',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+        customParents: true
+      },
+      'root.ops.lukioopetus.kurssi': {
+        parent: 'root.ops.lukioopetus',
+        useData: 'kurssiNimi',
+        useId: 'kurssiId',
+        customParents: true
+      },
+      'root.ops.lukioopetus.oppiaine.aihekokonaisuudet': {
+        parent: 'root.ops.lukioopetus.oppiaine',
+        label: 'aihekokonaisuudet'
+      },
+      'root.ops.lukioopetus.kurssi.aihekokonaisuudet': {
+        parent: 'root.ops.lukioopetus.kurssi',
+        label: 'aihekokonaisuudet'
+      },
+      'root.ops.lukioopetus.oppiaine.tavoitteet': {
+        parent: 'root.ops.lukioopetus.oppiaine',
+        label: 'yleiset-tavoitteet'
+      },
+      'root.ops.lukioopetus.kurssi.tavoitteet': {
+        parent: 'root.ops.lukioopetus.kurssi',
+        label: 'yleiset-tavoitteet'
       }
     };
 

@@ -8,7 +8,6 @@
 </div>
 
 <div esitys-teksti="oppiaine.tehtava" esitys-peruste="perusteOppiaine.tehtava" show-peruste="true"></div>
-
 <h2 class="vlk-otsikko" ng-show="!isEmpty(valittuVlk)" ng-bind="currentVlkCategory | kaanna"></h2>
 
 <div ng-show="oppiaine.tyyppi === 'yhteinen'">
@@ -19,7 +18,6 @@
 </div>
 
 <h2 class="vlk-otsikko" ng-bind="'opetus-vuosiluokkittain' | kaanna"></h2>
-
 <div ng-if="vuosiluokat.length > 0" class="vuosiluokka-valinta">
   <span kaanna="'vuosiluokka'"></span>
   <ul>
@@ -28,7 +26,6 @@
     </li>
   </ul>
 </div>
-
   <div ng-repeat="vuosiluokka in vlk.vuosiluokat | filter:vuosiluokkaFilter | orderBy:'vuosiluokka' track by vuosiluokka.vuosiluokka">
     <h2 class="vuosiluokka-otsikko" ng-bind="('vuosiluokka' | kaanna) + ' ' + vuosiluokka.$numero"></h2>
 
@@ -62,14 +59,14 @@
               </ul>
             </div>
           </div>
-          <div class="arviointi" ng-show="vs.tavoiteMap[tunniste].$arvioinninkohteet.length > 0">
-            <h4 kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
+          <div class="arviointi" ng-show="sa.$arvioinninkohteet.length > 0">
+            <h4 class="arviointi-title" kaanna="'arviointi-vuosiluokan-paatteeksi'"></h4>
             <table class="table table-bordered kriteerit">
               <tr>
                 <th width="30%" kaanna="'arvioinnin-kohde'"></th>
                 <th kaanna="'arvion-hyva-osaaminen'"></th>
               </tr>
-              <tr ng-repeat="kohde in vs.tavoiteMap[tunniste].$arvioinninkohteet">
+              <tr ng-repeat="kohde in sa.$arvioinninkohteet">
                 <td ng-bind="kohde.arvioinninKohde | kaanna"></td>
                 <td ng-bind="kohde.hyvanOsaamisenKuvaus | kaanna"></td>
               </tr>

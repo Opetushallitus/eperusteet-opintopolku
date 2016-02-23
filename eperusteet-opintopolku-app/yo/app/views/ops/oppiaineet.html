@@ -5,7 +5,7 @@
 <div ng-show="vlkTabit.length" class="vuosiluokka-valinta">
   <ul>
     <li ng-repeat="vlk in vlkTabit" ng-class="{active: addActiveClass(vlk.id)}">
-      <a ui-sref=".vlk({vlkId: vlk.id})"
+      <a ui-sref=".vlk({vlkId: vlk.id, vluokkakokonaisuus: vlk.vlkId})"
          kaanna="vlk.nimi"></a>
     </li>
   </ul>

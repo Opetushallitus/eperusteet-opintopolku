@@ -16,40 +16,33 @@
 
 'use strict';
 
-angular.module('eperusteet.esitys')
-  .directive('epLukioTabs', function ($window, $document, $timeout, $compile) {
+epOpintopolkuApp
+  .directive('epLukioTabs', function () {
     return {
-      templateUrl: 'eperusteet-esitys/directives/tabs.html',
+      templateUrl: 'views/common/directives/tabs.html',
       restrict: 'AE',
       scope: {
-        simegend: '='
+        simpleLegend: '=',
+        tabUrls: '='
       },
-      controller: 'epLukioTabController'
+      controller: 'LukioTabController'
     }
   })
 
-  .controller('epLukioTabController', function($scope, $state, epLukioTabService) {
+  .controller('LukioTabController', function($scope, $state) {
 
     $scope.currentState = function(){
       var parts = _.words($state.current.name);
-      if (_.indexOf(parts, 'oppiaine') > -1){
-        return 'oppiaine';
-      }
       if (_.indexOf(parts, 'kurssi') > -1){
         return 'kurssi';
+      }
+      if (_.indexOf(parts, 'oppiaine') > -1){
+        return 'oppiaine';
       }
       return null;
     };
 
-    $scope.tabs = epLukioTabService.tabs;
-    $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
-    $scope.tabClass = epLukioTabService.tabClassSelector;
-
-  })
-
-  .factory('epLukioTabService', function ($state) {
-    return {
-      tabClassSelector: function(tabName) {
+    $scope.tabClass = function (tabName) {
         var className = null;
         switch(tabName) {
           case 'tavoitteet':
@@ -65,20 +58,21 @@ angular.module('eperusteet.esitys')
             className = null;
         }
         return className;
-      },
-      tabs: [
+      };
+
+      $scope.tabs = [
         {
           title: {
-            oppiaine: 'oppiainen-sisalto',
+            oppiaine: 'oppiaineen-sisalto',
             kurssi: 'kurssin-sisalto'
           },
           name: 'sisalto',
           url: function(name){
             if (name === 'kurssi') {
-              return 'root.lukio.kurssi';
+              return $scope.tabUrls.kurssiUrl;
             }
             if (name === 'oppiaine') {
-              return 'root.lukio.oppiaine';
+              return $scope.tabUrls.oppiaineUrl;
             }
           }
         },
@@ -90,10 +84,10 @@ angular.module('eperusteet.esitys')
           name: 'tavoitteet',
           url: function (name) {
             if (name === 'kurssi') {
-              return 'root.lukio.kurssi.tavoitteet';
+              return $scope.tabUrls.kurssiUrl + '.tavoitteet';
             }
             if (name === 'oppiaine') {
-              return 'root.lukio.oppiaine.tavoitteet';
+              return $scope.tabUrls.oppiaineUrl + '.tavoitteet';
             }
           }
         },
@@ -105,15 +99,14 @@ angular.module('eperusteet.esitys')
           name: 'aihekokonaisuudet',
           url: function (name) {
             if (name === 'kurssi') {
-              return 'root.lukio.kurssi.aihekokonaisuudet';
+              return $scope.tabUrls.kurssiUrl + '.aihekokonaisuudet';
             }
             if (name === 'oppiaine') {
-              return 'root.lukio.oppiaine.aihekokonaisuudet';
+              return $scope.tabUrls.oppiaineUrl + '.aihekokonaisuudet';
             }
           }
         }
-      ]
-    };
+      ];
+
+    $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
   });
-
-

@@ -1,3 +1,50 @@
+$soveltava: #f8a35e;
+$pakollinen: #bddb8a;
+$syventava: #997bb6;
+$peruste: #f0ebe5;
+
+@mixin lg-kurssi-tyyppi-icon {
+  margin-bottom: -2px;
+  margin-left: 5px;
+  background-size: 14px 19px;
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+@mixin md-kurssi-tyyppi {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border-left: 9px;
+  display: inline-block;
+}
+
+@mixin md-kurssi-tyyppi-icon {
+  background-size: 8px 12px;
+  width: 18px;
+  height: 18px;
+  border-left: 8px;
+  display: inline-block;
+}
+
+@mixin colorbulletIcon {
+  background-size: 8px 12px;
+  width: 18px;
+  height: 18px;
+  border-left: 8px;
+  display: inline-block;
+}
+
+@mixin colorbullet {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border-left: 9px;
+  display: inline-block;
+}
+
 .tab-container {
   background: #F8f8f8;
   width: 105%;
@@ -15,64 +62,7 @@
   padding-top: 20px;
 }
 
-
-#ep-tabs1, #ep-tabs2 {
-  margin-bottom: 15px;
-  margin-left: -25px;
-  margin-top: -12px;
-
-  li > a {
-    border-bottom: none;
-    font-size: 13px;
-    border-radius: 0px;
-    padding-top: 16px;
-    padding-right: 19px;
-    padding-left: 19px;
-    padding-bottom: 16px;
-    background: #ffffff;
-    color: #000000;
-
-    &:hover {
-      padding-top: 17px;
-      padding-right: 20px;
-      padding-left: 20px;
-      border: 0;
-      background: #2abdea;
-      color: white;
-    }
-
-    &:active {
-      border-color: rgb(146, 204, 224);
-      background: #149ecb;
-      color: white;
-    }
-  }
-}
-
-.tab-active > a {
-  padding-top: 17px !important;
-  padding-right: 20px !important;
-  padding-left: 20px !important;
-  border: 0px !important;
-  background: #149ecb !important;
-  color: white !important;
-}
-
 //color legend
-
-.legend-container {
-  padding-top: 15px;
-  width: 400px;
-}
-
-.legend-label {
-  vertical-align: top;
-  margin-left: 10px;
-  font-size: 12px;
-  padding-bottom: 3px;
-  display: inline-block;
-  position: relative;
-}
 
 .colorlabel {
   width: 14px;
@@ -83,18 +73,201 @@
   display: inline-block;
   position: relative;
 }
+
+.legend-container {
+  padding-top: 15px;
+  width: 300px;
+}
+
+.big-legend-container {
+  padding-top: 15px;
+  width: 400px;
+}
+
+.legend-label {
+  vertical-align: top;
+  margin-left: 0px;
+  top: -1px;
+  font-size: 12px;
+  padding-bottom: 4px;
+  display: inline-block;
+  position: relative;
+}
+
+.op-legend-label {
+  vertical-align: top;
+  margin-left: 5px;
+  font-size: 12px;
+  padding-bottom: 3px;
+  display: inline-block;
+  position: relative;
+}
+
 .spacer-small {
   width: 15px;
   display: inline-block;
 }
-.syventava {
-  background-color: #997bb6;
+
+.big-spacer {
+  width: 25px;
+  display: inline-block;
 }
 
-.pakollinen {
-  background-color: #bddb8a;
+.md-valtakunnallinen-syventava {
+  @include md-kurssi-tyyppi;
+  background-color: $syventava;
 }
 
-.soveltava {
-  background-color: #f8a35e;
+.md-valtakunnallinen-soveltava {
+  @include md-kurssi-tyyppi;
+  background-color: $soveltava;
 }
+
+.md-valtakunnallinen-pakollinen {
+  background-color: $pakollinen;
+  @include md-kurssi-tyyppi;
+}
+
+.md-paikallinen-syventava {
+  @include md-kurssi-tyyppi-icon;
+  background: url('../../images/ikoni_paikallinen-syventava.png') no-repeat center;
+}
+
+.md-paikallinen-soveltava {
+  @include md-kurssi-tyyppi-icon;
+  background: url('../../images/ikoni_paikallinen_soveltava.png') no-repeat center;
+}
+
+.md-paikallinen-pakollinen {
+  @include md-kurssi-tyyppi-icon;
+  background: url('../../images/ikoni_paikallinen-pakollinen.png') no-repeat center;
+}
+
+.lg-kurssi-paikallinen-pakollinen {
+   background: url('../../images/ikoni_paikallinen-pakollinen.png') no-repeat center;
+   @include lg-kurssi-tyyppi-icon;
+ }
+
+.lg-kurssi-paikallinen-soveltava {
+  background: url('../../images/ikoni_paikallinen_soveltava.png') no-repeat center;
+  @include lg-kurssi-tyyppi-icon;
+}
+.lg-kurssi-paikallinen-syventava {
+  background: url('../../images/ikoni_paikallinen-syventava.png') no-repeat center;
+  @include lg-kurssi-tyyppi-icon;
+}
+.lg-kurssi-valtakunnallinen-pakollinen {
+  background-color: $pakollinen;
+  @include lg-kurssi-tyyppi-icon;
+}
+.lg-kurssi-valtakunnallinen-soveltava {
+  background-color: $soveltava;
+  @include lg-kurssi-tyyppi-icon;
+}
+.lg-kurssi-valtakunnallinen-syventava {
+  background-color: $syventava;
+  @include lg-kurssi-tyyppi-icon;
+}
+
+.perusteen-teksti {
+  padding: 10px 20px 10px 20px;
+  background-color: $peruste;
+  .teksti {
+    margin-top: -10px;
+  }
+}
+
+.peruste-box {
+  .glyphicon {
+    font-size: 12px;
+    margin-left: 2px;
+    padding-right: 2px;
+  }
+  .panel-heading {
+    padding: 3px;
+    background-color: $peruste;
+    .panel-title.h4 {
+      font-size: 12px;
+      font-weight: 400;
+    }
+  }
+  .panel-chosen > .panel-heading {
+    background-color: $peruste;
+    color: white;
+  }
+  h4 {
+    font-size: 14px !important;
+    font-weight: 400;
+  }
+  .list-group-item {
+    border-top: none;
+  }
+  ul {
+    list-style-type: none;
+    padding-left: 0px;
+  }
+  label {
+    font-weight: 300;
+  }
+  label > input {
+    top: 0px;
+    margin-right: 5px;
+  }
+  .list-group {
+    margin-bottom: 0px;
+  }
+  .inner-accordion {
+    border: 0;
+    .panel-heading {
+      background-color: inherit;
+      padding-left: 0;
+    }
+    .panel-collapse .panel-body {
+      border-top: 0;
+    }
+  }
+  .menu .panel-body {
+    padding: 0px;
+    margin: -1px;
+  }
+  .panel-group {
+    margin-bottom: 0px;
+  }
+  .panel {
+    box-shadow: none;
+  }
+  .panel + .panel {
+    margin-top: -1px;
+  }
+  .accordion-toggle {
+    &:hover, &:focus, &:hover *, &:focus * {
+      text-decoration: none;
+    }
+    cursor: pointer;
+  }
+  .input-group {
+    margin-bottom: 15px;
+  }
+}
+
+.lukioopetus {
+  h1 {
+    margin: 0 0 20px 0;
+    border-bottom: 1px solid #ccc;
+  }
+  .kokonaisuus {
+    margin-bottom: 20px;
+  }
+  .tekstisisalto {
+    margin-bottom: 4px;
+    padding: 3px;
+    cursor: pointer;
+    color: $brand-primary;
+    a:focus {
+      outline: none;
+    }
+  }
+  margin-bottom: 20px;
+}
+
+

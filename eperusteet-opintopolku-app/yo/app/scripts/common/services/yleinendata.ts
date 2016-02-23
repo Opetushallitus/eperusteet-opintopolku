@@ -89,6 +89,14 @@ epOpintopolkuApp
         sisaltoTunniste: 'losisalto',
         hasPdfCreation: true
       },
+      /*'koulutustyyppi_2': {
+        nimi: 'lukioopetus',
+        oletusSuoritustapa: 'lukioaopetus',
+        hasTutkintonimikkeet: false,
+        hakuState: 'root.selaus.lukioopetuslista',
+        sisaltoTunniste: 'luksisalto',
+        hasPdfCreation: false
+      },*/
       'koulutustyyppi_18': {
         nimi: 'valmentavakoulutus',
         //oletusSuoritustapa: 'naytto',
@@ -114,6 +122,10 @@ epOpintopolkuApp
     this.ammatillisetkoulutustyypit = ['koulutustyyppi_1', 'koulutustyyppi_11', 'koulutustyyppi_12'];
 
     this.arviointiasteikot = undefined;
+
+    /*this.isLukioopetus = function (peruste) {
+      return peruste.koulutustyyppi === 'koulutustyyppi_2';
+    };*/
 
     this.isPerusopetus = function (peruste) {
       return peruste.koulutustyyppi === 'koulutustyyppi_16';

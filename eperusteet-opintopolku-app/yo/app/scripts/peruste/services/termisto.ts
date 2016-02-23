@@ -17,8 +17,9 @@
 'use strict';
 
 epOpintopolkuApp
-.service('TermistoService', function (TermistoCRUD, $q, $timeout, opsTermisto) {
-  var peruste = null;
+.service('TermistoService', function (TermistoCRUD, $q, $timeout) {
+  //resource is either the peruste or the ops
+  var resource = null;
   var cached = {};
   var loading = false;
   var Resource = {
@@ -26,7 +27,7 @@ epOpintopolkuApp
     params: null
   };
   this.preload = function () {
-    if (!cached[peruste.id] && !loading) {
+    if (!cached[resource.id] && !loading) {
       loading = true;
       var self = this;
       $timeout(function () {
@@ -37,23 +38,16 @@ epOpintopolkuApp
     }
   };
   this.getAll = function () {
-    return Resource.CRUD.query(Resource.params, function (res) {
-      cached[peruste.id] = res;
+    return TermistoCRUD.query({resourceId: resource.id}, function (res) {
+      cached[resource.id] = res;
     }).$promise;
   };
-  this.setPeruste = function (value, isOps = false) {
-    peruste = value;
-    if (!isOps) {
-      Resource.params = {perusteId: peruste.id};
-    }
-    if (isOps) {
-      Resource.CRUD = opsTermisto;
-      Resource.params = {opsId: peruste.id};
-    }
+  this.setResource = function (value) {
+    resource = value;
   };
 
   function findTermi(avain) {
-    return _.find(cached[peruste.id], function (item) {
+    return _.find(cached[resource.id], function (item) {
       return item.avain === avain;
     });
   }
@@ -63,7 +57,7 @@ epOpintopolkuApp
       return findTermi(avain);
     }
     var deferred = $q.defer();
-    if (cached[peruste.id]) {
+    if (cached[resource.id]) {
       deferred.resolve(findTermi(avain));
     } else {
       this.getAll().then(function () {
