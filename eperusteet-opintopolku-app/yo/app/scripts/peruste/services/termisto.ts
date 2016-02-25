@@ -17,17 +17,14 @@
 'use strict';
 
 epOpintopolkuApp
-.service('TermistoService', function (TermistoCRUD, $q, $timeout) {
+.service('TermistoService', function (PerusteTermistoCRUD, OpsTermistoCRUD, $q, $timeout) {
   //resource is either the peruste or the ops
-  var resource = null;
+  var resources = [];
   var cached = {};
+  cached["number"] = 0;
   var loading = false;
-  var Resource = {
-    CRUD: TermistoCRUD,
-    params: null
-  };
   this.preload = function () {
-    if (!cached[resource.id] && !loading) {
+    if (resources.length != cached["number"] && !loading) {
       loading = true;
       var self = this;
       $timeout(function () {
@@ -38,26 +35,48 @@ epOpintopolkuApp
     }
   };
   this.getAll = function () {
-    return TermistoCRUD.query({resourceId: resource.id}, function (res) {
-      cached[resource.id] = res;
-    }).$promise;
+    var requests = _.map(resources, (resource) => {
+      if (resource.type == "OPS") {
+        return OpsTermistoCRUD
+                .query({resourceId: resource.id})
+                .$promise
+                .then((res)=> {
+                   _.each(res, (item) => {
+                    cached[item.avain] = item;
+                    cached["number"]++;
+                  });
+                })
+      }
+      if (resource.type == "PERUSTE") {
+        return PerusteTermistoCRUD
+          .query({resourceId: resource.id})
+          .$promise
+          .then((res) => {
+            _.each(res, (item) => {
+              cached[item.avain] = item;
+              cached["number"]++;
+            });
+          })
+      }
+    });
+    return $q.all(requests)
   };
-  this.setResource = function (value) {
-    resource = value;
+
+  this.setResource = (value, type = "PERUSTE") => {
+    value.type = type.toUpperCase();
+    resources.push(value);
   };
 
   function findTermi(avain) {
-    return _.find(cached[resource.id], function (item) {
-      return item.avain === avain;
-    });
+    return cached[avain]
   }
 
   this.getWithAvain = function (avain, cached) {
     if (cached) {
-      return findTermi(avain);
+      return findTermi(avain)
     }
     var deferred = $q.defer();
-    if (cached[resource.id]) {
+    if (cached) {
       deferred.resolve(findTermi(avain));
     } else {
       this.getAll().then(function () {
@@ -66,4 +85,5 @@ epOpintopolkuApp
     }
     return deferred.promise;
   };
+
 });

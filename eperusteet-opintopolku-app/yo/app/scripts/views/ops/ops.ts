@@ -25,7 +25,7 @@ epOpintopolkuApp
 
     $scope.ops = ops;
     $scope.otsikot = otsikot;
-    TermistoService.setResource(ops);
+    TermistoService.setResource(ops, "OPS");
     const koulutustyyppi = $scope.ops.koulutustyyppi;
     const kltMap = {
       "koulutustyyppi_2": ".lukioopetus",
