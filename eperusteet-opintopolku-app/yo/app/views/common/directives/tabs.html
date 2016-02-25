@@ -4,7 +4,7 @@
       <a ui-sref="{{tab.url('oppiaine')}}" ng-bind="tab.title.oppiaine | kaanna"></a></li>
     <li ng-show="tabClass('sisalto') && !!simpleLegend" class="legend legend-container">
       <span ng-repeat="tyyppi in kurssiTyypit">
-        <span class="spacer"></span><span class="colorbox" ng-class="'{{tyyppi}}'"></span>
+        <span class="spacer"></span><span class="lukio-colorbox" ng-class="'{{tyyppi}}'"></span>
         <span class="legend-label" ng-bind="tyyppi | kaanna"></span>
       </span>
     </li>
@@ -16,7 +16,7 @@
       <a ui-sref="{{tab.url('kurssi')}}" ng-bind="tab.title.kurssi | kaanna"></a></li>
     <li ng-show="tabClass('sisalto') && !!simpleLegend" class="legend legend-container">
       <span ng-repeat="tyyppi in kurssiTyypit">
-        <span class="spacer"></span><span class="colorbox" ng-class="'{{tyyppi}}'"></span>
+        <span class="spacer"></span><span class="lukio-colorbox" ng-class="'{{tyyppi}}'"></span>
         <span class="legend-label" ng-bind="tyyppi | kaanna"></span>
       </span>
     </li>
