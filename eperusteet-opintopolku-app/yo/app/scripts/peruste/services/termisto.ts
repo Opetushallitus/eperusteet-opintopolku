@@ -74,11 +74,8 @@ epOpintopolkuApp
   this.getWithAvain = function (avain, cached) {
     if (cached) {
       return findTermi(avain)
-    }
-    var deferred = $q.defer();
-    if (cached) {
-      deferred.resolve(findTermi(avain));
     } else {
+    var deferred = $q.defer();
       this.getAll().then(function () {
         deferred.resolve(findTermi(avain));
       });
