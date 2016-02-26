@@ -46,7 +46,7 @@ epOpintopolkuApp
       return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus)(.*)/, '.$1');
     }
 
-    TermistoService.setResource(ops);
+    TermistoService.setResource(ops, "OPS");
 
     const clickHandler = (event) => {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
