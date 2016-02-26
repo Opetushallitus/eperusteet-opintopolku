@@ -19,12 +19,29 @@
 epOpintopolkuApp
 .service('TermistoService', function (PerusteTermistoCRUD, OpsTermistoCRUD, $q, $timeout) {
   //resource is either the peruste or the ops
-  var resources = [];
-  var cached = {};
+  var resources = [], cached = {};
   cached["number"] = 0;
-  var loading = false;
+  let loading = false;
+  const cacheKasitteet = (items) => {
+    console.log(items);
+    _.each(items, (item) => {
+      cached[item.avain] = item;
+    });
+    cached["number"]++;
+  };
+  const CRUD = {
+    OPS: OpsTermistoCRUD.query,
+    PERUSTE: PerusteTermistoCRUD.query
+  };
+  const mapResources = (resrcs) => {
+    console.log(resrcs);
+    return _.map(resrcs, (resource) => {
+      CRUD[resource.type]({resourceId: resource.id})
+      .$promise.then((res) => cacheKasitteet(res))
+    })
+  };
   this.preload = function () {
-    if (resources.length != cached["number"] && !loading) {
+    if ((resources.length != cached["number"]) && !loading) {
       loading = true;
       var self = this;
       $timeout(function () {
@@ -35,31 +52,7 @@ epOpintopolkuApp
     }
   };
   this.getAll = function () {
-    var requests = _.map(resources, (resource) => {
-      if (resource.type == "OPS") {
-        return OpsTermistoCRUD
-                .query({resourceId: resource.id})
-                .$promise
-                .then((res)=> {
-                   _.each(res, (item) => {
-                    cached[item.avain] = item;
-                    cached["number"]++;
-                  });
-                })
-      }
-      if (resource.type == "PERUSTE") {
-        return PerusteTermistoCRUD
-          .query({resourceId: resource.id})
-          .$promise
-          .then((res) => {
-            _.each(res, (item) => {
-              cached[item.avain] = item;
-              cached["number"]++;
-            });
-          })
-      }
-    });
-    return $q.all(requests)
+    return $q.all(mapResources(resources));
   };
 
   this.setResource = (value, type = "PERUSTE") => {
