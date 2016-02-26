@@ -23,7 +23,6 @@ epOpintopolkuApp
   cached["number"] = 0;
   let loading = false;
   const cacheKasitteet = (items) => {
-    console.log(items);
     _.each(items, (item) => {
       cached[item.avain] = item;
     });
@@ -34,7 +33,6 @@ epOpintopolkuApp
     PERUSTE: PerusteTermistoCRUD.query
   };
   const mapResources = (resrcs) => {
-    console.log(resrcs);
     return _.map(resrcs, (resource) => {
       CRUD[resource.type]({resourceId: resource.id})
       .$promise.then((res) => cacheKasitteet(res))
