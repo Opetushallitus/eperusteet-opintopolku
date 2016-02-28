@@ -54,36 +54,11 @@ epOpintopolkuApp
 
     function setMurupolku() {
 
-      $scope.item = _.reduce($scope.navi.sections[2].items, (result, item, index) => {
-          if (item.$selected === true) {
-        item.index = index;
-        result = item;
-      }
-      return result;
-    }, '');
-
-      function findParents(set, index) {
-        var slicedSet = _.take(set, parseInt(index));
-        var found = _.findLast(slicedSet, function (item) {
-          return item.depth === 1;
-        });
-        return found.$oppiaine;
-      }
-      var murupolkuParams = {};
-      if ($scope.item && $scope.item.depth === 0) {
-        murupolkuParams = {
-          parents: null,
-          oppiaineId: oppiaine.id,
-          oppiaineNimi: oppiaine.nimi
-        };
-      }
-      if ($scope.item.depth === 1) {
-        murupolkuParams = {
-          parents: [findParents($scope.navi.sections[2].items, $scope.item.index)],
-          oppiaineId: oppiaine.id,
-          oppiaineNimi: oppiaine.nimi
-        };
-      }
+      let murupolkuParams = {
+        parents: null,
+        oppiaineId: oppiaine.id,
+        oppiaineNimi: oppiaine.nimi
+      };
 
       MurupolkuData.set(murupolkuParams);
 
@@ -106,7 +81,6 @@ epOpintopolkuApp
     };
 
     $scope.$on('$stateChangeSuccess', setMurupolku);
-    setMurupolku();
 
     $timeout(goToFirstVlk);
 
@@ -142,7 +116,6 @@ epOpintopolkuApp
     $scope.perusteOppiaine = oppiainePeruste;
     $scope.perusteOppiaineVlkMap = oppiainePeruste ?
       _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
-
     $scope.vuosiluokkakokonaisuus = vuosiluokkakokonaisuus;
     const laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
 
