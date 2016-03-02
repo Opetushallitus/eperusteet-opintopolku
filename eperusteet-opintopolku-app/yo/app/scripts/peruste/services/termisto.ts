@@ -17,17 +17,29 @@
 'use strict';
 
 epOpintopolkuApp
-.service('TermistoService', function (TermistoCRUD, $q, $timeout) {
+.service('TermistoService', function (PerusteTermistoCRUD, OpsTermistoCRUD, $q, $timeout) {
   //resource is either the peruste or the ops
-  var resource = null;
-  var cached = {};
-  var loading = false;
-  var Resource = {
-    CRUD: TermistoCRUD,
-    params: null
+  var resources = [], cached = {};
+  cached["number"] = 0;
+  let loading = false;
+  const cacheKasitteet = (items) => {
+    _.each(items, (item) => {
+      cached[item.avain] = item;
+    });
+    cached["number"]++;
+  };
+  const CRUD = {
+    OPS: OpsTermistoCRUD.query,
+    PERUSTE: PerusteTermistoCRUD.query
+  };
+  const mapResources = (resrcs) => {
+    return _.map(resrcs, (resource) => {
+      CRUD[resource.type]({resourceId: resource.id})
+      .$promise.then((res) => cacheKasitteet(res))
+    })
   };
   this.preload = function () {
-    if (!cached[resource.id] && !loading) {
+    if ((resources.length != cached["number"]) && !loading) {
       loading = true;
       var self = this;
       $timeout(function () {
@@ -38,32 +50,28 @@ epOpintopolkuApp
     }
   };
   this.getAll = function () {
-    return TermistoCRUD.query({resourceId: resource.id}, function (res) {
-      cached[resource.id] = res;
-    }).$promise;
+    return $q.all(mapResources(resources));
   };
-  this.setResource = function (value) {
-    resource = value;
+
+  this.setResource = (value, type = "PERUSTE") => {
+    value.type = type.toUpperCase();
+    resources.push(value);
   };
 
   function findTermi(avain) {
-    return _.find(cached[resource.id], function (item) {
-      return item.avain === avain;
-    });
+    return cached[avain]
   }
 
   this.getWithAvain = function (avain, cached) {
     if (cached) {
-      return findTermi(avain);
-    }
-    var deferred = $q.defer();
-    if (cached[resource.id]) {
-      deferred.resolve(findTermi(avain));
+      return findTermi(avain)
     } else {
+    var deferred = $q.defer();
       this.getAll().then(function () {
         deferred.resolve(findTermi(avain));
       });
     }
     return deferred.promise;
   };
+
 });
