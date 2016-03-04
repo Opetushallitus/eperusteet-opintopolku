@@ -18,14 +18,14 @@
 
   li > a {
     border: 0px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 550;
     min-width: 135px;
     text-align: center;
     border-radius: 0px;
     padding-top: 16px;
-    padding-right: 19px;
-    padding-left: 19px;
+    padding-right: 8px;
+    padding-left: 8px;
     padding-bottom: 16px;
     background: #ffffff;
     color: #000000;
@@ -47,8 +47,8 @@
 
 .tab-active > a {
   padding-top: 17px !important;
-  padding-right: 20px !important;
-  padding-left: 20px !important;
+  padding-right: 10px !important;
+  padding-left: 10px !important;
   border: 0px !important;
   background: #149ecb !important;
   color: white !important;
@@ -82,7 +82,7 @@
   position: relative;
 }
 
-.colorbox {
+.lukio-colorbox {
   width: 14px;
   height: 14px;
   border-radius: 4px;
