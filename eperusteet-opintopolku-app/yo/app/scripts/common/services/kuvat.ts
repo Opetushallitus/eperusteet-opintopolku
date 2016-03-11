@@ -16,6 +16,7 @@
 
 'use strict';
 
+
 epOpintopolkuApp
   .service('OpsImageService', function ($stateParams, opsBase) {
     this.getOpsId = function() {
@@ -43,6 +44,7 @@ epOpintopolkuApp
         if ( el.attr('src') !== url ) {
           modified = true;
           el.attr('src', OpsImageService.getUrl({id: el.attr('data-uid')}));
+          el.wrap('<a></a>')
         }
       });
       if ( modified ) {
@@ -50,4 +52,20 @@ epOpintopolkuApp
       }
       return text;
     };
-  });
+  })
+
+.directive('img', function(){
+  return {
+    restrict: "E",
+    controller: function ($window, $rootScope) {
+      $('img').click(function(e){
+        var pictureUrl = $(this).attr('src');
+        var href = "https://eperusteet.opintopolku.fi" + pictureUrl;
+        $rootScope.$apply(function(){
+         $window.location = href;
+        })
+      })
+    }
+  }
+});
+
