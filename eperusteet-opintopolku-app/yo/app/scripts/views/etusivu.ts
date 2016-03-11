@@ -44,6 +44,11 @@ epOpintopolkuApp
       tila: 'valmis',
       stateTila: 'root.lukio.tiedot'
     },
+    'koulutustyyppi_23': {
+      tyyppi: 'koulutustyyppi_23',
+      tila: 'valmis',
+      stateTila: 'root.lukio.tiedot'
+    },
     'koulutustyyppi_11': {
       tyyppi: 'koulutustyyppi_11',
       stateTila: 'root.esitys.peruste'
@@ -79,42 +84,43 @@ epOpintopolkuApp
     }
   };
 
-  function getGeneric(key) {
-    var params = paramMap[key];
-    return Perusteet.get(params, function (res) {
+  const getGeneric = (key) => {
+    const params = paramMap[key];
+    return Perusteet.get(params, (res) => {
       perusteet[params.tyyppi] = res.data;
     }).$promise;
-  }
+  };
 
-  var getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
-  var getLukioopetus = _.partial(getGeneric, 'koulutustyyppi_2');
-  var getEsiopetus = _.partial(getGeneric, 'koulutustyyppi_15');
-  var getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
-  var getValma = _.partial(getGeneric, 'koulutustyyppi_18');
-  var getVarhaiskasvatus = _.partial(getGeneric, 'koulutustyyppi_20');
+  const getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
+  const getLukioopetus = _.partial(getGeneric, 'koulutustyyppi_2');
+  const getValmistavaLukioopetus = _.partial(getGeneric, 'koulutustyyppi_23');
+  const getEsiopetus = _.partial(getGeneric, 'koulutustyyppi_15');
+  const getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
+  const getValma = _.partial(getGeneric, 'koulutustyyppi_18');
+  const getVarhaiskasvatus = _.partial(getGeneric, 'koulutustyyppi_20');
 
-  this.fetch = function (cb) {
-    var key = 'koulutustyyppi_1x';
-    var params = paramMap[key]; // jshint ignore:line
-    var amDeferred = Perusteet.get(params, function (res) {
+  this.fetch = (cb) => {
+    const key = 'koulutustyyppi_1x';
+    const params = paramMap[key]; // jshint ignore:line
+    const amDeferred = Perusteet.get(params, (res) => {
       perusteet[key] = res.data;
-      _.each(perusteet[key], function (peruste) {
+      _.each(perusteet[key], (peruste) => {
         peruste.url = $state.href('root.esitys.peruste', {
           perusteId: peruste.id,
           suoritustapa: peruste.koulutustyyppi==='koulutustyyppi_1' ? 'ops':'naytto'
         });
       });
     }).$promise;
-    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getLukioopetus(), getLisaopetus(), getVarhaiskasvatus(), getValma()]).then(function () {
+    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getValmistavaLukioopetus(), getLukioopetus(),
+      getLisaopetus(), getVarhaiskasvatus(), getValma()]).then(() => {
       cb(perusteet);
     });
   };
 
-  var getStateTila = function (tyyppi) {
-    return paramMap[tyyppi].stateTila;
-  };
+  const getStateTila = (tyyppi) => paramMap[tyyppi].stateTila;
 
   this.getPerusopetus = getPerusopetus;
+  this.getValmistavaLukioopetus = getValmistavaLukioopetus;
   this.getLukioopetus = getLukioopetus;
   this.getEsiopetus = getEsiopetus;
   this.getLisaopetus = getLisaopetus;
