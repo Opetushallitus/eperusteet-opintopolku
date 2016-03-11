@@ -54,13 +54,16 @@ epOpintopolkuApp
     };
   })
 
-.directive('img', function(){
+.directive('img', function($location){
+  var home = _.contains($location.$$host, 'testi')
+    ? 'https://testi.eperusteet.opintopolku.fi"'
+    : "https://eperusteet.opintopolku.fi";
   return {
     restrict: "E",
     controller: function ($window, $rootScope) {
       $('img').click(function(e){
         var pictureUrl = $(this).attr('src');
-        var href = "https://eperusteet.opintopolku.fi" + pictureUrl;
+        var href = home + pictureUrl;
         $rootScope.$apply(function(){
          $window.location = href;
         })
