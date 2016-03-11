@@ -55,13 +55,13 @@ epOpintopolkuApp
   })
 
 .directive('img', function($location){
-  var home = _.contains($location.$$host, 'testi')
-    ? 'https://testi.eperusteet.opintopolku.fi"'
-    : "https://eperusteet.opintopolku.fi";
   return {
     restrict: "E",
     controller: function ($window, $rootScope) {
       $('img').click(function(e){
+        var home = _.contains($location.$$host, 'testi')
+          ? 'https://testi.eperusteet.opintopolku.fi"'
+          : "https://eperusteet.opintopolku.fi";
         var pictureUrl = $(this).attr('src');
         var href = home + pictureUrl;
         $rootScope.$apply(function(){
