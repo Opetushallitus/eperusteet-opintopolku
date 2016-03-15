@@ -53,7 +53,7 @@ epOpintopolkuApp
         {
           id: 'sisalto',
           $open: true,
-          items: opsMenuBuilders.rakennaAmopsTekstikappaleMenu(otsikot)
+          items: opsMenuBuilders.rakennaAmopsTekstikappaleMenu(_.cloneDeep($scope.otsikot))
         }
       ]
     };
@@ -64,7 +64,7 @@ epOpintopolkuApp
 
     const currentRootState = '';
 
-    $scope.navi.sections[0].items.unshift({depth: 0, label: 'perusteen-tiedot', link: [currentRootState + '.tiedot']});
+    //$scope.navi.sections[0].items.unshift({depth: 0, label: 'perusteen-tiedot', link: [currentRootState + '.tiedot']});
 
   });
 

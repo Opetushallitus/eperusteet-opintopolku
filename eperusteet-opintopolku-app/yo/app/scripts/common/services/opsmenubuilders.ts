@@ -192,9 +192,25 @@ epOpintopolkuApp
       return menu;
     };
 
-    const rakennaAmopsTekstikappaleMenu = (otsikot) => {
-      return [];
+    const makeMenu = (current, depth, menu, map, otsikot) => {
+      if(_.keys(map).length === menu.length) return menu;
+      let teksti = map[current.id];
+      menu.push({
+        depth: depth,
+        label: (teksti.tekstiKappale !== null) ? teksti.tekstiKappale.nimi : teksti,
+        url: $state.href('root.amops.tekstikappale', {id: teksti.id})
+      });
+      if(current.lapset.length) {
+        depth++;
+        _.each(current.lapset, function(lapsiId) {
+          return makeMenu(map[lapsiId], depth, menu, map, otsikot)})
+      }
+      makeMenu(otsikot.shift(), depth, menu, map, otsikot);
+    };
 
+    const rakennaAmopsTekstikappaleMenu = (otsikot) => {
+      let map = _.indexBy(otsikot, 'id');
+      return makeMenu(otsikot.shift(), 0, [], map, otsikot);
     };
 
     return {
