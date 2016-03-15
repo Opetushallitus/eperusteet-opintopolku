@@ -192,8 +192,14 @@ epOpintopolkuApp
       return menu;
     };
 
+    const rakennaAmopsTekstikappaleMenu = (otsikot) => {
+      return [];
+
+    };
+
     return {
       rakennaOppiaineetMenu: rakennaOppiaineetMenu,
-      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu
+      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu,
+      rakennaAmopsTekstikappaleMenu: rakennaAmopsTekstikappaleMenu
     }
   });

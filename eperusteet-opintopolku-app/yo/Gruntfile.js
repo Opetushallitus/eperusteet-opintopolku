@@ -111,6 +111,12 @@ module.exports = function(grunt) {
         port: 443,
         https: true,
         changeOrigin: true
+      }, {
+        context: '/eperusteet-amosaa-service',
+        host: 'localhost',
+        port: 9030,
+        https: true,
+        changeOrigin: true
       }],
       livereload: {
         options: {
