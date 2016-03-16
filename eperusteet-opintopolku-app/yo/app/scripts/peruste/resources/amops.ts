@@ -33,7 +33,7 @@ epOpintopolkuApp
   .factory('AmopsResource', function ($resource, AmopsAPI) {
     return (id='') =>  ($resource(AmopsAPI.BASE, {},{
       getOps: {method: 'GET', url: AmopsAPI.BASE + AmopsAPI.OPS},
-      getTekstikappale: {method: 'GET', isArray: true, url: AmopsAPI.BASE + AmopsAPI.TEKSTIT[id]},
+      getTekstikappale: {method: 'GET', url: AmopsAPI.BASE + AmopsAPI.TEKSTIT[id]},
       getOtsikot: {method: 'GET', isArray: true, url: AmopsAPI.BASE + AmopsAPI.OTSIKOT}
     }));
   });

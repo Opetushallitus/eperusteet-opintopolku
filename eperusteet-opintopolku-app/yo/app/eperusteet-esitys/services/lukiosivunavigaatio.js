@@ -23,10 +23,11 @@ angular.module('eperusteet.esitys')
   $scope.menuCollapsed = true;
   $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
-  $scope.scrollToHash = function(id){
-    if(id && _.isString(id)) {
-      $state.go('root.lukio.tekstikappale');
-      $location.hash(id);
+  $scope.scrollToHash = function(id, isAmops){
+    var amops = isAmops || null;
+    if(id) {
+      amops ? $state.go('root.amops.tekstikappale') : $state.go('root.lukio.tekstikappale');
+      $location.hash(id + '');
       $rootScope.$broadcast('$locationChangeSuccess');
     }
   };

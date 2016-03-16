@@ -90,10 +90,6 @@ angular.module('eperusteet.esitys')
       epLukioStateService.setState($scope.navi);
     });
 
-    $scope.$on('$stateChangeSuccess', function () {
-      epLukioStateService.setState($scope.navi);
-    });
-
     $scope.currentState = function(){
       var parts = _.words($state.current.name);
       if (_.indexOf(parts, 'oppiaine') > -1){
@@ -157,6 +153,10 @@ angular.module('eperusteet.esitys')
         naviClasses: $scope.naviClasses
       }]
     };
+
+    console.log($scope.oppiaineRakenne.oppiaineet);
+
+    console.log(epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet)),
 
     $scope.navi.sections[0].items.unshift({
       depth: 0,
