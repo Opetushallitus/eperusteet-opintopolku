@@ -90,10 +90,6 @@ angular.module('eperusteet.esitys')
       epLukioStateService.setState($scope.navi);
     });
 
-    $scope.$on('$stateChangeSuccess', function () {
-      epLukioStateService.setState($scope.navi);
-    });
-
     $scope.currentState = function(){
       var parts = _.words($state.current.name);
       if (_.indexOf(parts, 'oppiaine') > -1){
