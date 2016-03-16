@@ -154,10 +154,6 @@ angular.module('eperusteet.esitys')
       }]
     };
 
-    console.log($scope.oppiaineRakenne.oppiaineet);
-
-    console.log(epMenuBuilder.buildLukioOppiaineMenu($scope.oppiaineRakenne.oppiaineet)),
-
     $scope.navi.sections[0].items.unshift({
       depth: 0,
       label: 'perusteen-tiedot',

@@ -21,8 +21,10 @@ epOpintopolkuApp
     $state,
     $stateParams,
     $rootScope,
+    $timeout,
     ops,
     otsikot,
+    MurupolkuData,
     opsMenuBuilders,
     AmopsStateService) {
 
@@ -32,8 +34,8 @@ epOpintopolkuApp
     $rootScope.$on('$locationChangeSuccess', function () {
       AmopsStateService.setState($scope.navi);
     });
-    //TermistoService.setResource(ops, "OPS");
-    //MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
+    //TODO TermistoService.setResource(ops, "AMOPS");
+
     /*function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
       if (ohjeEl.length === 0) {
@@ -92,39 +94,72 @@ epOpintopolkuApp
       AmopsStateService.setState($scope.navi);
     });
 
+    MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
+
   })
 
   .controller('AmopsTekstikappaleController', function(
     $scope,
     $rootScope,
+    $location,
+    $timeout,
     tekstikappale,
+    Kieli,
     MurupolkuData) {
     $scope.tekstikappale = tekstikappale.tekstiKappale;
     $scope.lapset = tekstikappale.lapset;
 
-   /* $scope.$on('$stateChangeSuccess', function () {
-      setMurupolku();
-    });
+    const getName = (lapset, id) => {
+      return _.filter(lapset, (lapsi) => lapsi.id + '' === id + '')[0];
+    };
 
-    function setMurupolku() {
-      MurupolkuData.set({osanId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
+    $timeout(() => {
+      var hash = $location.hash();
+      var lapsi = hash ? getName($scope.lapset, hash) : false;
+      if (lapsi) {
+        MurupolkuData.set({
+          tekstikappaleId: lapsi.id,
+          tekstikappaleNimi: lapsi.tekstiKappale.nimi
+        });
+      }
+      else {
+        MurupolkuData.set({tekstikappaleId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
+      }
+    },50);
 
-      $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item, index) {
-        if (item.$selected === true) {
-          item.index = index;
-          result = item;
+    $scope.links = {
+      prev: null,
+      next: null
+    };
+
+    const checkPrevNext = () => {
+      var items = $scope.navi.sections[0].items;
+      var me = _.findIndex(items, (item) => {
+        return item.$id + '' === tekstikappale.id + '';
+      });
+      if (me === -1) {
+        return;
+      }
+      var i = me + 1;
+      var meDepth = items[me].depth;
+      for (; i < items.length; ++i) {
+        if (items[i].depth <= meDepth) {
+          break;
         }
-        return result;
-      }, '');
-
-      function findParent(set, child) {
-        return set[child.$parent].$osa.tekstiKappale;
       }
-      if ($scope.sectionItem && $scope.sectionItem.depth > 1) {
-        MurupolkuData.set('parents', [findParent($scope.navi.sections[0].items, $scope.sectionItem)]);
+      $scope.links.next = i < items.length ? items[i] : null;
+      i = me - 1;
+      for (; i >= 0; --i) {
+        if (items[i].depth <= meDepth) {
+          break;
+        }
       }
-    }*/
+      $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
+    }
 
-  })
+    $scope.$on('amops:stateSet', checkPrevNext);
+    checkPrevNext();
+
+  });
 
 
