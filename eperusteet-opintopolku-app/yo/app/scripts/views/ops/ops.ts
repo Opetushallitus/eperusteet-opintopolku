@@ -19,6 +19,8 @@ epOpintopolkuApp
   .controller('OpsController', function(
     $scope,
     $state,
+    $location,
+    $window,
     TermistoService,
     otsikot,
     ops) {
@@ -36,4 +38,12 @@ epOpintopolkuApp
     if ($state.is('root.ops')) {
       $state.go(kltMap[koulutustyyppi], {location: 'replace'})
     }
+    $scope.returnToYlops = () => {
+      const isTestEnvironment = _.indexOf(_.words($location.absUrl()), 'testi');
+      $window.location.href = isTestEnvironment ?
+      'https://testi.virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/'
+      + $scope.ops.id + '/tiedot' :
+      'https://virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/'
+      + $scope.ops.id + '/tiedot';
+    };
   });

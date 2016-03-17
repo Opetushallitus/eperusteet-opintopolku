@@ -53,7 +53,6 @@ epOpintopolkuApp
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
 
-
     $scope.naviClasses = (item) => {
       var classes = ['depth' + item.depth];
       if (item.$selected) {

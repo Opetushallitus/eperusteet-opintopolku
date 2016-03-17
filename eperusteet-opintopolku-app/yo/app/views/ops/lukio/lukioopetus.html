@@ -17,7 +17,7 @@ European Union Public Licence for more details.
 <div>
   <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
   <div ng-if="ops.tila !== 'julkaistu'" class="alert alert-info">
-    <a class="palata-btn btn btn-primary pull-right" ng-href="https://virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/{{ops.id}}/tiedot"
+    <a class="palata-btn btn btn-primary pull-right" ng-click="returnToYlops()"
        ng-bind="'palata-ops-tyokaluun' | kaanna"></a>
     <h4 kaanna="'ops-esikatselu'"></h4>
     <p kaanna="'esikatselu-varoitus'"></p>
