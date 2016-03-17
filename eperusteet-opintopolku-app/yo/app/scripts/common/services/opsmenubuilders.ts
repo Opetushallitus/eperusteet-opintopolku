@@ -192,8 +192,46 @@ epOpintopolkuApp
       return menu;
     };
 
+    const hasChild = (allChildren, id) => {
+      return _.includes(allChildren, id);
+    };
+
+    const makeMenu = (current, depth, menu, map, otsikot, parent, isChild) => {
+      if(!otsikot.length) return menu;
+      let teksti = map[current.id];
+      if (teksti.tekstiKappale) {
+        menu.push({
+          depth: depth,
+          $hidden: depth > 0,
+          parent: parent,
+          $id: teksti.id,
+          label: teksti.tekstiKappale.nimi,
+          url: $state.href('root.amops.tekstikappale', {tekstikappaleId: teksti.id})
+        });
+      }
+      if(current.lapset.length) {
+        depth++;
+        _.each(current.lapset, function(lapsiId) {
+          otsikot.splice(_.indexOf(otsikot, map[lapsiId]),1);
+          return makeMenu(map[lapsiId], depth, menu, map, otsikot, current.id, isChild)})
+      }
+      let next = otsikot.shift();
+      if (next && isChild(next.id)) return makeMenu(next, depth, menu, map, otsikot, parent, isChild);
+      else return makeMenu(next, -1, menu, map, otsikot, null, isChild)
+
+    };
+
+    const rakennaAmopsTekstikappaleMenu = (otsikot) => {
+      let map = _.indexBy(otsikot, 'id');
+      let children = _.reduce(otsikot, (allChildren, teksti) => {
+        return allChildren.concat(teksti.lapset);
+      },[]);
+      return makeMenu(otsikot.shift(), -1, [], map, otsikot, null, _.partial(hasChild, children));
+    };
+
     return {
       rakennaOppiaineetMenu: rakennaOppiaineetMenu,
-      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu
+      rakennaVuosiluokkakokonaisuuksienMenu: rakennaVuosiluokkakokonaisuuksienMenu,
+      rakennaAmopsTekstikappaleMenu: rakennaAmopsTekstikappaleMenu
     }
   });

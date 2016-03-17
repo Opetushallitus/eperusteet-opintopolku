@@ -355,13 +355,28 @@ epOpintopolkuApp
       'root.ops.lukioopetus.kurssi.tavoitteet': {
         parent: 'root.ops.lukioopetus.kurssi',
         label: 'yleiset-tavoitteet'
-      }
+      },
+      'root.ops.amops':{
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.amops.tiedot': {
+        parent: 'root.ops.amops',
+        label: 'opetussuunnitelman-tiedot'
+      },
+      'root.amops.tekstikappale': {
+        parent: 'root.ops.amops',
+        useId: 'tekstikappaleId',
+        useData: 'tekstikappaleNimi',
+        customParents: true
+      },
     };
 
     function perusTaiYksinkertainen(state) {
       return _.contains(state, 'perusopetus') ||
         _.contains(state, 'esiopetus') ||
-        _.contains(state, 'lisaopetus');
+        _.contains(state, 'lisaopetus') ||
+        _.contains(state, 'amops')
     }
 
     function getPath(state) {
@@ -382,7 +397,7 @@ epOpintopolkuApp
               treeItem.params = perusTaiYksinkertainen(state) ? {tekstikappaleId: parent.id} : {osanId: parent.id};
               treeItem.label = parent.perusteenOsa.nimi;
             } else {
-              treeItem.params = {oppiaineId: parent.id};
+              treeItem.params = perusTaiYksinkertainen(state) ? {tekstikappaleId: parent.id} : {osanId: parent.id};
               treeItem.label = parent.nimi;
             }
             tree.push(treeItem);
