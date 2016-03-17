@@ -13,10 +13,10 @@
 <h2 class="vlk-otsikko" ng-bind="currentVlkCategory | kaanna"></h2>
 
 <div ng-show="oppiaine.tyyppi === 'yhteinen'">
-  <div esitys-teksti="vlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tehtava"></div>
-  <div esitys-teksti="vlk.tyotavat" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tyotavat"></div>
-  <div esitys-teksti="vlk.ohjaus" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].ohjaus"></div>
-  <div esitys-teksti="vlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].arviointi"></div>
+  <div show-all=true esitys-teksti="vlk.tehtava" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tehtava"></div>
+  <div show-all=true esitys-teksti="vlk.tyotavat" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].tyotavat"></div>
+  <div show-all=true esitys-teksti="vlk.ohjaus" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].ohjaus"></div>
+  <div show-all=true esitys-teksti="vlk.arviointi" esitys-peruste="perusteOppiaineVlkMap[vlk._vuosiluokkakokonaisuus].arviointi"></div>
 </div>
 
 <p class="vuosiluokkailmoitus alert alert-info" ng-show="!oppiaine.koosteinen && noYleistavoitteet() && missingVlk()" kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'"></p>
