@@ -196,10 +196,44 @@ epOpintopolkuApp
       return _.includes(allChildren, id);
     };
 
-    const makeMenu = (current, depth, menu, map, otsikot, parent, isChild) => {
+    interface Teksti {
+      id: number,
+      tunniste: string,
+      lapset: Array<string>,
+      tekstiKappale?: any,
+      pakollinen: boolean,
+      valmis: boolean
+    }
+
+    interface hasChild {
+      (id: number) : boolean;
+    }
+
+    interface MenuItem {
+      depth: number,
+      $hidden: boolean,
+      parent: number,
+      $id: number,
+      label: string,
+      url: string
+    }
+
+    interface MenuMaker {
+      (current: Teksti,
+       depth: number,
+       menu: Array<MenuItem>,
+       map: any,
+       otsikot: Array<Teksti>,
+       isChild: hasChild,
+       parent?: number) : Array<MenuItem>
+    }
+
+    let makeMenu: MenuMaker;
+
+    makeMenu = (current, depth, menu, map, otsikot, isChild, parent) => {
       if(!otsikot.length) return menu;
       let teksti = map[current.id];
-      if (teksti.tekstiKappale) {
+      if (parent) {
         menu.push({
           depth: depth,
           $hidden: depth > 0,
@@ -211,22 +245,24 @@ epOpintopolkuApp
       }
       if(current.lapset.length) {
         depth++;
-        _.each(current.lapset, function(lapsiId) {
+        _.each(current.lapset, function(lapsiId:string) {
           otsikot.splice(_.indexOf(otsikot, map[lapsiId]),1);
-          return makeMenu(map[lapsiId], depth, menu, map, otsikot, current.id, isChild)})
+          return makeMenu(map[lapsiId], depth, menu, map, otsikot, isChild, current.id)})
       }
       let next = otsikot.shift();
-      if (next && isChild(next.id)) return makeMenu(next, depth, menu, map, otsikot, parent, isChild);
-      else return makeMenu(next, -1, menu, map, otsikot, null, isChild)
+      if (next && isChild(next.id)) return makeMenu(next, depth, menu, map, otsikot, isChild, parent);
+      else return makeMenu(next, -1, menu, map, otsikot, isChild, null)
 
     };
 
-    const rakennaAmopsTekstikappaleMenu = (otsikot) => {
-      let map = _.indexBy(otsikot, 'id');
+    const rakennaAmopsTekstikappaleMenu = (otsikot:Array<Teksti>, rootInt:number): Array<MenuItem> => {
+      const map = _.indexBy(otsikot, 'id');
+      const root = _.filter(otsikot, {id: rootInt})[0];
       let children = _.reduce(otsikot, (allChildren, teksti) => {
         return allChildren.concat(teksti.lapset);
       },[]);
-      return makeMenu(otsikot.shift(), -1, [], map, otsikot, null, _.partial(hasChild, children));
+      let otsikotWithoutRoot = _.filter(otsikot, (o) => o.id != rootInt);
+      return makeMenu(root, -1, [], map, otsikotWithoutRoot, _.partial(hasChild, children), null);
     };
 
     return {

@@ -30,6 +30,7 @@ epOpintopolkuApp
 
     $scope.isNaviVisible = _.constant(true);
     $scope.ops = ops;
+    console.log(ops);
     $scope.otsikot = otsikot;
     $rootScope.$on('$locationChangeSuccess', function () {
       AmopsStateService.setState($scope.navi);
@@ -72,6 +73,7 @@ epOpintopolkuApp
       return classes;
     };
 
+
     $scope.navi = {
       header: 'amops',
       showOne: true,
@@ -79,7 +81,7 @@ epOpintopolkuApp
         title: 'amops-sisallöt',
         id: 'sisalto',
         include: 'views/amops/sivunavi.html',
-        items: opsMenuBuilders.rakennaAmopsTekstikappaleMenu(_.cloneDeep($scope.otsikot)),
+        items: opsMenuBuilders.rakennaAmopsTekstikappaleMenu(_.cloneDeep($scope.otsikot), ops._teksti),
         naviClasses: $scope.naviClasses
       }]
     };
@@ -155,7 +157,7 @@ epOpintopolkuApp
         }
       }
       $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
-    }
+    };
 
     $scope.$on('amops:stateSet', checkPrevNext);
     checkPrevNext();
