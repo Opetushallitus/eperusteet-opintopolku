@@ -39,7 +39,7 @@ epOpintopolkuApp
       $state.go(kltMap[koulutustyyppi], {location: 'replace'})
     }
     $scope.returnToYlops = () => {
-      const isTestEnvironment = _.indexOf(_.words($location.absUrl()), 'testi');
+      const isTestEnvironment = _.includes(_.words($location.absUrl()), 'testi');
       $window.location.href = isTestEnvironment ?
       'https://testi.virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/'
       + $scope.ops.id + '/tiedot' :
