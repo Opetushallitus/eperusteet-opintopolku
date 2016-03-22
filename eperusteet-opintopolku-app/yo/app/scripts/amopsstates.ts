@@ -34,4 +34,4 @@ epOpintopolkuApp
           AmopsResource(tekstikappaleId).getTekstikappale().$promise,
       }
     })
-})
+});

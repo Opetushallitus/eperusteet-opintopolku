@@ -546,6 +546,7 @@ epOpintopolkuApp
               })
           },
           opsResource: (OpsResource, ops) => OpsResource(ops.tila === "julkaistu"),
+          opsPerusteResource: (OpsPerusteResource, ops) => OpsPerusteResource(ops.tila === "julkaistu"),
           otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({opsId})
             .$promise.then((res) => {
               return res;

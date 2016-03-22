@@ -44,11 +44,11 @@ epOpintopolkuApp
     })
   })
 
-  .factory('opsPerusteResource', function ($resource, opsBase) {
-    return $resource(opsBase.OPS, {opsId: '@id'}, {
-      getVlkPeruste: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId/peruste', cache: true},
-      getOppiainePeruste: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/peruste', cache: true}
-    })
+  .factory('OpsPerusteResource', function ($resource, opsBase) {
+    return (useCache = false) => ($resource(opsBase.OPS, {opsId: '@id'}, {
+      getVlkPeruste: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId/peruste', cache: useCache},
+      getOppiainePeruste: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/peruste', cache: useCache}
+    }));
   })
 
   .factory('OpsKuvat', function ($resource, opsBase) {
