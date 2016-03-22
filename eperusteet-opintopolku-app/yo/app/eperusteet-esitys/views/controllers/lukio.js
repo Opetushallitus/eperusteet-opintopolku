@@ -46,6 +46,12 @@ angular.module('eperusteet.esitys')
     $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
     TermistoService.setResource(peruste);
 
+    $scope.scrollToHash = function(id){
+      $state.go('root.lukio.tekstikappale');
+      $location.hash(id + '');
+      $rootScope.$broadcast('$locationChangeSuccess');
+    };
+
     function clickHandler(event) {
       var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
       if (ohjeEl.length === 0) {

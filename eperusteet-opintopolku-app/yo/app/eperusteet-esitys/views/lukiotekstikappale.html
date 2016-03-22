@@ -4,15 +4,33 @@
 <termisto-tekstikentta tekstikentta="tekstikappale.teksti"></termisto-tekstikentta>
 
 <div ng-repeat="lapsi in lapset" id="{{lapsi.$osa.id}}">
-  <h2 ng-bind="lapsi.$osa.nimi | kaanna"></h2>
+  <span>
+    <span class="lukio-tekstikappale-h2" ng-bind="lapsi.$osa.nimi | kaanna"></span>
+    <span class="teksti-linkki">
+      <a href="#" ng-click="scrollToHash(lapsi.$osa.id)" icon-role="new-window">
+      </a>
+    </span>
+  </span>
   <termisto-tekstikentta tekstikentta="lapsi.$osa.teksti"></termisto-tekstikentta>
 
   <div ng-repeat="alilapsi in lapsi.lapset" id="{{alilapsi.$osa.id}}">
-    <h3 ng-bind="alilapsi.$osa.nimi | kaanna"></h3>
+    <span>
+      <span class="lukio-tekstikappale-h2" ng-bind="alilapsi.$osa.nimi  | kaanna"></span>
+      <span class="teksti-linkki" id="{{lapsi.$osa.id}}">
+        <a href="#" ng-click="scrollToHash(alilapsi.$osa.id)" icon-role="new-window">
+        </a>
+      </span>
+    </span>
     <termisto-tekstikentta tekstikentta="alilapsi.$osa.teksti"></termisto-tekstikentta>
 
     <div ng-repeat="alialilapsi in alilapsi.lapset" id="{{alialilapsi.$osa.id}}">
-      <h4 ng-bind="alialilapsi.$osa.nimi | kaanna"></h4>
+      <span>
+        <span class="lukio-tekstikappale-h2" ng-bind="alialilapsi.$osa.nimi  | kaanna"></span>
+        <span class="teksti-linkki" id="{{lapsi.$osa.id}}">
+          <a href="#" ng-click="scrollToHash(alialilapsi.$osa.id)" icon-role="new-window">
+          </a>
+        </span>
+      </span>
       <termisto-tekstikentta tekstikentta="alialilapsi.$osa.teksti"></termisto-tekstikentta>
     </div>
   </div>
