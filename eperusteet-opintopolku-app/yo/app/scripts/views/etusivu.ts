@@ -18,9 +18,9 @@
 
 epOpintopolkuApp
 .service('UusimmatPerusteetService', function ($q, Perusteet, $state, Kieli) {
-  var uikieli = Kieli.getUiKieli();
-  var perusteet = {};
-  var paramMap = {
+  const uikieli = Kieli.getUiKieli();
+  let perusteet = {};
+  const paramMap = {
     'koulutustyyppi_1x': {
       nimi: '',
       koulutusala: '',
@@ -81,6 +81,11 @@ epOpintopolkuApp
       tyyppi: 'koulutustyyppi_18',
       tila: 'valmis',
       stateTila: ''
+    },
+    'koulutustyyppi_22': {
+      tyyppi: 'koulutustyyppi_22',
+      tila: 'valmis',
+      stateTila: 'root.esiopetus.tiedot'
     }
   };
 
@@ -92,6 +97,7 @@ epOpintopolkuApp
   };
 
   const getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
+  const getValmistavaPerusopetus = _.partial(getGeneric, 'koulutustyyppi_22');
   const getLukioopetus = _.partial(getGeneric, 'koulutustyyppi_2');
   const getValmistavaLukioopetus = _.partial(getGeneric, 'koulutustyyppi_23');
   const getEsiopetus = _.partial(getGeneric, 'koulutustyyppi_15');
@@ -120,6 +126,7 @@ epOpintopolkuApp
   const getStateTila = (tyyppi) => paramMap[tyyppi].stateTila;
 
   this.getPerusopetus = getPerusopetus;
+  this.getValmistavaPerusopetus = getValmistavaPerusopetus;
   this.getValmistavaLukioopetus = getValmistavaLukioopetus;
   this.getLukioopetus = getLukioopetus;
   this.getEsiopetus = getEsiopetus;
@@ -139,16 +146,10 @@ epOpintopolkuApp
   $scope.kieli = Kieli.getSisaltokieli();
   $scope.UusimmatPerusteetService = UusimmatPerusteetService;
 
-  UusimmatPerusteetService.fetch(function (res) {
+  UusimmatPerusteetService.fetch( (res) => {
     $scope.uusimmat = res;
-
-    var uusimmatLista = [];
-
-    _.each(res, function (n) {
-      _.each(n, function (m) {
-        uusimmatLista.push(m);
-      });
-    });
+    let uusimmatLista = [];
+    _.each(res, (n) => uusimmatLista = _(uusimmatLista).concat(n).value());
 
     // järjestetään uusimman mukaan
     uusimmatLista =_(uusimmatLista).chain()
@@ -161,12 +162,12 @@ epOpintopolkuApp
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
 
-  var MONTH_OFFSET = 6;
-  var tempDate = new Date();
+  const MONTH_OFFSET = 6;
+  let tempDate = new Date();
   tempDate.setMonth(tempDate.getMonth() - MONTH_OFFSET);
-  var alkaen = tempDate.getTime();
+  const alkaen = tempDate.getTime();
 
-  TiedotteetCRUD.query({alkaen: alkaen , vainJulkiset: true}, function (res) {
+  TiedotteetCRUD.query({alkaen: alkaen , vainJulkiset: true}, (res) => {
     $scope.tiedotteet = res;
   });
 })
@@ -174,7 +175,7 @@ epOpintopolkuApp
 .controller('TiedoteViewController', function ($scope, TiedotteetCRUD, $stateParams, MurupolkuData) {
   $scope.tiedote = null;
 
-  TiedotteetCRUD.get({tiedoteId: $stateParams.tiedoteId}, function (tiedote) {
+  TiedotteetCRUD.get({tiedoteId: $stateParams.tiedoteId}, (tiedote) => {
     $scope.tiedote = tiedote;
     MurupolkuData.set('tiedoteNimi', tiedote.otsikko);
   });
@@ -191,13 +192,13 @@ epOpintopolkuApp
       'limit': '=',
       'limiter': '='
     },
-    controller: function ($scope) {
+    controller: ($scope) => {
       $scope.isVisible = false;
       $scope.linktext = 'sivupalkki-näytä-kaikki';
-      $scope.$watch('model', function () {
+      $scope.$watch('model', () => {
         $scope.isVisible = $scope.model.length > $scope.limit;
       });
-      $scope.toggle = function () {
+      $scope.toggle = () => {
         if ($scope.limiter === $scope.limit) {
           $scope.limiter = $scope.model.length;
           $scope.linktext = 'sivupalkki-piilota';
