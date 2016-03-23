@@ -86,6 +86,11 @@ epOpintopolkuApp
       tyyppi: 'koulutustyyppi_22',
       tila: 'valmis',
       stateTila: 'root.esiopetus.tiedot'
+    },
+    'koulutustyyppi_14': {
+      tyyppi: 'koulutustyyppi_14',
+      tila: 'valmis',
+      stateTila: 'root.lukio.tiedot'
     }
   };
 
@@ -104,6 +109,7 @@ epOpintopolkuApp
   const getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
   const getValma = _.partial(getGeneric, 'koulutustyyppi_18');
   const getVarhaiskasvatus = _.partial(getGeneric, 'koulutustyyppi_20');
+  const getAikuisLukio = _.partial(getGeneric, 'koulutustyyppi_14');
 
   this.fetch = (cb) => {
     const key = 'koulutustyyppi_1x';
@@ -117,8 +123,8 @@ epOpintopolkuApp
         });
       });
     }).$promise;
-    $q.all([amDeferred, getPerusopetus(), getEsiopetus(), getValmistavaLukioopetus(), getLukioopetus(),
-      getLisaopetus(), getVarhaiskasvatus(), getValma()]).then(() => {
+    $q.all([amDeferred, getPerusopetus(), getValmistavaPerusopetus(), getEsiopetus(), getValmistavaLukioopetus(),
+      getLukioopetus(), getLisaopetus(), getVarhaiskasvatus(), getValma(), getAikuisLukio()]).then(() => {
       cb(perusteet);
     });
   };
@@ -133,6 +139,7 @@ epOpintopolkuApp
   this.getLisaopetus = getLisaopetus;
   this.getVarhaiskasvatus = getVarhaiskasvatus;
   this.getValma = getValma;
+  this.getAikuisLukio = getAikuisLukio;
   this.getStateTila = getStateTila;
 })
 
