@@ -13,6 +13,7 @@
   </div>
 </div>
 
+
 <div class="row row-margin">
   <div class="col-xs-6 col-sm-4">
     <strong>
@@ -24,6 +25,19 @@
   </div>
 </div>
 
+
+<div class="row row-margin">
+  <div class="col-xs-6 col-sm-4">
+    <strong>
+      <span kaanna="'maarayksen-paatospaivamaara'"></span>
+    </strong>
+  </div>
+  <div class="col-xs-6 col-sm-8">
+    <span pvm="peruste.paatospvm"></span>
+  </div>
+</div>
+
+
 <div ng-if="peruste.maarayskirje && peruste.maarayskirje.url" class="row row-margin">
   <div class="col-xs-6 col-sm-4">
     <strong>
@@ -34,6 +48,7 @@
     <a ng-href="{{ peruste.maarayskirje.url | kaanna }}">{{ peruste.maarayskirje.url | kaanna }}</a>
   </div>
 </div>
+
 
 <div class="row row-margin" ng-if="peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0">
   <div class="col-xs-6 col-sm-4">
@@ -151,6 +166,7 @@
   </div>
 </div>
 
+
 <div class="row row-margin" ng-if="koodisto.length > 0">
   <div class="col-xs-12 col-sm-4">
     <strong>
@@ -179,6 +195,7 @@
     <div ng-if="koodisto.length === 0" kaanna="'ei-tutkintonimikkeita'"></div>
   </div>
 </div>
+
 
 <div class="row row-margin" ng-if="!!peruste.kuvaus">
   <div class="col-xs-12 col-sm-4">
