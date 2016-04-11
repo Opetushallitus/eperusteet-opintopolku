@@ -152,6 +152,7 @@ epOpintopolkuApp
   });
 
   $rootScope.$on('$stateNotFound', function(event, toState) {
+    console.warn(toState);
     virheService.virhe({state: toState.to});
   });
 

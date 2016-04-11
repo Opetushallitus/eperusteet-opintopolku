@@ -868,7 +868,7 @@ epOpintopolkuApp
 
       /* LUKIO OPS */
       .state('root.ops.lukioopetus', {
-        url: '/lukioopetus',
+        url: '/lukiokoulutus',
         templateUrl: 'views/ops/lukio/lukioopetus.html',
         controller: 'OpsLukioopetusController',
         resolve: {
