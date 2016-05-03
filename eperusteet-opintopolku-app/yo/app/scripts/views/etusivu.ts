@@ -157,13 +157,13 @@ epOpintopolkuApp
     $scope.uusimmat = res;
     let uusimmatLista = [];
     _.each(res, (n) => uusimmatLista = _(uusimmatLista).concat(n).value());
+    console.log(res);
 
     // järjestetään uusimman mukaan
     uusimmatLista =_(uusimmatLista).chain()
       .sortBy("luotu")
       .reverse() // desc
       .value();
-
     $scope.uusimmatLista = uusimmatLista;
   });
 

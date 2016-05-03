@@ -80,11 +80,12 @@
                 <span kaanna="'navi.ammatillinenaikuiskoulutus'"></span>
               </a>
             </li>
-            <!--<li class="peruste-linkki">
-              <a ui-sref="root.selaus.valmentavakoulutus">
-                <span kaanna="'navi.valmentavakoulutus'"></span>
-              </a>
-            </li>-->
+            <li class="peruste-linkki">
+              <a ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_5'][0].id, suoritustapa: 'ops'})" ng-bind="uusimmat['koulutustyyppi_5'][0].nimi | kaanna"></a>
+            </li>
+            <li class="peruste-linkki">
+              <a ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: 'ops'})" ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna"></a>
+            </li>
           </ul>
         </div>
       </div>
@@ -104,7 +105,7 @@
                 <span ng-bind="peruste.nimi | kaanna"></span>
               </a>
               <p>
-                <span kaanna="peruste.luotu | date"></span>
+                <span ng-bind="peruste.luotu | date"></span>
                 <span kaanna="peruste.koulutustyyppi"></span>
               </p>
             </li>
