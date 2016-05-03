@@ -23,6 +23,10 @@ $border-color: #0C566E;
 }
 
 .esitys {
+  td {
+    padding: 2px 2px 2px 4px;
+  }
+
   .tutkinnonosat-tools {
     .tutkinnonosat-rajaus {
       max-width: 450px;
@@ -97,15 +101,15 @@ $border-color: #0C566E;
       border: 1px solid $border-color;
 
       .arviointi-otsikko {
-	      background: $border-color;
-	      color: #fff;
-	      padding: 5px;
+        background: $border-color;
+        color: #fff;
+        padding: 5px;
       }
       .arviointi-sisalto {
-	      padding: 10px;
-	      h4 {
-	        font-weight: bold;
-	      }
+        padding: 10px;
+        h4 {
+          font-weight: bold;
+        }
       }
       .arviointi-okriteeri {
         width: 15%;
