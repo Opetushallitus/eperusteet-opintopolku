@@ -153,14 +153,14 @@ epOpintopolkuApp
   $scope.kieli = Kieli.getSisaltokieli();
   $scope.UusimmatPerusteetService = UusimmatPerusteetService;
 
-  UusimmatPerusteetService.fetch( (res) => {
+  UusimmatPerusteetService.fetch((res) => {
     $scope.uusimmat = res;
     let uusimmatLista = [];
     _.each(res, (n) => uusimmatLista = _(uusimmatLista).concat(n).value());
 
     // järjestetään uusimman mukaan
     uusimmatLista =_(uusimmatLista).chain()
-      .sortBy("muokattu")
+      .sortBy("luotu")
       .reverse() // desc
       .value();
 
