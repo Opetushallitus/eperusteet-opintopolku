@@ -144,7 +144,7 @@ epOpintopolkuApp
 })
 
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
-  TiedotteetCRUD, Utils, Kieli) {
+  TiedotteetCRUD, Utils, Kieli, Perusteet) {
   MurupolkuData.setTitle(null);
   $scope.uusimmat = {};
   $scope.uusimmatLista = [];
@@ -153,19 +153,8 @@ epOpintopolkuApp
   $scope.kieli = Kieli.getSisaltokieli();
   $scope.UusimmatPerusteetService = UusimmatPerusteetService;
 
-  UusimmatPerusteetService.fetch((res) => {
-    $scope.uusimmat = res;
-    let uusimmatLista = [];
-    _.each(res, (n) => uusimmatLista = _(uusimmatLista).concat(n).value());
-    console.log(res);
-
-    // järjestetään uusimman mukaan
-    uusimmatLista =_(uusimmatLista).chain()
-      .sortBy("luotu")
-      .reverse() // desc
-      .value();
-    $scope.uusimmatLista = uusimmatLista;
-  });
+  Perusteet.uusimmat((res) => $scope.uusimmatLista = res);
+  UusimmatPerusteetService.fetch((res) => $scope.uusimmat = res);
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
 
