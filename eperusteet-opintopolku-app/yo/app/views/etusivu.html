@@ -48,13 +48,13 @@
       <div class="sisalto-box">
         <h2 kaanna="'etusivu.valtakunnalliset-perusteet'"></h2>
         <div class="linkit">
-          <ul>
+          <ul ng-if="uusimmat">
             <li class="peruste-linkki">
               <a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})" ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna"></a>
             </li>
-            <li class="peruste-linkki">
-              <a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_22'][0].id})" ng-bind="uusimmat['koulutustyyppi_22'][0].nimi | kaanna"></a>
-            </li>
+            <!-- <li class="peruste-linkki"> -->
+            <!--   <a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_22'][0].id})" ng-bind="uusimmat['koulutustyyppi_22'][0].nimi | kaanna"></a> -->
+            <!-- </li> -->
             <li class="peruste-linkki">
               <a ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_16'][0].id})" ng-bind="uusimmat['koulutustyyppi_16'][0].nimi | kaanna"></a>
             </li>
@@ -64,12 +64,12 @@
             <li class="peruste-linkki">
               <a ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_2'][0].id})" ng-bind="uusimmat['koulutustyyppi_2'][0].nimi | kaanna"></a>
             </li>
-            <li class="peruste-linkki">
-              <a ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_23'][0].id})" ng-bind="uusimmat['koulutustyyppi_23'][0].nimi | kaanna"></a>
-            </li>
-            <li class="peruste-linkki">
-              <a ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_14'][0].id})" ng-bind="uusimmat['koulutustyyppi_14'][0].nimi | kaanna"></a>
-            </li>
+            <!-- <li class="peruste-linkki"> -->
+            <!--   <a ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_23'][0].id})" ng-bind="uusimmat['koulutustyyppi_23'][0].nimi | kaanna"></a> -->
+            <!-- </li> -->
+            <!-- <li class="peruste-linkki"> -->
+            <!--   <a ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_14'][0].id})" ng-bind="uusimmat['koulutustyyppi_14'][0].nimi | kaanna"></a> -->
+            <!-- </li> -->
             <li class="peruste-linkki">
               <a ui-sref="root.selaus.ammatillinenperuskoulutus">
                 <span kaanna="'navi.ammatillinenperuskoulutus'"></span>
@@ -80,9 +80,9 @@
                 <span kaanna="'navi.ammatillinenaikuiskoulutus'"></span>
               </a>
             </li>
-            <li class="peruste-linkki">
-              <a ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_5'][0].id, suoritustapa: 'ops'})" ng-bind="uusimmat['koulutustyyppi_5'][0].nimi | kaanna"></a>
-            </li>
+            <!-- <li class="peruste-linkki"> -->
+            <!--   <a ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_5'][0].id, suoritustapa: 'ops'})" ng-bind="uusimmat['koulutustyyppi_5'][0].nimi | kaanna"></a> -->
+            <!-- </li> -->
             <li class="peruste-linkki">
               <a ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: 'ops'})" ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna"></a>
             </li>

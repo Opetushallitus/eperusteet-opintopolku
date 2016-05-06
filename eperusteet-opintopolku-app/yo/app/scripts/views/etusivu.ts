@@ -146,7 +146,6 @@ epOpintopolkuApp
 .controller('EtusivuController', function ($scope, UusimmatPerusteetService, MurupolkuData,
   TiedotteetCRUD, Utils, Kieli, Perusteet) {
   MurupolkuData.setTitle(null);
-  $scope.uusimmat = {};
   $scope.uusimmatLista = [];
   $scope.tiedotteet = [];
   $scope.naytto = {limit: 5, shown: 5};
