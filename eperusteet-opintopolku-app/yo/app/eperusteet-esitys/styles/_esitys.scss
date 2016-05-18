@@ -202,5 +202,18 @@ $border-color: #0C566E;
   font-size: 16px;
 }
 
+.esitysteksti {
+  .esitys-peruste {
+    .nayta-peruste {
+    }
+    .peruste-teksti {
+      margin-top: 5px;
+      padding: 5px;
+    }
+  }
+  .esitys-paikallinen {
+  }
+}
+
 @import "sivunavi";
 @import "perusopetus";
