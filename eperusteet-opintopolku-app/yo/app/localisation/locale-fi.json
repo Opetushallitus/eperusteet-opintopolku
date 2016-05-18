@@ -211,9 +211,9 @@
   "tyhjenna-rajaus-tooltip": "Tyhjennä rajaus (Esc)",
   "tyhjenna-valinnat": "Palauta valinnat alkutilaan",
   "valinnaiset-osaamistavoitteet": "Valinnaiset osaamistavoitteet",
-  "valtakunnalliset-pakolliset-kurssit": "Valtakunnalliset Pakolliset Kurssit",
-  "valtakunnalliset-soveltavat-kurssit": "Valtakunnalliset Soveltavat Kurssit",
-  "valtakunalliset-syventavat-kurssit": "Valtakunalliset Syventavat Kurssit",
+  "valtakunnalliset-pakolliset-kurssit": "Pakolliset kurssit",
+  "valtakunnalliset-soveltavat-kurssit": "Valtakunnalliset syventävät kurssit",
+  "valtakunalliset-syventavat-kurssit": "Valtakunnalliset syventävät kurssit",
   "virhe.jotain-meni-pieleen": "Oho! Jotain meni pieleen.",
   "voimaantulo-pvm": "Voimaantulo",
   "voimassaolo-paattymispvm": "Voimassaolon päättyminen",
@@ -229,5 +229,6 @@
   "vuosiluokkakokonaisuuden-osaamisalueet": "Vuosiluokkakokonaisuuden osaamisalueet",
   "vuosiluokkakokonaisuudet": "Vuosiluokkakokonaisuudet",
   "yhteiset-osuudet": "Yhteiset osuudet",
+  "yleiset-osuudet": "Yleiset osuudet",
   "yleiset-tavoitteet": "Yleiset tavoitteet"
 }

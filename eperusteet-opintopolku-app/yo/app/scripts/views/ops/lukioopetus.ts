@@ -106,7 +106,7 @@ epOpintopolkuApp
         include: 'views/ops/opstekstisisalto.html',
         items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
         naviClasses: $scope.naviClasses,
-        title: 'yhteiset-osuudet'
+        title: 'yleiset-osuudet'
       }, {
         title: 'oppiaineet-ja-oppimaarat',
         id: 'sisalto',
