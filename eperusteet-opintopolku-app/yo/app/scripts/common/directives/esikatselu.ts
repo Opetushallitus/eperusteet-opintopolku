@@ -24,7 +24,21 @@ epOpintopolkuApp
         perusteModel: '=esitysPeruste',
         show: '='
       },
-      templateUrl: 'scripts/common/directives/esitysteksti.html',
+      template: '' +
+        '<div class="esitysteksti" ng-if="hasText()">' +
+        '    <h2 ng-bind="(perusteModel.otsikko || model.otsikko) | kaanna"></h2>' +
+        '    <div ng-if="hasPerusteText()" class="esitys-peruste">' +
+        '        <div class="nayta-peruste">' +
+        '            <img ng-hide="$$avoin" src="images/xs/ikoni-nuoli-oikealle.png">' +
+        '            <img ng-show="$$avoin" src="images/xs/ikoni-nuoli-alas.png">' +
+        '            <a href="" ng-click="$$avoin = !$$avoin">' +
+        '                <span ng-bind="($$avoin ? \'piilota-perusteen-teksti\' : \'nayta-perusteen-teksti\') | kaanna"></span>' +
+        '            </a>' +
+        '        </div>' +
+        '        <div class="peruste-teksti" ng-show="$$avoin" ng-bind-html="perusteModel.teksti | kaanna | kuvalinkit | unsafe"></div>' +
+        '    </div>' +
+        '    <div class="esitys-paikallinen" ng-bind-html="model.teksti | kaanna | kuvalinkit | unsafe"></div>' +
+        '</div>',
       controller: ($scope, Kieli) => {
         const hasText = (field) => field && _.isObject(field.teksti) && !_.isEmpty(field.teksti[Kieli.getSisaltokieli()]);
         $scope.hasPerusteText = () => hasText($scope.perusteModel);
