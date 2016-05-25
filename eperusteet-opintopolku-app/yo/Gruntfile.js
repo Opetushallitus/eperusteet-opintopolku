@@ -105,9 +105,15 @@ module.exports = function(grunt) {
       //   port: 443,
       //   https: true,
       //   changeOrigin: true
+      // }, {
+      //   context: '/eperusteet-ylops-service',
+      //   host: 'virkailija.opintopolku.fi',
+      //   port: 443,
+      //   https: true,
+      //   changeOrigin: true
       }, {
         context: '/eperusteet-ylops-service',
-        host: 'virkailija.opintopolku.fi',
+        host: 'testi.virkailija.opintopolku.fi',
         port: 443,
         https: true,
         changeOrigin: true
