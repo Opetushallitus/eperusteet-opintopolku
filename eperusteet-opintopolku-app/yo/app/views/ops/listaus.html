@@ -101,7 +101,7 @@
       <tr ng-repeat="ops in opsit | orderBy:sorter.fn:sorter.desc | slice:opsitAlku:opsitLoppu"
           class="ops-hakutulokset">
         <td class="ops-td-nimi">
-          <a ui-sref="root.ops.{{koulutustyypitLinkit(ops)}}.tiedot({ opsId: ops.id })">
+          <a ui-sref="root.ops.{{getKtLinkki(ops)}}.tiedot({ opsId: ops.id })">
           <span kaanna="ops.nimi"></span>
           </a>
         </td>

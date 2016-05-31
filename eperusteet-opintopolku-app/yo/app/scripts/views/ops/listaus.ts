@@ -50,7 +50,7 @@ epOpintopolkuApp
   })
   .controller('ListausController', function ($scope, $sessionStorage, JulkisetOps,
                                              ListaSorter, opsit, Kaanna, Kieli) {
-    const koulutustyypit = {
+    $scope.koulutustyypitLinkit = {
       koulutustyyppi_15: 'esiopetus',
       koulutustyyppi_16: 'perusopetus',
       koulutustyyppi_20: 'esiopetus',
@@ -60,7 +60,7 @@ epOpintopolkuApp
       koulutustyyppi_6: 'esiopetus',
     };
 
-    $scope.koulutustyypitLinkit = (ops) => koulutustyypit[ops.koulutustyyppi];
+    $scope.getKtLinkki = (ops) => $scope.koulutustyypitLinkit[ops.koulutustyyppi];
     $scope.kieli = Kieli.getUiKieli();
     $scope.tarkennettuHaku = $sessionStorage.tarkennettuHaku || false;
     $scope.opsit = opsit;

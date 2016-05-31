@@ -779,7 +779,7 @@ epOpintopolkuApp
       })
 
       .state('root.ops.perusopetus.valinnaisetoppiaineet', {
-        url: '/valinnaisetnoppiaineet/:oppiaineId',
+        url: '/valinnaisetoppiaineet/:oppiaineId',
         templateUrl: 'views/ops/vlnoppiaine.html',
         controller: 'OpsVlnOppiaineController',
         resolve: {
