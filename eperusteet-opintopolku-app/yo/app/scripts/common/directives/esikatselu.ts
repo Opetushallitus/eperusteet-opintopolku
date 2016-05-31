@@ -31,8 +31,8 @@ epOpintopolkuApp
         '    <div ng-show="hasText(pteksti)" class="esitys-peruste">' +
         '        <div class="nayta-peruste">' +
         '            <a href="" ng-click="$$avoin = !$$avoin">' +
-        '                <img ng-hide="$$avoin" src="/images/xs/ikoni-nuoli-oikealle.png">' +
-        '                <img ng-show="$$avoin" src="/images/xs/ikoni-nuoli-alas.png">' +
+        '                <img ng-hide="$$avoin" src="images/xs/ikoni-nuoli-oikealle.png">' +
+        '                <img ng-show="$$avoin" src="images/xs/ikoni-nuoli-alas.png">' +
         '                <span ng-bind="($$avoin ? \'piilota-perusteen-teksti\' : \'nayta-perusteen-teksti\') | kaanna"></span>' +
         '            </a>' +
         '        </div>' +
