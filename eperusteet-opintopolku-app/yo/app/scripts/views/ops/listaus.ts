@@ -50,16 +50,23 @@ epOpintopolkuApp
   })
   .controller('ListausController', function ($scope, $sessionStorage, JulkisetOps,
                                              ListaSorter, opsit, Kaanna, Kieli) {
+    const koulutustyypit = {
+      koulutustyyppi_15: 'esiopetus',
+      koulutustyyppi_16: 'perusopetus',
+      koulutustyyppi_20: 'esiopetus',
+      koulutustyyppi_22: 'perusopetus',
+      koulutustyyppi_23: 'lukioopetus',
+      koulutustyyppi_2: 'lukioopetus',
+      koulutustyyppi_6: 'esiopetus',
+    };
+
+    $scope.koulutustyypitLinkit = (ops) => koulutustyypit[ops.koulutustyyppi];
     $scope.kieli = Kieli.getUiKieli();
     $scope.tarkennettuHaku = $sessionStorage.tarkennettuHaku || false;
     $scope.opsit = opsit;
     $scope.kokonaismaara = $scope.opsit.length;
     $scope.sorter = ListaSorter.init($scope);
-    $scope.koulutustyypitLinkit = {
-      koulutustyyppi_15: 'esiopetus',
-      koulutustyyppi_16: 'perusopetus',
-      koulutustyyppi_6: 'lisaopetus'
-    };
+
     $scope.koulutustyypit = Object.keys($scope.koulutustyypitLinkit);
 
     $scope.hakuparametrit = {};
