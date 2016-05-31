@@ -17,15 +17,17 @@
 }
 
 .ops-hakutulokset {
-  .ops-td-nimi { width: 20%; }
-  .ops-td-oppilaitos { width: 15%; }
-  .ops-td-organisaatio { width: 15%; }
-  .ops-td-paikkakunta { width: 15%; }
-
-  span {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    width: 100px;
+  .ops-td-nimi {
+    // width: 20%;
   }
+  .ops-td-oppilaitos {
+    width: 20%;
+  }
+  .ops-td-organisaatio {
+    width: 15%;
+  }
+  .ops-td-paikkakunta {
+    width: 15%;
+  }
+
 }
