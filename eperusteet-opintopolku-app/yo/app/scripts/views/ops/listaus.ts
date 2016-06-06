@@ -4,7 +4,7 @@ epOpintopolkuApp
     this.init = function ($scope) {
       $scope.nimiSort = Utils.nameSort;
       return {
-        key: 'luotu',
+        key: 'nimi',
         desc: true,
         set: function (key) {
           if (key === $scope.sorter.key) {
@@ -149,4 +149,6 @@ epOpintopolkuApp
       // Päivitetään sivuvalikko
       $scope.kokonaismaara = $scope.opsit.length;
     }
+
+    $scope.sorter.set('nimi');
   });

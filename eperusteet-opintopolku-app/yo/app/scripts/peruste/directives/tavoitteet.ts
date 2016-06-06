@@ -112,7 +112,7 @@ epOpintopolkuApp
             $state.href('root.perusopetus.vuosiluokkakokonaisuus', {
               perusteId: $stateParams.perusteId,
               vlkId: $stateParams.vlkId || $scope.vuosiluokka.id,
-            }) + '#vlk-laajaalaisetosaamiset" kaanna="'vuosiluokkakokonaisuuden-osaamisalueet'"></a></div>';
+            }) + '#vlk-laajaalaisetosaamiset" kaanna="\'vuosiluokkakokonaisuuden-osaamisalueet\'"></a></div>';
         }));
       });
     };
