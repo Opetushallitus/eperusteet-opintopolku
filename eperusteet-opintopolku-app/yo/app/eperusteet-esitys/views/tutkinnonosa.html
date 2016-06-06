@@ -79,7 +79,7 @@
   <div ng-if="tutkinnonOsa.valmaTelmaSisalto" ng-include="'eperusteet-esitys/views/valmatelma.html'"></div>
 
   <div class="to-vapaat-tekstit" ng-show="tutkinnonOsa.vapaatTekstit.length > 0">
-    <h2 kaanna="vapaa-tekstisisalto"></h2>
+    <h2 kaanna="'vapaa-tekstisisalto'"></h2>
     <div ng-repeat="vt in tutkinnonOsa.vapaatTekstit">
       <h3>
         <a href="" ng-click="vt.$$open = !vt.$$open">

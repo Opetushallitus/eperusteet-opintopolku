@@ -1,4 +1,4 @@
-<h4 kaanna="osaamistavoitteet" ng-if="osaalue.valmaTelmaSisalto.osaamistavoite || tutkinnonOsa.valmaTelmaSisalto.osaamistavoite"></h4>
+<h4 kaanna="'osaamistavoitteet'" ng-if="osaalue.valmaTelmaSisalto.osaamistavoite || tutkinnonOsa.valmaTelmaSisalto.osaamistavoite"></h4>
 <div ng-repeat="osaamistavoite in (tutkinnonOsa.tyyppi === 'tutke2')? osaalue.valmaTelmaSisalto.osaamistavoite : tutkinnonOsa.valmaTelmaSisalto.osaamistavoite">
   <div class="arviointi">
     <div class="arviointi-otsikko">
@@ -22,7 +22,7 @@
   </div>
 </div>
 
-<h4 kaanna="osaamisen-arviointi" ng-if="tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi
+<h4 kaanna="'osaamisen-arviointi'" ng-if="tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi
 || tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointiTekstina"></h4>
 
 <div ng-if="tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi">

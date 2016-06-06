@@ -22,7 +22,7 @@
   <span kaanna="'vuosiluokka'"></span>
   <ul>
     <li ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'" ng-class="{active: isActive(vuosiluokka)}">
-      <a ui-sref="^.oppiaine({vuosiluokka: vuosiluokka.vuosiluokka})" kaanna="vuosiluokka.vuosiluokka"></a>
+      <a ui-sref="^.oppiaine({vuosiluokka: vuosiluokka.vuosiluokka})" ng-bind="vuosiluokka.vuosiluokka | kaanna"></a>
     </li>
   </ul>
 </div>
@@ -78,7 +78,7 @@
       <h3 ng-if="!vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko"
           kaanna="'sisaltoalueet'"></h3>
       <h3 ng-if="vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko"
-          kaanna="vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko"></h3>
+          ng-bind="vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko | kaanna"></h3>
 
       <div esitys-teksti="" esitys-peruste="vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo" show-peruste="true" hide-otsikko="true"></div>
       <div ng-repeat="tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].sisaltoaluetunnisteet"

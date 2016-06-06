@@ -16,7 +16,7 @@
 
     <div class="list-group" off-click="toggleSideMenu()" off-click-filter="#sivunavi-valikko-nappi" off-click-if="!menuCollapsed">
         <div class="list-group-item header" ng-if="header">
-            <span kaanna="header"></span>
+            <span kaanna="'header'"></span>
             <span class="glyphicon glyphicon glyphicon-remove pull-right action-link hidden-lg" ng-click="toggleSideMenu()"></span>
         </div>
       <div class="list-group-item" ng-show="hasTransclude">
@@ -31,7 +31,7 @@
         <accordion close-others="showOne">
           <accordion-group ng-repeat="section in sections" is-open="section.$open" ng-class="{'panel-chosen': section.$open, 'menu': !section.include}">
             <accordion-heading>
-              <span ng-click="onSectionChange(section)" kaanna="section.title"></span>
+              <span ng-click="onSectionChange(section)" ng-bind="section.title | kaanna"></span>
             </accordion-heading>
             <div ng-if="section.include" ng-include="section.include"></div>
             <div ng-if="!section.include" class="list-group">

@@ -2,7 +2,7 @@
 
 <div ng-show="stateIs('root.lukio.oppiaine.kurssi')">
   <h1 class="oppiaine-nimi" id="{{kurssi.id}}" esitys-sivu-otsikko="kurssi.nimi">
-    <span kaanna="kurssi.nimi"></span>
+    <span ng-bind="kurssi.nimi | kaanna"></span>
     (<span ng-bind="kurssi.koodiArvo"></span>)
   </h1>
 
@@ -24,17 +24,17 @@
     </div>
 
     <div ng-show="kurssi.tavoitteet.teksti | kaanna">
-      <h2 class="osio-otsikko" kaanna="kurssi.tavoitteet.otsikko"></h2>
+      <h2 class="osio-otsikko" ng-bind="kurssi.tavoitteet.otsikko | kaanna"></h2>
       <termisto-tekstikentta tekstikentta="kurssi.tavoitteet.teksti"></termisto-tekstikentta>
     </div>
 
     <div ng-show="kurssi.keskeisetSisallot.teksti | kaanna">
-      <h2 class="osio-otsikko" kaanna="kurssi.keskeisetSisallot.otsikko"></h2>
+      <h2 class="osio-otsikko" ng-bind="kurssi.keskeisetSisallot.otsikko | kaanna"></h2>
       <termisto-tekstikentta tekstikentta="kurssi.keskeisetSisallot.teksti"></termisto-tekstikentta>
     </div>
 
     <div ng-show="kurssi.tavoitteetJaKeskeisetSisallot.teksti | kaanna">
-      <h2 class="osio-otsikko" kaanna="kurssi.tavoitteetJaKeskeisetSisallot.otsikko"></h2>
+      <h2 class="osio-otsikko" ng-bind="kurssi.tavoitteetJaKeskeisetSisallot.otsikko | kaanna"></h2>
       <termisto-tekstikentta tekstikentta="kurssi.tavoitteetJaKeskeisetSisallot.teksti"></termisto-tekstikentta>
     </div>
   </div>

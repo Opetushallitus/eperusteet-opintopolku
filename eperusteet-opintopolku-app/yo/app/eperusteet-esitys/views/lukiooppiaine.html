@@ -1,6 +1,6 @@
 <div ng-show="stateIs('root.lukio.oppiaine')">
   <h1 class="oppiaine-nimi" esitys-sivu-otsikko="valittuOppiaine.oppiaine.nimi">
-    <span kaanna="valittuOppiaine.nimi"></span>
+    <span ng-bind="valittuOppiaine.nimi | kaanna"></span>
   </h1>
   <div class="clearfix"></div>
 

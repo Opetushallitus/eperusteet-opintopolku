@@ -9,7 +9,7 @@
     </strong>
   </div>
   <div class="col-xs-6 col-sm-8">
-    <span kaanna="peruste.nimi || 'nimetön'"></span>
+    <span ng-bind="(peruste.nimi || 'nimetön') | kaanna"></span>
   </div>
 </div>
 
@@ -158,7 +158,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="oa in peruste.osaamisalat" class="ng-scope">
-            <td kaanna="oa.nimi"></td>
+            <td ng-bind="oa.nimi | kaanna"></td>
             <td ng-bind="oa.arvo"></td>
           </tr>
         </tbody>
@@ -179,9 +179,9 @@
       <table ng-if="koodisto.length > 0" class="table aligned tutkintonimikkeet">
         <thead>
           <tr>
-            <th kaanna="osaamisala"></th>
-            <th kaanna="tutkintonimike"></th>
-            <th kaanna="tutkinnonosa"></th>
+            <th kaanna="'osaamisala'"></th>
+            <th kaanna="'tutkintonimike'"></th>
+            <th kaanna="'tutkinnonosa'"></th>
           </tr>
         </thead>
         <tbody>

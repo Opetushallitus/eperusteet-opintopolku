@@ -40,7 +40,7 @@
             <select id="haku-tyyppi" ng-model="hakuparametrit.tyyppi" class="form-control" ng-change="hakuMuuttui()">
               <option value="" kaanna="'kaikki-koulutustyypit'"></option>
               <option ng-repeat="tyyppi in koulutustyypit" value="{{tyyppi}}"
-                      kaanna="tyyppi"></option>
+                      ng-bind="tyyppi | kaanna"></option>
             </select>
           </div>
         </div>
@@ -102,29 +102,29 @@
           class="ops-hakutulokset">
         <td class="ops-td-nimi">
           <a ui-sref="root.ops.{{getKtLinkki(ops)}}.tiedot({ opsId: ops.id })">
-          <span kaanna="ops.nimi"></span>
+          <span ng-bind="ops.nimi | kaanna"></span>
           </a>
         </td>
         <td class="ops-td-oppilaitos">
           <!--<span kaanna="palautaAlinOrganisaatio(ops.organisaatiot)"></span>-->
           <div ng-repeat="org in ops.organisaatiot | filter:{tyypit:'oppilaitos'} | orderBy:nimiSort">
-            <span kaanna="org.nimi"></span>
+            <span ng-bind="org.nimi | kaanna"></span>
             <br ng-if="!$last">
           </div>
         </td>
         <td class="ops-td-organisaatio">
           <!--<span kaanna="palautaAlinOrganisaatio(ops.organisaatiot)"></span>-->
           <div ng-repeat="org in ops.organisaatiot | filter:{tyypit:'koulutustoimija'} | orderBy:nimiSort">
-            <span kaanna="org.nimi"></span>
+            <span ng-bind="org.nimi | kaanna"></span>
             <br ng-if="!$last">
           </div>
         </td>
         <td class="ops-td-paikkakunta">
           <!--<div ng-repeat="kunta in ops.kunnat">
-            <span kaanna="kunta.nimi"></span>
+            <span ng-bind="kunta.nimi | kaanna"></span>
           </div>-->
           <div ng-repeat="kunta in ops.kunnat | orderBy:nimiSort">
-            <span kaanna="kunta.nimi"></span>
+            <span ng-bind="kunta.nimi | kaanna"></span>
             </span><br ng-if="!$last">
           </div>
         </td>

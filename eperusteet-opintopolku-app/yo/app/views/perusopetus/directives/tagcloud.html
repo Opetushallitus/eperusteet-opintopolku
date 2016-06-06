@@ -1,6 +1,6 @@
 <!-- tagcloud.html -->
 
-<p ng-show="showEmptyPlaceholder()" kaanna="ei-asetettu"></p>
+<p ng-show="showEmptyPlaceholder()" kaanna="'ei-asetettu'"></p>
 <ul class="tagcloud">
   <li ng-repeat="tag in model | filter:notHidden | orderBy:orderFn">
     <span ng-if="openable === 'true'" ohje="false" ohje-click-anywhere="false" teksti="tag.teksti" otsikko="tag.nimi" suunta="bottom"

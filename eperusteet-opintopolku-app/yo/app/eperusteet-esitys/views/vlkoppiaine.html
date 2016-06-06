@@ -1,5 +1,5 @@
 <h1 class="oppiaine-nimi" esitys-sivu-otsikko="valittuOppiaine.oppiaine.nimi">
-  <span kaanna="valittuOppiaine.oppiaine.nimi"></span>
+  <span ng-bind="valittuOppiaine.oppiaine.nimi | kaanna"></span>
 </h1>
 <div class="vuosiluokkavalitsin" ng-if="valittuOppiaine.oppiaine.vuosiluokkakokonaisuudet.length > 1">
   <ul class="nav nav-pills">

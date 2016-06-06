@@ -1,4 +1,4 @@
-<h1 kaanna="oppiaine.nimi"></h1>
+<h1 ng-bind="oppiaine.nimi | kaanna"></h1>
 
 <div show-all=true esitys-teksti="oppiaine.tehtava" esitys-peruste="peruste.tehtava" show-peruste="true"></div>
 
@@ -6,7 +6,7 @@
   <ul>
     <li ng-repeat="vlk in vlkTabit" ng-class="{active: addActiveClass(vlk.id)}">
       <a ui-sref=".vlk({vlkId: vlk.id, vluokkakokonaisuus: vlk.vlkId})"
-         kaanna="vlk.nimi"></a>
+         ng-bind="vlk.nimi | kaanna"></a>
     </li>
   </ul>
 </div>

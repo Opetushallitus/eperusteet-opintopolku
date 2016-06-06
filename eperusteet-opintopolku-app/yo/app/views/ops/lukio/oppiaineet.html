@@ -16,7 +16,7 @@
 <div ng-show="!wrongState()">
   <oppiaine-legend></oppiaine-legend>
   <h1 class="oppiaine-nimi" esitys-sivu-otsikko="valittuOppiaine.oppiaine.nimi">
-    <span kaanna="valittuOppiaine.nimi"></span>
+    <span ng-bind="valittuOppiaine.nimi | kaanna"></span>
   </h1>
 
   <!-- <div ng-if="oppimaarat.length > 0" class="oppimaarat"> -->

@@ -21,17 +21,17 @@
                   <p ng-if="tavoite.$valittuKohdealue && !tavoite.$editing">{{ tavoite.$valittuKohdealue ? tavoite.$valittuKohdealue.nimi : '' | kaanna }}</p>
 
                   <div ng-if="tavoite.$editing || tavoite.laajattavoitteet">
-                    <h4 kaanna="laaja-alaisen-osaamisen-alueet"></h4>
+                    <h4 kaanna="'laaja-alaisen-osaamisen-alueet'"></h4>
                     <div tag-cloud="tavoite.$osaaminen" openable="true" edit-mode="tavoite.$editing" add-label="lisaa-laaja-alainen-osaaminen"></div>
                   </div>
 
                   <div ng-if="tavoite.$editing || tavoite.sisaltoalueet">
-                    <h4 kaanna="sisaltoalueet"></h4>
+                    <h4 kaanna="'sisaltoalueet'"></h4>
                     <div tag-cloud="tavoite.$sisaltoalueet" openable="true" edit-mode="tavoite.$editing" add-label="lisaa-sisaltoalue"></div>
                   </div>
 
                   <div ng-if="tavoite.$editing || hasArviointi(tavoite)">
-                    <h4 ng-if="!tavoite.$editing" kaanna="tavoite.arvioinninOtsikko || 'arviointi'"></h4>
+                    <h4 ng-if="!tavoite.$editing" ng-bind="(tavoite.arvioinninOtsikko || 'arviointi') | kaanna"></h4>
                     <div ng-show="hasArviointi(tavoite)" atavoite="tavoite" perusopetuksen-arviointi="tavoite.arvioinninkohteet" edit-mode="tavoite.$editing"></div>
                   </div>
                 </div>

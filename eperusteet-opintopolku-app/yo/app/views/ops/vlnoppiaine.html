@@ -1,4 +1,4 @@
-<h1 kaanna="oppiaine.nimi"></h1>
+<h1 ng-bind="oppiaine.nimi | kaanna"></h1>
 <div show-all=true esitys-teksti="oppiaine.tehtava"></div>
 
 <div>
@@ -16,7 +16,7 @@
 <div ng-show="vuosiluokat.length > 1" class="vuosiluokka-valinta">
   <ul>
     <li ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'" ng-class="{active: currentVuosiluokka === vuosiluokka.vuosiluokka}">
-      <a href="" ng-click="showVuosi(vuosiluokka.vuosiluokka)" kaanna="vuosiluokka.vuosiluokka"></a>
+      <a href="" ng-click="showVuosi(vuosiluokka.vuosiluokka)" ng-bind="vuosiluokka.vuosiluokka | kaanna"></a>
     </li>
   </ul>
 </div>

@@ -1,5 +1,5 @@
 <div class="perusopetus">
-  <h1 kaanna="yleiskuvaus.otsikko"></h1>
+  <h1 ng-bind="yleiskuvaus.otsikko | kaanna"></h1>
   <termisto-tekstikentta tekstikentta="yleiskuvaus.yleiskuvaus"></termisto-tekstikentta>
 
   <div ng-repeat="aihe in aihekokonaisuudet">

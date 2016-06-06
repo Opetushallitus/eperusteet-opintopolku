@@ -10,7 +10,7 @@
   <ul>
     <li ng-repeat="vuosi in vlkst" ng-class="{active: addActiveClass(vuosi.id, true)}">
       <a ui-sref=".vuosiluokat({vuosiId: vuosi.id, location: replace, notify: true})"
-         kaanna="vuosi.vuosiluokka"></a>
+         ng-bind="vuosi.vuosiluokka | kaanna"></a>
     </li>
   </ul>
 </div>

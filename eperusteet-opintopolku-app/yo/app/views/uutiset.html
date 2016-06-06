@@ -11,7 +11,7 @@
             <li ng-repeat="tiedote in tiedotteet | limitTo:naytto.shown" class="lista-elementti"
                 ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
               <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
-                <span kaanna="tiedote.otsikko"></span>
+                <span ng-bind="tiedote.otsikko | kaanna"></span>
               </a>
               <p>
                 <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
