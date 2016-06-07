@@ -16,17 +16,8 @@
 'use strict';
 
 angular.module('app')
-  .controller('AmopsController', function(
-    $scope,
-    $state,
-    $stateParams,
-    $rootScope,
-    $timeout,
-    ops,
-    otsikot,
-    MurupolkuData,
-    opsMenuBuilders,
-    AmopsStateService) {
+.controller('AmopsController', ($scope, $state, $stateParams, $rootScope, $timeout, ops,
+                                otsikot, MurupolkuData, opsMenuBuilders, AmopsStateService) => {
 
     $scope.isNaviVisible = _.constant(true);
     $scope.ops = ops;
@@ -35,26 +26,6 @@ angular.module('app')
     $rootScope.$on('$locationChangeSuccess', function () {
       AmopsStateService.setState($scope.navi);
     });
-    //TODO TermistoService.setResource(ops, "AMOPS");
-
-    /*function clickHandler(event) {
-      var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
-      if (ohjeEl.length === 0) {
-        $rootScope.$broadcast('ohje:closeAll');
-      }
-    }
-    function installClickHandler() {
-      $document.off('click', clickHandler);
-      $timeout(function () {
-        $document.on('click', clickHandler);
-      });
-    }
-    $scope.$on('$destroy', function () {
-      $document.off('click', clickHandler);
-    });*/
-
-
-     //installClickHandler();
 
      $scope.$on('$stateChangeSuccess', function () {
         if ($state.current.name === 'root.amops') {

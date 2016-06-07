@@ -17,20 +17,16 @@
 angular.module('app', [
   'ngRoute',
   'ngSanitize',
-  'ui.router',
+  'ngStorage',
   'ngResource',
   'ngAnimate',
-  'pascalprecht.translate',
+  'ui.router',
   'ui.bootstrap',
-  'ui.utils',
+  'pascalprecht.translate',
   'monospaced.elastic',
-  'angular-data.DSCacheFactory',
+  'angular-cache',
   'angularSpinner',
   'angulartics',
   'angulartics.piwik',
-  'eperusteet.esitys',
-  'ngStorage'
+  'eperusteet.esitys'
 ]);
-
-
-/* jshint ignore:end */

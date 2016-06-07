@@ -18,11 +18,11 @@
 /* global _ */
 
 angular.module('app')
-  .controller('JarjestelmaVirheModalController', function ($scope, $modalInstance, $state, viesti) {
+  .controller('JarjestelmaVirheModalController', function ($scope, $uidModalInstance, $state, viesti) {
     $scope.viesti = viesti;
-    $scope.ok = $modalInstance.close;
+    $scope.ok = $uidModalInstance.close;
   })
-  .service('Notifikaatiot', function ($rootScope, $timeout, NOTIFICATION_DELAY_SUCCESS, NOTIFICATION_DELAY_WARNING, $modal, $state, Kaanna) {
+  .service('Notifikaatiot', function ($rootScope, $timeout, NOTIFICATION_DELAY_SUCCESS, NOTIFICATION_DELAY_WARNING, $uibModal, $state, Kaanna) {
     var viestit = [];
 
     function refresh() {
@@ -64,7 +64,7 @@ angular.module('app')
 
     function fataali(viesti, cb) {
       cb = _.isFunction(cb) ? cb : angular.noop;
-      $modal.open({
+      $uibModal.open({
         templateUrl: 'views/modals/jarjestelmavirhe.html',
         controller: 'JarjestelmaVirheModalController',
         resolve: {viesti: function () {

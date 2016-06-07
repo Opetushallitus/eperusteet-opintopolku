@@ -10,14 +10,14 @@
   <h2 class="vuosiluokka-otsikko" ng-bind="vuosiluokka | kaanna"></h2>
 
   <h3 kaanna="'tavoitteet'"></h3>
-  <accordion ng-repeat="sa in sisalto" class="tavoitteet-box">
-    <accordion-group is-open="status.open">
-      <accordion-heading>
+  <uib-accordion ng-repeat="sa in sisalto" class="tavoitteet-box">
+    <uib-accordion-group is-open="status.open">
+      <uib-accordion-heading>
         <div ng-class="{'opened-oppiaine': status.open}">
           <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
           <h4 class="tavoite-otsikko" ng-bind-html="sa.$tavoite | kaanna | unsafe"></h4>
         </div>
-      </accordion-heading>
+      </uib-accordion-heading>
       <termisto-tekstikentta tekstikentta="sa.tavoite"></termisto-tekstikentta>
       <div class="listat">
         <div class="lista">
@@ -34,17 +34,17 @@
                 </div>
               </div>
               <div ng-if="sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus">
-                <accordion class="peruste-box">
-                  <accordion-group is-open="status.avoin">
-                    <accordion-heading>
+                <uib-accordion class="peruste-box">
+                  <uib-accordion-group is-open="status.avoin">
+                    <uib-accordion-heading>
                       <div>
                         <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.avoin, 'glyphicon-chevron-right': !status.avoin}"></i>
                         <h4 ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe"></h4>
                       </div>
-                    </accordion-heading>
+                    </uib-accordion-heading>
                     <termisto-tekstikentta perusteteksti="perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus"></termisto-tekstikentta>
-                  </accordion-group>
-                </accordion>
+                  </uib-accordion-group>
+                </uib-accordion>
               </div>
             </li>
           </ul>
@@ -77,7 +77,7 @@
           </tr>
         </table>
       </div>
-  </accordion-group>
+  </uib-accordion-group>
 </div>
 
 <h2 ng-if="sisaltoAlueet.length" ng-bind-html="'keskeiset-sisaltoalueet' | kaanna"></h2>

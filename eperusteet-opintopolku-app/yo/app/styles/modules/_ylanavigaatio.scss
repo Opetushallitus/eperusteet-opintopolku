@@ -57,7 +57,26 @@
     padding: 16px;
     display: block;
     float: left;
-    height: 100%;
+    height: 50px;
+
+    &:first-child {
+      padding: 4px 8px 2px 8px;
+      display: inline-block;
+
+      &.active {
+        background-color: $content-bg-color;
+        a {
+          color: black;
+        }
+      }
+    }
+
+    &.active {
+      background-color: $content-bg-color;
+      a {
+        color: black;
+      }
+    }
 
     a {
       img {
@@ -65,23 +84,6 @@
       }
     }
 
-    &.active {
-      background-color: $content-bg-color;
-      a {
-        color: black;
-      }
-    }
-  }
-  li:first-child {
-    padding: 4px 8px 2px 8px;
-    display: inline-block;
-
-    &.active {
-      background-color: $content-bg-color;
-      a {
-        color: black;
-      }
-    }
   }
 }
 .ylanavi-container {

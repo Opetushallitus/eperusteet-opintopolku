@@ -32,17 +32,17 @@ $sivunavi-level-padding: 20px;
 .sivunavi-box {
   ul {
     list-style-type: none;
-    padding-left: 0px;
+    padding-left: 0;
   }
   label {
     font-weight: 300;
   }
   label > input {
-    top: 0px;
+    top: 0;
     margin-right: 5px;
   }
   .list-group {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
   .inner-accordion {
     border: 0;

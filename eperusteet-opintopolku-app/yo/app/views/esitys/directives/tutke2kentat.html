@@ -8,11 +8,11 @@
 
   <div ng-if="!mainLevelEditing">
 
-    <accordion close-others="viewOptions.oneAtATime">
+    <uib-accordion close-others="viewOptions.oneAtATime">
       <!-- osa-alueet -->
-      <accordion-group ng-show="!tutke2osa.$fetching" ng-repeat="alue in tutke2osa.osaAlueet" is-open="alue.$open"
+      <uib-accordion-group ng-show="!tutke2osa.$fetching" ng-repeat="alue in tutke2osa.osaAlueet" is-open="alue.$open"
                        class="panel-clean osa-alue" ng-class="{'kohde-edit': alue.$editing}" id="{{alue.$uniqueId}}">
-        <accordion-heading>
+        <uib-accordion-heading>
           <div class="row">
             <div class="col-sm-9">
               <span class="glyphicon" ng-class="alue.$open ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'"></span>
@@ -34,7 +34,7 @@
               </div>
             </div>
           </div>
-        </accordion-heading>
+        </uib-accordion-heading>
 
         <!-- osaamistavoitteet -->
         <p class="info-placeholder" ng-show="!alue.$editing && (!alue.osaamistavoitteet || alue.osaamistavoitteet.length === 0)"
@@ -61,8 +61,8 @@
           </div>
         </div>
 
-      </accordion-group>
-    </accordion>
+      </uib-accordion-group>
+    </uib-accordion>
   </div>
 
 </div>
