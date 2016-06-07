@@ -33,7 +33,7 @@ angular.module('template/pagination/pagination.html', []).run(['$templateCache',
 }]);
 
 // startFrom filter for easy pagination
-epOpintopolkuApp
+angular.module('app')
 .filter('startFrom', function() {
   return function(input, start) {
     if (!input) {

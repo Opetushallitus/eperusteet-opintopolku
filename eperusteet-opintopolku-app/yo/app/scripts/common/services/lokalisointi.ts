@@ -17,7 +17,7 @@
 'use strict';
 /*global _*/
 
-epOpintopolkuApp
+angular.module('app')
 .factory('LokalisointiResource', function(LOKALISOINTI_SERVICE_LOC, $resource) {
   return $resource('/lokalisointi/cxf/rest/v1/localisation?category=eperusteet', {}, {
     get: {

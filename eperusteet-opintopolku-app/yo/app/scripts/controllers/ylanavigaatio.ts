@@ -1,7 +1,7 @@
 'use strict';
 
 
-epOpintopolkuApp
+angular.module('app')
   .controller('YlanavigaatioController', function ($rootScope, $timeout, $scope, $state, Kieli,
                                                    UusimmatPerusteetService, Haku, $stateParams, Kaanna) {
     $scope.kieli = Kieli.getUiKieli();

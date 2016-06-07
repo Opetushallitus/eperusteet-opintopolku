@@ -1,6 +1,6 @@
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .directive('offClick', ['$document', '$timeout', function ($document, $timeout) {
 
   function targetInFilter(target, filter) {

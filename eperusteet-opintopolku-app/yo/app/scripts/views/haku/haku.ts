@@ -17,7 +17,7 @@
 'use strict';
 /*global _*/
 
-epOpintopolkuApp
+angular.module('app')
   .service('Haku', function Haku(Kieli) {
     var uikieli = Kieli.getUiKieli();
     var DEFAULTS = {

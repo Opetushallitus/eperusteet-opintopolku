@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('epYlopsResource', function (eperusteetYlopsConfig) {
   this.SERVICE = eperusteetYlopsConfig.getServiceLocation();
   this.OPETUSSUUNNITELMAT_ROOT = this.SERVICE + '/opetussuunnitelmat';

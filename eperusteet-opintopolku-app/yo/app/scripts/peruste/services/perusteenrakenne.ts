@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('PerusteenRakenne', function(/*PerusteProjektiService, PerusteprojektiResource,
   PerusteTutkinnonosatVersio, */PerusteRakenteet,
   PerusteTutkinnonosat, Perusteet, PerusteTutkinnonosa, Notifikaatiot) {

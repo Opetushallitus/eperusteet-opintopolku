@@ -15,7 +15,7 @@
  */
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .directive('esitysTeksti', function() {
     return {
       restrict: 'EA',

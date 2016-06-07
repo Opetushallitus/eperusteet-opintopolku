@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .controller('UutisetController', function ($scope, UusimmatPerusteetService, MurupolkuData,
   TiedotteetCRUD, Utils, Kieli) {
   MurupolkuData.setTitle(null);

@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('TermistoService', function (PerusteTermistoCRUD, OpsTermistoCRUD, $q, $timeout) {
   //resource is either the peruste or the ops
   var resources = [], cached = {};

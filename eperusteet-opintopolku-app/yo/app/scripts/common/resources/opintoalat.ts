@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('Opintoalat', function Opintoalat($resource, epResource) {
   var opintoalatResource = $resource(epResource.SERVICE + '/opintoalat/',
     {}, { 'query': { method: 'GET', isArray: true, cache: true } });

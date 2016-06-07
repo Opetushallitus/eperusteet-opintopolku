@@ -17,7 +17,7 @@
 'use strict';
 
 
-epOpintopolkuApp
+angular.module('app')
   .service('OpsImageService', function ($stateParams, opsBase) {
     this.getOpsId = function() {
       return $stateParams.opsId;

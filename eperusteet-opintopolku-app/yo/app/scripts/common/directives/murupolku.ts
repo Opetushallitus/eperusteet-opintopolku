@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .service('MurupolkuData', function ($rootScope, Kaanna, $timeout) {
     this.noop = angular.noop;
     var data = {};

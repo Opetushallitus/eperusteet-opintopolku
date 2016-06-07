@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('epResource', function (eperusteetConfig) {
   var serviceLoc = eperusteetConfig.getServiceLocation();
   this.SERVICE = serviceLoc;

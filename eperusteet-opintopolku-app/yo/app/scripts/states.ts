@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .config(function ($stateProvider) {
     $stateProvider
       .state('root', {

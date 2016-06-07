@@ -340,6 +340,7 @@ module.exports = function(grunt) {
     karma: {
       unit: {
         configFile: 'karma.conf.js',
+        background: true,
         singleRun: true
       }
     },
@@ -382,7 +383,7 @@ module.exports = function(grunt) {
         dest: '<%= yeoman.dist %>/scripts/scripts.js',
         //append: true,
         options:    {
-          module: 'eperusteOpintopolkuApp',
+          module: 'app',
           usemin: 'scripts/scripts.js',
           htmlmin: { collapseWhitespace: true, removeComments: true }
         }
@@ -414,13 +415,6 @@ module.exports = function(grunt) {
           pattern : /(ng-show=|ng-hide=)[^>]+(ng-hide=|ng-show=)/m
         }
       },
-      // emptyHrefs: {
-      //   files: [{src: ['<%= yeoman.app %>/{scripts,views}#<{(||)}>#*.{js,html}']}],
-      //   options: {
-      //     #<{(| Check that empty href="" are not used |)}>#
-      //     pattern : /\s+href=""/m
-      //   },
-      // },
       controllerNaming: {
         files: [{src: ['<%= yeoman.app %>/scripts/**/*.js']}],
         options: {
@@ -474,10 +468,9 @@ module.exports = function(grunt) {
   grunt.registerTask('test', [
     'ts',
     'clean:server',
-    'copy:fonts', // needed if testing while "grunt dev" is running :)
+    'copy:fonts',
     'concurrent:test',
     'autoprefixer',
-//  'connect:test',
     'regex-check',
     'karma'
   ]);
@@ -492,7 +485,6 @@ module.exports = function(grunt) {
     'ngtemplates',
     'concat',
     'copy:dist',
-//  'ngmin',
     'cssmin',
     'uglify',
     'rev',

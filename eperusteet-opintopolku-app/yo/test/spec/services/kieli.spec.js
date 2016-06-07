@@ -29,7 +29,7 @@ describe('Service: kieli', function () {
 
   beforeEach(function () {
     // Load the service's module
-    module('eperusteOpintopolkuApp');
+    module('app');
   });
 
   describe('the service api', function () {

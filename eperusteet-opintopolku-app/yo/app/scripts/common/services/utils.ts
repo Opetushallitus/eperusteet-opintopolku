@@ -15,7 +15,7 @@
  */
 
 
-epOpintopolkuApp
+angular.module('app')
 .service('Utils', function ($window, Kieli, Kaanna) {
   this.scrollTo = function (selector, offset) {
     var element = angular.element(selector);

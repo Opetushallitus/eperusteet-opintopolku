@@ -15,7 +15,7 @@
  */
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .service('AmopsStateService', function ($state, $stateParams, $location, epSivunaviUtils, $rootScope) {
     let state: any = {};
     let section = null;

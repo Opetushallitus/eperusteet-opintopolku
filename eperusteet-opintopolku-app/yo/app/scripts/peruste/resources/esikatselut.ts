@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 'use strict';
-epOpintopolkuApp
+angular.module('app')
   .service('epEsikatseluResource', function (eperusteetConfig) {
     var serviceLoc = eperusteetConfig.getServiceLocation();
     this.SERVICE = serviceLoc;

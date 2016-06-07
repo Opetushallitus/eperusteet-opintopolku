@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .directive('epLukioTabs', function () {
     return {
       templateUrl: 'views/common/directives/tabs.html',

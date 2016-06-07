@@ -17,7 +17,7 @@
 'use strict';
 /* global moment */
 
-epOpintopolkuApp
+angular.module('app')
   .service('Kieli', function ($rootScope, $state, $stateParams, $translate) {
     var defaultLang = $stateParams.lang || 'fi';
     var sisaltokieli = defaultLang;

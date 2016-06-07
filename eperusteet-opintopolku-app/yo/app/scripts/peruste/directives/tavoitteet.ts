@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .directive('tavoitteet', function() {
     return {
       templateUrl: 'views/perusopetus/directives/tavoitteet.html',

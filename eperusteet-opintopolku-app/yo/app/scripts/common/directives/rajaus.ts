@@ -23,7 +23,7 @@
  * size: 'small' or default
  * placeholder: optional, string or {{expression}}
  */
-epOpintopolkuApp
+angular.module('app')
 .directive('rajaus', function () {
   return {
     templateUrl: 'views/common/directives/rajaus.html',
