@@ -17,7 +17,7 @@
 'use strict';
 /* global _ */
 
-epOpintopolkuApp
+angular.module('app')
 .service('Kaanna', function($translate, Kieli) {
   function translate (obj, key) {
     function getTranslation(input, lang) {

@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .factory('TutkinnonOsanKoodiUniqueResource', function($resource, SERVICE_LOC) {
     return $resource(SERVICE_LOC + '/tutkinnonosat/koodi/uniikki/:tutkinnonosakoodi');
   })

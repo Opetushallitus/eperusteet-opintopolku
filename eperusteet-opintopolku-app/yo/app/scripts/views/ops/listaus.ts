@@ -1,5 +1,5 @@
 
-epOpintopolkuApp
+angular.module('app')
   .service('ListaSorter', function (Utils) {
     this.init = function ($scope) {
       $scope.nimiSort = Utils.nameSort;

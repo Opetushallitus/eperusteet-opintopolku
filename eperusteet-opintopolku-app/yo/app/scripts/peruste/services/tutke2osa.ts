@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .directive('tutke2kentat', function () {
     return {
       restrict: 'AE',

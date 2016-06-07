@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .factory('TiedotteetCRUD', function($resource, epResource) {
   return $resource(epResource.SERVICE + '/tiedotteet/:tiedoteId', {
     tiedoteId: '@id'

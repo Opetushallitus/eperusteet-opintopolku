@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 'use strict';
-epOpintopolkuApp
+angular.module('app')
   .service('AmopsAPI', function () {
     this.AMOSAA = '/eperusteet-amosaa-service/api/';
     this.BASE = 'http://beta.json-generator.com/api/json/get/';

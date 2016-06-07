@@ -16,10 +16,10 @@
 
 'use strict';
 
-  /**
-   * Prepends a glyphicon to the element, see mapping in IconMapping.
-   */
-epOpintopolkuApp
+/**
+ * Prepends a glyphicon to the element, see mapping in IconMapping.
+ */
+angular.module('app')
   .directive('iconRole', function (IconMapping) {
     return {
       restrict: 'A',

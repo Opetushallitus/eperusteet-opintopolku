@@ -17,7 +17,7 @@
 'use strict';
 /* global _ */
 
-epOpintopolkuApp
+angular.module('app')
   .controller('JarjestelmaVirheModalController', function ($scope, $modalInstance, $state, viesti) {
     $scope.viesti = viesti;
     $scope.ok = $modalInstance.close;

@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('UusimmatPerusteetService', function ($q, Perusteet, $state, Kieli) {
   const uikieli = Kieli.getUiKieli();
   let perusteet = {};
@@ -151,6 +151,7 @@ epOpintopolkuApp
   $scope.naytto = {limit: 5, shown: 5};
   $scope.kieli = Kieli.getSisaltokieli();
   $scope.UusimmatPerusteetService = UusimmatPerusteetService;
+  $scope.currentYear = new Date().getFullYear();
 
   Perusteet.uusimmat((res) => $scope.uusimmatLista = res);
   UusimmatPerusteetService.fetch((res) => $scope.uusimmat = res);

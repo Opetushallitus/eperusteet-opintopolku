@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .directive('tagCloud', function () {
     return {
       templateUrl: 'views/perusopetus/directives/tagcloud.html',

@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .service('OpsLukioStateService', function ($state, $stateParams, $location, epSivunaviUtils, $rootScope) {
     var state: any = {};
     var section = null;

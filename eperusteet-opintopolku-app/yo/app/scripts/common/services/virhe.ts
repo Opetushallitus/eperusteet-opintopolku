@@ -17,7 +17,7 @@
 'use strict';
 /* global _ */
 
-epOpintopolkuApp
+angular.module('app')
 .controller('VirheController', function ($scope, virheService) {
   $scope.$watch(virheService.getData, function (value) {
     $scope.data = value;

@@ -18,7 +18,7 @@
 
 /* jshint -W074 */
 
-epOpintopolkuApp
+angular.module('app')
   .service('Muodostumissaannot', function($modal) {
     var skratchpadHasContent = false;
     function osienLaajuudenSumma(rakenneOsat) {

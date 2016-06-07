@@ -17,7 +17,7 @@
 'use strict';
 /* global _ */
 
-epOpintopolkuApp
+angular.module('app')
   .directive('termistoTekstikentta', function() {
     return {
       restrict: 'E',

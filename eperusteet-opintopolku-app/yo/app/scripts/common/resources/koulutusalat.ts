@@ -17,7 +17,7 @@
 'use strict';
 /*global _*/
 
-epOpintopolkuApp
+angular.module('app')
   .factory('KoulutusalatResource', function ($resource, epResource) {
     return $resource(epResource.SERVICE + '/koulutusalat/:koulutusalaId', {
       koulutusalaId: '@id'

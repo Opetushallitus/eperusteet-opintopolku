@@ -17,7 +17,7 @@
 'use strict';
 
 /* Sets sivunavi items active based on current state */
-epOpintopolkuApp
+angular.module('app')
   .service('opsStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope,
                                                   epEsitysSettings) {
     var state = {};

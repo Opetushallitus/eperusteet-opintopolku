@@ -15,7 +15,7 @@
  */
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .controller('AmopsController', function(
     $scope,
     $state,

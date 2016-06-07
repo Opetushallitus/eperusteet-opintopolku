@@ -30,7 +30,7 @@
  * suunta: left|right(default)|top|bottom
  * otsikko: optional
  */
-epOpintopolkuApp
+angular.module('app')
   .directive('ohje', function ($timeout, $compile, $document) {
     return {
       templateUrl: 'views/perusopetus/directives/ohje.html',

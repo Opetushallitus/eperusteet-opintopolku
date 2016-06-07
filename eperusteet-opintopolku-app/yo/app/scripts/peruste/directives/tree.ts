@@ -17,7 +17,7 @@
 'use strict';
 /*global _*/
 
-epOpintopolkuApp
+angular.module('app')
   .service('treeTemplate', function () {
     function generoiOtsikko() {
       var tosa = '{{ tutkinnonOsaSolmunNimi(rakenne) | kaanna }}' +

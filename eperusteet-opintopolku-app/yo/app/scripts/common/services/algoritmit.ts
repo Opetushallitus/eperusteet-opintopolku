@@ -17,7 +17,7 @@
 'use strict';
 /* global _, document */
 
-epOpintopolkuApp
+angular.module('app')
   .service('Algoritmit', function(Kaanna) {
     function rajausVertailu(input, kentta) {
       kentta = arguments.length > 2 ? kentta[arguments[2]] : kentta;

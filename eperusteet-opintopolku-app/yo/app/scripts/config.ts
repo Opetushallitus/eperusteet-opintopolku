@@ -19,7 +19,7 @@
 
 /* global moment */
 
-epOpintopolkuApp
+angular.module('app')
 .config(function($urlRouterProvider, $sceProvider) {
   $sceProvider.enabled(true);
   $urlRouterProvider.when('', '/');

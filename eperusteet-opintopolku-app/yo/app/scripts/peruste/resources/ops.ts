@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 'use strict';
-epOpintopolkuApp
+angular.module('app')
   .service('opsBase', function () {
     this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId';
     this.LUKIO_OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/lukio/:opsId';

@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .filter('mapFilter', function() {
   return function(input, f) {
     input = _.filter(input, function(v) {

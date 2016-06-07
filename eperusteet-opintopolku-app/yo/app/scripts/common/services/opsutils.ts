@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .factory('opsUtils', function (Algoritmit, $state, Kieli, Utils) {
 
     const sortVlk = (vlk) => {

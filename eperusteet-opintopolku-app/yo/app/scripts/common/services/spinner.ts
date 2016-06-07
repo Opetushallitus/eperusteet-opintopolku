@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('SpinnerService', function(SPINNER_WAIT, $rootScope, $timeout) {
   var pyynnot = 0;
 

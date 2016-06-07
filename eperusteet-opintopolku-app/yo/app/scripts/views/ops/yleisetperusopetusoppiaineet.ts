@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 'use strict';
-epOpintopolkuApp
+angular.module('app')
   .controller('OpsOppiaineetController', function(
     $scope,
     $timeout,

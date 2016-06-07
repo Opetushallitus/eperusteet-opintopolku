@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
   .service('YleinenData', function YleinenData($rootScope, Arviointiasteikot, Notifikaatiot) {
     this.rakenneRyhmaRoolit = [
       'määritelty',

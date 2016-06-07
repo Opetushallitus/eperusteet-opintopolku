@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-var epOpintopolkuApp = angular.module('eperusteOpintopolkuApp', [
+angular.module('app', [
   'ngRoute',
   'ngSanitize',
   'ui.router',

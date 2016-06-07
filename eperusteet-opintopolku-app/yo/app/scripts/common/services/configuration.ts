@@ -16,7 +16,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .service('eperusteetConfigTemplator', function($http, $q) {
   return function(serviceLocation) {
     var inited = false;

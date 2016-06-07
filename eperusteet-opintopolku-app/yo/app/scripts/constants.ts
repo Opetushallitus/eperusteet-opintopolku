@@ -17,7 +17,7 @@
 
 'use strict';
 
-epOpintopolkuApp
+angular.module('app')
 .constant('ORGANISATION_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
 .constant('LOKALISOINTI_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
 .constant('AUTHENTICATION_SERVICE_LOC', '/authentication-service/resources')
@@ -28,5 +28,4 @@ epOpintopolkuApp
 .constant('LUKITSIN_MINIMI', 5000)
 .constant('LUKITSIN_MAKSIMI', 20000)
 .constant('TEXT_HIERARCHY_MAX_DEPTH', 8)
-.constant('SHOW_VERSION_FOOTER', true)
-;
+.constant('SHOW_VERSION_FOOTER', true);
