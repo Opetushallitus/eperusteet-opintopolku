@@ -192,8 +192,7 @@ angular.module('eperusteet.esitys')
     };
   })
 
-
-  .directive('epLukioSivunavigaatio', function ($window, $document, $timeout, $compile) {
+  .directive('epLukioSivunavigaatio', function ($compile) {
     return {
       templateUrl: 'eperusteet-esitys/directives/lukiosivunavi.html',
       restrict: 'AE',

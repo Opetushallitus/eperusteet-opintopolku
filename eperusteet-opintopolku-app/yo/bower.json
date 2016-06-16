@@ -19,16 +19,12 @@
     "restangular": "1.5.2",
     "jquery": "2.2.4",
     "lodash": "3.10.1",
-    "es5-shim": "4.5.8",
+    "es5-shim": "4.5.9",
     "json3": "3.3.2",
     "momentjs": "2.13.0",
     "bootstrap-sass-official": "3.3.6",
     "angulartics": "1.1.0",
     "ngstorage": "0.3.10",
     "eperusteet-frontend-utils": "Opetushallitus/eperusteet-frontend-utils#master"
-  },
-  "devDependencies": {
-    "angular-mocks": "1.4.11",
-    "angular-scenario": "1.4.11"
   }
 }

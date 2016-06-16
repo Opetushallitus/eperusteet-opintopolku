@@ -1,7 +1,7 @@
 // Karma configuration
 // http://karma-runner.github.io/0.10/config/configuration-file.html
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     // base path, that will be used to resolve files and exclude
     basePath: '',
@@ -17,7 +17,7 @@ module.exports = function(config) {
       'app/bower_components/angular-sanitize/angular-sanitize.js',
       'app/bower_components/angular-resource/angular-resource.js',
       'app/bower_components/angular-animate/angular-animate.js',
-      'app/bower_components/angular-mocks/angular-mocks.js',
+      'node_modules/angular-mocks/angular-mocks.js',
       'app/bower_components/angular-translate/angular-translate.js',
       'app/bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
       'app/bower_components/angular-ui-utils/ui-utils.js',

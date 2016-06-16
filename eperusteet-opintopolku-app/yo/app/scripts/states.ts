@@ -961,16 +961,14 @@ angular.module('app')
         url: '/amops/:opsId',
         templateUrl: 'views/amops/amops.html',
         controller: 'AmopsController',
+        onEnter: (ops, MurupolkuData) => MurupolkuData.set({ opsId: ops.id, opsNimi: ops.nimi }),
         resolve: {
-          opsId: ($stateParams) => {
-            return $stateParams.opsId;
-          },
-          ops: (AmopsResource) => {
-            return AmopsResource().getOps().$promise;
-          },
-          otsikot: (AmopsResource) => {
-            return AmopsResource().getOtsikot().$promise;
-          }
+          ktId: (Api, $stateParams) => Api.all("julkinen").one("opetussuunnitelmat", $stateParams.opsId).one("koulutustoimija").get(),
+          koulutustoimija: (Api, ktId) => Api.all("koulutustoimijat").get(ktId),
+          ops: (koulutustoimija, $stateParams) => koulutustoimija.one("opetussuunnitelmat", $stateParams.opsId).get(),
+          otsikot: (ops) => ops.all("otsikot").getList(),
+          sisaltoRoot: (otsikot) => _.find(otsikot, (tkv) => !tkv._vanhempi),
+          tekstit: (ops, sisaltoRoot) => ops.one("tekstit", sisaltoRoot.id)
         }
       })
 
@@ -984,9 +982,7 @@ angular.module('app')
         templateUrl: 'views/amops/tekstikappale.html',
         controller: 'AmopsTekstikappaleController',
         resolve: {
-          tekstikappaleId: ($stateParams) => $stateParams.tekstikappaleId,
-          tekstikappale: (AmopsResource, tekstikappaleId) =>
-            AmopsResource(tekstikappaleId).getTekstikappale().$promise,
+          tekstikappale: (tekstit, $stateParams) => tekstit.one($stateParams.tekstikappaleId).get()
         }
       });
   });

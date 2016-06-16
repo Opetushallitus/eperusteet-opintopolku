@@ -28,5 +28,6 @@ angular.module('app', [
   'angularSpinner',
   'angulartics',
   'angulartics.piwik',
-  'eperusteet.esitys'
+  'eperusteet.esitys',
+  'restangular'
 ]);

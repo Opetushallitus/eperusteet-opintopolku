@@ -13,24 +13,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
  */
-
 'use strict';
 
 angular.module('app')
-.controller('AmopsController', ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot) => {
-  $scope.ops = ops;
-  $scope.otsikot = otsikot;
-
-  $scope.$on('$stateChangeSuccess', () => {
-    if ($state.current.name === 'root.amops') {
-      $state.go('.tiedot', { opsId: $scope.ops.id }, { location: 'replace' });
-    }
-  });
-
-  $scope.sivunavi = Tekstikappaleet.teeRakenne(Tekstikappaleet.uniikit(otsikot), sisaltoRoot.id);
-  console.log("asd");
-})
-.controller('AmopsTekstikappaleController', () => {
-
-});
-
+.factory("Api", Restangular => Restangular.withConfig(config => {
+  config.setBaseUrl("/eperusteet-amosaa-service/api");
+  config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
+}));

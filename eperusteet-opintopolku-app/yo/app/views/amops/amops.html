@@ -1,4 +1,4 @@
-<div>
+<div class="amops">
   <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
 
   <div ng-if="ops.tila !== 'valmis'" class="alert alert-info">
@@ -8,20 +8,21 @@
 
   <murupolku></murupolku>
 
-  <div class="clearfix"></div>
+  <div class="nakyma">
+    <div class="sivunavi">
+      <ul>
+        <li>Tiedot</li>
+        <dynamic template="views/amops/sivunaviitem.html"
+                 ng-model="sivunavi.lapset"
+                 misc="misc">
+        </dynamic>
+      </ul>
+    </div>
 
-  <div id="sivunavi-sisalto-wrapper" ng-class="{'sivunavi-hidden': !isNaviVisible()}">
-    <div class="esitys">
-      <div class="sivunavi-navigaatio sivunavi-simple">
-        <ep-lukio-sivunavigaatio  header="navi.header" sections="navi.sections"></ep-lukio-sivunavigaatio>
-      </div>
-
-      <div class="sivunavi-clear"></div>
-      <div class="sivunavi-sisalto perusopetus">
-        <div class="row">
-          <div class="col-md-12">
-            <div id="esitysPrintSisalto" ui-view></div>
-          </div>
+    <div class="sisalto">
+      <div class="row">
+        <div class="col-md-12">
+          <div ui-view></div>
         </div>
       </div>
     </div>
