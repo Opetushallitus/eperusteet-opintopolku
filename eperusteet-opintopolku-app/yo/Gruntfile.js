@@ -85,7 +85,7 @@ module.exports = function (grunt) {
     connect: {
       options: {
         port: 9020,
-        hostname: '0.0.0.0',
+        hostname: '0.0.0.0'
       },
       proxies: [{
         context: '/eperusteet-service',
@@ -114,26 +114,6 @@ module.exports = function (grunt) {
               livereloadSnippet,
               mountFolder(connect, process.env.HOME +'/oph-configuration/eperusteet-opintopolku'),
               mountFolder(connect, '.tmp'),
-              mountFolder(connect, pathConfig.dist)
-            ];
-          }
-        }
-      },
-      test: {
-        options: {
-          port: 0,
-          middleware: function(connect) {
-            return [
-              mountFolder(connect, '.tmp'),
-              mountFolder(connect, 'test')
-            ];
-          }
-        }
-      },
-      dist: {
-        options: {
-          middleware: function(connect) {
-            return [
               mountFolder(connect, pathConfig.dist)
             ];
           }
@@ -340,13 +320,13 @@ module.exports = function (grunt) {
           pattern : /templateUrl:\s*['"]\//m
         }
       },
-      showhide: {
-        files: [{src: ['<%= config.app %>/{scripts,views}/**/*.{js,html}']}],
+      /*showhide: {
+        files: [{src: ['<%= config.app %>/{scripts,views}/!**!/!*.{js,html}']}],
         options: {
-          /* Check that ng-show/ng-hide are not used in same element */
+          /!* Check that ng-show/ng-hide are not used in same element *!/
           pattern : /(ng-show=|ng-hide=)[^>]+(ng-hide=|ng-show=)/m
         }
-      },
+      },*/
       controllerNaming: {
         files: [{src: ['<%= config.app %>/scripts/**/*.js']}],
         options: {
@@ -359,7 +339,7 @@ module.exports = function (grunt) {
       options: {
         limit: 500
       },
-      javascript: {
+      typescript: {
         options: {
           limit: 300
         },

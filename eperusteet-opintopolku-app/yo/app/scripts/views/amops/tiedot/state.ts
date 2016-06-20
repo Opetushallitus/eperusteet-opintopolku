@@ -16,21 +16,9 @@
 
 'use strict';
 
-angular.module('app')
-.controller('AmopsController', ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot) => {
-  $scope.ops = ops;
-  $scope.otsikot = otsikot;
-
-  $scope.$on('$stateChangeSuccess', () => {
-    if ($state.current.name === 'root.amops') {
-      $state.go('.tiedot', { opsId: $scope.ops.id }, { location: 'replace' });
-    }
-  });
-
-  $scope.sivunavi = Tekstikappaleet.teeRakenne(Tekstikappaleet.uniikit(otsikot), sisaltoRoot.id);
-  console.log("asd");
-})
-.controller('AmopsTekstikappaleController', () => {
-
-});
-
+angular.module("app")
+.config($stateProvider => $stateProvider
+.state('root.amops.tiedot', {
+  url: '/tiedot',
+  templateUrl: 'views/amops/tiedot/view.html',
+}));

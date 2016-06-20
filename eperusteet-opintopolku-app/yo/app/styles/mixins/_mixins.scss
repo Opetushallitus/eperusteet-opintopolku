@@ -1,0 +1,31 @@
+.content-toggler {
+
+  .content-toggler-header {
+    margin: 0px;
+    padding: 0px;
+    margin-bottom: 6px;
+
+    .ct-otsikko {
+      margin: 0px;
+      padding: 0px;
+      cursor: pointer;
+      margin-bottom: 2px;
+
+      .glyphicon {
+        color: #A4CDDE;
+        margin-right: 10px;
+      }
+
+      label {
+        font-weight: normal;
+        font-size: large;
+        cursor: pointer;
+
+        &:hover {
+          transition: color 0.5s ease;
+          color: #888;
+        }
+      }
+    }
+  }
+}

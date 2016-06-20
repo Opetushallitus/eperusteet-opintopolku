@@ -1,17 +1,25 @@
 <li ng-show="!item.$$hidden" ng-repeat="item in ngModel" id="{{ 'sisalto-item-' + item.id }}">
-  <span>
-    <a ui-sref-active="active"
-       ui-sref="root.amops.tekstikappale({ tekstikappaleId: item.id })"
-       ng-class="{ pakollinen: item.$$obj.pakollinen, liikkumaton: item.$$obj.liikkumaton }"
-       href="">
-      <span ng-show="item.lapset.length > 0 && !misc.isSearching"
-            ng-click="misc.toggleItem($event, item)"
-            class="multi-item">
+
+  <a ui-sref="root.amops.osa({ osaId: item.id })" ui-sref-active="active">
+
+    <span class="chevron" ng-show="item.lapset.length > 0 && !misc.isSearching" ng-click="misc.toggleItem($event, item)">
+      <span ng-if="item.$$closed">
+        <span class="glyphicon glyphicon-chevron-right"></span>
       </span>
-      <span ng-bind="(item.$$obj.tekstiKappale.nimi || 'nimeton-tekstikappale') | kaanna"></span>
-    </a>
-  </span>
-  <div ng-hide="item.$$closed && !misc.isSearching">
-    <dynamic template="views/amops/sivunaviitem.html" ng-model="item.lapset" misc="misc"></dynamic>
-  </div>
+      <span ng-if="!item.$$closed">
+        <span class="glyphicon glyphicon-chevron-down"></span>
+      </span>
+    </span>
+
+    <span ng-bind="(item.$$obj.tekstiKappale.nimi || 'nimeton-tekstikappale') | kaanna">
+    </span>
+  </a>
+
+  <ul ng-hide="item.$$closed && !misc.isSearching || item.lapset.length === 0">
+    <dynamic template="views/amops/sivunaviitem.html"
+             ng-model="item.lapset"
+             misc="misc">
+    </dynamic>
+  </ul>
+
 </li>

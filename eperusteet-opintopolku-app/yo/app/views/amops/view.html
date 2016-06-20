@@ -1,0 +1,46 @@
+<div class="amops">
+  <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
+
+  <div ng-if="ops.tila !== 'valmis'" class="alert alert-info">
+    <h4 kaanna="'amops-esikatselu'"></h4>
+    <p kaanna="'amops-esikatselu-info'"></p>
+  </div>
+
+  <ol class="breadcrumb">
+    <li>
+      <a href="" ui-sref="root.etusivu">
+        <span class="glyphicon glyphicon-home"></span>
+      </a>
+    </li>
+    <li ng-repeat="muru in muruPath"><a href="" ui-sref="{{ muru.state }}" ui-sref-opts="{ reload: true }"><span ng-bind="muru.name | kaanna"></span></a></li>
+  </ol>
+
+  <div class="nakyma">
+    <div class="sivunavi sivunavi-box">
+      <div class="header">
+        Test
+      </div>
+      <ul>
+        <li>
+          <a ui-sref-active="active"
+             ui-sref=".tiedot"
+             ng-bind="'tiedot' | kaanna"
+             ng-class="{ pakollinen: item.$$obj.pakollinen, liikkumaton: item.$$obj.liikkumaton }">
+          </a>
+        </li>
+        <dynamic template="views/amops/sivunaviitem.html"
+                 ng-model="sivunavi.lapset"
+                 misc="misc">
+        </dynamic>
+      </ul>
+    </div>
+
+    <div class="oikea">
+      <div class="row">
+        <div class="col-md-12">
+          <div ui-view></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

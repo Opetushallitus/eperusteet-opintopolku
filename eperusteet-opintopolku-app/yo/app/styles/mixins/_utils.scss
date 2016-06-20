@@ -1,15 +1,9 @@
 @mixin borderradius($all) {
-  -webkit-border-radius: $all;
-  -moz-border-radius: $all;
-  -ms-border-radius: $all;
-  -o-border-radius: $all;
   border-radius: $all;
 }
 
 @mixin vertical-align($position: relative) {
   position: $position;
   top: 50%;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }

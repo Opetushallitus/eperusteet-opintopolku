@@ -38,12 +38,12 @@ angular.module('app')
       latest = crumbs;
       var titleEl = angular.element('head > title');
       var peruste = null;
-      _.each(crumbs, function (crumb, index) {
+      _.each(crumbs, function (crumb, index: Number) {
         if (crumb.peruste && index !== crumbs.length - 1) {
           peruste = crumb.peruste;
         }
       });
-      var leaf = _.last(crumbs);
+      var leaf: any = _.last(crumbs);
       var last = leaf ? Kaanna.kaanna(leaf.label) : '';
       var titleText = last;
       if (peruste && last) {

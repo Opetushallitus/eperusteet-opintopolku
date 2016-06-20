@@ -15,10 +15,9 @@
  */
 
 'use strict';
-/* global _, document */
 
 angular.module('app')
-  .service('Algoritmit', function(Kaanna) {
+  .service('Algoritmit',(Kaanna) => {
     function rajausVertailu(input, kentta) {
       kentta = arguments.length > 2 ? kentta[arguments[2]] : kentta;
       for (var i = 3; i < arguments.length; ++i) {
@@ -29,7 +28,7 @@ angular.module('app')
     }
 
     function mapLapsisolmut(objekti, lapsienAvain, cb) {
-      return _.map(_.isArray(objekti) ? objekti : objekti[lapsienAvain], function(solmu) {
+      return _.map(_.isArray(objekti) ? objekti : objekti[lapsienAvain], (solmu) => {
         solmu = _.clone(solmu);
         solmu[lapsienAvain] = mapLapsisolmut(solmu, lapsienAvain, cb);
         return cb(solmu);
@@ -38,7 +37,7 @@ angular.module('app')
 
     function kaikilleLapsisolmuille(objekti, lapsienAvain, cb, depth) {
       depth = depth || 0;
-      _.forEach(objekti[lapsienAvain], function(solmu) {
+      _.forEach(objekti[lapsienAvain], (solmu) => {
         if (!cb(solmu, depth)) {
           kaikilleLapsisolmuille(solmu, lapsienAvain, cb, depth + 1);
         }
@@ -49,7 +48,7 @@ angular.module('app')
       done = done || angular.noop;
       list = list || [];
       if (_.isEmpty(list)) { done(); return; }
-      cb(_.first(list), function() { asyncTraverse(_.rest(list), cb, done); });
+      cb(_.first(list), () => { asyncTraverse(_.rest(list), cb, done); });
     }
 
     function match(input, to) {
@@ -67,7 +66,7 @@ angular.module('app')
     }
 
     function perusteenSuoritustavanYksikko(peruste, suoritustapa) {
-      var foundSt = _.find(peruste.suoritustavat, function(st) {
+      var foundSt = _.find(peruste.suoritustavat, (st: any) => {
         return st.suoritustapakoodi === suoritustapa;
       });
       return foundSt ? foundSt.laajuusYksikko : 'OPINTOPISTE';
@@ -75,7 +74,7 @@ angular.module('app')
 
     function kaikilleTutkintokohtaisilleOsille(juuri, cb) {
       var lapsellaOn = false;
-      _.forEach(juuri.lapset, function(osa) {
+      _.forEach(juuri.lapset, (osa) => {
         lapsellaOn = kaikilleTutkintokohtaisilleOsille(osa, cb) || lapsellaOn;
       });
       return cb(juuri, lapsellaOn) || lapsellaOn;

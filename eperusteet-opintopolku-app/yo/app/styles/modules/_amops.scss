@@ -1,9 +1,78 @@
+$amops-padding: 15px;
+$amops-bgcolor: white;
+$amops-blue: #149ecb;
+
 .amops {
   .sivunavi {
-    width: 290px;
+    width: 320px;
     position: absolute;
+    background-color: $amops-bgcolor;
+    border: 1px solid #d2d2d2;
+
+    .header {
+      padding-top: $amops-padding;
+      padding-bottom: $amops-padding;
+      background-color: $amops-blue;
+      font-size: 110%;
+      font-weight: 700;
+      color: white;
+      text-align: center;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 0 $amops-padding;
+
+      li {
+        a {
+          display: block;
+          padding: 5px 5px 5px 25px;
+          position: relative;
+
+          .chevron {
+            position: absolute;
+            left: 5px;
+          }
+        }
+      }
+    }
+    & > ul {
+      margin: 10px $amops-padding;
+    }
   }
-  .sisalto {
-    padding-left: 300px;
+  .oikea {
+    background-color: $amops-bgcolor;
+    margin-left: 350px;
+    padding: 10px $amops-padding;
+
+    h1 {
+      margin: 0 0 20px 0;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .tiedot {
+      p {
+        margin: 0;
+      }
+    }
+
+    .osa {
+      .toggler {
+        float: right;
+        cursor: pointer;
+        margin-bottom: 20px;
+        .bubble {
+          color: #149ecb;
+          background-color: #F3F3F3;
+          padding: 10px;
+          display: inline-block;
+        }
+        .active {
+          color: #fff;
+          background-color: #149ecb;
+        }
+      }
+    }
   }
 }
