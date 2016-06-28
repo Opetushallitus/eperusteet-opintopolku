@@ -21,9 +21,9 @@
 /**
  * Override pagination template to get glyphs as first/last icons.
  */
-angular.module('template/pagination/pagination.html', [])
+angular.module('uib/template/pagination/pagination.html', [])
 .run(['$templateCache', function ($templateCache) {
-  $templateCache.put('template/pagination/pagination.html',
+  $templateCache.put('uib/template/pagination/pagination.html',
     '<ul class=\"pagination\">\n' +
     '  <li ng-if=\"boundaryLinks\" ng-class=\"{disabled: noPrevious()}\"><a href ng-click=\"selectPage(1)\" icon-role=\"first\">{{getText(\'first\')}}</a></li>\n' +
     '  <li ng-if=\"directionLinks\" ng-class=\"{disabled: noPrevious()}\"><a href ng-click=\"selectPage(page - 1)\" icon-role=\"previous\">{{getText(\'previous\')}}</a></li>\n' +
