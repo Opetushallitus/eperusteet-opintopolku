@@ -438,8 +438,8 @@ angular.module('app')
     });
   })
 
-  .config(function ($tooltipProvider) {
-    $tooltipProvider.setTriggers({
+  .config(function ($uibTooltipProvider) {
+    $uibTooltipProvider.setTriggers({
         'mouseenter': 'mouseleave',
         'click': 'click',
         'focus': 'blur',

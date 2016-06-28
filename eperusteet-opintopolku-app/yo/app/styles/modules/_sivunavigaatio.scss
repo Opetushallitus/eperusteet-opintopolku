@@ -32,17 +32,17 @@ $sivunavi-level-padding: 20px;
 .sivunavi-box {
   ul {
     list-style-type: none;
-    padding-left: 0px;
+    padding-left: 0;
   }
   label {
     font-weight: 300;
   }
   label > input {
-    top: 0px;
+    top: 0;
     margin-right: 5px;
   }
   .list-group {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
   .inner-accordion {
     border: 0;
@@ -219,41 +219,39 @@ $sivunavi-level-padding: 20px;
 
 /* Pienellä näytöllä sivunavista tulee kelluva ja kollapsoituva */
 @media (max-width: $screen-md-max) {
-  .sivunavi-outer {
-    .sivunavi-toggler {
-      position: fixed;
-      width: $sivunavi-toggle-leveys;
+  .sivunavi-toggler {
+    position: fixed;
+    width: $sivunavi-toggle-leveys;
+    height: $sivunavi-toggle-korkeus;
+    left: 0;
+    top: 180px;
+    z-index: 999;
+    display: block;
+    cursor: pointer;
+
+    .sivunavi-valinta {
+      width: 20px;
       height: $sivunavi-toggle-korkeus;
-      left: 0;
-      top: 180px;
-      z-index: 999;
-      display: block;
-      cursor: pointer;
+      text-align: center;
+      background-color: white;
+      box-shadow: 0 0 $sivunavi-shadow black;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
 
-      .sivunavi-valinta {
-        width: 20px;
-        height: $sivunavi-toggle-korkeus;
-        text-align: center;
-        background-color: white;
-        box-shadow: 0 0 $sivunavi-shadow black;
-        border-top-right-radius: 4px;
-        border-bottom-right-radius: 4px;
-
-        .glyphicon {
-          position: relative;
-          left: -15px;
-          top: -0px;
-          color: $brand-primary;
-          font-size: 30px;
-          line-height: $sivunavi-valinta-korkeus;
-          float: none;
-        }
+      .glyphicon {
+        position: relative;
+        left: -15px;
+        top: -0px;
+        color: $brand-primary;
+        font-size: 30px;
+        line-height: $sivunavi-valinta-korkeus;
+        float: none;
       }
     }
-    .sivunavi-valikko-open {
-      left: -$sivunavi-toggle-leveys;
-      box-shadow: none;
-    }
+  }
+  .sivunavi-valikko-open {
+    left: -$sivunavi-toggle-leveys;
+    box-shadow: none;
   }
   .sivunavi-box {
     display: block;
@@ -294,11 +292,9 @@ $sivunavi-level-padding: 20px;
 }
 
 @media (min-width: $screen-md) and (max-width: $screen-md-max) {
-  .sivunavi-outer {
-    .sivunavi-box {
-      &.sivunavi-open {
-        left: -$pager-border-radius;
-      }
+  .sivunavi-box {
+    &.sivunavi-open {
+      left: -$pager-border-radius;
     }
   }
 }
@@ -306,10 +302,8 @@ $sivunavi-level-padding: 20px;
 
 /* Suurella näytöllä sivunavi näytetään vasemmassa laidassa */
 @media (min-width: $screen-lg-min) {
-  .sivunavi-outer {
-    .sivunavi-toggler {
-      display: none;
-    }
+  .sivunavi-toggler {
+    display: none;
   }
   .sivunavi-sisalto {
     margin-left: $sivunavi-leveys + 30px;

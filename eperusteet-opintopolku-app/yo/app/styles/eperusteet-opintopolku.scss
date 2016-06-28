@@ -3,6 +3,7 @@
 @import "modules/bootstrap-overrides";
 
 @import "mixins/utils";
+@import "mixins/mixins";
 
 @import "modules/yleiset";
 
@@ -12,6 +13,7 @@
 @import "modules/haku";
 @import "modules/lukiosivunavi";
 
+@import "modules/kasitteet";
 @import "modules/tutkinnonosat";
 @import "modules/tree";
 @import "modules/perusopetus";
@@ -23,3 +25,6 @@
 @import "modules/tabbedmenu";
 @import "modules/lukio-oppiaine";
 @import "modules/tavoitteet-box";
+@import "modules/amops";
+@import "modules/suorituspolku";
+@import "modules/tutkinnonosa";

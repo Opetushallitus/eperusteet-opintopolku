@@ -17,9 +17,7 @@
 'use strict';
 
 angular.module('app')
-.controller('UutisetController', function ($scope, UusimmatPerusteetService, MurupolkuData,
-  TiedotteetCRUD, Utils, Kieli) {
-  MurupolkuData.setTitle(null);
+.controller('UutisetController', function ($scope, UusimmatPerusteetService, TiedotteetCRUD, Utils, Kieli) {
   $scope.tiedotteet = [];
   $scope.naytto = {limit: 50, shown: 10};
   $scope.kieli = Kieli.getSisaltokieli();

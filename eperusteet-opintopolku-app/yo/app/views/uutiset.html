@@ -1,28 +1,18 @@
 <h1 class="peruste-otsikko" kaanna="'etusivu.uutisia'"></h1>
-<murupolku></murupolku>
 
-<div class="etusivu">
-  <div class="row">
-    <!-- Uutiset / Tiedotteet -->
-    <div class="col-md-12">
-      <div class="sisalto-box">
-        <div class="linkit">
-          <ul>
-            <li ng-repeat="tiedote in tiedotteet | limitTo:naytto.shown" class="lista-elementti"
-                ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
-              <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
-                <span ng-bind="tiedote.otsikko | kaanna"></span>
-              </a>
-              <p>
-                <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
-              </p>
-            </li>
-            <li class="lista-elementti-lisaa">
-              <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="sisalto-box uutiset">
+  <ul>
+    <li ng-repeat="tiedote in tiedotteet | limitTo:naytto.shown" class="lista-elementti"
+        ng-if="hasContentOnCurrentLang(tiedote.otsikko)">
+      <a ui-sref="root.tiedote({tiedoteId: tiedote.id})">
+        <span ng-bind="tiedote.otsikko | kaanna"></span>
+      </a>
+      <p>
+        <span>{{tiedote.luotu || tiedote.luotu | date}}</span>
+      </p>
+    </li>
+    <li class="lista-elementti-lisaa">
+      <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
+    </li>
+  </ul>
 </div>

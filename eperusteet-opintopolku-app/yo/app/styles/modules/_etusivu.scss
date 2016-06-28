@@ -13,7 +13,6 @@
   }
 }
 
-
 .banneri-box {
   background-color: white;
   background-image: url("../images/banneri-tausta.jpg");
@@ -47,6 +46,12 @@
       padding-left: 32px;
       padding-top: 10px;
     }
+  }
+}
+
+.uutiset {
+  ul {
+    list-style-type: none;
   }
 }
 

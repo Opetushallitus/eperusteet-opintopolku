@@ -14,90 +14,87 @@
  * European Union Public Licence for more details.
  */
 
-
 'use strict';
 
-/* global moment */
-
 angular.module('app')
-.config(function($urlRouterProvider, $sceProvider) {
+.config(($urlRouterProvider, $sceProvider) => {
   $sceProvider.enabled(true);
   $urlRouterProvider.when('', '/');
-  $urlRouterProvider.otherwise(function($injector, $location) {
+  $urlRouterProvider.otherwise(($injector, $location) => {
     $injector.get('virheService').setData({path: $location.path()});
     $injector.get('$state').go('root.virhe');
   });
 })
-.config(function (epEsitysSettingsProvider) {
+.config((epEsitysSettingsProvider) => {
   epEsitysSettingsProvider.setValue('perusopetusState', 'root.perusopetus');
 })
-.config(function($translateProvider, $urlRouterProvider) {
-  var preferred = 'fi';
+.config(($translateProvider, $urlRouterProvider) => {
+  const preferred = 'fi';
   $urlRouterProvider.when('/', '/' + preferred);
   $translateProvider.useLoader('LokalisointiLoader');
   $translateProvider.preferredLanguage(preferred);
-  moment.lang(preferred);
+  $translateProvider.useSanitizeValueStrategy(null);
+  moment.locale(preferred);
 })
-.config(function($rootScopeProvider) {
+.config(($rootScopeProvider) => {
   // workaround for infdig with recursive tree structures
   $rootScopeProvider.digestTtl(20);
 })
-.config(function($httpProvider) {
-  $httpProvider.interceptors.push(['$rootScope', '$q', 'SpinnerService', function($rootScope, $q, Spinner) {
-      return {
-        request: function(request) {
-          Spinner.enable();
-          return request;
-        },
-        response: function(response) {
-          Spinner.disable();
-          return response || $q.when(response);
-        },
-        responseError: function(error) {
-          Spinner.disable();
-          return $q.reject(error);
-        }
-      };
-    }]);
+.config(($httpProvider) => {
+  $httpProvider.interceptors.push(['$rootScope', '$q', 'SpinnerService', ($rootScope, $q, Spinner) => {
+    return {
+      request: (request) => {
+        Spinner.enable();
+        return request;
+      },
+      response: (response) => {
+        Spinner.disable();
+        return response || $q.when(response);
+      },
+      responseError: (error) => {
+        Spinner.disable();
+        return $q.reject(error);
+      }
+    };
+  }]);
 })
 // Uudelleenohjaus autentikointiin ja palvelinvirheiden ilmoitukset
-.config(function($httpProvider) {
+.config(($httpProvider) => {
   // Asetetaan oma interceptor kuuntelemaan palvelinkutsuja
-  $httpProvider.interceptors.push(['$rootScope', '$q', function($rootScope, $q) {
-      return {
-        'response': function(response) {
-          var uudelleenohjausStatuskoodit = [401, 412, 500];
-          var fail = _.indexOf(uudelleenohjausStatuskoodit, response.status) !== -1;
+  $httpProvider.interceptors.push(['$rootScope', '$q', ($rootScope, $q) => {
+    return {
+      'response': (response) => {
+        var uudelleenohjausStatuskoodit = [401, 412, 500];
+        var fail = _.indexOf(uudelleenohjausStatuskoodit, response.status) !== -1;
 
-          if (fail) {
-            $rootScope.$emit('event:uudelleenohjattava', response.status);
-          }
-          return response || $q.when(response);
-        },
-        'responseError': function(err) {
-          return $q.reject(err);
+        if (fail) {
+          $rootScope.$emit('event:uudelleenohjattava', response.status);
         }
-      };
-    }]);
+        return response || $q.when(response);
+      },
+      'responseError': (err) => {
+        return $q.reject(err);
+      }
+    };
+  }]);
 })
-.run(function($rootScope, $modal, $location, $window, $state, $http, paginationConfig,
-  Kaanna, virheService) {
-  paginationConfig.firstText = '';
-  paginationConfig.previousText = '';
-  paginationConfig.nextText = '';
-  paginationConfig.lastText = '';
-  paginationConfig.maxSize = 5;
-  paginationConfig.rotate = false;
+.run(($rootScope, $uibModal, $location, $window, $state, $http, uibPaginationConfig, Kaanna, virheService) => {
+  uibPaginationConfig.firstText = '';
+  uibPaginationConfig.previousText = '';
+  uibPaginationConfig.nextText = '';
+  uibPaginationConfig.lastText = '';
+  uibPaginationConfig.maxSize = 5;
+  uibPaginationConfig.rotate = false;
 
   var onAvattuna = false;
 
-  $rootScope.$on('event:uudelleenohjattava', function(event, status) {
+  $rootScope.$on('event:uudelleenohjattava', (event, status) => {
     if (onAvattuna) {
       return;
     }
     onAvattuna = true;
 
-    function getCasURL() {
+    var getCasURL = () => {
       var host = $location.host();
       var port = $location.port();
       var protocol = $location.protocol();
@@ -111,7 +108,7 @@ angular.module('app')
 
       url += cas + '?service=' + redirectURL;
       return url;
-    }
+    };
 
     var casurl = getCasURL();
 
@@ -120,20 +117,20 @@ angular.module('app')
       return;
     }
 
-    var uudelleenohjausModaali = $modal.open({
+    var uudelleenohjausModaali = $uibModal.open({
       templateUrl: 'views/modals/uudelleenohjaus.html',
       controller: 'UudelleenohjausModalCtrl',
       resolve: {
-        status: function() {
+        status: () => {
           return status;
         },
-        redirect: function() {
+        redirect: () => {
           return casurl;
         }
       }
     });
 
-    uudelleenohjausModaali.result.then(angular.noop, angular.noop).finally(function() {
+    uudelleenohjausModaali.result.then(angular.noop, angular.noop).finally(() => {
       onAvattuna = false;
       switch (status) {
         case 500:
@@ -146,18 +143,23 @@ angular.module('app')
     });
   });
 
-  $rootScope.$on('$stateChangeError', function(event, toState) {
+  $rootScope.$on('$stateChangeError', (event, toState) => {
     console.warn(event, toState);
     virheService.virhe({state: toState.name});
   });
 
-  $rootScope.$on('$stateNotFound', function(event, toState) {
+  $rootScope.$on('$stateNotFound', (event, toState) => {
     console.warn(toState);
     virheService.virhe({state: toState.to});
   });
 
+  $rootScope.$on('$stateChangeStart', (evt, to, params) => {
+    if (to.redirectTo) {
+      evt.preventDefault();
+      $state.go(to.redirectTo, params, { location: 'replace' })
+    }
+  });
 })
-
 // Inject common scope utilities
 .run(($rootScope, $state) => {
   $rootScope.stateIs = $state.is;

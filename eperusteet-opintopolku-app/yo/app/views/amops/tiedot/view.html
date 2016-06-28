@@ -1,0 +1,87 @@
+<div class="tiedot">
+  <h1 esitys-sivu-otsikko="'opetussuunnitelman-tiedot'">
+    <span kaanna="'opetussuunnitelman-tiedot'"></span>
+  </h1>
+
+  <div class="container-fluid">
+
+    <div class="row row-margin">
+      <div class="col-xs-6 col-sm-4">
+        <strong>
+          <span kaanna="'opetussuunnitelman-nimi'"></span>
+        </strong>
+      </div>
+      <div class="col-xs-6 col-sm-8">
+        <span ng-bind="(ops.nimi || 'nimetön') | kaanna"></span>
+      </div>
+    </div>
+
+    <div class="row row-margin">
+      <div class="col-xs-6 col-sm-4">
+        <strong>
+          <span kaanna="'tiivistelma'"></span>
+        </strong>
+      </div>
+      <div class="col-xs-6 col-sm-8">
+        <span ng-bind-html="ops.kuvaus | kaanna"></span>
+      </div>
+    </div>
+
+    <div class="row row-margin">
+      <div class="col-xs-6 col-sm-4">
+        <strong>
+          <span kaanna="'paatosnumero'"></span>
+        </strong>
+      </div>
+      <div class="col-xs-6 col-sm-8">
+        <span ng-bind="ops.paatosnumero | kaanna"></span>
+      </div>
+    </div>
+
+    <div class="row row-margin">
+      <div class="col-xs-6 col-sm-4">
+        <strong>
+          <span kaanna="'hyvaksyja'"></span>
+        </strong>
+      </div>
+      <div class="col-xs-6 col-sm-8">
+        <span ng-bind="ops.hyvaksyja| kaanna"></span>
+      </div>
+    </div>
+
+    <div class="row row-margin">
+      <div class="col-xs-6 col-sm-4">
+        <strong>
+          <span kaanna="'tila'"></span>
+        </strong>
+      </div>
+      <div class="col-xs-6 col-sm-8">
+        <span ng-bind="ops.tila | kaanna"></span>
+      </div>
+    </div>
+
+
+    <div class="row row-margin" ng-if="!!ops.paatospaivamaara">
+      <div class="col-xs-6 col-sm-4">
+        <strong>
+          <span kaanna="'paatospaivamaara'"></span>
+        </strong>
+      </div>
+      <div class="col-xs-6 col-sm-8">
+        <span pvm="ops.paatospaivamaara"></span>
+      </div>
+    </div>
+
+    <div class="row" ng-show="!!ops.kuvaus">
+      <div class="col-xs-12 col-sm-4">
+        <strong>
+          <span kaanna="'tiivistelma'"></span>
+        </strong>
+      </div>
+      <div class="col-xs-12 col-sm-8">
+        <termisto-tekstikentta tekstikentta="ops.kuvaus"></termisto-tekstikentta>
+      </div>
+    </div>
+
+  </div>
+</div>

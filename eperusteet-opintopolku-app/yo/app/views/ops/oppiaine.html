@@ -32,15 +32,15 @@
     <div ng-if="oppiaine.tyyppi === 'yhteinen'">
       <h3 kaanna="'tavoitteet'"></h3>
 
-      <accordion ng-repeat="tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].tunnisteet"
+      <uib-accordion ng-repeat="tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].tunnisteet"
                  ng-init="vs = vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]" class="sivunavi-box">
-        <accordion-group is-open="status.open">
-          <accordion-heading>
+        <uib-accordion-group is-open="status.open">
+          <uib-accordion-heading>
             <div ng-class="{'opened-oppiaine': status.open}">
               <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
               <h4 class="tavoite-otsikko" ng-bind-html="vs.tavoiteMap[tunniste].$tavoite | kaanna | unsafe"></h4>
             </div>
-          </accordion-heading>
+          </uib-accordion-heading>
           <div class="listat">
             <div class="lista">
               <h4 kaanna="'sisaltoalueet'"></h4>
@@ -72,8 +72,8 @@
               </tr>
             </table>
           </div>
-        </accordion-group>
-      </accordion>
+        </uib-accordion-group>
+      </uib-accordion>
 
       <h3 ng-if="!vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko"
           kaanna="'sisaltoalueet'"></h3>

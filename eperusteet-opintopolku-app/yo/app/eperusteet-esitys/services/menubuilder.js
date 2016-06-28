@@ -109,7 +109,7 @@ angular.module('eperusteet.esitys')
   }
 
 
-  function rakennaYksinkertainenMenu(otsikot){
+  function rakennaYksinkertainenMenu(otsikot) {
     var menu = [];
     Algoritmit.kaikilleLapsisolmuille(otsikot, 'lapset', function(osa, depth) {
       menu.push({

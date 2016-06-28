@@ -2,18 +2,18 @@
   <h1 esitys-sivu-otsikko="tavoitteet.paikallinen.otsikko">
     <span ng-bind-html="tavoitteet.perusteen.otsikko | kaanna | unsafe"></span>
   </h1>
-  <accordion ng-show="hasContent(tavoitteet.paikallinen.kuvaus)" class="peruste-box">
-    <accordion-group is-open="status.open">
-      <accordion-heading>
+  <uib-accordion ng-show="hasContent(tavoitteet.paikallinen.kuvaus)" class="peruste-box">
+    <uib-accordion-group is-open="status.open">
+      <uib-accordion-heading>
         <div>
           <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
           <h4 ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe"></h4>
         </div>
-      </accordion-heading>
+      </uib-accordion-heading>
       <h5 ng-bind-html="tavoitteet.perusteen.otsikko | kaanna"></h5>
       <termisto-tekstikentta perusteteksti="tavoitteet.perusteen.kuvaus"></termisto-tekstikentta>
-    </accordion-group>
-  </accordion>
+    </uib-accordion-group>
+  </uib-accordion>
   <div ng-show="!hasContent(tavoitteet.paikallinen.kuvaus)">
     <termisto-tekstikentta perusteteksti="tavoitteet.perusteen.kuvaus"></termisto-tekstikentta>
   </div>
@@ -27,18 +27,18 @@
       <span ng-bind-html="aihe.otsikko | kaanna | unsafe"></span>
     </h1>
     <div ng-show="aihe.perusteen && hasContent(aihe.yleiskuvaus)">
-      <accordion class="peruste-box">
-        <accordion-group is-open="status.open">
-          <accordion-heading>
+      <uib-accordion class="peruste-box">
+        <uib-accordion-group is-open="status.open">
+          <uib-accordion-heading>
             <div>
               <i class="pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
               <h4 ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe"></h4>
             </div>
-          </accordion-heading>
+          </uib-accordion-heading>
           <h5 ng-bind-html="aihe.perusteen.otsikko | kaanna"></h5>
           <termisto-tekstikentta perusteteksti="aihe.perusteen.yleiskuvaus"></termisto-tekstikentta>
-        </accordion-group>
-      </accordion>
+        </uib-accordion-group>
+      </uib-accordion>
     </div>
     <div ng-show="!hasContent(aihe.yleiskuvaus)">
       <h5 ng-bind-html="tavoitteet.perusteen.otsikko | kaanna"></h5>

@@ -35,7 +35,7 @@ angular.module('app')
       }
     };
   })
-  .controller('TavoitteetController', function($scope, $modal, $state, $rootScope, $timeout,
+  .controller('TavoitteetController', function($scope, $state, $rootScope, $timeout,
     $stateParams, Oppiaineet, Kaanna) {
     $scope.osaamiset = $scope.providedOsaamiset;
     if (_.isEmpty($scope.osaamiset)) {

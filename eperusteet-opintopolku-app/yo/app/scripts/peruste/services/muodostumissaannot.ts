@@ -19,7 +19,7 @@
 /* jshint -W074 */
 
 angular.module('app')
-  .service('Muodostumissaannot', function($modal) {
+  .service('Muodostumissaannot', function($uibModal) {
     var skratchpadHasContent = false;
     function osienLaajuudenSumma(rakenneOsat) {
       return _(rakenneOsat || [])
@@ -171,7 +171,7 @@ angular.module('app')
 
     function ryhmaModaali(thenCb, peruste) {
       return function(suoritustapa, ryhma, vanhempi, leikelauta) {
-        $modal.open({
+        $uibModal.open({
           templateUrl: 'views/modals/ryhmaModal.html',
           controller: 'MuodostumisryhmaModalCtrl',
           resolve: {
@@ -190,7 +190,7 @@ angular.module('app')
 
     function rakenneosaModaali(thenCb) {
       return function(rakenneosa) {
-        $modal.open({
+        $uibModal.open({
           templateUrl: 'views/modals/rakenneosaModal.html',
           controller: 'RakenneosaModalCtrl',
           resolve: {
