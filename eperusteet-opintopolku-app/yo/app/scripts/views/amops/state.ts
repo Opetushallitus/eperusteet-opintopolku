@@ -27,7 +27,10 @@ angular.module("app")
 .config($stateProvider => $stateProvider
 .state('root.amops', {
   url: '/amops/:opsId',
-  onEnter: (koulutustoimija, ops) => Murupolku.register("root.amops", ops.nimi),
+  onEnter: (koulutustoimija, ops, $state) => {
+    Murupolku.register("root.amops", ops.nimi);
+  },
+  redirectTo: 'root.amops.tiedot',
   resolve: {
     ktId: (Api, $stateParams) => Api.all("julkinen").one("opetussuunnitelmat", $stateParams.opsId).one("koulutustoimija").get(),
     koulutustoimija: (Api, ktId) => Api.all("koulutustoimijat").get(ktId),

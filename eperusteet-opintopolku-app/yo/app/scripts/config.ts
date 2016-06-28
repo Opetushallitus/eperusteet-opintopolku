@@ -153,6 +153,12 @@ angular.module('app')
     virheService.virhe({state: toState.to});
   });
 
+  $rootScope.$on('$stateChangeStart', (evt, to, params) => {
+    if (to.redirectTo) {
+      evt.preventDefault();
+      $state.go(to.redirectTo, params, { location: 'replace' })
+    }
+  });
 })
 // Inject common scope utilities
 .run(($rootScope, $state) => {
