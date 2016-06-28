@@ -16,23 +16,36 @@
   </ol>
 
   <div class="nakyma">
-    <div class="sivunavi sivunavi-box">
-      <div class="header">
-        Test
+
+    <div class="sivunavi-toggler-wrapper">
+      <div id="sivunavi-valikko-nappi" class="sivunavi-toggler" ng-click="toggleSideMenu()"
+           ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'"
+           ng-attr-title="{{ menuCollapsed && ('sivunavigointi-avaa-menu' | kaanna) || ('sivunavigointi-sulje-menu' | kaanna )}}">
+        <div class="sivunavi-valinta">
+          <span class="glyphicon glyphicon-align-justify"></span>
+        </div>
       </div>
-      <ul>
-        <li>
-          <a ui-sref-active="active"
-             ui-sref=".tiedot"
-             ng-bind="'tiedot' | kaanna"
-             ng-class="{ pakollinen: item.$$obj.pakollinen, liikkumaton: item.$$obj.liikkumaton }">
-          </a>
-        </li>
-        <dynamic template="views/amops/sivunaviitem.html"
-                 ng-model="sivunavi.lapset"
-                 misc="misc">
-        </dynamic>
-      </ul>
+    </div>
+
+    <div off-click="toggleSideMenu()" off-click-filter="#sivunavi-valikko-nappi" off-click-if="!menuCollapsed">
+      <div class="sivunavi sivunavi-box" ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}" ng-style="{top: scrollTop}">
+        <div class="header">
+          Test
+        </div>
+        <ul>
+          <li>
+            <a ui-sref-active="active"
+               ui-sref=".tiedot"
+               ng-bind="'tiedot' | kaanna"
+               ng-class="{ pakollinen: item.$$obj.pakollinen, liikkumaton: item.$$obj.liikkumaton }">
+            </a>
+          </li>
+          <dynamic template="views/amops/sivunaviitem.html"
+                   ng-model="sivunavi.lapset"
+                   misc="misc">
+          </dynamic>
+        </ul>
+      </div>
     </div>
 
     <div class="oikea">

@@ -45,7 +45,7 @@ angular.module("app")
   views: {
     "": {
       templateUrl: 'views/amops/view.html',
-      controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot) => {
+      controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window) => {
         $scope.ops = ops;
         $scope.otsikot = otsikot;
 
@@ -81,6 +81,19 @@ angular.module("app")
           toggleItem: (event, item) => {
             event.stopPropagation();
             item.$$closed = !item.$$closed;
+          }
+        };
+
+        $scope.menuCollapsed = true;
+        $scope.$on('$stateChangeStart', () => {
+          $scope.menuCollapsed = true;
+        });
+
+        $scope.scrollTop = angular.element($window).scrollTop();
+        $scope.toggleSideMenu = () => {
+          $scope.menuCollapsed = !$scope.menuCollapsed;
+          if (!$scope.menuCollapsed) {
+            $scope.scrollTop = angular.element($window).scrollTop();
           }
         };
       },

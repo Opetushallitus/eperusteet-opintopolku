@@ -2,7 +2,6 @@ namespace TermistoData {
   let i, _termisto, ktId;
 
   const termistoAPI = () => {
-    console.log(ktId);
     return i.Api.one("koulutustoimijat", ktId).all('termisto');
   };
 

@@ -8,6 +8,9 @@ $amops-blue: #149ecb;
     position: absolute;
     background-color: $amops-bgcolor;
     border: 1px solid #d2d2d2;
+    @media (min-width: $screen-lg-min) {
+      top: auto !important;
+    }
 
     .header {
       padding-top: $amops-padding;
@@ -43,8 +46,15 @@ $amops-blue: #149ecb;
   }
   .oikea {
     background-color: $amops-bgcolor;
-    margin-left: 350px;
-    padding: 10px $amops-padding;
+    @media (min-width: $screen-sm-min) {
+      padding: 10px $amops-padding;
+    }
+    @media (max-width: $screen-xs-max) {
+      padding: 10px 25px;
+    }
+    @media (min-width: $screen-lg-min) {
+      margin-left: 350px;
+    }
 
     h1 {
       margin: 0 0 20px 0;
