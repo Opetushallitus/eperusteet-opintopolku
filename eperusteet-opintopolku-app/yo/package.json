@@ -34,6 +34,7 @@
     "grunt-svgmin": "3.2.0",
     "grunt-timer": "0.6.0",
     "grunt-ts": "5.5.1",
+    "grunt-typings": "0.1.5",
     "grunt-usemin": "3.1.1",
     "karma": "0.13.22",
     "karma-jasmine": "1.0.2",
