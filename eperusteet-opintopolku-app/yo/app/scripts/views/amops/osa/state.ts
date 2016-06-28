@@ -35,9 +35,10 @@ angular.module("app")
   views: {
     "": {
       templateUrl: 'views/amops/osa/view.html',
-      controller: ($scope, osa, pTosa) => {
+      controller: ($scope, osa, pTosa, ktId) => {
         $scope.osa = osa;
         $scope.pTosa = pTosa;
+        $scope.ktId = ktId;
       }
     },
     "suorituspolku@root.amops.osa": {

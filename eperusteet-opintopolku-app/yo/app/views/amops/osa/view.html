@@ -4,7 +4,7 @@
     <span ng-hide="!osa.tosa.omatutkinnonosa.koodi">({{ osa.tosa.omatutkinnonosa.koodi }})</span>
   </h1>
 
-  <termisto-tekstikentta tekstikentta="osa.tekstiKappale.teksti"></termisto-tekstikentta>
+  <amosaa-termisto-teksti teksti="osa.tekstiKappale.teksti" kt="ktId"></amosaa-termisto-teksti>
 
   <div ng-if="osa.tyyppi === 'suorituspolku'" ui-view="suorituspolku"></div>
   <div ng-if="osa.tyyppi === 'tutkinnonosa'" ui-view="tutkinnonosa"></div>

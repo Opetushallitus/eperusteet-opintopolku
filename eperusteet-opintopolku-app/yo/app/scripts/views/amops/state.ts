@@ -27,7 +27,7 @@ angular.module("app")
 .config($stateProvider => $stateProvider
 .state('root.amops', {
   url: '/amops/:opsId',
-  onEnter: (koulutustoimija, ops, $state) => {
+  onEnter: (koulutustoimija, ops) => {
     Murupolku.register("root.amops", ops.nimi);
   },
   redirectTo: 'root.amops.tiedot',
