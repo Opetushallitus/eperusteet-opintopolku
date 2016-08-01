@@ -65,6 +65,13 @@ angular.module('app')
     $scope.tarkennettuHaku = $sessionStorage.tarkennettuHaku || false;
     $scope.opsit = opsit;
     $scope.kokonaismaara = $scope.opsit.length;
+    $scope.kokonaismaaraOrganisaatiot = _($scope.opsit)
+      .map("organisaatiot")
+      .flatten()
+      .map("oid")
+      .uniq()
+      .size();
+
     $scope.sorter = ListaSorter.init($scope);
 
     $scope.koulutustyypit = Object.keys($scope.koulutustyypitLinkit);
