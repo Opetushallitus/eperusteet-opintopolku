@@ -97,6 +97,25 @@ angular.module('app')
         sisaltoTunniste: 'luksisalto',
         hasPdfCreation: false
       },*/
+      'koulutustyyppi_5': {
+        nimi: 'telma',
+        //oletusSuoritustapa: 'naytto',
+        //hasTutkintonimikkeet: false
+        //hakuState: 'root.selaus.lisaopetuslista',
+        //sisaltoTunniste: 'losisalto',
+        //hasPdfCreation: true
+        //oletusSuoritustapa: 'naytto',
+        //hasTutkintonimikkeet: false,
+        //hakuState: 'root.selaus.ammatillinenaikuiskoulutus',
+        //sisaltoTunniste: 'sisalto'
+        oletusSuoritustapa: 'ops',
+        hasTutkintonimikkeet: true,
+        hakuState: 'root.selaus.valmentavakoulutus',
+        sisaltoTunniste: 'sisalto',
+        hasPdfCreation: true
+
+
+      },
       'koulutustyyppi_18': {
         nimi: 'valmentavakoulutus',
         //oletusSuoritustapa: 'naytto',
