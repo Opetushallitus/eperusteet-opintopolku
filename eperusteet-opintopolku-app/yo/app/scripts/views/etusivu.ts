@@ -77,6 +77,11 @@ angular.module('app')
       tila: 'valmis',
       stateTila: ''
     },
+    'koulutustyyppi_5': {
+      tyyppi: 'koulutustyyppi_5',
+      tila: 'valmis',
+      stateTila: ''
+    },
     'koulutustyyppi_18': {
       tyyppi: 'koulutustyyppi_18',
       tila: 'valmis',
@@ -108,6 +113,7 @@ angular.module('app')
   const getEsiopetus = _.partial(getGeneric, 'koulutustyyppi_15');
   const getLisaopetus = _.partial(getGeneric, 'koulutustyyppi_6');
   const getValma = _.partial(getGeneric, 'koulutustyyppi_18');
+  const getTelma = _.partial(getGeneric, 'koulutustyyppi_5');
   const getVarhaiskasvatus = _.partial(getGeneric, 'koulutustyyppi_20');
   const getAikuisLukio = _.partial(getGeneric, 'koulutustyyppi_14');
 
@@ -124,7 +130,7 @@ angular.module('app')
       });
     }).$promise;
     $q.all([amDeferred, getPerusopetus(), getValmistavaPerusopetus(), getEsiopetus(), getValmistavaLukioopetus(),
-      getLukioopetus(), getLisaopetus(), getVarhaiskasvatus(), getValma(), getAikuisLukio()]).then(() => {
+      getLukioopetus(), getLisaopetus(), getVarhaiskasvatus(), getValma(), getAikuisLukio(), getTelma()]).then(() => {
       cb(perusteet);
     });
   };
@@ -139,6 +145,7 @@ angular.module('app')
   this.getLisaopetus = getLisaopetus;
   this.getVarhaiskasvatus = getVarhaiskasvatus;
   this.getValma = getValma;
+  this.getTelma = getTelma;
   this.getAikuisLukio = getAikuisLukio;
   this.getStateTila = getStateTila;
 })
@@ -154,7 +161,10 @@ angular.module('app')
   $scope.currentYear = new Date().getFullYear();
 
   Perusteet.uusimmat((res) => $scope.uusimmatLista = res);
-  UusimmatPerusteetService.fetch((res) => $scope.uusimmat = res);
+  UusimmatPerusteetService.fetch((res) => {
+      $scope.uusimmat = res;
+      console.log(res);
+  });
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
 

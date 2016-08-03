@@ -49,5 +49,8 @@
   },
   "scripts": {
     "test": "grunt test"
+  },
+  "dependencies": {
+    "angular-cache": "^4.6.0"
   }
 }
