@@ -34,7 +34,9 @@ angular.module("app")
     const
         PREFIX = "localisation/locale-",
         SUFFIX = ".json",
-        BYPASS_REMOTE = $window.location.host.indexOf("localhost") === 0;
+        // BYPASS_REMOTE = $window.location.host.indexOf("localhost") === 0;
+        BYPASS_REMOTE = true
+
     return (options) => {
         let deferred = $q.defer();
         let translations = {};
