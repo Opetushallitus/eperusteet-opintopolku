@@ -62,62 +62,63 @@ module KaannaService {
 
 
 angular.module("app")
-.directive("kaanna", ($compile) => {
-    const resolvePostfix = (attrs) => {
-        let postfix = attrs.kaannaPostfix || "";
-        if (postfix) {
-            postfix = " " + postfix;
-        }
-        if (!postfix && attrs.vaaditaan !== undefined) {
-            postfix = " *";
-        }
-        return postfix;
-    };
+// Nyt on direktiivit tuplana
+// .directive("kaanna", ($compile) => {
+//     const resolvePostfix = (attrs) => {
+//         let postfix = attrs.kaannaPostfix || "";
+//         if (postfix) {
+//             postfix = " " + postfix;
+//         }
+//         if (!postfix && attrs.vaaditaan !== undefined) {
+//             postfix = " *";
+//         }
+//         return postfix;
+//     };
 
-    const getAttr = (attr, scope) => _.isString(attr)
-        && !_.isEmpty(attr)
-        && (scope.$eval(attr) || attr);
+//     const getAttr = (attr, scope) => _.isString(attr)
+//         && !_.isEmpty(attr)
+//         && (scope.$eval(attr) || attr);
 
-    return {
-        restrict: "A",
-        link: (scope, el, attrs) => {
-            const kaannaValue = (value) => _.isObject(value)
-                ? KaannaService.kaannaSisalto(value)
-                : KaannaService.kaanna(value);
-            const original = getAttr(attrs["kaanna"], scope) || el.text();
-            const postfix = resolvePostfix(attrs);
+//     return {
+//         restrict: "A",
+//         link: (scope, el, attrs) => {
+//             const kaannaValue = (value) => _.isObject(value)
+//                 ? KaannaService.kaannaSisalto(value)
+//                 : KaannaService.kaanna(value);
+//             const original = getAttr(attrs["kaanna"], scope) || el.text();
+//             const postfix = resolvePostfix(attrs);
 
-            if (_.isObject(original)) {
-                el.text(KaannaService.kaannaSisalto(original));
-                // if (attrs.iconRole) {
-                //     IconMapping.addIcon(attrs.iconRole, el);
-                // }
-                scope.$watch(() => {
-                    return getAttr(attrs["kaanna"], scope);
-                }, (value) => {
-                    el.text(kaannaValue(value));
-                });
-                scope.$on("changed:sisaltokieli", () => {
-                    el.text(kaannaValue(getAttr(attrs["kaanna"], scope)));
-                });
-            }
-            else {
-                const textEl = angular.element("<span>").attr("translate", original);
-                if (attrs["kaannaValues"]) {
-                    textEl.attr("translate-values", attrs["kaannaValues"]);
-                }
-                el.html("").append(textEl).append(postfix);
-                if (attrs["iconRole"]) {
-                    const iconEl = angular.element("<span>").attr("icon-role", attrs["iconRole"]);
-                    el.removeAttr("icon-role");
-                    el.prepend(iconEl);
-                }
-                el.removeAttr("kaanna");
-                el.removeAttr("kaanna-values");
-                $compile(el.contents())(scope);
-            }
-        }
-    };
-})
-.filter("kaanna", () => KaannaService.kaanna)
+//             if (_.isObject(original)) {
+//                 el.text(KaannaService.kaannaSisalto(original));
+//                 // if (attrs.iconRole) {
+//                 //     IconMapping.addIcon(attrs.iconRole, el);
+//                 // }
+//                 scope.$watch(() => {
+//                     return getAttr(attrs["kaanna"], scope);
+//                 }, (value) => {
+//                     el.text(kaannaValue(value));
+//                 });
+//                 scope.$on("changed:sisaltokieli", () => {
+//                     el.text(kaannaValue(getAttr(attrs["kaanna"], scope)));
+//                 });
+//             }
+//             else {
+//                 const textEl = angular.element("<span>").attr("translate", original);
+//                 if (attrs["kaannaValues"]) {
+//                     textEl.attr("translate-values", attrs["kaannaValues"]);
+//                 }
+//                 el.html("").append(textEl).append(postfix);
+//                 if (attrs["iconRole"]) {
+//                     const iconEl = angular.element("<span>").attr("icon-role", attrs["iconRole"]);
+//                     el.removeAttr("icon-role");
+//                     el.prepend(iconEl);
+//                 }
+//                 el.removeAttr("kaanna");
+//                 el.removeAttr("kaanna-values");
+//                 $compile(el.contents())(scope);
+//             }
+//         }
+//     };
+// })
+// .filter("kaanna", () => KaannaService.kaanna)
 .run(($injector) => $injector.invoke(KaannaService.init));

@@ -163,7 +163,6 @@ angular.module('app')
   Perusteet.uusimmat((res) => $scope.uusimmatLista = res);
   UusimmatPerusteetService.fetch((res) => {
       $scope.uusimmat = res;
-      console.log(res);
   });
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
