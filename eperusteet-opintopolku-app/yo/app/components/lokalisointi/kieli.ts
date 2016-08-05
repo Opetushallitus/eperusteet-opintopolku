@@ -57,7 +57,7 @@ module KieliService {
                 _$state.go(_$state.current.name, _.merge(_$stateParams, {lang: kielikoodi}), {reload: true});
             }
             uikieli = kielikoodi;
-            moment.lang(kielikoodi);
+            moment.locale(kielikoodi);
             _$translate.use(kielikoodi);
             _$rootScope.$broadcast("changed:uikieli", kielikoodi);
         }

@@ -51,6 +51,25 @@ angular.module('app')
   };
 })
 
+.filter("aikaleima", ($filter) => {
+  const mapping = {
+    date: "d.M.yyyy",
+    default: "d.M.yyyy H:mm:ss",
+    short: "d.M.yyyy H:mm",
+    time: "H:mm"
+  };
+
+  return (input, format, defaultKey) => {
+    if (!input) {
+      return defaultKey ? KaannaService.kaanna(defaultKey) : "";
+    }
+    else {
+      return $filter("date")(input, mapping[format] || mapping.default);
+    }
+  };
+})
+
+
 .directive('pvm', function (Kaanna, $filter, $timeout) {
   return {
     restrict: 'A',

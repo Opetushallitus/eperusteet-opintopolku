@@ -75,7 +75,7 @@ angular.module('app')
         var current = uikieli;
         if (current !== kielikoodi) {
           uikieli = kielikoodi;
-          moment.lang(kielikoodi);
+          moment.locale(kielikoodi);
           $translate.use(kielikoodi);
         }
       }
