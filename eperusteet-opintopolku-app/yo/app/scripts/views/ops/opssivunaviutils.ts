@@ -203,7 +203,7 @@ angular.module('app')
           }
         },
         valinnaisetoppiaineet: {
-          index: 2,
+          index: 3,
           callback: function (item) {
             if (item.$oppiaine) {
               item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id;
@@ -250,9 +250,9 @@ angular.module('app')
       };
 
       var parentVlkId = null;
-      var parentVuosi = null;
       _.each(states, function (value, key) {
-        if (_.endsWith($state.current.name, key)) {
+        //if ($state.is("**." + key)) { // EP-903
+        if (_.last($state.current.name.split(".")) == key) {
           processSection(navi, value.index, value.callback || angular.noop);
           (value.actions || angular.noop)();
         }

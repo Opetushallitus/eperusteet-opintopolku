@@ -48,7 +48,10 @@ angular.module('app')
       };
     });
 
-    $scope.oppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
+    $scope.kaikkiOppiaineet = _.map($scope.ops.oppiaineet, 'oppiaine');
+    $scope.yhteisetOppiaineet = _.filter($scope.kaikkiOppiaineet, (oa: any) => oa.tyyppi == 'yhteinen');
+    $scope.valinnaisetOppiaineet = _.filter($scope.kaikkiOppiaineet, (oa: any) => oa.tyyppi != 'yhteinen');
+
     $scope.vlkt = opsUtils.sortVlk($scope.ops.vuosiluokkakokonaisuudet);
 
     MurupolkuData.set({opsId: $scope.ops.id, opsNimi: $scope.ops.nimi});
@@ -115,8 +118,7 @@ angular.module('app')
     $scope.navi = {
       header: 'opetussuunnitelma',
       showOne: true,
-      sections: [
-        {
+      sections: [{
           id: 'tekstikappale',
           include: 'views/ops/opstekstisisalto.html',
           items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
@@ -125,18 +127,23 @@ angular.module('app')
         }, {
           title: 'vuosiluokkakokonaisuudet',
           id: 'vlkoppiaine',
-          items: opsMenuBuilders.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlkt, $scope.oppiaineet),
+          items: opsMenuBuilders.rakennaVuosiluokkakokonaisuuksienMenu($scope.vlkt, $scope.kaikkiOppiaineet),
           naviClasses: $scope.naviClasses,
           include: 'views/ops/opsvlk.html',
           state: $scope.state
         }, {
           title: 'oppiaineet',
           id: 'oppiaineet',
-          items: opsMenuBuilders.rakennaOppiaineetMenu($scope.oppiaineet),
+          items: opsMenuBuilders.rakennaOppiaineetMenu($scope.yhteisetOppiaineet),
           naviClasses: $scope.naviClasses,
           include: 'views/ops/opsvlk.html'
-          }
-      ]
+        }, {
+          title: 'valinnaiset-oppiaineet',
+          id: 'valinnaiset',
+          items: opsMenuBuilders.rakennaOppiaineetMenu($scope.valinnaisetOppiaineet),
+          naviClasses: $scope.naviClasses,
+          include: 'views/ops/opsvlk.html'
+        }]
     };
 
     $scope.navi.sections[0].items.unshift({
