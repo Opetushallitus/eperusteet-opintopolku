@@ -8,6 +8,4 @@ npm-debug.log
 *.iml
 .idea/
 target/
-eperusteet-opintopolku-app/yo/node/
-eperusteet-opintopolku-app/yo/tscommand-*.tmp.txt
-data.js
+

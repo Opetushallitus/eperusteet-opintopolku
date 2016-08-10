@@ -5,10 +5,8 @@ typings
 .tmp
 .tscache
 .sass-cache
-app/bower_components
 .netbeans.xml
-*~
-
-.tscache
-**/*.js
-**/*.js.map
+app/bower_components
+tscommand-*.tmp.txt
+app/**/*.js
+app/**/*.js.map
