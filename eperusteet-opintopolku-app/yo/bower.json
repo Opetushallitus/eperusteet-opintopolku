@@ -24,6 +24,7 @@
     "momentjs": "2.13.0",
     "bootstrap-sass-official": "3.3.6",
     "angulartics": "1.1.0",
+    "angulartics-piwik": "1.0.4",
     "ngstorage": "0.3.10",
     "eperusteet-frontend-utils": "Opetushallitus/eperusteet-frontend-utils#master"
   }

@@ -1,24 +1,21 @@
-'use strict';
+const LIVERELOAD_PORT = 35739;
 
-var LIVERELOAD_PORT = 35739;
+const
+  timer = require("grunt-timer"),
+  livereloadSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT }),
+  proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest,
+  autoprefixSnippet = require('autoprefixer')({ browsers: ['last 1 version'] }),
+  mountFolder = (connect, dir) => connect.static(require('path').resolve(dir));
 
-var timer = require("grunt-timer");
-var livereloadSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT });
-var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
-var autoprefixSnippet = require('autoprefixer')({ browsers: ['last 1 version'] });
-
-var pathConfig = {
+const pathConfig = {
   app: 'app',
   dist: 'dist',
   test: 'test'
 };
 
-var mountFolder = function (connect, dir) {
-  return connect.static(require('path').resolve(dir));
-};
-
-module.exports = function (grunt) {
+module.exports = grunt => {
   require('load-grunt-tasks')(grunt); // Load all "grunt-*" modules
+
   timer.init(grunt);
 
   grunt.initConfig({
@@ -111,7 +108,7 @@ module.exports = function (grunt) {
       }],
       livereload: {
         options: {
-          middleware: function (connect) {
+          middleware: connect => {
             return [
               proxySnippet,
               livereloadSnippet,
@@ -180,7 +177,7 @@ module.exports = function (grunt) {
         }
       }
     },
-    image: {
+    imagemin: {
       dynamic: {
         files: [{
           expand: true,
@@ -265,7 +262,7 @@ module.exports = function (grunt) {
       ],
       dist: [
         'sass',
-        'image',
+        'imagemin',
         'svgmin',
         'htmlmin'
       ]
@@ -317,21 +314,21 @@ module.exports = function (grunt) {
     },
     'regex-check': {
       templateurls: {
-        files: [{src: ['<%= config.app %>/scripts/**/*.js']}],
+        files: [{ src: ['<%= config.app %>/scripts/**/*.js'] }],
         options: {
           /* Check that templateUrls don't start with slash */
           pattern : /templateUrl:\s*['"]\//m
         }
       },
-      /*showhide: {
-        files: [{src: ['<%= config.app %>/{scripts,views}/!**!/!*.{js,html}']}],
+      showhide: {
+        files: [{ src: ['<%= config.app %>/{scripts,views}/**/*.{js,html}'] }],
         options: {
-          /!* Check that ng-show/ng-hide are not used in same element *!/
+          /* Check that ng-show/ng-hide are not used in same element */
           pattern : /(ng-show=|ng-hide=)[^>]+(ng-hide=|ng-show=)/m
         }
-      },*/
+      },
       controllerNaming: {
-        files: [{src: ['<%= config.app %>/scripts/**/*.js']}],
+        files: [{ src: ['<%= config.app %>/scripts/**/*.js'] }],
         options: {
           /* Enforce CamelCaseController naming */
           pattern : /\.controller\s*\(\s*'([a-z][^']+|([^'](?!Controller))+)'/g
@@ -346,19 +343,18 @@ module.exports = function (grunt) {
         options: {
           limit: 300
         },
-        files: [{src: ['<%= config.app %>/scripts/**/*.ts']}]
+        files: [{ src: ['<%= config.app %>/scripts/**/*.ts'] }]
       },
       scss: {
         options: {
           limit: 500
         },
-        files: [{src: ['<%= config.app %>/styles/**/*.scss']}]
+        files: [{ src: ['<%= config.app %>/styles/**/*.scss'] }]
       }
     }
   });
 
   grunt.registerTask('dev', [
-    'clean:dist',
     'typings',
     'ts',
     'copy:imgutils',

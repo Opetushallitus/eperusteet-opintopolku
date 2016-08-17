@@ -58,9 +58,9 @@ mixin polkuRyhma()
             +teksti("misc.spRivit[ngModel.tunniste].kuvaus")
         div.sp-kuvaus-toggler(ng-click="ngModel.$$naytaKuvaus = !ngModel.$$naytaKuvaus")
           span ...
-    div.sp-ryhma-lapset(ng-hide="ngModel.$$poistettu" ng-show="!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu)" ng-repeat="koodi in misc.spRivit[ngModel.tunniste].koodit")
+    div.sp-ryhma-lapset(ng-show="!ngModel.$$poistettu && (!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu))" ng-repeat="koodi in misc.spRivit[ngModel.tunniste].koodit")
       +tosaKoodiOsa("koodi")
-    div.sp-ryhma-lapset(ng-hide="ngModel.$$poistettu" ng-show="!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu)" ng-repeat="osa in ngModel.osat")
+    div.sp-ryhma-lapset(ng-show="!ngModel.$$poistettu && (!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu))" ng-repeat="osa in ngModel.osat")
       dynamic(template="views/amops/osa/polunrakenne.html" misc="misc" ng-model="osa" depth="depth + 1")
 
 
