@@ -49,7 +49,7 @@
   $scope.showOsaamisalat = $scope.showKoulutukset;
   $scope.koulutusalaNimi = $scope.Koulutusalat.haeKoulutusalaNimi;
   $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
-  if (dokumenttiId && dokumenttiId.length > 0) {
+  if (dokumenttiId && dokumenttiId.toString().length > 0) {
     $scope.dokumenttiUrl = location.origin + "/eperusteet-service/api/dokumentit/" + dokumenttiId;
   }
 

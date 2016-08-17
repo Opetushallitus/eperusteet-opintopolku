@@ -226,7 +226,15 @@ angular.module('app')
 .state('root.perusopetus.tiedot', {
   url: '/tiedot',
   templateUrl: 'eperusteet-esitys/views/tiedot.html',
-  controller: 'epEsitysTiedotController'
+  controller: 'epEsitysTiedotController',
+  resolve: {
+    dokumenttiId: (PerusteApi, peruste, $stateParams) => {
+      return PerusteApi.all('dokumentit').customGET("peruste", {
+        perusteId: peruste.id,
+        kieli: $stateParams.lang
+      })
+    }
+  }
 })
 .state('root.perusopetus.tekstikappale', {
   url: '/tekstikappale/:tekstikappaleId',
@@ -424,7 +432,15 @@ angular.module('app')
 .state('root.esiopetus.tiedot', {
   url: '/tiedot',
   templateUrl: 'eperusteet-esitys/views/tiedot.html',
-  controller: 'epEsitysTiedotController'
+  controller: 'epEsitysTiedotController',
+  resolve: {
+    dokumenttiId: (PerusteApi, peruste, $stateParams) => {
+      return PerusteApi.all('dokumentit').customGET("peruste", {
+        perusteId: peruste.id,
+        kieli: $stateParams.lang
+      })
+    }
+  }
 })
 .state('root.esiopetus.tekstikappale', {
   url: '/tekstikappale/:tekstikappaleId',
@@ -474,7 +490,15 @@ angular.module('app')
 .state('root.lisaopetus.tiedot', {
   url: '/tiedot',
   templateUrl: 'eperusteet-esitys/views/tiedot.html',
-  controller: 'epEsitysTiedotController'
+  controller: 'epEsitysTiedotController',
+  resolve: {
+    dokumenttiId: (PerusteApi, peruste, $stateParams) => {
+      return PerusteApi.all('dokumentit').customGET("peruste", {
+        perusteId: peruste.id,
+        kieli: $stateParams.lang
+      })
+    }
+  }
 })
 .state('root.lisaopetus.tekstikappale', {
   url: '/tekstikappale/:tekstikappaleId',
