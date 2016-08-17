@@ -179,7 +179,15 @@ angular.module('app')
 .state('root.esitys.peruste.tiedot', {
   url: '/tiedot',
   templateUrl: 'eperusteet-esitys/views/tiedot.html',
-  controller: 'epEsitysTiedotController'
+  controller: 'epEsitysTiedotController',
+  resolve: {
+    dokumenttiId: (PerusteApi, peruste, $stateParams) => {
+      return PerusteApi.all('dokumentit').customGET("peruste", {
+        perusteId: peruste.id,
+        kieli: $stateParams.lang
+      })
+    }
+  }
 })
 /* PERUSOPETUS */
 .state('root.perusopetus', {

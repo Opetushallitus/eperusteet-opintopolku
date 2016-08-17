@@ -209,6 +209,17 @@
   </div>
 </div>
 
+<div class="row row-margin" ng-if="!!dokumenttiUrl">
+  <div class="col-xs-6 col-sm-4">
+    <strong>
+      <span kaanna="'dokumentti-osoite'"></span>
+    </strong>
+  </div>
+  <div class="col-xs-6 col-sm-8">
+    <a ng-href="{{ dokumenttiUrl }}">{{ dokumenttiUrl }}</a>
+    <span>{{ dokumenttiUrl }}</span>
+  </div>
+</div>
 
 <div class="row row-margin" ng-if="!!peruste.voimassaoloAlkaa">
   <div class="col-xs-6 col-sm-4">

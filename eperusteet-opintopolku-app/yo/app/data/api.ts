@@ -19,4 +19,8 @@ angular.module('app')
 .factory("Api", Restangular => Restangular.withConfig(config => {
   config.setBaseUrl("/eperusteet-amosaa-service/api");
   config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
+}))
+.factory("PerusteApi", Restangular => Restangular.withConfig(config => {
+  config.setBaseUrl("/eperusteet-service/api");
+  config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
 }));
