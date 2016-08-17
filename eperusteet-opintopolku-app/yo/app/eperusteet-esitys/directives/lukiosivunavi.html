@@ -11,6 +11,8 @@
       </div>
     </div>
 
+
+
     <div class="list-group">
       <div class="list-group-item header" ng-class="{'empty-header': !header}">{{header | kaanna}}</div>
       <div class="list-group-item rajaus-container">
@@ -24,7 +26,7 @@
 
       <div ng-if="sections">
         <uib-accordion close-others="showOne">
-          <uib-accordion-group ng-repeat="section in sections" is-open="section.$open">
+          <uib-accordion-group ng-if="section.items.length > 0" ng-repeat="section in sections" is-open="section.$open">
             <uib-accordion-heading><span ng-click="onSectionChange(section)">{{section.title | kaanna}}</span></uib-accordion-heading>
             <div ng-if="section.include" ng-include="section.include"></div>
             <div ng-if="!section.include" class="list-group">
