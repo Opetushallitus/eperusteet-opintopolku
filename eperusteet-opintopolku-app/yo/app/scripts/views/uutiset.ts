@@ -24,12 +24,13 @@ angular.module('app')
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
 
-  var MONTH_OFFSET = 6;
-  var tempDate = new Date();
-  tempDate.setMonth(tempDate.getMonth() - MONTH_OFFSET);
-  var alkaen = tempDate.getTime();
+  const MONTH_OFFSET = 48*30*24*60*60*1000; // 4 vuotta
+  const alkaen = (new Date()).getTime() - MONTH_OFFSET;
 
-  TiedotteetCRUD.query({alkaen: alkaen , vainJulkiset: true}, function (res) {
+  TiedotteetCRUD.query({
+      alkaen: 0,
+      vainJulkiset: true
+  }, function (res) {
     $scope.tiedotteet = res;
   });
 });

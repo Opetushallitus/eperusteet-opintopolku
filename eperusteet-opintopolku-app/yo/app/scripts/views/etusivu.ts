@@ -167,10 +167,8 @@ angular.module('app')
 
   $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
 
-  const MONTH_OFFSET = 6;
-  let tempDate = new Date();
-  tempDate.setMonth(tempDate.getMonth() - MONTH_OFFSET);
-  const alkaen = tempDate.getTime();
+  const MONTH_OFFSET = 12*30*24*60*60*1000;
+  const alkaen = (new Date()).getTime() - MONTH_OFFSET;
 
   TiedotteetCRUD.query({alkaen: alkaen , vainJulkiset: true}, (res) => {
     $scope.tiedotteet = res;
