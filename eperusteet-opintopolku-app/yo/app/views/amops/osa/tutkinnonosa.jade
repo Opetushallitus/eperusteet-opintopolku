@@ -33,7 +33,7 @@ mixin ammattitaitovaatimus()
         span(ng-if="ammattitaitovaatimus.otsikko" ng-bind="ammattitaitovaatimus.otsikko | kaanna")
 
     .box-panel-content
-      .vaatimuksen-kohteet(ui-sortable="sortableOptionsVaatimuksenKohteet" ng-model="ammattitaitovaatimus.vaatimuksenKohteet")
+      .vaatimuksen-kohteet
         div(ng-repeat="vaatimuksenKohde in ammattitaitovaatimus.vaatimuksenKohteet")
           +vaatimuksenKohde
 
@@ -45,15 +45,14 @@ mixin arviointiKohde()
     p
       span(ng-if="arviointiKohde.selite" ng-bind="arviointiKohde.selite | kaanna")
 
-
     .table-responsive
       table.table.table-striped.table-condensed
         tbody
-          tr(ng-repeat="(index, osaamistasonKriteeri) in arviointiKohde.osaamistasonKriteerit")
-            td(ng-bind="arviointiAsteikot[pa.arviointiasteikko(arviointiKohde) - 1].osaamistasot[index].otsikko | kaanna")
+          tr(ng-repeat="(index, osaamistaso) in arviointiAsteikot[pa.arviointiasteikko(arviointiKohde) - 1].osaamistasot | orderBy:'-id'")
+            td(ng-bind="osaamistaso.otsikko | kaanna")
             td
               ul
-                li(ng-bind="kriteeri | kaanna" ng-repeat="kriteeri in osaamistasonKriteeri.kriteerit")
+                li(ng-bind="kriteeri | kaanna" ng-repeat="kriteeri in (arviointiKohde.osaamistasonKriteerit | orderBy:'-_osaamistaso')[index].kriteerit")
 
 
 mixin arviointiAsteikko()
@@ -78,7 +77,7 @@ mixin arviointi()
         span(ng-if="arvioinninKohdealue.otsikko" ng-bind="arvioinninKohdealue.otsikko | kaanna")
 
     .box-panel-content
-      .arviointi-kohteet(ui-sortable="sortableOptionsArvioinninKohteet" ng-model="arvioinninKohdealue.arvioinninKohteet")
+      .arviointi-kohteet
         div(ng-repeat="arviointiKohde in arvioinninKohdealue.arvioinninKohteet")
           +arviointiKohde
 
@@ -184,7 +183,7 @@ mixin tosaSisalto()
     +omaTosaSisalto
 
 .tutkinnonosa
-  div(ng-hide="$$ekEditing" style="margin-bottom: 20px;")
+  div(style="margin-bottom: 20px;")
     +toggler("$$showToteutus", "'sisalto'", "'toteutus'")
   .clearfix
 

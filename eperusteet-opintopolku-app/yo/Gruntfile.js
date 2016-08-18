@@ -15,7 +15,6 @@ const pathConfig = {
 
 module.exports = grunt => {
   require('load-grunt-tasks')(grunt); // Load all "grunt-*" modules
-
   timer.init(grunt);
 
   grunt.initConfig({

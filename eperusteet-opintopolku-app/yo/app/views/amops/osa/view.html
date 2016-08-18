@@ -2,6 +2,7 @@
   <h1 esitys-sivu-otsikko="osa.tekstiKappale.nimi">
     <span ng-bind-html="osa.tekstiKappale.nimi | kaanna | unsafe"></span>
     <span ng-hide="!osa.tosa.omatutkinnonosa.koodi">({{ osa.tosa.omatutkinnonosa.koodi }})</span>
+    <span ng-hide="!pTosa.koodiArvo">({{ pTosa.koodiArvo }})</span>
   </h1>
 
   <amosaa-termisto-teksti teksti="osa.tekstiKappale.teksti" kt="ktId"></amosaa-termisto-teksti>
