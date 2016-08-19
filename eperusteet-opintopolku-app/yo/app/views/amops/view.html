@@ -1,7 +1,8 @@
 <div class="amops">
   <h1 class="peruste-otsikko" ng-bind-html="ops.nimi | kaanna | unsafe"></h1>
 
-  <div ng-if="ops.tila !== 'valmis'" class="alert alert-info">
+  <div ng-if="ops.tila !== 'julkaistu'" class="alert alert-info">
+    <a class="palata-btn btn btn-primary pull-right" ng-click="returnToAmosaa()" ng-bind="'palata-ops-tyokaluun' | kaanna"></a>
     <h4 kaanna="'amops-esikatselu'"></h4>
     <p kaanna="'amops-esikatselu-info'"></p>
   </div>

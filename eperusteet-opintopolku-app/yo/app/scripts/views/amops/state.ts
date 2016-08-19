@@ -46,7 +46,7 @@ angular.module("app")
   views: {
     "": {
       templateUrl: 'views/amops/view.html',
-      controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window) => {
+      controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location) => {
         $scope.ops = ops;
         $scope.otsikot = otsikot;
 
@@ -97,7 +97,16 @@ angular.module("app")
             $scope.scrollTop = angular.element($window).scrollTop();
           }
         };
-      },
+
+        $scope.returnToAmosaa = () => {
+          const isTestEnvironment = _.includes(_.words($location.absUrl()), 'testi');
+          $window.location.href = isTestEnvironment ?
+          'https://testi.virkailija.opintopolku.fi/eperusteet-amosaa-app/#/fi/ops/'
+          + $scope.ops.id + '/tiedot' :
+          'https://virkailija.opintopolku.fi/eperusteet-amosaa-app/#/fi/ops/'
+          + $scope.ops.id + '/tiedot';
+        };
+      }
     }
   }
 }));
