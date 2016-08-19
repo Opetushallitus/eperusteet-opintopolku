@@ -32,8 +32,9 @@ angular.module("app")
   },
   redirectTo: 'root.amops.tiedot',
   resolve: {
-    ktId: (Api, $stateParams) => Api.all("julkinen").one("opetussuunnitelmat", $stateParams.opsId).one("koulutustoimija").get(),
-    koulutustoimija: (Api, ktId) => Api.all("koulutustoimijat").get(ktId),
+    julkinen: (Api) => Api.all("julkinen"),
+    ktId: (julkinen, $stateParams) => julkinen.one("opetussuunnitelmat", $stateParams.opsId).one("koulutustoimija").get(),
+    koulutustoimija: (julkinen, ktId) => julkinen.all("koulutustoimijat").get(ktId),
     ops: (koulutustoimija, $stateParams) => koulutustoimija.one("opetussuunnitelmat", $stateParams.opsId).get(),
     otsikot: (ops) => ops.all("otsikot").getList(),
     sisaltoRoot: (otsikot) => _.find(otsikot, (tkv: any) => !tkv._vanhempi),
