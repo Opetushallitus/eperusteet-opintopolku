@@ -83,6 +83,8 @@
     "app/scripts/common/services/opsmenubuilders.ts",
     "app/scripts/common/services/kieli.ts",
     "app/scripts/common/services/iconrole.ts",
-    "app/scripts/common/services/lokalisointi.ts"
+    "app/scripts/common/services/lokalisointi.ts",
+
+    "app/states/state.ts"
   ]
 }
