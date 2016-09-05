@@ -14,7 +14,10 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+// TODO: Poista kun 2.0
+interface NumberConstructor {
+    MAX_SAFE_INTEGER: number;
+}
 
 angular.module('eperusteet.esitys')
 .service('epMenuBuilder', function (Algoritmit, $state, Kieli, Utils, epEsitysSettings) {
@@ -31,7 +34,7 @@ angular.module('eperusteet.esitys')
     if (oppiaine.koosteinen) {
       ret = _(oppiaine.oppimaarat).filter(function (oppimaara) {
         return oppimaara.nimi[Kieli.getSisaltokieli()] &&
-          _.some(oppimaara.vuosiluokkakokonaisuudet, function (omVlk) {
+          _.some(oppimaara.vuosiluokkakokonaisuudet, function (omVlk: any) {
             return _.some(vlks, function (oneVlk) {
               return '' + omVlk._vuosiluokkaKokonaisuus === '' + oneVlk;
             });
@@ -55,7 +58,7 @@ angular.module('eperusteet.esitys')
     });
   }
 
-  function createOppiaineItem(oppiaine, depth, idx) {
+  function createOppiaineItem(oppiaine, depth, idx = undefined) {
     return {
       $id: oppiaine.id,
       depth: depth,
@@ -86,11 +89,11 @@ angular.module('eperusteet.esitys')
 
   function buildLukioOppiaineMenu(oppiaineet){
     var idx = 0;
-    return _.reduce(oppiaineet, function(menu, oppiaine){
+    return _.reduce(oppiaineet, function(menu, oppiaine: any){
         menu.push(createOppiaineItem(oppiaine, 0, idx));
         idx++;
         if(!_.isEmpty(oppiaine.oppimaarat)) {
-          _.each(oppiaine.oppimaarat, function(oppimaara){
+          _.each(oppiaine.oppimaarat, function(oppimaara: any){
             menu.push(createOppiaineItem(oppimaara, 1));
             if(!_.isEmpty(oppimaara.kurssit)) {
               _.each(oppimaara.kurssit, function(kurssi) {
@@ -127,26 +130,30 @@ angular.module('eperusteet.esitys')
     return menu;
   }
 
-  function traverseOppiaineet(aineet, arr, vlk, startingDepth) {
-    startingDepth = startingDepth || 0;
-    var isSisalto = startingDepth === 0;
-    var vlks = _.isArray(vlk) ? vlk : [vlk];
-    var oaFiltered = _(aineet).filter(function(oa) {
-      var oppiaineHasVlk = _.some(oa.vuosiluokkakokonaisuudet, function(oavkl) {
-        return _.some(vlks, function (oneVlk) {
-          return '' + oavkl._vuosiluokkaKokonaisuus === '' + oneVlk;
+  function traverseOppiaineet(aineet, arr, vlk, startingDepth = 0) {
+    const isSisalto = startingDepth === 0;
+    const vlks = _.isArray(vlk) ? vlk : [vlk];
+    const oaFiltered = _(aineet)
+      .filter(function(oa) {
+        const oppiaineHasVlk = _.some(oa.vuosiluokkakokonaisuudet, function(oavkl: any) {
+            return _.some(vlks, function (oneVlk) {
+            return '' + oavkl._vuosiluokkaKokonaisuus === '' + oneVlk;
+            });
         });
-      });
-      var oppimaaraVlkIds = _(oa.oppimaarat).map(function (oppimaara) {
-        return _.map(oppimaara.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus');
-      }).flatten().uniq().value();
-      var vlkIds = _.map(vlks, String);
-      return oppiaineHasVlk || !_.isEmpty(_.intersection(oppimaaraVlkIds, vlkIds));
-    }).value();
-    _.each(oppiaineSort(oaFiltered), function (oa) {
-      buildOppiaineItem(arr, oa, vlks, startingDepth, isSisalto);
-      _.each(filteredOppimaarat(oa, vlks), function (oppimaara) {
-        buildOppiaineItem(arr, oppimaara, vlks, startingDepth + 1, isSisalto);
+        const oppimaaraVlkIds = _(oa.oppimaarat)
+            .map(oppimaara => _.map(oppimaara.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus'))
+            .flatten()
+            .uniq()
+            .value();
+        const vlkIds = _.map(vlks, String);
+        return oppiaineHasVlk || !_.isEmpty(_.intersection(oppimaaraVlkIds, vlkIds));
+      })
+      .value();
+
+      _.each(oppiaineSort(oaFiltered), function (oa) {
+        buildOppiaineItem(arr, oa, vlks, startingDepth, isSisalto);
+        _.each(filteredOppimaarat(oa, vlks), function (oppimaara) {
+          buildOppiaineItem(arr, oppimaara, vlks, startingDepth + 1, isSisalto);
       });
     });
   }
@@ -184,7 +191,7 @@ angular.module('eperusteet.esitys')
   }
 
   function rakennaSisallotOppiaineet(aineet, sections, selected) {
-    var navi = {};
+    var navi: any = {};
     navi.oppiaineet = [];
     traverseOppiaineet(aineet, navi.oppiaineet, selected);
     _.each(sections, function(v) {

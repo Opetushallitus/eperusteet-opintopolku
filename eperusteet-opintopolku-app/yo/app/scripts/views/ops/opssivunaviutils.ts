@@ -54,7 +54,7 @@ angular.module('app')
 
       function setParentOppiaineHeader() {
         if (selected && selected.$oppiaine) {
-          var found = _.find(items, function (item) {
+          var found = _.find(items, function (item: any) {
             return item.$vuosi === '' + selected.$parent_vuosi;
           });
           if (found) {
@@ -88,7 +88,7 @@ angular.module('app')
 
       function setParent(){
         if (selected && selected.$oppiaine) {
-          var found = _.find(items, function (item) {
+          var found = _.find(items, function (item: any) {
             return item.$vuosi === '' + selected.$parent_vuosi;
           });
           if (found) {

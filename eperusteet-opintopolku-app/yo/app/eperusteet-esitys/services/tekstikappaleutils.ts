@@ -88,7 +88,7 @@ angular.module('eperusteet.esitys')
       '    <a ng-if="amEsitys" ui-sref="^.tekstikappale({osanId: model.id})" icon-role="new-window"></a>' +
       '    <a ng-if="!amEsitys" ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
       '  </span></span>',
-      link: function (scope, element) {
+      link: function (scope: any, element) {
         var headerEl = angular.element('<h' + scope.level + '>');
         element.find('.otsikko-wrap').wrap(headerEl);
         scope.amEsitys = scope.linkVar === 'osanId';
@@ -108,7 +108,7 @@ angular.module('eperusteet.esitys')
       '  <span class="teksti-linkki">' +
       '    <a ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
       '  </span></span>',
-      link: function (scope, element) {
+      link: function (scope: any, element) {
         var headerEl = angular.element('<h' + scope.level + '>');
         element.find('.otsikko-wrap').wrap(headerEl);
         scope.amEsitys = scope.linkVar === 'osanId';

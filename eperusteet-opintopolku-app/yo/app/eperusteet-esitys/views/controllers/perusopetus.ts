@@ -98,7 +98,7 @@ namespace Controllers {
                         tavoite.$rejected = false;
                     }
                     else if (inSisallot) {
-                        tavoite.$rejected = _.all(tavoite.laajattavoitteet, function(lt) {
+                        tavoite.$rejected = _.all(tavoite.laajattavoitteet, function(lt: string) {
                             return $scope.filterOsaamiset[lt];
                         });
                     }
@@ -117,7 +117,7 @@ namespace Controllers {
             }
             vlkIds = _.map(vlkIds, String);
             if (inSisallot) {
-                $scope.valittuOppiaine.vuosiluokkakokonaisuudet = _.zipBy(_.filter(oppiaine.vuosiluokkakokonaisuudet, function (vlk) {
+                $scope.valittuOppiaine.vuosiluokkakokonaisuudet = _.zipBy(_.filter(oppiaine.vuosiluokkakokonaisuudet, function (vlk: any) {
                     return _.some(vlkIds, function (vlkId) {
                         return '' + vlk._vuosiluokkaKokonaisuus === '' + vlkId;
                     });
@@ -139,8 +139,8 @@ namespace Controllers {
         };
 
         $scope.chooseFirstOppiaine = function (section) {
-            var aineet = _.find((section || $scope.navi.sections[2]).model.sections, {id: 'oppiaineet'});
-            var aine = _.find(aineet.items, {depth: 0});
+            var aineet: any = _.find((section || $scope.navi.sections[2]).model.sections, {id: 'oppiaineet'});
+            var aine: any = _.find(aineet.items, {depth: 0});
             if (aine) {
                 $timeout(() => {
                     $state.go(epEsitysSettings.perusopetusState + '.sisallot', {
@@ -223,7 +223,7 @@ namespace Controllers {
                     model: {
                         sections: [{
                             $condensed: true,
-                            items: _.map($scope.vuosiluokkakokonaisuudet, function(kokonaisuus) {
+                            items: _.map($scope.vuosiluokkakokonaisuudet, function(kokonaisuus: any) {
                                 return { label: kokonaisuus.nimi, value: kokonaisuus.id, $selected: true };
                             }),
                             update: _.partial(updateSelection, 0)
@@ -289,7 +289,7 @@ namespace Controllers {
 
         function checkPrevNext() {
             var items = $scope.navi.sections[0].items;
-            var me = _.findIndex(items, function (item) {
+            var me = _.findIndex(items, function (item: any) {
                 return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
             });
             if (me === -1) {

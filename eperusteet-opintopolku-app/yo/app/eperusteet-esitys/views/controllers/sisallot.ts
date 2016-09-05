@@ -106,7 +106,8 @@ namespace Controllers {
     export const epEsitysTutkinnonOsatController = ($scope, $state, $stateParams, Algoritmit, JarjestysService, Kaanna) => {
         $scope.jarjestysOrder = _.isBoolean(JarjestysService.selection.order) ? JarjestysService.selection.order : false;
         $scope.jarjestysOptions = JarjestysService.options;
-        $scope.jarjestysTapa = JarjestysService.selection.value || _.first($scope.jarjestysOptions).value;
+        $scope.jarjestysTapa = JarjestysService.selection.value
+            || (<any>_.first($scope.jarjestysOptions)).value;
 
         $scope.jarjestysFn = (data) => {
             switch($scope.jarjestysTapa) {
@@ -136,7 +137,7 @@ namespace Controllers {
 
     export const epEsitysRakenneController = ($scope, $state, $stateParams, PerusteenRakenne, realParams) => {
         $scope.$parent.valittu.sisalto = 'rakenne';
-        $scope.muodostumisOtsikko = _.find($scope.$parent.sisalto, (item) => item.tunniste === 'rakenne');
+        $scope.muodostumisOtsikko = _.find($scope.$parent.sisalto, (item: any) => item.tunniste === 'rakenne');
 
         PerusteenRakenne.hae(realParams.perusteId, realParams.suoritustapa, (rakenne) => {
             $scope.rakenne = rakenne;

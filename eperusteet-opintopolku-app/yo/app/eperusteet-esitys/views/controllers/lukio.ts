@@ -29,7 +29,7 @@ angular.module('eperusteet.esitys')
             showOne: '=',
             onSectionChange: '=?'
         },
-        controller: 'epLukioSivuNaviController',
+        controller: Controllers.epLukioSivuNaviController,
         transclude: true,
         link: function (scope: any, element) {
             var transcluded = element.find('#sivunavi-tc').contents();
@@ -259,7 +259,7 @@ namespace Controllers {
 
       function checkPrevNext() {
           var items = $scope.navi.sections[0].items;
-          var me = _.findIndex(items, function (item) {
+          var me = _.findIndex(items, function (item: any) {
               return item.$osa && item.$osa.perusteenOsa && item.$osa.perusteenOsa.id === $scope.tekstikappale.id;
           });
           if (me === -1) {

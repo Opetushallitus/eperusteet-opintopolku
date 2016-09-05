@@ -117,13 +117,13 @@ angular.module('app')
       //NEW BUILDER
       let filteredAineet =
         _(aineet).filter( (oa) => {
-          return _.reduce(oa.vuosiluokkakokonaisuudet, (col, item, index, all) => {
+          return _.reduce(oa.vuosiluokkakokonaisuudet, (col, item: any, index, all) => {
             if (item._vuosiluokkakokonaisuus === vlk) {
               _.isEmpty(item.vuosiluokat) ? col.unshift("all") : col.unshift(item.vuosiluokat);
             }
             if (all.length - 1 === index) {
               if(_.isEmpty(col)) return false;
-              return !!_.filter(_.flatten(col), function(item){
+              return !!_.filter(_.flatten(col), function(item: any) {
                 return (item === "all") ? true : item.vuosiluokka === currentVuosi;
               }).length;
             }

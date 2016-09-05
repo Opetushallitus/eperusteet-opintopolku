@@ -22,9 +22,9 @@ angular.module('app')
     const sortVlk = (vlk) => {
       return _(vlk)
         .map('vuosiluokkakokonaisuus')
-        .sortBy((vlk) => {
-          return _.reduce(vlk.nimi.fi.replace(/\D/g, '').split(''), function(sum, num){
-            return sum + parseInt(num);
+        .sortBy((vlk: any) => {
+          return _.reduce(vlk.nimi.fi.replace(/\D/g, '').split(''), function(sum, num: any){
+            return sum + parseInt(num, 10);
           },0);
         })
         .value();
@@ -46,14 +46,14 @@ angular.module('app')
     const makeSisalto = (perusteOpVlk, tavoitteet, perusteOppiaine, laajaalaiset, sortHelper) => {
 
       return _(tavoitteet).each(function (item) {
-          var perusteSisaltoAlueet = perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : {};
-          var perusteKohdealueet = perusteOppiaine ? _.indexBy(perusteOppiaine.kohdealueet, 'id') : [];
+          const perusteSisaltoAlueet = perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : {};
+          const perusteKohdealueet = perusteOppiaine ? _.indexBy(perusteOppiaine.kohdealueet, 'id') : [];
           if (perusteOpVlk) {
-            var perusteTavoite = _.find(perusteOpVlk.tavoitteet, function (pTavoite) {
+            let perusteTavoite: any = _.find(perusteOpVlk.tavoitteet, function (pTavoite: any) {
               return pTavoite.tunniste === item.tunniste;
             });
             item.$tavoite = perusteTavoite.tavoite;
-            let alueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste) {
+            let alueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste: any) {
               return perusteSisaltoAlueet[tunniste] || {};
             });
             if(!_.isEmpty(alueet)) {
@@ -76,8 +76,8 @@ angular.module('app')
                 return 0;
               });
             }
-            item.$kohdealue = perusteKohdealueet[_.first(perusteTavoite.kohdealueet)];
-            item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste) {
+            item.$kohdealue = perusteKohdealueet[<string>_.first(perusteTavoite.kohdealueet)];
+            item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste: string) {
               return laajaalaiset[tunniste];
             });
             item.$arvioinninkohteet = perusteTavoite.arvioinninkohteet;

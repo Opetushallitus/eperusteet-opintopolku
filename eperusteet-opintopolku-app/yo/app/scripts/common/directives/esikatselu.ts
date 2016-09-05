@@ -54,16 +54,16 @@ angular.module('app')
     this.init = function (scope, laajaalaisetosaamiset, vlkPeruste) {
       scope.peruste = vlkPeruste;
       scope.tunnisteet = _.map(scope.peruste.laajaalaisetosaamiset, '_laajaalainenosaaminen');
-      var decorated = _.map(scope.peruste.laajaalaisetosaamiset, function (item) {
+      var decorated = _.map(scope.peruste.laajaalaisetosaamiset, function (item: any) {
         var base = laajaalaisetosaamiset[item._laajaalainenosaaminen];
         item.teksti = item.kuvaus;
         item.otsikko = base ? base.nimi : {fi: '[Ei nimeä]'};
         return item;
       });
       scope.laajaalaiset = _.indexBy(decorated, '_laajaalainenosaaminen');
-      scope.paikalliset = _.mapValues(scope.laajaalaiset, function (item) {
+      scope.paikalliset = _.mapValues(scope.laajaalaiset, function (item: any) {
         var newItem = _.cloneDeep(item);
-        var model = _.find(scope.vlk.laajaalaisetosaamiset, function (osaaminen) {
+        var model = _.find(scope.vlk.laajaalaisetosaamiset, function (osaaminen: any) {
           return '' + osaaminen._laajaalainenosaaminen === '' + item._laajaalainenosaaminen;
         });
         newItem.teksti = model ? model.kuvaus : {};

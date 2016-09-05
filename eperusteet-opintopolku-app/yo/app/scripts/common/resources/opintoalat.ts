@@ -35,7 +35,7 @@ angular.module('app')
   };
 
   return opintoalaPromise.then(function(vastaus) {
-    self.opintoalatMap = _.zipObject(_.pluck(vastaus, 'koodi'), _.map(vastaus, function(e) {
+    self.opintoalatMap = _.zipObject(_.pluck(vastaus, 'koodi'), _.map(vastaus, function(e: any) {
       return {
         nimi: e.nimi
       };

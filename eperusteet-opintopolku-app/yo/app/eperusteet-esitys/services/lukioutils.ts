@@ -33,9 +33,9 @@ angular.module('eperusteet.esitys')
         return flattenedLastenNimet;
       },
       flattenAndZipOppiaineet: function (oppiaineet) {
-        return _.reduce(oppiaineet, function (all, oppiaine, index) {
+        return _.reduce(oppiaineet, function (all, oppiaine: any, index) {
           if (!_.isEmpty(oppiaine.oppimaarat)) {
-            _.each(oppiaine.oppimaarat, function (oppimaara) {
+            _.each(oppiaine.oppimaarat, function (oppimaara: any) {
               all.push(oppimaara);
             });
           }
@@ -47,9 +47,9 @@ angular.module('eperusteet.esitys')
         }, []);
       },
       reduceKurssit: function (kurssit) {
-        return _.reduce(kurssit, function(kaikkiKurssit, oppiaine){
+        return _.reduce(kurssit, function(kaikkiKurssit, oppiaine: any) {
           if(!_.isEmpty(oppiaine.oppimaarat)) {
-            _.each(oppiaine.oppimaarat, function(oppimaara){
+            _.each(oppiaine.oppimaarat, function(oppimaara: any) {
               if(!_.isEmpty(oppimaara.kurssit)) {
                 _(oppimaara.kurssit)
                   .map(function(kurssi){
@@ -64,11 +64,11 @@ angular.module('eperusteet.esitys')
           }
           if(!_.isEmpty(oppiaine.kurssit)){
             _(oppiaine.kurssit)
-              .map(function(kurssi) {
+              .map(function(kurssi: any) {
                 kurssi.oppiaineNimi = oppiaine.nimi;
                 return kurssi;
               })
-              .each(function(kurssi){
+              .each(function(kurssi: any) {
                 kaikkiKurssit.push(kurssi);
               }).value();
           }

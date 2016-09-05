@@ -22,18 +22,19 @@
  * Käyttää joko omia ep-alkuisia komponentteja tai yleisiä komponentteja, jotka täytyy
  * määritellä moduulin ulkopuolella.
  */
-angular.module('eperusteet.esitys', [
-]).provider('epEsitysSettings', function() {
-  var settings = {
-    'perusopetusState': 'root.perusopetus',
-    'lukioState': 'root.lukio'
-  };
+angular
+.module('eperusteet.esitys', [])
+.provider('epEsitysSettings', <any>function() {
+    var settings = {
+        'perusopetusState': 'root.perusopetus',
+        'lukioState': 'root.lukio'
+    };
 
-  this.setValue = function(key, value) {
-    settings[key] = value;
-  };
+    this.setValue = function(key, value) {
+        settings[key] = value;
+    };
 
-  this.$get = function() {
-    return settings;
-  };
+    this.$get = function() {
+        return settings;
+    };
 });

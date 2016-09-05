@@ -73,7 +73,7 @@ angular.module('app')
 .directive('pvm', function (Kaanna, $filter, $timeout) {
   return {
     restrict: 'A',
-    link: function (scope, element, attrs) {
+    link: function (scope: any, element, attrs) {
       scope.$watch(attrs.pvm, function (value) {
         if (!value) {
           // Jonkin takia kääntäminen ei toimi suoraan ilman timeoutia

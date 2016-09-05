@@ -60,7 +60,7 @@ angular.module('app')
   }
   return {
     restrict: 'A',
-    link: function (scope, el, attrs) {
+    link: function (scope: any, el, attrs) {
       function kaannaValue(value) {
         return _.isObject(value) ? Kaanna.kaannaSisalto(value) : Kaanna.kaanna(value);
       }
@@ -80,13 +80,13 @@ angular.module('app')
           el.text(kaannaValue(getAttr(attrs.kaanna, scope)));
         });*/
       } else {
-        var textEl = angular.element('<span>').attr('translate', original);
+        var textEl: any = angular.element('<span>').attr('translate', original);
         if (attrs.kaannaValues) {
           textEl.attr('translate-values', attrs.kaannaValues);
         }
         el.html('').append(textEl);
         if (attrs.iconRole) {
-          var iconEl = angular.element('<span>').attr('icon-role', attrs.iconRole);
+          var iconEl: any = angular.element('<span>').attr('icon-role', attrs.iconRole);
           el.removeAttr('icon-role');
           el.prepend(iconEl);
         }

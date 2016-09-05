@@ -41,7 +41,7 @@
       },
       controller: 'epSivuNaviController',
       transclude: true,
-      link: function (scope, element, attrs) {
+      link: function (scope: any, element, attrs) {
         var transcluded = element.find('#sivunavi-tc').contents();
         scope.hasTransclude = transcluded.length > 0;
         scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
@@ -148,10 +148,10 @@
     $scope.search = {
       term: '',
       update: function () {
-        var matchCount = 0;
-        var items = $scope.items;
+        let matchCount = 0;
+        let items = $scope.items;
         if (_.isUndefined(items)) {
-          var section = _.find($scope.sections, '$open');
+          let section: any = _.find($scope.sections, '$open');
           if (section) {
             items = section.items;
           }
@@ -260,7 +260,7 @@
       }
     }
 
-    function updateModel(items, doUncollapse) {
+    function updateModel(items, doUncollapse = false) {
       if (!items) {
         return;
       }

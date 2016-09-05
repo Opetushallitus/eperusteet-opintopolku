@@ -19,11 +19,11 @@ angular.module('app')
     var sortVlk = function (vlk) {
         return _(vlk)
             .map('vuosiluokkakokonaisuus')
-            .sortBy(function (vlk) {
-            return _.reduce(vlk.nimi.fi.replace(/\D/g, '').split(''), function (sum, num) {
-                return sum + parseInt(num);
-            }, 0);
-        })
+            .sortBy(function (vlk: any) {
+                return _.reduce(vlk.nimi.fi.replace(/\D/g, '').split(''), function (sum, num: any) {
+                    return sum + parseInt(num, 10);
+                }, 0);
+            })
             .value();
     };
     var createMenuByYear = function (vlk) {
@@ -103,14 +103,14 @@ angular.module('app')
         var currentVlkt = createEachYearLabel(arr, currentYears);
         var isSisalto = depth === 0;
         var filteredAineet = _(aineet).filter(function (oa) {
-            return _.reduce(oa.vuosiluokkakokonaisuudet, function (col, item, index, all) {
+            return _.reduce(oa.vuosiluokkakokonaisuudet, function (col, item: any, index, all) {
                 if (item._vuosiluokkakokonaisuus === vlk) {
                     _.isEmpty(item.vuosiluokat) ? col.unshift("all") : col.unshift(item.vuosiluokat);
                 }
                 if (all.length - 1 === index) {
                     if (_.isEmpty(col))
                         return false;
-                    return !!_.filter(_.flatten(col), function (item) {
+                    return !!_.filter(_.flatten(col), function (item: any) {
                         return (item === "all") ? true : item.vuosiluokka === currentVuosi;
                     }).length;
                 }
@@ -190,11 +190,11 @@ angular.module('app')
             var perusteSisaltoAlueet = perusteOpVlk ? _.indexBy(perusteOpVlk.sisaltoalueet, 'tunniste') : {};
             var perusteKohdealueet = perusteOppiaine ? _.indexBy(perusteOppiaine.kohdealueet, 'id') : [];
             if (perusteOpVlk) {
-                var perusteTavoite = _.find(perusteOpVlk.tavoitteet, function (pTavoite) {
+                var perusteTavoite = _.find(perusteOpVlk.tavoitteet, function (pTavoite: any) {
                     return pTavoite.tunniste === item.tunniste;
                 });
                 item.$tavoite = perusteTavoite.tavoite;
-                var alueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste) {
+                var alueet = _.map(perusteTavoite.sisaltoalueet, function (tunniste: string) {
                     return perusteSisaltoAlueet[tunniste] || {};
                 });
                 if (!_.isEmpty(alueet)) {
@@ -217,8 +217,8 @@ angular.module('app')
                         return 0;
                     });
                 }
-                item.$kohdealue = perusteKohdealueet[_.first(perusteTavoite.kohdealueet)];
-                item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste) {
+                item.$kohdealue = perusteKohdealueet[<any>(_.first(perusteTavoite.kohdealueet))];
+                item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function (tunniste: any) {
                     return laajaalaiset[tunniste];
                 });
                 item.$arvioinninkohteet = perusteTavoite.arvioinninkohteet;

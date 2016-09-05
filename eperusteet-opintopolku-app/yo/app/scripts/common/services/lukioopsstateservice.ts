@@ -51,7 +51,7 @@ angular.module('app')
 
       function setParentOppiaineHeader() {
         if (selected && selected.$oppiaine._oppiaine) {
-          var found = _.find(items, function (item) {
+          var found = _.find(items, function (item: any) {
             return item.$oppiaine && '' + item.$oppiaine.id === '' + selected.$oppiaine._oppiaine;
           });
           if (found) {
@@ -73,7 +73,7 @@ angular.module('app')
       function setParentOppiaineHeaderForKurssi() {
         var found = null;
         if(selected && selected.$kurssi) {
-          found = _.find(items, function(item) {
+          found = _.find(items, function(item: any) {
             return (item.$oppiaine && !!item.$oppiaine.kurssit.length
             && _.contains(_.pluck(item.$oppiaine.kurssit, 'id'), selected.$id))
           });

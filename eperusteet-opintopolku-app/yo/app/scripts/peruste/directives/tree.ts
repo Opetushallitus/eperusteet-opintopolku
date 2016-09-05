@@ -194,7 +194,7 @@ angular.module('app')
         callbacks: '='
       },
       controller: 'TreeController',
-      link: function(scope, el) {
+      link: function(scope: any, el) {
         $animate.enabled(false, el);
         if (!scope.vanhempi) {
           var templateElement = angular.element(treeTemplate.root());
@@ -383,7 +383,7 @@ angular.module('app')
       input = input === undefined ? $scope.tosarajaus : input;
       $scope.tosarajaus = input;
       var filtered = !_.isEmpty(input);
-      $scope.uniikit = _.reject($scope.kaikkiUniikit, function(yksi) {
+      $scope.uniikit = _.reject($scope.kaikkiUniikit, function(yksi: any) {
         var nimi = $scope.rakenne.tutkinnonOsaViitteet[yksi._tutkinnonOsaViite] ?
           (Kaanna.kaanna($scope.rakenne.tutkinnonOsaViitteet[yksi._tutkinnonOsaViite].nimi) || '').toLowerCase() : '';
         return !yksi.alwaysVisible && ((filtered && nimi.indexOf(input.toLowerCase()) === -1) ||

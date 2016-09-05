@@ -14,13 +14,12 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
 
 /* Sets sivunavi items active based on current state */
 angular.module('eperusteet.esitys')
 .service('epLukioStateService', function ($state, $stateParams, $location, epSivunaviUtils, $rootScope) {
-  var state = {};
-  var section = null;
+  let state: any = {};
+  let section = null;
 
   function processSection(navi, index, cb) {
     section = navi.sections[index];
@@ -52,7 +51,7 @@ angular.module('eperusteet.esitys')
 
     function setParentOppiaineHeader() {
         if (selected && selected.$oppiaine._oppiaine) {
-          var found = _.find(items, function (item) {
+          var found = _.find(items, function (item: any) {
             return item.$oppiaine && '' + item.$oppiaine.id === '' + selected.$oppiaine._oppiaine;
           });
           if (found) {
@@ -65,7 +64,7 @@ angular.module('eperusteet.esitys')
     function setParentOppiaineHeaderForKurssi() {
       var found = null;
       if(selected && selected.$kurssi) {
-        found = _.find(items, function(item) {
+        found = _.find(items, function(item: any) {
           return item.$kurssi && '' + item.$kurssi.id === '' + $location.hash();
         });
       }
@@ -77,7 +76,7 @@ angular.module('eperusteet.esitys')
     var states = {
       tekstikappale: {
         index: 0,
-        callback: function(item) {
+        callback: function(item: any) {
           if (item.$osa && item.depth === 0 && !$location.hash()) {
             item.$selected = '' + $stateParams.tekstikappaleId === '' + item.$osa.id;
             item.$hidden = item.depth > 0;

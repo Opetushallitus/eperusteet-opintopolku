@@ -18,9 +18,8 @@
 
 /* Sets sivunavi items active based on current state */
 angular.module('eperusteet.esitys')
-.service('epPerusopetusStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope,
-  epEsitysSettings) {
-  var state = {};
+.service('epPerusopetusStateService', function ($state, $stateParams, epSivunaviUtils, $rootScope, epEsitysSettings) {
+  var state: any = {};
   var section = null;
 
   function processSection(navi, index, cb) {
@@ -51,7 +50,7 @@ angular.module('eperusteet.esitys')
 
     function setParentOppiaineHeader() {
       if (selected && selected.$oppiaine._oppiaine) {
-        var found = _.find(items, function (item) {
+        var found = _.find(items, function (item: any) {
           return item.$oppiaine && '' + item.$oppiaine.id === '' + selected.$oppiaine._oppiaine;
         });
         if (found) {
