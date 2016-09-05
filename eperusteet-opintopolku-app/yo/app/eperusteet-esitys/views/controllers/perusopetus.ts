@@ -319,10 +319,7 @@ namespace Controllers {
     export const epPerusopetusVlkController = ($scope, $stateParams, Utils, MurupolkuData) => {
         $scope.vlk = $scope.vuosiluokkakokonaisuudetMap[$stateParams.vlkId];
         MurupolkuData.set({vlkId: $scope.vlk.id, vlkNimi: $scope.vlk.nimi});
-
-        $scope.vlkOrder = function (item) {
-            return Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
-        };
+        $scope.vlkOrder = (item) => Utils.nameSort($scope.osaamiset[item._laajaalainenOsaaminen]);
     };
 
     export const epPerusopetusVlkOppiaineController = ($scope, oppiaine, $stateParams, MurupolkuData) => {
@@ -350,7 +347,7 @@ namespace Controllers {
         $scope.inSisallot = true;
 
         if (oppiaine) {
-            var murupolkuParams = {
+            const murupolkuParams = {
                 parents: null,
                 oppiaineId: oppiaine.id,
                 oppiaineNimi: oppiaine.nimi

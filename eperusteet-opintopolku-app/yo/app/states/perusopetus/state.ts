@@ -3,7 +3,7 @@ angular.module('app')
 .state('root.perusopetus', {
   url: '/perusopetus/:perusteId',
   templateUrl: 'eperusteet-esitys/views/perusopetus.html',
-  controller: 'epPerusopetusController',
+  controller: Controllers.epPerusopetusController,
   resolve: {
     perusteId: function (serviceConfig, $stateParams) {
       return $stateParams.perusteId;
@@ -49,7 +49,7 @@ angular.module('app')
 .state('root.perusopetus.tekstikappale', {
   url: '/tekstikappale/:tekstikappaleId',
   templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
-  controller: 'epPerusopetusTekstikappaleController',
+  controller: Controllers.epPerusopetusTekstikappaleController,
   resolve: {
     tekstikappaleId: function (serviceConfig, $stateParams) {
       return $stateParams.tekstikappaleId;
@@ -65,17 +65,17 @@ angular.module('app')
 .state('root.perusopetus.vuosiluokkakokonaisuus', {
   url: '/vuosiluokkakokonaisuus/:vlkId',
   templateUrl: 'eperusteet-esitys/views/vuosiluokkakokonaisuus.html',
-  controller: 'epPerusopetusVlkController'
+  controller: Controllers.epPerusopetusVlkController
 })
 .state('root.perusopetus.laajaalaiset', {
   url: '/laajaalaisetosaamiset',
   templateUrl: 'eperusteet-esitys/views/laajaalaiset.html',
-  controller: 'epLaajaalaisetOsaamisetController'
+  controller: Controllers.epLaajaalaisetOsaamisetController
 })
 .state('root.perusopetus.vlkoppiaine', {
   url: '/vuosiluokkakokonaisuus/:vlkId/oppiaine/:oppiaineId',
   templateUrl: 'eperusteet-esitys/views/vlkoppiaine.html',
-  controller: 'epPerusopetusVlkOppiaineController',
+  controller: Controllers.epPerusopetusVlkOppiaineController,
   resolve: {
     oppiaineId: function (serviceConfig, $stateParams) {
       return $stateParams.oppiaineId;
@@ -88,7 +88,7 @@ angular.module('app')
 .state('root.perusopetus.sisallot', {
   url: '/sisallot/:oppiaineId?vlk&sisalto&osaaminen&valittu',
   templateUrl: 'eperusteet-esitys/views/vlkoppiaine.html',
-  controller: 'epPerusopetusSisallotController',
+  controller: Controllers.epPerusopetusSisallotController,
   resolve: {
     oppiaineId: function (serviceConfig, $stateParams) {
       return $stateParams.oppiaineId;
