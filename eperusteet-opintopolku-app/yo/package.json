@@ -24,6 +24,7 @@
     "grunt-contrib-uglify": "2.0.0",
     "grunt-contrib-watch": "1.0.0",
     "grunt-focus": "1.0.0",
+    "grunt-jade": "^0.5.1",
     "grunt-karma": "2.0.0",
     "grunt-maxlines": "0.1.0",
     "grunt-open": "0.2.3",

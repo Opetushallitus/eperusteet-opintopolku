@@ -39,7 +39,6 @@
     "app/scripts/app.ts",
     "app/scripts/config.ts",
     "app/scripts/constants.ts",
-    "app/scripts/states.ts",
     "app/scripts/views/amops/state.ts",
     "app/scripts/views/amops/osa/state.ts",
     "app/scripts/views/amops/tiedot/state.ts",
@@ -56,6 +55,10 @@
     "app/scripts/views/ylanavigaatio.ts",
     "app/scripts/views/haku/haku.ts",
     "app/scripts/views/uutiset.ts",
+    "app/eperusteet-esitys/views/controllers/yksinkertainen.ts",
+    "app/eperusteet-esitys/views/controllers/sisallot.ts",
+    "app/eperusteet-esitys/views/controllers/lukio.ts",
+    "app/eperusteet-esitys/views/controllers/perusopetus.ts",
     "app/scripts/common/directives/suljevalikko.ts",
     "app/scripts/common/directives/termistoviitteet.ts",
     "app/scripts/common/directives/murupolku.ts",
@@ -85,6 +88,22 @@
     "app/scripts/common/services/iconrole.ts",
     "app/scripts/common/services/lokalisointi.ts",
 
-    "app/states/state.ts"
+    "app/states/state.ts",
+    "app/states/virhe/state.ts",
+    "app/states/etusivu/state.ts",
+    "app/states/uutiset/state.ts",
+    "app/states/tiedote/state.ts",
+    "app/states/selaus/state.ts",
+    "app/states/esiopetus/state.ts",
+    "app/states/lisaopetus/state.ts",
+    "app/states/virhe/state.ts",
+    "app/states/lukio/state.ts",
+    "app/states/uutiset/state.ts",
+    "app/states/etusivu/state.ts",
+    "app/states/esitys/state.ts",
+    "app/states/perusopetus/state.ts",
+    "app/states/tiedote/state.ts",
+    "app/states/ops/state.ts",
+    "app/states/selaus/state.ts"
   ]
 }
