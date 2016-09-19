@@ -27,6 +27,10 @@ $border-color: #0C566E;
     padding: 2px 2px 2px 4px;
   }
 
+  #esitysPrintSisalto {
+    overflow-x: hidden;
+  }
+
   .tutkinnonosat-tools {
     .tutkinnonosat-rajaus {
       max-width: 450px;
@@ -67,6 +71,7 @@ $border-color: #0C566E;
       margin: 0 0 20px 0;
       border-bottom: 1px solid #ccc;
     }
+
 
     .tiedot {
       padding: 5px;
