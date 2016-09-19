@@ -28,6 +28,7 @@ angular.module('app')
         kieli: uikieli,
         opintoala: '',
         siirtyma: false,
+        voimassaolo: true,
         sivu: 0,
         sivukoko: 20,
         suoritustapa: 'ops',
@@ -41,6 +42,7 @@ angular.module('app')
         kieli: uikieli,
         opintoala: '',
         siirtyma: false,
+        voimassaolo: true,
         sivu: 0,
         sivukoko: 20,
         suoritustapa: 'naytto',
@@ -54,6 +56,7 @@ angular.module('app')
         kieli: uikieli,
         opintoala: '',
         siirtyma: false,
+        voimassaolo: true,
         sivu: 0,
         sivukoko: 20,
         suoritustapa: 'ops',
@@ -186,6 +189,7 @@ angular.module('app')
       return $scope.hakuparametrit.nimi !== ''
         || $scope.hakuparametrit.koulutusala !== ''
         || $scope.hakuparametrit.siirtyma === true
+        || $scope.hakuparametrit.voimassaolo === false
         || ($scope.hakuparametrit.tyyppi !== '' && osio === 'ammatillinenaikuiskoulutus');
     };
 

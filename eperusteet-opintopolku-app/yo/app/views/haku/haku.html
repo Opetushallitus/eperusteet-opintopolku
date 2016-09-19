@@ -51,6 +51,12 @@
               <span kaanna="'haku-nayta-siirtymaajalla-olevat'"></span>
             </label>
           </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="hakuparametrit.voimassaolo" ng-change="hakuMuuttui()">
+              <span kaanna="'haku-nayta-voimassaolevat'"></span>
+            </label>
+          </div>
         </div>
         <div class="col-md-6 col-xs-12">
           <button class="btn btn-default pull-right" ng-click="tyhjenna()" kaanna="'tyhjenna'" ng-disabled="!onkoHakuTyhja()"></button>
