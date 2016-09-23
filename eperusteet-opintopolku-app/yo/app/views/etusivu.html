@@ -34,7 +34,7 @@
               <limit-toggler limit="naytto.limit" model="tiedotteet" limiter="naytto.shown"></limit-toggler>
             </li>
             <li class="lista-elementti">
-              <a ui-sref="root.uutiset">Näytä kaikki uutiset</a>
+              <a ui-sref="root.uutiset" ng-bind="'nayta-kaikki-uutiset' | kaanna"></a>
             </li>
           </ul>
         </div>
@@ -52,9 +52,9 @@
             <li class="peruste-linkki">
               <a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})" ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna"></a>
             </li>
-            <!-- <li class="peruste-linkki"> -->
-            <!--   <a ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_22'][0].id})" ng-bind="uusimmat['koulutustyyppi_22'][0].nimi | kaanna"></a> -->
-            <!-- </li> -->
+            <li class="peruste-linkki">
+              <a ui-sref="root.perusvalmistava({perusteId: uusimmat['koulutustyyppi_22'][0].id})" ng-bind="uusimmat['koulutustyyppi_22'][0].nimi | kaanna"></a>
+            </li>
             <li class="peruste-linkki">
               <a ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_16'][0].id})" ng-bind="uusimmat['koulutustyyppi_16'][0].nimi | kaanna"></a>
             </li>

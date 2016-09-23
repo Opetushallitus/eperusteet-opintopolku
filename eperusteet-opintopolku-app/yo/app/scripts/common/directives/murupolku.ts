@@ -180,6 +180,20 @@ angular.module('app')
         useId: 'tekstikappaleId',
         customParents: true
       },
+      'root.perusvalmistava': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.perusvalmistava.tiedot': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.perusvalmistava.tekstikappale': {
+        parent: 'root.perusvalmistava',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+        customParents: true
+      },
       'root.lisaopetus': {
         useData: 'perusteNimi',
         useId: 'perusteId'

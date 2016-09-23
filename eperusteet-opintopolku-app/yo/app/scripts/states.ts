@@ -458,6 +458,66 @@ angular.module('app')
     }
   }
 })
+// Perusopetukseen valmistava
+.state('root.perusvalmistava', {
+  url: '/pvalmistava/:perusteId',
+  templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',
+  controller: 'epYksinkertainenPerusteController',
+  resolve: {
+    perusteId: function (serviceConfig, $stateParams) {
+      return $stateParams.perusteId;
+    },
+    peruste: function (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) {
+      return !perusteId ? UusimmatPerusteetService.getValmistavaPerusopetus() : Perusteet.get({perusteId: perusteId}).$promise;
+    },
+    sisalto: function (serviceConfig, peruste, $q, SuoritustapaSisalto) {
+      if (_.isArray(peruste.data)) {
+        peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};
+      }
+      var perusteId = peruste.id;
+      return $q.all([
+        peruste,
+        perusteId ? SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'esiopetus'}).$promise : {}
+      ]);
+    },
+    koulutusalaService: function (serviceConfig, Koulutusalat) {
+      return Koulutusalat;
+    },
+    opintoalaService: function (serviceConfig, Opintoalat) {
+      return Opintoalat;
+    }
+  }
+})
+.state('root.perusvalmistava.tiedot', {
+  url: '/tiedot',
+  templateUrl: 'eperusteet-esitys/views/tiedot.html',
+  controller: 'epEsitysTiedotController',
+  resolve: {
+    dokumenttiId: (PerusteApi, peruste, $stateParams) => {
+      return PerusteApi.all('dokumentit').customGET("peruste", {
+        perusteId: peruste.id,
+        kieli: $stateParams.lang
+      })
+    }
+  }
+})
+.state('root.perusvalmistava.tekstikappale', {
+  url: '/tekstikappale/:tekstikappaleId',
+  templateUrl: 'eperusteet-esitys/views/tekstikappale.html',
+  controller: 'epEsitysSisaltoController',
+  resolve: {
+    tekstikappaleId: function (serviceConfig, $stateParams) {
+      return $stateParams.tekstikappaleId;
+    },
+    tekstikappale: function (serviceConfig, tekstikappaleId, PerusteenOsat) {
+      return PerusteenOsat.getByViite({viiteId: tekstikappaleId}).$promise;
+    },
+    lapset: function (serviceConfig, sisalto, tekstikappaleId, epTekstikappaleChildResolver) {
+      return epTekstikappaleChildResolver.get(sisalto[1], tekstikappaleId);
+    }
+  }
+})
+// Lisäopetus
 .state('root.lisaopetus', {
   url: '/lisaopetus/:perusteId',
   templateUrl: 'eperusteet-esitys/views/yksinkertainen.html',
