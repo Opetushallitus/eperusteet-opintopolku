@@ -118,6 +118,13 @@ h4.sparse {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+
+    img {
+      position: relative;
+      top: 5px;
+      width: 40px;
+    }
+
     a {
       color: darken($brand-primary, 5%);
       &:hover {

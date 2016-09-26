@@ -30,7 +30,8 @@ angular.module('app')
     };
 
     $scope.isPerusopetus = function () {
-      if (($state.includes('**.perusopetus.**') || $state.includes('**.lisaopetus.**')) && !$state.includes('**.ops.**')) {
+
+      if (($state.includes('**.perusopetus.**') || $state.includes('**.perusvalmistava.**') || $state.includes('**.lisaopetus.**')) && !$state.includes('**.ops.**')) {
         return true;
       }
     };
@@ -68,6 +69,8 @@ angular.module('app')
         return 'navi.esiopetus';
       } else if ($state.includes('root.perusopetus.**')) {
         return 'navi.perusopetus';
+      } else if ($state.includes('root.perusvalmistava.**')) {
+        return 'navi.perusvalmistava';
       } else if ($state.includes('root.lisaopetus.**')) {
         return 'navi.lisaopetus';
       } else if ($state.includes('root.lukio.**')) {

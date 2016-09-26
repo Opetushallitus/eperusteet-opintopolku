@@ -49,6 +49,24 @@
   </div>
 </div>
 
+<div ng-if="peruste.muutosmaaraykset && peruste.muutosmaaraykset.length > 0" class="row row-margin">
+  <div class="col-xs-6 col-sm-4">
+    <strong>
+      <span kaanna="'muutosmaaraykset'"></span>
+    </strong>
+  </div>
+  <div class="col-xs-6 col-sm-8">
+    <div ng-repeat="muutosmaaraykset in peruste.muutosmaaraykset">
+      <div class="row row-margin">
+        <div class="col-xs-12">
+          <a ng-href="{{muutosmaaraykset.url| kaanna}}">
+            {{(muutosmaaraykset.nimi | kaanna) ? (muutosmaaraykset.nimi | kaanna) : (muutosmaaraykset.url | kaanna)}}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="row row-margin" ng-if="peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0">
   <div class="col-xs-6 col-sm-4">
@@ -108,29 +126,6 @@
             <span>{{koulutus.koulutuskoodiArvo}}</span>
           </div>
         </div>
-
-        <!-- Poistettu käytöstä -->
-        <!-- <div class="row row-margin"> -->
-        <!--   <div class="col-xs-6"> -->
-        <!--     <strong> -->
-        <!--       <span kaanna="'haku-koulutusala'"></span> -->
-        <!--     </strong> -->
-        <!--   </div> -->
-        <!--   <div class="col-xs-6"> -->
-        <!--     <span>{{koulutusalaNimi(koulutus.koulutusalakoodi).nimi | kaanna}}</span> -->
-        <!--   </div> -->
-        <!-- </div> -->
-
-        <!--<div class="row">
-          <div class="col-xs-6">
-            <strong>
-              <span kaanna="'haku-opintoala'"></span>
-            </strong>
-          </div>
-          <div class="col-xs-6">
-            <span>{{opintoalaNimi(koulutus.opintoalakoodi).nimi | kaanna}}</span>
-          </div>
-        </div>-->
       </div>
     </div>
   </div>

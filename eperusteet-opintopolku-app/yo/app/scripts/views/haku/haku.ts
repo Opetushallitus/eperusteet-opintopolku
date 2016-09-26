@@ -190,4 +190,3 @@ angular.module('app')
         return this.hakuparametrit[stateName];
     };
 });
-

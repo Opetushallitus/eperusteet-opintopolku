@@ -3,5 +3,6 @@ angular.module('app')
 .state('root.esitys.peruste.tutkinnonosa', {
   url: '/tutkinnonosat/:id',
   templateUrl: 'eperusteet-esitys/views/tutkinnonosa.html',
-  controller: 'epEsitysTutkinnonOsaController'
+  controller: Controllers.epEsitysTutkinnonOsaController 
 }));
+
