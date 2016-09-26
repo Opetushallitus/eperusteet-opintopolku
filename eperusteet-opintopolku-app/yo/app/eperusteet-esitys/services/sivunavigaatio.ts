@@ -206,7 +206,7 @@ namespace Controllers {
             $scope.$watch('sections', function () {
                 $scope.refresh();
             }, true);
-    });
+    };
 };
 
 
