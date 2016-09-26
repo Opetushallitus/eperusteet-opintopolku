@@ -37,11 +37,11 @@ angular.module('app')
       scope: {
         model: '=termistoViitteet'
       },
-      link: function (scope, element) {
+      link: function (scope: any, element) {
         scope.popovers = [];
         function destroy() {
           element.find(TERMI_MATCHER).each(function () {
-            var jqEl = angular.element(this);
+            var jqEl: any = angular.element(this);
             if (jqEl.popover) {
               jqEl.popover('destroy');
             }
@@ -50,7 +50,7 @@ angular.module('app')
         }
         function setup() {
           element.find(TERMI_MATCHER).each(function () {
-            var jqEl = angular.element(this);
+            var jqEl: any = angular.element(this);
             var viiteId = jqEl.attr('data-viite');
             if (viiteId) {
               TermistoService.preload();

@@ -39,6 +39,6 @@ angular.module('app')
 
     $scope.showEmptyPlaceholder = function () {
       return !$scope.editMode && (!$scope.model || $scope.model.length === 0  ||
-        !_.some($scope.model, function (item) { return !item.$hidden; }));
+        !_.some($scope.model, function (item: any) { return !item.$hidden; }));
     };
   });

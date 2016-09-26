@@ -32,7 +32,7 @@ angular.module('app')
     }
     var hasContent = false;
     var langs = _.values(Kieli.SISALTOKIELET);
-    _.each(langs, function (key) {
+    _.each(langs, function (key: string) {
       if (!_.isEmpty(field[key])) {
         hasContent = true;
       }
@@ -64,7 +64,7 @@ angular.module('app')
     scope: {},
     template: '<div id="backtotop" ng-hide="hidden" title="{{\'takaisin-ylos\' | kaanna}}">' +
       '<a class="action-link" icon-role="arrow-up" ng-click="backToTop()"></a></div>',
-    link: function (scope) {
+    link: function (scope: any) {
       scope.backToTop = function () {
         Utils.scrollTo('#ylasivuankkuri');
       };

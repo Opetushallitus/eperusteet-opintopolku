@@ -33,7 +33,7 @@ angular.module('app')
     PERUSTE: PerusteTermistoCRUD.query
   };
   const mapResources = (resrcs) => {
-    return _.map(resrcs, (resource) => {
+    return _.map(resrcs, (resource: any) => {
       CRUD[resource.type]({resourceId: resource.id})
       .$promise.then((res) => cacheKasitteet(res))
     })

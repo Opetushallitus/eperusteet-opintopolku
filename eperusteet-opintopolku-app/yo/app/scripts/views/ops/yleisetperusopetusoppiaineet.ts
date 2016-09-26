@@ -32,15 +32,15 @@ angular.module('app')
     const createTabs = () => {
       let tabs = [];
       _.each(ops.vuosiluokkakokonaisuudet, function (vlk) {
-        var match = _.filter(oppiaine.vuosiluokkakokonaisuudet, function (v) {
+        const match = _.filter(oppiaine.vuosiluokkakokonaisuudet, function (v: any) {
           return vlk.vuosiluokkakokonaisuus._tunniste === v._vuosiluokkakokonaisuus;
         });
-        if(match.length) {
-          tabs.push({
-            nimi: vlk.vuosiluokkakokonaisuus.nimi,
-            vlkId: vlk.vuosiluokkakokonaisuus.id,
-            id: match.pop().id
-          })
+        if (match.length) {
+            tabs.push({
+                nimi: vlk.vuosiluokkakokonaisuus.nimi,
+                vlkId: vlk.vuosiluokkakokonaisuus.id,
+                id: <any>(match.pop()).id
+            })
         }
       });
       return  _.sortBy(tabs, Utils.nameSort);
@@ -64,7 +64,7 @@ angular.module('app')
 
     }
     const presentVlk = () => {
-      return _.filter($scope.vlkTabit, function(tab){
+      return _.filter($scope.vlkTabit, function(tab: any){
         return tab.id + '' === $state.params.vlkId + '';
       }).length;
     };
@@ -119,11 +119,11 @@ angular.module('app')
     $scope.vuosiluokkakokonaisuus = vuosiluokkakokonaisuus;
     const laajaalaisetosaamiset = _.indexBy(baseLaajaalaiset, 'tunniste');
 
-    $scope.vlk = _.filter(vlksuudet, (v) => {
+    $scope.vlk = _.filter(vlksuudet, (v: any) => {
       return v._tunniste === $scope.vuosiluokkakokonaisuus._vuosiluokkakokonaisuus
     })[0];
 
-    const vlkPeruste = _.filter(vlkPerusteet, (v) => {
+    const vlkPeruste = _.filter(vlkPerusteet, (v: any) => {
       return v.tunniste === $scope.vuosiluokkakokonaisuus._vuosiluokkakokonaisuus
     })[0];
 
@@ -145,7 +145,7 @@ angular.module('app')
     });
 
     const presentVuosi = () => {
-      return _.filter($scope.vlkst, function(tab){
+      return _.filter($scope.vlkst, function(tab: any){
         return tab.id + '' === $stateParams.vlkId + '';
       }).length;
     };
@@ -176,22 +176,22 @@ angular.module('app')
     MurupolkuData){
 
     $scope.oppiaine = oppiaine;
-    $scope.vuosiluokat = _($scope.oppiaine.vuosiluokkakokonaisuudet)
+    $scope.vuosiluokat = <any>_($scope.oppiaine.vuosiluokkakokonaisuudet)
       .map('vuosiluokat')
       .reverse()
       .flatten()
-      .reject(vl => $stateParams.vuosi && "vuosiluokka_" + $stateParams.vuosi !== vl.vuosiluokka)
+      .reject((vl: any) => $stateParams.vuosi && "vuosiluokka_" + $stateParams.vuosi !== vl.vuosiluokka)
       .value();
 
-    $scope.currentVuosiluokka = _.first(_.sortBy($scope.vuosiluokat, 'vuosiluokka')).vuosiluokka;
-    $scope.currentVuosiId = _.first($scope.vuosiluokat).id;
+    $scope.currentVuosiluokka = (<any>_.first(_.sortBy($scope.vuosiluokat, 'vuosiluokka'))).vuosiluokka;
+    $scope.currentVuosiId = (<any>_.first($scope.vuosiluokat)).id;
 
     $scope.showVuosi = (vuosiluokka) => {
       $scope.currentVuosiluokka = vuosiluokka;
     };
 
-    $scope.vlkSisalto = _.filter($scope.oppiaine.vuosiluokkakokonaisuudet, (opVlk) => {
-        return _.each(opVlk.vuosiluokat, function(v) {
+    $scope.vlkSisalto = _.filter($scope.oppiaine.vuosiluokkakokonaisuudet, (opVlk: any) => {
+        return _.each(opVlk.vuosiluokat, function(v: any) {
           return v.vuosiluokka === $scope.vuosi;
         })
       }).pop();

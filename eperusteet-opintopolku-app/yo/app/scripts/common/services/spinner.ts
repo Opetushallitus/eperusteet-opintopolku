@@ -51,11 +51,11 @@ angular.module('app')
               '<span us-spinner="{color: \'#009FCF\', length: 12, trail: 100, corners: 1, width: 8, radius: 18, lines: 13, shadow: false}" spinner-key="globalspinner"></span>' +
               '</div>',
     restrict: 'E',
-    link: function($scope) {
-      $scope.isSpinning = false;
+    link: function(scope: any) {
+      scope.isSpinning = false;
 
       function spin(state) {
-        $scope.isSpinning = state;
+        scope.isSpinning = state;
         if (state) {
           usSpinnerService.spin('globalspinner');
         } else {
@@ -63,11 +63,11 @@ angular.module('app')
         }
       }
 
-      $scope.$on('event:spinner_on', function() {
+      scope.$on('event:spinner_on', function() {
         spin(true);
       });
 
-      $scope.$on('event:spinner_off', function() {
+      scope.$on('event:spinner_off', function() {
         $timeout(function () {
           spin(false);
         }, 100);

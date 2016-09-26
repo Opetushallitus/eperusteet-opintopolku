@@ -29,7 +29,7 @@ angular.module('app')
         providedOppiaine: '=?oppiaine'
       },
       controller: 'TavoitteetController',
-      link: function(scope) {
+      link: function(scope: any) {
         // TODO call on model update
         scope.mapModel();
       }
@@ -69,7 +69,7 @@ angular.module('app')
 
     function generateArraySetter(findFrom, manipulator = _.noop) {
       return function(item) {
-        var found = _.find(findFrom, function(findItem) { return parseInt(findItem, 10) === item.id; });
+        var found = _.find(findFrom, function(findItem: any) { return parseInt(findItem, 10) === item.id; });
         item = _.clone(item);
         item.$hidden = !found;
         item.teksti = item.kuvaus;
@@ -95,16 +95,16 @@ angular.module('app')
           tavoite.$accordionOpen = true;
         }
 
-        var kohdealueId = !_.isEmpty(tavoite.kohdealueet) ? _.first(tavoite.kohdealueet) : null;
+        var kohdealueId: any = !_.isEmpty(tavoite.kohdealueet) ? _.first(tavoite.kohdealueet) : null;
         if (kohdealueId) {
-          tavoite.$valittuKohdealue = _.find($scope.kohdealueet, function(ka) {
+          tavoite.$valittuKohdealue = _.find($scope.kohdealueet, function(ka: any) {
             return ka.id === parseInt(kohdealueId, 10);
           });
         }
 
         tavoite.$sisaltoalueet = _.map($scope.model.sisaltoalueet, generateArraySetter(tavoite.sisaltoalueet));
         tavoite.$osaaminen = _.map($scope.osaamiset, generateArraySetter(tavoite.laajattavoitteet, function(osaaminen) {
-          var vuosiluokkakuvaus = _.find($scope.vuosiluokka.laajaalaisetOsaamiset, function(item) {
+          const vuosiluokkakuvaus = _.find($scope.vuosiluokka.laajaalaisetOsaamiset, function(item: any) {
             return '' + item._laajaalainenOsaaminen === '' + osaaminen.id;
           });
           osaaminen.teksti = vuosiluokkakuvaus ? vuosiluokkakuvaus.kuvaus : 'ei-kuvausta';
@@ -125,7 +125,7 @@ angular.module('app')
     }
 
     function accordionState() {
-      var obj = _.first($scope.model.tavoitteet);
+      var obj: any = _.first($scope.model.tavoitteet);
       return obj && obj.$accordionOpen;
     }
 

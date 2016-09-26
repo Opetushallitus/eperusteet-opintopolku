@@ -203,7 +203,7 @@ angular.module('app')
 
   this.get = function (perusteId, object) {
     PerusteTutkintonimikekoodit.get({ perusteId: perusteId }, function(res) {
-      object.koodisto = _.map(res, function(osa) {
+      object.koodisto = _.map(res, function(osa: any) {
         function parsiNimi(kentta) {
           if (osa[kentta + 'Arvo']) {
             var nimi = osa.b[osa[kentta + 'Arvo']].metadata;

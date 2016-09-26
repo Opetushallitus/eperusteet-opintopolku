@@ -41,7 +41,7 @@ angular.module('app')
     };
     $scope.otsikot = otsikot;
     $scope.ops = perusOps;
-    $scope.vlkMap = _.map($scope.ops.vuosiluokkakokonaisuudet, function(v){
+    $scope.vlkMap = _.map($scope.ops.vuosiluokkakokonaisuudet, function(v: any) {
       return {
         nimi: v.vuosiluokkakokonaisuus.nimi,
         tunniste: v.vuosiluokkakokonaisuus._tunniste
@@ -158,7 +158,7 @@ angular.module('app')
       if ($state.is('root.ops.perusopetus') && !id.length) {
         $state.go('.tiedot', {location: 'replace'});
       }
-      else if (_.endsWith(_.keys($stateParams), 'vuosi')){
+      else if (_.endsWith(_.keys($stateParams), 'vuosi')) { // FIXME: ???
         var vuosi = $state.params.vuosi;
         moveToOppiaine(vuosi);
       }
@@ -205,7 +205,7 @@ angular.module('app')
     function setMurupolku() {
       MurupolkuData.set({osanId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
 
-      $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item, index) {
+      $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item: any, index) {
         if (item.$selected === true) {
           item.index = index;
           result = item;
@@ -291,7 +291,7 @@ angular.module('app')
     $scope.perusteOppiaineVlkMap = oppiainePeruste ?
       _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, '_vuosiluokkakokonaisuus') : {};
     const laajaalaiset = _.indexBy(baseLaajaalaiset, 'tunniste');
-    const perusteSisalto = perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus] ? perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus].sisaltoalueet : [];
+    const perusteSisalto = perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus] ? (<any>perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus]).sisaltoalueet : [];
     const sortMapHelper = _(perusteSisalto).pluck('nimi').map('fi').value();
     $scope.perustenSisaltoMap = perusteSisalto ? _.indexBy(perusteSisalto, 'tunniste') : {};
     const vlkSisalto =  vuosiluokkaSisalto ? vuosiluokkaSisalto.sisaltoalueet : [];
@@ -306,7 +306,7 @@ angular.module('app')
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
 
     function setMurupolku() {
-      let item = _.reduce($scope.navi.sections[1].items, (result, item, index) => {
+      let item = _.reduce($scope.navi.sections[1].items, (result, item: any, index) => {
         if (item.$selected === true) {
           item.index = index;
           result = item;
@@ -316,7 +316,7 @@ angular.module('app')
 
       function findParents(set, index) {
         var slicedSet = _.take(set, parseInt(index));
-        var found = _.findLast(slicedSet, function (item) {
+        var found = _.findLast(slicedSet, function (item: any) {
           return item.depth === 2;
         });
         return found.$oppiaine;
@@ -346,7 +346,7 @@ angular.module('app')
 
     const getCurrentVlk = (vlk) => {
       var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
-      vuodet = _.map(vuodet, function(v) { return parseInt(v); });
+      vuodet = _.map(vuodet, function(v: any) { return parseInt(v); });
       return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
     };
 
@@ -355,7 +355,7 @@ angular.module('app')
       .map('nimi')
       .first();
 
-    $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, (vlk) => {
+    $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, (vlk: any) => {
       return vlk._vuosiluokkakokonaisuus == $scope.currentVlk;
     }).pop();
 
@@ -402,7 +402,8 @@ angular.module('app')
 
 //keskeiset sisaltoaluet
     const perusteSisalto = perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus]
-      ? perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus].sisaltoalueet : [];
+      ? (<any>perusteSisaltoMap[$scope.vlk._vuosiluokkakokonaisuus]).sisaltoalueet
+      : [];
     const sortMapHelper = _(perusteSisalto).pluck('nimi').map('fi').value();
     $scope.perustenSisaltoMap = perusteSisalto ? _.indexBy(perusteSisalto, 'tunniste') : {};
     const vlkSisalto =  vuosiluokkaSisalto ? vuosiluokkaSisalto.sisaltoalueet : [];
@@ -423,7 +424,7 @@ angular.module('app')
 
     const getCurrentVlk = (vlk) => {
       var vuodet = vlk.nimi.fi.replace(/\D/g, '').split('') || vlk.nimi.sv.replace(/\D/g, '').split('');
-      vuodet = _.map(vuodet, function(v) { return parseInt(v); });
+      vuodet = _.map(vuodet, function(v: any) { return parseInt(v); });
       return parseInt($state.params.vuosi) >= vuodet[0] && parseInt($state.params.vuosi) <= vuodet[1]
     };
 
@@ -432,7 +433,7 @@ angular.module('app')
       .map('nimi')
       .first();
 
-    $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, (vlk) => {
+    $scope.valittuVlk = _.filter(oppiaine.vuosiluokkakokonaisuudet, (vlk: any) => {
       return vlk._vuosiluokkakokonaisuus == $scope.currentVlk;
     }).pop();
 

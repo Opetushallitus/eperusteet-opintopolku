@@ -43,7 +43,7 @@ angular.module('app')
 
     return koulutusalaPromise.then(function(vastaus) {
 
-      self.koulutusalatMap = _.zipObject(_.pluck(vastaus, 'koodi'), _.map(vastaus, function(e) {
+      self.koulutusalatMap = _.zipObject(_.pluck(vastaus, 'koodi'), _.map(vastaus, function(e: any) {
         return { nimi: e.nimi };
       }));
       self.koulutusalat = vastaus;

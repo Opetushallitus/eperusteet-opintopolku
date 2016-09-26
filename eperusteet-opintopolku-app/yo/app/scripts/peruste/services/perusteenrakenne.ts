@@ -124,7 +124,7 @@ angular.module('app')
     success = success || function() {
     };
     var after = _.after(_.size(rakenne.tutkinnonOsat), success);
-    _.forEach(_.values(rakenne.tutkinnonOsat), function(osa) {
+    _.forEach(_.values(rakenne.tutkinnonOsat), function(osa: any) {
       PerusteTutkinnonosa.save({
         perusteId: id,
         suoritustapa: suoritustapa,

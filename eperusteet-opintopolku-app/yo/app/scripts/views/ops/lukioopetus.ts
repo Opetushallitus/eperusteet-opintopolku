@@ -135,9 +135,9 @@ angular.module('app')
       var tiedot = '' + section.id === 'suunnitelma';
       var states = _.words($state.current.name);
       var suunnitelmaEndStates = ['tekstikappale', 'tiedot'];
-      var aine = _.find($scope.navi.sections[1].items, {depth: 0});
+      var aine: any = _.find($scope.navi.sections[1].items, {depth: 0});
       if (aine && oppiaine) {
-        var params = {opsId: $scope.ops.id, oppiaineId: aine.$oppiaine.id};
+        const params = {opsId: $scope.ops.id, oppiaineId: aine.$oppiaine.id};
         $timeout(function () {
           $state.go('root.ops.lukioopetus.oppiaine', params);
         });
@@ -169,7 +169,7 @@ angular.module('app')
     function setMurupolku() {
       MurupolkuData.set({osanId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
 
-      $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item, index) {
+      $scope.sectionItem = _.reduce($scope.navi.sections[0].items, function (result, item: any, index) {
         if (item.$selected === true) {
           item.index = index;
           result = item;
@@ -216,7 +216,7 @@ angular.module('app')
         "VALTAKUNNALLINEN_SOVELTAVA",
         "PAIKALLINEN_SOVELTAVA"
       ];
-      return _.filter(kurssit, (kurssi) => kurssi.tyyppi === tyyppiList[parseInt(tyyppi)])
+      return _.filter(kurssit, (kurssi: any) => kurssi.tyyppi === tyyppiList[parseInt(tyyppi)])
     };
     MurupolkuData.set({oppiaineId: $stateParams.oppiaineId, oppiaineNimi: $scope.valittuOppiaine.nimi});
   })
@@ -270,7 +270,7 @@ angular.module('app')
 
     function buildLukioOppiaineMenu(oppiaineet){
       var idx = 0;
-      return _.reduce(oppiaineet, function(menu, oppiaine){
+      return _.reduce(oppiaineet, function(menu, oppiaine: any){
         menu.push(createOppiaineItem(oppiaine, 0, idx));
         idx++;
         if(!_.isEmpty(oppiaine.oppimaarat)) {
