@@ -1,0 +1,243 @@
+<!doctype html>
+
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if IE 9]>
+<html class="no-js lt-ie10"> <![endif]-->
+<!--[if !(IE)]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=yes">
+  <link rel="shortcut icon" href="favicon.ico" />
+  <!-- build:css(.tmp) styles/eperusteet-opintopolku.css -->
+  <link rel="stylesheet" href="styles/eperusteet-opintopolku.css">
+  <!-- endbuild -->
+</head>
+<body ng-app="app">
+<!-- build:js scripts/ieshims.js -->
+<!--[if lt IE 9]>
+<script src="bower_components/es5-shim/es5-shim.js"></script>
+<script src="bower_components/json3/lib/json3.js"></script>
+<![endif]-->
+<!-- endbuild  -->
+<ui-view></ui-view>
+<spinner></spinner>
+<backtotop ng-if="lokalisointiInited"></backtotop>
+
+<!-- build:js scripts/components.js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/lodash/lodash.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-translate/angular-translate.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
+<script src="bower_components/angular-ui-bootstrap-bower/ui-bootstrap-tpls.js"></script>
+<script src="bower_components/angular-elastic/elastic.js"></script>
+<script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
+<script src="bower_components/angular-i18n/angular-locale_fi-fi.js"></script>
+<script src="bower_components/momentjs/moment.js"></script>
+<script src="bower_components/momentjs/locale/fi.js"></script>
+<script src="bower_components/momentjs/locale/sv.js"></script>
+<script src="bower_components/angular-cache/dist/angular-cache.js"></script>
+<script src="bower_components/spin.js/spin.js"></script>
+<script src="bower_components/angular-spinner/angular-spinner.js"></script>
+<script src="bower_components/angulartics/dist/angulartics.min.js"></script>
+<script src="bower_components/angulartics-piwik/dist/angulartics-piwik.min.js"></script>
+<script src="bower_components/ngstorage/ngStorage.js"></script>
+<script src="bower_components/restangular/dist/restangular.js"></script>
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/constants.js"></script>
+<script src="scripts/config.js"></script>
+
+<script src="scripts/common/services/configuration.js"></script>
+<script src="scripts/common/services/kieli.js"></script>
+<script src="scripts/common/services/lokalisointi.js"></script>
+<script src="scripts/common/services/iconrole.js"></script>
+<script src="scripts/common/services/kaanna.js"></script>
+<script src="scripts/common/services/spinner.js"></script>
+<script src="scripts/common/services/pagination.js"></script>
+<script src="scripts/common/services/notifikaatiot.js"></script>
+<script src="scripts/common/services/yleinendata.js"></script>
+<script src="scripts/common/services/algoritmit.js"></script>
+<script src="scripts/common/services/utils.js"></script>
+<script src="scripts/common/services/kuvat.js"></script>
+<script src="scripts/common/services/opsmenubuilders.js"></script>
+<script src="scripts/common/services/lukioopsstateservice.js"></script>
+<script src="scripts/common/services/opsutils.js"></script>
+
+<script src="scripts/common/resources/koulutusalat.js"></script>
+<script src="scripts/common/resources/opintoalat.js"></script>
+<script src="scripts/common/resources/tiedotteet.js"></script>
+
+<script src="scripts/common/filters.js"></script>
+
+<script src="scripts/common/directives/highlight.js"></script>
+<script src="scripts/common/directives/termistoviitteet.js"></script>
+<script src="scripts/common/directives/rajaus.js"></script>
+<script src="scripts/common/directives/murupolku.js"></script>
+<script src="scripts/common/directives/suljevalikko.js"></script>
+<script src="scripts/common/directives/legend.js"></script>
+<script src="scripts/common/directives/esikatselu.js"></script>
+<script src="scripts/common/directives/lukiotabservice.js"></script>
+
+<script src="scripts/views/ops/opssivunaviutils.js"></script>
+<script src="scripts/views/ops/ops.js"></script>
+<script src="scripts/views/ops/yksinkertainen.js"></script>
+<script src="scripts/views/ops/perusopetus.js"></script>
+<script src="scripts/views/ops/yleisetperusopetusoppiaineet.js"></script>
+<script src="scripts/views/ops/lukioopetus.js"></script>
+<script src="scripts/views/ops/listaus.js"></script>
+
+<script src="components/dynamic/dynamic.js"></script>
+<script src="components/injector/injector.js"></script>
+<script src="components/lokalisointi/kaanna.js"></script>
+<script src="components/lokalisointi/kieli.js"></script>
+<script src="components/lokalisointi/lokalisointi.js"></script>
+<script src="components/termisto/termisto.js"></script>
+
+<script src="data/api.js"></script>
+<script src="data/kasitteet.js"></script>
+<script src="data/tekstikappaleet.js"></script>
+
+<script src="logic/algoritmit.js"></script>
+<script src="logic/koodisto.js"></script>
+<script src="logic/lmixins.js"></script>
+<script src="logic/perusteet.js"></script>
+<script src="logic/sorting.js"></script>
+<script src="logic/suorituspolku.js"></script>
+
+<script src="scripts/views/amops/state.js"></script>
+<script src="scripts/views/amops/osa/state.js"></script>
+<script src="scripts/views/amops/tiedot/state.js"></script>
+
+<script src="scripts/peruste/resources/ylops.js"></script>
+<script src="scripts/peruste/resources/perusteet.js"></script>
+<script src="scripts/peruste/resources/esikatselut.js"></script>
+<script src="scripts/peruste/resources/ops.js"></script>
+
+<script src="scripts/peruste/services/tutkinnonosa.js"></script>
+<script src="scripts/peruste/services/termisto.js"></script>
+<script src="scripts/peruste/services/tutke2osa.js"></script>
+<script src="scripts/peruste/services/perusteenrakenne.js"></script>
+<script src="scripts/peruste/services/muodostumissaannot.js"></script>
+
+<script src="scripts/peruste/directives/tree.js"></script>
+<script src="scripts/peruste/directives/tavoitteet.js"></script>
+<script src="scripts/peruste/directives/tagcloud.js"></script>
+<script src="scripts/peruste/directives/ohje.js"></script>
+
+<script src="scripts/views/etusivu.js"></script>
+<script src="scripts/views/uutiset.js"></script>
+<script src="scripts/views/ylanavigaatio.js"></script>
+<script src="scripts/views/haku/haku.js"></script>
+<script src="scripts/views/esitys/esitys.js"></script>
+
+<script src="states/state.js"></script>
+<script src="states/esiopetus/state.js"></script>
+<script src="states/esiopetus/tiedot/state.js"></script>
+<script src="states/esiopetus/tekstikappale/state.js"></script>
+<script src="states/perusvalmistava/state.js"></script>
+<script src="states/perusvalmistava/tiedot/state.js"></script>
+<script src="states/perusvalmistava/tekstikappale/state.js"></script>
+<script src="states/lisaopetus/state.js"></script>
+<script src="states/lisaopetus/tiedot/state.js"></script>
+<script src="states/lisaopetus/tekstikappale/state.js"></script>
+<script src="states/virhe/state.js"></script>
+<script src="states/lukio/state.js"></script>
+<script src="states/lukio/tiedot/state.js"></script>
+<script src="states/lukio/tekstikappale/state.js"></script>
+<script src="states/lukio/oppiaine/state.js"></script>
+<script src="states/lukio/oppiaine/aihekokonaisuudet/state.js"></script>
+<script src="states/lukio/oppiaine/tavoitteet/state.js"></script>
+<script src="states/lukio/oppiaine/kurssi/state.js"></script>
+<script src="states/lukio/oppiaine/kurssi/aihekokonaisuudet/state.js"></script>
+<script src="states/lukio/oppiaine/kurssi/tavoitteet/state.js"></script>
+<script src="states/uutiset/state.js"></script>
+<script src="states/etusivu/state.js"></script>
+<script src="states/esitys/state.js"></script>
+<script src="states/esitys/peruste/state.js"></script>
+<script src="states/esitys/peruste/tiedot/state.js"></script>
+<script src="states/esitys/peruste/rakenne/state.js"></script>
+<script src="states/esitys/peruste/tutkinnonosat/state.js"></script>
+<script src="states/esitys/peruste/tekstikappale/state.js"></script>
+<script src="states/esitys/peruste/tutkinnonosa/state.js"></script>
+<script src="states/perusopetus/state.js"></script>
+<script src="states/perusopetus/laajaalaiset/state.js"></script>
+<script src="states/perusopetus/tiedot/state.js"></script>
+<script src="states/perusopetus/vuosiluokkakokonaisuus/state.js"></script>
+<script src="states/perusopetus/tekstikappale/state.js"></script>
+<script src="states/perusopetus/sisallot/state.js"></script>
+<script src="states/perusopetus/vlkoppiaine/state.js"></script>
+<script src="states/tiedote/state.js"></script>
+<script src="states/ops/state.js"></script>
+<script src="states/selaus/state.js"></script>
+<script src="states/selaus/ammatillinenperuskoulutus/state.js"></script>
+<script src="states/selaus/ammatillinenaikuiskoulutus/state.js"></script>
+<script src="states/selaus/valmentavakoulutus/state.js"></script>
+<script src="states/selaus/ops/state.js"></script>
+
+<!-- endbuild -->
+
+<!-- build:js({.tmp,app}) scripts/esitys.js -->
+<script src="eperusteet-esitys/main.js"></script>
+<script src="eperusteet-esitys/services/lukiosivunavigaatio.js"></script>
+<script src="eperusteet-esitys/services/lukiostateservice.js"></script>
+<script src="eperusteet-esitys/services/lukioutils.js"></script>
+<script src="eperusteet-esitys/services/menubuilder.js"></script>
+<script src="eperusteet-esitys/services/sivunavigaatio.js"></script>
+<script src="eperusteet-esitys/services/stateservice.js"></script>
+<script src="eperusteet-esitys/services/tekstikappaleutils.js"></script>
+<script src="eperusteet-esitys/views/controllers/lukio.js"></script>
+<script src="eperusteet-esitys/views/controllers/perusopetus.js"></script>
+<script src="eperusteet-esitys/views/controllers/sisallot.js"></script>
+<script src="eperusteet-esitys/views/controllers/yksinkertainen.js"></script>
+<!-- endbuild -->
+
+
+<!-- Piwik -->
+<script type="text/javascript">
+  var siteDomain = document.domain;
+  if (siteDomain !== 'localhost') {
+    var piwikSiteId = 2;
+    if (siteDomain == 'eperusteet.opintopolku.fi') {
+      piwikSiteId = 11;
+    } else {
+      piwikSiteId = 2;
+    }
+    var _paq = _paq || [];
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+
+    (function () {
+      var u = (("https:" == document.location.protocol) ? "https" : "http") + "://analytiikka.opintopolku.fi/piwik/";
+      _paq.push(["setTrackerUrl", u + "piwik.php"]);
+      _paq.push(["setSiteId", piwikSiteId]);
+      var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
+      g.type = "text/javascript";
+      g.defer = true;
+      g.async = true;
+      g.src = u + "piwik.js";
+      s.parentNode.insertBefore(g, s);
+    })();
+  }
+</script>
+<!-- End Piwik Code -->
+</body>
+</html>

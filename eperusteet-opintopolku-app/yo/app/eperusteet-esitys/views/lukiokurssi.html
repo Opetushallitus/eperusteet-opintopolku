@@ -1,0 +1,41 @@
+<div class="tavoitteet-aihekokonaisuudet" ui-view></div>
+
+<div ng-show="stateIs('root.lukio.oppiaine.kurssi')">
+  <h1 class="oppiaine-nimi" id="{{kurssi.id}}" esitys-sivu-otsikko="kurssi.nimi">
+    <span ng-bind="kurssi.nimi | kaanna"></span>
+    (<span ng-bind="kurssi.koodiArvo"></span>)
+  </h1>
+
+  <!-- FIXME: Tyylit omaan tiedostoon -->
+  <div class="kurssikuvaus-pakollinen"
+       ng-show="kurssi.tyyppi === 'PAKOLLINEN' && oppiaine.pakollinenKurssiKuvaus"
+       ng-bind-html="oppiaine.pakollinenKurssiKuvaus | kaanna | unsafe"></div>
+  <div class="kurssikuvaus-syventava"
+       ng-show="kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA' && oppiaine.syventavaKurssiKuvaus"
+       ng-bind-html="oppiaine.syventavaKurssiKuvaus | kaanna | unsafe"></div>
+  <div class="kurssikuvaus-soveltava"
+       ng-show="kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA' && oppiaine.soveltavaKurssiKuvaus"
+       ng-bind-html="oppiaine.soveltavaKurssiKuvaus | kaanna | unsafe"></div>
+  <div style="margin-bottom: 10px"></div>
+
+  <div class="lukio-kurssi-list">
+    <div ng-show="kurssi.kuvaus | kaanna">
+      <termisto-tekstikentta tekstikentta="kurssi.kuvaus"></termisto-tekstikentta>
+    </div>
+
+    <div ng-show="kurssi.tavoitteet.teksti | kaanna">
+      <h2 class="osio-otsikko" ng-bind="kurssi.tavoitteet.otsikko | kaanna"></h2>
+      <termisto-tekstikentta tekstikentta="kurssi.tavoitteet.teksti"></termisto-tekstikentta>
+    </div>
+
+    <div ng-show="kurssi.keskeisetSisallot.teksti | kaanna">
+      <h2 class="osio-otsikko" ng-bind="kurssi.keskeisetSisallot.otsikko | kaanna"></h2>
+      <termisto-tekstikentta tekstikentta="kurssi.keskeisetSisallot.teksti"></termisto-tekstikentta>
+    </div>
+
+    <div ng-show="kurssi.tavoitteetJaKeskeisetSisallot.teksti | kaanna">
+      <h2 class="osio-otsikko" ng-bind="kurssi.tavoitteetJaKeskeisetSisallot.otsikko | kaanna"></h2>
+      <termisto-tekstikentta tekstikentta="kurssi.tavoitteetJaKeskeisetSisallot.teksti"></termisto-tekstikentta>
+    </div>
+  </div>
+</div>
