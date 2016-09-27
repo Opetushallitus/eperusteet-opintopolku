@@ -1,0 +1,6 @@
+html
+  body
+    h1(esitys-sivu-otsikko="'tutkinnon-rakenne'")
+      span(ng-bind="muodostumisOtsikko.nimi || 'tutkinnon-muodostuminen' | kaanna")
+    .tree-presentation(ng-if='rakenne.$resolved')
+      tree-wrapper(esitys='true', muokkaus='false', rakenne='rakenne')
