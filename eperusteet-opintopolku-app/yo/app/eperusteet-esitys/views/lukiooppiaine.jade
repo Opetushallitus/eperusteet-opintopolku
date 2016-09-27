@@ -1,0 +1,75 @@
+html
+  body
+    div(ng-show="stateIs('root.lukio.oppiaine')")
+      h1.oppiaine-nimi(esitys-sivu-otsikko='valittuOppiaine.oppiaine.nimi')
+        span(ng-bind='valittuOppiaine.nimi | kaanna')
+      |   
+      .clearfix
+      |   
+      .kurssi-list(ng-if='filterKurssit(kurssit,2).length')
+        h2(ng-bind-html="'soveltavat-kurssit' | kaanna | unsafe")
+        |     
+        div(ng-repeat='kurssi in filterKurssit(kurssit, 2)')
+          span.colorlabel.soveltava
+          |       
+          span.spacer-small
+          |       
+          a.kurssi-soveltava.oppiaine-kurssi-list(ui-sref="root.lukio.oppiaine.kurssi({kurssiId: '{{kurssi.id}}'})", ng-bind='kurssi.nimi | kaanna')
+      |   
+      div(ng-if='valittuOppiaine.tehtava')
+        h2(ng-bind-html='valittuOppiaine.tehtava.otsikko | kaanna | unsafe')
+        |     
+        div(ng-hide='!valittuOppiaine.tehtava || !hasContent(valittuOppiaine.tehtava)')
+          termisto-tekstikentta(tekstikentta="valittuOppiaine.tehtava.teksti  || '-'")
+      |   
+      div(ng-if='valittuOppiaine.tavoitteet')
+        h2(ng-bind-html='valittuOppiaine.tavoitteet.otsikko | kaanna | unsafe')
+        |     
+        div(ng-hide='!valittuOppiaine.tavoitteet || !hasContent(valittuOppiaine.tavoitteet)')
+          termisto-tekstikentta(tekstikentta="valittuOppiaine.tavoitteet.teksti  || '-'")
+      |   
+      div(ng-if='valittuOppiaine.arviointi')
+        h2(ng-bind-html='valittuOppiaine.arviointi.otsikko | kaanna | unsafe')
+        |     
+        div(ng-hide='!valittuOppiaine.arviointi || !hasContent(valittuOppiaine.arviointi)')
+          termisto-tekstikentta(tekstikentta="valittuOppiaine.arviointi.teksti  || '-'")
+      |   
+      div
+        div(ng-show='valittuOppiaine.pakollinenKurssiKuvaus')
+          h2(ng-bind="'pakolliset-kurssit' | kaanna")
+          |       
+          .kurssikuvaus-pakollinen
+            termisto-tekstikentta(tekstikentta="valittuOppiaine.pakollinenKurssiKuvaus  || '-'")
+        |     
+        .kurssi-list(ng-if='filterKurssit(kurssit,0).length')
+          h2(ng-bind-html="'pakolliset-kurssit' | kaanna | unsafe")
+          |       
+          div(ng-repeat='kurssi in filterKurssit(kurssit, 0)')
+            span.colorlabel.pakollinen
+            |         
+            span.spacer-small
+            |         
+            a.kurssi-soveltava.oppiaine-kurssi-list(ui-sref="root.lukio.oppiaine.kurssi({kurssiId: '{{kurssi.id}}'})", ng-bind='kurssi.nimi | kaanna')
+        |     
+        div(ng-show='valittuOppiaine.syventavaKurssiKuvaus')
+          h2(kaanna="'syventavat-kurssit'")
+          |       
+          .kurssikuvaus-syventava
+            termisto-tekstikentta(tekstikentta="valittuOppiaine.syventavaKurssiKuvaus  || '-'")
+        |     
+        .kurssi-list(ng-if='filterKurssit(kurssit,1).length')
+          h2(ng-bind-html="'syventavat-kurssit' | kaanna | unsafe")
+          |       
+          div(ng-repeat='kurssi in filterKurssit(kurssit, 1)')
+            span.colorlabel.syventava
+            |         
+            span.spacer-small
+            |         
+            a.kurssi-soveltava.oppiaine-kurssi-list(ui-sref="root.lukio.oppiaine.kurssi({kurssiId: '{{kurssi.id}}'})", ng-bind='kurssi.nimi | kaanna')
+        |     
+        div(ng-show='valittuOppiaine.soveltavaKurssiKuvaus')
+          h2(kaanna="'soveltavat-kurssit'")
+          |       
+          .kurssikuvaus-soveltava
+            termisto-tekstikentta(tekstikentta="valittuOppiaine.soveltavaKurssiKuvaus  || '-'")
+    .tavoitteet-aihekokonaisuudet(ui-view='')

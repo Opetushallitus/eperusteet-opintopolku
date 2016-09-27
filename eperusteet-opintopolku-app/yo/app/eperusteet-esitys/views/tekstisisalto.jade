@@ -1,0 +1,10 @@
+html
+  body
+    .perusopetus
+      rajaus(size='small', model='search.term', placeholder='etsi-sisallosta')
+      .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
+        a(ng-if='item.$osa', ui-sref='.tekstikappale({tekstikappaleId: item.$osa.id})')
+          span(ep-highlight='search.term', ng-bind='item.label | kaanna')
+        |   
+        a(ng-if='item.href', ng-href='{{item.href}}')
+          span(ep-highlight='search.term', ng-bind='item.label | kaanna', ng-class='{uppercase: item.$uppercase}')

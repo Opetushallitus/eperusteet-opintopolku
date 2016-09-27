@@ -1,0 +1,44 @@
+html
+  body
+    h1(esitys-sivu-otsikko='tekstikappale.nimi')
+      span(ng-bind-html='tekstikappale.nimi | kaanna | unsafe')
+    termisto-tekstikentta(tekstikentta='tekstikappale.teksti')
+    div(ng-repeat='lapsi in lapset', id='{{lapsi.$osa.id}}')
+      span
+        span.lukio-tekstikappale-h2(ng-bind='lapsi.$osa.nimi | kaanna')
+        |     
+        span.teksti-linkki
+          a(href='#', ng-click='scrollToHash(lapsi.$osa.id)', icon-role='new-window')
+      |   
+      termisto-tekstikentta(tekstikentta='lapsi.$osa.teksti')
+      |   
+      div(ng-repeat='alilapsi in lapsi.lapset', id='{{alilapsi.$osa.id}}')
+        span
+          span.lukio-tekstikappale-h2(ng-bind='alilapsi.$osa.nimi  | kaanna')
+          |       
+          span.teksti-linkki(id='{{lapsi.$osa.id}}')
+            a(href='#', ng-click='scrollToHash(alilapsi.$osa.id)', icon-role='new-window')
+        |     
+        termisto-tekstikentta(tekstikentta='alilapsi.$osa.teksti')
+        |     
+        div(ng-repeat='alialilapsi in alilapsi.lapset', id='{{alialilapsi.$osa.id}}')
+          span
+            span.lukio-tekstikappale-h2(ng-bind='alialilapsi.$osa.nimi  | kaanna')
+            |         
+            span.teksti-linkki(id='{{lapsi.$osa.id}}')
+              a(href='#', ng-click='scrollToHash(alialilapsi.$osa.id)', icon-role='new-window')
+          |       
+          termisto-tekstikentta(tekstikentta='alialilapsi.$osa.teksti')
+    .prevnext-wrapper(ng-if='links.prev || links.next')
+      .prevnext
+        a.prev.chevron(ng-if='links.prev', ui-sref='^.tekstikappale({tekstikappaleId: links.prev.$osa.id})')
+          span.glyphicon.glyphicon-chevron-left
+        |     
+        a.prev(ng-if='links.prev', ui-sref='^.tekstikappale({tekstikappaleId: links.prev.$osa.id})')
+          span(ng-bind-html='links.prev.label | kaanna | unsafe')
+        |     
+        a.next(ng-if='links.next', ui-sref='^.tekstikappale({tekstikappaleId: links.next.$osa.id})')
+          span(ng-bind-html='links.next.label | kaanna | unsafe')
+        |     
+        a.next.chevron(ng-if='links.next', ui-sref='^.tekstikappale({tekstikappaleId: links.next.$osa.id})')
+          span.glyphicon.glyphicon-chevron-right

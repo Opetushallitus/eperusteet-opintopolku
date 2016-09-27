@@ -206,6 +206,27 @@ module.exports = grunt => {
         }]
       }
     },
+    puglint: {
+
+    },
+    pug: {
+      compile: {
+        options: {
+          data: {
+            debug: true
+          }
+        },
+        files: [{
+          src: '<%= config.app %>/eperusteet-esitys/**/*.jade',
+          expand: true,
+          ext: '.html'
+        }, {
+          src: '<%= config.app %>/views/**/*.jade',
+          expand: true,
+          ext: '.html'
+        }]
+      }
+    },
     copy: {
       imgutils: {
         files: [{
@@ -356,6 +377,7 @@ module.exports = grunt => {
   grunt.registerTask('dev', [
     'typings',
     'ts',
+    'pug',
     'copy:imgutils',
     'useminPrepare',
     'concurrent:dist',
@@ -373,6 +395,7 @@ module.exports = grunt => {
     'clean:server',
     'typings',
     'ts',
+    'pug',
     'copy:fonts',
     'concurrent:test',
     'postcss',
@@ -384,6 +407,7 @@ module.exports = grunt => {
     'clean:dist',
     'typings',
     'ts',
+    'pug',
     'copy:imgutils',
     'useminPrepare',
     'concurrent:dist',
