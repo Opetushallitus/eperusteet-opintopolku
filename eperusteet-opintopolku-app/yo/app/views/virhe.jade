@@ -1,0 +1,10 @@
+html
+  body
+    .etusivu
+      .sisalto-box
+        p(kaanna="'virhe.jotain-meni-pieleen'")
+        |     
+        pre(ng-if='hasData()', ng-bind='data | json').
+          
+        |     
+        a(ui-sref='root.etusivu', kaanna="'etusivulle'")

@@ -1,0 +1,38 @@
+html
+  body
+    // tavoitteet.html
+    .opetuksen-tavoitteet
+      .panel.panel-default.panel-small.arviointi-kohdealueet
+        span.toggler(ng-show='model.tavoitteet.length')
+          a.action-link(kaanna='', ng-click='toggleAll()') avaa-sulje-kaikki
+        |     
+        .panel-body
+          .panel-group
+            div(ng-model='model.tavoitteet')
+              .panel.panel-default.tavoite(ng-hide='tavoite.$rejected || tavoite.$hide', ng-repeat='tavoite in model.tavoitteet', ng-class="{'kohde-edit': tavoite.$editing}")
+                .panel-body
+                  .tavoite-sisalto(ng-class='{collapsed: !tavoite.$accordionOpen}')
+                    h4.tavoite-otsikko.action-link(ng-show='!tavoite.$editing', ng-click='tavoiteFn.toggle(tavoite)', ng-bind-html='tavoite.tavoite | kaanna | unsafe')
+                    |                 
+                    .tavoite-collapser.action-link(ng-show='!tavoite.$accordionOpen', ng-click='tavoite.$accordionOpen = true') &mldr;
+                    |                 
+                    .collapsible(collapse='!tavoite.$accordionOpen')
+                      h4(ng-show='tavoite.$valittuKohdealue || tavoite.$editing', kaanna="'kohdealue'")
+                      |                   
+                      p(ng-if='tavoite.$valittuKohdealue && !tavoite.$editing') {{ tavoite.$valittuKohdealue ? tavoite.$valittuKohdealue.nimi : &apos;&apos; | kaanna }}
+                      |                   
+                      div(ng-if='tavoite.$editing || tavoite.laajattavoitteet')
+                        h4(kaanna="'laaja-alaisen-osaamisen-alueet'")
+                        |                     
+                        div(tag-cloud='tavoite.$osaaminen', openable='true', edit-mode='tavoite.$editing', add-label='lisaa-laaja-alainen-osaaminen')
+                      |                   
+                      div(ng-if='tavoite.$editing || tavoite.sisaltoalueet')
+                        h4(kaanna="'sisaltoalueet'")
+                        |                     
+                        div(tag-cloud='tavoite.$sisaltoalueet', openable='true', edit-mode='tavoite.$editing', add-label='lisaa-sisaltoalue')
+                      |                   
+                      div(ng-if='tavoite.$editing || hasArviointi(tavoite)')
+                        h4(ng-if='!tavoite.$editing', ng-bind="(tavoite.arvioinninOtsikko || 'arviointi') | kaanna")
+                        |                     
+                        div(ng-show='hasArviointi(tavoite)', atavoite='tavoite', perusopetuksen-arviointi='tavoite.arvioinninkohteet', edit-mode='tavoite.$editing')
+          // panel-group

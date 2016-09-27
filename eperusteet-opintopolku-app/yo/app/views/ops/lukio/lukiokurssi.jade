@@ -1,0 +1,26 @@
+html
+  body
+    div(ng-if='!wrongState()')
+      oppiaine-legend
+      |   
+      h1.oppiaine-nimi(esitys-sivu-otsikko='kurssit')
+        span(ng-bind='kurssi.nimi | kaanna')
+        |     (
+        span(ng-bind='kurssi.lokalisoituKoodi | kaanna')
+        | )
+        |     
+        span.icon(ng-class='addkurssityyppiIcon(kurssi)')
+      |   
+      div
+        div(esitys-teksti='kurssi.tavoitteetJaKeskeinenSisalto', esitys-peruste='kurssi.perusteen.tavoitteetJaKeskeinenSisalto')
+        |     
+        div(esitys-teksti='kurssi.tavoitteetJaKeskeisetSisallot', esitys-peruste='kurssi.perusteen.tavoitteetJaKeskeisetSisallot')
+        |     
+        div(esitys-teksti='kurssi.kuvaus', esitys-peruste='kurssi.perusteen.kuvaus')
+        |     
+        div(esitys-teksti='kurssi.tehtava', esitys-peruste='kurssi.perusteen.tehtava')
+        |     
+        div(esitys-teksti='kurssi.tavoitteet', esitys-peruste='kurssi.perusteen.tavoitteet')
+        |     
+        div(esitys-teksti='kurssi.keskeinenSisalto', esitys-peruste='kurssi.perusteen.keskeisetSisallot')
+    .tavoitteet-aihekokonaisuudet(ui-view='')

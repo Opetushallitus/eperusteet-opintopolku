@@ -1,0 +1,9 @@
+html
+  body
+    .container-fluid
+      div(ng-include='', src="'views/navigaatio/ylanavigaatio.html'")
+      |   
+      .row.sisalto-container
+        .col-md-12
+          #ylasivuankkuri.inner-container
+            ui-view

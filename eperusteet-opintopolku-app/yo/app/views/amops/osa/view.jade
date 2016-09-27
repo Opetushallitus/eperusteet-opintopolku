@@ -1,0 +1,15 @@
+html
+  body
+    .osa
+      h1(esitys-sivu-otsikko='osa.tekstiKappale.nimi')
+        span(ng-bind-html='osa.tekstiKappale.nimi | kaanna | unsafe')
+        |     
+        span(ng-hide='!osa.tosa.omatutkinnonosa.koodi') ({{ osa.tosa.omatutkinnonosa.koodi }})
+        |     
+        span(ng-hide='!pTosa.koodiArvo') ({{ pTosa.koodiArvo }})
+      |   
+      amosaa-termisto-teksti(teksti='osa.tekstiKappale.teksti', kt='ktId')
+      |   
+      div(ng-if="osa.tyyppi === 'suorituspolku'", ui-view='suorituspolku')
+      |   
+      div(ng-if="osa.tyyppi === 'tutkinnonosa'", ui-view='tutkinnonosa')

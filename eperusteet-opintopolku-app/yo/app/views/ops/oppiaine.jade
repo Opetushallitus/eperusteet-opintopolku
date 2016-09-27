@@ -1,0 +1,87 @@
+html
+  body
+    div(ng-show='oppiaine.kohdealueet.length > 0')
+      h2(kaanna="'kohdealueet'")
+      |   
+      ul
+        li(ng-repeat='ka in oppiaine.kohdealueet')
+          span(ng-bind='ka.nimi | kaanna')
+    div(esitys-teksti='oppiaine.tehtava', esitys-peruste='perusteOppiaine.tehtava', show-peruste='true')
+    h2.vlk-otsikko(ng-show='!isEmpty(valittuVlk)', ng-bind='currentVlkCategory | kaanna')
+    div(ng-show="oppiaine.tyyppi === 'yhteinen'")
+      div(esitys-teksti='valittuVlk.tehtava', esitys-peruste='perusteOppiaineVlkMap[currentVlk].tehtava')
+      |   
+      div(esitys-teksti='valittuVlk.tyotavat', esitys-peruste='perusteOppiaineVlkMap[currentVlk].tyotavat')
+      |   
+      div(esitys-teksti='valittuVlk.ohjaus', esitys-peruste='perusteOppiaineVlkMap[currentVlk].ohjaus')
+      |   
+      div(esitys-teksti='valittuVlk.arviointi', esitys-peruste='perusteOppiaineVlkMap[currentVlk].arviointi')
+    h2.vlk-otsikko(ng-bind="'opetus-vuosiluokkittain' | kaanna")
+    .vuosiluokka-valinta(ng-if='vuosiluokat.length > 0')
+      span(kaanna="'vuosiluokka'")
+      |   
+      ul
+        li(ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'", ng-class='{active: isActive(vuosiluokka)}')
+          a(ui-sref='^.oppiaine({vuosiluokka: vuosiluokka.vuosiluokka})', ng-bind='vuosiluokka.vuosiluokka | kaanna')
+    |   
+    div(ng-repeat="vuosiluokka in vlk.vuosiluokat | filter:vuosiluokkaFilter | orderBy:'vuosiluokka' track by vuosiluokka.vuosiluokka")
+      h2.vuosiluokka-otsikko(ng-bind="('vuosiluokka' | kaanna) + ' ' + vuosiluokka.$numero")
+      |     
+      div(ng-if="oppiaine.tyyppi === 'yhteinen'")
+        h3(kaanna="'tavoitteet'")
+        |       
+        uib-accordion.sivunavi-box(ng-repeat='tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].tunnisteet', ng-init='vs = vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]')
+          uib-accordion-group(is-open='status.open')
+            uib-accordion-heading
+              div(ng-class="{'opened-oppiaine': status.open}")
+                i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
+                |               
+                h4.tavoite-otsikko(ng-bind-html='vs.tavoiteMap[tunniste].$tavoite | kaanna | unsafe')
+            |           
+            .listat
+              .lista
+                h4(kaanna="'sisaltoalueet'")
+                |               
+                ul
+                  li(ng-repeat='sisaltoalue in vs.tavoiteMap[tunniste].$sisaltoalueet | orderBy:nimiOrder')
+                    span(ng-bind='sisaltoalue.nimi | kaanna')
+              |             
+              .lista
+                h4(kaanna="'laaja-alaiset-osaamiset'")
+                |               
+                ul
+                  li(ng-repeat='laajaalainen in vs.tavoiteMap[tunniste].$laajaalaiset | orderBy:nimiOrder')
+                    span(ng-bind='laajaalainen.nimi | kaanna')
+            |           
+            .arviointi(ng-show='sa.$arvioinninkohteet.length > 0')
+              h4.arviointi-title(kaanna="'arviointi-vuosiluokan-paatteeksi'")
+              |             
+              table.table.table-bordered.kriteerit
+                tr
+                  th(width='30%', kaanna="'arvioinnin-kohde'")
+                  |                 
+                  th(kaanna="'arvion-hyva-osaaminen'")
+                |               
+                tr(ng-repeat='kohde in sa.$arvioinninkohteet')
+                  td(ng-bind='kohde.arvioinninKohde | kaanna')
+                  |                 
+                  td(ng-bind='kohde.hyvanOsaamisenKuvaus | kaanna')
+        |       
+        h3(ng-if='!vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko', kaanna="'sisaltoalueet'")
+        |       
+        h3(ng-if='vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko', ng-bind='vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo.otsikko | kaanna')
+        |       
+        div(esitys-teksti='', esitys-peruste='vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].perusteOpVlk.sisaltoalueinfo', show-peruste='true', hide-otsikko='true')
+        |       
+        .tavoite(ng-repeat='tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].sisaltoaluetunnisteet', ng-init='vs = vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]')
+          h4.tavoite-otsikko(ng-bind-html='vs.perusteSisaltoalueet[tunniste].nimi | kaanna | unsafe')
+          |         
+          .esitys-peruste(termisto-viitteet='vs.perusteSisaltoalueet[tunniste].kuvaus', ng-bind-html='vs.perusteSisaltoalueet[tunniste].kuvaus | kaanna | unsafe')
+          |         
+          .esitys-paikallinen(termisto-viitteet='vs.sisaltoaluemuokattavat[tunniste].teksti', ng-bind-html='vs.sisaltoaluemuokattavat[tunniste].teksti | kaanna | unsafe')
+      |     
+      div(ng-if="oppiaine.tyyppi !== 'yhteinen'")
+        div(ng-repeat='tavoite in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].valinnaisenTekstiosat')
+          h4(ng-bind-html='tavoite.otsikko | kaanna | unsafe')
+          |         
+          div(termisto-vitteet='tavoite.teksti', ng-bind-html='tavoite.teksti | kaanna | unsafe')

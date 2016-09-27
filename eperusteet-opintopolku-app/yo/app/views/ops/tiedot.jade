@@ -1,0 +1,75 @@
+html
+  body
+    // partials/esitys/tiedot.html
+    h1(esitys-sivu-otsikko="'opetussuunnitelman-tiedot'")
+      span(kaanna="'opetussuunnitelman-tiedot'")
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'opetussuunnitelman-nimi'")
+      |   
+      .col-xs-6.col-sm-8
+        span(ng-bind="(ops.nimi || 'nimetön') | kaanna")
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'maarayksen-diaarinumero'")
+      |   
+      .col-xs-6.col-sm-8
+        span(ng-bind='ops.perusteenDiaarinumero')
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'koulutus-tyyppi'")
+      |   
+      .col-xs-6.col-sm-8
+        span(ng-bind='ops.koulutustyyppi | kaanna')
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'kunnat'")
+      |   
+      .col-xs-6.col-sm-8.esitys-korvattavat
+        ul
+          li(ng-repeat='kunta in ops.kunnat')
+            span {{kunta.nimi | kaanna}}
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'organisaatiot'")
+      |   
+      .col-xs-6.col-sm-8.esitys-korvattavat
+        ul
+          li(ng-repeat='org in ops.organisaatiot')
+            span {{org.nimi | kaanna}}
+            | &nbsp;
+            span(ng-repeat='tyypi in org.tyypit') &nbsp;({{tyypi}})
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'luotu'")
+      |   
+      .col-xs-6.col-sm-8
+        span(pvm='ops.luotu')
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'muokattu'")
+      |   
+      .col-xs-6.col-sm-8
+        span(pvm='ops.muokattu')
+    .row.row-margin(ng-if='!!ops.paatospaivamaara')
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'paatospaivamaara'")
+      |   
+      .col-xs-6.col-sm-8
+        span(pvm='ops.paatospaivamaara')
+    .row.row-margin(ng-show='!!ops.kuvaus')
+      .col-xs-12.col-sm-4
+        strong
+          span(kaanna="'tiivistelma'")
+      |   
+      .col-xs-12.col-sm-8
+        termisto-tekstikentta(tekstikentta='ops.kuvaus')
+    .clearfix

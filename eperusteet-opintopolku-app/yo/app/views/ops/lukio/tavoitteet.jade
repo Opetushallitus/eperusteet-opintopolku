@@ -1,0 +1,46 @@
+html
+  body
+    .lukioopetus(ng-show="getCurrentEndState() === 'tavoitteet'")
+      h1(esitys-sivu-otsikko='tavoitteet.paikallinen.otsikko')
+        span(ng-bind-html='tavoitteet.perusteen.otsikko | kaanna | unsafe')
+      |   
+      uib-accordion.peruste-box(ng-show='hasContent(tavoitteet.paikallinen.kuvaus)')
+        uib-accordion-group(is-open='status.open')
+          uib-accordion-heading
+            div
+              i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
+              |           
+              h4(ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe")
+          |       
+          h5(ng-bind-html='tavoitteet.perusteen.otsikko | kaanna')
+          |       
+          termisto-tekstikentta(perusteteksti='tavoitteet.perusteen.kuvaus')
+      |   
+      div(ng-show='!hasContent(tavoitteet.paikallinen.kuvaus)')
+        termisto-tekstikentta(perusteteksti='tavoitteet.perusteen.kuvaus')
+      |   
+      termisto-tekstikentta(tekstikentta='tavoitteet.paikallinen.kuvaus')
+    .lukioopetus(ng-show="getCurrentEndState() === 'aihekokonaisuudet'")
+      .kokonaisuus(ng-repeat='aihe in aihekokonaisuudet')
+        h1(esitys-sivu-otsikko='aihe.nimi')
+          span(ng-bind-html='aihe.otsikko | kaanna | unsafe')
+        |     
+        div(ng-show='aihe.perusteen && hasContent(aihe.yleiskuvaus)')
+          uib-accordion.peruste-box
+            uib-accordion-group(is-open='status.open')
+              uib-accordion-heading
+                div
+                  i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
+                  |               
+                  h4(ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe")
+              |           
+              h5(ng-bind-html='aihe.perusteen.otsikko | kaanna')
+              |           
+              termisto-tekstikentta(perusteteksti='aihe.perusteen.yleiskuvaus')
+        |     
+        div(ng-show='!hasContent(aihe.yleiskuvaus)')
+          h5(ng-bind-html='tavoitteet.perusteen.otsikko | kaanna')
+          |       
+          termisto-tekstikentta(perusteteksti='aihe.perusteen.yleiskuvaus')
+        |     
+        termisto-tekstikentta(tekstikentta='aihe.yleiskuvaus')
