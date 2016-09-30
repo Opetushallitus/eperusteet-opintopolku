@@ -1,42 +1,30 @@
-html
-  body
-    .amops
-      h1.peruste-otsikko(ng-bind-html='ops.nimi | kaanna | unsafe')
-      |   
-      .alert.alert-info(ng-if="ops.tila !== 'julkaistu'")
-        a.palata-btn.btn.btn-primary.pull-right(ng-click='returnToAmosaa()', ng-bind="'palata-ops-tyokaluun' | kaanna")
-        |     
-        h4(kaanna="'amops-esikatselu'")
-        |     
-        p(kaanna="'amops-esikatselu-info'")
-      |   
-      ol.breadcrumb
-        li
-          a(href='', ui-sref='root.etusivu')
-            img(src='images/sm/ikoni-eperusteet.png')
-        |     
-        li(ng-repeat='muru in muruPath')
-          a(href='', ui-sref='{{ muru.state }}', ui-sref-opts='{ reload: true }')
-            span(ng-bind='muru.name | kaanna')
-      |   
-      .nakyma
-        .sivunavi-toggler-wrapper
-          #sivunavi-valikko-nappi.sivunavi-toggler(ng-click='toggleSideMenu()', ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'", ng-attr-title="{{ menuCollapsed && ('sivunavigointi-avaa-menu' | kaanna) || ('sivunavigointi-sulje-menu' | kaanna )}}")
-            .sivunavi-valinta
-              span.glyphicon.glyphicon-align-justify
-        |     
-        div(off-click='toggleSideMenu()', off-click-filter='#sivunavi-valikko-nappi', off-click-if='!menuCollapsed')
-          .sivunavi.sivunavi-box(ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}", ng-style='{top: scrollTop}')
-            .header
-              | Test
-            |         
-            ul
-              li
-                a(ui-sref-active='active', ui-sref='.tiedot', ng-bind="'tiedot' | kaanna", ng-class='{ pakollinen: item.$$obj.pakollinen, liikkumaton: item.$$obj.liikkumaton }')
-              |           
-              dynamic(template='views/amops/sivunaviitem.html', ng-model='sivunavi.lapset', misc='misc')
-        |     
-        .oikea
-          .row
-            .col-md-12
-              div(ui-view='')
+.amops
+  h1.peruste-otsikko(ng-bind-html='ops.nimi | kaanna | unsafe')
+  .alert.alert-info(ng-if="ops.tila !== 'julkaistu'")
+    a.palata-btn.btn.btn-primary.pull-right(ng-click='returnToAmosaa()', ng-bind="'palata-ops-tyokaluun' | kaanna")
+    h4(kaanna="'amops-esikatselu'")
+    p(kaanna="'amops-esikatselu-info'")
+  ol.breadcrumb
+    li
+      a(href='', ui-sref='root.etusivu')
+        img(src='images/sm/ikoni-eperusteet.png')
+    li(ng-repeat='muru in muruPath')
+      a(href='', ui-sref='{{ muru.state }}', ui-sref-opts='{ reload: true }')
+        span(ng-bind='muru.name | kaanna')
+  .nakyma
+    .sivunavi-toggler-wrapper
+      #sivunavi-valikko-nappi.sivunavi-toggler(ng-click='toggleSideMenu()', ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'", ng-attr-title="{{ menuCollapsed && ('sivunavigointi-avaa-menu' | kaanna) || ('sivunavigointi-sulje-menu' | kaanna )}}")
+        .sivunavi-valinta
+          span.glyphicon.glyphicon-align-justify
+    div(off-click='toggleSideMenu()', off-click-filter='#sivunavi-valikko-nappi', off-click-if='!menuCollapsed')
+      .sivunavi.sivunavi-box(ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}", ng-style='{top: scrollTop}')
+        .header
+          | Test
+        ul
+          li
+            a(ui-sref-active='active', ui-sref='.tiedot', ng-bind="'tiedot' | kaanna", ng-class='{ pakollinen: item.$$obj.pakollinen, liikkumaton: item.$$obj.liikkumaton }')
+          dynamic(template='views/amops/sivunaviitem.html', ng-model='sivunavi.lapset', misc='misc')
+    .oikea
+      .row
+        .col-md-12
+          div(ui-view='')

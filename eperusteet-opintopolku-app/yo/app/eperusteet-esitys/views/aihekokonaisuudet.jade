@@ -1,12 +1,7 @@
-html
-  body
-    .perusopetus
-      h1(ng-bind='yleiskuvaus.otsikko | kaanna')
-      |   
-      termisto-tekstikentta(tekstikentta='yleiskuvaus.yleiskuvaus')
-      |   
-      div(ng-repeat='aihe in aihekokonaisuudet')
-        h1(esitys-sivu-otsikko='aihe.nimi')
-          span(ng-bind-html='aihe.nimi | kaanna | unsafe')
-        |     
-        termisto-tekstikentta(tekstikentta='aihe.kuvaus')
+.perusopetus
+  h1(ng-bind='yleiskuvaus.otsikko | kaanna')
+  termisto-tekstikentta(tekstikentta='yleiskuvaus.yleiskuvaus')
+  div(ng-repeat='aihe in aihekokonaisuudet')
+    h1(esitys-sivu-otsikko='aihe.nimi')
+      span(ng-bind-html='aihe.nimi | kaanna | unsafe')
+    termisto-tekstikentta(tekstikentta='aihe.kuvaus')

@@ -56,7 +56,7 @@ module.exports = grunt => {
           'usemin'
         ],
         files: [
-          '<%= config.app %>/**/*.{html,ts}',
+          '<%= config.app %>/**/*.{jade,html,ts}',
           '!<%= config.app %>/bower_components/**',
           '<%= config.app %>/localisation/*.json',
           '.tmp/styles/**/*.css',

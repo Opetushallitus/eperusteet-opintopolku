@@ -1,89 +1,61 @@
-html
-  body
-    .tutkinnonosa-wrapper
-      h1(esitys-sivu-otsikko='tutkinnonOsaViite.nimi')
-        | {{ tutkinnonOsa.nimi | kaanna }} 
-        span(ng-show='tutkinnonOsaViite.laajuus') {{ tutkinnonOsaViite.laajuus }} {{ yksikko | kaanna }}
-      |   
-      div(ng-if='tutkinnonOsa.koodiArvo')
-        strong(kaanna="'koodi'")
-        | : {{ tutkinnonOsa.koodiArvo }}
-      |   
-      div(ng-if='tutkinnonOsaViite.jarjestys')
-        strong(kaanna="'tutkinnonosa-jarjestysnumero'")
-        | : {{ tutkinnonOsaViite.jarjestys }}
-      |   
-      div(ng-if="tutkinnonOsa.tyyppi !== 'tutke2'", ng-repeat='k in fieldKeys | orderBy: fieldOrder')
-        div(ng-if="k === 'arviointi'")
-          div(ng-show='tutkinnonOsa.arviointi.arvioinninKohdealueet')
-            h3(kaanna="'arviointi'")
-            |         
-            div(ng-repeat='kohdealue in tutkinnonOsa.arviointi.arvioinninKohdealueet')
-              .arviointi
-                .arviointi-otsikko
-                  h4 {{ kohdealue.otsikko | kaanna }}
-                |                 
-                .arviointi-sisalto
-                  div(ng-repeat='kohde in kohdealue.arvioinninKohteet')
-                    h4 {{ kohde.otsikko | kaanna }}
-                    |                         
-                    h5 {{ kohde.selite || &apos;&apos; | kaanna }}
-                    |                         
-                    .table-responsive
-                      table.table.table-striped
-                        tr(ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy: '_osaamistaso'")
-                          td.arviointi-okriteeri
-                            span
-                              | {{ arviointiasteikot[kohde._arviointiAsteikko][okriteeri._osaamistaso].otsikko | kaanna }}
-                          |                                   
-                          td
-                            ul
-                              li(ng-repeat='kriteeri in okriteeri.kriteerit') {{ kriteeri | kaanna }}
-          |       
-          div(ng-show='(!tutkinnonOsa.arviointi.arvioinninKohdealueet || tutkinnonOsa.arviointi.arvioinninKohdealueet.length === 0) && tutkinnonOsa.arviointi.lisatiedot')
-            h3(kaanna="'arviointi'")
-            |         
-            div(ng-bind-html='tutkinnonOsa.arviointi.lisatiedot | kaanna | unsafe')
-        |     
-        div(ng-if="k !== 'arviointi' && tutkinnonOsa[k]")
-          h3 {{ k | kaanna }}
-          |       
-          termisto-tekstikentta(tekstikentta='tutkinnonOsa[k]')
-      |   
-      div(ng-if="tutkinnonOsa.tyyppi === 'tutke2'")
-        termisto-tekstikentta(tekstikentta='tutkinnonOsa.kuvaus')
-        |     
-        div
-          span(kaanna="'osa-alueet'")
-          span :
-          |       
-          span(ng-repeat='osaalue in tutkinnonOsa.osaAlueet | filter:osaAlueFilter')
-            span(ng-if='!$first') &nbsp;|&nbsp;
-            |         
-            a.action-link(ng-click="goToAnchor('osaalue', osaalue.id)") {{ osaalue.nimi | kaanna }}
-        |     
-        div(ng-repeat='osaalue in tutkinnonOsa.osaAlueet | filter:osaAlueFilter')
-          h3(id='osaalue{{ osaalue.id }}') {{osaalue.nimi | kaanna}}
-          |       
-          div(ng-repeat='osaamistavoitteet in osaalue.$groups.grouped')
-            div(ng-repeat='tavoite in osaamistavoitteet | filter:osaAlueFilter', ng-include="'eperusteet-esitys/views/osaamistavoite.html'")
-          |       
-          div(ng-repeat='tavoite in osaalue.$groups.ungrouped', ng-include="'eperusteet-esitys/views/osaamistavoite.html'")
-          |       
-          div(ng-if='osaalue.valmaTelmaSisalto', ng-include="'eperusteet-esitys/views/valmatelma.html'")
-      |   
-      div(ng-if='tutkinnonOsa.valmaTelmaSisalto', ng-include="'eperusteet-esitys/views/valmatelma.html'")
-      |   
-      .to-vapaat-tekstit(ng-show='tutkinnonOsa.vapaatTekstit.length > 0')
-        h2(kaanna="'vapaa-tekstisisalto'")
-        |     
-        div(ng-repeat='vt in tutkinnonOsa.vapaatTekstit')
-          h3
-            a(href='', ng-click='vt.$$open = !vt.$$open')
-              span(ng-hide='vt.$$open', icon-role='chevron-right')
-              |           
-              span(ng-show='vt.$$open', icon-role='chevron-down')
-              |           
-              span(ng-bind-html='vt.nimi | kaanna')
-          |       
-          div(collapse='!vt.$$open', ng-bind-html='vt.teksti | kaanna')
+.tutkinnonosa-wrapper
+  h1(esitys-sivu-otsikko='tutkinnonOsaViite.nimi')
+    | {{ tutkinnonOsa.nimi | kaanna }} 
+    span(ng-show='tutkinnonOsaViite.laajuus') {{ tutkinnonOsaViite.laajuus }} {{ yksikko | kaanna }}
+  div(ng-if='tutkinnonOsa.koodiArvo')
+    strong(kaanna="'koodi'")
+    | : {{ tutkinnonOsa.koodiArvo }}
+  div(ng-if='tutkinnonOsaViite.jarjestys')
+    strong(kaanna="'tutkinnonosa-jarjestysnumero'")
+    | : {{ tutkinnonOsaViite.jarjestys }}
+  div(ng-if="tutkinnonOsa.tyyppi !== 'tutke2'", ng-repeat='k in fieldKeys | orderBy: fieldOrder')
+    div(ng-if="k === 'arviointi'")
+      div(ng-show='tutkinnonOsa.arviointi.arvioinninKohdealueet')
+        h3(kaanna="'arviointi'")
+        div(ng-repeat='kohdealue in tutkinnonOsa.arviointi.arvioinninKohdealueet')
+          .arviointi
+            .arviointi-otsikko
+              h4 {{ kohdealue.otsikko | kaanna }}
+            .arviointi-sisalto
+              div(ng-repeat='kohde in kohdealue.arvioinninKohteet')
+                h4 {{ kohde.otsikko | kaanna }}
+                h5 {{ kohde.selite || &apos;&apos; | kaanna }}
+                .table-responsive
+                  table.table.table-striped
+                    tr(ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy: '_osaamistaso'")
+                      td.arviointi-okriteeri
+                        span
+                          | {{ arviointiasteikot[kohde._arviointiAsteikko][okriteeri._osaamistaso].otsikko | kaanna }}
+                      td
+                        ul
+                          li(ng-repeat='kriteeri in okriteeri.kriteerit') {{ kriteeri | kaanna }}
+      div(ng-show='(!tutkinnonOsa.arviointi.arvioinninKohdealueet || tutkinnonOsa.arviointi.arvioinninKohdealueet.length === 0) && tutkinnonOsa.arviointi.lisatiedot')
+        h3(kaanna="'arviointi'")
+        div(ng-bind-html='tutkinnonOsa.arviointi.lisatiedot | kaanna | unsafe')
+    div(ng-if="k !== 'arviointi' && tutkinnonOsa[k]")
+      h3 {{ k | kaanna }}
+      termisto-tekstikentta(tekstikentta='tutkinnonOsa[k]')
+  div(ng-if="tutkinnonOsa.tyyppi === 'tutke2'")
+    termisto-tekstikentta(tekstikentta='tutkinnonOsa.kuvaus')
+    div
+      span(kaanna="'osa-alueet'")
+      span :
+      span(ng-repeat='osaalue in tutkinnonOsa.osaAlueet | filter:osaAlueFilter')
+        span(ng-if='!$first') &nbsp;|&nbsp;
+        a.action-link(ng-click="goToAnchor('osaalue', osaalue.id)") {{ osaalue.nimi | kaanna }}
+    div(ng-repeat='osaalue in tutkinnonOsa.osaAlueet | filter:osaAlueFilter')
+      h3(id='osaalue{{ osaalue.id }}') {{osaalue.nimi | kaanna}}
+      div(ng-repeat='osaamistavoitteet in osaalue.$groups.grouped')
+        div(ng-repeat='tavoite in osaamistavoitteet | filter:osaAlueFilter', ng-include="'eperusteet-esitys/views/osaamistavoite.html'")
+      div(ng-repeat='tavoite in osaalue.$groups.ungrouped', ng-include="'eperusteet-esitys/views/osaamistavoite.html'")
+      div(ng-if='osaalue.valmaTelmaSisalto', ng-include="'eperusteet-esitys/views/valmatelma.html'")
+  div(ng-if='tutkinnonOsa.valmaTelmaSisalto', ng-include="'eperusteet-esitys/views/valmatelma.html'")
+  .to-vapaat-tekstit(ng-show='tutkinnonOsa.vapaatTekstit.length > 0')
+    h2(kaanna="'vapaa-tekstisisalto'")
+    div(ng-repeat='vt in tutkinnonOsa.vapaatTekstit')
+      h3
+        a(href='', ng-click='vt.$$open = !vt.$$open')
+          span(ng-hide='vt.$$open', icon-role='chevron-right')
+          span(ng-show='vt.$$open', icon-role='chevron-down')
+          span(ng-bind-html='vt.nimi | kaanna')
+      div(collapse='!vt.$$open', ng-bind-html='vt.teksti | kaanna')

@@ -1,24 +1,18 @@
-html
-  body
-    .tab-container(ng-show="currentState() === 'oppiaine'")
-      ul#ep-tabs1.nav.nav-tabs
-        li(ng-repeat='tab in tabs', ng-class="{'tab-active': tabClass('{{tab.name}}')}")
-          a(ui-sref="{{tab.url('oppiaine')}}", ng-bind='tab.title.oppiaine | kaanna')
-        |     
-        li.legend.legend-container(ng-show="tabClass('sisalto') && !!simpleLegend")
-          span(ng-repeat='tyyppi in kurssiTyypit')
-            span.spacer
-            span.lukio-colorbox(ng-class="'{{tyyppi}}'")
-            |         
-            span.legend-label(ng-bind='tyyppi | kaanna')
-    .tab-container(ng-show="currentState() === 'kurssi'")
-      ul#ep-tabs2.nav.nav-tabs
-        li(ng-repeat='tab in tabs', ng-class="{'tab-active': tabClass('{{tab.name}}')}")
-          a(ui-sref="{{tab.url('kurssi')}}", ng-bind='tab.title.kurssi | kaanna')
-        |     
-        li.legend.legend-container(ng-show="tabClass('sisalto') && !!simpleLegend")
-          span(ng-repeat='tyyppi in kurssiTyypit')
-            span.spacer
-            span.lukio-colorbox(ng-class="'{{tyyppi}}'")
-            |         
-            span.legend-label(ng-bind='tyyppi | kaanna')
+.tab-container(ng-show="currentState() === 'oppiaine'")
+  ul#ep-tabs1.nav.nav-tabs
+    li(ng-repeat='tab in tabs', ng-class="{'tab-active': tabClass('{{tab.name}}')}")
+      a(ui-sref="{{tab.url('oppiaine')}}", ng-bind='tab.title.oppiaine | kaanna')
+    li.legend.legend-container(ng-show="tabClass('sisalto') && !!simpleLegend")
+      span(ng-repeat='tyyppi in kurssiTyypit')
+        span.spacer
+        span.lukio-colorbox(ng-class="'{{tyyppi}}'")
+        span.legend-label(ng-bind='tyyppi | kaanna')
+.tab-container(ng-show="currentState() === 'kurssi'")
+  ul#ep-tabs2.nav.nav-tabs
+    li(ng-repeat='tab in tabs', ng-class="{'tab-active': tabClass('{{tab.name}}')}")
+      a(ui-sref="{{tab.url('kurssi')}}", ng-bind='tab.title.kurssi | kaanna')
+    li.legend.legend-container(ng-show="tabClass('sisalto') && !!simpleLegend")
+      span(ng-repeat='tyyppi in kurssiTyypit')
+        span.spacer
+        span.lukio-colorbox(ng-class="'{{tyyppi}}'")
+        span.legend-label(ng-bind='tyyppi | kaanna')

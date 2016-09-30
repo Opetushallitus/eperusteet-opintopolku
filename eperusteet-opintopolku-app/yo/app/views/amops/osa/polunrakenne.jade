@@ -1,44 +1,42 @@
-html
-  body
-    .sp-laatikko(ng-hide='(misc.hasInput && !ngModel.$$haettu) || (!misc.collapsed_removed && ngModel.$$poistettu)')
-      .sp-tutkinnonosa(ng-class="{ 'sp-laatikko-active': ngModel.$$haettu, 'sp-sisalto-poistettu': ngModel.$$poistettu }", ng-show='ngModel._tutkinnonOsaViite', ng-init='tosa = misc.tosat[ngModel._tutkinnonOsaViite];')
+.sp-laatikko(ng-hide='(misc.hasInput && !ngModel.$$haettu) || (!misc.collapsed_removed && ngModel.$$poistettu)')
+  .sp-tutkinnonosa(ng-class="{ 'sp-laatikko-active': ngModel.$$haettu, 'sp-sisalto-poistettu': ngModel.$$poistettu }", ng-show='ngModel._tutkinnonOsaViite', ng-init='tosa = misc.tosat[ngModel._tutkinnonOsaViite];')
+    .sp-sisalto.sp-sisalto-tosa
+      .sp-nimi
+        a(href='', ng-click='misc.siirry(tosa)', ng-bind='tosa.$$tosa.nimi | kaanna')
+        b.sp-osaamisala(ng-bind='tosa.$$tosa.koodiArvo')
+      .sp-toolbar
+        span.laajuus
+          span(ng-bind='tosa.laajuus')
+          span(style='margin-left: 2px', ng-bind='misc.suoritustapa.laajuusYksikko | kaanna')
+  .sp-ryhma(ng-show='ngModel.rooli', ng-init="isVieras = ngModel.rooli === 'määrittelemätön' || ngModel.vieras; ")
+    .sp-sisalto(ng-class="{ 'sp-sisalto-vieras': isVieras, 'sp-sisalto-osaamisala': !isVieras && ngModel.osaamisala, 'sp-sisalto-ryhma': !isVieras && !ngModel.osaamisala, 'sp-sisalto-poistettu': ngModel.$$poistettu }")
+      .sp-toggler(ng-class="{ 'sp-toggler-osaamisala': ngModel.osaamisala, 'sp-toggler-ryhma': !ngModel.osaamisala }", ng-click='misc.toggle(ngModel)')
+        .chevron
+          span.glyphicon.glyphicon-chevron-down(ng-hide='ngModel.$$collapsed')
+          span.glyphicon.glyphicon-chevron-right(ng-show='ngModel.$$collapsed')
+      .sp-nimi
+        span(ng-bind='ngModel.nimi | kaanna')
+        span.sp-osaamisala(ng-show='ngModel.osaamisala', ng-bind='ngModel.osaamisala.osaamisalakoodiArvo')
+      .sp-toolbar
+        .sp-muodostuminen(ng-show='ngModel.muodostumisSaanto', ng-init='laajuus = ngModel.muodostumisSaanto.laajuus; koko = ngModel.muodostumisSaanto.koko; laajuusSama = laajuus.minimi === laajuus.maksimi')
+          span(ng-show='laajuus.minimi || laajuus.maksimi', ng-bind='laajuus.minimi || 0')
+          span(ng-show='!laajuusSama') {{ &apos; - &apos; }}
+          span(ng-show='laajuus.maksimi && !laajuusSama', ng-bind='laajuus.maksimi')
+          span(style='margin-left: 2px', ng-show='laajuus.minimi || laajuus.maksimi', ng-bind='misc.suoritustapa.laajuusYksikko | kaanna')
+    .sp-kuvaus
+      div(ng-if='ngModel.kuvaus || (misc.spRivit[ngModel.tunniste] && misc.spRivit[ngModel.tunniste].kuvaus)')
+        div(ng-show='ngModel.$$naytaKuvaus')
+          .sp-kuvaus-peruste(ng-if='ngModel.kuvaus')
+            p(termisto-viitteet='ngModel.kuvaus', ng-bind-html='ngModel.kuvaus| kaanna | kuvalinkit | unsafe')
+          .sp-kuvaus-oma(ng-if='misc.spRivit[ngModel.tunniste] && misc.spRivit[ngModel.tunniste].kuvaus')
+            p(termisto-viitteet='misc.spRivit[ngModel.tunniste].kuvaus', ng-bind-html='misc.spRivit[ngModel.tunniste].kuvaus| kaanna | kuvalinkit | unsafe')
+        .sp-kuvaus-toggler(ng-click='ngModel.$$naytaKuvaus = !ngModel.$$naytaKuvaus')
+          span ...
+    .sp-ryhma-lapset(ng-show='!ngModel.$$poistettu && (!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu))', ng-repeat='koodi in misc.spRivit[ngModel.tunniste].koodit')
+      .sp-tutkinnonosa.sp-tutkinnonosa-(ng-class="{ 'sp-laatikko-active': ngModel.$$haettu, 'sp-sisalto-poistettu': ngModel.$$poistettu, 'sp-laatikko-rikki': misc.koodinimet[koodi].rikki }")
         .sp-sisalto.sp-sisalto-tosa
           .sp-nimi
-            a(href='', ng-click='misc.siirry(tosa)', ng-bind='tosa.$$tosa.nimi | kaanna')
-            b.sp-osaamisala(ng-bind='tosa.$$tosa.koodiArvo')
-          .sp-toolbar
-            span.laajuus
-              span(ng-bind='tosa.laajuus')
-              span(style='margin-left: 2px', ng-bind='misc.suoritustapa.laajuusYksikko | kaanna')
-      .sp-ryhma(ng-show='ngModel.rooli', ng-init="isVieras = ngModel.rooli === 'määrittelemätön' || ngModel.vieras; ")
-        .sp-sisalto(ng-class="{ 'sp-sisalto-vieras': isVieras, 'sp-sisalto-osaamisala': !isVieras && ngModel.osaamisala, 'sp-sisalto-ryhma': !isVieras && !ngModel.osaamisala, 'sp-sisalto-poistettu': ngModel.$$poistettu }")
-          .sp-toggler(ng-class="{ 'sp-toggler-osaamisala': ngModel.osaamisala, 'sp-toggler-ryhma': !ngModel.osaamisala }", ng-click='misc.toggle(ngModel)')
-            .chevron
-              span.glyphicon.glyphicon-chevron-down(ng-hide='ngModel.$$collapsed')
-              span.glyphicon.glyphicon-chevron-right(ng-show='ngModel.$$collapsed')
-          .sp-nimi
-            span(ng-bind='ngModel.nimi | kaanna')
-            span.sp-osaamisala(ng-show='ngModel.osaamisala', ng-bind='ngModel.osaamisala.osaamisalakoodiArvo')
-          .sp-toolbar
-            .sp-muodostuminen(ng-show='ngModel.muodostumisSaanto', ng-init='laajuus = ngModel.muodostumisSaanto.laajuus; koko = ngModel.muodostumisSaanto.koko; laajuusSama = laajuus.minimi === laajuus.maksimi')
-              span(ng-show='laajuus.minimi || laajuus.maksimi', ng-bind='laajuus.minimi || 0')
-              span(ng-show='!laajuusSama') {{ &apos; - &apos; }}
-              span(ng-show='laajuus.maksimi && !laajuusSama', ng-bind='laajuus.maksimi')
-              span(style='margin-left: 2px', ng-show='laajuus.minimi || laajuus.maksimi', ng-bind='misc.suoritustapa.laajuusYksikko | kaanna')
-        .sp-kuvaus
-          div(ng-if='ngModel.kuvaus || (misc.spRivit[ngModel.tunniste] && misc.spRivit[ngModel.tunniste].kuvaus)')
-            div(ng-show='ngModel.$$naytaKuvaus')
-              .sp-kuvaus-peruste(ng-if='ngModel.kuvaus')
-                p(termisto-viitteet='ngModel.kuvaus', ng-bind-html='ngModel.kuvaus| kaanna | kuvalinkit | unsafe')
-              .sp-kuvaus-oma(ng-if='misc.spRivit[ngModel.tunniste] && misc.spRivit[ngModel.tunniste].kuvaus')
-                p(termisto-viitteet='misc.spRivit[ngModel.tunniste].kuvaus', ng-bind-html='misc.spRivit[ngModel.tunniste].kuvaus| kaanna | kuvalinkit | unsafe')
-            .sp-kuvaus-toggler(ng-click='ngModel.$$naytaKuvaus = !ngModel.$$naytaKuvaus')
-              span ...
-        .sp-ryhma-lapset(ng-show='!ngModel.$$poistettu && (!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu))', ng-repeat='koodi in misc.spRivit[ngModel.tunniste].koodit')
-          .sp-tutkinnonosa.sp-tutkinnonosa-(ng-class="{ 'sp-laatikko-active': ngModel.$$haettu, 'sp-sisalto-poistettu': ngModel.$$poistettu, 'sp-laatikko-rikki': misc.koodinimet[koodi].rikki }")
-            .sp-sisalto.sp-sisalto-tosa
-              .sp-nimi
-                a(href='', ng-click='misc.siirry(misc.koodinimet[koodi].uri)', ng-bind='misc.koodinimet[koodi].nimi | kaanna')
-                b.sp-osaamisala(ng-bind='misc.koodinimet[koodi].arvo')
-        .sp-ryhma-lapset(ng-show='!ngModel.$$poistettu && (!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu))', ng-repeat='osa in ngModel.osat')
-          dynamic(template='views/amops/osa/polunrakenne.html', misc='misc', ng-model='osa', depth='depth + 1')
+            a(href='', ng-click='misc.siirry(misc.koodinimet[koodi].uri)', ng-bind='misc.koodinimet[koodi].nimi | kaanna')
+            b.sp-osaamisala(ng-bind='misc.koodinimet[koodi].arvo')
+    .sp-ryhma-lapset(ng-show='!ngModel.$$poistettu && (!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu))', ng-repeat='osa in ngModel.osat')
+      dynamic(template='views/amops/osa/polunrakenne.html', misc='misc', ng-model='osa', depth='depth + 1')

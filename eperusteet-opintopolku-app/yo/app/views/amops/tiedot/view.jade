@@ -1,62 +1,46 @@
-html
-  body
-    .tiedot
-      h1(esitys-sivu-otsikko="'opetussuunnitelman-tiedot'")
-        span(kaanna="'opetussuunnitelman-tiedot'")
-      |   
-      .container-fluid
-        .row.row-margin
-          .col-xs-6.col-sm-4
-            strong
-              span(kaanna="'opetussuunnitelman-nimi'")
-          |       
-          .col-xs-6.col-sm-8
-            span(ng-bind="(ops.nimi || 'nimetön') | kaanna")
-        |     
-        .row.row-margin
-          .col-xs-6.col-sm-4
-            strong
-              span(kaanna="'tiivistelma'")
-          |       
-          .col-xs-6.col-sm-8
-            span(ng-bind-html='ops.kuvaus | kaanna')
-        |     
-        .row.row-margin
-          .col-xs-6.col-sm-4
-            strong
-              span(kaanna="'paatosnumero'")
-          |       
-          .col-xs-6.col-sm-8
-            span(ng-bind='ops.paatosnumero | kaanna')
-        |     
-        .row.row-margin
-          .col-xs-6.col-sm-4
-            strong
-              span(kaanna="'hyvaksyja'")
-          |       
-          .col-xs-6.col-sm-8
-            span(ng-bind='ops.hyvaksyja| kaanna')
-        |     
-        .row.row-margin
-          .col-xs-6.col-sm-4
-            strong
-              span(kaanna="'tila'")
-          |       
-          .col-xs-6.col-sm-8
-            span(ng-bind='ops.tila | kaanna')
-        |     
-        .row.row-margin(ng-if='!!ops.paatospaivamaara')
-          .col-xs-6.col-sm-4
-            strong
-              span(kaanna="'paatospaivamaara'")
-          |       
-          .col-xs-6.col-sm-8
-            span(pvm='ops.paatospaivamaara')
-        |     
-        .row(ng-show='!!ops.kuvaus')
-          .col-xs-12.col-sm-4
-            strong
-              span(kaanna="'tiivistelma'")
-          |       
-          .col-xs-12.col-sm-8
-            termisto-tekstikentta(tekstikentta='ops.kuvaus')
+.tiedot
+  h1(esitys-sivu-otsikko="'opetussuunnitelman-tiedot'")
+    span(kaanna="'opetussuunnitelman-tiedot'")
+  .container-fluid
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'opetussuunnitelman-nimi'")
+      .col-xs-6.col-sm-8
+        span(ng-bind="(ops.nimi || 'nimetön') | kaanna")
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'tiivistelma'")
+      .col-xs-6.col-sm-8
+        span(ng-bind-html='ops.kuvaus | kaanna')
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'paatosnumero'")
+      .col-xs-6.col-sm-8
+        span(ng-bind='ops.paatosnumero | kaanna')
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'hyvaksyja'")
+      .col-xs-6.col-sm-8
+        span(ng-bind='ops.hyvaksyja| kaanna')
+    .row.row-margin
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'tila'")
+      .col-xs-6.col-sm-8
+        span(ng-bind='ops.tila | kaanna')
+    .row.row-margin(ng-if='!!ops.paatospaivamaara')
+      .col-xs-6.col-sm-4
+        strong
+          span(kaanna="'paatospaivamaara'")
+      .col-xs-6.col-sm-8
+        span(pvm='ops.paatospaivamaara')
+    .row(ng-show='!!ops.kuvaus')
+      .col-xs-12.col-sm-4
+        strong
+          span(kaanna="'tiivistelma'")
+      .col-xs-12.col-sm-8
+        termisto-tekstikentta(tekstikentta='ops.kuvaus')

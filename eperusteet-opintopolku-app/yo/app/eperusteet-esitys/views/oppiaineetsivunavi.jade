@@ -1,8 +1,5 @@
-html
-  body
-    .perusopetus
-      .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
-        a(ng-href='{{item.url}}')
-          span(ep-highlight='search.term', ng-bind='item.label | kaanna')
-          |         
-          span(ng-if='item.$kurssi') ({{ item.$kurssi.koodiArvo }})
+.perusopetus
+  .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
+    a(ng-href='{{item.url}}')
+      span(ep-highlight='search.term', ng-bind='item.label | kaanna')
+      span(ng-if='item.$kurssi') ({{ item.$kurssi.koodiArvo }})

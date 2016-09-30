@@ -1,11 +1,7 @@
-html
-  body
-    .perusopetus
-      .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
-        a(ng-if='item.$vlk', ng-click='getVlk(item.$vlk)', ng-href='{{item.url}}')
-          span {{ item.label | kaanna }}
-        |     
-        a(ng-if='!item.$vlk', ng-href='{{item.url}}')
-          span {{ item.label | kaanna }}
-          |       
-          i.pull-right(ng-class='section.naviClasses(item)')
+.perusopetus
+  .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
+    a(ng-if='item.$vlk', ng-click='getVlk(item.$vlk)', ng-href='{{item.url}}')
+      span {{ item.label | kaanna }}
+    a(ng-if='!item.$vlk', ng-href='{{item.url}}')
+      span {{ item.label | kaanna }}
+      i.pull-right(ng-class='section.naviClasses(item)')

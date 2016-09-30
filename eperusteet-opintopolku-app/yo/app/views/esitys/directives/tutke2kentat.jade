@@ -1,57 +1,38 @@
-html
-  body
-    .tutke2
-      // tutke2kentat.html
-      .osa-alue-navi(ng-show='!mainLevelEditing && tutke2osa.osaAlueet.length > 1')
-        span(kaanna='') osa-alueet
-        |     
-        ul
-          li(ng-repeat='alue in tutke2osa.osaAlueet')
-            a.action-link(ng-click='osaAlue.jumpTo(alue)') {{alue.nimi | kaanna}}
-      |   
-      p.info-placeholder(ng-show='!tutke2osa.$fetching && (!tutke2osa.osaAlueet || tutke2osa.osaAlueet.length === 0) && !mainLevelEditing', kaanna='') ei-osa-alueita
-      |   
-      div(ng-if='!mainLevelEditing')
-        uib-accordion(close-others='viewOptions.oneAtATime')
-          // osa-alueet
-          uib-accordion-group.panel-clean.osa-alue(ng-show='!tutke2osa.$fetching', ng-repeat='alue in tutke2osa.osaAlueet', is-open='alue.$open', ng-class="{'kohde-edit': alue.$editing}", id='{{alue.$uniqueId}}')
-            uib-accordion-heading
-              .row
-                .col-sm-9
-                  span.glyphicon(ng-class="alue.$open ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'")
-                  |               
-                  span.otsikko(ng-show='!alue.$editing') {{alue.nimi| kaanna}}
-                  |               
-                  input.osa-alue-nimi(ng-show='alue.$editing', ng-model='osaAlue.$editing.nimi', slocalized='', ng-click='$event.stopPropagation()')
-                  |               
-                  span(ng-hide='isEditingInProgress()')
-                    select(ng-if='alue.$groups.$size > 1', ng-options='item.value as item.label|kaanna for item in alue.$groups.$options', ng-model='alue.$chosen', ng-click='$event.stopPropagation()')
-                |             
-                .col-sm-3
-                  .muokkaus-napit.pull-right(ng-hide="alue.$editing || isEditingInProgress() || !tutke2osa.versiot.latest || originalViite.tutkinnonOsa.tila === 'valmis'")
-                    button.btn.btn-default(ng-click='osaAlue.edit(alue, $event)', kaanna="'muokkaa'", icon-role='edit', oikeustarkastelu="{ target: 'peruste', permission: 'muokkaus' }")
-                  |               
-                  .muokkaus-napit.pull-right(ng-show='alue.$editing')
-                    button.btn.btn-default(ng-click='osaAlue.removeDirect(alue, $event)', kaanna="'poista-osa-alue'", icon-role='remove')
-            // osaamistavoitteet
-            p.info-placeholder(ng-show='!alue.$editing && (!alue.osaamistavoitteet || alue.osaamistavoitteet.length === 0)', kaanna='') Ei osaamistavoitteita.
-            |         
-            div(ng-if='!alue.$editing', ng-repeat='pakollisuus in [true, false]')
-              .panel.panel-default.panel-clean(ng-repeat='tavoite in getTavoitteet(alue, pakollisuus)', ng-class="{'kohde-edit': tavoite.$editing}")
-                div(ng-if='!tavoite.$editing')
-                  .panel-heading
-                    h3
-                      | {{pakollisuus &amp;&amp; &apos;pakolliset-osaamistavoitteet&apos; || &apos;valinnaiset-osaamistavoitteet&apos; | kaanna}}, {{tavoite.laajuus}} {{ yksikko | kaanna }}
-                  |               
-                  .panel-body.non-collapsibles
-                    label.header(kaanna='') tavoitteet
-                    |                 
-                    p(ng-bind-html='tavoite.tavoitteet | kaanna | unsafe')
-                    |                 
-                    label.header(kaanna='') arviointi
-                    |                 
-                    arviointi(arviointi='tavoite.arviointi.arvioinninKohdealueet', mainlevelediting='tavoite.$editing', ei-kohdealueita='true')
-                    |                 
-                    label.header(kaanna='') tutkinnonosa-tunnustaminen
-                    |                 
-                    p(ng-bind-html='tavoite.tunnustaminen | kaanna | unsafe')
+.tutke2
+  .osa-alue-navi(ng-show='!mainLevelEditing && tutke2osa.osaAlueet.length > 1')
+    span(kaanna='') osa-alueet
+    ul
+      li(ng-repeat='alue in tutke2osa.osaAlueet')
+        a.action-link(ng-click='osaAlue.jumpTo(alue)') {{alue.nimi | kaanna}}
+  p.info-placeholder(ng-show='!tutke2osa.$fetching && (!tutke2osa.osaAlueet || tutke2osa.osaAlueet.length === 0) && !mainLevelEditing', kaanna='') ei-osa-alueita
+  div(ng-if='!mainLevelEditing')
+    uib-accordion(close-others='viewOptions.oneAtATime')
+      // osa-alueet
+      uib-accordion-group.panel-clean.osa-alue(ng-show='!tutke2osa.$fetching', ng-repeat='alue in tutke2osa.osaAlueet', is-open='alue.$open', ng-class="{'kohde-edit': alue.$editing}", id='{{alue.$uniqueId}}')
+        uib-accordion-heading
+          .row
+            .col-sm-9
+              span.glyphicon(ng-class="alue.$open ? 'glyphicon-chevron-down' : 'glyphicon-chevron-right'")
+              span.otsikko(ng-show='!alue.$editing') {{alue.nimi| kaanna}}
+              input.osa-alue-nimi(ng-show='alue.$editing', ng-model='osaAlue.$editing.nimi', slocalized='', ng-click='$event.stopPropagation()')
+              span(ng-hide='isEditingInProgress()')
+                select(ng-if='alue.$groups.$size > 1', ng-options='item.value as item.label|kaanna for item in alue.$groups.$options', ng-model='alue.$chosen', ng-click='$event.stopPropagation()')
+            .col-sm-3
+              .muokkaus-napit.pull-right(ng-hide="alue.$editing || isEditingInProgress() || !tutke2osa.versiot.latest || originalViite.tutkinnonOsa.tila === 'valmis'")
+                button.btn.btn-default(ng-click='osaAlue.edit(alue, $event)', kaanna="'muokkaa'", icon-role='edit', oikeustarkastelu="{ target: 'peruste', permission: 'muokkaus' }")
+              .muokkaus-napit.pull-right(ng-show='alue.$editing')
+                button.btn.btn-default(ng-click='osaAlue.removeDirect(alue, $event)', kaanna="'poista-osa-alue'", icon-role='remove')
+        // osaamistavoitteet
+        p.info-placeholder(ng-show='!alue.$editing && (!alue.osaamistavoitteet || alue.osaamistavoitteet.length === 0)', kaanna='') Ei osaamistavoitteita.
+        div(ng-if='!alue.$editing', ng-repeat='pakollisuus in [true, false]')
+          .panel.panel-default.panel-clean(ng-repeat='tavoite in getTavoitteet(alue, pakollisuus)', ng-class="{'kohde-edit': tavoite.$editing}")
+            div(ng-if='!tavoite.$editing')
+              .panel-heading
+                h3 {{pakollisuus &amp;&amp; &apos;pakolliset-osaamistavoitteet&apos; || &apos;valinnaiset-osaamistavoitteet&apos; | kaanna}}, {{tavoite.laajuus}} {{ yksikko | kaanna }}
+              .panel-body.non-collapsibles
+                label.header(kaanna='') tavoitteet
+                p(ng-bind-html='tavoite.tavoitteet | kaanna | unsafe')
+                label.header(kaanna='') arviointi
+                arviointi(arviointi='tavoite.arviointi.arvioinninKohdealueet', mainlevelediting='tavoite.$editing', ei-kohdealueita='true')
+                label.header(kaanna='') tutkinnonosa-tunnustaminen
+                p(ng-bind-html='tavoite.tunnustaminen | kaanna | unsafe')

@@ -1,11 +1,9 @@
-html
-  body
-    h1(ng-bind='oppiaine.nimi | kaanna')
-    div(show-all='true', esitys-teksti='oppiaine.tehtava', esitys-peruste='peruste.tehtava', show-peruste='true')
-    .vuosiluokka-valinta(ng-show='vlkTabit.length')
-      ul
-        li(ng-repeat='vlk in vlkTabit', ng-class='{active: addActiveClass(vlk.id)}')
-          a(ui-sref='.vlk({vlkId: vlk.id, vluokkakokonaisuus: vlk.vlkId})', ng-bind='vlk.nimi | kaanna')
-    .vuosiluokka-valinta(ng-show='vlktTabit.length === 0')
-      p.vuosiluokkailmoitus.alert.alert-info(kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'")
-    div(ui-view='')
+h1(ng-bind='oppiaine.nimi | kaanna')
+div(show-all='true', esitys-teksti='oppiaine.tehtava', esitys-peruste='peruste.tehtava', show-peruste='true')
+.vuosiluokka-valinta(ng-show='vlkTabit.length')
+  ul
+    li(ng-repeat='vlk in vlkTabit', ng-class='{active: addActiveClass(vlk.id)}')
+      a(ui-sref='.vlk({vlkId: vlk.id, vluokkakokonaisuus: vlk.vlkId})', ng-bind='vlk.nimi | kaanna')
+.vuosiluokka-valinta(ng-show='vlktTabit.length === 0')
+  p.vuosiluokkailmoitus.alert.alert-info(kaanna="'oppiaineella-ei-vuosiluokkasisaltoja'")
+div(ui-view='')

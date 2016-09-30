@@ -1,16 +1,11 @@
-html
-  body
-    h2.vlk-otsikko(ng-bind='currentVlkCategory | kaanna')
-    div(ng-show="oppiaine.tyyppi === 'yhteinen'")
-      div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.tehtava', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].tehtava')
-      |   
-      div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.tyotavat', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].tyotavat')
-      |   
-      div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.ohjaus', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].ohjaus')
-      |   
-      div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.arviointi', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].arviointi')
-    .vuosiluokka-valinta(ng-show='vlkst.length')
-      ul
-        li(ng-repeat='vuosi in vlkst', ng-class='{active: addActiveClass(vuosi.id, true)}')
-          a(ui-sref='.vuosiluokat({vuosiId: vuosi.id, location: replace, notify: true})', ng-bind='vuosi.vuosiluokka | kaanna')
-    div(ui-view='')
+h2.vlk-otsikko(ng-bind='currentVlkCategory | kaanna')
+div(ng-show="oppiaine.tyyppi === 'yhteinen'")
+  div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.tehtava', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].tehtava')
+  div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.tyotavat', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].tyotavat')
+  div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.ohjaus', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].ohjaus')
+  div(show-all='true', esitys-teksti='vuosiluokkakokonaisuus.arviointi', esitys-peruste='perusteOppiaineVlkMap[vuosiluokkakokonaisuus._vuosiluokkakokonaisuus].arviointi')
+.vuosiluokka-valinta(ng-show='vlkst.length')
+  ul
+    li(ng-repeat='vuosi in vlkst', ng-class='{active: addActiveClass(vuosi.id, true)}')
+      a(ui-sref='.vuosiluokat({vuosiId: vuosi.id, location: replace, notify: true})', ng-bind='vuosi.vuosiluokka | kaanna')
+div(ui-view='')

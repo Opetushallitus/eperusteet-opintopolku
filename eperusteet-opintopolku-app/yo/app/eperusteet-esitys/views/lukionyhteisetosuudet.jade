@@ -1,12 +1,8 @@
-html
-  body
-    .perusopetus
-      .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
-        a(ng-if='item.depth > 0', ng-click='scrollToHash(item.$osa._perusteenOsa)')
-          span(ep-highlight='search.term', ng-bind='item.label | kaanna')
-        |     
-        a(ng-if='item.$osa && item.depth === 0', ui-sref='.tekstikappale({tekstikappaleId: item.$osa.id})')
-          span(ep-highlight='search.term', ng-bind='item.label | kaanna', ng-class='{uppercase: item.$uppercase}')
-        |     
-        a(ng-if='item.href', ng-href='{{item.href}}')
-          span(ep-highlight='search.term', ng-bind='item.label | kaanna', ng-class='{uppercase: item.$uppercase}')
+.perusopetus
+  .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
+    a(ng-if='item.depth > 0', ng-click='scrollToHash(item.$osa._perusteenOsa)')
+      span(ep-highlight='search.term', ng-bind='item.label | kaanna')
+    a(ng-if='item.$osa && item.depth === 0', ui-sref='.tekstikappale({tekstikappaleId: item.$osa.id})')
+      span(ep-highlight='search.term', ng-bind='item.label | kaanna', ng-class='{uppercase: item.$uppercase}')
+    a(ng-if='item.href', ng-href='{{item.href}}')
+      span(ep-highlight='search.term', ng-bind='item.label | kaanna', ng-class='{uppercase: item.$uppercase}')

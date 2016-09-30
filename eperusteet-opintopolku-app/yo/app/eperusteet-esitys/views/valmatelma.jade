@@ -1,38 +1,26 @@
-html
-  body
-    h4(kaanna="'osaamistavoitteet'", ng-if='osaalue.valmaTelmaSisalto.osaamistavoite || tutkinnonOsa.valmaTelmaSisalto.osaamistavoite')
-    div(ng-repeat="osaamistavoite in (tutkinnonOsa.tyyppi === 'tutke2')? osaalue.valmaTelmaSisalto.osaamistavoite : tutkinnonOsa.valmaTelmaSisalto.osaamistavoite")
-      .arviointi
-        .arviointi-otsikko
-          h4 {{ osaamistavoite.nimi | kaanna }}
-        |     
-        .arviointi-sisalto
-          h4 {{ osaamistavoite.kohde | kaanna }}
-          |       
-          table.table.table-striped
-            tr
-              td
-                ul
-                  li(ng-repeat='tavoite in osaamistavoite.tavoitteet') {{ tavoite | kaanna }}
-        |     
-        p.leipateksti(ng-bind-html='osaamistavoite.selite | kaanna')
-    h4(kaanna="'osaamisen-arviointi'", ng-if='tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi\
-    || tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointiTekstina')
-    div(ng-if='tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi')
-      .arviointi
-        .arviointi-otsikko
-          h4
-            | {{ (tutkinnonOsa.tyyppi === &apos;tutke2&apos;) ? osaalue.valmaTelmaSisalto.osaamisenarviointi.kohde :
-            | tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.kohde | kaanna }}
-        |     
-        .arviointi-sisalto
-          table.table.table-striped
-            tr
-              td
-                ul
-                  li(ng-repeat="tavoite in (tutkinnonOsa.tyyppi === 'tutke2') ? osaalue.valmaTelmaSisalto.osaamisenarviointi.tavoitteet\
-                  : tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.tavoitteet") {{ tavoite | kaanna }}
-        |     
-        p.leipateksti(ng-bind-html="(tutkinnonOsa.tyyppi === 'tutke2') ? osaalue.valmaTelmaSisalto.osaamisenarviointi.selite :\
-        tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.selite | kaanna")
-    .leipateksti(ng-bind-html='tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointiTekstina | kaanna | unsafe')
+h4(kaanna="'osaamistavoitteet'", ng-if='osaalue.valmaTelmaSisalto.osaamistavoite || tutkinnonOsa.valmaTelmaSisalto.osaamistavoite')
+div(ng-repeat="osaamistavoite in (tutkinnonOsa.tyyppi === 'tutke2')? osaalue.valmaTelmaSisalto.osaamistavoite : tutkinnonOsa.valmaTelmaSisalto.osaamistavoite")
+  .arviointi
+    .arviointi-otsikko
+      h4 {{ osaamistavoite.nimi | kaanna }}
+    .arviointi-sisalto
+      h4 {{ osaamistavoite.kohde | kaanna }}
+      table.table.table-striped
+        tr
+          td
+            ul
+              li(ng-repeat='tavoite in osaamistavoite.tavoitteet') {{ tavoite | kaanna }}
+    p.leipateksti(ng-bind-html='osaamistavoite.selite | kaanna')
+h4(kaanna="'osaamisen-arviointi'", ng-if='tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi || tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointiTekstina')
+div(ng-if='tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi')
+  .arviointi
+    .arviointi-otsikko
+      h4 {{ (tutkinnonOsa.tyyppi === &apos;tutke2&apos;) ? osaalue.valmaTelmaSisalto.osaamisenarviointi.kohde : tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.kohde | kaanna }}
+    .arviointi-sisalto
+      table.table.table-striped
+        tr
+          td
+            ul
+              li(ng-repeat="tavoite in (tutkinnonOsa.tyyppi === 'tutke2') ? osaalue.valmaTelmaSisalto.osaamisenarviointi.tavoitteet : tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.tavoitteet") {{ tavoite | kaanna }}
+    p.leipateksti(ng-bind-html="(tutkinnonOsa.tyyppi === 'tutke2') ? osaalue.valmaTelmaSisalto.osaamisenarviointi.selite : tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.selite | kaanna")
+.leipateksti(ng-bind-html='tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointiTekstina | kaanna | unsafe')

@@ -1,15 +1,10 @@
-html
-  body
-    li(ng-show='!item.$$hidden', ng-repeat='item in ngModel', id="{{ 'sisalto-item-' + item.id }}")
-      a(ui-sref='root.amops.osa({ osaId: item.id })', ui-sref-active='active')
-        span.chevron(ng-show='item.lapset.length > 0 && !misc.isSearching', ng-click='misc.toggleItem($event, item)')
-          span(ng-if='item.$$closed')
-            span.glyphicon.glyphicon-chevron-right
-          |       
-          span(ng-if='!item.$$closed')
-            span.glyphicon.glyphicon-chevron-down
-        |     
-        span(ng-bind="(item.$$obj.tekstiKappale.nimi || 'nimeton-tekstikappale') | kaanna")
-      |   
-      ul(ng-hide='item.$$closed && !misc.isSearching || item.lapset.length === 0')
-        dynamic(template='views/amops/sivunaviitem.html', ng-model='item.lapset', misc='misc')
+li(ng-show='!item.$$hidden', ng-repeat='item in ngModel', id="{{ 'sisalto-item-' + item.id }}")
+  a(ui-sref='root.amops.osa({ osaId: item.id })', ui-sref-active='active')
+    span.chevron(ng-show='item.lapset.length > 0 && !misc.isSearching', ng-click='misc.toggleItem($event, item)')
+      span(ng-if='item.$$closed')
+        span.glyphicon.glyphicon-chevron-right
+      span(ng-if='!item.$$closed')
+        span.glyphicon.glyphicon-chevron-down
+    span(ng-bind="(item.$$obj.tekstiKappale.nimi || 'nimeton-tekstikappale') | kaanna")
+  ul(ng-hide='item.$$closed && !misc.isSearching || item.lapset.length === 0')
+    dynamic(template='views/amops/sivunaviitem.html', ng-model='item.lapset', misc='misc')

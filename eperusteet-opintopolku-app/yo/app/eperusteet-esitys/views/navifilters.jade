@@ -1,30 +1,21 @@
-html
-  body
-    a.reset-filters(kaanna="'tyhjenna-valinnat'", icon-role='refresh', ng-href='{{$parent.section.nollausLinkki}}')
-    div(ng-repeat='section in $parent.section.model.sections')
-      uib-accordion(ng-if='section.title && section.items && section.items.length > 0', close-others='$parent.section.model.oneAtATime')
-        uib-accordion-group.inner-accordion(is-open='section.$open')
-          uib-accordion-heading
-            span.glyphicon(ng-class="{'glyphicon-chevron-down': section.$open, 'glyphicon-chevron-right': !section.$open}")
-            |         {{section.title | kaanna}}
-          |       
-          div(ng-if='!section.include')
-            ul
-              li.labeled-checkboxes(ng-repeat='item in section.items | orderBy:orderFn')
-                label
-                  input(type='checkbox', ng-model='item.$selected', ng-change='section.update(item, section)')
-                  |               
-                  span.lc-label(ng-bind='item.label | kaanna')
-          |       
-          div(ng-if='section.include', ng-include='section.include')
-      |   
-      div(ng-if='!section.title')
-        div(ng-if='!section.include && section.items && section.items.length > 0')
-          ul
-            li.labeled-checkboxes(ng-repeat='item in section.items | orderBy:orderFn')
-              label
-                input(type='checkbox', ng-model='item.$selected', ng-change='section.update(item, section)')
-                |             
-                span.lc-label(ng-bind='item.label | kaanna')
-        |     
-        div(ng-if='section.include', ng-include='section.include')
+a.reset-filters(kaanna="'tyhjenna-valinnat'", icon-role='refresh', ng-href='{{$parent.section.nollausLinkki}}')
+div(ng-repeat='section in $parent.section.model.sections')
+  uib-accordion(ng-if='section.title && section.items && section.items.length > 0', close-others='$parent.section.model.oneAtATime')
+    uib-accordion-group.inner-accordion(is-open='section.$open')
+      uib-accordion-heading
+        span.glyphicon(ng-class="{'glyphicon-chevron-down': section.$open, 'glyphicon-chevron-right': !section.$open}") {{section.title | kaanna}}
+      div(ng-if='!section.include')
+        ul
+          li.labeled-checkboxes(ng-repeat='item in section.items | orderBy:orderFn')
+            label
+              input(type='checkbox', ng-model='item.$selected', ng-change='section.update(item, section)')
+              span.lc-label(ng-bind='item.label | kaanna')
+      div(ng-if='section.include', ng-include='section.include')
+  div(ng-if='!section.title')
+    div(ng-if='!section.include && section.items && section.items.length > 0')
+      ul
+        li.labeled-checkboxes(ng-repeat='item in section.items | orderBy:orderFn')
+          label
+            input(type='checkbox', ng-model='item.$selected', ng-change='section.update(item, section)')
+            span.lc-label(ng-bind='item.label | kaanna')
+    div(ng-if='section.include', ng-include='section.include')

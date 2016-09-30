@@ -1,89 +1,61 @@
-html
-  body
-    // listaus.html
-    .sisalto-box.topmost
-      h1(kaanna='sivu.otsikko')
-      |   
-      .panel.panel-default
-        .clearfix
-        |     
-        form.panel-body
-          .row
-            .col-md-6.col-xs-12
-              .form-group
-                label(for='tutkinnon-nimi', kaanna="'haku-nimi'")
-                |             
-                input#tutkinnon-nimi.form-control(type='text', placeholder="{{kaanna('haku-tutkinnon-nimi-placeholder')}}", ng-model='hakuparametrit.nimi', ng-change='hakuMuuttui()')
-            |         
-            .col-md-6.col-xs-12(ng-hide='piilotaKoulutustyyppi()')
-              .form-group
-                label(for='haku-tyyppi', kaanna="'haku-tyyppi'")
-                |             
-                select#haku-tyyppi.form-control(ng-model='hakuparametrit.tyyppi', ng-change='hakuMuuttui()')
-                  option(value='', kaanna="'haku-kaikki-tutkinnot'")
-                  |               
-                  option(ng-repeat='koodi in koulutustyypit', value='{{koodi}}', ng-selected='hakuparametrit.tyyppi === koodi', kaanna='koodi')
-          |       
-          .row(ng-hide='isValma()')
-            .col-md-6.col-xs-12
-              .form-group
-                label(for='haku-ala', kaanna="'haku-koulutusala'")
-                |             
-                select#haku-ala.form-control(ng-model='hakuparametrit.koulutusala', ng-change='koulutusalaMuuttui()')
-                  option(value='', kaanna="'haku-kaikki-alat'")
-                  |               
-                  option(ng-repeat='ala in koulutusalat', value='{{ala.koodi}}', ng-selected='hakuparametrit.koulutusala === ala.koodi', kaanna='ala.nimi')
-            |         
-            .col-md-6.col-xs-12(ng-show="hakuparametrit.koulutusala !== ''")
-              .form-group
-                label(for='haku-opintoala', kaanna="'haku-opintoala'")
-                |             
-                select#haku-opintoala.form-control(ng-model='hakuparametrit.opintoala', ng-change='hakuMuuttui()')
-                  option(value='', kaanna="'haku-kaikki-opintoalat'")
-                  |               
-                  option(ng-repeat='ala in opintoalat', value='{{ala.koodi}}', ng-selected='hakuparametrit.opintoala === ala.koodi') {{ala.nimi|kaanna}}
-          |       
-          .row
-            .col-md-6.col-xs-12
-              .checkbox
-                label
-                  input(type='checkbox', ng-model='hakuparametrit.siirtyma', ng-change='hakuMuuttui()')
-                  |               
-                  span(kaanna="'haku-nayta-siirtymaajalla-olevat'")
-              |           
-              .checkbox
-                label
-                  input(type='checkbox', ng-model='hakuparametrit.voimassaolo', ng-change='hakuMuuttui()')
-                  |               
-                  span(kaanna="'haku-nayta-voimassaolevat'")
-            |         
-            .col-md-6.col-xs-12
-              button.btn.btn-default.pull-right(ng-click='tyhjenna()', kaanna="'tyhjenna'", ng-disabled='!onkoHakuTyhja()')
-      |   
-      p
-        span(kaanna="'haku-tulosten-maara'")
-        |  {{kokonaismaara}}
-      |   
-      .table-responsive
-        table.table.table-condensed.table-striped(ng-show='kokonaismaara > 0')
-          thead
-            tr
-              th.haku-th-nimi(kaanna='') haku-nimi
-              |           
-              th.haku-th-koulutusala(kaanna='') haku-koulutusala
-              |           
-              th.haku-th-pvm.bootstrap(kaanna='') haku-voimaantulopvm
-          |       
-          tbody
-            tr(ng-repeat='peruste in perusteet.data')
-              td
-                a(ui-sref='root.esitys.peruste({ perusteId: peruste.id, suoritustapa: hakuparametrit.suoritustapa})', ep-highlight='hakuparametrit.nimi')
-                  span(ng-bind='peruste.nimi | kaanna')
-              |           
-              td
-                ul(style='list-style:none; padding-left:0; margin-bottom: 0;', ng-repeat='koulutus in peruste.koulutukset')
-                  li {{koulutusalaNimi(koulutus.koulutusalakoodi).nimi|kaanna}}
-              |           
-              td {{peruste.voimassaoloAlkaa|date:&apos;dd.MM.yyyy&apos;}}
-      |   
-      uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')
+.sisalto-box.topmost
+  h1(kaanna='sivu.otsikko')
+  .panel.panel-default
+    .clearfix
+    form.panel-body
+      .row
+        .col-md-6.col-xs-12
+          .form-group
+            label(for='tutkinnon-nimi', kaanna="'haku-nimi'")
+            input#tutkinnon-nimi.form-control(type='text', placeholder="{{kaanna('haku-tutkinnon-nimi-placeholder')}}", ng-model='hakuparametrit.nimi', ng-change='hakuMuuttui()')
+        .col-md-6.col-xs-12(ng-hide='piilotaKoulutustyyppi()')
+          .form-group
+            label(for='haku-tyyppi', kaanna="'haku-tyyppi'")
+            select#haku-tyyppi.form-control(ng-model='hakuparametrit.tyyppi', ng-change='hakuMuuttui()')
+              option(value='', kaanna="'haku-kaikki-tutkinnot'")
+              option(ng-repeat='koodi in koulutustyypit', value='{{koodi}}', ng-selected='hakuparametrit.tyyppi === koodi', kaanna='koodi')
+      .row(ng-hide='isValma()')
+        .col-md-6.col-xs-12
+          .form-group
+            label(for='haku-ala', kaanna="'haku-koulutusala'")
+            select#haku-ala.form-control(ng-model='hakuparametrit.koulutusala', ng-change='koulutusalaMuuttui()')
+              option(value='', kaanna="'haku-kaikki-alat'")
+              option(ng-repeat='ala in koulutusalat', value='{{ala.koodi}}', ng-selected='hakuparametrit.koulutusala === ala.koodi', kaanna='ala.nimi')
+        .col-md-6.col-xs-12(ng-show="hakuparametrit.koulutusala !== ''")
+          .form-group
+            label(for='haku-opintoala', kaanna="'haku-opintoala'")
+            select#haku-opintoala.form-control(ng-model='hakuparametrit.opintoala', ng-change='hakuMuuttui()')
+              option(value='', kaanna="'haku-kaikki-opintoalat'")
+              option(ng-repeat='ala in opintoalat', value='{{ala.koodi}}', ng-selected='hakuparametrit.opintoala === ala.koodi') {{ala.nimi|kaanna}}
+      .row
+        .col-md-6.col-xs-12
+          .checkbox
+            label
+              input(type='checkbox', ng-model='hakuparametrit.siirtyma', ng-change='hakuMuuttui()')
+              span(kaanna="'haku-nayta-siirtymaajalla-olevat'")
+          .checkbox
+            label
+              input(type='checkbox', ng-model='hakuparametrit.voimassaolo', ng-change='hakuMuuttui()')
+              span(kaanna="'haku-nayta-voimassaolevat'")
+        .col-md-6.col-xs-12
+          button.btn.btn-default.pull-right(ng-click='tyhjenna()', kaanna="'tyhjenna'", ng-disabled='!onkoHakuTyhja()')
+  p
+    span(kaanna="'haku-tulosten-maara'")
+    |  {{kokonaismaara}}
+  .table-responsive
+    table.table.table-condensed.table-striped(ng-show='kokonaismaara > 0')
+      thead
+        tr
+          th.haku-th-nimi(kaanna='') haku-nimi
+          th.haku-th-koulutusala(kaanna='') haku-koulutusala
+          th.haku-th-pvm.bootstrap(kaanna='') haku-voimaantulopvm
+      tbody
+        tr(ng-repeat='peruste in perusteet.data')
+          td
+            a(ui-sref='root.esitys.peruste({ perusteId: peruste.id, suoritustapa: hakuparametrit.suoritustapa})', ep-highlight='hakuparametrit.nimi')
+              span(ng-bind='peruste.nimi | kaanna')
+          td
+            ul(style='list-style:none; padding-left:0; margin-bottom: 0;', ng-repeat='koulutus in peruste.koulutukset')
+              li {{koulutusalaNimi(koulutus.koulutusalakoodi).nimi|kaanna}}
+          td {{peruste.voimassaoloAlkaa|date:&apos;dd.MM.yyyy&apos;}}
+  uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')

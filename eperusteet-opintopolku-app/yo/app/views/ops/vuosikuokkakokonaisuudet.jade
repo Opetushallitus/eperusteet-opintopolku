@@ -1,22 +1,12 @@
-html
-  body
-    div(ng-show='isVlkState()')
-      h1(ng-bind-html='vlk.nimi | kaanna | unsafe')
-      |   
-      div(show-all='true', esitys-teksti='vlk.tehtava', esitys-peruste='peruste.tehtava')
-      |   
-      h1(ng-bind-html="'siirtymavaiheet' | kaanna")
-      |   
-      div(show-all='true', esitys-teksti='vlk.siirtymaEdellisesta', esitys-peruste='peruste.siirtymaEdellisesta')
-      |   
-      div(show-all='true', esitys-teksti='vlk.siirtymaSeuraavaan', esitys-peruste='peruste.siirtymaSeuraavaan')
-      |   
-      h1(show-all='true', ng-bind-html="'laaja-alaisen-osaamisen-alueet' | kaanna")
-      |   
-      div(esitys-teksti='', esitys-peruste='peruste.laajaalainenOsaaminen')
-      |   
-      h2(ng-if='tunnisteet.length > 0', kaanna="'laaja-alaisen-osaamisen-alueet'")
-      |     
-      div(ng-repeat='tunniste in tunnisteet | orderBy:orderFn', id='{{tunniste}}')
-        div(show-all='true', esitys-teksti='paikalliset[tunniste]', esitys-peruste='laajaalaiset[tunniste]')
-    div(ui-view='')
+div(ng-show='isVlkState()')
+  h1(ng-bind-html='vlk.nimi | kaanna | unsafe')
+  div(show-all='true', esitys-teksti='vlk.tehtava', esitys-peruste='peruste.tehtava')
+  h1(ng-bind-html="'siirtymavaiheet' | kaanna")
+  div(show-all='true', esitys-teksti='vlk.siirtymaEdellisesta', esitys-peruste='peruste.siirtymaEdellisesta')
+  div(show-all='true', esitys-teksti='vlk.siirtymaSeuraavaan', esitys-peruste='peruste.siirtymaSeuraavaan')
+  h1(show-all='true', ng-bind-html="'laaja-alaisen-osaamisen-alueet' | kaanna")
+  div(esitys-teksti='', esitys-peruste='peruste.laajaalainenOsaaminen')
+  h2(ng-if='tunnisteet.length > 0', kaanna="'laaja-alaisen-osaamisen-alueet'")
+  div(ng-repeat='tunniste in tunnisteet | orderBy:orderFn', id='{{tunniste}}')
+    div(show-all='true', esitys-teksti='paikalliset[tunniste]', esitys-peruste='laajaalaiset[tunniste]')
+div(ui-view='')

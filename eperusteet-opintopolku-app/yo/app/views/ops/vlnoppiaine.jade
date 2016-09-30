@@ -1,46 +1,31 @@
-html
-  body
-    h1(ng-bind='oppiaine.nimi | kaanna')
-    div(show-all='true', esitys-teksti='oppiaine.tehtava')
-    div
-      div(termisto-viitteet='vlkSisalto.tehtava.teksti', ng-bind-html='vlkSisalto.tehtava.teksti | kaanna | unsafe')
-      |   
-      h3(ng-bind-html='vlkSisalto.tyotavat.otsikko | kaanna | unsafe')
-      |   
-      div(termisto-viitteet='vlkSisalto.tyotavat.teksti', ng-bind-html='vlkSisalto.tyotavat.teksti | kaanna | unsafe')
-      |   
-      h3(ng-bind-html='vlkSisalto.ohjaus.otsikko | kaanna | unsafe')
-      |   
-      div(termisto-viitteet='vlkSisalto.ohjaus.teksti', ng-bind-html='vlkSisalto.ohjaus.teksti | kaanna | unsafe')
-      |   
-      h3(ng-bind-html='vlkSisalto.arviointi.otsikko | kaanna | unsafe')
-      |   
-      div(termisto-viitteet='vlkSisalto.arviointi.teksti', ng-bind-html='vlkSisalto.arviointi.teksti | kaanna | unsafe')
-      |   
-      h3(kaanna="'laajuus'")
-      |   
-      div(ng-bind-html='oppiaine.laajuus')
-    .vuosiluokka-valinta(ng-show='vuosiluokat.length > 1')
-      ul
-        li(ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'", ng-class='{active: currentVuosiluokka === vuosiluokka.vuosiluokka}')
-          a(href='', ng-click='showVuosi(vuosiluokka.vuosiluokka)', ng-bind='vuosiluokka.vuosiluokka | kaanna')
-    div(ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'")
-      div(ng-show='currentVuosiluokka === vuosiluokka.vuosiluokka')
-        h2.vuosiluokka-otsikko(ng-bind='vuosiluokka.vuosiluokka | kaanna')
-        |     
-        h3(kaanna="'tavoitteet'")
-        |     
-        uib-accordion(ng-repeat='tavoite in vuosiluokka.tavoitteet')
-          uib-accordion-group(is-open='status.open')
-            uib-accordion-heading
-              div(ng-class="{'opened-oppiaine': status.open}")
-                i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
-                |             
-                h4.tavoite-otsikko(style='cursor: pointer', ng-bind-html='tavoite.tavoite | kaanna | unsafe')
-            |         
-            .listat
-              .lista
-                div(ng-repeat='sa in tavoite.sisaltoalueet | orderBy:nimiOrder')
-                  div(ng-bind='sa.sisaltoalueet.nimi | kaanna')
-                  |                 
-                  div(termisto-viitteet='sa.sisaltoalueet.kuvaus', ng-bind-html='sa.sisaltoalueet.kuvaus | kaanna | unsafe')
+h1(ng-bind='oppiaine.nimi | kaanna')
+div(show-all='true', esitys-teksti='oppiaine.tehtava')
+div
+  div(termisto-viitteet='vlkSisalto.tehtava.teksti', ng-bind-html='vlkSisalto.tehtava.teksti | kaanna | unsafe')
+  h3(ng-bind-html='vlkSisalto.tyotavat.otsikko | kaanna | unsafe')
+  div(termisto-viitteet='vlkSisalto.tyotavat.teksti', ng-bind-html='vlkSisalto.tyotavat.teksti | kaanna | unsafe')
+  h3(ng-bind-html='vlkSisalto.ohjaus.otsikko | kaanna | unsafe')
+  div(termisto-viitteet='vlkSisalto.ohjaus.teksti', ng-bind-html='vlkSisalto.ohjaus.teksti | kaanna | unsafe')
+  h3(ng-bind-html='vlkSisalto.arviointi.otsikko | kaanna | unsafe')
+  div(termisto-viitteet='vlkSisalto.arviointi.teksti', ng-bind-html='vlkSisalto.arviointi.teksti | kaanna | unsafe')
+  h3(kaanna="'laajuus'")
+  div(ng-bind-html='oppiaine.laajuus')
+.vuosiluokka-valinta(ng-show='vuosiluokat.length > 1')
+  ul
+    li(ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'", ng-class='{active: currentVuosiluokka === vuosiluokka.vuosiluokka}')
+      a(href='', ng-click='showVuosi(vuosiluokka.vuosiluokka)', ng-bind='vuosiluokka.vuosiluokka | kaanna')
+div(ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'")
+  div(ng-show='currentVuosiluokka === vuosiluokka.vuosiluokka')
+    h2.vuosiluokka-otsikko(ng-bind='vuosiluokka.vuosiluokka | kaanna')
+    h3(kaanna="'tavoitteet'")
+    uib-accordion(ng-repeat='tavoite in vuosiluokka.tavoitteet')
+      uib-accordion-group(is-open='status.open')
+        uib-accordion-heading
+          div(ng-class="{'opened-oppiaine': status.open}")
+            i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
+            h4.tavoite-otsikko(style='cursor: pointer', ng-bind-html='tavoite.tavoite | kaanna | unsafe')
+        .listat
+          .lista
+            div(ng-repeat='sa in tavoite.sisaltoalueet | orderBy:nimiOrder')
+              div(ng-bind='sa.sisaltoalueet.nimi | kaanna')
+              div(termisto-viitteet='sa.sisaltoalueet.kuvaus', ng-bind-html='sa.sisaltoalueet.kuvaus | kaanna | unsafe')

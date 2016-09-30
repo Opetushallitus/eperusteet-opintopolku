@@ -1,30 +1,21 @@
-html
-  body
-    h1 {{ vlk.nimi | kaanna }}
-    div(ng-if='hasContent(vlk.tehtava)')
-      h2(ng-bind-html='vlk.tehtava.otsikko | kaanna | unsafe')
-      |   
-      termisto-tekstikentta(tekstikentta='vlk.tehtava.teksti')
-    div(ng-if='hasContent(vlk.siirtymaEdellisesta)')
-      h2(ng-bind-html='vlk.siirtymaEdellisesta.otsikko | kaanna | unsafe')
-      |   
-      termisto-tekstikentta(tekstikentta='vlk.siirtymaEdellisesta.teksti')
-    div(ng-if='hasContent(vlk.siirtymaSeuraavaan)')
-      h2(ng-bind-html='vlk.siirtymaSeuraavaan.otsikko | kaanna | unsafe')
-      |   
-      termisto-tekstikentta(tekstikentta='vlk.siirtymaSeuraavaan.teksti')
-    div(ng-if='hasContent(vlk.laajaalainenOsaaminen)')
-      h2(ng-bind-html='vlk.laajaalainenOsaaminen.otsikko | kaanna | unsafe')
-      |   
-      termisto-tekstikentta(tekstikentta='vlk.laajaalainenOsaaminen.teksti')
-    div(ng-if='vlk.laajaalaisetOsaamiset')
-      h2#vlk-laajaalaisetosaamiset(kaanna="'laaja-alaisen-osaamisen-alueet'")
-      |   
-      div(ng-repeat='osaaminen in vlk.laajaalaisetOsaamiset | orderBy:vlkOrder')
-        h3(ng-bind-html='osaamiset[osaaminen._laajaalainenOsaaminen].nimi | kaanna | unsafe')
-        |     
-        termisto-tekstikentta(tekstikentta='osaaminen.kuvaus')
-    div(ng-if='hasContent(vlk.paikallisestiPaatettavatAsiat)')
-      h2(ng-bind-html='vlk.paikallisestiPaatettavatAsiat.otsikko | kaanna | unsafe')
-      |   
-      termisto-tekstikentta(tekstikentta='vlk.paikallisestiPaatettavatAsiat.teksti')
+h1 {{ vlk.nimi | kaanna }}
+div(ng-if='hasContent(vlk.tehtava)')
+  h2(ng-bind-html='vlk.tehtava.otsikko | kaanna | unsafe')
+  termisto-tekstikentta(tekstikentta='vlk.tehtava.teksti')
+div(ng-if='hasContent(vlk.siirtymaEdellisesta)')
+  h2(ng-bind-html='vlk.siirtymaEdellisesta.otsikko | kaanna | unsafe')
+  termisto-tekstikentta(tekstikentta='vlk.siirtymaEdellisesta.teksti')
+div(ng-if='hasContent(vlk.siirtymaSeuraavaan)')
+  h2(ng-bind-html='vlk.siirtymaSeuraavaan.otsikko | kaanna | unsafe')
+  termisto-tekstikentta(tekstikentta='vlk.siirtymaSeuraavaan.teksti')
+div(ng-if='hasContent(vlk.laajaalainenOsaaminen)')
+  h2(ng-bind-html='vlk.laajaalainenOsaaminen.otsikko | kaanna | unsafe')
+  termisto-tekstikentta(tekstikentta='vlk.laajaalainenOsaaminen.teksti')
+div(ng-if='vlk.laajaalaisetOsaamiset')
+  h2#vlk-laajaalaisetosaamiset(kaanna="'laaja-alaisen-osaamisen-alueet'")
+  div(ng-repeat='osaaminen in vlk.laajaalaisetOsaamiset | orderBy:vlkOrder')
+    h3(ng-bind-html='osaamiset[osaaminen._laajaalainenOsaaminen].nimi | kaanna | unsafe')
+    termisto-tekstikentta(tekstikentta='osaaminen.kuvaus')
+div(ng-if='hasContent(vlk.paikallisestiPaatettavatAsiat)')
+  h2(ng-bind-html='vlk.paikallisestiPaatettavatAsiat.otsikko | kaanna | unsafe')
+  termisto-tekstikentta(tekstikentta='vlk.paikallisestiPaatettavatAsiat.teksti')

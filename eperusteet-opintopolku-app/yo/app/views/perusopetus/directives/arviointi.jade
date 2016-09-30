@@ -1,17 +1,11 @@
-html
-  body
-    // arviointi.html
-    table.table.table-bordered.perusopetuksen-arviointi
-      thead
-        tr
-          th(ng-bind="atavoite.arvioinninKuvaus || 'arvioinnin-kohde' | kaanna")
-          |       
-          th(ng-bind="atavoite.arvioinninOsaamisenKuvaus || 'arvion-hyva-osaaminen' | kaanna")
-      |   
-      tbody
-        tr(ng-repeat='arviointi in model')
-          td
-            span {{arviointi.arvioinninKohde | kaanna}}
-          |       
-          td
-            span {{arviointi.hyvanOsaamisenKuvaus | kaanna}}
+table.table.table-bordered.perusopetuksen-arviointi
+  thead
+    tr
+      th(ng-bind="atavoite.arvioinninKuvaus || 'arvioinnin-kohde' | kaanna")
+      th(ng-bind="atavoite.arvioinninOsaamisenKuvaus || 'arvion-hyva-osaaminen' | kaanna")
+  tbody
+    tr(ng-repeat='arviointi in model')
+      td
+        span {{arviointi.arvioinninKohde | kaanna}}
+      td
+        span {{arviointi.hyvanOsaamisenKuvaus | kaanna}}
