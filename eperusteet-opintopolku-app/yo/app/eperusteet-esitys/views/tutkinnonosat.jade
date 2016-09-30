@@ -23,10 +23,11 @@ div
     li.tutkinnonosa-laatikko.list-group-item(ui-sref='root.esitys.peruste.tutkinnonosa({ id: v.id })', ng-repeat='v in tutkinnonOsat | mapFilter:rajaaTutkinnonOsia | orderBy:jarjestysFn:jarjestysOrder')
       .muokkaus(ng-hide='editoi')
       .numero-wrapper
-        span.badge.jarjestysnumero(ng-show='v.jarjestys') {{v.jarjestys || &apos;-&apos; }}
+        span.badge.jarjestysnumero(ng-show='v.jarjestys') {{v.jarjestys || '-' }}
       .otsikko.otsikko-esitys
         h3
           a(ui-sref='root.esitys.peruste.tutkinnonosa({ id: v.id })') {{ v.nimi | kaanna }}
         .pienet-tiedot
-          .osan-laajuus(ng-if="suoritustapa !== 'naytto' && v.laajuus") {{ v.laajuus }} {{ yksikko || &apos;&apos; | kaanna }}
+          .osan-laajuus(ng-if="suoritustapa !== 'naytto' && v.laajuus") {{ v.laajuus }} {{ yksikko || '' | kaanna }}
   .clearfix
+

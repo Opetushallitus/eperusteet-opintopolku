@@ -19,7 +19,7 @@
             .arviointi-sisalto
               div(ng-repeat='kohde in kohdealue.arvioinninKohteet')
                 h4 {{ kohde.otsikko | kaanna }}
-                h5 {{ kohde.selite || &apos;&apos; | kaanna }}
+                h5 {{ kohde.selite || '' | kaanna }}
                 .table-responsive
                   table.table.table-striped
                     tr(ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy: '_osaamistaso'")

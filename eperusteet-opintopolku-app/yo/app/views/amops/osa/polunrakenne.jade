@@ -20,7 +20,7 @@
       .sp-toolbar
         .sp-muodostuminen(ng-show='ngModel.muodostumisSaanto', ng-init='laajuus = ngModel.muodostumisSaanto.laajuus; koko = ngModel.muodostumisSaanto.koko; laajuusSama = laajuus.minimi === laajuus.maksimi')
           span(ng-show='laajuus.minimi || laajuus.maksimi', ng-bind='laajuus.minimi || 0')
-          span(ng-show='!laajuusSama') {{ &apos; - &apos; }}
+          span(ng-show='!laajuusSama') {{ ' - ' }}
           span(ng-show='laajuus.maksimi && !laajuusSama', ng-bind='laajuus.maksimi')
           span(style='margin-left: 2px', ng-show='laajuus.minimi || laajuus.maksimi', ng-bind='misc.suoritustapa.laajuusYksikko | kaanna')
     .sp-kuvaus

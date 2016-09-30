@@ -57,5 +57,6 @@
           td
             ul(style='list-style:none; padding-left:0; margin-bottom: 0;', ng-repeat='koulutus in peruste.koulutukset')
               li {{koulutusalaNimi(koulutus.koulutusalakoodi).nimi|kaanna}}
-          td {{peruste.voimassaoloAlkaa|date:&apos;dd.MM.yyyy&apos;}}
+          td {{peruste.voimassaoloAlkaa|date:'dd.MM.yyyy'}}
   uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')
+

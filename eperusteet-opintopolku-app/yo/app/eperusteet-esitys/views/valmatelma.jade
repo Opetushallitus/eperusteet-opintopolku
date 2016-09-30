@@ -15,7 +15,7 @@ h4(kaanna="'osaamisen-arviointi'", ng-if='tutkinnonOsa.valmaTelmaSisalto.osaamis
 div(ng-if='tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi || osaalue.valmaTelmaSisalto.osaamisenarviointi')
   .arviointi
     .arviointi-otsikko
-      h4 {{ (tutkinnonOsa.tyyppi === &apos;tutke2&apos;) ? osaalue.valmaTelmaSisalto.osaamisenarviointi.kohde : tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.kohde | kaanna }}
+      h4 {{ (tutkinnonOsa.tyyppi === 'tutke2') ? osaalue.valmaTelmaSisalto.osaamisenarviointi.kohde : tutkinnonOsa.valmaTelmaSisalto.osaamisenarviointi.kohde | kaanna }}
     .arviointi-sisalto
       table.table.table-striped
         tr

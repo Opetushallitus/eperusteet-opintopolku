@@ -12,7 +12,7 @@
                 .tavoite-collapser.action-link(ng-show='!tavoite.$accordionOpen', ng-click='tavoite.$accordionOpen = true') &mldr;
                 .collapsible(collapse='!tavoite.$accordionOpen')
                   h4(ng-show='tavoite.$valittuKohdealue || tavoite.$editing', kaanna="'kohdealue'")
-                  p(ng-if='tavoite.$valittuKohdealue && !tavoite.$editing') {{ tavoite.$valittuKohdealue ? tavoite.$valittuKohdealue.nimi : &apos;&apos; | kaanna }}
+                  p(ng-if='tavoite.$valittuKohdealue && !tavoite.$editing') {{ tavoite.$valittuKohdealue ? tavoite.$valittuKohdealue.nimi : '' | kaanna }}
                   div(ng-if='tavoite.$editing || tavoite.laajattavoitteet')
                     h4(kaanna="'laaja-alaisen-osaamisen-alueet'")
                     div(tag-cloud='tavoite.$osaaminen', openable='true', edit-mode='tavoite.$editing', add-label='lisaa-laaja-alainen-osaaminen')

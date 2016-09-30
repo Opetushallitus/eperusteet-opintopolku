@@ -28,7 +28,7 @@
           .panel.panel-default.panel-clean(ng-repeat='tavoite in getTavoitteet(alue, pakollisuus)', ng-class="{'kohde-edit': tavoite.$editing}")
             div(ng-if='!tavoite.$editing')
               .panel-heading
-                h3 {{pakollisuus &amp;&amp; &apos;pakolliset-osaamistavoitteet&apos; || &apos;valinnaiset-osaamistavoitteet&apos; | kaanna}}, {{tavoite.laajuus}} {{ yksikko | kaanna }}
+                h3 {{pakollisuus && 'pakolliset-osaamistavoitteet' || 'valinnaiset-osaamistavoitteet' | kaanna}}, {{tavoite.laajuus}} {{ yksikko | kaanna }}
               .panel-body.non-collapsibles
                 label.header(kaanna='') tavoitteet
                 p(ng-bind-html='tavoite.tavoitteet | kaanna | unsafe')
