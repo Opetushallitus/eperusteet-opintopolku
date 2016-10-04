@@ -8,6 +8,7 @@ angular.module('app')
         dokumenttiId: (PerusteApi, peruste, $stateParams) =>
         PerusteApi.all('dokumentit').customGET("peruste", {
             perusteId: peruste.id,
-            kieli: $stateParams.lang })
+            kieli: $stateParams.lang
+        })
     }
 }));
