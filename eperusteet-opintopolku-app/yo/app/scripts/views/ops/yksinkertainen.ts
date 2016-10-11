@@ -26,7 +26,7 @@ namespace Controllers {
 
         const getRootState = (current) => {
             return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus)(.*)/, '.$1');
-        }
+        };
 
         TermistoService.setResource(ops, "OPS");
 
@@ -99,7 +99,11 @@ namespace Controllers {
         $scope.navi.sections[0].items.unshift({depth: 0, label: 'opetussuunnitelman-tiedot', link: [currentRootState + '.tiedot']});
   };
 
-  export const OpsYksinkertainenTiedotController = angular.noop;
+  export const OpsYksinkertainenTiedotController = ($scope, dokumenttiId) => {
+    if (dokumenttiId && dokumenttiId.toString().length > 0) {
+      $scope.dokumenttiUrl = location.origin + '/eperusteet-ylops-service/api/dokumentit/' + dokumenttiId;
+    }
+  };
 
   export const OpsTekstikappaleController = ($scope, $state, $stateParams, tekstikappaleWithChildren, MurupolkuData) => {
     $scope.tekstikappale = tekstikappaleWithChildren.tekstiKappale;

@@ -23,4 +23,8 @@ angular.module('app')
 .factory("PerusteApi", Restangular => Restangular.withConfig(config => {
   config.setBaseUrl("/eperusteet-service/api");
   config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
+}))
+.factory("YlopsApi", Restangular => Restangular.withConfig(config => {
+  config.setBaseUrl("/eperusteet-ylops-service/api");
+  config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
 }));

@@ -19,8 +19,14 @@ angular.module('app')
     otsikot: (opsResource, opsId, ops) => opsResource.getOtsikot({opsId})
       .$promise.then((res) => {
         return res;
+      }),
+    dokumenttiId: (YlopsApi, ops, $stateParams) => {
+      return YlopsApi.all('dokumentit').customGET("ops", {
+        opsId: ops.id,
+        kieli: $stateParams.lang
       })
-   }
+    }
+  }
 })
 .state('root.ops.esiopetus', {
   url: '/esiopetus',
@@ -30,7 +36,7 @@ angular.module('app')
 .state('root.ops.esiopetus.tiedot', {
   url: '/tiedot',
   templateUrl: 'views/ops/tiedot.html',
-  controller: Controllers.OpsYksinkertainenTiedotController
+  controller: Controllers.OpsYksinkertainenTiedotController,
 })
 .state('root.ops.esiopetus.tekstikappale', {
   url: '/tekstikappale/:tekstikappaleId',
@@ -146,7 +152,12 @@ angular.module('app')
 })
 .state('root.ops.perusopetus.tiedot', {
   url: '/tiedot',
-  templateUrl: 'views/ops/tiedot.html'
+  templateUrl: 'views/ops/tiedot.html',
+  controller: ($scope, dokumenttiId) => {
+    if (dokumenttiId && dokumenttiId.toString().length > 0) {
+      $scope.dokumenttiUrl = location.origin + '/eperusteet-ylops-service/api/dokumentit/' + dokumenttiId;
+    }
+  }
 })
 .state('root.ops.perusopetus.vuosiluokkakokonaisuus', {
   url: '/vuosiluokkakokonaisuus/:vlkId',
@@ -327,7 +338,12 @@ angular.module('app')
 })
 .state('root.ops.lukioopetus.tiedot', {
   url: '/tiedot',
-  templateUrl: 'views/ops/tiedot.html'
+  templateUrl: 'views/ops/tiedot.html',
+  controller: ($scope, dokumenttiId) => {
+    if (dokumenttiId && dokumenttiId.toString().length > 0) {
+      $scope.dokumenttiUrl = location.origin + '/eperusteet-ylops-service/api/dokumentit/' + dokumenttiId;
+    }
+  }
 })
 .state('root.ops.lukioopetus.tekstikappale', {
   url: '/tekstikappale/:tekstikappaleId',
