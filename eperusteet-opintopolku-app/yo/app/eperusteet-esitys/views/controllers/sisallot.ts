@@ -51,15 +51,15 @@ namespace Controllers {
         }
     };
 
-    export const epEsitysTiedotController = ($scope, $q, $state, YleinenData, PerusteenTutkintonimikkeet, Perusteet, dokumenttiId) => {
+    export const epEsitysTiedotController = ($scope, $q, $state, YleinenData, PerusteenTutkintonimikkeet, Perusteet /* dokumenttiId */) => {
         $scope.showKoulutukset = _.constant(YleinenData.showKoulutukset($scope.peruste));
         $scope.showOsaamisalat = $scope.showKoulutukset;
         $scope.koulutusalaNimi = $scope.Koulutusalat.haeKoulutusalaNimi;
         $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
 
-        if (dokumenttiId && dokumenttiId.toString().length > 0) {
-            $scope.dokumenttiUrl = location.origin + '/eperusteet-service/api/dokumentit/' + dokumenttiId;
-        }
+        // if (dokumenttiId && dokumenttiId.toString().length > 0) {
+        //     $scope.dokumenttiUrl = location.origin + '/eperusteet-service/api/dokumentit/' + dokumenttiId;
+        // }
 
         PerusteenTutkintonimikkeet.get($scope.peruste.id, $scope);
 

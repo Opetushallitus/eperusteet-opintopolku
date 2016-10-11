@@ -6,9 +6,9 @@ angular.module('app')
     controller: Controllers.epEsitysTiedotController,
     resolve: {
         dokumenttiId: (PerusteApi, peruste, $stateParams) =>
-        PerusteApi.all('dokumentit').customGET("peruste", {
-            perusteId: peruste.id,
-            kieli: $stateParams.lang
-        })
+            PerusteApi.all('dokumentit').customGET("peruste", {
+                perusteId: peruste.id,
+                kieli: $stateParams.lang
+            })
     }
 }));
