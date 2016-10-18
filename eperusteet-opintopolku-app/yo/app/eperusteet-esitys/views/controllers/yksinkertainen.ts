@@ -18,7 +18,7 @@ namespace Controllers {
     export const epYksinkertainenPerusteController = ($q, $scope, $timeout, sisalto, PerusteenOsat, $state, $stateParams, epMenuBuilder, Algoritmit, Utils, MurupolkuData, Oppiaineet, TermistoService, Kieli, $document, $rootScope, epPerusopetusStateService, koulutusalaService, opintoalaService, epEsitysSettings) => {
         $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
         function getRootState(current) {
-            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava)(.*)/, '.$1');
+            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus)(.*)/, '.$1');
         }
         $scope.Koulutusalat = koulutusalaService;
         $scope.Opintoalat = opintoalaService;
