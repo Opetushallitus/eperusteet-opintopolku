@@ -31,6 +31,8 @@
         .linkit
           ul(ng-if='uusimmat')
             li.peruste-linkki
+              a(ui-sref="root.varhaiskasvatus({perusteId: uusimmat['koulutustyyppi_20'][0].id})", ng-bind="uusimmat['koulutustyyppi_20'][0].nimi | kaanna")
+            li.peruste-linkki
               a(ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})", ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna")
             li.peruste-linkki
               a(ui-sref="root.perusvalmistava({perusteId: uusimmat['koulutustyyppi_22'][0].id})", ng-bind="uusimmat['koulutustyyppi_22'][0].nimi | kaanna")
@@ -42,8 +44,6 @@
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_2'][0].id})", ng-bind="uusimmat['koulutustyyppi_2'][0].nimi | kaanna")
             li.peruste-linkki
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_23'][0].id})", ng-bind="uusimmat['koulutustyyppi_23'][0].nimi | kaanna")
-            // li.peruste-linkki
-              a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_24'][0].id})", ng-bind="uusimmat['koulutustyyppi_24'][0].nimi | kaanna")
             li.peruste-linkki
               a(ui-sref='root.selaus.ammatillinenperuskoulutus')
                 span(kaanna="'navi.ammatillinenperuskoulutus'")

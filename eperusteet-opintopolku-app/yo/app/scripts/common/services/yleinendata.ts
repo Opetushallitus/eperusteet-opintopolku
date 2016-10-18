@@ -65,6 +65,14 @@ angular.module('app')
         sisaltoTunniste: 'sisalto',
         hasPdfCreation: true
       },
+      'koulutustyyppi_20': {
+        nimi: 'varhaiskasvatus',
+        oletusSuoritustapa: 'esiopetus',
+        hasTutkintonimikkeet: false,
+        hakuState: 'root.selaus.esiopetuslista',
+        sisaltoTunniste: 'eosisalto',
+        hasPdfCreation: false
+      },
       'koulutustyyppi_15': {
         nimi: 'esiopetus',
         oletusSuoritustapa: 'esiopetus',

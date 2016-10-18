@@ -166,6 +166,20 @@ angular.module('app')
         useData: 'tekstiNimi',
         useId: 'tekstiId'
       },
+      'root.varhaiskasvatus': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.varhaiskasvatus.tiedot': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.varhaiskasvatus.tekstikappale': {
+        parent: 'root.varhaiskasvatus',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+        customParents: true
+      },
       'root.esiopetus': {
         useData: 'perusteNimi',
         useId: 'perusteId'

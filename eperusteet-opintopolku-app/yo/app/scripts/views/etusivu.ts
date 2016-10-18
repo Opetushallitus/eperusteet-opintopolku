@@ -44,6 +44,11 @@ angular.module('app')
       tila: 'valmis',
       stateTila: 'root.lukio.tiedot'
     },
+    'koulutustyyppi_20': {
+      tyyppi: 'koulutustyyppi_20',
+      tila: 'valmis',
+      stateTila: 'root.varhaiskasvatus.tiedot'
+    },
     'koulutustyyppi_23': {
       tyyppi: 'koulutustyyppi_23',
       tila: 'valmis',
@@ -71,11 +76,6 @@ angular.module('app')
       tyyppi: 'koulutustyyppi_6',
       tila: 'valmis',
       stateTila: 'root.lisaopetus.tiedot'
-    },
-    'koulutustyyppi_20': {
-      tyyppi: 'koulutustyyppi_20',
-      tila: 'valmis',
-      stateTila: ''
     },
     'koulutustyyppi_5': {
       tyyppi: 'koulutustyyppi_5',
