@@ -135,7 +135,7 @@ namespace Controllers {
                 }
             }
 
-            function updateModel(items, doUncollapse = true) {
+            function updateModel(items, doUncollapse = undefined) {
                 if (!items) {
                     return;
                 }
@@ -146,6 +146,7 @@ namespace Controllers {
                     item.$collapsed = true;
                     item.$header = false;
                 });
+                doUncollapse = _.isUndefined(doUncollapse) ? true : doUncollapse;
                 if (doUncollapse) {
                     var active = _.find(items, function (item) {
                         return epSivunaviUtils.isActive(item);

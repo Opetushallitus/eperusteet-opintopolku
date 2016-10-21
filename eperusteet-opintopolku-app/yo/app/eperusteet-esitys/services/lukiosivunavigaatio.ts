@@ -141,7 +141,7 @@ namespace Controllers {
             }
         }
 
-        function updateModel(items, doUncollapse = false) {
+        function updateModel(items, doUncollapse = undefined) {
             if (!items) {
                 return;
             }
