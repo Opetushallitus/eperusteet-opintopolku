@@ -46,6 +46,7 @@ module.exports = grunt => {
         },
         tasks: [
           'ts',
+          'pug',
           'copy:imgutils',
           'useminPrepare',
           'concurrent:dist',
@@ -56,7 +57,7 @@ module.exports = grunt => {
           'usemin'
         ],
         files: [
-          '<%= config.app %>/**/*.{jade,html,ts}',
+          '<%= config.app %>/**/*.{jade,ts}',
           '!<%= config.app %>/bower_components/**',
           '<%= config.app %>/localisation/*.json',
           '.tmp/styles/**/*.css',

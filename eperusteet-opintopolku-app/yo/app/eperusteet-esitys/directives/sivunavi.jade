@@ -29,12 +29,16 @@
       div(ng-if='!sections')
         .list-group-item.rajaus
           rajaus(ng-if='!sections && !disableRajaus', size='small', model='search.term', placeholder='etsi-sisallosta')
-        a.list-group-item.item.items-item(ng-repeat='item in items', ng-class='itemClasses(item)', ng-href='{{item.href}}', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
+      a.list-group-item.item.items-item(
+          ng-repeat='item in items'
+          ng-class='itemClasses(item)'
+          ng-href='{{item.href}}'
+          ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))")
           .toggler
-            span.glyphicon(ng-show='!item.$leaf', ng-click='toggle(items, item, $event)', ng-class="{'glyphicon-chevron-right': item.$collapsed, 'glyphicon-chevron-down': !item.$collapsed}")
-            span.ep-icon(ng-show='item.$leaf && !item.$glyph', ng-class="item.$type ? item.$type : 'ep-text'")
-            span(ng-show='item.$leaf && item.$glyph', icon-role='{{item.$glyph}}')
+            span.glyphicon(ng-show="!item.$leaf", ng-click='toggle(items, item, $event)', ng-class="{'glyphicon-chevron-right': item.$collapsed, 'glyphicon-chevron-down': !item.$collapsed}")
+            span.ep-icon(ng-show="item.$leaf && !item.$glyph", ng-class="item.$type ? item.$type : 'ep-text'")
+            span(ng-show="item.$leaf && item.$glyph", icon-role='{{item.$glyph}}')
           span.linktext(ng-class="{'action-link': !!item.href}", ep-highlight='search.term', ng-bind='item.label|kaanna')
-        .list-group-item(ng-if='!sections', ng-show='!hasResults && search.term')
+        .list-group-item(ng-if="!sections", ng-show="!hasResults && search.term")
           p.no-results(kaanna="'ei-tuloksia'")
     #sivunavi-footer-content

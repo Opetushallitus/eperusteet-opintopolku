@@ -135,7 +135,7 @@ namespace Controllers {
                 }
             }
 
-            function updateModel(items, doUncollapse = false) {
+            function updateModel(items, doUncollapse = true) {
                 if (!items) {
                     return;
                 }
@@ -146,7 +146,6 @@ namespace Controllers {
                     item.$collapsed = true;
                     item.$header = false;
                 });
-                doUncollapse = _.isUndefined(doUncollapse) ? true : doUncollapse;
                 if (doUncollapse) {
                     var active = _.find(items, function (item) {
                         return epSivunaviUtils.isActive(item);
@@ -249,7 +248,6 @@ namespace Controllers {
           }
         }
         scope.$watch('footer', updateFooter);
-
       }
     };
   })
