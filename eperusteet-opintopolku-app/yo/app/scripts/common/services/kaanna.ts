@@ -14,89 +14,92 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
-/* global _ */
 
 angular.module('app')
 .service('Kaanna', function($translate, Kieli) {
-  function translate (obj, key) {
     function getTranslation(input, lang) {
-      return input[lang] || input[lang.toUpperCase()] || input['kieli_' + lang + '#1'];
+        return input[lang] || input[lang.toUpperCase()] || input['kieli_' + lang + '#1'];
     }
-    var primary = getTranslation(obj, key);
-    if (primary) {
-      return primary;
-    }
-    var secondaryKey = key === 'fi' || key === 'FI' ? 'sv' : 'fi';
-    return getTranslation(obj, secondaryKey);
-  }
 
-  function kaannaSisalto(input) {
-    if (_.isEmpty(input)) {
-      return '';
-    }
-    var sisaltokieli = Kieli.getSisaltokieli();
-    return translate(input, sisaltokieli);
-  }
+    function translate (obj, key) {
+        let primary = getTranslation(obj, key);
 
-  return {
-    kaanna: function(input, config) {
-      if (_.isObject(input)) {
-        return kaannaSisalto(input);
-      } else if (_.isString(input)) {
-        return $translate.instant(input, config);
-      }
-      return '';
-    },
-    kaannaSisalto: kaannaSisalto
-  };
+        if (primary) {
+            return primary;
+        }
+        let secondaryKey = key === 'fi' || key === 'FI' ? 'sv' : 'fi';
+        let result =  getTranslation(obj, secondaryKey);
+        return result;
+    }
+
+    function kaannaSisalto(input) {
+        if (_.isEmpty(input)) {
+            return '';
+        }
+        var sisaltokieli = Kieli.getSisaltokieli();
+
+        return translate(input, sisaltokieli);
+    }
+
+    return {
+        kaanna: function(input, config) {
+            if (_.isObject(input)) {
+                return kaannaSisalto(input);
+            } else if (_.isString(input)) {
+                return $translate.instant(input, config);
+            }
+            return '';
+        },
+        kaannaSisalto: kaannaSisalto,
+        getAltLang: (): string => Kieli.getSisaltokieli() === 'fi' ? 'sv' : 'fi'
+    };
 })
 .directive('kaanna', function(Kaanna, $compile, IconMapping) {
-  function getAttr(attr, scope) {
-    if (!_.isString(attr) || _.size(attr) === 0) {
-      return;
+    function getAttr(attr, scope) {
+        if (!_.isString(attr) || _.size(attr) === 0) {
+            return;
+        }
+        return scope.$eval(attr) || attr;
     }
-    return scope.$eval(attr) || attr;
-  }
-  return {
-    restrict: 'A',
-    link: function (scope: any, el, attrs) {
-      function kaannaValue(value) {
-        return _.isObject(value) ? Kaanna.kaannaSisalto(value) : Kaanna.kaanna(value);
-      }
-      var original = getAttr(attrs.kaanna, scope) || el.text();
-      if (_.isObject(original)) {
-        el.text(Kaanna.kaannaSisalto(original));
-        if (attrs.iconRole) {
-          IconMapping.addIcon(attrs.iconRole, el);
+    return {
+        restrict: 'A',
+        link: function (scope: any, el, attrs) {
+            function kaannaValue(value) {
+                return _.isObject(value) ? Kaanna.kaannaSisalto(value) : Kaanna.kaanna(value);
+            }
+            var original = getAttr(attrs.kaanna, scope) || el.text();
+            if (_.isObject(original)) {
+                el.text(Kaanna.kaannaSisalto(original));
+                if (attrs.iconRole) {
+                    IconMapping.addIcon(attrs.iconRole, el);
+                }
+                scope.$watch(function () {
+                    return getAttr(attrs.kaanna, scope);
+                }, function (value) {
+                    el.text(kaannaValue(value));
+                });
+                // Tämä rikkoo filterin kieltä vaihdettaessa
+                /*scope.$on('changed:sisaltokieli', function () {
+                  el.text(kaannaValue(getAttr(attrs.kaanna, scope)));
+                  });*/
+            } else {
+                var textEl: any = angular.element('<span>').attr('translate', original);
+                if (attrs.kaannaValues) {
+                    textEl.attr('translate-values', attrs.kaannaValues);
+                }
+                el.html('').append(textEl);
+                if (attrs.iconRole) {
+                    var iconEl: any = angular.element('<span>').attr('icon-role', attrs.iconRole);
+                    el.removeAttr('icon-role');
+                    el.prepend(iconEl);
+                }
+                el.removeAttr('kaanna');
+                el.removeAttr('kaanna-values');
+                $compile(el.contents())(scope);
+            }
         }
-        scope.$watch(function () {
-          return getAttr(attrs.kaanna, scope);
-        }, function (value) {
-          el.text(kaannaValue(value));
-        });
-        // Tämä rikkoo filterin kieltä vaihdettaessa
-        /*scope.$on('changed:sisaltokieli', function () {
-          el.text(kaannaValue(getAttr(attrs.kaanna, scope)));
-        });*/
-      } else {
-        var textEl: any = angular.element('<span>').attr('translate', original);
-        if (attrs.kaannaValues) {
-          textEl.attr('translate-values', attrs.kaannaValues);
-        }
-        el.html('').append(textEl);
-        if (attrs.iconRole) {
-          var iconEl: any = angular.element('<span>').attr('icon-role', attrs.iconRole);
-          el.removeAttr('icon-role');
-          el.prepend(iconEl);
-        }
-        el.removeAttr('kaanna');
-        el.removeAttr('kaanna-values');
-        $compile(el.contents())(scope);
-      }
-    }
-  };
+    };
 })
 .filter('kaanna', function(Kaanna) {
-  return Kaanna.kaanna;
+    return Kaanna.kaanna;
 });
