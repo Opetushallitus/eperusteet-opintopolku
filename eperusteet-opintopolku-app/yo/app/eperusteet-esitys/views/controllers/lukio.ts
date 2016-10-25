@@ -321,7 +321,12 @@ namespace Controllers {
       });
   };
 
-  export const epLukioTiedotController = () => {
+  export const epLukioTiedotController = ($scope) => {
+    let currentTime = new Date().getTime();
+    $scope.voimassaOleva = !!(!$scope.peruste.voimassaoloLoppuu
+    || $scope.peruste.voimassaoloAlkaa
+    && currentTime > $scope.peruste.voimassaoloAlkaa
+    && currentTime < $scope.peruste.voimassaoloLoppuu);
   };
 
   export const epLukioOppiaineController = ($scope, $location, epLukioStateService, Utils, epEsitysSettings, oppiaine, $state, Kieli, epParentFinder, epTekstikappaleChildResolver, $stateParams, $rootScope, MurupolkuData, epSivunaviUtils) => {

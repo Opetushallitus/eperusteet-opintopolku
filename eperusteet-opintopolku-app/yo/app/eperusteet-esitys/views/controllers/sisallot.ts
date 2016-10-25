@@ -61,6 +61,12 @@ namespace Controllers {
             $scope.dokumenttiUrl = location.origin + '/eperusteet-service/api/dokumentit/' + dokumenttiId;
         }
 
+        let currentTime = new Date().getTime();
+        $scope.voimassaOleva = !!(!$scope.peruste.voimassaoloLoppuu
+        || $scope.peruste.voimassaoloAlkaa
+        && currentTime > $scope.peruste.voimassaoloAlkaa
+        && currentTime < $scope.peruste.voimassaoloLoppuu);
+
         PerusteenTutkintonimikkeet.get($scope.peruste.id, $scope);
 
         $scope.korvattavatPerusteet = {};

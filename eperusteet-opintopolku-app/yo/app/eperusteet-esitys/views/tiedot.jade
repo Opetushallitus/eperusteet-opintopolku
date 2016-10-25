@@ -18,6 +18,25 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
       span(kaanna="'maarayksen-paatospaivamaara'")
   .col-xs-6.col-sm-8
     span(pvm='peruste.paatospvm')
+.row.row-margin(ng-if='!!peruste.voimassaoloAlkaa')
+  .col-xs-6.col-sm-4
+    strong
+      span(kaanna="'voimaantulo-pvm'")
+  .col-xs-6.col-sm-8
+    span(pvm='peruste.voimassaoloAlkaa')
+.row.row-margin(ng-if='!!peruste.voimassaoloLoppuu')
+  .col-xs-6.col-sm-4
+    strong
+      span(kaanna="'voimassaolo-paattymispvm'")
+  .col-xs-6.col-sm-8
+    span(pvm='peruste.voimassaoloLoppuu')
+.row.row-margin(ng-if='peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0 && !voimassaOleva')
+  .col-xs-6.col-sm-4
+    strong
+      span(kaanna="'siirtyman-paattyminen'")
+  .col-xs-6.col-sm-8
+    span(pvm='peruste.siirtymaPaattyy')
+    p ({{'siirtyman-kuvaus' | kaanna}})
 .row.row-margin(ng-if='peruste.maarayskirje && peruste.maarayskirje.url')
   .col-xs-6.col-sm-4
     strong
@@ -42,12 +61,6 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
     ul
       li(ng-repeat='diaari in peruste.korvattavatDiaarinumerot')
         span(ng-bind='diaari')
-.row.row-margin(ng-if='peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0 && !!peruste.siirtymaPaattyy')
-  .col-xs-6.col-sm-4
-    strong
-      span(kaanna="'siirtyman-paattyminen'")
-  .col-xs-6.col-sm-8
-    span(pvm='peruste.siirtymaPaattyy')
 .row.row-margin(ng-if='peruste.koulutukset.length !== 0')
   .col-xs-12.col-sm-4
     strong
@@ -117,16 +130,4 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   .col-xs-6.col-sm-8
     a(ng-href='{{ dokumenttiUrl }}')
       span(kaanna="'lataa-dokumentti'")
-.row.row-margin(ng-if='!!peruste.voimassaoloAlkaa')
-  .col-xs-6.col-sm-4
-    strong
-      span(kaanna="'voimaantulo-pvm'")
-  .col-xs-6.col-sm-8
-    span(pvm='peruste.voimassaoloAlkaa')
-.row.row-margin(ng-if='!!peruste.voimassaoloLoppuu')
-  .col-xs-6.col-sm-4
-    strong
-      span(kaanna="'voimassaolo-paattymispvm'")
-  .col-xs-6.col-sm-8
-    span(pvm='peruste.voimassaoloLoppuu')
 .clearfix
