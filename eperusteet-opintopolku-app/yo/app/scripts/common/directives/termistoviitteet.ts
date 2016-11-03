@@ -25,12 +25,15 @@ angular.module('app')
         transclude: true,
         template: '' +
             '<div ng-if="teksti" ng-bind-html="teksti | kuvalinkit | unsafe" termisto-viitteet="model"></div>' +
-            '<div ng-if="perusteModel" class="esitys-peruste" termisto-viitteet="perusteModel" ng-bind-html="perusteModel | kaanna | kuvalinkit | unsafe"></div>',
-        controller: function ($scope, Utils, Kieli, Kaanna) {
+            '<div ng-if="perusteTeksti" class="esitys-peruste" termisto-viitteet="perusteTeksti" ng-bind-html="perusteTeksti | kaanna | kuvalinkit | unsafe"></div>',
+        controller: function ($scope, Utils, Kaanna, Kieli) {
             const altLang = Kaanna.getAltLang();
-            $scope.teksti = $scope.model && ($scope.model[Kieli.getSisaltokieli()] || $scope.model[altLang]);
-            $scope.perusteTeksti = $scope.perusteModel && ($scope.perusteModel[Kieli.getSisaltokieli()] || $scope.perusteModel[Kieli.getAlternate()]);
             $scope.hasContent = Utils.hasContentOnCurrentLang;
+
+            $scope.$watch("model", (newValue, oldValue) => {
+                $scope.teksti = $scope.model && ($scope.model[Kieli.getSisaltokieli()] || $scope.model[altLang]);
+                $scope.perusteTeksti = $scope.perusteModel && ($scope.perusteModel[Kieli.getSisaltokieli()] || $scope.perusteModel[Kieli.getAlternate()]);
+            });
         }
     };
 })
