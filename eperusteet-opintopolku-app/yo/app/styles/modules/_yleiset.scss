@@ -80,7 +80,7 @@ body {
   position: relative;
 }
 
-@media (max-width: $screen-sm) {
+@media (max-width: $screen-sm-max) {
   .sisalto-container {
     margin-bottom: 15px;
   }

@@ -15,178 +15,234 @@
  */
 
 namespace Controllers {
-    export const HakuController = ($scope, $rootScope, $state, Perusteet, Haku, koulutusalaService, Kieli, YleinenData, MurupolkuData, Kaanna) => {
-        var pat: any = '';
-        var osio = _.last($state.current.name.split('.'));
-        Haku.osio = osio;
-        var otsikko = 'navi.' + osio;
+  export const HakuController = ($scope, $rootScope, $state, Perusteet, Haku, koulutusalaService, Kieli,
+                                 YleinenData, MurupolkuData, Kaanna, PerusteenTutkintonimikkeet) => {
+    var pat: any = '';
+    var osio = _.last($state.current.name.split('.'));
+    Haku.osio = osio;
+    var otsikko = 'navi.' + osio;
 
-        MurupolkuData.setTitle([{label: otsikko}]);
-        // Viive, joka odotetaan, ennen kuin haku nimi muutoksesta lähtee serverille.
-        var hakuViive = 300; //ms
-        // Huom! Sivu alkaa UI:lla ykkösestä, serverillä nollasta.
-        $scope.nykyinenSivu = 1;
-        $scope.sivuja = 1;
-        $scope.kokonaismaara = 0;
-        $scope.koulutusalat = koulutusalaService.haeKoulutusalat();
-        $scope.sivu = {
-            otsikko: otsikko
-        };
+    MurupolkuData.setTitle([{label: otsikko}]);
+    // Viive, joka odotetaan, ennen kuin haku nimi muutoksesta lähtee serverille.
+    var hakuViive = 300; //ms
+    // Huom! Sivu alkaa UI:lla ykkösestä, serverillä nollasta.
+    $scope.nykyinenSivu = 1;
+    $scope.sivuja = 1;
+    $scope.kokonaismaara = 0;
+    $scope.koulutusalat = koulutusalaService.haeKoulutusalat();
+    $scope.koulutusalatMap = {};
+    $scope.opintoalatMap = {};
+    _.each($scope.koulutusalat, (ala) => {
+      $scope.koulutusalatMap[ala.koodi] = ala;
+    });
+    $scope.sivu = {
+      otsikko: otsikko
+    };
 
-        $scope.kaanna = function (text) {
-            return Kaanna.kaanna(text);
-        };
+    $scope.kaanna = function (text) {
+      return Kaanna.kaanna(text);
+    };
 
-        function setHakuparametrit() {
-            $scope.hakuparametrit = _.merge(Haku.getHakuparametrit($state.current.name), {
-                kieli: Kieli.getSisaltokieli()
-            });
+    $scope.selvitaTila = (peruste) => {
+      let currentTime = new Date().getTime();
+      let voimassaoloAlkaa = peruste.voimassaoloAlkaa;
+      let voimassaoloLoppuu = peruste.voimassaoloLoppuu;
+      let siirtymaPaattyy = peruste.siirtymaPaattyy;
+
+      if (siirtymaPaattyy) {
+        if (currentTime > siirtymaPaattyy) {
+          peruste.$$tila = "arkistoitu";
+          return;
+        } else {
+          peruste.$$tila = "siirtyma";
+          return;
         }
-        setHakuparametrit();
+      } else {
+        if (voimassaoloLoppuu && currentTime > voimassaoloLoppuu) {
+          peruste.$$tila = "arkistoitu";
+          return;
+        }
+      }
 
-        $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
+      if (voimassaoloAlkaa && currentTime > voimassaoloAlkaa) {
+        peruste.$$tila = "voimassa";
+        return;
+      }
 
-        $scope.tyhjenna = function() {
-            $scope.nykyinenSivu = 1;
-            $scope.hakuparametrit = Haku.resetHakuparametrit($state.current.name);
-            setHakuparametrit();
-            $scope.haePerusteet($scope.nykyinenSivu);
-        };
+      peruste.$$tila = "tuleva";
+      return;
+    };
 
-        var hakuVastaus = function(vastaus) {
-            $scope.perusteet = vastaus;
-            $scope.nykyinenSivu = $scope.perusteet.sivu + 1;
-            $scope.hakuparametrit.sivukoko = $scope.perusteet.sivukoko;
-            $scope.sivuja = $scope.perusteet.sivuja;
-            $scope.kokonaismaara = $scope.perusteet.kokonaismäärä;
-            $scope.sivut = _.range(0, $scope.perusteet.sivuja);
-            pat = new RegExp('(' + $scope.hakuparametrit.nimi + ')', 'i');
-        };
-
-        $scope.pageChanged = function() {
-            $scope.haePerusteet($scope.nykyinenSivu);
-        };
-
-        /**
-         * Hakee sivun serveriltä.
-         * @param {number} sivu UI:n sivunumero, alkaa ykkösestä.
-         */
-        $scope.haePerusteet = function(sivu) {
-            $scope.hakuparametrit.sivu = sivu - 1;
-            Haku.setHakuparametrit($state.current.name, $scope.hakuparametrit);
-            Perusteet.get($scope.hakuparametrit, hakuVastaus, function(virhe) {
-                if (virhe.status === 404) {
-                    hakuVastaus(virhe.data);
-                }
-            });
-        };
-
-        $scope.sivujaYhteensa = function() {
-            return Math.max($scope.sivuja, 1);
-        };
-
-        $scope.hakuMuuttui = _.debounce(_.bind($scope.haePerusteet, $scope, 1), hakuViive, {'leading': false});
-
-        $scope.korosta = function(otsikko) {
-            if ($scope.hakuparametrit.nimi === null || $scope.hakuparametrit.nimi.length < 3) {
-                return otsikko;
-            }
-            return otsikko.replace(pat, '<strong>$1</strong>');
-        };
-
-        $scope.koulutusalaMuuttui = function() {
-            $scope.hakuparametrit.opintoala = '';
-            if ($scope.hakuparametrit.koulutusala !== '') {
-                $scope.opintoalat = (<any>_.findWhere($scope.koulutusalat, {koodi: $scope.hakuparametrit.koulutusala})).opintoalat;
-            } else {
-                $scope.opintoalat = [];
-            }
-            $scope.hakuMuuttui();
-        };
-        $scope.koulutusalaMuuttui();
-
-        $scope.koulutusalaNimi = function(koodi) {
-            return koulutusalaService.haeKoulutusalaNimi(koodi);
-        };
-
-        $scope.piilotaKoulutustyyppi = function() {
-            return $state.current.name === 'root.selaus.ammatillinenperuskoulutus' || $scope.isValma();
-        };
-
-        $scope.isValma = function () {
-            return $state.current.name === 'root.selaus.valmentavakoulutus';
-        };
-
-        $scope.onkoHakuTyhja = function () {
-            return $scope.hakuparametrit.nimi !== ''
-                || $scope.hakuparametrit.koulutusala !== ''
-                || $scope.hakuparametrit.siirtyma === true
-                || ($scope.hakuparametrit.tyyppi !== '' && osio === 'ammatillinenaikuiskoulutus');
-        };
-        $scope.$on('changed:sisaltokieli', $scope.tyhjenna);
+    function setHakuparametrit() {
+      $scope.hakuparametrit = _.merge(Haku.getHakuparametrit($state.current.name), {
+        kieli: Kieli.getSisaltokieli()
+      });
     }
+
+    setHakuparametrit();
+
+    $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
+
+    $scope.tyhjenna = function () {
+      $scope.nykyinenSivu = 1;
+      $scope.hakuparametrit = Haku.resetHakuparametrit($state.current.name);
+      setHakuparametrit();
+      $scope.haePerusteet($scope.nykyinenSivu);
+    };
+
+    var hakuVastaus = function (vastaus) {
+      $scope.perusteet = vastaus;
+      _.each(vastaus.data, peruste => {
+        $scope.selvitaTila(peruste);
+        peruste.$$tutkintonimikkeet = {};
+        PerusteenTutkintonimikkeet.get(peruste.id, peruste.$$tutkintonimikkeet);
+      });
+      $scope.nykyinenSivu = vastaus.sivu + 1;
+      $scope.hakuparametrit.sivukoko = vastaus.sivukoko;
+      $scope.sivuja = vastaus.sivuja;
+      $scope.kokonaismaara = vastaus.kokonaismäärä;
+      $scope.sivut = _.range(0, vastaus.sivuja);
+      pat = new RegExp('(' + $scope.hakuparametrit.nimi + ')', 'i');
+    };
+
+    $scope.pageChanged = function () {
+      $scope.haePerusteet($scope.nykyinenSivu);
+    };
+
+    /**
+     * Hakee sivun serveriltä.
+     * @param {number} sivu UI:n sivunumero, alkaa ykkösestä.
+     */
+    $scope.haePerusteet = function (sivu) {
+      $scope.hakuparametrit.sivu = sivu - 1;
+      Haku.setHakuparametrit($state.current.name, $scope.hakuparametrit);
+      Perusteet.get($scope.hakuparametrit, hakuVastaus, function (virhe) {
+        if (virhe.status === 404) {
+          hakuVastaus(virhe.data);
+        }
+      });
+    };
+
+    $scope.sivujaYhteensa = function () {
+      return Math.max($scope.sivuja, 1);
+    };
+
+    $scope.muutaHakua = (key, value) => {
+      $scope.hakuparametrit[key] = value;
+      $scope.koulutusalaMuuttui();
+      $scope.hakuMuuttui();
+    };
+
+    $scope.poistaHakukriteeri = (key) => {
+      delete $scope.hakuparametrit[key];
+      $scope.koulutusalaMuuttui();
+      $scope.hakuMuuttui();
+    };
+
+    $scope.hakuMuuttui = _.debounce(_.bind($scope.haePerusteet, $scope, 1), hakuViive, {'leading': false});
+
+    $scope.korosta = function (otsikko) {
+      if ($scope.hakuparametrit.nimi === null || $scope.hakuparametrit.nimi.length < 3) {
+        return otsikko;
+      }
+      return otsikko.replace(pat, '<strong>$1</strong>');
+    };
+
+    $scope.koulutusalaMuuttui = function () {
+      if ($scope.hakuparametrit.koulutusala) {
+        $scope.opintoalat = (<any>_.findWhere($scope.koulutusalat, {
+          koodi: $scope.hakuparametrit.koulutusala
+        })).opintoalat;
+        _.each($scope.opintoalat, (ala) => {
+          $scope.opintoalatMap[ala.koodi] = ala;
+        });
+      } else {
+        $scope.opintoalat = [];
+        delete $scope.hakuparametrit.opintoala;
+      }
+      $scope.hakuMuuttui();
+    };
+
+    $scope.koulutusalaMuuttui();
+
+    $scope.koulutusalaNimi = function (koodi) {
+      return koulutusalaService.haeKoulutusalaNimi(koodi);
+    };
+
+    $scope.piilotaKoulutustyyppi = function () {
+      return $state.current.name === 'root.selaus.ammatillinenperuskoulutus' || $scope.isValma();
+    };
+
+    $scope.isValma = function () {
+      return $state.current.name === 'root.selaus.valmentavakoulutus';
+    };
+
+    $scope.onkoHakuTyhja = function () {
+      return $scope.hakuparametrit.nimi !== ''
+        || $scope.hakuparametrit.koulutusala !== ''
+        || ($scope.hakuparametrit.tyyppi !== '' && osio === 'ammatillinenaikuiskoulutus');
+    };
+    $scope.$on('changed:sisaltokieli', $scope.tyhjenna);
+  }
 }
 
 
 // TODO: Refactor
 angular.module('app')
-.service('Haku', function Haku(Kieli) {
+  .service('Haku', function Haku(Kieli) {
     var uikieli = Kieli.getUiKieli();
     var DEFAULTS = {
-        'root.selaus.ammatillinenperuskoulutus': {
-            nimi: '',
-            koulutusala: '',
-            tyyppi: 'koulutustyyppi_1',
-            kieli: uikieli,
-            opintoala: '',
-            siirtyma: false,
-            sivu: 0,
-            sivukoko: 20,
-            suoritustapa: 'ops',
-            perusteTyyppi: 'normaali',
-            tila: 'valmis'
-        },
-        'root.selaus.ammatillinenaikuiskoulutus': {
-            nimi: '',
-            koulutusala: '',
-            tyyppi: '',
-            kieli: uikieli,
-            opintoala: '',
-            siirtyma: false,
-            sivu: 0,
-            sivukoko: 20,
-            suoritustapa: 'naytto',
-            perusteTyyppi: 'normaali',
-            tila: 'valmis'
-        },
-        'root.selaus.valmentavakoulutus': {
-            nimi: '',
-            koulutusala: '',
-            tyyppi: 'koulutustyyppi_18',
-            kieli: uikieli,
-            opintoala: '',
-            siirtyma: false,
-            sivu: 0,
-            sivukoko: 20,
-            suoritustapa: 'ops',
-            perusteTyyppi: 'normaali',
-            tila: 'valmis'
-        }
+      'root.selaus.ammatillinenperuskoulutus': {
+        nimi: '',
+        koulutusala: '',
+        tyyppi: 'koulutustyyppi_1',
+        kieli: uikieli,
+        opintoala: '',
+        sivu: 0,
+        sivukoko: 5,
+        suoritustapa: 'ops',
+        perusteTyyppi: 'normaali',
+        tila: 'valmis'
+      },
+      'root.selaus.ammatillinenaikuiskoulutus': {
+        nimi: '',
+        koulutusala: '',
+        tyyppi: '',
+        kieli: uikieli,
+        opintoala: '',
+        sivu: 0,
+        sivukoko: 5,
+        suoritustapa: 'naytto',
+        perusteTyyppi: 'normaali',
+        tila: 'valmis'
+      },
+      'root.selaus.valmentavakoulutus': {
+        nimi: '',
+        koulutusala: '',
+        tyyppi: 'koulutustyyppi_18',
+        kieli: uikieli,
+        opintoala: '',
+        sivu: 0,
+        sivukoko: 20,
+        suoritustapa: 'ops',
+        perusteTyyppi: 'normaali',
+        tila: 'valmis'
+      }
     };
 
     this.osio = null;
     this.hakuparametrit = _.clone(DEFAULTS);
 
     this.getHakuparametrit = function (stateName) {
-        return _.clone(this.hakuparametrit[stateName]);
+      return _.clone(this.hakuparametrit[stateName]);
     };
 
     this.setHakuparametrit = function (stateName, hakuparametrit) {
-        this.hakuparametrit[stateName] = _.merge(hakuparametrit);
+      this.hakuparametrit[stateName] = _.merge(hakuparametrit);
     };
 
     this.resetHakuparametrit = function (stateName) {
-        this.hakuparametrit[stateName] = _.clone(DEFAULTS[stateName]);
-        return this.hakuparametrit[stateName];
+      this.hakuparametrit[stateName] = _.clone(DEFAULTS[stateName]);
+      return this.hakuparametrit[stateName];
     };
-});
+  });

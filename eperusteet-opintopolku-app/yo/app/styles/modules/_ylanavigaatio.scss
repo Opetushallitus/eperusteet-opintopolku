@@ -116,7 +116,7 @@
   }
 }
 
-@media (max-width: $screen-sm) {
+@media (max-width: $screen-sm-max) {
   .navbar-ylanavigaatio-mobile {
     background-color: $ylanavi-color;
     margin-bottom: 0;
