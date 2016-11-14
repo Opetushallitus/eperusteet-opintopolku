@@ -135,7 +135,7 @@ angular.module('eperusteet.esitys')
     };
 
     var parentVlkId = null;
-    _.each(states, function (value, key) {
+    _.each(states, function (value: any, key) {
       if (_.endsWith($state.current.name, key)) {
         processSection(navi, value.index, value.callback || angular.noop);
         (value.actions || angular.noop)();

@@ -57,7 +57,7 @@ angular.module('app')
               return perusteSisaltoAlueet[tunniste] || {};
             });
             if(!_.isEmpty(alueet)) {
-              item.$sisaltoalueet = alueet.sort((a, b) => {
+              item.$sisaltoalueet = alueet.sort((a: any, b: any) => {
                 if (sortHelper.indexOf(a.nimi.fi) > sortHelper.indexOf(b.nimi.fi)) {
                   return 1;
                 }

@@ -1,7 +1,7 @@
 const LIVERELOAD_PORT = 35739;
 
 const
-  timer = require("grunt-timer"),
+  timer = require('grunt-timer'),
   livereloadSnippet = require('connect-livereload')({ port: LIVERELOAD_PORT }),
   proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest,
   autoprefixSnippet = require('autoprefixer')({ browsers: ['last 1 version'] }),
@@ -14,7 +14,7 @@ const pathConfig = {
 };
 
 module.exports = grunt => {
-  require('load-grunt-tasks')(grunt); // Load all "grunt-*" modules
+  require('load-grunt-tasks')(grunt); // Load all 'grunt-*' modules
   timer.init(grunt);
 
   grunt.initConfig({
@@ -26,7 +26,7 @@ module.exports = grunt => {
       default: {
         tsconfig: true,
         options: {
-          failOnTypeErrors: false // Todo: Delete this line after fixed all errors
+          failOnTypeErrors: false // Todo: Delete this line after all errors are fixed
         }
       }
     },
@@ -35,9 +35,13 @@ module.exports = grunt => {
         files: ['<%= config.app %>/styles/{,*/}*.scss', '<%= config.app %>/eperusteet-esitys/styles/{,*/}*.scss'],
         tasks: ['sass', 'copy:fonts', 'postcss']
       },
-      test: {
-        files: ['<%= config.app %>/**/*.{js,html}', 'test/**/*.js','!<%= config.app %>/bower_components/**'],
-        tasks: ['ts', 'karma:unit', 'regex-check']
+      ts: {
+        files: ['<%= config.app %>/**/*.ts', '!<%= config.app %>/bower_components/**'],
+        tasks: ['ts']
+      },
+      pug: {
+        files: ['<%= config.app %>/**/*.{jade, pug}','!<%= config.app %>/bower_components/**'],
+        tasks: ['pug', 'regex-check']
       },
       livereload: {
         options: {
@@ -45,15 +49,13 @@ module.exports = grunt => {
           open: false
         },
         tasks: [
-          'ts',
-          'pug',
-          'copy:imgutils',
           'useminPrepare',
-          'concurrent:dist',
+          'postcss',
           'ngtemplates',
           'concat',
           'copy:dist',
           'uglify',
+          'cssmin',
           'usemin'
         ],
         files: [
@@ -108,15 +110,13 @@ module.exports = grunt => {
       }],
       livereload: {
         options: {
-          middleware: connect => {
-            return [
+          middleware: connect => [
               proxySnippet,
               livereloadSnippet,
               mountFolder(connect, process.env.HOME +'/oph-configuration/eperusteet-opintopolku'),
               mountFolder(connect, '.tmp'),
               mountFolder(connect, pathConfig.dist)
-            ];
-          }
+            ]
         }
       }
     },
@@ -207,9 +207,6 @@ module.exports = grunt => {
         }]
       }
     },
-    puglint: {
-
-    },
     pug: {
       compile: {
         options: {
@@ -279,9 +276,13 @@ module.exports = grunt => {
     },
     concurrent: {
       test: [
+        'ts',
+        'pug',
         'sass'
       ],
       dist: [
+        'ts',
+        'pug',
         'sass',
         'imagemin',
         'svgmin',
@@ -376,16 +377,16 @@ module.exports = grunt => {
   });
 
   grunt.registerTask('dev', [
+    'clean:dist',
     'typings',
-    'ts',
-    'pug',
-    'copy:imgutils',
     'useminPrepare',
     'concurrent:dist',
+    'postcss',
     'ngtemplates',
     'concat',
     'copy:dist',
     'uglify',
+    'cssmin',
     'usemin',
     'configureProxies',
     'connect:livereload',
@@ -395,8 +396,6 @@ module.exports = grunt => {
   grunt.registerTask('test', [
     'clean:server',
     'typings',
-    'ts',
-    'pug',
     'copy:fonts',
     'concurrent:test',
     'postcss',
@@ -407,8 +406,6 @@ module.exports = grunt => {
   grunt.registerTask('build', [
     'clean:dist',
     'typings',
-    'ts',
-    'pug',
     'copy:imgutils',
     'useminPrepare',
     'concurrent:dist',

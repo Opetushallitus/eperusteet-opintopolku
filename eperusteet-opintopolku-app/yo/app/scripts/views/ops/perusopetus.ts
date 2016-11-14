@@ -158,7 +158,7 @@ angular.module('app')
       if ($state.is('root.ops.perusopetus') && !id.length) {
         $state.go('.tiedot', {location: 'replace'});
       }
-      else if (_.endsWith(_.keys($stateParams), 'vuosi')) { // FIXME: ???
+      else if (_.contains(_.keys($stateParams), 'vuosi')) {
         var vuosi = $state.params.vuosi;
         moveToOppiaine(vuosi);
       }

@@ -360,6 +360,30 @@ namespace Controllers {
 
       MurupolkuData.set('parents', epParentFinder.find($scope.oppiaineet.lapset, $scope.tekstikappale.id, true));
 
+      var doRefresh = function (items) {
+        var levels = {};
+        if (items.length && !items[0].root) {
+          items.unshift({root: true, depth: -1});
+        }
+        _.each(items, function (item, index) {
+          item.depth = item.depth || 0;
+          levels[item.depth] = index;
+          if (_.isArray(item.link)) {
+            item.href = $state.href.apply($state, item.link);
+            if (item.link.length > 1) {
+              // State is matched with string parameters
+              _.each(item.link[1], function (value, key) {
+                item.link[1][key] = value === null ? '' : ('' + value);
+              });
+            }
+          }
+          item.$parent = levels[item.depth - 1] || null;
+          item.$hidden = item.depth > 0;
+          item.$matched = true;
+        });
+        updateModel(items);
+      };
+
       $scope.refresh = function () {
           if (_.isArray($scope.items)) {
               doRefresh($scope.items);

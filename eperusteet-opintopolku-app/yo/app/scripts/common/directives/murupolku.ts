@@ -445,7 +445,7 @@ angular.module('app')
       }
       $scope.crumbs = [];
 
-      _.each(STATE_ROOTS, function (root, key) {
+      _.each(STATE_ROOTS, function (root: any, key) {
         if (toState.name.indexOf(key) === 0 && toState.name !== key) {
           $scope.crumbs.push({
             url: $state.href(root.state),
