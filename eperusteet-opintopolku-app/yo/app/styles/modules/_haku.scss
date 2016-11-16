@@ -80,6 +80,11 @@
       font-size: 16px;
       padding-left: 0;
       padding-right: 0;
+
+      @media (max-width: $screen-sm-max) {
+        margin-left: 10px;
+        margin-right: 10px;
+      }
     }
 
     .color-box {

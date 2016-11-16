@@ -70,6 +70,12 @@ angular.module('app')
 })
 
 
+.filter('unique', function () {
+  return function (array, field) {
+    return _.uniq(array, function(el) { return el[field]; });
+  };
+})
+
 .directive('pvm', function (Kaanna, $filter, $timeout) {
   return {
     restrict: 'A',

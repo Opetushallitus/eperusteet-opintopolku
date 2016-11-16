@@ -18,7 +18,7 @@ mixin label(icon, text, type)
   .haku-box
     .col-md-6
       input.form-control(type="text" placeholder="{{'hakusana' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
-    .col-md-6.hidden-xs.hidden-sm
+    .col-md-6
       .pull-right.haku-filters
         span(uib-dropdown ng-hide="piilotaKoulutustyyppi()" ng-if="!hakuparametrit.tyyppi")
           a.dropdown-toggle(uib-dropdown-toggle)
@@ -81,7 +81,7 @@ mixin label(icon, text, type)
           p.tutkintonimikkeet(ng-if="peruste.$$tutkintonimikkeet.koodisto.length > 0")
             span Tutkintonimikkeet
             =" "
-            span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto")
+            span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto | unique:'tutkintonimikeArvo'")
               span(class="label label-primary")
                 span(kaanna="nimike.$tutkintonimikeNimi")
               span {{$last ? '' : ' '}}
@@ -98,4 +98,5 @@ mixin label(icon, text, type)
             =" "
             span(pvm="peruste.siirtymaPaattyy")
 
-  uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')
+  .text-center
+    uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')
