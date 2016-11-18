@@ -64,14 +64,29 @@ mixin haku()
     input.form-control(type="text" placeholder="{{'hakusana' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
 
     .haku-filtered
-      span(class="label label-primary")
-        span(kaanna="voimassaolevat")
+      a(href="" ng-click="switchHakua('tuleva')")
+        span(class="label label-tulevat")
+          span(ng-if="hakuparametrit.tuleva")
+            +gicon("ok", "'tulevat'")
+          span(kaanna="'tulevat'" ng-if="!hakuparametrit.tuleva")
       =" "
-      span(class="label label-success")
-        span(kaanna="siirtymassa")
+      a(href="" ng-click="switchHakua('voimassaolo')")
+        span(class="label label-voimassaolevat")
+          span(ng-if="hakuparametrit.voimassaolo")
+            +gicon("ok", "'voimassaolevat'")
+          span(kaanna="'voimassaolevat'" ng-if="!hakuparametrit.voimassaolo")
       =" "
-      span(class="label label-warning")
-        span(kaanna="poistuneet")
+      a(href="" ng-click="switchHakua('siirtyma')")
+        span(class="label label-siirtymassa")
+          span(ng-if="hakuparametrit.siirtyma")
+            +gicon("ok", "'siirtymassa'")
+          span(kaanna="'siirtymassa'" ng-if="!hakuparametrit.siirtyma")
+      =" "
+      a(href="" ng-click="switchHakua('poistunut')")
+        span(class="label label-poistuneet")
+          span(ng-if="hakuparametrit.poistunut")
+            +gicon("ok", "'poistuneet'")
+          span(kaanna="'poistuneet'" ng-if="!hakuparametrit.poistunut")
 
       .haku-filters
         +haku
@@ -86,7 +101,7 @@ mixin haku()
               span(kaanna="peruste.nimi")
 
           p
-            b(ng-repeat="koulutus in peruste.koulutukset")
+            b(ng-repeat="koulutus in peruste.koulutukset | orderBy:'id'")
               span(kaanna="koulutusalaNimi(koulutus.koulutusalakoodi).nimi")
               span {{$last ? '' : ', '}}
 
