@@ -12,48 +12,56 @@ mixin label(icon, text, type)
   span(class="label label-" + type)
     +gicon(icon, text)
 
+mixin haku()
+  span(uib-dropdown ng-if="!hakuparametrit.kieli")
+    a.dropdown-toggle(uib-dropdown-toggle)
+      +giconrtl("chevron-down", "'haku-julkaisukieli'")
+    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+      li(ng-repeat="kieli in sisaltokielet" ng-class="{active: hakuparametrit.kieli === kieli}")
+        a(kaanna="kieli" ng-click="muutaHakua('kieli', kieli)")
+
+  span(ng-if="hakuparametrit.kieli")
+    a(ng-click="poistaHakukriteeri('kieli')")
+      +giconrtl("remove", "hakuparametrit.kieli")
+
+  span(uib-dropdown ng-hide="piilotaKoulutustyyppi()" ng-if="!hakuparametrit.tyyppi")
+    a.dropdown-toggle(uib-dropdown-toggle)
+      +giconrtl("chevron-down", "'tyyppi'")
+    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+      li(ng-repeat="koodi in koulutustyypit" ng-class="{active: hakuparametrit.tyyppi === koodi}")
+        a(kaanna="koodi" ng-click="muutaHakua('tyyppi',koodi)")
+
+  span(ng-hide="piilotaKoulutustyyppi()" ng-if="hakuparametrit.tyyppi")
+    a(ng-click="poistaHakukriteeri('tyyppi')")
+      +giconrtl("remove", "hakuparametrit.tyyppi")
+
+  span(uib-dropdown ng-if="!hakuparametrit.koulutusala")
+    a.dropdown-toggle(uib-dropdown-toggle)
+      +giconrtl("chevron-down", "'haku-koulutusala'")
+    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+      li(ng-repeat="ala in koulutusalat")
+        a(kaanna="ala.nimi" ng-click="muutaHakua('koulutusala', ala.koodi)")
+
+  span(ng-if="hakuparametrit.koulutusala")
+    a(ng-click="poistaHakukriteeri('koulutusala')")
+      +giconrtl("remove", "koulutusalatMap[hakuparametrit.koulutusala].nimi")
+
+  span(uib-dropdown ng-if="hakuparametrit.koulutusala && !hakuparametrit.opintoala")
+    a.dropdown-toggle(uib-dropdown-toggle)
+      +giconrtl("chevron-down", "'haku-opintoala'")
+    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+      li(ng-repeat="ala in opintoalat")
+        a(kaanna="ala.nimi" ng-click="muutaHakua('opintoala', ala.koodi)")
+
+  span(ng-if="hakuparametrit.koulutusala && hakuparametrit.opintoala")
+    a(ng-click="poistaHakukriteeri('opintoala')")
+      +giconrtl("remove", "opintoalatMap[hakuparametrit.opintoala].nimi")
+
 .haku
   h1.hidden-xs(kaanna='sivu.otsikko')
 
   .haku-box
-    .col-md-6
-      input.form-control(type="text" placeholder="{{'hakusana' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
-    .col-md-6
-      .pull-right.haku-filters
-        span(uib-dropdown ng-hide="piilotaKoulutustyyppi()" ng-if="!hakuparametrit.tyyppi")
-          a.dropdown-toggle(uib-dropdown-toggle)
-            +giconrtl("chevron-down", "'tyyppi'")
-          ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-            li(ng-repeat="koodi in koulutustyypit" ng-class="{active: hakuparametrit.tyyppi === koodi}")
-              a(kaanna="koodi" ng-click="muutaHakua('tyyppi',koodi)")
-
-        span(ng-hide="piilotaKoulutustyyppi()" ng-if="hakuparametrit.tyyppi")
-          a(ng-click="poistaHakukriteeri('tyyppi')")
-            +giconrtl("remove", "hakuparametrit.tyyppi")
-
-        span(uib-dropdown ng-if="!hakuparametrit.koulutusala")
-          a.dropdown-toggle(uib-dropdown-toggle)
-            +giconrtl("chevron-down", "'haku-koulutusala'")
-          ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-            li(ng-repeat="ala in koulutusalat")
-              a(kaanna="ala.nimi" ng-click="muutaHakua('koulutusala', ala.koodi)")
-
-        span(ng-if="hakuparametrit.koulutusala")
-          a(ng-click="poistaHakukriteeri('koulutusala')")
-            +giconrtl("remove", "koulutusalatMap[hakuparametrit.koulutusala].nimi")
-
-        span(uib-dropdown ng-if="hakuparametrit.koulutusala && !hakuparametrit.opintoala")
-          a.dropdown-toggle(uib-dropdown-toggle)
-            +giconrtl("chevron-down", "'haku-opintoala'")
-          ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-            li(ng-repeat="ala in opintoalat")
-              a(kaanna="ala.nimi" ng-click="muutaHakua('opintoala', ala.koodi)")
-
-        span(ng-if="hakuparametrit.koulutusala && hakuparametrit.opintoala")
-          a(ng-click="poistaHakukriteeri('opintoala')")
-            +giconrtl("remove", "opintoalatMap[hakuparametrit.opintoala].nimi")
-
-    .hidden-md.hidden-lg
+    input.form-control(type="text" placeholder="{{'hakusana' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
 
     .haku-filtered
       span(class="label label-primary")
@@ -64,6 +72,10 @@ mixin label(icon, text, type)
       =" "
       span(class="label label-warning")
         span(kaanna="poistuneet")
+
+      .haku-filters
+        +haku
+      .clearfix
 
   div(ng-repeat="peruste in perusteet.data")
     .haku-box

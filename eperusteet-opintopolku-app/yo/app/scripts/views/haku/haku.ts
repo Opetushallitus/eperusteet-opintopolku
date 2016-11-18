@@ -38,6 +38,10 @@ namespace Controllers {
     $scope.sivu = {
       otsikko: otsikko
     };
+    $scope.sisaltokielet = [
+      'fi',
+      'sv'
+    ];
 
     $scope.kaanna = function (text) {
       return Kaanna.kaanna(text);

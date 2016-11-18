@@ -263,5 +263,8 @@
   "yleiset-tavoitteet": "Yleiset tavoitteet",
   "valinnaiset-oppiaineet": "Valinnaiset Oppiaineet",
   "dokumentti-osoite": "Dokumentin osoite",
-  "lataa-dokumentti": "Lataa dokumentti"
+  "lataa-dokumentti": "Lataa dokumentti",
+  "fi": "suomi",
+  "sv": "ruotsi",
+  "haku-julkaisukieli": "Julkaisukieli"
 }
