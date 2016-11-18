@@ -291,7 +291,7 @@ namespace Controllers {
         hidden.push(items[children[i]].$hidden);
       }
       item.$leaf = hidden.length === 0;
-      item.$collapsed = _.all(hidden);
+      item.$collapsed = _.every(hidden);
       item.$active = isActive(item);
       if (item.$active) {
         var parent = items[item.$parent];

@@ -28,20 +28,24 @@ angular.module('app')
 .config((epEsitysSettingsProvider) => {
   epEsitysSettingsProvider.setValue('perusopetusState', 'root.perusopetus');
 })
-.config(($translateProvider, $urlRouterProvider) => {
+.config(($translateProvider, $urlRouterProvider, $urlMatcherFactoryProvider) => {
   const preferred = 'fi';
   $urlRouterProvider.when('/', '/' + preferred);
+
+  $urlMatcherFactoryProvider.strictMode(false); // Trailing slash ignored
+
   $translateProvider.useLoader('LokalisointiLoader');
   $translateProvider.preferredLanguage(preferred);
   $translateProvider.useSanitizeValueStrategy(null);
+
   moment.locale(preferred);
 })
-.config(($rootScopeProvider) => {
+.config($rootScopeProvider => {
   // workaround for infdig with recursive tree structures
   $rootScopeProvider.digestTtl(20);
 })
-.config(($httpProvider) => {
-  $httpProvider.interceptors.push(['$rootScope', '$q', 'SpinnerService', ($rootScope, $q, Spinner) => {
+/*.config($httpProvider => {
+  $httpProvider.interceptors.push(($rootScope, $q, Spinner) => {
     return {
       request: (request) => {
         Spinner.enable();
@@ -56,27 +60,28 @@ angular.module('app')
         return $q.reject(error);
       }
     };
-  }]);
-})
+  });
+})*/
 // Uudelleenohjaus autentikointiin ja palvelinvirheiden ilmoitukset
 .config(($httpProvider) => {
   // Asetetaan oma interceptor kuuntelemaan palvelinkutsuja
-  $httpProvider.interceptors.push(['$rootScope', '$q', ($rootScope, $q) => {
+  $httpProvider.interceptors.push(($rootScope, $q) => {
     return {
-      'response': (response) => {
+      response: (response) => {
         var uudelleenohjausStatuskoodit = [401, 412, 500];
         var fail = _.indexOf(uudelleenohjausStatuskoodit, response.status) !== -1;
 
         if (fail) {
           $rootScope.$emit('event:uudelleenohjattava', response.status);
         }
+
         return response || $q.when(response);
       },
-      'responseError': (err) => {
+      responseError: (err) => {
         return $q.reject(err);
       }
     };
-  }]);
+  });
 })
 .run(($rootScope, $uibModal, $location, $window, $state, $http, uibPaginationConfig, Kaanna, virheService) => {
   uibPaginationConfig.firstText = '';

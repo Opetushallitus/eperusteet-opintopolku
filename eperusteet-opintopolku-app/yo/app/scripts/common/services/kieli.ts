@@ -43,7 +43,7 @@ angular.module('app')
 
     this.setAvailableSisaltokielet = function (kielet) {
       if (_.isArray(kielet) && !_.isEmpty(kielet)) {
-        var isValid = _.all(_.map(kielet, isValidKielikoodi));
+        var isValid = _.every(_.map(kielet, isValidKielikoodi));
         if (isValid) {
           this.availableSisaltokielet = kielet;
           $rootScope.$broadcast('update:sisaltokielet', kielet);

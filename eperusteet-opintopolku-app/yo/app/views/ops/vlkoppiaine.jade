@@ -19,7 +19,7 @@ div(ng-show='!missingVlk()')
   h2.vuosiluokka-otsikko(ng-bind='vuosi | kaanna')
   h3(kaanna="'tavoitteet'")
   uib-accordion.tavoitteet-box(ng-repeat='sa in sisalto')
-    uib-accordion-group(is-open='status.open')
+    div(uib-accordion-group, is-open='status.open')
       uib-accordion-heading
         div(ng-class="{'opened-oppiaine': status.open}")
           i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
@@ -38,7 +38,7 @@ div(ng-show='!missingVlk()')
                   termisto-tekstikentta(ng-show='!sisaltoalue.omaKuvaus && !sisaltoalue.sisaltoalueet.kuvaus', perusteteksti='perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus')
               div(ng-show='sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus')
                 uib-accordion.peruste-box
-                  uib-accordion-group(is-open='status.avoin')
+                  div(uib-accordion-group, is-open='status.avoin')
                     uib-accordion-heading
                       div
                         i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.avoin, 'glyphicon-chevron-right': !status.avoin}")

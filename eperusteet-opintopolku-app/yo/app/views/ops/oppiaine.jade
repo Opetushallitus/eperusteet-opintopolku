@@ -21,7 +21,7 @@ div(ng-repeat="vuosiluokka in vlk.vuosiluokat | filter:vuosiluokkaFilter | order
   div(ng-if="oppiaine.tyyppi === 'yhteinen'")
     h3(kaanna="'tavoitteet'")
     uib-accordion.sivunavi-box(ng-repeat='tunniste in vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka].tunnisteet', ng-init='vs = vuosiluokkaSisallot[vlk._vuosiluokkakokonaisuus][vuosiluokka.vuosiluokka]')
-      uib-accordion-group(is-open='status.open')
+      div(uib-accordion-group, is-open='status.open')
         uib-accordion-heading
           div(ng-class="{'opened-oppiaine': status.open}")
             i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")

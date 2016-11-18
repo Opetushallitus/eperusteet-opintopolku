@@ -455,7 +455,7 @@ angular.module('app')
       });
 
       var path = getPath(toState.name);
-      _(path).reverse().each(function (item) {
+      _(path).reverse().each(item => {
         var params = item.params || {};
         if (item.useId) {
           params[item.useId] = MurupolkuData.get(item.useId);

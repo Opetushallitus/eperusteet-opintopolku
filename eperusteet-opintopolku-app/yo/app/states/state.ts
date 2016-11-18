@@ -5,18 +5,18 @@ angular.module('app')
     templateUrl: 'views/navisisalto.html',
     abstract: true,
     resolve: {
-        serviceConfig: ['eperusteetConfig', function (eperusteetConfig) {
+        serviceConfig: eperusteetConfig => {
             return eperusteetConfig.init();
-        }],
-        configCheck: ['serviceConfig', function (serviceConfig) {
+        },
+        configCheck: serviceConfig => {
             if (_.isString(serviceConfig)) {
                 console.error(serviceConfig);
             }
-        }]
+        }
     },
-    onEnter: ['Kieli', '$stateParams', function (Kieli, $stateParams) {
-        var kielikoodi = $stateParams.lang;
+    onEnter: (Kieli, $stateParams) => {
+        const kielikoodi = $stateParams.lang;
         Kieli.setSisaltokieli(kielikoodi);
         Kieli.setUiKieli(kielikoodi);
-    }]
+    }
 }));
