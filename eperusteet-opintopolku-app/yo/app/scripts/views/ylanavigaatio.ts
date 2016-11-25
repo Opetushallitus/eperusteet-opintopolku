@@ -36,14 +36,14 @@ angular.module('app')
   };
 
   $scope.isAmPerus = function () {
-    if ($state.includes('**.esitys.**') && _.last($state.current.name.split('.')) === 'ammatillinenperuskoulutus' ||
+    if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenperuskoulutus' ||
       $state.includes('root.selaus.ammatillinenperuskoulutus')) {
       return true;
     }
   };
 
   $scope.isAmAikuis = function () {
-    if ($state.includes('**.esitys.**') && _.last($state.current.name.split('.')) === 'ammatillinenaikuiskoulutus' ||
+    if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenaikuiskoulutus' ||
       $state.includes('root.selaus.ammatillinenaikuiskoulutus')) {
       return true;
     }
@@ -93,14 +93,12 @@ angular.module('app')
     $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
   });
 
-  /*var amOsio = null;
+  var amOsio = null;
   $scope.$watch(function () {
-    console.log(Haku.osio);
     return Haku.osio;
   }, function (value) {
-    console.log(value);
     amOsio = value;
-  });*/
+  });
 
   $scope.vaihdaKieli = function (uusiKieli) {
     if (uusiKieli !== Kieli.getUiKieli()) {
