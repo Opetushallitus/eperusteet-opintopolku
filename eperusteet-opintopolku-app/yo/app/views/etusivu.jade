@@ -8,41 +8,44 @@
               h2(kaanna="'etusivu.eperusteet'")
               span(kaanna="'etusivu.eperusteet.kuvaus'")
   .row
+
     // Uutiset / Tiedotteet
     .col-lg-4.col-lg-push-8.col-md-12
       .sisalto-box
         h2(kaanna="'etusivu.uutisia'")
         .linkit
           ul
-            li.lista-elementti(ng-repeat='tiedote in tiedotteet | limitTo:naytto.shown', ng-if='hasContentOnCurrentLang(tiedote.otsikko)')
+            li.lista-elementti(ng-repeat='tiedote in tiedotteet | limitTo:naytto.shown', ng-if='hasContentOnCurrentLang(tiedote.otsikko) && tiedotteet.length > 0')
               a(ui-sref='root.tiedote({tiedoteId: tiedote.id})')
                 span(ng-bind='tiedote.otsikko | kaanna')
               p
                 span {{tiedote.luotu || tiedote.luotu | date}}
-            li.lista-elementti-lisaa
+            li.lista-elementti-lisaa(ng-show="tiedotteet.length > 0")
               limit-toggler(limit='naytto.limit', model='tiedotteet', limiter='naytto.shown')
-            li.lista-elementti
+            li.lista-elementti(ng-show="tiedotteet.length > 0")
               a(ui-sref='root.uutiset', ng-bind="'nayta-kaikki-uutiset' | kaanna")
+        p(ng-show="tiedotteet.length < 1" kaanna="'ei-tiedotteita'")
       .visible-lg(ng-include='', src="'views/osaan.html'")
+
     // Valtakunnalliset perusteet
     .col-lg-4.col-lg-pull-4.col-md-6
       .sisalto-box
         h2(kaanna="'etusivu.valtakunnalliset-perusteet'")
         .linkit
-          ul(ng-if='uusimmat')
-            li.peruste-linkki
+          ul
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_20'][0]")
               a(ui-sref="root.varhaiskasvatus({perusteId: uusimmat['koulutustyyppi_20'][0].id})", ng-bind="uusimmat['koulutustyyppi_20'][0].nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_15'][0]")
               a(ui-sref="root.esiopetus({perusteId: uusimmat['koulutustyyppi_15'][0].id})", ng-bind="uusimmat['koulutustyyppi_15'][0].nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_22'][0]")
               a(ui-sref="root.perusvalmistava({perusteId: uusimmat['koulutustyyppi_22'][0].id})", ng-bind="uusimmat['koulutustyyppi_22'][0].nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_16'][0]")
               a(ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_16'][0].id})", ng-bind="uusimmat['koulutustyyppi_16'][0].nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_6'][0]")
               a(ui-sref="root.lisaopetus({perusteId: uusimmat['koulutustyyppi_6'][0].id})", ng-bind="uusimmat['koulutustyyppi_6'][0].nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_2'][0]")
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_2'][0].id})", ng-bind="uusimmat['koulutustyyppi_2'][0].nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_23'][0]")
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_23'][0].id})", ng-bind="uusimmat['koulutustyyppi_23'][0].nimi | kaanna")
             li.peruste-linkki
               a(ui-sref='root.selaus.ammatillinenperuskoulutus')
@@ -50,11 +53,13 @@
             li.peruste-linkki
               a(ui-sref='root.selaus.ammatillinenaikuiskoulutus')
                 span(kaanna="'navi.ammatillinenaikuiskoulutus'")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_5'][0]")
               a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_5'][0].id, suoritustapa: 'ops'})", ng-bind="uusimmat['koulutustyyppi_5'][0].nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_18'][0]")
               a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: 'ops'})", ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna")
+
       .visible-md(ng-include='', src="'views/osaan.html'")
+
     // Uusimmat ammatilliset perusteet
     .col-lg-4.col-lg-pull-4.col-md-6
       .sisalto-box
@@ -68,6 +73,7 @@
                 span(ng-bind='peruste.paatospvm | date')
                 = ' '
                 span(ng-bind='peruste.koulutustyyppi | kaanna')
+        p(ng-show="uusimmatLista.length < 1" kaanna="'ei-uusia-perusteita'")
 
   footer
     .alatunniste
@@ -97,7 +103,10 @@
         .col-xs-12.text-center
           p.alatunniste-copyright
             span(kaanna="'copyright-opetushallitus'")
+            =" "
             span(ng-bind='currentYear')
-            |  |&nbsp;
+            =" "
+            span |
+            =" "
             a(href='http://www.oph.fi')
               span www.oph.fi

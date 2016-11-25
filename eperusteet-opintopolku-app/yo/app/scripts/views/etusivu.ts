@@ -125,7 +125,7 @@ angular.module('app')
       _.each(perusteet[key], (peruste) => {
         peruste.url = $state.href('root.esitys.peruste', {
           perusteId: peruste.id,
-          suoritustapa: peruste.koulutustyyppi==='koulutustyyppi_1' ? 'ops':'naytto'
+          suoritustapa: peruste.koulutustyyppi === 'koulutustyyppi_1' ? 'ops' : 'naytto'
         });
       });
     }).$promise;
@@ -161,7 +161,7 @@ angular.module('app')
   $scope.currentYear = new Date().getFullYear();
 
   Perusteet.uusimmat((res) => $scope.uusimmatLista = res);
-  UusimmatPerusteetService.fetch((res) => {
+  UusimmatPerusteetService.fetch(res => {
       $scope.uusimmat = res;
   });
 

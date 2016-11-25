@@ -30,7 +30,6 @@ _.mixin({
     },
     cset: (obj, path) => (value) => _.set(obj, path, value),
     spy: (obj) => {
-        console.log(obj);
         return obj;
     },
     fromPairs: (pairs) => {
