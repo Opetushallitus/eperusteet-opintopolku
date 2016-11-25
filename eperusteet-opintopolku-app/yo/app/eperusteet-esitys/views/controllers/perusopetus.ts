@@ -111,9 +111,10 @@ namespace Controllers {
             $scope.valittuOppiaine = {};
             $scope.valittuOppiaine.oppiaine = oppiaine;
             if (_.isEmpty(vlkIds)) {
-                vlkIds = _(oppiaine.vuosiluokkakokonaisuudet).sortBy(function (item) {
-                    return _.first($scope.vuosiluokkakokonaisuudetMap[item._vuosiluokkaKokonaisuus].vuosiluokat);
-                }).map('_vuosiluokkaKokonaisuus').value();
+                vlkIds = _(oppiaine.vuosiluokkakokonaisuudet)
+                  .sortBy(item => _.first($scope.vuosiluokkakokonaisuudetMap[item._vuosiluokkaKokonaisuus].vuosiluokat))
+                  .map('_vuosiluokkaKokonaisuus')
+                  .value();
             }
             vlkIds = _.map(vlkIds, String);
             if (inSisallot) {

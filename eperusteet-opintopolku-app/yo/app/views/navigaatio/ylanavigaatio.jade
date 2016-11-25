@@ -2,7 +2,7 @@ div(ng-controller='YlanavigaatioController')
   .row
     .col-md-12.opintopolku-header
       .inner-container
-        // opintopolku päävalikko
+        // Opintopolku päävalikko
         ul
           li
             a(ng-href='{{urls.opintopolku[kieli]}}', kaanna="'opintopolku'")
@@ -12,7 +12,8 @@ div(ng-controller='YlanavigaatioController')
         .header-kielenvaihto.hidden-xs
           a(href='', ng-click="vaihdaKieli('sv')", ng-show="kieli === 'fi'") P&aring; svenska
           a(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli === 'sv'") Suomeksi
-  // opintopolku valikko
+
+  // Opintopolku valikko
   .row
     .col-md-12.hidden-xs.ylanavigaatio
       .inner-container
@@ -20,38 +21,36 @@ div(ng-controller='YlanavigaatioController')
           ul.ylanavi-list
             li(ui-sref-active='active')
               a(ui-sref='root.etusivu')
-                img(src='images/md/ikoni-eperusteet.png', ng-if="state.includes('root.etusivu.**')")
-                img(src='images/md/ikoni-eperusteet-valkoinen.png', ng-if="!state.includes('root.etusivu.**')")
-            li(ui-sref-active='active')
+                img(src='images/md/ikoni-eperusteet.png', ng-show="state.includes('root.etusivu.**')")
+                img(src='images/md/ikoni-eperusteet-valkoinen.png', ng-hide="state.includes('root.etusivu.**')")
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_15', ui-sref-active='active')
               a(ui-sref='root.esiopetus', kaanna="'navi.esiopetus'")
-            li(ng-class="isPerusopetus() ? 'active' : ''")
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_16', ng-class="isPerusopetus() ? 'active' : ''")
               a(ui-sref='root.perusopetus', kaanna="'navi.perusopetus'")
-            li(ng-show='lukioPerusteExists', ng-class="isLukioopetus() ? 'active' : ''")
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_2', ng-class="isLukioopetus() ? 'active' : ''")
               a(ui-sref='root.lukio', kaanna="'navi.lukiokoulutus'")
             li(ng-class="isAmPerus() ? 'active' : ''")
               a(ui-sref='root.selaus.ammatillinenperuskoulutus', kaanna="'navi.ammatillinenperuskoulutus'")
             li(ng-class="isAmAikuis() ? 'active' : ''")
               a(ui-sref='root.selaus.ammatillinenaikuiskoulutus', kaanna="'navi.ammatillinenaikuiskoulutus'")
-            //
-              <li ng-class="isValmatelma() ? 'active' : ''">
-              <a ui-sref="root.selaus.valmentavakoulutus" kaanna="'navi.valmentavakoulutus'"></a>
-              </li>
             li(ng-class="isOps() ? 'active' : ''")
               a(ui-sref='root.selaus.ops', kaanna="'navi.opetussuunnitelmat'")
           .clearfix
-  // opintopolku alivalikko
+
+  // Opintopolku alivalikko
   .row(ng-show='isPerusopetus()')
     .col-md-12.hidden-xs.ylanavigaatio-sub
       .inner-container
         .ylanavi-container-sub(role='navigation')
           ul.ylanavi-list.ylanavi-list-sub
-            li(ui-sref-active='active')
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_16', ui-sref-active='active')
               a(ui-sref='root.perusopetus', kaanna="'navi.perusopetus'")
-            li(ui-sref-active='active')
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_22', ui-sref-active='active')
               a(ui-sref='root.perusvalmistava', kaanna="'navi.pvalmistava'")
-            li(ui-sref-active='active')
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_6', ui-sref-active='active')
               a(ui-sref='root.lisaopetus', kaanna="'navi.lisaopetus'")
-  // opintopolku mobiilivalikko
+
+  // Opintopolku mobiilivalikko
   .row
     .col-md-12.visible-xs.ylanavigaatio
       nav.navbar.navbar-ylanavigaatio-mobile.navbar-static-top(role='navigation')
@@ -67,13 +66,15 @@ div(ng-controller='YlanavigaatioController')
             ul.nav.navbar-nav
               li(ui-sref-active='active')
                 a(ui-sref='root.etusivu', kaanna="'navi.etusivu'", ng-click='navCollapse()')
-              li(ui-sref-active='active')
+              li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_15', ui-sref-active='active')
                 a(ui-sref='root.esiopetus', kaanna="'navi.esiopetus'", ng-click='navCollapse()')
-              li(ui-sref-active='active')
+              li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_16', ui-sref-active='active')
                 a(ui-sref='root.perusopetus', kaanna="'navi.perusopetus'", ng-click='navCollapse()')
-              li(ng-show='lukioPerusteExists', ui-sref-active='active')
+              li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_2', ui-sref-active='active')
                 a(ui-sref='root.lukio', kaanna="'navi.lukiokoulutus'")
-              li(ui-sref-active='active')
+              li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_22', ui-sref-active='active')
+                a(ui-sref='root.perusvalmistava', kaanna="'navi.pvalmistava'", ng-click='navCollapse()')
+              li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_6', ui-sref-active='active')
                 a(ui-sref='root.lisaopetus', kaanna="'navi.lisaopetus'", ng-click='navCollapse()')
               li(ng-class="isAmPerus() ? 'active' : ''")
                 a(ui-sref='root.selaus.ammatillinenperuskoulutus', kaanna="'navi.ammatillinenperuskoulutus'", ng-click='navCollapse()')

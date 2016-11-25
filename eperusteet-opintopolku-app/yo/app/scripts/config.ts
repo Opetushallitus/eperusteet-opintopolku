@@ -21,7 +21,7 @@ angular.module('app')
   $sceProvider.enabled(true);
   $urlRouterProvider.when('', '/');
   $urlRouterProvider.otherwise(($injector, $location) => {
-    $injector.get('virheService').setData({path: $location.path()});
+    $injector.get('VirheService').setData({ path: $location.path() });
     $injector.get('$state').go('root.virhe');
   });
 })
@@ -83,7 +83,7 @@ angular.module('app')
     };
   });
 })
-.run(($rootScope, $uibModal, $location, $window, $state, $http, uibPaginationConfig, Kaanna, virheService) => {
+.run(($rootScope, $uibModal, $location, $window, $state, $http, uibPaginationConfig, VirheService) => {
   uibPaginationConfig.firstText = '';
   uibPaginationConfig.previousText = '';
   uibPaginationConfig.nextText = '';
@@ -122,7 +122,7 @@ angular.module('app')
       return;
     }
 
-    var uudelleenohjausModaali = $uibModal.open({
+    var redirectModal = $uibModal.open({
       templateUrl: 'views/modals/uudelleenohjaus.html',
       controller: 'UudelleenohjausModalCtrl',
       resolve: {
@@ -135,7 +135,7 @@ angular.module('app')
       }
     });
 
-    uudelleenohjausModaali.result.then(angular.noop, angular.noop).finally(() => {
+    redirectModal.result.then(angular.noop, angular.noop).finally(() => {
       onAvattuna = false;
       switch (status) {
         case 500:
@@ -149,21 +149,25 @@ angular.module('app')
   });
 
   $rootScope.$on('$stateChangeError', (event, toState) => {
-    console.warn(event, toState);
-    virheService.virhe({state: toState.name});
+    if (toState.name !== 'root.virhe') {
+      console.warn(event, toState);
+      VirheService.virhe({
+        state: toState.name,
+        viesti: 'virhe.jotain-meni-pieleen'
+      });
+    }
   });
 
   $rootScope.$on('$stateNotFound', (event, toState) => {
-    console.warn(toState);
-    virheService.virhe({state: toState.to});
-  });
-
-  $rootScope.$on('$stateChangeStart', (evt, to, params) => {
-    if (to.redirectTo) {
-      evt.preventDefault();
-      $state.go(to.redirectTo, params, { location: 'replace' })
+    if (toState.name !== 'root.virhe') {
+      console.warn(event, toState);
+      VirheService.virhe({
+        state: toState.name,
+        viesti: 'virhe.sivua-ei-loydy'
+      });
     }
   });
+
 })
 // Inject common scope utilities
 .run(($rootScope, $state) => {

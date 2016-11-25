@@ -94,6 +94,7 @@
     "app/scripts/common/services/kieli.ts",
     "app/scripts/common/services/iconrole.ts",
     "app/scripts/common/services/lokalisointi.ts",
+    "app/scripts/common/services/virhe.ts",
     "app/states/state.ts",
     "app/states/varhaiskasvatus/state.ts",
     "app/states/varhaiskasvatus/tiedot/state.ts",

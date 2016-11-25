@@ -30,6 +30,11 @@ namespace Controllers {
     $scope.sivuja = 1;
     $scope.kokonaismaara = 0;
     $scope.koulutusalat = koulutusalaService.haeKoulutusalat();
+    $scope.koulutusalat = _($scope.koulutusalat)
+      .sortBy(ala => {
+        return ala.nimi[Kieli.getSisaltokieli()];
+      })
+      .value();
     $scope.koulutusalatMap = {};
     $scope.opintoalatMap = {};
     _.each($scope.koulutusalat, (ala) => {
@@ -131,6 +136,11 @@ namespace Controllers {
       return Math.max($scope.sivuja, 1);
     };
 
+    $scope.switchHakua = (key) => {
+      $scope.hakuparametrit[key] = !$scope.hakuparametrit[key] || false;
+      $scope.hakuMuuttui();
+    };
+
     $scope.muutaHakua = (key, value) => {
       $scope.hakuparametrit[key] = value;
       $scope.koulutusalaMuuttui();
@@ -206,7 +216,11 @@ angular.module('app')
         sivukoko: 5,
         suoritustapa: 'ops',
         perusteTyyppi: 'normaali',
-        tila: 'valmis'
+        tila: 'valmis',
+        tuleva: true,
+        voimassaolo: true,
+        siirtyma: true,
+        poistunut: false
       },
       'root.selaus.ammatillinenaikuiskoulutus': {
         nimi: '',
@@ -218,7 +232,11 @@ angular.module('app')
         sivukoko: 5,
         suoritustapa: 'naytto',
         perusteTyyppi: 'normaali',
-        tila: 'valmis'
+        tila: 'valmis',
+        tuleva: true,
+        voimassaolo: true,
+        siirtyma: true,
+        poistunut: false
       },
       'root.selaus.valmentavakoulutus': {
         nimi: '',
@@ -230,7 +248,11 @@ angular.module('app')
         sivukoko: 20,
         suoritustapa: 'ops',
         perusteTyyppi: 'normaali',
-        tila: 'valmis'
+        tila: 'valmis',
+        tuleva: true,
+        voimassaolo: true,
+        siirtyma: true,
+        poistunut: false
       }
     };
 

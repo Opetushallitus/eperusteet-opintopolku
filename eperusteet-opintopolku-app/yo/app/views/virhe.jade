@@ -1,6 +1,9 @@
 .etusivu
   .sisalto-box
-    p(kaanna="'virhe.jotain-meni-pieleen'")
-    pre(ng-if='hasData()', ng-bind='data | json').
-      
-    a(ui-sref='root.etusivu', kaanna="'etusivulle'")
+    p(kaanna="data.viesti", ng-show="hasData && data.viesti")
+    p(kaanna="'virhe.jotain-meni-pieleen'", ng-hide="hasData && data.viesti")
+
+    a(href="", ng-click="isCollapsed = !isCollapsed", kaanna="'lisatietoa'", ng-show="hasData")
+
+    div(uib-collapse="isCollapsed", ng-if="hasData")
+      pre(ng-bind="data | json")

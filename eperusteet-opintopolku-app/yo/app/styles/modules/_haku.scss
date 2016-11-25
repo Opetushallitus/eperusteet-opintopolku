@@ -32,13 +32,16 @@
 
 }
 .haku {
-  .label-primary {
+  .label-tulevat {
+    background-color: #7be66c;
+  }
+  .label-voimassaolevat {
     background-color: #00b3ee;
   }
-  .label-success {
+  .label-siirtymassa {
     background-color: #ffc426;
   }
-  .label-warning {
+  .label-poistuneet {
     background-color: #ff7c8a;
   }
 
@@ -52,7 +55,7 @@
     border-left-color: #ff7c8a;
   }
   .tuleva {
-    border-left-color: #d3d3d3;
+    border-left-color: #7be66c;
   }
 
   .haku-box {
@@ -89,9 +92,14 @@
       border-left-style: solid;
       border-left-width: 4px;
       border-radius: 2px 0 0 2px;
+      min-height: 115px;
 
       .text-box {
-        padding: 15px 10px;
+        padding: 10px 10px 5px 10px;
+
+        p {
+          margin-bottom: 5px;
+        }
       }
 
       @media (max-width: $screen-sm-max) {
