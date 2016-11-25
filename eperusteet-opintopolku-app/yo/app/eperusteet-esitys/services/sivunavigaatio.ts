@@ -207,7 +207,7 @@ namespace Controllers {
                 $scope.refresh();
             }, true);
     };
-};
+}
 
 
 /**
@@ -220,116 +220,116 @@ namespace Controllers {
  * @param footer Sisältö lisätään menun alapuolelle
  * Valinnainen transclude sijoitetaan ensimmäiseksi otsikon alle.
  */
- angular.module('eperusteet.esitys')
-  .directive('epSivunavigaatio', function ($window, $document, $timeout, $compile) {
-    return {
-      templateUrl: 'eperusteet-esitys/directives/sivunavi.html',
-      restrict: 'AE',
-      scope: {
-        items: '=',
-        header: '=',
-        sections: '=',
-        footer: '=',
-        showOne: '=',
-        onSectionChange: '=?'
-      },
-      controller: Controllers.epSivuNaviController,
-      transclude: true,
-      link: function (scope: any, element, attrs) {
-        var transcluded = element.find('#sivunavi-tc').contents();
-        scope.hasTransclude = transcluded.length > 0;
-        scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
+angular.module('eperusteet.esitys')
+.directive('epSivunavigaatio', function ($window, $document, $timeout, $compile) {
+  return {
+    templateUrl: 'eperusteet-esitys/directives/sivunavi.html',
+    restrict: 'AE',
+    scope: {
+      items: '=',
+      header: '=',
+      sections: '=',
+      footer: '=',
+      showOne: '=',
+      onSectionChange: '=?'
+    },
+    controller: Controllers.epSivuNaviController,
+    transclude: true,
+    link: function (scope: any, element, attrs) {
+      var transcluded = element.find('#sivunavi-tc').contents();
+      scope.hasTransclude = transcluded.length > 0;
+      scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
 
-        function updateFooter() {
-          scope.footerContent = scope.footer ? $compile(scope.footer)(scope) : '';
-          var el = element.find('#sivunavi-footer-content');
-          el.empty().removeClass('has-content');
-          if (scope.footer) {
-            el.append(scope.footerContent).addClass('has-content');
-          }
-        }
-        scope.$watch('footer', updateFooter);
-      }
-    };
-  })
-
-  .service('epSivunaviUtils', function ($state, $stateParams) {
-    function getChildren(items, index) {
-      var children = [];
-      var level = items[index].depth;
-      index = index + 1;
-      var depth = level + 1;
-      for (; index < items.length && depth > level; ++index) {
-        depth = items[index].depth;
-        if (depth === level + 1) {
-          children.push(index);
+      function updateFooter() {
+        scope.footerContent = scope.footer ? $compile(scope.footer)(scope) : '';
+        var el = element.find('#sivunavi-footer-content');
+        el.empty().removeClass('has-content');
+        if (scope.footer) {
+          el.append(scope.footerContent).addClass('has-content');
         }
       }
-      return children;
+      scope.$watch('footer', updateFooter);
     }
+  };
+})
 
-    function isActive(item) {
-      if (_.has(item, '$selected')) {
-        return item.$selected;
+.service('epSivunaviUtils', function ($state, $stateParams) {
+  function getChildren(items, index) {
+    var children = [];
+    var level = items[index].depth;
+    index = index + 1;
+    var depth = level + 1;
+    for (; index < items.length && depth > level; ++index) {
+      depth = items[index].depth;
+      if (depth === level + 1) {
+        children.push(index);
       }
-      if (_.isFunction(item.isActive)) {
-        return item.isActive(item);
-      }
-      return (!_.isEmpty(item.link) && _.isArray(item.link) &&
-        $state.is(item.link[0], _.extend(_.clone($stateParams), item.link[1])));
     }
+    return children;
+  }
 
-    function traverse(items, index) {
-      if (index >= items.length) {
-        return;
-      }
-      var item = items[index];
-      var children = getChildren(items, index);
-      var hidden = [];
-      for (var i = 0; i < children.length; ++i) {
-        traverse(items, children[i]);
-        hidden.push(items[children[i]].$hidden);
-      }
-      item.$leaf = hidden.length === 0;
-      item.$collapsed = _.every(hidden);
-      item.$active = isActive(item);
-      if (item.$active) {
-        var parent = items[item.$parent];
-        while (parent) {
-          parent.$header = true;
-          parent = items[parent.$parent];
-        }
-      }
-      if (!item.$collapsed) {
-        // Reveal all children of uncollapsed node
-        for (i = 0; i < children.length; ++i) {
-          items[children[i]].$hidden = false;
-        }
-      }
-      item.$impHidden = false;
+  function isActive(item) {
+    if (_.has(item, '$selected')) {
+      return item.$selected;
     }
+    if (_.isFunction(item.isActive)) {
+      return item.isActive(item);
+    }
+    return (!_.isEmpty(item.link) && _.isArray(item.link) &&
+      $state.is(item.link[0], _.extend(_.clone($stateParams), item.link[1])));
+  }
 
-
-    function unCollapse(items, item) {
-      item.$hidden = false;
-      // Open up
+  function traverse(items, index) {
+    if (index >= items.length) {
+      return;
+    }
+    var item = items[index];
+    var children = getChildren(items, index);
+    var hidden = [];
+    for (var i = 0; i < children.length; ++i) {
+      traverse(items, children[i]);
+      hidden.push(items[children[i]].$hidden);
+    }
+    item.$leaf = hidden.length === 0;
+    item.$collapsed = _.every(hidden);
+    item.$active = isActive(item);
+    if (item.$active) {
       var parent = items[item.$parent];
       while (parent) {
-        parent.$hidden = false;
+        parent.$header = true;
         parent = items[parent.$parent];
       }
-      // Open down one level
-      var index = _.indexOf(items, item);
-      if (index > 0) {
-        var children = getChildren(items, index);
-        _.each(children, function (child) {
-          items[child].$hidden = false;
-        });
+    }
+    if (!item.$collapsed) {
+      // Reveal all children of uncollapsed node
+      for (i = 0; i < children.length; ++i) {
+        items[children[i]].$hidden = false;
       }
     }
+    item.$impHidden = false;
+  }
 
-    this.unCollapse = unCollapse;
-    this.getChildren = getChildren;
-    this.traverse = traverse;
-    this.isActive = isActive;
-  })
+
+  function unCollapse(items, item) {
+    item.$hidden = false;
+    // Open up
+    var parent = items[item.$parent];
+    while (parent) {
+      parent.$hidden = false;
+      parent = items[parent.$parent];
+    }
+    // Open down one level
+    var index = _.indexOf(items, item);
+    if (index > 0) {
+      var children = getChildren(items, index);
+      _.each(children, function (child) {
+        items[child].$hidden = false;
+      });
+    }
+  }
+
+  this.unCollapse = unCollapse;
+  this.getChildren = getChildren;
+  this.traverse = traverse;
+  this.isActive = isActive;
+});

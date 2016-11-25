@@ -25,7 +25,7 @@ div(ng-if='!missingVlk()')
                   termisto-tekstikentta(ng-if='!sisaltoalue.omaKuvaus && !sisaltoalue.sisaltoalueet.kuvaus', perusteteksti='perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus')
               div(ng-if='sisaltoalue.omaKuvaus || sisaltoalue.sisaltoalueet.kuvaus')
                 uib-accordion.peruste-box
-                  uib-accordion-group(is-open='status.avoin')
+                  .panel-default(uib-accordion-group, is-open='status.avoin')
                     uib-accordion-heading
                       div
                         i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.avoin, 'glyphicon-chevron-right': !status.avoin}")

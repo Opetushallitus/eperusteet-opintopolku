@@ -1,11 +1,11 @@
 mixin gicon(icon, text)
   span(class="glyphicon glyphicon-" + icon)
-  =" "
+  span=" "
   span(kaanna=text)
 
 mixin giconrtl(icon, text)
   span(kaanna=text)
-  =" "
+  span=" "
   span(class="glyphicon glyphicon-" + icon)
 
 mixin label(icon, text, type)
@@ -107,22 +107,22 @@ mixin haku()
 
           p.tutkintonimikkeet(ng-if="peruste.$$tutkintonimikkeet.koodisto.length > 0")
             span Tutkintonimikkeet
-            =" "
+            span=" "
             span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto | unique:'tutkintonimikeArvo'")
               span(class="label label-primary")
                 span(kaanna="nimike.$tutkintonimikeNimi")
               span {{$last ? '' : ' '}}
           p.pvm(ng-if="peruste.$$tila === 'voimassa'")
             span(kaanna="'voimaantulo-pvm'")
-            =" "
+            span=" "
             span(pvm="peruste.voimassaoloAlkaa")
           p.pvm(ng-if="peruste.$$tila === 'arkistoitu'")
             span(kaanna="'voimassaolo-paattymispvm'")
-            =" "
+            span=" "
             span(pvm="peruste.voimassaoloLoppuu")
           p.pvm(ng-if="peruste.$$tila === 'siirtyma'")
             span(kaanna="'siirtyman-paattyminen'")
-            =" "
+            span=" "
             span(pvm="peruste.siirtymaPaattyy")
 
   .text-center

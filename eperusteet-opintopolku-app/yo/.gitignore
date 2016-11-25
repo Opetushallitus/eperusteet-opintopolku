@@ -6,7 +6,6 @@ typings
 .tscache
 .sass-cache
 .netbeans.xml
-app/bower_components
 tscommand-*.tmp.txt
 app/**/*.js
 app/**/*.js.map

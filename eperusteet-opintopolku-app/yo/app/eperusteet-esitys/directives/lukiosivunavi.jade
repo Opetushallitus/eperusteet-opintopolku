@@ -13,7 +13,7 @@
           #sivunavi-tc(ng-transclude='')
       div(ng-if='sections')
         uib-accordion(close-others='showOne')
-          div(uib-accordion-group, ng-if='section.items.length > 0', ng-repeat='section in sections', is-open='section.$open')
+          .panel-default(uib-accordion-group, ng-if='section.items.length > 0', ng-repeat='section in sections', is-open='section.$open')
             uib-accordion-heading
               span(ng-click='onSectionChange(section)') {{section.title | kaanna}}
             div(ng-if='section.include', ng-include='section.include')

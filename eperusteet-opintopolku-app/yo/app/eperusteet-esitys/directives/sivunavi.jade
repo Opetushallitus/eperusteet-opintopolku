@@ -3,7 +3,6 @@
     #sivunavi-valikko-nappi.sivunavi-toggler(ng-click='toggleSideMenu()', ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'", ng-attr-title="{{menuCollapsed && ('sivunavigointi-avaa-menu' | kaanna) || ('sivunavigointi-sulje-menu' | kaanna)}}")
       .sivunavi-valinta
         span.glyphicon.glyphicon-align-justify
-  // partials/sivunavi2.html
   .sivunavi-box.sivunavi-collapsed(ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}", ng-style='{top: scrollTop}')
     .list-group(off-click='toggleSideMenu()', off-click-filter='#sivunavi-valikko-nappi', off-click-if='!menuCollapsed')
       .list-group-item.header(ng-if='header')
@@ -16,7 +15,7 @@
       // Perusopetus valikko
       div(ng-if='sections')
         uib-accordion(close-others='showOne')
-          div(uib-accordion-group, ng-repeat='section in sections', is-open='section.$open')
+          .panel-default(uib-accordion-group, ng-repeat='section in sections', is-open='section.$open')
             uib-accordion-heading
               span(ng-click='onSectionChange(section)', ng-bind='section.title | kaanna')
             div(ng-if='section.include', ng-include='section.include')

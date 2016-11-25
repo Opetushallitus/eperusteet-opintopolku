@@ -68,14 +68,6 @@ namespace Controllers {
         && currentTime < $scope.peruste.voimassaoloLoppuu);
 
         PerusteenTutkintonimikkeet.get($scope.peruste.id, $scope);
-
-        $scope.korvattavatPerusteet = {};
-        _.each($scope.peruste.korvattavatDiaarinumerot, (diaari) => {
-            $scope.korvattavatPerusteet[diaari] = { diaarinumero: diaari };
-            Perusteet.diaari({diaarinumero: diaari}, (res) => {
-                $scope.korvattavatPerusteet[diaari] = res;
-            });
-        });
     };
 
     export const epEsitysTutkinnonOsaController = ($scope, $state, $stateParams, PerusteenOsat, TutkinnonosanTiedotService, $anchorScroll, $location, Tutke2Osa, Kieli, MurupolkuData) => {

@@ -6,6 +6,7 @@
       span(ng-repeat='tyyppi in kurssiTyypit')
         span.spacer
         span.lukio-colorbox(ng-class="'{{tyyppi}}'")
+        span=" "
         span.legend-label(ng-bind='tyyppi | kaanna')
 .tab-container(ng-show="currentState() === 'kurssi'")
   ul#ep-tabs2.nav.nav-tabs
@@ -15,4 +16,5 @@
       span(ng-repeat='tyyppi in kurssiTyypit')
         span.spacer
         span.lukio-colorbox(ng-class="'{{tyyppi}}'")
+        span=" "
         span.legend-label(ng-bind='tyyppi | kaanna')
