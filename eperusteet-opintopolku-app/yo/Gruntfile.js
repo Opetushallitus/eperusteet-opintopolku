@@ -26,7 +26,7 @@ module.exports = grunt => {
       default: {
         tsconfig: true,
         options: {
-          failOnTypeErrors: false // Todo: Delete this line after all errors are fixed
+          failOnTypeErrors: false
         }
       }
     },

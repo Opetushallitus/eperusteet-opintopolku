@@ -20,10 +20,10 @@
 angular.module('app')
   .service('treeTemplate', function () {
     function generoiOtsikko() {
-      var tosa = '{{ tutkinnonOsaSolmunNimi(rakenne) | kaanna }}' +
+      const tosa = '{{ tutkinnonOsaSolmunNimi(rakenne) | kaanna }}' +
       '<span ng-if="!rakenne.erikoisuus && apumuuttujat.suoritustapa !== \'naytto\' && tutkinnonOsaViitteet[rakenne._tutkinnonOsaViite].laajuus">,' +
       ' <strong>{{ + tutkinnonOsaViitteet[rakenne._tutkinnonOsaViite].laajuus || 0 }}</strong> {{ apumuuttujat.laajuusYksikko | kaanna }}</span>';
-      var editointiIkoni =
+      const editointiIkoni =
       '<div ng-click="togglaaPakollisuus(rakenne)" class="osa-ikoni">' +
         '  <span ng-if="!rakenne.pakollinen"><img src="images/tutkinnonosa.png" alt=""></span> ' +
         '  <span ng-if="rakenne.pakollinen"><img src="images/tutkinnonosa_pakollinen.png" alt=""></span> ' +
@@ -44,24 +44,24 @@ angular.module('app')
         '</span>';
     }
 
-    var varivalinta = 'ng-class="{vieras: rakenne.rooli === \'vieras\', maarittelematon: rakenne.rooli === \'määrittelemätön\', tyhja: rakenne.osat.length === 0, ' +
+    const varivalinta = 'ng-class="{vieras: rakenne.rooli === \'vieras\', maarittelematon: rakenne.rooli === \'määrittelemätön\', tyhja: rakenne.osat.length === 0, ' +
         'suljettu: rakenne.$collapsed, osaamisala: rakenne.rooli === \'osaamisala\'}"';
 
-    var koonIlmaisu = '<span ng-if="rakenne.muodostumisSaanto.koko.minimi === rakenne.muodostumisSaanto.koko.maksimi">' +
+    const koonIlmaisu = '<span ng-if="rakenne.muodostumisSaanto.koko.minimi === rakenne.muodostumisSaanto.koko.maksimi">' +
                       '  {{ rakenne.muodostumisSaanto.koko.minimi || 0 }} {{ \'kpl\' | kaanna }}' +
                       '</span>' +
                       '<span ng-if="rakenne.muodostumisSaanto.koko.minimi !== rakenne.muodostumisSaanto.koko.maksimi">' +
                       '  {{ rakenne.muodostumisSaanto.koko.minimi || 0 }} - {{ rakenne.muodostumisSaanto.koko.maksimi || 0 }} {{ \'kpl\' | kaanna }}' +
                       '</span>';
 
-    var laajuudenIlmaisu = '<span ng-if="rakenne.muodostumisSaanto.laajuus.minimi === rakenne.muodostumisSaanto.laajuus.maksimi">' +
+    const laajuudenIlmaisu = '<span ng-if="rakenne.muodostumisSaanto.laajuus.minimi === rakenne.muodostumisSaanto.laajuus.maksimi">' +
                            '  {{ rakenne.muodostumisSaanto.laajuus.minimi || 0 }} {{ apumuuttujat.laajuusYksikko | kaanna }}' +
                            '</span>' +
                            '<span ng-if="rakenne.muodostumisSaanto.laajuus.minimi !== rakenne.muodostumisSaanto.laajuus.maksimi">' +
                            '  {{ rakenne.muodostumisSaanto.laajuus.minimi || 0 }} - {{ rakenne.muodostumisSaanto.laajuus.maksimi || 0 }} {{ apumuuttujat.laajuusYksikko | kaanna }}' +
                            '</span>';
 
-    var avaaKaikki = '' +
+    const avaaKaikki = '' +
       '<div class="pull-right">' +
       '  <a ng-click="togglaaKuvaukset()" class="group-toggler action-link" ng-show="scanKuvaukset()">' +
       '    <span icon-role="ep-part">{{kuvauksetOpen && "piilota-kuvaukset" || "nayta-kuvaukset" | kaanna }}</span>' +
@@ -105,7 +105,7 @@ angular.module('app')
         '</div>';
     };
 
-    var optiot = '' +
+    const optiot = '' +
       '<span ng-click="rakenne.$collapsed = rakenne.osat.length > 0 ? (!rakenne.$collapsed || rakenne.$searchitem) : false" ng-if="!onOsa(rakenne)" class="colorbox" ' + varivalinta + '>' +
       '  <span ng-if="rakenne.rooli !== \'määrittelemätön\'">' +
       '    <span ng-hide="rakenne.$collapsed || !rakenne.$searchitem" class="glyphicon glyphicon-chevron-down"></span>' +
@@ -126,7 +126,7 @@ angular.module('app')
       '  <span>' + generoiOtsikko() + '</span>' +
       '</div>';
 
-    var kentta =
+    const kentta =
       '<div ng-class="osaLuokat(rakenne)">' + optiot + '</div>' +
       '<div ng-if="rakenne.osaamisala || (rakenne.kuvaus && rakenne.kuvaus[lang].length > 0)" class="kuvaus">' +
       '  <div class="kuvausteksti" ng-class="{ \'text-truncated\': !rakenne.$showKuvaus }">' +
@@ -197,7 +197,7 @@ angular.module('app')
       link: function(scope: any, el) {
         $animate.enabled(false, el);
         if (!scope.vanhempi) {
-          var templateElement = angular.element(treeTemplate.root());
+          const templateElement = angular.element(treeTemplate.root());
           $compile(templateElement)(scope);
           el.replaceWith(templateElement);
         }
@@ -254,10 +254,10 @@ angular.module('app')
     };
 
     $scope.osaLuokat = function (osa) {
-      var luokat = [];
+      let luokat = [];
       if ($scope.onOsa(osa)) {
         luokat.push('bubble-osa');
-        var viite = $scope.tutkinnonOsaViitteet[osa._tutkinnonOsaViite];
+        const viite = $scope.tutkinnonOsaViitteet[osa._tutkinnonOsaViite];
         if (viite && (viite.$elevate || ($scope.apumuuttujat.haku && viite.$matched))) {
           luokat.push('huomio');
         }
@@ -268,7 +268,7 @@ angular.module('app')
     };
 
     $scope.scanKuvaukset = function () {
-      var hasKuvaukset = false;
+      let hasKuvaukset = false;
       $scope.kuvauksetOpen = false;
       Algoritmit.kaikilleLapsisolmuille($scope.rakenne, 'osat', function(osa) {
         if (!$scope.kuvauksetOpen && osa.$showKuvaus) {
@@ -289,7 +289,7 @@ angular.module('app')
     };
 
     $scope.togglaaPolut = function() {
-      var avaamattomat = _($scope.rakenne.osat)
+      const avaamattomat = _($scope.rakenne.osat)
         .reject(function(osa) {
           return osa._tutkinnonOsaViite || osa.$collapsed || osa.osat.length === 1;
         })
@@ -353,16 +353,16 @@ angular.module('app')
         PerusteenRakenne.kaikilleRakenteille($scope.rakenne.rakenne, function(item) {
           // 1. Find matches
           item.$searchitem = false;
-          var osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
+          let osa: any = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
           if (osa) {
             osa.$matched = Algoritmit.rajausVertailu(value, osa, 'nimi');
           }
         });
         PerusteenRakenne.kaikilleRakenteille($scope.rakenne.rakenne, function(item) {
           // 2. Uncollapse parents of matched
-          var osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
+          const osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
           if (osa && osa.$matched) {
-            var parent = item.$parent;
+            let parent = item.$parent;
             while (parent) {
               if (parent.$parent) {
                 parent.$searchitem = true;
@@ -382,9 +382,9 @@ angular.module('app')
     $scope.paivitaRajaus = function(input) {
       input = input === undefined ? $scope.tosarajaus : input;
       $scope.tosarajaus = input;
-      var filtered = !_.isEmpty(input);
+      const filtered = !_.isEmpty(input);
       $scope.uniikit = _.reject($scope.kaikkiUniikit, function(yksi: any) {
-        var nimi = $scope.rakenne.tutkinnonOsaViitteet[yksi._tutkinnonOsaViite] ?
+        const nimi = $scope.rakenne.tutkinnonOsaViitteet[yksi._tutkinnonOsaViite] ?
           (Kaanna.kaanna($scope.rakenne.tutkinnonOsaViitteet[yksi._tutkinnonOsaViite].nimi) || '').toLowerCase() : '';
         return !yksi.alwaysVisible && ((filtered && nimi.indexOf(input.toLowerCase()) === -1) ||
                ($scope.piilotaKaikki && $scope.kaytetytUniikit[yksi._tutkinnonOsaViite]));
@@ -396,7 +396,7 @@ angular.module('app')
         return -1;
       }
       if (item._tutkinnonOsaViite) {
-        var osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
+        const osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
         if (osa && _.isNumber(osa.jarjestys)) {
           return osa.jarjestys;
         }
@@ -406,7 +406,7 @@ angular.module('app')
 
     $scope.nimiSorter = function (item) {
       if (item._tutkinnonOsaViite) {
-        var osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
+        const osa = $scope.rakenne.tutkinnonOsaViitteet[item._tutkinnonOsaViite];
         return Kaanna.kaanna(osa.nimi).toLowerCase();
       }
     };
@@ -418,7 +418,7 @@ angular.module('app')
     };
 
     $scope.$watch('rakenne.$suoritustapa', function() {
-      var sts = null;
+      let sts = null;
       if ($scope.rakenne.$peruste) {
         sts = _($scope.rakenne.$peruste.suoritustavat).filter(function(st) { return st.laajuusYksikko; }).value();
         sts = _.zipObject(_.map(sts, 'suoritustapakoodi'), sts)[$scope.rakenne.$suoritustapa];

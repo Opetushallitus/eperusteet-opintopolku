@@ -55,11 +55,11 @@ $sivunavi-level-padding: 20px;
     }
   }
   .menu .panel-body {
-    padding: 0px;
+    padding: 0;
     margin: -1px;
   }
   .panel-group {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
   .panel {
     box-shadow: none;
@@ -176,18 +176,6 @@ $sivunavi-level-padding: 20px;
     &:active, &:focus {
       outline: 0;
     }
-    // TODO animation problem when using search term
-    /*&.ng-hide-add, &.ng-hide-remove {
-      transition: max-height 0.2s ease;
-    }
-    &.ng-hide-add.ng-hide-add-active, &.ng-hide-remove {
-      overflow: hidden;
-      max-height: 0px;
-    }
-    &.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
-      overflow: hidden;
-      max-height: 80px;
-    }*/
   }
 }
 
@@ -323,7 +311,7 @@ $sivunavi-level-padding: 20px;
   background-color: white;
   border-right: 1px solid #ddd;
   button {
-    margin: 10px 0px;
+    margin: 10px 0;
   }
 }
 
