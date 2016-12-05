@@ -201,23 +201,30 @@ angular.module('app')
       YleinenData.koulutustyyppiInfo[peruste] && YleinenData.koulutustyyppiInfo[peruste].hasTutkintonimikkeet;
   };
 
+  const parse = function (res, object) {
+    object.koodisto = _.map(res, function(osa: any) {
+      function parsiNimi(kentta) {
+        if (osa[kentta + 'Arvo']) {
+          let nimi = osa.b[osa[kentta + 'Arvo']].metadata;
+          osa['$' + kentta + 'Nimi'] = _.zipObject(_.map(nimi, 'kieli'), _.map(nimi, 'nimi'));
+        }
+      }
+
+      parsiNimi('osaamisala');
+      parsiNimi('tutkintonimike');
+      parsiNimi('tutkinnonOsa');
+      delete osa.b;
+      return osa;
+    });
+    object.koodisto.$resolved = true;
+    return object;
+  };
+
   this.get = function (perusteId, object) {
     PerusteTutkintonimikekoodit.get({ perusteId: perusteId }, function(res) {
-      object.koodisto = _.map(res, function(osa: any) {
-        function parsiNimi(kentta) {
-          if (osa[kentta + 'Arvo']) {
-            var nimi = osa.b[osa[kentta + 'Arvo']].metadata;
-            osa['$' + kentta + 'Nimi'] = _.zipObject(_.map(nimi, 'kieli'), _.map(nimi, 'nimi'));
-          }
-        }
-
-        parsiNimi('osaamisala');
-        parsiNimi('tutkintonimike');
-        parsiNimi('tutkinnonOsa');
-        delete osa.b;
-        return osa;
-      });
-      object.koodisto.$resolved = true;
+      parse(res, object);
     });
   };
+
+  this.parse = parse;
 });

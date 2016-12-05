@@ -33,29 +33,43 @@
 }
 .haku {
   .label-tulevat {
-    background-color: #7be66c;
+    background-color: #99D840;
   }
   .label-voimassaolevat {
-    background-color: #00b3ee;
+    background-color: #149FCB;
   }
   .label-siirtymassa {
-    background-color: #ffc426;
+    background-color: #ffba00;
   }
   .label-poistuneet {
     background-color: #ff7c8a;
   }
 
   .voimassa {
-    border-left-color: #00b3ee;
+    border-left-color: #149FCB;
+    @media (max-width: $screen-sm-max) {
+      border-top: #149FCB;
+    }
   }
   .siirtyma {
-    border-left-color: #ffc426;
+    border-left-color: #ffba00;
+
   }
   .arkistoitu {
     border-left-color: #ff7c8a;
   }
   .tuleva {
-    border-left-color: #7be66c;
+    border-left-color: #99D840;
+  }
+
+  .kokonaismaara {
+    color: #636363;
+    font-size: 12px;
+
+    @media (max-width: $screen-sm-max) {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
   }
 
   .haku-box {
@@ -70,7 +84,6 @@
       border-right: none;
       border-right: none;
       border-radius: 0;
-      margin-top: 10px;
     }
 
     input[type="text"] {
@@ -104,8 +117,6 @@
 
       @media (max-width: $screen-sm-max) {
         border-radius: 0;
-        border-left: 0;
-        border-right: 0;
       }
 
       & > p {
@@ -117,6 +128,9 @@
         font-size: 16px;
       }
       .tutkintonimikkeet {
+        color: darkgray;
+      }
+      .osaamisalat {
         color: darkgray;
       }
 

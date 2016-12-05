@@ -92,6 +92,11 @@ mixin haku()
         +haku
       .clearfix
 
+  p.kokonaismaara
+    span(kaanna="'loydettyjen-opsien-maara'")
+    span=" "
+    span(ng-bind="kokonaismaara")
+
   div(ng-repeat="peruste in perusteet.data")
     .haku-box
       .color-box(ng-class="peruste.$$tila")
@@ -106,11 +111,22 @@ mixin haku()
               span {{$last ? '' : ', '}}
 
           p.tutkintonimikkeet(ng-if="peruste.$$tutkintonimikkeet.koodisto.length > 0")
-            span Tutkintonimikkeet
+            span(kaanna="'tutkintonimikkeet'")
             =" "
             span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto | unique:'tutkintonimikeArvo'")
               span(class="label label-primary")
                 span(kaanna="nimike.$tutkintonimikeNimi")
+              span {{$last ? '' : ' '}}
+          p.osaamisalat(ng-if="peruste.osaamisalat.length > 0")
+            span(kaanna="'osaamisalat'")
+            =" "
+            span(ng-repeat="osaamisala in peruste.osaamisalat")
+              span(class="label label-primary")
+                span(kaanna="osaamisala.nimi")
+                span(ng-show="osaamisala.arvo")
+                  span=" ("
+                  span(ng-bind="osaamisala.arvo")
+                  span=")"
               span {{$last ? '' : ' '}}
           p.pvm(ng-if="peruste.$$tila === 'voimassa'")
             span(kaanna="'voimaantulo-pvm'")
@@ -125,5 +141,5 @@ mixin haku()
             =" "
             span(pvm="peruste.siirtymaPaattyy")
 
-  .text-center
+  .text-center(ng-show="kokonaismaara > hakuparametrit.sivukoko")
     uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')

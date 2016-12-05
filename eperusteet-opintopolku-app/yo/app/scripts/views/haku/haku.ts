@@ -99,12 +99,12 @@ namespace Controllers {
       $scope.haePerusteet($scope.nykyinenSivu);
     };
 
-    var hakuVastaus = function (vastaus) {
+    let hakuVastaus = function (vastaus) {
       $scope.perusteet = vastaus;
       _.each(vastaus.data, peruste => {
         $scope.selvitaTila(peruste);
         peruste.$$tutkintonimikkeet = {};
-        PerusteenTutkintonimikkeet.get(peruste.id, peruste.$$tutkintonimikkeet);
+        PerusteenTutkintonimikkeet.parse(peruste.tutkintonimikkeetKoodisto, peruste.$$tutkintonimikkeet);
       });
       $scope.nykyinenSivu = vastaus.sivu + 1;
       $scope.hakuparametrit.sivukoko = vastaus.sivukoko;
@@ -220,7 +220,8 @@ angular.module('app')
         tuleva: true,
         voimassaolo: true,
         siirtyma: true,
-        poistunut: false
+        poistunut: false,
+        tutkintonimikkeet: true
       },
       'root.selaus.ammatillinenaikuiskoulutus': {
         nimi: '',
@@ -236,7 +237,8 @@ angular.module('app')
         tuleva: true,
         voimassaolo: true,
         siirtyma: true,
-        poistunut: false
+        poistunut: false,
+        tutkintonimikkeet: true
       },
       'root.selaus.valmentavakoulutus': {
         nimi: '',
@@ -252,7 +254,8 @@ angular.module('app')
         tuleva: true,
         voimassaolo: true,
         siirtyma: true,
-        poistunut: false
+        poistunut: false,
+        tutkintonimikkeet: true
       }
     };
 
