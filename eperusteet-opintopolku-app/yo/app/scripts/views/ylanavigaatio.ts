@@ -21,6 +21,11 @@ angular.module('app')
     }
   };
 
+  let amOsio;
+  $scope.$on('loaded:peruste', (event, peruste) => {
+    amOsio = peruste.koulutustyyppi;
+  });
+
   $scope.isPerusopetus = () => {
     if (($state.includes('**.perusopetus.**')
         || $state.includes('**.perusvalmistava.**')
@@ -35,15 +40,16 @@ angular.module('app')
     }
   };
 
+
   $scope.isAmPerus = function () {
-    if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenperuskoulutus' ||
+    if ($state.includes('**.esitys.**') && amOsio === 'koulutustyyppi_1' ||
       $state.includes('root.selaus.ammatillinenperuskoulutus')) {
       return true;
     }
   };
 
   $scope.isAmAikuis = function () {
-    if ($state.includes('**.esitys.**') && amOsio === 'ammatillinenaikuiskoulutus' ||
+    if ($state.includes('**.esitys.**') && amOsio === 'koulutustyyppi_11' ||
       $state.includes('root.selaus.ammatillinenaikuiskoulutus')) {
       return true;
     }
@@ -93,20 +99,13 @@ angular.module('app')
     $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
   });
 
-  var amOsio = null;
-  $scope.$watch(function () {
-    return Haku.osio;
-  }, function (value) {
-    amOsio = value;
-  });
-
-  $scope.vaihdaKieli = function (uusiKieli) {
+  $scope.vaihdaKieli = uusiKieli => {
     if (uusiKieli !== Kieli.getUiKieli()) {
       Kieli.setUiKieli(uusiKieli);
       Kieli.setSisaltokieli(uusiKieli);
       $scope.kieli = uusiKieli;
 
-      $state.go($state.current.name, _.merge($stateParams, {lang: uusiKieli}), {});
+      $state.go($state.current.name, _.merge($stateParams, { lang: uusiKieli }), {});
     }
   };
 

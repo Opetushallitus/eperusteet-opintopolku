@@ -19,6 +19,7 @@ div(ng-repeat='lapsi in lapset', id='{{lapsi.$osa.id}}')
         span.teksti-linkki(id='{{lapsi.$osa.id}}')
           a(href='#', ng-click='scrollToHash(alialilapsi.$osa.id)', icon-role='new-window')
       termisto-tekstikentta(tekstikentta='alialilapsi.$osa.teksti')
+
 .prevnext-wrapper(ng-if='links.prev || links.next')
   .prevnext
     a.prev.chevron(ng-if='links.prev', ui-sref='^.tekstikappale({tekstikappaleId: links.prev.$osa.id})')

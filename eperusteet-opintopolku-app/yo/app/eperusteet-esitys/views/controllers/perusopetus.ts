@@ -92,13 +92,13 @@ namespace Controllers {
 
         function paivitaTavoitteet(inSisallot = false) {
             if ($scope.valittuOppiaine.vlks) {
-                var filteritTyhjat = !inSisallot || _.all($scope.filterOsaamiset, function(v) { return v; });
+                var filteritTyhjat = !inSisallot || _.every($scope.filterOsaamiset, function(v) { return v; });
                 _.each($scope.valittuOppiaine.vlks.tavoitteet, function(tavoite) {
                     if (filteritTyhjat || _.isEmpty(tavoite.laajattavoitteet)) {
                         tavoite.$rejected = false;
                     }
                     else if (inSisallot) {
-                        tavoite.$rejected = _.all(tavoite.laajattavoitteet, function(lt: string) {
+                        tavoite.$rejected = _.every(tavoite.laajattavoitteet, function(lt: string) {
                             return $scope.filterOsaamiset[lt];
                         });
                     }

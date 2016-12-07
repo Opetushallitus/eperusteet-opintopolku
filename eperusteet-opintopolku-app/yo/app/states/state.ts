@@ -36,7 +36,7 @@ angular.module('app')
     }
   },
   onEnter: (Kieli, $state, $stateParams) => {
-    var kielikoodi = $stateParams.lang;
+    const kielikoodi = $stateParams.lang;
     if (!(kielikoodi == 'fi' || kielikoodi == 'sv')) {
       $stateParams.lang = 'fi';
       $state.reload();

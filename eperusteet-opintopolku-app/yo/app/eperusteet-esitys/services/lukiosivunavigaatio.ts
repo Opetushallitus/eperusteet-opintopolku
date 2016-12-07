@@ -29,10 +29,10 @@ namespace Controllers {
         };
 
         $scope.addIconClass = function(item){
-            var convertToClassName = function(item){
+            const convertToClassName = function(item){
                 return ['kurssi-' + item.toLowerCase().replace('_', '-')];
             };
-            var kurssiWithTyyppi = !!item.$kurssi && !!item.$kurssi.tyyppi;
+            const kurssiWithTyyppi = !!item.$kurssi && !!item.$kurssi.tyyppi;
             return kurssiWithTyyppi ? convertToClassName(item.$kurssi.tyyppi) : null;
         };
 

@@ -20,8 +20,6 @@ angular.module('app')
                     : {}
             ]);
         },
-
-        // FIXME: ?
         koulutusalaService: (serviceConfig, Koulutusalat) => Koulutusalat,
         opintoalaService: (serviceConfig, Opintoalat) => Opintoalat
     }

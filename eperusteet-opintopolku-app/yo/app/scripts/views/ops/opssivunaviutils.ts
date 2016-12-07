@@ -251,7 +251,6 @@ angular.module('app')
 
       var parentVlkId = null;
       _.each(states, function (value: any, key) {
-        //if ($state.is("**." + key)) { // EP-903
         if (_.last($state.current.name.split(".")) == key) {
           processSection(navi, value.index, value.callback || angular.noop);
           (value.actions || angular.noop)();

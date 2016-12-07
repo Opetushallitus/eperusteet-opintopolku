@@ -46,9 +46,9 @@ angular.module('app')
   }, {
     get: epResource.CACHEDGET,
     uusimmat: { method: 'GET', url: epResource.PERUSTEET_ROOT + '/uusimmat', isArray: true },
-    info: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/info'},
-    valittavatKielet: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/valittavatkielet', isArray: true},
-    diaari: {method: 'GET', url: epResource.PERUSTEET_ROOT + '/diaari', cache: true}
+    info: { method: 'GET', url: epResource.PERUSTEET_ROOT + '/info' },
+    valittavatKielet: { method: 'GET', url: epResource.PERUSTEET_ROOT + '/valittavatkielet', isArray: true },
+    diaari: { method: 'GET', url: epResource.PERUSTEET_ROOT + '/diaari', cache: true }
   });
 })
 

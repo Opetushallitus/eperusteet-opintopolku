@@ -2,7 +2,7 @@
   h1(esitys-sivu-otsikko='tavoitteet.paikallinen.otsikko')
     span(ng-bind-html='tavoitteet.perusteen.otsikko | kaanna | unsafe')
   uib-accordion.peruste-box(ng-show='hasContent(tavoitteet.paikallinen.kuvaus)')
-    uib-accordion-group(is-open='status.open')
+    .panel-default(uib-accordion-group, is-open='status.open')
       uib-accordion-heading
         div
           i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
@@ -18,7 +18,7 @@
       span(ng-bind-html='aihe.otsikko | kaanna | unsafe')
     div(ng-show='aihe.perusteen && hasContent(aihe.yleiskuvaus)')
       uib-accordion.peruste-box
-        uib-accordion-group(is-open='status.open')
+        .panel-default(uib-accordion-group, is-open='status.open')
           uib-accordion-heading
             div
               i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")

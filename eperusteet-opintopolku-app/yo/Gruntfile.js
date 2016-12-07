@@ -26,7 +26,7 @@ module.exports = grunt => {
       default: {
         tsconfig: true,
         options: {
-          failOnTypeErrors: false // Todo: Delete this line after all errors are fixed
+          failOnTypeErrors: false
         }
       }
     },
@@ -36,11 +36,11 @@ module.exports = grunt => {
         tasks: ['sass', 'copy:fonts', 'postcss']
       },
       ts: {
-        files: ['<%= config.app %>/**/*.ts', '!<%= config.app %>/bower_components/**'],
+        files: ['<%= config.app %>/**/*.ts'],
         tasks: ['ts']
       },
       pug: {
-        files: ['<%= config.app %>/**/*.{jade, pug}','!<%= config.app %>/bower_components/**'],
+        files: ['<%= config.app %>/**/*.{jade, pug}'],
         tasks: ['pug', 'regex-check']
       },
       livereload: {
@@ -60,7 +60,6 @@ module.exports = grunt => {
         ],
         files: [
           '<%= config.app %>/**/*.{jade,ts}',
-          '!<%= config.app %>/bower_components/**',
           '<%= config.app %>/localisation/*.json',
           '.tmp/styles/**/*.css',
           '<%= config.app %>/eperusteet-esitys/**/*.js',
@@ -229,7 +228,7 @@ module.exports = grunt => {
       imgutils: {
         files: [{
           expand: true,
-          cwd: '<%= config.app %>/bower_components/eperusteet-frontend-utils/png',
+          cwd: '<%= config.app %>/../node_modules/eperusteet-frontend-utils/png',
           dest: '<%= config.app %>/images',
           src: '**'
         }]
@@ -262,14 +261,14 @@ module.exports = grunt => {
           ]
         }, {
           expand: true,
-          cwd: '<%= config.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
+          cwd: '<%= config.app %>/../node_modules/bootstrap-sass/assets/fonts/bootstrap',
           dest: '<%= config.dist %>/styles/fonts',
           src: '*.{eot,svg,ttf,woff,woff2}'
         }]
       },
       fonts: {
         expand: true,
-        cwd: '<%= config.app %>/bower_components/bootstrap-sass-official/assets/fonts/bootstrap',
+        cwd: '<%= config.app %>/../node_modules/bootstrap-sass/assets/fonts/bootstrap',
         dest: '.tmp/styles/fonts/',
         src: '*.{eot,svg,ttf,woff,woff2}'
       }

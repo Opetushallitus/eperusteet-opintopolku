@@ -19,7 +19,7 @@ div(ng-repeat="vuosiluokka in vuosiluokat | orderBy:'vuosiluokka'")
     h2.vuosiluokka-otsikko(ng-bind='vuosiluokka.vuosiluokka | kaanna')
     h3(kaanna="'tavoitteet'")
     uib-accordion(ng-repeat='tavoite in vuosiluokka.tavoitteet')
-      uib-accordion-group(is-open='status.open')
+      .panel-default(uib-accordion-group, is-open='status.open')
         uib-accordion-heading
           div(ng-class="{'opened-oppiaine': status.open}")
             i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
