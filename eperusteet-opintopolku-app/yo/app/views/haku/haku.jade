@@ -61,7 +61,7 @@ mixin haku()
   h1.hidden-xs(kaanna='sivu.otsikko')
 
   .haku-box
-    input.form-control(type="text" placeholder="{{'hakusana' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
+    input.form-control(type="text" placeholder="{{'hae-nimella' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
 
     .haku-filtered
       a(href="" ng-click="switchHakua('tuleva')")
@@ -111,23 +111,17 @@ mixin haku()
               span {{$last ? '' : ', '}}
 
           p.tutkintonimikkeet(ng-if="peruste.$$tutkintonimikkeet.koodisto.length > 0")
-            span(kaanna="'tutkintonimikkeet'")
-            =" "
+            span(kaanna="'tutkintonimikkeet'" style="font-weight: bold;")
+            =": "
             span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto | unique:'tutkintonimikeArvo'")
-              span(class="label label-primary")
-                span(kaanna="nimike.$tutkintonimikeNimi")
-              span {{$last ? '' : ' '}}
+              span(kaanna="nimike.$tutkintonimikeNimi")
+              span {{$last ? '' : ', '}}
           p.osaamisalat(ng-if="peruste.osaamisalat.length > 0")
-            span(kaanna="'osaamisalat'")
-            =" "
+            span(kaanna="'osaamisalat'" style="font-weight: bold;")
+            =": "
             span(ng-repeat="osaamisala in peruste.osaamisalat")
-              span(class="label label-primary")
-                span(kaanna="osaamisala.nimi")
-                span(ng-show="osaamisala.arvo")
-                  span=" ("
-                  span(ng-bind="osaamisala.arvo")
-                  span=")"
-              span {{$last ? '' : ' '}}
+              span(kaanna="osaamisala.nimi")
+              span {{$last ? '' : ', '}}
           p.pvm(ng-if="peruste.$$tila === 'voimassa'")
             span(kaanna="'voimaantulo-pvm'")
             =" "
