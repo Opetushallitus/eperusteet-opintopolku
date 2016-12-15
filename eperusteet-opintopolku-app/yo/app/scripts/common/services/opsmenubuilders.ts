@@ -134,7 +134,7 @@ angular.module('app')
       _.each(oppiaineSort(filteredAineet, vlk), function (oa) {
         buildOppiaineItem(arr, oa, vlk, depth, isSisalto, currentVuosi, {'menuType': 'vuosiluokittain'});
         if(oa.koosteinen && oa.oppimaarat.length > 0) {
-          traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears)
+          traverseOppiaineet(oa.oppimaarat, arr, vlk, 3, currentVuosi, currentYears);
         }
       });
     }
@@ -143,6 +143,13 @@ angular.module('app')
       if (!oppiaine.nimi[Kieli.getSisaltokieli()]) {
         return;
       }
+
+      let piilotettu = false;
+      const oaVlk: any = _.find(oppiaine.vuosiluokkakokonaisuudet, { _vuosiluokkakokonaisuus: vlk });
+      if (oaVlk && oaVlk.piilotettu) {
+        piilotettu = true;
+      }
+
       let vlkId = vlk ? vlkMap[vlk]['id'] : null;
       let currentYear = currentVuosi ? currentVuosi[currentVuosi.length-1] : null;
       let type = oppiaine.tyyppi === 'yhteinen';
@@ -172,6 +179,7 @@ angular.module('app')
         depth: depth,
         $hidden: depth > 0,
         $oppiaine: oppiaine,
+        $piilotettu: piilotettu,
         label: oppiaine.nimi,
         $parent_vuosi: currentVuosi,
         $tyyppi: oppiaine.tyyppi,

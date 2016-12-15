@@ -96,9 +96,9 @@ module.exports = grunt => {
         changeOrigin: true
       }, {
         context: '/eperusteet-ylops-service',
-        host: 'virkailija.opintopolku.fi',
-        port: 443,
-        https: true,
+        host: 'localhost',
+        port: 8080,
+        https: false,
         changeOrigin: true
       }, {
         context: '/eperusteet-amosaa-service',

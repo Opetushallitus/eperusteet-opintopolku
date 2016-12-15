@@ -1,5 +1,5 @@
 .perusopetus
-  .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))')
+  .tekstisisalto(ng-repeat='item in section.items', ng-class='section.naviClasses(item)', ng-hide='!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden)) || item.$piilotettu')
     a(ng-if='item.$vlk', ng-click='getVlk(item.$vlk)', ng-href='{{item.url}}')
       span {{ item.label | kaanna }}
     a(ng-if='!item.$vlk', ng-href='{{item.url}}')
