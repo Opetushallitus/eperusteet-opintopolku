@@ -225,8 +225,9 @@ $paaotsikko-logo-size: 96px;
     float: right;
     background-image: url("../images/oph_logo_vaaka.svg");
     width: 200px;
-    height: 50px;
+    height: 56px;
     margin-right: 60px;
+    background-size: cover;
     @include vertical-align();
   }
 }
