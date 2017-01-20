@@ -46,9 +46,10 @@ angular.module("app")
   views: {
     "": {
       templateUrl: 'views/amops/view.html',
-      controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location) => {
+      controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location, ktId) => {
         $scope.ops = ops;
         $scope.otsikot = otsikot;
+        $scope.ktId = ktId;
 
         $scope.sivunavi = Tekstikappaleet.teeRakenne(Tekstikappaleet.uniikit(otsikot), sisaltoRoot.id);
 
@@ -99,12 +100,24 @@ angular.module("app")
         };
 
         $scope.returnToAmosaa = () => {
-          const isTestEnvironment = _.includes(_.words($location.absUrl()), 'testi');
-          $window.location.href = isTestEnvironment ?
-          'https://testi.virkailija.opintopolku.fi/eperusteet-amosaa-app/#/fi/ops/'
-          + $scope.ops.id + '/tiedot' :
-          'https://virkailija.opintopolku.fi/eperusteet-amosaa-app/#/fi/ops/'
-          + $scope.ops.id + '/tiedot';
+          let protocol = 'https';
+          let domain = 'virkailija.opintopolku.fi';
+          let context = 'eperusteet-amosaa-app/';
+          if (_.includes(_.words($location.absUrl()), 'testi')) {
+            domain = 'testi.virkailija.opintopolku.fi';
+          } else if (_.includes(_.words($location.absUrl()), 'localhost')) {
+            protocol = 'http';
+            domain = 'localhost:9030';
+            context = '';
+          }
+
+          $window.location.href
+            = protocol + '://'
+            + domain + '/'
+            + context + '#/'
+            + KieliService.getSisaltokieli() +'/koulutustoimija/'
+            + $scope.ktId + '/ops/'
+            + $scope.ops.id + '/sisalto/tiedot';
         };
       }
     }
