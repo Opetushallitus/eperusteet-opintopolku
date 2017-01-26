@@ -64,29 +64,19 @@ mixin haku()
     input.form-control(type="text" placeholder="{{'hae-nimella' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
 
     .haku-filtered
-      a(href="" ng-click="switchHakua('tuleva')")
-        span(class="label label-tulevat")
-          span(ng-if="hakuparametrit.tuleva")
-            +gicon("ok", "'tulevat'")
-          span(kaanna="'tulevat'" ng-if="!hakuparametrit.tuleva")
-      =" "
-      a(href="" ng-click="switchHakua('voimassaolo')")
-        span(class="label label-voimassaolevat")
-          span(ng-if="hakuparametrit.voimassaolo")
-            +gicon("ok", "'voimassaolevat'")
-          span(kaanna="'voimassaolevat'" ng-if="!hakuparametrit.voimassaolo")
-      =" "
-      a(href="" ng-click="switchHakua('siirtyma')")
-        span(class="label label-siirtymassa")
-          span(ng-if="hakuparametrit.siirtyma")
-            +gicon("ok", "'siirtymassa'")
-          span(kaanna="'siirtymassa'" ng-if="!hakuparametrit.siirtyma")
-      =" "
-      a(href="" ng-click="switchHakua('poistunut')")
-        span(class="label label-poistuneet")
-          span(ng-if="hakuparametrit.poistunut")
-            +gicon("ok", "'poistuneet'")
-          span(kaanna="'poistuneet'" ng-if="!hakuparametrit.poistunut")
+      mixin switchField(field, locale)
+        a(href="" ng-click="switchHakua('" + field + "')")
+          span(class="label label-" + locale)
+            span(ng-if="hakuparametrit." + field)
+              +gicon("ok", "'" + locale + "'")
+            span(kaanna="'" + locale + "'" ng-if="!hakuparametrit." + field)
+
+      +switchField('tuleva', 'tulevat')
+      +switchField('voimassaolo', 'voimassaolevat')
+      +switchField('siirtyma', 'siirtymassa')
+      +switchField('poistunut', 'poistuneet')
+      +switchField('tutkintonimikkeet', 'tutkintonimikkeet')
+      +switchField('osaamisalat', 'osaamisalat')
 
       .haku-filters
         +haku

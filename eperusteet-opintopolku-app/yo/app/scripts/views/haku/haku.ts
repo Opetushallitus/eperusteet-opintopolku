@@ -122,7 +122,7 @@ namespace Controllers {
      * Hakee sivun serveriltä.
      * @param {number} sivu UI:n sivunumero, alkaa ykkösestä.
      */
-    $scope.haePerusteet = function (sivu) {
+    $scope.haePerusteet = (sivu) => {
       $scope.hakuparametrit.sivu = sivu - 1;
       Haku.setHakuparametrit($state.current.name, $scope.hakuparametrit);
       Perusteet.get($scope.hakuparametrit, hakuVastaus, function (virhe) {
@@ -132,12 +132,10 @@ namespace Controllers {
       });
     };
 
-    $scope.sivujaYhteensa = function () {
-      return Math.max($scope.sivuja, 1);
-    };
+    $scope.sivujaYhteensa = () => Math.max($scope.sivuja, 1);
 
     $scope.switchHakua = (key) => {
-      $scope.hakuparametrit[key] = !$scope.hakuparametrit[key] || false;
+      $scope.hakuparametrit[key] = !$scope.hakuparametrit[key];
       $scope.hakuMuuttui();
     };
 
