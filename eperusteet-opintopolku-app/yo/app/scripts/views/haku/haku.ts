@@ -203,75 +203,59 @@ namespace Controllers {
 
 // TODO: Refactor
 angular.module('app')
-  .service('Haku', function Haku(Kieli) {
-    var uikieli = Kieli.getUiKieli();
-    var DEFAULTS = {
-      'root.selaus.ammatillinenperuskoulutus': {
-        nimi: '',
-        koulutusala: '',
-        tyyppi: 'koulutustyyppi_1',
+.service('Haku', function Haku(Kieli) {
+    const uikieli = Kieli.getUiKieli();
+
+    const COMMON = {
         kieli: uikieli,
+        koulutusala: '',
+        nimi: '',
         opintoala: '',
+        osaamisalat: true,
+        perusteTyyppi: 'normaali',
+        poistunut: false,
+        siirtyma: true,
         sivu: 0,
         sivukoko: 5,
-        suoritustapa: 'ops',
-        perusteTyyppi: 'normaali',
         tila: 'valmis',
         tuleva: true,
+        tutkintonimikkeet: true,
         voimassaolo: true,
-        siirtyma: true,
-        poistunut: false,
-        tutkintonimikkeet: true
-      },
-      'root.selaus.ammatillinenaikuiskoulutus': {
-        nimi: '',
-        koulutusala: '',
-        tyyppi: '',
-        kieli: uikieli,
-        opintoala: '',
-        sivu: 0,
-        sivukoko: 5,
-        suoritustapa: 'naytto',
-        perusteTyyppi: 'normaali',
-        tila: 'valmis',
-        tuleva: true,
-        voimassaolo: true,
-        siirtyma: true,
-        poistunut: false,
-        tutkintonimikkeet: true
-      },
-      'root.selaus.valmentavakoulutus': {
-        nimi: '',
-        koulutusala: '',
-        tyyppi: 'koulutustyyppi_18',
-        kieli: uikieli,
-        opintoala: '',
-        sivu: 0,
-        sivukoko: 20,
-        suoritustapa: 'ops',
-        perusteTyyppi: 'normaali',
-        tila: 'valmis',
-        tuleva: true,
-        voimassaolo: true,
-        siirtyma: true,
-        poistunut: false,
-        tutkintonimikkeet: true
-      }
+    };
+
+    const DEFAULTS = {
+        'root.selaus.ammatillinenperuskoulutus': {
+            ...COMMON,
+            tyyppi: 'koulutustyyppi_1',
+            suoritustapa: 'ops',
+        },
+        'root.selaus.ammatillinenaikuiskoulutus': {
+            ...COMMON,
+            tyyppi: '',
+            suoritustapa: 'naytto',
+        },
+        'root.selaus.valmentavakoulutus': {
+            ...COMMON,
+            tyyppi: 'koulutustyyppi_18',
+            sivu: 0,
+            sivukoko: 20,
+            suoritustapa: 'ops',
+        }
     };
 
     this.osio = null;
     this.hakuparametrit = _.clone(DEFAULTS);
 
     this.getHakuparametrit = function (stateName) {
-      return _.clone(this.hakuparametrit[stateName]);
+        return _.clone(this.hakuparametrit[stateName]);
     };
 
     this.setHakuparametrit = function (stateName, hakuparametrit) {
-      this.hakuparametrit[stateName] = _.merge(hakuparametrit);
+        this.hakuparametrit[stateName] = _.merge(hakuparametrit);
     };
 
     this.resetHakuparametrit = function (stateName) {
-      this.hakuparametrit[stateName] = _.clone(DEFAULTS[stateName]);
-      return this.hakuparametrit[stateName];
+        this.hakuparametrit[stateName] = _.clone(DEFAULTS[stateName]);
+        return this.hakuparametrit[stateName];
     };
-  });
+});
