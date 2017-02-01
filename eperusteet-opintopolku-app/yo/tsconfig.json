@@ -134,6 +134,7 @@
     "app/states/perusopetus/tekstikappale/state.ts",
     "app/states/perusopetus/sisallot/state.ts",
     "app/states/perusopetus/vlkoppiaine/state.ts",
+    "app/states/aipe/state.ts",
     "app/states/tiedote/state.ts",
     "app/states/ops/state.ts",
     "app/states/selaus/state.ts",

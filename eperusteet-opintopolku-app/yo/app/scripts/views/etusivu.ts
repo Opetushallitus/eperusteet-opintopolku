@@ -107,6 +107,7 @@ angular.module('app')
   };
 
   const getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
+  const getAipe = _.partial(getGeneric, 'koulutustyyppi_17');
   const getValmistavaPerusopetus = _.partial(getGeneric, 'koulutustyyppi_22');
   const getLukioopetus = _.partial(getGeneric, 'koulutustyyppi_2');
   const getValmistavaLukioopetus = _.partial(getGeneric, 'koulutustyyppi_23');

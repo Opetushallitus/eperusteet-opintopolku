@@ -23,7 +23,8 @@ angular.module('app')
           'koulutustyyppi_16',
           'koulutustyyppi_22',
           'koulutustyyppi_6',
-          'koulutustyyppi_2'
+          'koulutustyyppi_2',
+          'koulutustyyppi_17'
         ]
       }, res => {
         const groupByTyyppi = _.groupBy(res.data, 'koulutustyyppi');

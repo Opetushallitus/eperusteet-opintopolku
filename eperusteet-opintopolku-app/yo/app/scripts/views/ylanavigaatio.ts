@@ -29,6 +29,7 @@ angular.module('app')
   $scope.isPerusopetus = () => {
     if (($state.includes('**.perusopetus.**')
         || $state.includes('**.perusvalmistava.**')
+        || $state.includes('**.aipe.**')
         || $state.includes('**.lisaopetus.**')) && !$state.includes('**.ops.**')) {
       return true;
     }
