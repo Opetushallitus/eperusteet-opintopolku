@@ -120,6 +120,14 @@ angular.module('app')
         useId: 'oppiaineId',
         customParents: true
       },
+      'root.aipe': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.aipe.tiedot': {
+        parent: 'root.aipe',
+        label: 'perusteen-tiedot'
+        },
       'root.lukio':{
         useData: 'perusteNimi',
         useId: 'perusteId'

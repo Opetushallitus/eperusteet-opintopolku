@@ -3,24 +3,25 @@ angular.module('app')
 .state('root.aipe', {
     url: '/aipe/:perusteId',
     templateUrl: 'eperusteet-esitys/views/aipe.html',
-    controller: Controllers.epPerusopetusController,
+    controller: Controllers.epAipeController,
     resolve: {
         perusteId: (serviceConfig, $stateParams) => $stateParams.perusteId,
 
-        peruste: (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) =>
-            !perusteId ? UusimmatPerusteetService.getAipe() : Perusteet.get({perusteId: perusteId}).$promise,
+        perusteList: (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) =>
+            !perusteId ? UusimmatPerusteetService.getAipe() : Perusteet.get({ perusteId: perusteId }).$promise,
 
-        /*sisalto: (serviceConfig, peruste, $q, LaajaalaisetOsaamiset, Oppiaineet, Vuosiluokkakokonaisuudet, SuoritustapaSisalto) => {
-            if (_.isArray(peruste.data)) {
-                peruste = peruste.data[0];
+        peruste: (perusteList) => {
+            if (_.isArray(perusteList.data)) {
+                return perusteList.data[0];
             }
-            const perusteId = peruste.id;
+        },
+
+        /*sisalto: (serviceConfig, $q, LaajaalaisetOsaamiset, Oppiaineet, Vuosiluokkakokonaisuudet, SuoritustapaSisalto) => {
+
             return $q.all([
-                peruste,
-                LaajaalaisetOsaamiset.query({perusteId: perusteId}).$promise,
-                Oppiaineet.query({perusteId: perusteId}).$promise,
-                Vuosiluokkakokonaisuudet.query({perusteId: perusteId}).$promise,
-                SuoritustapaSisalto.get({perusteId: perusteId, suoritustapa: 'perusopetus'}).$promise
+                //LaajaalaisetOsaamiset.query({ perusteId: peruste.id }).$promise,
+                //Oppiaineet.query({ perusteId: peruste.id }).$promise,
+                //SuoritustapaSisalto.get({ perusteId: peruste.id, suoritustapa: 'aipe' }).$promise
             ]);
         },
 
