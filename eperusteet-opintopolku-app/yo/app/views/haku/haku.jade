@@ -126,4 +126,4 @@ mixin haku()
             span(pvm="peruste.siirtymaPaattyy")
 
   .text-center(ng-show="kokonaismaara > hakuparametrit.sivukoko")
-    uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')
+    ul(uib-pagination ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')

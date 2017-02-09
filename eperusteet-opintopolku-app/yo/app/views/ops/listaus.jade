@@ -80,4 +80,4 @@ h1.peruste-otsikko(kaanna="'paikalliset-opetussuunnitelmat'")
               span(ng-bind='kunta.nimi | kaanna')
               br(ng-if='!$last')
   // Hakusivut
-  uib-pagination(ng-model='nykyinenSivu', ng-change='vahdaSivua()', total-items='kokonaismaara', items-per-page='sivukoko')
+  ul(uib-pagination ng-model='nykyinenSivu', ng-change='vahdaSivua()', total-items='kokonaismaara', items-per-page='sivukoko')
