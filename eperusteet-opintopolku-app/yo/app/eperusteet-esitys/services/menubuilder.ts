@@ -14,10 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-// TODO: Poista kun 2.0
-interface NumberConstructor {
-    MAX_SAFE_INTEGER: number;
-}
 
 angular.module('eperusteet.esitys')
 .service('epMenuBuilder', function (Algoritmit, $state, Kieli, Utils, epEsitysSettings) {

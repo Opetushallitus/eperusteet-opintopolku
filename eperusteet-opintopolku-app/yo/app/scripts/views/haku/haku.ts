@@ -17,6 +17,7 @@
 namespace Controllers {
   export const HakuController = ($scope, $rootScope, $state, Perusteet, Haku, koulutusalaService, Kieli,
                                  YleinenData, MurupolkuData, Kaanna, PerusteenTutkintonimikkeet) => {
+
     var pat: any = '';
     var osio = _.last($state.current.name.split('.'));
     Haku.osio = osio;
