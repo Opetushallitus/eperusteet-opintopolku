@@ -20,26 +20,24 @@ angular.module('app')
 .service('SpinnerService', function(SPINNER_WAIT, $rootScope, $timeout) {
   var pyynnot = 0;
 
-  function enableSpinner() {
-    ++pyynnot;
-    $timeout(function() {
-      if (pyynnot > 0) {
-        $rootScope.$emit('event:spinner_on');
-      }
-    }, SPINNER_WAIT);
-  }
-
-  function disableSpinner() {
-    --pyynnot;
-    if (pyynnot === 0) {
-      $rootScope.$emit('event:spinner_off');
-    }
-  }
-
   return {
-    enable: enableSpinner,
-    disable: disableSpinner,
-    isSpinning: function() {
+    enable() {
+      ++pyynnot;
+      $timeout(function() {
+        if (pyynnot > 0) {
+          $rootScope.$emit('event:spinner_on');
+        }
+      }, SPINNER_WAIT);
+    },
+
+    disable() {
+      --pyynnot;
+      if (pyynnot === 0) {
+        $rootScope.$emit('event:spinner_off');
+      }
+    },
+
+    isSpinning() {
       return pyynnot > 0;
     }
   };

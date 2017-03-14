@@ -49,6 +49,8 @@ angular.module('app')
     info: { method: 'GET', url: epResource.PERUSTEET_ROOT + '/info' },
     valittavatKielet: { method: 'GET', url: epResource.PERUSTEET_ROOT + '/valittavatkielet', isArray: true },
     diaari: { method: 'GET', url: epResource.PERUSTEET_ROOT + '/diaari', cache: true }
+  }, {
+      cancellable: true
   });
 })
 
