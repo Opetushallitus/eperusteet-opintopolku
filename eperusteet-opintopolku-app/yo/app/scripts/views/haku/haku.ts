@@ -56,6 +56,11 @@ namespace Controllers {
             let voimassaoloLoppuu = peruste.voimassaoloLoppuu;
             let siirtymaPaattyy = peruste.siirtymaPaattyy;
 
+            if (voimassaoloAlkaa && currentTime > voimassaoloAlkaa && (!voimassaoloLoppuu || voimassaoloLoppuu > currentTime)) {
+                peruste.$$tila = "voimassa";
+                return;
+            }
+
             if (siirtymaPaattyy) {
                 if (currentTime > siirtymaPaattyy) {
                     peruste.$$tila = "arkistoitu";
@@ -64,16 +69,12 @@ namespace Controllers {
                     peruste.$$tila = "siirtyma";
                     return;
                 }
-            } else {
+            }
+            else {
                 if (voimassaoloLoppuu && currentTime > voimassaoloLoppuu) {
                     peruste.$$tila = "arkistoitu";
                     return;
                 }
-            }
-
-            if (voimassaoloAlkaa && currentTime > voimassaoloAlkaa) {
-                peruste.$$tila = "voimassa";
-                return;
             }
 
             peruste.$$tila = "tuleva";

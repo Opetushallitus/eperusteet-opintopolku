@@ -114,12 +114,14 @@ mixin haku()
               span(kaanna="osaamisala.nimi")
               span {{$last ? '' : ', '}}
 
-          p.pvm(ng-if="peruste.$$tila === 'voimassa' || peruste.$$tila === 'tuleva'")
+          // p.pvm(ng-if="peruste.$$tila === 'voimassa' || peruste.$$tila === 'tuleva'")
+          p.pvm
             span(kaanna="'voimaantulo-pvm'")
             =" "
             span(pvm="peruste.voimassaoloAlkaa")
 
-          p.pvm(ng-if="peruste.$$tila === 'arkistoitu'")
+          // p.pvm(ng-if="peruste.$$tila === 'arkistoitu'")
+          p.pvm(ng-if="peruste.voimassaoloLoppuu")
             span(kaanna="'voimassaolo-paattymispvm'")
             =" "
             span(pvm="peruste.voimassaoloLoppuu")
