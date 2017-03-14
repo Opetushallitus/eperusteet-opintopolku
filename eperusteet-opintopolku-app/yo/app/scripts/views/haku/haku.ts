@@ -125,6 +125,7 @@ namespace Controllers {
             $scope.hakuparametrit.sivu = sivu - 1;
             Haku.setHakuparametrit($state.current.name, $scope.hakuparametrit);
             if (currentQuery) {
+                console.log(currentQuery.$cancelRequest);
                 currentQuery.$cancelRequest();
             }
 
@@ -135,7 +136,6 @@ namespace Controllers {
                     hakuVastaus(response);
                 })
                 .catch(function (virhe) {
-                    SpinnerService.disable();
                     if (virhe.status === 404) {
                         hakuVastaus(virhe.data);
                     }

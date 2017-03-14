@@ -100,26 +100,30 @@ mixin haku()
               span(kaanna="koulutusalaNimi(koulutus.koulutusalakoodi).nimi")
               span {{$last ? '' : ', '}}
 
-          p.tutkintonimikkeet(ng-if="peruste.$$tutkintonimikkeet.koodisto.length > 0")
+          p.tutkintonimikkeet(ng-if="hakuparametrit.tutkintonimikkeet && peruste.$$tutkintonimikkeet.koodisto.length > 0")
             span(kaanna="'tutkintonimikkeet'" style="font-weight: bold;")
             =": "
             span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto | unique:'tutkintonimikeArvo'")
               span(kaanna="nimike.$tutkintonimikeNimi")
               span {{$last ? '' : ', '}}
-          p.osaamisalat(ng-if="peruste.osaamisalat.length > 0")
+
+          p.osaamisalat(ng-if="hakuparametrit.osaamisalat && peruste.osaamisalat.length > 0")
             span(kaanna="'osaamisalat'" style="font-weight: bold;")
             =": "
             span(ng-repeat="osaamisala in peruste.osaamisalat")
               span(kaanna="osaamisala.nimi")
               span {{$last ? '' : ', '}}
-          p.pvm(ng-if="peruste.$$tila === 'voimassa'")
+
+          p.pvm(ng-if="peruste.$$tila === 'voimassa' || peruste.$$tila === 'tuleva'")
             span(kaanna="'voimaantulo-pvm'")
             =" "
             span(pvm="peruste.voimassaoloAlkaa")
+
           p.pvm(ng-if="peruste.$$tila === 'arkistoitu'")
             span(kaanna="'voimassaolo-paattymispvm'")
             =" "
             span(pvm="peruste.voimassaoloLoppuu")
+
           p.pvm(ng-if="peruste.$$tila === 'siirtyma'")
             span(kaanna="'siirtyman-paattyminen'")
             =" "
