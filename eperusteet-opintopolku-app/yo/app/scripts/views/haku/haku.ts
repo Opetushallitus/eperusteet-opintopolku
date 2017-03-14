@@ -125,7 +125,6 @@ namespace Controllers {
             $scope.hakuparametrit.sivu = sivu - 1;
             Haku.setHakuparametrit($state.current.name, $scope.hakuparametrit);
             if (currentQuery) {
-                console.log(currentQuery.$cancelRequest);
                 currentQuery.$cancelRequest();
             }
 
