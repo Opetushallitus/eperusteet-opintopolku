@@ -42,7 +42,7 @@ angular.module("app")
         }
     };
 })
-.directive("spinner", function(usSpinnerService, $timeout) {
+.directive("spinner", function(usSpinnerService, $timeout, $rootScope) {
     // Väri on sama kuin $ylanavi-color
     return {
         template: '<div id="global-spinner" ng-show="isSpinning">' +
@@ -55,8 +55,10 @@ angular.module("app")
             function spin(state) {
                 scope.isSpinning = state;
                 if (state) {
+                    $rootScope.$$hasActiveSpinner = true;
                     usSpinnerService.spin("globalspinner");
                 } else {
+                    $rootScope.$$hasActiveSpinner = false;
                     usSpinnerService.stop("globalspinner");
                 }
             }

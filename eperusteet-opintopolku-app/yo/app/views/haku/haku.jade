@@ -82,9 +82,9 @@ mixin haku()
         +haku
       .clearfix
 
-  p.kokonaismaara
-    span(kaanna="'loydettyjen-opsien-maara'")
-    span=" "
+  p.kokonaismaara(ng-show="$$hasActiveSpinner === false")
+    span(kaanna="'loydettyjen-tutkintojen-maara'")
+    span=": "
     span(ng-bind="kokonaismaara")
 
   div(ng-repeat="peruste in perusteet.data")
