@@ -123,6 +123,11 @@
 
         p {
           margin-bottom: 5px;
+          .alarm-marker {
+            color: #ffba00;
+            margin-left: 8px;
+            cursor: pointer;
+          }
         }
       }
 

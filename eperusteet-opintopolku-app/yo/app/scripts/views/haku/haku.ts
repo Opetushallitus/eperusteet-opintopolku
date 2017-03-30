@@ -16,7 +16,6 @@
 
 namespace Controllers {
     export const HakuController = ($scope, $rootScope, $state, SpinnerService, Perusteet, Haku, koulutusalaService, Kieli, YleinenData, MurupolkuData, Kaanna, PerusteenTutkintonimikkeet) => {
-
         let pat: any = "";
         let osio = _.last($state.current.name.split("."));
         Haku.osio = osio;
@@ -56,6 +55,11 @@ namespace Controllers {
             let voimassaoloLoppuu = peruste.voimassaoloLoppuu;
             let siirtymaPaattyy = peruste.siirtymaPaattyy;
 
+            if (voimassaoloAlkaa && voimassaoloAlkaa > currentTime) {
+                peruste.$$tila = "tuleva";
+                return;
+            }
+
             if (voimassaoloAlkaa && currentTime > voimassaoloAlkaa && (!voimassaoloLoppuu || voimassaoloLoppuu > currentTime)) {
                 peruste.$$tila = "voimassa";
                 return;
@@ -77,7 +81,6 @@ namespace Controllers {
                 }
             }
 
-            peruste.$$tila = "tuleva";
             return;
         };
 
@@ -98,11 +101,34 @@ namespace Controllers {
             $scope.haePerusteet($scope.nykyinenSivu);
         };
 
+        const rakennaKorvauslista = (perusteet, avain = "korvattavat-perusteet") => {
+            let result = "<div>";
+            result += "<h4>" + KaannaService.kaanna(avain) + "</h4>";
+            let perusteetMapped = [];
+
+            for (const peruste of perusteet) {
+                const link = $state.href("root.esitys.peruste", { perusteId: peruste.id, suoritustapa: peruste.suoritustavat[0].suoritustapakoodi });
+                perusteetMapped.push("<a href=\"" + link + "\">" + KaannaService.kaanna(peruste.nimi) + " (" + peruste.diaarinumero + ")</a>");
+            }
+
+            result += _(perusteetMapped)
+                .map(peruste => "<div>" + peruste + "</div>")
+                .value();
+            result += "</div>";
+            return result;
+        };
+
         let hakuVastaus = function (vastaus) {
             $scope.perusteet = vastaus;
             _.each(vastaus.data, peruste => {
                 $scope.selvitaTila(peruste);
                 peruste.$$tutkintonimikkeet = {};
+                if (!_.isEmpty(peruste.korvattavatPerusteet)) {
+                    peruste.$$korvattavatPerusteet = rakennaKorvauslista(peruste.korvattavatPerusteet, "korvattavat-perusteet");
+                }
+                if (!_.isEmpty(peruste.korvaavatPerusteet)) {
+                    peruste.$$korvaavatPerusteet = rakennaKorvauslista(peruste.korvaavatPerusteet, "korvaavat-perusteet");
+                }
                 PerusteenTutkintonimikkeet.parse(peruste.tutkintonimikkeetKoodisto, peruste.$$tutkintonimikkeet);
             });
             $scope.nykyinenSivu = vastaus.sivu + 1;

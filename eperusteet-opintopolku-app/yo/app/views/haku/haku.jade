@@ -93,7 +93,19 @@ mixin haku()
         .text-box
           p
             a.nimi(ui-sref='root.esitys.peruste({ perusteId: peruste.id, suoritustapa: hakuparametrit.suoritustapa})')
-              span(kaanna="peruste.nimi")
+              span(ng-bind="peruste.nimi | kaanna")
+
+            span.alarm-marker(
+              ng-show="peruste.korvaavatPerusteet.length > 0"
+              uib-popover-html="peruste.$$korvaavatPerusteet"
+              popover-placement="bottom")
+              +gicon("alert")
+
+            span.alarm-marker(
+              ng-show="peruste.korvattavatPerusteet.length > 0"
+              uib-popover-html="peruste.$$korvattavatPerusteet"
+              popover-placement="bottom")
+              +gicon("alert")
 
           p
             b(ng-repeat="koulutus in peruste.koulutukset | orderBy:'id'")
@@ -130,6 +142,19 @@ mixin haku()
             span(kaanna="'siirtyman-paattyminen'")
             =" "
             span(pvm="peruste.siirtymaPaattyy")
+
+          mixin korvaavuusLista(lista)
+            table.table
+              thead
+                tr
+                  td(ng-bind="'diaarinumero-label' | kaanna")
+                  td(ng-bind="'nimi' | kaanna")
+                  td(ng-bind="'voimaantulo-pvm' | kaanna")
+              tbody
+                tr(ng-repeat="korvaava in " + lista)
+                  td(ng-bind="korvaava.diaarinumero")
+                  td(ng-bind="korvaava.nimi | kaanna")
+                  td(pvm="korvaava.voimassaoloAlkaa")
 
   .text-center(ng-show="kokonaismaara > hakuparametrit.sivukoko")
     ul(uib-pagination ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')

@@ -29,7 +29,7 @@ module.exports = grunt => {
       options: {
         module: 'commonjs',
         target: 'es3',
-        lib: ["DOM", "ES2015", "ES5"],
+        lib: ['DOM', 'ES2015', 'ES5'],
         alwaysStrict: true,
       }
     },
@@ -92,6 +92,12 @@ module.exports = grunt => {
         hostname: '0.0.0.0'
       },
       proxies: [{
+        // context: '/eperusteet-service',
+        // host: 'localhost',
+        // port: 8080,
+        // https: false,
+        // changeOrigin: true
+      // }, {
         context: '/eperusteet-service',
         host: 'virkailija.opintopolku.fi',
         port: 443,
