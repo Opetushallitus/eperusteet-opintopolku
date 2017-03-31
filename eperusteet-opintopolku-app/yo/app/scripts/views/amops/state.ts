@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
-
 namespace Murupolku {
   const svars = {};
 
@@ -25,15 +23,16 @@ namespace Murupolku {
 
 angular.module("app")
 .config($stateProvider => $stateProvider
-.state('root.amops', {
-  url: '/amops/:opsId',
+.state("root.amops", {
+  url: "/amops/:opsId",
   onEnter: (koulutustoimija, ops) => {
     Murupolku.register("root.amops", ops.nimi);
   },
-  redirectTo: 'root.amops.tiedot',
+  redirectTo: "root.amops.tiedot",
   resolve: {
     julkinen: (Api) => Api.all("julkinen"),
-    ktId: (julkinen, $stateParams) => julkinen.one("opetussuunnitelmat", $stateParams.opsId).one("koulutustoimija").get(),
+    ktInfo: (julkinen, $stateParams) => julkinen.one("opetussuunnitelmat", $stateParams.opsId).one("koulutustoimija").get(),
+    ktId: (ktInfo) => ktInfo.id,
     koulutustoimija: (julkinen, ktId) => julkinen.all("koulutustoimijat").get(ktId),
     ops: (koulutustoimija, $stateParams) => koulutustoimija.one("opetussuunnitelmat", $stateParams.opsId).get(),
     otsikot: (ops) => ops.all("otsikot").getList(),
@@ -45,7 +44,7 @@ angular.module("app")
   },
   views: {
     "": {
-      templateUrl: 'views/amops/view.html',
+      templateUrl: "views/amops/view.html",
       controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location, ktId) => {
         $scope.ops = ops;
         $scope.otsikot = otsikot;
@@ -87,7 +86,7 @@ angular.module("app")
         };
 
         $scope.menuCollapsed = true;
-        $scope.$on('$stateChangeStart', () => {
+        $scope.$on("$stateChangeStart", () => {
           $scope.menuCollapsed = true;
         });
 
@@ -100,24 +99,24 @@ angular.module("app")
         };
 
         $scope.returnToAmosaa = () => {
-          let protocol = 'https';
-          let domain = 'virkailija.opintopolku.fi';
-          let context = 'eperusteet-amosaa-app/';
-          if (_.includes(_.words($location.absUrl()), 'testi')) {
-            domain = 'testi.virkailija.opintopolku.fi';
-          } else if (_.includes(_.words($location.absUrl()), 'localhost')) {
-            protocol = 'http';
-            domain = 'localhost:9030';
-            context = '';
+          let protocol = "https";
+          let domain = "virkailija.opintopolku.fi";
+          let context = "eperusteet-amosaa-app/";
+          if (_.includes(_.words($location.absUrl()), "testi")) {
+            domain = "testi.virkailija.opintopolku.fi";
+          } else if (_.includes(_.words($location.absUrl()), "localhost")) {
+            protocol = "http";
+            domain = "localhost:9030";
+            context = "";
           }
 
-          $window.location.href
-            = protocol + '://'
-            + domain + '/'
-            + context + '#/'
-            + KieliService.getSisaltokieli() +'/koulutustoimija/'
-            + $scope.ktId + '/ops/'
-            + $scope.ops.id + '/sisalto/tiedot';
+          $window.location.href = protocol
+            + "://"
+            + domain + "/"
+            + context + "#/"
+            + KieliService.getSisaltokieli() + "/koulutustoimija/"
+            + $scope.ktId + "/ops/"
+            + $scope.ops.id + "/sisalto/tiedot";
         };
       }
     }

@@ -14,27 +14,26 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
 
 angular.module("app")
 .config($stateProvider => $stateProvider
-.state('root.amops.osa', {
-  url: '/osa/:osaId',
+.state("root.amops.osa", {
+  url: "/osa/:osaId",
   onEnter: (osa) =>
     Murupolku.register("root.amops.osa", osa.tekstiKappale.nimi),
   resolve: {
     osa: (ops, $stateParams) => ops.one("tekstit", $stateParams.osaId).get(),
     pTosat: (Api, osa, ops) => (osa.tyyppi === "suorituspolku"
-    && Api.all("perusteet/" + ops.peruste.id + "/tutkinnonosat").getList()),
+        && Api.all("perusteet/" + ops.peruste.id + "/tutkinnonosat").getList()),
     pTosa: (Api, osa, ops) => (osa.tyyppi === "tutkinnonosa" && osa.tosa.tyyppi === "perusteesta"
-    && Api.one("perusteet/" + ops.peruste.id + "/tutkinnonosat/" + osa.tosa.perusteentutkinnonosa).get()),
+        && Api.one("perusteet/" + ops.peruste.id + "/tutkinnonosat/" + osa.tosa.perusteentutkinnonosa).get()),
     pSuoritustavat: (Api, osa, ops) => (osa.tyyppi === "suorituspolku"
-    && Api.one("perusteet/" + ops.peruste.id + "/suoritustavat").get()),
+        && Api.one("perusteet/" + ops.peruste.id + "/suoritustavat").get()),
     arviointiAsteikot: (Api) => Api.all("arviointiasteikot").getList()
   },
   views: {
     "": {
-      templateUrl: 'views/amops/osa/view.html',
+      templateUrl: "views/amops/osa/view.html",
       controller: ($scope, osa, pTosa, ktId) => {
         $scope.osa = osa;
         $scope.pTosa = pTosa;
@@ -42,7 +41,7 @@ angular.module("app")
       }
     },
     "suorituspolku@root.amops.osa": {
-      templateUrl: 'views/amops/osa/suorituspolku.html',
+      templateUrl: "views/amops/osa/suorituspolku.html",
       controller: ($q, $rootScope, $scope, $state, $stateParams, osa, peruste, pSuoritustavat, pTosat, koodisto, paikallisetTutkinnonosatEP, koulutustoimija, Notifikaatiot) => {
         const
           suoritustapa = Perusteet.getSuoritustapa(pSuoritustavat),
@@ -184,7 +183,7 @@ angular.module("app")
       }
     },
     "tutkinnonosa@root.amops.osa": {
-      templateUrl: 'views/amops/osa/tutkinnonosa.html',
+      templateUrl: "views/amops/osa/tutkinnonosa.html",
       controller: ($q, $scope, peruste, arviointiAsteikot, koodisto, koulutustoimija) => {
         const
           isPaikallinen = _.property("tosa.tyyppi")($scope.osa) === "oma",
@@ -220,7 +219,7 @@ angular.module("app")
               .then(koodit => {
                 _.each(koodit, koodi => {
                   $scope.koodistoTiedot[koodi.uri] = koodi;
-                })
+                });
               });
           };
 
