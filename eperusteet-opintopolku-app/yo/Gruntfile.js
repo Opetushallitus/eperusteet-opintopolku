@@ -25,9 +25,12 @@ module.exports = grunt => {
     ts: {
       default: {
         tsconfig: true,
-        options: {
-          failOnTypeErrors: false
-        }
+      },
+      options: {
+        module: 'commonjs',
+        target: 'es3',
+        lib: ['DOM', 'ES2015', 'ES5'],
+        alwaysStrict: true,
       }
     },
     watch: {
@@ -89,6 +92,12 @@ module.exports = grunt => {
         hostname: '0.0.0.0'
       },
       proxies: [{
+        // context: '/eperusteet-service',
+        // host: 'localhost',
+        // port: 8080,
+        // https: false,
+        // changeOrigin: true
+      // }, {
         context: '/eperusteet-service',
         host: 'localhost',
         port: 8080,

@@ -14,72 +14,72 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+angular.module("app")
+.service("SpinnerService", function(SPINNER_WAIT, $rootScope, $timeout) {
+    let pyynnot = 0;
 
-angular.module('app')
-.service('SpinnerService', function(SPINNER_WAIT, $rootScope, $timeout) {
-  var pyynnot = 0;
+    return {
+        enable() {
+            ++pyynnot;
+            if (pyynnot > 0) {
+                $rootScope.$emit("event:spinner_on");
+            }
+        },
 
-  function enableSpinner() {
-    ++pyynnot;
-    $timeout(function() {
-      if (pyynnot > 0) {
-        $rootScope.$emit('event:spinner_on');
-      }
-    }, SPINNER_WAIT);
-  }
+        disable() {
+            --pyynnot;
+            if (pyynnot < 0) {
+                pyynnot = 0;
+            }
 
-  function disableSpinner() {
-    --pyynnot;
-    if (pyynnot === 0) {
-      $rootScope.$emit('event:spinner_off');
-    }
-  }
+            if (pyynnot === 0) {
+                $rootScope.$emit("event:spinner_off");
+            }
+        },
 
-  return {
-    enable: enableSpinner,
-    disable: disableSpinner,
-    isSpinning: function() {
-      return pyynnot > 0;
-    }
-  };
-})
-.directive('spinner', function(usSpinnerService, $timeout) {
-  // Väri on sama kuin $ylanavi-color
-  return {
-    template: '<div id="global-spinner" ng-show="isSpinning">' +
-              '<span us-spinner="{color: \'#009FCF\', length: 12, trail: 100, corners: 1, width: 8, radius: 18, lines: 13, shadow: false}" spinner-key="globalspinner"></span>' +
-              '</div>',
-    restrict: 'E',
-    link: function(scope: any) {
-      scope.isSpinning = false;
-
-      function spin(state) {
-        scope.isSpinning = state;
-        if (state) {
-          usSpinnerService.spin('globalspinner');
-        } else {
-          usSpinnerService.stop('globalspinner');
+        isSpinning() {
+            return pyynnot > 0;
         }
-      }
-
-      scope.$on('event:spinner_on', function() {
-        spin(true);
-      });
-
-      scope.$on('event:spinner_off', function() {
-        $timeout(function () {
-          spin(false);
-        }, 100);
-      });
-    }
-  };
+    };
 })
-.directive('smallSpinner', function () {
-  return {
-    restrict: 'EA',
-    link: function(scope, element) {
-      element.prepend('<img class="small-spinner" src="images/spinner-small.gif" alt="">');
-    }
-  };
+.directive("spinner", function(usSpinnerService, $timeout, $rootScope) {
+    // Väri on sama kuin $ylanavi-color
+    return {
+        template: '<div id="global-spinner" ng-show="isSpinning">' +
+            '<span us-spinner="{color: \'#009FCF\', length: 12, trail: 100, corners: 1, width: 8, radius: 18, lines: 13, shadow: false}" spinner-key="globalspinner"></span>' +
+            '</div>',
+        restrict: "E",
+        link: function(scope: any) {
+            scope.isSpinning = false;
+
+            function spin(state) {
+                scope.isSpinning = state;
+                if (state) {
+                    $rootScope.$$hasActiveSpinner = true;
+                    usSpinnerService.spin("globalspinner");
+                } else {
+                    $rootScope.$$hasActiveSpinner = false;
+                    usSpinnerService.stop("globalspinner");
+                }
+            }
+
+            scope.$on("event:spinner_on", function() {
+                spin(true);
+            });
+
+            scope.$on("event:spinner_off", function() {
+                $timeout(function () {
+                    spin(false);
+                }, 100);
+            });
+        }
+    };
+})
+.directive("smallSpinner", function () {
+    return {
+        restrict: "EA",
+        link: function(scope, element) {
+            element.prepend('<img class="small-spinner" src="images/spinner-small.gif" alt="">');
+        }
+    };
 });

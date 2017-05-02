@@ -64,37 +64,27 @@ mixin haku()
     input.form-control(type="text" placeholder="{{'hae-nimella' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
 
     .haku-filtered
-      a(href="" ng-click="switchHakua('tuleva')")
-        span(class="label label-tulevat")
-          span(ng-if="hakuparametrit.tuleva")
-            +gicon("ok", "'tulevat'")
-          span(kaanna="'tulevat'" ng-if="!hakuparametrit.tuleva")
-      =" "
-      a(href="" ng-click="switchHakua('voimassaolo')")
-        span(class="label label-voimassaolevat")
-          span(ng-if="hakuparametrit.voimassaolo")
-            +gicon("ok", "'voimassaolevat'")
-          span(kaanna="'voimassaolevat'" ng-if="!hakuparametrit.voimassaolo")
-      =" "
-      a(href="" ng-click="switchHakua('siirtyma')")
-        span(class="label label-siirtymassa")
-          span(ng-if="hakuparametrit.siirtyma")
-            +gicon("ok", "'siirtymassa'")
-          span(kaanna="'siirtymassa'" ng-if="!hakuparametrit.siirtyma")
-      =" "
-      a(href="" ng-click="switchHakua('poistunut')")
-        span(class="label label-poistuneet")
-          span(ng-if="hakuparametrit.poistunut")
-            +gicon("ok", "'poistuneet'")
-          span(kaanna="'poistuneet'" ng-if="!hakuparametrit.poistunut")
+      mixin switchField(field, locale)
+        a(href="" ng-click="switchHakua('" + field + "')")
+          span(class="label label-" + locale)
+            span(ng-if="hakuparametrit." + field)
+              +gicon("ok", "'" + locale + "'")
+            span(kaanna="'" + locale + "'" ng-if="!hakuparametrit." + field)
+
+      +switchField('tuleva', 'tulevat')
+      +switchField('voimassaolo', 'voimassaolevat')
+      +switchField('siirtyma', 'siirtymassa')
+      +switchField('poistunut', 'poistuneet')
+      +switchField('tutkintonimikkeet', 'tutkintonimikkeet')
+      +switchField('osaamisalat', 'osaamisalat')
 
       .haku-filters
         +haku
       .clearfix
 
-  p.kokonaismaara
-    span(kaanna="'loydettyjen-opsien-maara'")
-    span=" "
+  p.kokonaismaara(ng-show="$$hasActiveSpinner === false")
+    span(kaanna="'loydettyjen-tutkintojen-maara'")
+    span=": "
     span(ng-bind="kokonaismaara")
 
   div(ng-repeat="peruste in perusteet.data")
@@ -103,37 +93,68 @@ mixin haku()
         .text-box
           p
             a.nimi(ui-sref='root.esitys.peruste({ perusteId: peruste.id, suoritustapa: hakuparametrit.suoritustapa})')
-              span(kaanna="peruste.nimi")
+              span(ng-bind="peruste.nimi | kaanna")
+
+            span.alarm-marker(
+              ng-show="peruste.korvaavatPerusteet.length > 0"
+              uib-popover-html="peruste.$$korvaavatPerusteet"
+              popover-placement="bottom")
+              +gicon("alert")
+
+            span.alarm-marker(
+              ng-show="peruste.korvattavatPerusteet.length > 0"
+              uib-popover-html="peruste.$$korvattavatPerusteet"
+              popover-placement="bottom")
+              +gicon("alert")
 
           p
             b(ng-repeat="koulutus in peruste.koulutukset | orderBy:'id'")
               span(kaanna="koulutusalaNimi(koulutus.koulutusalakoodi).nimi")
               span {{$last ? '' : ', '}}
 
-          p.tutkintonimikkeet(ng-if="peruste.$$tutkintonimikkeet.koodisto.length > 0")
+          p.tutkintonimikkeet(ng-if="hakuparametrit.tutkintonimikkeet && peruste.$$tutkintonimikkeet.koodisto.length > 0")
             span(kaanna="'tutkintonimikkeet'" style="font-weight: bold;")
             =": "
             span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto | unique:'tutkintonimikeArvo'")
               span(kaanna="nimike.$tutkintonimikeNimi")
               span {{$last ? '' : ', '}}
-          p.osaamisalat(ng-if="peruste.osaamisalat.length > 0")
+
+          p.osaamisalat(ng-if="hakuparametrit.osaamisalat && peruste.osaamisalat.length > 0")
             span(kaanna="'osaamisalat'" style="font-weight: bold;")
             =": "
             span(ng-repeat="osaamisala in peruste.osaamisalat")
               span(kaanna="osaamisala.nimi")
               span {{$last ? '' : ', '}}
-          p.pvm(ng-if="peruste.$$tila === 'voimassa'")
+
+          // p.pvm(ng-if="peruste.$$tila === 'voimassa' || peruste.$$tila === 'tuleva'")
+          p.pvm
             span(kaanna="'voimaantulo-pvm'")
             =" "
             span(pvm="peruste.voimassaoloAlkaa")
-          p.pvm(ng-if="peruste.$$tila === 'arkistoitu'")
+
+          // p.pvm(ng-if="peruste.$$tila === 'arkistoitu'")
+          p.pvm(ng-if="peruste.voimassaoloLoppuu")
             span(kaanna="'voimassaolo-paattymispvm'")
             =" "
             span(pvm="peruste.voimassaoloLoppuu")
+
           p.pvm(ng-if="peruste.$$tila === 'siirtyma'")
             span(kaanna="'siirtyman-paattyminen'")
             =" "
             span(pvm="peruste.siirtymaPaattyy")
 
+          mixin korvaavuusLista(lista)
+            table.table
+              thead
+                tr
+                  td(ng-bind="'diaarinumero-label' | kaanna")
+                  td(ng-bind="'nimi' | kaanna")
+                  td(ng-bind="'voimaantulo-pvm' | kaanna")
+              tbody
+                tr(ng-repeat="korvaava in " + lista)
+                  td(ng-bind="korvaava.diaarinumero")
+                  td(ng-bind="korvaava.nimi | kaanna")
+                  td(pvm="korvaava.voimassaoloAlkaa")
+
   .text-center(ng-show="kokonaismaara > hakuparametrit.sivukoko")
-    uib-pagination(ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')
+    ul(uib-pagination ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')

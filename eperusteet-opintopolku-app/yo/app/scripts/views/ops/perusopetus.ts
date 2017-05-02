@@ -306,7 +306,7 @@ angular.module('app')
     $scope.vuosi = 'vuosiluokka_' + $state.params.vuosi;
 
     function setMurupolku() {
-      let item = _.reduce($scope.navi.sections[1].items, (result, item: any, index) => {
+      let item: any = _.reduce($scope.navi.sections[1].items, (result, item: any, index) => {
         if (item.$selected === true) {
           item.index = index;
           result = item;

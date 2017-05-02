@@ -63,7 +63,7 @@ angular.module('app')
     }
     return {
         restrict: 'A',
-        link: function (scope: any, el, attrs) {
+        link: function (scope: any, el, attrs: any) {
             function kaannaValue(value) {
                 return _.isObject(value) ? Kaanna.kaannaSisalto(value) : Kaanna.kaanna(value);
             }

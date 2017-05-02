@@ -43,7 +43,7 @@ angular.module('app')
         ohje: '@?',
         extra: '='
       },
-      link: function (scope: any, element, attrs) {
+      link: function (scope: any, element, attrs: any) {
         scope.showing = false;
         var DELAY = 500;
         var clickAnywhere = attrs.ohjeClickAnywhere !== 'false';

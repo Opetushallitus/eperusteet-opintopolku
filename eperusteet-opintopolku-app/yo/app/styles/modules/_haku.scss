@@ -35,12 +35,19 @@
   .label {
     line-height: normal;
     padding: 5px;
+    margin-right: 5px;
   }
   .label-tulevat {
     background-color: #99D840;
   }
   .label-voimassaolevat {
     background-color: #149FCB;
+  }
+  .label-tutkintonimikkeet {
+    background-color: #8e8e8e;
+  }
+  .label-osaamisalat {
+    background-color: #8e8e8e;
   }
   .label-siirtymassa {
     background-color: #ffba00;
@@ -116,6 +123,11 @@
 
         p {
           margin-bottom: 5px;
+          .alarm-marker {
+            color: #ffba00;
+            margin-left: 8px;
+            cursor: pointer;
+          }
         }
       }
 

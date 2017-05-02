@@ -233,7 +233,7 @@ angular.module('eperusteet.esitys')
       },
       controller: Controllers.epSivuNaviController,
       transclude: true,
-      link: function (scope: any, element, attrs) {
+      link: function (scope: any, element, attrs: any) {
         const transcluded = element.find('#sivunavi-tc').contents();
         scope.hasTransclude = transcluded.length > 0;
         scope.disableRajaus = !_.isEmpty(attrs.disableRajaus);
