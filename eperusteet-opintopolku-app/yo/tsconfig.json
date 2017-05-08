@@ -15,6 +15,7 @@
     "app/components/lokalisointi/lokalisointi.ts",
     "app/components/termisto/termisto.ts",
     "app/data/api.ts",
+    "app/data/dokumentit.ts",
     "app/data/tekstikappaleet.ts",
     "app/data/kasitteet.ts",
     "app/logic/algoritmit.ts",

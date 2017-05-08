@@ -30,6 +30,7 @@ namespace Controllers {
     $scope.valittuSisalto = $scope.$parent.sisalto[$stateParams[$scope.linkVar]];
     $scope.tekstikappale = $scope.valittuSisalto;
     $scope.lapset = epTekstikappaleChildResolver.getSisalto();
+
     const parentNode = $scope.$parent.originalSisalto ? $scope.$parent.originalSisalto : $scope.tekstisisalto;
     MurupolkuData.set({
       osanId: $scope.valittuSisalto.id,
@@ -51,15 +52,12 @@ namespace Controllers {
     }
   };
 
-  export const epEsitysTiedotController = ($scope, $q, $state, YleinenData, PerusteenTutkintonimikkeet, Perusteet, dokumenttiId) => {
+  export const epEsitysTiedotController = ($scope, $q, $state, YleinenData, PerusteenTutkintonimikkeet, Perusteet, dokumenttiUrl) => {
     $scope.showKoulutukset = _.constant(YleinenData.showKoulutukset($scope.peruste));
     $scope.showOsaamisalat = $scope.showKoulutukset;
     $scope.koulutusalaNimi = $scope.Koulutusalat.haeKoulutusalaNimi;
     $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
-
-    if (dokumenttiId && dokumenttiId.toString().length > 0) {
-      $scope.dokumenttiUrl = location.origin + '/eperusteet-service/api/dokumentit/' + dokumenttiId;
-    }
+    dokumenttiUrl($scope);
 
     let currentTime = new Date().getTime();
     $scope.voimassaOleva = !!(!$scope.peruste.voimassaoloLoppuu
