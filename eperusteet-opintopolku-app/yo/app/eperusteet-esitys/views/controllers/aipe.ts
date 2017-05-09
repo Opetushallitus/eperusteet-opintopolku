@@ -15,46 +15,64 @@
  */
 
 namespace Controllers {
-    export const epAipeController = ($scope, peruste, $state, $stateParams, MurupolkuData) => {
+    export const epAipeController = ($scope, perusteId, perusteList, $state, $stateParams, MurupolkuData, sisalto,
+                                     epMenuBuilder, koulutusalaService, opintoalaService) => {
+        const peruste = sisalto[0];
         $scope.peruste = peruste;
+        $scope.Koulutusalat = koulutusalaService;
+        $scope.Opintoalat = opintoalaService;
+        console.log($scope.peruste);
 
-        MurupolkuData.set({ perusteId: $scope.peruste.id, perusteNimi: $scope.peruste.nimi });
+        // Murupolun alustus
+        MurupolkuData.set({
+            perusteId: $scope.peruste.id,
+            perusteNimi: $scope.peruste.nimi
+        });
 
+        // Sivunavin asetukset Aipea varten
+        $scope.naviClasses = item => {
+            var classes = ['depth' + item.depth];
+            if (item.$selected) {
+                classes.push('tekstisisalto-active');
+            }
+            if (item.$header) {
+                classes.push('tekstisisalto-active-header');
+            }
+            return classes;
+        };
+        $scope.otsikot = {};
         $scope.navi = {
             header: 'perusteen-sisalto',
             showOne: true,
-            sections: [
-                {
+            sections: [{
                     id: 'suunnitelma',
                     include: 'eperusteet-esitys/views/tekstisisalto.html',
-                    items: [],
+                    items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
                     naviClasses: $scope.naviClasses,
                     title: 'yhteiset-osuudet'
-                }, {
+            }, {
                     title: 'vaiheet',
                     id: 'vaiheet',
                     items: [],
                     naviClasses: $scope.naviClasses,
                     include: 'eperusteet-esitys/views/vlk.html',
                     state: $scope.state
-                }, {
-                    title: 'opetuksen-sisallot',
-                    id: 'sisalto',
-                    include: 'eperusteet-esitys/views/navifilters.html'
-                }
-            ]
+            }]
         };
 
-        /*function getRootState(current) {
-            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus)(.*)/, '.$1');
+        // Uudelleenohjaa Aipen root tilasta tiedot tilaan
+        function getRootState(current) {
+            return current.replace(/\.(aipe)(.*)/, '.$1');
         }
-
         const currentRootState = getRootState($state.current.name);
-        console.log($state.current.name, currentRootState);
-        $scope.$on('$stateChangeSuccess', function () {
+        $scope.$on('$stateChangeSuccess', () => {
             if ($state.current.name === currentRootState && (!$state.includes("**.tiedot") || !$stateParams.perusteId)) {
-                $state.go('.tiedot', { perusteId: $scope.peruste.id }, { location: 'replace' });
+                $state.go('.tiedot', {
+                    perusteId: $scope.peruste.id
+                }, {
+                    location: 'replace'
+                });
             }
-        });*/
+        });
     };
 }

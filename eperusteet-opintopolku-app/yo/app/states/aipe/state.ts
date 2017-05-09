@@ -6,27 +6,29 @@ angular.module('app')
     controller: Controllers.epAipeController,
     resolve: {
         perusteId: (serviceConfig, $stateParams) => $stateParams.perusteId,
-
         perusteList: (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) =>
             !perusteId ? UusimmatPerusteetService.getAipe() : Perusteet.get({ perusteId: perusteId }).$promise,
-
         peruste: (perusteList) => {
             if (_.isArray(perusteList.data)) {
                 return perusteList.data[0];
+            } else {
+                return perusteList;
             }
         },
-
-        /*sisalto: (serviceConfig, $q, LaajaalaisetOsaamiset, Oppiaineet, Vuosiluokkakokonaisuudet, SuoritustapaSisalto) => {
+        sisalto: (serviceConfig, peruste, $q, SuoritustapaSisalto) => {
+            if (_.isArray(peruste.data)) {
+                peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};
+            }
 
             return $q.all([
-                //LaajaalaisetOsaamiset.query({ perusteId: peruste.id }).$promise,
-                //Oppiaineet.query({ perusteId: peruste.id }).$promise,
-                //SuoritustapaSisalto.get({ perusteId: peruste.id, suoritustapa: 'aipe' }).$promise
+                peruste,
+                peruste.id ? SuoritustapaSisalto.get({
+                    perusteId: peruste.id,
+                    suoritustapa: 'aipe'
+                }).$promise : {}
             ]);
         },
-
         koulutusalaService: (serviceConfig, Koulutusalat) => Koulutusalat,
-
-        opintoalaService: (serviceConfig, Opintoalat) => Opintoalat*/
+        opintoalaService: (serviceConfig, Opintoalat) => Opintoalat
     }
 }));

@@ -1,6 +1,7 @@
 angular.module('app')
-.controller('YlanavigaatioController', ($rootScope, $timeout, $scope, $state, Kieli,
-                                                 UusimmatPerusteetService, Haku, $stateParams, Kaanna) => {
+.controller('YlanavigaatioController', ($rootScope, $timeout, $scope, $state, Kieli, Perusteet,
+                                        UusimmatPerusteetService, Haku, $stateParams, Kaanna,
+                                        VirheService) => {
   $scope.kieli = Kieli.getUiKieli();
   $scope.nykyinenTila = $state;
   $scope.navCollapsed = true;
@@ -20,6 +21,22 @@ angular.module('app')
       sv: 'https://studieinfo.fi/'
     }
   };
+
+  Perusteet.get({
+    tyyppi: [
+      'koulutustyyppi_15',
+      'koulutustyyppi_16',
+      'koulutustyyppi_22',
+      'koulutustyyppi_6',
+      'koulutustyyppi_2',
+      'koulutustyyppi_17'
+    ]
+  }, res => {
+    $scope.perusteetGroupByTyyppi = _.groupBy(res.data, 'koulutustyyppi');
+    console.log($scope.perusteetGroupByTyyppi);
+  }, err => {
+    console.error(err);
+  });
 
   let amOsio;
   $scope.$on('loaded:peruste', (event, peruste) => {
