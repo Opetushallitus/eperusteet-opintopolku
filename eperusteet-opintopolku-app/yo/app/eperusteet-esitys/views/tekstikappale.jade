@@ -13,11 +13,24 @@ div(ng-repeat='lapsi in lapset')
 
 .prevnext-wrapper(ng-if='links.prev || links.next')
   .prevnext
-    a.prev.chevron(ng-if='links.prev', ui-sref='^.tekstikappale({tekstikappaleId: links.prev.$osa.id})')
-      span.glyphicon.glyphicon-chevron-left
-    a.prev(ng-if='links.prev', ui-sref='^.tekstikappale({tekstikappaleId: links.prev.$osa.id})')
-      span(ng-bind-html='links.prev.label | kaanna | unsafe')
-    a.next(ng-if='links.next', ui-sref='^.tekstikappale({tekstikappaleId: links.next.$osa.id})')
-      span(ng-bind-html='links.next.label | kaanna | unsafe')
-    a.next.chevron(ng-if='links.next', ui-sref='^.tekstikappale({tekstikappaleId: links.next.$osa.id})')
-      span.glyphicon.glyphicon-chevron-right
+    div.prev(ng-if='links.prev')
+      span(ng-if='links.prev.link && links.prev.link.length > 0')
+        a.chevron(ui-sref='{{links.prev.link[0]}}')
+          span.glyphicon.glyphicon-chevron-left
+          span.prev-space(ng-bind-html='links.prev.label | kaanna | unsafe')
+
+      span(ng-if='!links.prev.link')
+        a.chevron(ui-sref='^.tekstikappale({tekstikappaleId: links.prev.$osa.id})')
+          span.glyphicon.glyphicon-chevron-left
+          span.prev-space(ng-bind-html='links.prev.label | kaanna | unsafe')
+
+    div.next(ng-if='links.next')
+      span(ng-if='links.next.link && links.next.link.length > 0')
+        a(ui-sref='{{links.next.link[0]}}')
+          span.next-space(ng-bind-html='links.next.label | kaanna | unsafe')
+          span.glyphicon.glyphicon-chevron-right
+
+      span(ng-if='!links.next.link')
+        a(ui-sref='^.tekstikappale({tekstikappaleId: links.next.$osa.id})')
+          span.next-space(ng-bind-html='links.next.label | kaanna | unsafe')
+          span.glyphicon.glyphicon-chevron-right

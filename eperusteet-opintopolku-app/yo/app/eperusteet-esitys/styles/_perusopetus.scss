@@ -81,18 +81,21 @@
   border: 1px solid #ccc;
   .prevnext {
     display: table-row;
-    .prev.chevron, .next.chevron {
-      width: 30px;
-    }
     .prev, .next {
       display: table-cell;
     }
     .prev {
       padding: 5px 15px 5px 5px;
+      .prev-space {
+        margin-left: 30px;
+      }
     }
     .next {
       padding: 5px 5px 5px 15px;
       text-align: right;
+      .next-space {
+        margin-right: 30px;
+      }
     }
   }
 
