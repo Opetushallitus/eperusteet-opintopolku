@@ -15,6 +15,7 @@ angular.module('app')
                 return perusteList;
             }
         },
+        vaiheet: (Vaiheet, perusteId) => Vaiheet.query({ perusteId: perusteId }),
         sisalto: (serviceConfig, peruste, $q, SuoritustapaSisalto) => {
             if (_.isArray(peruste.data)) {
                 peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};

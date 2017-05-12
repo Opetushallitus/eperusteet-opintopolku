@@ -279,7 +279,10 @@ namespace Controllers {
 
     export const epPerusopetusTekstikappaleController = ($scope, tekstikappale, epTekstikappaleChildResolver, MurupolkuData, epParentFinder) => {
         $scope.tekstikappale = tekstikappale;
-        MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
+        MurupolkuData.set({
+            tekstikappaleId: tekstikappale.id,
+            tekstikappaleNimi: tekstikappale.nimi
+        });
         $scope.lapset = epTekstikappaleChildResolver.getSisalto();
         $scope.links = {
             prev: null,

@@ -197,10 +197,24 @@ angular.module('eperusteet.esitys')
     });
   }
 
+  function rakennaVaiheet(vaiheet) {
+      const menu = [];
+      _.each(vaiheet, vaihe => {
+          menu.push({
+              $id: vaihe.id,
+              depth: vaihe.depth,
+              $vaihe: vaihe,
+              label: vaihe.nimi
+          });
+      });
+      return menu;
+  }
+
   this.filteredOppimaarat = filteredOppimaarat;
   this.buildLukioOppiaineMenu = buildLukioOppiaineMenu;
   this.rakennaTekstisisalto = rakennaTekstisisalto;
   this.rakennaYksinkertainenMenu = rakennaYksinkertainenMenu;
   this.rakennaVuosiluokkakokonaisuuksienSisalto = rakennaVuosiluokkakokonaisuuksienSisalto;
   this.rakennaSisallotOppiaineet = rakennaSisallotOppiaineet;
+  this.rakennaVaiheet = rakennaVaiheet;
 });

@@ -15,13 +15,20 @@
  */
 
 namespace Controllers {
-    export const epAipeController = ($scope, perusteId, perusteList, $state, $stateParams, MurupolkuData, sisalto,
-                                     epMenuBuilder, koulutusalaService, opintoalaService) => {
-        const peruste = sisalto[0];
-        $scope.peruste = peruste;
+    export const epAipeController = ($scope, perusteId, $state, $stateParams, MurupolkuData, sisalto, epMenuBuilder,
+                                     koulutusalaService, opintoalaService, epPerusopetusStateService, peruste,
+                                     vaiheet, Kieli) => {
+        $scope.peruste = sisalto[0];
         $scope.Koulutusalat = koulutusalaService;
         $scope.Opintoalat = opintoalaService;
-        console.log($scope.peruste);
+        $scope.tekstisisalto = sisalto[1];
+        $scope.vaiheet = vaiheet;
+
+        $scope.$on('$stateChangeSuccess', () => {
+            epPerusopetusStateService.setState($scope.navi);
+        });
+
+        $scope.hasContent = (obj) => _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
 
         // Murupolun alustus
         MurupolkuData.set({
@@ -29,9 +36,19 @@ namespace Controllers {
             perusteNimi: $scope.peruste.nimi
         });
 
+        // Aipen root tila
+        function getRootState(current) {
+            return current.replace(/\.(aipe)(.*)/, '.$1');
+        }
+
+        const currentRootState = getRootState($state.current.name);
+
         // Sivunavin asetukset Aipea varten
         $scope.naviClasses = item => {
-            var classes = ['depth' + item.depth];
+            let classes = [];
+            if (item.depth) {
+                classes.push('depth' + item.depth);
+            }
             if (item.$selected) {
                 classes.push('tekstisisalto-active');
             }
@@ -45,26 +62,28 @@ namespace Controllers {
             header: 'perusteen-sisalto',
             showOne: true,
             sections: [{
-                    id: 'suunnitelma',
-                    include: 'eperusteet-esitys/views/tekstisisalto.html',
-                    items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
-                    naviClasses: $scope.naviClasses,
-                    title: 'yhteiset-osuudet'
+                id: 'suunnitelma',
+                include: 'eperusteet-esitys/views/tekstisisalto.html',
+                $open: true,
+                items: epMenuBuilder.rakennaTekstisisalto($scope.tekstisisalto),
+                naviClasses: $scope.naviClasses,
+                title: 'yhteiset-osuudet'
             }, {
-                    title: 'vaiheet',
-                    id: 'vaiheet',
-                    items: [],
-                    naviClasses: $scope.naviClasses,
-                    include: 'eperusteet-esitys/views/vlk.html',
-                    state: $scope.state
+                id: 'vaiheet',
+                include: 'eperusteet-esitys/views/vaiheet.html',
+                items: epMenuBuilder.rakennaVaiheet($scope.vaiheet),
+                naviClasses: $scope.naviClasses,
+                title: 'vaiheet'
             }]
         };
 
+        $scope.navi.sections[0].items.unshift({
+            depth: 0,
+            label: 'perusteen-tiedot',
+            link: [currentRootState + '.tiedot'],
+        });
+
         // Uudelleenohjaa Aipen root tilasta tiedot tilaan
-        function getRootState(current) {
-            return current.replace(/\.(aipe)(.*)/, '.$1');
-        }
-        const currentRootState = getRootState($state.current.name);
         $scope.$on('$stateChangeSuccess', () => {
             if ($state.current.name === currentRootState && (!$state.includes("**.tiedot") || !$stateParams.perusteId)) {
                 $state.go('.tiedot', {

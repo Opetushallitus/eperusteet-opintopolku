@@ -127,7 +127,17 @@ angular.module('app')
       'root.aipe.tiedot': {
         parent: 'root.aipe',
         label: 'perusteen-tiedot'
-        },
+      },
+      'root.aipe.tekstikappale': {
+        parent: 'root.aipe',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+      },
+      'root.aipe.vaihe': {
+        parent: 'root.aipe',
+        useData: 'vaiheNimi',
+        useId: 'vaiheId',
+      },
       'root.lukio':{
         useData: 'perusteNimi',
         useId: 'perusteId'

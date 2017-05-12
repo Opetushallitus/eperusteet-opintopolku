@@ -33,7 +33,6 @@ angular.module('app')
     ]
   }, res => {
     $scope.perusteetGroupByTyyppi = _.groupBy(res.data, 'koulutustyyppi');
-    console.log($scope.perusteetGroupByTyyppi);
   }, err => {
     console.error(err);
   });
