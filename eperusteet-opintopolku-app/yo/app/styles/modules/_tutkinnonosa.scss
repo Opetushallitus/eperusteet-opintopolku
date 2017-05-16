@@ -156,7 +156,7 @@ $tosa-color: #199DD0;
       background: $box-table-bgcolor;
       color: white;
       padding: $box-table-padding;
-      height: 50px;
+      min-height: 50px;
 
       h3 {
         margin-top: 10px;
