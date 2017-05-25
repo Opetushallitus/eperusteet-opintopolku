@@ -21,8 +21,13 @@ module.exports = {
     'Perusopetus - valikot'
         (browser) {
             const { expect: { element }, click, waitForElementVisible } = browser;
-            withXpath(browser, () => click('//a[. = "Oppiaineet"]')).screenshot();
-            withXpath(browser, () => click('//a[. = "Vuosiluokkakokonaisuudet"]')).screenshot();
+            withXpath(browser, () => click('//a[. = "Oppiaineet"]')
+                .click('//a[. = "Palauta valinnat alkutilaan"]')
+                .click('//a[. = "Äidinkieli ja kirjallisuus"]')
+                .click('//a[. = "Suomen kieli ja kirjallisuus"]')
+                .click('//a[. = "Vuosiluokat 3-6"]'));
+            element('h3 span[translate="perusopetus-tavoitteet"]').text.to.equal('Oppiaineen tavoitteet');
+            withXpath(browser, () => click('//a[. = "Vuosiluokkakokonaisuudet"]'));
         },
 
     // 'Perusopetus - sisältö'
