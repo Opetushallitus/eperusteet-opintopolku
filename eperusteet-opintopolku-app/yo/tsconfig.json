@@ -140,6 +140,8 @@
     "app/states/tiedote/state.ts",
     "app/states/ops/state.ts",
     "app/states/selaus/state.ts",
+    "app/states/selaus/ammatillinenkoulutus/state.ts",
+    "app/states/selaus/ammatillinenkoulutus/peruste/state.ts",
     "app/states/selaus/ammatillinenperuskoulutus/state.ts",
     "app/states/selaus/ammatillinenaikuiskoulutus/state.ts",
     "app/states/selaus/valmentavakoulutus/state.ts",

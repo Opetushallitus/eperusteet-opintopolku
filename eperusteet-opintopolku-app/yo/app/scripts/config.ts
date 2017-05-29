@@ -148,9 +148,10 @@ angular.module('app')
     });
   });
 
-  $rootScope.$on('$stateChangeError', (event, toState) => {
+  $rootScope.$on('$stateChangeError', (event, toState, toParams, fromState, fromParams, error) => {
     if (toState.name !== 'root.virhe') {
-      console.warn(event, toState);
+      // console.warn(event, toState, error);
+      console.warn(error);
       VirheService.virhe({
         state: toState.name,
         viesti: 'virhe.jotain-meni-pieleen'

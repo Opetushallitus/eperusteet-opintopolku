@@ -40,6 +40,12 @@ angular.module('app')
     }
   };
 
+  $scope.isAmmatillinen = function () {
+    const uusiAmmatillinen = $state.includes('root.selaus.koostenakyma.**') && $stateParams.perusteluokitus === 'ammatillinenkoulutus';
+    if (uusiAmmatillinen || $state.includes('**.esitys.**') || $state.includes('root.selaus.ammatillinen')) {
+      return true;
+    }
+  };
 
   $scope.isAmPerus = function () {
     if ($state.includes('**.esitys.**') && amOsio === 'koulutustyyppi_1' ||

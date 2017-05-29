@@ -86,7 +86,7 @@ namespace Controllers {
         var params = _.extend(_.clone($stateParams), {
           suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
         });
-        $state.go('root.esitys.peruste.tiedot', params);
+        $state.go('root.esitys.peruste.tiedot', params, $stateParams, { location: "replace" });
       }
     });
 

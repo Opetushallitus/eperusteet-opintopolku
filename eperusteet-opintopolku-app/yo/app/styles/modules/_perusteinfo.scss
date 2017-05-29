@@ -1,0 +1,123 @@
+$laatikko-padding: 12px;
+$laatikko-margin: 6px;
+$light-color: #149ECB;
+$mid-color: #53989E;
+$heavy-color: #06526b;
+$dark-color: #555;
+$border-color: #E6E7E8;
+
+
+.perusteinfo {
+    margin-top: 24px;
+
+    .perustelaatikko {
+        margin-top: 4px;
+        background-color: #fff;
+        border: 1px solid $border-color;
+
+        .otsikko {
+            font-weight: bold;
+            padding: $laatikko-padding;
+            border-bottom: 1px solid $border-color;
+        }
+
+        .peruste-linkki {
+            margin: 12px;
+            padding: 0px 12px 0px 12px;
+            background: #ffffff;
+            border-radius: 4px;
+            border: 1px solid $light-color;
+            font-weight: bold;
+
+            h4 {
+                margin-top: 5px;
+                margin-bottom: 2px;
+            }
+
+            button {
+                margin-top: 9px;
+                margin-bottom: 5px;
+                color: #ffffff;
+                float: right;
+                border-radius: 4px;
+                padding: 8px 14px 8px 14px;
+                // position: relative;
+                // top: 15px;
+                background-color: $light-color;
+                border-color: #ffffff;
+                text-shadow: none;
+                box-shadow: none;
+            }
+        }
+
+        .tiivistelmalaatikko {
+            padding: $laatikko-padding;
+        }
+    }
+
+    .infolaatikko {
+        background: white;
+        border: 1px solid $border-color;
+        margin-top: 24px;
+    }
+
+    .uutislaatikko {
+        margin: 0px;
+        margin-top: 4px;
+        .otsikko {
+            padding: $laatikko-padding;
+            border-bottom: 1px solid $border-color;
+        }
+        .uutislista {
+            padding: $laatikko-padding;
+            .uutinen {
+                a.uutinen-nimi {
+                    color: $heavy-color;
+                }
+                .uutinen-paivamaara {
+                    font-size: 12px;
+                    color: $dark-color;
+                }
+            }
+            .nayta-kaikki-uutiset {
+                margin-top: 6px;
+            }
+
+        }
+    }
+
+}
+
+.paikalliset {
+    margin-top: 8px;
+    margin-bottom: 8px;
+
+    .opslistaus {
+        margin-top: 8px;
+        .opetussuunnitelma {
+            margin-bottom: 12px;
+            padding: 18px;
+            background: #fff;
+
+            .ops-toimija {
+            }
+            .ops-nimi {
+            }
+            .ops-tutkintonimikkeet {
+                .tnimike-otsikko {
+                    font-size: 12px;
+                    color: $dark-color;
+                }
+                .tutkintonimike-bubble {
+                    background: $mid-color;
+                    border-radius: 4px;
+                    color: #fff;
+                    font-size: 12px;
+                    margin: 4px;
+                    margin-left: 6px;
+                    padding: 3px;
+                }
+            }
+        }
+    }
+}

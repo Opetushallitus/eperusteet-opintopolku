@@ -1,0 +1,40 @@
+.perusteinfo
+  .row
+    .col-md-7
+      .perustelaatikko
+        .otsikko
+          span(ng-bind="peruste.nimi | kaanna")
+          =" "
+          span ({{ peruste.diaarinumero }})
+        .tiivistelmalaatikko
+          span(ng-bind-html="peruste.kuvaus | kaanna")
+        .peruste-linkki
+          .row
+            .col-md-10
+              h4
+                img(src="images/sm/ikoni-eperusteet.png")
+                span(ng-bind="peruste.nimi | kaanna")
+            .col-md-2
+              button.btn.btn-info(ng-bind="'avaa' | kaanna")
+    .col-md-5
+      .infolaatikko.uutislaatikko
+        .otsikko
+          span(ng-bind="'tiedotteet' | kaanna")
+        .uutislista
+          .uutinen
+            a.uutinen-nimi(href="") Terve moi olen uutinen
+            .uutinen-paivamaara 1.1.1970
+          .uutinen
+            a.uutinen-nimi(href="") Terve moi olen toinen uutinen
+            .uutinen-paivamaara 1.1.1971
+          .uutinen
+            a.uutinen-nimi(href="") Terve moi olen uutinen
+            .uutinen-paivamaara 1.1.1970
+          .uutinen
+            a.uutinen-nimi(href="") Terve moi olen toinen uutinen
+            .uutinen-paivamaara 1.1.1971
+          .nayta-kaikki-uutiset
+            a(href="" ng-bind="'nayta-kaikki-uutiset' | kaanna")
+
+  div(ui-view="paikalliset")
+  pre(ng-bind="peruste.tutkintonimikkeet | json")
