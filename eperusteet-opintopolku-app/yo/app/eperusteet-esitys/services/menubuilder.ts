@@ -14,7 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-
 angular.module('eperusteet.esitys')
 .service('epMenuBuilder', function (Algoritmit, $state, Kieli, Utils, epEsitysSettings) {
   function oppiaineSort(aineet) {
@@ -157,12 +156,23 @@ angular.module('eperusteet.esitys')
   function rakennaTekstisisalto(sisalto) {
     var suunnitelma = [];
     Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function(osa, depth) {
-      suunnitelma.push({
-        $osa: osa,
-        label: osa.perusteenOsa ? osa.perusteenOsa.nimi : '',
-        depth: depth,
-        $hidden: depth > 0
-      });
+      if (osa.perusteenOsa != null && osa.perusteenOsa.tunniste != null && osa.perusteenOsa.tunniste === 'laajaalainenosaaminen') {
+        suunnitelma.push({
+          id: 'laajaalaiset',
+          $osa: null,
+          label: osa.perusteenOsa.nimi,
+          depth: depth,
+          $hidden: depth > 0,
+          link: ['root.aipe.laajaalaiset']
+        });
+      } else {
+        suunnitelma.push({
+          $osa: osa,
+          label: osa.perusteenOsa ? osa.perusteenOsa.nimi : '',
+          depth: depth,
+          $hidden: depth > 0
+        });
+      }
     });
     var levels = {};
     _.each(suunnitelma, function (item, index) {
@@ -202,9 +212,9 @@ angular.module('eperusteet.esitys')
       _.each(vaiheet, vaihe => {
           menu.push({
               $id: vaihe.id,
-              depth: vaihe.depth,
               $vaihe: vaihe,
-              label: vaihe.nimi
+              label: vaihe.nimi,
+              depth: 0
           });
       });
       return menu;

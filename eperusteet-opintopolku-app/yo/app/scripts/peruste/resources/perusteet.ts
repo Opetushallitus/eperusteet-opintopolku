@@ -214,6 +214,36 @@ angular.module('app')
     });
 })
 
+.factory('AipeOppimaarat', function ($resource, epResource) {
+    return $resource(epResource.VAIHEET + '/oppiaineet/:oppiaineId/oppimaarat', {
+        vaiheId: '@id',
+        oppiaineId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
+})
+
+.factory('AipeKurssit', function ($resource, epResource) {
+    return $resource(epResource.VAIHEET + '/oppiaineet/:oppiaineId/kurssit/:kurssiId', {
+        vaiheId: '@id',
+        oppiaineId: '@id',
+        kurssiId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
+})
+
+.factory('AipeLaajaalaisetOsaamiset', function($resource, epResource) {
+    return $resource(epResource.AIPEOPETUS + '/laajaalaiset/:osanId', {
+        osanId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
+})
+
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {
   this.perusteellaTutkintonimikkeet = function(peruste) {
     if (_.isObject(peruste)) {

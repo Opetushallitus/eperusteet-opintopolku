@@ -25,7 +25,6 @@
                 ng-class="itemClasses(item)"
                 ng-href="{{item.href}}"
                 ng-hide="!item.$matched || item.root || (!search.term && (item.$hidden || item.$impHidden))")
-                pre {{item | json}}
                 .toggler
                   span.glyphicon(ng-show='!item.$leaf', ng-click='toggle(section.items, item, $event)', ng-class="{'glyphicon-chevron-right': item.$collapsed, 'glyphicon-chevron-down': !item.$collapsed}")
                 span.linktext(ng-class="{'action-link': !!item.href}", ep-highlight='search.term', ng-bind='item.label | kaanna')

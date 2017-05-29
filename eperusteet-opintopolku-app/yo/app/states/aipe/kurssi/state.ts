@@ -16,24 +16,24 @@
 
 angular.module('app')
 .config(($stateProvider) => $stateProvider
-.state('root.aipe.vaihe', {
-    url: '/vaiheet/:vaiheId',
-    templateUrl: 'eperusteet-esitys/views/vaihe.html',
-    controller: (vaihe, $scope, MurupolkuData, oppiaineet, $state) => {
-        $scope.vaihe = vaihe;
-        $scope.oppiaineet = oppiaineet;
-        MurupolkuData.set({ vaiheId: $scope.vaihe.id, vaiheNimi: $scope.vaihe.nimi });
-        $scope.isVaihe = () => $state.is('root.aipe.vaihe');
+.state('root.aipe.vaihe.oppiaine.kurssi', {
+    url: '/kurssit/:kurssiId',
+    templateUrl: 'eperusteet-esitys/views/kurssi.html',
+    controller: ($scope, MurupolkuData, kurssi) => {
+        $scope.kurssi = kurssi;
+        MurupolkuData.set({ kurssiId: $scope.kurssi.id, kurssiNimi: $scope.kurssi.nimi });
+        $scope.tavoitteetFilter = item => {
+            return _.includes($scope.kurssi.tavoitteet, item.id + "");
+        };
     },
     resolve: {
-        vaiheId: $stateParams => $stateParams.vaiheId,
-        vaihe: (perusteId, vaiheId, Vaiheet) => Vaiheet.get({
+        oppiaineId: $stateParams => $stateParams.oppiaineId,
+        kurssiId: $stateParams => $stateParams.kurssiId,
+        kurssi: (oppiaineId, perusteId, vaiheId, kurssiId, AipeKurssit) => AipeKurssit.get({
             perusteId: perusteId,
-            vaiheId: vaiheId
-        }).$promise,
-        oppiaineet: (AipeOppiaineet, perusteId, vaiheId) => AipeOppiaineet.query({
-            perusteId: perusteId,
-            vaiheId: vaiheId
+            vaiheId: vaiheId,
+            oppiaineId: oppiaineId,
+            kurssiId: kurssiId
         }).$promise
     }
 }));

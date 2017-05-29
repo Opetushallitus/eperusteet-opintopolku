@@ -277,5 +277,12 @@
   "fi": "suomi",
   "sv": "ruotsi",
   "haku-julkaisukieli": "Julkaisukieli",
-  "tulevat": "Tulevat"
+  "tulevat": "Tulevat",
+  "pakollinen-kurssi-kuvaus-header": "Pakollisten kurssien yleinen kuvaus",
+  "syventava-kurssi-kuvaus-header": "Valtakunnallisten syventävien kurssien yleinen kuvaus",
+  "soveltava-kurssi-kuvaus-header": "Valtakunnallisten soveltavien kurssien yleinen kuvaus",
+  "nimeton": "Nimetön",
+  "kuvaus": "Kuvaus",
+  "liitetyt-tavoitteet": "Liitetyt tavoitteet",
+  "nimeton-oppiaine": "Nimetön oppiaine"
 }

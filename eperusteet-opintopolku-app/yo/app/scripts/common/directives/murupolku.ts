@@ -138,6 +138,20 @@ angular.module('app')
         useData: 'vaiheNimi',
         useId: 'vaiheId',
       },
+      'root.aipe.vaihe.oppiaine': {
+        parent: 'root.aipe.vaihe',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+      },
+      'root.aipe.vaihe.oppiaine.kurssi': {
+        parent: 'root.aipe.vaihe.oppiaine',
+        useData: 'kurssiNimi',
+        useId: 'kurssiId',
+      },
+      'root.aipe.vaihe.oppiaine.laajaalaiset': {
+        parent: 'root.aipe',
+        label: 'laaja-alaiset-osaamiset'
+      },
       'root.lukio':{
         useData: 'perusteNimi',
         useId: 'perusteId'

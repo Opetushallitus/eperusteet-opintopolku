@@ -169,4 +169,15 @@
   }
 }
 
+  .vaiheet {
+    .vaihe {
+      margin-bottom: 4px;
+      padding: 3px;
+      cursor: pointer;
+      color: $brand-primary;
+      a:focus {
+        outline: none;
+      }
+    }
+  }
 }

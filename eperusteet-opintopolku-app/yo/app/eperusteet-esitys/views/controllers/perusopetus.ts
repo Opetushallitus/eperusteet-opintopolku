@@ -313,7 +313,7 @@ namespace Controllers {
                     break;
                 }
             }
-            $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
+            $scope.links.prev = i >= 0 && items[i].depth >= 0 && items[i].id !== 'laajaalaiset' ? items[i] : null;
         }
 
         $scope.$on('perusopetus:stateSet', checkPrevNext);

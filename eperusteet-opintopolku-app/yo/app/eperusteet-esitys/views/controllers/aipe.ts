@@ -17,7 +17,7 @@
 namespace Controllers {
     export const epAipeController = ($scope, perusteId, $state, $stateParams, MurupolkuData, sisalto, epMenuBuilder,
                                      koulutusalaService, opintoalaService, epPerusopetusStateService, peruste,
-                                     vaiheet, Kieli) => {
+                                     vaiheet, Kieli, opsStateService) => {
         $scope.peruste = sisalto[0];
         $scope.Koulutusalat = koulutusalaService;
         $scope.Opintoalat = opintoalaService;
@@ -51,6 +51,7 @@ namespace Controllers {
             }
             if (item.$selected) {
                 classes.push('tekstisisalto-active');
+                classes.push('active');
             }
             if (item.$header) {
                 classes.push('tekstisisalto-active-header');
@@ -64,7 +65,6 @@ namespace Controllers {
             sections: [{
                 id: 'suunnitelma',
                 include: 'eperusteet-esitys/views/tekstisisalto.html',
-                $open: true,
                 items: epMenuBuilder.rakennaTekstisisalto($scope.tekstisisalto),
                 naviClasses: $scope.naviClasses,
                 title: 'yhteiset-osuudet'
@@ -92,6 +92,7 @@ namespace Controllers {
                     location: 'replace'
                 });
             }
+            opsStateService.setState($scope.navi);
         });
     };
 }
