@@ -45,7 +45,7 @@ namespace Controllers {
 
         // Sivunavin asetukset Aipea varten
         $scope.naviClasses = item => {
-            let classes = [];
+            const classes = [];
             if (item.depth) {
                 classes.push('depth' + item.depth);
             }
