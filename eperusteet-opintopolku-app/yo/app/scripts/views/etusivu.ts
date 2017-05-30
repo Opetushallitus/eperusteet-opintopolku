@@ -67,6 +67,11 @@ angular.module('app')
       tila: 'valmis',
       stateTila: 'root.perusopetus.tiedot'
     },
+    'koulutustyyppi_17': {
+      tyyppi: 'koulutustyyppi_17',
+      tila: 'valmis',
+      stateTila: 'root.aipe.tiedot'
+    },
     'koulutustyyppi_15': {
       tyyppi: 'koulutustyyppi_15',
       tila: 'valmis',
@@ -107,6 +112,7 @@ angular.module('app')
   };
 
   const getPerusopetus = _.partial(getGeneric, 'koulutustyyppi_16');
+  const getAipe = _.partial(getGeneric, 'koulutustyyppi_17');
   const getValmistavaPerusopetus = _.partial(getGeneric, 'koulutustyyppi_22');
   const getLukioopetus = _.partial(getGeneric, 'koulutustyyppi_2');
   const getValmistavaLukioopetus = _.partial(getGeneric, 'koulutustyyppi_23');
@@ -138,6 +144,7 @@ angular.module('app')
   const getStateTila = (tyyppi) => paramMap[tyyppi].stateTila;
 
   this.getPerusopetus = getPerusopetus;
+  this.getAipe = getAipe;
   this.getValmistavaPerusopetus = getValmistavaPerusopetus;
   this.getValmistavaLukioopetus = getValmistavaLukioopetus;
   this.getLukioopetus = getLukioopetus;

@@ -14,7 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-
 angular.module('eperusteet.esitys')
 .service('epMenuBuilder', function (Algoritmit, $state, Kieli, Utils, epEsitysSettings) {
   function oppiaineSort(aineet) {
@@ -157,12 +156,23 @@ angular.module('eperusteet.esitys')
   function rakennaTekstisisalto(sisalto) {
     var suunnitelma = [];
     Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function(osa, depth) {
-      suunnitelma.push({
-        $osa: osa,
-        label: osa.perusteenOsa ? osa.perusteenOsa.nimi : '',
-        depth: depth,
-        $hidden: depth > 0
-      });
+      if (osa.perusteenOsa != null && osa.perusteenOsa.tunniste != null && osa.perusteenOsa.tunniste === 'laajaalainenosaaminen') {
+        suunnitelma.push({
+          id: 'laajaalaiset',
+          $osa: null,
+          label: osa.perusteenOsa.nimi,
+          depth: depth,
+          $hidden: depth > 0,
+          link: ['root.aipe.laajaalaiset']
+        });
+      } else {
+        suunnitelma.push({
+          $osa: osa,
+          label: osa.perusteenOsa ? osa.perusteenOsa.nimi : '',
+          depth: depth,
+          $hidden: depth > 0
+        });
+      }
     });
     var levels = {};
     _.each(suunnitelma, function (item, index) {
@@ -197,10 +207,24 @@ angular.module('eperusteet.esitys')
     });
   }
 
+  function rakennaVaiheet(vaiheet) {
+      const menu = [];
+      _.each(vaiheet, vaihe => {
+          menu.push({
+              $id: vaihe.id,
+              $vaihe: vaihe,
+              label: vaihe.nimi,
+              depth: 0
+          });
+      });
+      return menu;
+  }
+
   this.filteredOppimaarat = filteredOppimaarat;
   this.buildLukioOppiaineMenu = buildLukioOppiaineMenu;
   this.rakennaTekstisisalto = rakennaTekstisisalto;
   this.rakennaYksinkertainenMenu = rakennaYksinkertainenMenu;
   this.rakennaVuosiluokkakokonaisuuksienSisalto = rakennaVuosiluokkakokonaisuuksienSisalto;
   this.rakennaSisallotOppiaineet = rakennaSisallotOppiaineet;
+  this.rakennaVaiheet = rakennaVaiheet;
 });

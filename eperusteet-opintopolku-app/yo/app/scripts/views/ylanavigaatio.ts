@@ -1,6 +1,7 @@
 angular.module('app')
-.controller('YlanavigaatioController', ($rootScope, $timeout, $scope, $state, Kieli,
-                                                 UusimmatPerusteetService, Haku, $stateParams, Kaanna) => {
+.controller('YlanavigaatioController', ($rootScope, $timeout, $scope, $state, Kieli, Perusteet,
+                                        UusimmatPerusteetService, Haku, $stateParams, Kaanna,
+                                        VirheService) => {
   $scope.kieli = Kieli.getUiKieli();
   $scope.nykyinenTila = $state;
   $scope.navCollapsed = true;
@@ -21,6 +22,21 @@ angular.module('app')
     }
   };
 
+  Perusteet.get({
+    tyyppi: [
+      'koulutustyyppi_15',
+      'koulutustyyppi_16',
+      'koulutustyyppi_22',
+      'koulutustyyppi_6',
+      'koulutustyyppi_2',
+      'koulutustyyppi_17'
+    ]
+  }, res => {
+    $scope.perusteetGroupByTyyppi = _.groupBy(res.data, 'koulutustyyppi');
+  }, err => {
+    console.error(err);
+  });
+
   let amOsio;
   $scope.$on('loaded:peruste', (event, peruste) => {
     amOsio = peruste.koulutustyyppi;
@@ -29,6 +45,7 @@ angular.module('app')
   $scope.isPerusopetus = () => {
     if (($state.includes('**.perusopetus.**')
         || $state.includes('**.perusvalmistava.**')
+        || $state.includes('**.aipe.**')
         || $state.includes('**.lisaopetus.**')) && !$state.includes('**.ops.**')) {
       return true;
     }

@@ -23,6 +23,8 @@ angular.module('app')
   this.PERUSTEET_ROOT = serviceLoc + '/perusteet';
   this.PERUSTEET = this.PERUSTEET_ROOT + '/:perusteId';
   this.PERUSOPETUS = this.PERUSTEET + '/perusopetus';
+  this.AIPEOPETUS = this.PERUSTEET + '/aipeopetus';
+  this.VAIHEET = this.AIPEOPETUS + '/vaiheet/:vaiheId';
   this.PERUSTEENOSAT = serviceLoc + '/perusteenosat/:osanId';
   this.PERUSTEENOSAVIITE = serviceLoc + '/perusteenosat/viite/:viiteId';
   this.SUORITUSTAPA = this.PERUSTEET + '/suoritustavat/:suoritustapa';
@@ -31,7 +33,6 @@ angular.module('app')
   this.CACHEDGET = {method: 'GET', cache: true};
   this.CACHEDQUERY = {method: 'GET', isArray: true, cache: true};
 })
-
 .factory('Arviointiasteikot', function($resource, epResource) {
   return $resource(epResource.ARVIOINTIASTEIKOT, {
     asteikkoId: '@id'
@@ -192,6 +193,55 @@ angular.module('app')
   }, {
     query: epResource.CACHEDQUERY
   });
+})
+
+.factory('Vaiheet', function ($resource, epResource) {
+    return $resource(epResource.VAIHEET, {
+        vaiheId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
+})
+
+.factory('AipeOppiaineet', function ($resource, epResource) {
+    return $resource(epResource.VAIHEET + '/oppiaineet/:oppiaineId', {
+        vaiheId: '@id',
+        oppiaineId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
+})
+
+.factory('AipeOppimaarat', function ($resource, epResource) {
+    return $resource(epResource.VAIHEET + '/oppiaineet/:oppiaineId/oppimaarat', {
+        vaiheId: '@id',
+        oppiaineId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
+})
+
+.factory('AipeKurssit', function ($resource, epResource) {
+    return $resource(epResource.VAIHEET + '/oppiaineet/:oppiaineId/kurssit/:kurssiId', {
+        vaiheId: '@id',
+        oppiaineId: '@id',
+        kurssiId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
+})
+
+.factory('AipeLaajaalaisetOsaamiset', function($resource, epResource) {
+    return $resource(epResource.AIPEOPETUS + '/laajaalaiset/:osanId', {
+        osanId: '@id'
+    }, {
+        get: epResource.CACHEDGET,
+        query: epResource.CACHEDQUERY
+    });
 })
 
 .service('PerusteenTutkintonimikkeet', function(PerusteTutkintonimikekoodit, YleinenData) {

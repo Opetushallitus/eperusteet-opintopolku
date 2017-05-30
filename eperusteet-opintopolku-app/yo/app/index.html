@@ -41,7 +41,6 @@
 <script src="../node_modules/moment/locale/fi.js"></script>
 <script src="../node_modules/moment/locale/sv.js"></script>
 <script src="../node_modules/angular/angular.js"></script>
-<script src="../node_modules/angular-route/angular-route.js"></script>
 <script src="../node_modules/angular-ui-router/release/angular-ui-router.js"></script>
 <script src="../node_modules/angular-sanitize/angular-sanitize.js"></script>
 <script src="../node_modules/angular-resource/angular-resource.js"></script>
@@ -141,6 +140,7 @@
 
 <script src="scripts/peruste/directives/tree.js"></script>
 <script src="scripts/peruste/directives/tavoitteet.js"></script>
+<script src="scripts/peruste/directives/aipe/tavoitteet.js"></script>
 <script src="scripts/peruste/directives/tagcloud.js"></script>
 <script src="scripts/peruste/directives/ohje.js"></script>
 
@@ -189,6 +189,13 @@
 <script src="states/perusopetus/tekstikappale/state.js"></script>
 <script src="states/perusopetus/sisallot/state.js"></script>
 <script src="states/perusopetus/vlkoppiaine/state.js"></script>
+<script src="states/aipe/state.js"></script>
+<script src="states/aipe/tiedot/state.js"></script>
+<script src="states/aipe/tekstikappale/state.js"></script>
+<script src="states/aipe/vaihe/state.js"></script>
+<script src="states/aipe/oppiaine/state.js"></script>
+<script src="states/aipe/kurssi/state.js"></script>
+<script src="states/aipe/laajaalaiset/state.js"></script>
 <script src="states/tiedote/state.js"></script>
 <script src="states/ops/state.js"></script>
 <script src="states/selaus/state.js"></script>
@@ -196,7 +203,6 @@
 <script src="states/selaus/ammatillinenaikuiskoulutus/state.js"></script>
 <script src="states/selaus/valmentavakoulutus/state.js"></script>
 <script src="states/selaus/ops/state.js"></script>
-
 <!-- endbuild -->
 
 <!-- build:js({.tmp,app}) scripts/esitys.js -->
@@ -210,6 +216,7 @@
 <script src="eperusteet-esitys/services/tekstikappaleutils.js"></script>
 <script src="eperusteet-esitys/views/controllers/lukio.js"></script>
 <script src="eperusteet-esitys/views/controllers/perusopetus.js"></script>
+<script src="eperusteet-esitys/views/controllers/aipe.js"></script>
 <script src="eperusteet-esitys/views/controllers/sisallot.js"></script>
 <script src="eperusteet-esitys/views/controllers/yksinkertainen.js"></script>
 <!-- endbuild -->

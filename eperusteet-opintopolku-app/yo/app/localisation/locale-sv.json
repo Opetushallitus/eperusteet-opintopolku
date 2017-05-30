@@ -38,6 +38,7 @@
   "etusivu.uutisia": "Nyheter",
   "etusivu.valtakunnalliset-perusteet": "De nationella eGrunderna",
   "etusivulle": "Till startsidan",
+  "hae-nimella": "Sök på examensnamnet",
   "haku-hakuehdot": "Sökvillkor",
   "haku-kaikki-alat": "Alla utbildningsområden",
   "haku-kaikki-opintoalat": "Alla studieområden",
@@ -52,7 +53,11 @@
   "haku-tulosten-maara": "Antal grunder som hittades:",
   "haku-tutkinnon-nimi-placeholder": "Examens namn",
   "haku-tyyppi": "Typ",
+  "tyyppi": "Examenstyp",
   "haku-voimaantulopvm": "Datum för ikraftträdande",
+  "voimassaolevat": "I kraft",
+  "siirtymassa": "Övergångstid",
+  "poistuneet": "Inte längre i kraft",
   "kaikki-koulutustyypit": "Alla utbildningstyper",
   "kasitteet": "Begrepp",
   "keskeiset-sisallot": "Centralt innehåll",
@@ -90,6 +95,7 @@
   "laaja-alaiset-osaamiset": "Mångsidig kompetens",
   "laajuus": "Omfattning",
   "loydettyjen-opsien-maara": "Antal läroplaner som hittades",
+  "loydettyjen-tutkintojen-maara": "Antal examina som hittades",
   "lukio-kurssi-tyyppi-otsikko-paikallinen_soveltava": "Lokal tillämpad",
   "lukio-kurssi-tyyppi-otsikko-paikallinen_syventava": "Lokal fördjupad",
   "lukio-kurssi-tyyppi-otsikko-valtakunnallinen_pakollinen": "Obligatorisk",
@@ -236,5 +242,8 @@
   "vuosiluokkakokonaisuudet": "Årskurshelheterna",
   "yhteiset-osuudet": "Gemensamma delar",
   "yleiset-osuudet": "Allmänna delar",
-  "yleiset-tavoitteet": "Allmänna mål"
+  "yleiset-tavoitteet": "Allmänna mål",
+  "fi": "finska",
+  "sv": "svenska",
+  "tulevat": "På kommande"
 }
