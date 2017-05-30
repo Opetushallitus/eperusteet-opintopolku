@@ -15,26 +15,16 @@
                 img(src="images/sm/ikoni-eperusteet.png")
                 span(ng-bind="peruste.nimi | kaanna")
             .col-md-2
-              button.btn.btn-info(ng-bind="'avaa' | kaanna")
+              a.btn.btn-info(ng-href="{{ perusteUrl }}" ng-bind="'avaa' | kaanna")
     .col-md-5
       .infolaatikko.uutislaatikko
         .otsikko
-          span(ng-bind="'tiedotteet' | kaanna")
+          span(ng-bind="'perusteen-tiedotteet' | kaanna")
         .uutislista
-          .uutinen
-            a.uutinen-nimi(href="") Terve moi olen uutinen
-            .uutinen-paivamaara 1.1.1970
-          .uutinen
-            a.uutinen-nimi(href="") Terve moi olen toinen uutinen
-            .uutinen-paivamaara 1.1.1971
-          .uutinen
-            a.uutinen-nimi(href="") Terve moi olen uutinen
-            .uutinen-paivamaara 1.1.1970
-          .uutinen
-            a.uutinen-nimi(href="") Terve moi olen toinen uutinen
-            .uutinen-paivamaara 1.1.1971
+          .uutinen(ng-repeat="tiedote in perusteenTiedotteet | limitTo:tiedoteMaara")
+            a.uutinen-nimi(ui-sref="root.tiedote({ tiedoteId: tiedote.id })" ng-bind="tiedote.otsikko | kaanna")
+            .uutinen-paivamaara(ng-bind="tiedote.luotu | aikaleima")
           .nayta-kaikki-uutiset
-            a(href="" ng-bind="'nayta-kaikki-uutiset' | kaanna")
+            a(href="" ng-bind="'nayta-kaikki-uutiset' | kaanna" ng-click="toggleTiedoteMaara()")
 
   div(ui-view="paikalliset")
-  pre(ng-bind="peruste.tutkintonimikkeet | json")

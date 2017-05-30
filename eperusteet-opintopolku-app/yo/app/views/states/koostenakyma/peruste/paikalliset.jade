@@ -2,21 +2,31 @@ mixin haku()
   input.form-control(type="text" placeholder="{{ 'hakusana' | kaanna }}")
 
 
+mixin opslaatikko()
+  .ops-content.ops-voimassaolevat
+    .ops-nimi
+      a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
+    .ops-toimija
+      span.tnimike-otsikko(ng-bind="ops.koulutustoimija.nimi | kaanna")
+    .ops-tutkintonimikkeet
+      span.tnimike-otsikko(ng-bind="'tutkintonimikkeet' | kaanna")
+      span(ng-show="ops.tutkintonimikkeet.length > 0")
+      // span.tutkintonimike-bubble(ng-repeat="nimike in ops.tutkintonimikkeet")
+      //   span(ng-bind="tutkintonimiketaulu[nimike][0] | json")
+
+
+
 mixin opslistaus()
   .opslistaus
     .opetussuunnitelma(ng-repeat="ops in opetussuunnitelmat")
-      .ops-nimi
-        a.tnimike-otsikko(ng-bind="ops.nimi | kaanna")
-      .ops-toimija
-        span.tnimike-otsikko(ng-bind="ops.koulutustoimija.nimi | kaanna")
-      .ops-tutkintonimikkeet
-        span.tnimike-otsikko(ng-bind="'tutkintonimikkeet' | kaanna")
-        span(ng-show="ops.tutkintonimikkeet.length > 0")
-          // span.tutkintonimike-bubble(ng-repeat="nimike in ops.tutkintonimikkeet")
-          //   span(ng-bind="tutkintonimiketaulu[nimike][0] | json")
+      +opslaatikko()
 
 
 .paikalliset
   h3(ng-bind="'paikalliset-opetussuunnitelmat' | kaanna")
-  +haku
-  +opslistaus
+  div(ng-show="opetussuunnitelmat.length === 0")
+    .alert.alert-info
+      span(ng-bind="'perusteella-ei-paikallisia-opetussuunnitelmia' | kaanna")
+  div(ng-show="opetussuunnitelmat.length > 0")
+    // +haku
+    +opslistaus

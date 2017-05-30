@@ -78,7 +78,10 @@ namespace Controllers {
       $state.go('root.esitys.peruste', {
         perusteId: $stateParams.perusteId,
         suoritustapa: suoritustapa
-      }, {reload: true});
+      }, {
+          location: "replace",
+          reload: true
+      });
     };
 
     $scope.$on('$stateChangeSuccess', function () {
@@ -86,7 +89,7 @@ namespace Controllers {
         var params = _.extend(_.clone($stateParams), {
           suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
         });
-        $state.go('root.esitys.peruste.tiedot', params, $stateParams, { location: "replace" });
+        $state.go('root.esitys.peruste.tiedot', params, { location: "replace" });
       }
     });
 

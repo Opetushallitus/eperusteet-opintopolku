@@ -22,35 +22,56 @@ angular.module("app")
             template: "<div ui-view></div>",
             resolve: {
                 peruste: (PerusteApi, $stateParams) => PerusteApi.one("perusteet", $stateParams.perusteId).get(),
-                opetussuunnitelmat(peruste) {
-                    // TODO: Lataa paikalliset amosaasta perusteen pohjalta
-                    return [{
-                        nimi: { fi: "Hei moi" },
-                        koulutustoimija: {
-                            nimi: { fi: "Olen testiteksti" },
-                        },
-                        tutkintonimikkeet: ["tutkintonimikkeet_10092"],
-                    }, {
-                        nimi: { fi: "Joopa joo" },
-                        koulutustoimija: {
-                            nimi: { fi: "Lisää tekstiä ilman tutkintonimikettä" },
-                        },
-                        tutkintonimikkeet: [],
-                    }];
+                perusteenTiedotteet: (PerusteApi, $stateParams) => {
+                    const MONTH_OFFSET = 12 * 30 * 24 * 60 * 60 * 1000;
+                    const alkaen = (new Date()).getTime() - MONTH_OFFSET;
+                    return PerusteApi.all("tiedotteet").getList({
+                        perusteId: $stateParams.perusteId,
+                        vainJulkiset: true,
+                        alkaen
+                    });
+                },
+                async opetussuunnitelmat(peruste, Api) {
+                    try {
+                        const opsit = await Api.all("julkinen/perusteenopetussuunnitelmat").getList({
+                            perusteenDiaarinumero: peruste.diaarinumero
+                        });
+                        return opsit;
+                    }
+                    catch (ex) {
+                        return [];
+                    }
                 }
             },
             views: {
                 "": {
                     templateUrl: "views/states/koostenakyma/peruste/view.html",
-                    controller: ($scope, peruste) => {
+                    controller: ($scope, $state, $stateParams, peruste, perusteenTiedotteet) => {
+                        $scope.tiedoteMaara = 5;
                         $scope.peruste = peruste;
+                        $scope.perusteenTiedotteet = perusteenTiedotteet;
+
+                        $scope.toggleTiedoteMaara = () => {
+                            $scope.tiedoteMaara = $scope.tiedoteMaara === 5 ? 30 : 5;
+                        };
+
+                        $scope.perusteUrl = $state.href("root.esitys.peruste", {
+                            perusteId: peruste.id,
+                            suoritustapa: peruste.suoritustavat[0].suoritustapakoodi
+                        });
+
+                        $scope.goToPeruste = () => {
+                            $state.go("root.esitys.peruste", {
+                                perusteId: peruste.id,
+                                suoritustapa: peruste.suoritustavat[0].suoritustapakoodi
+                            });
+                        };
                     },
                 },
                 "paikalliset@root.selaus.perusteinfo": {
                     templateUrl: "views/states/koostenakyma/peruste/paikalliset.html",
-                    controller($scope, peruste, opetussuunnitelmat) {
+                    controller($scope, $state, peruste, opetussuunnitelmat) {
                         $scope.tutkintonimiketaulu = _.groupBy(peruste.tutkintonimikkeet, "tutkintonimikeUri");
-                        console.log($scope.tutkintonimiketaulu);
                         $scope.opetussuunnitelmat = opetussuunnitelmat;
                     }
                 },

@@ -34,7 +34,7 @@ $border-color: #E6E7E8;
                 margin-bottom: 2px;
             }
 
-            button {
+            .btn {
                 margin-top: 9px;
                 margin-bottom: 5px;
                 color: #ffffff;
@@ -94,29 +94,46 @@ $border-color: #E6E7E8;
 
     .opslistaus {
         margin-top: 8px;
+
         .opetussuunnitelma {
             margin-bottom: 12px;
-            padding: 18px;
             background: #fff;
 
-            .ops-toimija {
-            }
-            .ops-nimi {
-            }
-            .ops-tutkintonimikkeet {
-                .tnimike-otsikko {
-                    font-size: 12px;
-                    color: $dark-color;
+            .ops-content {
+                border: 1px solid $border-color;
+                padding: 18px;
+
+                .ops-toimija {
                 }
-                .tutkintonimike-bubble {
-                    background: $mid-color;
-                    border-radius: 4px;
-                    color: #fff;
-                    font-size: 12px;
-                    margin: 4px;
-                    margin-left: 6px;
-                    padding: 3px;
+                .ops-nimi {
                 }
+                .ops-tutkintonimikkeet {
+                    .tnimike-otsikko {
+                        font-size: 12px;
+                        color: $dark-color;
+                    }
+                    .tutkintonimike-bubble {
+                        background: $mid-color;
+                        border-radius: 4px;
+                        color: #fff;
+                        font-size: 12px;
+                        margin: 4px;
+                        margin-left: 6px;
+                        padding: 3px;
+                    }
+                }
+            }
+            .ops-tulevat {
+                border-left: 6px solid #99D840;
+            }
+            .ops-voimassaolevat {
+                border-left: 6px solid #149FCB;
+            }
+            .ops-siirtymassa {
+                border-left: 6px solid #ffba00;
+            }
+            .ops-poistuneet {
+                border-left: 6px solid #ff7c8a;
             }
         }
     }

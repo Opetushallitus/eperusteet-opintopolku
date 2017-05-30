@@ -30,7 +30,7 @@ angular.module("app", [
   "eperusteet.esitys",
   "restangular"
 ])
-.constant("DEBUG_UI_ROUTER", true)
+.constant("DEBUG_UI_ROUTER", false)
 .run(($rootScope, DEBUG_UI_ROUTER) => {
     if (DEBUG_UI_ROUTER) {
         $rootScope.$on("$stateChangeSuccess", (event, state, params) => {
