@@ -117,17 +117,21 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
             td
               span(ng-show='koodi.tutkinnonOsaArvo') {{ koodi.$tutkinnonOsaNimi | kaanna }} ({{ koodi.tutkinnonOsaArvo }})
     div(ng-if='koodisto.length === 0', kaanna="'ei-tutkintonimikkeita'")
+
 .row.row-margin(ng-if='!!peruste.kuvaus')
   .col-xs-12.col-sm-4
     strong
       span(kaanna="'tiivistelma'")
   .col-xs-12.col-sm-8
     termisto-tekstikentta(tekstikentta='peruste.kuvaus')
-.row.row-margin(ng-if='!!dokumenttiUrl')
+
+.row.row-margin
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'dokumentti-osoite'")
   .col-xs-6.col-sm-8
-    a(ng-href='{{ dokumenttiUrl }}')
-      span(kaanna="'lataa-dokumentti'")
+    small-spinner(ng-show="$$ladataanDokumenttia")
+    span(ng-hide="$$ladataanDokumenttia")
+      a(ng-href='{{ dokumenttiUrl }}' ng-show="dokumenttiUrl" kaanna="'lataa-dokumentti'")
+      span(ng-hide="dokumenttiUrl" kaanna="'dokumenttia-ei-luotu'")
 .clearfix

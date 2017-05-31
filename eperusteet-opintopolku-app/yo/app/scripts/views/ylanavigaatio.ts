@@ -57,6 +57,21 @@ angular.module('app')
     }
   };
 
+  $scope.isAmmatillinen = function () {
+    if ($state.includes('root.amops.**')) {
+      return true;
+    }
+    if ($state.includes('root.selaus.perusteinfo.**')) {
+      return true;
+    }
+    if ($state.includes('root.selaus.koostenakyma.**') && $stateParams.perusteluokitus === 'ammatillinenkoulutus') {
+      return true;
+    }
+    const uusiAmmatillinen = $state.includes('root.selaus.koostenakyma.**') && $stateParams.perusteluokitus === 'ammatillinenkoulutus';
+    if (uusiAmmatillinen || $state.includes('**.esitys.**') || $state.includes('root.selaus.ammatillinen')) {
+      return true;
+    }
+  };
 
   $scope.isAmPerus = function () {
     if ($state.includes('**.esitys.**') && amOsio === 'koulutustyyppi_1' ||

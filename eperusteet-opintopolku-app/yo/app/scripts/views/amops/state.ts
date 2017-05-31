@@ -46,6 +46,11 @@ angular.module("app")
     "": {
       templateUrl: "views/amops/view.html",
       controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location, ktId) => {
+        if ($state.is("root.amops")) {
+          $state.go("root.amops.tiedot", { location: "replace" });
+          // return;
+        }
+
         $scope.ops = ops;
         $scope.otsikot = otsikot;
         $scope.ktId = ktId;
