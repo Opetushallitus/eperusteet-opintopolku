@@ -51,6 +51,8 @@ div(ng-controller='YlanavigaatioController')
               a(ui-sref='root.perusvalmistava', kaanna="'navi.pvalmistava'")
             li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_6', ui-sref-active='active')
               a(ui-sref='root.lisaopetus', kaanna="'navi.lisaopetus'")
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_17', ui-sref-active='active')
+              a(ui-sref='root.aipe', kaanna="'navi.aipe'")
 
   // Opintopolku mobiilivalikko
   .row
@@ -72,6 +74,8 @@ div(ng-controller='YlanavigaatioController')
                 a(ui-sref='root.esiopetus', kaanna="'navi.esiopetus'", ng-click='navCollapse()')
               li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_16', ui-sref-active='active')
                 a(ui-sref='root.perusopetus', kaanna="'navi.perusopetus'", ng-click='navCollapse()')
+              li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_17', ui-sref-active='active')
+                a(ui-sref='root.aipe', kaanna="'navi.aipe'", ng-click='navCollapse()')
               li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_2', ui-sref-active='active')
                 a(ui-sref='root.lukio', kaanna="'navi.lukiokoulutus'")
               li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_22', ui-sref-active='active')

@@ -89,6 +89,14 @@ angular.module('app')
         sisaltoTunniste: 'posisalto',
         hasPdfCreation: false
       },
+      'koulutustyyppi_17': {
+        nimi: 'aipe',
+        oletusSuoritustapa: 'aipe',
+        hasTutkintonimikkeet: false,
+        hakuState: 'root.selaus.aipelista',
+        sisaltoTunniste: 'aipesisalto',
+        hasPdfCreation: false
+      },
       'koulutustyyppi_6': {
         nimi: 'lisaopetus',
         oletusSuoritustapa: 'lisaopetus',

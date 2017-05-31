@@ -120,6 +120,38 @@ angular.module('app')
         useId: 'oppiaineId',
         customParents: true
       },
+      'root.aipe': {
+        useData: 'perusteNimi',
+        useId: 'perusteId'
+      },
+      'root.aipe.tiedot': {
+        parent: 'root.aipe',
+        label: 'perusteen-tiedot'
+      },
+      'root.aipe.tekstikappale': {
+        parent: 'root.aipe',
+        useData: 'tekstikappaleNimi',
+        useId: 'tekstikappaleId',
+      },
+      'root.aipe.vaihe': {
+        parent: 'root.aipe',
+        useData: 'vaiheNimi',
+        useId: 'vaiheId',
+      },
+      'root.aipe.vaihe.oppiaine': {
+        parent: 'root.aipe.vaihe',
+        useData: 'oppiaineNimi',
+        useId: 'oppiaineId',
+      },
+      'root.aipe.vaihe.oppiaine.kurssi': {
+        parent: 'root.aipe.vaihe.oppiaine',
+        useData: 'kurssiNimi',
+        useId: 'kurssiId',
+      },
+      'root.aipe.vaihe.oppiaine.laajaalaiset': {
+        parent: 'root.aipe',
+        label: 'laaja-alaiset-osaamiset'
+      },
       'root.lukio':{
         useData: 'perusteNimi',
         useId: 'perusteId'
