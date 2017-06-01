@@ -107,7 +107,10 @@ namespace Controllers {
             let perusteetMapped = [];
 
             for (const peruste of perusteet) {
-                const link = $state.href("root.esitys.peruste", { perusteId: peruste.id, suoritustapa: peruste.suoritustavat[0].suoritustapakoodi });
+                const link = $state.href("root.esitys.peruste", {
+                    perusteId: peruste.id,
+                    suoritustapa: peruste.suoritustavat[0].suoritustapakoodi
+                });
                 perusteetMapped.push("<a href=\"" + link + "\">" + KaannaService.kaanna(peruste.nimi) + " (" + peruste.diaarinumero + ")</a>");
             }
 

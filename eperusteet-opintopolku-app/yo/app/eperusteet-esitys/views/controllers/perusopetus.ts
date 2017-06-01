@@ -279,7 +279,10 @@ namespace Controllers {
 
     export const epPerusopetusTekstikappaleController = ($scope, tekstikappale, epTekstikappaleChildResolver, MurupolkuData, epParentFinder) => {
         $scope.tekstikappale = tekstikappale;
-        MurupolkuData.set({tekstikappaleId: tekstikappale.id, tekstikappaleNimi: tekstikappale.nimi});
+        MurupolkuData.set({
+            tekstikappaleId: tekstikappale.id,
+            tekstikappaleNimi: tekstikappale.nimi
+        });
         $scope.lapset = epTekstikappaleChildResolver.getSisalto();
         $scope.links = {
             prev: null,
@@ -310,7 +313,7 @@ namespace Controllers {
                     break;
                 }
             }
-            $scope.links.prev = i >= 0 && items[i].depth >= 0 ? items[i] : null;
+            $scope.links.prev = i >= 0 && items[i].depth >= 0 && items[i].id !== 'laajaalaiset' ? items[i] : null;
         }
 
         $scope.$on('perusopetus:stateSet', checkPrevNext);

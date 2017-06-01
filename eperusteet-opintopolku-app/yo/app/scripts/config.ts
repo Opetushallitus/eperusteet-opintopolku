@@ -148,9 +148,9 @@ angular.module('app')
     });
   });
 
-  $rootScope.$on('$stateChangeError', (event, toState) => {
+  $rootScope.$on('$stateChangeError', (event, toState, toParams, fromState, fromParams, error) => {
+    console.warn(error);
     if (toState.name !== 'root.virhe') {
-      console.warn(event, toState);
       VirheService.virhe({
         state: toState.name,
         viesti: 'virhe.jotain-meni-pieleen'
@@ -159,8 +159,8 @@ angular.module('app')
   });
 
   $rootScope.$on('$stateNotFound', (event, toState) => {
+    console.warn(event, toState);
     if (toState.name !== 'root.virhe') {
-      console.warn(event, toState);
       VirheService.virhe({
         state: toState.name,
         viesti: 'virhe.sivua-ei-loydy'

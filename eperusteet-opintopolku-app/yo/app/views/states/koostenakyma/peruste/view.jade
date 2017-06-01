@@ -1,0 +1,30 @@
+.perusteinfo
+  .row
+    .col-md-7
+      .perustelaatikko
+        .otsikko
+          span(ng-bind="peruste.nimi | kaanna")
+          =" "
+          span ({{ peruste.diaarinumero }})
+        .tiivistelmalaatikko
+          span(ng-bind-html="peruste.kuvaus | kaanna")
+        .peruste-linkki
+          .row
+            .col-md-10
+              h4
+                img(src="images/sm/ikoni-eperusteet.png")
+                span(ng-bind="peruste.nimi | kaanna")
+            .col-md-2
+              a.btn.btn-info(ng-href="{{ perusteUrl }}" ng-bind="'avaa' | kaanna")
+    .col-md-5
+      .infolaatikko.uutislaatikko
+        .otsikko
+          span(ng-bind="'perusteen-tiedotteet' | kaanna")
+        .uutislista
+          .uutinen(ng-repeat="tiedote in perusteenTiedotteet | limitTo:tiedoteMaara")
+            a.uutinen-nimi(ui-sref="root.tiedote({ tiedoteId: tiedote.id })" ng-bind="tiedote.otsikko | kaanna")
+            .uutinen-paivamaara(ng-bind="tiedote.luotu | aikaleima")
+          .nayta-kaikki-uutiset
+            a(href="" ng-bind="'nayta-kaikki-uutiset' | kaanna" ng-click="toggleTiedoteMaara()")
+
+  div(ui-view="paikalliset")
