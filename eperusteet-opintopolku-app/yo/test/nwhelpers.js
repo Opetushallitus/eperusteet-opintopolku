@@ -57,7 +57,7 @@ const beforeAll = (browser) => {
 const testPerusteCommon = (browser, state, otsikko) => {
     const { pause, expect: { element }, click, waitForElementVisible, waitForElementPresent } = browser;
     click('a[ui-sref="' + state + '"]');
-    pause(200);
+    pause(2000);
     waitForElementPresent('#esitysPrintSisalto', 1000);
     element('#esitysPrintSisalto > h1[esitys-sivu-otsikko]').text.to.equal('Perusteen tiedot');
     element('h1.peruste-otsikko').text.to.equal(otsikko);
