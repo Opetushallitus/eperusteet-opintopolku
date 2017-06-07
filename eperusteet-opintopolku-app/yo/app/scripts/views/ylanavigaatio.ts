@@ -61,6 +61,9 @@ angular.module('app')
     if ($state.includes('root.amops.**')) {
       return true;
     }
+    if ($state.includes('root.selaus.jarjestajat.**')) {
+      return true;
+    }
     if ($state.includes('root.selaus.perusteinfo.**')) {
       return true;
     }

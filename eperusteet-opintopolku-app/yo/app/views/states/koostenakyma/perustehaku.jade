@@ -24,16 +24,16 @@ mixin haku()
     a(ng-click="poistaHakukriteeri('kieli')")
       +giconrtl("remove", "hakuparametrit.kieli")
 
-  span(uib-dropdown ng-hide="piilotaKoulutustyyppi()" ng-if="!hakuparametrit.tyyppi")
+  span(uib-dropdown ng-show="hakuparametrit.tyyppi.length > 1")
     a.dropdown-toggle(uib-dropdown-toggle)
       +giconrtl("chevron-down", "'tyyppi'")
     ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
       li(ng-repeat="koodi in koulutustyypit" ng-class="{active: hakuparametrit.tyyppi === koodi}")
         a(kaanna="koodi" ng-click="muutaHakua('tyyppi',koodi)")
 
-  span(ng-hide="piilotaKoulutustyyppi()" ng-if="hakuparametrit.tyyppi")
+  span(ng-show="hakuparametrit.tyyppi.length === 1")
     a(ng-click="poistaHakukriteeri('tyyppi')")
-      +giconrtl("remove", "hakuparametrit.tyyppi")
+      +giconrtl("remove", "hakuparametrit.tyyppi[0]")
 
   span(uib-dropdown ng-if="!hakuparametrit.koulutusala")
     a.dropdown-toggle(uib-dropdown-toggle)
@@ -111,6 +111,8 @@ mixin haku()
             b(ng-repeat="kanimi in peruste.$$koulutusalaNimet")
               span(kaanna="kanimi")
               span {{$last ? '' : ', '}}
+
+          div(kaanna="peruste.koulutustyyppi | kaanna")
 
           p.tutkintonimikkeet(ng-if="hakuparametrit.tutkintonimikkeet && peruste.$$tutkintonimikkeet.koodisto.length > 0")
             span(kaanna="'tutkintonimikkeet'" style="font-weight: bold;")

@@ -22,6 +22,9 @@ angular.module("app")
             template: "<div ui-view></div>",
             resolve: {
                 peruste: (PerusteApi, $stateParams) => PerusteApi.one("perusteet", $stateParams.perusteId).get(),
+
+                tutkintonimikkeet: (peruste) => peruste.one("tutkintonimikekoodit").get(),
+
                 perusteenTiedotteet: (PerusteApi, $stateParams) => {
                     const MONTH_OFFSET = 12 * 30 * 24 * 60 * 60 * 1000;
                     const alkaen = (new Date()).getTime() - MONTH_OFFSET;
@@ -31,25 +34,19 @@ angular.module("app")
                         alkaen
                     });
                 },
-                async opetussuunnitelmat(peruste, Api) {
-                    try {
-                        const opsit = await Api.all("julkinen/perusteenopetussuunnitelmat").getList({
-                            perusteenDiaarinumero: peruste.diaarinumero
-                        });
-                        return opsit;
-                    }
-                    catch (ex) {
-                        return [];
-                    }
-                }
+
+                paikallisetHaku: (peruste, Api) => Api.one("julkinen/opetussuunnitelmat")
             },
             views: {
                 "": {
                     templateUrl: "views/states/koostenakyma/peruste/view.html",
-                    controller: ($scope, $state, $stateParams, peruste, perusteenTiedotteet) => {
+                    controller: ($scope, $state, $stateParams, peruste, perusteenTiedotteet, tutkintonimikkeet) => {
                         $scope.tiedoteMaara = 5;
                         $scope.peruste = peruste;
                         $scope.perusteenTiedotteet = perusteenTiedotteet;
+                        $scope.tutkintonimikkeet = _(tutkintonimikkeet)
+                            .map((tn) => _.fromPairs(_.map(tn.b[tn.tutkintonimikeArvo].metadata, ({ kieli, nimi }) => ([kieli.toLowerCase(), nimi]))))
+                            .value();
 
                         $scope.toggleTiedoteMaara = () => {
                             $scope.tiedoteMaara = $scope.tiedoteMaara === 5 ? 30 : 5;
@@ -70,9 +67,51 @@ angular.module("app")
                 },
                 "paikalliset@root.selaus.perusteinfo": {
                     templateUrl: "views/states/koostenakyma/peruste/paikalliset.html",
-                    controller($scope, $state, peruste, opetussuunnitelmat) {
+                    controller($scope, $state, $timeout, $q, peruste, paikallisetHaku) {
                         $scope.tutkintonimiketaulu = _.groupBy(peruste.tutkintonimikkeet, "tutkintonimikeUri");
-                        $scope.opetussuunnitelmat = opetussuunnitelmat;
+                        $scope.haku = "";
+                        $scope.isLoading = true;
+                        $scope.opetussuunnitelmat = [];
+                        $scope.sivu = 1;
+                        $scope.sivukoko = 10;
+                        let canceler = null;
+
+                        async function haeOpetussuunnitelmista() {
+                            $scope.isLoading = true;
+                            if (canceler) {
+                                canceler.resolve();
+                            }
+
+                            $timeout(async () => {
+                                try {
+                                    canceler = $q.defer();
+                                    const opsit = await paikallisetHaku.withHttpConfig({
+                                        // timeout: canceler.promise
+                                    }).get({
+                                        perusteenDiaarinumero: peruste.diaarinumero,
+                                        nimi: $scope.haku,
+                                        sivu: $scope.sivu - 1,
+                                        sivukoko: $scope.sivukoko
+                                    });
+
+                                    $scope.opetussuunnitelmat = opsit.data;
+                                    $scope.sivu = opsit.sivu + 1;
+                                    $scope.sivuja = opsit.sivuja;
+                                    $scope.sivukoko = opsit.sivukoko;
+                                    $scope.kokonaismaara = opsit["kokonaismäärä"];
+                                    canceler = null;
+                                }
+                                catch (ex) {
+                                    $scope.opetussuunnitelmat = [];
+                                }
+                                finally {
+                                    $timeout(() => $scope.isLoading = false);
+                                }
+                            }, 200);
+                        };
+
+                        $timeout(() => haeOpetussuunnitelmista());
+                        $scope.hakuMuuttui = () => haeOpetussuunnitelmista();
                     }
                 },
             },

@@ -38,9 +38,9 @@
           span(kaanna="'paatospaivamaara'")
       .col-xs-6.col-sm-8
         span(pvm='ops.paatospaivamaara')
-    .row(ng-show='!!ops.kuvaus')
+    .row.row-margin
       .col-xs-12.col-sm-4
         strong
-          span(kaanna="'tiivistelma'")
+          span(kaanna="'koulutustoimija'")
       .col-xs-12.col-sm-8
-        termisto-tekstikentta(tekstikentta='ops.kuvaus')
+        a(ui-sref="root.selaus.jarjestajat({ ktId: ops.koulutustoimija.id })" ng-bind="ops.koulutustoimija.nimi | kaanna")

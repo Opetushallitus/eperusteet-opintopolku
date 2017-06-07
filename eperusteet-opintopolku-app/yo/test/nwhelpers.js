@@ -30,8 +30,8 @@ const checkHeader = (browser) => {
     assert.containsText(ylanaviClass, 'Esiopetus');
     assert.containsText(ylanaviClass, 'Perusopetus');
     assert.containsText(ylanaviClass, 'Lukiokoulutus');
-    assert.containsText(ylanaviClass, 'Ammatillinen peruskoulutus');
-    assert.containsText(ylanaviClass, 'Ammatillinen aikuiskoulutus');
+    // assert.containsText(ylanaviClass, 'Ammatillinen peruskoulutus');
+    assert.containsText(ylanaviClass, 'Ammatillinen koulutus');
     assert.containsText(ylanaviClass, 'Opetussuunnitelmat');
     return browser;
 };

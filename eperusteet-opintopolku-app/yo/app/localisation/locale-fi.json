@@ -49,6 +49,7 @@
   "etusivu.valtakunnalliset-perusteet": "Valtakunnalliset ePerusteet",
   "etusivulle": "Etusivulle",
   "hae": "Hae",
+  "hae-paikallisista": "Hae paikallisista opetussuunnitelmista",
   "hae-nimella": "Hae tutkinnon nimellä",
   "haku-hakuehdot": "Hakuehdot",
   "haku-kaikki-alat": "Kaikki koulutusalat",
@@ -289,5 +290,14 @@
   "nimeton": "Nimetön",
   "kuvaus": "Kuvaus",
   "liitetyt-tavoitteet": "Liitetyt tavoitteet",
-  "nimeton-oppiaine": "Nimetön oppiaine"
+  "ops-sisalto": "Opetussuunnitelman sisältö",
+  "nimeton-oppiaine": "Nimetön oppiaine",
+  "koulutustoimija-tiedotteet": "Koulutuksen järjestäjän tiedotteet",
+  "koulutuksen-jarjestajat": "Koulutuksen järjestäjät",
+  "yhteista-osaa-ei-toteutettu": "Koulutuksen järjestäjä ei ole lisännyt yhteistä osaa.",
+  "koulutustoimija": "Koulutuksen järjestäjä",
+  "jaetut-sisallot": "Jaetut sisällöt",
+  "opetussuunnitelmat": "Opetussuunnitelmat",
+  "hae-opetussuunnitelmista": "Hae opetussuunnitelmista",
+  "hae-koulutustoimijoista": "Hae koulutuksen järjestäjistä"
 }

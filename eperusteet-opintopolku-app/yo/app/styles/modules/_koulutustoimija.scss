@@ -1,16 +1,18 @@
 $laatikko-padding: 12px;
 $laatikko-margin: 6px;
 $light-color: #149ECB;
+$jaettu-color: #99D840;
+$ops-color: #149FCB;
 $mid-color: #53989E;
 $heavy-color: #06526b;
 $dark-color: #555;
 $border-color: #E6E7E8;
 
 
-.perusteinfo {
+.koulutustoimija {
     margin-top: 24px;
 
-    .perustelaatikko {
+    .opslaatikko {
         margin-top: 4px;
         background-color: #fff;
         border: 1px solid $border-color;
@@ -21,7 +23,7 @@ $border-color: #E6E7E8;
             border-bottom: 1px solid $border-color;
         }
 
-        .peruste-linkki {
+        .ops-linkki {
             margin: 12px;
             padding: 0px 12px 0px 12px;
             background: #ffffff;
@@ -50,17 +52,20 @@ $border-color: #E6E7E8;
             }
         }
 
+        .ops-linkki-jaettu {
+            border: 1px solid $jaettu-color;
+        }
+
         .tiivistelmalaatikko {
             padding: $laatikko-padding;
-
-            .tutkintonimikkeet {
-                color: #666;
-            }
-
-            .osaamisalat {
-                color: #666;
+            .ei-sisaltoa {
+                color: #555;
+                font-size: small;
             }
         }
+    }
+    .opslaatikko-jaettu {
+
     }
 
     .infolaatikko {
@@ -72,6 +77,11 @@ $border-color: #E6E7E8;
     .uutislaatikko {
         margin: 0px;
         margin-top: 4px;
+
+        .ei-tiedotteita {
+            color: #555;
+            font-size: small;
+        }
         .otsikko {
             padding: $laatikko-padding;
             border-bottom: 1px solid $border-color;
@@ -80,8 +90,13 @@ $border-color: #E6E7E8;
         .uutislista {
             padding: $laatikko-padding;
             .uutinen {
+                margin-bottom: 10px;
+
                 a.uutinen-nimi {
                     color: $heavy-color;
+                }
+                .uutinen-body {
+                    color: #555;
                 }
                 .uutinen-paivamaara {
                     font-size: 12px;
@@ -89,7 +104,7 @@ $border-color: #E6E7E8;
                 }
             }
             .nayta-kaikki-uutiset {
-                margin-top: 6px;
+                margin-top: 4px;
             }
 
         }
@@ -97,24 +112,56 @@ $border-color: #E6E7E8;
 
 }
 
-.paikalliset {
+.omat-opetussuunnitelmat {
     margin-top: 8px;
     margin-bottom: 8px;
 
-    input[type="text"] {
-        background-color: #FFFFFF;
-        border-radius: 2px;
-        border: 1px solid #E8E8E9;
-        box-shadow: none;
-        display: inline-block;
-        width: 100%;
+    .opshaku {
+        input {
+            border-bottom-left-radius: 0px;
+            border-bottom-right-radius: 0px;
+            margin-bottom: 0px;
+        }
+
+        .hakuvalinnat {
+            margin-top: 0px;
+            padding: 9px 8px 8px 12px;
+            color: #666;
+            font-size: smaller;
+            font-weight: bold;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-bottom-left-radius: 4px;
+            border-bottom-right-radius: 4px;
+
+            .bubble {
+                padding: 5px 7px 5px 7px;
+                margin: 3px 2px 2px 10px;
+                color: #fff;
+                border-radius: 4px;
+                cursor: pointer;
+                user-select: none;
+
+                i {
+                    margin-right: 4px;
+                }
+            }
+
+            .bubble-ops {
+                background: $ops-color;
+            }
+
+            .bubble-jaettu {
+                background: $jaettu-color;
+            }
+        }
     }
 
     .opslistaus {
-        margin-top: 7px;
+        margin-top: 8px;
 
         .opetussuunnitelma {
-            margin-bottom: 4px;
+            margin-bottom: 12px;
             background: #fff;
 
             .ops-content {
@@ -125,18 +172,14 @@ $border-color: #E6E7E8;
                 }
                 .ops-nimi {
                 }
-                .ops-kuvaus {
-                    margin-top: 4px;
-                    margin-bottom: 0px;
-                    color: #555;
-                    font-size: small;
-                }
                 .ops-tutkintonimikkeet {
+                    margin-top: 6px;
                     .tnimike-otsikko {
-                        font-size: 12px;
+                        font-size: small;
                         color: $dark-color;
                     }
                     .tutkintonimike-bubble {
+                        font-size: smaller !important;
                         background: $mid-color;
                         border-radius: 4px;
                         color: #fff;
@@ -144,8 +187,12 @@ $border-color: #E6E7E8;
                         margin: 4px;
                         margin-left: 6px;
                         padding: 3px;
+                        margin-top: 4px;
                     }
                 }
+            }
+            .ops-yleinen {
+                border-left: 6px solid #99D840;
             }
             .ops-tulevat {
                 border-left: 6px solid #99D840;
@@ -162,3 +209,4 @@ $border-color: #E6E7E8;
         }
     }
 }
+

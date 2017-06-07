@@ -1,5 +1,7 @@
 mixin haku()
-  input.form-control(type="text" placeholder="{{ 'hakusana' | kaanna }}")
+  input.form-control(type="text" placeholder="{{ 'hae-paikallisista' | kaanna }}"
+    ng-model-options="{ debounce: 300 }"
+    ng-model="haku" ng-change="hakuMuuttui(haku)")
 
 
 mixin opslaatikko()
@@ -8,25 +10,30 @@ mixin opslaatikko()
       a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
     .ops-toimija
       span.tnimike-otsikko(ng-bind="ops.koulutustoimija.nimi | kaanna")
-    .ops-tutkintonimikkeet
+    // .ops-tutkintonimikkeet
       span.tnimike-otsikko(ng-bind="'tutkintonimikkeet' | kaanna")
       span(ng-show="ops.tutkintonimikkeet.length > 0")
-      // span.tutkintonimike-bubble(ng-repeat="nimike in ops.tutkintonimikkeet")
-      //   span(ng-bind="tutkintonimiketaulu[nimike][0] | json")
-
+      span.tutkintonimike-bubble(ng-repeat="nimike in ops.tutkintonimikkeet")
+        span(ng-bind="nimike | json")
 
 
 mixin opslistaus()
   .opslistaus
     .opetussuunnitelma(ng-repeat="ops in opetussuunnitelmat")
       +opslaatikko()
+    .text-center
+      ul(uib-pagination ng-model='sivu' ng-change="hakuMuuttui()" total-items='kokonaismaara' items-per-page='sivukoko')
 
 
 .paikalliset
-  h3(ng-bind="'paikalliset-opetussuunnitelmat' | kaanna")
-  div(ng-show="opetussuunnitelmat.length === 0")
+  h3
+    span(ng-bind="'paikalliset-opetussuunnitelmat' | kaanna")
+    =" "
+    span(style="margin-left: 4px")
+      small-spinner(ng-show="isLoading")
+  +haku
+  div(ng-show="!isLoading && opetussuunnitelmat.length === 0" style="margin-top: 8px")
     .alert.alert-info
       span(ng-bind="'perusteella-ei-paikallisia-opetussuunnitelmia' | kaanna")
   div(ng-show="opetussuunnitelmat.length > 0")
-    // +haku
     +opslistaus
