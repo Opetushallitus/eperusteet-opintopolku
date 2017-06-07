@@ -24,6 +24,6 @@ mixin opslistaus()
   +haku
   div(ng-show="!isLoading && koulutustoimijat.length === 0" style="margin-top: 8px")
     .alert.alert-info
-      span(ng-bind="'perusteella-ei-paikallisia-opetussuunnitelmia' | kaanna")
+      span(ng-bind="'ei-hakutuloksia' | kaanna")
   div(ng-show="koulutustoimijat.length > 0")
     +opslistaus
