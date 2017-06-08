@@ -113,14 +113,10 @@ angular.module("app")
                                                 try {
                                                     const peruste = await PerusteApi.one("perusteet", ops.peruste.perusteId).get();
                                                     perusteCache[ops.peruste.perusteId] = peruste;
-                                                    console.log("Lisätään", peruste);
                                                 }
                                                 catch (ex) {
                                                 }
                                             }
-
-                                            console.log(perusteCache);
-                                            console.log(perusteCache[ops.peruste.perusteId]);
 
                                             if (!tutkintonimikeCache[ops.peruste.perusteId]) {
                                                 try {
