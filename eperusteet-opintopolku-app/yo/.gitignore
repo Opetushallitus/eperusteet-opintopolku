@@ -10,5 +10,3 @@ tscommand-*.tmp.txt
 app/**/*.js
 app/**/*.js.map
 app/**/*.html
-*.pug
-*.jade

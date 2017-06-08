@@ -1,0 +1,93 @@
+mixin haku()
+  .opshaku
+    input.form-control(type="text" placeholder="{{ 'hae-opetussuunnitelmista' | kaanna }}"
+      ng-model-options="{ debounce: 300 }"
+      ng-model="haku" ng-change="hakuMuuttui(haku)")
+    .hakuvalinnat
+      span(ng-bind="'nayta' | kaanna")
+      span.bubble.bubble-ops(ng-click="toggle('ops')")
+        i.glyphicon.glyphicon-ok(ng-show="hasTyyppi('ops')")
+        span(ng-bind="'opetussuunnitelmat' | kaanna")
+      span.bubble.bubble-jaettu(ng-click="toggle('yleinen')")
+        i.glyphicon.glyphicon-ok(ng-show="hasTyyppi('yleinen')")
+        span(ng-bind="'jaetut-sisallot' | kaanna")
+
+
+mixin opslaatikko()
+  .ops-border
+    .ops-content(ng-class="{ 'ops-voimassaolevat': ops.tyyppi === 'ops', 'ops-yleinen': ops.tyyppi === 'yleinen' }")
+      .ops-nimi
+        a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
+      .ops-toimija(ng-hide="ops.tyyppi !== 'ops'")
+        span.tnimike-otsikko(ng-bind="ops.peruste.nimi | kaanna")
+        span(style="margin-left: 4px") ({{ ops.peruste.diaarinumero }})
+      .ops-tutkintonimikkeet(ng-show="ops.$$tutkintonimikkeet.length > 0")
+        span.tnimike-otsikko {{ 'tutkintonimikkeet' | kaanna }}:
+        div
+          span.badge.tutkintonimike-bubble(ng-repeat="nimike in ops.$$tutkintonimikkeet")
+            span(ng-bind="nimike | kaanna")
+      .ops-tutkintonimikkeet(ng-show="ops.$$osaamisalat.length > 0")
+        span.tnimike-otsikko {{ 'osaamisalat' | kaanna }}:
+        div
+          span.badge.tutkintonimike-bubble(ng-repeat="osaamisala in ops.$$osaamisalat")
+            span(ng-bind="osaamisala.nimi | kaanna")
+
+
+mixin opslistaus()
+  .opslistaus
+    .opetussuunnitelma(ng-repeat="ops in opetussuunnitelmat")
+      +opslaatikko()
+    .text-center
+      ul(uib-pagination ng-model='sivu' ng-change="hakuMuuttui()" total-items='kokonaismaara' items-per-page='sivukoko')
+
+
+mixin paikalliset()
+  .omat-opetussuunnitelmat
+    h3
+      span(ng-bind="'opetussuunnitelmat' | kaanna")
+      =" "
+      span(style="margin-left: 4px")
+        small-spinner(ng-show="isLoading")
+    +haku
+    div(ng-show="!isLoading && opetussuunnitelmat.length === 0" style="margin-top: 8px")
+      .alert.alert-info
+        span(ng-bind="'ei-paikallisia-opetussuunnitelmia' | kaanna")
+    div(ng-show="opetussuunnitelmat.length > 0")
+      +opslistaus
+
+
+.koulutustoimija
+  .row
+    .col-md-7
+      .opslaatikko
+        .otsikko
+          span(ng-bind="koulutustoimija.nimi | kaanna")
+        div(ng-hide="yhteiset.length > 0")
+          .tiivistelmalaatikko
+            span.ei-sisaltoa(ng-bind="'yhteista-osaa-ei-toteutettu' | kaanna")
+        div(ng-show="yhteiset.length > 0")
+          .tiivistelmalaatikko
+            span(ng-bind-html="yhteiset[0].kuvaus | kaanna")
+          .ops-linkki(ng-repeat="yhteinen in yhteiset")
+            .row
+              .col-md-10
+                h4
+                  img(src="images/sm/ikoni-eperusteet.png")
+                  span(ng-bind="yhteinen.nimi | kaanna")
+              .col-md-2
+                a.btn.btn-info(ui-sref="root.amops({ opsId: yhteinen.id })" ng-bind="'avaa' | kaanna")
+    .col-md-5
+      .infolaatikko.uutislaatikko
+        .otsikko
+          span(ng-bind="'koulutustoimija-tiedotteet' | kaanna")
+        .uutislista(ng-hide="tiedotteet.length > 0")
+          span.ei-tiedotteita(ng-bind="'ei-tiedotteita' | kaanna")
+        .uutislista(ng-show="tiedotteet.length > 0")
+          .uutinen(ng-repeat="tiedote in tiedotteet")
+            a.uutinen-nimi(href="" ng-click="avaa($index)" ng-bind="tiedote.otsikko | kaanna")
+            .uutinen-body(ng-show="avattu === $index" ng-bind-html="tiedote.teksti | unsafe")
+            .uutinen-paivamaara(ng-bind="tiedote.luotu | aikaleima")
+          .nayta-kaikki-uutiset(ng-show="tiedotteet.length > 5")
+            a(href="" ng-bind="'nayta-kaikki-uutiset' | kaanna" ng-click="toggleTiedoteMaara()")
+
+  +paikalliset

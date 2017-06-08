@@ -14,8 +14,9 @@ angular.module("app")
                     $timeout(() => {
                         scope[target] = location.origin + "/eperusteet-service/api/dokumentit/" + doc;
                         scope.$$ladataanDokumenttia = false;
-                    });
+                    }, 1000);
                 }
+                scope.$$ladataanDokumenttia = false;
             }
             catch (ex) {
                 scope.$$ladataanDokumenttia = false;

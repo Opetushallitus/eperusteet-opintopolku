@@ -1,1 +1,29 @@
-h1 Terve
+mixin haku()
+  input.form-control(type="text" placeholder="{{ 'hae-koulutustoimijoista' | kaanna }}"
+    ng-model-options="{ debounce: 300 }"
+    ng-model="haku" ng-change="hakuMuuttui(haku)")
+
+
+mixin opslaatikko()
+  .ops-border
+    .ops-content.ops-voimassaolevat
+      .ops-nimi
+        a.tnimike-otsikko(ui-sref="root.selaus.jarjestajat({ ktId: kt.id })" ng-bind="kt.nimi | kaanna")
+      p.ops-kuvaus(ng-show="kt.kuvaus" ng-bind-html="kt.kuvaus | kaanna")
+
+
+mixin opslistaus()
+  .opslistaus
+    .opetussuunnitelma(ng-repeat="kt in koulutustoimijat")
+      +opslaatikko()
+    .text-center
+      ul(uib-pagination ng-model='sivu' ng-change="hakuMuuttui()" total-items='kokonaismaara' items-per-page='sivukoko')
+
+
+.paikalliset
+  +haku
+  div(ng-show="!isLoading && koulutustoimijat.length === 0" style="margin-top: 8px")
+    .alert.alert-info
+      span(ng-bind="'ei-hakutuloksia' | kaanna")
+  div(ng-show="koulutustoimijat.length > 0")
+    +opslistaus

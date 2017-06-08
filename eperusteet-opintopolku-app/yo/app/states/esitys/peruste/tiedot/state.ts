@@ -5,6 +5,5 @@ angular.module("app")
     templateUrl: "eperusteet-esitys/views/tiedot.html",
     controller: Controllers.epEsitysTiedotController,
     resolve: {
-        dokumenttiUrl: (PerusteApi, peruste, Dokumentit) => Dokumentit.dokumenttiUrlLataaja(PerusteApi, peruste.id, Dokumentit)
     }
 }));

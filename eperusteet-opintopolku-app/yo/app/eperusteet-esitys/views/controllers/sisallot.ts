@@ -52,12 +52,12 @@ namespace Controllers {
     }
   };
 
-  export const epEsitysTiedotController = ($scope, $q, $state, YleinenData, PerusteenTutkintonimikkeet, Perusteet, dokumenttiUrl) => {
+  export const epEsitysTiedotController = ($scope, $q, $state, YleinenData, PerusteenTutkintonimikkeet, Perusteet, Dokumentit, PerusteApi) => {
     $scope.showKoulutukset = _.constant(YleinenData.showKoulutukset($scope.peruste));
     $scope.showOsaamisalat = $scope.showKoulutukset;
     $scope.koulutusalaNimi = $scope.Koulutusalat.haeKoulutusalaNimi;
     $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
-    dokumenttiUrl($scope);
+    Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id)($scope);
 
     let currentTime = new Date().getTime();
     $scope.voimassaOleva = !!(!$scope.peruste.voimassaoloLoppuu

@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+    app:
+        tty: true
+        build: .
+        ports:
+            - "2700:9020"
