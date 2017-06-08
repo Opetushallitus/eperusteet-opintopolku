@@ -5,11 +5,11 @@ mixin haku()
 
 
 mixin opslaatikko()
-  .ops-content.ops-voimassaolevat
-    .ops-nimi
-      a.tnimike-otsikko(ui-sref="root.selaus.jarjestajat({ ktId: kt.id })" ng-bind="kt.nimi | kaanna")
-    p.ops-kuvaus(ng-show="kt.kuvaus" ng-bind-html="kt.kuvaus | kaanna")
-      
+  .ops-border
+    .ops-content.ops-voimassaolevat
+      .ops-nimi
+        a.tnimike-otsikko(ui-sref="root.selaus.jarjestajat({ ktId: kt.id })" ng-bind="kt.nimi | kaanna")
+      p.ops-kuvaus(ng-show="kt.kuvaus" ng-bind-html="kt.kuvaus | kaanna")
 
 
 mixin opslistaus()

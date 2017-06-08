@@ -14,22 +14,23 @@ mixin haku()
 
 
 mixin opslaatikko()
-  .ops-content(ng-class="{ 'ops-voimassaolevat': ops.tyyppi === 'ops', 'ops-yleinen': ops.tyyppi === 'yleinen' }")
-    .ops-nimi
-      a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
-    .ops-toimija(ng-hide="ops.tyyppi !== 'ops'")
-      span.tnimike-otsikko(ng-bind="ops.peruste.nimi | kaanna")
-      span(style="margin-left: 4px") ({{ ops.peruste.diaarinumero }})
-    .ops-tutkintonimikkeet(ng-show="ops.$$tutkintonimikkeet.length > 0")
-      span.tnimike-otsikko {{ 'tutkintonimikkeet' | kaanna }}:
-      div
-        span.badge.tutkintonimike-bubble(ng-repeat="nimike in ops.$$tutkintonimikkeet")
-          span(ng-bind="nimike | kaanna")
-    .ops-tutkintonimikkeet(ng-show="ops.$$osaamisalat.length > 0")
-      span.tnimike-otsikko {{ 'osaamisalat' | kaanna }}:
-      div
-        span.badge.tutkintonimike-bubble(ng-repeat="osaamisala in ops.$$osaamisalat")
-          span(ng-bind="osaamisala.nimi | kaanna")
+  .ops-border
+    .ops-content(ng-class="{ 'ops-voimassaolevat': ops.tyyppi === 'ops', 'ops-yleinen': ops.tyyppi === 'yleinen' }")
+      .ops-nimi
+        a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
+      .ops-toimija(ng-hide="ops.tyyppi !== 'ops'")
+        span.tnimike-otsikko(ng-bind="ops.peruste.nimi | kaanna")
+        span(style="margin-left: 4px") ({{ ops.peruste.diaarinumero }})
+      .ops-tutkintonimikkeet(ng-show="ops.$$tutkintonimikkeet.length > 0")
+        span.tnimike-otsikko {{ 'tutkintonimikkeet' | kaanna }}:
+        div
+          span.badge.tutkintonimike-bubble(ng-repeat="nimike in ops.$$tutkintonimikkeet")
+            span(ng-bind="nimike | kaanna")
+      .ops-tutkintonimikkeet(ng-show="ops.$$osaamisalat.length > 0")
+        span.tnimike-otsikko {{ 'osaamisalat' | kaanna }}:
+        div
+          span.badge.tutkintonimike-bubble(ng-repeat="osaamisala in ops.$$osaamisalat")
+            span(ng-bind="osaamisala.nimi | kaanna")
 
 
 mixin opslistaus()

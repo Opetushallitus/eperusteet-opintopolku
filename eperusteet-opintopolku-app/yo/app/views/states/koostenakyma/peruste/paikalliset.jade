@@ -5,16 +5,17 @@ mixin haku()
 
 
 mixin opslaatikko()
-  .ops-content.ops-voimassaolevat
-    .ops-nimi
-      a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
-    .ops-toimija
-      span.tnimike-otsikko(ng-bind="ops.koulutustoimija.nimi | kaanna")
-    // .ops-tutkintonimikkeet
-      span.tnimike-otsikko(ng-bind="'tutkintonimikkeet' | kaanna")
-      span(ng-show="ops.tutkintonimikkeet.length > 0")
-      span.tutkintonimike-bubble(ng-repeat="nimike in ops.tutkintonimikkeet")
-        span(ng-bind="nimike | json")
+  .ops-border
+    .ops-content.ops-voimassaolevat
+      .ops-nimi
+        a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
+      .ops-toimija
+        span.tnimike-otsikko(ng-bind="ops.koulutustoimija.nimi | kaanna")
+      // .ops-tutkintonimikkeet
+        span.tnimike-otsikko(ng-bind="'tutkintonimikkeet' | kaanna")
+        span(ng-show="ops.tutkintonimikkeet.length > 0")
+        span.tutkintonimike-bubble(ng-repeat="nimike in ops.tutkintonimikkeet")
+          span(ng-bind="nimike")
 
 
 mixin opslistaus()

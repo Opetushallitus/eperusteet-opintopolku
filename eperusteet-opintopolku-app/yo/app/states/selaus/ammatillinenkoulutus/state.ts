@@ -265,13 +265,13 @@ angular.module("app")
                             $timeout(async () => {
                                 try {
                                     canceler = $q.defer();
-                                    const koulutustoimijat = await koulutustoimijaHaku.withHttpConfig({
-                                        // timeout: canceler.promise
-                                    }).get({
-                                        nimi: $scope.haku,
-                                        sivu: $scope.sivu - 1,
-                                        sivukoko: $scope.sivukoko
-                                    });
+                                    const koulutustoimijat = await koulutustoimijaHaku
+                                        .withHttpConfig({ timeout: canceler.promise })
+                                        .get({
+                                            nimi: $scope.haku,
+                                            sivu: $scope.sivu - 1,
+                                            sivukoko: $scope.sivukoko
+                                        });
 
                                     $scope.koulutustoimijat = koulutustoimijat.data;
                                     $scope.sivu = koulutustoimijat.sivu + 1;
@@ -294,5 +294,5 @@ angular.module("app")
                     }
                 }
             },
-        })
+        });
 });

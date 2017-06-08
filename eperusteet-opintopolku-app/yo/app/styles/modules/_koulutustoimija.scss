@@ -164,47 +164,53 @@ $border-color: #E6E7E8;
             margin-bottom: 12px;
             background: #fff;
 
-            .ops-content {
+            .ops-border {
                 border: 1px solid $border-color;
-                padding: 18px;
+                padding: 0px;
+                margin: 0px;
 
-                .ops-toimija {
-                }
-                .ops-nimi {
-                }
-                .ops-tutkintonimikkeet {
-                    margin-top: 6px;
-                    .tnimike-otsikko {
-                        font-size: small;
-                        color: $dark-color;
+                .ops-content {
+                    border: 0px;
+                    padding: 18px;
+
+                    .ops-toimija {
                     }
-                    .tutkintonimike-bubble {
-                        font-size: smaller !important;
-                        background: $mid-color;
-                        border-radius: 4px;
-                        color: #fff;
-                        font-size: 12px;
-                        margin: 4px;
-                        margin-left: 6px;
-                        padding: 3px;
-                        margin-top: 4px;
+                    .ops-nimi {
+                    }
+                    .ops-tutkintonimikkeet {
+                        margin-top: 6px;
+                        .tnimike-otsikko {
+                            font-size: small;
+                            color: $dark-color;
+                        }
+                        .tutkintonimike-bubble {
+                            font-size: smaller !important;
+                            background: $mid-color;
+                            border-radius: 4px;
+                            color: #fff;
+                            font-size: 12px;
+                            margin: 4px;
+                            margin-left: 6px;
+                            padding: 3px;
+                            margin-top: 4px;
+                        }
                     }
                 }
-            }
-            .ops-yleinen {
-                border-left: 6px solid #99D840;
-            }
-            .ops-tulevat {
-                border-left: 6px solid #99D840;
-            }
-            .ops-voimassaolevat {
-                border-left: 6px solid #149FCB;
-            }
-            .ops-siirtymassa {
-                border-left: 6px solid #ffba00;
-            }
-            .ops-poistuneet {
-                border-left: 6px solid #ff7c8a;
+                .ops-yleinen {
+                    border-left: 6px solid #99D840;
+                }
+                .ops-tulevat {
+                    border-left: 6px solid #99D840;
+                }
+                .ops-voimassaolevat {
+                    border-left: 6px solid #149FCB;
+                }
+                .ops-siirtymassa {
+                    border-left: 6px solid #ffba00;
+                }
+                .ops-poistuneet {
+                    border-left: 6px solid #ff7c8a;
+                }
             }
         }
     }
