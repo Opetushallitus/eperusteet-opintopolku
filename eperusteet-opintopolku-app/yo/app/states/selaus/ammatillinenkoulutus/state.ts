@@ -72,7 +72,7 @@ angular.module("app")
                             voimassaolo: true
                         });
 
-                        { // Muuttujat
+                        {   // Muuttujat
                             $scope.isSearching = true;
                             $scope.hakuparametrit = hakuparametrit();
                             $scope.nykyinenSivu = 1;
@@ -98,7 +98,7 @@ angular.module("app")
                             $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
                         }
 
-                        { // Kontrollerin toiminnallisuus
+                        {   // Kontrollerin toiminnallisuus
                             // Kutsutaan uib-pagination eventistä
                             $scope.pageChanged = () => haePerusteista($scope.hakuparametrit, $scope.nykyinenSivu);
                             $scope.isArray = _.isArray;
@@ -117,7 +117,7 @@ angular.module("app")
                             };
 
                             $scope.muutaHakua = (key, value) => {
-                                $scope.hakuparametrit[key] = [value];
+                                $scope.hakuparametrit[key] = key === 'tyyppi' ? [value] : value;
                                 $scope.hakuMuuttui();
                             };
 
@@ -168,7 +168,7 @@ angular.module("app")
                                 }
                             }
                             return;
-                        };
+                        }
 
                         function rakennaKorvauslista(perusteet, avain = "korvattavat-perusteet") {
                             let result = "<div>";
@@ -188,7 +188,7 @@ angular.module("app")
                                 .value();
                             result += "</div>";
                             return result;
-                        };
+                        }
 
                         // Muokkaa haetut perusteet käyttöliittymälle kelpaavaan muotoon
                         function perusteParsinta(vastaus) {
@@ -214,7 +214,7 @@ angular.module("app")
                             $scope.kokonaismaara = vastaus.kokonaismäärä;
                             $scope.sivut = _.range(0, vastaus.sivuja);
                             hakuPattern = new RegExp("(" + $scope.hakuparametrit.nimi + ")", "i");
-                        };
+                        }
 
                         // Perusteiden haku
                         // Vanha haku perutaan uuden alkaessa
@@ -239,7 +239,7 @@ angular.module("app")
                                 canceler = undefined;
                                 SpinnerService.disable();
                             }
-                        };
+                        }
 
                         haePerusteista($scope.hakuparametrit);
 
@@ -249,7 +249,6 @@ angular.module("app")
                 "laitoslistaus@root.selaus.koostenakyma": {
                     templateUrl: "views/states/koostenakyma/laitoshaku.html",
                     controller($scope, $timeout, $q, $state, koulutustoimijaHaku) {
-                        console.log("Morjens");
                         $scope.haku = "";
                         $scope.isLoading = true;
                         $scope.koulutustoimijat = [];
@@ -266,7 +265,6 @@ angular.module("app")
                             $timeout(async () => {
                                 try {
                                     canceler = $q.defer();
-                                    console.log("Haetaan");
                                     const koulutustoimijat = await koulutustoimijaHaku.withHttpConfig({
                                         // timeout: canceler.promise
                                     }).get({
@@ -283,14 +281,13 @@ angular.module("app")
                                     canceler = null;
                                 }
                                 catch (ex) {
-                                    console.log("Wirhe", ex);
                                     $scope.koulutustoimijat = [];
                                 }
                                 finally {
                                     $timeout(() => $scope.isLoading = false);
                                 }
                             }, 200);
-                        };
+                        }
 
                         $timeout(() => haeKoulutustoimijoista());
                         $scope.hakuMuuttui = () => haeKoulutustoimijoista();
