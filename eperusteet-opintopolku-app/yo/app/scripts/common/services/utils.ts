@@ -62,7 +62,7 @@ angular.module('app')
   return {
     restrict: 'AE',
     scope: {},
-    template: '<div id="backtotop" ng-hide="hidden" title="{{\'takaisin-ylos\' | kaanna}}">' +
+    template: '<div id="backtotop" ng-hide="hidden">' +
       '<a class="action-link" icon-role="arrow-up" ng-click="backToTop()"></a></div>',
     link: function (scope: any) {
       scope.backToTop = function () {
