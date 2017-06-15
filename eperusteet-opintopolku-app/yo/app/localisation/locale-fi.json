@@ -17,6 +17,7 @@
   "arviointi": "Arviointi",
   "arviointi-vuosiluokan-paatteeksi": "Arviointikriteerit vuosiluokkakokonaisuuden päätteeksi",
   "arvion-hyva-osaaminen": "Arvion \"hyvä\" / arvosanan 8 osaaminen",
+  "osaamisen-osoittaminen": "Osaamisen osoittaminen",
   "avaa-sulje-kaikki": "Avaa/sulje kaikki",
   "avaa-sulje-rakenne": "Avaa / sulje rakenne",
   "copyright-opetushallitus": "Copyright © Opetushallitus",
@@ -27,7 +28,6 @@
   "ei-tuloksia": "Ei tuloksia rajauksellasi",
   "ei-hakutuloksia": "Ei hakutuloksia",
   "ei-tutkintonimikkeita": "Ei tutkintonimikkeitä",
-  "ei-tutkintonimikkeita ": "Ei tutkintonimikkeitä",
   "eperusteet-otsikko": "ePerusteet",
   "eperusteet-virkailija-linkki": "Virkailijanäkymään",
   "esikatselu-varoitus": "Opetussuunnitelma on vielä kesken.",
@@ -301,5 +301,8 @@
   "jaetut-sisallot": "Jaetut sisällöt",
   "opetussuunnitelmat": "Opetussuunnitelmat",
   "hae-opetussuunnitelmista": "Hae opetussuunnitelmista",
-  "hae-koulutustoimijoista": "Hae koulutuksen järjestäjistä"
+  "hae-koulutustoimijoista": "Hae koulutuksen järjestäjistä",
+  "hyvaksyja": "Hyväksyjä",
+  "paatosnumero": "Päätösnumero",
+  "viimeksi-muokattu": "Viimeksi muokattu"
 }
