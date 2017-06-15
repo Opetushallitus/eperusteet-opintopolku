@@ -8,10 +8,10 @@
       .list-group-item.header(ng-if='header')
         span(kaanna='header')
         span.glyphicon.glyphicon.glyphicon-remove.pull-right.action-link.hidden-lg(ng-click='toggleSideMenu()')
-      .list-group-item(ng-if='!sections && !disableRajaus', ng-show='hasTransclude')
+      .list-group-item(ng-show='hasTransclude')
         .sivunavi-tc-item
           #sivunavi-tc(ng-transclude='')
-        rajaus(size='small', model='search.term', placeholder='etsi-sisallosta')
+        rajaus(ng-if='!sections && !disableRajaus', size='small', model='search.term', placeholder='etsi-sisallosta')
       // Perusopetus valikko
       div(ng-if='sections')
         uib-accordion(close-others='showOne')
