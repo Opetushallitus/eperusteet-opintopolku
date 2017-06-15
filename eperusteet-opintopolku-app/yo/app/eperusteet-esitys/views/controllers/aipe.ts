@@ -17,7 +17,7 @@
 namespace Controllers {
     export const epAipeController = ($scope, perusteId, $state, $stateParams, MurupolkuData, sisalto, epMenuBuilder,
                                      koulutusalaService, opintoalaService, epPerusopetusStateService, peruste,
-                                     vaiheet, Kieli, opsStateService) => {
+                                     vaiheet, Kieli, opsStateService, TermistoService) => {
         $scope.peruste = sisalto[0];
         $scope.Koulutusalat = koulutusalaService;
         $scope.Opintoalat = opintoalaService;
@@ -29,6 +29,8 @@ namespace Controllers {
         });
 
         $scope.hasContent = (obj) => _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
+
+        TermistoService.setResource(peruste);
 
         // Murupolun alustus
         MurupolkuData.set({

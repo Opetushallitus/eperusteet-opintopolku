@@ -14,9 +14,6 @@
 * European Union Public Licence for more details.
 */
 
-'use strict';
-/* global _ */
-
 angular.module('app')
 .directive('termistoTekstikentta', function() {
     return {
@@ -38,7 +35,7 @@ angular.module('app')
     };
 })
 .directive('termistoViitteet', function (Kaanna, TermistoService, $document, $timeout) {
-    var TERMI_MATCHER = 'abbr[data-viite]';
+    const TERMI_MATCHER = 'abbr[data-viite]';
     return {
         restrict: 'A',
         scope: {
@@ -48,7 +45,7 @@ angular.module('app')
             scope.popovers = [];
             function destroy() {
                 element.find(TERMI_MATCHER).each(function () {
-                    var jqEl: any = angular.element(this);
+                    const jqEl: any = angular.element(this);
                     if (jqEl.popover) {
                         jqEl.popover('destroy');
                     }
@@ -57,19 +54,19 @@ angular.module('app')
             }
             function setup() {
                 element.find(TERMI_MATCHER).each(function () {
-                    var jqEl: any = angular.element(this);
-                    var viiteId = jqEl.attr('data-viite');
+                    const jqEl: any = angular.element(this);
+                    const viiteId = jqEl.attr('data-viite');
                     if (viiteId) {
                         TermistoService.preload();
                     }
-                    var popover = jqEl.popover({
+                    const popover = jqEl.popover({
                         placement: 'auto',
                         html: true,
                         title: Kaanna.kaanna('termin-selitys'),
                         trigger: 'click'
                     }).on('show.bs.popover', function () {
-                        var res = TermistoService.getWithAvain(viiteId, true);
-                        var content = res ? Kaanna.kaanna(res.selitys) : Kaanna.kaanna('termia-ei-loytynyt');
+                        const res = TermistoService.getWithAvain(viiteId, true);
+                        const content = res ? Kaanna.kaanna(res.selitys) : Kaanna.kaanna('termia-ei-loytynyt');
                         popover.attr('data-content', content);
                         if (res) {
                             popover.attr('data-original-title', Kaanna.kaanna(res.termi));
@@ -80,9 +77,9 @@ angular.module('app')
                             }
                         });
                         $timeout(function () {
-                            var thisPopover = popover.next('.popover');
-                            var title = thisPopover.find('.popover-title');
-                            var closer = angular.element(
+                            const thisPopover = popover.next('.popover');
+                            const title = thisPopover.find('.popover-title');
+                            const closer = angular.element(
                                 '<span class="closer pull-right">&#x2715;</span>');
                                 title.append(closer);
                                 closer.on('click', function () {
