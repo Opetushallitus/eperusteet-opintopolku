@@ -125,7 +125,7 @@ angular.module('app')
 
   this.fetch = (cb) => {
     const key = 'koulutustyyppi_1x';
-    const params = paramMap[key]; // jshint ignore:line
+    const params = paramMap[key];
     const amDeferred = Perusteet.get(params, (res) => {
       perusteet[key] = res.data;
       _.each(perusteet[key], (peruste) => {
@@ -135,7 +135,7 @@ angular.module('app')
         });
       });
     }).$promise;
-    $q.all([amDeferred, getPerusopetus(), getValmistavaPerusopetus(), getEsiopetus(), getValmistavaLukioopetus(),
+    $q.all([amDeferred, getPerusopetus(), getAipe(), getValmistavaPerusopetus(), getEsiopetus(), getValmistavaLukioopetus(),
       getLukioopetus(), getLisaopetus(), getVarhaiskasvatus(), getValma(), getAikuisLukio(), getTelma()]).then(() => {
       cb(perusteet);
     });

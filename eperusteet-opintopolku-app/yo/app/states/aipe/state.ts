@@ -31,7 +31,12 @@ angular.module('app')
                 return perusteList;
             }
         },
-        vaiheet: (Vaiheet, perusteId) => Vaiheet.query({ perusteId: perusteId }),
+        vaiheet: (Vaiheet, perusteId, peruste) => {
+            if (!perusteId) {
+                perusteId = peruste.id
+            }
+            return Vaiheet.query({ perusteId: perusteId })
+        },
         sisalto: (serviceConfig, peruste, $q, SuoritustapaSisalto) => {
             if (_.isArray(peruste.data)) {
                 peruste = peruste.data && peruste.data.length > 0 ? peruste.data[0] : {};
@@ -47,8 +52,13 @@ angular.module('app')
         },
         koulutusalaService: (serviceConfig, Koulutusalat) => Koulutusalat,
         opintoalaService: (serviceConfig, Opintoalat) => Opintoalat,
-        laajaalaiset: (AipeLaajaalaisetOsaamiset, perusteId) => AipeLaajaalaisetOsaamiset.query({
-            perusteId: perusteId
-        }).$promise
+        laajaalaiset: (AipeLaajaalaisetOsaamiset, perusteId, peruste) => {
+            if (!perusteId) {
+                perusteId = peruste.id
+            }
+            return AipeLaajaalaisetOsaamiset.query({
+                perusteId: perusteId
+            }).$promise;
+        }
     }
 }));
