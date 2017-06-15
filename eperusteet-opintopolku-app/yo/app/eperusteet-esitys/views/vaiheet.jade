@@ -1,0 +1,5 @@
+.vaiheet
+  .vaihe(ng-repeat="item in section.items"
+         ng-class="section.naviClasses(item)")
+    a(ng-if="item.$vaihe", ui-sref=".vaihe({vaiheId: item.$vaihe.id})")
+      span(ng-bind="item.label | kaanna")
