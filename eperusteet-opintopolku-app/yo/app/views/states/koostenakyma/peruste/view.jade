@@ -9,15 +9,19 @@
         .tiivistelmalaatikko
           span(ng-bind-html="peruste.kuvaus | kaanna")
           .tutkintonimikkeet(ng-show="tutkintonimikkeet.length > 0")
-            span.nimi(ng-bind="'tutkintonimikkeet' | kaanna")
-            =": "
-            span(ng-repeat="tutkintonimike in tutkintonimikkeet" ng-bind="tutkintonimike | kaanna")
+            p
+              span.nimi(ng-bind="'tutkintonimikkeet' | kaanna")
+              =": "
+              span(ng-repeat="tutkintonimike in tutkintonimikkeet")
+                span(ng-bind="tutkintonimike | kaanna")
+                span(ng-hide="$last" ng-bind="', '")
           .osaamisalat(ng-show="peruste.osaamisalat.length > 0")
-            span.nimi(ng-bind="'osaamisalat' | kaanna")
-            =": "
-            span(ng-repeat="osaamisala in peruste.osaamisalat")
-              span(ng-bind="osaamisala.nimi | kaanna")
-              span(ng-hide="$last" ng-bind="', '")
+            p
+              span.nimi(ng-bind="'osaamisalat' | kaanna")
+              =": "
+              span(ng-repeat="osaamisala in peruste.osaamisalat")
+                span(ng-bind="osaamisala.nimi | kaanna")
+                span(ng-hide="$last" ng-bind="', '")
         .peruste-linkki
           .row
             .col-md-10
