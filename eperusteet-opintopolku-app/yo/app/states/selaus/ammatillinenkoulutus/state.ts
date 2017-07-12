@@ -117,13 +117,13 @@ angular.module("app")
                             };
 
                             $scope.muutaHakua = (key, value) => {
-                                $scope.hakuparametrit[key] = key === 'tyyppi' ? [value] : value;
+                                $scope.hakuparametrit[key] = key === "tyyppi" ? [value] : value;
                                 $scope.hakuMuuttui();
                             };
 
                             $scope.poistaHakukriteeri = (key) => {
                                 delete $scope.hakuparametrit[key];
-                                if (key === 'tyyppi') {
+                                if (key === "tyyppi") {
                                     $scope.hakuparametrit.tyyppi = oletustyypit;
                                 }
                                 $scope.hakuMuuttui();
@@ -232,6 +232,20 @@ angular.module("app")
                                 perusteParsinta(await perustehaku
                                     .withHttpConfig({ timeout: canceler.promise })
                                     .get({ ...$scope.hakuparametrit, sivu }));
+
+                                if ($scope.hakuparametrit.koulutusala) {
+                                    console.log($scope.hakuparametrit);
+                                    $scope.opintoalat = (<any>_.findWhere($scope.koulutusalat, {
+                                        koodi: $scope.hakuparametrit.koulutusala
+                                    })).opintoalat;
+                                    _.each($scope.opintoalat, (ala) => {
+                                        $scope.opintoalatMap[ala.koodi] = ala;
+                                    });
+                                }
+                                else {
+                                    $scope.opintoalat = [];
+                                    delete $scope.hakuparametrit.opintoala;
+                                }
                             }
                             catch (ex) {
                             }
