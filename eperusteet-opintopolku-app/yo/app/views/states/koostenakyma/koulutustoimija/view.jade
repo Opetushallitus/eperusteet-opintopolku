@@ -1,3 +1,5 @@
+include ../../../../misc/mixins.jade
+
 mixin haku()
   .opshaku
     input.form-control(type="text" placeholder="{{ 'hae-opetussuunnitelmista' | kaanna }}"
@@ -54,6 +56,11 @@ mixin paikalliset()
         span(ng-bind="'ei-paikallisia-opetussuunnitelmia' | kaanna")
     div(ng-show="opetussuunnitelmat.length > 0")
       +opslistaus
+
+
++murupolku(
+  [ '"etusivu.ammatilliset"', 'root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus", hakutyyppi: "jarjestajat" })' ],
+  [ 'koulutustoimija.nimi', '' ])
 
 
 .koulutustoimija

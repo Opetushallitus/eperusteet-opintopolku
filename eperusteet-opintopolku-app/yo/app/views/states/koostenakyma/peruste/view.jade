@@ -1,3 +1,10 @@
+include ../../../../misc/mixins.jade
+
++murupolku(
+  [ '"etusivu.ammatilliset"', 'root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus", hakutyyppi: "perusteet" })' ],
+  [ 'peruste.nimi', '' ])
+
+
 .perusteinfo
   .row
     .col-md-7
@@ -11,7 +18,9 @@
           .tutkintonimikkeet(ng-show="tutkintonimikkeet.length > 0")
             span.nimi(ng-bind="'tutkintonimikkeet' | kaanna")
             =": "
-            span(ng-repeat="tutkintonimike in tutkintonimikkeet" ng-bind="tutkintonimike | kaanna")
+            span(ng-repeat="tutkintonimike in tutkintonimikkeet")
+              span(ng-bind="tutkintonimike | kaanna")
+              span(ng-hide="$last" ng-bind="', '")
           .osaamisalat(ng-show="peruste.osaamisalat.length > 0")
             span.nimi(ng-bind="'osaamisalat' | kaanna")
             =": "
