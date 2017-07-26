@@ -27,11 +27,4 @@
               a(ui-sref=".oppiaine({ oppiaineId: oppiaine.id })")
                 span(kaanna="oppiaine.nimi")
 
-    div(ng-if="vaihe.opetuksenKohdealueet.length > 0")
-      h2(kaanna="'opetuksen-kohdealueet'")
-      .table-responsive
-        table.table.table-striped
-          tr(ng-repeat="kohdealue in vaihe.opetuksenKohdealueet")
-            td(kaanna="kohdealue.nimi")
-
   div(ui-view="")
