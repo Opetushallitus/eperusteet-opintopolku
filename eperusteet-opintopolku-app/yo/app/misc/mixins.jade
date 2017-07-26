@@ -1,3 +1,17 @@
+mixin murupolku(...linkit)
+  if linkit.length > 0
+    ol.breadcrumb
+      li
+        a(ui-sref="root.etusivu")
+          img(src='images/sm/ikoni-eperusteet.png')
+      - for (var idx = 0; idx < linkit.length - 1; idx++)
+        li
+          a(ui-sref=linkit[idx][1])
+            span(ng-bind=linkit[idx][0] + " | kaanna")
+      li.active
+        span(ng-bind=linkit[linkit.length - 1][0] + " | kaanna")
+
+
 mixin gicon(type)
   span(class="glyphicon glyphicon-" + type)
 

@@ -38,11 +38,15 @@ $tosa-color: #199DD0;
       top: -41px;
     }
 
+    .vapaat-tekstit {
+    }
+
     .toteutus-esitys {
       margin-top: 10px;
-      border: 1px solid $tosa-color;
+      border: none;
 
-      .otsikko { font-size: 16px;
+      .otsikko {
+        font-size: 16px;
         background: $tosa-color;
         padding: 6px;
         color: white;

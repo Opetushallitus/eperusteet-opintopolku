@@ -231,6 +231,10 @@ angular.module("app")
           }
         };
 
+        _.each($scope.osa.tosa.toteutukset, (toteutus) => {
+            toteutus.$$nayta = true;
+        });
+
         $scope.paikallinenKoodiUpdate(_.property("tosa.omatutkinnonosa.koodi")($scope.osa));
 
         { // Init block

@@ -41,6 +41,12 @@
     .row.row-margin
       .col-xs-12.col-sm-4
         strong
+          span(kaanna="'peruste'")
+      .col-xs-12.col-sm-8
+        a(ui-sref="root.selaus.perusteinfo({ perusteId: ops.peruste.perusteId })" ng-bind="ops.peruste.nimi | kaanna")
+    .row.row-margin
+      .col-xs-12.col-sm-4
+        strong
           span(kaanna="'koulutustoimija'")
       .col-xs-12.col-sm-8
         a(ui-sref="root.selaus.jarjestajat({ ktId: ops.koulutustoimija.id })" ng-bind="ops.koulutustoimija.nimi | kaanna")

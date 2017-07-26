@@ -92,12 +92,17 @@ module.exports = grunt => {
         hostname: '0.0.0.0'
       },
       proxies: [{
+        context: '/eperusteet-amosaa-service',
+        host: 'virkailija.opintopolku.fi',
+        port: 443,
+        https: true,
+        changeOrigin: true
+      }, {
         context: '/eperusteet-service',
         host: 'virkailija.opintopolku.fi',
         port: 443,
         https: true,
         changeOrigin: true
-      // }, {
       //   context: '/eperusteet-service',
       //   host: 'localhost',
       //   port: 8080,
