@@ -2,6 +2,10 @@ abbr[data-viite] {
   border-bottom: 1px dotted #999;
 }
 
+abbr[title] {
+  text-decoration: none;
+}
+
 //this offsets styles in yhteiset which are hitting the popover
 .popover-title {
   margin: 0 !important;

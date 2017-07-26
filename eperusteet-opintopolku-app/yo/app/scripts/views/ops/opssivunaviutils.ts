@@ -182,6 +182,25 @@ angular.module('app')
             setParent();
           }
         },
+          valinainenoppiaine: {
+              index: 1,
+              callback: function (item) {
+                  if (item.$oppiaine) {
+                      item.$selected = '' + $stateParams.oppiaineId === '' + item.$oppiaine.id
+                          && _.endsWith(item.$parent_vuosi, $stateParams.vuosi);
+                  }
+                  if (item.$vaihe) {
+                      item.$selected = '' + $stateParams.vaiheId === '' + item.$vaihe.id;
+                  }
+                  if (item.$selected) {
+                      selected = item;
+                  }
+              },
+              actions: function () {
+                  items = section.items;
+                  setParent();
+              }
+          },
         vaihe: {
           index: 1,
           callback: function (item) {

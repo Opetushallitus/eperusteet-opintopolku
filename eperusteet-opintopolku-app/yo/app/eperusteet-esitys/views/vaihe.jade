@@ -1,0 +1,37 @@
+.aipe-vaihe
+  div(ng-if="isVaihe()")
+    h1(kaanna="vaihe.nimi")
+
+    div(ng-if="hasContent(vaihe.siirtymaEdellisesta)")
+      h2(kaanna="vaihe.siirtymaEdellisesta.otsikko")
+      termisto-tekstikentta(tekstikentta="vaihe.siirtymaEdellisesta.teksti")
+
+    div(ng-if="hasContent(vaihe.tehtava)")
+      h2(kaanna="vaihe.tehtava.otsikko")
+      termisto-tekstikentta(tekstikentta="vaihe.tehtava.teksti")
+
+    div(ng-if="hasContent(vaihe.siirtymaSeuraavaan)")
+      h2(kaanna="vaihe.siirtymaSeuraavaan.otsikko")
+      termisto-tekstikentta(tekstikentta="vaihe.siirtymaSeuraavaan.teksti")
+
+    div(ng-if="hasContent(vaihe.paikallisestiPaatettavatAsiat)")
+      h2(kaanna="vaihe.paikallisestiPaatettavatAsiat.otsikko")
+      termisto-tekstikentta(tekstikentta="vaihe.paikallisestiPaatettavatAsiat.teksti")
+
+    div(ng-if="oppiaineet.length > 0")
+      h2(kaanna="'oppiaineet'")
+      .table-responsive
+        table.table.table-striped
+          tr(ng-repeat="oppiaine in oppiaineet")
+            td
+              a(ui-sref=".oppiaine({ oppiaineId: oppiaine.id })")
+                span(kaanna="oppiaine.nimi")
+
+    div(ng-if="vaihe.opetuksenKohdealueet.length > 0")
+      h2(kaanna="'opetuksen-kohdealueet'")
+      .table-responsive
+        table.table.table-striped
+          tr(ng-repeat="kohdealue in vaihe.opetuksenKohdealueet")
+            td(kaanna="kohdealue.nimi")
+
+  div(ui-view="")

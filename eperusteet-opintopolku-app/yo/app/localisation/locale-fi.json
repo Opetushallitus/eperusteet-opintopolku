@@ -17,6 +17,7 @@
   "arviointi": "Arviointi",
   "arviointi-vuosiluokan-paatteeksi": "Arviointikriteerit vuosiluokkakokonaisuuden päätteeksi",
   "arvion-hyva-osaaminen": "Arvion \"hyvä\" / arvosanan 8 osaaminen",
+  "osaamisen-osoittaminen": "Osaamisen osoittaminen",
   "avaa-sulje-kaikki": "Avaa/sulje kaikki",
   "avaa-sulje-rakenne": "Avaa / sulje rakenne",
   "copyright-opetushallitus": "Copyright © Opetushallitus",
@@ -27,7 +28,6 @@
   "ei-tuloksia": "Ei tuloksia rajauksellasi",
   "ei-hakutuloksia": "Ei hakutuloksia",
   "ei-tutkintonimikkeita": "Ei tutkintonimikkeitä",
-  "ei-tutkintonimikkeita ": "Ei tutkintonimikkeitä",
   "eperusteet-otsikko": "ePerusteet",
   "eperusteet-virkailija-linkki": "Virkailijanäkymään",
   "esikatselu-varoitus": "Opetussuunnitelma on vielä kesken.",
@@ -149,6 +149,7 @@
   "navi.tiedote": "Tiedote",
   "navi.valikkon-otsikko": "ePerusteet valikko",
   "navi.valmentavakoulutus": "Valmentava koulutus",
+  "navi.perusvalmistava": "Perusopetukseen valmistava",
   "nayta-kuvaukset": "Näytä kuvaukset",
   "nayta-perusteen-teksti": "Näytä perusteen teksti",
   "nayta-ryhman-kuvaus": "Näytä ryhmän kuvaus",
@@ -171,7 +172,7 @@
   "oppiaineet-ja-oppimaarat": "Oppiaineet ja oppimäärät",
   "oppilaitos-organisaatio-paikkakunta": "Oppilaitos / Organisaatio / Paikkakunta",
   "oppimaarat": "Oppimäärät",
-  "ops": "Perusopetus",
+  "ops": "Peruskoulutus",
   "ops-esikatselu": "Opetussuunnitelman esikatselu",
   "amops-esikatselu-info": "Ammatillisen opetussuunnitelman esikatselu",
   "ops:-tiedot": "Ops: tiedot",
@@ -301,5 +302,8 @@
   "jaetut-sisallot": "Jaetut sisällöt",
   "opetussuunnitelmat": "Opetussuunnitelmat",
   "hae-opetussuunnitelmista": "Hae opetussuunnitelmista",
-  "hae-koulutustoimijoista": "Hae koulutuksen järjestäjistä"
+  "hae-koulutustoimijoista": "Hae koulutuksen järjestäjistä",
+  "hyvaksyja": "Hyväksyjä",
+  "paatosnumero": "Päätösnumero",
+  "viimeksi-muokattu": "Viimeksi muokattu"
 }

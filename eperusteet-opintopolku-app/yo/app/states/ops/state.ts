@@ -263,19 +263,13 @@ angular.module('app')
     controller: 'OpsVlkOppiaineController',
     resolve: {
         oppiaineId: ($stateParams) => $stateParams.oppiaineId,
-
-            vlkId: ($stateParams) => $stateParams.vlkId,
-
-            oppiaine: (opsResource, oppiaineId, opsId) =>
-        opsResource.getOppiaine({ opsId, oppiaineId }).$promise,
-
-        oppiainePeruste: (opsPerusteResource, opsId, oppiaineId) =>
-        opsPerusteResource.getOppiainePeruste({ opsId, oppiaineId }).$promise,
-
-        baseLaajaalaiset: (opsId, opsResource) =>
-        opsResource.getLaajaalaisetosaamiset({ opsId: opsId }).$promise,
-
-        vuosiluokkakokonaisuus: function(vlkt, opsId, oppiaine, oppiaineId, opsResource, opsUtils) {
+        vlkId: ($stateParams) => $stateParams.vlkId,
+        oppiaine: (opsResource, oppiaineId, opsId) => opsResource.getOppiaine({ opsId, oppiaineId }).$promise,
+        oppiainePeruste: (opsPerusteResource, opsId, oppiaineId) => opsPerusteResource
+            .getOppiainePeruste({ opsId, oppiaineId }).$promise,
+        baseLaajaalaiset: (opsId, opsResource) => opsResource
+            .getLaajaalaisetosaamiset({ opsId: opsId }).$promise,
+        vuosiluokkakokonaisuus: (vlkt, opsId, oppiaine, oppiaineId, opsResource, opsUtils) => {
             let vId = opsUtils.getVlkId(vlkt, oppiaine);
             if(vId) {
                 return opsResource.getOppiaineVlk({
@@ -288,8 +282,8 @@ angular.module('app')
             }
             return {};
         },
-        vuosiluokkaSisalto: function(vlkt, oppiaine, vuosiluokkakokonaisuus, vuosi,
-                                     opsId, oppiaineId, opsResource, opsUtils){
+        vuosiluokkaSisalto: (vlkt, oppiaine, vuosiluokkakokonaisuus, vuosi, opsId, oppiaineId, opsResource,
+                             opsUtils) => {
                                          let vuosiluokkaId = opsUtils.getVuosiId(vuosiluokkakokonaisuus, vuosi);
                                          let vId = opsUtils.getVlkId(vlkt, oppiaine);
                                          if (vuosiluokkaId) {
@@ -298,7 +292,7 @@ angular.module('app')
                                                  oppiaineId: oppiaineId,
                                                  vlkId: vId,
                                                  vuosiId: vuosiluokkaId
-                                             }).$promise.then(function (res) {
+                                             }).$promise.then(res => {
                                                  return res;
                                              })
                                          }
@@ -314,7 +308,7 @@ angular.module('app')
     controller: 'OpsVlnOppiaineController',
     resolve: {
         oppiaineId: ($stateParams) => $stateParams.oppiaineId,
-            oppiaine: (opsResource, oppiaineId, opsId) =>
+        oppiaine: (opsResource, oppiaineId, opsId) =>
         opsResource.getOppiaine({
             opsId: opsId,
             oppiaineId: oppiaineId

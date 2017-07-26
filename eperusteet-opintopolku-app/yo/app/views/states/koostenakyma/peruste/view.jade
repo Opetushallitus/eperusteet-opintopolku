@@ -22,11 +22,12 @@ include ../../../../misc/mixins.jade
               span(ng-bind="tutkintonimike | kaanna")
               span(ng-hide="$last" ng-bind="', '")
           .osaamisalat(ng-show="peruste.osaamisalat.length > 0")
-            span.nimi(ng-bind="'osaamisalat' | kaanna")
-            =": "
-            span(ng-repeat="osaamisala in peruste.osaamisalat")
-              span(ng-bind="osaamisala.nimi | kaanna")
-              span(ng-hide="$last" ng-bind="', '")
+            p
+              span.nimi(ng-bind="'osaamisalat' | kaanna")
+              =": "
+              span(ng-repeat="osaamisala in peruste.osaamisalat")
+                span(ng-bind="osaamisala.nimi | kaanna")
+                span(ng-hide="$last" ng-bind="', '")
         .peruste-linkki
           .row
             .col-md-10

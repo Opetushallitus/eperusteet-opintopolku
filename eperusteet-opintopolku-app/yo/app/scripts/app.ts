@@ -36,7 +36,8 @@ angular.module("app", [
         $rootScope.$on("$stateChangeSuccess", (event, state, params) => {
             console.info(
                 "%c" + state.name, "color: #ffb05b; background: #333; font-weight: bold",
-                "(" + state.url + (state.templateUrl && (" | " + state.templateUrl) + ")"),
+                state.url,
+                state.templateUrl,
                 params);
         });
     }

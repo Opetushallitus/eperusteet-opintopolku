@@ -1,0 +1,61 @@
+.aipe-oppiaine
+  div(ng-if="isOppiaine()")
+    h1(ng-bind="oppiaine.nimi || 'nimeton-oppiaine' | kaanna")
+
+    div(ng-if="oppiaine.koodi")
+      h2(kaanna="'koodi'")
+      p {{oppiaine.koodi.arvo}}
+
+    div(ng-if="hasContent(oppiaine.tyotavat)")
+      h2(kaanna="oppiaine.tyotavat.otsikko")
+      termisto-tekstikentta(tekstikentta="oppiaine.tyotavat.teksti")
+
+    div(ng-if="hasContent(oppiaine.ohjaus)")
+      h2(kaanna="oppiaine.ohjaus.otsikko")
+      termisto-tekstikentta(tekstikentta="oppiaine.ohjaus.teksti")
+
+    div(ng-if="hasContent(oppiaine.arviointi)")
+      h2(kaanna="oppiaine.arviointi.otsikko")
+      termisto-tekstikentta(tekstikentta="oppiaine.arviointi.teksti")
+
+    div(ng-if="hasContent(oppiaine.sisaltoalueinfo)")
+      h2(kaanna="oppiaine.sisaltoalueinfo.otsikko")
+      termisto-tekstikentta(tekstikentta="oppiaine.sisaltoalueinfo.teksti")
+
+    div(ng-if="oppiaine.pakollinenKurssiKuvaus")
+      h2(kaanna="'pakollinen-kurssi-kuvaus-header'")
+      termisto-tekstikentta(tekstikentta="oppiaine.pakollinenKurssiKuvaus")
+
+    div(ng-if="oppiaine.syventavaKurssiKuvaus")
+      h2(kaanna="'syventava-kurssi-kuvaus-header'")
+      termisto-tekstikentta(tekstikentta="oppiaine.syventavaKurssiKuvaus")
+
+    div(ng-if="oppiaine.soveltavaKurssiKuvaus")
+      h2(kaanna="'soveltava-kurssi-kuvaus-header'")
+      termisto-tekstikentta(tekstikentta="oppiaine.soveltavaKurssiKuvaus")
+
+    div(ng-if="oppimaarat.length > 0")
+      h2(kaanna="'oppimaarat'")
+      .table-responsive
+        table.table.table-striped
+          tr(ng-repeat="oppimaara in oppimaarat")
+            td
+              a(ui-sref=".({ oppiaineId: oppimaara.id })")
+                span(kaanna="oppimaara.nimi || 'nimeton'")
+
+    div(ng-if="kurssit.length > 0")
+      h2(kaanna="'kurssit'")
+      .table-responsive
+        table.table.table-striped
+          tr(ng-repeat="kurssi in kurssit")
+            td
+              a(ui-sref=".kurssi({ kurssiId: kurssi.id })")
+                span(kaanna="kurssi.nimi || 'nimeton'")
+
+
+    div(ng-if="oppiaine.tavoitteet.length > 0")
+      h2(kaanna="'tavoitteet'")
+      aipe-tavoitteet(model="oppiaine.tavoitteet", laajaalaiset="laajaalaiset", vaihe="vaihe", editing="false")
+
+  div(ui-view="")
+
