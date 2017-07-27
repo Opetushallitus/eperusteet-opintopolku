@@ -259,7 +259,7 @@ angular.module("app")
         sivukoko: 5,
         tila: "valmis",
         tuleva: true,
-        tutkintonimikkeet: true,
+        tutkintonimikkeet: false,
         voimassaolo: true,
     };
 
