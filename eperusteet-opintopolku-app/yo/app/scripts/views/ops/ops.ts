@@ -33,7 +33,8 @@ angular.module('app')
       "koulutustyyppi_2": ".lukioopetus",
       "koulutustyyppi_6": ".lisaopetus",
       "koulutustyyppi_15": ".esiopetus",
-      "koulutustyyppi_16": ".perusopetus"
+      "koulutustyyppi_16": ".perusopetus",
+      "koulutustyyppi_17": ".aipe",
     };
     if ($state.is('root.ops')) {
       $state.go(kltMap[koulutustyyppi], {location: 'replace'})

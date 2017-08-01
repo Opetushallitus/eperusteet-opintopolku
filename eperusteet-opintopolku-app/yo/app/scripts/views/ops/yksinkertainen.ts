@@ -25,13 +25,13 @@ namespace Controllers {
         };
 
         const getRootState = (current) => {
-            return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus)(.*)/, '.$1');
+            return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus|aipe)(.*)/, '.$1');
         };
 
         TermistoService.setResource(ops, "OPS");
 
         const clickHandler = (event) => {
-            var ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
+            const ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
             if (ohjeEl.length === 0) {
                 $rootScope.$broadcast('ohje:closeAll');
             }
@@ -53,7 +53,7 @@ namespace Controllers {
         MurupolkuData.set({opsId: ops.id, opsNimi: ops.nimi});
 
         $scope.naviClasses = function (item) {
-            var classes = ['depth' + item.depth];
+            const classes = ['depth' + item.depth];
             if (item.$selected) {
                 classes.push('tekstisisalto-active');
             }
@@ -68,7 +68,7 @@ namespace Controllers {
         });
 
         $scope.$on('$stateChangeSuccess', function () {
-            if ($state.current.name === ('root.ops.esiopetus' || 'root.ops.varhaiskasvatus' || 'root.ops.lisaopetus')) {
+            if ($state.current.name === ('root.ops.esiopetus' || 'root.ops.varhaiskasvatus' || 'root.ops.lisaopetus' || 'root.ops.aipe')) {
                 $state.go('.tiedot', {location: 'replace'});
             }
         });
@@ -85,7 +85,7 @@ namespace Controllers {
             ]
         };
 
-        var currentRootState = getRootState($state.current.name);
+        const currentRootState = getRootState($state.current.name);
 
         _.each($scope.navi.sections[0].items, function (item) {
             if (item.$osa) {

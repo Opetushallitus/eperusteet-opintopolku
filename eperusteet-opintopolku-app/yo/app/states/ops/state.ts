@@ -81,6 +81,34 @@ angular.module('app')
         }
     }
 })
+.state('root.ops.aipe', {
+    url: '/aipe',
+    templateUrl: 'views/ops/yksinkertainen.html',
+    controller: Controllers.OpsYksinkertainenController,
+})
+.state('root.ops.aipe.tiedot', {
+    url: '/tiedot',
+    templateUrl: 'views/ops/tiedot.html',
+    controller: Controllers.OpsYksinkertainenTiedotController,
+})
+.state('root.ops.aipe.tekstikappale', {
+    url: '/tekstikappale/:tekstikappaleId',
+    templateUrl: 'views/ops/tekstikappale.html',
+    controller: Controllers.OpsTekstikappaleController,
+    resolve: {
+        viiteId: function (serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+        },
+        tekstikappaleWithChildren: function (opsResource, viiteId, opsId) {
+            return opsResource.getTekstikappaleWithChildren({
+                opsId: opsId,
+                viiteId: viiteId
+            }).$promise.then(function (res) {
+                return res;
+            })
+        }
+    }
+})
 .state('root.ops.varhaiskasvatus', {
     url: '/varhaiskasvatus',
     templateUrl: 'views/ops/yksinkertainen.html',
@@ -400,5 +428,4 @@ angular.module('app')
         tavoitteet: (OpsLukioResource, opsId) =>
         OpsLukioResource.getTavoitteet({ opsId }).$promise
     }
-})
-       );
+}));
