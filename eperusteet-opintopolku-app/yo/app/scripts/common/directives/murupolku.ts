@@ -304,6 +304,20 @@ angular.module('app')
         useId: 'osanId',
         useData: 'tekstikappaleNimi'
       },
+      'root.ops.aipe': {
+        useData: 'opsNimi',
+        useId: 'opsId'
+      },
+      'root.ops.aipe.tiedot': {
+        parent: 'root.ops.aipe',
+        label: 'opetussuunnitelman-tiedot'
+      },
+      'root.ops.aipe.tekstikappale': {
+        parent: 'root.ops.aipe',
+        useId: 'osanId',
+        useData: 'tekstikappaleNimi',
+        customParents: true
+      },
       'root.ops.varhaiskasvatus': {
         useData: 'opsNimi',
         useId: 'opsId'
