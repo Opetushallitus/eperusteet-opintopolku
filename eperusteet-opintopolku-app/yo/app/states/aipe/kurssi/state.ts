@@ -14,26 +14,27 @@
  * European Union Public Licence for more details.
  */
 
-angular.module('app')
-.config(($stateProvider) => $stateProvider
-.state('root.aipe.vaihe.oppiaine.kurssi', {
-    url: '/kurssit/:kurssiId',
-    templateUrl: 'eperusteet-esitys/views/kurssi.html',
-    controller: ($scope, MurupolkuData, kurssi) => {
-        $scope.kurssi = kurssi;
-        MurupolkuData.set({ kurssiId: $scope.kurssi.id, kurssiNimi: $scope.kurssi.nimi });
-        $scope.tavoitteetFilter = item => {
-            return _.includes($scope.kurssi.tavoitteet, item.id + "");
-        };
-    },
-    resolve: {
-        oppiaineId: $stateParams => $stateParams.oppiaineId,
-        kurssiId: $stateParams => $stateParams.kurssiId,
-        kurssi: (oppiaineId, perusteId, vaiheId, kurssiId, AipeKurssit) => AipeKurssit.get({
-            perusteId: perusteId,
-            vaiheId: vaiheId,
-            oppiaineId: oppiaineId,
-            kurssiId: kurssiId
-        }).$promise
-    }
-}));
+angular.module("app").config($stateProvider =>
+    $stateProvider.state("root.aipe.vaihe.oppiaine.kurssi", {
+        url: "/kurssit/:kurssiId",
+        templateUrl: "eperusteet-esitys/views/kurssi.html",
+        controller: ($scope, MurupolkuData, kurssi) => {
+            $scope.kurssi = kurssi;
+            MurupolkuData.set({ kurssiId: $scope.kurssi.id, kurssiNimi: $scope.kurssi.nimi });
+            $scope.tavoitteetFilter = item => {
+                return _.includes($scope.kurssi.tavoitteet, item.id + "");
+            };
+        },
+        resolve: {
+            oppiaineId: $stateParams => $stateParams.oppiaineId,
+            kurssiId: $stateParams => $stateParams.kurssiId,
+            kurssi: (oppiaineId, perusteId, vaiheId, kurssiId, AipeKurssit) =>
+                AipeKurssit.get({
+                    perusteId: perusteId,
+                    vaiheId: vaiheId,
+                    oppiaineId: oppiaineId,
+                    kurssiId: kurssiId
+                }).$promise
+        }
+    })
+);

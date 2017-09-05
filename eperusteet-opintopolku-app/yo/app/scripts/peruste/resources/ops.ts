@@ -13,54 +13,99 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
  */
-'use strict';
-angular.module('app')
-  .service('opsBase', function () {
-    this.OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId';
-    this.LUKIO_OPS = '/eperusteet-ylops-service/api/opetussuunnitelmat/lukio/:opsId';
-    this.CACHEDQUERY = { method: 'GET', isArray: true, cache: true };
-  })
-
-  .factory('OpsResource', function ($resource, opsBase) {
-    return (useCache = false) => ($resource(opsBase.OPS, {opsId: '@id'}, {
-      get: {method: 'GET', cache: false},
-      getOtsikot: {method: 'GET', url: opsBase.OPS + '/otsikot', cache: useCache},
-      getVlk: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId', cache: useCache},
-      getOppiaine: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId', cache: useCache},
-      getOppiaineVlk: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:vlkId', cache: useCache},
-      getOppiaineVlkByVuosiluokka: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:vlkId/vuosiluokat/:vuosiId', cache: useCache},
-      getTekstikappale: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId', cache: useCache},
-      getTekstikappaleWithChildren: {method: 'GET', url: opsBase.OPS + '/tekstit/:viiteId/kaikki', cache: useCache},
-      getLaajaalaisetosaamiset: {method: 'GET', isArray: true, url: opsBase.OPS + '/laajaalaisetosaamiset', cache: useCache}
-    }));
-  })
-
-  .factory('OpsLukioResource', function ($resource, opsBase) {
-    return $resource(opsBase.LUKIO_OPS, {opsId: '@id'}, {
-      getRakenne: {method: 'GET', url: opsBase.LUKIO_OPS + '/rakenne'},
-      getTavoitteet: {method: 'GET', url: opsBase.LUKIO_OPS + '/opetuksenYleisetTavoitteet'},
-      getAihekokonaisuudet: {method: 'GET', url: opsBase.LUKIO_OPS + '/aihekokonaisuudet'},
-      getOppiaine: {method: 'GET', url: opsBase.LUKIO_OPS + '/oppiaine/:oppiaineId'}
+"use strict";
+angular
+    .module("app")
+    .service("opsBase", function() {
+        this.OPS = "/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId";
+        this.LUKIO_OPS = "/eperusteet-ylops-service/api/opetussuunnitelmat/lukio/:opsId";
+        this.CACHEDQUERY = { method: "GET", isArray: true, cache: true };
     })
-  })
-
-  .factory('OpsPerusteResource', function ($resource, opsBase) {
-    return (useCache = false) => ($resource(opsBase.OPS, {opsId: '@id'}, {
-      getVlkPeruste: {method: 'GET', url: opsBase.OPS + '/vuosiluokkakokonaisuudet/:vlkId/peruste', cache: useCache},
-      getOppiainePeruste: {method: 'GET', url: opsBase.OPS + '/oppiaineet/:oppiaineId/peruste', cache: useCache}
-    }));
-  })
-
-  .factory('OpsKuvat', function ($resource, opsBase) {
-    return $resource(opsBase.OPS, { opsId: '@id'}, {
-      get: {method: 'GET', url: opsBase.OPS + '/kuvat'}
+    .factory("OpsResource", function($resource, opsBase) {
+        return (useCache = false) =>
+            $resource(
+                opsBase.OPS,
+                { opsId: "@id" },
+                {
+                    get: { method: "GET", cache: false },
+                    getOtsikot: { method: "GET", url: opsBase.OPS + "/otsikot", cache: useCache },
+                    getVlk: { method: "GET", url: opsBase.OPS + "/vuosiluokkakokonaisuudet/:vlkId", cache: useCache },
+                    getOppiaine: { method: "GET", url: opsBase.OPS + "/oppiaineet/:oppiaineId", cache: useCache },
+                    getOppiaineVlk: {
+                        method: "GET",
+                        url: opsBase.OPS + "/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:vlkId",
+                        cache: useCache
+                    },
+                    getOppiaineVlkByVuosiluokka: {
+                        method: "GET",
+                        url:
+                            opsBase.OPS +
+                            "/oppiaineet/:oppiaineId/vuosiluokkakokonaisuudet/:vlkId/vuosiluokat/:vuosiId",
+                        cache: useCache
+                    },
+                    getTekstikappale: { method: "GET", url: opsBase.OPS + "/tekstit/:viiteId", cache: useCache },
+                    getTekstikappaleWithChildren: {
+                        method: "GET",
+                        url: opsBase.OPS + "/tekstit/:viiteId/kaikki",
+                        cache: useCache
+                    },
+                    getLaajaalaisetosaamiset: {
+                        method: "GET",
+                        isArray: true,
+                        url: opsBase.OPS + "/laajaalaisetosaamiset",
+                        cache: useCache
+                    }
+                }
+            );
     })
-  })
-
-  .factory('opsTermisto', function ($resource, opsBase) {
-    return $resource(opsBase.OPS + '/termisto/:opsId', {
-      opsId: '@id',
-    }, {
-      query: opsBase.CACHEDQUERY
+    .factory("OpsLukioResource", function($resource, opsBase) {
+        return $resource(
+            opsBase.LUKIO_OPS,
+            { opsId: "@id" },
+            {
+                getRakenne: { method: "GET", url: opsBase.LUKIO_OPS + "/rakenne" },
+                getTavoitteet: { method: "GET", url: opsBase.LUKIO_OPS + "/opetuksenYleisetTavoitteet" },
+                getAihekokonaisuudet: { method: "GET", url: opsBase.LUKIO_OPS + "/aihekokonaisuudet" },
+                getOppiaine: { method: "GET", url: opsBase.LUKIO_OPS + "/oppiaine/:oppiaineId" }
+            }
+        );
     })
-  });
+    .factory("OpsPerusteResource", function($resource, opsBase) {
+        return (useCache = false) =>
+            $resource(
+                opsBase.OPS,
+                { opsId: "@id" },
+                {
+                    getVlkPeruste: {
+                        method: "GET",
+                        url: opsBase.OPS + "/vuosiluokkakokonaisuudet/:vlkId/peruste",
+                        cache: useCache
+                    },
+                    getOppiainePeruste: {
+                        method: "GET",
+                        url: opsBase.OPS + "/oppiaineet/:oppiaineId/peruste",
+                        cache: useCache
+                    }
+                }
+            );
+    })
+    .factory("OpsKuvat", function($resource, opsBase) {
+        return $resource(
+            opsBase.OPS,
+            { opsId: "@id" },
+            {
+                get: { method: "GET", url: opsBase.OPS + "/kuvat" }
+            }
+        );
+    })
+    .factory("opsTermisto", function($resource, opsBase) {
+        return $resource(
+            opsBase.OPS + "/termisto/:opsId",
+            {
+                opsId: "@id"
+            },
+            {
+                query: opsBase.CACHEDQUERY
+            }
+        );
+    });

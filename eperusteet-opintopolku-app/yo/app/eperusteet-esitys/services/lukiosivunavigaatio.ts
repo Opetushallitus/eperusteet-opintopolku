@@ -15,41 +15,52 @@
  */
 
 namespace Controllers {
-    export const epLukioSivuNaviController = ($rootScope, $scope, $location, $state, Algoritmit, Utils, epSivunaviUtils, epEsitysSettings) => {
+    export const epLukioSivuNaviController = (
+        $rootScope,
+        $scope,
+        $location,
+        $state,
+        Algoritmit,
+        Utils,
+        epSivunaviUtils,
+        epEsitysSettings
+    ) => {
         $scope.menuCollapsed = true;
         $scope.onSectionChange = _.isFunction($scope.onSectionChange) ? $scope.onSectionChange : angular.noop;
 
-        $scope.scrollToHash = function(id, isAmops){
+        $scope.scrollToHash = function(id, isAmops) {
             var amops = isAmops || null;
-            if(id) {
-                amops ? $state.go('root.amops.tekstikappale') : $state.go('root.lukio.tekstikappale');
-                $location.hash(id + '');
-                $rootScope.$broadcast('$locationChangeSuccess');
+            if (id) {
+                amops ? $state.go("root.amops.tekstikappale") : $state.go("root.lukio.tekstikappale");
+                $location.hash(id + "");
+                $rootScope.$broadcast("$locationChangeSuccess");
             }
         };
 
-        $scope.addIconClass = function(item){
-            const convertToClassName = function(item){
-                return ['kurssi-' + item.toLowerCase().replace('_', '-')];
+        $scope.addIconClass = function(item) {
+            const convertToClassName = function(item) {
+                return ["kurssi-" + item.toLowerCase().replace("_", "-")];
             };
             const kurssiWithTyyppi = !!item.$kurssi && !!item.$kurssi.tyyppi;
             return kurssiWithTyyppi ? convertToClassName(item.$kurssi.tyyppi) : null;
         };
 
         $scope.search = {
-            term: '',
-            update: function () {
+            term: "",
+            update: function() {
                 let matchCount = 0;
                 let items = $scope.items;
                 if (_.isUndefined(items)) {
-                    let section: any = _.find($scope.sections, '$open');
+                    let section: any = _.find($scope.sections, "$open");
                     if (section) {
                         items = section.items;
                     }
                 }
-                _.each(items, function (item) {
-                    item.$matched = _.isEmpty($scope.search.term) || _.isEmpty(item.label) ? true :
-                        Algoritmit.match($scope.search.term, item.label);
+                _.each(items, function(item) {
+                    item.$matched =
+                        _.isEmpty($scope.search.term) || _.isEmpty(item.label)
+                            ? true
+                            : Algoritmit.match($scope.search.term, item.label);
                     if (item.$matched) {
                         matchCount++;
                         let parent = items[item.$parent];
@@ -64,41 +75,43 @@ namespace Controllers {
             }
         };
 
-        $scope.$watch('search.term', _.debounce(function () {
-            $scope.$apply(function () {
-                $scope.search.update();
-            });
-        }, 100));
+        $scope.$watch(
+            "search.term",
+            _.debounce(function() {
+                $scope.$apply(function() {
+                    $scope.search.update();
+                });
+            }, 100)
+        );
 
-
-        $scope.itemClasses = function (item) {
-            var classes = ['level' + item.depth];
+        $scope.itemClasses = function(item) {
+            var classes = ["level" + item.depth];
             if (item.$matched && $scope.search.term) {
-                classes.push('matched');
+                classes.push("matched");
             }
             if (item.$active) {
-                classes.push('active');
+                classes.push("active");
             }
             if (item.$header) {
-                classes.push('tekstisisalto-active-header');
+                classes.push("tekstisisalto-active-header");
             }
             return classes;
         };
 
-        var doRefresh = function (items) {
+        var doRefresh = function(items) {
             var levels = {};
             if (items.length && !items[0].root) {
-                items.unshift({root: true, depth: -1});
+                items.unshift({ root: true, depth: -1 });
             }
-            _.each(items, function (item, index) {
+            _.each(items, function(item, index) {
                 item.depth = item.depth || 0;
                 levels[item.depth] = index;
                 if (_.isArray(item.link)) {
                     item.href = $state.href.apply($state, item.link);
                     if (item.link.length > 1) {
                         // State is matched with string parameters
-                        _.each(item.link[1], function (value, key) {
-                            item.link[1][key] = value === null ? '' : ('' + value);
+                        _.each(item.link[1], function(value, key) {
+                            item.link[1][key] = value === null ? "" : "" + value;
                         });
                     }
                 }
@@ -110,11 +123,11 @@ namespace Controllers {
             updateModel(items);
         };
 
-        $scope.refresh = function () {
+        $scope.refresh = function() {
             if (_.isArray($scope.items)) {
                 doRefresh($scope.items);
             } else {
-                _.each($scope.sections, function (section) {
+                _.each($scope.sections, function(section) {
                     if (section.items) {
                         doRefresh(section.items);
                     }
@@ -125,8 +138,7 @@ namespace Controllers {
         function hideNodeOrphans(items, index) {
             // If the parent is hidden, then the child is implicitly hidden
             var item = items[index];
-            for (index++; index < items.length &&
-                 items[index].depth > item.depth; ++index) {
+            for (index++; index < items.length && items[index].depth > item.depth; ++index) {
                 if (!items[index].$hidden) {
                     items[index].$impHidden = true;
                 }
@@ -145,7 +157,7 @@ namespace Controllers {
             if (!items) {
                 return;
             }
-            _.each(items, function (item) {
+            _.each(items, function(item) {
                 if (item.depth > 0) {
                     item.$hidden = true;
                 }
@@ -154,7 +166,7 @@ namespace Controllers {
             });
             doUncollapse = _.isUndefined(doUncollapse) ? true : doUncollapse;
             if (doUncollapse) {
-                var active = _.find(items, function (item) {
+                var active = _.find(items, function(item) {
                     return epSivunaviUtils.isActive(item);
                 });
                 if (active) {
@@ -165,16 +177,15 @@ namespace Controllers {
             hideOrphans(items);
         }
 
-        $scope.toggle = function (items, item, $event, state) {
+        $scope.toggle = function(items, item, $event, state) {
             if ($event) {
                 $event.preventDefault();
             }
             var index = _.indexOf(items, item);
             state = _.isUndefined(state) ? !item.$collapsed : state;
-            if (index >= 0 && index < (items.length - 1)) {
+            if (index >= 0 && index < items.length - 1) {
                 index = index + 1;
-                while (index < items.length &&
-                       items[index].depth > item.depth) {
+                while (index < items.length && items[index].depth > item.depth) {
                     if (items[index].depth === item.depth + 1) {
                         items[index].$hidden = state;
                     }
@@ -184,30 +195,38 @@ namespace Controllers {
             updateModel(items, false);
         };
 
-        $scope.toggleSideMenu = function () {
+        $scope.toggleSideMenu = function() {
             $scope.menuCollapsed = !$scope.menuCollapsed;
         };
 
-        $scope.orderFn = function (item) {
-            return _.isNumber(item.order) ? item.order : Utils.nameSort(item, 'label');
+        $scope.orderFn = function(item) {
+            return _.isNumber(item.order) ? item.order : Utils.nameSort(item, "label");
         };
 
-        $scope.$on('$stateChangeStart', function () {
+        $scope.$on("$stateChangeStart", function() {
             $scope.menuCollapsed = true;
         });
 
-        $scope.$on('$stateChangeSuccess', function (event, toState) {
+        $scope.$on("$stateChangeSuccess", function(event, toState) {
             if (toState.name !== epEsitysSettings.lukioState) {
                 // Utils.scrollTo('#ylasivuankkuri');
             }
             updateModel($scope.items);
         });
 
-        $scope.$watch('items', function () {
-            $scope.refresh();
-        }, true);
-        $scope.$watch('sections', function () {
-            $scope.refresh();
-        }, true);
+        $scope.$watch(
+            "items",
+            function() {
+                $scope.refresh();
+            },
+            true
+        );
+        $scope.$watch(
+            "sections",
+            function() {
+                $scope.refresh();
+            },
+            true
+        );
     };
 }

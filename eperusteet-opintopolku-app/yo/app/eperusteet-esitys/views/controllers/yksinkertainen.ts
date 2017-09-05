@@ -15,99 +15,128 @@
  */
 
 namespace Controllers {
-  export const epYksinkertainenPerusteController = ($q, $scope, $timeout, sisalto, PerusteenOsat, $state, $stateParams, epMenuBuilder, Algoritmit, Utils, MurupolkuData, Oppiaineet, TermistoService, Kieli, $document, $rootScope, epPerusopetusStateService, koulutusalaService, opintoalaService, epEsitysSettings) => {
-    $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
-    function getRootState(current) {
-      return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus)(.*)/, '.$1');
-    }
+    export const epYksinkertainenPerusteController = (
+        $q,
+        $scope,
+        $timeout,
+        sisalto,
+        PerusteenOsat,
+        $state,
+        $stateParams,
+        epMenuBuilder,
+        Algoritmit,
+        Utils,
+        MurupolkuData,
+        Oppiaineet,
+        TermistoService,
+        Kieli,
+        $document,
+        $rootScope,
+        epPerusopetusStateService,
+        koulutusalaService,
+        opintoalaService,
+        epEsitysSettings
+    ) => {
+        $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
+        function getRootState(current) {
+            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus)(.*)/, ".$1");
+        }
 
-    $scope.Koulutusalat = koulutusalaService;
-    $scope.Opintoalat = opintoalaService;
-    const currentRootState = getRootState($state.current.name);
-    $scope.isNaviVisible = _.constant(true);
-    $scope.hasContent = function (obj) {
-      return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
-    };
-    const peruste = sisalto[0];
-    $scope.peruste = peruste;
-    MurupolkuData.set({perusteId: peruste.id, perusteNimi: peruste.nimi});
-    $scope.sisallot = _.zipBy(sisalto[1], 'id');
-    $scope.tekstisisalto = sisalto[1];
-    $scope.state = epPerusopetusStateService.getState();
+        $scope.Koulutusalat = koulutusalaService;
+        $scope.Opintoalat = opintoalaService;
+        const currentRootState = getRootState($state.current.name);
+        $scope.isNaviVisible = _.constant(true);
+        $scope.hasContent = function(obj) {
+            return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
+        };
+        const peruste = sisalto[0];
+        $scope.peruste = peruste;
+        MurupolkuData.set({ perusteId: peruste.id, perusteNimi: peruste.nimi });
+        $scope.sisallot = _.zipBy(sisalto[1], "id");
+        $scope.tekstisisalto = sisalto[1];
+        $scope.state = epPerusopetusStateService.getState();
 
-    function mapSisalto(sisalto) {
-      sisalto = _.clone(sisalto);
-      let flattened = {};
-      Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', (lapsi) => {
-        flattened[lapsi.id] = lapsi.perusteenOsa;
-      });
-      return flattened;
-    }
+        function mapSisalto(sisalto) {
+            sisalto = _.clone(sisalto);
+            let flattened = {};
+            Algoritmit.kaikilleLapsisolmuille(sisalto, "lapset", lapsi => {
+                flattened[lapsi.id] = lapsi.perusteenOsa;
+            });
+            return flattened;
+        }
 
-    $scope.sisalto = mapSisalto($scope.tekstisisalto);
+        $scope.sisalto = mapSisalto($scope.tekstisisalto);
 
-    TermistoService.setResource(peruste);
+        TermistoService.setResource(peruste);
 
-    $scope.naviClasses = function (item) {
-      let classes = ['depth' + item.depth];
-      if (item.$selected) {
-        classes.push('tekstisisalto-active');
-      }
-      if (item.$header) {
-        classes.push('tekstisisalto-active-header');
-      }
-      return classes;
-    };
+        $scope.naviClasses = function(item) {
+            let classes = ["depth" + item.depth];
+            if (item.$selected) {
+                classes.push("tekstisisalto-active");
+            }
+            if (item.$header) {
+                classes.push("tekstisisalto-active-header");
+            }
+            return classes;
+        };
 
-    function clickHandler(event) {
-      const ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
-      if (ohjeEl.length === 0) {
-        $rootScope.$broadcast('ohje:closeAll');
-      }
-    }
+        function clickHandler(event) {
+            const ohjeEl = angular.element(event.target).closest(".popover, .popover-element");
+            if (ohjeEl.length === 0) {
+                $rootScope.$broadcast("ohje:closeAll");
+            }
+        }
 
-    function installClickHandler() {
-      $document.off('click', clickHandler);
-      $timeout(function () {
-        $document.on('click', clickHandler);
-      });
-    }
+        function installClickHandler() {
+            $document.off("click", clickHandler);
+            $timeout(function() {
+                $document.on("click", clickHandler);
+            });
+        }
 
-    $scope.$on('$destroy', function () {
-      $document.off('click', clickHandler);
-    });
-
-    $scope.$on('$stateChangeSuccess', function () {
-      epPerusopetusStateService.setState($scope.navi);
-    });
-
-
-    $scope.navi = {
-      header: 'perusteen-sisalto',
-      sections: [{
-        id: 'sisalto',
-        $open: true,
-        items: epMenuBuilder.rakennaTekstisisalto($scope.tekstisisalto)
-      }]
-    };
-
-    $scope.navi.sections[0].items.unshift({depth: 0, label: 'perusteen-tiedot', link: [currentRootState + '.tiedot']});
-
-    _.each($scope.navi.sections[0].items, function (item) {
-      if (item.$osa) {
-        item.href = $state.href(currentRootState + '.tekstikappale', {
-          perusteId: $scope.peruste.id,
-          tekstikappaleId: item.$osa.id
+        $scope.$on("$destroy", function() {
+            $document.off("click", clickHandler);
         });
-      }
-    });
 
-    installClickHandler();
+        $scope.$on("$stateChangeSuccess", function() {
+            epPerusopetusStateService.setState($scope.navi);
+        });
 
-    $scope.$on('$stateChangeSuccess', function () {
-      if ($state.current.name === currentRootState && (!$state.includes("**.tiedot") || !$stateParams.perusteId)) {
-        $state.go('.tiedot', {perusteId: $scope.peruste.id}, {location: 'replace'});
-      }
-    });
-  };
+        $scope.navi = {
+            header: "perusteen-sisalto",
+            sections: [
+                {
+                    id: "sisalto",
+                    $open: true,
+                    items: epMenuBuilder.rakennaTekstisisalto($scope.tekstisisalto)
+                }
+            ]
+        };
+
+        $scope.navi.sections[0].items.unshift({
+            depth: 0,
+            label: "perusteen-tiedot",
+            link: [currentRootState + ".tiedot"]
+        });
+
+        _.each($scope.navi.sections[0].items, function(item) {
+            if (item.$osa) {
+                item.href = $state.href(currentRootState + ".tekstikappale", {
+                    perusteId: $scope.peruste.id,
+                    tekstikappaleId: item.$osa.id
+                });
+            }
+        });
+
+        installClickHandler();
+
+        $scope.$on("$stateChangeSuccess", function() {
+            if (
+                $state.current.name === currentRootState &&
+                (!$state.includes("**.tiedot") || !$stateParams.perusteId)
+            ) {
+                $state.go(".tiedot", { perusteId: $scope.peruste.id }, { location: "replace" });
+            }
+        });
+    };
 }

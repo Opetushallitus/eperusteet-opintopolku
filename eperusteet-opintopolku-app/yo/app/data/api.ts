@@ -13,18 +13,25 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
  */
-'use strict';
+"use strict";
 
-angular.module('app')
-.factory("Api", Restangular => Restangular.withConfig(config => {
-  config.setBaseUrl("/eperusteet-amosaa-service/api");
-  config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
-}))
-.factory("PerusteApi", Restangular => Restangular.withConfig(config => {
-  config.setBaseUrl("/eperusteet-service/api");
-  config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
-}))
-.factory("YlopsApi", Restangular => Restangular.withConfig(config => {
-  config.setBaseUrl("/eperusteet-ylops-service/api");
-  config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
-}));
+angular
+    .module("app")
+    .factory("Api", Restangular =>
+        Restangular.withConfig(config => {
+            config.setBaseUrl("/eperusteet-amosaa-service/api");
+            config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
+        })
+    )
+    .factory("PerusteApi", Restangular =>
+        Restangular.withConfig(config => {
+            config.setBaseUrl("/eperusteet-service/api");
+            config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
+        })
+    )
+    .factory("YlopsApi", Restangular =>
+        Restangular.withConfig(config => {
+            config.setBaseUrl("/eperusteet-ylops-service/api");
+            config.addResponseInterceptor((data, operation, what, url, response, deferred) => data);
+        })
+    );

@@ -14,18 +14,23 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-.service('epYlopsResource', function (eperusteetYlopsConfig) {
-  this.SERVICE = eperusteetYlopsConfig.getServiceLocation();
-  this.OPETUSSUUNNITELMAT_ROOT = this.SERVICE + '/opetussuunnitelmat';
-  this.OPETUSSUUNNITELMAT = this.OPETUSSUUNNITELMAT_ROOT + '/:opsId';
-})
-.factory('YlopsOpetussuunnitelmat', function($resource, epYlopsResource) {
-  return $resource(epYlopsResource.OPETUSSUUNNITELMAT, {
-      opsId: '@id'
-    }, {
-      list: { method: 'GET', isArray: true, cache: true }
+angular
+    .module("app")
+    .service("epYlopsResource", function(eperusteetYlopsConfig) {
+        this.SERVICE = eperusteetYlopsConfig.getServiceLocation();
+        this.OPETUSSUUNNITELMAT_ROOT = this.SERVICE + "/opetussuunnitelmat";
+        this.OPETUSSUUNNITELMAT = this.OPETUSSUUNNITELMAT_ROOT + "/:opsId";
+    })
+    .factory("YlopsOpetussuunnitelmat", function($resource, epYlopsResource) {
+        return $resource(
+            epYlopsResource.OPETUSSUUNNITELMAT,
+            {
+                opsId: "@id"
+            },
+            {
+                list: { method: "GET", isArray: true, cache: true }
+            }
+        );
     });
-});

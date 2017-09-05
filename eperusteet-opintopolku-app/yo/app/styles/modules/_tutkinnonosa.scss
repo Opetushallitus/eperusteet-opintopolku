@@ -1,230 +1,228 @@
 $box-table-bgcolor: #199dd0;
 $box-table-padding: 5px;
-$tosa-color: #199DD0;
+$tosa-color: #199dd0;
 
 .tutkinnonosa {
-  .koodi-kaytossa {
-  }
-
-  .tutke2osa {
-    .valitsin {
-      .valitsin-osaalue {
-        .pipe {
-          padding: 0 5px 0 5px;
-        }
-      }
-    }
-    .osa-alue {
-      margin-top: 16px;
-
-      .osa-alue-nimi {
-        .koodi {
-          margin-left: 6px;
-        }
-      }
-
-      .osaamistavoite {
-        border-bottom: 1px solid #ddd;
-        .osaamistavoite-nimi {
-        }
-      }
-    }
-  }
-
-  .toteutukset {
-    .toolbar {
-      position: relative;
-      float: right;
-      top: -41px;
+    .koodi-kaytossa {
     }
 
-    .vapaat-tekstit {
-    }
-
-    .toteutus-esitys {
-      margin-top: 10px;
-      border: none;
-
-      .otsikko {
-        font-size: 16px;
-        background: $tosa-color;
-        padding: 6px;
-        color: white;
-        cursor: pointer;
-
-        .turbochevron {
-          margin-right: 5px;
-        }
-      }
-
-      .sisalto {
-        margin-top: 10px;
-        padding: 0 10px 0 10px;
-      }
-    }
-
-    .toteutus {
-      margin-top: 10px;
-      border: 1px solid $tosa-color;
-
-      .toteutus-header {
-        padding: 5px;
-        background: $tosa-color;
-      }
-
-      .toteutus-content {
-        padding: 5px;
-      }
-
-      .content-toggler-header {
-        margin-top: 10px;
-      }
-
-      .toolbar-bottom {
-        margin-top: 14px;
-      }
-
-      .osaamisalatieto {
-        margin: 8px 0 5px 0;
-      }
-    }
-  }
-
-  .toteutus-placeholder {
-    margin-top: 10px;
-    height: 44px;
-    background: $tosa-color;
-  }
-
-  .arviointi-kohdealueet {
-
-    .arviointi-kohteet {
-      min-height: 2em;
-
-      .arviointi-kohde {
-        padding: $box-table-padding;
-
-        .osaamistason-kriteerit {
-          min-height: 2em;
-        }
-
-        .painikkeet {
-          & > span {
-            margin-left: 10px;
-          }
-        }
-        table {
-          tr {
-            td:first-child {
-              width: 33.3%;
+    .tutke2osa {
+        .valitsin {
+            .valitsin-osaalue {
+                .pipe {
+                    padding: 0 5px 0 5px;
+                }
             }
-          }
         }
-      }
+        .osa-alue {
+            margin-top: 16px;
 
+            .osa-alue-nimi {
+                .koodi {
+                    margin-left: 6px;
+                }
+            }
+
+            .osaamistavoite {
+                border-bottom: 1px solid #ddd;
+                .osaamistavoite-nimi {
+                }
+            }
+        }
     }
 
-    .uusi-arviointi-kohde {
-      padding: $box-table-padding;
-      .arviointi-asteikko {
-        .painikkeet {
-          & > button {
-            margin-right: 10px;
-          }
+    .toteutukset {
+        .toolbar {
+            position: relative;
+            float: right;
+            top: -41px;
         }
-      }
-    }
-  }
 
-  .ammattitaitovaatimukset {
-    .vaatimuksen-kohteet {
-      min-height: 2em;
-      .vaatimuksen-kohde {
-        padding: $box-table-padding;
-
-        .painikkeet {
-          & > span {
-            margin-left: 10px;
-          }
+        .vapaat-tekstit {
         }
-      }
+
+        .toteutus-esitys {
+            margin-top: 10px;
+            border: none;
+
+            .otsikko {
+                font-size: 16px;
+                background: $tosa-color;
+                padding: 6px;
+                color: white;
+                cursor: pointer;
+
+                .turbochevron {
+                    margin-right: 5px;
+                }
+            }
+
+            .sisalto {
+                margin-top: 10px;
+                padding: 0 10px 0 10px;
+            }
+        }
+
+        .toteutus {
+            margin-top: 10px;
+            border: 1px solid $tosa-color;
+
+            .toteutus-header {
+                padding: 5px;
+                background: $tosa-color;
+            }
+
+            .toteutus-content {
+                padding: 5px;
+            }
+
+            .content-toggler-header {
+                margin-top: 10px;
+            }
+
+            .toolbar-bottom {
+                margin-top: 14px;
+            }
+
+            .osaamisalatieto {
+                margin: 8px 0 5px 0;
+            }
+        }
     }
-  }
 
-  // General styles
-  .box-panel {
-    border: 1px solid $box-table-bgcolor;
-    margin-bottom: 10px;
-
-    .box-panel-title {
-      background: $box-table-bgcolor;
-      color: white;
-      padding: $box-table-padding;
-      min-height: 50px;
-
-      h3 {
+    .toteutus-placeholder {
         margin-top: 10px;
+        height: 44px;
+        background: $tosa-color;
+    }
+
+    .arviointi-kohdealueet {
+        .arviointi-kohteet {
+            min-height: 2em;
+
+            .arviointi-kohde {
+                padding: $box-table-padding;
+
+                .osaamistason-kriteerit {
+                    min-height: 2em;
+                }
+
+                .painikkeet {
+                    & > span {
+                        margin-left: 10px;
+                    }
+                }
+                table {
+                    tr {
+                        td:first-child {
+                            width: 33.3%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .uusi-arviointi-kohde {
+            padding: $box-table-padding;
+            .arviointi-asteikko {
+                .painikkeet {
+                    & > button {
+                        margin-right: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    .ammattitaitovaatimukset {
+        .vaatimuksen-kohteet {
+            min-height: 2em;
+            .vaatimuksen-kohde {
+                padding: $box-table-padding;
+
+                .painikkeet {
+                    & > span {
+                        margin-left: 10px;
+                    }
+                }
+            }
+        }
+    }
+
+    // General styles
+    .box-panel {
+        border: 1px solid $box-table-bgcolor;
         margin-bottom: 10px;
-        a {
-          color: #135870;
-          margin-right: 10px;
-          &:hover {
+
+        .box-panel-title {
+            background: $box-table-bgcolor;
             color: white;
-          }
+            padding: $box-table-padding;
+            min-height: 50px;
 
-          i {
-            text-decoration: none;
-          }
+            h3 {
+                margin-top: 10px;
+                margin-bottom: 10px;
+                a {
+                    color: #135870;
+                    margin-right: 10px;
+                    &:hover {
+                        color: white;
+                    }
+
+                    i {
+                        text-decoration: none;
+                    }
+                }
+            }
         }
-      }
-    }
 
-    .box-panel-content {
-      padding: 4px;
-      h4 {
-        font-weight: bold;
-      }
-      button {
-        margin: $box-table-padding;
-      }
-      textarea {
-        overflow-y: scroll;
-        resize: vertical;
-        height: auto;
-        word-wrap: break-word;
-        margin-bottom: 5px;
-      }
-    }
-
-    .input-group {
-      margin-top: 3px;
-
-      .input-group-addon {
-        &:hover {
-          background-color: #dddddd;
+        .box-panel-content {
+            padding: 4px;
+            h4 {
+                font-weight: bold;
+            }
+            button {
+                margin: $box-table-padding;
+            }
+            textarea {
+                overflow-y: scroll;
+                resize: vertical;
+                height: auto;
+                word-wrap: break-word;
+                margin-bottom: 5px;
+            }
         }
-      }
+
+        .input-group {
+            margin-top: 3px;
+
+            .input-group-addon {
+                &:hover {
+                    background-color: #dddddd;
+                }
+            }
+        }
     }
-  }
 
-  // Helper styles
-  .linkki {
-    cursor: pointer;
-  }
+    // Helper styles
+    .linkki {
+        cursor: pointer;
+    }
 
-  .sortable-item-handle {
-    cursor: move;
-  }
+    .sortable-item-handle {
+        cursor: move;
+    }
 
-  .sortable-item-placeholder {
-    background-color: #f3fafd;
-    //height: 60px;
-    border: 2px dashed gray;
-    margin-bottom: 10px;
-  }
+    .sortable-item-placeholder {
+        background-color: #f3fafd;
+        //height: 60px;
+        border: 2px dashed gray;
+        margin-bottom: 10px;
+    }
 
-  .ui-sortable-helper {
-    background-color: white;
-    opacity: 0.4;
-  }
+    .ui-sortable-helper {
+        background-color: white;
+        opacity: 0.4;
+    }
 }

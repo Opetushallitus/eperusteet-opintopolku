@@ -14,104 +14,108 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('eperusteet.esitys')
-  .service('epTekstikappaleChildResolver', function (Algoritmit, $q, PerusteenOsat, LukioTekstikappale) {
-    var lapset = null;
-    var resource;
-    this.get = function (sisalto, viiteId, lukio) {
-      resource = lukio ? PerusteenOsat : LukioTekstikappale;
-      var promises = [];
-      var viite = null;
-      Algoritmit.kaikilleLapsisolmuille(sisalto, 'lapset', function (item) {
-        if ('' + item.id === '' + viiteId) {
-          viite = item;
-          return false;
+angular
+    .module("eperusteet.esitys")
+    .service("epTekstikappaleChildResolver", function(Algoritmit, $q, PerusteenOsat, LukioTekstikappale) {
+        var lapset = null;
+        var resource;
+        this.get = function(sisalto, viiteId, lukio) {
+            resource = lukio ? PerusteenOsat : LukioTekstikappale;
+            var promises = [];
+            var viite = null;
+            Algoritmit.kaikilleLapsisolmuille(sisalto, "lapset", function(item) {
+                if ("" + item.id === "" + viiteId) {
+                    viite = item;
+                    return false;
+                }
+            });
+            if (viite) {
+                Algoritmit.kaikilleLapsisolmuille(viite, "lapset", function(lapsi) {
+                    lapsi.$osa = resource.getByViite({ viiteId: lapsi.id });
+                    promises.push(lapsi.$osa.$promise);
+                });
+                lapset = viite.lapset;
+            }
+            return $q.all(promises);
+        };
+        this.getSisalto = function() {
+            return lapset;
+        };
+    })
+    .service("epParentFinder", function() {
+        var idToMatch = null;
+        var usePerusteenOsa = false;
+        function matcher(node, accumulator) {
+            if (
+                (usePerusteenOsa && node.perusteenOsa && node.perusteenOsa.id === idToMatch) ||
+                (!usePerusteenOsa && node.id === idToMatch)
+            ) {
+                accumulator.push(node);
+                return true;
+            }
+            var childMatch = _.some(node.lapset, function(lapsi) {
+                return matcher(lapsi, accumulator);
+            });
+            if (childMatch) {
+                accumulator.push(node);
+                return true;
+            }
         }
-      });
-      if (viite) {
-        Algoritmit.kaikilleLapsisolmuille(viite, 'lapset', function (lapsi) {
-          lapsi.$osa = resource.getByViite({viiteId: lapsi.id});
-          promises.push(lapsi.$osa.$promise);
-        });
-        lapset = viite.lapset;
-      }
-      return $q.all(promises);
-    };
-    this.getSisalto = function () {
-      return lapset;
-    };
-  })
 
-  .service('epParentFinder', function () {
-    var idToMatch = null;
-    var usePerusteenOsa = false;
-    function matcher(node, accumulator) {
-      if ((usePerusteenOsa && node.perusteenOsa && node.perusteenOsa.id === idToMatch) ||
-          (!usePerusteenOsa && node.id === idToMatch)) {
-        accumulator.push(node);
-        return true;
-      }
-      var childMatch = _.some(node.lapset, function (lapsi) {
-        return matcher(lapsi, accumulator);
-      });
-      if (childMatch) {
-        accumulator.push(node);
-        return true;
-      }
-    }
+        function iterateFn(accumulator, value) {
+            matcher(value, accumulator);
+            return accumulator;
+        }
 
-    function iterateFn(accumulator, value) {
-      matcher(value, accumulator);
-      return accumulator;
-    }
-
-    this.find = function (lapset, matchId, perusteenOsaIdMatch) {
-      idToMatch = matchId;
-      usePerusteenOsa = !!perusteenOsaIdMatch;
-      var parents = _.reduce(lapset, iterateFn, []);
-      return _(parents).drop(1).value();
-    };
-  })
-
-  .directive('epTekstiotsikko', function () {
-    return {
-      restrict: 'E',
-      scope: {
-        model: '=',
-        level: '@',
-        linkVar: '='
-      },
-      template: '<span class="otsikko-wrap"><span ng-bind-html="model.$osa.nimi | kaanna | unsafe"></span>' +
-      '  <span class="teksti-linkki">' +
-      '    <a ng-if="amEsitys" ui-sref="^.tekstikappale({osanId: model.id})" icon-role="new-window"></a>' +
-      '    <a ng-if="!amEsitys" ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
-      '  </span></span>',
-      link: function (scope: any, element) {
-        var headerEl = angular.element('<h' + scope.level + '>');
-        element.find('.otsikko-wrap').wrap(headerEl);
-        scope.amEsitys = scope.linkVar === 'osanId';
-      }
-    };
-  })
-
-  .directive('opsTekstiotsikko', function () {
-    return {
-      restrict: 'E',
-      scope: {
-        model: '=',
-        level: '@',
-        linkVar: '='
-      },
-      template: '<span class="otsikko-wrap"><span ng-bind-html="model.tekstiKappale.nimi | kaanna | unsafe"></span>' +
-      '  <span class="teksti-linkki">' +
-      '    <a ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
-      '  </span></span>',
-      link: function (scope: any, element) {
-        var headerEl = angular.element('<h' + scope.level + '>');
-        element.find('.otsikko-wrap').wrap(headerEl);
-        scope.amEsitys = scope.linkVar === 'osanId';
-      }
-    };
-  });
+        this.find = function(lapset, matchId, perusteenOsaIdMatch) {
+            idToMatch = matchId;
+            usePerusteenOsa = !!perusteenOsaIdMatch;
+            var parents = _.reduce(lapset, iterateFn, []);
+            return _(parents)
+                .drop(1)
+                .value();
+        };
+    })
+    .directive("epTekstiotsikko", function() {
+        return {
+            restrict: "E",
+            scope: {
+                model: "=",
+                level: "@",
+                linkVar: "="
+            },
+            template:
+                '<span class="otsikko-wrap"><span ng-bind-html="model.$osa.nimi | kaanna | unsafe"></span>' +
+                '  <span class="teksti-linkki">' +
+                '    <a ng-if="amEsitys" ui-sref="^.tekstikappale({osanId: model.id})" icon-role="new-window"></a>' +
+                '    <a ng-if="!amEsitys" ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
+                "  </span></span>",
+            link: function(scope: any, element) {
+                var headerEl = angular.element("<h" + scope.level + ">");
+                element.find(".otsikko-wrap").wrap(headerEl);
+                scope.amEsitys = scope.linkVar === "osanId";
+            }
+        };
+    })
+    .directive("opsTekstiotsikko", function() {
+        return {
+            restrict: "E",
+            scope: {
+                model: "=",
+                level: "@",
+                linkVar: "="
+            },
+            template:
+                '<span class="otsikko-wrap"><span ng-bind-html="model.tekstiKappale.nimi | kaanna | unsafe"></span>' +
+                '  <span class="teksti-linkki">' +
+                '    <a ui-sref="^.tekstikappale({tekstikappaleId: model.id})" icon-role="new-window"></a>' +
+                "  </span></span>",
+            link: function(scope: any, element) {
+                var headerEl = angular.element("<h" + scope.level + ">");
+                element.find(".otsikko-wrap").wrap(headerEl);
+                scope.amEsitys = scope.linkVar === "osanId";
+            }
+        };
+    });

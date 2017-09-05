@@ -1,233 +1,243 @@
 .haku-th-nimi {
-  width: 50%;
+    width: 50%;
 }
 
 .haku-th-koulutusala {
-  width: 30%;
+    width: 30%;
 }
 
 .ops-hakutulokset-otsikko {
-  cursor: pointer;
-  &:hover, &:focus, &:active, &:visited {
-    text-decoration: none;
-  }
-  span:hover, span:focus, span:active, span:visited {
-    text-decoration: none;
-  }
+    cursor: pointer;
+    &:hover,
+    &:focus,
+    &:active,
+    &:visited {
+        text-decoration: none;
+    }
+    span:hover,
+    span:focus,
+    span:active,
+    span:visited {
+        text-decoration: none;
+    }
 }
 
 .ops-hakutulokset {
-  .ops-td-nimi {
-    // width: 20%;
-  }
-  .ops-td-oppilaitos {
-    width: 20%;
-  }
-  .ops-td-organisaatio {
-    width: 15%;
-  }
-  .ops-td-paikkakunta {
-    width: 15%;
-  }
-
+    .ops-td-nimi {
+        // width: 20%;
+    }
+    .ops-td-oppilaitos {
+        width: 20%;
+    }
+    .ops-td-organisaatio {
+        width: 15%;
+    }
+    .ops-td-paikkakunta {
+        width: 15%;
+    }
 }
 .haku {
-  .label {
-    line-height: normal;
-    padding: 5px;
-    margin-right: 5px;
-  }
-  .label-tulevat {
-    background-color: #99D840;
-  }
-  .label-voimassaolevat {
-    background-color: #149FCB;
-  }
-  .label-tutkintonimikkeet {
-    background-color: #8e8e8e;
-  }
-  .label-osaamisalat {
-    background-color: #8e8e8e;
-  }
-  .label-siirtymassa {
-    background-color: #ffba00;
-  }
-  .label-poistuneet {
-    background-color: #ff7c8a;
-  }
-
-  .voimassa {
-    border-left-color: #149FCB;
-    @media (max-width: $screen-sm-max) {
-      border-top: #149FCB;
-    }
-  }
-  .siirtyma {
-    border-left-color: #ffba00;
-
-  }
-  .arkistoitu {
-    border-left-color: #ff7c8a;
-  }
-  .tuleva {
-    border-left-color: #99D840;
-  }
-
-  .kokonaismaara {
-    color: #636363;
-    font-size: 12px;
-
-    @media (max-width: $screen-sm-max) {
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-  }
-
-  .haku-box {
-    background-color: #FFFFFF;
-    border: 1px solid #E8E8E9;
-    width: 100%;
-    display: inline-block;
-    border-radius: 2px;
-    margin-bottom: 10px;
-
-    @media (max-width: $screen-sm-max) {
-      border-right: none;
-      border-right: none;
-      border-radius: 0;
-    }
-
-    input[type="text"] {
-      background: transparent;
-      border: none;
-      box-shadow: none;
-      border-radius: 0;
-      outline: none;
-      width: 100%;
-      padding-left: 0;
-      padding-right: 0;
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-
-    .color-box {
-      height: 100%;
-      border-left-style: solid;
-      border-left-width: 4px;
-      border-radius: 2px 0 0 2px;
-      min-height: 115px;
-
-      .text-box {
-        padding: 10px 10px 5px 10px;
-
-        p {
-          margin-bottom: 5px;
-          .alarm-marker {
-            color: #ffba00;
-            margin-left: 8px;
-            cursor: pointer;
-          }
-        }
-      }
-
-      @media (max-width: $screen-sm-max) {
-        border-radius: 0;
-      }
-
-      & > p {
-        margin: 0;
-      }
-
-      .nimi {
-        font-weight: bold;
-        font-size: 16px;
-      }
-      .tutkintonimikkeet {
-        color: darkgray;
-      }
-      .osaamisalat {
-        color: darkgray;
-      }
-
-      .pvm {
-        font-size: 12px;
-        color: darkgray;
-      }
-
-      .open {
-        width: 100%;
-        height: 18px;
-        background-color: #efefef;
-        border-right: solid 4px #efefef;
-        text-align: center;
-
-        content: "";
-        cursor: pointer;
-        top: -8px;
-        color: #777;
-        font-weight: 700;
-      }
-    }
-
-    .haku-filters {
-      float: right;
-      & > span {
-        margin-left: 10px;
-      }
-
-      * {
-        text-decoration: none;
-        &:hover, &:focus, &:active, &:visited {
-          text-decoration: none;
-        }
-      }
-
-      a {
-        cursor: pointer;
-      }
-    }
-
-    .haku-filtered {
-      border-radius: 0 0 2px 2px;
-      background-color: #F6F7F7;
-      border-top: 1px solid #E8E8E9;
-      padding: 5px;
-      color: #58595B;
-      min-height: 32px;
-      clear: both;
-
-      * {
-        text-decoration: none;
-        &:hover, &:focus, &:active, &:visited {
-          text-decoration: none;
-        }
-      }
-
-      .haku-show {
-        margin-left: 10px;
-        margin-right: 10px;
-        font-weight: bold;
-        font-size: 14px;
-      }
-    }
-
     .label {
-      white-space: nowrap;
-      display: inline-block;
+        line-height: normal;
+        padding: 5px;
+        margin-right: 5px;
+    }
+    .label-tulevat {
+        background-color: #99d840;
+    }
+    .label-voimassaolevat {
+        background-color: #149fcb;
+    }
+    .label-tutkintonimikkeet {
+        background-color: #8e8e8e;
+    }
+    .label-osaamisalat {
+        background-color: #8e8e8e;
+    }
+    .label-siirtymassa {
+        background-color: #ffba00;
+    }
+    .label-poistuneet {
+        background-color: #ff7c8a;
     }
 
-    .dropdown-toggle {
-      cursor: pointer;
+    .voimassa {
+        border-left-color: #149fcb;
+        @media (max-width: $screen-sm-max) {
+            border-top: #149fcb;
+        }
     }
-    li > a {
-      cursor: pointer;
+    .siirtyma {
+        border-left-color: #ffba00;
     }
-  }
+    .arkistoitu {
+        border-left-color: #ff7c8a;
+    }
+    .tuleva {
+        border-left-color: #99d840;
+    }
 
-  @media (max-width: $screen-sm-max) {
-    h1 {
-      margin-left: 10px;
-      margin-right: 10px;
+    .kokonaismaara {
+        color: #636363;
+        font-size: 12px;
+
+        @media (max-width: $screen-sm-max) {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
     }
-  }
+
+    .haku-box {
+        background-color: #ffffff;
+        border: 1px solid #e8e8e9;
+        width: 100%;
+        display: inline-block;
+        border-radius: 2px;
+        margin-bottom: 10px;
+
+        @media (max-width: $screen-sm-max) {
+            border-right: none;
+            border-right: none;
+            border-radius: 0;
+        }
+
+        input[type="text"] {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            outline: none;
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .color-box {
+            height: 100%;
+            border-left-style: solid;
+            border-left-width: 4px;
+            border-radius: 2px 0 0 2px;
+            min-height: 115px;
+
+            .text-box {
+                padding: 10px 10px 5px 10px;
+
+                p {
+                    margin-bottom: 5px;
+                    .alarm-marker {
+                        color: #ffba00;
+                        margin-left: 8px;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            @media (max-width: $screen-sm-max) {
+                border-radius: 0;
+            }
+
+            & > p {
+                margin: 0;
+            }
+
+            .nimi {
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .tutkintonimikkeet {
+                color: darkgray;
+            }
+            .osaamisalat {
+                color: darkgray;
+            }
+
+            .pvm {
+                font-size: 12px;
+                color: darkgray;
+            }
+
+            .open {
+                width: 100%;
+                height: 18px;
+                background-color: #efefef;
+                border-right: solid 4px #efefef;
+                text-align: center;
+
+                content: "";
+                cursor: pointer;
+                top: -8px;
+                color: #777;
+                font-weight: 700;
+            }
+        }
+
+        .haku-filters {
+            float: right;
+            & > span {
+                margin-left: 10px;
+            }
+
+            * {
+                text-decoration: none;
+                &:hover,
+                &:focus,
+                &:active,
+                &:visited {
+                    text-decoration: none;
+                }
+            }
+
+            a {
+                cursor: pointer;
+            }
+        }
+
+        .haku-filtered {
+            border-radius: 0 0 2px 2px;
+            background-color: #f6f7f7;
+            border-top: 1px solid #e8e8e9;
+            padding: 5px;
+            color: #58595b;
+            min-height: 32px;
+            clear: both;
+
+            * {
+                text-decoration: none;
+                &:hover,
+                &:focus,
+                &:active,
+                &:visited {
+                    text-decoration: none;
+                }
+            }
+
+            .haku-show {
+                margin-left: 10px;
+                margin-right: 10px;
+                font-weight: bold;
+                font-size: 14px;
+            }
+        }
+
+        .label {
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+        li > a {
+            cursor: pointer;
+        }
+    }
+
+    @media (max-width: $screen-sm-max) {
+        h1 {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+    }
 }

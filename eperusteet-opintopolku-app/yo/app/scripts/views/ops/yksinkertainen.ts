@@ -15,99 +15,129 @@
  */
 
 namespace Controllers {
-    export const OpsYksinkertainenController = ($q, $scope, $document, $state, ops, TermistoService, otsikot, epMenuBuilder, $timeout, $rootScope, epPerusopetusStateService, opsId, Kieli, epEsitysSettings, MurupolkuData, $stateParams) => {
+    export const OpsYksinkertainenController = (
+        $q,
+        $scope,
+        $document,
+        $state,
+        ops,
+        TermistoService,
+        otsikot,
+        epMenuBuilder,
+        $timeout,
+        $rootScope,
+        epPerusopetusStateService,
+        opsId,
+        Kieli,
+        epEsitysSettings,
+        MurupolkuData,
+        $stateParams
+    ) => {
         $scope.isNaviVisible = _.constant(true);
         $scope.otsikot = otsikot;
         $scope.ops = ops;
 
-        $scope.hasContent = (obj) => {
+        $scope.hasContent = obj => {
             return _.isObject(obj) && obj.teksti && obj.teksti[Kieli.getSisaltokieli()];
         };
 
-        const getRootState = (current) => {
-            return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus|aipe)(.*)/, '.$1');
+        const getRootState = current => {
+            return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus|aipe)(.*)/, ".$1");
         };
 
         TermistoService.setResource(ops, "OPS");
 
-        const clickHandler = (event) => {
-            const ohjeEl = angular.element(event.target).closest('.popover, .popover-element');
+        const clickHandler = event => {
+            const ohjeEl = angular.element(event.target).closest(".popover, .popover-element");
             if (ohjeEl.length === 0) {
-                $rootScope.$broadcast('ohje:closeAll');
+                $rootScope.$broadcast("ohje:closeAll");
             }
         };
 
         const installClickHandler = () => {
-            $document.off('click', clickHandler);
+            $document.off("click", clickHandler);
             $timeout(() => {
-                $document.on('click', clickHandler);
+                $document.on("click", clickHandler);
             });
         };
 
-        $scope.$on('$destroy', function () {
-            $document.off('click', clickHandler);
+        $scope.$on("$destroy", function() {
+            $document.off("click", clickHandler);
         });
 
         installClickHandler();
 
-        MurupolkuData.set({opsId: ops.id, opsNimi: ops.nimi});
+        MurupolkuData.set({ opsId: ops.id, opsNimi: ops.nimi });
 
-        $scope.naviClasses = function (item) {
-            const classes = ['depth' + item.depth];
+        $scope.naviClasses = function(item) {
+            const classes = ["depth" + item.depth];
             if (item.$selected) {
-                classes.push('tekstisisalto-active');
+                classes.push("tekstisisalto-active");
             }
             if (item.$header) {
-                classes.push('tekstisisalto-active-header');
+                classes.push("tekstisisalto-active-header");
             }
             return classes;
         };
 
-        $scope.$on('$stateChangeSuccess', function () {
+        $scope.$on("$stateChangeSuccess", function() {
             epPerusopetusStateService.setState($scope.navi);
         });
 
-        $scope.$on('$stateChangeSuccess', function () {
-            if ($state.current.name === ('root.ops.esiopetus' || 'root.ops.varhaiskasvatus' || 'root.ops.lisaopetus' || 'root.ops.aipe')) {
-                $state.go('.tiedot', {location: 'replace'});
+        $scope.$on("$stateChangeSuccess", function() {
+            if (
+                $state.current.name ===
+                ("root.ops.esiopetus" || "root.ops.varhaiskasvatus" || "root.ops.lisaopetus" || "root.ops.aipe")
+            ) {
+                $state.go(".tiedot", { location: "replace" });
             }
         });
 
         $scope.navi = {
-            header: 'opetussuunnitelma',
+            header: "opetussuunnitelma",
             sections: [
                 {
-                    id: 'tekstikappale',
+                    id: "tekstikappale",
                     $open: true,
                     items: epMenuBuilder.rakennaYksinkertainenMenu($scope.otsikot),
-                    include: 'views/ops/opsVlk.html'
+                    include: "views/ops/opsVlk.html"
                 }
             ]
         };
 
         const currentRootState = getRootState($state.current.name);
 
-        _.each($scope.navi.sections[0].items, function (item) {
+        _.each($scope.navi.sections[0].items, function(item) {
             if (item.$osa) {
-                item.href = $state.href(currentRootState + '.tekstikappale', {
+                item.href = $state.href(currentRootState + ".tekstikappale", {
                     perusteId: $stateParams.perusteId,
                     tekstikappaleId: item.$osa.id
                 });
             }
         });
 
-        $scope.navi.sections[0].items.unshift({depth: 0, label: 'opetussuunnitelman-tiedot', link: [currentRootState + '.tiedot']});
-  };
+        $scope.navi.sections[0].items.unshift({
+            depth: 0,
+            label: "opetussuunnitelman-tiedot",
+            link: [currentRootState + ".tiedot"]
+        });
+    };
 
-  export const OpsYksinkertainenTiedotController = ($scope, dokumenttiId) => {
-    if (dokumenttiId && dokumenttiId.toString().length > 0) {
-      $scope.dokumenttiUrl = location.origin + '/eperusteet-ylops-service/api/dokumentit/' + dokumenttiId;
-    }
-  };
+    export const OpsYksinkertainenTiedotController = ($scope, dokumenttiId) => {
+        if (dokumenttiId && dokumenttiId.toString().length > 0) {
+            $scope.dokumenttiUrl = location.origin + "/eperusteet-ylops-service/api/dokumentit/" + dokumenttiId;
+        }
+    };
 
-  export const OpsTekstikappaleController = ($scope, $state, $stateParams, tekstikappaleWithChildren, MurupolkuData) => {
-    $scope.tekstikappale = tekstikappaleWithChildren.tekstiKappale;
-    $scope.lapset = tekstikappaleWithChildren.lapset;
-    MurupolkuData.set({tekstikappaleId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi});
-  };
+    export const OpsTekstikappaleController = (
+        $scope,
+        $state,
+        $stateParams,
+        tekstikappaleWithChildren,
+        MurupolkuData
+    ) => {
+        $scope.tekstikappale = tekstikappaleWithChildren.tekstiKappale;
+        $scope.lapset = tekstikappaleWithChildren.lapset;
+        MurupolkuData.set({ tekstikappaleId: $scope.tekstikappale.id, tekstikappaleNimi: $scope.tekstikappale.nimi });
+    };
 }

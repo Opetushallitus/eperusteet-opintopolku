@@ -1,58 +1,58 @@
 dl.termisto {
-  dt {
-    font-size: 110%;
-    padding: 7px 4px;
-    &:hover {
-      background-color: #eaeaea;
+    dt {
+        font-size: 110%;
+        padding: 7px 4px;
+        &:hover {
+            background-color: #eaeaea;
+        }
     }
-  }
-  .actions {
-    margin-left: 5px;
-  }
-  margin-top: 20px;
-  dd {
-    margin-left: 40px;
-    margin-bottom: 20px;
-  }
+    .actions {
+        margin-left: 5px;
+    }
+    margin-top: 20px;
+    dd {
+        margin-left: 40px;
+        margin-bottom: 20px;
+    }
 }
 
 .termisto-rajaus {
-  max-width: 30em;
-  margin-bottom: 30px;
+    max-width: 30em;
+    margin-bottom: 30px;
 }
 
 .spacer {
-  margin-bottom: 80px;
+    margin-bottom: 80px;
 }
 
 .termisto-maara {
-  margin-top: 30px;
-  margin-bottom: 0;
+    margin-top: 30px;
+    margin-bottom: 0;
 }
 
 .termi-muokkaus {
-  .input-group {
-    margin-bottom: 15px;
-  }
-  .navbar-fixed-top {
-    position: relative;
-  }
+    .input-group {
+        margin-bottom: 15px;
+    }
+    .navbar-fixed-top {
+        position: relative;
+    }
 }
 
 .termisto-wrapper {
-  max-width: 800px;
+    max-width: 800px;
 }
 
 .readmore-collapsable {
-  overflow-y: hidden;
-  display: block;
-  transition: height 0.2s;
+    overflow-y: hidden;
+    display: block;
+    transition: height 0.2s;
 }
 
 .readmore-toggler {
-  width: 100%;
-  display: block;
-  border-top: 1px solid #ddd;
-  margin-top: 5px;
-  text-align: center;
+    width: 100%;
+    display: block;
+    border-top: 1px solid #ddd;
+    margin-top: 5px;
+    text-align: center;
 }

@@ -14,23 +14,27 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-.controller('UutisetController', function ($scope, UusimmatPerusteetService, TiedotteetCRUD, Utils, Kieli) {
-  $scope.tiedotteet = [];
-  $scope.naytto = {limit: 50, shown: 10};
-  $scope.kieli = Kieli.getSisaltokieli();
+angular
+    .module("app")
+    .controller("UutisetController", function($scope, UusimmatPerusteetService, TiedotteetCRUD, Utils, Kieli) {
+        $scope.tiedotteet = [];
+        $scope.naytto = { limit: 50, shown: 10 };
+        $scope.kieli = Kieli.getSisaltokieli();
 
-  $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
+        $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
 
-  const MONTH_OFFSET = 48*30*24*60*60*1000; // 4 vuotta
-  const alkaen = (new Date()).getTime() - MONTH_OFFSET;
+        const MONTH_OFFSET = 48 * 30 * 24 * 60 * 60 * 1000; // 4 vuotta
+        const alkaen = new Date().getTime() - MONTH_OFFSET;
 
-  TiedotteetCRUD.query({
-      alkaen: 0,
-      vainJulkiset: true
-  }, function (res) {
-    $scope.tiedotteet = res;
-  });
-});
+        TiedotteetCRUD.query(
+            {
+                alkaen: 0,
+                vainJulkiset: true
+            },
+            function(res) {
+                $scope.tiedotteet = res;
+            }
+        );
+    });

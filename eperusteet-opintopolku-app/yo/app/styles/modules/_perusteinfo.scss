@@ -1,11 +1,10 @@
 $laatikko-padding: 12px;
 $laatikko-margin: 6px;
-$light-color: #149ECB;
-$mid-color: #53989E;
+$light-color: #149ecb;
+$mid-color: #53989e;
 $heavy-color: #06526b;
 $dark-color: #555;
-$border-color: #E6E7E8;
-
+$border-color: #e6e7e8;
 
 .perusteinfo {
     margin-top: 0px;
@@ -91,10 +90,8 @@ $border-color: #E6E7E8;
             .nayta-kaikki-uutiset {
                 margin-top: 6px;
             }
-
         }
     }
-
 }
 
 .paikalliset {
@@ -102,9 +99,9 @@ $border-color: #E6E7E8;
     margin-bottom: 8px;
 
     input[type="text"] {
-        background-color: #FFFFFF;
+        background-color: #ffffff;
         border-radius: 2px;
-        border: 1px solid #E8E8E9;
+        border: 1px solid #e8e8e9;
         box-shadow: none;
         display: inline-block;
         width: 100%;
@@ -152,10 +149,10 @@ $border-color: #E6E7E8;
                     }
                 }
                 .ops-tulevat {
-                    border-left: 6px solid #99D840;
+                    border-left: 6px solid #99d840;
                 }
                 .ops-voimassaolevat {
-                    border-left: 6px solid #149FCB;
+                    border-left: 6px solid #149fcb;
                 }
                 .ops-siirtymassa {
                     border-left: 6px solid #ffba00;

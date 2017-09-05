@@ -1,169 +1,168 @@
 @mixin sp-toggler($color, $background-color) {
-  background: $color;
-  color: $background-color;
-  height: 28px;
-  width: 28px;
-  float: left;
-  cursor: pointer;
-  padding: 6px 8px 8px 8px;
-  user-select: none;
-  margin-right: 10px;
+    background: $color;
+    color: $background-color;
+    height: 28px;
+    width: 28px;
+    float: left;
+    cursor: pointer;
+    padding: 6px 8px 8px 8px;
+    user-select: none;
+    margin-right: 10px;
 
-  .chevron {
-  }
+    .chevron {
+    }
 }
 
 .suorituspolku {
-  clear: both;
-  padding-top: 10px;
+    clear: both;
+    padding-top: 10px;
 
-  .sp-laatikko-rikki {
-    background: #ffd3d3;
-  }
-
-  .sp-laatikko-active {
-    box-shadow: 0 0 10px #ffffe0;
-  }
-
-  .sp-laatikko {
-    .sp-sisalto-poistettu {
-      text-decoration: line-through;
+    .sp-laatikko-rikki {
+        background: #ffd3d3;
     }
 
-    .sp-sisalto-tosa {
-      .laajuus {
-        float: right;
-        position: relative;
-        top: 6px;
-        right: 6px;
-        min-width: 61px;
-        text-align: center;
-      }
+    .sp-laatikko-active {
+        box-shadow: 0 0 10px #ffffe0;
     }
 
-    .sp-sisalto-vieras {
-      background-color: #F1F2F3;
-      .sp-toggler {
-        @include sp-toggler(#93278F, #fff)
-      }
-    }
-
-    .sp-sisalto-osaamisala {
-      font-weight: bold;
-      background-color: #F3FAFD;
-      .sp-toggler {
-        @include sp-toggler(#F3FAFD, #000)
-      }
-    }
-
-    .sp-sisalto-ryhma {
-      background-color: #F1F2F3;
-      .sp-toggler {
-        @include sp-toggler(#155971, #fff)
-      }
-    }
-
-    .sp-kuvaus-toggler {
-      border-bottom: 1px solid #dBdCdD;
-      background: #F1F2F3;
-      height: 7px;
-      cursor: pointer;
-      text-align: center;
-      vertical-align: middle;
-
-      &:hover {
-        background: #F9FAFB;
-      }
-
-      span {
-        position: relative;
-        top: -11px;
-        user-select: none;
-      }
-    }
-
-    .sp-kuvaus {
-      border-left: 1px solid #dBdCdD;
-      border-right: 1px solid #dBdCdD;
-      margin-bottom: 5px;
-
-      p {
-        margin: 0;
-      }
-
-      .sp-kuvaus-peruste {
-        padding: 4px;
-        background-color: #f9f9f9;
-        font-style: italic;
-        color: #555;
-        margin-bottom: 0;
-      }
-
-      .sp-kuvaus-oma {
-        padding: 4px;
-        margin-bottom: 0;
-      }
-    }
-
-    .sp-sisalto {
-      border: 1px solid #dBdCdD;
-      height: 30px;
-
-      .sp-toolbar {
-        float: right;
-        top: -30px;
-        position: relative;
-
-        .sp-muodostuminen {
-          float: right;
-          height: 28px;
-          padding: 5px 8px 5px 8px;
-          color: black;
-          font-weight: normal;
-          min-width: 61px;
-          text-align: center;
-          border-left: 1px solid #ddd;
+    .sp-laatikko {
+        .sp-sisalto-poistettu {
+            text-decoration: line-through;
         }
 
-        .muodostuminen-invalid {
-          background-color: #ed8e00;
-          color: #ffffff;
-          font-weight: bold;
+        .sp-sisalto-tosa {
+            .laajuus {
+                float: right;
+                position: relative;
+                top: 6px;
+                right: 6px;
+                min-width: 61px;
+                text-align: center;
+            }
         }
 
-        .muodostuminen-valid {
-          background-color: #0A8241;
-          color: #ffffff;
+        .sp-sisalto-vieras {
+            background-color: #f1f2f3;
+            .sp-toggler {
+                @include sp-toggler(#93278F, #fff);
+            }
         }
 
-      }
-
-      .sp-nimi {
-        margin-left: 14px;
-        padding: 5px;
-
-        .sp-osaamisala {
-          font-weight: normal;
-          margin-left: 20px;
+        .sp-sisalto-osaamisala {
+            font-weight: bold;
+            background-color: #f3fafd;
+            .sp-toggler {
+                @include sp-toggler(#F3FAFD, #000);
+            }
         }
-      }
+
+        .sp-sisalto-ryhma {
+            background-color: #f1f2f3;
+            .sp-toggler {
+                @include sp-toggler(#155971, #fff);
+            }
+        }
+
+        .sp-kuvaus-toggler {
+            border-bottom: 1px solid #dbdcdd;
+            background: #f1f2f3;
+            height: 7px;
+            cursor: pointer;
+            text-align: center;
+            vertical-align: middle;
+
+            &:hover {
+                background: #f9fafb;
+            }
+
+            span {
+                position: relative;
+                top: -11px;
+                user-select: none;
+            }
+        }
+
+        .sp-kuvaus {
+            border-left: 1px solid #dbdcdd;
+            border-right: 1px solid #dbdcdd;
+            margin-bottom: 5px;
+
+            p {
+                margin: 0;
+            }
+
+            .sp-kuvaus-peruste {
+                padding: 4px;
+                background-color: #f9f9f9;
+                font-style: italic;
+                color: #555;
+                margin-bottom: 0;
+            }
+
+            .sp-kuvaus-oma {
+                padding: 4px;
+                margin-bottom: 0;
+            }
+        }
+
+        .sp-sisalto {
+            border: 1px solid #dbdcdd;
+            height: 30px;
+
+            .sp-toolbar {
+                float: right;
+                top: -30px;
+                position: relative;
+
+                .sp-muodostuminen {
+                    float: right;
+                    height: 28px;
+                    padding: 5px 8px 5px 8px;
+                    color: black;
+                    font-weight: normal;
+                    min-width: 61px;
+                    text-align: center;
+                    border-left: 1px solid #ddd;
+                }
+
+                .muodostuminen-invalid {
+                    background-color: #ed8e00;
+                    color: #ffffff;
+                    font-weight: bold;
+                }
+
+                .muodostuminen-valid {
+                    background-color: #0a8241;
+                    color: #ffffff;
+                }
+            }
+
+            .sp-nimi {
+                margin-left: 14px;
+                padding: 5px;
+
+                .sp-osaamisala {
+                    font-weight: normal;
+                    margin-left: 20px;
+                }
+            }
+        }
+
+        .sp-tutkinnonosa {
+            margin-bottom: 5px;
+
+            .sp-button {
+                display: block;
+                width: 15px;
+            }
+        }
+
+        .sp-ryhma {
+            margin-bottom: 5px;
+
+            .sp-ryhma-lapset {
+                margin-left: 30px;
+            }
+        }
     }
-
-    .sp-tutkinnonosa {
-      margin-bottom: 5px;
-
-      .sp-button {
-        display: block;
-        width: 15px;
-      }
-    }
-
-    .sp-ryhma {
-      margin-bottom: 5px;
-
-      .sp-ryhma-lapset {
-        margin-left: 30px;
-      }
-    }
-  }
 }

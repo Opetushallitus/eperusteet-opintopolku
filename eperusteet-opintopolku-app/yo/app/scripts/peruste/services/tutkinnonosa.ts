@@ -14,74 +14,77 @@
 * European Union Public Licence for more details.
 */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-  .factory('TutkinnonOsanKoodiUniqueResource', function($resource, SERVICE_LOC) {
-    return $resource(SERVICE_LOC + '/tutkinnonosat/koodi/uniikki/:tutkinnonosakoodi');
-  })
-  .service('TutkinnonosanTiedotService', function(PerusteenOsat, $q, TutkinnonOsanOsaAlue, Osaamistavoite) {
-    var FIELD_ORDER = {
-      tavoitteet: 3,
-      ammattitaitovaatimukset: 4,
-      ammattitaidonOsoittamistavat: 7,
-      arviointi: 5,
-      lisatiedot: 5,
-      arvioinninKohdealueet: 6
-    };
+angular
+    .module("app")
+    .factory("TutkinnonOsanKoodiUniqueResource", function($resource, SERVICE_LOC) {
+        return $resource(SERVICE_LOC + "/tutkinnonosat/koodi/uniikki/:tutkinnonosakoodi");
+    })
+    .service("TutkinnonosanTiedotService", function(PerusteenOsat, $q, TutkinnonOsanOsaAlue, Osaamistavoite) {
+        var FIELD_ORDER = {
+            tavoitteet: 3,
+            ammattitaitovaatimukset: 4,
+            ammattitaidonOsoittamistavat: 7,
+            arviointi: 5,
+            lisatiedot: 5,
+            arvioinninKohdealueet: 6
+        };
 
-    var tutkinnonOsa;
+        var tutkinnonOsa;
 
-    function noudaTutkinnonOsa(stateParams) {
+        function noudaTutkinnonOsa(stateParams) {
+            var deferred = $q.defer();
 
-      var deferred = $q.defer();
+            PerusteenOsat.get({ osanId: stateParams.perusteenOsaId }, function(vastaus) {
+                tutkinnonOsa = vastaus;
+                if (vastaus.tyyppi === "tutke2") {
+                    TutkinnonOsanOsaAlue.list({ osanId: stateParams.perusteenOsaId }, function(osaAlueet) {
+                        tutkinnonOsa.osaAlueet = osaAlueet;
 
-      PerusteenOsat.get({osanId: stateParams.perusteenOsaId}, function (vastaus) {
-        tutkinnonOsa = vastaus;
-        if (vastaus.tyyppi === 'tutke2') {
-          TutkinnonOsanOsaAlue.list({osanId: stateParams.perusteenOsaId}, function (osaAlueet) {
-            tutkinnonOsa.osaAlueet = osaAlueet;
+                        if (osaAlueet && osaAlueet.length > 0) {
+                            var promisesList = [];
+                            _.each(osaAlueet, function(osaAlue) {
+                                var valmis = Osaamistavoite.list(
+                                    { osanId: stateParams.perusteenOsaId, osaalueenId: osaAlue.id },
+                                    function(osaamistavoitteet) {
+                                        osaAlue.osaamistavoitteet = osaamistavoitteet;
+                                    }
+                                );
+                                promisesList.push(valmis.promise);
+                            });
+                            $q.all(promisesList).then(
+                                function() {
+                                    deferred.resolve();
+                                },
+                                function() {
+                                    deferred.reject();
+                                }
+                            );
+                        } else {
+                            deferred.resolve();
+                        }
+                    });
+                } else {
+                    deferred.resolve();
+                }
+            });
 
-            if (osaAlueet && osaAlueet.length > 0) {
-              var promisesList = [];
-              _.each(osaAlueet, function (osaAlue) {
-                var valmis = Osaamistavoite.list({osanId: stateParams.perusteenOsaId, osaalueenId: osaAlue.id}, function (osaamistavoitteet) {
-                  osaAlue.osaamistavoitteet = osaamistavoitteet;
-                });
-                promisesList.push(valmis.promise);
-              });
-              $q.all(promisesList).then( function() {
-                deferred.resolve();
-              }, function () {
-                deferred.reject();
-              });
-
-            } else {
-              deferred.resolve();
-            }
-          });
-        } else {
-          deferred.resolve();
+            return deferred.promise;
         }
 
-      });
+        function getTutkinnonOsa() {
+            return _.clone(tutkinnonOsa);
+        }
 
-      return deferred.promise;
-    }
-
-    function getTutkinnonOsa() {
-      return _.clone(tutkinnonOsa);
-    }
-
-    return {
-      noudaTutkinnonOsa: noudaTutkinnonOsa,
-      getTutkinnonOsa: getTutkinnonOsa,
-      order: function (key) {
-        return FIELD_ORDER[key] || -1;
-      },
-      keys: function () {
-        return _.keys(FIELD_ORDER);
-      }
-    };
-
-  });
+        return {
+            noudaTutkinnonOsa: noudaTutkinnonOsa,
+            getTutkinnonOsa: getTutkinnonOsa,
+            order: function(key) {
+                return FIELD_ORDER[key] || -1;
+            },
+            keys: function() {
+                return _.keys(FIELD_ORDER);
+            }
+        };
+    });

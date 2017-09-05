@@ -14,50 +14,61 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 /*global _*/
 
-angular.module('app')
-.factory('LokalisointiResource', function(LOKALISOINTI_SERVICE_LOC, $resource) {
-  return $resource('/lokalisointi/cxf/rest/v1/localisation?category=eperusteet', {}, {
-    get: {
-      method: 'GET',
-      isArray: true,
-      cache: true
-    }
-  });
-})
-.factory('LokalisointiLoader', function ($q, $http, LokalisointiResource, $window, $rootScope) {
-  var PREFIX = 'localisation/locale-',
-      SUFFIX = '.json',
-      BYPASS_REMOTE = true;
-  return function (options) {
-    var deferred = $q.defer();
-    var translations = {};
-    $http({
-      url: PREFIX + options.key + SUFFIX,
-      method: 'GET',
-      params: ''
-    }).success(function (data) {
-      _.extend(translations, data);
-      if (BYPASS_REMOTE) {
-        deferred.resolve(translations);
-        $rootScope.lokalisointiInited = true;
-      } else {
-        LokalisointiResource.get({locale: options.key}, function (res) {
-          var remotes = _.zipObject(_.map(res, 'key'), _.map(res, 'value'));
-          _.extend(translations, remotes);
-          deferred.resolve(translations);
-          $rootScope.lokalisointiInited = true;
-        }, function () {
-          // Ohita tyytyväisesti jos lokalisointipalvelua ei ole
-          deferred.resolve(translations);
-          $rootScope.lokalisointiInited = true;
-        });
-      }
-    }).error(function () {
-      deferred.reject(options.key);
+angular
+    .module("app")
+    .factory("LokalisointiResource", function(LOKALISOINTI_SERVICE_LOC, $resource) {
+        return $resource(
+            "/lokalisointi/cxf/rest/v1/localisation?category=eperusteet",
+            {},
+            {
+                get: {
+                    method: "GET",
+                    isArray: true,
+                    cache: true
+                }
+            }
+        );
+    })
+    .factory("LokalisointiLoader", function($q, $http, LokalisointiResource, $window, $rootScope) {
+        var PREFIX = "localisation/locale-",
+            SUFFIX = ".json",
+            BYPASS_REMOTE = true;
+        return function(options) {
+            var deferred = $q.defer();
+            var translations = {};
+            $http({
+                url: PREFIX + options.key + SUFFIX,
+                method: "GET",
+                params: ""
+            })
+                .success(function(data) {
+                    _.extend(translations, data);
+                    if (BYPASS_REMOTE) {
+                        deferred.resolve(translations);
+                        $rootScope.lokalisointiInited = true;
+                    } else {
+                        LokalisointiResource.get(
+                            { locale: options.key },
+                            function(res) {
+                                var remotes = _.zipObject(_.map(res, "key"), _.map(res, "value"));
+                                _.extend(translations, remotes);
+                                deferred.resolve(translations);
+                                $rootScope.lokalisointiInited = true;
+                            },
+                            function() {
+                                // Ohita tyytyväisesti jos lokalisointipalvelua ei ole
+                                deferred.resolve(translations);
+                                $rootScope.lokalisointiInited = true;
+                            }
+                        );
+                    }
+                })
+                .error(function() {
+                    deferred.reject(options.key);
+                });
+            return deferred.promise;
+        };
     });
-    return deferred.promise;
-  };
-});

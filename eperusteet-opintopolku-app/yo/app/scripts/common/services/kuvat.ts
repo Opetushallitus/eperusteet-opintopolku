@@ -14,42 +14,48 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-
-angular.module('app')
-  .service('OpsImageService', function ($stateParams, opsBase) {
-    this.getOpsId = function() {
-      return $stateParams.opsId;
-    };
-    this.getPerusteId = function() {
-      return $stateParams.perusteId;
-    };
-    this.getUrl = function (image) {
-      if (this.getOpsId()) {
-        return (opsBase.OPS + '/kuvat').replace(':opsId', '' + this.getOpsId()) + '/' + image.id;
-      } else {
-        return ('eperusteet-service/api/perusteet/:perusteId/kuvat').replace(':perusteId', '' + this.getPerusteId()) + '/' + image.id;
-      }
-    };
-  })
-
-  .filter('kuvalinkit', function(OpsImageService) {
-    return function(text) {
-      var modified = false;
-      var tmp = angular.element('<div>'+text+'</div>');
-      tmp.find('img[data-uid]').each(function () {
-        var el = angular.element(this);
-        var url = OpsImageService.getUrl({id: el.attr('data-uid')});
-        if ( el.attr('src') !== url ) {
-          modified = true;
-          el.attr('src', OpsImageService.getUrl({id: el.attr('data-uid')}));
-          el.wrap('<a></a>')
-        }
-      });
-      if ( modified ) {
-        return tmp.html();
-      }
-      return text;
-    };
-  });
+angular
+    .module("app")
+    .service("OpsImageService", function($stateParams, opsBase) {
+        this.getOpsId = function() {
+            return $stateParams.opsId;
+        };
+        this.getPerusteId = function() {
+            return $stateParams.perusteId;
+        };
+        this.getUrl = function(image) {
+            if (this.getOpsId()) {
+                return (opsBase.OPS + "/kuvat").replace(":opsId", "" + this.getOpsId()) + "/" + image.id;
+            } else {
+                return (
+                    "eperusteet-service/api/perusteet/:perusteId/kuvat".replace(
+                        ":perusteId",
+                        "" + this.getPerusteId()
+                    ) +
+                    "/" +
+                    image.id
+                );
+            }
+        };
+    })
+    .filter("kuvalinkit", function(OpsImageService) {
+        return function(text) {
+            var modified = false;
+            var tmp = angular.element("<div>" + text + "</div>");
+            tmp.find("img[data-uid]").each(function() {
+                var el = angular.element(this);
+                var url = OpsImageService.getUrl({ id: el.attr("data-uid") });
+                if (el.attr("src") !== url) {
+                    modified = true;
+                    el.attr("src", OpsImageService.getUrl({ id: el.attr("data-uid") }));
+                    el.wrap("<a></a>");
+                }
+            });
+            if (modified) {
+                return tmp.html();
+            }
+            return text;
+        };
+    });

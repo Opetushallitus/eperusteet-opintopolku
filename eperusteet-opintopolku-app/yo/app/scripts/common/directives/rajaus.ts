@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
 /**
  * Rajaus
@@ -23,41 +23,40 @@
  * size: 'small' or default
  * placeholder: optional, string or {{expression}}
  */
-angular.module('app')
-.directive('rajaus', function () {
-  return {
-    templateUrl: 'views/common/directives/rajaus.html',
-    restrict: 'EA',
-    scope: {
-      model: '=',
-      placeholder: '@',
-      callback: '&',
-      classes: '@?',
-      size: '@?'
-    },
-    controller: function ($scope) {
-      $scope.changed = function () {
-        $scope.callback({value: $scope.model});
-      };
-      $scope.applyClasses = function () {
-        var classes = 'input-group rajauslaatikko';
-        if ($scope.classes) {
-          classes += (' ' + $scope.classes);
+angular.module("app").directive("rajaus", function() {
+    return {
+        templateUrl: "views/common/directives/rajaus.html",
+        restrict: "EA",
+        scope: {
+            model: "=",
+            placeholder: "@",
+            callback: "&",
+            classes: "@?",
+            size: "@?"
+        },
+        controller: function($scope) {
+            $scope.changed = function() {
+                $scope.callback({ value: $scope.model });
+            };
+            $scope.applyClasses = function() {
+                var classes = "input-group rajauslaatikko";
+                if ($scope.classes) {
+                    classes += " " + $scope.classes;
+                }
+                return classes;
+            };
+            $scope.clear = function($event) {
+                if ($event) {
+                    $event.preventDefault();
+                }
+                $scope.model = "";
+                $scope.changed();
+            };
+        },
+        link: function(scope: any, element, attrs) {
+            attrs.$observe("placeholder", function(value) {
+                scope.placeholderstring = value;
+            });
         }
-        return classes;
-      };
-      $scope.clear = function ($event) {
-        if ($event) {
-          $event.preventDefault();
-        }
-        $scope.model = '';
-        $scope.changed();
-      };
-    },
-    link: function (scope: any, element, attrs) {
-      attrs.$observe('placeholder', function (value) {
-        scope.placeholderstring = value;
-      });
-    }
-  };
+    };
 });

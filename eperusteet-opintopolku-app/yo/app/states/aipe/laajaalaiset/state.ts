@@ -14,13 +14,13 @@
  * European Union Public Licence for more details.
  */
 
-angular.module('app')
-.config(($stateProvider) => $stateProvider
-.state('root.aipe.laajaalaiset', {
-    url: '/laajaalaiset',
-    templateUrl: 'eperusteet-esitys/views/laajaalaiset.html',
-    controller: ($scope, laajaalaiset, Utils) => {
-        $scope.laajaalaiset = laajaalaiset;
-        $scope.osaaminenSort = Utils.nameSort;
-    }
-}));
+angular.module("app").config($stateProvider =>
+    $stateProvider.state("root.aipe.laajaalaiset", {
+        url: "/laajaalaiset",
+        templateUrl: "eperusteet-esitys/views/laajaalaiset.html",
+        controller: ($scope, laajaalaiset, Utils) => {
+            $scope.laajaalaiset = laajaalaiset;
+            $scope.osaaminenSort = Utils.nameSort;
+        }
+    })
+);

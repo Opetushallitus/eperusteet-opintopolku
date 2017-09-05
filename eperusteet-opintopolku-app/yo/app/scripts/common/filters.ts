@@ -14,83 +14,80 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-.filter('mapFilter', function() {
-  return function(input, f) {
-    input = _.filter(input, function(v) {
-      var bool = f(v);
-      return bool;
-    });
-    return input;
-  };
-})
-
-.filter('tyhja', function (Kaanna) {
-  return function (input) {
-    return _.isEmpty(input) ? Kaanna.kaanna('ei-asetettu') : input;
-  };
-})
-
-.filter('reverse', function(){
-  return function(input){
-    return input.reverse();
-  }
-})
-
-.filter('unsafe', ['$sce', function ($sce) {
-  return function (val) {
-    return $sce.trustAsHtml(val);
-  };
-}])
-
-.filter('paragraphsplit', function() {
-  return function(text) {
-    return text.split('\n');
-  };
-})
-
-.filter("aikaleima", ($filter) => {
-  const mapping = {
-    date: "d.M.yyyy",
-    default: "d.M.yyyy H:mm:ss",
-    short: "d.M.yyyy H:mm",
-    time: "H:mm"
-  };
-
-  return (input, format, defaultKey) => {
-    if (!input) {
-      return defaultKey ? KaannaService.kaanna(defaultKey) : "";
-    }
-    else {
-      return $filter("date")(input, mapping[format] || mapping.default);
-    }
-  };
-})
-
-
-.filter('unique', function () {
-  return function (array, field) {
-    return _.uniq(array, function(el) { return el[field]; });
-  };
-})
-
-.directive('pvm', function (Kaanna, $filter, $timeout) {
-  return {
-    restrict: 'A',
-    link: function (scope: any, element, attrs: any) {
-      scope.$watch(attrs.pvm, function (value) {
-        if (!value) {
-          // Jonkin takia kääntäminen ei toimi suoraan ilman timeoutia
-          $timeout(function () {
-            element.text(Kaanna.kaanna('ei-asetettu'));
-          });
-          return;
+angular
+    .module("app")
+    .filter("mapFilter", function() {
+        return function(input, f) {
+            input = _.filter(input, function(v) {
+                var bool = f(v);
+                return bool;
+            });
+            return input;
+        };
+    })
+    .filter("tyhja", function(Kaanna) {
+        return function(input) {
+            return _.isEmpty(input) ? Kaanna.kaanna("ei-asetettu") : input;
+        };
+    })
+    .filter("reverse", function() {
+        return function(input) {
+            return input.reverse();
+        };
+    })
+    .filter("unsafe", [
+        "$sce",
+        function($sce) {
+            return function(val) {
+                return $sce.trustAsHtml(val);
+            };
         }
-        var date = new Date(value);
-        element.text($filter('date')(date, 'd.M.yyyy'));
-      });
-    }
-  };
-});
+    ])
+    .filter("paragraphsplit", function() {
+        return function(text) {
+            return text.split("\n");
+        };
+    })
+    .filter("aikaleima", $filter => {
+        const mapping = {
+            date: "d.M.yyyy",
+            default: "d.M.yyyy H:mm:ss",
+            short: "d.M.yyyy H:mm",
+            time: "H:mm"
+        };
+
+        return (input, format, defaultKey) => {
+            if (!input) {
+                return defaultKey ? KaannaService.kaanna(defaultKey) : "";
+            } else {
+                return $filter("date")(input, mapping[format] || mapping.default);
+            }
+        };
+    })
+    .filter("unique", function() {
+        return function(array, field) {
+            return _.uniq(array, function(el) {
+                return el[field];
+            });
+        };
+    })
+    .directive("pvm", function(Kaanna, $filter, $timeout) {
+        return {
+            restrict: "A",
+            link: function(scope: any, element, attrs: any) {
+                scope.$watch(attrs.pvm, function(value) {
+                    if (!value) {
+                        // Jonkin takia kääntäminen ei toimi suoraan ilman timeoutia
+                        $timeout(function() {
+                            element.text(Kaanna.kaanna("ei-asetettu"));
+                        });
+                        return;
+                    }
+                    var date = new Date(value);
+                    element.text($filter("date")(date, "d.M.yyyy"));
+                });
+            }
+        };
+    });

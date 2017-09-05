@@ -14,62 +14,60 @@
  * European Union Public Licence for more details.
  */
 
-angular.module('app')
-.service('TermistoService', function (PerusteTermistoCRUD, OpsTermistoCRUD, $q, $timeout) {
-  //resource is either the peruste or the ops
-  var resources = [], cached = {};
-  cached["number"] = 0;
-  let loading = false;
-  const cacheKasitteet = (items) => {
-    _.each(items, (item) => {
-      cached[item.avain] = item;
-    });
-    cached["number"]++;
-  };
-  const CRUD = {
-    OPS: OpsTermistoCRUD.query,
-    PERUSTE: PerusteTermistoCRUD.query
-  };
-  const mapResources = (resrcs) => {
-    return _.map(resrcs, (resource: any) => {
-      CRUD[resource.type]({resourceId: resource.id})
-      .$promise.then((res) => cacheKasitteet(res))
-    })
-  };
-  this.preload = function () {
-    if ((resources.length != cached["number"]) && !loading) {
-      loading = true;
-      var self = this;
-      $timeout(function () {
-        self.getAll().then(function () {
-          loading = false;
+angular.module("app").service("TermistoService", function(PerusteTermistoCRUD, OpsTermistoCRUD, $q, $timeout) {
+    //resource is either the peruste or the ops
+    var resources = [],
+        cached = {};
+    cached["number"] = 0;
+    let loading = false;
+    const cacheKasitteet = items => {
+        _.each(items, item => {
+            cached[item.avain] = item;
         });
-      });
+        cached["number"]++;
+    };
+    const CRUD = {
+        OPS: OpsTermistoCRUD.query,
+        PERUSTE: PerusteTermistoCRUD.query
+    };
+    const mapResources = resrcs => {
+        return _.map(resrcs, (resource: any) => {
+            CRUD[resource.type]({ resourceId: resource.id }).$promise.then(res => cacheKasitteet(res));
+        });
+    };
+    this.preload = function() {
+        if (resources.length != cached["number"] && !loading) {
+            loading = true;
+            var self = this;
+            $timeout(function() {
+                self.getAll().then(function() {
+                    loading = false;
+                });
+            });
+        }
+    };
+    this.getAll = function() {
+        return $q.all(mapResources(resources));
+    };
+
+    this.setResource = (value, type = "PERUSTE") => {
+        value.type = type.toUpperCase();
+        resources.push(value);
+    };
+
+    function findTermi(avain) {
+        return cached[avain];
     }
-  };
-  this.getAll = function () {
-    return $q.all(mapResources(resources));
-  };
 
-  this.setResource = (value, type = "PERUSTE") => {
-    value.type = type.toUpperCase();
-    resources.push(value);
-  };
-
-  function findTermi(avain) {
-    return cached[avain]
-  }
-
-  this.getWithAvain = function (avain, cached) {
-    if (cached) {
-      return findTermi(avain)
-    } else {
-    var deferred = $q.defer();
-      this.getAll().then(function () {
-        deferred.resolve(findTermi(avain));
-      });
-    }
-    return deferred.promise;
-  };
-
+    this.getWithAvain = function(avain, cached) {
+        if (cached) {
+            return findTermi(avain);
+        } else {
+            var deferred = $q.defer();
+            this.getAll().then(function() {
+                deferred.resolve(findTermi(avain));
+            });
+        }
+        return deferred.promise;
+    };
 });

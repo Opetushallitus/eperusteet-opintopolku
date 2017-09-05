@@ -1,266 +1,266 @@
 .sisalto-box {
-  background-color: white;
-  border: 1px solid $brand-border-color;
-  padding-top: 10px;
-  padding-left: $sisalto-padding;
-  padding-right: $sisalto-padding;
-  margin-bottom: 20px;
-  &.topmost {
-    margin-top: 40px;
-  }
-  & > h1:first-child {
-    margin-top: 0;
-  }
+    background-color: white;
+    border: 1px solid $brand-border-color;
+    padding-top: 10px;
+    padding-left: $sisalto-padding;
+    padding-right: $sisalto-padding;
+    margin-bottom: 20px;
+    &.topmost {
+        margin-top: 40px;
+    }
+    & > h1:first-child {
+        margin-top: 0;
+    }
 }
 
 .banneri-box {
-  background-color: white;
-  background-image: url("../images/banneri-tausta.jpg");
-  background-position: 50% 32%;
-  background-size: cover;
-  border: 1px solid $brand-border-color;
-  margin-bottom: 20px;
-  h2 {
-    font-weight: 900;
-  }
-  .banneri-sisalto {
-    background-color: rgba(6, 82, 107, 0.7);
-    padding: $sisalto-padding;
-    color: white;
-    line-height: 1.6em;
-  }
+    background-color: white;
+    background-image: url("../images/banneri-tausta.jpg");
+    background-position: 50% 32%;
+    background-size: cover;
+    border: 1px solid $brand-border-color;
+    margin-bottom: 20px;
+    h2 {
+        font-weight: 900;
+    }
+    .banneri-sisalto {
+        background-color: rgba(6, 82, 107, 0.7);
+        padding: $sisalto-padding;
+        color: white;
+        line-height: 1.6em;
+    }
 }
 
 .linkit {
-  margin-left: -$sisalto-padding;
-  margin-right: -$sisalto-padding;
-  border-top: 1px solid $brand-border-color;
-  ul {
-    list-style-type: none;
-    padding-left: $sisalto-padding;
-    padding-right: $sisalto-padding;
-    li.peruste-linkki {
-      background: url("../images/xs/ikoni-peruste.png") no-repeat left top;
-      background-size: 18px 10px;
-      background-position: 0 14px;
-      padding-left: 32px;
-      padding-top: 10px;
+    margin-left: -$sisalto-padding;
+    margin-right: -$sisalto-padding;
+    border-top: 1px solid $brand-border-color;
+    ul {
+        list-style-type: none;
+        padding-left: $sisalto-padding;
+        padding-right: $sisalto-padding;
+        li.peruste-linkki {
+            background: url("../images/xs/ikoni-peruste.png") no-repeat left top;
+            background-size: 18px 10px;
+            background-position: 0 14px;
+            padding-left: 32px;
+            padding-top: 10px;
+        }
     }
-  }
 }
 
 .uutiset {
-  ul {
-    list-style-type: none;
-  }
+    ul {
+        list-style-type: none;
+    }
 }
 
 .lista-elementti {
-  padding-top: 10px;
-  p {
-    color: #A3A5A7;
-    margin: 0;
-  }
+    padding-top: 10px;
+    p {
+        color: #a3a5a7;
+        margin: 0;
+    }
 }
 .lista-elementti-lisaa {
-  padding-top: 10px;
+    padding-top: 10px;
 }
 
 .osaan-banneri {
-  background-color: #e1f2dd;
-  min-height: 140px;
+    background-color: #e1f2dd;
+    min-height: 140px;
 }
 .osaan-tekstit {
-  position: absolute;
-  z-index: 1;
-  margin-right: 100px;
+    position: absolute;
+    z-index: 1;
+    margin-right: 100px;
 }
 
 .osaan-otsikko {
-  color: black;
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 0;
-  line-height: 1;
+    color: black;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0;
+    line-height: 1;
 }
 .osaan-teksti {
-  margin-top: 5px;
-  margin-bottom: 5px;
-  font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: 14px;
 }
 .osaan-vihrea {
-  color: #327B1F;
+    color: #327b1f;
 }
 
 .osaan-pollo {
-  background-color: #e1f2dd;
-  background: url("../images/osaan-pollo.png") no-repeat right top;
-  background-size: 150px 150px;
-  width: 90px;
-  height: 130px;
-  top: -10px;
-  left: $sisalto-padding;
-  position: relative;
-  background-position: 0 100%;
+    background-color: #e1f2dd;
+    background: url("../images/osaan-pollo.png") no-repeat right top;
+    background-size: 150px 150px;
+    width: 90px;
+    height: 130px;
+    top: -10px;
+    left: $sisalto-padding;
+    position: relative;
+    background-position: 0 100%;
 }
 
 @media (max-width: $screen-sm) {
-  .sisalto-box {
-    padding-left: $sisalto-padding * 0.75;
-    padding-right: $sisalto-padding * 0.75;
-    &.topmost {
-      margin-top: 0;
+    .sisalto-box {
+        padding-left: $sisalto-padding * 0.75;
+        padding-right: $sisalto-padding * 0.75;
+        &.topmost {
+            margin-top: 0;
+        }
     }
-  }
-  .linkit {
-    margin-left: -$sisalto-padding * 0.75;
-    margin-right: -$sisalto-padding * 0.75;
-    ul {
-      padding-left: $sisalto-padding * 0.75;
-      padding-right: $sisalto-padding * 0.75;
+    .linkit {
+        margin-left: -$sisalto-padding * 0.75;
+        margin-right: -$sisalto-padding * 0.75;
+        ul {
+            padding-left: $sisalto-padding * 0.75;
+            padding-right: $sisalto-padding * 0.75;
+        }
     }
-  }
-  .osaan-pollo {
-    left: $sisalto-padding * 0.75;
-  }
+    .osaan-pollo {
+        left: $sisalto-padding * 0.75;
+    }
 }
 
 $paaotsikko-logo-size: 96px;
 
 .etusivu {
-  margin-top: 20px;
-  h1, h2 {
-    margin-top: 0;
-  }
-  .paaotsikko {
-    background-image: url("../images/ikoni_peruste_blue_96.png");
-    background-repeat: no-repeat;
-    background-position: 20px 20px;
-    padding-left: $paaotsikko-logo-size + 40px;
-    img {
-      margin-left: 15px;
-      float: right;
+    margin-top: 20px;
+    h1,
+    h2 {
+        margin-top: 0;
     }
-  }
+    .paaotsikko {
+        background-image: url("../images/ikoni_peruste_blue_96.png");
+        background-repeat: no-repeat;
+        background-position: 20px 20px;
+        padding-left: $paaotsikko-logo-size + 40px;
+        img {
+            margin-left: 15px;
+            float: right;
+        }
+    }
 }
 
 @media (max-width: $screen-xs-max) {
-  .etusivu {
-    margin-top: 10px;
+    .etusivu {
+        margin-top: 10px;
 
-    .paaotsikko {
-      img {
-        display: none;
-      }
+        .paaotsikko {
+            img {
+                display: none;
+            }
+        }
     }
-  }
-  .sisalto-box {
-    border-style: solid;
-    border-color: $brand-border-color;
-    border-width: 1px 0 1px 0;
-  }
+    .sisalto-box {
+        border-style: solid;
+        border-color: $brand-border-color;
+        border-width: 1px 0 1px 0;
+    }
 }
 
 .uusimmat {
-  list-style-type: none;
-  padding-left: 0;
-  padding-bottom: 10px;
-  line-height: 2em;
+    list-style-type: none;
+    padding-left: 0;
+    padding-bottom: 10px;
+    line-height: 2em;
 }
 
 .am-linkit {
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-top: 20px;
-  border-top: 1px solid $content-bg-color;
-  ul {
-    list-style-type: none;
-    padding-left: 20px;
-    line-height: 2.5em;
-    li a {
-      font-size: 120%;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-top: 20px;
+    border-top: 1px solid $content-bg-color;
+    ul {
+        list-style-type: none;
+        padding-left: 20px;
+        line-height: 2.5em;
+        li a {
+            font-size: 120%;
+        }
     }
-  }
 }
 
 .link-prepend {
-  font-size: 120%;
-  margin-right: 10px;
+    font-size: 120%;
+    margin-right: 10px;
 }
 
 .tiedotteet-list {
-  list-style-type: none;
-  padding-left: 0;
+    list-style-type: none;
+    padding-left: 0;
 }
 
 .alatunniste {
-  height: 80px;
-  background-color: #e1e4e5;
-  margin-bottom: 10px;
-
-  .alatunniste-tausta {
-    float: left;
-    background-image: url("../images/alatunniste_tausta.png");
-    background-color: $content-bg-color;
-    background-size: 112px 80px;
-    width: 112px;
     height: 80px;
-  }
+    background-color: #e1e4e5;
+    margin-bottom: 10px;
 
-  .alatunniste-sisalto {
-    float: left;
-    @include vertical-align();
-
-    .alatunniste-linkit {
-      float: left;
-      list-style-type: none;
-      margin-bottom: 0;
-      li {
-        line-height: 150%;
-      }
+    .alatunniste-tausta {
+        float: left;
+        background-image: url("../images/alatunniste_tausta.png");
+        background-color: $content-bg-color;
+        background-size: 112px 80px;
+        width: 112px;
+        height: 80px;
     }
-  }
 
-  .opetushallitus-logo {
-    float: right;
-    background-image: url("../images/oph_logo_vaaka.svg");
-    width: 200px;
-    height: 56px;
-    margin-right: 60px;
-    background-size: cover;
-    @include vertical-align();
-  }
+    .alatunniste-sisalto {
+        float: left;
+        @include vertical-align();
+
+        .alatunniste-linkit {
+            float: left;
+            list-style-type: none;
+            margin-bottom: 0;
+            li {
+                line-height: 150%;
+            }
+        }
+    }
+
+    .opetushallitus-logo {
+        float: right;
+        background-image: url("../images/oph_logo_vaaka.svg");
+        width: 200px;
+        height: 56px;
+        margin-right: 60px;
+        background-size: cover;
+        @include vertical-align();
+    }
 }
 
 @media (max-width: $screen-sm-max) {
-  .alatunniste {
-    .opetushallitus-logo {
-      display: none;
+    .alatunniste {
+        .opetushallitus-logo {
+            display: none;
+        }
     }
-  }
 }
 
 @media (max-width: $screen-xs-max) {
-  .alatunniste {
-    height: 100px;
+    .alatunniste {
+        height: 100px;
 
-    .alatunniste-tausta {
-      display: none;
+        .alatunniste-tausta {
+            display: none;
+        }
     }
-  }
 }
 
 .alatunniste-copyright {
-  font-size: 12px;
+    font-size: 12px;
 }
 
-
 @media (max-width: $screen-xs-max) {
-  .banneri-container {
-    .banneri {
-      .banneri-linkit {
-        font-size: 20px;
-      }
+    .banneri-container {
+        .banneri {
+            .banneri-linkit {
+                font-size: 20px;
+            }
+        }
     }
-  }
 }

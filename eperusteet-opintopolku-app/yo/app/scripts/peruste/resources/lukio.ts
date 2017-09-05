@@ -13,57 +13,79 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
  */
-'use strict';
-angular.module('app')
-.service('epLukioResource', function (eperusteetConfig) {
-    var serviceLoc = eperusteetConfig.getServiceLocation();
-    this.SERVICE = serviceLoc;
-    this.LUKIO_PERUSTEET = '/eperusteet-service/api/perusteet/:perusteId';
-})
-.factory('LukioPerusteenOsat', function ($resource, epLukioResource) {
-    return $resource(epLukioResource.LUKIO_PERUSTEET + '/suoritustavat/lukiokoulutus/sisalto', {
-        perusteId: '@id'
-    }, {
-        query: {
-            method: 'GET',
-            cache: true
-        }
+"use strict";
+angular
+    .module("app")
+    .service("epLukioResource", function(eperusteetConfig) {
+        var serviceLoc = eperusteetConfig.getServiceLocation();
+        this.SERVICE = serviceLoc;
+        this.LUKIO_PERUSTEET = "/eperusteet-service/api/perusteet/:perusteId";
+    })
+    .factory("LukioPerusteenOsat", function($resource, epLukioResource) {
+        return $resource(
+            epLukioResource.LUKIO_PERUSTEET + "/suoritustavat/lukiokoulutus/sisalto",
+            {
+                perusteId: "@id"
+            },
+            {
+                query: {
+                    method: "GET",
+                    cache: true
+                }
+            }
+        );
+    })
+    .factory("LukioTekstikappale", function($resource) {
+        return $resource(
+            "/eperusteet-service/api/perusteenosat/viite/:viiteId",
+            {
+                viiteId: "@id"
+            },
+            {
+                getByViite: {
+                    method: "GET",
+                    cache: true
+                }
+            }
+        );
+    })
+    .factory("LukioOppiaineet", function($resource, epLukioResource) {
+        var baseUrl = epLukioResource.LUKIO_PERUSTEET + "/lukiokoulutus/oppiaineet";
+        return $resource(
+            baseUrl,
+            {
+                perusteId: "@id"
+            },
+            {
+                list: { method: "GET", url: baseUrl, isArray: true, cache: true },
+                getOppiaine: { method: "GET", url: baseUrl + "/:oppiaineId" }
+            }
+        );
+    })
+    .factory("LukioYleistiedot", function($resource, epLukioResource) {
+        var baseUrl = epLukioResource.LUKIO_PERUSTEET + "/lukiokoulutus";
+        return $resource(
+            baseUrl,
+            {
+                perusteId: "@id"
+            },
+            {
+                getTavoitteet: { method: "GET", url: baseUrl + "/yleisettavoitteet", cache: true },
+                getAihekokonaisuudet: { method: "GET", url: baseUrl + "/aihekokonaisuudet/yleiskuvaus", cache: true },
+                getOppiaineRakenne: { method: "GET", url: baseUrl + "/julkinen/oppiainerakenne", cache: true }
+            }
+        );
+    })
+    .factory("LukioKurssit", function($resource, epLukioResource) {
+        var baseUrl = epLukioResource.LUKIO_PERUSTEET + "/lukiokoulutus/kurssit";
+        return $resource(
+            baseUrl,
+            {
+                perusteId: "@id"
+            },
+            {
+                list: { method: "GET", isArray: true, cache: true },
+                getKurssi: { method: "GET", isArray: false, url: baseUrl + "/:kurssiId", cache: true }
+            }
+        );
     });
-})
-.factory('LukioTekstikappale', function ($resource) {
-    return $resource('/eperusteet-service/api/perusteenosat/viite/:viiteId', {
-        viiteId: '@id'
-    }, {
-        getByViite: {
-            method: 'GET', cache: true
-        }
-    });
-})
-.factory('LukioOppiaineet', function ($resource, epLukioResource) {
-    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/lukiokoulutus/oppiaineet';
-    return $resource(baseUrl, {
-        perusteId: '@id'
-    }, {
-        list: { method: 'GET', url: baseUrl, isArray: true, cache: true },
-        getOppiaine: { method: 'GET', url: baseUrl + '/:oppiaineId' }
-    });
-})
-.factory('LukioYleistiedot', function ($resource, epLukioResource) {
-    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/lukiokoulutus';
-    return $resource(baseUrl, {
-        perusteId: '@id'
-    }, {
-        getTavoitteet: { method: 'GET', url: baseUrl + '/yleisettavoitteet', cache: true },
-        getAihekokonaisuudet: { method: 'GET', url: baseUrl + '/aihekokonaisuudet/yleiskuvaus', cache: true },
-        getOppiaineRakenne: { method: 'GET', url: baseUrl + '/julkinen/oppiainerakenne', cache: true }
-    });
-})
-.factory('LukioKurssit', function ($resource, epLukioResource) {
-    var baseUrl = epLukioResource.LUKIO_PERUSTEET + '/lukiokoulutus/kurssit';
-    return $resource(baseUrl, {
-        perusteId: '@id'
-    }, {
-        list: { method: 'GET', isArray: true, cache: true },
-        getKurssi: { method: 'GET', isArray: false, url: baseUrl + '/:kurssiId', cache: true }
-    });
-});
