@@ -14,162 +14,173 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-  .directive('tavoitteet', function() {
-    return {
-      templateUrl: 'views/perusopetus/directives/tavoitteet.html',
-      restrict: 'A',
-      scope: {
-        model: '=tavoitteet',
-        editable: '@?',
-        providedVuosiluokka: '=?vuosiluokka',
-        providedOsaamiset: '=?osaamiset',
-        providedOppiaine: '=?oppiaine'
-      },
-      controller: 'TavoitteetController',
-      link: function(scope: any) {
-        // TODO call on model update
-        scope.mapModel();
-      }
-    };
-  })
-  .controller('TavoitteetController', function($scope, $state, $rootScope, $timeout,
-    $stateParams, Oppiaineet, Kaanna) {
-    $scope.osaamiset = $scope.providedOsaamiset;
-    if (_.isEmpty($scope.osaamiset)) {
-      // käytetään vain lukutilan kanssa
-      /*PerusopetusService.getOsat(PerusopetusService.OSAAMINEN, true).then(function (res) {
+angular
+    .module("app")
+    .directive("tavoitteet", function() {
+        return {
+            templateUrl: "views/perusopetus/directives/tavoitteet.html",
+            restrict: "A",
+            scope: {
+                model: "=tavoitteet",
+                editable: "@?",
+                providedVuosiluokka: "=?vuosiluokka",
+                providedOsaamiset: "=?osaamiset",
+                providedOppiaine: "=?oppiaine"
+            },
+            controller: "TavoitteetController",
+            link: function(scope: any) {
+                // TODO call on model update
+                scope.mapModel();
+            }
+        };
+    })
+    .controller("TavoitteetController", function(
+        $scope,
+        $state,
+        $rootScope,
+        $timeout,
+        $stateParams,
+        Oppiaineet,
+        Kaanna
+    ) {
+        $scope.osaamiset = $scope.providedOsaamiset;
+        if (_.isEmpty($scope.osaamiset)) {
+            // käytetään vain lukutilan kanssa
+            /*PerusopetusService.getOsat(PerusopetusService.OSAAMINEN, true).then(function (res) {
         $scope.osaamiset = res;
         $scope.mapModel();
       });*/
-    }
-    $scope.vuosiluokka = $scope.providedVuosiluokka;
-    $scope.oppiaine = $scope.providedOppiaine;
-    $scope.editMode = false;
-    $scope.currentEditable = null;
+        }
+        $scope.vuosiluokka = $scope.providedVuosiluokka;
+        $scope.oppiaine = $scope.providedOppiaine;
+        $scope.editMode = false;
+        $scope.currentEditable = null;
 
-    $scope.kohdealueet = $scope.oppiaine.oppiaine ? $scope.oppiaine.oppiaine.kohdealueet : $scope.oppiaine.kohdealueet;
+        $scope.kohdealueet = $scope.oppiaine.oppiaine
+            ? $scope.oppiaine.oppiaine.kohdealueet
+            : $scope.oppiaine.kohdealueet;
 
-    $scope.$watch('editable', function(value) {
-      $scope.editMode = !!value;
-    });
+        $scope.$watch("editable", function(value) {
+            $scope.editMode = !!value;
+        });
 
-    $scope.treeOptions = {
-      dropped: function() {
-        $scope.mapModel(true);
-      }
-    };
+        $scope.treeOptions = {
+            dropped: function() {
+                $scope.mapModel(true);
+            }
+        };
 
-    $scope.$watch('providedVuosiluokka', function () {
-      $scope.vuosiluokka = $scope.providedVuosiluokka;
-      $scope.mapModel();
-    });
+        $scope.$watch("providedVuosiluokka", function() {
+            $scope.vuosiluokka = $scope.providedVuosiluokka;
+            $scope.mapModel();
+        });
 
-    function generateArraySetter(findFrom, manipulator = _.noop) {
-      return function(item) {
-        var found = _.find(findFrom, function(findItem: any) { return parseInt(findItem, 10) === item.id; });
-        item = _.clone(item);
-        item.$hidden = !found;
-        item.teksti = item.kuvaus;
-        return manipulator(item) || item;
-      };
-    }
-
-    $scope.kaannaKohdealue = function(ka) {
-      return Kaanna.kaanna(ka.nimi);
-    };
-
-    $scope.poistaValittuKohdealue = function(tavoite) {
-      tavoite.$valittuKohdealue = undefined;
-    };
-
-    $scope.asetaKohdealue = function(tavoite) {
-      tavoite.$kohdealueet = tavoite.$valittuKohdealue ? [tavoite.$valittuKohdealue] : [];
-    };
-
-    $scope.mapModel = function(update) {
-      _.each($scope.model.tavoitteet, function(tavoite) {
-        if (!update) {
-          tavoite.$accordionOpen = true;
+        function generateArraySetter(findFrom, manipulator = _.noop) {
+            return function(item) {
+                var found = _.find(findFrom, function(findItem: any) {
+                    return parseInt(findItem, 10) === item.id;
+                });
+                item = _.clone(item);
+                item.$hidden = !found;
+                item.teksti = item.kuvaus;
+                return manipulator(item) || item;
+            };
         }
 
-        var kohdealueId: any = !_.isEmpty(tavoite.kohdealueet) ? _.first(tavoite.kohdealueet) : null;
-        if (kohdealueId) {
-          tavoite.$valittuKohdealue = _.find($scope.kohdealueet, function(ka: any) {
-            return ka.id === parseInt(kohdealueId, 10);
-          });
+        $scope.kaannaKohdealue = function(ka) {
+            return Kaanna.kaanna(ka.nimi);
+        };
+
+        $scope.poistaValittuKohdealue = function(tavoite) {
+            tavoite.$valittuKohdealue = undefined;
+        };
+
+        $scope.asetaKohdealue = function(tavoite) {
+            tavoite.$kohdealueet = tavoite.$valittuKohdealue ? [tavoite.$valittuKohdealue] : [];
+        };
+
+        $scope.mapModel = function(update) {
+            _.each($scope.model.tavoitteet, function(tavoite) {
+                if (!update) {
+                    tavoite.$accordionOpen = true;
+                }
+
+                var kohdealueId: any = !_.isEmpty(tavoite.kohdealueet) ? _.first(tavoite.kohdealueet) : null;
+                if (kohdealueId) {
+                    tavoite.$valittuKohdealue = _.find($scope.kohdealueet, function(ka: any) {
+                        return ka.id === parseInt(kohdealueId, 10);
+                    });
+                }
+
+                tavoite.$sisaltoalueet = _.map($scope.model.sisaltoalueet, generateArraySetter(tavoite.sisaltoalueet));
+                tavoite.$osaaminen = _.map(
+                    $scope.osaamiset,
+                    generateArraySetter(tavoite.laajattavoitteet, function(osaaminen) {
+                        const vuosiluokkakuvaus = _.find($scope.vuosiluokka.laajaalaisetOsaamiset, function(item: any) {
+                            return "" + item._laajaalainenOsaaminen === "" + osaaminen.id;
+                        });
+                        osaaminen.teksti = vuosiluokkakuvaus ? vuosiluokkakuvaus.kuvaus : "ei-kuvausta";
+                        osaaminen.extra =
+                            '<div class="clearfix"><a class="pull-right" href="' +
+                            $state.href("root.perusopetus.vuosiluokkakokonaisuus", {
+                                perusteId: $stateParams.perusteId,
+                                vlkId: $stateParams.vlkId || $scope.vuosiluokka.id
+                            }) +
+                            '#vlk-laajaalaisetosaamiset" kaanna="\'vuosiluokkakokonaisuuden-osaamisalueet\'"></a></div>';
+                    })
+                );
+            });
+        };
+
+        function setAccordion(mode) {
+            var obj = $scope.model.tavoitteet;
+            _.each(obj, function(tavoite) {
+                tavoite.$accordionOpen = mode;
+            });
         }
 
-        tavoite.$sisaltoalueet = _.map($scope.model.sisaltoalueet, generateArraySetter(tavoite.sisaltoalueet));
-        tavoite.$osaaminen = _.map($scope.osaamiset, generateArraySetter(tavoite.laajattavoitteet, function(osaaminen) {
-          const vuosiluokkakuvaus = _.find($scope.vuosiluokka.laajaalaisetOsaamiset, function(item: any) {
-            return '' + item._laajaalainenOsaaminen === '' + osaaminen.id;
-          });
-          osaaminen.teksti = vuosiluokkakuvaus ? vuosiluokkakuvaus.kuvaus : 'ei-kuvausta';
-          osaaminen.extra = '<div class="clearfix"><a class="pull-right" href="' +
-            $state.href('root.perusopetus.vuosiluokkakokonaisuus', {
-              perusteId: $stateParams.perusteId,
-              vlkId: $stateParams.vlkId || $scope.vuosiluokka.id,
-            }) + '#vlk-laajaalaisetosaamiset" kaanna="\'vuosiluokkakokonaisuuden-osaamisalueet\'"></a></div>';
-        }));
-      });
-    };
+        function accordionState() {
+            var obj: any = _.first($scope.model.tavoitteet);
+            return obj && obj.$accordionOpen;
+        }
 
-    function setAccordion(mode) {
-      var obj = $scope.model.tavoitteet;
-      _.each(obj, function(tavoite) {
-        tavoite.$accordionOpen = mode;
-      });
-    }
+        $scope.toggleAll = function() {
+            setAccordion(!accordionState());
+        };
 
-    function accordionState() {
-      var obj: any = _.first($scope.model.tavoitteet);
-      return obj && obj.$accordionOpen;
-    }
+        $scope.hasArviointi = function(tavoite) {
+            return !!tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0;
+        };
 
-    $scope.toggleAll = function() {
-      setAccordion(!accordionState());
-    };
+        $scope.addArviointi = function(tavoite) {
+            tavoite.arvioinninkohteet = [{ arvioinninKohde: {}, hyvanOsaamisenKuvaus: {} }];
+        };
 
-    $scope.hasArviointi = function(tavoite) {
-      return !!tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0;
-    };
+        //var cloner = CloneHelper.init(['tavoite', 'sisaltoalueet', 'laajattavoitteet', 'arvioinninkohteet']);
+        //var idFn = function(item) { return item.id; };
+        //var filterFn = function(item) { return !item.$hidden; };
 
-    $scope.addArviointi = function(tavoite) {
-      tavoite.arvioinninkohteet = [{arvioinninKohde: {}, hyvanOsaamisenKuvaus: {}}];
-    };
-
-    //var cloner = CloneHelper.init(['tavoite', 'sisaltoalueet', 'laajattavoitteet', 'arvioinninkohteet']);
-    //var idFn = function(item) { return item.id; };
-    //var filterFn = function(item) { return !item.$hidden; };
-
-    $scope.tavoiteFn = {
-      edit: function() {
-      },
-      remove: function() {
-      },
-      ok: function() {
-      },
-      cancel: function() {
-      },
-      add: function() {
-      },
-      toggle: function(tavoite) {
-        tavoite.$accordionOpen = !tavoite.$accordionOpen;
-      }
-    };
-  })
-
-  .directive('perusopetuksenArviointi', function() {
-    return {
-      templateUrl: 'views/perusopetus/directives/arviointi.html',
-      restrict: 'A',
-      scope: {
-        model: '=perusopetuksenArviointi',
-        editMode: '=',
-        atavoite: '=atavoite'
-      }
-    };
-  });
+        $scope.tavoiteFn = {
+            edit: function() {},
+            remove: function() {},
+            ok: function() {},
+            cancel: function() {},
+            add: function() {},
+            toggle: function(tavoite) {
+                tavoite.$accordionOpen = !tavoite.$accordionOpen;
+            }
+        };
+    })
+    .directive("perusopetuksenArviointi", function() {
+        return {
+            templateUrl: "views/perusopetus/directives/arviointi.html",
+            restrict: "A",
+            scope: {
+                model: "=perusopetuksenArviointi",
+                editMode: "=",
+                atavoite: "=atavoite"
+            }
+        };
+    });

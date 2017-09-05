@@ -14,20 +14,20 @@
  * European Union Public Licence for more details.
  */
 
-angular.module('app')
-  .directive('oppiaineLegend', function(){
-    return {
-      restrict: 'EA',
-      scope: {},
-      templateUrl: 'views/common/directives/legend.html',
-      controller: 'LegendController'
-    };
-  })
-
- .controller('LegendController', function($scope, $state){
-   $scope.tyypit = ['valtakunnallinen','paikallinen','pakollinen', 'syventava', 'soveltava'];
-   $scope.stateParams = _.words($state.current.name);
-   $scope.isOppiaineState = function() {
-     return !!_.intersection($scope.stateParams, ['oppiaine', 'kurssi']).length;
-   };
- });
+angular
+    .module("app")
+    .directive("oppiaineLegend", function() {
+        return {
+            restrict: "EA",
+            scope: {},
+            templateUrl: "views/common/directives/legend.html",
+            controller: "LegendController"
+        };
+    })
+    .controller("LegendController", function($scope, $state) {
+        $scope.tyypit = ["valtakunnallinen", "paikallinen", "pakollinen", "syventava", "soveltava"];
+        $scope.stateParams = _.words($state.current.name);
+        $scope.isOppiaineState = function() {
+            return !!_.intersection($scope.stateParams, ["oppiaine", "kurssi"]).length;
+        };
+    });

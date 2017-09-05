@@ -1,147 +1,180 @@
-angular.module('app')
-.controller('YlanavigaatioController', ($rootScope, $timeout, $scope, $state, Kieli, Perusteet,
-                                        UusimmatPerusteetService, Haku, $stateParams, Kaanna,
-                                        VirheService) => {
-  $scope.kieli = Kieli.getUiKieli();
-  $scope.nykyinenTila = $state;
-  $scope.navCollapsed = true;
-  $scope.state = $state;
+angular
+    .module("app")
+    .controller(
+        "YlanavigaatioController",
+        (
+            $rootScope,
+            $timeout,
+            $scope,
+            $state,
+            Kieli,
+            Perusteet,
+            UusimmatPerusteetService,
+            Haku,
+            $stateParams,
+            Kaanna,
+            VirheService
+        ) => {
+            $scope.kieli = Kieli.getUiKieli();
+            $scope.nykyinenTila = $state;
+            $scope.navCollapsed = true;
+            $scope.state = $state;
 
-  $scope.navCollapse = function () {
-    $scope.navCollapsed = !$scope.navCollapsed;
-  };
+            $scope.navCollapse = function() {
+                $scope.navCollapsed = !$scope.navCollapsed;
+            };
 
-  $scope.urls = {
-    eperusteet: {
-      fi: 'https://eperusteet.opintopolku.fi/',
-      sv: 'https://egrunder.studieinfo.fi/'
-    },
-    opintopolku: {
-      fi: 'https://opintopolku.fi/',
-      sv: 'https://studieinfo.fi/'
-    }
-  };
+            $scope.urls = {
+                eperusteet: {
+                    fi: "https://eperusteet.opintopolku.fi/",
+                    sv: "https://egrunder.studieinfo.fi/"
+                },
+                opintopolku: {
+                    fi: "https://opintopolku.fi/",
+                    sv: "https://studieinfo.fi/"
+                }
+            };
 
-  Perusteet.get({
-    tyyppi: [
-      'koulutustyyppi_15',
-      'koulutustyyppi_16',
-      'koulutustyyppi_22',
-      'koulutustyyppi_6',
-      'koulutustyyppi_2',
-      'koulutustyyppi_17'
-    ]
-  }, res => {
-    $scope.perusteetGroupByTyyppi = _.groupBy(res.data, 'koulutustyyppi');
-  }, err => {
-    console.error(err);
-  });
+            Perusteet.get(
+                {
+                    tyyppi: [
+                        "koulutustyyppi_15",
+                        "koulutustyyppi_16",
+                        "koulutustyyppi_22",
+                        "koulutustyyppi_6",
+                        "koulutustyyppi_2",
+                        "koulutustyyppi_17"
+                    ]
+                },
+                res => {
+                    $scope.perusteetGroupByTyyppi = _.groupBy(res.data, "koulutustyyppi");
+                },
+                err => {
+                    console.error(err);
+                }
+            );
 
-  let amOsio;
-  $scope.$on('loaded:peruste', (event, peruste) => {
-    amOsio = peruste.koulutustyyppi;
-  });
+            let amOsio;
+            $scope.$on("loaded:peruste", (event, peruste) => {
+                amOsio = peruste.koulutustyyppi;
+            });
 
-  $scope.isPerusopetus = () => {
-    if (($state.includes('**.perusopetus.**')
-        || $state.includes('**.perusvalmistava.**')
-        || $state.includes('**.aipe.**')
-        || $state.includes('**.lisaopetus.**')) && !$state.includes('**.ops.**')) {
-      return true;
-    }
-  };
+            $scope.isPerusopetus = () => {
+                if (
+                    ($state.includes("**.perusopetus.**") ||
+                        $state.includes("**.perusvalmistava.**") ||
+                        $state.includes("**.aipe.**") ||
+                        $state.includes("**.lisaopetus.**")) &&
+                    !$state.includes("**.ops.**")
+                ) {
+                    return true;
+                }
+            };
 
-  $scope.isLukioopetus = function () {
-    if ($state.includes('**.lukio.**') && !$state.includes('**.ops.**')) {
-      return true;
-    }
-  };
+            $scope.isLukioopetus = function() {
+                if ($state.includes("**.lukio.**") && !$state.includes("**.ops.**")) {
+                    return true;
+                }
+            };
 
-  $scope.isAmmatillinen = function () {
-    if ($state.includes('root.amops.**')) {
-      return true;
-    }
-    if ($state.includes('root.selaus.jarjestajat.**')) {
-      return true;
-    }
-    if ($state.includes('root.selaus.perusteinfo.**')) {
-      return true;
-    }
-    if ($state.includes('root.selaus.koostenakyma.**') && $stateParams.perusteluokitus === 'ammatillinenkoulutus') {
-      return true;
-    }
-    const uusiAmmatillinen = $state.includes('root.selaus.koostenakyma.**') && $stateParams.perusteluokitus === 'ammatillinenkoulutus';
-    if (uusiAmmatillinen || $state.includes('**.esitys.**') || $state.includes('root.selaus.ammatillinen')) {
-      return true;
-    }
-  };
+            $scope.isAmmatillinen = function() {
+                if ($state.includes("root.amops.**")) {
+                    return true;
+                }
+                if ($state.includes("root.selaus.jarjestajat.**")) {
+                    return true;
+                }
+                if ($state.includes("root.selaus.perusteinfo.**")) {
+                    return true;
+                }
+                if (
+                    $state.includes("root.selaus.koostenakyma.**") &&
+                    $stateParams.perusteluokitus === "ammatillinenkoulutus"
+                ) {
+                    return true;
+                }
+                const uusiAmmatillinen =
+                    $state.includes("root.selaus.koostenakyma.**") &&
+                    $stateParams.perusteluokitus === "ammatillinenkoulutus";
+                if (
+                    uusiAmmatillinen ||
+                    $state.includes("**.esitys.**") ||
+                    $state.includes("root.selaus.ammatillinen")
+                ) {
+                    return true;
+                }
+            };
 
-  $scope.isAmPerus = function () {
-    if ($state.includes('**.esitys.**') && amOsio === 'koulutustyyppi_1' ||
-      $state.includes('root.selaus.ammatillinenperuskoulutus')) {
-      return true;
-    }
-  };
+            $scope.isAmPerus = function() {
+                if (
+                    ($state.includes("**.esitys.**") && amOsio === "koulutustyyppi_1") ||
+                    $state.includes("root.selaus.ammatillinenperuskoulutus")
+                ) {
+                    return true;
+                }
+            };
 
-  $scope.isAmAikuis = function () {
-    if ($state.includes('**.esitys.**') && amOsio === 'koulutustyyppi_11' ||
-      $state.includes('root.selaus.ammatillinenaikuiskoulutus')) {
-      return true;
-    }
-  };
+            $scope.isAmAikuis = function() {
+                if (
+                    ($state.includes("**.esitys.**") && amOsio === "koulutustyyppi_11") ||
+                    $state.includes("root.selaus.ammatillinenaikuiskoulutus")
+                ) {
+                    return true;
+                }
+            };
 
-  $scope.isOps = function () {
-    if ($state.includes('root.ops.**') || $state.includes('root.selaus.ops.**')) {
-      return true;
-    }
-  };
+            $scope.isOps = function() {
+                if ($state.includes("root.ops.**") || $state.includes("root.selaus.ops.**")) {
+                    return true;
+                }
+            };
 
-  $scope.valittuOsio = function () {
-    if ($state.includes('root.etusivu.**')) {
-      return 'navi.etusivu';
-    } else if ($state.includes('root.esiopetus.**')) {
-      return 'navi.esiopetus';
-    } else if ($state.includes('root.perusopetus.**')) {
-      return 'navi.perusopetus';
-    } else if ($state.includes('root.varhaiskasvatus.**')) {
-      return 'navi.varhaiskasvatus';
-    } else if ($state.includes('root.perusvalmistava.**')) {
-      return 'navi.perusvalmistava';
-    } else if ($state.includes('root.lisaopetus.**')) {
-      return 'navi.lisaopetus';
-    } else if ($state.includes('root.lukio.**')) {
-      return 'navi.lukio';
-    } else if ($scope.isAmPerus()) {
-      return 'navi.ammatillinenperuskoulutus';
-    } else if ($scope.isAmAikuis()) {
-      return 'navi.ammatillinenperuskoulutus';
-    } else if ($scope.isOps()) {
-      return 'navi.opetussuunnitelmat';
-    } else if ($state.includes('root.tiedote.**')) {
-      return 'navi.tiedote';
-    } else if ($state.includes('root.esitys.peruste.**')) {
-      return 'navi.peruste';
-    } else if ($state.includes('root.lukio.**')) {
-      return 'navi.lukio';
-    } else {
-      return '';
-    }
-  };
+            $scope.valittuOsio = function() {
+                if ($state.includes("root.etusivu.**")) {
+                    return "navi.etusivu";
+                } else if ($state.includes("root.esiopetus.**")) {
+                    return "navi.esiopetus";
+                } else if ($state.includes("root.perusopetus.**")) {
+                    return "navi.perusopetus";
+                } else if ($state.includes("root.varhaiskasvatus.**")) {
+                    return "navi.varhaiskasvatus";
+                } else if ($state.includes("root.perusvalmistava.**")) {
+                    return "navi.perusvalmistava";
+                } else if ($state.includes("root.lisaopetus.**")) {
+                    return "navi.lisaopetus";
+                } else if ($state.includes("root.lukio.**")) {
+                    return "navi.lukio";
+                } else if ($scope.isAmPerus()) {
+                    return "navi.ammatillinenperuskoulutus";
+                } else if ($scope.isAmAikuis()) {
+                    return "navi.ammatillinenperuskoulutus";
+                } else if ($scope.isOps()) {
+                    return "navi.opetussuunnitelmat";
+                } else if ($state.includes("root.tiedote.**")) {
+                    return "navi.tiedote";
+                } else if ($state.includes("root.esitys.peruste.**")) {
+                    return "navi.peruste";
+                } else if ($state.includes("root.lukio.**")) {
+                    return "navi.lukio";
+                } else {
+                    return "";
+                }
+            };
 
-  $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
+            $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
 
-  $rootScope.$on('$stateChangeSuccess', () => {
-    $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
-  });
+            $rootScope.$on("$stateChangeSuccess", () => {
+                $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
+            });
 
-  $scope.vaihdaKieli = uusiKieli => {
-    if (uusiKieli !== Kieli.getUiKieli()) {
-      Kieli.setUiKieli(uusiKieli);
-      Kieli.setSisaltokieli(uusiKieli);
-      $scope.kieli = uusiKieli;
+            $scope.vaihdaKieli = uusiKieli => {
+                if (uusiKieli !== Kieli.getUiKieli()) {
+                    Kieli.setUiKieli(uusiKieli);
+                    Kieli.setSisaltokieli(uusiKieli);
+                    $scope.kieli = uusiKieli;
 
-      $state.go($state.current.name, _.merge($stateParams, { lang: uusiKieli }), {});
-    }
-  };
-
-});
+                    $state.go($state.current.name, _.merge($stateParams, { lang: uusiKieli }), {});
+                }
+            };
+        }
+    );

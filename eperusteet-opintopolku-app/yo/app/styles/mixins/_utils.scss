@@ -1,9 +1,9 @@
 @mixin borderradius($all) {
-  border-radius: $all;
+    border-radius: $all;
 }
 
 @mixin vertical-align($position: relative) {
-  position: $position;
-  top: 50%;
-  transform: translateY(-50%);
+    position: $position;
+    top: 50%;
+    transform: translateY(-50%);
 }

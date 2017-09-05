@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
 /**
  * Ohje
@@ -30,94 +30,101 @@
  * suunta: left|right(default)|top|bottom
  * otsikko: optional
  */
-angular.module('app')
-  .directive('ohje', function ($timeout, $compile, $document) {
+angular.module("app").directive("ohje", function($timeout, $compile, $document) {
     return {
-      templateUrl: 'views/perusopetus/directives/ohje.html',
-      restrict: 'EA',
-      transclude: true,
-      scope: {
-        teksti: '@',
-        otsikko: '@?',
-        suunta: '@?',
-        ohje: '@?',
-        extra: '='
-      },
-      link: function (scope: any, element, attrs: any) {
-        scope.showing = false;
-        var DELAY = 500;
-        var clickAnywhere = attrs.ohjeClickAnywhere !== 'false';
-        function appendExtraContent() {
-          var content = $compile(scope.extra)(scope);
-          element.find('.popover-extra').empty().append(content);
-        }
-
-        var el = element.find('.popover-element');
-
-        scope.show = function (visible, mouseEnter) {
-          var popupDelay = mouseEnter ? DELAY : 0;
-          if (mouseEnter && scope.ohje === 'false') {
-            return;
-          }
-          var opening = angular.isUndefined(visible) || visible;
-          if (!scope.showing && !opening) {
-            return;
-          }
-          $timeout(function () {
-            el.trigger(opening ? 'show' : 'hide');
-            scope.showing = opening;
-            if (opening) {
-              var title = element.find('.popover-title');
-              var closer = $compile(angular.element(
-                '<span class="closer pull-right" ng-click="show(false)">&#x2715;</span>'))(scope);
-              title.append(closer);
-              appendExtraContent();
+        templateUrl: "views/perusopetus/directives/ohje.html",
+        restrict: "EA",
+        transclude: true,
+        scope: {
+            teksti: "@",
+            otsikko: "@?",
+            suunta: "@?",
+            ohje: "@?",
+            extra: "="
+        },
+        link: function(scope: any, element, attrs: any) {
+            scope.showing = false;
+            var DELAY = 500;
+            var clickAnywhere = attrs.ohjeClickAnywhere !== "false";
+            function appendExtraContent() {
+                var content = $compile(scope.extra)(scope);
+                element
+                    .find(".popover-extra")
+                    .empty()
+                    .append(content);
             }
-          }, popupDelay);
-        };
 
-        var clickHandler = function (event) {
-          if (element.find(event.target).length > 0) {
-            return;
-          }
-          scope.show(false);
-          scope.$apply();
-        };
+            var el = element.find(".popover-element");
 
-        if (clickAnywhere) {
-          // Click anywhere to close
-          $document.on('click', clickHandler);
-          scope.$on('$destroy', function () {
-            $document.off('click', clickHandler);
-          });
+            scope.show = function(visible, mouseEnter) {
+                var popupDelay = mouseEnter ? DELAY : 0;
+                if (mouseEnter && scope.ohje === "false") {
+                    return;
+                }
+                var opening = angular.isUndefined(visible) || visible;
+                if (!scope.showing && !opening) {
+                    return;
+                }
+                $timeout(function() {
+                    el.trigger(opening ? "show" : "hide");
+                    scope.showing = opening;
+                    if (opening) {
+                        var title = element.find(".popover-title");
+                        var closer = $compile(
+                            angular.element('<span class="closer pull-right" ng-click="show(false)">&#x2715;</span>')
+                        )(scope);
+                        title.append(closer);
+                        appendExtraContent();
+                    }
+                }, popupDelay);
+            };
+
+            var clickHandler = function(event) {
+                if (element.find(event.target).length > 0) {
+                    return;
+                }
+                scope.show(false);
+                scope.$apply();
+            };
+
+            if (clickAnywhere) {
+                // Click anywhere to close
+                $document.on("click", clickHandler);
+                scope.$on("$destroy", function() {
+                    $document.off("click", clickHandler);
+                });
+            }
+
+            scope.$on("ohje:closeAll", function() {
+                scope.show(false);
+            });
+
+            scope.$watch("teksti", function() {
+                scope.textObject = scope.$parent.$eval(scope.teksti) || scope.teksti;
+            });
+            scope.$watch("otsikko", function() {
+                scope.title = scope.$parent.$eval(scope.otsikko) || scope.otsikko;
+            });
         }
-
-        scope.$on('ohje:closeAll', function () {
-          scope.show(false);
-        });
-
-        scope.$watch('teksti', function () {
-          scope.textObject = scope.$parent.$eval(scope.teksti) || scope.teksti;
-        });
-        scope.$watch('otsikko', function () {
-          scope.title = scope.$parent.$eval(scope.otsikko) || scope.otsikko;
-        });
-
-      }
     };
-  });
+});
 
 // Modify popover template for binding unsafe html
-angular.module('template/popover/popover.html', []).run(['$templateCache', function ($templateCache) {
-  $templateCache.put('template/popover/popover.html',
-      '<div class="popover {{placement}}" ng-class="{ in: isOpen(), fade: animation() }">\n' +
-      '  <div class="arrow"></div>\n' +
-      '\n' +
-      '  <div class="popover-inner">\n' +
-      '      <h3 class="popover-title" ng-bind-html="title | unsafe" ng-show="title"></h3>\n' +
-      '      <div class="popover-content" ng-bind-html="content | unsafe"></div>\n' +
-      '      <div class="popover-extra"></div>\n' +
-      '  </div>\n' +
-      '</div>\n' +
-      '');
-}]);
+angular.module("template/popover/popover.html", []).run([
+    "$templateCache",
+    function($templateCache) {
+        $templateCache.put(
+            "template/popover/popover.html",
+            '<div class="popover {{placement}}" ng-class="{ in: isOpen(), fade: animation() }">\n' +
+                '  <div class="arrow"></div>\n' +
+                "\n" +
+                '  <div class="popover-inner">\n' +
+                '      <h3 class="popover-title" ng-bind-html="title | unsafe" ng-show="title"></h3>\n' +
+                '      <div class="popover-content" ng-bind-html="content | unsafe"></div>\n' +
+                '      <div class="popover-extra"></div>\n' +
+                "  </div>\n" +
+                "</div>\n" +
+                ""
+        );
+    }
+]);

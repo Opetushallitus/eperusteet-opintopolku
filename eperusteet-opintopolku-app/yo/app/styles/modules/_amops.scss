@@ -3,86 +3,86 @@ $amops-bgcolor: white;
 $amops-blue: #149ecb;
 
 .amops {
-  .sivunavi {
-    width: 320px;
-    position: absolute;
-    background-color: $amops-bgcolor;
-    border: 1px solid #d2d2d2;
-    @media (min-width: $screen-lg-min) {
-      top: auto !important;
-    }
-
-    .header {
-      padding-top: $amops-padding;
-      padding-bottom: $amops-padding;
-      background-color: $amops-blue;
-      font-size: 110%;
-      font-weight: 700;
-      color: white;
-      text-align: center;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 0 $amops-padding;
-
-      li {
-        a {
-          display: block;
-          padding: 5px 5px 5px 25px;
-          position: relative;
-
-          .chevron {
-            position: absolute;
-            left: 5px;
-          }
+    .sivunavi {
+        width: 320px;
+        position: absolute;
+        background-color: $amops-bgcolor;
+        border: 1px solid #d2d2d2;
+        @media (min-width: $screen-lg-min) {
+            top: auto !important;
         }
-      }
-    }
-    & > ul {
-      margin: 10px $amops-padding;
-    }
-  }
-  .oikea {
-    background-color: $amops-bgcolor;
-    @media (min-width: $screen-sm-min) {
-      padding: 10px $amops-padding;
-    }
-    @media (max-width: $screen-xs-max) {
-      padding: 10px 25px;
-    }
-    @media (min-width: $screen-lg-min) {
-      margin-left: 350px;
-    }
 
-    h1 {
-      margin: 0 0 20px 0;
-      border-bottom: 1px solid #ccc;
-    }
-
-    .tiedot {
-      p {
-        margin: 0;
-      }
-    }
-
-    .osa {
-      .toggler {
-        float: right;
-        cursor: pointer;
-        margin-bottom: 20px;
-        .bubble {
-          color: #149ecb;
-          background-color: #F3F3F3;
-          padding: 10px;
-          display: inline-block;
+        .header {
+            padding-top: $amops-padding;
+            padding-bottom: $amops-padding;
+            background-color: $amops-blue;
+            font-size: 110%;
+            font-weight: 700;
+            color: white;
+            text-align: center;
         }
-        .active {
-          color: #fff;
-          background-color: #149ecb;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 0 $amops-padding;
+
+            li {
+                a {
+                    display: block;
+                    padding: 5px 5px 5px 25px;
+                    position: relative;
+
+                    .chevron {
+                        position: absolute;
+                        left: 5px;
+                    }
+                }
+            }
         }
-      }
+        & > ul {
+            margin: 10px $amops-padding;
+        }
     }
-  }
+    .oikea {
+        background-color: $amops-bgcolor;
+        @media (min-width: $screen-sm-min) {
+            padding: 10px $amops-padding;
+        }
+        @media (max-width: $screen-xs-max) {
+            padding: 10px 25px;
+        }
+        @media (min-width: $screen-lg-min) {
+            margin-left: 350px;
+        }
+
+        h1 {
+            margin: 0 0 20px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .tiedot {
+            p {
+                margin: 0;
+            }
+        }
+
+        .osa {
+            .toggler {
+                float: right;
+                cursor: pointer;
+                margin-bottom: 20px;
+                .bubble {
+                    color: #149ecb;
+                    background-color: #f3f3f3;
+                    padding: 10px;
+                    display: inline-block;
+                }
+                .active {
+                    color: #fff;
+                    background-color: #149ecb;
+                }
+            }
+        }
+    }
 }

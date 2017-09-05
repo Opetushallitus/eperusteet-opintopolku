@@ -14,31 +14,34 @@
  * European Union Public Licence for more details.
  */
 
-angular.module("app", [
-  "ngSanitize",
-  "ngStorage",
-  "ngResource",
-  "ngAnimate",
-  "ui.router",
-  "ui.bootstrap",
-  "pascalprecht.translate",
-  "monospaced.elastic",
-  "angular-cache",
-  "angularSpinner",
-  "angulartics",
-  "angulartics.piwik",
-  "eperusteet.esitys",
-  "restangular"
-])
-.constant("DEBUG_UI_ROUTER", false)
-.run(($rootScope, DEBUG_UI_ROUTER) => {
-    if (DEBUG_UI_ROUTER) {
-        $rootScope.$on("$stateChangeSuccess", (event, state, params) => {
-            console.info(
-                "%c" + state.name, "color: #ffb05b; background: #333; font-weight: bold",
-                state.url,
-                state.templateUrl,
-                params);
-        });
-    }
-});
+angular
+    .module("app", [
+        "ngSanitize",
+        "ngStorage",
+        "ngResource",
+        "ngAnimate",
+        "ui.router",
+        "ui.bootstrap",
+        "pascalprecht.translate",
+        "monospaced.elastic",
+        "angular-cache",
+        "angularSpinner",
+        "angulartics",
+        "angulartics.piwik",
+        "eperusteet.esitys",
+        "restangular"
+    ])
+    .constant("DEBUG_UI_ROUTER", false)
+    .run(($rootScope, DEBUG_UI_ROUTER) => {
+        if (DEBUG_UI_ROUTER) {
+            $rootScope.$on("$stateChangeSuccess", (event, state, params) => {
+                console.info(
+                    "%c" + state.name,
+                    "color: #ffb05b; background: #333; font-weight: bold",
+                    state.url,
+                    state.templateUrl,
+                    params
+                );
+            });
+        }
+    });

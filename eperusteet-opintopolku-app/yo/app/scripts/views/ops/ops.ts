@@ -13,38 +13,33 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * European Union Public Licence for more details.
  */
-'use strict';
+"use strict";
 
-angular.module('app')
-  .controller('OpsController', function(
-    $scope,
-    $state,
-    $location,
-    $window,
-    TermistoService,
-    otsikot,
-    ops) {
-
-    $scope.ops = ops;
-    $scope.otsikot = otsikot;
-    TermistoService.setResource(ops, "OPS");
-    const koulutustyyppi = $scope.ops.koulutustyyppi;
-    const kltMap = {
-      "koulutustyyppi_2": ".lukioopetus",
-      "koulutustyyppi_6": ".lisaopetus",
-      "koulutustyyppi_15": ".esiopetus",
-      "koulutustyyppi_16": ".perusopetus",
-      "koulutustyyppi_17": ".aipe",
-    };
-    if ($state.is('root.ops')) {
-      $state.go(kltMap[koulutustyyppi], {location: 'replace'})
-    }
-    $scope.returnToYlops = () => {
-      const isTestEnvironment = _.includes(_.words($location.absUrl()), 'testi');
-      $window.location.href = isTestEnvironment ?
-      'https://testi.virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/'
-      + $scope.ops.id + '/tiedot' :
-      'https://virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/'
-      + $scope.ops.id + '/tiedot';
-    };
-  });
+angular
+    .module("app")
+    .controller("OpsController", function($scope, $state, $location, $window, TermistoService, otsikot, ops) {
+        $scope.ops = ops;
+        $scope.otsikot = otsikot;
+        TermistoService.setResource(ops, "OPS");
+        const koulutustyyppi = $scope.ops.koulutustyyppi;
+        const kltMap = {
+            koulutustyyppi_2: ".lukioopetus",
+            koulutustyyppi_6: ".lisaopetus",
+            koulutustyyppi_15: ".esiopetus",
+            koulutustyyppi_16: ".perusopetus",
+            koulutustyyppi_17: ".aipe"
+        };
+        if ($state.is("root.ops")) {
+            $state.go(kltMap[koulutustyyppi], { location: "replace" });
+        }
+        $scope.returnToYlops = () => {
+            const isTestEnvironment = _.includes(_.words($location.absUrl()), "testi");
+            $window.location.href = isTestEnvironment
+                ? "https://testi.virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/" +
+                  $scope.ops.id +
+                  "/tiedot"
+                : "https://virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/" +
+                  $scope.ops.id +
+                  "/tiedot";
+        };
+    });

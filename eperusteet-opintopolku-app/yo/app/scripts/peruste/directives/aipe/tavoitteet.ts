@@ -32,24 +32,25 @@ interface Kohdealue {
     opetuksenTavoitteet: Array<any>;
 }
 
-angular.module('app')
-.directive('aipeTavoitteet', () => {
+angular.module("app").directive("aipeTavoitteet", () => {
     return {
-        templateUrl: 'views/aipe/directives/tavoitteet.html',
-        restrict: 'E',
+        templateUrl: "views/aipe/directives/tavoitteet.html",
+        restrict: "E",
         scope: {
-            model: '=',
-            laajaalaiset: '=',
-            vaihe: '='
+            model: "=",
+            laajaalaiset: "=",
+            vaihe: "="
         },
-        controller: function ($scope) {
+        controller: function($scope) {
             _.each($scope.model, tavoite => {
                 tavoite.$accordionOpen = true;
 
                 // Alustetaan valitut kohdealueet
                 if (tavoite.kohdealueet && tavoite.kohdealueet.length > 0) {
-                    tavoite.$valittuKohdealue = _.find($scope.vaihe.opetuksenKohdealueet,
-                        (ka: any) => ka.id.toString() === tavoite.kohdealueet[0]);
+                    tavoite.$valittuKohdealue = _.find(
+                        $scope.vaihe.opetuksenKohdealueet,
+                        (ka: any) => ka.id.toString() === tavoite.kohdealueet[0]
+                    );
                 }
 
                 // Alustetaan laaja-alaiset
@@ -69,9 +70,9 @@ angular.module('app')
             }
 
             $scope.toggleAll = () => {
-                _.each($scope.model, (tavoite) => {
+                _.each($scope.model, tavoite => {
                     tavoite.$accordionOpen = !tavoite.$accordionOpen;
-                })
+                });
             };
         }
     };

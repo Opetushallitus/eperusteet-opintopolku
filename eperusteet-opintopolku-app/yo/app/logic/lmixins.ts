@@ -1,4 +1,4 @@
-declare module _ {
+declare namespace _ {
     interface OwnMixins {
         callAndGive<F>(x: F, ...args: any[]): F;
         print(x: any): any;
@@ -11,9 +11,9 @@ declare module _ {
         fromPairs(): any;
     }
 
-    interface LoDashStatic extends OwnMixins { }
-    interface LoDashImplicitArrayWrapper<T> extends OwnMixins { }
-    interface LoDashImplicitObjectWrapper<T> extends OwnMixins { }
+    interface LoDashStatic extends OwnMixins {}
+    interface LoDashImplicitArrayWrapper<T> extends OwnMixins {}
+    interface LoDashImplicitObjectWrapper<T> extends OwnMixins {}
 }
 
 _.mixin({
@@ -28,20 +28,20 @@ _.mixin({
         f.apply(undefined, args);
         return f;
     },
-    cset: (obj, path) => (value) => _.set(obj, path, value),
-    spy: (obj) => {
+    cset: (obj, path) => value => _.set(obj, path, value),
+    spy: obj => {
         return obj;
     },
-    fromPairs: (pairs) => {
+    fromPairs: pairs => {
         let obj: any = {};
-        _.each(pairs, (pair) => {
+        _.each(pairs, pair => {
             if (pair) {
                 obj[pair[0]] = pair[1];
             }
         });
         return obj;
     },
-    print: (array) => {
+    print: array => {
         _.each(array, (v, k) => console.log(_.clone(k), _.clone(v)));
         return array;
     }

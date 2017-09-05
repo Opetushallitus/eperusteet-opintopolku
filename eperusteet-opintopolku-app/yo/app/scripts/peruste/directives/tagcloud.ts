@@ -14,31 +14,38 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-  .directive('tagCloud', function () {
-    return {
-      templateUrl: 'views/perusopetus/directives/tagcloud.html',
-      restrict: 'A',
-      scope: {
-        model: '=tagCloud',
-        openable: '@',
-        editMode: '=',
-        addLabel: '@'
-      },
-      controller: 'TagCloudController'
-    };
-  })
-  .controller('TagCloudController', function ($scope, Utils) {
-    $scope.notHidden = function (item) {
-      return !item.$hidden;
-    };
+angular
+    .module("app")
+    .directive("tagCloud", function() {
+        return {
+            templateUrl: "views/perusopetus/directives/tagcloud.html",
+            restrict: "A",
+            scope: {
+                model: "=tagCloud",
+                openable: "@",
+                editMode: "=",
+                addLabel: "@"
+            },
+            controller: "TagCloudController"
+        };
+    })
+    .controller("TagCloudController", function($scope, Utils) {
+        $scope.notHidden = function(item) {
+            return !item.$hidden;
+        };
 
-    $scope.orderFn = Utils.nameSort;
+        $scope.orderFn = Utils.nameSort;
 
-    $scope.showEmptyPlaceholder = function () {
-      return !$scope.editMode && (!$scope.model || $scope.model.length === 0  ||
-        !_.some($scope.model, function (item: any) { return !item.$hidden; }));
-    };
-  });
+        $scope.showEmptyPlaceholder = function() {
+            return (
+                !$scope.editMode &&
+                (!$scope.model ||
+                    $scope.model.length === 0 ||
+                    !_.some($scope.model, function(item: any) {
+                        return !item.$hidden;
+                    }))
+            );
+        };
+    });

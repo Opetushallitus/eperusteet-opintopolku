@@ -14,22 +14,21 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-.directive('epHighlight', function () {
-  var matcher;
-  return {
-    scope: {
-      epHighlight: '='
-    },
-    restrict: 'A',
-    link: function (scope, element) {
-      scope.$watch('epHighlight', function (value) {
-        matcher = new RegExp('(' + value + ')', 'i');
-        var text = element.text();
-        element.html(text.replace(matcher, '<strong class="ep-match">$1</strong>'));
-      });
-    }
-  };
+angular.module("app").directive("epHighlight", function() {
+    var matcher;
+    return {
+        scope: {
+            epHighlight: "="
+        },
+        restrict: "A",
+        link: function(scope, element) {
+            scope.$watch("epHighlight", function(value) {
+                matcher = new RegExp("(" + value + ")", "i");
+                var text = element.text();
+                element.html(text.replace(matcher, '<strong class="ep-match">$1</strong>'));
+            });
+        }
+    };
 });

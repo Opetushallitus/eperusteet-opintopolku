@@ -14,7 +14,7 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
 /**
  * Esityspuolen moduuli. Yhteistä koodia eperusteet ja eperusteet-opintopolku
@@ -22,12 +22,10 @@
  * Käyttää joko omia ep-alkuisia komponentteja tai yleisiä komponentteja, jotka täytyy
  * määritellä moduulin ulkopuolella.
  */
-angular
-.module('eperusteet.esitys', [])
-.provider('epEsitysSettings', <any>function() {
+angular.module("eperusteet.esitys", []).provider("epEsitysSettings", <any>function() {
     var settings = {
-        'perusopetusState': 'root.perusopetus',
-        'lukioState': 'root.lukio'
+        perusopetusState: "root.perusopetus",
+        lukioState: "root.lukio"
     };
 
     this.setValue = function(key, value) {

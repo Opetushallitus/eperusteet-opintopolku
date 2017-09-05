@@ -1,13 +1,12 @@
 $laatikko-padding: 12px;
 $laatikko-margin: 6px;
-$light-color: #149ECB;
-$jaettu-color: #99D840;
-$ops-color: #149FCB;
-$mid-color: #53989E;
+$light-color: #149ecb;
+$jaettu-color: #99d840;
+$ops-color: #149fcb;
+$mid-color: #53989e;
 $heavy-color: #06526b;
 $dark-color: #555;
-$border-color: #E6E7E8;
-
+$border-color: #e6e7e8;
 
 .koulutustoimija {
     margin-top: 0px;
@@ -65,7 +64,6 @@ $border-color: #E6E7E8;
         }
     }
     .opslaatikko-jaettu {
-
     }
 
     .infolaatikko {
@@ -106,10 +104,8 @@ $border-color: #E6E7E8;
             .nayta-kaikki-uutiset {
                 margin-top: 4px;
             }
-
         }
     }
-
 }
 
 .omat-opetussuunnitelmat {
@@ -197,13 +193,13 @@ $border-color: #E6E7E8;
                     }
                 }
                 .ops-yleinen {
-                    border-left: 6px solid #99D840;
+                    border-left: 6px solid #99d840;
                 }
                 .ops-tulevat {
-                    border-left: 6px solid #99D840;
+                    border-left: 6px solid #99d840;
                 }
                 .ops-voimassaolevat {
-                    border-left: 6px solid #149FCB;
+                    border-left: 6px solid #149fcb;
                 }
                 .ops-siirtymassa {
                     border-left: 6px solid #ffba00;
@@ -215,4 +211,3 @@ $border-color: #E6E7E8;
         }
     }
 }
-

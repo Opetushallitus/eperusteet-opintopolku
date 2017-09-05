@@ -14,45 +14,49 @@
  * European Union Public Licence for more details.
  */
 
-angular.module('app')
-.service('eperusteetConfigTemplator', function($http, $q) {
-  return function(serviceLocation) {
-    var inited = false;
-    var obj: any = {};
+angular
+    .module("app")
+    .service("eperusteetConfigTemplator", function($http, $q) {
+        return function(serviceLocation) {
+            var inited = false;
+            var obj: any = {};
 
-    obj.init = function() {
-      var deferred = $q.defer();
-      if (!inited) {
-        inited = true;
-        $http({
-          url: 'config.json'
-        })
-        .success(function (res) {
-          if (!res['eperusteet-service']) {
-            deferred.resolve('Virheellinen configuraatio: config.json: "eperusteet-service" puuttuu');
-          }
-          serviceLocation = res['eperusteet-service'] + '/api';
-          deferred.resolve(true);
-        })
-        .error(function () {
-          deferred.resolve('Virheellinen configuraatio: config.json puuttuu');
-        });
-      }
-      else {
-        deferred.resolve(true);
-      }
+            obj.init = function() {
+                var deferred = $q.defer();
+                if (!inited) {
+                    inited = true;
+                    $http({
+                        url: "config.json"
+                    })
+                        .success(function(res) {
+                            if (!res["eperusteet-service"]) {
+                                deferred.resolve(
+                                    'Virheellinen configuraatio: config.json: "eperusteet-service" puuttuu'
+                                );
+                            }
+                            serviceLocation = res["eperusteet-service"] + "/api";
+                            deferred.resolve(true);
+                        })
+                        .error(function() {
+                            deferred.resolve("Virheellinen configuraatio: config.json puuttuu");
+                        });
+                } else {
+                    deferred.resolve(true);
+                }
 
-      return deferred.promise;
-    };
+                return deferred.promise;
+            };
 
-    obj.getServiceLocation = function() { return serviceLocation; };
+            obj.getServiceLocation = function() {
+                return serviceLocation;
+            };
 
-    return obj;
-  };
-})
-.service('eperusteetConfig', function(eperusteetConfigTemplator) {
-  return eperusteetConfigTemplator('/eperusteet-service/api');
-})
-.service('eperusteetYlopsConfig', function(eperusteetConfigTemplator) {
-  return eperusteetConfigTemplator('/eperusteet-ylops-service/api');
-});
+            return obj;
+        };
+    })
+    .service("eperusteetConfig", function(eperusteetConfigTemplator) {
+        return eperusteetConfigTemplator("/eperusteet-service/api");
+    })
+    .service("eperusteetYlopsConfig", function(eperusteetConfigTemplator) {
+        return eperusteetConfigTemplator("/eperusteet-ylops-service/api");
+    });

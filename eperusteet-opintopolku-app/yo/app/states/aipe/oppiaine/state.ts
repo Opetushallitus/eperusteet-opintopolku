@@ -14,35 +14,38 @@
  * European Union Public Licence for more details.
  */
 
-angular.module('app')
-.config(($stateProvider) => $stateProvider
-.state('root.aipe.vaihe.oppiaine', {
-    url: '/oppiaineet/:oppiaineId',
-    templateUrl: 'eperusteet-esitys/views/oppiaine.html',
-    controller: (vaihe, $scope, $state, MurupolkuData, oppiaine, oppimaarat, kurssit, laajaalaiset) => {
-        $scope.oppiaine = oppiaine;
-        $scope.oppimaarat = oppimaarat;
-        $scope.kurssit = kurssit;
-        $scope.laajaalaiset = laajaalaiset;
-        MurupolkuData.set({ oppiaineId: $scope.oppiaine.id, oppiaineNimi: $scope.oppiaine.nimi });
-        $scope.isOppiaine = () => $state.is('root.aipe.vaihe.oppiaine');
-    },
-    resolve: {
-        oppiaineId: $stateParams => $stateParams.oppiaineId,
-        oppiaine: (oppiaineId, perusteId, vaiheId, AipeOppiaineet) => AipeOppiaineet.get({
-            perusteId: perusteId,
-            vaiheId: vaiheId,
-            oppiaineId: oppiaineId
-        }).$promise,
-        oppimaarat: (oppiaineId, perusteId, vaiheId, AipeOppimaarat) => AipeOppimaarat.query({
-            perusteId: perusteId,
-            vaiheId: vaiheId,
-            oppiaineId: oppiaineId
-        }).$promise,
-        kurssit: (oppiaineId, perusteId, vaiheId, AipeKurssit) => AipeKurssit.query({
-            perusteId: perusteId,
-            vaiheId: vaiheId,
-            oppiaineId: oppiaineId,
-        }).$promise
-    }
-}));
+angular.module("app").config($stateProvider =>
+    $stateProvider.state("root.aipe.vaihe.oppiaine", {
+        url: "/oppiaineet/:oppiaineId",
+        templateUrl: "eperusteet-esitys/views/oppiaine.html",
+        controller: (vaihe, $scope, $state, MurupolkuData, oppiaine, oppimaarat, kurssit, laajaalaiset) => {
+            $scope.oppiaine = oppiaine;
+            $scope.oppimaarat = oppimaarat;
+            $scope.kurssit = kurssit;
+            $scope.laajaalaiset = laajaalaiset;
+            MurupolkuData.set({ oppiaineId: $scope.oppiaine.id, oppiaineNimi: $scope.oppiaine.nimi });
+            $scope.isOppiaine = () => $state.is("root.aipe.vaihe.oppiaine");
+        },
+        resolve: {
+            oppiaineId: $stateParams => $stateParams.oppiaineId,
+            oppiaine: (oppiaineId, perusteId, vaiheId, AipeOppiaineet) =>
+                AipeOppiaineet.get({
+                    perusteId: perusteId,
+                    vaiheId: vaiheId,
+                    oppiaineId: oppiaineId
+                }).$promise,
+            oppimaarat: (oppiaineId, perusteId, vaiheId, AipeOppimaarat) =>
+                AipeOppimaarat.query({
+                    perusteId: perusteId,
+                    vaiheId: vaiheId,
+                    oppiaineId: oppiaineId
+                }).$promise,
+            kurssit: (oppiaineId, perusteId, vaiheId, AipeKurssit) =>
+                AipeKurssit.query({
+                    perusteId: perusteId,
+                    vaiheId: vaiheId,
+                    oppiaineId: oppiaineId
+                }).$promise
+        }
+    })
+);

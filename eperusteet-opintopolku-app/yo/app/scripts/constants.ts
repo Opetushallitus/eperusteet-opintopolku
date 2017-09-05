@@ -14,18 +14,18 @@
  * European Union Public Licence for more details.
  */
 
+"use strict";
 
-'use strict';
-
-angular.module('app')
-.constant('ORGANISATION_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
-.constant('LOKALISOINTI_SERVICE_LOC', '/lokalisointi/cxf/rest/v1/localisation')
-.constant('AUTHENTICATION_SERVICE_LOC', '/authentication-service/resources')
-.constant('REQUEST_TIMEOUT', 10000)
-.constant('SPINNER_WAIT', 100)
-.constant('NOTIFICATION_DELAY_SUCCESS', 4000)
-.constant('NOTIFICATION_DELAY_WARNING', 10000)
-.constant('LUKITSIN_MINIMI', 5000)
-.constant('LUKITSIN_MAKSIMI', 20000)
-.constant('TEXT_HIERARCHY_MAX_DEPTH', 8)
-.constant('SHOW_VERSION_FOOTER', true);
+angular
+    .module("app")
+    .constant("ORGANISATION_SERVICE_LOC", "/lokalisointi/cxf/rest/v1/localisation")
+    .constant("LOKALISOINTI_SERVICE_LOC", "/lokalisointi/cxf/rest/v1/localisation")
+    .constant("AUTHENTICATION_SERVICE_LOC", "/authentication-service/resources")
+    .constant("REQUEST_TIMEOUT", 10000)
+    .constant("SPINNER_WAIT", 100)
+    .constant("NOTIFICATION_DELAY_SUCCESS", 4000)
+    .constant("NOTIFICATION_DELAY_WARNING", 10000)
+    .constant("LUKITSIN_MINIMI", 5000)
+    .constant("LUKITSIN_MAKSIMI", 20000)
+    .constant("TEXT_HIERARCHY_MAX_DEPTH", 8)
+    .constant("SHOW_VERSION_FOOTER", true);

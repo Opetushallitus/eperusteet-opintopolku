@@ -14,40 +14,45 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 /*global _*/
 
-angular.module('app')
-  .factory('KoulutusalatResource', function ($resource, epResource) {
-    return $resource(epResource.SERVICE + '/koulutusalat/:koulutusalaId', {
-      koulutusalaId: '@id'
-    }, {
-      query: { method: 'GET', isArray: true, cache: true }
+angular
+    .module("app")
+    .factory("KoulutusalatResource", function($resource, epResource) {
+        return $resource(
+            epResource.SERVICE + "/koulutusalat/:koulutusalaId",
+            {
+                koulutusalaId: "@id"
+            },
+            {
+                query: { method: "GET", isArray: true, cache: true }
+            }
+        );
+    })
+    .service("Koulutusalat", function(KoulutusalatResource) {
+        this.koulutusalatMap = {};
+        this.koulutusalat = [];
+        var self = this;
+
+        var koulutusalaPromise = KoulutusalatResource.query().$promise;
+
+        this.haeKoulutusalat = function() {
+            return self.koulutusalat;
+        };
+
+        this.haeKoulutusalaNimi = function(koodi) {
+            return self.koulutusalatMap[koodi];
+        };
+
+        return koulutusalaPromise.then(function(vastaus) {
+            self.koulutusalatMap = _.zipObject(
+                _.pluck(vastaus, "koodi"),
+                _.map(vastaus, function(e: any) {
+                    return { nimi: e.nimi };
+                })
+            );
+            self.koulutusalat = vastaus;
+            return self;
+        });
     });
-  })
-
-  .service('Koulutusalat', function (KoulutusalatResource) {
-    this.koulutusalatMap = {};
-    this.koulutusalat = [];
-    var self = this;
-
-    var koulutusalaPromise = KoulutusalatResource.query().$promise;
-
-    this.haeKoulutusalat = function() {
-      return self.koulutusalat;
-    };
-
-    this.haeKoulutusalaNimi = function(koodi) {
-      return self.koulutusalatMap[koodi];
-    };
-
-    return koulutusalaPromise.then(function(vastaus) {
-
-      self.koulutusalatMap = _.zipObject(_.pluck(vastaus, 'koodi'), _.map(vastaus, function(e: any) {
-        return { nimi: e.nimi };
-      }));
-      self.koulutusalat = vastaus;
-      return self;
-    });
-
-  });

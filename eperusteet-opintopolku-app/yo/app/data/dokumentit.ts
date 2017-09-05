@@ -1,5 +1,4 @@
-angular.module("app")
-.service("Dokumentit", ($timeout, $stateParams) => {
+angular.module("app").service("Dokumentit", ($timeout, $stateParams) => {
     function dokumenttiUrlLataaja(Api, id) {
         return async function(scope, target = "dokumenttiUrl") {
             scope.$$ladataanDokumenttia = true;
@@ -17,8 +16,7 @@ angular.module("app")
                     }, 1000);
                 }
                 scope.$$ladataanDokumenttia = false;
-            }
-            catch (ex) {
+            } catch (ex) {
                 scope.$$ladataanDokumenttia = false;
             }
         };

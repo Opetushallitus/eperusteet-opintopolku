@@ -14,99 +14,102 @@
  * European Union Public Licence for more details.
  */
 
-'use strict';
+"use strict";
 
-angular.module('app')
-  .directive('epLukioTabs', function () {
-    return {
-      templateUrl: 'views/common/directives/tabs.html',
-      restrict: 'AE',
-      scope: {
-        simpleLegend: '=',
-        tabUrls: '='
-      },
-      controller: 'LukioTabController'
-    }
-  })
+angular
+    .module("app")
+    .directive("epLukioTabs", function() {
+        return {
+            templateUrl: "views/common/directives/tabs.html",
+            restrict: "AE",
+            scope: {
+                simpleLegend: "=",
+                tabUrls: "="
+            },
+            controller: "LukioTabController"
+        };
+    })
+    .controller("LukioTabController", function($scope, $state) {
+        $scope.currentState = function() {
+            var parts = _.words($state.current.name);
+            if (_.indexOf(parts, "kurssi") > -1) {
+                return "kurssi";
+            }
+            if (_.indexOf(parts, "oppiaine") > -1) {
+                return "oppiaine";
+            }
+            return null;
+        };
 
-  .controller('LukioTabController', function($scope, $state) {
+        $scope.tabClass = function(tabName) {
+            var className = null;
+            switch (tabName) {
+                case "tavoitteet":
+                    className = _.endsWith($state.current.name, tabName) ? true : null;
+                    break;
+                case "aihekokonaisuudet":
+                    className = _.endsWith($state.current.name, tabName) ? true : null;
+                    break;
+                case "sisalto":
+                    className =
+                        !_.endsWith($state.current.name, "tavoitteet") &&
+                        !_.endsWith($state.current.name, "aihekokonaisuudet")
+                            ? true
+                            : null;
+                    break;
+                default:
+                    className = null;
+            }
+            return className;
+        };
 
-    $scope.currentState = function(){
-      var parts = _.words($state.current.name);
-      if (_.indexOf(parts, 'kurssi') > -1){
-        return 'kurssi';
-      }
-      if (_.indexOf(parts, 'oppiaine') > -1){
-        return 'oppiaine';
-      }
-      return null;
-    };
+        $scope.tabs = [
+            {
+                title: {
+                    oppiaine: "oppiaineen-sisalto",
+                    kurssi: "kurssin-sisalto"
+                },
+                name: "sisalto",
+                url: function(name) {
+                    if (name === "kurssi") {
+                        return $scope.tabUrls.kurssiUrl;
+                    }
+                    if (name === "oppiaine") {
+                        return $scope.tabUrls.oppiaineUrl;
+                    }
+                }
+            },
+            {
+                title: {
+                    oppiaine: "opetuksen-yleiset-tavoitteet",
+                    kurssi: "opetuksen-yleiset-tavoitteet"
+                },
+                name: "tavoitteet",
+                url: function(name) {
+                    if (name === "kurssi") {
+                        return $scope.tabUrls.kurssiUrl + ".tavoitteet";
+                    }
+                    if (name === "oppiaine") {
+                        return $scope.tabUrls.oppiaineUrl + ".tavoitteet";
+                    }
+                }
+            },
+            {
+                title: {
+                    oppiaine: "aihekokonaisuudet",
+                    kurssi: "aihekokonaisuudet"
+                },
+                name: "aihekokonaisuudet",
+                url: function(name) {
+                    if (name === "kurssi") {
+                        return $scope.tabUrls.kurssiUrl + ".aihekokonaisuudet";
+                    }
+                    if (name === "oppiaine") {
+                        return $scope.tabUrls.oppiaineUrl + ".aihekokonaisuudet";
+                    }
+                }
+            }
+        ];
 
-    $scope.tabClass = function (tabName) {
-        var className = null;
-        switch(tabName) {
-          case 'tavoitteet':
-            className = _.endsWith($state.current.name, tabName) ? true : null;
-            break;
-          case 'aihekokonaisuudet':
-            className = _.endsWith($state.current.name, tabName) ? true : null;
-            break;
-          case 'sisalto':
-            className = !_.endsWith($state.current.name, 'tavoitteet') && !_.endsWith($state.current.name, 'aihekokonaisuudet') ? true : null;
-            break;
-          default:
-            className = null;
-        }
-        return className;
-      };
-
-      $scope.tabs = [
-        {
-          title: {
-            oppiaine: 'oppiaineen-sisalto',
-            kurssi: 'kurssin-sisalto'
-          },
-          name: 'sisalto',
-          url: function(name){
-            if (name === 'kurssi') {
-              return $scope.tabUrls.kurssiUrl;
-            }
-            if (name === 'oppiaine') {
-              return $scope.tabUrls.oppiaineUrl;
-            }
-          }
-        },
-        {
-          title: {
-            oppiaine: 'opetuksen-yleiset-tavoitteet',
-            kurssi: 'opetuksen-yleiset-tavoitteet'
-          },
-          name: 'tavoitteet',
-          url: function (name) {
-            if (name === 'kurssi') {
-              return $scope.tabUrls.kurssiUrl + '.tavoitteet';
-            }
-            if (name === 'oppiaine') {
-              return $scope.tabUrls.oppiaineUrl + '.tavoitteet';
-            }
-          }
-        },
-        {
-          title:  {
-            oppiaine: 'aihekokonaisuudet',
-            kurssi: 'aihekokonaisuudet'
-          },
-          name: 'aihekokonaisuudet',
-          url: function (name) {
-            if (name === 'kurssi') {
-              return $scope.tabUrls.kurssiUrl + '.aihekokonaisuudet';
-            }
-            if (name === 'oppiaine') {
-              return $scope.tabUrls.oppiaineUrl + '.aihekokonaisuudet';
-            }
-          }
-        }
-      ];
-
-    $scope.kurssiTyypit = ['pakollinen', 'syventava', 'soveltava'];
-  });
+        $scope.kurssiTyypit = ["pakollinen", "syventava", "soveltava"];
+    });
