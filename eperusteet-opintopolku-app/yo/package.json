@@ -2,6 +2,15 @@
   "name": "yo",
   "version": "0.0.0",
   "private": true,
+  "engines": {
+    "node": "6.11.2"
+  },
+  "scripts": {
+    "dev": "grunt dev",
+    "build": "grunt build",
+    "test": "grunt test",
+    "prettier": "prettier --config .prettierrc --write app/**/*.{ts,json,scss}"
+  },
   "dependencies": {
     "angular": "1.5.8",
     "angular-animate": "1.5.8",
@@ -68,14 +77,8 @@
     "karma-ng-scenario": "1.0.0",
     "load-grunt-tasks": "3.5.0",
     "nightwatch": "0.9.15",
-    "typescript": "2.2",
+    "prettier": "1.6.1",
+    "typescript": "2.5.2",
     "webdriver-manager": "12.0.6"
-  },
-  "engines": {
-    "node": "6.3.1"
-  },
-  "scripts": {
-    "start": "grunt dev",
-    "test": "grunt test"
   }
 }
