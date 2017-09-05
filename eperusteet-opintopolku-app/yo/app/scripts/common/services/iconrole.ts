@@ -20,7 +20,7 @@
  * Prepends a glyphicon to the element, see mapping in IconMapping.
  */
 angular.module('app')
-  .directive('iconRole', function (IconMapping) {
+  .directive('iconRole', ['IconMapping', function (IconMapping) {
     return {
       restrict: 'A',
       compile: function() {
@@ -32,7 +32,7 @@ angular.module('app')
         };
       }
     };
-  })
+  }])
 
   .service('IconMapping', function () {
     this.addIcon = function (key, el) {
