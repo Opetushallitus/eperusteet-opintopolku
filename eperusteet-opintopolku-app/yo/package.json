@@ -9,7 +9,7 @@
     "dev": "grunt dev",
     "build": "grunt build",
     "test": "grunt test",
-    "prettier": "prettier --config .prettierrc --write app/**/*.{ts,json,scss}"
+    "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\""
   },
   "dependencies": {
     "angular": "1.5.8",
