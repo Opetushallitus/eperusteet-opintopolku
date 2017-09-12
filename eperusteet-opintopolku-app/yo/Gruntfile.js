@@ -13,6 +13,78 @@ const pathConfig = {
   test: 'test'
 };
 
+const proxies = {
+  eperusteet: {
+    local: {
+      context: '/eperusteet-service',
+      host: 'localhost',
+      port: 8081,
+      https: false,
+      changeOrigin: true
+    },
+    qa: {
+      context: '/eperusteet-service',
+      host: 'testi.virkailija.opintopolku.fi',
+      port: 443,
+      https: true,
+      changeOrigin: true
+    },
+    prod: {
+      context: '/eperusteet-service',
+      host: 'virkailija.opintopolku.fi',
+      port: 443,
+      https: true,
+      changeOrigin: true
+    }
+  },
+  ylops: {
+    local: {
+      context: '/eperusteet-ylops-service',
+      host: 'localhost',
+      port: 8080,
+      https: false,
+      changeOrigin: true
+    },
+    qa: {
+      context: '/eperusteet-ylops-service',
+      host: 'testi.virkailija.opintopolku.fi',
+      port: 443,
+      https: true,
+      changeOrigin: true
+    },
+    prod: {
+      context: '/eperusteet-ylops-service',
+      host: 'virkailija.opintopolku.fi',
+      port: 443,
+      https: true,
+      changeOrigin: true
+    }
+  },
+  amosaa: {
+    local: {
+      context: '/eperusteet-amosaa-service',
+      host: 'localhost',
+      port: 8080,
+      https: false,
+      changeOrigin: true
+    },
+    qa: {
+      context: '/eperusteet-amosaa-service',
+      host: 'testi.virkailija.opintopolku.fi',
+      port: 443,
+      https: true,
+      changeOrigin: true
+    },
+    prod: {
+      context: '/eperusteet-amosaa-service',
+      host: 'virkailija.opintopolku.fi',
+      port: 443,
+      https: true,
+      changeOrigin: true
+    }
+  }
+};
+
 module.exports = grunt => {
   require('load-grunt-tasks')(grunt); // Load all 'grunt-*' modules
   timer.init(grunt);
@@ -91,36 +163,11 @@ module.exports = grunt => {
         port: 9020,
         hostname: '0.0.0.0'
       },
-      proxies: [{
-        context: '/eperusteet-amosaa-service',
-        host: 'virkailija.opintopolku.fi',
-        port: 443,
-        https: true,
-        changeOrigin: true
-      }, {
-        context: '/eperusteet-service',
-        host: 'virkailija.opintopolku.fi',
-        port: 443,
-        https: true,
-        changeOrigin: true
-      //   context: '/eperusteet-service',
-      //   host: 'localhost',
-      //   port: 8080,
-      //   https: false,
-      //   changeOrigin: true
-      }, {
-        context: '/eperusteet-ylops-service',
-        host: 'localhost',
-        port: 8080,
-        https: false,
-        changeOrigin: true
-      }, {
-        context: '/eperusteet-amosaa-service',
-        host: 'localhost',
-        port: 8080,
-        https: false,
-        changeOrigin: true
-      }],
+      proxies: [
+        proxies.eperusteet.local,
+        proxies.ylops.prod,
+        proxies.amosaa.prod
+      ],
       livereload: {
         options: {
           middleware: connect => [
