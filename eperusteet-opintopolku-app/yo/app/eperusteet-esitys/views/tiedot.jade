@@ -134,4 +134,15 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
     span(ng-hide="$$ladataanDokumenttia")
       a(ng-href='{{ dokumenttiUrl }}' ng-show="dokumenttiUrl" kaanna="'lataa-dokumentti'")
       span(ng-hide="dokumenttiUrl" kaanna="'dokumenttia-ei-luotu'")
+.row.row-margin
+  .col-xs-6.col-sm-4
+    strong
+      span(kaanna="'kv-liitteet'")
+  .col-xs-6.col-sm-8
+    p(ng-show="kvliiteUrlFi")
+      a(ng-href='{{ kvliiteUrlFi }}' kaanna="'lataa-kvliite-fi'")
+    p(ng-show="kvliiteUrlSv")
+      a(ng-href='{{ kvliiteUrlSv }}' kaanna="'lataa-kvliite-sv'")
+    p(ng-show="kvliiteUrlEn")
+      a(ng-href='{{ kvliiteUrlEn }}' kaanna="'lataa-kvliite-en'")
 .clearfix

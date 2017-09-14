@@ -73,7 +73,10 @@ namespace Controllers {
         $scope.showOsaamisalat = $scope.showKoulutukset;
         $scope.koulutusalaNimi = $scope.Koulutusalat.haeKoulutusalaNimi;
         $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
-        Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id)($scope);
+        Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "peruste")($scope);
+        Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "kvliite", "fi")($scope, "kvliiteUrlFi");
+        Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "kvliite", "sv")($scope, "kvliiteUrlSv");
+        Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "kvliite", "en")($scope, "kvliiteUrlEn");
 
         let currentTime = new Date().getTime();
         $scope.voimassaOleva = !!(
