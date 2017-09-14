@@ -18,7 +18,7 @@ const proxies = {
     local: {
       context: '/eperusteet-service',
       host: 'localhost',
-      port: 8081,
+      port: 8080,
       https: false,
       changeOrigin: true
     },
@@ -165,7 +165,7 @@ module.exports = grunt => {
       },
       proxies: [
         proxies.eperusteet.local,
-        proxies.ylops.prod,
+        proxies.ylops.local,
         proxies.amosaa.prod
       ],
       livereload: {
