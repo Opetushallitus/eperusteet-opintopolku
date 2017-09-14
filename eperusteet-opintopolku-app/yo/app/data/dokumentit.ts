@@ -1,23 +1,23 @@
 angular.module("app").service("Dokumentit", ($timeout, $stateParams) => {
-    function dokumenttiUrlLataaja(Api, id) {
-        return async function(scope, target = "dokumenttiUrl") {
-            scope.$$ladataanDokumenttia = true;
+    function dokumenttiUrlLataaja(Api, id, tyyppi = "peruste", kieli) {
+        return async function(scope, target = "dokumenttiUrl", loading = "$$ladataanDokumenttia") {
+            scope[loading] = true;
             try {
-                const doc = await Api.all("dokumentit").customGET("peruste", {
+                const doc = await Api.all("dokumentit").customGET(tyyppi, {
                     perusteId: id,
-                    kieli: $stateParams.lang,
+                    kieli: kieli || $stateParams.lang,
                     suoritustapa: $stateParams.suoritustapa
                 });
 
                 if (doc && doc.toString().length > 0) {
                     $timeout(() => {
                         scope[target] = location.origin + "/eperusteet-service/api/dokumentit/" + doc;
-                        scope.$$ladataanDokumenttia = false;
+                        scope[loading] = false;
                     }, 1000);
                 }
-                scope.$$ladataanDokumenttia = false;
+                scope[loading] = false;
             } catch (ex) {
-                scope.$$ladataanDokumenttia = false;
+                scope[loading] = false;
             }
         };
     }
