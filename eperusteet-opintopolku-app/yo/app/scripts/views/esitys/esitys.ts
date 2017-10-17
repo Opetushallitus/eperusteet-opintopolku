@@ -113,9 +113,10 @@ namespace Controllers {
 
         $scope.$on("$stateChangeSuccess", function() {
             if ($state.current.name === "root.esitys.peruste") {
-                var params = _.extend(_.clone($stateParams), {
+                var params = {
+                    ...$stateParams,
                     suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)
-                });
+                };
                 $state.go("root.esitys.peruste.tiedot", params, { location: "replace" });
             }
         });

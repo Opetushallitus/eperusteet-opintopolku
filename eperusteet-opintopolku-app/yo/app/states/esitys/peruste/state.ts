@@ -7,11 +7,12 @@ angular.module("app").config($stateProvider =>
             peruste: (serviceConfig, $stateParams, Perusteet) =>
                 Perusteet.get({ perusteId: $stateParams.perusteId }).$promise,
 
-            sisalto: (serviceConfig, $stateParams, SuoritustapaSisalto) =>
-                SuoritustapaSisalto.get({
+            sisalto: (serviceConfig, $stateParams, SuoritustapaSisalto) => {
+                return SuoritustapaSisalto.get({
                     perusteId: $stateParams.perusteId,
                     suoritustapa: $stateParams.suoritustapa
-                }).$promise,
+                }).$promise;
+            },
 
             arviointiasteikot: (serviceConfig, Arviointiasteikot) => Arviointiasteikot.list({}).$promise,
 
