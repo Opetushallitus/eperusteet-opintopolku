@@ -8,6 +8,8 @@ angular.module("app").service("VirheService", function($state) {
     };
     this.virhe = function(virhe) {
         data = _.isObject(virhe) ? virhe : { muu: virhe };
-        $state.go("root.virhe");
+        $state.go("root.virhe", {
+            location: "replace"
+        });
     };
 });

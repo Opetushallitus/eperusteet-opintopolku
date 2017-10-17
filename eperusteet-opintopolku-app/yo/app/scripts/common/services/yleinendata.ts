@@ -168,7 +168,7 @@ angular.module("app").service("YleinenData", function YleinenData($rootScope, Ar
     };
 
     this.validSuoritustapa = function(peruste, suoritustapa) {
-        return peruste.koulutustyyppi === "koulutustyyppi_12" ? "naytto" : suoritustapa;
+        return suoritustapa || "naytto";
     };
 
     this.valitseSuoritustapaKoulutustyypille = function(koulutustyyppi) {
