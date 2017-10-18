@@ -10,8 +10,11 @@ div(ng-controller='YlanavigaatioController')
             span(kaanna="'eperusteet-otsikko'")
         // kielivalitsin
         .header-kielenvaihto.hidden-xs
-          a(href='', ng-click="vaihdaKieli('sv')", ng-show="kieli === 'fi'") P&aring; svenska
-          a(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli === 'sv'") Suomeksi
+          a(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'fi'") Suomeksi
+          span(ng-show="kieli !== 'sv' && kieli !== 'fi'") |
+          a(href='', ng-click="vaihdaKieli('sv')", ng-show="kieli !== 'sv'") På svenska
+          span(ng-show="kieli !== 'en'") |
+          a(href='', ng-click="vaihdaKieli('en')", ng-show="kieli !== 'en'") In English
 
   // Opintopolku valikko
   .row
@@ -89,5 +92,6 @@ div(ng-controller='YlanavigaatioController')
               li(ui-sref-active='active')
                 a(ui-sref='root.selaus.ops', kaanna="'navi.opetussuunnitelmat'", ng-click='navCollapse()')
               li
-                a.kieli(href='', ng-click="vaihdaKieli('sv')", ng-show="kieli === 'fi'") P&aring; svenska
-                a.kieli(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli === 'sv'") Suomeksi
+                a.kieli(href='', ng-click="vaihdaKieli('sv')", ng-show="kieli !== 'sv'") P&aring; svenska
+                a.kieli(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'fi'") Suomeksi
+                a.kieli(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'en'") In English

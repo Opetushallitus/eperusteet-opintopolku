@@ -9,7 +9,7 @@ angular
 
         this.init = () => {
             let deferred = [];
-            _.each(["fi", "sv"], key => {
+            _.each(["fi", "sv", "en"], key => {
                 deferred.push(
                     $http({
                         url: PREFIX + key + SUFFIX,

@@ -14,7 +14,7 @@ angular.module("app").config($stateProvider =>
         onEnter: (Kieli, $state, $stateParams) => {
             // Aseta kieli jos puuttuu
             const kielikoodi = $stateParams.lang;
-            if (!(kielikoodi == "fi" || kielikoodi == "sv")) {
+            if (!(kielikoodi == "fi" || kielikoodi == "sv" || kielikoodi == "en")) {
                 $stateParams.lang = "fi";
                 $state.reload();
             }
