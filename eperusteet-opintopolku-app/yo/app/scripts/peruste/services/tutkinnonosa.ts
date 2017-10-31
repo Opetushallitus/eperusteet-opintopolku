@@ -38,7 +38,7 @@ angular
 
             PerusteenOsat.get({ osanId: stateParams.perusteenOsaId }, function(vastaus) {
                 tutkinnonOsa = vastaus;
-                if (vastaus.tyyppi === "tutke2") {
+                if (vastaus.tyyppi === "tutke2" || vastaus.tyyppi === "reformi_tutke2") {
                     TutkinnonOsanOsaAlue.list({ osanId: stateParams.perusteenOsaId }, function(osaAlueet) {
                         tutkinnonOsa.osaAlueet = osaAlueet;
 

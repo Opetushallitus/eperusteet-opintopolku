@@ -1,11 +1,14 @@
 h4(ng-show='$first') {{tavoite.nimi | kaanna}}
 h4 {{tavoite.pakollinen && 'pakolliset-osaamistavoitteet' || 'valinnaiset-osaamistavoitteet' | kaanna}}, {{tavoite.laajuus}} {{yksikko|kaanna}}
 .leipateksti(ng-bind-html='tavoite.tavoitteet | kaanna | unsafe')
+div(ng-if='tavoite.koodiArvo')
+  strong(kaanna="'koodi'")
+  | : {{tutkinnonOsa.koodiArvo}}
 div(ng-if='hasArviointi(tavoite)')
   h4(kaanna="'osaamisen-arviointi'")
   div(ng-repeat='kohdealue in tavoite.arviointi.arvioinninKohdealueet')
     .arviointi
-      .arviointi-otsikko(ng-hide="kohdealue.otsikko.fi === 'automaattinen'")
+      .arviointi-otsikko(ng-hide="kohdealue.otsikko.fi === 'automaattinen' || kohdealue.otsikko.fi === 'Nimetön' || $scope.reformiTutke2")
         h4 {{ kohdealue.otsikko | kaanna }}
       .arviointi-sisalto
         div(ng-repeat='kohde in kohdealue.arvioinninKohteet')
@@ -18,3 +21,22 @@ div(ng-if='hasArviointi(tavoite)')
                 ul
                   li(ng-repeat='kriteeri in okriteeri.kriteerit') {{ kriteeri | kaanna }}
 .leipateksti(ng-bind-html='tavoite.tunnustaminen | kaanna | unsafe')
+.ammattitaitovaatimukset
+  div(ng-repeat="ammattitaitovaatimus in tavoite.ammattitaitovaatimuksetLista")
+    .box-panel
+      .box-panel-title
+        h3
+          span(ng-if="ammattitaitovaatimus.otsikko" ng-bind="ammattitaitovaatimus.otsikko | kaanna")
+      .box-panel-content
+        .vaatimuksen-kohteet
+          div(ng-repeat='vaatimuksenKohde in ammattitaitovaatimus.vaatimuksenKohteet')
+            .vaatimuksen-kohde
+              h4
+                span(ng-if='vaatimuksenKohde.otsikko', ng-bind='vaatimuksenKohde.otsikko | kaanna')
+              p
+                span(ng-if='vaatimuksenKohde.selite', ng-bind='vaatimuksenKohde.selite | kaanna')
+              div
+                ul
+                  li(ng-repeat='vaatimus in vaatimuksenKohde.vaatimukset')
+                    span(ng-bind='vaatimus.selite | kaanna')
+                    span  ({{ vaatimus.ammattitaitovaatimusKoodi }})

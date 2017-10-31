@@ -113,8 +113,11 @@ namespace Controllers {
         }).then(() => {
             $scope.tutkinnonOsa = TutkinnonosanTiedotService.getTutkinnonOsa();
             $scope.fieldKeys = _.intersection(_.keys($scope.tutkinnonOsa), TutkinnonosanTiedotService.keys());
-            if ($scope.tutkinnonOsa.tyyppi === "tutke2") {
+            if ($scope.tutkinnonOsa.tyyppi === "tutke2" || $scope.tutkinnonOsa.tyyppi === "reformi_tutke2") {
                 Tutke2Osa.kasitteleOsaAlueet($scope.tutkinnonOsa);
+            }
+            if ($scope.tutkinnonOsa.tyyppi === "reformi_tutke2") {
+                $scope.reformiTutke2 = true;
             }
         });
 

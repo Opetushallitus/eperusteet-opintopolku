@@ -1,13 +1,13 @@
 .tutkinnonosa-wrapper
   h1(esitys-sivu-otsikko='tutkinnonOsaViite.nimi')
-    | {{ tutkinnonOsa.nimi | kaanna }} 
-    span(ng-show='tutkinnonOsaViite.laajuus') {{ tutkinnonOsaViite.laajuus }} {{ yksikko | kaanna }}
+    | {{tutkinnonOsa.nimi | kaanna}}
+    span(ng-show='tutkinnonOsaViite.laajuus') {{tutkinnonOsaViite.laajuus}} {{yksikko | kaanna}}
   div(ng-if='tutkinnonOsa.koodiArvo')
     strong(kaanna="'koodi'")
-    | : {{ tutkinnonOsa.koodiArvo }}
+    | : {{tutkinnonOsa.koodiArvo}}
   div(ng-if='tutkinnonOsaViite.jarjestys')
     strong(kaanna="'tutkinnonosa-jarjestysnumero'")
-    | : {{ tutkinnonOsaViite.jarjestys }}
+    | : {{tutkinnonOsaViite.jarjestys}}
   div(ng-if="tutkinnonOsa.tyyppi !== 'tutke2'", ng-repeat='k in fieldKeys | orderBy: fieldOrder')
     div(ng-if="k === 'arviointi'")
       div(ng-show='tutkinnonOsa.arviointi.arvioinninKohdealueet')
@@ -15,36 +15,36 @@
         div(ng-repeat='kohdealue in tutkinnonOsa.arviointi.arvioinninKohdealueet')
           .arviointi
             .arviointi-otsikko
-              h4 {{ kohdealue.otsikko | kaanna }}
+              h4 {{kohdealue.otsikko | kaanna}}
             .arviointi-sisalto
               div(ng-repeat='kohde in kohdealue.arvioinninKohteet')
-                h4 {{ kohde.otsikko | kaanna }}
-                h5 {{ kohde.selite || '' | kaanna }}
+                h4 {{kohde.otsikko | kaanna}}
+                h5 {{kohde.selite || '' | kaanna}}
                 .table-responsive
                   table.table.table-striped
                     tr(ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy: '_osaamistaso'")
                       td.arviointi-okriteeri
                         span
-                          | {{ arviointiasteikot[kohde._arviointiAsteikko][okriteeri._osaamistaso].otsikko | kaanna }}
+                          | {{arviointiasteikot[kohde._arviointiAsteikko][okriteeri._osaamistaso].otsikko | kaanna}}
                       td
                         ul
-                          li(ng-repeat='kriteeri in okriteeri.kriteerit') {{ kriteeri | kaanna }}
+                          li(ng-repeat='kriteeri in okriteeri.kriteerit') {{kriteeri | kaanna}}
       div(ng-show='(!tutkinnonOsa.arviointi.arvioinninKohdealueet || tutkinnonOsa.arviointi.arvioinninKohdealueet.length === 0) && tutkinnonOsa.arviointi.lisatiedot')
         h3(kaanna="'arviointi'")
         div(ng-bind-html='tutkinnonOsa.arviointi.lisatiedot | kaanna | unsafe')
     div(ng-if="k !== 'arviointi' && tutkinnonOsa[k]")
-      h3 {{ k | kaanna }}
+      h3 {{k | kaanna}}
       termisto-tekstikentta(tekstikentta='tutkinnonOsa[k]')
-  div(ng-if="tutkinnonOsa.tyyppi === 'tutke2'")
+  div(ng-if="tutkinnonOsa.tyyppi === 'tutke2' || tutkinnonOsa.tyyppi === 'reformi_tutke2'")
     termisto-tekstikentta(tekstikentta='tutkinnonOsa.kuvaus')
     div
       span(kaanna="'osa-alueet'")
-      span :
+      span :&nbsp;
       span(ng-repeat='osaalue in tutkinnonOsa.osaAlueet | filter:osaAlueFilter')
         span(ng-if='!$first') &nbsp;|&nbsp;
-        a.action-link(ng-click="goToAnchor('osaalue', osaalue.id)") {{ osaalue.nimi | kaanna }}
+        a.action-link(ng-click="goToAnchor('osaalue', osaalue.id)") {{osaalue.nimi | kaanna}}
     div(ng-repeat='osaalue in tutkinnonOsa.osaAlueet | filter:osaAlueFilter')
-      h3(id='osaalue{{ osaalue.id }}') {{osaalue.nimi | kaanna}}
+      h3(id='osaalue{{osaalue.id}}') {{osaalue.nimi | kaanna}}
       div(ng-repeat='osaamistavoitteet in osaalue.$groups.grouped')
         div(ng-repeat='tavoite in osaamistavoitteet | filter:osaAlueFilter', ng-include="'eperusteet-esitys/views/osaamistavoite.html'")
       div(ng-repeat='tavoite in osaalue.$groups.ungrouped', ng-include="'eperusteet-esitys/views/osaamistavoite.html'")
