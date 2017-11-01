@@ -225,6 +225,20 @@ angular
                 useId: "tekstikappaleId",
                 customParents: true
             },
+            "root.tpo": {
+                useData: "perusteNimi",
+                useId: "perusteId"
+            },
+            "root.tpo.tiedot": {
+                useData: "perusteNimi",
+                useId: "perusteId"
+            },
+            "root.tpo.tekstikappale": {
+                parent: "root.tpo",
+                useData: "tekstikappaleNimi",
+                useId: "tekstikappaleId",
+                customParents: true
+            },
             "root.perusvalmistava": {
                 useData: "perusteNimi",
                 useId: "perusteId"
@@ -449,6 +463,7 @@ angular
             return (
                 _.contains(state, "perusopetus") ||
                 _.contains(state, "esiopetus") ||
+                _.contains(state, "tpo") ||
                 _.contains(state, "lisaopetus") ||
                 _.contains(state, "amops")
             );

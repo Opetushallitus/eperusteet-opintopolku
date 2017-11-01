@@ -39,7 +39,7 @@ namespace Controllers {
     ) => {
         $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
         function getRootState(current) {
-            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus)(.*)/, ".$1");
+            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus|tpo)(.*)/, ".$1");
         }
 
         $scope.Koulutusalat = koulutusalaService;

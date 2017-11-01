@@ -135,7 +135,14 @@ angular.module("app").service("YleinenData", function YleinenData($rootScope, Ar
             hakuState: "root.selaus.valmentavakoulutus",
             sisaltoTunniste: "sisalto",
             hasPdfCreation: true
-        }
+        },
+        koulutustyyppi_999907: {
+            nimi: "tpo",
+            oletusSuoritustapa: "tpo",
+            hasTutkintonimikkeet: false,
+            sisaltoTunniste: "sisalto",
+            hasPdfCreation: false
+        },
     };
 
     this.koulutustyypit = _.keys(this.koulutustyyppiInfo);
