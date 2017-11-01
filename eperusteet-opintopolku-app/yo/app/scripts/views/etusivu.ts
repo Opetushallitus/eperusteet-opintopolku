@@ -100,6 +100,11 @@ angular
                 tyyppi: "koulutustyyppi_14",
                 tila: "valmis",
                 stateTila: "root.lukio.tiedot"
+            },
+            koulutustyyppi_999907: {
+                tyyppi: "koulutustyyppi_999907",
+                tila: "valmis",
+                stateTila: "root.tpo.tiedot"
             }
         };
 
@@ -116,6 +121,7 @@ angular
         const getLukioopetus = _.partial(getGeneric, "koulutustyyppi_2");
         const getValmistavaLukioopetus = _.partial(getGeneric, "koulutustyyppi_23");
         const getEsiopetus = _.partial(getGeneric, "koulutustyyppi_15");
+        const getTpo = _.partial(getGeneric, "koulutustyyppi_999907");
         const getLisaopetus = _.partial(getGeneric, "koulutustyyppi_6");
         const getValma = _.partial(getGeneric, "koulutustyyppi_18");
         const getTelma = _.partial(getGeneric, "koulutustyyppi_5");
@@ -141,6 +147,7 @@ angular
                     getAipe(),
                     getValmistavaPerusopetus(),
                     getEsiopetus(),
+                    getTpo(),
                     getValmistavaLukioopetus(),
                     getLukioopetus(),
                     getLisaopetus(),
@@ -162,6 +169,7 @@ angular
         this.getValmistavaLukioopetus = getValmistavaLukioopetus;
         this.getLukioopetus = getLukioopetus;
         this.getEsiopetus = getEsiopetus;
+        this.getTpo = getTpo;
         this.getLisaopetus = getLisaopetus;
         this.getVarhaiskasvatus = getVarhaiskasvatus;
         this.getValma = getValma;

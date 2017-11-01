@@ -134,6 +134,8 @@ angular
                     return "navi.etusivu";
                 } else if ($state.includes("root.esiopetus.**")) {
                     return "navi.esiopetus";
+                } else if ($state.includes("root.tpo.**")) {
+                    return "navi.tpo";
                 } else if ($state.includes("root.perusopetus.**")) {
                     return "navi.perusopetus";
                 } else if ($state.includes("root.varhaiskasvatus.**")) {
