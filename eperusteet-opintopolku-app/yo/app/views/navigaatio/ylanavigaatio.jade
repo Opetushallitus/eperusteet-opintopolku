@@ -13,8 +13,8 @@ div(ng-controller='YlanavigaatioController')
           a(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'fi'") Suomeksi
           span(ng-show="kieli !== 'sv' && kieli !== 'fi'") |
           a(href='', ng-click="vaihdaKieli('sv')", ng-show="kieli !== 'sv'") På svenska
-          span(ng-show="kieli !== 'en'") |
-          a(href='', ng-click="vaihdaKieli('en')", ng-show="kieli !== 'en'") In English
+          //span(ng-show="kieli !== 'en'") |
+          //a(href='', ng-click="vaihdaKieli('en')", ng-show="kieli !== 'en'") In English
 
   // Opintopolku valikko
   .row
@@ -94,4 +94,4 @@ div(ng-controller='YlanavigaatioController')
               li
                 a.kieli(href='', ng-click="vaihdaKieli('sv')", ng-show="kieli !== 'sv'") P&aring; svenska
                 a.kieli(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'fi'") Suomeksi
-                a.kieli(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'en'") In English
+                //a.kieli(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'en'") In English
