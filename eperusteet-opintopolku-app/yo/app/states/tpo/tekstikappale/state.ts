@@ -1,7 +1,7 @@
 angular.module("app").config($stateProvider =>
     $stateProvider.state("root.tpo.tekstikappale", {
         url: "/tekstikappale/:tekstikappaleId",
-        templateUrl: "eperusteet-esitys/views/tekstikappale.html",
+        templateUrl: "views/tpo/tekstikappale.html",
         controller: Controllers.epEsitysSisaltoController,
         resolve: {
             tekstikappaleId: (serviceConfig, $stateParams) => $stateParams.tekstikappaleId,
