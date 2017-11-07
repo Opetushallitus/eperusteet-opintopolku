@@ -55,17 +55,13 @@ namespace Controllers {
             PerusteenOsat.get({ osanId: $scope.valittuSisalto.id }, res => {
                 $scope.valittuSisalto = res;
                 $scope.tekstikappale = res;
-
-                $scope.taiteenalaFields = [
-                    $scope.tekstikappale["aikuistenOpetus"],
-                    $scope.tekstikappale["kasvatus"],
-                    $scope.tekstikappale["oppimisenArviointiOpetuksessa"],
-                    $scope.tekstikappale["teemaopinnot"],
-                    $scope.tekstikappale["tyotavatOpetuksessa"],
-                    $scope.tekstikappale["yhteisetOpinnot"],
+                $scope.taiteenalaFields = ["aikuistenOpetus",
+                    "kasvatus",
+                    "oppimisenArviointiOpetuksessa",
+                    "teemaopinnot",
+                    "tyotavatOpetuksessa",
+                    "yhteisetOpinnot"
                 ];
-
-                console.log($scope.taiteenalaFields);
             });
         }
     };
