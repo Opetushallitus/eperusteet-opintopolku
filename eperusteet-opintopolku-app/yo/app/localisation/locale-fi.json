@@ -316,5 +316,12 @@
     "hae-koulutustoimijoista": "Hae koulutuksen järjestäjistä",
     "hyvaksyja": "Hyväksyjä",
     "paatosnumero": "Päätösnumero",
-    "viimeksi-muokattu": "Viimeksi muokattu"
+    "viimeksi-muokattu": "Viimeksi muokattu",
+    "taiteenala-koodi": "Taiteenala koodi",
+    "aikuistenOpetus": "Aikuisten opetus",
+    "kasvatus": "Kasvatus",
+    "oppimisenArviointiOpetuksessa": "Oppimisen arviointi opetuksessa",
+    "teemaopinnot": "Teemaopinnot",
+    "tyotavatOpetuksessa": "Työtavat opetuksessa",
+    "yhteisetOpinnot": "Yhteiset opinnot"
 }
