@@ -8,7 +8,7 @@ namespace Controllers {
             koulutustyyppi_23: "lukioopetus",
             koulutustyyppi_2: "lukioopetus",
             koulutustyyppi_6: "esiopetus",
-            koulutustyyppi_999907: "tpo",
+            koulutustyyppi_999907: "tpo"
         };
 
         $scope.getKtLinkki = ops => $scope.koulutustyypitLinkit[ops.koulutustyyppi];

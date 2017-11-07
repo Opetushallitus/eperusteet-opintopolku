@@ -6,7 +6,7 @@ angular.module("app").config($stateProvider =>
         resolve: {
             perusteId: (serviceConfig, $stateParams) => $stateParams.perusteId,
             peruste: (serviceConfig, perusteId, UusimmatPerusteetService, Perusteet) =>
-                !perusteId ? UusimmatPerusteetService.getTpo() : Perusteet.get({perusteId: perusteId}).$promise,
+                !perusteId ? UusimmatPerusteetService.getTpo() : Perusteet.get({ perusteId: perusteId }).$promise,
 
             sisalto: (serviceConfig, peruste, $q, SuoritustapaSisalto) => {
                 if (_.isArray(peruste.data)) {
@@ -15,9 +15,7 @@ angular.module("app").config($stateProvider =>
 
                 return $q.all([
                     peruste,
-                    peruste.id
-                        ? SuoritustapaSisalto.get({perusteId: peruste.id, suoritustapa: "tpo"}).$promise
-                        : {}
+                    peruste.id ? SuoritustapaSisalto.get({ perusteId: peruste.id, suoritustapa: "tpo" }).$promise : {}
                 ]);
             },
             koulutusalaService: (serviceConfig, Koulutusalat) => Koulutusalat,
