@@ -55,7 +55,8 @@ namespace Controllers {
             PerusteenOsat.get({ osanId: $scope.valittuSisalto.id }, res => {
                 $scope.valittuSisalto = res;
                 $scope.tekstikappale = res;
-                $scope.taiteenalaFields = ["aikuistenOpetus",
+                $scope.taiteenalaFields = [
+                    "aikuistenOpetus",
                     "kasvatus",
                     "oppimisenArviointiOpetuksessa",
                     "teemaopinnot",

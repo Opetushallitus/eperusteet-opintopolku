@@ -5,7 +5,7 @@ angular.module("app").service("Dokumentit", ($timeout, $stateParams) => {
             try {
                 const doc = await Api.all("dokumentit").customGET(tyyppi, {
                     perusteId: id,
-                    kieli: kieli || $stateParams.lang,
+                    kieli: kieli || $stateParams.lang,
                     suoritustapa: $stateParams.suoritustapa
                 });
 

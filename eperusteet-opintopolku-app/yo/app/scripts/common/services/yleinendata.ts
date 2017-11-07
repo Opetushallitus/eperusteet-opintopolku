@@ -142,7 +142,7 @@ angular.module("app").service("YleinenData", function YleinenData($rootScope, Ar
             hasTutkintonimikkeet: false,
             sisaltoTunniste: "sisalto",
             hasPdfCreation: false
-        },
+        }
     };
 
     this.koulutustyypit = _.keys(this.koulutustyyppiInfo);
