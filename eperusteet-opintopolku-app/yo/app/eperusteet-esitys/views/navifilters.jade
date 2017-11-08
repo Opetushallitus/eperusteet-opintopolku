@@ -3,7 +3,9 @@ div(ng-repeat='section in $parent.section.model.sections')
   uib-accordion(ng-if='section.title && section.items && section.items.length > 0', close-others='$parent.section.model.oneAtATime')
     .inner-accordion(uib-accordion-group, is-open='section.$open')
       uib-accordion-heading
-        span.glyphicon(ng-class="{'glyphicon-chevron-down': section.$open, 'glyphicon-chevron-right': !section.$open}") {{section.title | kaanna}}
+        i.glyphicon(ng-class="{'glyphicon-chevron-down': section.$open, 'glyphicon-chevron-right': !section.$open}")
+        |
+        span {{section.title | kaanna}}
       div(ng-if='!section.include')
         ul
           li.labeled-checkboxes(ng-repeat='item in section.items | orderBy:orderFn')
