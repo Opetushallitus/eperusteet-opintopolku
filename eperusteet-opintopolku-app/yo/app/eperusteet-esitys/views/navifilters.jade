@@ -4,7 +4,7 @@ div(ng-repeat='section in $parent.section.model.sections')
     .inner-accordion(uib-accordion-group, is-open='section.$open')
       uib-accordion-heading
         i.glyphicon(ng-class="{'glyphicon-chevron-down': section.$open, 'glyphicon-chevron-right': !section.$open}")
-        |
+        =" "
         span {{section.title | kaanna}}
       div(ng-if='!section.include')
         ul
