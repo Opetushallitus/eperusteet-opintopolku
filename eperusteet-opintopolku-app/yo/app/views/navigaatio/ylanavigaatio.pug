@@ -24,20 +24,22 @@ div(ng-controller='YlanavigaatioController')
           ul.ylanavi-list
             li(ui-sref-active='active')
               a(ui-sref='root.etusivu')
-                img(src='images/md/ikoni-eperusteet.png', ng-show="state.includes('root.etusivu.**')")
-                img(src='images/md/ikoni-eperusteet-valkoinen.png', ng-hide="state.includes('root.etusivu.**')")
+                span
+                img(src='images/md/ikoni-eperusteet.png', ng-show="state.includes('root.etusivu.**')", alt="etusivu")
+                img(src='images/md/ikoni-eperusteet-valkoinen.png', ng-hide="state.includes('root.etusivu.**')", alt="etusivu")
+
             li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_15', ui-sref-active='active')
               a(ui-sref='root.esiopetus', kaanna="'navi.esiopetus'")
+
             li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_16', ng-class="isPerusopetus() ? 'active' : ''")
               a(ui-sref='root.perusopetus', kaanna="'navi.perusopetus'")
+
             li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_2', ng-class="isLukioopetus() ? 'active' : ''")
               a(ui-sref='root.lukio', kaanna="'navi.lukiokoulutus'")
-            // li(ng-class="isAmPerus() ? 'active' : ''")
-            //   a(ui-sref='root.selaus.ammatillinenperuskoulutus', kaanna="'navi.ammatillinenperuskoulutus'")
-            // li(ng-class="isAmAikuis() ? 'active' : ''")
-            //   a(ui-sref='root.selaus.ammatillinenaikuiskoulutus', kaanna="'navi.ammatillinenaikuiskoulutus'")
+
             li(ng-class="isAmmatillinen() ? 'active' : ''")
               a(ui-sref='root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus" })', kaanna="'navi.ammatillinenkoulutus'")
+
             li(ng-class="isOps() ? 'active' : ''")
               a(ui-sref='root.selaus.ops', kaanna="'navi.opetussuunnitelmat'")
           .clearfix
