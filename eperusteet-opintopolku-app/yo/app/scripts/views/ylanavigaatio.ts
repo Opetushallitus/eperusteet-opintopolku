@@ -38,14 +38,15 @@ angular
             Perusteet.get(
                 {
                     tyyppi: [
-                        "koulutustyyppi_20",
+                        "koulutustyyppi_2",
+                        "koulutustyyppi_6",
+                        "koulutustyyppi_14",
                         "koulutustyyppi_15",
                         "koulutustyyppi_16",
-                        "koulutustyyppi_2",
-
+                        "koulutustyyppi_17",
+                        "koulutustyyppi_20",
                         "koulutustyyppi_22",
-                        "koulutustyyppi_6",
-                        "koulutustyyppi_17"
+                        "koulutustyyppi_23"
                     ]
                 },
                 res => {
@@ -55,6 +56,11 @@ angular
                     console.error(err);
                 }
             );
+
+            $scope.selectedPerusteId = $stateParams.perusteId;
+            $scope.$on("$stateChangeSuccess", function() {
+                $scope.selectedPerusteId = $stateParams.perusteId;
+            });
 
             let amOsio;
             $scope.$on("loaded:peruste", (event, peruste) => {
@@ -73,7 +79,7 @@ angular
                 }
             };
 
-            $scope.isLukioopetus = function() {
+            $scope.isLukioopetus = () => {
                 if ($state.includes("**.lukio.**") && !$state.includes("**.ops.**")) {
                     return true;
                 }

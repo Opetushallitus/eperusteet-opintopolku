@@ -271,7 +271,7 @@ module.exports = grunt => {
       compile: {
         options: {
           data: {
-            debug: true
+            debug: false
           }
         },
         files: [{
