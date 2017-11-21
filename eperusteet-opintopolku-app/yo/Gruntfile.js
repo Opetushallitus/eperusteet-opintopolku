@@ -115,7 +115,7 @@ module.exports = grunt => {
         tasks: ['ts']
       },
       pug: {
-        files: ['<%= config.app %>/**/*.{jade, pug}'],
+        files: ['<%= config.app %>/**/*.{pug}'],
         tasks: ['pug', 'regex-check']
       },
       livereload: {
@@ -134,7 +134,7 @@ module.exports = grunt => {
           'usemin'
         ],
         files: [
-          '<%= config.app %>/**/*.{jade,ts}',
+          '<%= config.app %>/**/*.{pug,ts}',
           '<%= config.app %>/localisation/*.json',
           '.tmp/styles/**/*.css',
           '<%= config.app %>/eperusteet-esitys/**/*.js',
@@ -164,7 +164,7 @@ module.exports = grunt => {
         hostname: '0.0.0.0'
       },
       proxies: [
-        proxies.eperusteet.prod,
+        proxies.eperusteet.local,
         proxies.ylops.prod,
         proxies.amosaa.prod
       ],
@@ -271,15 +271,15 @@ module.exports = grunt => {
       compile: {
         options: {
           data: {
-            debug: true
+            debug: false
           }
         },
         files: [{
-          src: '<%= config.app %>/eperusteet-esitys/**/*.jade',
+          src: '<%= config.app %>/eperusteet-esitys/**/*.pug',
           expand: true,
           ext: '.html'
         }, {
-          src: '<%= config.app %>/views/**/*.jade',
+          src: '<%= config.app %>/views/**/*.pug',
           expand: true,
           ext: '.html'
         }]

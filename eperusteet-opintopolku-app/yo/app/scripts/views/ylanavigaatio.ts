@@ -38,12 +38,15 @@ angular
             Perusteet.get(
                 {
                     tyyppi: [
+                        "koulutustyyppi_2",
+                        "koulutustyyppi_6",
+                        "koulutustyyppi_14",
                         "koulutustyyppi_15",
                         "koulutustyyppi_16",
+                        "koulutustyyppi_17",
+                        "koulutustyyppi_20",
                         "koulutustyyppi_22",
-                        "koulutustyyppi_6",
-                        "koulutustyyppi_2",
-                        "koulutustyyppi_17"
+                        "koulutustyyppi_23"
                     ]
                 },
                 res => {
@@ -53,6 +56,11 @@ angular
                     console.error(err);
                 }
             );
+
+            $scope.selectedPerusteId = $stateParams.perusteId;
+            $scope.$on("$stateChangeSuccess", function() {
+                $scope.selectedPerusteId = $stateParams.perusteId;
+            });
 
             let amOsio;
             $scope.$on("loaded:peruste", (event, peruste) => {
@@ -71,7 +79,7 @@ angular
                 }
             };
 
-            $scope.isLukioopetus = function() {
+            $scope.isLukioopetus = () => {
                 if ($state.includes("**.lukio.**") && !$state.includes("**.ops.**")) {
                     return true;
                 }
@@ -165,15 +173,12 @@ angular
 
             $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
 
-            $rootScope.$on("$stateChangeSuccess", () => {
-                $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
-            });
-
-            $scope.vaihdaKieli = uusiKieli => {
+            $scope.vaihdaKieli = async uusiKieli => {
                 if (uusiKieli !== Kieli.getUiKieli()) {
-                    Kieli.setUiKieli(uusiKieli);
+                    await Kieli.setUiKieli(uusiKieli);
                     Kieli.setSisaltokieli(uusiKieli);
                     $scope.kieli = uusiKieli;
+                    $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
 
                     $state.go($state.current.name, _.merge($stateParams, { lang: uusiKieli }), {});
                 }
