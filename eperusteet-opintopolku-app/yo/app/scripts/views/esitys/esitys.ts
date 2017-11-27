@@ -40,15 +40,22 @@ namespace Controllers {
         $scope.Koulutusalat = koulutusalaService;
         $scope.Opintoalat = opintoalaService;
         const isTutkinnonosatActive = () =>
-            $state.is("root.esitys.peruste.tutkinnonosat") || $state.is("root.esitys.peruste.tutkinnonosa");
+            $state.is("root.esitys.peruste.tutkinnonosat") || $state.is("root.esitys.peruste.tutkinnonosa")
+            || $state.is("root.esitys.peruste.koulutuksenosat") || $state.is("root.esitys.peruste.koulutuksenosa");
 
         $scope.navi = {
             header: "perusteen-sisalto",
             items: [
                 { label: "perusteen-tiedot", link: ["root.esitys.peruste.tiedot"], $glyph: "list-alt" },
-                { label: "tutkinnonosat", link: ["root.esitys.peruste.tutkinnonosat"], isActive: isTutkinnonosatActive }
             ]
         };
+
+        if (_.includes(["koulutustyyppi_5", "koulutustyyppi_18"], peruste.koulutustyyppi)) {
+            $scope.navi.items.push({ label: "koulutuksenosat", link: ["root.esitys.peruste.koulutuksenosat"], isActive: isTutkinnonosatActive });
+        }
+        else {
+            $scope.navi.items.push({ label: "tutkinnonosat", link: ["root.esitys.peruste.tutkinnonosat"], isActive: isTutkinnonosatActive });
+        }
 
         function mapSisalto(sisalto) {
             sisalto = _.clone(sisalto);
