@@ -283,8 +283,17 @@ angular
                 parent: "root.esitys.peruste",
                 label: "tutkinnonosat"
             },
+            "root.esitys.peruste.koulutuksenosat": {
+                parent: "root.esitys.peruste",
+                label: "koulutuksenosat"
+            },
             "root.esitys.peruste.tutkinnonosa": {
                 parent: "root.esitys.peruste.tutkinnonosat",
+                useId: "id",
+                useData: "tutkinnonosaNimi"
+            },
+            "root.esitys.peruste.koulutuksenosa": {
+                parent: "root.esitys.peruste.koulutuksenosat",
                 useId: "id",
                 useData: "tutkinnonosaNimi"
             },

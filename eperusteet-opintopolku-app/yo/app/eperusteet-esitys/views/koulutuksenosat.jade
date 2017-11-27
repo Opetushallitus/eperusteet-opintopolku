@@ -1,6 +1,6 @@
 div
-  h1(esitys-sivu-otsikko="'tutkinnonosat'")
-    span(kaanna="'tutkinnonosat'")
+  h1(esitys-sivu-otsikko="'koulutuksenosat'")
+    span(kaanna="'koulutuksenosat'")
   .tutkinnonosat-tools.hidden-xs
     .tosat-sort-selector
       select.jarjestys-select.form-control(ng-model='jarjestysTapa', ng-options='opt.value as opt.label|kaanna for opt in jarjestysOptions')
@@ -8,7 +8,7 @@ div
         a.action-link(ng-click='jarjestysOrder = !jarjestysOrder')
           span.glyphicon(ng-class="jarjestysOrder ? 'glyphicon-sort-by-attributes-alt' : 'glyphicon-sort-by-attributes'")
     .tutkinnonosat-rajaus
-      rajaus(model='tosarajaus', callback='paivitaRajaus(value)', placeholder="{{'rajaa-tutkinnonosia'|kaanna}}")
+      rajaus(model='tosarajaus', callback='paivitaRajaus(value)', placeholder="{{'rajaa-koulutuksenosia'|kaanna}}")
   .row.row-margin.visible-xs
     .col-xs-12
       .input-group
@@ -18,16 +18,17 @@ div
   .row.visible-xs
     .col-xs-12
       .tutkinnonosat-rajaus
-        rajaus(model='tosarajaus', callback='paivitaRajaus(value)', placeholder="{{'rajaa-tutkinnonosia'|kaanna}}")
+        rajaus(model='tosarajaus', callback='paivitaRajaus(value)', placeholder="{{'rajaa-koulutuksenosia'|kaanna}}")
   ul.tutkinnonosat
-    li.tutkinnonosa-laatikko.list-group-item(ui-sref='root.esitys.peruste.tutkinnonosa({ id: v.id })', ng-repeat='v in tutkinnonOsat | mapFilter:rajaaTutkinnonOsia | orderBy:jarjestysFn:jarjestysOrder')
+    li.tutkinnonosa-laatikko.list-group-item(ui-sref='root.esitys.peruste.koulutuksenosa({ id: v.id })', ng-repeat='v in tutkinnonOsat | mapFilter:rajaaTutkinnonOsia | orderBy:jarjestysFn:jarjestysOrder')
       .muokkaus(ng-hide='editoi')
       .numero-wrapper
         span.badge.jarjestysnumero(ng-show='v.jarjestys') {{v.jarjestys || '-' }}
       .otsikko.otsikko-esitys
         h3
-          a(ui-sref='root.esitys.peruste.tutkinnonosa({ id: v.id })') {{ v.nimi | kaanna }}
+          a(ui-sref='root.esitys.peruste.koulutuksenosa({ id: v.id })') {{ v.nimi | kaanna }}
         .pienet-tiedot
           .osan-laajuus(ng-if="v.laajuus") {{ v.laajuus }} {{ yksikko || '' | kaanna }}
   .clearfix
+
 
