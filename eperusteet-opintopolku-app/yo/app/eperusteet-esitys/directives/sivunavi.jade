@@ -11,7 +11,8 @@
       .list-group-item(ng-show='hasTransclude')
         .sivunavi-tc-item
           #sivunavi-tc(ng-transclude='')
-        rajaus(ng-if='!sections && !disableRajaus', size='small', model='search.term', placeholder='etsi-sisallosta')
+        div(ng-if='!sections && !disableRajaus')
+          rajaus(size='small', model='search.term', placeholder='etsi-sisallosta')
       // Perusopetus valikko
       div(ng-if='sections')
         uib-accordion(close-others='showOne')
@@ -30,8 +31,8 @@
                 span.linktext(ng-class="{'action-link': !!item.href}", ep-highlight='search.term', ng-bind='item.label | kaanna')
       // Yksinkertainen valikko
       div(ng-if='!sections')
-        .list-group-item.rajaus
-          rajaus(ng-if='!sections && !disableRajaus', size='small', model='search.term', placeholder='etsi-sisallosta')
+        .list-group-item.rajaus(ng-if='!sections && !disableRajaus')
+          rajaus(size='small', model='search.term', placeholder='etsi-sisallosta')
         a.list-group-item.item.items-item(
             ng-repeat='item in items'
             ng-class='itemClasses(item)'

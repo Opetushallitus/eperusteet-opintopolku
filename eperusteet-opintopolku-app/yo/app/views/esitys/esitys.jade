@@ -16,8 +16,9 @@
   #sivunavi-sisalto-wrapper
     .esitys
       .sivunavi-navigaatio.sivunavi-simple
-        ep-sivunavigaatio(items='navi.items', header='navi.header', disable-rajaus='true')
-          select.form-control.input-sm(ng-show='suoritustavat.length > 1', ng-model='suoritustapa', ng-change='vaihdaSuoritustapa(suoritustapa)', ng-options='kaanna(st) for st in suoritustavat')
+        ep-sivunavigaatio(ng-if='suoritustavat.length > 1', items='navi.items', header='navi.header', disable-rajaus='true')
+          select.form-control.input-sm(ng-model='suoritustapa', ng-change='vaihdaSuoritustapa(suoritustapa)', ng-options='kaanna(st) for st in suoritustavat')
+        ep-sivunavigaatio(ng-if='suoritustavat.length <= 1', items='navi.items', header='navi.header', disable-rajaus='true')
       .sivunavi-clear
       .sivunavi-sisalto
         .row
