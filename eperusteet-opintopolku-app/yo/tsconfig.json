@@ -12,7 +12,6 @@
     "app/components/injector/injector.ts",
     "app/components/lokalisointi/kaanna.ts",
     "app/components/lokalisointi/kieli.ts",
-    "app/components/lokalisointi/lokalisointi.ts",
     "app/components/termisto/termisto.ts",
     "app/data/api.ts",
     "app/data/dokumentit.ts",
