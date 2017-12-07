@@ -111,7 +111,14 @@ angular
         const getGeneric = key => {
             const params = paramMap[key];
             return Perusteet.get(params, res => {
-                perusteet[params.tyyppi] = res.data;
+                const found = {};
+                perusteet[params.tyyppi] = _(res.data)
+                    .filter(p => { // FIXME: uniqBy
+                        const result = !found[p.id];
+                        found[p.id] = true;
+                        return result;
+                    })
+                    .value();
             }).$promise;
         };
 
