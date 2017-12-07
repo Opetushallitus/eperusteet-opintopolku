@@ -49,8 +49,8 @@
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_23'][0].id})", ng-bind="uusimmat['koulutustyyppi_23'][0].nimi | kaanna")
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_14'][0]")
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_14'][0].id})", ng-bind="uusimmat['koulutustyyppi_14'][0].nimi | kaanna")
-            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_999907'][0]")
-              a(ui-sref="root.tpo({perusteId: uusimmat['koulutustyyppi_999907'][0].id})", ng-bind="uusimmat['koulutustyyppi_999907'][0].nimi | kaanna")
+            li.peruste-linkki(ng-repeat="tpo in uusimmat['koulutustyyppi_999907']")
+              a(ui-sref="root.tpo({perusteId: tpo.id})", ng-bind="tpo.nimi | kaanna")
             li.peruste-linkki
               a(ui-sref='root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus" })')
                 span(kaanna="'navi.ammatillinenkoulutus'")
