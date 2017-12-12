@@ -188,7 +188,7 @@ namespace Controllers {
         $scope.rajaaTutkinnonOsia = haku => Algoritmit.rajausVertailu($scope.tosarajaus, haku, "nimi");
     };
 
-    export const epEsitysRakenneController = ($scope, $state, $stateParams, PerusteenRakenne) => {
+    export const epEsitysRakenneController = ($scope, $state, $stateParams, PerusteenRakenne, peruste, MurupolkuData) => {
         $scope.$parent.valittu.sisalto = "rakenne";
         $scope.muodostumisOtsikko = _.find($scope.$parent.sisalto, (item: any) => item.tunniste === "rakenne");
 
@@ -197,5 +197,11 @@ namespace Controllers {
             $scope.rakenne.$suoritustapa = $stateParams.suoritustapa;
             $scope.rakenne.$resolved = true;
         });
+
+        if (peruste.koulutustyyppi === "koulutustyyppi_18" || peruste.koulutustyyppi === "koulutustyyppi_5") {
+            MurupolkuData.set({ nimi: "Koulutuksen muodostuminen" });
+        } else {
+            MurupolkuData.set({ nimi: "Tutkinnon muodostuminen" });
+        }
     };
 }
