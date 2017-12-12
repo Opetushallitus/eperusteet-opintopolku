@@ -273,7 +273,7 @@ angular
             },
             "root.esitys.peruste.rakenne": {
                 parent: "root.esitys.peruste",
-                label: "tutkinnon-muodostuminen"
+                useData: "nimi",
             },
             "root.esitys.peruste.tiedot": {
                 parent: "root.esitys.peruste",
@@ -538,6 +538,7 @@ angular
                         params[item.useId] = MurupolkuData.get(item.useId);
                     }
                     var usedData = item.useData ? MurupolkuData.get(item.useData) : null;
+                    console.log(item.useData);
                     $scope.crumbs.push({
                         url: $state.href(item.state, params),
                         label: usedData ? usedData : item.label ? item.label : _.last(item.state.split(".")),
