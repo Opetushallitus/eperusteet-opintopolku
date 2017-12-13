@@ -266,7 +266,6 @@ angular.module("app").config($stateProvider => {
                             );
 
                             if ($scope.hakuparametrit.koulutusala) {
-                                console.log($scope.hakuparametrit);
                                 $scope.opintoalat = (<any>_.findWhere($scope.koulutusalat, {
                                     koodi: $scope.hakuparametrit.koulutusala
                                 })).opintoalat;

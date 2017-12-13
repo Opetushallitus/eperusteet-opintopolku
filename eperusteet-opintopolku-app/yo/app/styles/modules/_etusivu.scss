@@ -239,6 +239,11 @@ $paaotsikko-logo-size: 96px;
             display: none;
         }
     }
+
+    .banneri-box {
+          border-right: 0;
+          border-left: 0;
+    }
 }
 
 @media (max-width: $screen-xs-max) {
