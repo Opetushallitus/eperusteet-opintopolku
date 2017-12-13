@@ -65,13 +65,13 @@ angular
             return sisaltokieli;
         };
 
-        this.setUiKieli = function(kielikoodi) {
+        this.setUiKieli = async (kielikoodi) => {
             if (isValidKielikoodi(kielikoodi)) {
                 var current = uikieli;
                 if (current !== kielikoodi) {
                     uikieli = kielikoodi;
                     moment.locale(kielikoodi);
-                    $translate.use(kielikoodi);
+                    await $translate.use(kielikoodi);
                 }
             }
         };
@@ -106,10 +106,10 @@ angular
             stateInit.resolve();
         });
 
-        $q.all([stateInit.promise]).then(function() {
-            var lang = "fi"; // TODO default language based on host
+        $q.all([stateInit.promise]).then(async () => {
+            const lang = "fi"; // TODO default language based on host
             if (Kieli.isValidKielikoodi(lang)) {
-                Kieli.setUiKieli(lang);
+                await Kieli.setUiKieli(lang);
                 Kieli.setSisaltokieli(lang);
             }
         });

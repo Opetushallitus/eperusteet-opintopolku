@@ -11,7 +11,7 @@ angular.module("app").config($stateProvider =>
                 }
             }
         },
-        onEnter: (Kieli, $state, $stateParams) => {
+        onEnter: async (Kieli, $state, $stateParams) => {
             // Aseta kieli jos puuttuu
             const kielikoodi = $stateParams.lang;
             if (!(kielikoodi == "fi" || kielikoodi == "sv" || kielikoodi == "en")) {
@@ -19,7 +19,7 @@ angular.module("app").config($stateProvider =>
                 $state.reload();
             }
             Kieli.setSisaltokieli(kielikoodi);
-            Kieli.setUiKieli(kielikoodi);
+            await Kieli.setUiKieli(kielikoodi);
         }
     })
 );

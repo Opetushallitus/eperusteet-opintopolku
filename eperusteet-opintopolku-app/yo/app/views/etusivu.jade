@@ -20,7 +20,7 @@
                 span(ng-bind='tiedote.otsikko | kaanna')
               p
                 span {{tiedote.luotu || tiedote.luotu | date}}
-            li.lista-elementti-lisaa(ng-show="tiedotteet.length > 0")
+            li.lista-elementti-lisaa(ng-show="tiedotteet.length > naytto.limit")
               limit-toggler(limit='naytto.limit', model='tiedotteet', limiter='naytto.shown')
             li.lista-elementti(ng-show="tiedotteet.length > 0")
               a(ui-sref='root.uutiset', ng-bind="'nayta-kaikki-uutiset' | kaanna")

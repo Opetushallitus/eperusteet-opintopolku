@@ -39,7 +39,7 @@ namespace KieliService {
         }
     };
 
-    export const setUiKieli = (kielikoodi, doStateChange?) => {
+    export const setUiKieli = async (kielikoodi, doStateChange?) => {
         if (
             isValidKielikoodi(kielikoodi) &&
             (kielikoodi !== uikieli || (stateInited && _$stateParams.lang !== kielikoodi))
@@ -49,7 +49,7 @@ namespace KieliService {
             }
             uikieli = kielikoodi;
             moment.locale(kielikoodi);
-            _$translate.use(kielikoodi);
+            await _$translate.use(kielikoodi);
             _$rootScope.$broadcast("changed:uikieli", kielikoodi);
         }
     };
