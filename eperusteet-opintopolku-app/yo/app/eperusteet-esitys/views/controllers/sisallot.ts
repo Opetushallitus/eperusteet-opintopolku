@@ -198,10 +198,6 @@ namespace Controllers {
             $scope.rakenne.$resolved = true;
         });
 
-        if (peruste.koulutustyyppi === "koulutustyyppi_18" || peruste.koulutustyyppi === "koulutustyyppi_5") {
-            MurupolkuData.set({ nimi: "Koulutuksen muodostuminen" });
-        } else {
-            MurupolkuData.set({ nimi: "Tutkinnon muodostuminen" });
-        }
+        MurupolkuData.set({ nimi: $scope.muodostumisOtsikko.nimi });
     };
 }
