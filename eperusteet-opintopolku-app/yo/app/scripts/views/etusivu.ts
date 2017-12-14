@@ -228,8 +228,9 @@ angular
             restrict: "AE",
             template:
                 '<div class="show-toggler" ng-show="isVisible">' +
-                '<a class="action-link" ng-click="toggle()">{{ linktext | kaanna }}</a>' +
-                "</div>",
+                '  <a ng-show="isToggled" class="action-link" ng-click="toggle()" kaanna="\'sivupalkki-piilota\'"></a>' +
+                '  <a ng-hide="isToggled" class="action-link" ng-click="toggle()" kaanna="\'sivupalkki-nayta-kaikki\'"></a>' +
+                '</div>',
             scope: {
                 model: "=",
                 limit: "=",
@@ -237,17 +238,17 @@ angular
             },
             controller: $scope => {
                 $scope.isVisible = false;
-                $scope.linktext = "sivupalkki-näytä-kaikki";
+                $scope.isToggled = false;
                 $scope.$watch("model", () => {
                     $scope.isVisible = $scope.model.length > $scope.limit;
                 });
                 $scope.toggle = () => {
                     if ($scope.limiter === $scope.limit) {
                         $scope.limiter = $scope.model.length;
-                        $scope.linktext = "sivupalkki-piilota";
+                        $scope.isToggled = true;
                     } else {
                         $scope.limiter = $scope.limit;
-                        $scope.linktext = "sivupalkki-näytä-kaikki";
+                        $scope.isToggled = false;
                     }
                 };
             }

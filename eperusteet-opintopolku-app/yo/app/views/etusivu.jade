@@ -23,7 +23,7 @@
             li.lista-elementti-lisaa(ng-show="tiedotteet.length > naytto.limit")
               limit-toggler(limit='naytto.limit', model='tiedotteet', limiter='naytto.shown')
             li.lista-elementti(ng-show="tiedotteet.length > 0")
-              a(ui-sref='root.uutiset', ng-bind="'nayta-kaikki-uutiset' | kaanna")
+              a(ui-sref='root.uutiset', kaanna="'nayta-kaikki-uutiset'")
         p(ng-show="tiedotteet.length < 1" kaanna="'ei-tiedotteita'")
       .visible-lg(ng-include='', src="'views/osaan.html'")
 
