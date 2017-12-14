@@ -43,6 +43,8 @@
               a(ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_16'][0].id})", ng-bind="uusimmat['koulutustyyppi_16'][0].nimi | kaanna")
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_6'][0]")
               a(ui-sref="root.lisaopetus({perusteId: uusimmat['koulutustyyppi_6'][0].id})", ng-bind="uusimmat['koulutustyyppi_6'][0].nimi | kaanna")
+            li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_17'][0]")
+              a(ui-sref="root.perusopetus({perusteId: uusimmat['koulutustyyppi_17'][0].id})", ng-bind="uusimmat['koulutustyyppi_17'][0].nimi | kaanna")
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_2'][0]")
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_2'][0].id})", ng-bind="uusimmat['koulutustyyppi_2'][0].nimi | kaanna")
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_23'][0]")
@@ -67,7 +69,7 @@
         h2(kaanna="'etusivu.uusimmat-perusteet'")
         .linkit
           ul
-            li.lista-elementti(ng-repeat='peruste in uusimmatLista | limitTo:5')
+            li.lista-elementti(ng-repeat='peruste in uusimmatLista | limitTo:10')
               a(ui-sref='{{UusimmatPerusteetService.getStateTila(peruste.koulutustyyppi)}}({perusteId: peruste.id, suoritustapa: peruste.suoritustavat[0].suoritustapakoodi})')
                 span(ng-bind='peruste.nimi | kaanna')
               p
