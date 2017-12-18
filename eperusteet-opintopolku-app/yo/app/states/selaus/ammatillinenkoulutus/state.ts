@@ -232,10 +232,10 @@ angular.module("app").config($stateProvider => {
                             );
                             peruste.$$koulutusalaNimet = _(peruste.koulutukset)
                                 .sortBy("id")
-                                .map(
-                                    (koulutus: any) =>
-                                        koulutusalaService.haeKoulutusalaNimi(koulutus.koulutusalakoodi).nimi
-                                )
+                                .map("koulutusalakoodi")
+                                .map(koulutusalaService.haeKoulutusalaNimi)
+                                .filter(_.isObject)
+                                .map("nimi")
                                 .value();
                         });
                         $scope.nykyinenSivu = vastaus.sivu + 1;
