@@ -288,6 +288,159 @@ angular.module("app").config($stateProvider => {
                     $scope.$on("changed:sisaltokieli", $scope.tyhjenna);
                 }
             },
+            "oppaat@root.selaus.koostenakyma": {
+                templateUrl: "views/states/koostenakyma/oppaat.html",
+                controller(
+                    $q,
+                    $scope,
+                    $rootScope,
+                    $state,
+                    perustehaku,
+                    Haku,
+                    koulutusalaService,
+                    SpinnerService,
+                    Kieli,
+                    YleinenData,
+                    MurupolkuData,
+                    Kaanna,
+                    PerusteenTutkintonimikkeet
+                ) {
+                    const uikieli = Kieli.getUiKieli();
+                    let hakuPattern: RegExp;
+                    const hakuViive = 300; // ms
+
+                    const hakuparametrit = () => ({
+                        kieli: uikieli,
+                        nimi: "",
+                        perusteTyyppi: "opas",
+                        poistunut: false,
+                        sivu: 0,
+                        sivukoko: 5,
+                        tila: "valmis",
+                        tuleva: true,
+                        voimassaolo: true
+                    });
+
+                    {
+                        // Muuttujat
+                        $scope.isSearching = true;
+                        $scope.hakuparametrit = hakuparametrit();
+                        $scope.nykyinenSivu = 1;
+                        $scope.sivuja = 1;
+                        $scope.kokonaismaara = 0;
+                        $scope.sisaltokielet = ["fi", "sv"];
+                        $scope.kaanna = text => Kaanna.kaanna(text);
+                    }
+
+                    {
+                        // Kontrollerin toiminnallisuus
+                        // Kutsutaan uib-pagination eventistä
+                        $scope.pageChanged = () => haePerusteista($scope.hakuparametrit, $scope.nykyinenSivu);
+                        $scope.isArray = _.isArray;
+
+                        $scope.tyhjenna = () => {
+                            $scope.nykyinenSivu = 1;
+                            $scope.hakuparametrit = hakuparametrit();
+                            haePerusteista($scope.nykyinenSivu);
+                        };
+
+                        // Totuusarvoille
+                        $scope.toggleHakuparametri = key => {
+                            $scope.hakuparametrit[key] = !$scope.hakuparametrit[key];
+                            $scope.hakuMuuttui();
+                        };
+
+                        $scope.muutaHakua = (key, value) => {
+                            $scope.hakuparametrit[key] = value;
+                            $scope.hakuMuuttui();
+                        };
+
+                        $scope.poistaHakukriteeri = key => {
+                            delete $scope.hakuparametrit[key];
+                            $scope.hakuMuuttui();
+                        };
+
+                        $scope.hakuMuuttui = _.debounce(_.bind(haePerusteista, $scope, 1), hakuViive, {
+                            leading: false
+                        });
+                    }
+
+                    function selvitaTila(peruste) {
+                        let currentTime = new Date().getTime();
+                        let voimassaoloAlkaa = peruste.voimassaoloAlkaa;
+                        let voimassaoloLoppuu = peruste.voimassaoloLoppuu;
+
+                        if (voimassaoloAlkaa && voimassaoloAlkaa > currentTime) {
+                            peruste.$$tila = "tuleva";
+                            return;
+                        }
+
+                        if (
+                            voimassaoloAlkaa &&
+                            currentTime > voimassaoloAlkaa &&
+                            (!voimassaoloLoppuu || voimassaoloLoppuu > currentTime)
+                        ) {
+                            peruste.$$tila = "voimassa";
+                            return;
+                        }
+
+                        if (voimassaoloLoppuu && currentTime > voimassaoloLoppuu) {
+                            peruste.$$tila = "arkistoitu";
+                            return;
+                        }
+
+                        // Jos voimassaolon alkamista tai loppumista ei ole asetettu
+                        if (!peruste.$$tila) {
+                            peruste.$$tila = "voimassa";
+                        }
+
+                        return;
+                    }
+
+                    // Muokkaa haetut perusteet käyttöliittymälle kelpaavaan muotoon
+                    function perusteParsinta(vastaus) {
+                        $scope.perusteet = vastaus;
+                        _.each(vastaus.data, peruste => {
+                            selvitaTila(peruste);
+                        });
+                        $scope.nykyinenSivu = vastaus.sivu + 1;
+                        $scope.hakuparametrit.sivukoko = vastaus.sivukoko;
+                        $scope.sivuja = vastaus.sivuja;
+                        $scope.kokonaismaara = vastaus.kokonaismäärä;
+                        $scope.sivut = _.range(0, vastaus.sivuja);
+                        hakuPattern = new RegExp("(" + $scope.hakuparametrit.nimi + ")", "i");
+                    }
+
+                    // Perusteiden haku
+                    // Vanha haku perutaan uuden alkaessa
+                    let canceler;
+                    async function haePerusteista(hakuparametrit, sivu = 1) {
+                        sivu = sivu - 1;
+                        try {
+                            $scope.isSearching = true;
+                            if (canceler) {
+                                await canceler.resolve();
+                            }
+                            SpinnerService.enable();
+                            canceler = $q.defer();
+                            $scope.isSearching = true;
+                            perusteParsinta(
+                                await perustehaku
+                                    .withHttpConfig({ timeout: canceler.promise })
+                                    .get({ ...$scope.hakuparametrit, sivu })
+                            );
+                        } catch (ex) {
+                        } finally {
+                            canceler = undefined;
+                            SpinnerService.disable();
+                        }
+                    }
+
+                    haePerusteista($scope.hakuparametrit);
+
+                    $scope.$on("changed:sisaltokieli", $scope.tyhjenna);
+                }
+            },
             "laitoslistaus@root.selaus.koostenakyma": {
                 templateUrl: "views/states/koostenakyma/laitoshaku.html",
                 controller($scope, $timeout, $q, $state, koulutustoimijaHaku) {
