@@ -8,11 +8,12 @@ div(ng-if='hasArviointi(tavoite)')
   h4(kaanna="'osaamisen-arviointi'")
   div(ng-repeat='kohdealue in tavoite.arviointi.arvioinninKohdealueet')
     .arviointi
-      .arviointi-otsikko(ng-hide="kohdealue.otsikko.fi === 'automaattinen' || kohdealue.otsikko.fi === 'Nimetön' || $scope.reformiTutke2")
+      .arviointi-otsikko(ng-hide="kohdealue.otsikko.fi === 'automaattinen' || kohdealue.otsikko.fi === 'Nimetön' || reformiTutke2")
         h4 {{ kohdealue.otsikko | kaanna }}
       .arviointi-sisalto
         div(ng-repeat='kohde in kohdealue.arvioinninKohteet')
           h4 {{ kohde.otsikko | kaanna }}
+          b(ng-show="reformiTutke2") {{ kohde.selite | kaanna }}
           table.table.table-striped
             tr(ng-repeat="okriteeri in kohde.osaamistasonKriteerit | orderBy:'_osaamistaso'")
               td.arviointi-okriteeri(ng-class='{yksiportainen: $first && $last}')
