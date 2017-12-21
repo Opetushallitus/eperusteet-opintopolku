@@ -214,7 +214,8 @@ angular.module("app").config($stateProvider =>
             },
             "tutkinnonosa@root.amops.osa": {
                 templateUrl: "views/amops/osa/tutkinnonosa.html",
-                controller: ($q, $scope, peruste, arviointiAsteikot, koodisto, koulutustoimija) => {
+                controller: ($q, $scope, peruste, arviointiAsteikot, koodisto, koulutustoimija, $location,
+                             $anchorScroll) => {
                     const isPaikallinen = _.property("tosa.tyyppi")($scope.osa) === "oma",
                         osaamisalaKoodit = peruste.osaamisalat,
                         paikallisetKoodit = koulutustoimija.all("koodi"),
@@ -262,6 +263,14 @@ angular.module("app").config($stateProvider =>
                                             (koodi: any) => koodi.id === $scope.osa.id
                                         ))
                                 );
+                        }
+                    };
+
+                    $scope.goToAnchor = (pre, id) => {
+                        if ($location.hash() !== pre + id) {
+                            $location.hash(pre + id);
+                        } else {
+                            $anchorScroll();
                         }
                     };
 

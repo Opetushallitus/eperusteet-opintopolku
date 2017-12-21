@@ -100,11 +100,11 @@
             span(style='margin-right: 5px') :
             span.valitsin-osaalue(ng-repeat='osaAlue in pTosa.osaAlueet')
               span.pipe(ng-hide='$first') |
-              a(href='', ng-bind='osaAlue.nimi | kaanna', ng-click="gotoAnchor('osa-alue-' + osaAlue.id)")
+              a(href='', ng-bind='osaAlue.nimi | kaanna', ng-click="goToAnchor('osa-alue-', osaAlue.id)")
           .osa-alue(ng-repeat='osaAlue in pTosa.osaAlueet')
             h1.osa-alue-nimi(id="{{ 'osa-alue-' + osaAlue.id }}")
               span(ng-bind='osaAlue.nimi | kaanna')
-              span.koodi ({{ osaAlue.koodiArvo }})
+              span.koodi(ng-show="osaAlue.koodiArvo") ({{ osaAlue.koodiArvo }})
             .osaamistavoite(ng-repeat='osaamistavoite in osaAlue.osaamistavoitteet')
               h2.osaamistavoite-nimi(ng-bind='osaamistavoite.nimi | kaanna')
               .content-toggler(style='margin-top: 16px')
