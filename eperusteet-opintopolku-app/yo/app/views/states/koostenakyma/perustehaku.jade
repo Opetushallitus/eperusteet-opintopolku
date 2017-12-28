@@ -79,9 +79,7 @@ mixin haku()
       .color-box(ng-class="peruste.$$tila")
         .text-box
           p
-            // a.nimi(ui-sref="root.esitys.peruste({ perusteId: peruste.id, suoritustapa: 'naytto' })")
-            // a.nimi(ng-href="peruste.$$link")
-            a.nimi(ui-sref="root.selaus.perusteinfo({ perusteId: peruste.id })")
+            a.nimi(ui-sref="root.kooste({ perusteId: peruste.id })")
               span(ng-bind="peruste.nimi | kaanna")
 
             span.alarm-marker(

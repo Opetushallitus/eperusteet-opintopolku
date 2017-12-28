@@ -104,7 +104,7 @@ angular.module("app").config($stateProvider => {
                         $scope.sisaltokielet = ["fi", "sv"];
 
                         $scope.kaanna = text => Kaanna.kaanna(text);
-                        $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
+                        $scope.koulutustyypit = YleinenData.ammatillisetKoulutustyypit;
                     }
 
                     {
@@ -350,7 +350,7 @@ angular.module("app").config($stateProvider => {
                         $scope.sisaltokielet = ["fi", "sv"];
 
                         $scope.kaanna = text => Kaanna.kaanna(text);
-                        $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
+                        $scope.koulutustyypit = YleinenData.ammatillisetKoulutustyypit;
                     }
 
                     {

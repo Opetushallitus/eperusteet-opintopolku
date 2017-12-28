@@ -34,7 +34,6 @@ namespace Controllers {
         TermistoService,
         MurupolkuData
     ) => {
-        $timeout(() => $rootScope.$broadcast("loaded:peruste", peruste));
         TermistoService.setResource(peruste);
         MurupolkuData.set({ perusteId: peruste.id, perusteNimi: peruste.nimi });
         $scope.Koulutusalat = koulutusalaService;

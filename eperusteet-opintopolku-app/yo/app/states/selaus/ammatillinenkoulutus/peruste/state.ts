@@ -122,6 +122,7 @@ angular.module("app").config($stateProvider => {
         template: "<div ui-view></div>",
         resolve: {
             peruste(PerusteApi, $stateParams) {
+                console.log($stateParams);
                 return PerusteApi.one("perusteet", $stateParams.perusteId).get();
             },
 
@@ -146,6 +147,7 @@ angular.module("app").config($stateProvider => {
                     $scope.tiedoteMaara = 5;
                     $scope.peruste = peruste;
                     $scope.perusteenTiedotteet = perusteenTiedotteet;
+                    $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen(peruste.koulutustyyppi);
 
                     $scope.tutkintonimikkeet = _(tutkintonimikkeet)
                         .map(tn =>
@@ -168,12 +170,12 @@ angular.module("app").config($stateProvider => {
             },
             // FIXME: Poistetaan root.selaus.perusteinfo tulevaisuudessa
             "paikalliset@root.selaus.perusteinfo": paikallisetView,
-            "paikalliset@root.perusteinfo": paikallisetView,
+            "paikalliset@root.kooste": paikallisetView,
         }
     };
 
-    $stateProvider.state("root.selaus.perusteinfo", impl);
-    $stateProvider.state("root.perusteinfo", {
+    $stateProvider.state("root.selaus.perusteinfo", impl); // deprekoitu
+    $stateProvider.state("root.kooste", {
         ...impl,
         url: "/kooste/:perusteId",
     });
