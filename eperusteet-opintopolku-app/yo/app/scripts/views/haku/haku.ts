@@ -105,7 +105,7 @@ namespace Controllers {
 
         setHakuparametrit();
 
-        $scope.koulutustyypit = YleinenData.ammatillisetkoulutustyypit;
+        $scope.koulutustyypit = YleinenData.ammatillisetKoulutustyypit;
 
         $scope.tyhjenna = function() {
             $scope.nykyinenSivu = 1;

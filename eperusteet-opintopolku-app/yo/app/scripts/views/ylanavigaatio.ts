@@ -13,7 +13,9 @@ angular
             Haku,
             $stateParams,
             Kaanna,
-            VirheService
+            VirheService,
+            YleinenData,
+            OpsResource
         ) => {
             $scope.kieli = Kieli.getUiKieli();
             $scope.nykyinenTila = $state;
@@ -58,30 +60,53 @@ angular
                 }
             );
 
+            function getKoulutustyyppi() {
+                if ($stateParams.perusteId) {
+                    Perusteet.get(
+                        { perusteId: $stateParams.perusteId },
+                        res => {
+                            $scope.selectedKoulutustyyppi = res.koulutustyyppi;
+                            console.log($scope.selectedKoulutustyyppi);
+                        },
+                        err => {
+                            console.error(err);
+                        }
+                    );
+                } else if ($stateParams.opsId) {
+                    OpsResource().get(
+                        { opsId: $stateParams.opsId },
+                        res => {
+                            $scope.selectedKoulutustyyppi = res.koulutustyyppi;
+                            console.log($scope.selectedKoulutustyyppi);
+                        },
+                        err => {
+                            console.error(err);
+                        }
+                    );
+                } else {
+                    $scope.selectedKoulutustyyppi = null;
+                }
+            }
+            getKoulutustyyppi();
+
             $scope.selectedPerusteId = $stateParams.perusteId;
             $scope.$on("$stateChangeSuccess", () => {
+                // Todo: Should use resolved peruste (not available in this (root) state)
+                if ($stateParams.perusteId !== $scope.selectedPerusteId) {
+                    getKoulutustyyppi();
+                }
                 $scope.selectedPerusteId = $stateParams.perusteId;
-            });
-
-            let amOsio;
-            $scope.$on("loaded:peruste", (event, peruste) => {
-                amOsio = peruste.koulutustyyppi;
+                console.log($stateParams);
             });
 
             $scope.isPerusopetus = () => {
-                if (
-                    ($state.includes("**.perusopetus.**") ||
-                        $state.includes("**.perusvalmistava.**") ||
-                        $state.includes("**.aipe.**") ||
-                        $state.includes("**.lisaopetus.**")) &&
-                    !$state.includes("**.ops.**")
-                ) {
+                if (_.includes(YleinenData.perusopetusKoulutustyypit, $scope.selectedKoulutustyyppi)) {
                     return true;
                 }
             };
 
             $scope.isLukioopetus = function() {
-                if ($state.includes("**.lukio.**") && !$state.includes("**.ops.**")) {
+                if (_.includes(YleinenData.lukioKoulutustyypit, $scope.selectedKoulutustyyppi)) {
                     return true;
                 }
             };
@@ -112,32 +137,12 @@ angular
                 ) {
                     return true;
                 }
-            };
-
-            $scope.isAmPerus = function() {
-                if (
-                    ($state.includes("**.esitys.**") && amOsio === "koulutustyyppi_1") ||
-                    $state.includes("root.selaus.ammatillinenperuskoulutus")
-                ) {
+                if (_.includes(YleinenData.ammatillisetKoulutustyypit, $scope.selectedKoulutustyyppi)) {
                     return true;
                 }
             };
 
-            $scope.isAmAikuis = function() {
-                if (
-                    ($state.includes("**.esitys.**") && amOsio === "koulutustyyppi_11") ||
-                    $state.includes("root.selaus.ammatillinenaikuiskoulutus")
-                ) {
-                    return true;
-                }
-            };
-
-            $scope.isOps = function() {
-                if ($state.includes("root.ops.**") || $state.includes("root.selaus.ops.**")) {
-                    return true;
-                }
-            };
-
+            // Tiloja vastaavat lokalisointiavaimet
             $scope.valittuOsio = function() {
                 if ($state.includes("root.etusivu.**")) {
                     return "navi.etusivu";
@@ -155,12 +160,6 @@ angular
                     return "navi.lisaopetus";
                 } else if ($state.includes("root.lukio.**")) {
                     return "navi.lukio";
-                } else if ($scope.isAmPerus()) {
-                    return "navi.ammatillinenperuskoulutus";
-                } else if ($scope.isAmAikuis()) {
-                    return "navi.ammatillinenperuskoulutus";
-                } else if ($scope.isOps()) {
-                    return "navi.opetussuunnitelmat";
                 } else if ($state.includes("root.tiedote.**")) {
                     return "navi.tiedote";
                 } else if ($state.includes("root.esitys.peruste.**")) {

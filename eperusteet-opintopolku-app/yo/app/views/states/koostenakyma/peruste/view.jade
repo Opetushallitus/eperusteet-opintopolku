@@ -1,8 +1,11 @@
 include ../../../../misc/mixins.jade
 
-+murupolku(
-  [ '"etusivu.ammatilliset"', 'root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus", hakutyyppi: "perusteet" })' ],
-  [ 'peruste.nimi', '' ])
+
+div(ng-if="isAmmatillinen")
+  +murupolku(
+    [ '"etusivu.ammatilliset"', 'root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus", hakutyyppi: "perusteet" })' ],
+    [ 'peruste.nimi', '' ])
+div(ng-if="!isAmmatillinen" style="margin-top: 16px;")
 
 
 .perusteinfo

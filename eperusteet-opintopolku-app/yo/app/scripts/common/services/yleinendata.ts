@@ -146,7 +146,9 @@ angular.module("app").service("YleinenData", function YleinenData($rootScope, Ar
     };
 
     this.koulutustyypit = _.keys(this.koulutustyyppiInfo);
-    this.ammatillisetkoulutustyypit = ["koulutustyyppi_1", "koulutustyyppi_11", "koulutustyyppi_12"];
+    this.ammatillisetKoulutustyypit = ["koulutustyyppi_1", "koulutustyyppi_11", "koulutustyyppi_12"];
+    this.perusopetusKoulutustyypit = ["koulutustyyppi_6", "koulutustyyppi_16", "koulutustyyppi_17", "koulutustyyppi_22"];
+    this.lukioKoulutustyypit = ["koulutustyyppi_2", "koulutustyyppi_14", "koulutustyyppi_23"];
 
     this.arviointiasteikot = undefined;
 
