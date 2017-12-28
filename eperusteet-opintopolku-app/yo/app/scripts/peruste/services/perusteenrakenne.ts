@@ -24,7 +24,8 @@ angular
         PerusteTutkinnonosat,
         Perusteet,
         PerusteTutkinnonosa,
-        Notifikaatiot
+        Notifikaatiot,
+        $state
     ) {
         function haeTutkinnonosatByPeruste(perusteId, suoritustapa, success) {
             PerusteTutkinnonosat.query(
@@ -206,6 +207,186 @@ angular
             return set;
         }
 
+        function isValmaTelma(koulutustyyppi) {
+            return _.includes([
+                "koulutustyyppi_18",
+                "koulutustyyppi_5",
+            ], koulutustyyppi);
+        }
+
+        function isAmmatillinen(koulutustyyppi) {
+            return _.includes([
+                "koulutustyyppi_1",
+                "koulutustyyppi_11",
+                "koulutustyyppi_12",
+                "koulutustyyppi_18",
+                "koulutustyyppi_5",
+            ], koulutustyyppi);
+        }
+
+        const PerusteDefaults = {
+            koulutustyyppi_1: {
+                nimi: "perustutkinto",
+                oletusSuoritustapa: "ops",
+                hasLaajuus: true,
+                hasTutkintonimikkeet: true,
+                state: "root.esitys.peruste",
+                sisaltoTunniste: "sisalto",
+                hasPdfCreation: true
+            },
+            koulutustyyppi_2: {
+                nimi: "lukiokoulutus",
+                oletusSuoritustapa: "lukiokoulutus",
+                hasTutkintonimikkeet: false,
+                state: "root.lukio",
+                hasLaajuus: false,
+                sisaltoTunniste: "lukiosisalto",
+                hasPdfCreation: false
+            },
+            koulutustyyppi_5: {
+                nimi: "telma",
+                hasLaajuus: true,
+                oletusSuoritustapa: "ops",
+                hasTutkintonimikkeet: true,
+                state: "root.ammatillinenaikuiskoulutus",
+                sisaltoTunniste: "sisalto",
+                hasPdfCreation: true
+            },
+            koulutustyyppi_6: {
+                nimi: "lisaopetus",
+                oletusSuoritustapa: "lisaopetus",
+                hasTutkintonimikkeet: false,
+                state: "root.lisaopetus",
+                hasLaajuus: false,
+                sisaltoTunniste: "losisalto",
+                hasPdfCreation: true
+            },
+            koulutustyyppi_11: {
+                nimi: "ammattitutkinto",
+                oletusSuoritustapa: "naytto",
+                hasTutkintonimikkeet: true,
+                hasLaajuus: true,
+                state: "root.ammatillinenaikuiskoulutus",
+                sisaltoTunniste: "sisalto",
+                hasPdfCreation: true
+            },
+            koulutustyyppi_12: {
+                nimi: "erikoisammattitutkinto",
+                oletusSuoritustapa: "naytto",
+                hasLaajuus: true,
+                hasTutkintonimikkeet: true,
+                state: "root.ammatillinenaikuiskoulutus",
+                sisaltoTunniste: "sisalto",
+                hasPdfCreation: true
+            },
+            koulutustyyppi_14: {
+                nimi: "aikuistenlukiokoulutus",
+                oletusSuoritustapa: "lukiokoulutus",
+                hasTutkintonimikkeet: false,
+                state: "root.lukio",
+                hasLaajuus: false,
+                sisaltoTunniste: "lukiosisalto",
+                hasPdfCreation: false
+            },
+            koulutustyyppi_15: {
+                nimi: "esiopetus",
+                oletusSuoritustapa: "esiopetus",
+                hasTutkintonimikkeet: false,
+                state: "root.esiopetus",
+                sisaltoTunniste: "eosisalto",
+                hasLaajuus: false,
+                hasPdfCreation: false
+            },
+            koulutustyyppi_16: {
+                nimi: "perusopetus",
+                oletusSuoritustapa: "perusopetus",
+                hasTutkintonimikkeet: false,
+                state: "root.perusopetus",
+                hasLaajuus: false,
+                sisaltoTunniste: "posisalto",
+                hasPdfCreation: false
+            },
+            koulutustyyppi_17: {
+                nimi: "aikuistenperusopetus",
+                oletusSuoritustapa: "aipe",
+                hasTutkintonimikkeet: false,
+                state: "root.aikuisperusopetus",
+                sisaltoTunniste: "aipesisalto",
+                hasLaajuus: false,
+                hasPdfCreation: true
+            },
+            koulutustyyppi_18: {
+                nimi: "velma",
+                hasLaajuus: true,
+                oletusSuoritustapa: "ops",
+                hasTutkintonimikkeet: true,
+                state: "root.ammatillinenaikuiskoulutus",
+                sisaltoTunniste: "sisalto",
+                hasPdfCreation: true
+            },
+            koulutustyyppi_20: {
+                nimi: "varhaiskasvatus",
+                oletusSuoritustapa: "varhaiskasvatus",
+                hasTutkintonimikkeet: false,
+                state: "root.varhaiskasvatus",
+                hasLaajuus: false,
+                sisaltoTunniste: "vksisalto",
+                hasPdfCreation: false
+            },
+            koulutustyyppi_22: {
+                nimi: "perusopetusvalmistava",
+                oletusSuoritustapa: "esiopetus",
+                hasTutkintonimikkeet: false,
+                state: "root.perusvalmistava",
+                hasLaajuus: false,
+                sisaltoTunniste: "eosisalto",
+                hasPdfCreation: false
+            },
+            koulutustyyppi_23: {
+                nimi: "lukiovalmistavakoulutus",
+                oletusSuoritustapa: "lukiokoulutus",
+                hasTutkintonimikkeet: false,
+                state: "root.lukio",
+                hasLaajuus: false,
+                sisaltoTunniste: "lukiosisalto",
+                hasPdfCreation: false
+            },
+            koulutustyyppi_999907: {
+                nimi: "tpo",
+                oletusSuoritustapa: "tpo",
+                hasTutkintonimikkeet: false,
+                hasLaajuus: false,
+                state: "root.tpo",
+                sisaltoTunniste: "tposisalto",
+                hasPdfCreation: true
+            }
+        };
+
+        function valitseSuoritustapa(peruste) {
+            if (_.isArray(peruste.suoritustavat) && !_.isEmpty(peruste.suoritustavat)) {
+                if (_.includes(peruste.suoritustavat, "reformi")) {
+                    return "reformi";
+                }
+                else if (_.includes(peruste.suoritustavat, "naytto")) {
+                    return "naytto";
+                }
+                else {
+                    return peruste.suoritustavat[0];
+                }
+            }
+            else if (_.isObject(PerusteDefaults[peruste.koulutustyyppi])) {
+                return PerusteDefaults[peruste.koulutustyyppi].oletusSuoritustapa;
+            }
+        }
+
+        function rakennaEsityslinkki(peruste) {
+            const suoritustapa = valitseSuoritustapa(peruste);
+            return $state.href(PerusteDefaults[peruste.koulutustyyppi].state, {
+                perusteId: peruste.id,
+                suoritustapa
+            });
+        }
+
         return {
             hae: hae,
             //haeByPerusteprojekti: haeByPerusteprojekti,
@@ -219,6 +400,9 @@ angular
             puustaLoytyy: puustaLoytyy,
             tallennaRakenne: tallennaRakenne,
             tallennaTutkinnonosat: tallennaTutkinnonosat,
-            validoiRakennetta: validoiRakennetta
+            validoiRakennetta: validoiRakennetta,
+            isAmmatillinen,
+            valitseSuoritustapa,
+            rakennaEsityslinkki,
         };
     });

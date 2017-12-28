@@ -8,9 +8,29 @@ mixin opslaatikko()
   .ops-border
     .ops-content.ops-voimassaolevat
       .ops-nimi
-        a.tnimike-otsikko(ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
+        a.tnimike-otsikko(ng-if="ops.$$href" ng-href="{{ ops.$$href }}" ng-bind="ops.nimi | kaanna")
+        a.tnimike-otsikko(ng-if="!ops.$$href" ui-sref="root.amops({ opsId: ops.id })" ng-bind="ops.nimi | kaanna")
       .ops-toimija
         span.tnimike-otsikko(ng-bind="ops.koulutustoimija.nimi | kaanna")
+      .ops-toteuttajat(ng-if="!isAmmatillinen")
+        // div(ng-show="ops.$$kunnat.length > 0")
+          span.ops-toteuttaja-otsikko
+            ="{{ 'kunnat' | kaanna }}:"
+          span.ops-toteuttaja-nimi(ng-repeat="toteuttaja in ops.$$kunnat" kaanna="toteuttaja.nimi")
+        div(ng-show="ops.$$organisaatiot.length > 0")
+          span.ops-toteuttaja-otsikko
+            ="{{ 'organisaatiot' | kaanna }}:"
+          span(ng-repeat="toteuttaja in ops.$$organisaatiot")
+            span.ops-toteuttaja-nimi(kaanna="toteuttaja.nimi")
+            span(style="margin-right: 4px" ng-show="!$last")
+              =", "
+        div(ng-show="ops.$$oppilaitokset.length > 0")
+          span.ops-toteuttaja-otsikko
+            ="{{ 'oppilaitokset' | kaanna }}:"
+          span.ops-toteuttaja-nimi(ng-repeat="toteuttaja in ops.$$oppilaitokset")
+            span.ops-toteuttaja-nimi(kaanna="toteuttaja.nimi")
+            span(style="margin-right: 4px" ng-show="!$last")
+              =", "
       // .ops-tutkintonimikkeet
         span.tnimike-otsikko(ng-bind="'tutkintonimikkeet' | kaanna")
         span(ng-show="ops.tutkintonimikkeet.length > 0")
@@ -30,8 +50,10 @@ mixin opslistaus()
   h3
     span(ng-bind="'paikalliset-opetussuunnitelmat' | kaanna")
     =" "
-    span(style="margin-left: 4px")
-      small-spinner(ng-show="isLoading")
+    span(style="margin-left: 4px" ng-if="isLoading")
+      small-spinner()
+    span(ng-show="kokonaismaara > 0")
+      ="({{ kokonaismaara }})"
   +haku
   div(ng-show="!isLoading && opetussuunnitelmat.length === 0" style="margin-top: 8px")
     .alert.alert-info

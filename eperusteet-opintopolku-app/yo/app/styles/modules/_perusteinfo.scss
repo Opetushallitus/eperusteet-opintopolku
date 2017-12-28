@@ -126,6 +126,15 @@ $border-color: #e6e7e8;
                     }
                     .ops-nimi {
                     }
+                    .ops-toteuttajat {
+                        margin-top: 4px;
+                        .ops-toteuttaja-otsikko {
+                            margin-right: 4px;
+                            font-weight: bold;
+                        }
+                        .ops-toteuttaja-nimi {
+                        }
+                    }
                     .ops-kuvaus {
                         margin-top: 4px;
                         margin-bottom: 0px;
