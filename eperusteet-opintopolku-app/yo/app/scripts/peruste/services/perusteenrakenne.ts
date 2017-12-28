@@ -364,14 +364,15 @@ angular
 
         function valitseSuoritustapa(peruste) {
             if (_.isArray(peruste.suoritustavat) && !_.isEmpty(peruste.suoritustavat)) {
-                if (_.includes(peruste.suoritustavat, "reformi")) {
+                const koodit = _.map(peruste.suoritustavat, "suoritustapakoodi");
+                if (_.includes(koodit, "reformi")) {
                     return "reformi";
                 }
-                else if (_.includes(peruste.suoritustavat, "naytto")) {
+                else if (_.includes(koodit, "naytto")) {
                     return "naytto";
                 }
                 else {
-                    return peruste.suoritustavat[0];
+                    return koodit[0];
                 }
             }
             else if (_.isObject(PerusteDefaults[peruste.koulutustyyppi])) {
@@ -381,7 +382,10 @@ angular
 
         function rakennaEsityslinkki(peruste) {
             const suoritustapa = valitseSuoritustapa(peruste);
-            return $state.href(PerusteDefaults[peruste.koulutustyyppi].state, {
+            const statename = isAmmatillinen(peruste.koulutustyyppi)
+                ? "root.esitys.peruste"
+                : PerusteDefaults[peruste.koulutustyyppi].state
+            return $state.href(statename, {
                 perusteId: peruste.id,
                 suoritustapa
             });
