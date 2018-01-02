@@ -31,14 +31,10 @@ div(ng-if="!isAmmatillinen" style="margin-top: 16px;")
               span(ng-repeat="osaamisala in peruste.osaamisalat")
                 span(ng-bind="osaamisala.nimi | kaanna")
                 span(ng-hide="$last" ng-bind="', '")
-        .peruste-linkki
-          .row
-            .col-md-10
-              h4
-                img(src="images/sm/ikoni-eperusteet.png")
-                span(ng-bind="peruste.nimi | kaanna")
-            .col-md-2
-              a.btn.btn-info(ng-href="{{ perusteUrl }}" ng-bind="'avaa' | kaanna")
+        .peruste-linkki.clearfix
+          img(src="images/sm/ikoni-eperusteet.png")
+          h4(ng-bind="peruste.nimi | kaanna")
+          a.btn.btn-info(ng-href="{{ perusteUrl }}" ng-bind="'avaa' | kaanna")
     .col-md-5
       .infolaatikko.uutislaatikko
         .otsikko

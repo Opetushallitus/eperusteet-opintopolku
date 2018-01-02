@@ -13,10 +13,6 @@ mixin opslaatikko()
       .ops-toimija
         span.tnimike-otsikko(ng-bind="ops.koulutustoimija.nimi | kaanna")
       .ops-toteuttajat(ng-if="!isAmmatillinen")
-        // div(ng-show="ops.$$kunnat.length > 0")
-          span.ops-toteuttaja-otsikko
-            ="{{ 'kunnat' | kaanna }}:"
-          span.ops-toteuttaja-nimi(ng-repeat="toteuttaja in ops.$$kunnat" kaanna="toteuttaja.nimi")
         div(ng-show="ops.$$organisaatiot.length > 0")
           span.ops-toteuttaja-otsikko
             ="{{ 'organisaatiot' | kaanna }}:"
@@ -31,11 +27,6 @@ mixin opslaatikko()
             span.ops-toteuttaja-nimi(kaanna="toteuttaja.nimi")
             span(style="margin-right: 4px" ng-show="!$last")
               =", "
-      // .ops-tutkintonimikkeet
-        span.tnimike-otsikko(ng-bind="'tutkintonimikkeet' | kaanna")
-        span(ng-show="ops.tutkintonimikkeet.length > 0")
-        span.tutkintonimike-bubble(ng-repeat="nimike in ops.tutkintonimikkeet")
-          span(ng-bind="nimike")
 
 
 mixin opslistaus()
