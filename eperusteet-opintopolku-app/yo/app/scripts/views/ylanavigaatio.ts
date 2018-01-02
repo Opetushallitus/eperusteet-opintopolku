@@ -66,7 +66,6 @@ angular
                         { perusteId: $stateParams.perusteId },
                         res => {
                             $scope.selectedKoulutustyyppi = res.koulutustyyppi;
-                            console.log($scope.selectedKoulutustyyppi);
                         },
                         err => {
                             console.error(err);
@@ -77,7 +76,6 @@ angular
                         { opsId: $stateParams.opsId },
                         res => {
                             $scope.selectedKoulutustyyppi = res.koulutustyyppi;
-                            console.log($scope.selectedKoulutustyyppi);
                         },
                         err => {
                             console.error(err);
@@ -96,7 +94,6 @@ angular
                     getKoulutustyyppi();
                 }
                 $scope.selectedPerusteId = $stateParams.perusteId;
-                console.log($stateParams);
             });
 
             $scope.isPerusopetus = () => {

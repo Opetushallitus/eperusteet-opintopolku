@@ -122,7 +122,6 @@ angular.module("app").config($stateProvider => {
         template: "<div ui-view></div>",
         resolve: {
             peruste(PerusteApi, $stateParams) {
-                console.log($stateParams);
                 return PerusteApi.one("perusteet", $stateParams.perusteId).get();
             },
 
