@@ -50,7 +50,7 @@ angular
                 if (el.attr("src") !== url) {
                     modified = true;
                     el.attr("src", OpsImageService.getUrl({ id: el.attr("data-uid") }));
-                    el.wrap("<a></a>");
+                    el.addClass("kuvalinkki-img");
                 }
             });
             if (modified) {
