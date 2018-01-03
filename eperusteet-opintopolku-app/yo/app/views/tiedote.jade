@@ -1,8 +1,8 @@
-h1.peruste-otsikko(kaanna="'tiedote'")
-murupolku
-.sisalto-box
-  h1(ng-bind-html='tiedote.otsikko | kaanna | unsafe')
-  .tiedote-tiedot
-    | {{tiedote.luotu | date:'d.M.yyyy H:mm'}}
-  .tiedote-leipateksti(ng-bind-html='tiedote.sisalto | kaanna | unsafe')
-
+.tiedote
+  h1.peruste-otsikko(kaanna="'tiedote'")
+  murupolku
+  .sisalto-box
+    h1(ng-bind-html='tiedote.otsikko | kaanna | unsafe')
+    .tiedote-tiedot
+      | {{tiedote.luotu | date:'d.M.yyyy H:mm'}}
+    .tiedote-leipateksti(ng-bind-html='tiedote.sisalto | kaanna | unsafe')

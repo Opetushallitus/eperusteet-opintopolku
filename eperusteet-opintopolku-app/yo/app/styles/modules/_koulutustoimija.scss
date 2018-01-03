@@ -162,11 +162,16 @@ $border-color: #e6e7e8;
 
             .ops-border {
                 border: 1px solid $border-color;
-                padding: 0px;
-                margin: 0px;
+                padding: 0;
+                margin: 0;
+
+                @media (max-width: $screen-sm-max) {
+                    border-left-width: 0;
+                    border-right-width: 0;
+                }
 
                 .ops-content {
-                    border: 0px;
+                    border: 0;
                     padding: 18px;
 
                     .ops-toimija {
@@ -193,19 +198,19 @@ $border-color: #e6e7e8;
                     }
                 }
                 .ops-yleinen {
-                    border-left: 6px solid #99d840;
+                    border-left: 4px solid #99d840;
                 }
                 .ops-tulevat {
-                    border-left: 6px solid #99d840;
+                    border-left: 4px solid #99d840;
                 }
                 .ops-voimassaolevat {
-                    border-left: 6px solid #149fcb;
+                    border-left: 4px solid #149fcb;
                 }
                 .ops-siirtymassa {
-                    border-left: 6px solid #ffba00;
+                    border-left: 4px solid #ffba00;
                 }
                 .ops-poistuneet {
-                    border-left: 6px solid #ff7c8a;
+                    border-left: 4px solid #ff7c8a;
                 }
             }
         }

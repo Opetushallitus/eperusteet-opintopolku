@@ -1,10 +1,11 @@
-h1.peruste-otsikko(kaanna="'etusivu.uutisia'")
-.sisalto-box.uutiset
-  ul
-    li.lista-elementti(ng-repeat='tiedote in tiedotteet | limitTo:naytto.shown', ng-if='hasContentOnCurrentLang(tiedote.otsikko)')
-      a(ui-sref='root.tiedote({tiedoteId: tiedote.id})')
-        span(ng-bind='tiedote.otsikko | kaanna')
-      p
-        span {{tiedote.luotu || tiedote.luotu | date}}
-    li.lista-elementti-lisaa
-      limit-toggler(limit='naytto.limit', model='tiedotteet', limiter='naytto.shown')
+.uutiset
+  h1.peruste-otsikko(kaanna="'etusivu.uutisia'")
+  .sisalto-box
+    ul
+      li.lista-elementti(ng-repeat='tiedote in tiedotteet | limitTo:naytto.shown', ng-if='hasContentOnCurrentLang(tiedote.otsikko)')
+        a(ui-sref='root.tiedote({tiedoteId: tiedote.id})')
+          span(ng-bind='tiedote.otsikko | kaanna')
+        p
+          span {{tiedote.luotu || tiedote.luotu | date}}
+      li.lista-elementti-lisaa
+        limit-toggler(limit='naytto.limit', model='tiedotteet', limiter='naytto.shown')

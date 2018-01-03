@@ -1,7 +1,19 @@
-.tiedote-tiedot {
-    color: #777;
+.tiedote {
+    .tiedote-tiedot {
+        color: #777;
+    }
+    .tiedote-leipateksti {
+        margin-top: 20px;
+        margin-bottom: 40px;
+    }
+    ul {
+        padding: 0;
+    }
 }
-.tiedote-leipateksti {
-    margin-top: 20px;
-    margin-bottom: 40px;
+
+.uutiset {
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
 }

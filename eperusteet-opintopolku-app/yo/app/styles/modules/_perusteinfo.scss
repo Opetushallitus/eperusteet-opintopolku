@@ -101,13 +101,32 @@ $border-color: #e6e7e8;
     margin-top: 8px;
     margin-bottom: 8px;
 
-    input[type="text"] {
+    .haku-box {
         background-color: #ffffff;
-        border-radius: 2px;
         border: 1px solid #e8e8e9;
-        box-shadow: none;
-        display: inline-block;
         width: 100%;
+        display: inline-block;
+        border-radius: 2px;
+        margin-bottom: 10px;
+
+        @media (max-width: $screen-sm-max) {
+            border-left: none;
+            border-right: none;
+            border-radius: 0;
+        }
+
+        input[type="text"] {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+            outline: none;
+            width: 100%;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-left: 0;
+            margin-right: 0;
+        }
     }
 
     .opslistaus {
@@ -121,6 +140,11 @@ $border-color: #e6e7e8;
                 border: 1px solid $border-color;
                 margin: 0;
                 padding: 0;
+
+                @media (max-width: $screen-sm-max) {
+                    border-left-width: 0;
+                    border-right-width: 0;
+                }
 
                 .ops-content {
                     padding: 18px;
@@ -160,16 +184,16 @@ $border-color: #e6e7e8;
                     }
                 }
                 .ops-tulevat {
-                    border-left: 6px solid #99d840;
+                    border-left: 4px solid #99d840;
                 }
                 .ops-voimassaolevat {
-                    border-left: 6px solid #149fcb;
+                    border-left: 4px solid #149fcb;
                 }
                 .ops-siirtymassa {
-                    border-left: 6px solid #ffba00;
+                    border-left: 4px solid #ffba00;
                 }
                 .ops-poistuneet {
-                    border-left: 6px solid #ff7c8a;
+                    border-left: 4px solid #ff7c8a;
                 }
             }
         }
