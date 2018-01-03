@@ -310,7 +310,7 @@ angular
                 nimi: "aikuistenperusopetus",
                 oletusSuoritustapa: "aipe",
                 hasTutkintonimikkeet: false,
-                state: "root.aikuisperusopetus",
+                state: "root.aipe",
                 sisaltoTunniste: "aipesisalto",
                 hasLaajuus: false,
                 hasPdfCreation: true
@@ -384,7 +384,7 @@ angular
             const suoritustapa = valitseSuoritustapa(peruste);
             const statename = isAmmatillinen(peruste.koulutustyyppi)
                 ? "root.esitys.peruste"
-                : PerusteDefaults[peruste.koulutustyyppi].state
+                : PerusteDefaults[peruste.koulutustyyppi].state;
             return $state.href(statename, {
                 perusteId: peruste.id,
                 suoritustapa
