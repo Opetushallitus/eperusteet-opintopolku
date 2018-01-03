@@ -12,13 +12,11 @@ angular
             UusimmatPerusteetService,
             Haku,
             $stateParams,
-            Kaanna,
             VirheService,
             YleinenData,
             OpsResource
         ) => {
             $scope.kieli = Kieli.getUiKieli();
-            $scope.nykyinenTila = $state;
             $scope.navCollapsed = true;
             $scope.state = $state;
 
@@ -108,6 +106,7 @@ angular
                 }
             };
 
+            // Todo: voisiko tehdä yksinkertaisemmin?
             $scope.isAmmatillinen = function() {
                 if ($state.includes("root.amops.**")) {
                     return true;
@@ -139,43 +138,11 @@ angular
                 }
             };
 
-            // Tiloja vastaavat lokalisointiavaimet
-            $scope.valittuOsio = function() {
-                if ($state.includes("root.etusivu.**")) {
-                    return "navi.etusivu";
-                } else if ($state.includes("root.esiopetus.**")) {
-                    return "navi.esiopetus";
-                } else if ($state.includes("root.tpo.**")) {
-                    return "navi.tpo";
-                } else if ($state.includes("root.perusopetus.**")) {
-                    return "navi.perusopetus";
-                } else if ($state.includes("root.varhaiskasvatus.**")) {
-                    return "navi.varhaiskasvatus";
-                } else if ($state.includes("root.perusvalmistava.**")) {
-                    return "navi.perusvalmistava";
-                } else if ($state.includes("root.lisaopetus.**")) {
-                    return "navi.lisaopetus";
-                } else if ($state.includes("root.lukio.**")) {
-                    return "navi.lukio";
-                } else if ($state.includes("root.tiedote.**")) {
-                    return "navi.tiedote";
-                } else if ($state.includes("root.esitys.peruste.**")) {
-                    return "navi.peruste";
-                } else if ($state.includes("root.lukio.**")) {
-                    return "navi.lukio";
-                } else {
-                    return "";
-                }
-            };
-
-            $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
-
             $scope.vaihdaKieli = async uusiKieli => {
                 if (uusiKieli !== Kieli.getUiKieli()) {
                     await Kieli.setUiKieli(uusiKieli);
                     Kieli.setSisaltokieli(uusiKieli);
                     $scope.kieli = uusiKieli;
-                    $scope.valittuOsioNimi = Kaanna.kaanna($scope.valittuOsio());
 
                     $state.go($state.current.name, _.merge($stateParams, { lang: uusiKieli }), {});
                 }
