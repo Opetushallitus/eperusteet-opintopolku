@@ -157,4 +157,8 @@ mixin haku()
                   td(pvm="korvaava.voimassaoloAlkaa")
 
   .text-center(ng-show="kokonaismaara > hakuparametrit.sivukoko")
-    ul(uib-pagination ng-model='nykyinenSivu', ng-change='pageChanged()', total-items='kokonaismaara', items-per-page='hakuparametrit.sivukoko')
+    ul(uib-pagination
+       ng-model='nykyinenSivu'
+       ng-change='pageChanged()'
+       total-items='kokonaismaara'
+       items-per-page='hakuparametrit.sivukoko')
