@@ -63,9 +63,6 @@
 
     .voimassa {
         border-left-color: #149fcb;
-        @media (max-width: $screen-sm-max) {
-            border-top: #149fcb;
-        }
     }
     .siirtyma {
         border-left-color: #ffba00;
@@ -96,7 +93,7 @@
         margin-bottom: 10px;
 
         @media (max-width: $screen-sm-max) {
-            border-right: none;
+            border-left: none;
             border-right: none;
             border-radius: 0;
         }
@@ -108,10 +105,10 @@
             border-radius: 0;
             outline: none;
             width: 100%;
-            padding-left: 0;
-            padding-right: 0;
-            margin-left: 10px;
-            margin-right: 10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-left: 0;
+            margin-right: 0;
         }
 
         .color-box {
