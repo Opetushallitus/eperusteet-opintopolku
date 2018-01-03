@@ -9,7 +9,7 @@ $dark-color: #555;
 $border-color: #e6e7e8;
 
 .koulutustoimija {
-    margin-top: 0px;
+    margin-top: 0;
 
     .opslaatikko {
         margin-top: 4px;
@@ -24,7 +24,7 @@ $border-color: #e6e7e8;
 
         .ops-linkki {
             margin: 12px;
-            padding: 0px 12px 0px 12px;
+            padding: 0 12px 0 12px;
             background: #ffffff;
             border-radius: 4px;
             border: 1px solid $light-color;
@@ -73,7 +73,7 @@ $border-color: #e6e7e8;
     }
 
     .uutislaatikko {
-        margin: 0px;
+        margin: 0;
         margin-top: 4px;
 
         .ei-tiedotteita {
@@ -106,6 +106,13 @@ $border-color: #e6e7e8;
             }
         }
     }
+
+    @media (max-width: $screen-sm-max) {
+        .infolaatikko, .opslaatikko {
+            border-left-width: 0;
+            border-right-width: 0;
+        }
+    }
 }
 
 .omat-opetussuunnitelmat {
@@ -114,13 +121,13 @@ $border-color: #e6e7e8;
 
     .opshaku {
         input {
-            border-bottom-left-radius: 0px;
-            border-bottom-right-radius: 0px;
-            margin-bottom: 0px;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            margin-bottom: 0;
         }
 
         .hakuvalinnat {
-            margin-top: 0px;
+            margin-top: 0;
             padding: 9px 8px 8px 12px;
             color: #666;
             font-size: smaller;
@@ -149,6 +156,21 @@ $border-color: #e6e7e8;
 
             .bubble-jaettu {
                 background: $jaettu-color;
+            }
+        }
+
+        @media (max-width: $screen-sm-max) {
+            input {
+                border-top-left-radius: 0;
+                border-top-right-radius: 0;
+                border-left-width: 0;
+                border-right-width: 0;
+            }
+
+            .hakuvalinnat {
+                border-radius: 0;
+                border-left-width: 0;
+                border-right-width: 0;
             }
         }
     }
@@ -189,11 +211,9 @@ $border-color: #e6e7e8;
                             background: $mid-color;
                             border-radius: 4px;
                             color: #fff;
-                            font-size: 12px;
                             margin: 4px;
                             margin-left: 6px;
                             padding: 3px;
-                            margin-top: 4px;
                         }
                     }
                 }
