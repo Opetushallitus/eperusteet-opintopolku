@@ -36,7 +36,10 @@
     "etsi-rakenteesta": "Etsi rakenteesta...",
     "etsi-sisallosta": "Rajaa sisältöä...",
     "etusivu.ammatilliset": "Ammatillinen koulutus",
-    "perusteluokitus-ammatillinenkoulutus": "Ammatillinen koulutus",
+    "tab-perusteet": "Ammatillinen koulutus",
+    "tab-koulutusvienti": "Koulutusvienti",
+    "tab-oppaat": "Ohjeet ja materiaalit",
+    "tab-jarjestajat": "Koulutuksen järjestäjät",
     "etusivu.eperusteet": "ePerusteet",
     "etusivu.eperusteet.kuvaus":
         "ePerusteet-palvelussa voit tutustua voimassa oleviin opetussuunnitelmien ja tutkintojen perusteisiin. Perusteita julkaistaan palvelussa vaiheittain.",
