@@ -95,6 +95,18 @@ $border-color: #e6e7e8;
             }
         }
     }
+
+    @media (max-width: $screen-sm-max) {
+        h3 {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .infolaatikko, .perustelaatikko {
+            border-left-width: 0;
+            border-right-width: 0;
+        }
+    }
 }
 
 .paikalliset {
