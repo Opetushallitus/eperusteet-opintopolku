@@ -156,6 +156,17 @@ hr {
     color: $brand-primary;
 }
 
+.kuvalinkki-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.pagination {
+    margin: 0;
+}
+
+
 @media (max-width: $screen-sm) {
     .table-responsive {
         border: none;
@@ -201,11 +212,4 @@ hr {
             max-width: 80vw;
         }
     }
-}
-
-img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-    cursor: pointer;
 }
