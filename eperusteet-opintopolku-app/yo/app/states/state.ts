@@ -7,7 +7,7 @@ angular.module("app").config($stateProvider =>
             serviceConfig: eperusteetConfig => eperusteetConfig.init(),
             configCheck: serviceConfig => {
                 if (_.isString(serviceConfig)) {
-                    console.error(serviceConfig);
+                    console.error("serviceConfig", serviceConfig);
                 }
             }
         },

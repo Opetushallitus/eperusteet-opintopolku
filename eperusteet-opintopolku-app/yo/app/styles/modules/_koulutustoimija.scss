@@ -144,6 +144,8 @@ $border-color: #e6e7e8;
                 border-radius: 4px;
                 cursor: pointer;
                 user-select: none;
+                display: inline-block;
+                white-space: nowrap;
 
                 i {
                     margin-right: 4px;
