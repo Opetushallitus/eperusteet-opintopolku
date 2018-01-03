@@ -1,7 +1,10 @@
 mixin haku()
-  input.form-control(type="text" placeholder="{{ 'hae-koulutustoimijoista' | kaanna }}"
-    ng-model-options="{ debounce: 300 }"
-    ng-model="haku" ng-change="hakuMuuttui(haku)")
+  .haku-box
+    input.form-control(type="text"
+                       placeholder="{{ 'hae-koulutustoimijoista' | kaanna }}"
+                       ng-model-options="{ debounce: 300 }"
+                       ng-model="haku"
+                       ng-change="hakuMuuttui(haku)")
 
 
 mixin opslaatikko()
@@ -17,7 +20,11 @@ mixin opslistaus()
     .opetussuunnitelma(ng-repeat="kt in koulutustoimijat")
       +opslaatikko()
     .text-center
-      ul(uib-pagination ng-model='sivu' ng-change="hakuMuuttui()" total-items='kokonaismaara' items-per-page='sivukoko')
+      ul(uib-pagination
+         ng-model='sivu'
+         ng-change="hakuMuuttui()"
+         total-items='kokonaismaara'
+         items-per-page='sivukoko')
 
 
 .paikalliset

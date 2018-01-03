@@ -1,4 +1,4 @@
-include ../../../../misc/mixins.jade
+include ../../../../misc/mixins.pug
 
 mixin haku()
   .opshaku
@@ -40,7 +40,11 @@ mixin opslistaus()
     .opetussuunnitelma(ng-repeat="ops in opetussuunnitelmat")
       +opslaatikko()
     .text-center
-      ul(uib-pagination ng-model='sivu' ng-change="hakuMuuttui()" total-items='kokonaismaara' items-per-page='sivukoko')
+      ul(uib-pagination
+         ng-model='sivu'
+         ng-change="hakuMuuttui()"
+         total-items='kokonaismaara'
+         items-per-page='sivukoko')
 
 
 mixin paikalliset()
