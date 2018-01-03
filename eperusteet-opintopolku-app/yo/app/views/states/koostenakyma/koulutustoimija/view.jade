@@ -100,5 +100,6 @@ mixin paikalliset()
             .uutinen-paivamaara(ng-bind="tiedote.luotu | aikaleima")
           .nayta-kaikki-uutiset(ng-show="tiedotteet.length > 5")
             a(href="" ng-bind="'nayta-kaikki-uutiset' | kaanna" ng-click="toggleTiedoteMaara()")
+          span(ng-show="tiedotteet.length == 0" kaanna="'ei-tiedotteita'")
 
   +paikalliset
