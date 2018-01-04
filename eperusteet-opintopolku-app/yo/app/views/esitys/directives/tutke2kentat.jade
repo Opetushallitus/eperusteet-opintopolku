@@ -26,7 +26,7 @@
         p.info-placeholder(ng-show='!alue.$editing && (!alue.osaamistavoitteet || alue.osaamistavoitteet.length === 0)', kaanna='') Ei osaamistavoitteita.
         div(ng-if='!alue.$editing', ng-repeat='pakollisuus in [true, false]')
           .panel.panel-default.panel-clean(ng-repeat='tavoite in getTavoitteet(alue, pakollisuus)', ng-class="{'kohde-edit': tavoite.$editing}")
-            div(ng-if='!tavoite.$editing')
+            div(ng-if='!tavoite.$editing && (tavoite.tavoitteet._id != null || tavoite.tunnustaminen._id != null)')
               .panel-heading
                 h3 {{pakollisuus && 'pakolliset-osaamistavoitteet' || 'valinnaiset-osaamistavoitteet' | kaanna}}, {{tavoite.laajuus}} {{ yksikko | kaanna }}
               .panel-body.non-collapsibles
