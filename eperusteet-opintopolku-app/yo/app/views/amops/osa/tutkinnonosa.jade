@@ -69,8 +69,6 @@
                 div(ng-if='!$$showArvioinnista')
                   p(termisto-viitteet='toteutus.arvioinnista.teksti', ng-bind-html='toteutus.arvioinnista.teksti| kaanna | kuvalinkit | unsafe')
 
-    hr(ng-show="osa.tosa.vapaat.length > 0")
-
     div(ng-repeat="vapaa in osa.tosa.vapaat")
       h3(termisto-viitteet='vapaa.nimi', ng-bind-html='vapaa.nimi | kaanna | unsafe')
       p(termisto-viitteet='vapaa.teksti', ng-bind-html='vapaa.teksti | kaanna | kuvalinkit | unsafe')
