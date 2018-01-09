@@ -196,13 +196,6 @@ $sivunavi-level-padding: 20px;
     width: $sivunavi-leveys;
 }
 
-.sivunavi-navigaatio {
-    text-transform: lowercase;
-    *::first-letter {
-        text-transform: uppercase;
-    }
-}
-
 .sivunavi-takaisin {
     a {
         font-size: 140%;
