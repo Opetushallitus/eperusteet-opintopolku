@@ -32,6 +32,9 @@ angular.module("app").service("TermistoService", function(PerusteTermistoCRUD, O
     };
     const mapResources = resrcs => {
         return _.map(resrcs, (resource: any) => {
+            if (resource.type === "OPS") {
+                CRUD.PERUSTE({ resourceId: resource.perusteenId }).$promise.then(res => cacheKasitteet(res));
+            }
             CRUD[resource.type]({ resourceId: resource.id }).$promise.then(res => cacheKasitteet(res));
         });
     };
