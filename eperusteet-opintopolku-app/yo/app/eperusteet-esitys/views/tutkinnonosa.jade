@@ -9,6 +9,14 @@
   div(ng-if='tutkinnonOsaViite.jarjestys')
     strong(kaanna="'tutkinnonosa-jarjestysnumero'")
     | : {{tutkinnonOsaViite.jarjestys}}
+  div.to-vapaat-tekstit(ng-show='tutkinnonOsa.vapaatTekstit.length > 0')
+    div(ng-repeat='vt in tutkinnonOsa.vapaatTekstit')
+      h3
+        a(href='', ng-click='vt.$$open = !vt.$$open')
+          span(ng-hide='vt.$$open', icon-role='chevron-right')
+          span(ng-show='vt.$$open', icon-role='chevron-down')
+          span(ng-bind-html='vt.nimi | kaanna')
+      div(uib-collapse='!vt.$$open', ng-bind-html='vt.teksti | kaanna')
   div(ng-if="tutkinnonOsa.tyyppi !== 'tutke2'", ng-repeat='k in fieldKeys | orderBy: fieldOrder')
     div(ng-if="k === 'arviointi'")
       div(ng-show='tutkinnonOsa.arviointi.arvioinninKohdealueet')
@@ -51,11 +59,3 @@
       div(ng-repeat='tavoite in osaalue.$groups.ungrouped', ng-include="'eperusteet-esitys/views/osaamistavoite.html'")
       div(ng-if='osaalue.valmaTelmaSisalto', ng-include="'eperusteet-esitys/views/valmatelma.html'")
   div(ng-if='tutkinnonOsa.valmaTelmaSisalto', ng-include="'eperusteet-esitys/views/valmatelma.html'")
-  .to-vapaat-tekstit(ng-show='tutkinnonOsa.vapaatTekstit.length > 0')
-    div(ng-repeat='vt in tutkinnonOsa.vapaatTekstit')
-      h3
-        a(href='', ng-click='vt.$$open = !vt.$$open')
-          span(ng-hide='vt.$$open', icon-role='chevron-right')
-          span(ng-show='vt.$$open', icon-role='chevron-down')
-          span(ng-bind-html='vt.nimi | kaanna')
-      div(uib-collapse='!vt.$$open', ng-bind-html='vt.teksti | kaanna')
