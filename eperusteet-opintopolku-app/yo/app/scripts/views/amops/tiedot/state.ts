@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular.module("app").config($stateProvider =>
     $stateProvider.state("root.amops.tiedot", {
         url: "/tiedot",

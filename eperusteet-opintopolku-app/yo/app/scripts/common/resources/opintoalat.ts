@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular.module("app").service("Opintoalat", function Opintoalat($resource, epResource) {
     var opintoalatResource = $resource(
         epResource.SERVICE + "/opintoalat/",

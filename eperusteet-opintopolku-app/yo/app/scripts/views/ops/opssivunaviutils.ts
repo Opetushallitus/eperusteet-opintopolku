@@ -14,7 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
 
 /* Sets sivunavi items active based on current state */
 angular

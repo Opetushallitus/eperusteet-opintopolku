@@ -14,10 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
-/* jshint -W074 */
-
 angular.module("app").service("Muodostumissaannot", function($uibModal) {
     var skratchpadHasContent = false;
     function osienLaajuudenSumma(rakenneOsat) {

@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 /**
  * Prepends a glyphicon to the element, see mapping in IconMapping.
  */

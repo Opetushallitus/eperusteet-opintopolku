@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular.module("app").service("YleinenData", function YleinenData($rootScope, Arviointiasteikot, Notifikaatiot) {
     this.rakenneRyhmaRoolit = ["määritelty", "määrittelemätön", "vieras"];
 

@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular
     .module("app")
     .service("MurupolkuData", function($rootScope, Kaanna, $timeout) {

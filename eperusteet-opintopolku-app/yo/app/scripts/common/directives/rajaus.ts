@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 /**
  * Rajaus
  * callback: optional, called on change
