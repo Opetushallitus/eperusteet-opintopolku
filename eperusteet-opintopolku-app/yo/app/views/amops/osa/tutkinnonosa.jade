@@ -5,7 +5,6 @@
       span.bubble(ng-class="{ 'active': !$$showToteutus }", kaanna="'sisalto'")
   .clearfix
   div(ng-if='$$showToteutus')
-
     div(ng-repeat="vapaa in osa.tosa.vapaat")
       h3(termisto-viitteet='vapaa.nimi', ng-bind-html='vapaa.nimi | kaanna | unsafe')
       p(termisto-viitteet='vapaa.teksti', ng-bind-html='vapaa.teksti | kaanna | kuvalinkit | unsafe')
