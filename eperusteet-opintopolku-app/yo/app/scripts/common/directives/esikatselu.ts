@@ -37,7 +37,7 @@ angular
                 "                <span ng-bind=\"($$avoin ? 'piilota-perusteen-teksti' : 'nayta-perusteen-teksti') | kaanna\"></span>" +
                 "            </a>" +
                 "        </div>" +
-                '        <div class="peruste-teksti" ng-show="$$avoin" ng-bind-html="pteksti | kaanna | kuvalinkit | unsafe"></div>' +
+                '        <div class="peruste-teksti" ng-show="$$avoin" termisto-viitteet="pteksti" peruste ng-bind-html="pteksti | kaanna | kuvalinkit | unsafe"></div>' +
                 "    </div>" +
                 '    <div class="esitys-paikallinen" ng-bind-html="teksti | kaanna | kuvalinkit | unsafe"></div>' +
                 "</div>",
