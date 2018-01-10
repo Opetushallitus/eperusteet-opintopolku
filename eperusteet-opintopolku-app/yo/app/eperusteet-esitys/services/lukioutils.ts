@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular.module("eperusteet.esitys").factory("epLukioUtils", function() {
     return {
         flattenNames: function(lapset) {

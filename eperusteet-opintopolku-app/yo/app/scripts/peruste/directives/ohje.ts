@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 /**
  * Ohje
  * Ikoni tooltipille ja siihen liittyvä kelluva ohjeteksti.

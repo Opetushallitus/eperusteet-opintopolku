@@ -14,8 +14,6 @@
 * European Union Public Licence for more details.
 */
 
-"use strict";
-
 angular
     .module("app")
     .factory("TutkinnonOsanKoodiUniqueResource", function($resource, SERVICE_LOC) {

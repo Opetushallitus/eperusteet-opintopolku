@@ -14,9 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-/* global moment */
-
 angular
     .module("app")
     .service("Kieli", function($rootScope, $state, $stateParams, $translate) {

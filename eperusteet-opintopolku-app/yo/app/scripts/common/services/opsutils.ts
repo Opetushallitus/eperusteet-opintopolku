@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular.module("app").factory("opsUtils", function(Algoritmit, $state, Kieli, Utils) {
     const sortVlk = vlk => {
         return _(vlk)

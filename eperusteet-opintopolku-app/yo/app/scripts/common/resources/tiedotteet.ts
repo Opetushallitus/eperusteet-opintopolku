@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular.module("app").factory("TiedotteetCRUD", function($resource, epResource) {
     return $resource(epResource.SERVICE + "/tiedotteet/:tiedoteId", {
         tiedoteId: "@id"

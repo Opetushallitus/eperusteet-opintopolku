@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 angular.module("app").service("Algoritmit", Kaanna => {
     function rajausVertailu(input, kentta) {
         kentta = arguments.length > 2 ? kentta[arguments[2]] : kentta;

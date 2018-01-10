@@ -14,8 +14,6 @@
  * European Union Public Licence for more details.
  */
 
-"use strict";
-
 /**
  * Esityspuolen moduuli. Yhteistä koodia eperusteet ja eperusteet-opintopolku
  * -projektien välillä.
