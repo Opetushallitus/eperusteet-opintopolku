@@ -164,7 +164,7 @@ module.exports = grunt => {
         hostname: '0.0.0.0'
       },
       proxies: [
-        proxies.eperusteet.local,
+        proxies.eperusteet.prod,
         proxies.ylops.prod,
         proxies.amosaa.prod
       ],

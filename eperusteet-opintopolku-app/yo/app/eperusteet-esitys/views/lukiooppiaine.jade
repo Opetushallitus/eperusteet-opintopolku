@@ -1,6 +1,8 @@
 div(ng-show="stateIs('root.lukio.oppiaine')")
   h1.oppiaine-nimi(esitys-sivu-otsikko='valittuOppiaine.oppiaine.nimi')
     span(ng-bind='valittuOppiaine.nimi | kaanna')
+    =" "
+    | ({{ valittuOppiaine.koodiArvo }})
   .clearfix
   .kurssi-list(ng-if='filterKurssit(kurssit,2).length')
     h2(ng-bind-html="'soveltavat-kurssit' | kaanna | unsafe")
