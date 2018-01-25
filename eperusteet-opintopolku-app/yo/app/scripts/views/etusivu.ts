@@ -109,16 +109,22 @@ angular
         };
 
         const getGeneric = key => {
+            const now = (new Date()).getTime();
             const params = paramMap[key];
+            const voimaantuloFilter = (p: any) => p.voimassaoloAlkaa
+                && p.voimassaoloAlkaa < now
+                && (!p.voimassaoloLoppuu || p.voimassaoloLoppuu > now);
             return Perusteet.get(params, res => {
                 const found = {};
-                perusteet[params.tyyppi] = _(res.data)
-                    .filter(p => { // FIXME: uniqBy
-                        const result = !found[p.id];
-                        found[p.id] = true;
-                        return result;
-                    })
+                const kaikki = _(res.data)
+                    .uniq("id")
+                    .sortBy("voimassaoloAlkaa")
+                    .reverse()
                     .value();
+                const voimassaOlevat = _.filter(kaikki, voimaantuloFilter);
+                perusteet[params.tyyppi] = _.isEmpty(voimassaOlevat)
+                    ? kaikki
+                    : voimassaOlevat;
             }).$promise;
         };
 
