@@ -32,12 +32,14 @@ angular.module("app").config($stateProvider => {
             const koulutustyypitLinkit = {
                 koulutustyyppi_15: "esiopetus",
                 koulutustyyppi_16: "perusopetus",
-                koulutustyyppi_20: "esiopetus",
-                koulutustyyppi_22: "perusopetus",
+                koulutustyyppi_17: "aipe",
+                koulutustyyppi_20: "varhaiskasvatus",
+                koulutustyyppi_22: "perusopetukseenvalmistava",
+                koulutustyyppi_14: "lukioopetus",
                 koulutustyyppi_23: "lukioopetus",
                 koulutustyyppi_2: "lukioopetus",
-                koulutustyyppi_6: "esiopetus",
-                koulutustyyppi_999907: "tpo"
+                koulutustyyppi_6: "lisaopetus",
+                koulutustyyppi_999907: "tpo",
             };
 
             const getKtLinkki = ops => $state.href("root.ops." + koulutustyypitLinkit[ops.koulutustyyppi] + ".tiedot", {
