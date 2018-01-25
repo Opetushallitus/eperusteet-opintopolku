@@ -42,7 +42,7 @@ namespace Controllers {
         };
 
         const getRootState = current => {
-            return current.replace(/\.(esiopetus|varhaiskasvatus|lisaopetus|aipe)(.*)/, ".$1");
+            return current.replace(/\.(esiopetus|perusopetukseenvalmistava|tpo|varhaiskasvatus|lisaopetus|aipe)(.*)/, ".$1");
         };
 
         TermistoService.setResource(ops, "OPS");
@@ -87,7 +87,12 @@ namespace Controllers {
         $scope.$on("$stateChangeSuccess", function() {
             if (
                 $state.current.name ===
-                ("root.ops.esiopetus" || "root.ops.varhaiskasvatus" || "root.ops.lisaopetus" || "root.ops.aipe")
+                ("root.ops.esiopetus"
+                    || "root.ops.varhaiskasvatus"
+                    || "root.ops.perusopetukseenvalmistava"
+                    || "root.ops.lisaopetus"
+                    || "root.ops.aipe"
+                    || "root.ops.tpo")
             ) {
                 $state.go(".tiedot", { location: "replace" });
             }

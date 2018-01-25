@@ -41,6 +41,22 @@ angular.module("app").config($stateProvider => {
                 }
             }
         })
+        .state("root.ops.tpo", {
+            url: "/tpo",
+            templateUrl: "views/ops/yksinkertainen.html",
+            controller: Controllers.OpsYksinkertainenController
+        })
+        .state("root.ops.tpo.tiedot", {
+            url: "/tiedot",
+            templateUrl: "views/ops/tiedot.html",
+            controller: Controllers.OpsYksinkertainenTiedotController
+        })
+        .state("root.ops.tpo.tekstikappale", {
+            url: "/tekstikappale/:tekstikappaleId",
+            templateUrl: "views/ops/tekstikappale.html",
+            controller: Controllers.OpsTekstikappaleController,
+            resolve: YksinkertaistenResolve
+        })
         .state("root.ops.esiopetus", {
             url: "/esiopetus",
             templateUrl: "views/ops/yksinkertainen.html",

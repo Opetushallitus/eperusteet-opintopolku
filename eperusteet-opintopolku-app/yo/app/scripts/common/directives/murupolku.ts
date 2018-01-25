@@ -301,6 +301,20 @@ angular
                 useData: "tekstikappaleNimi",
                 customParents: true
             },
+            "root.ops.tpo": {
+                useData: "opsNimi",
+                useId: "opsId"
+            },
+            "root.ops.tpo.tiedot": {
+                parent: "root.ops.tpo",
+                label: "opetussuunnitelman-tiedot"
+            },
+            "root.ops.tpo.tekstikappale": {
+                parent: "root.ops.tpo",
+                useId: "osanId",
+                useData: "tekstikappaleNimi",
+                customParents: true
+            },
             "root.ops.esiopetus": {
                 useData: "opsNimi",
                 useId: "opsId"
