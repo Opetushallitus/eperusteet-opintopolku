@@ -1,4 +1,19 @@
-angular.module("app").config($stateProvider =>
+angular.module("app").config($stateProvider => {
+    const YksinkertaistenResolve = {
+        viiteId: function(serviceConfig, $stateParams) {
+            return $stateParams.tekstikappaleId;
+        },
+            tekstikappaleWithChildren: function(opsResource, viiteId, opsId) {
+                return opsResource
+                    .getTekstikappaleWithChildren({
+                        opsId: opsId,
+                        viiteId: viiteId
+                    })
+                    .$promise.then(function(res) {
+                        return res;
+                    });
+            }
+    };
     $stateProvider
         .state("root.ops", {
             url: "/ops/:opsId",
@@ -40,21 +55,23 @@ angular.module("app").config($stateProvider =>
             url: "/tekstikappale/:tekstikappaleId",
             templateUrl: "views/ops/tekstikappale.html",
             controller: Controllers.OpsTekstikappaleController,
-            resolve: {
-                viiteId: function(serviceConfig, $stateParams) {
-                    return $stateParams.tekstikappaleId;
-                },
-                tekstikappaleWithChildren: function(opsResource, viiteId, opsId) {
-                    return opsResource
-                        .getTekstikappaleWithChildren({
-                            opsId: opsId,
-                            viiteId: viiteId
-                        })
-                        .$promise.then(function(res) {
-                            return res;
-                        });
-                }
-            }
+            resolve: YksinkertaistenResolve
+        })
+        .state("root.ops.perusopetukseenvalmistava", {
+            url: "/perusopetukseenvalmistava",
+            templateUrl: "views/ops/yksinkertainen.html",
+            controller: Controllers.OpsYksinkertainenController
+        })
+        .state("root.ops.perusopetukseenvalmistava.tiedot", {
+            url: "/tiedot",
+            templateUrl: "views/ops/tiedot.html",
+            controller: Controllers.OpsYksinkertainenTiedotController
+        })
+        .state("root.ops.perusopetukseenvalmistava.tekstikappale", {
+            url: "/tekstikappale/:tekstikappaleId",
+            templateUrl: "views/ops/tekstikappale.html",
+            controller: Controllers.OpsTekstikappaleController,
+            resolve: YksinkertaistenResolve
         })
         .state("root.ops.lisaopetus", {
             url: "/lisaopetus",
@@ -70,21 +87,7 @@ angular.module("app").config($stateProvider =>
             url: "/tekstikappale/:tekstikappaleId",
             templateUrl: "views/ops/tekstikappale.html",
             controller: Controllers.OpsTekstikappaleController,
-            resolve: {
-                viiteId: function(serviceConfig, $stateParams) {
-                    return $stateParams.tekstikappaleId;
-                },
-                tekstikappaleWithChildren: function(opsResource, viiteId, opsId) {
-                    return opsResource
-                        .getTekstikappaleWithChildren({
-                            opsId: opsId,
-                            viiteId: viiteId
-                        })
-                        .$promise.then(function(res) {
-                            return res;
-                        });
-                }
-            }
+            resolve: YksinkertaistenResolve
         })
         .state("root.ops.aipe", {
             url: "/aipe",
@@ -100,21 +103,7 @@ angular.module("app").config($stateProvider =>
             url: "/tekstikappale/:tekstikappaleId",
             templateUrl: "views/ops/tekstikappale.html",
             controller: Controllers.OpsTekstikappaleController,
-            resolve: {
-                viiteId: function(serviceConfig, $stateParams) {
-                    return $stateParams.tekstikappaleId;
-                },
-                tekstikappaleWithChildren: function(opsResource, viiteId, opsId) {
-                    return opsResource
-                        .getTekstikappaleWithChildren({
-                            opsId: opsId,
-                            viiteId: viiteId
-                        })
-                        .$promise.then(function(res) {
-                            return res;
-                        });
-                }
-            }
+            resolve: YksinkertaistenResolve
         })
         .state("root.ops.varhaiskasvatus", {
             url: "/varhaiskasvatus",
@@ -130,21 +119,7 @@ angular.module("app").config($stateProvider =>
             url: "/tekstikappale/:tekstikappaleId",
             templateUrl: "views/ops/tekstikappale.html",
             controller: Controllers.OpsTekstikappaleController,
-            resolve: {
-                viiteId: function(serviceConfig, $stateParams) {
-                    return $stateParams.tekstikappaleId;
-                },
-                tekstikappaleWithChildren: function(opsResource, viiteId, opsId) {
-                    return opsResource
-                        .getTekstikappaleWithChildren({
-                            opsId: opsId,
-                            viiteId: viiteId
-                        })
-                        .$promise.then(function(res) {
-                            return res;
-                        });
-                }
-            }
+            resolve: YksinkertaistenResolve
         })
         /* PERUSOPETUS OPS */
         .state("root.ops.perusopetus", {
@@ -461,4 +436,4 @@ angular.module("app").config($stateProvider =>
                 tavoitteet: (OpsLukioResource, opsId) => OpsLukioResource.getTavoitteet({ opsId }).$promise
             }
         })
-);
+});
