@@ -6,6 +6,10 @@
       h2(kaanna="'koodi'")
       p {{oppiaine.koodi.arvo}}
 
+    div(ng-if="hasContent(oppiaine.tehtava)")
+      h2(kaanna="oppiaine.tehtava.otsikko")
+      termisto-tekstikentta(tekstikentta="oppiaine.tehtava.teksti")
+
     div(ng-if="hasContent(oppiaine.tyotavat)")
       h2(kaanna="oppiaine.tyotavat.otsikko")
       termisto-tekstikentta(tekstikentta="oppiaine.tyotavat.teksti")
