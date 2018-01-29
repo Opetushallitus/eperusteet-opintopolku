@@ -18,6 +18,7 @@ angular
     .service("opsBase", function() {
         this.OPS = "/eperusteet-ylops-service/api/opetussuunnitelmat/:opsId";
         this.LUKIO_OPS = "/eperusteet-ylops-service/api/opetussuunnitelmat/lukio/:opsId";
+        this.AMOSAA_OPS = "/eperusteet-amosaa-service/api/koulutustoimijat/:ktId/opetussuunnitelmat/:opsId";
         this.CACHEDQUERY = { method: "GET", isArray: true, cache: true };
     })
     .factory("OpsResource", function($resource, opsBase) {
