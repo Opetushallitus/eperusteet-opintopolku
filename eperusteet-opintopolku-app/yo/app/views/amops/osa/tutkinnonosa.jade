@@ -6,8 +6,8 @@
   .clearfix
   div(ng-if='$$showToteutus')
     div(ng-repeat="vapaa in osa.tosa.vapaat")
-      h3(termisto-viitteet='vapaa.nimi', ng-bind-html='vapaa.nimi | kaanna | unsafe')
-      p(termisto-viitteet='vapaa.teksti', ng-bind-html='vapaa.teksti | kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+      h3(amosaa-termisto-viitteet='vapaa.nimi', kt="ktId", ng-bind-html='vapaa.nimi | kaanna | unsafe')
+      p(amosaa-termisto-viitteet='vapaa.teksti', kt="ktId", ng-bind-html='vapaa.teksti | kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
 
     .toteutukset
       div
@@ -22,13 +22,13 @@
                     span.glyphicon.glyphicon-chevron-down
                 label(kaanna="'osaamisen-osoittaminen'")
             div(ng-if='!$$showOsaamisenOsoittaminen')
-              p(termisto-viitteet='osa.tosa.osaamisenOsoittaminen', ng-bind-html='osa.tosa.osaamisenOsoittaminen| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+              p(amosaa-termisto-viitteet='osa.tosa.osaamisenOsoittaminen', kt="ktId", ng-bind-html='osa.tosa.osaamisenOsoittaminen| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
         div(ng-hide='osa.tosa.toteutukset.length > 0')
           .alert.alert-info
             span(ng-bind="'tutkinnon-osalle-ei-maaritelty-paikallisia-toteutuksia' | kaanna")
         .toteutus-esitys(ng-repeat='toteutus in osa.tosa.toteutukset')
           div
-            h3(termisto-viitteet='toteutus.otsikko', ng-bind-html='toteutus.otsikko| kaanna | unsafe')
+            h3(amosaa-termisto-viitteet='toteutus.otsikko', kt="ktId", ng-bind-html='toteutus.otsikko| kaanna | unsafe')
             .sisalto(ng-if='toteutus.$$nayta')
               div(ng-show='toteutus.koodit.length > 0')
                 .content-toggler(style='margin-top: 16px')
@@ -60,7 +60,7 @@
                         span.glyphicon.glyphicon-chevron-down
                     label(kaanna="'tavat-ja-ymparisto'")
                 div(ng-if='!$$showTavatjaymparisto')
-                  p(termisto-viitteet='toteutus.tavatjaymparisto.teksti', ng-bind-html='toteutus.tavatjaymparisto.teksti | kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+                  p(amosaa-termisto-viitteet='toteutus.tavatjaymparisto.teksti', kt="ktId", ng-bind-html='toteutus.tavatjaymparisto.teksti | kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
               .content-toggler(style='margin-top: 16px')
                 .content-toggler-header(ng-click='$$showArvioinnista = !$$showArvioinnista')
                   span.ct-otsikko
@@ -71,7 +71,7 @@
                         span.glyphicon.glyphicon-chevron-down
                     label(kaanna="'osaamisen-arvioinnista'")
                 div(ng-if='!$$showArvioinnista')
-                  p(termisto-viitteet='toteutus.arvioinnista.teksti', ng-bind-html='toteutus.arvioinnista.teksti | kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+                  p(amosaa-termisto-viitteet='toteutus.arvioinnista.teksti', kt="ktId", ng-bind-html='toteutus.arvioinnista.teksti | kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
 
   div(ng-if='!$$showToteutus')
     div(ng-if='pTosa')
@@ -90,7 +90,7 @@
           span(kaanna="'viimeksi-muokattu'")
         .col-xs-10
           span(ng-bind='pTosa.muokattu | aikaleima')
-      p(termisto-viitteet='pTosa.kuvaus', ng-bind-html='pTosa.kuvaus| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+      p(amosaa-termisto-viitteet='pTosa.kuvaus', kt="ktId", ng-bind-html='pTosa.kuvaus| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
       div(ng-if="pTosa.tyyppi === 'tutke2'")
         .tutke2osa
           .valitsin
@@ -115,7 +115,7 @@
                         span.glyphicon.glyphicon-chevron-down
                     label(kaanna="'osaamistavoitteet'")
                 div(ng-if='!$$showOsaamistavoitteet')
-                  p(termisto-viitteet='osaamistavoite.tavoitteet', ng-bind-html='osaamistavoite.tavoitteet| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+                  p(amosaa-termisto-viitteet='osaamistavoite.tavoitteet', kt="ktId", ng-bind-html='osaamistavoite.tavoitteet| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
               div(ng-repeat='arvioinninKohdealue in osaamistavoite.arviointi.arvioinninKohdealueet')
                 .box-panel
                   .box-panel-title
@@ -137,7 +137,7 @@
                                   td
                                     ul
                                       li(ng-bind='kriteeri | kaanna', ng-repeat="kriteeri in (arviointiKohde.osaamistasonKriteerit | orderBy:'-_osaamistaso')[index].kriteerit")
-              p(termisto-viitteet='osaamistavoite.tunnustaminen', ng-bind-html='osaamistavoite.tunnustaminen| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+              p(amosaa-termisto-viitteet='osaamistavoite.tunnustaminen', kt="ktId", ng-bind-html='osaamistavoite.tunnustaminen| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
       div(ng-if="pTosa.tyyppi !== 'tutke2'")
         .content-toggler(style='margin-top: 16px')
           .content-toggler-header(ng-click='pTosa.$$showAmVaatimukset = !pTosa.$$showAmVaatimukset')
@@ -149,7 +149,7 @@
                   span.glyphicon.glyphicon-chevron-down
               label(kaanna="'ammattitaitovaatimukset'")
           div(ng-if='!pTosa.$$showAmVaatimukset')
-            p(termisto-viitteet='pTosa.ammattitaitovaatimukset', ng-bind-html='pTosa.ammattitaitovaatimukset| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+            p(amosaa-termisto-viitteet='pTosa.ammattitaitovaatimukset', kt="ktId", ng-bind-html='pTosa.ammattitaitovaatimukset| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
         .content-toggler(style='margin-top: 16px')
           .content-toggler-header(ng-click='$$showArviointi = !$$showArviointi')
             span.ct-otsikko
@@ -192,7 +192,7 @@
                   span.glyphicon.glyphicon-chevron-down
               label(kaanna="'ammattitaidon-osoittamistavat'")
           div(ng-if='!pTosa.$$showAmOsoittamiset')
-            p(termisto-viitteet='pTosa.ammattitaidonOsoittamistavat', ng-bind-html='pTosa.ammattitaidonOsoittamistavat| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+            p(amosaa-termisto-viitteet='pTosa.ammattitaidonOsoittamistavat', kt="ktId", ng-bind-html='pTosa.ammattitaidonOsoittamistavat| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
     div(ng-if='!pTosa')
       div
         .content-toggler(style='margin-top: 16px')
@@ -205,7 +205,7 @@
                   span.glyphicon.glyphicon-chevron-down
               label(kaanna="'tavoitteet'")
           div(ng-if='!$$showTavoitteet')
-            p(termisto-viitteet='osa.tosa.omatutkinnonosa.tavoitteet', ng-bind-html='osa.tosa.omatutkinnonosa.tavoitteet| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+            p(amosaa-termisto-viitteet='osa.tosa.omatutkinnonosa.tavoitteet', kt="ktId", ng-bind-html='osa.tosa.omatutkinnonosa.tavoitteet| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
         .content-toggler(style='margin-top: 16px')
           .content-toggler-header(ng-click='$$showAmmattitaitovaatimukset = !$$showAmmattitaitovaatimukset')
             span.ct-otsikko
@@ -277,4 +277,4 @@
                   span.glyphicon.glyphicon-chevron-down
               label(kaanna="'ammattitaidon-osoittamistavat'")
           div(ng-if='!$$showAmmattitaidonOsoittamistavat')
-            p(termisto-viitteet='osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat', ng-bind-html='osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
+            p(amosaa-termisto-viitteet='osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat', kt="ktId", ng-bind-html='osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')

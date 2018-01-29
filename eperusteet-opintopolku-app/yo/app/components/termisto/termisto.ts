@@ -25,7 +25,7 @@ angular
             },
             transclude: true,
             template:
-                '<div amosaa-termisto-viitteet="teksti" kt="ktId" ng-bind-html="teksti | kaanna | kuvalinkit | unsafe"></div>'
+                '<div amosaa-termisto-viitteet="teksti" kt="ktId" ng-bind-html="teksti | kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe"></div>'
         };
     })
     .directive("amosaaTermistoViitteet", ($stateParams, $document, $timeout) => {
@@ -51,16 +51,15 @@ angular
 
                 function setup() {
                     element.find(TERMI_MATCHER).each(function() {
-                        var jqEl: any = angular.element(this);
-                        var viiteId: any = jqEl.attr("data-viite");
+                        const jqEl: any = angular.element(this);
+                        const viiteId: any = jqEl.attr("data-viite");
                         TermistoData.getByAvain(viiteId, scope.ktId).then(res => {
-                            var popover = jqEl.popover({
+                            const popover = jqEl.popover({
                                 placement: "auto",
                                 html: true,
                                 title: KaannaService.kaanna("termin-selitys"),
                                 trigger: "click"
                             });
-
                             popover.on("show.bs.popover", () => {
                                 var content = res
                                     ? KaannaService.kaanna(res.selitys)
@@ -74,36 +73,44 @@ angular
                                         po.popover("hide");
                                     }
                                 });
-                                var thisPopover = popover.next(".popover");
-                                var title = thisPopover.find(".popover-title");
-                                var closer = angular.element('<span class="closer pull-right">&#x2715;</span>');
-                                title.append(closer);
-                                closer.on("click", function() {
-                                    popover.popover("hide");
-                                });
-                                scope.popovers.push(popover);
+                                $timeout(function() {
+                                    const thisPopover = popover.next(".popover");
+                                    const title = thisPopover.find(".popover-title");
+                                    const closer = angular.element('<span class="closer pull-right">&#x2715;</span>');
+                                    title.append(closer);
+                                    closer.on("click", function() {
+                                        popover.popover("hide");
+                                    });
+                                }, 100);
                             });
-                        });
+                            scope.popovers.push(popover);
+                        }).catch(err => console.error(err));
+                    });
+                }
+
+                function clickHandler(event) {
+                    if (element.find(event.target).length > 0) {
+                        return;
+                    }
+                    _.each(scope.popovers, function(popover) {
+                        popover.popover("hide");
                     });
                 }
 
                 // Click anywhere to close
-                $document.on("click", event => {
-                    if (element.find(event.target).length > 0) {
-                        return;
-                    }
-                    _.each(scope.popovers, popover => {
-                        popover.popover("hide");
-                    });
-                });
+                $document.on("click", clickHandler);
 
-                $timeout(function() {
-                    destroy();
-                    setup();
-                }, 500);
+                function refresh() {
+                    $timeout(function() {
+                        destroy();
+                        setup();
+                    }, 500);
+                }
 
+                scope.$watch("model", refresh);
+                scope.$on("termisto:update", refresh);
                 scope.$on("$destroy", function() {
-                    $document.off("click");
+                    $document.off("click", clickHandler);
                     destroy();
                 });
             }
