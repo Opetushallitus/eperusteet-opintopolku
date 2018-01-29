@@ -27,9 +27,9 @@
       div(ng-if='ngModel.kuvaus || (misc.spRivit[ngModel.tunniste] && misc.spRivit[ngModel.tunniste].kuvaus)')
         div(ng-show='ngModel.$$naytaKuvaus')
           .sp-kuvaus-peruste(ng-if='ngModel.kuvaus')
-            p(termisto-viitteet='ngModel.kuvaus', ng-bind-html='ngModel.kuvaus| kaanna | kuvalinkit | unsafe')
+            p(termisto-viitteet='ngModel.kuvaus', ng-bind-html='ngModel.kuvaus| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
           .sp-kuvaus-oma(ng-if='misc.spRivit[ngModel.tunniste] && misc.spRivit[ngModel.tunniste].kuvaus')
-            p(termisto-viitteet='misc.spRivit[ngModel.tunniste].kuvaus', ng-bind-html='misc.spRivit[ngModel.tunniste].kuvaus| kaanna | kuvalinkit | unsafe')
+            p(termisto-viitteet='misc.spRivit[ngModel.tunniste].kuvaus', ng-bind-html='misc.spRivit[ngModel.tunniste].kuvaus| kaanna | kuvalinkit:{ amosaa: { ktId } } | unsafe')
         .sp-kuvaus-toggler(ng-click='ngModel.$$naytaKuvaus = !ngModel.$$naytaKuvaus')
           span ...
     .sp-ryhma-lapset(ng-show='!ngModel.$$poistettu && (!ngModel.$$collapsed || (misc.hasInput && ngModel.$$haettu))', ng-repeat='koodi in misc.spRivit[ngModel.tunniste].koodit')

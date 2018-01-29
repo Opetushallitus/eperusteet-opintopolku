@@ -23,9 +23,16 @@ angular
         this.getPerusteId = function() {
             return $stateParams.perusteId;
         };
-        this.getUrl = function(image) {
+        this.getUrl = function(image, params) {
             if (this.getOpsId()) {
-                return (opsBase.OPS + "/kuvat").replace(":opsId", "" + this.getOpsId()) + "/" + image.id;
+                if (params && params.amosaa) {
+                    return (opsBase.AMOSAA_OPS + "/kuvat")
+                        .replace(":ktId", params.amosaa.ktId)
+                        .replace(":opsId", "" + (params.amosaa.opsId || this.getOpsId())) +
+                        "/" + image.id;
+                }  else {
+                    return (opsBase.OPS + "/kuvat").replace(":opsId", "" + this.getOpsId()) + "/" + image.id;
+                }
             } else {
                 return (
                     "eperusteet-service/api/perusteet/:perusteId/kuvat".replace(
@@ -39,15 +46,15 @@ angular
         };
     })
     .filter("kuvalinkit", function(OpsImageService) {
-        return function(text) {
+        return function(text, params) {
             var modified = false;
             var tmp = angular.element("<div>" + text + "</div>");
             tmp.find("img[data-uid]").each(function() {
                 var el = angular.element(this);
-                var url = OpsImageService.getUrl({ id: el.attr("data-uid") });
+                var url = OpsImageService.getUrl({ id: el.attr("data-uid") }, params);
                 if (el.attr("src") !== url) {
                     modified = true;
-                    el.attr("src", OpsImageService.getUrl({ id: el.attr("data-uid") }));
+                    el.attr("src", OpsImageService.getUrl({ id: el.attr("data-uid") }, params));
                     el.addClass("kuvalinkki-img");
                 }
             });
