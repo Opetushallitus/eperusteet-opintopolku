@@ -32,6 +32,8 @@ div(ng-controller='YlanavigaatioController')
               a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_15[0].id })', kaanna="'navi.esiopetus'")
             li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_16', ng-class="isPerusopetus() ? 'active' : ''")
               a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_16[0].id })', kaanna="'navi.perusopetus'")
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_999907', ng-class="selectedKoulutustyyppi === 'koulutustyyppi_999907' ? 'active' : ''")
+              a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_999907[0].id })', kaanna="'navi.tpo'")
             li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_2', ng-class="isLukioopetus() ? 'active' : ''")
               a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_2[0].id })', kaanna="'navi.lukiokoulutus'")
             li(ng-class="isAmmatillinen() ? 'active' : ''")
@@ -52,6 +54,17 @@ div(ng-controller='YlanavigaatioController')
               a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_6[0].id })', kaanna="'navi.lisaopetus'")
             li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_17', ng-class="selectedKoulutustyyppi === 'koulutustyyppi_17' ? 'active' : ''")
               a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_17[0].id })', kaanna="'navi.aipe'")
+
+  // Opintopolku tpo alivalikko
+  .row(ng-show="selectedKoulutustyyppi === 'koulutustyyppi_999907'")
+    .col-md-12.hidden-xs.ylanavigaatio-sub
+      .inner-container
+        .ylanavi-container-sub(role='navigation')
+          ul.ylanavi-list.ylanavi-list-sub
+            li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_999907',
+               ng-repeat="tpoPeruste in perusteetGroupByTyyppi.koulutustyyppi_999907",
+               ng-class="selectedPerusteId == tpoPeruste.id ? 'active' : ''")
+              a(ui-sref='root.kooste({ perusteId: tpoPeruste.id })', kaanna='tpoPeruste.nimi')
 
   // Opintopolku lukio alivalikko
   .row(ng-show='isLukioopetus()')
@@ -94,6 +107,10 @@ div(ng-controller='YlanavigaatioController')
                 a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_6[0].id })', kaanna="'navi.lisaopetus'", ng-click='navCollapse()')
               li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_17', ng-class="selectedKoulutustyyppi === 'koulutustyyppi_17' ? 'active' : ''")
                 a(ui-sref='root.kooste({ perusteId: perusteetGroupByTyyppi.koulutustyyppi_17[0].id })', kaanna="'navi.aipe'", ng-click='navCollapse()')
+              li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_999907',
+                 ng-repeat="tpoPeruste in perusteetGroupByTyyppi.koulutustyyppi_999907",
+                 ng-class="selectedPerusteId == tpoPeruste.id ? 'active' : ''")
+                a(ui-sref="root.kooste({perusteId: tpoPeruste.id})", kaanna="tpoPeruste.nimi", ng-click='navCollapse()')
               li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_2', ng-class="selectedKoulutustyyppi === 'koulutustyyppi_2' ? 'active' : ''")
                 a(ui-sref="root.kooste({perusteId: perusteetGroupByTyyppi.koulutustyyppi_2[0].id})", kaanna="'navi.lukiokoulutus'", ng-click='navCollapse()')
               li(ng-show='perusteetGroupByTyyppi.koulutustyyppi_23', ng-class="selectedKoulutustyyppi === 'koulutustyyppi_23' ? 'active' : ''")

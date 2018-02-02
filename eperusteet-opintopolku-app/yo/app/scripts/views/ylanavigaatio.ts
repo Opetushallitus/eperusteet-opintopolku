@@ -46,8 +46,8 @@ angular
                         "koulutustyyppi_17",
                         "koulutustyyppi_20",
                         "koulutustyyppi_22",
-                        "koulutustyyppi_23"
-
+                        "koulutustyyppi_23",
+                        "koulutustyyppi_999907"
                     ]
                 },
                 res => {
