@@ -24,7 +24,7 @@ const proxies = {
     },
     qa: {
       context: '/eperusteet-service',
-      host: 'testi.virkailija.opintopolku.fi',
+      host: 'virkailija.testiopintopolku.fi',
       port: 443,
       https: true,
       changeOrigin: true
@@ -47,7 +47,7 @@ const proxies = {
     },
     qa: {
       context: '/eperusteet-ylops-service',
-      host: 'testi.virkailija.opintopolku.fi',
+      host: 'virkailija.testiopintopolku.fi',
       port: 443,
       https: true,
       changeOrigin: true
@@ -70,7 +70,7 @@ const proxies = {
     },
     qa: {
       context: '/eperusteet-amosaa-service',
-      host: 'testi.virkailija.opintopolku.fi',
+      host: 'virkailija.testiopintopolku.fi',
       port: 443,
       https: true,
       changeOrigin: true
@@ -164,9 +164,9 @@ module.exports = grunt => {
         hostname: '0.0.0.0'
       },
       proxies: [
-        proxies.eperusteet.prod,
-        proxies.ylops.prod,
-        proxies.amosaa.prod
+        proxies.eperusteet[process.env.EPERUSTEET_API || 'prod'],
+        proxies.ylops[process.env.EPERUSTEET_YLOPS_API || 'prod'],
+        proxies.amosaa[process.env.EPERUSTEET_AMOSAA_API || 'prod']
       ],
       livereload: {
         options: {
