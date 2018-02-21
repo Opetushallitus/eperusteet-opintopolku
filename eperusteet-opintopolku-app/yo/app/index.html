@@ -1,5 +1,4 @@
 <!doctype html>
-
 <!--[if lt IE 7]>
 <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>
@@ -227,24 +226,22 @@
 <script src="eperusteet-esitys/views/controllers/yksinkertainen.js"></script>
 <!-- endbuild -->
 
-
 <!-- Piwik -->
 <script type="text/javascript">
   var siteDomain = document.domain;
   if (siteDomain !== 'localhost') {
     var piwikSiteId = 2;
-    if (siteDomain == 'eperusteet.opintopolku.fi') {
+    if (siteDomain === 'eperusteet.opintopolku.fi') {
       piwikSiteId = 11;
-    } else {
-      piwikSiteId = 2;
     }
+
     var _paq = _paq || [];
     _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-    _paq.push(["trackPageView"]);
+    //_paq.push(["trackPageView"]); // angulartics-piwik README.md
     _paq.push(["enableLinkTracking"]);
 
     (function () {
-      var u = (("https:" == document.location.protocol) ? "https" : "http") + "://analytiikka.opintopolku.fi/piwik/";
+      var u = "//analytiikka.opintopolku.fi/piwik/";
       _paq.push(["setTrackerUrl", u + "piwik.php"]);
       _paq.push(["setSiteId", piwikSiteId]);
       var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
@@ -257,5 +254,6 @@
   }
 </script>
 <!-- End Piwik Code -->
+
 </body>
 </html>
