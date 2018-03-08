@@ -198,6 +198,8 @@ namespace Controllers {
             return _.isNumber(item.order) ? item.order : Utils.nameSort(item, "label");
         };
 
+        Utils.scrollTo("#ylasivuankkuri");
+
         $scope.$on("$stateChangeSuccess", function(event, toState) {
             if (toState.name !== epEsitysSettings.perusopetusState + ".sisallot") {
                 Utils.scrollTo("#ylasivuankkuri");
