@@ -34,10 +34,8 @@ namespace Controllers {
         $rootScope,
         epPerusopetusStateService,
         koulutusalaService,
-        opintoalaService,
-        epEsitysSettings
+        opintoalaService
     ) => {
-        $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
         function getRootState(current) {
             return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus|tpo)(.*)/, ".$1");
         }
@@ -54,6 +52,7 @@ namespace Controllers {
         MurupolkuData.set({ perusteId: peruste.id, perusteNimi: peruste.nimi });
         $scope.sisallot = _.zipBy(sisalto[1], "id");
         $scope.tekstisisalto = sisalto[1];
+
         $scope.state = epPerusopetusStateService.getState();
 
         function mapSisalto(sisalto) {

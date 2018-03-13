@@ -36,7 +36,6 @@ namespace Controllers {
         opintoalaService,
         epEsitysSettings
     ) => {
-        $scope.showPreviewNote = epEsitysSettings.showPreviewNote;
         $scope.Koulutusalat = koulutusalaService;
         $scope.Opintoalat = opintoalaService;
         $scope.isNaviVisible = _.constant(true);
