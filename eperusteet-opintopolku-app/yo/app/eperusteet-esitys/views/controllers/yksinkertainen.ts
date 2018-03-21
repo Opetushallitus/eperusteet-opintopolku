@@ -119,11 +119,25 @@ namespace Controllers {
         });
 
         _.each($scope.navi.sections[0].items, function(item) {
-            if (item.$osa) {
-                item.href = $state.href(currentRootState + ".tekstikappale", {
-                    perusteId: $scope.peruste.id,
-                    tekstikappaleId: item.$osa.id
-                });
+            const osa = item.$osa;
+            if (osa) {
+                if (item.tyyppi === "taiteenalaOsa") {
+                    item.href = $state.href(currentRootState + ".taiteenalaOsa", {
+                        perusteId: $scope.peruste.id,
+                        tekstikappaleId: osa.id,
+                        taiteenalaOsa: item.id
+                    });
+                } else if (item.tyyppi === "taiteenala") {
+                    item.href = $state.href(currentRootState + ".taiteenala", {
+                        perusteId: $scope.peruste.id,
+                        tekstikappaleId: osa.id
+                    });
+                } else {
+                    item.href = $state.href(currentRootState + ".tekstikappale", {
+                        perusteId: $scope.peruste.id,
+                        tekstikappaleId: osa.id
+                    });
+                }
             }
         });
 

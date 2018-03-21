@@ -64,18 +64,31 @@ angular
             }
 
             function textCallback(item) {
-                if (item.$osa) {
+                if (item.tyyppi === "taiteenalaOsa") {
+                    item.$selected = "" + $stateParams.tekstikappaleId === "" + item.$osa.id
+                        && item.id === $stateParams.taiteenalaOsa;
+                    item.$hidden = item.depth > 0;
+                } else if (item.$osa) {
                     item.$selected = "" + $stateParams.tekstikappaleId === "" + item.$osa.id;
                     item.$hidden = item.depth > 0;
                 } else if (item.id === "laajaalaiset") {
                     item.$selected = $state.is(epEsitysSettings.perusopetusState + ".laajaalaiset");
                 }
+
                 if (item.$selected) {
                     selected = item;
                 }
             }
 
             var states = {
+                taiteenala: {
+                    index: 0,
+                    callback: textCallback
+                },
+                taiteenalaOsa: {
+                    index: 0,
+                    callback: textCallback
+                },
                 laajaalaiset: {
                     index: 0,
                     callback: textCallback

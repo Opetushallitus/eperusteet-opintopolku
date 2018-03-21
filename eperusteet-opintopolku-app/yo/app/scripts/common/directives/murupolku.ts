@@ -237,6 +237,18 @@ angular
                 useId: "tekstikappaleId",
                 customParents: true
             },
+            "root.tpo.taiteenala": {
+                parent: "root.tpo",
+                useData: "tekstikappaleNimi",
+                useId: "tekstikappaleId",
+                customParents: true
+            },
+            "root.tpo.taiteenalaOsa": {
+                parent: "root.tpo",
+                useData: "tekstikappaleNimi",
+                useId: "tekstikappaleId",
+                customParents: true
+            },
             "root.perusvalmistava": {
                 useData: "perusteNimi",
                 useId: "perusteId"

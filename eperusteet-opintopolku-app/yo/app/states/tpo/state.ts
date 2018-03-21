@@ -15,7 +15,7 @@ angular.module("app").config($stateProvider =>
 
                 return $q.all([
                     peruste,
-                    peruste.id ? SuoritustapaSisalto.get({ perusteId: peruste.id, suoritustapa: "tpo" }).$promise : {}
+                    peruste.id ? SuoritustapaSisalto.get({ perusteId: peruste.id, suoritustapa: "tpo", muoto: "laaja" }).$promise : {}
                 ]);
             },
             koulutusalaService: (serviceConfig, Koulutusalat) => Koulutusalat,
