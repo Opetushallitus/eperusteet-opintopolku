@@ -33,6 +33,7 @@ namespace Controllers {
     ) => {
         $scope.linkVar = $stateParams.osanId ? "osanId" : "tekstikappaleId";
         $scope.valittuSisalto = $scope.$parent.sisalto[$stateParams[$scope.linkVar]];
+        $scope.taiteenalaOsa = $stateParams.taiteenalaOsa;
         $scope.tekstikappale = $scope.valittuSisalto;
         $scope.lapset = epTekstikappaleChildResolver.getSisalto();
 
@@ -45,7 +46,6 @@ namespace Controllers {
                 parseInt($stateParams[$scope.linkVar], 10)
             )
         });
-
         if (!$scope.valittuSisalto) {
             const params = _.extend(_.clone($stateParams), {
                 suoritustapa: YleinenData.validSuoritustapa($scope.peruste, $stateParams.suoritustapa)

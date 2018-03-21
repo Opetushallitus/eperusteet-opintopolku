@@ -108,6 +108,8 @@
     "app/states/esiopetus/tekstikappale/state.ts",
     "app/states/tpo/state.ts",
     "app/states/tpo/tiedot/state.ts",
+    "app/states/tpo/taiteenala/state.ts",
+    "app/states/tpo/taiteenalaOsa/state.ts",
     "app/states/tpo/tekstikappale/state.ts",
     "app/states/perusvalmistava/state.ts",
     "app/states/perusvalmistava/tiedot/state.ts",

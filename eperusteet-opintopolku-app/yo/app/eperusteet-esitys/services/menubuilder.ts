@@ -185,10 +185,69 @@ angular
                         $hidden: depth > 0,
                         link: ["root.aipe.laajaalaiset"]
                     });
-                } else {
+                } else if (osa.perusteenOsa != null &&
+                    osa.perusteenOsa.osanTyyppi != null &&
+                    osa.perusteenOsa.osanTyyppi === "taiteenala") {
+
                     suunnitelma.push({
                         $osa: osa,
                         label: osa.perusteenOsa ? osa.perusteenOsa.nimi : "",
+                        depth: depth,
+                        $hidden: depth > 0,
+                        tyyppi: "taiteenala"
+                    });
+                    suunnitelma.push({
+                        id: "aikuistenOpetus",
+                        $osa: osa,
+                        label: osa.perusteenOsa.aikuistenOpetus ? osa.perusteenOsa.aikuistenOpetus.nimi : "",
+                        depth: depth + 1,
+                        $hidden: depth > 0,
+                        tyyppi: "taiteenalaOsa"
+                    });
+                    suunnitelma.push({
+                        id: "kasvatus",
+                        $osa: osa,
+                        label: osa.perusteenOsa.kasvatus ? osa.perusteenOsa.kasvatus.nimi : "",
+                        depth: depth + 1,
+                        $hidden: depth > 0,
+                        tyyppi: "taiteenalaOsa"
+                    });
+                    suunnitelma.push({
+                        id: "oppimisenArviointiOpetuksessa",
+                        $osa: osa,
+                        label: osa.perusteenOsa.oppimisenArviointiOpetuksessa ? osa.perusteenOsa.oppimisenArviointiOpetuksessa.nimi : "",
+                        depth: depth + 1,
+                        $hidden: depth > 0,
+                        tyyppi: "taiteenalaOsa"
+                    });
+                    suunnitelma.push({
+                        id: "teemaopinnot",
+                        $osa: osa,
+                        label: osa.perusteenOsa.teemaopinnot ? osa.perusteenOsa.teemaopinnot.nimi : "",
+                        depth: depth + 1,
+                        $hidden: depth > 0,
+                        tyyppi: "taiteenalaOsa"
+                    });
+                    suunnitelma.push({
+                        id: "tyotavatOpetuksessa",
+                        $osa: osa,
+                        label: osa.perusteenOsa.tyotavatOpetuksessa ? osa.perusteenOsa.tyotavatOpetuksessa.nimi : "",
+                        depth: depth + 1,
+                        $hidden: depth > 0,
+                        tyyppi: "taiteenalaOsa"
+                    });
+                    suunnitelma.push({
+                        id: "yhteisetOpinnot",
+                        $osa: osa,
+                        label: osa.perusteenOsa.yhteisetOpinnot ? osa.perusteenOsa.yhteisetOpinnot.nimi : "",
+                        depth: depth + 1,
+                        $hidden: depth > 0,
+                        tyyppi: "taiteenalaOsa"
+                    });
+                } else {
+                    suunnitelma.push({
+                        $osa: osa,
+                        label: osa.perusteenOsa ? osa.perusteenOsa.nimi : (osa.nimi ? osa.nimi : ""),
                         depth: depth,
                         $hidden: depth > 0
                     });
