@@ -249,6 +249,20 @@ angular
                 useId: "tekstikappaleId",
                 customParents: true
             },
+            "root.opas": {
+                useData: "perusteNimi",
+                useId: "perusteId"
+            },
+            "root.opas.tiedot": {
+                useData: "perusteNimi",
+                useId: "perusteId"
+            },
+            "root.opas.tekstikappale": {
+                parent: "root.tpo",
+                useData: "tekstikappaleNimi",
+                useId: "tekstikappaleId",
+                customParents: true
+            },
             "root.perusvalmistava": {
                 useData: "perusteNimi",
                 useId: "perusteId"

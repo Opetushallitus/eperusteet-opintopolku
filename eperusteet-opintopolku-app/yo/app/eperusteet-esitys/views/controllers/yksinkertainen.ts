@@ -37,7 +37,7 @@ namespace Controllers {
         opintoalaService
     ) => {
         function getRootState(current) {
-            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus|tpo)(.*)/, ".$1");
+            return current.replace(/\.(esiopetus|lisaopetus|perusvalmistava|varhaiskasvatus|tpo|opas)(.*)/, ".$1");
         }
 
         $scope.Koulutusalat = koulutusalaService;
@@ -49,6 +49,7 @@ namespace Controllers {
         };
         const peruste = sisalto[0];
         $scope.peruste = peruste;
+        console.log(peruste);
         MurupolkuData.set({ perusteId: peruste.id, perusteNimi: peruste.nimi });
         $scope.sisallot = _.zipBy(sisalto[1], "id");
         $scope.tekstisisalto = sisalto[1];

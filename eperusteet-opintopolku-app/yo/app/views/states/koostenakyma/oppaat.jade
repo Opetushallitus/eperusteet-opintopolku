@@ -55,7 +55,7 @@ mixin haku()
             .color-box(ng-class="peruste.$$tila")
                 .text-box
                     p
-                        a.nimi(ui-sref="root.selaus.perusteinfo({ perusteId: peruste.id })")
+                        a.nimi(ui-sref="root.opas.tiedot({ perusteId: peruste.id })")
                             span(ng-bind="peruste.nimi | kaanna")
 
                         span.alarm-marker(
