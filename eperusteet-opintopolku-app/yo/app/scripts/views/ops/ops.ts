@@ -16,7 +16,8 @@
 
 angular
     .module("app")
-    .controller("OpsController", function($scope, $state, $location, $window, TermistoService, otsikot, ops) {
+    .controller("OpsController", function($scope, $state, $location, $window, TermistoService,
+                                          Kieli, otsikot, ops) {
         $scope.ops = ops;
         $scope.otsikot = otsikot;
         TermistoService.setResource(ops, "OPS");
@@ -32,13 +33,8 @@ angular
             $state.go(kltMap[koulutustyyppi], { location: "replace" });
         }
         $scope.returnToYlops = () => {
-            const isTestEnvironment = _.includes(_.words($location.absUrl()), "testi");
-            $window.location.href = isTestEnvironment
-                ? "https://testi.virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/" +
-                  $scope.ops.id +
-                  "/tiedot"
-                : "https://virkailija.opintopolku.fi/eperusteet-ylops-app/#/fi/opetussuunnitelmat/" +
-                  $scope.ops.id +
-                  "/tiedot";
+            $window.location.href =  "//" + location.host
+                + "/eperusteet-ylops-app/#/" + Kieli.getSisaltokieli()
+                + "/opetussuunnitelmat/"+ $scope.ops.id + "/tiedot";
         };
     });

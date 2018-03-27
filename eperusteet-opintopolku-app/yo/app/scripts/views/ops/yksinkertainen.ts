@@ -61,6 +61,10 @@ namespace Controllers {
             });
         };
 
+        $scope.isReturnToYlopsEnabled = _.startsWith($state.current.name, "root.ops.tpo");
+        $scope.returnToYlopsLink =  "//" + location.host
+            + "/eperusteet-ylops-app/#/" + Kieli.getSisaltokieli() + "/opetussuunnitelmat/" + $scope.ops.id + "/tiedot";
+
         $scope.$on("$destroy", function() {
             $document.off("click", clickHandler);
         });
