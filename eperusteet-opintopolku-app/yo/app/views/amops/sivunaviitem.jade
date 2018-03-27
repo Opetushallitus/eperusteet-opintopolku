@@ -1,6 +1,6 @@
 li(ng-show='!item.$$hidden', ng-repeat='item in ngModel', id="{{ 'sisalto-item-' + item.id }}")
-  a(ui-sref='root.amops.osa({ osaId: item.id })', ui-sref-active='active')
-    span.chevron(ng-show='item.lapset.length > 0 && !misc.isSearching', ng-click='misc.toggleItem($event, item)')
+  a(ui-sref='root.amops.osa({ osaId: item.id })', ui-sref-active='active', ng-click='misc.toggleItem($event, item)')
+    span.chevron(ng-show='item.lapset.length > 0 && !misc.isSearching')
       span(ng-if='item.$$closed')
         span.glyphicon.glyphicon-chevron-right
       span(ng-if='!item.$$closed')
