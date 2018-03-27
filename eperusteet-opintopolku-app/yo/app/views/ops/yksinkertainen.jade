@@ -1,6 +1,7 @@
 div
   h1.peruste-otsikko(ng-bind-html='ops.nimi | kaanna | unsafe')
   .alert.alert-info(ng-if="ops.tila !== 'julkaistu'")
+    a.palata-btn.btn.btn-primary.pull-right(ng-href='{{returnToYlopsLink}}', kaanna="'palata-ops-tyokaluun'" ng-if="isReturnToYlopsEnabled")
     h4(kaanna="'ops-esikatselu'")
     p(kaanna="'esikatselu-varoitus'")
   murupolku
