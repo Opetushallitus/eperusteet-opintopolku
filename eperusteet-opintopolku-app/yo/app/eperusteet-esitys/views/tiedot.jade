@@ -30,7 +30,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
       span(kaanna="'voimassaolo-paattymispvm'")
   .col-xs-6.col-sm-8
     span(pvm='peruste.voimassaoloLoppuu')
-.row.row-margin(ng-if='!voimassaOleva')
+.row.row-margin(ng-if='!!peruste.siirtymaPaattyy')
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'siirtyman-paattyminen'")
