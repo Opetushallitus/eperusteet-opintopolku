@@ -49,7 +49,6 @@ namespace Controllers {
         };
         const peruste = sisalto[0];
         $scope.peruste = peruste;
-        console.log(peruste);
         MurupolkuData.set({ perusteId: peruste.id, perusteNimi: peruste.nimi });
         $scope.sisallot = _.zipBy(sisalto[1], "id");
         $scope.tekstisisalto = sisalto[1];
