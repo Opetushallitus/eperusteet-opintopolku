@@ -111,6 +111,9 @@ angular
                 if ($state.includes("root.amops.**")) {
                     return true;
                 }
+                if ($state.includes("root.opas.**")) {
+                    return true;
+                }
                 if ($state.includes("root.selaus.jarjestajat.**")) {
                     return true;
                 }
