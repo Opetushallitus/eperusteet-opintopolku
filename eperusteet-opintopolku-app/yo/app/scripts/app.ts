@@ -32,7 +32,7 @@ angular
         "restangular"
     ])
     .constant("DEBUG_UI_ROUTER", false)
-    .run(($rootScope, DEBUG_UI_ROUTER) => {
+    .run(($rootScope, DEBUG_UI_ROUTER, $anchorScroll, $location) => {
         if (DEBUG_UI_ROUTER) {
             $rootScope.$on("$stateChangeSuccess", (event, state, params) => {
                 console.info(
@@ -44,4 +44,8 @@ angular
                 );
             });
         }
+        $rootScope.gotoAnchor = loc => {
+            $location.hash(loc);
+            $anchorScroll();
+        };
     });

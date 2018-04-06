@@ -14,6 +14,13 @@
  * European Union Public Licence for more details.
  */
 
+namespace Osat {
+    export const isTutke2 = (osa) => {
+        return _.isObject(osa) && (osa.tyyppi === "tutke2" || osa.tyyppi === "reformi_tutke2");
+    };
+}
+
+
 angular.module("app").config($stateProvider =>
     $stateProvider.state("root.amops.osa", {
         url: "/osa/:osaId",
@@ -36,6 +43,9 @@ angular.module("app").config($stateProvider =>
                 controller: ($scope, osa, pTosa, ktId) => {
                     $scope.osa = osa;
                     $scope.pTosa = pTosa;
+                    if (pTosa) {
+                        $scope.pTosa.$$isTutke2 = Osat.isTutke2(pTosa);
+                    }
                     $scope.ktId = ktId;
                 }
             },
