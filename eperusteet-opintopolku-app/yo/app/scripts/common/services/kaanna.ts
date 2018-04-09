@@ -41,15 +41,18 @@ angular
             return translate(input, sisaltokieli);
         }
 
+        function kaanna(input, config) {
+            if (_.isObject(input)) {
+                return kaannaSisalto(input);
+            } else if (_.isString(input)) {
+                return $translate.instant(input, config);
+            }
+            return "";
+        }
+        (kaanna as any).$stateful = true;
+
         return {
-            kaanna: function(input, config) {
-                if (_.isObject(input)) {
-                    return kaannaSisalto(input);
-                } else if (_.isString(input)) {
-                    return $translate.instant(input, config);
-                }
-                return "";
-            },
+            kaanna,
             kaannaSisalto: kaannaSisalto,
             getAltLang: (): string => (Kieli.getSisaltokieli() === "fi" ? "sv" : "fi")
         };
