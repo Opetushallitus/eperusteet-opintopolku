@@ -52,6 +52,7 @@ namespace Controllers {
         MurupolkuData.set({ perusteId: peruste.id, perusteNimi: peruste.nimi });
         $scope.sisallot = _.zipBy(sisalto[1], "id");
         $scope.tekstisisalto = sisalto[1];
+        $scope.isOpas = $state.includes("root.opas.**");
 
         $scope.state = epPerusopetusStateService.getState();
 
@@ -102,7 +103,7 @@ namespace Controllers {
         });
 
         $scope.navi = {
-            header: "perusteen-sisalto",
+            header: $scope.isOpas ? "oppaan-sisalto" : "perusteen-sisalto",
             sections: [
                 {
                     id: "sisalto",
@@ -114,7 +115,7 @@ namespace Controllers {
 
         $scope.navi.sections[0].items.unshift({
             depth: 0,
-            label: "perusteen-tiedot",
+            label: $scope.isOpas ? "oppaan-tiedot" : "perusteen-tiedot",
             link: [currentRootState + ".tiedot"]
         });
 

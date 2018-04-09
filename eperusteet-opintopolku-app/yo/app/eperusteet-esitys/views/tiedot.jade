@@ -1,9 +1,11 @@
 h1(esitys-sivu-otsikko="'perusteen-tiedot'")
-  span(kaanna="'perusteen-tiedot'")
+  span(ng-if="!isOpas" kaanna="'perusteen-tiedot'")
+  span(ng-if="isOpas" kaanna="'oppaan-tiedot'")
 .row.row-margin
   .col-xs-6.col-sm-4
     strong
-      span(kaanna="'perusteen-nimi'")
+      span(ng-if="!isOpas" kaanna="'perusteen-nimi'")
+      span(ng-if="isOpas" kaanna="'oppaan-nimi'")
   .col-xs-6.col-sm-8
     span(ng-bind="(peruste.nimi || 'nimetön') | kaanna")
 .row.row-margin(ng-if="peruste.diaarinumero")
@@ -12,7 +14,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
       span(kaanna="'maarayksen-diaarinumero'")
   .col-xs-6.col-sm-8
     span(ng-bind='peruste.diaarinumero')
-.row.row-margin
+.row.row-margin(ng-if="!isOpas")
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'maarayksen-paatospaivamaara'")
