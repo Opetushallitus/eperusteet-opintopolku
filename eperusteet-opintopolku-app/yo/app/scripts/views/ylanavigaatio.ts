@@ -69,7 +69,7 @@ angular
                             console.error(err);
                         }
                     );
-                } else if ($stateParams.opsId) {
+                } else if ($stateParams.opsId && $state.includes("root.ops.**")) {
                     OpsResource().get(
                         { opsId: $stateParams.opsId },
                         res => {
