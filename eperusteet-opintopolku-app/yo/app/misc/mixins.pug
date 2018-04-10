@@ -172,7 +172,7 @@ mixin turboChevron(toggleField)
 
 
 mixin contentToggler(toggleField, name)
-  div.content-toggler(style="margin-top: 16px")
+  div.content-toggler
     div.content-toggler-header(ng-click=toggleField + " = !" + toggleField)
       span.ct-otsikko
         +turboChevron(toggleField)
