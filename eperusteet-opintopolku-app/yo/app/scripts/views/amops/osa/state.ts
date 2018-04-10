@@ -275,10 +275,6 @@ angular.module("app").config($stateProvider =>
                         }
                     };
 
-                    _.each($scope.osa.tosa.toteutukset, toteutus => {
-                        toteutus.$$nayta = true;
-                    });
-
                     $scope.paikallinenKoodiUpdate(_.property("tosa.omatutkinnonosa.koodi")($scope.osa));
 
                     {

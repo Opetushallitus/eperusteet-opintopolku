@@ -1,13 +1,15 @@
 .content-toggler {
     clear: both;
+    margin-top: 16px;
+
     .content-toggler-header {
-        margin: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
         margin-bottom: 6px;
 
         .ct-otsikko {
-            margin: 0px;
-            padding: 0px;
+            margin: 0;
+            padding: 0;
             cursor: pointer;
             margin-bottom: 2px;
 

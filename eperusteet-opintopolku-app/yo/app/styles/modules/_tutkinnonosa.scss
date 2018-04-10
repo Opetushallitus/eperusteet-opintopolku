@@ -1,6 +1,5 @@
 $box-table-bgcolor: #199dd0;
 $box-table-padding: 5px;
-$tosa-color: #199dd0;
 
 .tutkinnonosa {
     .koodi-kaytossa {
@@ -42,15 +41,20 @@ $tosa-color: #199dd0;
         }
 
         .toteutus-esitys {
-            margin-top: 10px;
-            border: none;
+            border: 1px solid $box-table-bgcolor;
+            margin-bottom: 10px;
 
             .otsikko {
-                font-size: 16px;
-                background: $tosa-color;
-                padding: 6px;
+                background: $box-table-bgcolor;
                 color: white;
+                padding: $box-table-padding;
+                min-height: 50px;
                 cursor: pointer;
+
+                h3 {
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                }
 
                 .turbochevron {
                     margin-right: 5px;
@@ -58,18 +62,17 @@ $tosa-color: #199dd0;
             }
 
             .sisalto {
-                margin-top: 10px;
                 padding: 0 10px 0 10px;
             }
         }
 
         .toteutus {
             margin-top: 10px;
-            border: 1px solid $tosa-color;
+            border: 1px solid $box-table-bgcolor;
 
             .toteutus-header {
                 padding: 5px;
-                background: $tosa-color;
+                background: $box-table-bgcolor;
             }
 
             .toteutus-content {
@@ -93,7 +96,7 @@ $tosa-color: #199dd0;
     .toteutus-placeholder {
         margin-top: 10px;
         height: 44px;
-        background: $tosa-color;
+        background: $box-table-bgcolor;
     }
 
     .arviointi-kohdealueet {

@@ -337,16 +337,17 @@ mixin tosaToteutus()
         +contentToggler("vapaa.$$show", "vapaa.nimi")
           +teksti("vapaa.teksti")
 
-      div(ng-hide="osa.tosa.toteutukset.length > 0")
-        div.alert.alert-info
-          span(ng-bind="'tutkinnon-osalle-ei-maaritelty-paikallisia-toteutuksia' | kaanna" ng-if="!$$isValmaTelma")
-          span(ng-bind="'koulutuksen-osalle-ei-maaritelty-paikallisia-toteutuksia' | kaanna" ng-if="$$isValmaTelma")
+      div
+        h2
+          span(ng-bind="'toteutukset' | kaanna")
 
       div.toteutus-esitys(ng-repeat="toteutus in osa.tosa.toteutukset")
         div
           .otsikko(ng-click="toteutus.$$nayta = !toteutus.$$nayta")
-            +turboChevron("!toteutus.$$nayta")
-            +plainTeksti("toteutus.otsikko")
+            h3
+              +turboChevron("!toteutus.$$nayta")
+              +plainTeksti("toteutus.otsikko")
+
           .sisalto(ng-if="toteutus.$$nayta")
             div(ng-show="toteutus.koodit.length > 0")
               +contentToggler("$$showKoodit", "'liitetyt-koodit'")
