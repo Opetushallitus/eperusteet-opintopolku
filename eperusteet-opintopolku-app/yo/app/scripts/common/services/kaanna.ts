@@ -16,7 +16,8 @@
 
 angular
     .module("app")
-    .service("Kaanna", function($translate, Kieli) {
+    .constant("DEBUG_KAANNA", false)
+    .service("Kaanna", function($translate, Kieli, DEBUG_KAANNA) {
         function getTranslation(input, lang) {
             return input[lang] || input[lang.toUpperCase()] || input["kieli_" + lang + "#1"];
         }
@@ -45,7 +46,13 @@ angular
             if (_.isObject(input)) {
                 return kaannaSisalto(input);
             } else if (_.isString(input)) {
-                return $translate.instant(input, config);
+                const translation = $translate.instant(input, config);
+                if (DEBUG_KAANNA) {
+                    if (_.eq(translation, input)) {
+                        console.info("Käännös puuttuu:", input);
+                    }
+                }
+                return translation;
             }
             return "";
         }
