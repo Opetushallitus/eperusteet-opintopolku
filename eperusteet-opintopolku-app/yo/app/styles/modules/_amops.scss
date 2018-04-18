@@ -85,4 +85,9 @@ $amops-blue: #149ecb;
             }
         }
     }
+    .alert {
+        @media (max-width: $screen-md-max) {
+            margin: 10px 25px;
+        }
+    }
 }

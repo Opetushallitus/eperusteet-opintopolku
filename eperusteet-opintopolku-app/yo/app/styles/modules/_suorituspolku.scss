@@ -16,6 +16,7 @@
 .suorituspolku {
     clear: both;
     padding-top: 10px;
+    overflow-x: scroll;
 
     .sp-laatikko-rikki {
         background: #ffd3d3;
@@ -107,22 +108,22 @@
 
         .sp-sisalto {
             border: 1px solid #dbdcdd;
-            height: 30px;
+            min-height: 30px;
 
             .sp-toolbar {
                 float: right;
-                top: -30px;
-                position: relative;
 
                 .sp-muodostuminen {
                     float: right;
-                    height: 28px;
+                    height: 29px;
                     padding: 5px 8px 5px 8px;
                     color: black;
                     font-weight: normal;
                     min-width: 61px;
                     text-align: center;
                     border-left: 1px solid #ddd;
+                    border-bottom: 1px solid #ddd;
+                    margin-left: 5px;
                 }
 
                 .muodostuminen-invalid {
@@ -139,7 +140,8 @@
 
             .sp-nimi {
                 margin-left: 14px;
-                padding: 5px;
+                padding: 4px;
+                min-height: 28px;
 
                 .sp-osaamisala {
                     font-weight: normal;
