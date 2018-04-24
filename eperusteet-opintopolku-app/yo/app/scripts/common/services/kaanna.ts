@@ -64,7 +64,7 @@ angular
             getAltLang: (): string => (Kieli.getSisaltokieli() === "fi" ? "sv" : "fi")
         };
     })
-    .directive("kaanna", function(Kaanna, $compile, IconMapping) {
+    .directive("kaanna", function(Kaanna, Kieli, $compile, IconMapping) {
         function getAttr(attr, scope) {
             if (!_.isString(attr) || _.size(attr) === 0) {
                 return;
@@ -77,6 +77,7 @@ angular
                 function kaannaValue(value) {
                     return _.isObject(value) ? Kaanna.kaannaSisalto(value) : Kaanna.kaanna(value);
                 }
+
                 var original = getAttr(attrs.kaanna, scope) || el.text();
                 if (_.isObject(original)) {
                     el.text(Kaanna.kaannaSisalto(original));
@@ -95,8 +96,11 @@ angular
                     /*scope.$on('changed:sisaltokieli', function () {
                   el.text(kaannaValue(getAttr(attrs.kaanna, scope)));
                   });*/
-                } else {
-                    var textEl: any = angular.element("<span>").attr("translate", original);
+                }
+                else {
+                    var textEl: any = angular.element("<span>")
+                        .attr("translate", original);
+
                     if (attrs.kaannaValues) {
                         textEl.attr("translate-values", attrs.kaannaValues);
                     }

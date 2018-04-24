@@ -16,7 +16,7 @@
 
 angular
     .module("app")
-    .service("MurupolkuData", function($rootScope, Kaanna, $timeout) {
+    .service("MurupolkuData", function($rootScope, $timeout, Kaanna) {
         this.noop = angular.noop;
         var data = {};
         var latest = null;
@@ -30,10 +30,16 @@ angular
             }
             $rootScope.$broadcast("murupolku:update");
         };
+
         this.get = function(key) {
             return data[key];
         };
+
         this.setTitle = function(crumbs) {
+            latest = crumbs;
+        };
+
+        function afterLoadSetTitle(crumbs) {
             latest = crumbs;
             var titleEl = angular.element("head > title");
             var peruste = null;
@@ -51,14 +57,14 @@ angular
             if (titleText) {
                 titleText += " // ";
             }
+
             titleText += Kaanna.kaanna("eperusteet-otsikko");
             titleEl.html(titleText);
         };
 
-        var self = this;
-
-        $timeout(function() {
-            self.setTitle(latest);
+        $rootScope.$on("LokalisointiLoader:update", () => {
+            this.setTitle = afterLoadSetTitle;
+            this.setTitle(latest);
         });
     })
     .directive("murupolku", function() {
@@ -584,7 +590,7 @@ angular
                 })
                 .value();
 
-            MurupolkuData.setTitle($scope.crumbs);
+            // MurupolkuData.setTitle($scope.crumbs);
         }
 
         $scope.$on("murupolku:update", update);

@@ -69,6 +69,7 @@ angular
                     uikieli = kielikoodi;
                     moment.locale(kielikoodi);
                     await $translate.use(kielikoodi);
+                    $("html").attr("lang", kielikoodi);
                 }
             }
         };

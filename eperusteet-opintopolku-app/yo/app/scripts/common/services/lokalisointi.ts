@@ -29,7 +29,7 @@ angular
             }
         );
     })
-    .factory("LokalisointiLoader", function($q, $http, $window, $rootScope, LokalisointiResource) {
+    .factory("LokalisointiLoader", function($q, $http, $window, $rootScope, $timeout, LokalisointiResource) {
         const
             PREFIX = "localisation/locale-",
             SUFFIX = ".json",
@@ -38,6 +38,14 @@ angular
         return options => {
             const deferred = $q.defer();
             const translations = {};
+            const afterLokalisointiLoad = (translations) => {
+                deferred.resolve(translations);
+                $rootScope.lokalisointiInited = true;
+                $timeout(() => {
+                    $rootScope.$broadcast("LokalisointiLoader:update");
+                });
+            };
+
             $http({
                 url: PREFIX + options.key + SUFFIX,
                 method: "GET",
@@ -46,24 +54,18 @@ angular
                 .success(data => {
                     _.extend(translations, data);
                     if (BYPASS_REMOTE) {
-                        deferred.resolve(translations);
-                        $rootScope.lokalisointiInited = true;
-                    } else {
-                        LokalisointiResource.get(
-                            {
-                                locale: options.key
-                            },
-                            res => {
+                        afterLokalisointiLoad(translations);
+                    }
+                    else {
+                        LokalisointiResource.get({
+                            locale: options.key
+                        }, res => {
                                 _.extend(translations, _.zipObject(_.map(res, "key"), _.map(res, "value")));
-                                deferred.resolve(translations);
-                                $rootScope.lokalisointiInited = true;
-                            },
-                            () => {
-                                // Ohita tyytyväisesti jos lokalisointipalvelua ei ole
-                                deferred.resolve(translations);
-                                $rootScope.lokalisointiInited = true;
-                            }
-                        );
+                                afterLokalisointiLoad(translations);
+                        }, () => {
+                            // Ohita tyytyväisesti jos lokalisointipalvelua ei ole
+                            afterLokalisointiLoad(translations);
+                        });
                     }
                 })
                 .error(() => {
