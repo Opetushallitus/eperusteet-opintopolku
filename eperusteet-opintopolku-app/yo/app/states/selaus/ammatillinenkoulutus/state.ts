@@ -58,7 +58,8 @@ angular.module("app").config($stateProvider => {
                     YleinenData,
                     MurupolkuData,
                     Kaanna,
-                    PerusteenTutkintonimikkeet
+                    PerusteenTutkintonimikkeet,
+                    PERUSTE_HAKU_TUORE_KESTO
                 ) {
                     const uikieli = Kieli.getUiKieli();
                     let hakuPattern: RegExp;
@@ -228,10 +229,9 @@ angular.module("app").config($stateProvider => {
                                     "korvaavat-perusteet"
                                 );
                             }
-                            if (peruste.muokattu) {
+                            if (peruste.globalVersion) {
                                 const currentTime = new Date().getTime();
-                                // 2vk
-                                if (currentTime - peruste.muokattu < 60 * 60 * 24 * 7 * 2 * 1000) {
+                                if (currentTime - peruste.globalVersion.aikaleima < PERUSTE_HAKU_TUORE_KESTO) {
                                     peruste.$$muokattuViimeAikoina = true;
                                 } else {
                                     peruste.$$muokattuViimeAikoina = false;
@@ -314,7 +314,8 @@ angular.module("app").config($stateProvider => {
                     YleinenData,
                     MurupolkuData,
                     Kaanna,
-                    PerusteenTutkintonimikkeet
+                    PerusteenTutkintonimikkeet,
+                    PERUSTE_HAKU_TUORE_KESTO
                 ) {
                     const uikieli = Kieli.getUiKieli();
                     let hakuPattern: RegExp;
@@ -485,10 +486,9 @@ angular.module("app").config($stateProvider => {
                                     "korvaavat-perusteet"
                                 );
                             }
-                            if (peruste.muokattu) {
+                            if (peruste.globalVersion) {
                                 const currentTime = new Date().getTime();
-                                // 2vk
-                                if (currentTime - peruste.muokattu < 60 * 60 * 24 * 7 * 2 * 1000) {
+                                if (currentTime - peruste.globalVersion.aikaleima < PERUSTE_HAKU_TUORE_KESTO) {
                                     peruste.$$muokattuViimeAikoina = true;
                                 } else {
                                     peruste.$$muokattuViimeAikoina = false;

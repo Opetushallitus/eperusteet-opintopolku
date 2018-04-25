@@ -64,7 +64,7 @@ const proxies = {
     local: {
       context: '/eperusteet-amosaa-service',
       host: 'localhost',
-      port: 8080,
+      port: 8090,
       https: false,
       changeOrigin: true
     },
