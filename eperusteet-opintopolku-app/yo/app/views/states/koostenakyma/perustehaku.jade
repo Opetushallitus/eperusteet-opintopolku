@@ -46,6 +46,17 @@ mixin haku()
     a(ng-click="poistaHakukriteeri('opintoala')")
       +giconrtl("remove", "opintoalatMap[hakuparametrit.opintoala].nimi")
 
+  span(uib-dropdown ng-if="!hakuparametrit.jarjestys")
+    a.dropdown-toggle(uib-dropdown-toggle)
+      +giconrtl("chevron-down", "'haku-jarjestys'")
+    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
+      li(ng-repeat="jarjestys in jarjestysTyypit" ng-class="{active: hakuparametrit.jarjestys === jarjestys}")
+        a(kaanna="jarjestys" ng-click="muutaHakua('jarjestys', jarjestys)")
+
+  span(ng-if="hakuparametrit.jarjestys")
+    a(ng-click="poistaHakukriteeri('jarjestys')")
+      +giconrtl("remove", "hakuparametrit.jarjestys")
+
 .haku
   .haku-box
     input.form-control(type="text" placeholder="{{'hae-nimella' | kaanna}}" ng-model="hakuparametrit.nimi" ng-change="hakuMuuttui()")
@@ -93,6 +104,12 @@ mixin haku()
               uib-popover-html="peruste.$$korvattavatPerusteet"
               popover-placement="bottom")
               +gicon("alert")
+
+            span.trend-marker(
+              ng-show="peruste.$$muokattuViimeAikoina"
+              uib-tooltip="{{'uusi-tai-muokattu-viime-aikoina' | kaanna}}"
+              tooltip-placement="bottom")
+              +gicon("fire")
 
           p
             b(ng-repeat="kanimi in peruste.$$koulutusalaNimet")
