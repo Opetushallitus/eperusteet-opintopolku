@@ -311,6 +311,8 @@
     "fi": "suomi",
     "sv": "ruotsi",
     "haku-julkaisukieli": "Julkaisukieli",
+    "haku-jarjestys": "Jarjestys",
+    "uusi-tai-muokattu-viime-aikoina": "Peruste on uusi tai sitä on muokattu viime aikoina",
     "tulevat": "Tulevat",
     "pakollinen-kurssi-kuvaus-header": "Pakollisten kurssien yleinen kuvaus",
     "syventava-kurssi-kuvaus-header": "Valtakunnallisten syventävien kurssien yleinen kuvaus",

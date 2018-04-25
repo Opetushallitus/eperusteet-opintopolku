@@ -80,7 +80,8 @@ angular.module("app").config($stateProvider => {
                         tila: "valmis",
                         tuleva: true,
                         tutkintonimikkeet: false,
-                        voimassaolo: true
+                        voimassaolo: true,
+                        jarjestys: "nimi"
                     });
 
                     {
@@ -102,6 +103,7 @@ angular.module("app").config($stateProvider => {
                             $scope.koulutusalatMap[ala.koodi] = ala;
                         });
                         $scope.sisaltokielet = ["fi", "sv"];
+                        $scope.jarjestysTyypit = ["nimi", "muokattu"];
 
                         $scope.kaanna = text => Kaanna.kaanna(text);
                         $scope.koulutustyypit = YleinenData.ammatillisetKoulutustyypit;
@@ -226,6 +228,15 @@ angular.module("app").config($stateProvider => {
                                     "korvaavat-perusteet"
                                 );
                             }
+                            if (peruste.muokattu) {
+                                const currentTime = new Date().getTime();
+                                // 2vk
+                                if (currentTime - peruste.muokattu < 60 * 60 * 24 * 7 * 2 * 1000) {
+                                    peruste.$$muokattuViimeAikoina = true;
+                                } else {
+                                    peruste.$$muokattuViimeAikoina = false;
+                                }
+                            }
                             PerusteenTutkintonimikkeet.parse(
                                 peruste.tutkintonimikkeetKoodisto,
                                 peruste.$$tutkintonimikkeet
@@ -326,7 +337,8 @@ angular.module("app").config($stateProvider => {
                         tuleva: true,
                         tutkintonimikkeet: false,
                         voimassaolo: true,
-                        koulutusvienti: true
+                        koulutusvienti: true,
+                        jarjestys: "nimi"
                     });
 
                     {
@@ -348,6 +360,7 @@ angular.module("app").config($stateProvider => {
                             $scope.koulutusalatMap[ala.koodi] = ala;
                         });
                         $scope.sisaltokielet = ["fi", "sv"];
+                        $scope.jarjestysTyypit = ["nimi", "muokattu"];
 
                         $scope.kaanna = text => Kaanna.kaanna(text);
                         $scope.koulutustyypit = YleinenData.ammatillisetKoulutustyypit;
@@ -472,6 +485,15 @@ angular.module("app").config($stateProvider => {
                                     "korvaavat-perusteet"
                                 );
                             }
+                            if (peruste.muokattu) {
+                                const currentTime = new Date().getTime();
+                                // 2vk
+                                if (currentTime - peruste.muokattu < 60 * 60 * 24 * 7 * 2 * 1000) {
+                                    peruste.$$muokattuViimeAikoina = true;
+                                } else {
+                                    peruste.$$muokattuViimeAikoina = false;
+                                }
+                            }
                             PerusteenTutkintonimikkeet.parse(
                                 peruste.tutkintonimikkeetKoodisto,
                                 peruste.$$tutkintonimikkeet
@@ -562,7 +584,8 @@ angular.module("app").config($stateProvider => {
                         sivukoko: 5,
                         tila: "valmis",
                         tuleva: true,
-                        voimassaolo: true
+                        voimassaolo: true,
+                        jarjestys: "nimi"
                     });
 
                     {
@@ -573,6 +596,7 @@ angular.module("app").config($stateProvider => {
                         $scope.sivuja = 1;
                         $scope.kokonaismaara = 0;
                         $scope.sisaltokielet = ["fi", "sv"];
+                        $scope.jarjestysTyypit = ["nimi", "muokattu"];
                         $scope.kaanna = text => Kaanna.kaanna(text);
                     }
 
