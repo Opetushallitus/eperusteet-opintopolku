@@ -20,4 +20,5 @@ angular
     .constant("REQUEST_TIMEOUT", 10000)
     .constant("SPINNER_WAIT", 100)
     .constant("NOTIFICATION_DELAY_SUCCESS", 4000)
-    .constant("NOTIFICATION_DELAY_WARNING", 10000);
+    .constant("NOTIFICATION_DELAY_WARNING", 10000)
+    .constant("PERUSTE_HAKU_TUORE_KESTO", moment.duration(2, 'weeks').asMilliseconds());
