@@ -337,7 +337,7 @@ mixin tosaToteutus()
         +contentToggler("vapaa.$$show", "vapaa.nimi")
           +teksti("vapaa.teksti")
 
-      div
+      div(ng-if="osa.tosa.toteutukset.length > 0")
         h2
           span(ng-bind="'toteutukset' | kaanna")
 
@@ -345,10 +345,11 @@ mixin tosaToteutus()
         div
           .otsikko(ng-click="toteutus.$$nayta = !toteutus.$$nayta")
             h3
-              +turboChevron("!toteutus.$$nayta")
+              span(ng-if="osa.tosa.toteutukset.length > 1")
+                +turboChevron("!toteutus.$$nayta")
               +plainTeksti("toteutus.otsikko")
 
-          .sisalto(ng-if="toteutus.$$nayta")
+          .sisalto(ng-if="toteutus.$$nayta || osa.tosa.toteutukset.length === 1")
             div(ng-show="toteutus.koodit.length > 0")
               +contentToggler("$$showKoodit", "'liitetyt-koodit'")
                 table.table.table-striped
