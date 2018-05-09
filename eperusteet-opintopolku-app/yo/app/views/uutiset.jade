@@ -2,10 +2,15 @@
   h1.peruste-otsikko(kaanna="'etusivu.uutisia'")
   .sisalto-box
     ul
-      li.lista-elementti(ng-repeat='tiedote in tiedotteet | limitTo:naytto.shown', ng-if='hasContentOnCurrentLang(tiedote.otsikko)')
-        a(ui-sref='root.tiedote({tiedoteId: tiedote.id})')
-          span(ng-bind='tiedote.otsikko | kaanna')
+      li.lista-elementti(ng-repeat="tiedote in tiedotteet")
+        a(ui-sref="root.tiedote({tiedoteId: tiedote.id})")
+          span(kaanna="tiedote.otsikko")
         p
           span {{tiedote.luotu || tiedote.luotu | date}}
-      li.lista-elementti-lisaa
-        limit-toggler(limit='naytto.limit', model='tiedotteet', limiter='naytto.shown')
+
+  .text-center
+    ul(uib-pagination
+       ng-model='sivu'
+       ng-change="hakuMuuttui()"
+       total-items='kokonaismaara'
+       items-per-page='sivukoko')
