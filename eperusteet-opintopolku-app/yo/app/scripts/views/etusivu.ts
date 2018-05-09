@@ -194,7 +194,7 @@ angular
         $scope,
         UusimmatPerusteetService,
         MurupolkuData,
-        TiedotteetCRUD,
+        TiedotteetHaku,
         Utils,
         Kieli,
         Perusteet
@@ -212,13 +212,11 @@ angular
             $scope.uusimmat = res;
         });
 
-        $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
-
-        const MONTH_OFFSET = 12 * 30 * 24 * 60 * 60 * 1000;
-        const alkaen = new Date().getTime() - MONTH_OFFSET;
-
-        TiedotteetCRUD.query({ alkaen: alkaen, vainJulkiset: true }, res => {
-            $scope.tiedotteet = res;
+        TiedotteetHaku.get({
+            sivukoko: 5,
+            kieli: Kieli.getSisaltokieli()
+        }, res => {
+            $scope.tiedotteet = res.data;
         });
     })
     .controller("TiedoteViewController", function($scope, TiedotteetCRUD, $stateParams, MurupolkuData) {

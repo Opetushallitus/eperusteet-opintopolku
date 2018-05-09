@@ -14,8 +14,12 @@
  * European Union Public Licence for more details.
  */
 
-angular.module("app").factory("TiedotteetCRUD", function($resource, epResource) {
-    return $resource(epResource.SERVICE + "/tiedotteet/:tiedoteId", {
-        tiedoteId: "@id"
+angular.module("app")
+    .factory("TiedotteetCRUD", function($resource, epResource) {
+        return $resource(epResource.SERVICE + "/tiedotteet/:tiedoteId", {
+            tiedoteId: "@id"
+        });
+    })
+    .factory("TiedotteetHaku", function($resource, epResource) {
+        return $resource(epResource.SERVICE + "/tiedotteet/haku", {});
     });
-});

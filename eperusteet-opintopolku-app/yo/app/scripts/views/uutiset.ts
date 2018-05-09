@@ -16,23 +16,25 @@
 
 angular
     .module("app")
-    .controller("UutisetController", function($scope, UusimmatPerusteetService, TiedotteetCRUD, Utils, Kieli) {
-        $scope.tiedotteet = [];
-        $scope.naytto = { limit: 50, shown: 10 };
-        $scope.kieli = Kieli.getSisaltokieli();
+    .controller("UutisetController", ($scope, TiedotteetHaku, Kieli) => {
+        $scope.sivu = 1;
+        $scope.sivukoko = 10;
 
-        $scope.hasContentOnCurrentLang = Utils.hasContentOnCurrentLang;
+        function haeTiedotteet() {
+            TiedotteetHaku.get({
+                sivukoko: $scope.sivukoko,
+                sivu: $scope.sivu - 1,
+                kieli: Kieli.getSisaltokieli()
+            }, res => {
+                $scope.tiedotteet = res.data;
+                $scope.kokonaismaara = res.kokonaismäärä;
+                $scope.sivu = res.sivu + 1;
+            });
+        }
+        haeTiedotteet();
 
-        const MONTH_OFFSET = 48 * 30 * 24 * 60 * 60 * 1000; // 4 vuotta
-        const alkaen = new Date().getTime() - MONTH_OFFSET;
-
-        TiedotteetCRUD.query(
-            {
-                alkaen: 0,
-                vainJulkiset: true
-            },
-            function(res) {
-                $scope.tiedotteet = res;
-            }
-        );
+        let hakuViive = 300; // ms
+        $scope.hakuMuuttui = _.debounce(_.bind(haeTiedotteet, $scope, 1), hakuViive, {
+            leading: false
+        });
     });
