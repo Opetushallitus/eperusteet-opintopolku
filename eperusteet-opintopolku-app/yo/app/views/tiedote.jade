@@ -1,7 +1,12 @@
 .tiedote
   murupolku
   .sisalto-box
-    h1(ng-bind-html='tiedote.otsikko | kaanna | unsafe')
+    h1
+      span(ng-bind-html='tiedote.otsikko | kaanna | unsafe')
     .tiedote-tiedot
       | {{tiedote.luotu | date:'d.M.yyyy H:mm'}}
+    .tiedote-perusteprojekti(ng-if="tiedote.peruste")
+      p
+        span {{'peruste' | kaanna}}:{{' '}}
+        a(ui-sref="root.kooste({ perusteId: tiedote.peruste.id })" kaanna="tiedote.peruste.nimi")
     .tiedote-leipateksti(ng-bind-html='tiedote.sisalto | kaanna | unsafe')

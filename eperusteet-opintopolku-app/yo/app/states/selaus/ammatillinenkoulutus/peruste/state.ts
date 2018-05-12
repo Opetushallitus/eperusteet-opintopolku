@@ -131,14 +131,12 @@ angular.module("app").config($stateProvider => {
                 return peruste.one("tutkintonimikekoodit").get();
             },
 
-            perusteenTiedotteet: (PerusteApi, $stateParams) => {
-                const MONTH_OFFSET = 12 * 30 * 24 * 60 * 60 * 1000;
-                const alkaen = new Date().getTime() - MONTH_OFFSET;
-                return PerusteApi.all("tiedotteet").getList({
+            perusteenTiedotteet: ($stateParams, TiedotteetHaku, Kieli) => {
+                return TiedotteetHaku.get({
                     perusteId: $stateParams.perusteId,
-                    vainJulkiset: true,
-                    alkaen
-                });
+                    kieli: Kieli.getSisaltokieli(),
+                    julkinen: true
+                }).$promise;
             },
         },
         views: {
@@ -147,7 +145,7 @@ angular.module("app").config($stateProvider => {
                 controller: ($scope, $state, $stateParams, peruste, perusteenTiedotteet, tutkintonimikkeet, PerusteenRakenne) => {
                     $scope.tiedoteMaara = 5;
                     $scope.peruste = peruste;
-                    $scope.perusteenTiedotteet = perusteenTiedotteet;
+                    $scope.perusteenTiedotteet = perusteenTiedotteet.data;
                     $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen(peruste.koulutustyyppi);
 
                     $scope.tutkintonimikkeet = _(tutkintonimikkeet)

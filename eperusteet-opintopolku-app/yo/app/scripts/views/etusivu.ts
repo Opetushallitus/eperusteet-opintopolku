@@ -214,7 +214,9 @@ angular
 
         TiedotteetHaku.get({
             sivukoko: 5,
-            kieli: Kieli.getSisaltokieli()
+            kieli: Kieli.getSisaltokieli(),
+            julkinen: true,
+            yleinen: true
         }, res => {
             $scope.tiedotteet = res.data;
         });

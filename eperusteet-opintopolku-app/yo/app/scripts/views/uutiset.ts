@@ -22,9 +22,11 @@ angular
 
         function haeTiedotteet() {
             TiedotteetHaku.get({
-                sivukoko: $scope.sivukoko,
                 sivu: $scope.sivu - 1,
-                kieli: Kieli.getSisaltokieli()
+                sivukoko: $scope.sivukoko,
+                kieli: Kieli.getSisaltokieli(),
+                julkinen: true,
+                yleinen: true
             }, res => {
                 $scope.tiedotteet = res.data;
                 $scope.kokonaismaara = res.kokonaismäärä;
