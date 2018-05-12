@@ -82,7 +82,7 @@ angular
         var STATES = {
             "root.tiedotteet": {
                 state: "root.uutiset",
-                label: "etusivu.tiedotteet"
+                label: "etusivu.uutisia"
             },
             "root.tiedote": {
                 useData: "tiedoteNimi",
