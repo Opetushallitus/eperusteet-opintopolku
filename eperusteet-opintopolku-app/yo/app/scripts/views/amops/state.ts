@@ -48,7 +48,7 @@ angular.module("app").config($stateProvider =>
         views: {
             "": {
                 templateUrl: "views/amops/view.html",
-                controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location, ktId) => {
+                controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location, ktId, Utils) => {
                     if ($state.is("root.amops")) {
                         $state.go("root.amops.tiedot", { location: "replace" });
                         // return;
@@ -59,6 +59,11 @@ angular.module("app").config($stateProvider =>
                     $scope.ktId = ktId;
 
                     $scope.sivunavi = Tekstikappaleet.teeRakenne(Tekstikappaleet.uniikit(otsikot), sisaltoRoot.id);
+
+                    $scope.$on("$stateChangeSuccess", (event, toState) => {
+                        Utils.scrollTo("#ylasivuankkuri");
+                    });
+
 
                     $scope.suodata = search => {
                         if (!!$scope.misc.isSearching !== !_.isEmpty(search)) {

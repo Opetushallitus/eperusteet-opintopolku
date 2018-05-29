@@ -18,7 +18,10 @@
           span.glyphicon.glyphicon-align-justify
     div(off-click='toggleSideMenu()', off-click-filter='#sivunavi-valikko-nappi', off-click-if='!menuCollapsed')
       .sivunavi.sivunavi-box(ng-class="{'sivunavi-collapsed': menuCollapsed, 'sivunavi-open': !menuCollapsed}", ng-style='{top: scrollTop}')
-        .header(ng-bind="'ops-sisalto' | kaanna")
+        .header(ng-bind="'toteutussuunnitelman-sisalto' | kaanna")
+        .input-group(style="margin: 10px 15px 0 15px;")
+          span.input-group-addon.input-sm(icon-role='search')
+          input.form-control.input-sm(ng-change="suodata(search)" type="text" ng-model="search" placeholder="{{ 'hae' | kaanna }}")
         ul
           li
             a(ui-sref-active='active', ui-sref='.tiedot', ng-bind="'tiedot' | kaanna", ng-class='{ pakollinen: item.$$obj.pakollinen, liikkumaton: item.$$obj.liikkumaton }')
