@@ -465,6 +465,8 @@ mixin valmaTelma(field)
 mixin perusteenTosaSisalto()
   +formfieldDense("'koodi'")
     b(ng-bind="pTosa.koodiArvo")
+  +formfieldDense("'laajuus'")
+    span {{pTosaViite.laajuus}} {{st.laajuusYksikko | kaanna}}
   +formfieldDense("'luotu'")
     span(ng-bind="pTosa.luotu | aikaleima")
   +formfieldDense("'viimeksi-muokattu'")
