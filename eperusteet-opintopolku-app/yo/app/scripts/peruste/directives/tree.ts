@@ -19,9 +19,10 @@ angular
     .service("treeTemplate", function() {
         function generoiOtsikko() {
             const tosa =
-                "{{ tutkinnonOsaSolmunNimi(rakenne) | kaanna }}" +
-                "<span ng-if=\"!rakenne.erikoisuus && tutkinnonOsaViitteet[rakenne._tutkinnonOsaViite].laajuus\">," +
-                " <strong>{{ + tutkinnonOsaViitteet[rakenne._tutkinnonOsaViite].laajuus || 0 }}</strong> {{ apumuuttujat.laajuusYksikko | kaanna }}</span>";
+                '{{ tutkinnonOsaSolmunNimi(rakenne) | kaanna }}' +
+                '<span ng-if="naytaLaajuus">' +
+                ', <strong>{{ laajuus }}</strong> {{ apumuuttujat.laajuusYksikko | kaanna }}' +
+                '</span>';
             const editointiIkoni =
                 '<div ng-click="togglaaPakollisuus(rakenne)" class="osa-ikoni">' +
                 '  <span ng-if="!rakenne.pakollinen"><img src="images/tutkinnonosa.png" alt=""></span> ' +
@@ -122,8 +123,8 @@ angular
             varivalinta +
             ">" +
             "  <span ng-if=\"rakenne.rooli !== 'määrittelemätön'\">" +
-            '    <span ng-hide="rakenne.$collapsed || !rakenne.$searchitem" class="glyphicon glyphicon-chevron-down"></span>' +
-            '    <span ng-show="rakenne.$collapsed || !rakenne.$searchitem" class="glyphicon glyphicon-chevron-right"></span>' +
+            '    <span ng-hide="rakenne.$collapsed" class="glyphicon glyphicon-chevron-down"></span>' +
+            '    <span ng-show="rakenne.$collapsed" class="glyphicon glyphicon-chevron-right"></span>' +
             "  </span>" +
             "</span>" +
             '<div class="right">' +
@@ -247,6 +248,17 @@ angular
         $scope.esitystilassa = $state.includes("**.esitys.**");
         $scope.lang = $translate.use() || $translate.preferredLanguage();
         $scope.isNumber = _.isNumber;
+
+        const tosa = $scope.tutkinnonOsaViitteet[$scope.rakenne._tutkinnonOsaViite];
+        if (tosa) {
+            $scope.naytaLaajuus = !$scope.rakenne.erikoisuus && (tosa.laajuus || tosa.laajuusMaksimi);
+            if (!tosa.laajuusMaksimi || tosa.laajuus >= tosa.laajuusMaksimi) {
+                $scope.laajuus = tosa.laajuus;
+            }
+            else {
+                $scope.laajuus = tosa.laajuus + "-" + tosa.laajuusMaksimi;
+            }
+        }
 
         $scope.trackingFunction = function(osa, index) {
             return osa.nimi && osa.nimi._id ? osa.nimi._id : index;
