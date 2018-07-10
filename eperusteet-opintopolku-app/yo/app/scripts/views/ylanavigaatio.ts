@@ -29,6 +29,10 @@ angular
                     fi: "https://eperusteet.opintopolku.fi/",
                     sv: "https://egrunder.studieinfo.fi/"
                 },
+                omaopintopolku: {
+                    fi: "https://opintopolku.fi/oma-opintopolku/",
+                    sv: "https://opintopolku.fi/oma-opintopolku/"
+                },
                 opintopolku: {
                     fi: "https://opintopolku.fi/",
                     sv: "https://studieinfo.fi/"
