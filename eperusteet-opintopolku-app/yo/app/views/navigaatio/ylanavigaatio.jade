@@ -6,6 +6,8 @@ div(ng-controller='YlanavigaatioController')
         ul
           li
             a(ng-href='{{urls.opintopolku[kieli]}}', kaanna="'opintopolku'")
+          li
+            a(ng-href='{{urls.omaopintopolku[kieli]}}', kaanna="'oma-opintopolku'")
           li.active
             span(kaanna="'eperusteet-otsikko'")
         // kielivalitsin
