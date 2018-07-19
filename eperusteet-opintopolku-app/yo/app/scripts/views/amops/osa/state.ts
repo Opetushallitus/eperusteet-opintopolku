@@ -26,14 +26,17 @@ angular.module("app").config($stateProvider =>
         url: "/osa/:osaId",
         onEnter: osa => Murupolku.register("root.amops.osa", osa.tekstiKappale.nimi),
         resolve: {
-            osa: (ops, $stateParams) => ops.one("tekstit", $stateParams.osaId).get(),
+            osa: (ops, $stateParams) => {
+                return ops.one("tekstit", $stateParams.osaId).get();
+            },
             pTosat: (Api, osa, ops) =>
                 osa.tyyppi === "suorituspolku" && Api.all("perusteet/" + ops.peruste.id + "/tutkinnonosat").getList(),
-            pTosa: (Api, osa, ops) =>
-                osa.tyyppi === "tutkinnonosa" &&
-                osa.tosa.tyyppi === "perusteesta" &&
-                Api.one("perusteet/" + ops.peruste.id + "/tutkinnonosat/" + osa.tosa.perusteentutkinnonosa).get(),
-            pTosaViite: (Api, osa, ops) => {
+            pTosa: (Api, osa, ops) => {
+                if (osa.tyyppi === "tutkinnonosa" && osa.tosa.tyyppi === "perusteesta") {
+                    return Api.one("perusteet/" + ops.peruste.id + "/tutkinnonosat/" + osa.tosa.perusteentutkinnonosa).get();
+                }
+            },
+            pTosaViite: async (Api, osa, ops) => {
                 if (osa.tyyppi === "tutkinnonosa") {
                     let perusteId = null;
                     let tosaId = null;
@@ -46,8 +49,26 @@ angular.module("app").config($stateProvider =>
                     } else {
                         return;
                     }
-                    return Api.one("perusteet/" + ops.peruste.id + "/suoritustavat/" + ops.suoritustapa
-                        + "/tutkinnonosat/" + tosaId).get();
+
+                    const getSuoritustapaSisalto = async(suoritustavat) => {
+                        if (!suoritustavat) {
+                            return;
+                        }
+                        else if (!_.head(suoritustavat)) {
+                            return await getSuoritustapaSisalto(_.tail(suoritustavat));
+                        }
+                        else {
+                            const url = "perusteet/" + ops.peruste.id + "/suoritustavat/" + _.head(suoritustavat) + "/tutkinnonosat/" + tosaId;
+                            try {
+                                return await Api.one(url).get();
+                            }
+                            catch (err) {
+                                return await getSuoritustapaSisalto(_.tail(suoritustavat));
+                            }
+                        }
+                    }
+
+                    return getSuoritustapaSisalto([ops.suoritustapa, "reformi", "ops", "naytto"]);
                 }
             },
             pSuoritustavat: (Api, osa, ops) =>
