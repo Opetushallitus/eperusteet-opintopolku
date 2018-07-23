@@ -1,8 +1,4 @@
 a(ng-href="{{kieli === 'fi' ? 'http://osaan.fi' : 'http://jagkan.fi'}}", target='_blank')
   .sisalto-box.osaan-banneri
-    .pull-left.osaan-tekstit
-      p.osaan-otsikko(kaanna="'osaatko-jo'")
-      p.osaan-otsikko(kaanna="'arvio-itse'")
-      p.osaan-otsikko.osaan-vihrea(kaanna="'osaan-linkki'")
-      p.osaan-teksti.osaan-vihrea(kaanna="'osaan-kuvaus'")
-    .osaan-pollo.pull-right
+    img.osaan-logo(ng-show="kieli === 'fi'" src="../images/osaan-logo-fi.png" alt="Osaan.fi")
+    img.osaan-logo(ng-show="kieli === 'sv'" src="../images/osaan-logo-fi.png" alt="Jagkan.fi")
