@@ -65,41 +65,10 @@
 }
 
 .osaan-banneri {
-    background-color: #e1f2dd;
-    min-height: 140px;
+    padding: 0;
 }
-.osaan-tekstit {
-    position: absolute;
-    z-index: 1;
-    margin-right: 100px;
-}
-
-.osaan-otsikko {
-    color: black;
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 0;
-    line-height: 1;
-}
-.osaan-teksti {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    font-size: 14px;
-}
-.osaan-vihrea {
-    color: #327b1f;
-}
-
-.osaan-pollo {
-    background-color: #e1f2dd;
-    background: url("../images/osaan-pollo.png") no-repeat right top;
-    background-size: 150px 150px;
-    width: 90px;
-    height: 130px;
-    top: -10px;
-    left: $sisalto-padding;
-    position: relative;
-    background-position: 0 100%;
+.osaan-logo {
+    width: 100%;
 }
 
 @media (max-width: $screen-xs-max) {
@@ -118,8 +87,8 @@
             padding-right: $sisalto-padding * 0.75;
         }
     }
-    .osaan-pollo {
-        left: $sisalto-padding * 0.75;
+    .osaan-banneri {
+        padding: 0;
     }
 }
 

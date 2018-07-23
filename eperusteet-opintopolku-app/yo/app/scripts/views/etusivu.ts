@@ -213,7 +213,7 @@ angular
         });
 
         TiedotteetHaku.get({
-            sivukoko: 5,
+            sivukoko: 8,
             kieli: Kieli.getSisaltokieli(),
             julkinen: true,
             yleinen: true

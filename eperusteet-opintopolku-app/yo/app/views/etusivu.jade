@@ -8,7 +8,6 @@
               h2(kaanna="'etusivu.eperusteet'")
               span(kaanna="'etusivu.eperusteet.kuvaus'")
   .row
-
     // Uutiset / Tiedotteet
     .col-lg-4.col-lg-push-8.col-md-12
       .sisalto-box
@@ -23,6 +22,7 @@
             li.lista-elementti(ng-show="tiedotteet.length > 0")
               a(ui-sref='root.uutiset', kaanna="'nayta-kaikki-uutiset'")
         p(ng-show="tiedotteet.length === 0" kaanna="'ei-tiedotteita'")
+
       .visible-lg(ng-include='', src="'views/osaan.html'")
 
     // Valtakunnalliset perusteet
@@ -59,8 +59,6 @@
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_18'][0]")
               a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: 'ops'})", ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna")
 
-      .visible-md(ng-include='', src="'views/osaan.html'")
-
     // Uusimmat ammatilliset perusteet
     .col-lg-4.col-lg-pull-4.col-md-6
       .sisalto-box
@@ -75,6 +73,10 @@
                 = ' '
                 span(ng-bind='peruste.koulutustyyppi | kaanna')
         p(ng-show="uusimmatLista.length < 1" kaanna="'ei-uusia-perusteita'")
+
+      .visible-md(ng-include='', src="'views/osaan.html'")
+      .visible-sm(ng-include='', src="'views/osaan.html'")
+      .visible-xs(ng-include='', src="'views/osaan.html'")
 
   footer
     .alatunniste
