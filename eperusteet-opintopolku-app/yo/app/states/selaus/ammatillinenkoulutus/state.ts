@@ -74,7 +74,7 @@ angular.module("app").config($stateProvider => {
                         osaamisalat: false,
                         perusteTyyppi: "normaali",
                         poistunut: false,
-                        siirtyma: true,
+                        siirtyma: false,
                         sivu: 0,
                         sivukoko: 5,
                         tyyppi: oletustyypit,
