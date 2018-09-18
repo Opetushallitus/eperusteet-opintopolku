@@ -15,7 +15,7 @@
           span.glyphicon.glyphicon-chevron-down(ng-hide='ngModel.$$collapsed')
           span.glyphicon.glyphicon-chevron-right(ng-show='ngModel.$$collapsed')
       .sp-toolbar
-        .sp-muodostuminen(ng-show='ngModel.muodostumisSaanto', ng-init='laajuus = ngModel.muodostumisSaanto.laajuus; koko = ngModel.muodostumisSaanto.koko; laajuusSama = laajuus.minimi === laajuus.maksimi')
+        .sp-muodostuminen(ng-show='ngModel.muodostumisSaanto && !osa.suorituspolku.osasuorituspolku', ng-init='laajuus = ngModel.muodostumisSaanto.laajuus; koko = ngModel.muodostumisSaanto.koko; laajuusSama = laajuus.minimi === laajuus.maksimi')
           span(ng-show='laajuus.minimi || laajuus.maksimi', ng-bind='laajuus.minimi || 0')
           span(ng-show='!laajuusSama') {{ ' - ' }}
           span(ng-show='laajuus.maksimi && !laajuusSama', ng-bind='laajuus.maksimi')
