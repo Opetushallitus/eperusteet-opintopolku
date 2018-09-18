@@ -66,7 +66,7 @@ angular.module("app").config($stateProvider =>
                                 return await getSuoritustapaSisalto(_.tail(suoritustavat));
                             }
                         }
-                    }
+                    };
 
                     return getSuoritustapaSisalto([ops.suoritustapa, "reformi", "ops", "naytto"]);
                 }
@@ -101,8 +101,7 @@ angular.module("app").config($stateProvider =>
                     pTosat,
                     koodisto,
                     paikallisetTutkinnonosatEP,
-                    koulutustoimija,
-                    Notifikaatiot
+                    koulutustoimija
                 ) => {
                     const suoritustapa = Perusteet.getSuoritustapa(pSuoritustavat),
                         tosat = _.indexBy(pTosat, "id"),
