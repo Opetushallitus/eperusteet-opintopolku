@@ -1,6 +1,6 @@
 include ../../../misc/mixins.pug
 
-.suorituspolku-laajuus(ng-show="osa.suorituspolku.osasuorituspolku && osa.suorituspolku.osasuorituspolkuLaajuus")
+.suorituspolku-laajuus(ng-show="osa.tyyppi === 'osasuorituspolku' && osa.suorituspolku.osasuorituspolkuLaajuus")
   +contentToggler("osa.suorituspolku.$$naytaLaajuus", "'osasuorituspolku-laajuus'")
     span(ng-bind="osa.suorituspolku.osasuorituspolkuLaajuus")
     span(style='margin-left: 2px', ng-show='misc.suoritustapa.laajuusYksikko', ng-bind='misc.suoritustapa.laajuusYksikko | kaanna')
