@@ -17,7 +17,7 @@
 angular.module("app").config($stateProvider => {
     const paikallisetView = {
         templateUrl: "views/states/koostenakyma/peruste/paikalliset.html",
-        controller($scope, $state, $timeout, $q, peruste, PerusteenRakenne, Api, YlopsApi, Algoritmit) {
+        controller($scope, $state, $timeout, $q, $stateParams, peruste, PerusteenRakenne, Api, YlopsApi, Algoritmit) {
             $scope.tutkintonimiketaulu = _.groupBy(peruste.tutkintonimikkeet, "tutkintonimikeUri");
             $scope.haku = "";
             $scope.isLoading = true;
@@ -48,7 +48,9 @@ angular.module("app").config($stateProvider => {
 
             if (!isAmmatillinen) {
                 $scope.isLoading = true;
-                ylopsPaikalliset = YlopsApi.one("opetussuunnitelmat/julkiset").getList()
+                ylopsPaikalliset = YlopsApi.all("opetussuunnitelmat").customGETLIST("julkiset", {
+                    perusteenId: $stateParams.perusteId
+                })
                     .then(res => _.map(res, (ops: any) => ({
                         ...ops.plain(),
                         $$href: getKtLinkki(ops),
