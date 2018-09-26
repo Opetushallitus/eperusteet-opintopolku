@@ -30,7 +30,7 @@ angular.module("app").config($stateProvider =>
                 return ops.one("tekstit", $stateParams.osaId).get();
             },
             pTosat: (Api, osa, ops) =>
-                osa.tyyppi === "suorituspolku" && Api.all("perusteet/" + ops.peruste.id + "/tutkinnonosat").getList(),
+                (osa.tyyppi === "suorituspolku" || osa.tyyppi === "osasuorituspolku") && Api.all("perusteet/" + ops.peruste.id + "/tutkinnonosat").getList(),
             pTosa: (Api, osa, ops) => {
                 if (osa.tyyppi === "tutkinnonosa" && osa.tosa.tyyppi === "perusteesta") {
                     return Api.one("perusteet/" + ops.peruste.id + "/tutkinnonosat/" + osa.tosa.perusteentutkinnonosa).get();
@@ -72,7 +72,7 @@ angular.module("app").config($stateProvider =>
                 }
             },
             pSuoritustavat: (Api, osa, ops) =>
-                osa.tyyppi === "suorituspolku" && Api.one("perusteet/" + ops.peruste.id + "/suoritustavat").get(),
+                (osa.tyyppi === "suorituspolku" || osa.tyyppi === "osasuorituspolku") && Api.one("perusteet/" + ops.peruste.id + "/suoritustavat").get(),
             arviointiAsteikot: Api => Api.all("arviointiasteikot").getList()
         },
         views: {

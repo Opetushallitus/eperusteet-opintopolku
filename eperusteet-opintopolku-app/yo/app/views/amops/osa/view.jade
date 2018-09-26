@@ -6,4 +6,5 @@
     span(ng-hide='!pTosa.koodiArvo') ({{ pTosa.koodiArvo }})
   amosaa-termisto-teksti(teksti='osa.tekstiKappale.teksti', kt='ktId')
   div(ng-if="osa.tyyppi === 'suorituspolku'", ui-view='suorituspolku')
+  div(ng-if="osa.tyyppi === 'osasuorituspolku'", ui-view='suorituspolku')
   div(ng-if="osa.tyyppi === 'tutkinnonosa'", ui-view='tutkinnonosa')
