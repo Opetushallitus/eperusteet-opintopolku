@@ -16,8 +16,9 @@
 
 angular
     .module("app")
-    .controller("OpsController", function($scope, $state, $location, $window, TermistoService,
-                                          Kieli, otsikot, ops) {
+    .controller("OpsController", ($scope, $state, $location, $window, TermistoService,
+                                          Kieli, otsikot, ops) => {
+        ops.organisaatiot = _.reject(ops.organisaatiot, { tyypit: ["Ryhma"] }); // Piilotetaan ryhmät
         $scope.ops = ops;
         $scope.otsikot = otsikot;
         TermistoService.setResource(ops, "OPS");
