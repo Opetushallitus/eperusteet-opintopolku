@@ -27,7 +27,7 @@ h1(esitys-sivu-otsikko="'opetussuunnitelman-tiedot'")
     ul
       li(ng-repeat='kunta in ops.kunnat')
         span {{kunta.nimi | kaanna}}
-.row.row-margin
+.row.row-margin(ng-show="ops.organisaatiot && ops.organisaatiot.length > 0")
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'organisaatiot'")
