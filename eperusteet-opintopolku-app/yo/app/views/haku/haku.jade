@@ -139,7 +139,8 @@ mixin haku()
             =" "
             span(pvm="peruste.voimassaoloLoppuu")
 
-          p.pvm(ng-if="peruste.$$tila === 'siirtyma'")
+          // EP-1486
+          p.pvm
             span(kaanna="'siirtyman-paattyminen'")
             =" "
             span(pvm="peruste.siirtymaPaattyy")
