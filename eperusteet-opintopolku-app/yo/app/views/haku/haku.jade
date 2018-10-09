@@ -140,7 +140,7 @@ mixin haku()
             span(pvm="peruste.voimassaoloLoppuu")
 
           // EP-1486
-          p.pvm
+          p.pvm(ng-if="peruste.siirtymaPaattyy")
             span(kaanna="'siirtyman-paattyminen'")
             =" "
             span(pvm="peruste.siirtymaPaattyy")
