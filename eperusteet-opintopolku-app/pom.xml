@@ -28,7 +28,7 @@
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.5</version>
+                <version>1.6</version>
                 <configuration>
                     <workingDirectory>yo</workingDirectory>
                 </configuration>
@@ -39,8 +39,8 @@
                             <goal>install-node-and-npm</goal>
                         </goals>
                         <configuration>
-                            <nodeVersion>v6.11.2</nodeVersion>
-                            <npmVersion>3.10.10</npmVersion>
+                            <nodeVersion>v10.11.0</nodeVersion>
+                            <npmVersion>6.4.1</npmVersion>
                         </configuration>
                     </execution>
                     <execution>
@@ -58,7 +58,8 @@
                             <goal>grunt</goal>
                         </goals>
                         <configuration>
-                            <arguments>build --no-color</arguments>
+                            <arguments>build</arguments>
+                            <arguments>--no-color</arguments>
                         </configuration>
                     </execution>
                 </executions>
