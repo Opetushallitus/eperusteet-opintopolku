@@ -36,7 +36,7 @@
     "jquery": "3.1.1",
     "json3": "3.3.2",
     "lodash": "3.10.1",
-    "moment": "^2.22.2",
+    "moment": "2.16.0",
     "ngstorage": "0.3.11",
     "restangular": "1.5.2"
   },
@@ -48,7 +48,7 @@
     "grunt-angular-templates": "1.1.0",
     "grunt-cli": "1.2.0",
     "grunt-concurrent": "2.3.0",
-    "grunt-connect-proxy": "^0.2.0",
+    "grunt-connect-proxy": "0.1.10",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-concat": "1.0.1",
     "grunt-contrib-connect": "0.10.1",
@@ -59,7 +59,7 @@
     "grunt-contrib-jshint": "1.0.0",
     "grunt-contrib-pug": "1.0.0",
     "grunt-contrib-uglify": "2.0.0",
-    "grunt-contrib-watch": "^1.1.0",
+    "grunt-contrib-watch": "1.0.0",
     "grunt-focus": "1.0.0",
     "grunt-karma": "2.0.0",
     "grunt-maxlines": "0.1.0",
@@ -70,7 +70,7 @@
     "grunt-sass": "1.2.0",
     "grunt-svgmin": "3.3.0",
     "grunt-timer": "0.6.0",
-    "grunt-ts": "^6.0.0-beta.21",
+    "grunt-ts": "6.0.0-beta.14",
     "grunt-typings": "0.1.5",
     "grunt-usemin": "3.1.1",
     "jasmine-core": "2.4.1",
@@ -82,6 +82,6 @@
     "nightwatch": "0.9.15",
     "prettier": "1.6.1",
     "typescript": "2.5.2",
-    "webdriver-manager": "^12.1.0"
+    "webdriver-manager": "12.0.6"
   }
 }
