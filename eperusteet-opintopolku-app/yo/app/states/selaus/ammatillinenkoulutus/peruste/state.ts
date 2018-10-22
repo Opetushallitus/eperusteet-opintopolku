@@ -48,8 +48,9 @@ angular.module("app").config($stateProvider => {
 
             if (!isAmmatillinen) {
                 $scope.isLoading = true;
+                // TODO: tilapäinen korjaus, käytä mielummin peruste cachea
                 ylopsPaikalliset = YlopsApi.all("opetussuunnitelmat").customGETLIST("julkiset", {
-                    perusteenId: $stateParams.perusteId
+                    perusteenDiaarinumero: peruste.diaarinumero
                 })
                     .then(res => _.map(res, (ops: any) => ({
                         ...ops.plain(),
