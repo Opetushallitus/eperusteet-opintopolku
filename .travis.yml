@@ -30,7 +30,7 @@ script:
   - mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
   - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
 
-  - export BASE_IMAGE="base-legacy:0.1"
+  - export BASE_IMAGE="baseimage-war:master"
   - ./ci-tools/common/pull-image.sh
   - ./ci-tools/build/build-war.sh ${ARTIFACT_NAME}
 
