@@ -35,28 +35,6 @@ mixin haku()
     a(ng-click="poistaHakukriteeri('tyyppi')")
       +giconrtl("remove", "hakuparametrit.tyyppi")
 
-  span(uib-dropdown ng-if="!hakuparametrit.koulutusala")
-    a.dropdown-toggle(uib-dropdown-toggle)
-      +giconrtl("chevron-down", "'haku-koulutusala'")
-    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-      li(ng-repeat="ala in koulutusalat")
-        a(kaanna="ala.nimi" ng-click="muutaHakua('koulutusala', ala.koodi)")
-
-  span(ng-if="hakuparametrit.koulutusala")
-    a(ng-click="poistaHakukriteeri('koulutusala')")
-      +giconrtl("remove", "koulutusalatMap[hakuparametrit.koulutusala].nimi")
-
-  span(uib-dropdown ng-if="hakuparametrit.koulutusala && !hakuparametrit.opintoala")
-    a.dropdown-toggle(uib-dropdown-toggle)
-      +giconrtl("chevron-down", "'haku-opintoala'")
-    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-      li(ng-repeat="ala in opintoalat")
-        a(kaanna="ala.nimi" ng-click="muutaHakua('opintoala', ala.koodi)")
-
-  span(ng-if="hakuparametrit.koulutusala && hakuparametrit.opintoala")
-    a(ng-click="poistaHakukriteeri('opintoala')")
-      +giconrtl("remove", "opintoalatMap[hakuparametrit.opintoala].nimi")
-
 .haku
   h1.hidden-xs(kaanna='sivu.otsikko')
 
@@ -107,11 +85,6 @@ mixin haku()
               uib-popover-html="peruste.$$korvattavatPerusteet"
               popover-placement="bottom")
               +gicon("alert")
-
-          p
-            b(ng-repeat="koulutus in peruste.koulutukset | orderBy:'id'")
-              span(kaanna="koulutusalaNimi(koulutus.koulutusalakoodi).nimi")
-              span {{$last ? '' : ', '}}
 
           p.tutkintonimikkeet(ng-if="hakuparametrit.tutkintonimikkeet && peruste.$$tutkintonimikkeet.koodisto.length > 0")
             span(kaanna="'tutkintonimikkeet'" style="font-weight: bold;")

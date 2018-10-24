@@ -24,28 +24,6 @@ mixin haku()
     a(ng-click="poistaHakukriteeri('kieli')")
       +giconrtl("remove", "hakuparametrit.kieli")
 
-  span(uib-dropdown ng-if="!hakuparametrit.koulutusala")
-    a.dropdown-toggle(uib-dropdown-toggle)
-      +giconrtl("chevron-down", "'haku-koulutusala'")
-    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-      li(ng-repeat="ala in koulutusalat")
-        a(kaanna="ala.nimi" ng-click="muutaHakua('koulutusala', ala.koodi)")
-
-  span(ng-if="hakuparametrit.koulutusala")
-    a(ng-click="poistaHakukriteeri('koulutusala')")
-      +giconrtl("remove", "koulutusalatMap[hakuparametrit.koulutusala].nimi")
-
-  span(uib-dropdown ng-if="hakuparametrit.koulutusala && !hakuparametrit.opintoala")
-    a.dropdown-toggle(uib-dropdown-toggle)
-      +giconrtl("chevron-down", "'haku-opintoala'")
-    ul.dropdown-menu.dropdown-menu-right(uib-dropdown-menu)
-      li(ng-repeat="ala in opintoalat")
-        a(kaanna="ala.nimi" ng-click="muutaHakua('opintoala', ala.koodi)")
-
-  span(ng-if="hakuparametrit.koulutusala && hakuparametrit.opintoala")
-    a(ng-click="poistaHakukriteeri('opintoala')")
-      +giconrtl("remove", "opintoalatMap[hakuparametrit.opintoala].nimi")
-
   span(uib-dropdown ng-if="!hakuparametrit.jarjestys")
     a.dropdown-toggle(uib-dropdown-toggle)
       +giconrtl("chevron-down", "'haku-jarjestys'")
@@ -111,11 +89,6 @@ mixin haku()
               uib-tooltip="{{'uusi-tai-muokattu-viime-aikoina' | kaanna}}"
               tooltip-placement="bottom")
               +gicon("fire")
-
-          p
-            b(ng-repeat="kanimi in peruste.$$koulutusalaNimet")
-              span(kaanna="kanimi")
-              span {{$last ? '' : ', '}}
 
           //div(kaanna="peruste.koulutustyyppi | kaanna")
 
