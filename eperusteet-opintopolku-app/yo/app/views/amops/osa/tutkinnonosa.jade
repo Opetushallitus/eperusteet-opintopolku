@@ -415,7 +415,7 @@ mixin omaTosaSisalto()
         .arviointi-kohdealueet
           div(ng-repeat="arvioinninKohdealue in osa.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet")
             +arviointi
-    div(ng-if="osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat && osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat.length > 0")
+    div(ng-if="osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat")
       +contentToggler("$$showAmmattitaidonOsoittamistavat", "'ammattitaidon-osoittamistavat'")
         +teksti("osa.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat")
 
