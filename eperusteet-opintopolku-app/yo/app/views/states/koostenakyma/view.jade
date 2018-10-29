@@ -3,6 +3,18 @@
 
   div(ui-view="tiedot")
 
+  div(ng-if="perusteluokitus === 'ammatillinenkoulutus'")
+    div(ng-if="'kooste-kuvaus-ammatillinen-koulutus' | kaanna")
+      p.koostekuvaus(ng-bind="'kooste-kuvaus-ammatillinen-koulutus' | kaanna")
+    div(ng-if="tab === 'perusteet' && 'kooste-kuvaus-perusteet' | kaanna")
+      p.koostekuvaus(kaanna="'kooste-kuvaus-perusteet'")
+    div(ng-if="tab === 'koulutusvienti' && 'kooste-kuvaus-koulutusvienti' | kaanna")
+      p.koostekuvaus(kaanna="'kooste-kuvaus-koulutusvienti'")
+    div(ng-if="tab === 'oppaat' && 'kooste-kuvaus-ohjeet' | kaanna")
+      p.koostekuvaus(kaanna="'kooste-kuvaus-ohjeet'")
+    div(ng-if="tab === 'jarjestajat' && 'kooste-kuvaus-jarjestajat' | kaanna")
+      p.koostekuvaus(kaanna="'kooste-kuvaus-jarjestajat'")
+
   div(style="margin-bottom: 8px;")
     ul.nav.nav-tabs(style="maring-bottom: 12px;")
       li(ng-class="{ 'active': tab === 'perusteet' }")
