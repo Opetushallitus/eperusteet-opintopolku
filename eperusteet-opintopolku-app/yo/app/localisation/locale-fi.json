@@ -345,5 +345,8 @@
     "tyotavatOpetuksessa": "Työtavat opetuksessa",
     "yhteisetOpinnot": "Yhteiset opinnot",
     "oma-opintopolku": "Oma Opintopolku",
-    "osasuorituspolku-laajuus": "Osasuorituspolun kokonaislaajuus"
+    "osasuorituspolku-laajuus": "Osasuorituspolun kokonaislaajuus",
+    "suorittaneen-osaaminen": "Tutkinnon suorittaneen osaaminen",
+    "tyotehtavat-joissa-voi-toimia": "Työtehtäviä, joissa tutkinnon suorittanut voi toimia",
+    "osaamisalojen-kuvaukset": "Osaamisalojen kuvaukset"
 }
