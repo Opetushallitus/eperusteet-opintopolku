@@ -4,9 +4,8 @@
   div(ui-view="tiedot")
 
   div(ng-if="perusteluokitus === 'ammatillinenkoulutus'")
-    div(ng-if="'kooste-kuvaus-ammatillinen-koulutus' | kaanna")
-      p.koostekuvaus(ng-bind="'kooste-kuvaus-ammatillinen-koulutus' | kaanna")
     div(ng-if="tab === 'perusteet' && 'kooste-kuvaus-perusteet' | kaanna")
+      p.koostekuvaus(ng-if="'kooste-kuvaus-ammatillinen-koulutus' | kaanna" ng-bind="'kooste-kuvaus-ammatillinen-koulutus' | kaanna")
       p.koostekuvaus(kaanna="'kooste-kuvaus-perusteet'")
     div(ng-if="tab === 'koulutusvienti' && 'kooste-kuvaus-koulutusvienti' | kaanna")
       p.koostekuvaus(kaanna="'kooste-kuvaus-koulutusvienti'")
