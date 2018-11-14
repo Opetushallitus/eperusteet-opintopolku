@@ -92,14 +92,14 @@ mixin haku()
 
           //div(kaanna="peruste.koulutustyyppi | kaanna")
 
-          p.tutkintonimikkeet(ng-if="hakuparametrit.tutkintonimikkeet && peruste.$$tutkintonimikkeet.koodisto.length > 0")
+          p.tutkintonimikkeet(ng-if="peruste.tutkintonimikeKoodit.length > 0")
             span(kaanna="'tutkintonimikkeet'" style="font-weight: bold;")
             =": "
-            span(ng-repeat="nimike in peruste.$$tutkintonimikkeet.koodisto | unique:'tutkintonimikeArvo'")
-              span(kaanna="nimike.$tutkintonimikeNimi")
+            span(ng-repeat="koodi in peruste.tutkintonimikeKoodit")
+              span(kaanna="koodi.nimi")
               span {{$last ? '' : ', '}}
 
-          p.osaamisalat(ng-if="hakuparametrit.osaamisalat && peruste.osaamisalat.length > 0")
+          p.osaamisalat(ng-if="peruste.osaamisalat.length > 0")
             span(kaanna="'osaamisalat'" style="font-weight: bold;")
             =": "
             span(ng-repeat="osaamisala in peruste.osaamisalat")
@@ -143,3 +143,5 @@ mixin haku()
        ng-change='pageChanged()'
        total-items='kokonaismaara'
        items-per-page='hakuparametrit.sivukoko')
+
+  pre(ng-bind="hakuparametrit | json")
