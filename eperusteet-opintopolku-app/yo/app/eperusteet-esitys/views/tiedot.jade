@@ -120,12 +120,33 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
               span(ng-show='koodi.tutkinnonOsaArvo') {{ koodi.$tutkinnonOsaNimi | kaanna }} ({{ koodi.tutkinnonOsaArvo }})
     div(ng-if='koodisto.length === 0', kaanna="'ei-tutkintonimikkeita'")
 
-.row.row-margin(ng-if='!!peruste.kuvaus')
+.row.row-margin(ng-if='!!peruste.kvliite && peruste.kvliite.suorittaneenOsaaminen')
   .col-xs-12.col-sm-4
-    strong
-      span(kaanna="'tiivistelma'")
+    strong(kaanna="'suorittaneen-osaaminen'")
   .col-xs-12.col-sm-8
-    termisto-tekstikentta(tekstikentta='peruste.kuvaus')
+    termisto-tekstikentta(tekstikentta='peruste.kvliite.suorittaneenOsaaminen')
+
+.row.row-margin(ng-if='!!peruste.kvliite && peruste.kvliite.tyotehtavatJoissaVoiToimia')
+  .col-xs-12.col-sm-4
+    strong(kaanna="'tyotehtavat-joissa-voi-toimia'")
+  .col-xs-12.col-sm-8
+    termisto-tekstikentta(tekstikentta='peruste.kvliite.tyotehtavatJoissaVoiToimia')
+
+.row.row-margin(ng-if='!!peruste.kvliite')
+  .col-xs-12.col-sm-4
+    strong(kaanna="'osaamisalojen-kuvaukset'")
+  .col-xs-12.col-sm-8
+    div(ng-repeat="oak in osaamisalakuvaukset")
+      div
+        strong(kaanna="oaks.osaamisala ? oak.osaamisala.nimi : oak.nimi")
+      termisto-tekstikentta(tekstikentta='oak.teksti')
+
+//- .row.row-margin(ng-if='!!peruste.kuvaus')
+  //- .col-xs-12.col-sm-4
+  //-   strong
+  //-     span(kaanna="'tiivistelma'")
+  //- .col-xs-12.col-sm-8
+  //-   termisto-tekstikentta(tekstikentta='peruste.kuvaus')
 
 .row.row-margin
   .col-xs-6.col-sm-4
