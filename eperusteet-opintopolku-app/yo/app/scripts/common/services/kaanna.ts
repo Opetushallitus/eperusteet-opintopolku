@@ -45,7 +45,8 @@ angular
         function kaanna(input, config) {
             if (_.isObject(input)) {
                 return kaannaSisalto(input);
-            } else if (_.isString(input)) {
+            }
+            else if (_.isString(input)) {
                 const translation = $translate.instant(input, config);
                 if (DEBUG_KAANNA) {
                     if (_.eq(translation, input)) {

@@ -1,6 +1,6 @@
 .tutkinnonosa-wrapper
   h1(esitys-sivu-otsikko='tutkinnonOsaViite.nimi')
-    | {{tutkinnonOsaViite.nimi | kaanna}}{{tutkinnonOsaViite.laajuus ? ',' : ''}}
+    | {{tutkinnonOsaViite.nimi | kaanna}}{{tutkinnonOsaViite.laajuus ? ', ' : ''}}
     span(ng-show='tutkinnonOsaViite.laajuus') {{tutkinnonOsaViite.laajuus}} {{yksikko | kaanna}}
   div(ng-if='tutkinnonOsa.koodiArvo')
     strong(kaanna="'koodi'")

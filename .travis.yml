@@ -11,6 +11,7 @@ services:
 cache:
   directories:
     - $HOME/.m2
+    - $HOME/.npm
 
 env:
   global:
@@ -35,13 +36,7 @@ script:
   - ./ci-tools/build/build-war.sh ${ARTIFACT_NAME}
 
 deploy:
-#  - provider: script
-#    script: mvn deploy -pl ${ARTIFACT_NAME}-app -DskipTests --settings ci-tools/common/maven-settings.xml
-#    skip_cleanup: true
-#    on:
-#      branch: master
-
-  - provider: script
-    script: ./ci-tools/build/upload-image.sh ${ARTIFACT_NAME}
-    on:
-      all_branches: true
+  provider: script
+  script: ./ci-tools/build/upload-image.sh ${ARTIFACT_NAME}
+  on:
+    all_branches: true
