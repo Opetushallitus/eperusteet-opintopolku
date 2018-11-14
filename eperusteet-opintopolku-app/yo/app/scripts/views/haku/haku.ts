@@ -287,7 +287,7 @@ angular.module("app").service("Haku", function Haku(Kieli) {
         sivukoko: 5,
         tila: "valmis",
         tuleva: true,
-        tutkintonimikkeet: false,
+        tutkintonimikkeet: true,
         voimassaolo: true
     };
 
