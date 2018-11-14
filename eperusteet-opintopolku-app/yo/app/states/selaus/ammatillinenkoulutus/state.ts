@@ -71,7 +71,7 @@ angular.module("app").config($stateProvider => {
                         koulutusala: "",
                         nimi: "",
                         opintoala: "",
-                        osaamisalat: false,
+                        osaamisalat: true,
                         perusteTyyppi: "normaali",
                         poistunut: false,
                         siirtyma: false,
@@ -80,7 +80,7 @@ angular.module("app").config($stateProvider => {
                         tyyppi: oletustyypit,
                         tila: "valmis",
                         tuleva: true,
-                        tutkintonimikkeet: false,
+                        tutkintonimikkeet: true,
                         voimassaolo: true,
                         jarjestys: "nimi"
                     });
