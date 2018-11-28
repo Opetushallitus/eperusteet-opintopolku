@@ -1,9 +1,6 @@
 h4(ng-show='$first') {{tavoite.nimi | kaanna}}
 h4 {{tavoite.pakollinen && 'pakolliset-osaamistavoitteet' || 'valinnaiset-osaamistavoitteet' | kaanna}}, {{tavoite.laajuus}} {{yksikko|kaanna}}
 .leipateksti(ng-bind-html='tavoite.tavoitteet | kaanna | unsafe')
-div(ng-if='tavoite.koodiArvo')
-  strong(kaanna="'koodi'")
-  | : {{tutkinnonOsa.koodiArvo}}
 div(ng-if='hasArviointi(tavoite)')
   h4(kaanna="'osaamisen-arviointi'")
   div(ng-repeat='kohdealue in tavoite.arviointi.arvioinninKohdealueet')
