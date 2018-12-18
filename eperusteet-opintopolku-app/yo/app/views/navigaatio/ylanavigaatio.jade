@@ -9,7 +9,7 @@ div(ng-controller='YlanavigaatioController')
           li
             a(ng-href='{{urls.omaopintopolku[kieli]}}', kaanna="'oma-opintopolku'")
           li.active
-            span(kaanna="'eperusteet-otsikko'")
+            a(ui-sref='root.etusivu', kaanna="'eperusteet-otsikko'")
         // kielivalitsin
         .header-kielenvaihto.hidden-xs
           a(href='', ng-click="vaihdaKieli('fi')", ng-show="kieli !== 'fi'") Suomeksi
@@ -86,7 +86,9 @@ div(ng-controller='YlanavigaatioController')
     .col-md-12.visible-xs.ylanavigaatio
       nav.navbar.navbar-ylanavigaatio-mobile.navbar-static-top(role='navigation')
         .navbar-header
-          .navbar-brand(ng-show='navCollapsed', kaanna="'eperusteet-otsikko'")
+          a.ylanavigaatio-ikonilinkki(ui-sref='root.etusivu')
+            img(src='images/md/ikoni-eperusteet-valkoinen.png', alt="etusivu")
+          a.navbar-brand(ng-show='navCollapsed', ui-sref='root.etusivu', kaanna="'eperusteet-otsikko'")
           .navbar-brand(ng-show='!navCollapsed', kaanna="'navi.valikkon-otsikko'")
           button#valikko-nappi.navbar-toggle.collapsed(type='button', ng-click='navCollapse()')
             span.icon-bar

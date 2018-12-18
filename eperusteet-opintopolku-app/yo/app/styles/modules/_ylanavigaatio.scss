@@ -44,6 +44,18 @@
     background-color: $ylanavi-color;
 }
 
+.ylanavigaatio-ikonilinkki {
+    float:left;
+    height:50px;
+    line-height:20px;
+    margin-right: -5px;
+    padding: 5px 0px;
+
+    img {
+        max-height:100%;
+    }
+}
+
 .ylanavigaatio-sub {
     a:hover {
         text-decoration: none;

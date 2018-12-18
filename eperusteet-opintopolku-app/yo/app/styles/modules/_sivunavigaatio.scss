@@ -249,10 +249,16 @@ $sivunavi-level-padding: 20px;
             }
         }
     }
+
     .sivunavi-valikko-open {
-        left: -$sivunavi-toggle-leveys;
+        left: $sivunavi-leveys;
         box-shadow: none;
     }
+
+    .sivunavi-valikko-open-add {
+        transition: left 0.2s;
+    }
+
     .sivunavi-box {
         display: block;
         width: $sivunavi-leveys;
