@@ -206,9 +206,6 @@ $sivunavi-level-padding: 20px;
     }
 }
 
-.sivunavi-toggler-wrapper {
-    position: relative;
-}
 .sivunavi-sisalto {
     background-color: white;
     padding: 10px $sisalto-padding $sisalto-padding $sisalto-padding;
@@ -219,12 +216,11 @@ $sivunavi-level-padding: 20px;
 
 /* Pienellä näytöllä sivunavista tulee kelluva ja kollapsoituva */
 @media (max-width: $screen-md-max) {
+
     .sivunavi-toggler {
-        position: fixed;
         width: $sivunavi-toggle-leveys;
         height: $sivunavi-toggle-korkeus;
         left: 0;
-        top: 180px;
         z-index: 999;
         display: block;
         cursor: pointer;
@@ -248,16 +244,25 @@ $sivunavi-level-padding: 20px;
                 float: none;
             }
         }
+
+    }
+
+    .sivunavi-valikko-collapsed {
+        position: fixed;
+        top: 180px !important;
     }
 
     .sivunavi-valikko-open {
         left: $sivunavi-leveys;
         box-shadow: none;
+        position: absolute;
+        margin-top: 52px;
     }
 
     .sivunavi-valikko-open-add {
         transition: left 0.2s;
     }
+
 
     .sivunavi-box {
         display: block;
@@ -285,12 +290,14 @@ $sivunavi-level-padding: 20px;
             transition: left 0.2s;
         }
     }
+
     .sivunavi-takaisin {
         margin-top: 0;
         margin-bottom: 10px;
         width: 100%;
         height: auto;
     }
+
     .sivunavi-clear {
         clear: both;
         display: block;
@@ -303,6 +310,10 @@ $sivunavi-level-padding: 20px;
         &.sivunavi-open {
             left: -$pager-border-radius;
         }
+    }
+
+    .sivunavi-valikko-open{
+        margin-left: -$pager-border-radius;
     }
 }
 
