@@ -18,7 +18,15 @@ div(ng-if="!isAmmatillinen" style="margin-top: 16px;")
             =" "
             span ({{ peruste.diaarinumero }})
         .tiivistelmalaatikko
-          span(ng-bind-html="peruste.kuvaus | kaanna")
+          h2(kaanna="'suorittaneen-osaaminen'")
+          termisto-tekstikentta(tekstikentta='peruste.kvliite.suorittaneenOsaaminen')
+          h2(kaanna="'tyotehtavat-joissa-voi-toimia'")
+          termisto-tekstikentta(tekstikentta='peruste.kvliite.tyotehtavatJoissaVoiToimia')
+          h2(kaanna="'osaamisalojen-kuvaukset'")
+          div(ng-repeat="oak in osaamisalakuvaukset")
+            div
+              strong(kaanna="oaks.osaamisala ? oak.osaamisala.nimi : oak.nimi")
+            termisto-tekstikentta(tekstikentta='oak.teksti')
           .tutkintonimikkeet(ng-show="tutkintonimikkeet.length > 0")
             span.nimi(ng-bind="'tutkintonimikkeet' | kaanna")
             =": "
