@@ -134,6 +134,10 @@ angular.module("app").config($stateProvider => {
                 return peruste.one("tutkintonimikekoodit").get();
             },
 
+            osaamisalakuvaukset(peruste) {
+                return peruste.one("osaamisalakuvaukset").get();
+            },
+
             perusteenTiedotteet: ($stateParams, TiedotteetHaku, Kieli) => {
                 return TiedotteetHaku.get({
                     perusteId: $stateParams.perusteId,
@@ -145,11 +149,17 @@ angular.module("app").config($stateProvider => {
         views: {
             "": {
                 templateUrl: "views/states/koostenakyma/peruste/view.html",
-                controller: ($scope, $state, $stateParams, peruste, perusteenTiedotteet, tutkintonimikkeet, PerusteenRakenne) => {
+                controller: ($scope, $state, $stateParams, peruste, perusteenTiedotteet, tutkintonimikkeet, PerusteenRakenne, osaamisalakuvaukset) => {
                     $scope.tiedoteMaara = 5;
                     $scope.peruste = peruste;
                     $scope.perusteenTiedotteet = perusteenTiedotteet.data;
                     $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen(peruste.koulutustyyppi);
+                    $scope.osaamisalakuvaukset = _(osaamisalakuvaukset.plain())
+                        .values()
+                        .map(_.values)
+                        .flatten()
+                        .flatten()
+                        .value();
 
                     $scope.tutkintonimikkeet = _(tutkintonimikkeet)
                         .map(tn =>
