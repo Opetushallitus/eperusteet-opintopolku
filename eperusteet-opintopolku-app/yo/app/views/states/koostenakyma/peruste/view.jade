@@ -22,15 +22,13 @@ div(ng-if="!isAmmatillinen" style="margin-top: 16px;")
           termisto-tekstikentta(tekstikentta='peruste.kvliite.suorittaneenOsaaminen')
           h2(kaanna="'tyotehtavat-joissa-voi-toimia'")
           termisto-tekstikentta(tekstikentta='peruste.kvliite.tyotehtavatJoissaVoiToimia')
-          h2(kaanna="'osaamisalojen-kuvaukset'")
-
+          h2(ng-show="osaamisalakuvaukset.length > 0", kaanna="'osaamisalojen-kuvaukset'")
           uib-accordion(ng-repeat="oak in osaamisalakuvaukset")
             .peruste-acc-group(uib-accordion-group, is-open='status.open')
               uib-accordion-heading
                 i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}")
                 h4(kaanna="oaks.osaamisala ? oak.osaamisala.nimi : oak.nimi")
               termisto-tekstikentta(tekstikentta='oak.teksti')
-
           .tutkintonimikkeet(ng-show="tutkintonimikkeet.length > 0")
             span.nimi(ng-bind="'tutkintonimikkeet' | kaanna")
             =": "
