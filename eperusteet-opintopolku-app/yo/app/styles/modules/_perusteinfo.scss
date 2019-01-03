@@ -20,6 +20,16 @@ $border-color: #e6e7e8;
             border-bottom: 1px solid $border-color;
         }
 
+        .peruste-acc-group {
+            .panel-heading {
+                padding: 1px 5px;
+            }
+
+            i {
+                margin-right: 5px;
+            }
+        }
+
         .peruste-linkki {
             margin: 12px;
             padding: 0 12px 0 0;
