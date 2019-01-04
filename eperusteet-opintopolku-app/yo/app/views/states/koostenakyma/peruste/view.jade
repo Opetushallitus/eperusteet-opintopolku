@@ -30,18 +30,17 @@ div(ng-if="!isAmmatillinen" style="margin-top: 16px;")
                 h4(kaanna="oaks.osaamisala ? oak.osaamisala.nimi : oak.nimi")
               termisto-tekstikentta(tekstikentta='oak.teksti')
           .tutkintonimikkeet(ng-show="tutkintonimikkeet.length > 0")
-            span.nimi(ng-bind="'tutkintonimikkeet' | kaanna")
+            strong.nimi(ng-bind="'tutkintonimikkeet' | kaanna")
             =": "
-            span(ng-repeat="tutkintonimike in tutkintonimikkeet")
-              span(ng-bind="tutkintonimike | kaanna")
-              span(ng-hide="$last" ng-bind="', '")
+            div.bubble-holder
+              span.nimike-bubble(ng-repeat="tutkintonimike in tutkintonimikkeet")
+                span(ng-bind="tutkintonimike | kaanna")
           .osaamisalat(ng-show="peruste.osaamisalat.length > 0")
-            p
-              span.nimi(ng-bind="'osaamisalat' | kaanna")
-              =": "
-              span(ng-repeat="osaamisala in peruste.osaamisalat")
+            strong.nimi(ng-bind="'osaamisalat' | kaanna")
+            =": "
+            div
+              span.nimike-bubble(ng-repeat="osaamisala in peruste.osaamisalat")
                 span(ng-bind="osaamisala.nimi | kaanna")
-                span(ng-hide="$last" ng-bind="', '")
         .peruste-linkki.clearfix
           img(src="images/sm/ikoni-eperusteet.png")
           h4(ng-bind="peruste.nimi | kaanna")
