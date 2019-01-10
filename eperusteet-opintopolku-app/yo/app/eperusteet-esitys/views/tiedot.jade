@@ -39,17 +39,12 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   .col-xs-6.col-sm-8
     span(pvm='peruste.siirtymaPaattyy')
     p ({{'siirtyman-kuvaus' | kaanna}})
-.row.row-margin(ng-if='peruste.maarayskirje && peruste.maarayskirje.liitteet && peruste.maarayskirje.liitteet.length > 0')
+.row.row-margin(ng-if='peruste.maarayskirje && peruste.maarayskirje.url')
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'maarayskirje'")
   .col-xs-6.col-sm-8
-    div(ng-repeat='liite in peruste.maarayskirje.liitteet')
-      .row.row-margin
-        .col-xs-12
-          a(target="_blank"
-            rel="noopener noreferrer"
-            ng-href='{{"/eperusteet-service/api/perusteet/" + peruste.id + "/liitteet/" + liite.id}}') {{liite.nimi}}
+    a(ng-href='{{ peruste.maarayskirje.url | kaanna }}') {{ peruste.maarayskirje.url | kaanna }}
 .row.row-margin(ng-if='peruste.muutosmaaraykset && peruste.muutosmaaraykset.length > 0')
   .col-xs-6.col-sm-4
     strong
@@ -59,7 +54,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
       .row.row-margin
         .col-xs-12
           a(ng-href='{{muutosmaaraykset.url| kaanna}}')
-            | {{(muutosmaaraykset.nimi | kaanna) ? (muutosmaaraykset.nimi | kaanna) : (muutosmaaraykset.url | kaanna)}}
+            | {{(muutosmaaraykset.nimi |&nbsp;kaanna) ? (muutosmaaraykset.nimi | kaanna) : (muutosmaaraykset.url | kaanna)}}
 .row.row-margin(ng-if='peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0')
   .col-xs-6.col-sm-4
     strong
