@@ -42,8 +42,6 @@ $border-color: #e6e7e8;
                 float: right;
                 border-radius: 4px;
                 padding: 8px 14px 8px 14px;
-                // position: relative;
-                // top: 15px;
                 background-color: $light-color;
                 border-color: #ffffff;
                 text-shadow: none;
@@ -62,8 +60,17 @@ $border-color: #e6e7e8;
                 font-size: small;
             }
         }
-    }
-    .opslaatikko-jaettu {
+
+        .flex-row-vcenter {
+            margin-left: 0;
+            margin-right: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .flex-auto {
+            flex: auto;
+        }
     }
 
     .infolaatikko {
@@ -198,10 +205,6 @@ $border-color: #e6e7e8;
                     border: 0;
                     padding: 18px;
 
-                    .ops-toimija {
-                    }
-                    .ops-nimi {
-                    }
                     .ops-tutkintonimikkeet {
                         margin-top: 6px;
                         .tnimike-otsikko {

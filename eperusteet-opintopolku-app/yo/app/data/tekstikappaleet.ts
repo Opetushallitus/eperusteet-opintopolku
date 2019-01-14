@@ -13,7 +13,7 @@ namespace Tekstikappaleet {
         id: id,
         $$depth: depth,
         $$obj: tekstikappaleviitteet[id],
-        $$closed: true,
+        $$closed: false,
         lapset: _.map(tekstikappaleviitteet[id].lapset, (lapsiId: number) =>
             teeRakenne(tekstikappaleviitteet, lapsiId, depth + 1)
         )
