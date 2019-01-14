@@ -49,7 +49,6 @@ angular.module("app").config($stateProvider => {
             if (!isAmmatillinen) {
                 $scope.isLoading = true;
                 // TODO: tilapäinen korjaus, käytä mielummin peruste cachea
-                console.log(peruste.koulutustyyppi);
                 ylopsPaikalliset = YlopsApi.all("opetussuunnitelmat")
                     .customGETLIST("julkiset", {
                         koulutustyyppi: peruste.koulutustyyppi,

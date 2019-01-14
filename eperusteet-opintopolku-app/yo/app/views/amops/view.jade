@@ -13,7 +13,7 @@
         span(ng-bind='muru.name | kaanna')
   .nakyma
     .sivunavi-toggler-wrapper
-      #sivunavi-valikko-nappi.sivunavi-toggler(ng-click='toggleSideMenu()', ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'", ng-attr-title="{{ menuCollapsed && ('sivunavigointi-avaa-menu' | kaanna) || ('sivunavigointi-sulje-menu' | kaanna )}}")
+      #sivunavi-valikko-nappi.sivunavi-toggler(ng-click='toggleSideMenu()', ng-class="menuCollapsed ? 'sivunavi-valikko-collapsed' : 'sivunavi-valikko-open'", ng-attr-title="{{ menuCollapsed && ('sivunavigointi-avaa-menu' | kaanna) || ('sivunavigointi-sulje-menu' | kaanna )}}", ng-style='{top: scrollTop}')
         .sivunavi-valinta
           span.glyphicon.glyphicon-align-justify
     div(off-click='toggleSideMenu()', off-click-filter='#sivunavi-valikko-nappi', off-click-if='!menuCollapsed')
