@@ -130,6 +130,7 @@
     "app/states/lukio/oppiaine/kurssi/state.ts",
     "app/states/lukio/oppiaine/kurssi/aihekokonaisuudet/state.ts",
     "app/states/lukio/oppiaine/kurssi/tavoitteet/state.ts",
+    "app/states/ohjaa/state.ts",
     "app/states/uutiset/state.ts",
     "app/states/etusivu/state.ts",
     "app/states/esitys/state.ts",
