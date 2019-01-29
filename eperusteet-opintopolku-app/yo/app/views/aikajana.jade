@@ -1,0 +1,27 @@
+.aikajana
+  h1(kaanna="'koulutusten-tulevaisuus'")
+  .haku
+    input.form-control(
+      ng-change="updateFilters()"
+      type="text"
+      ng-model="filters.text"
+      placeholder="Suodata koulutuksia...")
+    .actions
+      .btn-group
+        label.btn.btn-sm.btn-default(type="checkbox" ng-click="updateFilters()" ng-model="filters.tulevat" uib-btn-checkbox) Tulevat
+        label.btn.btn-sm.btn-default(type="checkbox" ng-click="updateFilters()" ng-model="filters.nykyiset" uib-btn-checkbox) Nykyiset
+        label.btn.btn-sm.btn-default(type="checkbox" ng-click="updateFilters()" ng-model="filters.vanhentuvat" uib-btn-checkbox) Vanhentuvat
+
+  div(ng-show="koulutuksetFitered !== null")
+    .alert.alert-info(ng-show="koulutuksetFiltered.length === 0")
+      span Ei hakutuloksia
+
+    timeline(ng-show="koulutuksetFiltered.length > 0")
+      timeline-event(ng-repeat="koulutus in koulutuksetFiltered" side="{{ koulutus.group === 'nykyiset' ? 'left' : 'right' }}")
+        timeline-badge(ng-class="koulutus.badgeClass")
+          i.glyphicon.glyphicon-book
+        timeline-panel(ng-class="koulutus.badgeClass")
+          h2(kaanna="koulutus.nimi")
+          div
+            span {{ koulutus.voimassaAlkuPvm | aikaleima:'date' }}
+            span(ng-show="koulutus.voimassaLoppuPvm") - {{ koulutus.voimassaLoppuPvm | aikaleima:'date' }}

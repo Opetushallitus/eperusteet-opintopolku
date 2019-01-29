@@ -9,6 +9,7 @@ const
 
 const pathConfig = {
   app: 'app',
+  modules: 'node_modules',
   dist: 'dist',
   test: 'test'
 };
@@ -107,7 +108,10 @@ module.exports = grunt => {
     },
     watch: {
       css: {
-        files: ['<%= config.app %>/styles/{,*/}*.scss', '<%= config.app %>/eperusteet-esitys/styles/{,*/}*.scss'],
+        files: [
+          '<%= config.app %>/styles/{,*/}*.scss',
+          '<%= config.app %>/eperusteet-esitys/styles/{,*/}*.scss'
+        ],
         tasks: ['sass', 'copy:fonts', 'postcss']
       },
       ts: {
@@ -305,6 +309,15 @@ module.exports = grunt => {
             '.htaccess',
             'images/{,*/}*.{gif,webp}',
             'styles/fonts/*'
+          ]
+        }, {
+          expand: true,
+          cwd: '<%= config.modules %>/angular-timeline/dist',
+          dest: '<%= config.dist %>/styles',
+          src: [
+            'angular-timeline.css',
+            'angular-timeline-bootstrap.css',
+            'angular-timeline-animations.css',
           ]
         }, {
           expand: true,

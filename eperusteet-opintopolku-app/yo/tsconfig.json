@@ -101,6 +101,7 @@
     "app/scripts/common/services/virhe.ts",
     "app/states/state.ts",
     "app/states/varhaiskasvatus/state.ts",
+    "app/states/timeline/state.ts",
     "app/states/varhaiskasvatus/tiedot/state.ts",
     "app/states/varhaiskasvatus/tekstikappale/state.ts",
     "app/states/esiopetus/state.ts",

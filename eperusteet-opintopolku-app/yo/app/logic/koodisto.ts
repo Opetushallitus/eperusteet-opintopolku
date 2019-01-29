@@ -4,6 +4,7 @@ namespace Koodisto {
             .flatten()
             .compact()
             .map((koodi: any) => ({
+                ...koodi,
                 arvo: koodi.koodiArvo,
                 uri: koodi.koodiUri,
                 nimi: _.zipObject(
@@ -12,6 +13,11 @@ namespace Koodisto {
                 )
             }))
             .value();
+
+    export const mapMetadataToObj = (metadata) =>
+        _.zipObject(
+            _.map(metadata, (meta: any) => meta.kieli.toLowerCase()),
+            _.map(metadata, "nimi"));
 
     export const paikallinenPrefix = "paikallinen_tutkinnonosa_";
 
