@@ -29,7 +29,8 @@ angular
         "angulartics",
         "angulartics.piwik",
         "eperusteet.esitys",
-        "restangular"
+        "restangular",
+        "angular-timeline",
     ])
     .constant("DEBUG_UI_ROUTER", false)
     .run(($rootScope, DEBUG_UI_ROUTER, $anchorScroll, $location) => {
