@@ -208,7 +208,6 @@ angular
         $scope.currentYear = new Date().getFullYear();
 
         $scope.uusimmatLadattu = false;
-        //Perusteet.uusimmat(res => ($scope.uusimmatLista = res));
         Perusteet.uusimmat({ kieli: $scope.kieli }).$promise.then(res => {
             $scope.uusimmatLista = res;
             $scope.uusimmatLadattu = true;
