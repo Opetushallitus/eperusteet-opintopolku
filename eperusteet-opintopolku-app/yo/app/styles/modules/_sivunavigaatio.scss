@@ -83,10 +83,11 @@ $sivunavi-level-padding: 20px;
         }
         cursor: pointer;
     }
+
     .list-group-item {
         border-radius: 0 !important;
     }
-    //.list-group-item:not(.active) {
+
     .list-group-item {
         border-top: none;
     }
@@ -96,18 +97,12 @@ $sivunavi-level-padding: 20px;
     .level,
     .level0 {
         border-top: 1px solid #ddd !important;
-        &.active {
-            //border-color: $brand-primary !important;
-        }
     }
     $sn-levels: 0, 1, 2, 3, 4, 5, 6, 7, 8;
     @each $i in $sn-levels {
         .level#{$i} {
             @include sn-padding($i);
         }
-    }
-    .matched {
-        //background-color: lighten($nappi-vari, 5);
     }
     .input-group {
         margin-bottom: 15px;
