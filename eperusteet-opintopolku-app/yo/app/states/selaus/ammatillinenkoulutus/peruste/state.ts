@@ -17,7 +17,7 @@
 angular.module("app").config($stateProvider => {
     const paikallisetView = {
         templateUrl: "views/states/koostenakyma/peruste/paikalliset.html",
-        controller($scope, $state, $timeout, $q, $stateParams, peruste, PerusteenRakenne, Api, YlopsApi, Algoritmit) {
+        controller($scope, $state, $timeout, $q, $stateParams, peruste, PerusteenRakenne, Api, YlopsApi, Algoritmit, Kieli) {
             $scope.tutkintonimiketaulu = _.groupBy(peruste.tutkintonimikkeet, "tutkintonimikeUri");
             $scope.haku = "";
             $scope.isLoading = true;
@@ -82,7 +82,8 @@ angular.module("app").config($stateProvider => {
                                     perusteenDiaarinumero: peruste.diaarinumero,
                                     nimi: $scope.haku,
                                     sivu: $scope.sivu - 1,
-                                    sivukoko: $scope.sivukoko
+                                    sivukoko: $scope.sivukoko,
+                                    kieli: Kieli.getUiKieli()
                                 });
 
                             $scope.opetussuunnitelmat = opsit.data;
@@ -142,7 +143,7 @@ angular.module("app").config($stateProvider => {
             perusteenTiedotteet: ($stateParams, TiedotteetHaku, Kieli) => {
                 return TiedotteetHaku.get({
                     perusteId: $stateParams.perusteId,
-                    kieli: Kieli.getSisaltokieli(),
+                    kieli: Kieli.getUiKieli(),
                     julkinen: true
                 }).$promise;
             },

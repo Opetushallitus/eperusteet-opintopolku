@@ -55,7 +55,7 @@ namespace Controllers {
         $scope.sivu = {
             otsikko: otsikko
         };
-        $scope.sisaltokielet = ["fi", "sv"];
+        $scope.sisaltokielet = ["fi", "sv", "en"];
 
         $scope.kaanna = text => Kaanna.kaanna(text);
 

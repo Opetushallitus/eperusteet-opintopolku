@@ -8,8 +8,9 @@
               h2(kaanna="'etusivu.eperusteet'")
               span(kaanna="'etusivu.eperusteet.kuvaus'")
   .row
+
     // Uutiset / Tiedotteet
-    .col-lg-4.col-lg-push-8.col-md-12
+    div(ng-class="{'col-md-12': kieli !== 'en','col-lg-4': kieli !== 'en', 'col-lg-push-8': kieli !== 'en', 'col-lg-6': kieli === 'en', 'col-lg-push-6': kieli === 'en', 'col-md-6': kieli === 'en', 'col-md-push-6': kieli === 'en'}")
       .sisalto-box
         h2(kaanna="'etusivu.uutisia'")
         .linkit
@@ -21,12 +22,14 @@
                 span {{tiedote.luotu || tiedote.luotu | date}}
             li.lista-elementti(ng-show="tiedotteet.length > 0")
               a(ui-sref='root.uutiset', kaanna="'nayta-kaikki-uutiset'")
-        p(ng-show="tiedotteet.length === 0" kaanna="'ei-tiedotteita'")
+        p.text-center(ng-hide="tiedotteetLadattu")
+          small-spinner
+        p(ng-show="tiedotteetLadattu && tiedotteet.length === 0" kaanna="'ei-tiedotteita'")
 
       .visible-lg(ng-include='', src="'views/osaan.html'")
 
     // Valtakunnalliset perusteet
-    .col-lg-4.col-lg-pull-4.col-md-6
+    .col-lg-4.col-lg-pull-4.col-md-6(ng-show="kieli !== 'en'")
       .sisalto-box
         h2(kaanna="'etusivu.valtakunnalliset-perusteet'")
         .linkit
@@ -51,7 +54,7 @@
               a(ui-sref="root.lukio({perusteId: uusimmat['koulutustyyppi_14'][0].id})", ng-bind="uusimmat['koulutustyyppi_14'][0].nimi | kaanna")
             li.peruste-linkki(ng-repeat="tpo in uusimmat['koulutustyyppi_999907']")
               a(ui-sref="root.tpo({perusteId: tpo.id})", ng-bind="tpo.nimi | kaanna")
-            li.peruste-linkki
+            li.peruste-linkki(ng-show="uusimmatValtakunnallisetLadattu")
               a(ui-sref='root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus" })')
                 span(kaanna="'navi.ammatillinenkoulutus'")
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_5'][0]")
@@ -59,8 +62,11 @@
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_18'][0]")
               a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: 'ops'})", ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna")
 
+        p.text-center(ng-hide="uusimmatValtakunnallisetLadattu")
+          small-spinner
+
     // Uusimmat ammatilliset perusteet
-    .col-lg-4.col-lg-pull-4.col-md-6
+    .col-md-6(ng-class="{'col-lg-4': kieli !== 'en', 'col-lg-pull-4': kieli !== 'en', 'col-lg-6': kieli === 'en', 'col-lg-pull-6': kieli === 'en', 'col-md-pull-6': kieli === 'en'}")
       .sisalto-box
         h2(kaanna="'etusivu.uusimmat-perusteet'")
         .linkit
@@ -72,7 +78,9 @@
                 span(ng-bind='peruste.paatospvm | date')
                 = ' '
                 span(ng-bind='peruste.koulutustyyppi | kaanna')
-        p(ng-show="uusimmatLista.length < 1" kaanna="'ei-uusia-perusteita'")
+        p.text-center(ng-hide="uusimmatLadattu")
+          small-spinner
+        p(ng-show="uusimmatLadattu && uusimmatLista.length === 0" kaanna="'ei-uusia-perusteita'")
 
       .visible-md(ng-include='', src="'views/osaan.html'")
       .visible-sm(ng-include='', src="'views/osaan.html'")
