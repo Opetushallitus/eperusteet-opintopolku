@@ -28,7 +28,7 @@ angular.module("app").config($stateProvider => {
         views: {
             "": {
                 templateUrl: "views/states/koostenakyma/view.html",
-                controller: ($scope, $timeout, $stateParams, $state) => {
+                controller: ($scope, $timeout, $stateParams, $state, Kieli) => {
                     // FIXME: :perusteluokitus virhehallinta
                     $scope.perusteluokitus = $stateParams.perusteluokitus;
                     $scope.tab = $stateParams.hakutyyppi;
@@ -37,6 +37,7 @@ angular.module("app").config($stateProvider => {
                         $stateParams.hakutyyppi = name;
                         $state.go($state.current.name, $stateParams);
                     };
+                    $scope.kieli = Kieli.getUiKieli();
                 }
             },
             "tiedot@root.selaus.koostenakyma": {
@@ -103,7 +104,7 @@ angular.module("app").config($stateProvider => {
                         _.each($scope.koulutusalat, ala => {
                             $scope.koulutusalatMap[ala.koodi] = ala;
                         });
-                        $scope.sisaltokielet = ["fi", "sv"];
+                        $scope.sisaltokielet = ["fi", "sv", "en"];
                         $scope.jarjestysTyypit = ["nimi", "muokattu"];
 
                         $scope.kaanna = text => Kaanna.kaanna(text);
@@ -360,7 +361,7 @@ angular.module("app").config($stateProvider => {
                         _.each($scope.koulutusalat, ala => {
                             $scope.koulutusalatMap[ala.koodi] = ala;
                         });
-                        $scope.sisaltokielet = ["fi", "sv"];
+                        $scope.sisaltokielet = ["fi", "sv", "en"];
                         $scope.jarjestysTyypit = ["nimi", "muokattu"];
 
                         $scope.kaanna = text => Kaanna.kaanna(text);
@@ -595,7 +596,7 @@ angular.module("app").config($stateProvider => {
                         $scope.nykyinenSivu = 1;
                         $scope.sivuja = 1;
                         $scope.kokonaismaara = 0;
-                        $scope.sisaltokielet = ["fi", "sv"];
+                        $scope.sisaltokielet = ["fi", "sv", "en"];
                         $scope.jarjestysTyypit = ["nimi", "muokattu"];
                         $scope.kaanna = text => Kaanna.kaanna(text);
                     }
@@ -711,7 +712,7 @@ angular.module("app").config($stateProvider => {
             },
             "laitoslistaus@root.selaus.koostenakyma": {
                 templateUrl: "views/states/koostenakyma/laitoshaku.html",
-                controller($scope, $timeout, $q, $state, koulutustoimijaHaku) {
+                controller($scope, $timeout, $q, $state, koulutustoimijaHaku, Kieli) {
                     $scope.haku = "";
                     $scope.isLoading = true;
                     $scope.koulutustoimijat = [];
@@ -733,7 +734,8 @@ angular.module("app").config($stateProvider => {
                                     .get({
                                         nimi: $scope.haku,
                                         sivu: $scope.sivu - 1,
-                                        sivukoko: $scope.sivukoko
+                                        sivukoko: $scope.sivukoko,
+                                        kieli: Kieli.getUiKieli()
                                     });
 
                                 $scope.koulutustoimijat = koulutustoimijat.data;

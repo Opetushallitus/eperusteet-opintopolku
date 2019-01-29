@@ -26,15 +26,18 @@ angular.module("app").config($stateProvider => {
 
             opsHaku: Api => Api.one("julkinen/opetussuunnitelmat"),
 
-            async yhteiset(koulutustoimija, opsHaku) {
+            async yhteiset(koulutustoimija, opsHaku, Kieli) {
                 const yhteiset = await opsHaku.get({
                     tyyppi: "yhteinen",
-                    organisaatio: koulutustoimija.organisaatio
+                    organisaatio: koulutustoimija.organisaatio,
+                    kieli: Kieli.getUiKieli()
                 });
                 return yhteiset.data;
             },
 
-            tiedotteet: koulutustoimija => koulutustoimija.all("tiedotteet").getList()
+            tiedotteet: (koulutustoimija, Kieli) => koulutustoimija.all("tiedotteet").customGETLIST("", {
+                kieli: Kieli.getUiKieli()
+            })
         },
         views: {
             "": {
@@ -49,7 +52,8 @@ angular.module("app").config($stateProvider => {
                     yhteiset,
                     opsHaku,
                     PerusteApi,
-                    tiedotteet
+                    tiedotteet,
+                    Kieli
                 ) => {
                     if (_.isArray(tiedotteet)) {
                         tiedotteet.reverse();
@@ -109,7 +113,8 @@ angular.module("app").config($stateProvider => {
                                         tyyppi: $scope.hakuvalinnat,
                                         nimi: $scope.haku,
                                         sivu: $scope.sivu - 1,
-                                        sivukoko: $scope.sivukoko
+                                        sivukoko: $scope.sivukoko,
+                                        kieli: Kieli.getUiKieli()
                                     });
 
                                 $scope.opetussuunnitelmat = opsit.data;

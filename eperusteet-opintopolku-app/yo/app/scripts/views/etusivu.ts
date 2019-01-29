@@ -207,11 +207,20 @@ angular
         $scope.UusimmatPerusteetService = UusimmatPerusteetService;
         $scope.currentYear = new Date().getFullYear();
 
-        Perusteet.uusimmat(res => ($scope.uusimmatLista = res));
-        UusimmatPerusteetService.fetch(res => {
-            $scope.uusimmat = res;
+        $scope.uusimmatLadattu = false;
+        //Perusteet.uusimmat(res => ($scope.uusimmatLista = res));
+        Perusteet.uusimmat({ kieli: $scope.kieli }).$promise.then(res => {
+            $scope.uusimmatLista = res;
+            $scope.uusimmatLadattu = true;
         });
 
+        $scope.uusimmatValtakunnallisetLadattu = false;
+        UusimmatPerusteetService.fetch(res => {
+            $scope.uusimmat = res;
+            $scope.uusimmatValtakunnallisetLadattu = true;
+        });
+
+        $scope.tiedotteetLadattu = false;
         TiedotteetHaku.get({
             sivukoko: 8,
             kieli: Kieli.getSisaltokieli(),
@@ -219,6 +228,7 @@ angular
             yleinen: true
         }, res => {
             $scope.tiedotteet = res.data;
+            $scope.tiedotteetLadattu = true;
         });
     })
     .controller("TiedoteViewController", function($scope, TiedotteetCRUD, $stateParams, MurupolkuData) {

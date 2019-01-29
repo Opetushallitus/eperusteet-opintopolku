@@ -22,7 +22,7 @@
     "angular-i18n": "1.5.8",
     "angular-resource": "1.5.8",
     "angular-sanitize": "1.5.8",
-    "angular-spinner": "0.8.1",
+    "angular-spinner": "1.0.1",
     "angular-translate": "2.13.0",
     "angular-translate-loader-static-files": "2.13.0",
     "angular-ui-bootstrap": "2.2.0",

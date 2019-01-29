@@ -16,7 +16,7 @@
 
 angular
     .module("app")
-    .service("SpinnerService", function(SPINNER_WAIT, $rootScope, $timeout) {
+    .service("SpinnerService", function(SPINNER_WAIT, $rootScope) {
         let pyynnot = 0;
 
         return {
@@ -43,8 +43,7 @@ angular
             }
         };
     })
-    .directive("spinner", function(usSpinnerService, $timeout, $rootScope) {
-        // Väri on sama kuin $ylanavi-color
+    .directive("spinner", (usSpinnerService, $timeout, $rootScope) => {
         return {
             template:
                 '<div id="global-spinner" ng-show="isSpinning">' +
@@ -65,12 +64,12 @@ angular
                     }
                 }
 
-                scope.$on("event:spinner_on", function() {
+                scope.$on("event:spinner_on", () => {
                     spin(true);
                 });
 
-                scope.$on("event:spinner_off", function() {
-                    $timeout(function() {
+                scope.$on("event:spinner_off", () => {
+                    $timeout(() => {
                         spin(false);
                     }, 100);
                 });

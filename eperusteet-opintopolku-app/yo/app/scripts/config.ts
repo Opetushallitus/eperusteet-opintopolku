@@ -43,24 +43,24 @@ angular
         // workaround for infdig with recursive tree structures
         $rootScopeProvider.digestTtl(20);
     })
-    /*.config($httpProvider => {
-  $httpProvider.interceptors.push(($rootScope, $q, Spinner) => {
-    return {
-      request: (request) => {
-        Spinner.enable();
-        return request;
-      },
-      response: (response) => {
-        Spinner.disable();
-        return response || $q.when(response);
-      },
-      responseError: (error) => {
-        Spinner.disable();
-        return $q.reject(error);
-      }
-    };
-  });
-})*/
+    .config($httpProvider => {
+        $httpProvider.interceptors.push(($rootScope, $q, SpinnerService) => {
+        return {
+            request: (request) => {
+                SpinnerService.enable();
+                return request;
+            },
+            response: (response) => {
+                SpinnerService.disable();
+                return response || $q.when(response);
+            },
+            responseError: (error) => {
+                SpinnerService.disable();
+                return $q.reject(error);
+            }
+        };
+        });
+    })
     // Uudelleenohjaus autentikointiin ja palvelinvirheiden ilmoitukset
     .config($httpProvider => {
         // Asetetaan oma interceptor kuuntelemaan palvelinkutsuja
