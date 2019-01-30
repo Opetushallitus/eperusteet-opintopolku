@@ -14,7 +14,9 @@
  * European Union Public Licence for more details.
  */
 
-angular.module("app").service("Opintoalat", function Opintoalat($resource, epResource) {
+angular
+    .module("app")
+    .service("Opintoalat", function Opintoalat($resource, epResource) {
     var opintoalatResource = $resource(
         epResource.SERVICE + "/opintoalat/",
         {},
@@ -44,6 +46,8 @@ angular.module("app").service("Opintoalat", function Opintoalat($resource, epRes
             })
         );
         self.opintoalat = vastaus;
+        return self;
+    }).catch(() => {
         return self;
     });
 });

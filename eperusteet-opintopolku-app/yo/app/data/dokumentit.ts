@@ -1,5 +1,5 @@
 angular.module("app").service("Dokumentit", ($timeout, $stateParams) => {
-    function dokumenttiUrlLataaja(Api, id, tyyppi = "peruste", kieli) {
+    function dokumenttiUrlLataaja(Api, id, tyyppi = "peruste", kieli?) {
         return async function(scope, target = "dokumenttiUrl", loading = "$$ladataanDokumenttia") {
             scope[loading] = true;
             try {

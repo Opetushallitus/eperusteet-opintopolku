@@ -1,6 +1,7 @@
 h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   span(ng-if="!isOpas" kaanna="'perusteen-tiedot'")
   span(ng-if="isOpas" kaanna="'oppaan-tiedot'")
+
 .row.row-margin
   .col-xs-6.col-sm-4
     strong
@@ -8,30 +9,35 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
       span(ng-if="isOpas" kaanna="'oppaan-nimi'")
   .col-xs-6.col-sm-8
     span(ng-bind="(peruste.nimi || 'nimetön') | kaanna")
+
 .row.row-margin(ng-if="peruste.diaarinumero")
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'maarayksen-diaarinumero'")
   .col-xs-6.col-sm-8
     span(ng-bind='peruste.diaarinumero')
+
 .row.row-margin(ng-if="!isOpas")
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'maarayksen-paatospaivamaara'")
   .col-xs-6.col-sm-8
     span(pvm='peruste.paatospvm')
+
 .row.row-margin(ng-if='!!peruste.voimassaoloAlkaa')
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'voimaantulo-pvm'")
   .col-xs-6.col-sm-8
     span(pvm='peruste.voimassaoloAlkaa')
+
 .row.row-margin(ng-if='!!peruste.voimassaoloLoppuu')
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'voimassaolo-paattymispvm'")
   .col-xs-6.col-sm-8
     span(pvm='peruste.voimassaoloLoppuu')
+
 .row.row-margin(ng-if='!!peruste.siirtymaPaattyy')
   .col-xs-6.col-sm-4
     strong
@@ -39,6 +45,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   .col-xs-6.col-sm-8
     span(pvm='peruste.siirtymaPaattyy')
     p ({{'siirtyman-kuvaus' | kaanna}})
+
 .row.row-margin(ng-if='peruste.maarayskirje && peruste.maarayskirje.liitteet && (peruste.maarayskirje.liitteet | kaanna) != null')
   .col-xs-6.col-sm-4
     strong
@@ -49,6 +56,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
         a(ng-href='{{"/eperusteet-service/api/perusteet/" + peruste.id + "/liitteet/" + (peruste.maarayskirje.liitteet | kaanna).id}}'
           target="_blank"
           rel="noopener noreferrer") {{(peruste.maarayskirje.liitteet | kaanna).nimi}}
+
 .row.row-margin(ng-if='peruste.muutosmaaraykset && peruste.muutosmaaraykset.length > 0')
   .col-xs-6.col-sm-4
     strong
@@ -59,6 +67,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
         .col-xs-12
           a(ng-href='{{muutosmaaraykset.url| kaanna}}')
             | {{(muutosmaaraykset.nimi | kaanna) ? (muutosmaaraykset.nimi | kaanna) : (muutosmaaraykset.url | kaanna)}}
+
 .row.row-margin(ng-if='peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0')
   .col-xs-6.col-sm-4
     strong
@@ -67,6 +76,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
     ul
       li(ng-repeat='diaari in peruste.korvattavatDiaarinumerot')
         span(ng-bind='diaari')
+
 .row.row-margin(ng-if='peruste.koulutukset.length !== 0')
   .col-xs-12.col-sm-4
     strong
@@ -86,6 +96,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
               span(kaanna="'perusteen-koodi'")
           .col-xs-6
             span {{koulutus.koulutuskoodiArvo}}
+
 .row.row-margin(ng-show='showOsaamisalat()', ng-if='peruste.osaamisalat.length > 0')
   .col-xs-12.col-sm-4
     strong
@@ -96,20 +107,21 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
         thead
           tr
             th
-              span(kaanna="'nimi'") Nimi
+              span(kaanna="'nimi'")
             th
-              span(kaanna="'koodi'") Koodi
+              span(kaanna="'koodi'")
         tbody
           tr.ng-scope(ng-repeat='oa in peruste.osaamisalat')
-            td(ng-bind='oa.nimi | kaanna')
-            td(ng-bind='oa.arvo')
+            td(ng-bind="oa.nimi || 'koodin-nimea-ei-onnistuttu-hakemaan' | kaanna")
+            td(ng-bind="oa.arvo || oa.uri.split('_')[1]")
+
 .row.row-margin(ng-if='koodisto.length > 0')
   .col-xs-12.col-sm-4
     strong
       span(kaanna="'tutkintonimikkeet'")
   .col-xs-12.col-sm-8
     .table-responsive
-      table.table.aligned.tutkintonimikkeet(ng-if='koodisto.length > 0')
+      table.table.aligned.tutkintonimikkeet
         thead
           tr
             th(kaanna="'osaamisala'")
@@ -122,7 +134,6 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
             td {{ koodi.$tutkintonimikeNimi | kaanna }} ({{ koodi.tutkintonimikeArvo }})
             td
               span(ng-show='koodi.tutkinnonOsaArvo') {{ koodi.$tutkinnonOsaNimi | kaanna }} ({{ koodi.tutkinnonOsaArvo }})
-    div(ng-if='koodisto.length === 0', kaanna="'ei-tutkintonimikkeita'")
 
 .row.row-margin(ng-if='!!peruste.kvliite && peruste.kvliite.suorittaneenOsaaminen')
   .col-xs-12.col-sm-4
@@ -140,17 +151,11 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   .col-xs-12.col-sm-4
     strong(kaanna="'osaamisalojen-kuvaukset'")
   .col-xs-12.col-sm-8
-    div(ng-repeat="oak in osaamisalakuvaukset")
+    div(ng-if="oak.teksti" ng-repeat="oak in osaamisalakuvaukset")
       div
-        strong(kaanna="oaks.osaamisala ? oak.osaamisala.nimi : oak.nimi")
+        strong(ng-if="oaks.osaamisala.nimi" kaanna="oak.osaamisala.nimi")
+        strong(ng-if="!oaks.osaamisala && oak.nimi" kaanna="oak.nimi")
       termisto-tekstikentta(tekstikentta='oak.teksti')
-
-//- .row.row-margin(ng-if='!!peruste.kuvaus')
-  //- .col-xs-12.col-sm-4
-  //-   strong
-  //-     span(kaanna="'tiivistelma'")
-  //- .col-xs-12.col-sm-8
-  //-   termisto-tekstikentta(tekstikentta='peruste.kuvaus')
 
 .row.row-margin
   .col-xs-6.col-sm-4
@@ -161,6 +166,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
     span(ng-hide="$$ladataanDokumenttia")
       a(ng-href='{{ dokumenttiUrl }}' ng-show="dokumenttiUrl" kaanna="'lataa-dokumentti'")
       span(ng-hide="dokumenttiUrl" kaanna="'dokumenttia-ei-luotu'")
+
 .row.row-margin(ng-show="kvliiteUrlFi ||  kvliiteUrlSv || kvliiteUrlEn")
   .col-xs-6.col-sm-4
     strong

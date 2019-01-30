@@ -132,8 +132,17 @@ angular.module("app").config($stateProvider => {
                 return PerusteApi.one("perusteet", $stateParams.perusteId).get();
             },
 
-            tutkintonimikkeet(peruste) {
-                return peruste.one("tutkintonimikekoodit").get();
+            tutkintonimikkeet($q, peruste) {
+
+                const deferred = $q.defer();
+
+                peruste.one("tutkintonimikekoodit").get().then(res => {
+                    deferred.resolve(res);
+                }).catch(err => {
+                    deferred.resolve([]);
+                });
+
+                return deferred.promise;
             },
 
             osaamisalakuvaukset(peruste) {

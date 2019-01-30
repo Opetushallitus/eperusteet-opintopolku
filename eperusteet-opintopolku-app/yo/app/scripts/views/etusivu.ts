@@ -141,7 +141,7 @@ angular
         const getVarhaiskasvatus = _.partial(getGeneric, "koulutustyyppi_20");
         const getAikuisLukio = _.partial(getGeneric, "koulutustyyppi_14");
 
-        this.fetch = cb => {
+        this.fetch = (cb, errorCb) => {
             const key = "koulutustyyppi_1x";
             const params = paramMap[key];
             const amDeferred = Perusteet.get(params, res => {
@@ -171,7 +171,9 @@ angular
                 ])
                 .then(() => {
                     cb(perusteet);
-                });
+                }).catch(err => {
+                    errorCb(err);
+            });
         };
 
         const getStateTila = tyyppi => paramMap[tyyppi].stateTila;
@@ -208,26 +210,35 @@ angular
         $scope.currentYear = new Date().getFullYear();
 
         $scope.uusimmatLadattu = false;
+        $scope.uusimmatVirhe = false;
         Perusteet.uusimmat({ kieli: $scope.kieli }).$promise.then(res => {
             $scope.uusimmatLista = res;
             $scope.uusimmatLadattu = true;
+        }).catch(err => {
+            $scope.uusimmatVirhe = true;
         });
 
         $scope.uusimmatValtakunnallisetLadattu = false;
+        $scope.uusimmatValtakunnallisetVirhe = false;
         UusimmatPerusteetService.fetch(res => {
             $scope.uusimmat = res;
             $scope.uusimmatValtakunnallisetLadattu = true;
+        }, () => {
+            $scope.uusimmatValtakunnallisetVirhe = true;
         });
 
         $scope.tiedotteetLadattu = false;
+        $scope.tiedotteetVirhe = false;
         TiedotteetHaku.get({
             sivukoko: 8,
             kieli: Kieli.getSisaltokieli(),
             julkinen: true,
             yleinen: true
-        }, res => {
+        }).$promise.then(res => {
             $scope.tiedotteet = res.data;
             $scope.tiedotteetLadattu = true;
+        }).catch(() => {
+            $scope.tiedotteetVirhe = true;
         });
     })
     .controller("TiedoteViewController", function($scope, TiedotteetCRUD, $stateParams, MurupolkuData) {

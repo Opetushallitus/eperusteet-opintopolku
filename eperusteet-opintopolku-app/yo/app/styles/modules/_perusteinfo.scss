@@ -43,6 +43,7 @@ $border-color: #e6e7e8;
             margin-right: 5px;
             background-color: #e4f4f9;
             font-weight: 700;
+            user-select: all;
         }
 
         .bubble-holder {
@@ -64,6 +65,7 @@ $border-color: #e6e7e8;
 
             h4 {
                 margin: 5px auto 5px 5px;
+                hyphens: auto;
             }
 
             a {
