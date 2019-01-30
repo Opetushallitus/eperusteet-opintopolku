@@ -72,6 +72,8 @@ $amops-blue: #149ecb;
                 float: right;
                 cursor: pointer;
                 margin-bottom: 20px;
+                user-select: none;
+
                 .bubble {
                     color: #149ecb;
                     background-color: #f3f3f3;

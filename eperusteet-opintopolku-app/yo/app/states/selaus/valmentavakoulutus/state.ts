@@ -4,13 +4,9 @@ angular.module("app").config($stateProvider =>
         templateUrl: "views/haku/haku.html",
         controller: Controllers.HakuController,
         resolve: {
-            koulutusalaService: [
-                "serviceConfig",
-                "Koulutusalat",
-                function(serviceConfig, Koulutusalat) {
-                    return Koulutusalat;
-                }
-            ]
+            koulutusalaService: (serviceConfig, Koulutusalat) => {
+                return Koulutusalat;
+            }
         }
     })
 );

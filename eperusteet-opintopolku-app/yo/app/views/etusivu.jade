@@ -22,9 +22,10 @@
                 span {{tiedote.luotu || tiedote.luotu | date}}
             li.lista-elementti(ng-show="tiedotteet.length > 0")
               a(ui-sref='root.uutiset', kaanna="'nayta-kaikki-uutiset'")
-        p.text-center(ng-hide="tiedotteetLadattu")
+        p.text-center(ng-hide="tiedotteetLadattu || tiedotteetVirhe")
           small-spinner
         p(ng-show="tiedotteetLadattu && tiedotteet.length === 0" kaanna="'ei-tiedotteita'")
+        p(ng-show="tiedotteetVirhe" kaanna="'virhe.jotain-meni-pieleen'")
 
       .visible-lg(ng-include='', src="'views/osaan.html'")
 
@@ -62,8 +63,9 @@
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_18'][0]")
               a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: 'ops'})", ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna")
 
-        p.text-center(ng-hide="uusimmatValtakunnallisetLadattu")
+        p.text-center(ng-hide="uusimmatValtakunnallisetLadattu || uusimmatValtakunnallisetVirhe")
           small-spinner
+        p(ng-show="uusimmatValtakunnallisetVirhe" kaanna="'virhe.jotain-meni-pieleen'")
 
     // Uusimmat ammatilliset perusteet
     .col-md-6(ng-class="{'col-lg-4': kieli !== 'en', 'col-lg-pull-4': kieli !== 'en', 'col-lg-6': kieli === 'en', 'col-lg-pull-6': kieli === 'en', 'col-md-pull-6': kieli === 'en'}")
@@ -78,9 +80,10 @@
                 span(ng-bind='peruste.paatospvm | date')
                 = ' '
                 span(ng-bind='peruste.koulutustyyppi | kaanna')
-        p.text-center(ng-hide="uusimmatLadattu")
+        p.text-center(ng-hide="uusimmatLadattu || uusimmatVirhe")
           small-spinner
         p(ng-show="uusimmatLadattu && uusimmatLista.length === 0" kaanna="'ei-uusia-perusteita'")
+        p(ng-show="uusimmatVirhe" kaanna="'virhe.jotain-meni-pieleen'")
 
       .visible-md(ng-include='', src="'views/osaan.html'")
       .visible-sm(ng-include='', src="'views/osaan.html'")

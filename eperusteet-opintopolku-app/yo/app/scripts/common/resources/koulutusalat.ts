@@ -42,7 +42,7 @@ angular
             return self.koulutusalatMap[koodi];
         };
 
-        return koulutusalaPromise.then(function(vastaus) {
+        return koulutusalaPromise.then(vastaus => {
             self.koulutusalatMap = _.zipObject(
                 _.pluck(vastaus, "koodi"),
                 _.map(vastaus, function(e: any) {
@@ -50,6 +50,8 @@ angular
                 })
             );
             self.koulutusalat = vastaus;
+            return self;
+        }).catch(() => {
             return self;
         });
     });

@@ -347,7 +347,7 @@ angular
         };
 
         this.get = function(perusteId, object) {
-            PerusteTutkintonimikekoodit.get({ perusteId: perusteId }, function(res) {
+            PerusteTutkintonimikekoodit.get({ perusteId: perusteId }).$promise.then(res => {
                 parse(res, object);
             });
         };

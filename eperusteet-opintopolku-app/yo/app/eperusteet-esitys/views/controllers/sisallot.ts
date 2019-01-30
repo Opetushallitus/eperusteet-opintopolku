@@ -90,18 +90,22 @@ namespace Controllers {
             Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "kvliite", "en")($scope, "kvliiteUrlEn");
 
             (async function() {
-                const [ kvliite, osaamisalakuvaukset ]: any = await Promise.all([
-                    PerusteApi.one("perusteet", $scope.peruste.id).one("kvliite").get(),
-                    PerusteApi.one("perusteet", $scope.peruste.id).one("osaamisalakuvaukset").get(),
-                ]);
+                try {
+                    const osaamisalakuvaukset = PerusteApi
+                        .one("perusteet", $scope.peruste.id)
+                        .one("osaamisalakuvaukset")
+                        .get();
 
-                $scope.kvliite = kvliite.plain();
-                $scope.osaamisalakuvaukset = _(osaamisalakuvaukset.plain())
-                    .values()
-                    .map(_.values)
-                    .flatten()
-                    .flatten()
-                    .value();
+                    $scope.osaamisalakuvaukset = _(osaamisalakuvaukset)
+                        .values()
+                        .map(_.values)
+                        .flatten()
+                        .flatten()
+                        .value();
+
+                } catch(err) {
+                    console.error(err);
+                }
             })();
         }
 

@@ -1,5 +1,5 @@
 namespace Controllers {
-    export const ListausController = ($scope, $sessionStorage, JulkisetOps, ListaSorter, opsit, Kaanna, Kieli) => {
+    export const ListausController = ($scope, $sessionStorage, ListaSorter, opsit, Kaanna, Kieli) => {
         $scope.koulutustyypitLinkit = {
             koulutustyyppi_15: "esiopetus",
             koulutustyyppi_16: "perusopetus",

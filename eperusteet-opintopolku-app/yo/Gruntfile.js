@@ -41,7 +41,7 @@ const proxies = {
     local: {
       context: '/eperusteet-ylops-service',
       host: 'localhost',
-      port: 8080,
+      port: 8070,
       https: false,
       changeOrigin: true
     },

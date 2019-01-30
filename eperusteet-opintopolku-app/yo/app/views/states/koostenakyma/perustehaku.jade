@@ -96,14 +96,15 @@ mixin haku()
             span(kaanna="'tutkintonimikkeet'" style="font-weight: bold;")
             =": "
             span(ng-repeat="koodi in peruste.tutkintonimikeKoodit")
-              span(kaanna="koodi.nimi")
+
+              span {{koodi.nimi || koodi.uri.split('_')[1] | kaanna}}
               span {{$last ? '' : ', '}}
 
           p.osaamisalat(ng-if="peruste.osaamisalat.length > 0")
             span(kaanna="'osaamisalat'" style="font-weight: bold;")
             =": "
             span(ng-repeat="osaamisala in peruste.osaamisalat")
-              span(kaanna="osaamisala.nimi")
+              span {{osaamisala.nimi || osaamisala.uri.split('_')[1] | kaanna}}
               span {{$last ? '' : ', '}}
 
           // p.pvm(ng-if="peruste.$$tila === 'voimassa' || peruste.$$tila === 'tuleva'")
