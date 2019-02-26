@@ -46,16 +46,19 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
     span(pvm='peruste.siirtymaPaattyy')
     p ({{'siirtyman-kuvaus' | kaanna}})
 
-.row.row-margin(ng-if='peruste.maarayskirje && peruste.maarayskirje.liitteet && (peruste.maarayskirje.liitteet | kaanna) != null')
+.row.row-margin(ng-if="peruste.maarayskirje && !peruste.maarayskirje.$$hide")
   .col-xs-6.col-sm-4
     strong
       span(kaanna="'maarayskirje'")
   .col-xs-6.col-sm-8
     .row.row-margin
       .col-xs-12
-        a(ng-href='{{"/eperusteet-service/api/perusteet/" + peruste.id + "/liitteet/" + (peruste.maarayskirje.liitteet | kaanna).id}}'
+        a(ng-if="!peruste.maarayskirje.$$naytaUrl"
+          ng-href='{{"/eperusteet-service/api/perusteet/" + peruste.id + "/liitteet/" + (peruste.maarayskirje.liitteet | kaanna).id}}'
           target="_blank"
-          rel="noopener noreferrer") {{(peruste.maarayskirje.liitteet | kaanna).nimi}}
+          rel="noopener noreferrer") {{(peruste.maarayskirje.liitteet | kaanna).nimi || (peruste.maarayskirje.liitteet | kaanna).id}}
+        a(ng-if="peruste.maarayskirje.$$naytaUrl"
+          ng-href="{{ peruste.maarayskirje.url | kaanna }}") {{ peruste.maarayskirje.url | kaanna }}
 
 .row.row-margin(ng-if='peruste.muutosmaaraykset && peruste.muutosmaaraykset.length > 0')
   .col-xs-6.col-sm-4
