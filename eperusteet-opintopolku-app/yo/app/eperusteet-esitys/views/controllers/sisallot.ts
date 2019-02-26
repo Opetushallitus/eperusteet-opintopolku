@@ -109,6 +109,13 @@ namespace Controllers {
             })();
         }
 
+        if (_.isEmpty($scope.peruste.maarayskirje.liitteet)) {
+            $scope.peruste.maarayskirje.$$naytaUrl = true;
+            if (_.isEmpty($scope.peruste.maarayskirje.url)) {
+                $scope.peruste.maarayskirje.$$hide = true;
+            }
+        }
+
         let currentTime = new Date().getTime();
         $scope.voimassaOleva = !!(
             !$scope.peruste.voimassaoloLoppuu ||

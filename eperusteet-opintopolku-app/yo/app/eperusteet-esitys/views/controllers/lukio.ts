@@ -76,6 +76,13 @@ namespace Controllers {
         $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
         TermistoService.setResource(peruste);
 
+        if (_.isEmpty($scope.peruste.maarayskirje.liitteet)) {
+            $scope.peruste.maarayskirje.$$naytaUrl = true;
+            if (_.isEmpty($scope.peruste.maarayskirje.url)) {
+                $scope.peruste.maarayskirje.$$hide = true;
+            }
+        }
+
         $scope.scrollToHash = function(id) {
             $state.go("root.lukio.tekstikappale");
             $location.hash(id + "");
