@@ -16,7 +16,7 @@
 
 angular
     .module("app")
-    .service("OpsImageService", function($stateParams, opsBase) {
+    .service("OpsImageService", function($state, $stateParams, opsBase) {
         this.getOpsId = function() {
             return $stateParams.opsId;
         };
@@ -25,10 +25,10 @@ angular
         };
         this.getUrl = function(image, params) {
             if (this.getOpsId()) {
-                if (params && params.amosaa) {
+                if ($state.includes("root.amops")) {
+                    const opsId = (params && params.amosaa && params.amosaa.opsId) || $stateParams.opsId;
                     return (opsBase.AMOSAA_OPS + "/kuvat")
-                        .replace(":ktId", params.amosaa.ktId)
-                        .replace(":opsId", "" + (params.amosaa.opsId || this.getOpsId())) +
+                        .replace(":opsId", "" + opsId || this.getOpsId()) +
                         "/" + image.id;
                 }  else {
                     return (opsBase.OPS + "/kuvat").replace(":opsId", "" + this.getOpsId()) + "/" + image.id;
