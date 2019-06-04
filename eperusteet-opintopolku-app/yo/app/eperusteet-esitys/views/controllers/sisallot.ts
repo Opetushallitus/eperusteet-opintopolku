@@ -75,12 +75,14 @@ namespace Controllers {
         PerusteenTutkintonimikkeet,
         Perusteet,
         Dokumentit,
+        PerusteenRakenne,
         PerusteApi
     ) => {
         $scope.showKoulutukset = _.constant(YleinenData.showKoulutukset($scope.peruste));
         $scope.showOsaamisalat = $scope.showKoulutukset;
         $scope.koulutusalaNimi = $scope.Koulutusalat.haeKoulutusalaNimi;
         $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
+        $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen($scope.peruste.koulutustyyppi);
 
         Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "peruste")($scope);
 
@@ -91,20 +93,19 @@ namespace Controllers {
 
             (async function() {
                 try {
-                    const osaamisalakuvaukset = PerusteApi
+                    const osaamisalakuvaukset = await PerusteApi
                         .one("perusteet", $scope.peruste.id)
                         .one("osaamisalakuvaukset")
                         .get();
 
-                    $scope.osaamisalakuvaukset = _(osaamisalakuvaukset)
+                    $scope.osaamisalakuvaukset = _(osaamisalakuvaukset.plain())
                         .values()
                         .map(_.values)
                         .flatten()
                         .flatten()
                         .value();
-
                 } catch(err) {
-                    console.error(err);
+                    console.error("osaamisalakuvauksien haku epäonnistui", err);
                 }
             })();
         }
