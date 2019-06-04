@@ -150,7 +150,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   .col-xs-12.col-sm-8
     termisto-tekstikentta(tekstikentta='peruste.kvliite.tyotehtavatJoissaVoiToimia')
 
-.row.row-margin(ng-if='!!peruste.kvliite')
+.row.row-margin(ng-if="!!peruste.kvliite && isAmmatillinen && osaamisalakuvaukset && osaamisalakuvaukset.length > 0")
   .col-xs-12.col-sm-4
     strong(kaanna="'osaamisalojen-kuvaukset'")
   .col-xs-12.col-sm-8
@@ -159,6 +159,13 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
         strong(ng-if="oaks.osaamisala.nimi" kaanna="oak.osaamisala.nimi")
         strong(ng-if="!oaks.osaamisala && oak.nimi" kaanna="oak.nimi")
       termisto-tekstikentta(tekstikentta='oak.teksti')
+
+.row.row-margin(ng-if='!isAmmatillinen && peruste.kuvaus')
+  .col-xs-12.col-sm-4
+    strong(kaanna="'kuvaus'")
+  .col-xs-12.col-sm-8
+    termisto-tekstikentta(tekstikentta="peruste.kuvaus")
+
 
 .row.row-margin
   .col-xs-6.col-sm-4
