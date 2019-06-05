@@ -50,3 +50,13 @@
           span(kaanna="'koulutustoimija'")
       .col-xs-12.col-sm-8
         a(ui-sref="root.selaus.jarjestajat({ ktId: ops.koulutustoimija.id })" ng-bind="ops.koulutustoimija.nimi | kaanna")
+    .row.row-margin
+      .col-xs-12.col-sm-4
+        strong
+          span(kaanna="'dokumentti-osoite'")
+      .col-xs-12.col-sm-8
+        small-spinner(ng-show="$$ladataanDokumenttia")
+        span(ng-hide="$$ladataanDokumenttia")
+          a(ng-href='{{ dokumenttiUrl }}' target="_blank" rel="noopener noreferrer" ng-show="dokumenttiUrl" kaanna="'lataa-dokumentti'")
+          span(ng-hide="dokumenttiUrl" kaanna="'dokumenttia-ei-luotu'")
+

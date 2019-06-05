@@ -51,7 +51,6 @@ angular.module("app").config($stateProvider =>
                 controller: ($scope, $state, $stateParams, ops, otsikot, sisaltoRoot, $window, $location, ktId, Utils) => {
                     if ($state.is("root.amops")) {
                         $state.go("root.amops.tiedot", { location: "replace" });
-                        // return;
                     }
 
                     $scope.ops = ops;
