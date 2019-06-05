@@ -167,7 +167,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   .col-xs-6.col-sm-8
     small-spinner(ng-show="$$ladataanDokumenttia")
     span(ng-hide="$$ladataanDokumenttia")
-      a(ng-href='{{ dokumenttiUrl }}' ng-show="dokumenttiUrl" kaanna="'lataa-dokumentti'")
+      a(ng-href="{{ dokumenttiUrl }}" target="_blank" rel="noopener noreferrer" ng-show="dokumenttiUrl" kaanna="'lataa-dokumentti'")
       span(ng-hide="dokumenttiUrl" kaanna="'dokumenttia-ei-luotu'")
 
 .row.row-margin(ng-show="kvliiteUrlFi ||  kvliiteUrlSv || kvliiteUrlEn")

@@ -17,6 +17,31 @@
 angular.module("app").config($stateProvider =>
     $stateProvider.state("root.amops.tiedot", {
         url: "/tiedot",
-        templateUrl: "views/amops/tiedot/view.html"
+        templateUrl: "views/amops/tiedot/view.html",
+        controller: ($scope, $stateParams, ops) => {
+            const dokumenttiUrlLataaja = async (kieli) => {
+                try {
+                    const doc = await ops.customGET("dokumentti/tila", {
+                        kieli
+                    });
+
+                    if (doc.tila === "valmis") {
+                        return ops.getRequestedUrl() + "/dokumentti?kieli=" + kieli;
+                    } else {
+                        return null;
+                    }
+                } catch (e) {
+                    // Ei pitäisi tapahtua
+                    return null;
+                }
+            };
+
+            $scope.$$ladataanDokumenttia = true;
+
+            dokumenttiUrlLataaja($stateParams.lang).then(res => {
+                $scope.dokumenttiUrl = res;
+                $scope.$$ladataanDokumenttia = false;
+            });
+        }
     })
 );
