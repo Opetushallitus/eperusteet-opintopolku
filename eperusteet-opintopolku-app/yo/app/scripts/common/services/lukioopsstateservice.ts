@@ -118,7 +118,10 @@ angular
                     index: 1,
                     callback: function(item) {
                         if (item.$kurssi) {
-                            item.$selected = "" + $stateParams.kurssiId === "" + item.$kurssi.id;
+                            // Hyväksytään myös puuttuva oaineId arvo (tällöin vertailu toimii kuten ennenkin)
+                            item.$selected = String($stateParams.kurssiId) === String(item.$kurssi.id) && (
+                                !item.oaineId ||
+                                String(item.oaineId) === String($stateParams.oppiaineId) );
                         }
                         if (item.$selected) {
                             selected = item;

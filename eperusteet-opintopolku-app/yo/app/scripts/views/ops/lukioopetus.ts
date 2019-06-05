@@ -260,6 +260,7 @@ angular
             return {
                 $id: kurssi.id,
                 depth: depth,
+                oaineId: oppiaineId,
                 tyyppi: kurssi.tyyppi,
                 $jnro: kurssi.jarjestys,
                 $kurssi: kurssi,
