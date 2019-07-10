@@ -73,6 +73,7 @@ namespace Controllers {
         $state,
         YleinenData,
         PerusteenTutkintonimikkeet,
+        PerusteenRakenne,
         Perusteet,
         Dokumentit,
         PerusteApi
@@ -83,6 +84,7 @@ namespace Controllers {
         $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
 
         Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "peruste")($scope);
+        $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen($scope.peruste.koulutustyyppi);
 
         if (_.includes(YleinenData.ammatillisetKoulutustyypit, $scope.peruste.koulutustyyppi)) {
             Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "kvliite", "fi")($scope, "kvliiteUrlFi");

@@ -138,7 +138,7 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
             td
               span(ng-show='koodi.tutkinnonOsaArvo') {{ koodi.$tutkinnonOsaNimi | kaanna }} ({{ koodi.tutkinnonOsaArvo }})
 
-.row.row-margin(ng-if='!!peruste.kvliite && peruste.kvliite.suorittaneenOsaaminen')
+.row.row-margin(ng-if='!!peruste.kvliite && isAmmatillinen')
   .col-xs-12.col-sm-4
     strong(kaanna="'suorittaneen-osaaminen'")
   .col-xs-12.col-sm-8
@@ -150,7 +150,8 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
   .col-xs-12.col-sm-8
     termisto-tekstikentta(tekstikentta='peruste.kvliite.tyotehtavatJoissaVoiToimia')
 
-.row.row-margin(ng-if='!!peruste.kvliite')
+
+.row.row-margin(ng-if='!!peruste.kvliite && isAmmatillinen')
   .col-xs-12.col-sm-4
     strong(kaanna="'osaamisalojen-kuvaukset'")
   .col-xs-12.col-sm-8
