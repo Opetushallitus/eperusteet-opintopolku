@@ -73,9 +73,9 @@ namespace Controllers {
         $state,
         YleinenData,
         PerusteenTutkintonimikkeet,
+        PerusteenRakenne,
         Perusteet,
         Dokumentit,
-        PerusteenRakenne,
         PerusteApi
     ) => {
         $scope.showKoulutukset = _.constant(YleinenData.showKoulutukset($scope.peruste));
@@ -85,6 +85,7 @@ namespace Controllers {
         $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen($scope.peruste.koulutustyyppi);
 
         Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "peruste")($scope);
+        $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen($scope.peruste.koulutustyyppi);
 
         if (_.includes(YleinenData.ammatillisetKoulutustyypit, $scope.peruste.koulutustyyppi)) {
             Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "kvliite", "fi")($scope, "kvliiteUrlFi");
@@ -110,7 +111,7 @@ namespace Controllers {
             })();
         }
 
-        if (_.isEmpty($scope.peruste.maarayskirje.liitteet)) {
+        if ($scope.peruste.maarayskirje && _.isEmpty($scope.peruste.maarayskirje.liitteet)) {
             $scope.peruste.maarayskirje.$$naytaUrl = true;
             if (_.isEmpty($scope.peruste.maarayskirje.url)) {
                 $scope.peruste.maarayskirje.$$hide = true;
