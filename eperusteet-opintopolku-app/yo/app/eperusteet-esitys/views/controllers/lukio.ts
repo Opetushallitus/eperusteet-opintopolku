@@ -367,7 +367,7 @@ namespace Controllers {
         });
     };
 
-    export const epLukioTiedotController = $scope => {
+    export const epLukioTiedotController = ($scope, peruste) => {
         let currentTime = new Date().getTime();
         $scope.voimassaOleva = !!(
             !$scope.peruste.voimassaoloLoppuu ||
