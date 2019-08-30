@@ -160,8 +160,10 @@ angular.module("app").config($stateProvider => {
                                         $timeout(() => {
                                             $scope.$apply(() => {
                                                 ops.$$osaamisalat = _.isObject(perusteCache[ops.peruste.perusteId])
-                                                    ? perusteCache[ops.peruste.perusteId].osaamisalat || []
+                                                    ? _.filter(perusteCache[ops.peruste.perusteId].osaamisalat || [], (osaamisala: any) => 
+                                                        _.includes(ops.osaamisalat, osaamisala.uri))
                                                     : [];
+                                                
                                                 ops.$$tutkintonimikkeet =
                                                     tutkintonimikeCache[ops.peruste.perusteId] || [];
                                             });
