@@ -265,5 +265,30 @@
 </script>
 <!-- End Piwik Code -->
 
+
+<!-- Snoobi -->
+<script type="text/javascript">
+var _saq = _saq || [];
+
+(function() {
+
+var account = 'eperusteet_opintopolku_fi';
+var page_name = '';
+var section = '';
+
+var snbscript = document.createElement('script');
+ snbscript.type = 'text/javascript';
+ snbscript.async = true;
+ snbscript.src = ('https:' == document.location.protocol ? 'https://' : 'https://')
+ + 'eu1.snoobi.com/snoop.php?tili=' + account
+ + '&page_name=' + page_name
+ + '&section=' + section;
+
+var s = document.getElementsByTagName('script')[0];
+ s.parentNode.insertBefore(snbscript, s);
+ })();
+</script>
+<!-- /Snoobi -->
+
 </body>
 </html>
