@@ -45,6 +45,8 @@ angular
     })
     // Uudelleenohjaus autentikointiin ja palvelinvirheiden ilmoitukset
     .config($httpProvider => {
+        $httpProvider.defaults.headers.common["Caller-Id"] = "1.2.246.562.10.00000000001.eperusteet-opintopolku";
+
         // Asetetaan oma interceptor kuuntelemaan palvelinkutsuja
         $httpProvider.interceptors.push(($rootScope, $q) => {
             return {
