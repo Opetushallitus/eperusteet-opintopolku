@@ -88,6 +88,10 @@ export default class EpNavigation extends Vue {
 
 .navbar-ep {
   padding: .3rem 0;
+  // Todo: käytä muuttujaa
+  @media (min-width: 768px) {
+    padding: 0 0;
+  }
 
   .navbar-brand {
     // Todo: käytä muuttujaa
@@ -99,12 +103,25 @@ export default class EpNavigation extends Vue {
   &.navbar-expand-md .navbar-nav .nav-link {
     padding-right: 1rem;
     padding-left: 1rem;
+    // Todo: käytä muuttujaa
+    @media (min-width: 768px) {
+      padding-top: 0.8rem;
+      padding-bottom: 0.55rem;
+    }
 
     color: white;
     // Todo: käytä muuttujaa
     @media (max-width: 767.98px) {
       padding-left: 0;
       padding-right: 0;
+    }
+  }
+
+  // Todo: käytä muuttujaa
+  @media (min-width: 768px) {
+    &.navbar-expand-md .navbar-nav .nav-link.router-link-active {
+      border-bottom: white 0.25rem solid;
+      padding-bottom: 0.30rem;
     }
   }
 }
