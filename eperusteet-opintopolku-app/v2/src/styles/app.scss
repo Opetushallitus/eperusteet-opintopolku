@@ -1,0 +1,28 @@
+@import './variables';
+@import '../../node_modules/oph-virkailija-style-guide/oph-styles';
+
+:root {
+  color: $font-color-base;
+  margin: 0;
+  padding: 0;
+  hyphens: auto;
+  overflow-y: scroll;
+
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  body {
+    font-family: "Open Sans", "Helvetica", sans-serif;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  li p {
+    margin-bottom: 0;
+  }
+}
