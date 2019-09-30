@@ -6,10 +6,10 @@ import '@/config/bootstrap';
 import '@/config/fontawesome';
 
 import { router } from '@/router';
-import { i18n } from '@/stores/kieli';
-import { Virheet } from '@/stores/virheet';
+import { i18n } from 'eperusteet-frontend-utils/vue/src/stores/kieli';
+import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 
-import { createLogger } from '@/stores/logger';
+import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
 import _ from 'lodash';
 
 import App from '@/App.vue';

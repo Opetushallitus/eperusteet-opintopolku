@@ -4,7 +4,7 @@
     <ep-navigation :sticky="true"></ep-navigation>
   </header>
   <div class="container">
-    <p>Etusivu</p><p>Etusivu</p><p>Etusivu</p><p>Etusivu</p><p>Etusivu</p><p>Etusivu</p><p>Etusivu</p><p>Etusivu</p>
+    <p style="height: 500px">Etusivu placeholder</p>
   <br>
   </div>
 </div>

@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Kielet, i18n } from '@/stores/kieli';
-import { delay } from '@/utils/delay';
+import { Kielet } from 'eperusteet-frontend-utils/vue/src/stores/kieli';
+import { delay } from 'eperusteet-frontend-utils/vue/src/utils/delay';
 
 @Component
 export default class App extends Vue {

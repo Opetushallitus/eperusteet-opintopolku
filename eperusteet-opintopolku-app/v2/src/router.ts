@@ -5,10 +5,10 @@ import Root from '@/routes/Root.vue';
 import Home from "@/routes/home/RouteHome.vue";
 import Kooste from "@/routes/kooste/RouteKooste.vue";
 
-import { Virheet } from '@/stores/virheet';
-import { SovellusVirhe } from "@/tyypit";
+import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
+import { SovellusVirhe } from "eperusteet-frontend-utils/vue/src/tyypit";
 
-import { createLogger } from '@/stores/logger';
+import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
 
 Vue.use(Router);
 const logger = createLogger('Router');
