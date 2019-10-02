@@ -2,11 +2,17 @@ const eperusteetServicePort = process.env.YLOPS_SERVICE_PORT || 8080;
 const eperusteetYlopsServicePort = process.env.YLOPS_SERVICE_PORT || 8081;
 const amosaaYlopsServicePort = process.env.YLOPS_SERVICE_PORT || 8082;
 const webpack = require('webpack');
+const path = require('path');
 
 module.exports = {
   lintOnSave: false,
   publicPath: process.env.NODE_ENV === 'production' ? '/eperusteet-opintopolku-app/v2/' : '/',
   configureWebpack: {
+    resolve: {
+      alias: {
+        vue: path.resolve(__dirname, 'node_modules/vue'),
+      },
+    },
     plugins: [
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
