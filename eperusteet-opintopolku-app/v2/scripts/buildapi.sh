@@ -20,6 +20,8 @@ then
 fi
 
 rootdir=$(pwd)
+genconfig="${rootdir}/generator.config.json"
+
 eperusteetgen="${rootdir}/src/generated/eperusteet"
 ylopsgen="${rootdir}/src/generated/ylops"
 
@@ -30,7 +32,7 @@ specfile="$YLOPS_SERVICE_DIR/target/openapi/ylops.spec.json"
 cd "$YLOPS_SERVICE_DIR" \
   && mvn clean compile -Pgenerate-openapi \
   && cd "${ylopsgen}" \
-  && npx openapi-generator generate -c ../../generator.config.json -i "$specfile" -g typescript-axios
+  && npx openapi-generator generate -c "${genconfig}" -i "$specfile" -g typescript-axios
 
 mkdir -p ${eperusteetgen}
 cd ${eperusteetgen} || exit 1
@@ -39,5 +41,5 @@ specfile="$EPERUSTEET_SERVICE_DIR/target/openapi/eperusteet.spec.json"
 cd "$EPERUSTEET_SERVICE_DIR" \
   && mvn clean compile -Pgenerate-openapi \
   && cd "${eperusteetgen}" \
-  && npx openapi-generator generate -c ../../generator.config.json -i "$specfile" -g typescript-axios
+  && npx openapi-generator generate -c "${genconfig}" -i "$specfile" -g typescript-axios
 
