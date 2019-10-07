@@ -22,6 +22,7 @@ Vue.use(Loading, {
   color: '#159ecb',
   loader: 'dots',
 });
+console.log('used main');
 
 const isDevelopmentMode = () => _.get(process.env.NODE_ENV, '') === 'development';
 

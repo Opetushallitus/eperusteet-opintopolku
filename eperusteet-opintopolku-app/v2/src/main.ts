@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-import { rootConfig } from '@/mainvue';
+import { rootConfig,  } from '@/mainvue';
 import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
 import '@/config/styles';
 

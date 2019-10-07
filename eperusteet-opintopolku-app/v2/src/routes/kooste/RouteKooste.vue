@@ -1,26 +1,13 @@
 <template>
-<div class="kooste-container">
-  <header>
-    <ep-navigation :sticky="true"></ep-navigation>
-  </header>
-  <div class="container">
-    <p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p>
-    <br>
-  </div>
+<div class="container">
+  <p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p><p>Lorem ipsum</p>
 </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import {
-  EpNavigation,
-} from '@/components';
 
-@Component({
-  components: {
-    EpNavigation,
-  }
-})
+@Component
 export default class Home extends Vue {
 }
 </script>
@@ -30,10 +17,6 @@ export default class Home extends Vue {
 
 header {
   background-color: #1B47AF;
-}
-
-.kooste-container {
-  background-color: $etusivu-background;
 }
 
 .container {

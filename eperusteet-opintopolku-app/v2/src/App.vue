@@ -12,6 +12,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Kielet } from 'eperusteet-frontend-utils/vue/src/stores/kieli';
 import { delay } from 'eperusteet-frontend-utils/vue/src/utils/delay';
 
+
 @Component
 export default class App extends Vue {
   private isInitializing = true;
