@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import Root from '@/routes/Root.vue';
 import Home from "@/routes/home/RouteHome.vue";
 import Kooste from "@/routes/kooste/RouteKooste.vue";
+import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from "eperusteet-frontend-utils/vue/src/tyypit";
@@ -31,6 +32,11 @@ export const router = new Router({
         path: 'kooste/:koulutustyyppi',
         name: 'kooste',
         component: Kooste,
+      },
+      {
+        path: 'peruste/:perusteId',
+        name: 'peruste',
+        component: RoutePeruste,
       },
     ],
   }, {

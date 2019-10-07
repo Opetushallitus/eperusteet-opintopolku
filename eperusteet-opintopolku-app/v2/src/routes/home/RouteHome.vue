@@ -49,11 +49,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
-import { Perusteet, Tiedotteet } from '@/api/eperusteet';
-import { Opetussuunnitelmat } from '@/api/ylops';
-import { PerusteDto, PerusteHakuDto, TiedoteDto } from '@/api/tyypit';
-import { delay } from 'eperusteet-frontend-utils/vue/src/utils/delay';
+import { Perusteet, Tiedotteet } from '@shared/api/eperusteet';
+import { PerusteDto, PerusteHakuDto, TiedoteDto } from '@shared/api/tyypit';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 
 
@@ -115,7 +112,7 @@ export default class Home extends Vue {
     padding: 25px;
     color: #fff;
     background: #1B47AF;
-    
+
     h3.otsikko {
       margin-bottom: 47px;
     }

@@ -32,7 +32,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-import EpLinkki from '@/components/EpLinkki/EpLinkki.vue';
+import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 
 @Component({
   name: 'EpFooter',
