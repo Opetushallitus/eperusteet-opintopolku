@@ -1,22 +1,22 @@
 import _ from 'lodash';
 
 const ktToState = {
-  "koulutustyyppi_1": "ammatillinenperustutkinto",
-  "koulutustyyppi_11": "ammattitutkinto",
-  "koulutustyyppi_12": "erikoisammattitutkinto",
-  "koulutustyyppi_14": "aikuistenlukiokoulutus",
-  "koulutustyyppi_15": "esiopetus",
-  "koulutustyyppi_16": "perusopetus",
-  "koulutustyyppi_17": "aikuistenperusopetus",
-  "koulutustyyppi_18": "valma",
-  "koulutustyyppi_2": "lukiokoulutus",
-  "koulutustyyppi_20": "varhaiskasvatus",
-  "koulutustyyppi_22": "perusopetukseenvalmistava",
-  "koulutustyyppi_23": "valmistavalukiokoulutus",
-  "koulutustyyppi_5": "telma",
-  "koulutustyyppi_6": "lisaopetus",
-  "koulutustyyppi_999907": "taiteenperusopetus",
-}
+  'koulutustyyppi_1': 'ammatillinenperustutkinto',
+  'koulutustyyppi_11': 'ammattitutkinto',
+  'koulutustyyppi_12': 'erikoisammattitutkinto',
+  'koulutustyyppi_14': 'aikuistenlukiokoulutus',
+  'koulutustyyppi_15': 'esiopetus',
+  'koulutustyyppi_16': 'perusopetus',
+  'koulutustyyppi_17': 'aikuistenperusopetus',
+  'koulutustyyppi_18': 'valma',
+  'koulutustyyppi_2': 'lukiokoulutus',
+  'koulutustyyppi_20': 'varhaiskasvatus',
+  'koulutustyyppi_22': 'perusopetukseenvalmistava',
+  'koulutustyyppi_23': 'valmistavalukiokoulutus',
+  'koulutustyyppi_5': 'telma',
+  'koulutustyyppi_6': 'lisaopetus',
+  'koulutustyyppi_999907': 'taiteenperusopetus',
+};
 
 const stateToKt = _.zipObject(
   _.values(ktToState),

@@ -1,21 +1,21 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
 import Root from '@/routes/Root.vue';
-import Home from "@/routes/home/RouteHome.vue";
-import Kooste from "@/routes/kooste/RouteKooste.vue";
-import RouteUutiset from "@/routes/uutiset/RouteUutiset.vue";
+import Home from '@/routes/home/RouteHome.vue';
+import Kooste from '@/routes/kooste/RouteKooste.vue';
+import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
-import { PerusteStore } from "@/stores/PerusteStore";
-import { TiedoteStore } from "@/stores/TiedoteStore";
-import { PerusteDataStore } from "@/stores/PerusteDataStore";
-import { PerusteKoosteStore } from "@/stores/PerusteKoosteStore";
-import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
+import { PerusteStore } from '@/stores/PerusteStore';
+import { TiedoteStore } from '@/stores/TiedoteStore';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
+import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
-import { SovellusVirhe } from "eperusteet-frontend-utils/vue/src/tyypit";
+import { SovellusVirhe } from 'eperusteet-frontend-utils/vue/src/tyypit';
 
 import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
 import _ from 'lodash';
