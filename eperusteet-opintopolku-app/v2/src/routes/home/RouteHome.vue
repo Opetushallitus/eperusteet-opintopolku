@@ -2,45 +2,62 @@
 <div>
   <div class="ylaosa">
     <div class="container">
-      <b-container fluid>
-        <b-row>
-          <b-col>
-            <div class="laatikko">
-              <h3 class="otsikko">{{ $t('eperusteet') }}</h3>
-              <p class="kuvaus">{{ $t('eperusteet-kuvaus') }}</p>
-            </div>
-          </b-col>
-          <b-col></b-col>
-        </b-row>
-      </b-container>
+      <div class="laatikko">
+        <h3 class="otsikko">{{ $t('eperusteet') }}</h3>
+        <p class="kuvaus">{{ $t('eperusteet-kuvaus') }}</p>
+      </div>
     </div>
   </div>
   <div class="container">
     <b-container fluid>
       <b-row>
-
         <b-col md="6" class="tile">
-          <h2>{{ $t('uutisia') }}</h2>
+          <h2 class="tile-heading">{{ $t('uutisia') }}</h2>
           <ep-spinner-slot :is-loading="!tiedotteet">
-            <div v-for="(tiedote, idx) in tiedotteet" :key="idx">
-              <div class="nimi">{{ $kaanna(tiedote.otsikko) }}</div>
-              <div class="luotu">{{ $ago(tiedote.luotu) }}</div>
-              <pre>{{ tiedote }}</pre>
+            <div class="box" v-for="(tiedote, idx) in tiedotteet" :key="idx">
+              <div class="nimi">
+                {{ $kaanna(tiedote.otsikko) }}
+              </div>
+              <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
+            </div>
+            <div class="box">
+              <div class="nimi">
+                <router-link :to="{ name: 'uutiset' }">
+                  {{ $t('nayta-kaikki-uutiset') }}
+                </router-link>
+              </div>
             </div>
           </ep-spinner-slot>
         </b-col>
 
         <b-col md="6" class="tile">
-          <h2>{{ $t('uusimmat-eperusteet') }}</h2>
+          <h2 class="tile-heading">{{ $t('uusimmat-eperusteet') }}</h2>
           <ep-spinner-slot :is-loading="!uusimmat">
-            <pre>{{ uusimmat }}</pre>
-            </ep-spinner-slot>
+            <div class="box" v-for="(peruste, idx) in uusimmat" :key="idx">
+              <div class="nimi">
+                <router-link :to="peruste.$$route">
+                  {{ $kaanna(peruste.nimi) }}
+                </router-link>
+              </div>
+              <div class="luotu">{{ $sd(peruste.paatospvm) }}</div>
+            </div>
+          </ep-spinner-slot>
         </b-col>
       </b-row>
 
-      <h2>{{ $t('valtakunnalliset-eperusteet') }}</h2>
+      <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
       <ep-spinner-slot :is-loading="!perusteet">
-        <pre>{{ perusteet }}</pre>
+        <div class="valtakunnallinen" v-for="(peruste, idx) in perusteet" :key="idx">
+          <div class="d-flex align-items-center">
+            <div class="raita"></div>
+            <div class="nimi flex-fill">
+              <router-link :to="peruste.$$route">
+                {{ $kaanna(peruste.nimi) }}
+              </router-link>
+            </div>
+            <div class="luotu">{{ $sd(peruste.luotu) }}</div>
+          </div>
+        </div>
       </ep-spinner-slot>
     </b-container>
   </div>
@@ -48,13 +65,32 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Prop, Component, Vue } from 'vue-property-decorator';
 import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
 import { Perusteet, Tiedotteet } from '@/api/eperusteet';
+import _ from 'lodash';
 import { Opetussuunnitelmat } from '@/api/ylops';
-import { PerusteDto, PerusteHakuDto, TiedoteDto } from '@/api/tyypit';
-import { delay } from 'eperusteet-frontend-utils/vue/src/utils/delay';
+import { PerusteDto, TiedoteDto } from '@/api/tyypit';
+import { delay } from '@shared/utils/delay';
+import { PerusteStore } from '@/stores/PerusteStore';
+import { TiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import { koulutustyyppiStateName } from '@/utils/perusteet';
+
+
+function mapRoutes(perusteet: PerusteDto[] | null) {
+  return perusteet
+    ? _.map(perusteet, peruste => ({
+        ...peruste,
+        $$route: {
+          name: 'kooste',
+          params: {
+            koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
+          },
+        }
+      }))
+    : null;
+}
 
 
 @Component({
@@ -62,43 +98,29 @@ import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
     EpSpinnerSlot,
   },
 })
-export default class Home extends Vue {
-  private perusteet: PerusteHakuDto[] | null = null;
-  private uusimmat: PerusteDto[] | null = null;
-  private tiedotteet: TiedoteDto[] | null = null;
+export default class RouteHome extends Vue {
+  @Prop({ required: true })
+  private perusteStore!: PerusteStore;
+
+  @Prop({ required: true })
+  private tiedoteStore!: TiedoteStore;
+
+  get perusteet() {
+    return mapRoutes(this.perusteStore.perusteet);
+  }
+
+  get uusimmat() {
+    return mapRoutes(this.perusteStore.uusimmat);
+  }
+
+  get tiedotteet() {
+    return this.tiedoteStore.uusimmatTiedotteet;
+  }
 
   async mounted() {
-    const [ perusteet, uusimmat, tiedotteet ] = await Promise.all([
-      Perusteet.getAllPerusteet(
-        0,
-        100,
-        true,
-        true,
-        true,
-        false,
-        undefined,
-        undefined,
-        [
-          'koulutustyyppi_2',
-          'koulutustyyppi_5',
-          'koulutustyyppi_6',
-          'koulutustyyppi_14',
-          'koulutustyyppi_15',
-          'koulutustyyppi_16',
-          'koulutustyyppi_17',
-          'koulutustyyppi_18',
-          'koulutustyyppi_20',
-          'koulutustyyppi_22',
-          'koulutustyyppi_23',
-          'koulutustyyppi_999907',
-        ]),
-      Perusteet.getUusimmatPerusteet('fi'),
-      Tiedotteet.findTiedotteetBy(0, 10, ['fi'], undefined, undefined, undefined, true, true),
-    ]);
-    this.perusteet = (perusteet.data as any).data;
-    this.uusimmat = uusimmat.data;
-    this.tiedotteet = (tiedotteet.data as any).data;
-    console.log(tiedotteet);
+    this.perusteStore.getYleisetPerusteet();
+    this.perusteStore.getUusimmat();
+    this.tiedoteStore.getUusimmat();
   }
 }
 </script>
@@ -107,14 +129,30 @@ export default class Home extends Vue {
 @import '../../styles/_variables.scss';
 
 .ylaosa {
+  .container {
+    padding: 0px;
+
+    @media (max-width: 767.99px) {
+      max-width: none;
+    }
+
+    @media (min-width: 767.99px) {
+      min-height: 335px;
+      padding: 25px;
+    }
+  }
+
   background: #fee; /* TODO: Lisää kuva */
-  height: 335px;
 
   .laatikko {
-    margin-top: 30px;
-    padding: 25px;
+    padding: 15px;
     color: #fff;
     background: #1B47AF;
+    min-height: 280px;
+
+    @media (min-width: 767.99px) {
+      max-width: 406px;
+    }
     
     h3.otsikko {
       margin-bottom: 47px;
@@ -123,13 +161,44 @@ export default class Home extends Vue {
 }
 
 .container {
-  // Todo: käytä muuttujaa
-  @media (max-width: 767.98px) {
-    max-width: none;
+  .valtakunnallinen {
+    height: 80px;
+    border: 2px solid #DADADA;
+    margin-bottom: 5px;
+    border-radius: 2px;
+
+    .raita {
+      content: block;
+      width: 5px;
+      height: 50px;
+      margin: 15px 20px 15px 15px;
+      background-color: #368715;
+      border-radius: 3px;
+    }
+
+    .luotu {
+      color: #878787;
+      font-size: 80%;
+      margin: 15px 15px 15px 20px;
+    }
+  }
+
+  .tile-heading {
+    margin-bottom: 25px;
   }
 
   .tile {
-    padding: 25px;
+    margin: 25px 0 25px 0;
+
+    .box {
+      margin-bottom: 15px;
+
+      .luotu {
+        color: #878787;
+        font-size: 80%;
+      }
+    }
+
   }
 }
 

@@ -15,7 +15,9 @@
       <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item v-for="(item, idx) in items" :key="idx"
-                      :to="item.route">{{ $t(item.nimi) }}</b-nav-item>
+                      :to="item.route">
+            {{ $t(item.nimi) }}
+          </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
@@ -24,61 +26,24 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { koulutustyyppiStateName, koulutustyyppiRelaatiot } from '@/utils/perusteet';
+import _ from 'lodash';
 
-@Component({})
+@Component
 export default class EpNavigation extends Vue {
-  private get items() {
-    return [
-      {
-        nimi: 'varhaiskasvatus',
-        koulutustyypit: [
-          'koulutustyyppi_20',
-        ],
-        route: { name: 'kooste', params: { koulutustyyppi: 'koulutustyyppi_20' } },
-      },
-      {
-        nimi: 'esiopetus',
-        koulutustyypit: [
-          'koulutustyyppi_15',
-        ],
-        route: { name: 'kooste', params: { koulutustyyppi: 'koulutustyyppi_15' } },
-      },
-      {
-        nimi: 'perusopetus',
-        koulutustyypit: [
-          'koulutustyyppi_6',
-          'koulutustyyppi_16',
-          'koulutustyyppi_17',
-          'koulutustyyppi_22',
-        ],
-        route: { name: 'kooste', params: { koulutustyyppi: 'koulutustyyppi_16' } },
-      },
-      {
-        nimi: 'taiteenperusopetus',
-        koulutustyypit: [
-          'koulutustyyppi_15',
-        ],
-        route: { name: 'kooste', params: { koulutustyyppi: 'koulutustyyppi_999907' } },
-      },
-      {
-        nimi: 'lukiokoulutus',
-        koulutustyypit: [
-          'koulutustyyppi_2',
-          'koulutustyyppi_14',
-          'koulutustyyppi_23'
-        ],
-        route: { name: 'kooste', params: { koulutustyyppi: 'koulutustyyppi_2' } },
-      },
-      {
-        nimi: 'ammatillinen-koulutus',
-        koulutustyypit: [
-          'koulutustyyppi_1',
-          'koulutustyyppi_11',
-          'koulutustyyppi_12'
-        ],
-        route: { name: 'kooste', params: { koulutustyyppi: 'koulutustyyppi_1' } },
-      }
-    ];
+  get items() {
+    return _.map(koulutustyyppiRelaatiot(), kt => {
+      return {
+        ...kt,
+        nimi: koulutustyyppiStateName(kt.koulutustyyppi),
+        route: {
+          name: 'kooste',
+          params: {
+            koulutustyyppi: koulutustyyppiStateName(kt.koulutustyyppi),
+          },
+        },
+      };
+    });
   }
 }
 </script>
@@ -86,8 +51,21 @@ export default class EpNavigation extends Vue {
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
 
+.container {
+  @media (max-width: 768px) {
+    padding: 0;
+    margin: 0;
+    max-width: 768px;
+  }
+}
+
 .navbar-ep {
-  padding: .3rem 0;
+  background-color: #1B47AF;
+
+  #nav-collapse {
+    background-color: #1B47AF;
+  }
+
   // Todo: käytä muuttujaa
   @media (min-width: 768px) {
     padding: 0 0;
@@ -103,6 +81,7 @@ export default class EpNavigation extends Vue {
   &.navbar-expand-md .navbar-nav .nav-link {
     padding-right: 1rem;
     padding-left: 1rem;
+
     // Todo: käytä muuttujaa
     @media (min-width: 768px) {
       padding-top: 0.8rem;
