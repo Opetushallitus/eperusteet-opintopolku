@@ -65,16 +65,16 @@
 </template>
 
 <script lang="ts">
-import { Prop, Component, Vue } from 'vue-property-decorator';
-import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
-import { Perusteet, Tiedotteet } from '@/api/eperusteet';
 import _ from 'lodash';
-import { Opetussuunnitelmat } from '@/api/ylops';
-import { PerusteDto, TiedoteDto } from '@/api/tyypit';
-import { delay } from '@shared/utils/delay';
-import { PerusteStore } from '@/stores/PerusteStore';
-import { TiedoteStore } from '@/stores/TiedoteStore';
+import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import { Opetussuunnitelmat } from '@shared/api/ylops';
+import { PerusteDto, PerusteHakuDto, TiedoteDto } from '@shared/api/tyypit';
+import { PerusteStore } from '@/stores/PerusteStore';
+import { Perusteet, Tiedotteet } from '@shared/api/eperusteet';
+import { Prop, Component, Vue } from 'vue-property-decorator';
+import { TiedoteStore } from '@/stores/TiedoteStore';
+import { delay } from '@shared/utils/delay';
 import { koulutustyyppiStateName } from '@/utils/perusteet';
 
 
@@ -153,7 +153,7 @@ export default class RouteHome extends Vue {
     @media (min-width: 767.99px) {
       max-width: 406px;
     }
-    
+
     h3.otsikko {
       margin-bottom: 47px;
     }

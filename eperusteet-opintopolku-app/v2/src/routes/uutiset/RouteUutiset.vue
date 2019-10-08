@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { Watch, Prop, Component, Vue } from 'vue-property-decorator';
-import { Tiedotteet } from '@/api/eperusteet';
+import { Tiedotteet } from '@shared/api/eperusteet';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import _ from 'lodash';

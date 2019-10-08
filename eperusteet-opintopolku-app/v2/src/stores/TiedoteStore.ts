@@ -1,6 +1,6 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { PageTiedoteDto, TiedoteDto } from '@/api/tyypit';
-import { Tiedotteet } from '@/api/eperusteet';
+import { PageTiedoteDto, TiedoteDto } from '@shared/api/tyypit';
+import { Tiedotteet } from '@shared/api/eperusteet';
 
 
 @Store

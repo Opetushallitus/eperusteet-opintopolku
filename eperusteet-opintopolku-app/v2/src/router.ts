@@ -12,6 +12,7 @@ import { PerusteStore } from "@/stores/PerusteStore";
 import { TiedoteStore } from "@/stores/TiedoteStore";
 import { PerusteDataStore } from "@/stores/PerusteDataStore";
 import { PerusteKoosteStore } from "@/stores/PerusteKoosteStore";
+import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from "eperusteet-frontend-utils/vue/src/tyypit";
@@ -62,7 +63,11 @@ export const router = new Router({
       component: RouteUutiset,
       props: {
         ...props,
-      },
+      }
+    }, {
+      path: 'peruste/:perusteId',
+      name: 'peruste',
+      component: RoutePeruste,
     }],
   }, {
     path: '*',
