@@ -2,17 +2,18 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Root from '@/routes/Root.vue';
-import Home from '@/routes/home/RouteHome.vue';
-import Kooste from '@/routes/kooste/RouteKooste.vue';
-import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
+import Home from "@/routes/home/RouteHome.vue";
+import RouteKooste from "@/routes/kooste/RouteKooste.vue";
+import RouteUutiset from "@/routes/uutiset/RouteUutiset.vue";
+import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
+import RouteTiedot from "@/routes/perusteet/tiedot/RouteTiedot.vue";
 
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
-import { PerusteStore } from '@/stores/PerusteStore';
-import { TiedoteStore } from '@/stores/TiedoteStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
-import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
+import { PerusteStore } from "@/stores/PerusteStore";
+import { TiedoteStore } from "@/stores/TiedoteStore";
+import { PerusteDataStore } from "@/stores/PerusteDataStore";
+import { PerusteKoosteStore } from "@/stores/PerusteKoosteStore";
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from 'eperusteet-frontend-utils/vue/src/tyypit';
@@ -49,7 +50,7 @@ export const router = new Router({
     }, {
       path: 'kooste/:koulutustyyppi/:perusteId?',
       name: 'kooste',
-      component: Kooste,
+      component: RouteKooste,
       props(route) {
         return {
           perusteKoosteStore: new PerusteKoosteStore(
@@ -68,6 +69,19 @@ export const router = new Router({
       path: 'peruste/:perusteId',
       name: 'peruste',
       component: RoutePeruste,
+      props(route) {
+        return {
+          perusteDataStore: new PerusteDataStore(
+            route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined
+          ),
+        };
+      },
+      children: [{
+        path: 'tiedot',
+        component: RouteTiedot,
+        name: 'perusteTiedot',
+        props,
+      }],
     }],
   }, {
     path: '*',

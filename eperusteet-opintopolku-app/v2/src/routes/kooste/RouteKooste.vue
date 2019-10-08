@@ -11,12 +11,15 @@
           <h4>{{ $t('perusteet') }}</h4>
           <div class="perustebox">
             <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
-              <div class="nimi d-flex justify-content-center align-items-center">
-                <div class="">
-                  {{ $kaanna(peruste.nimi) }}
+              <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }"
+                           tag="a">
+                <div class="nimi d-flex justify-content-center align-items-center">
+                  <div class="">
+                    {{ $kaanna(peruste.nimi) }}
+                  </div>
                 </div>
-              </div>
-              <div class="kuvaus" v-html="$kaanna(peruste.kuvaus)"></div>
+                <div class="kuvaus" v-html="$kaanna(peruste.kuvaus)"></div>
+              </router-link>
             </div>
           </div>
         </b-col>

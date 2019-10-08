@@ -52,7 +52,7 @@ export default class EpNavigation extends Vue {
 @import '../../styles/_variables.scss';
 
 .container {
-  @media (max-width: 768px) {
+  @media (max-width: 767.98px) {
     padding: 0;
     margin: 0;
     max-width: 768px;
@@ -61,6 +61,12 @@ export default class EpNavigation extends Vue {
 
 .navbar-ep {
   background-color: #1B47AF;
+
+  ul {
+    li {
+      white-space: nowrap;
+    }
+  }
 
   #nav-collapse {
     background-color: #1B47AF;
