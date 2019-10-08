@@ -53,7 +53,7 @@ export default class RouteUutiset extends Vue {
   private page = 1;
 
   get lang() {
-    return (this as any).$i18n.locale;
+    return this.$i18n.locale;
   }
 
   get tiedotteet() {

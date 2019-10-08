@@ -80,7 +80,11 @@ import { koulutustyyppiStateName } from '@/utils/perusteet';
 
 function mapRoutes(perusteet: PerusteDto[] | null) {
   return perusteet
-    ? _.map(perusteet, peruste => ({
+    ? _.map(perusteet, peruste => {
+      if (!peruste.koulutustyyppi) {
+        throw new Error('koulutustyyppi-ei-maaritelty');
+      }
+      return {
         ...peruste,
         $$route: {
           name: 'kooste',
@@ -88,7 +92,8 @@ function mapRoutes(perusteet: PerusteDto[] | null) {
             koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
           },
         }
-      }))
+      };
+    })
     : null;
 }
 
@@ -130,13 +135,13 @@ export default class RouteHome extends Vue {
 
 .ylaosa {
   .container {
-    padding: 0px;
+    padding: 0;
 
-    @media (max-width: 767.99px) {
+    @media (max-width: 767.98px) {
       max-width: none;
     }
 
-    @media (min-width: 767.99px) {
+    @media (min-width: 768px) {
       min-height: 335px;
       padding: 25px;
     }
@@ -148,10 +153,10 @@ export default class RouteHome extends Vue {
     padding: 15px;
     color: #fff;
     background: #1B47AF;
-    min-height: 280px;
 
-    @media (min-width: 767.99px) {
+    @media (min-width: 768px) {
       max-width: 406px;
+      min-height: 285px;
     }
 
     h3.otsikko {
@@ -168,7 +173,7 @@ export default class RouteHome extends Vue {
     border-radius: 2px;
 
     .raita {
-      content: block;
+      display: block;
       width: 5px;
       height: 50px;
       margin: 15px 20px 15px 15px;

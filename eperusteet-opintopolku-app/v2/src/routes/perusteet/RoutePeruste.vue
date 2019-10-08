@@ -1,5 +1,9 @@
 <template>
-  <div>peruste {{$route.params.perusteId}}</div>
+<div class="container">
+  <div>
+    <pre>peruste {{$route.params.perusteId}}</pre>
+  </div>
+</div>
 </template>
 
 <script lang="ts">

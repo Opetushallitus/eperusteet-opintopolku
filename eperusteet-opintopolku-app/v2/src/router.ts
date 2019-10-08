@@ -54,7 +54,7 @@ export const router = new Router({
         return {
           perusteKoosteStore: new PerusteKoosteStore(
             stateToKoulutustyyppi(route.params.koulutustyyppi),
-            route.params.perusteId && _.parseInt(route.params.perusteId)),
+            route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
         };
       },
     }, {

@@ -30,4 +30,4 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang="scss" src="./styles/app.scss" />
+<style lang="scss" src="./styles/app.scss"></style>

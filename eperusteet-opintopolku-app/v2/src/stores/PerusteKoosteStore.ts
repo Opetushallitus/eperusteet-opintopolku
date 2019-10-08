@@ -24,9 +24,9 @@ export class PerusteKoosteStore {
 
   constructor(
     koulutustyyppi: string,
-    perusteId: number) {
+    perusteId?: number) {
     this.koulutustyyppi = koulutustyyppi;
-    this.perusteId = perusteId;
+    this.perusteId = perusteId || null;
     this.reload();
   }
 
