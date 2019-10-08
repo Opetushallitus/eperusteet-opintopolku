@@ -4,15 +4,32 @@ import Router from 'vue-router'
 import Root from '@/routes/Root.vue';
 import Home from "@/routes/home/RouteHome.vue";
 import Kooste from "@/routes/kooste/RouteKooste.vue";
+import RouteUutiset from "@/routes/uutiset/RouteUutiset.vue";
+
+import { stateToKoulutustyyppi } from '@/utils/perusteet';
+
+import { PerusteStore } from "@/stores/PerusteStore";
+import { TiedoteStore } from "@/stores/TiedoteStore";
+import { PerusteDataStore } from "@/stores/PerusteDataStore";
+import { PerusteKoosteStore } from "@/stores/PerusteKoosteStore";
 import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from "eperusteet-frontend-utils/vue/src/tyypit";
 
 import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
+import _ from 'lodash';
 
 Vue.use(Router);
 const logger = createLogger('Router');
+
+const perusteStore = new PerusteStore();
+const tiedoteStore = new TiedoteStore();
+const props = {
+  perusteStore,
+  tiedoteStore,
+};
+
 
 export const router = new Router({
   scrollBehavior: () => ({ x: 0, y: 0 }),
@@ -22,23 +39,36 @@ export const router = new Router({
   }, {
     path: '/:lang',
     component: Root,
-    children: [
-      {
-        path: '',
-        name: 'root',
-        component: Home,
+    children: [{
+      path: '',
+      name: 'root',
+      component: Home,
+      props: {
+        ...props,
       },
-      {
-        path: 'kooste/:koulutustyyppi',
-        name: 'kooste',
-        component: Kooste,
+    }, {
+      path: 'kooste/:koulutustyyppi/:perusteId?',
+      name: 'kooste',
+      component: Kooste,
+      props(route) {
+        return {
+          perusteKoosteStore: new PerusteKoosteStore(
+            stateToKoulutustyyppi(route.params.koulutustyyppi),
+            route.params.perusteId && _.parseInt(route.params.perusteId)),
+        };
       },
-      {
-        path: 'peruste/:perusteId',
-        name: 'peruste',
-        component: RoutePeruste,
-      },
-    ],
+    }, {
+      path: 'uutiset',
+      name: 'uutiset',
+      component: RouteUutiset,
+      props: {
+        ...props,
+      }
+    }, {
+      path: 'peruste/:perusteId',
+      name: 'peruste',
+      component: RoutePeruste,
+    }],
   }, {
     path: '*',
     redirect: (to) => {
