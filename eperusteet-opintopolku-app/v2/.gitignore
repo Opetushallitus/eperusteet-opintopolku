@@ -23,4 +23,5 @@ yarn-error.log*
 *.sln
 *.sw?
 
+coverage
 package-lock.json

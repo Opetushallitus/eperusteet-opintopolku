@@ -53,5 +53,10 @@ export function koulutustyyppiRelaatiot() {
     alityypit: [
       'koulutustyyppi_999907',
     ],
+  }, {
+    koulutustyyppi: 'koulutustyyppi_2',
+    alityypit: [
+      'koulutustyyppi_23',
+    ],
   }];
 }

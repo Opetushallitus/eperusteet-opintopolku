@@ -7,6 +7,18 @@ module.exports = {
     'ts',
     'tsx'
   ],
+  coverageReporters: [
+    'text-summary',
+    'json',
+    'lcov',
+  ],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.(ts|tsx|vue)',
+    '!<rootDir>/src/**/script.ts',
+    '!<rootDir>/**/*.d.ts',
+    '!<rootDir>/src/main.ts',
+    '!<rootDir>/src/registerServiceWorker.ts',
+  ],
   transform: {
     '^.+\\.vue$': 'vue-jest',
     '.+\\.(css|styl|less|sass|scss|svg|png|jpg|ttf|woff|woff2)$': 'jest-transform-stub',
@@ -16,13 +28,14 @@ module.exports = {
     '/node_modules/'
   ],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    '^@shared/(.*)$': 'eperusteet-frontend-utils/vue/src/$1',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   snapshotSerializers: [
     'jest-serializer-vue'
   ],
   testMatch: [
-    '**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)'
+    '**/src/**/*.spec.ts|**/__tests__/*.ts'
   ],
   testURL: 'http://localhost/',
   watchPlugins: [

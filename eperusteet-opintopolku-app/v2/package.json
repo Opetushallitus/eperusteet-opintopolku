@@ -8,7 +8,9 @@
     "lint": "vue-cli-service lint --no-fix",
     "lint:fix": "vue-cli-service lint",
     "test:e2e": "vue-cli-service test:e2e",
-    "test:unit": "vue-cli-service test:unit"
+    "test:unit": "vue-cli-service test:unit --ci --coverage --no-cache",
+    "test:unit:dev": "vue-cli-service test:unit --watch --no-cache",
+    "test:unit:report": "$BROWSER coverage/lcov-report/index.html"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.9.0",
@@ -17,7 +19,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.9.0",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/vue-fontawesome": "^0.1.6",
-    "@types/jest": "^23.1.4",
+    "@types/jest": "^24.0.18",
     "@types/lodash": "^4.14.142",
     "@vue/cli-plugin-babel": "^3.11.0",
     "@vue/cli-plugin-e2e-cypress": "^3.11.0",
@@ -37,6 +39,7 @@
     "eperusteet-frontend-utils": "github:Opetushallitus/eperusteet-frontend-utils#EP-1653",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
+    "file-loader": "^4.2.0",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "node-sass": "^4.9.0",

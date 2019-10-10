@@ -52,7 +52,9 @@ export default class EpHeader extends Vue {
 .kooste-header {
   height: 150px;
   box-shadow: 0 2px 6px 0 rgba(0,45,153,0.08);
-  background: #fee; // FIXME: puuttuu kuva
+  background-image: url('../../../public/img/banners/aallot.svg');
+  background-repeat: no-repeat;
+  background-position: right;
 
   .murupolku {
     padding-top: 25px;

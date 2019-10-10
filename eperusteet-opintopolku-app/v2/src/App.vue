@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Kielet } from 'eperusteet-frontend-utils/vue/src/stores/kieli';
-import { delay } from 'eperusteet-frontend-utils/vue/src/utils/delay';
+import { Kielet } from '@shared/stores/kieli';
+import { delay } from '@shared/utils/delay';
 
 
 @Component
