@@ -6,9 +6,9 @@
         <ep-peruste-sidenav :peruste-data-store="perusteDataStore"></ep-peruste-sidenav>
       </template>
       <template slot="view">
-        <transition name="fade" mode="out-in">
-          <router-view :key="$route.fullPath" />
-        </transition>
+      <transition name="fade" mode="out-in">
+        <router-view :key="$route.fullPath" />
+      </transition>
       </template>
     </ep-sidebar>
   </div>
@@ -16,11 +16,10 @@
 </template>
 
 <script lang="ts">
-import { Mixins, Component, Prop } from 'vue-property-decorator';
-import EpRoute from '@shared/mixins/EpRoute';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { Mixins, Component } from 'vue-property-decorator';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
+import EpPerusteRoute from "@/mixins/EpPerusteRoute";
 
 @Component({
   components: {
@@ -28,9 +27,7 @@ import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue
     EpPerusteSidenav,
   },
 })
-export default class RoutePeruste extends Mixins(EpRoute) {
-    @Prop({ required: true })
-    private perusteDataStore!: PerusteDataStore;
+export default class RoutePeruste extends Mixins(EpPerusteRoute) {
 }
 </script>
 

@@ -10,10 +10,9 @@ export class PerusteDataStore {
 
   constructor(perusteId?: number) {
     this.perusteId = perusteId || null;
-    this.reload();
   }
 
-  async reload() {
+  async init() {
     if (this.perusteId) {
       this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
     } else {

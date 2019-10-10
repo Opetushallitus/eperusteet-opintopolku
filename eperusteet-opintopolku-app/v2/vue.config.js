@@ -1,21 +1,26 @@
-const eperusteetServicePort = process.env.YLOPS_SERVICE_PORT || 8080;
-const eperusteetYlopsServicePort = process.env.YLOPS_SERVICE_PORT || 8081;
-const amosaaYlopsServicePort = process.env.YLOPS_SERVICE_PORT || 8082;
 const webpack = require('webpack');
 const path = require('path');
 
-const palleroProxy = {
+const
+  eperusteetService = process.env.EPERUSTEET_SERVICE,
+  eperusteetServicePort = process.env.EPERUSTEET_SERVICE_PORT || 8080,
+  eperusteetYlopsService = process.env.EPERUSTEET_YLOPS_SERVICE,
+  eperusteetYlopsServicePort = process.env.EPERUSTEET_SERVICE_PORT || 8081,
+  eperusteetAmosaaService = process.env.EPERUSTEET_AMOSAA_SERVICE,
+  eperusteetAmosaaServicePort = process.env.EPERUSTEET_SERVICE_PORT || 8082;
+
+const proxy = {
   '/eperusteet-service': {
-    target: 'https://eperusteet.testiopintopolku.fi',
-    secure: true,
+    target: eperusteetService || 'http://localhost:' + eperusteetServicePort,
+    secure: !!eperusteetService,
   },
   '/eperusteet-ylops-service': {
-    target: 'https://eperusteet.testiopintopolku.fi',
-    secure: true,
+    target: eperusteetYlopsService || 'http://localhost:' + eperusteetYlopsServicePort,
+    secure: !!eperusteetYlopsService,
   },
   '/eperusteet-amosaa-service': {
-    target: 'https://eperusteet.testiopintopolku.fi',
-    secure: true,
+    target: eperusteetAmosaaService || 'http://localhost:' + eperusteetAmosaaServicePort,
+    secure: !!eperusteetAmosaaService,
   },
 };
 
@@ -40,20 +45,6 @@ module.exports = {
     },
     clientLogLevel: 'none',
     port: 9020,
-    proxy: palleroProxy,
-    // proxy: {
-    //   '/eperusteet-service': {
-    //     target: process.env.NODE_ENV === 'e2e' ? 'http://app:8080' : 'http://localhost:' + eperusteetServicePort,
-    //     secure: false,
-    //   },
-    //   '/eperusteet-ylops-service': {
-    //     target: process.env.NODE_ENV === 'e2e' ? 'http://app:8080' : 'http://localhost:' + eperusteetYlopsServicePort,
-    //     secure: false,
-    //   },
-    //   '/eperusteet-amosaa-service': {
-    //     target: process.env.NODE_ENV === 'e2e' ? 'http://app:8080' : 'http://localhost:' + amosaaYlopsServicePort,
-    //     secure: false,
-    //   },
-    // },
+    proxy
   },
 };

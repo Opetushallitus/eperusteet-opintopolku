@@ -31,6 +31,14 @@ const props = {
   tiedoteStore,
 };
 
+function perusteProps(route) {
+  return {
+    perusteDataStore: new PerusteDataStore(
+      route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined
+    ),
+  };
+}
+
 
 export const router = new Router({
   scrollBehavior: () => ({ x: 0, y: 0 }),
@@ -69,18 +77,12 @@ export const router = new Router({
       path: 'peruste/:perusteId',
       name: 'peruste',
       component: RoutePeruste,
-      props(route) {
-        return {
-          perusteDataStore: new PerusteDataStore(
-            route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined
-          ),
-        };
-      },
+      props: perusteProps,
       children: [{
         path: 'tiedot',
         component: RouteTiedot,
         name: 'perusteTiedot',
-        props,
+        props: perusteProps,
       }],
     }],
   }, {
