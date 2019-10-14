@@ -8,10 +8,13 @@ jdk:
 services:
   - docker
 
+
 cache:
+  yarn: true
   directories:
-    - $HOME/.m2
     - $HOME/.npm
+    - $HOME/.m2
+    - $HOME/.cache
 
 env:
   global:
@@ -19,13 +22,39 @@ env:
     - secure: "YRnssek4uB908x7GzTXOeO2Zp66nx7pCrlNYfUnlpQQcVFZaPk9q14p8jp7sYyFoydIA9KPrBBbTDWKjFpRk3TJLdqpgTCmD/j4yUHs6n170MDvLXohiuoiVP41zQ8gaB1WBxXiyAyJ70kmVI7BsHAQTmZhNoASoM9wd1zXQfRU="
     # AWS_SECRET_ACCESS_KEY
     - secure: "mDvjeyMzww8xWjUvkMeUGqFaO62L3ZPqgCru/FK5XL95mUfBTz8VXHx5lqfTvR0JALmp6PelTNglBq03R3U1Fg4IDGXxocgjHVQ1w16Nkdh0nIFt/3R46iWLZ5j7WuQTKUOzLuH/Sbk5RQybROxWbqrm/FaLP5fHk8WLnAqvTio="
+    - YLOPS_SERVICE_DIR=$PWD/eperusteet-ylops/eperusteet-ylops-service
+    - EPERUSTEET_SERVICE_DIR=$PWD/eperusteet/eperusteet/eperusteet-service
 
 install:
   - git clone https://github.com/Opetushallitus/ci-tools.git
   - source ci-tools/common/setup-tools.sh
   - export ARTIFACT_NAME="eperusteet-opintopolku"
 
+  - git clone --depth=1 --branch uusi_lukio https://github.com/Opetushallitus/eperusteet-ylops
+  - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
+  - cd eperusteet/eperusteet && mvn dependency:resolve --quiet && cd ../..
+  - cd eperusteet-ylops && mvn dependency:resolve --quiet && cd ..
+  - nvm install 10.16.3
+  - cd eperusteet-opintopolku-app/v2
+  - yarn install
+
+before_script:
+  - echo $JAVA_HOME
+  - java -version
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
+  - nvm use 10.16.3
+  - cd eperusteet-opintopolku-app/v2
+  - ls
+  - echo 'Generate API code' && echo -en 'travis_fold:start:script.1\\r'
+  - yarn run gen:api
+  - echo -en 'travis_fold:end:script.1\\r'
+  - yarn run lint
+  - yarn run test:unit
+
   - mvn clean install -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
 
   - mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
@@ -34,6 +63,11 @@ script:
   - export BASE_IMAGE="baseimage-war:master"
   - ./ci-tools/common/pull-image.sh
   - ./ci-tools/build/build-war.sh ${ARTIFACT_NAME}
+
+after_script:
+  - ./cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
+  - ./cc-test-reporter upload-coverage
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
 deploy:
   provider: script
