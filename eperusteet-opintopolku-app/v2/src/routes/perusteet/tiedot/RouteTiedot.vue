@@ -145,7 +145,7 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
         _.each(maaraysObj.liitteet, (liite, kieli) => {
           result[kieli] = {
             ...liite,
-            url: baseURL + LiitetiedostotParam.get(this.perusteId, liite.id!).url
+            url: baseURL + LiitetiedostotParam.getKuva(this.perusteId, liite.id!).url
           };
         });
       }

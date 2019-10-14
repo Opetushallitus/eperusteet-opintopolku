@@ -6,7 +6,7 @@ import '@/config/bootstrap';
 import '@/config/fontawesome';
 
 import { router } from '@/router';
-import { i18n } from 'eperusteet-frontend-utils/vue/src/stores/kieli';
+import { KieliStore } from 'eperusteet-frontend-utils/vue/src/stores/kieli';
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 
 import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
@@ -23,10 +23,18 @@ Vue.use(Loading, {
   loader: 'dots',
 });
 
+
+KieliStore.setup(Vue, {
+  messages: {
+    fi: require('@/translations/locale-fi.json'),
+    sv: require('@/translations/locale-sv.json'),
+  },
+});
+
+
 import VueI18n, { IVueI18n } from 'vue-i18n';
 
 declare module 'vue/types/vue' {
-
   interface Vue {
     readonly $i18n: VueI18n & IVueI18n;
     $t: typeof VueI18n.prototype.t;
@@ -53,7 +61,7 @@ function errorCaptured(err: Error, vm: Vue, info: string) {
 }
 
 export const rootConfig: any = {
-  i18n,
+  i18n: KieliStore.i18n,
   router,
   render: (h: any) => h(App),
   errorCaptured,

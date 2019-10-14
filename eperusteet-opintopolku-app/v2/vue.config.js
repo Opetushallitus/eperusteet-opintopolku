@@ -9,6 +9,27 @@ const
   eperusteetAmosaaService = process.env.EPERUSTEET_AMOSAA_SERVICE,
   eperusteetAmosaaServicePort = process.env.EPERUSTEET_SERVICE_PORT || 8082;
 
+if (process.env.EPERUSTEET_SERVICE) {
+  console.log('Using eperusteet-service proxy:', process.env.EPERUSTEET_SERVICE);
+}
+else {
+  console.log('EPERUSTEET_SERVICE not defined. Using local eperusteet-service.');
+}
+
+if (process.env.EPERUSTEET_YLOPS_SERVICE) {
+  console.log('Using eperusteet-ylops-service proxy:', process.env.EPERUSTEET_YLOPS_SERVICE);
+}
+else {
+  console.log('EPERUSTEET_YLOPS_SERVICE not defined. Using local eperusteet-ylops-service.');
+}
+
+if (process.env.EPERUSTEET_AMOSAA_SERVICE) {
+  console.log('Using eperusteet-amosaa-service proxy:', process.env.EPERUSTEET_AMOSAA_SERVICE);
+}
+else {
+  console.log('EPERUSTEET_AMOSAA_SERVICE not defined. Using local eperusteet-amosaa-service.');
+}
+
 const proxy = {
   '/eperusteet-service': {
     target: eperusteetService || 'http://localhost:' + eperusteetServicePort,
