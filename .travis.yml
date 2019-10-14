@@ -32,7 +32,9 @@ install:
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-frontend-utils
 
   - echo 'Generate API code' && echo -en 'travis_fold:start:script.1\\r'
-  - cd eperusteet-frontend-utils/vue && yarn install && yarn gen:api && cd .. && yarn link && cd ..
+  - cd eperusteet-frontend-utils/vue && yarn install
+  - yarn gen:api > /dev/null
+  - cd .. && yarn link && cd ..
   - echo -en 'travis_fold:end:script.1\\r'
 
   - cd eperusteet/eperusteet && mvn dependency:resolve --quiet && cd ../..
