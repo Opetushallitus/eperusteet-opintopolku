@@ -32,15 +32,14 @@ install:
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-frontend-utils
 
   - echo 'Generate API code' && echo -en 'travis_fold:start:script.1\\r'
-  - cd eperusteet-frontend-utils/vue && yarn install && yarn gen:api && cd .. && yarn link && cd ..
-  - echo -en 'travis_fold:end:script.1\\r'
-
   - cd eperusteet/eperusteet && mvn dependency:resolve --quiet && cd ../..
   - cd eperusteet-ylops && mvn dependency:resolve --quiet && cd ..
-  - ls
+  - (cd eperusteet-frontend-utils/vue && yarn install && yarn gen:api && cd .. && yarn link && cd ..) > /dev/null
+  - echo -en 'travis_fold:end:script.1\\r'
+
   - cd eperusteet-opintopolku-app/v2
   - yarn link eperusteet-frontend-utils
-  - yarn install
+  - yarn install > /dev/null
   - cd ../..
 
   - git clone https://github.com/Opetushallitus/ci-tools.git
@@ -58,10 +57,7 @@ before_script:
 
 script:
   - nvm use 10.16.3
-  - pwd
-  - ls
   - cd eperusteet-opintopolku-app/v2
-  - ls
   - yarn run lint
   - yarn run test:unit
   - cd ../..
