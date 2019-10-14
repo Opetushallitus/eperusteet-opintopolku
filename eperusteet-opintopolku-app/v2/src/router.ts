@@ -8,12 +8,13 @@ import RouteUutiset from "@/routes/uutiset/RouteUutiset.vue";
 import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
 import RouteTiedot from "@/routes/perusteet/tiedot/RouteTiedot.vue";
 
-import { stateToKoulutustyyppi } from '@/utils/perusteet';
-
 import { PerusteStore } from "@/stores/PerusteStore";
 import { TiedoteStore } from "@/stores/TiedoteStore";
 import { PerusteDataStore } from "@/stores/PerusteDataStore";
 import { PerusteKoosteStore } from "@/stores/PerusteKoosteStore";
+
+import { stateToKoulutustyyppi } from '@/utils/perusteet';
+
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from 'eperusteet-frontend-utils/vue/src/tyypit';
@@ -24,12 +25,9 @@ import _ from 'lodash';
 Vue.use(Router);
 const logger = createLogger('Router');
 
+
 const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
-const props = {
-  perusteStore,
-  tiedoteStore,
-};
 
 export const router = new Router({
   scrollBehavior: () => ({ x: 0, y: 0 }),
@@ -43,45 +41,42 @@ export const router = new Router({
       path: '',
       name: 'root',
       component: Home,
-      props: {
-        ...props,
+      meta: {
+        async props() {
+          return {
+            perusteStore,
+            tiedoteStore,
+          };
+        },
       },
     }, {
       path: 'kooste/:koulutustyyppi/:perusteId?',
       name: 'kooste',
       component: RouteKooste,
-      props(route) {
-        return {
-          perusteKoosteStore: new PerusteKoosteStore(
-            stateToKoulutustyyppi(route.params.koulutustyyppi),
-            route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
-        };
+      meta: {
+        async props(route) {
+          return {
+            perusteKoosteStore: new PerusteKoosteStore(
+              stateToKoulutustyyppi(route.params.koulutustyyppi),
+              route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
+          };
+        },
       },
     }, {
       path: 'uutiset',
       name: 'uutiset',
       component: RouteUutiset,
-      props: {
-        ...props,
-      }
     }, {
       path: 'peruste/:perusteId',
       name: 'peruste',
       component: RoutePeruste,
-      props: _.memoize(async (route) => {
-        console.log('new PerusteDataStore');
-
-        const perusteDataStore = new PerusteDataStore(
-            route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined
-        );
-
-        await perusteDataStore.init();
-        await perusteDataStore.initSisalto();
-
-        return {
-          perusteDataStore,
-        }
-      }),
+      meta: {
+        props: async (route) => {
+          return {
+            perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId)),
+          };
+        },
+      },
       children: [{
         path: 'tiedot',
         component: RouteTiedot,
@@ -107,25 +102,24 @@ export const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  console.log('beforeEach');
-  let params = {};
+  let props = {};
   for (const record of to.matched) {
-    console.log('for record', record);
-    if (_.isFunction((record.props as any).default)) {
-      params = {
-        ...await (record as any).props.default(to),
+    if (_.isFunction(record.meta.props)) {
+      const recordParams = await record.meta.props(to);
+      props = {
+        ...props,
+        ...recordParams,
       };
-      console.log('wait record', record);
+      if (_.isFunction((record.props as any).default)) {
+        props = {
+          ...props,
+          ...await (record.props as any).default(to),
+        };
+      }
     }
-    else if (_.isObject((record.props as any).default)) {
-      params = {
-        ...(record as any).props.default,
-      };
-    }
-    else {
-      // boolean -> noop
-    }
-    (record.props as any).default = params;
+    record.props = {
+      default: props,
+    };
   }
   next();
 });
