@@ -1,0 +1,33 @@
+@import './variables';
+
+// html element
+:root {
+  overflow-y: scroll;
+
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  body {
+    font-family: "Open Sans", "Helvetica", sans-serif;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  li p {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 767.98px) {
+    .container {
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      max-width: 100% !important;
+    }
+  }
+}
