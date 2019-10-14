@@ -25,22 +25,25 @@ describe('RouteHome', () => {
       },
     });
 
+    expect(perusteStore.getYleisetPerusteet).toBeCalledTimes(1);
+    expect(perusteStore.getUusimmat).toBeCalledTimes(1);
+    expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
     expect(wrapper.findAll('.oph-spinner').length).toEqual(3);
 
     tiedoteStore.uusimmatTiedotteet = [{
-        luotu: 'aikaleima_1234' as any,
-        otsikko: {
-          fi: 'uutinen_1234',
-        } as any,
+      luotu: 'aikaleima_1234' as any,
+      otsikko: {
+        fi: 'uutinen_1234',
+      } as any,
     }];
 
     perusteStore.uusimmat = [{
-        id: 1,
-        koulutustyyppi: 'koulutustyyppi_2',
-        nimi: {
-          fi: 'peruste1',
-        } as any,
-      }];
+      id: 1,
+      koulutustyyppi: 'koulutustyyppi_2',
+      nimi: {
+        fi: 'peruste1',
+      } as any,
+    }];
 
     perusteStore.perusteet = [{
       id: 2,
@@ -56,9 +59,6 @@ describe('RouteHome', () => {
     expect(wrapper.html()).toContain('peruste1');
     expect(wrapper.html()).toContain('peruste2');
     expect(wrapper.html()).toContain('uutinen_1234');
-    expect(perusteStore.getYleisetPerusteet).toBeCalledTimes(1);
-    expect(perusteStore.getUusimmat).toBeCalledTimes(1);
-    expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
   });
 
   test('Throws on wrong koulutustyyppi', async () => {

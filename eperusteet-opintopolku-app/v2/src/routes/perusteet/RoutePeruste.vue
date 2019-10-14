@@ -19,7 +19,7 @@
 import { Mixins, Component } from 'vue-property-decorator';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
-import EpPerusteRoute from "@/mixins/EpPerusteRoute";
+import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 
 @Component({
   components: {
