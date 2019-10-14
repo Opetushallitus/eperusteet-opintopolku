@@ -2,7 +2,6 @@ import { Prop, Component } from 'vue-property-decorator';
 import EpRoute from '@shared/mixins/EpRoute';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 
-
 @Component
 export default class EpPerusteRoute extends EpRoute {
     @Prop({ required: true })
