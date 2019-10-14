@@ -27,7 +27,7 @@ env:
 
 install:
   - nvm install 10.16.3
-  - git clone --depth=1 --branch uusi_lukio https://github.com/Opetushallitus/eperusteet-ylops
+  - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-ylops
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-frontend-utils
 
