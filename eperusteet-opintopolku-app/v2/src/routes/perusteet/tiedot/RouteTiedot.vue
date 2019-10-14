@@ -244,9 +244,10 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
 @import '../../../styles/_variables.scss';
 
 .content {
-  padding: 15px;
-}
-.help {
-  color: $gray;
+  padding: $content-padding;
+
+  .help {
+    color: $gray;
+  }
 }
 </style>

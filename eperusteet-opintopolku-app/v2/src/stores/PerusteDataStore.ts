@@ -1,5 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { PerusteenOsaViiteDtoObject, PerusteDto } from '@shared/api/tyypit';
+import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
 import _ from 'lodash';
 
@@ -8,7 +8,7 @@ import _ from 'lodash';
 export class PerusteDataStore {
   @State() public peruste: PerusteDto | null = null;
   @State() public perusteId: number | null = null;
-  @State() public sisalto: PerusteenOsaViiteDtoObject | null = null;
+  @State() public sisalto: Matala | null = null;
   @State() public suoritustapa: string | null = null;
 
   public static readonly create = _.memoize(async (perusteId: number) => {
