@@ -26,17 +26,27 @@ env:
     - EPERUSTEET_SERVICE_DIR=$PWD/eperusteet/eperusteet/eperusteet-service
 
 install:
+  - nvm install 10.16.3
+  - git clone --depth=1 --branch uusi_lukio https://github.com/Opetushallitus/eperusteet-ylops
+  - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
+  - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-frontend-utils
+
+  - echo 'Generate API code' && echo -en 'travis_fold:start:script.1\\r'
+  - cd eperusteet-frontend-utils/vue && yarn install && yarn gen:api && cd .. && yarn link && cd ..
+  - echo -en 'travis_fold:end:script.1\\r'
+
+  - cd eperusteet/eperusteet && mvn dependency:resolve --quiet && cd ../..
+  - cd eperusteet-ylops && mvn dependency:resolve --quiet && cd ..
+  - ls
+  - cd eperusteet-opintopolku-app/v2
+  - yarn link eperusteet-frontend-utils
+  - yarn install
+  - cd ../..
+
   - git clone https://github.com/Opetushallitus/ci-tools.git
   - source ci-tools/common/setup-tools.sh
   - export ARTIFACT_NAME="eperusteet-opintopolku"
 
-  - git clone --depth=1 --branch uusi_lukio https://github.com/Opetushallitus/eperusteet-ylops
-  - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
-  - cd eperusteet/eperusteet && mvn dependency:resolve --quiet && cd ../..
-  - cd eperusteet-ylops && mvn dependency:resolve --quiet && cd ..
-  - nvm install 10.16.3
-  - cd eperusteet-opintopolku-app/v2
-  - yarn install
 
 before_script:
   - echo $JAVA_HOME
@@ -45,15 +55,16 @@ before_script:
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
 
+
 script:
   - nvm use 10.16.3
+  - pwd
+  - ls
   - cd eperusteet-opintopolku-app/v2
   - ls
-  - echo 'Generate API code' && echo -en 'travis_fold:start:script.1\\r'
-  - yarn run gen:api
-  - echo -en 'travis_fold:end:script.1\\r'
   - yarn run lint
   - yarn run test:unit
+  - cd ../..
 
   - mvn clean install -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
 
@@ -65,7 +76,10 @@ script:
   - ./ci-tools/build/build-war.sh ${ARTIFACT_NAME}
 
 after_script:
-  - ./cc-test-reporter format-coverage -t lcov ./coverage/lcov.info
+  - pwd
+  - ls
+  - ls eperusteet-opintopolku-app/v2/coverage/lcov.info
+  - ./cc-test-reporter format-coverage -t lcov eperusteet-opintopolku-app/v2/coverage/lcov.info
   - ./cc-test-reporter upload-coverage
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 

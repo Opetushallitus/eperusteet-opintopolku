@@ -15,7 +15,8 @@ export class PerusteDataStore {
   async init() {
     if (this.perusteId) {
       this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
-    } else {
+    }
+    else {
       throw new Error('peruste-id-puuttuu');
     }
   }

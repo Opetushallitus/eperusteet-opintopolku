@@ -2,18 +2,18 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Root from '@/routes/Root.vue';
-import Home from "@/routes/home/RouteHome.vue";
-import RouteKooste from "@/routes/kooste/RouteKooste.vue";
-import RouteUutiset from "@/routes/uutiset/RouteUutiset.vue";
-import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
-import RouteTiedot from "@/routes/perusteet/tiedot/RouteTiedot.vue";
+import Home from '@/routes/home/RouteHome.vue';
+import RouteKooste from '@/routes/kooste/RouteKooste.vue';
+import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
+import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
+import RouteTiedot from '@/routes/perusteet/tiedot/RouteTiedot.vue';
 
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
-import { PerusteStore } from "@/stores/PerusteStore";
-import { TiedoteStore } from "@/stores/TiedoteStore";
-import { PerusteDataStore } from "@/stores/PerusteDataStore";
-import { PerusteKoosteStore } from "@/stores/PerusteKoosteStore";
+import { PerusteStore } from '@/stores/PerusteStore';
+import { TiedoteStore } from '@/stores/TiedoteStore';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from 'eperusteet-frontend-utils/vue/src/tyypit';

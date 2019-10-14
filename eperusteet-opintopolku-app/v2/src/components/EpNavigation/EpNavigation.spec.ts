@@ -19,7 +19,7 @@ describe('EpNavigation', () => {
     });
 
     await localVue.nextTick();
-    const links = wrapper.contains
+    const links = wrapper.contains;
     expect(findContaining(wrapper, 'a', 'esiopetus')).toBeTruthy();
     expect(findContaining(wrapper, 'a', 'lukiokoulutus')).toBeTruthy();
     expect(findContaining(wrapper, 'a', 'varhaiskasvatus')).toBeTruthy();
