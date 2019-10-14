@@ -31,15 +31,6 @@ const props = {
   tiedoteStore,
 };
 
-function perusteProps(route) {
-  return {
-    perusteDataStore: new PerusteDataStore(
-      route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined
-    ),
-  };
-}
-
-
 export const router = new Router({
   scrollBehavior: () => ({ x: 0, y: 0 }),
   routes: [{
@@ -77,12 +68,24 @@ export const router = new Router({
       path: 'peruste/:perusteId',
       name: 'peruste',
       component: RoutePeruste,
-      props: perusteProps,
+      props: _.memoize(async (route) => {
+        console.log('new PerusteDataStore');
+
+        const perusteDataStore = new PerusteDataStore(
+            route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined
+        );
+
+        await perusteDataStore.init();
+        await perusteDataStore.initSisalto();
+
+        return {
+          perusteDataStore,
+        }
+      }),
       children: [{
         path: 'tiedot',
         component: RouteTiedot,
         name: 'perusteTiedot',
-        props: perusteProps,
       }],
     }],
   }, {
@@ -101,6 +104,30 @@ export const router = new Router({
       };
     },
   }],
+});
+
+router.beforeEach(async (to, from, next) => {
+  console.log('beforeEach');
+  let params = {};
+  for (const record of to.matched) {
+    console.log('for record', record);
+    if (_.isFunction((record.props as any).default)) {
+      params = {
+        ...await (record as any).props.default(to),
+      };
+      console.log('wait record', record);
+    }
+    else if (_.isObject((record.props as any).default)) {
+      params = {
+        ...(record as any).props.default,
+      };
+    }
+    else {
+      // boolean -> noop
+    }
+    (record.props as any).default = params;
+  }
+  next();
 });
 
 Virheet.onError((virhe: SovellusVirhe) => {
