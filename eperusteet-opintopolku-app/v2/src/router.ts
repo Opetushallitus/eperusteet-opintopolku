@@ -7,6 +7,7 @@ import RouteKooste from "@/routes/kooste/RouteKooste.vue";
 import RouteUutiset from "@/routes/uutiset/RouteUutiset.vue";
 import RoutePeruste from "@/routes/perusteet/RoutePeruste.vue";
 import RouteTiedot from "@/routes/perusteet/tiedot/RouteTiedot.vue";
+import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
 
 import { PerusteStore } from "@/stores/PerusteStore";
 import { TiedoteStore } from "@/stores/TiedoteStore";
@@ -81,6 +82,10 @@ export const router = new Router({
         path: 'tiedot',
         component: RouteTiedot,
         name: 'perusteTiedot',
+      }, {
+        path: 'tekstikappaleet/:osaId',
+        component: RouteTekstikappale,
+        name: 'tekstikappale',
       }],
     }],
   }, {
