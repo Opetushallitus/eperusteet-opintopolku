@@ -1,28 +1,36 @@
 <template>
-<li class="node-tree" v-if="node.perusteenOsa">
-    <b-link :to="{ name: 'tekstikappale', params: { osaId: node.perusteenOsa.id} }">
-        <span class="label">{{ $kaanna(node.perusteenOsa.nimi) }}</span>
+<li v-if="isVisible && isFiltered"
+    class="node-tree">
+    <b-link v-if="node.to"
+            :to="node.to">
+        <span class="label"
+              :class="{ 'label-match': isMatch }">{{ node.label }}</span>
     </b-link>
-    <ul v-if="node.children && node.children.length">
+    <span v-else
+          class="label"
+          :class="{ 'label-match': isMatch }">{{ node.label }}</span>
+
+    <ul v-if="!isCollapsed && node.children && node.children.length">
         <ep-peruste-sidenav-node v-for="(child, idx) in node.children"
-                                      :key="idx"
-                                      :node="child"></ep-peruste-sidenav-node>
+                                 :key="idx"
+                                 :node="child"
+                                 :filter="filter"></ep-peruste-sidenav-node>
     </ul>
 </li>
-<li class="node-tree" v-else-if="node.tyyppi === 'tiedot'">
-    <b-link :to="{ name: 'perusteTiedot', params: { perusteId: node.perusteId } }">
-        <span class="label">{{ $t('perusteen-tiedot') }}</span>
-    </b-link>
-</li>
-<div class="node-tree skip" v-else>
-    <ep-peruste-sidenav-node v-for="(child, idx) in node.children"
-                             :key="idx"
-                             :node="child"></ep-peruste-sidenav-node>
+<div v-else
+     class="node-tree skip">
+    <div v-if="!isCollapsed && node.children && node.children.length">
+        <ep-peruste-sidenav-node v-for="(child, idx) in node.children"
+                                 :key="idx"
+                                 :node="child"
+                                 :filter="filter"></ep-peruste-sidenav-node>
+    </div>
 </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { FilterObj, SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
 
 @Component({
   components: {
@@ -31,8 +39,26 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  private node!: object;
+  private node!: SidenavNode;
 
+  @Prop({ required: true })
+  private filter!: FilterObj;
+
+  private get isVisible() {
+    return this.node.isVisible;
+  }
+
+  private get isFiltered() {
+    return this.node.isFiltered;
+  }
+
+  private get isCollapsed() {
+    return this.node.isCollapsed && !this.filter.isEnabled;
+  }
+
+  private get isMatch() {
+    return this.node.isMatch && this.filter.isEnabled;
+  }
 }
 </script>
 
@@ -46,7 +72,22 @@ export default class EpPerusteSidenavNode extends Vue {
         padding-left: $sidenav-depth-padding;
     }
 
+    li {
+        color: $sidenav-color;
+        padding: 0.25em 0;
+        hyphens: auto;
+
+        & a {
+            color: $sidenav-color;
+        }
+    }
+
     .router-link-active {
+        //text-decoration: underline;
+        color: $sidenav-active-color;
+    }
+
+    .label-match {
         font-weight: bold;
     }
 }

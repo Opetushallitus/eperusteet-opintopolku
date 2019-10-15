@@ -12,6 +12,7 @@ import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTe
 import { PerusteStore } from "@/stores/PerusteStore";
 import { TiedoteStore } from "@/stores/TiedoteStore";
 import { PerusteDataStore } from "@/stores/PerusteDataStore";
+import { PerusteenOsaStore } from "@/stores/PerusteenOsaStore";
 import { PerusteKoosteStore } from "@/stores/PerusteKoosteStore";
 
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
@@ -83,9 +84,16 @@ export const router = new Router({
         component: RouteTiedot,
         name: 'perusteTiedot',
       }, {
-        path: 'tekstikappaleet/:osaId',
+        path: 'tekstikappaleet/:viiteId',
         component: RouteTekstikappale,
         name: 'tekstikappale',
+        meta: {
+          props: async (route) => {
+            return {
+              perusteenOsaStore: await PerusteenOsaStore.create(_.parseInt(route.params.viiteId)),
+            };
+          },
+        },
       }],
     }],
   }, {

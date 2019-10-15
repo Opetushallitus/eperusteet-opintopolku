@@ -13,13 +13,9 @@ export class PerusteDataStore {
 
   public static readonly create = _.memoize(async (perusteId: number) => {
     try {
-      if (!_.isInteger(perusteId)) {
-        throw Error('error-peruste-id-invalid');
-      }
       const result = new PerusteDataStore(perusteId);
       await result.init();
       await result.initSisalto();
-      console.log('returning', result);
       return result;
     }
     catch (err) {
@@ -41,10 +37,8 @@ export class PerusteDataStore {
 
   async initSisalto() {
     if (this.perusteId && this.peruste) {
-      const suoritustavat = this.peruste.suoritustavat;
-      console.log(suoritustavat);
-      this.sisalto = null;
-      // this.sisalto = (await Sisallot.getSuoritustapaSisaltoUUSI(this.perusteId, 'LUKIOKOULUTUS2019')).data;
+      // Todo: erikoisammattitutkinto vaatii oikean suoritustapakoodin
+      this.sisalto = (await Sisallot.getSuoritustapaSisaltoUUSI(this.perusteId, 'LUKIOKOULUTUS2019')).data;
     } else {
       throw new Error('peruste-id-tai-peruste-puuttuu');
     }
