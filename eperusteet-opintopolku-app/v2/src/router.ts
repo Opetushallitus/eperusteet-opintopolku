@@ -17,7 +17,6 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
-
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from 'eperusteet-frontend-utils/vue/src/tyypit';
 

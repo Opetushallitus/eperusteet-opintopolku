@@ -1,5 +1,9 @@
 # ePerusteet-opintopolku
 
+[![Build Status](https://travis-ci.org/Opetushallitus/eperusteet-opintopolku.svg?branch=master)](https://travis-ci.org/Opetushallitus/eperusteet-opintopolku)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/24fc0c3e2b968b432319/test_coverage)](https://codeclimate.com/github/Opetushallitus/eperusteet-opintopolku/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/24fc0c3e2b968b432319/maintainability)](https://codeclimate.com/github/Opetushallitus/eperusteet-opintopolku/maintainability)
+
 ## Konfigurointi paikallisesti (grunt)
 
 ePerusteet-servicen sijainti konfiguroidaan kotihakemistoon tiedostoon:

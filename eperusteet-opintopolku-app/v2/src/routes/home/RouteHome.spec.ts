@@ -25,6 +25,9 @@ describe('RouteHome', () => {
       },
     });
 
+    expect(perusteStore.getYleisetPerusteet).toBeCalledTimes(1);
+    expect(perusteStore.getUusimmat).toBeCalledTimes(1);
+    expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
     expect(wrapper.findAll('.oph-spinner').length).toEqual(3);
 
     tiedoteStore.uusimmatTiedotteet = [{
@@ -56,9 +59,6 @@ describe('RouteHome', () => {
     expect(wrapper.html()).toContain('peruste1');
     expect(wrapper.html()).toContain('peruste2');
     expect(wrapper.html()).toContain('uutinen_1234');
-    expect(perusteStore.getYleisetPerusteet).toBeCalledTimes(1);
-    expect(perusteStore.getUusimmat).toBeCalledTimes(1);
-    expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
   });
 
   test('Throws on wrong koulutustyyppi', async () => {
