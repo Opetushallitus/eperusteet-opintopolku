@@ -9,7 +9,7 @@
                                       :node="child"></ep-peruste-sidenav-node>
     </ul>
 </li>
-<li class="node-tree" v-else-if="node.tyyppi === 'tiedot'">
+<li class="node-tree" v-else-if="node.type === 'tiedot'">
     <b-link :to="{ name: 'perusteTiedot', params: { perusteId: node.perusteId } }">
         <span class="label">{{ $t('perusteen-tiedot') }}</span>
     </b-link>
@@ -23,6 +23,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
 
 @Component({
   components: {
@@ -31,7 +32,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  private node!: object;
+  private node!: SidenavNode;
 
 }
 </script>

@@ -9,7 +9,7 @@
       <ep-peruste-sidenav-node :node="treeData"></ep-peruste-sidenav-node>
     </ul>
   </div>
-  
+
   <pre>{{ treeData }}</pre>
 </div>
 </template>
