@@ -7,13 +7,15 @@ import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 import RouteTiedot from '@/routes/perusteet/tiedot/RouteTiedot.vue';
-
-import { stateToKoulutustyyppi } from '@/utils/perusteet';
+import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
+
+import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
 import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
 import { SovellusVirhe } from 'eperusteet-frontend-utils/vue/src/tyypit';
@@ -24,21 +26,9 @@ import _ from 'lodash';
 Vue.use(Router);
 const logger = createLogger('Router');
 
+
 const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
-const props = {
-  perusteStore,
-  tiedoteStore,
-};
-
-function perusteProps(route) {
-  return {
-    perusteDataStore: new PerusteDataStore(
-      route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined
-    ),
-  };
-}
-
 
 export const router = new Router({
   scrollBehavior: () => ({ x: 0, y: 0 }),
@@ -52,37 +42,57 @@ export const router = new Router({
       path: '',
       name: 'root',
       component: Home,
-      props: {
-        ...props,
+      meta: {
+        async props() {
+          return {
+            perusteStore,
+            tiedoteStore,
+          };
+        },
       },
     }, {
       path: 'kooste/:koulutustyyppi/:perusteId?',
       name: 'kooste',
       component: RouteKooste,
-      props(route) {
-        return {
-          perusteKoosteStore: new PerusteKoosteStore(
-            stateToKoulutustyyppi(route.params.koulutustyyppi),
-            route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
-        };
+      meta: {
+        async props(route) {
+          return {
+            perusteKoosteStore: new PerusteKoosteStore(
+              stateToKoulutustyyppi(route.params.koulutustyyppi),
+              route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
+          };
+        },
       },
     }, {
       path: 'uutiset',
       name: 'uutiset',
       component: RouteUutiset,
-      props: {
-        ...props,
-      }
     }, {
       path: 'peruste/:perusteId',
       name: 'peruste',
       component: RoutePeruste,
-      props: perusteProps,
+      meta: {
+        props: async (route) => {
+          return {
+            perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId)),
+          };
+        },
+      },
       children: [{
         path: 'tiedot',
         component: RouteTiedot,
         name: 'perusteTiedot',
-        props: perusteProps,
+      }, {
+        path: 'tekstikappaleet/:viiteId',
+        component: RouteTekstikappale,
+        name: 'tekstikappale',
+        meta: {
+          props: async (route) => {
+            return {
+              perusteenOsaStore: await PerusteenOsaStore.create(_.parseInt(route.params.viiteId)),
+            };
+          },
+        },
       }],
     }],
   }, {
@@ -101,6 +111,29 @@ export const router = new Router({
       };
     },
   }],
+});
+
+router.beforeEach(async (to, from, next) => {
+  let props = {};
+  for (const record of to.matched) {
+    if (_.isFunction(record.meta.props)) {
+      const recordParams = await record.meta.props(to);
+      props = {
+        ...props,
+        ...recordParams,
+      };
+      if (_.isFunction((record.props as any).default)) {
+        props = {
+          ...props,
+          ...await (record.props as any).default(to),
+        };
+      }
+    }
+    record.props = {
+      default: props,
+    };
+  }
+  next();
 });
 
 Virheet.onError((virhe: SovellusVirhe) => {

@@ -79,14 +79,15 @@ footer {
   }
 
   .footer-content {
-    max-width: 90%;
     margin: 0 auto;
-    padding: 20px 0;
+    padding: 0;
 
     .row {
+      margin-left: 0;
+      margin-right: 0;
       align-items: center;
       .col-slot {
-        padding: 16px;
+        padding: 15px;
       }
     }
 

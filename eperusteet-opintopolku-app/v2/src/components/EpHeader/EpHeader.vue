@@ -8,15 +8,12 @@
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
                 <router-link class="breadcrumb-home" :to="{ name: 'root' }">
-                  <!-- <fas icon="home"></fas> -->
                   {{ $t('eperusteet') }}
                 </router-link>
               </li>
-              <!-- <li class="breadcrumb-item" :v-for="(item, idx) in items" :key="idx"> -->
-              <!--   <router-link class="breadcrumb-normal" :to="{ name: 'root' }">      -->
-              <!--     tässä on tekstiä                                               -->
-              <!--   </router-link>                                                      -->
-              <!-- </li>                                                                 -->
+              <li class="breadcrumb-item" v-for="(item, idx) in murupolku" :key="idx">
+                <router-link class="breadcrumb-normal" :to="item.to">{{ item.name }}</router-link>
+              </li>
             </ol>
           </nav>
           <slot name="murupolku"></slot>
@@ -35,15 +32,14 @@
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class EpHeader extends Vue {
 
-  get items() {
-    return [{
-    }];
-  }
+  @Prop({ required: false, default: () => [] })
+  private murupolku!: Array<any>;
+
 }
 </script>
 

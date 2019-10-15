@@ -76,7 +76,7 @@
       <!-- todo: kuvaus -->
       <div class="col-md-12" v-if="hasDokumentti">
         <ep-form-content name="dokumentti-osoite">
-          <!-- todo -->
+          <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-dokumentti') }}</a>
         </ep-form-content>
       </div>
       <!-- todo: kv-liitteet -->
@@ -94,7 +94,7 @@ import EpSelect from '@shared/components/forms/EpSelect.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { baseURL, LiitetiedostotParam, Dokumentit } from '@shared/api/eperusteet';
+import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 
@@ -114,11 +114,10 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
   private dokumenttiObj = {};
 
   public async init() {
-    await this.store.init();
-    this.handleMaarayskirje();
-    this.handleMuutosmaaraykset();
-    this.handleKorvaavatPerusteet();
-    this.handleDokumentti();
+    await this.handleMaarayskirje();
+    await this.handleMuutosmaaraykset();
+    await this.handleKorvaavatPerusteet();
+    await this.handleDokumentti();
   }
 
   private handleMaarayskirje() {
@@ -145,7 +144,7 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
         _.each(maaraysObj.liitteet, (liite, kieli) => {
           result[kieli] = {
             ...liite,
-            url: baseURL + LiitetiedostotParam.getKuva(this.perusteId, liite.id!).url
+            url: baseURL + LiitetiedostotParam.getAllLiitteet(this.perusteId, liite.id!).url
           };
         });
       }
@@ -183,6 +182,10 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
     this.korvaavatPerusteet = result;
   }
 
+  get sisaltoKieli() {
+    return Kielet.getSisaltoKieli();
+  }
+
   private async handleDokumentti() {
     const suoritustavat = this.peruste.suoritustavat;
     if (suoritustavat) {
@@ -190,8 +193,8 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
         const st = suoritustavat[i];
         const suoritustapakoodi = st.suoritustapakoodi;
         if (suoritustapakoodi) {
-          const dokumenttiId = await Dokumentit.getDokumenttiId(this.perusteId, Kielet.getSisaltoKieli(), suoritustapakoodi);
-          // todo: dokumenttilinkit
+          const dokumenttiId = await Dokumentit.getDokumenttiId(this.perusteId, this.sisaltoKieli, suoritustapakoodi);
+          this.dokumenttiObj[this.sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId.data).url;
         }
       }
     }
@@ -230,6 +233,10 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
   private get hasDokumentti() {
     return this.dokumenttiObj && (this as any).$kaanna(this.dokumenttiObj);
   }
+
+  private get dokumentti() {
+    return (this as any).$kaanna(this.dokumenttiObj);
+  }
 }
 </script>
 
@@ -237,9 +244,10 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
 @import '../../../styles/_variables.scss';
 
 .content {
-  padding: 15px;
-}
-.help {
-  color: $gray;
+  padding: $content-padding;
+
+  .help {
+    color: $gray;
+  }
 }
 </style>
