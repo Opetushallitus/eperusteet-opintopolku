@@ -30,7 +30,8 @@ export class PerusteDataStore {
   async init() {
     if (this.perusteId) {
       this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
-    } else {
+    }
+    else {
       throw new Error('peruste-id-puuttuu');
     }
   }
@@ -39,7 +40,8 @@ export class PerusteDataStore {
     if (this.perusteId && this.peruste) {
       // Todo: erikoisammattitutkinto vaatii oikean suoritustapakoodin
       this.sisalto = (await Sisallot.getSuoritustapaSisaltoUUSI(this.perusteId, 'LUKIOKOULUTUS2019')).data;
-    } else {
+    }
+    else {
       throw new Error('peruste-id-tai-peruste-puuttuu');
     }
   }

@@ -47,13 +47,13 @@ function wrap<T extends object>(original: T, value: T) {
 
   // Overwrite with default mocks
   _.forEach(value, (v, k) => {
-      if (_.isFunction(v)) {
-        result[k] = jest.fn(v);
-      }
-      else {
-        result[k] = Vue.observable(v);
-      }
-    });
+    if (_.isFunction(v)) {
+      result[k] = jest.fn(v);
+    }
+    else {
+      result[k] = Vue.observable(v);
+    }
+  });
 
   const Mock = jest.fn(() => Vue.observable(result) as T);
   return new Mock();
@@ -68,7 +68,7 @@ export const perusteKoosteStoreMock = (config: Partial<PerusteKoosteStore> = {})
     perusteId: null,
     async reload() {},
     constructor(koulutustyyppi: string,
-                perusteId?: number) {
+      perusteId?: number) {
       this.koulutustyyppi = koulutustyyppi;
       this.perusteId = perusteId || null;
     },

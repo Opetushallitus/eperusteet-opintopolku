@@ -28,19 +28,19 @@ describe('RouteHome', () => {
     expect(wrapper.findAll('.oph-spinner').length).toEqual(3);
 
     tiedoteStore.uusimmatTiedotteet = [{
-        luotu: 'aikaleima_1234' as any,
-        otsikko: {
-          fi: 'uutinen_1234',
-        } as any,
+      luotu: 'aikaleima_1234' as any,
+      otsikko: {
+        fi: 'uutinen_1234',
+      } as any,
     }];
 
     perusteStore.uusimmat = [{
-        id: 1,
-        koulutustyyppi: 'koulutustyyppi_2',
-        nimi: {
-          fi: 'peruste1',
-        } as any,
-      }];
+      id: 1,
+      koulutustyyppi: 'koulutustyyppi_2',
+      nimi: {
+        fi: 'peruste1',
+      } as any,
+    }];
 
     perusteStore.perusteet = [{
       id: 2,

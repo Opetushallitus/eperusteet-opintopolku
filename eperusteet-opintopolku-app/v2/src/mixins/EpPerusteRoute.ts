@@ -8,18 +8,18 @@ export default class EpPerusteRoute extends EpRoute {
     private perusteDataStore!: PerusteDataStore;
 
     get store() {
-        return this.perusteDataStore;
+      return this.perusteDataStore;
     }
 
     get peruste() {
-        return this.store.peruste!;
+      return this.store.peruste!;
     }
 
     get perusteId() {
-        return this.store.peruste!.id!;
+      return this.store.peruste!.id!;
     }
 
     get sisalto() {
-        return this.store.sisalto!;
+      return this.store.sisalto!;
     }
 }

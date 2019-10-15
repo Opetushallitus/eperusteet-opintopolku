@@ -92,7 +92,7 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSelect from '@shared/components/forms/EpSelect.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
-import EpPerusteRoute from "@/mixins/EpPerusteRoute";
+import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';

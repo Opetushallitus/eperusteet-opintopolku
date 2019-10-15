@@ -27,7 +27,8 @@ export class PerusteenOsaStore {
   async init() {
     if (this.perusteenOsaId) {
       this.perusteenOsa = (await Perusteenosat.getPerusteenOsatByViite(this.perusteenOsaId)).data;
-    } else {
+    }
+    else {
       throw new Error('peruste-id-puuttuu');
     }
   }

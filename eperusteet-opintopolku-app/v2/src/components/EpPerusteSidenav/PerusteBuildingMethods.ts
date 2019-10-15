@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Matala } from "@shared/api/tyypit";
+import { Matala } from '@shared/api/tyypit';
 
 interface SidenavNodeState {
   name: string,
@@ -48,7 +48,7 @@ export function traverseSisalto(vueInstance, sisalto: Matala, path: Array<Sidena
           params: {
             viiteId: lapsi.id
           }
-        }
+        };
       }
 
       // Collapse if not open
@@ -63,7 +63,7 @@ export function traverseSisalto(vueInstance, sisalto: Matala, path: Array<Sidena
       path.pop();
 
       children.push(child);
-    })
+    });
   }
 
   return children;
@@ -76,7 +76,8 @@ function handleCollapse(vueInstance, child, path) {
     for (const node of path) {
       node.isCollapsed = false;
     }
-  } else {
+  }
+  else {
     child.isCollapsed = true;
   }
 }
