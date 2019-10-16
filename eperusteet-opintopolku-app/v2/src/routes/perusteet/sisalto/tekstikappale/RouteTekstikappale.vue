@@ -38,6 +38,12 @@ export default class RouteTekstikappale extends Mixins(EpPerusteRoute) {
 
         & /deep/ img {
             max-width: 100%;
+            margin: 0 auto;
+        }
+
+        & /deep/ table {
+            max-width: 100%;
+            margin: 0 auto;
         }
     }
 }
