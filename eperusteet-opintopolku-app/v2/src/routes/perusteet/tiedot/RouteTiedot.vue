@@ -249,5 +249,11 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
   .help {
     color: $gray;
   }
+
+  a {
+    word-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
+  }
 }
 </style>

@@ -61,6 +61,10 @@ export default class EpPerusteSidenavNode extends Vue {
   padding: 0.25em 0;
   hyphens: auto;
 
+  &.root {
+    padding: 0;
+  }
+
   a {
     color: $sidenav-color;
   }
