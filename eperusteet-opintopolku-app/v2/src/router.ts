@@ -68,11 +68,11 @@ export const router = new Router({
       name: 'uutiset',
       component: RouteUutiset,
     }, {
-      path: 'peruste/:perusteId',
+      path: ':koulutustyyppi/:perusteId',
       name: 'peruste',
       component: RoutePeruste,
       meta: {
-        props: async (route) => {
+        async props(route) {
           return {
             perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId)),
           };
@@ -87,7 +87,7 @@ export const router = new Router({
         component: RouteTekstikappale,
         name: 'tekstikappale',
         meta: {
-          props: async (route) => {
+          async props(route) {
             return {
               perusteenOsaStore: await PerusteenOsaStore.create(_.parseInt(route.params.viiteId)),
             };
