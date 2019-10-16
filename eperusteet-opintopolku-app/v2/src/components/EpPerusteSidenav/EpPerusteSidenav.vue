@@ -4,11 +4,8 @@
     <ep-search :value="filter.label" @input="setValue"></ep-search>
   </div>
 
-  <div class="tree">
-    <ul class="tree-list">
-      <ep-peruste-sidenav-node :node="treeData"
-                               :filter="filter"></ep-peruste-sidenav-node>
-    </ul>
+  <div class="navigation-tree">
+    <ep-peruste-sidenav-node :node="treeData" :filter="filter" class="root"></ep-peruste-sidenav-node>
   </div>
 
   <!--<pre>{{ treeData }}</pre>-->
@@ -62,9 +59,7 @@ export default class EpPerusteSidenav extends Vue {
     padding: $sidenav-padding;
   }
 
-  ul.tree-list {
-    // Remove default list styles
-    list-style: none;
+  .navigation-tree {
     padding: $sidenav-padding;
   }
 }
