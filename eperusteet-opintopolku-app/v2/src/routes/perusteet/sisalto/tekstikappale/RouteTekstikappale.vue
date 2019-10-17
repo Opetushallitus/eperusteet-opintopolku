@@ -1,27 +1,43 @@
 <template>
 <div class="content">
-  <h1 class="teksti">{{ $kaanna(perusteenOsa.nimi) }}</h1>
-  <div v-html="$kaanna(perusteenOsa.teksti)" class="teksti"></div>
-  <pre>{{ current.id }}</pre>
-  <pre>{{ parent && parent.label }}</pre>
-  <pre>{{ previous && previous.label }}</pre>
-  <pre>{{ next && next.label }}</pre>
+  <h1 class="teksti" id="tekstikappale-otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h1>
+  <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
+
+  <!-- Alikappaleet -->
+  <ep-spinner v-if="isLoading" />
+  <div v-else>
+    <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
+      <h2 class="teksti">{{ $kaanna(alikappale.nimi) }}</h2>
+      <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
+    </div>
+  </div>
+
+  <ep-previous-next-navigation :viite-id="viiteId" :sidenav="sidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
 <script lang="ts">
-import { Component, Watch, Mixins, Prop, Vue } from 'vue-property-decorator';
-import EpPerusteRoute from '@/mixins/EpPerusteRoute';
+import _ from 'lodash';
+import { Component, Watch, Mixins, Prop } from 'vue-property-decorator';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
-import _ from 'lodash';
+import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import EpPerusteRoute from '@/mixins/EpPerusteRoute';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { Perusteenosat } from '@shared/api/eperusteet';
+import { Laaja } from '@shared/api/tyypit';
 
 
-@Component
-export default class RouteTekstikappale extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+@Component({
+  components: {
+    EpPreviousNextNavigation,
+    EpSpinner,
+  }
+})
+export default class RouteTekstikappale extends Mixins(EpPerusteRoute) {
+
+  private alikappaleet: Array<Laaja> = [];
 
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
@@ -29,38 +45,23 @@ export default class RouteTekstikappale extends Vue {
   @Prop({ required: true })
   private viiteId!: string;
 
+  async init() {
+    if (this.alikappaleNodes) {
+      for (const node of this.alikappaleNodes) {
+        if (node.id) {
+          const alikappale = (await Perusteenosat.getPerusteenOsatByViite(node.id)).data;
+          this.alikappaleet.push(alikappale);
+        }
+      }
+    }
+  }
+
   get perusteenOsa() {
     return this.perusteenOsaStore.perusteenOsa;
   }
 
   get sidenav() {
-    return this.perusteDataStore.sidenav();
-  }
-
-  get next(): SidenavNode {
-    if (this.parent) {
-      return this.parent.children[this.currentIndex + 1];
-    }
-  }
-
-  get previous(): SidenavNode {
-    if (this.parent) {
-      return this.parent.children[this.currentIndex - 1];
-    }
-  }
-
-  get currentIndex(): SidenavNode {
-    if (this.parent && this.current) {
-      return _.findIndex(this.parent.children, { id: this.current.id });
-    }
-    return -1;
-  }
-
-  get parent(): SidenavNode {
-    if (this.current) {
-      return _.last(this.current.$$path);
-    }
-    return null;
+    return this.store.sidenav();
   }
 
   get current(): SidenavNode | null {
@@ -71,7 +72,7 @@ export default class RouteTekstikappale extends Vue {
       while (stack.length > 0) {
         const head = stack.pop();
         if (head!.id === viiteId) {
-          return head;
+          return head || null;
         }
         stack.push(...head!.children);
       }
@@ -79,9 +80,16 @@ export default class RouteTekstikappale extends Vue {
     return null;
   }
 
+  get alikappaleNodes(): Array<SidenavNode> | null {
+    if (this.current && this.current.depth === 1) {
+      return this.current.children;
+    }
+    return null;
+  }
+
   @Watch('viiteId', { immediate: true })
   onViiteUpdate(value) {
-    this.perusteDataStore.viiteId = value;
+    this.store.viiteId = value;
   }
 
 }
@@ -92,7 +100,7 @@ export default class RouteTekstikappale extends Vue {
 @import '../../../../styles/_variables.scss';
 
 .content {
-  padding: $content-padding;
+  padding: 0 $content-padding;
 
   .teksti {
     hyphens: auto;

@@ -82,6 +82,7 @@
       <!-- todo: kv-liitteet -->
     </div>
   </div>
+  <ep-previous-next-navigation :sidenav="sidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
@@ -94,6 +95,7 @@ import EpSelect from '@shared/components/forms/EpSelect.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
@@ -105,6 +107,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpSelect,
     EpDatepicker,
     EpSpinner,
+    EpPreviousNextNavigation,
   },
 })
 export default class RouteTiedot extends Mixins(EpPerusteRoute) {
@@ -118,6 +121,10 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
     await this.handleMuutosmaaraykset();
     await this.handleKorvaavatPerusteet();
     await this.handleDokumentti();
+  }
+
+  get sidenav() {
+    return this.store.sidenav();
   }
 
   private handleMaarayskirje() {
