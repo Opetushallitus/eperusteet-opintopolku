@@ -60,11 +60,11 @@ export default class RoutePeruste extends Vue {
   get murupolku() {
     if (this.peruste && this.current) {
       return [{
-          label: (this as any).$kaanna(this.peruste.nimi),
-          to: this.$route
-        },
-        ...this.current.path,
-        this.current,
+        label: (this as any).$kaanna(this.peruste.nimi),
+        to: this.$route
+      },
+      ...this.current.path,
+      this.current,
       ];
     }
     else {
