@@ -10,8 +10,13 @@
                   {{ $t('eperusteet') }}
                 </router-link>
               </li>
-              <li class="breadcrumb-item" v-for="(item, idx) in murupolku" :key="idx">
-                <router-link class="breadcrumb-normal" :to="item.to">{{ item.name }}</router-link>
+              <li class="breadcrumb-item"
+                  :class="{ 'breadcrumb-truncated': idx < murupolku.length - 1 }"
+                  v-for="(item, idx) in murupolku"
+                  :key="idx">
+                <router-link class="breadcrumb-normal" :to="item.to">
+                  {{ item.label }}
+                </router-link>
               </li>
             </ol>
           </nav>
@@ -35,6 +40,14 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme } from '@/utils/perusteet';
 import Tausta from './Tausta.vue';
+import { RawLocation } from 'vue-router';
+
+
+export interface Muru {
+  label: string;
+  to: RawLocation;
+}
+
 
 @Component({
   components: {
@@ -43,8 +56,8 @@ import Tausta from './Tausta.vue';
 })
 export default class EpHeader extends Vue {
 
-  @Prop({ required: false, default: () => [] })
-  private murupolku!: Array<any>;
+  @Prop({ required: true })
+  private murupolku!: Muru[];
 
   @Prop({ required: true })
   private koulutustyyppi!: string;
@@ -156,8 +169,18 @@ export default class EpHeader extends Vue {
       font-weight: bolder;
     }
 
-    .breadcrumb-normal {
+    .breadcrumb-truncated {
       color: #fff;
+      max-width: 140px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .breadcrumb-item {
+      .breadcrumb-normal {
+        color: #fff;
+      }
     }
   }
 }

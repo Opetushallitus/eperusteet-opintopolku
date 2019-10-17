@@ -15,14 +15,6 @@ export class PerusteKoosteStore {
   @State() public perusteId: number | null = null;
   @State() public opetussuunnitelmat: OpetussuunnitelmaJulkinenDto[] | null = null;
 
-  @Getter()
-  info() {
-    return {
-      koulutustyyppi: this.koulutustyyppi,
-      perusteId: this.perusteId,
-    };
-  }
-
   constructor(
     koulutustyyppi: string,
     perusteId?: number) {

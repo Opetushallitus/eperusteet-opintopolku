@@ -2,7 +2,7 @@
 <div>
   <ep-header :koulutustyyppi="peruste.koulutustyyppi" :murupolku="murupolku">
     <template slot="header">
-    {{ $kaanna(peruste.nimi) }}
+      {{ $kaanna(peruste.nimi) }}
     </template>
   </ep-header>
   <div class="container">
@@ -23,7 +23,8 @@
 </template>
 
 <script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator';
+import { Prop, Mixins, Component } from 'vue-property-decorator';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpPerusteRoute from '@/mixins/EpPerusteRoute';
@@ -37,14 +38,33 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
   },
 })
 export default class RoutePeruste extends Mixins(EpPerusteRoute) {
-  private get murupolku() {
-    return [
-      {
-        name: (this as any).$kaanna(this.peruste.nimi),
-        to: this.$route
-      }
-    ];
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
+
+  get sidenav() {
+    return this.perusteDataStore.sidenav;
   }
+
+  get current(): SidenavNode | null {
+    return this.perusteDataStore.current;
+  }
+
+  get murupolku() {
+    let result = [{
+      label: (this as any).$kaanna(this.peruste.nimi),
+      to: this.$route
+    }];
+
+    if (this.current) {
+      result = [
+        ...result,
+        ...this.current.$$path,
+        this.current,
+      ];
+    }
+    return result;
+  }
+
 }
 </script>
 

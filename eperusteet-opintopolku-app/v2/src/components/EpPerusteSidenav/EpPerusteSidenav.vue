@@ -42,7 +42,7 @@ export default class EpPerusteSidenav extends Vue {
     }
 
     get treeData() {
-      return this.perusteDataStore.sidenav();
+      return this.perusteDataStore.sidenav;
     }
 
 }

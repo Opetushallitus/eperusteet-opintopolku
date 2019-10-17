@@ -95,10 +95,6 @@ export default class RouteKooste extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
-  mounted() {
-    this.perusteKoosteStore.perusteId = _.first(this.perusteet).id;
-  }
-
   get koulutustyyppi() {
     return this.perusteKoosteStore.koulutustyyppi;
   }

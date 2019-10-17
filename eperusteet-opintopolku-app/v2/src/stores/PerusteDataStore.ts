@@ -17,7 +17,7 @@ export class PerusteDataStore {
     isEnabled: false,
   };
 
-  public static readonly create = _.memoize(async (perusteId: number) => {
+  public static async create(perusteId: number) {
     try {
       const result = new PerusteDataStore(perusteId);
       await result.init();
@@ -27,14 +27,13 @@ export class PerusteDataStore {
     catch (err) {
       console.error(err);
     }
-  });
+  }
 
   constructor(perusteId: number) {
     this.perusteId = perusteId;
   }
 
-  @Getter()
-  public sidenav(): SidenavNode | null {
+  get sidenav(): SidenavNode | null {
     if (this.perusteId && this.sisalto) {
       return buildYksinkertainenNavigation(
         this.viiteId!,
@@ -45,6 +44,26 @@ export class PerusteDataStore {
     else {
       return null;
     }
+  }
+
+  get current(): SidenavNode | null {
+    if (this.viiteId && this.sidenav) {
+      const root = this.sidenav;
+      const stack = [root];
+      const viiteId = this.viiteId;
+      while (stack.length > 0) {
+        const head = stack.pop();
+        if (head!.id === viiteId) {
+          return head || null;
+        }
+        stack.push(...head!.children);
+      }
+    }
+    return null;
+  }
+
+  public async updateViiteId(value) {
+    this.viiteId = value;
   }
 
   public readonly updateFilter = _.debounce((filter: SidenavFilter) => {

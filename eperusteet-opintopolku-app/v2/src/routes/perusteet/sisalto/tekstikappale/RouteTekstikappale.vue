@@ -2,10 +2,6 @@
 <div class="content">
   <h1 class="teksti">{{ $kaanna(perusteenOsa.nimi) }}</h1>
   <div v-html="$kaanna(perusteenOsa.teksti)" class="teksti"></div>
-  <pre>{{ current.id }}</pre>
-  <pre>{{ parent && parent.label }}</pre>
-  <pre>{{ previous && previous.label }}</pre>
-  <pre>{{ next && next.label }}</pre>
 </div>
 </template>
 
@@ -34,7 +30,7 @@ export default class RouteTekstikappale extends Vue {
   }
 
   get sidenav() {
-    return this.perusteDataStore.sidenav();
+    return this.perusteDataStore.sidenav;
   }
 
   get next(): SidenavNode {
@@ -64,24 +60,12 @@ export default class RouteTekstikappale extends Vue {
   }
 
   get current(): SidenavNode | null {
-    if (this.viiteId && this.sidenav) {
-      const root = this.sidenav;
-      const stack = [root];
-      const viiteId = _.parseInt(this.viiteId);
-      while (stack.length > 0) {
-        const head = stack.pop();
-        if (head!.id === viiteId) {
-          return head;
-        }
-        stack.push(...head!.children);
-      }
-    }
-    return null;
+    return this.perusteDataStore.current;
   }
 
   @Watch('viiteId', { immediate: true })
   onViiteUpdate(value) {
-    this.perusteDataStore.viiteId = value;
+    this.perusteDataStore.updateViiteId(value);
   }
 
 }
