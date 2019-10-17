@@ -18,7 +18,7 @@ const logger = createLogger('main');
 Vue.use(Notifications);
 
 if (process.env.NODE_ENV !== 'production') {
-  const VueAxe = require('vue-axe')
+  const VueAxe = require('vue-axe');
   Vue.use(VueAxe, {
     config: {
       rules: [
@@ -27,7 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
       ],
     },
     clearConsoleOnUpdate: false,
-  })
+  });
 }
 
 Vue.use(Loading, {

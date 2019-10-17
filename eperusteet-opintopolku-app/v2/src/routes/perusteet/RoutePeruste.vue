@@ -23,21 +23,23 @@
 </template>
 
 <script lang="ts">
-import { Mixins, Component } from 'vue-property-decorator';
+import { Mixins, Component, Prop } from 'vue-property-decorator';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
+import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 
 @Component({
   components: {
     EpSidebar,
     EpPerusteSidenav,
     EpHeader,
+    EpPreviousNextNavigation,
   },
 })
 export default class RoutePeruste extends Mixins(EpPerusteRoute) {
-  private get murupolku() {
+  get murupolku() {
     return [
       {
         name: (this as any).$kaanna(this.peruste.nimi),

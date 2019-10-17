@@ -2,7 +2,7 @@
 <div>
   <ep-spinner v-if="!tiedotteet" />
   <div v-else>
-    <ep-header>
+    <ep-header :murupolku="[]">
       <template slot="header">
         {{ $t('uutiset') }}
       </template>

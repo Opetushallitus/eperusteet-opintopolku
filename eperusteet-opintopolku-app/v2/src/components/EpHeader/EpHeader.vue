@@ -38,14 +38,19 @@ import { koulutustyyppiTheme } from '@/utils/perusteet';
 @Component
 export default class EpHeader extends Vue {
 
-  @Prop({ required: false, default: () => [] })
+  @Prop({ required: true })
   private murupolku!: Array<any>;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   private koulutustyyppi!: string;
 
   get theme() {
-    return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
+    if (this.koulutustyyppi) {
+      return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
+    }
+    else {
+      return 'default';
+    }
   }
 
 }
@@ -53,9 +58,10 @@ export default class EpHeader extends Vue {
 
 
 <style scoped lang="scss">
+@import '../../styles/_variables.scss';
+
 .kooste-header {
   height: 238px;
-  box-shadow: 0 2px 6px 0 rgba(0,45,153,0.08);
   background-repeat: no-repeat;
   position: relative;
   width: 100%;
@@ -87,6 +93,10 @@ export default class EpHeader extends Vue {
     &.koulutustyyppi-varhaiskasvatus {
       background-color: #ffcc33;
     }
+
+    &.default {
+      background-color: $uutiset-header-background;
+    }
   }
 
   .bg-right {
@@ -117,6 +127,10 @@ export default class EpHeader extends Vue {
     &.koulutustyyppi-varhaiskasvatus {
       background-image: url('../../../public/img/banners/aallot_varhaiskasvatus.svg');
     }
+
+    &.default {
+      background-color: $uutiset-header-background;
+    }
   }
 
   .murupolku {
@@ -125,7 +139,7 @@ export default class EpHeader extends Vue {
   }
 
   h1.nimi {
-    margin-top: 0px;
+    margin-top: 0;
     height: 75px;
     font-weight: bold;
     font-size: 32px;
@@ -135,8 +149,8 @@ export default class EpHeader extends Vue {
   ol.breadcrumb {
     font-size: 14px;
     background: none;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 
     .breadcrumb-home {
       color: #fff;
@@ -150,8 +164,8 @@ export default class EpHeader extends Vue {
 }
 
 .container.sisalto {
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: $sisalto-container-margin;
+  margin-bottom: $sisalto-container-margin;
 }
 
 </style>
