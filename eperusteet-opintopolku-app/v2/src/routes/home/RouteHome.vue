@@ -146,13 +146,14 @@ export default class RouteHome extends Vue {
   background: $etusivu-header-background; /* TODO: Lisää kuva */
 
   .laatikko {
-    padding: 25px;
+    padding: 15px;
     color: #000;
     background: #fff;
 
     @media (min-width: 768px) {
       max-width: 406px;
       min-height: 285px;
+      padding: 25px;
     }
 
     h1.otsikko {
@@ -182,7 +183,7 @@ export default class RouteHome extends Vue {
     .luotu {
       color: #878787;
       font-size: 80%;
-      margin: 15px 15px 15px 20px;
+      margin-right: 15px;
     }
   }
 
@@ -194,7 +195,7 @@ export default class RouteHome extends Vue {
     margin: 25px 0 25px 0;
 
     .box {
-      margin-bottom: 15px;
+      margin-bottom: 1rem;
 
       .luotu {
         color: #878787;
