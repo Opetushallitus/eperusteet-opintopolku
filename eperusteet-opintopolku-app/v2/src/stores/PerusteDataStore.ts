@@ -1,7 +1,7 @@
+import _ from 'lodash';
 import { Getter, Store, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import _ from 'lodash';
 import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
 
 
