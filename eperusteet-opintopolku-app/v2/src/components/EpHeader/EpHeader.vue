@@ -2,24 +2,26 @@
   <div>
     <div class="kooste-header">
       <div class="container">
-        <div class="murupolku">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <router-link class="breadcrumb-home" :to="{ name: 'root' }">
-                  {{ $t('eperusteet') }}
-                </router-link>
-              </li>
-              <li class="breadcrumb-item" v-for="(item, idx) in murupolku" :key="idx">
-                <router-link class="breadcrumb-normal" :to="item.to">{{ item.name }}</router-link>
-              </li>
-            </ol>
-          </nav>
-          <slot name="murupolku"></slot>
+        <div class="col">
+          <div class="murupolku">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <router-link class="breadcrumb-home" :to="{ name: 'root' }" :style="{ color: textColor }">
+                    {{ $t('eperusteet') }}
+                  </router-link>
+                </li>
+                <li class="breadcrumb-item" v-for="(item, idx) in murupolku" :key="idx">
+                  <router-link class="breadcrumb-normal" :to="item.to">{{ item.name }}</router-link>
+                </li>
+              </ol>
+            </nav>
+            <slot name="murupolku"></slot>
+          </div>
+          <h1 class="nimi" :style="{ color: nimiColor }">
+            <slot name="header"></slot>
+          </h1>
         </div>
-        <h1 class="nimi">
-          <slot name="header"></slot>
-        </h1>
       </div>
       <div class="bg-left" :class="theme"></div>
       <div class="bg-right" :class="theme"></div>
@@ -32,8 +34,8 @@
 
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme } from '@/utils/perusteet';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@/utils/perusteet';
 
 @Component
 export default class EpHeader extends Vue {
@@ -53,6 +55,22 @@ export default class EpHeader extends Vue {
     }
   }
 
+  get bgColor() {
+    return koulutustyyppiThemeColor(this.koulutustyyppi);
+  }
+
+  get textColor() {
+    return calculateVisibleColor(this.bgColor, 125);
+  }
+
+  get nimiColor() {
+    if (this.textColor === 'black') {
+      return '#001A58';
+    }
+    else {
+      return 'white';
+    }
+  }
 }
 </script>
 
@@ -61,7 +79,7 @@ export default class EpHeader extends Vue {
 @import '../../styles/_variables.scss';
 
 .kooste-header {
-  height: 238px;
+  min-height: 238px;
   background-repeat: no-repeat;
   position: relative;
   width: 100%;
@@ -134,31 +152,32 @@ export default class EpHeader extends Vue {
   }
 
   .murupolku {
-    padding-top: 81px;
-    height: 119px;
+    padding-top: 80px;
+    padding-bottom: 1rem;
+
+    @media (max-width: 991.98px) {
+      padding-top: 40px;
+    }
   }
 
   h1.nimi {
     margin-top: 0;
-    height: 75px;
     font-weight: bold;
-    font-size: 32px;
-    color: #fff;
+    font-size: 2rem;
+    color: #001A58;
+
+    @media (max-width: 991.98px) {
+      font-size: 1.5rem;
+    }
   }
 
   ol.breadcrumb {
-    font-size: 14px;
     background: none;
     margin: 0;
     padding: 0;
 
     .breadcrumb-home {
-      color: #fff;
       font-weight: bolder;
-    }
-
-    .breadcrumb-normal {
-      color: #fff;
     }
   }
 }
