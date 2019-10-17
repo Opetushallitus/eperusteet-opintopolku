@@ -99,8 +99,11 @@ export default class RouteUutiset extends Vue {
 
 .search {
   margin-bottom: 40px;
+padding: 15px;
 }
 .tiedotteet {
+  padding: 15px;
+
   .tiedote {
     margin-bottom: 50px;
 
