@@ -98,12 +98,8 @@ export default class RouteKooste extends Vue {
 @import '../../styles/_variables.scss';
 
 .paikalliset {
-  margin: 0 10px 10px 10px;
-  margin-top: 31px;
-
   h2.otsikko {
     font-weight: bolder;
-    margin-bottom: 43px;
   }
 
   .peruste-nav {

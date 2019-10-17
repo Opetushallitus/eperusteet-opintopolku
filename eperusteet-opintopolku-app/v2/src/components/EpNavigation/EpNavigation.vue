@@ -97,6 +97,9 @@ export default class EpNavigation extends Vue {
 @import '../../styles/_variables.scss';
 
 .navbar-ep {
+  padding-left: 15px;
+  padding-right: 15px;
+
   .navbar-nav .nav-item {
     white-space: nowrap;
     color: #000;
