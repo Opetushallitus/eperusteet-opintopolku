@@ -2,7 +2,7 @@
 <div>
   <b-navbar type="light"
             role="navigation"
-            toggleable="lg"
+            toggleable="md"
             class="navbar-ep">
     <b-navbar-brand href="#">
       <b-link :to="{ name: 'root' }">
@@ -12,8 +12,8 @@
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-    <b-collapse id="nav-collapse" is-nav>
-      <div class="container">
+    <div class="container">
+      <b-collapse id="nav-collapse" is-nav>
         <b-navbar-nav>
           <b-nav-item v-for="(item, idx) in items"
                       :key="idx"
@@ -22,21 +22,21 @@
             {{ $t(item.nimi) }}
           </b-nav-item>
         </b-navbar-nav>
-      </div>
-      <b-navbar-nav class="ml-auto">
-        <b-nav-item-dropdown right>
-          <template slot="button-content">
-            {{ $t('kieli-' + valittuKieli) }}
-          </template>
-          <b-dropdown-item
-            v-for="kieli in kielet"
-            :key="kieli"
-            @click="valitseKieli(kieli)">
-            {{ $t('kieli-' + kieli) }}
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
-    </b-collapse>
+        <!-- <b-navbar-nav class="ml-auto">          -->
+        <!--   <b-nav-item-dropdown right>           -->
+        <!--     <template slot="button-content">    -->
+        <!--       {{ $t('kieli-' + valittuKieli) }} -->
+        <!--     </template>                         -->
+        <!--     <b-dropdown-item                    -->
+        <!--       v-for="kieli in kielet"           -->
+        <!--       :key="kieli"                      -->
+        <!--       @click="valitseKieli(kieli)">     -->
+        <!--       {{ $t('kieli-' + kieli) }}        -->
+        <!--     </b-dropdown-item>                  -->
+        <!--   </b-nav-item-dropdown>                -->
+        <!-- </b-navbar-nav>                         -->
+      </b-collapse>
+    </div>
 
   </b-navbar>
 </div>
@@ -122,7 +122,7 @@ export default class EpNavigation extends Vue {
     }
   }
 
-  &.navbar-expand-lg .navbar-nav .nav-link {
+  &.navbar-expand-md .navbar-nav .nav-link {
     padding-right: 1rem;
     padding-left: 1rem;
     color: #000;
@@ -143,7 +143,7 @@ export default class EpNavigation extends Vue {
 
   // Todo: käytä muuttujaa
   @media (min-width: 768px) {
-    &.navbar-expand-lg .navbar-nav .nav-link.router-link-active {
+    &.navbar-expand-md .navbar-nav .nav-link.router-link-active {
       border-bottom: #0143da 0.25rem solid;
       padding-bottom: 0.30rem;
     }

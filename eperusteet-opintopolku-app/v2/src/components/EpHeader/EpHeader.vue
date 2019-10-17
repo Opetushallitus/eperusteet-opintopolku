@@ -88,6 +88,12 @@ export default class EpHeader extends Vue {
   background-repeat: no-repeat;
   position: relative;
   width: 100%;
+  z-index: -999;
+  padding-left: 25px;
+
+  @media(max-width: 768px) {
+    padding-left: 15px;
+  }
 
   .bg-left {
     left: 0;
