@@ -19,13 +19,13 @@ const themes = {
 };
 
 const themeColors = {
-  'ammatillinen': [ 0, 136, 0],
-  'esiopetus': [ 132, 210, 255 ],
-  'lukio': [ 1, 67, 218 ],
-  'perusopetus': [ 103, 204, 204 ],
-  'varhaiskasvatus': [ 255, 204, 51 ],
-  'taiteenperusopetus': [ 250, 204, 234 ],
-}
+  'ammatillinen': [0, 136, 0],
+  'esiopetus': [132, 210, 255],
+  'lukio': [1, 67, 218],
+  'perusopetus': [103, 204, 204],
+  'varhaiskasvatus': [255, 204, 51],
+  'taiteenperusopetus': [250, 204, 234],
+};
 
 const ktToState = {
   'koulutustyyppi_1': 'ammatillinenperustutkinto',
@@ -109,7 +109,7 @@ export function koulutustyyppiTheme(koulutustyyppi: string) {
 }
 
 export function koulutustyyppiThemeColor(koulutustyyppi: string) {
-  return themeColors[themes[koulutustyyppi]] || [ 255, 255, 255 ];
+  return themeColors[themes[koulutustyyppi]] || [255, 255, 255];
 }
 
 export function rgb2string(color: number[]) {
@@ -117,12 +117,12 @@ export function rgb2string(color: number[]) {
 }
 
 export function calculateVisibleColor(bgRGBColor = [0, 0, 0], limit = 125): string {
-    // http://www.w3.org/TR/AERT#color-contrast
-    const value = Math.round(((bgRGBColor[0] * 299) + (bgRGBColor[1] * 587) + (bgRGBColor[2] * 114)) / 1000);
-    if (value > limit) {
-      return 'black';
-    }
-    else {
-      return 'white';
-    }
+  // http://www.w3.org/TR/AERT#color-contrast
+  const value = Math.round(((bgRGBColor[0] * 299) + (bgRGBColor[1] * 587) + (bgRGBColor[2] * 114)) / 1000);
+  if (value > limit) {
+    return 'black';
+  }
+  else {
+    return 'white';
+  }
 }
