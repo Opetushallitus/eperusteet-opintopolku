@@ -1,6 +1,6 @@
 <template>
 <div>
-  <ep-header :murupolku="murupolku">
+  <ep-header :koulutustyyppi="peruste.koulutustyyppi" :murupolku="murupolku">
     <template slot="header">
     {{ $kaanna(peruste.nimi) }}
     </template>
@@ -9,7 +9,7 @@
     <div class="lower">
       <ep-sidebar>
         <template slot="bar">
-        <ep-peruste-sidenav :peruste-data-store="perusteDataStore"></ep-peruste-sidenav>
+          <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
         </template>
         <template slot="view">
         <transition name="fade" mode="out-in">
@@ -37,8 +37,7 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
   },
 })
 export default class RoutePeruste extends Mixins(EpPerusteRoute) {
-
-  private get murupolku() {
+  private get murupolku() {
     return [
       {
         name: (this as any).$kaanna(this.peruste.nimi),

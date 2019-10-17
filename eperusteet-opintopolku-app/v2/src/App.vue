@@ -22,7 +22,8 @@ export default class App extends Vue {
       color: '#2E5FD1',
     });
 
-    await Kielet.init();
+    // FIXME
+    // await KieletStore.load();
     await delay(500);
     this.isInitializing = false;
     loader.hide();

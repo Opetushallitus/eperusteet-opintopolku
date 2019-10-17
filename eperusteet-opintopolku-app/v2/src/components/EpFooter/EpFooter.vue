@@ -1,9 +1,9 @@
 <template>
-<footer>
+<footer role="contentinfo">
   <div class="footer-content">
     <div class="row">
       <div class="col-xl col-slot">
-        <img src="../../../public/img/banners/oph_logo.svg" slot="footer-logo" />
+        <img src="../../../public/img/banners/oph_logo.svg" :alt="$t('alt-oph-logo')" slot="footer-logo" />
       </div>
       <div class="col-lg col-slot">
         <b>{{ $t('opetushallitus') }}</b>

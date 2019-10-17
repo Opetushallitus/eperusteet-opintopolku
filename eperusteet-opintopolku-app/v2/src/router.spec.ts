@@ -6,5 +6,4 @@ describe('Router', () => {
   test('Construction', async () => {
     expect(router).toBeTruthy();
   });
-
 });

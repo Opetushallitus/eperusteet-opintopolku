@@ -3,7 +3,7 @@
   <div class="ylaosa">
     <div class="container">
       <div class="laatikko">
-        <h3 class="otsikko">{{ $t('eperusteet') }}</h3>
+        <h1 class="otsikko">{{ $t('eperusteet') }}</h1>
         <p class="kuvaus">{{ $t('eperusteet-kuvaus') }}</p>
       </div>
     </div>
@@ -150,17 +150,19 @@ export default class RouteHome extends Vue {
   background: #fee; /* TODO: Lisää kuva */
 
   .laatikko {
-    padding: 15px;
-    color: #fff;
-    background: #1B47AF;
+    padding: 25px;
+    color: #000;
+    background: #fff;
 
     @media (min-width: 768px) {
       max-width: 406px;
       min-height: 285px;
     }
 
-    h3.otsikko {
-      margin-bottom: 47px;
+    h1.otsikko {
+      font-size: 28px;
+      font-weight: bolder;
+      margin-bottom: 27px;
     }
   }
 }

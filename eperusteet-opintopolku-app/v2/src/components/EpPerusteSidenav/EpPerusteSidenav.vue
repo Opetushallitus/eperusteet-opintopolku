@@ -1,14 +1,14 @@
 <template>
 <div class="sidebar">
   <div class="search">
-    <ep-search :value="filter.label" @input="setValue"></ep-search>
+    <ep-search :value="query" @input="setValue" />
   </div>
 
   <div class="navigation-tree">
-    <ep-peruste-sidenav-node :node="treeData" :filter="filter" class="root"></ep-peruste-sidenav-node>
+      <ep-peruste-sidenav-node v-if="treeData"
+                               :node="treeData"
+                               :filter="filter" />
   </div>
-
-  <!--<pre>{{ treeData }}</pre>-->
 </div>
 </template>
 
@@ -18,7 +18,6 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpPerusteSidenavNode from '@/components/EpPerusteSidenav/EpPerusteSidenavNode.vue';
-import { buildYksinkertainenNavigation, FilterObj } from './PerusteBuildingMethods';
 
 @Component({
   components: {
@@ -29,25 +28,23 @@ import { buildYksinkertainenNavigation, FilterObj } from './PerusteBuildingMetho
 export default class EpPerusteSidenav extends Vue {
     @Prop({ required: true })
     private perusteDataStore!: PerusteDataStore;
-
-    private filter: FilterObj = {
-      label: '',
-      isEnabled: false
-    };
+    private query = '';
 
     private setValue(value) {
-      this.filter.isEnabled = !_.isEmpty(value);
-      this.filter.label = value;
+      this.perusteDataStore.updateFilter({
+        isEnabled: !_.isEmpty(value),
+        label: value,
+      });
     }
 
-    private get treeData() {
-      return buildYksinkertainenNavigation(
-        this, // Vue instance
-        this.perusteDataStore.perusteId!,
-        this.perusteDataStore.sisalto!,
-        this.filter
-      );
+    get filter() {
+      return this.perusteDataStore.sidenavFilter;
     }
+
+    get treeData() {
+      return this.perusteDataStore.sidenav();
+    }
+
 }
 </script>
 

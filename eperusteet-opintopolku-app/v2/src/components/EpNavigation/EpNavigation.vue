@@ -1,27 +1,31 @@
 <template>
-  <div class="container">
-    <b-navbar type="dark"
-              toggleable="md"
-              class="navbar-ep">
+<div>
+  <b-navbar type="light"
+            role="navigation"
+            toggleable="lg"
+            class="navbar-ep">
+    <b-navbar-brand href="#">
+      <b-link :to="{ name: 'root' }">
+        <img src="../../../public/img/icons/eperusteet-logo.svg">
+      </b-link>
+    </b-navbar-brand>
 
-      <b-navbar-brand href="#">
-        <b-link :to="{ name: 'root' }">
-          <img src="../../../public/img/icons/eperusteet-logo.svg" height="26">
-        </b-link>
-      </b-navbar-brand>
+    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-      <b-collapse id="nav-collapse" is-nav>
+    <b-collapse id="nav-collapse" is-nav>
+      <div class="container">
         <b-navbar-nav>
-          <b-nav-item v-for="(item, idx) in items" :key="idx"
+          <b-nav-item v-for="(item, idx) in items"
+                      :key="idx"
+                      active
                       :to="item.route">
             {{ $t(item.nimi) }}
           </b-nav-item>
         </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
-  </div>
+      </div>
+    </b-collapse>
+  </b-navbar>
+</div>
 </template>
 
 <script lang="ts">
@@ -60,7 +64,8 @@ export default class EpNavigation extends Vue {
 }
 
 .navbar-ep {
-  background-color: #1B47AF;
+  background-color: #fff;
+  height: 80px;
 
   ul {
     li {
@@ -69,7 +74,7 @@ export default class EpNavigation extends Vue {
   }
 
   #nav-collapse {
-    background-color: #1B47AF;
+    background-color: #fff;
   }
 
   // Todo: käytä muuttujaa
@@ -78,15 +83,20 @@ export default class EpNavigation extends Vue {
   }
 
   .navbar-brand {
+    padding: 20px 0 20px 53px;
+    font-weight: bolder;
+
     // Todo: käytä muuttujaa
     @media (min-width: 768px) {
-      margin-right: 3rem;
+      // margin-right: 3rem;
     }
   }
 
-  &.navbar-expand-md .navbar-nav .nav-link {
+  &.navbar-expand-lg .navbar-nav .nav-link {
     padding-right: 1rem;
     padding-left: 1rem;
+    color: #000;
+    font-weight: bold;
 
     // Todo: käytä muuttujaa
     @media (min-width: 768px) {
@@ -94,7 +104,6 @@ export default class EpNavigation extends Vue {
       padding-bottom: 0.55rem;
     }
 
-    color: white;
     // Todo: käytä muuttujaa
     @media (max-width: 767.98px) {
       padding-left: 0;
@@ -104,8 +113,8 @@ export default class EpNavigation extends Vue {
 
   // Todo: käytä muuttujaa
   @media (min-width: 768px) {
-    &.navbar-expand-md .navbar-nav .nav-link.router-link-active {
-      border-bottom: white 0.25rem solid;
+    &.navbar-expand-lg .navbar-nav .nav-link.router-link-active {
+      border-bottom: #0143da 0.25rem solid;
       padding-bottom: 0.30rem;
     }
   }

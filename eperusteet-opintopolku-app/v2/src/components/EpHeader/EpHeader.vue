@@ -1,8 +1,7 @@
 <template>
-<div>
-  <div class="kooste-header">
-    <div class="container">
-      <div>
+  <div>
+    <div class="kooste-header">
+      <div class="container">
         <div class="murupolku">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -18,21 +17,23 @@
           </nav>
           <slot name="murupolku"></slot>
         </div>
-        <div class="nimi">
+        <h1 class="nimi">
           <slot name="header"></slot>
-        </div>
+        </h1>
       </div>
+      <div class="bg-left" :class="theme"></div>
+      <div class="bg-right" :class="theme"></div>
+    </div>
+    <div class="container sisalto">
+      <slot></slot>
     </div>
   </div>
-  <div class="container sisalto">
-    <slot></slot>
-  </div>
-</div>
 </template>
 
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { koulutustyyppiTheme } from '@/utils/perusteet';
 
 @Component
 export default class EpHeader extends Vue {
@@ -40,42 +41,110 @@ export default class EpHeader extends Vue {
   @Prop({ required: false, default: () => [] })
   private murupolku!: Array<any>;
 
+  @Prop({ required: true })
+  private koulutustyyppi!: string;
+
+  get theme() {
+    return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
+  }
+
 }
 </script>
 
 
 <style scoped lang="scss">
 .kooste-header {
-  height: 150px;
+  height: 238px;
   box-shadow: 0 2px 6px 0 rgba(0,45,153,0.08);
-  background-image: url('../../../public/img/banners/aallot.svg');
   background-repeat: no-repeat;
-  background-position: right;
+  position: relative;
+  width: 100%;
 
-  .murupolku {
-    padding-top: 25px;
-    height: 75px;
+  .bg-left {
+    left: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    width: calc(100vw - 1440px);
+    z-index: -1000;
+
+    &.koulutustyyppi-ammatillinen {
+      background-color: #008800;
+    }
+
+    &.koulutustyyppi-esiopetus {
+      background-color: #84d2ff;
+    }
+
+    &.koulutustyyppi-lukio {
+      background-color: #0143da;
+    }
+
+    &.koulutustyyppi-perusopetus {
+      background-color: #67cccc;
+    }
+
+    &.koulutustyyppi-varhaiskasvatus {
+      background-color: #ffcc33;
+    }
   }
 
-  .nimi {
+  .bg-right {
+    background-position: right;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    width: 1440px;
+    z-index: -1000;
+
+    &.koulutustyyppi-ammatillinen {
+      background-image: url('../../../public/img/banners/aallot_ammatillinen.svg');
+    }
+
+    &.koulutustyyppi-esiopetus {
+      background-image: url('../../../public/img/banners/aallot_esiopetus.svg');
+    }
+
+    &.koulutustyyppi-lukio {
+      background-image: url('../../../public/img/banners/aallot_lukio.svg');
+    }
+
+    &.koulutustyyppi-perusopetus {
+      background-image: url('../../../public/img/banners/aallot_perusopetus.svg');
+    }
+
+    &.koulutustyyppi-varhaiskasvatus {
+      background-image: url('../../../public/img/banners/aallot_varhaiskasvatus.svg');
+    }
+  }
+
+  .murupolku {
+    padding-top: 81px;
+    height: 119px;
+  }
+
+  h1.nimi {
     margin-top: 0px;
     height: 75px;
-    font-size: 28px;
-    color: #001A58;
+    font-weight: bold;
+    font-size: 32px;
+    color: #fff;
   }
 
   ol.breadcrumb {
+    font-size: 14px;
     background: none;
     margin: 0px;
     padding: 0px;
 
     .breadcrumb-home {
-      color: #2B2B2B;
+      color: #fff;
       font-weight: bolder;
     }
 
     .breadcrumb-normal {
-      color: #2B2B2B;
+      color: #fff;
     }
   }
 }

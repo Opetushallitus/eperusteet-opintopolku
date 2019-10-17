@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 58 (101010) - https://sketch.com -->
+    <title>81ADE0BD-B36B-46ED-A426-D2085C579D34@2x</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M13,8 L3,18 L2,18 L2,17 L12,7 L13,8 Z M15.2928932,0.707106781 L13.5,2.5 L13.5,2.5 L17.5,6.5 L19.2928932,4.70710678 C19.6834175,4.31658249 19.6834175,3.68341751 19.2928932,3.29289322 L16.7071068,0.707106781 C16.3165825,0.316582489 15.6834175,0.316582489 15.2928932,0.707106781 Z M12,4 L0,16 L0,20 L4,20 L16,8 L12,4 Z" id="path-1"></path>
+    </defs>
+    <g id="ASSETIT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ASSETIT---IKONIT" transform="translate(-439.000000, -347.000000)">
+            <g id="Ikonit/Kynä" transform="translate(439.000000, 347.000000)">
+                <g>
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Mask" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+                    <g id="Värit/Tumma-harmaa" mask="url(#mask-2)" fill="#575757">
+                        <rect id="Rectangle" x="0" y="0" width="20" height="20"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

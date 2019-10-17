@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 58 (101010) - https://sketch.com -->
+    <title>58C115BB-023A-4324-BAEF-27C9CCDFE968@2x</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M8,4 L8,5.999 L2,6 L2,18 L14,18 L14,12 L16,12 L16,18.2222222 C16,19.1511111 15.278,19.9195556 14.3674778,19.9940778 L14.2222222,20 L1.77777778,20 C0.848888889,20 0.0804444444,19.278 0.00592222222,18.3674778 L0,18.2222222 L0,5.77777778 C0,4.84888889 0.722,4.08044444 1.63252222,4.00592222 L1.77777778,4 L8,4 Z M14,3 L17,6 L9,14 L6,14 L6,11 L14,3 Z M14,5 L7.5,11.5 L7.5,12.5 L8.5,12.5 L15,6 L14,5 Z M17.6128994,0.623918175 L17.7071068,0.707106781 L19.2928932,2.29289322 C19.6533772,2.65337718 19.6811067,3.22060824 19.3760818,3.61289944 L19.2928932,3.70710678 L18,5 L15,2 L16.2928932,0.707106781 C16.6533772,0.34662282 17.2206082,0.318893284 17.6128994,0.623918175 Z" id="path-1"></path>
+    </defs>
+    <g id="ASSETIT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ASSETIT---IKONIT" transform="translate(-389.000000, -347.000000)">
+            <g id="Ikonit/Kynä-ja-kehys" transform="translate(389.000000, 347.000000)">
+                <g>
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Combined-Shape" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+                    <g id="Värit/Tumma-harmaa" mask="url(#mask-2)" fill="#575757">
+                        <rect id="Rectangle" x="0" y="0" width="20" height="20"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

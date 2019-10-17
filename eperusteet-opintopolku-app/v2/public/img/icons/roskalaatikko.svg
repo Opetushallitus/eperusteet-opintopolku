@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 58 (101010) - https://sketch.com -->
+    <title>918A85AF-67B5-4143-84D7-7761C6256704@2x</title>
+    <desc>Created with sketchtool.</desc>
+    <defs>
+        <path d="M15,18 L6,18 L6,6 L15,6 L15,18 Z M13,6.03961325e-14 L8,6.03961325e-14 L7,1 L3,1 L3,3 L18,3 L18,1 L14,1 L13,6.03961325e-14 Z M17,4 L4,4 L4,17 C4,17.3333333 4,17.6666667 4,18 C4,19.1045695 4.8954305,20 6,20 L15,20 C16.1045695,20 17,19.1045695 17,18 C17,18 17,18 17,18 L17,4 Z" id="path-1"></path>
+    </defs>
+    <g id="ASSETIT" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ASSETIT---IKONIT" transform="translate(-339.000000, -348.000000)">
+            <g id="Ikonit/Roskalaatikko" transform="translate(339.000000, 347.000000)">
+                <g>
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="Mask" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+                    <g id="Värit/Tumma-harmaa" mask="url(#mask-2)" fill="#575757">
+                        <rect id="Rectangle" x="0" y="0" width="20" height="20"></rect>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

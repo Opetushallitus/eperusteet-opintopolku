@@ -1,11 +1,11 @@
 <template>
 <div>
-  <header>
+  <header role="banner">
     <ep-navigation :sticky="true"></ep-navigation>
   </header>
-  <div class="router-container">
+  <main class="router-container" role="main">
     <router-view />
-  </div>
+  </main>
   <ep-footer />
 </div>
 </template>
@@ -28,11 +28,9 @@ export default class Root extends Vue {
 <style lang="scss">
 @import '../styles/_variables.scss';
 
-header {
-  background-color: #1B47AF;
-}
-
-.router-container {
+main.router-container {
+  min-height: calc(100vh - 400px);
+  margin-bottom: 40px;
 }
 
 </style>

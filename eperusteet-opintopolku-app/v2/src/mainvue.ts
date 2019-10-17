@@ -17,6 +17,19 @@ const logger = createLogger('main');
 
 Vue.use(Notifications);
 
+if (process.env.NODE_ENV !== 'production') {
+  const VueAxe = require('vue-axe')
+  Vue.use(VueAxe, {
+    config: {
+      rules: [
+        { id: 'heading-order', enabled: true },
+        { id: 'label-title-only', enabled: true },
+      ],
+    },
+    clearConsoleOnUpdate: false,
+  })
+}
+
 Vue.use(Loading, {
   fullPage: true,
   color: '#159ecb',

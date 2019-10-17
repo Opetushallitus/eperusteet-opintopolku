@@ -14,6 +14,7 @@ import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
+import { attachRouterMetaProps } from '@shared/utils/router';
 
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
@@ -30,8 +31,9 @@ const logger = createLogger('Router');
 const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
 
+
 export const router = new Router({
-  scrollBehavior: () => ({ x: 0, y: 0 }),
+  // scrollBehavior: () => ({ x: 0, y: 0 }),
   routes: [{
     path: '/',
     redirect: () => '/fi',
@@ -43,11 +45,15 @@ export const router = new Router({
       name: 'root',
       component: Home,
       meta: {
-        async props() {
-          return {
-            perusteStore,
-            tiedoteStore,
-          };
+        resolve: {
+          async props() {
+            return {
+              default: {
+                perusteStore,
+                tiedoteStore,
+              },
+            };
+          },
         },
       },
     }, {
@@ -55,12 +61,17 @@ export const router = new Router({
       name: 'kooste',
       component: RouteKooste,
       meta: {
-        async props(route) {
-          return {
-            perusteKoosteStore: new PerusteKoosteStore(
-              stateToKoulutustyyppi(route.params.koulutustyyppi),
-              route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
-          };
+        resolve: {
+          cacheBy: ['koulutustyyppi'],
+          async props(route) {
+            return {
+              default: {
+                perusteKoosteStore: new PerusteKoosteStore(
+                  stateToKoulutustyyppi(route.params.koulutustyyppi),
+                  route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
+              },
+            };
+          },
         },
       },
     }, {
@@ -71,11 +82,22 @@ export const router = new Router({
       path: ':koulutustyyppi/:perusteId',
       name: 'peruste',
       component: RoutePeruste,
+      redirect(to) {
+        return {
+          name: 'perusteTiedot',
+        };
+      },
       meta: {
-        async props(route) {
-          return {
-            perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId)),
-          };
+        resolve: {
+          cacheBy: ['perusteId'],
+          async props(route) {
+            return {
+              default: {
+                perusteDataStore: await PerusteDataStore.create(
+                  _.parseInt(route.params.perusteId)),
+              },
+            };
+          },
         },
       },
       children: [{
@@ -87,10 +109,17 @@ export const router = new Router({
         component: RouteTekstikappale,
         name: 'tekstikappale',
         meta: {
-          async props(route) {
-            return {
-              perusteenOsaStore: await PerusteenOsaStore.create(_.parseInt(route.params.viiteId)),
-            };
+          resolve: {
+            cacheBy: ['viiteId'],
+            async props(route) {
+              return {
+                default: {
+                  viiteId: route.params.viiteId,
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.viiteId)),
+                },
+              };
+            },
           },
         },
       }],
@@ -113,28 +142,7 @@ export const router = new Router({
   }],
 });
 
-router.beforeEach(async (to, from, next) => {
-  let props = {};
-  for (const record of to.matched) {
-    if (_.isFunction(record.meta.props)) {
-      const recordParams = await record.meta.props(to);
-      props = {
-        ...props,
-        ...recordParams,
-      };
-      if (_.isFunction((record.props as any).default)) {
-        props = {
-          ...props,
-          ...await (record.props as any).default(to),
-        };
-      }
-    }
-    record.props = {
-      default: props,
-    };
-  }
-  next();
-});
+attachRouterMetaProps(router);
 
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);

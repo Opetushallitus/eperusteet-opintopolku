@@ -1,76 +1,68 @@
 import _ from 'lodash';
 import { Matala } from '@shared/api/tyypit';
+import { Kielet } from '@shared/stores/kieli';
+import { RawLocation } from 'vue-router';
 
-interface SidenavNodeState {
-  name: string,
-  params?: object
-}
 
 export interface SidenavNode {
-  id?: number,
-  label: string,
-  to?: SidenavNodeState,
+  id?: number;
+  label: string;
+  to?: RawLocation;
   isVisible: boolean,
-  isFiltered: boolean,
-  isMatch: boolean,
-  isCollapsed: boolean
-  type: 'root' | 'viite' | 'tiedot',
-  perusteenOsa?: object, // todo oikea tyyppi
-  children?: Array<SidenavNode>
+  isFiltered: boolean;
+  isMatch: boolean;
+  isCollapsed: boolean;
+  type: 'root' | 'viite' | 'tiedot';
+  perusteenOsa?: object; // todo oikea tyyppi
+  children: Array<SidenavNode>;
+  $$path: Array<SidenavNode>;
 }
 
-export interface FilterObj {
-  label: string
-  isEnabled: boolean
+export interface SidenavFilter {
+  label: string;
+  isEnabled: boolean;
 }
 
-export function traverseSisalto(vueInstance, sisalto: Matala, path: Array<SidenavNode>, filter: FilterObj) {
-  const children: Array<SidenavNode> = [];
+export function nodeToRoute(lapsi: Matala): RawLocation | undefined {
+  if (lapsi.perusteenOsa) {
+    return {
+      name: 'tekstikappale',
+      params: {
+        viiteId: lapsi.id as any,
+      }
+    };
+  }
+}
 
-  if (!_.isEmpty(sisalto.lapset)) {
-    _.each(sisalto.lapset, (lapsi: Matala) => {
-      const viiteId = vueInstance.$route.params.viiteId;
+export function traverseSisalto(viiteId: string, sisalto: Matala, path: Array<SidenavNode>, filter: SidenavFilter): SidenavNode[] {
+  return (sisalto.lapset || [])
+    .map((lapsi: Matala) => {
       const child: SidenavNode = {
         id: lapsi.id,
-        label: handleLabel(vueInstance, lapsi.perusteenOsa!.nimi || 'nimeton'),
+        label: handleLabel(lapsi.perusteenOsa!.nimi || 'nimeton'),
         isVisible: true,
         isFiltered: false,
         isMatch: false,
         isCollapsed: false,
         perusteenOsa: lapsi.perusteenOsa,
+        children: [],
+        $$path: path,
         type: 'viite',
+        to: nodeToRoute(lapsi),
       };
 
-      // Add perusteen osa
-      if (lapsi.perusteenOsa) {
-        child['to'] = {
-          name: 'tekstikappale',
-          params: {
-            viiteId: lapsi.id
-          }
-        };
-      }
-
       // Collapse if not open
-      handleCollapse(vueInstance, child, path);
+      handleCollapse(viiteId, child, [...path, child]);
 
       // Filter by label
-      handleFilter(vueInstance, child, path, filter);
+      handleFilter(child, [...path, child], filter);
 
-      // Rekursiivinen
-      path.push(child);
-      child.children = traverseSisalto(vueInstance, lapsi, path, filter);
-      path.pop();
-
-      children.push(child);
+      child.children = traverseSisalto(viiteId, lapsi, [...path, child], filter);
+      return child;
     });
-  }
-
-  return children;
 }
 
-function handleCollapse(vueInstance, child, path) {
-  const viiteId = _.parseInt(_.get(vueInstance, '$route.params.viiteId'));
+function handleCollapse(viiteId: number, child, path) {
   if (viiteId && viiteId === child.id) {
     child.isCollapsed = false;
     for (const node of path) {
@@ -82,7 +74,7 @@ function handleCollapse(vueInstance, child, path) {
   }
 }
 
-function handleFilter(vueInstance, child, path, filter) {
+function handleFilter(child, path, filter) {
   if (_.includes(_.lowerCase(child.label), _.lowerCase(filter.label))) {
     child.isFiltered = true;
     child.isMatch = true;
@@ -92,19 +84,19 @@ function handleFilter(vueInstance, child, path, filter) {
   }
 }
 
-function handleLabel(vueInstance, label) {
+function handleLabel(label) {
   if (_.isObject(label)) {
-    return vueInstance.$kaanna(label);
+    return Kielet.kaanna(label);
   }
   else if (_.isString(label)) {
-    return vueInstance.$t(label);
+    return Kielet.t(label);
   }
   else {
     return label;
   }
 }
 
-export function buildYksinkertainenNavigation(vueInstance, perusteId: number, sisalto: Matala, filter: FilterObj) {
+export function buildYksinkertainenNavigation(viiteId: string | number, perusteId: number, sisalto: Matala, filter: SidenavFilter): SidenavNode {
   const root: SidenavNode = {
     type: 'root',
     label: 'root',
@@ -112,14 +104,21 @@ export function buildYksinkertainenNavigation(vueInstance, perusteId: number, si
     isFiltered: false,
     isMatch: false,
     isCollapsed: false,
+    children: [],
+    $$path: [],
   };
+
   // Lisätään vapaat tekstikappaleet
-  root.children = traverseSisalto(vueInstance, sisalto, [], filter);
+  root.children = traverseSisalto(
+    _.isString(viiteId) ? _.parseInt(viiteId) : viiteId,
+    sisalto,
+    [],
+    filter);
 
   // Lisätään tiedot
   const tiedot: SidenavNode = {
     type: 'tiedot',
-    label: handleLabel(vueInstance, 'tiedot'),
+    label: handleLabel('tiedot'),
     isVisible: true,
     isFiltered: false,
     isMatch: false,
@@ -127,14 +126,15 @@ export function buildYksinkertainenNavigation(vueInstance, perusteId: number, si
     to: {
       name: 'perusteTiedot',
       params: {
-        perusteId
+        perusteId: perusteId as any,
       }
-    }
+    },
+    children: [],
+    $$path: [],
   };
-  handleFilter(vueInstance, tiedot, [], filter);
+
+  handleFilter(tiedot, [], filter);
   root.children.unshift(tiedot);
-
-
 
   return root;
 }

@@ -1,30 +1,49 @@
 <template>
 <ep-spinner v-if="!koulutustyyppi" />
-<ep-header v-else>
+<ep-header :murupolku="[]" :koulutustyyppi="koulutustyyppi" v-else>
   <template slot="header">
     {{ $t(koulutustyyppi) }}
   </template>
   <div>
     <b-container fluid>
       <b-row>
-        <b-col md="6" class="tile">
-          <h4>{{ $t('perusteet') }}</h4>
-          <div class="perustebox">
+        <b-col lg="8" class="tile">
+          <h2>{{ $t('perusteet') }}</h2>
+          <div class="perustebox d-flex">
             <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
-              <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }"
-                           tag="a">
-                <div class="nimi d-flex justify-content-center align-items-center">
-                  <div class="">
+              <div class="upper">
+                <div class="peruste-ikoni">
+                  <img src="../../../public/img/icons/hallitus.svg" :alt="$t('peruste')" style="fill: #0041DC" />
+                </div>
+                <div class="nimi">
+                  <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
                     {{ $kaanna(peruste.nimi) }}
+                  </router-link>
+                </div>
+              </div>
+              <div class="voimaantulo-viiva"></div>
+              <div>
+                <div class="d-flex align-items-center justify-content-center">
+                  <div class="voimaantulo">
+                    {{ $t('voimaantulo') }}:
+                    {{ $sd(peruste.voimaantulopvm) }}
                   </div>
                 </div>
-                <div class="kuvaus" v-html="$kaanna(peruste.kuvaus)"></div>
-              </router-link>
+              </div>
+              <!-- <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }" -->
+              <!--              tag="a">                                                           -->
+              <!--   <div class="nimi d-flex justify-content-center align-items-center">           -->
+              <!--     <div class="">                                                              -->
+              <!--       {{ $kaanna(peruste.nimi) }}                                               -->
+              <!--     </div>                                                                      -->
+              <!--   </div>                                                                        -->
+              <!--   <div class="kuvaus" v-html="$kaanna(peruste.kuvaus)"></div>                   -->
+              <!-- </router-link>                                                                  -->
             </div>
           </div>
         </b-col>
-        <b-col md="6" class="tile">
-          <h4>{{ $t('tiedotteet') }}</h4>
+        <b-col lg="4" class="tile">
+          <h2>{{ $t('tiedotteet') }}</h2>
           <div class="tiedotebox">
             <div v-if="tiedotteet">
               <div v-if="tiedotteet.length === 0">
@@ -47,42 +66,12 @@
           </div>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col>
+          <paikalliset :peruste-kooste-store="perusteKoosteStore" />
+        </b-col>
+      </b-row>
     </b-container>
-    <div class="paikalliset">
-      <h4>{{ $t('paikalliset-opetussuunnitelmat') }}</h4>
-      <div class="opetussuunnitelma" v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
-        <div class="d-flex align-items-center">
-          <div class="opsicon-wrapper">
-            <div class="opsicon"></div>
-          </div>
-          <div class="nimi flex-fill">
-            <div class="ops">
-              <router-link :to="{ name: 'ops', params: { 'opsId': ops.id } }">
-                {{ $kaanna(ops.nimi) }}
-              </router-link>
-            </div>
-            <div class="organisaatiot">
-              <div v-if="ops.toimijat.length > 0">
-                <span>{{ $t('toimijat') }}</span>
-                <span class="mr-1">:</span>
-                <span class="toimijat" v-for="(toimija, tidx) in ops.toimijat" :key="tidx">
-                  {{ $kaanna(toimija.nimi) }}<span v-if="tidx < ops.toimijat.length - 1">, </span>
-                </span>
-              </div>
-              <div v-if="ops.oppilaitokset.length > 0">
-                <span>{{ $t('oppilaitokset') }}</span>
-                <span class="mr-1">:</span>
-                <span class="toimijat" v-for="(oppilaitos, tidx) in ops.oppilaitokset" :key="tidx">
-                  {{ $kaanna(oppilaitos.nimi) }}<span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="perusteen-nimi">
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </ep-header>
 </template>
@@ -92,12 +81,14 @@ import { Watch, Component, Vue, Prop } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import Paikalliset from './Paikalliset.vue';
 import _ from 'lodash';
 
 @Component({
   components: {
     EpSpinner,
     EpHeader,
+    Paikalliset,
   },
 })
 export default class RouteKooste extends Vue {
@@ -137,9 +128,23 @@ export default class RouteKooste extends Vue {
 .container {
   .paikalliset {
     margin-top: 31px;
+
+    h2.otsikko {
+      font-weight: bolder;
+      margin-bottom: 43px;
+      font-size: 29px;
+    }
   }
 
   .paikalliset {
+    margin: 0 10px 10px 10px;
+
+    .peruste-nav {
+      .peruste {
+        color: #575757;
+      }
+    }
+
     .opetussuunnitelma {
       border: 1px solid #DADADA;
       border-radius: 2px;
@@ -155,6 +160,7 @@ export default class RouteKooste extends Vue {
           background: url('../../../public/img/icons/opskortti.svg');
           background-size: 40px 40px;
         }
+
       }
 
       .nimi {
@@ -174,54 +180,88 @@ export default class RouteKooste extends Vue {
           color: #555;
           font-size: smaller;
         }
+
+        .otsikko {
+          color: #2B2B2B;
+          font-size: smaller;
+        }
       }
     }
   }
 
   .tile {
-    padding: 0;
+    margin-top: 31px;
+
+    h2 {
+      font-weight: bolder;
+    }
 
     .perustebox {
-      margin-right: 31px;
+      margin-top: 43px;
 
       .peruste {
-        min-height: 310px;
-        border: 1px solid #DADADA;
         border-radius: 10px;
+        border: 1px solid #E7E7E7;
+        box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
+        height: 230px;
+        width: 192px;
+        margin-right: 8px;
 
-        .nimi {
-          padding: 0px 30px 0px 30px;
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px;
-          height: 120px;
-          background: #0041DC;
-          color: white;
-          font-size: 22px;
+        .voimaantulo-viiva {
+          width: 152px;
+        }
+
+        .voimaantulo {
+          border-top: 1px solid #EBEBEB;
+          color: #001A58;
+          font-size: 15px;
+          height: 40px;
+          padding-top: 4px;
           text-align: center;
         }
 
-        .kuvaus {
-          padding: 35px 30px 35px 30px;
-        }
+        .upper {
+          height: 180px;
 
+          .peruste-ikoni {
+            color: #0041DC;
+            text-align: center;
+
+            img {
+              margin: 20px;
+              height: 32px;
+              width: 32px;
+            }
+          }
+
+          .nimi {
+            width: 100%;
+            padding: 12px;
+            padding-top: 0;
+            font-weight: bold;
+            text-align: center;
+          }
+        }
       }
     }
 
     .tiedotebox {
-      padding: 35px 30px 35px 30px;
+      margin-top: 43px;
       min-height: 310px;
-      border: 1px solid #DADADA;
-      border-radius: 10px;
 
       .tiedote {
         margin-bottom: 15px;
+        padding: 5px;
+
+        &:nth-child(odd) {
+          background-color: #F9F9F9;
+        }
 
         .aikaleima {
           font-size: smaller;
           color: #555;
         }
       }
-
     }
   }
 }
