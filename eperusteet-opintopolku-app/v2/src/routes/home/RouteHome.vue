@@ -144,11 +144,15 @@ export default class RouteHome extends Vue {
   }
 
   background: $etusivu-header-background; /* TODO: Lisää kuva */
+  // background-image: /* TODO: Lisää kuva */
+  background-size: cover;
+  background-position: 50% 33%;;
 
   .laatikko {
     padding: 15px;
     color: #000;
     background: #fff;
+    opacity: 0.95;
 
     @media (min-width: 768px) {
       max-width: 406px;
