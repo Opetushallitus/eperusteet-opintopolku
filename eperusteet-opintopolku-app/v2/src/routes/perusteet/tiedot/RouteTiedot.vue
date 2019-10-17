@@ -131,7 +131,7 @@ export default class RouteTiedot extends Vue {
   }
 
   get peruste() {
-    return this.perusteDataStore.peruste;
+    return this.perusteDataStore.peruste!;
   }
 
   get sidenav() {
@@ -139,11 +139,11 @@ export default class RouteTiedot extends Vue {
   }
 
   handleMaarayskirje() {
-    this.maarayskirjeObj = this.handleMaarays(this.peruste.maarayskirje);
+    this.maarayskirjeObj = this.handleMaarays(this.peruste!.maarayskirje);
   }
 
   handleMuutosmaaraykset() {
-    _.each(this.peruste.muutosmaaraykset, muutosmaarays => {
+    _.each(this.peruste!.muutosmaaraykset, muutosmaarays => {
       const maaraysObj = this.handleMaarays(muutosmaarays);
       _.each(maaraysObj, (maarays, kieli) => {
         if (!this.muutosmaarayksetObj[kieli]) {
@@ -162,7 +162,7 @@ export default class RouteTiedot extends Vue {
         _.each(maaraysObj.liitteet, (liite, kieli) => {
           result[kieli] = {
             ...liite,
-            url: baseURL + LiitetiedostotParam.getAllLiitteet(this.perusteId, liite.id!).url
+            url: baseURL + LiitetiedostotParam.getAllLiitteet(this.peruste!.id!, liite.id!).url
           };
         });
       }
@@ -211,7 +211,7 @@ export default class RouteTiedot extends Vue {
         const st = suoritustavat[i];
         const suoritustapakoodi = st.suoritustapakoodi;
         if (suoritustapakoodi) {
-          const dokumenttiId = await Dokumentit.getDokumenttiId(this.peruste.id, this.sisaltoKieli, suoritustapakoodi);
+          const dokumenttiId = await Dokumentit.getDokumenttiId(this.peruste!.id!, this.sisaltoKieli, suoritustapakoodi);
           this.dokumenttiObj[this.sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId.data).url;
         }
       }

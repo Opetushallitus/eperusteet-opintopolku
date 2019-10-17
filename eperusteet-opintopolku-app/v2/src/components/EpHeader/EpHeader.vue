@@ -41,6 +41,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme } from '@/utils/perusteet';
 import Tausta from './Tausta.vue';
 import { RawLocation } from 'vue-router';
+import _ from 'lodash';
 
 
 export interface Muru {
