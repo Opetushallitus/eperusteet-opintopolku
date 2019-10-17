@@ -95,6 +95,10 @@ export default class RouteKooste extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
+  mounted() {
+    this.perusteKoosteStore.perusteId = _.first(this.perusteet).id;
+  }
+
   get koulutustyyppi() {
     return this.perusteKoosteStore.koulutustyyppi;
   }
@@ -105,18 +109,6 @@ export default class RouteKooste extends Vue {
 
   get perusteet() {
     return this.perusteKoosteStore.perusteet;
-  }
-
-  get opetussuunnitelmat() {
-    return _.chain(this.perusteKoosteStore.opetussuunnitelmat)
-      .map(ops => ({
-        ...ops,
-        toimijat: _.filter(ops.organisaatiot, org =>
-          _.includes(org.tyypit, 'Koulutustoimija')),
-        oppilaitokset: _.filter(ops.organisaatiot, org =>
-          _.includes(org.tyypit, 'Oppilaitos')),
-      }))
-      .value();
   }
 
 }
@@ -203,13 +195,9 @@ export default class RouteKooste extends Vue {
         border-radius: 10px;
         border: 1px solid #E7E7E7;
         box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
-        height: 230px;
-        width: 192px;
+        min-height: 230px;
+        min-width: 232px;
         margin-right: 8px;
-
-        .voimaantulo-viiva {
-          width: 152px;
-        }
 
         .voimaantulo {
           border-top: 1px solid #EBEBEB;

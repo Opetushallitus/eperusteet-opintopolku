@@ -34,8 +34,13 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme } from '@/utils/perusteet';
+import Tausta from './Tausta.vue';
 
-@Component
+@Component({
+  components: {
+    Tausta,
+  },
+})
 export default class EpHeader extends Vue {
 
   @Prop({ required: false, default: () => [] })
@@ -55,7 +60,6 @@ export default class EpHeader extends Vue {
 <style scoped lang="scss">
 .kooste-header {
   height: 238px;
-  box-shadow: 0 2px 6px 0 rgba(0,45,153,0.08);
   background-repeat: no-repeat;
   position: relative;
   width: 100%;
@@ -82,6 +86,10 @@ export default class EpHeader extends Vue {
 
     &.koulutustyyppi-perusopetus {
       background-color: #67cccc;
+    }
+
+    &.koulutustyyppi-taiteenperusopetus {
+      background-color: #f3d3f1;
     }
 
     &.koulutustyyppi-varhaiskasvatus {
@@ -117,6 +125,11 @@ export default class EpHeader extends Vue {
     &.koulutustyyppi-varhaiskasvatus {
       background-image: url('../../../public/img/banners/aallot_varhaiskasvatus.svg');
     }
+
+    &.koulutustyyppi-taiteenperusopetus {
+      background-image: url('../../../public/img/banners/aalto_taiteet.svg');
+    }
+
   }
 
   .murupolku {

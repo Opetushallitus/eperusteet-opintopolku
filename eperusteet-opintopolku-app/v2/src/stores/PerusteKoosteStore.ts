@@ -2,7 +2,7 @@ import { Store, Getter, State } from '@shared/stores/store';
 import { OpetussuunnitelmaJulkinenDto, PerusteDto, TiedoteDto } from '@shared/api/tyypit';
 import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 import { Perusteet } from '@shared/api/eperusteet';
-import {  } from '@shared/api/eperusteet';
+import { ryhmat } from '@/utils/perusteet';
 import { tiedoteQuery, perusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 
@@ -10,10 +10,10 @@ import _ from 'lodash';
 @Store
 export class PerusteKoosteStore {
   @State() public perusteet: PerusteDto[] | null = null;
-  @State() public opetussuunnitelmat: OpetussuunnitelmaJulkinenDto[] | null = null;
   @State() public tiedotteet: TiedoteDto[] | null = null;
   @State() public koulutustyyppi: string | null = null;
   @State() public perusteId: number | null = null;
+  @State() public opetussuunnitelmat: OpetussuunnitelmaJulkinenDto[] | null = null;
 
   @Getter()
   info() {
@@ -31,18 +31,30 @@ export class PerusteKoosteStore {
     this.reload();
   }
 
+  async setPerusteId(id: number) {
+    this.perusteId = id;
+    this.opetussuunnitelmat = null;
+    const opsit = await OpetussuunnitelmatJulkiset.getAllJulkiset(
+      undefined, undefined, undefined, '' + id);
+    this.opetussuunnitelmat = opsit.data;
+  }
+
   async reload() {
     if (this.koulutustyyppi) {
+      const koulutustyypit = ryhmat(this.koulutustyyppi);
       this.perusteet = await perusteetQuery({
         sivukoko: 100,
-        koulutustyyppi: [this.koulutustyyppi],
+        koulutustyyppi: koulutustyypit,
         siirtyma: false,
         poistunut: false,
         voimassaolo: true,
         tuleva: true,
       });
 
-      this.opetussuunnitelmat = (await OpetussuunnitelmatJulkiset.getAllJulkiset(this.koulutustyyppi)).data;
+      const id = _.get(this, 'perusteet[0].id');
+      if (id) {
+        this.setPerusteId(id);
+      }
     }
 
 

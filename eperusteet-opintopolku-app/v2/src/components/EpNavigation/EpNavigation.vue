@@ -23,7 +23,21 @@
           </b-nav-item>
         </b-navbar-nav>
       </div>
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item-dropdown right>
+          <template slot="button-content">
+            {{ $t('kieli-' + valittuKieli) }}
+          </template>
+          <b-dropdown-item
+            v-for="kieli in kielet"
+            :key="kieli"
+            @click="valitseKieli(kieli)">
+            {{ $t('kieli-' + kieli) }}
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
     </b-collapse>
+
   </b-navbar>
 </div>
 </template>
@@ -31,10 +45,20 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { koulutustyyppiStateName, koulutustyyppiRelaatiot } from '@/utils/perusteet';
+import { Kielet } from '@shared/stores/kieli';
 import _ from 'lodash';
 
 @Component
 export default class EpNavigation extends Vue {
+
+  get kielet() {
+    return ['fi', 'sv', 'en'];
+  }
+
+  get valittuKieli() {
+    return Kielet.getUiKieli();
+  }
+
   get items() {
     return _.map(koulutustyyppiRelaatiot(), kt => {
       return {
@@ -49,6 +73,12 @@ export default class EpNavigation extends Vue {
       };
     });
   }
+
+  valitseKieli(kieli) {
+    Kielet.setUiKieli(kieli);
+    Kielet.setSisaltoKieli(kieli);
+  }
+
 }
 </script>
 
