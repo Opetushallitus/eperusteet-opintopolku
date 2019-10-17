@@ -57,10 +57,17 @@
                    :fields="korvattavatDiaarinumerotFields"
                    :items="korvaavatPerusteet">
             <template v-slot:cell(perusteet)="data">
-              <div v-for="(peruste, idx) in data.item.perusteet" :key="idx">
-                <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
-                  {{ $kaanna(peruste.nimi) }}
-                </router-link>
+              <div v-if="data.item.perusteet.length > 0">
+                <div v-for="(peruste, idx) in data.item.perusteet" :key="idx">
+                  <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
+                    {{ $kaanna(peruste.nimi) }}
+                  </router-link>
+                </div>
+              </div>
+              <div v-else>
+                <i>
+                  {{ $t('perusteita-ei-saatavilla') }}
+                </i>
               </div>
             </template>
           </b-table>
@@ -74,7 +81,7 @@
         <!-- todo: tyotehtavat-joissa-voi-toimia -->
         <!-- todo: osaamisalojen-kuvaukset -->
       <!-- todo: kuvaus -->
-      <div class="col-md-12" v-if="hasDokumentti">
+      <div class="col-md-12" v-if="dokumentti">
         <ep-form-content name="dokumentti-osoite">
           <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-dokumentti') }}</a>
         </ep-form-content>
@@ -97,8 +104,7 @@ import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
-import { perusteetQuery } from '@/api/eperusteet';
+import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 
 
@@ -119,15 +125,17 @@ export default class RouteTiedot extends Vue {
   private isLoading = true;
   private maarayskirjeObj;
   private muutosmaarayksetObj = {};
-  private korvaavatPerusteet: object[] = [];
-  private dokumenttiObj = {};
 
   async mounted() {
-    await this.handleMaarayskirje();
-    await this.handleMuutosmaaraykset();
-    await this.handleKorvaavatPerusteet();
-    await this.handleDokumentti();
+    this.handleMaarayskirje();
+    this.handleMuutosmaaraykset();
+    await this.perusteDataStore.getKorvaavatPerusteet();
+    await this.perusteDataStore.getDokumentit(this.sisaltoKieli);
     this.isLoading = false;
+  }
+
+  get korvaavatPerusteet() {
+    return this.perusteDataStore.korvaavatPerusteet;
   }
 
   get peruste() {
@@ -145,7 +153,7 @@ export default class RouteTiedot extends Vue {
   handleMuutosmaaraykset() {
     _.each(this.peruste!.muutosmaaraykset, muutosmaarays => {
       const maaraysObj = this.handleMaarays(muutosmaarays);
-      _.each(maaraysObj, (maarays, kieli) => {
+      _.each(maaraysObj, (maarays, kieli) => {
         if (!this.muutosmaarayksetObj[kieli]) {
           this.muutosmaarayksetObj[kieli] = [];
         }
@@ -178,44 +186,8 @@ export default class RouteTiedot extends Vue {
     return result;
   }
 
-  async handleKorvaavatPerusteet() {
-    const diaarinumerot = this.peruste.korvattavatDiaarinumerot;
-    if (!diaarinumerot) {
-      return;
-    }
-
-    const result: object[] = [];
-
-    for(let i = 0; i < diaarinumerot.length; i++) {
-      const diaarinumero = diaarinumerot[i];
-      const perusteet = await perusteetQuery({
-        diaarinumero
-      });
-
-      result.push({
-        diaarinumero,
-        perusteet: perusteet
-      });
-    }
-    this.korvaavatPerusteet = result;
-  }
-
   get sisaltoKieli() {
     return Kielet.getSisaltoKieli();
-  }
-
-  async handleDokumentti() {
-    const suoritustavat = this.peruste.suoritustavat;
-    if (suoritustavat) {
-      for (let i = 0; i < suoritustavat.length; i++) {
-        const st = suoritustavat[i];
-        const suoritustapakoodi = st.suoritustapakoodi;
-        if (suoritustapakoodi) {
-          const dokumenttiId = await Dokumentit.getDokumenttiId(this.peruste!.id!, this.sisaltoKieli, suoritustapakoodi);
-          this.dokumenttiObj[this.sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId.data).url;
-        }
-      }
-    }
   }
 
   get maarayskirje() {
@@ -248,13 +220,10 @@ export default class RouteTiedot extends Vue {
     }];
   }
 
-  get hasDokumentti() {
-    return this.dokumenttiObj && (this as any).$kaanna(this.dokumenttiObj);
+  get dokumentti() {
+    return this.perusteDataStore.dokumentit && (this as any).$kaanna(this.perusteDataStore.dokumentit);
   }
 
-  get dokumentti() {
-    return (this as any).$kaanna(this.dokumenttiObj);
-  }
 }
 </script>
 

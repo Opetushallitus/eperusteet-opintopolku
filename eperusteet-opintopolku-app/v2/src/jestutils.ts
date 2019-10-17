@@ -1,6 +1,7 @@
 import { PerusteStore } from '@/stores/PerusteStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import Vue from 'vue';
 import _ from 'lodash';
 import { Wrapper } from '@vue/test-utils';
@@ -94,4 +95,11 @@ export const tiedoteStoreMock = (config: Partial<TiedoteStore> = {}) => {
     async getUusimmat() {},
     ...config,
   } as TiedoteStore);
+};
+
+
+export const perusteDataStoreMock = (config: Partial<PerusteDataStore> = {}) => {
+  return wrap(PerusteDataStore.prototype, {
+    ...config,
+  } as PerusteDataStore);
 };

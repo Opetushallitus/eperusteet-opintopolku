@@ -11,7 +11,7 @@
                 </router-link>
               </li>
               <li class="breadcrumb-item"
-                  :class="{ 'breadcrumb-truncated': idx < murupolku.length - 1 }"
+                  :class="{ 'breadcrumb-truncated': idx < murupolku.length - 2 }"
                   v-for="(item, idx) in murupolkuFiltered"
                   :key="idx">
                 <router-link class="breadcrumb-normal" :to="item.to">

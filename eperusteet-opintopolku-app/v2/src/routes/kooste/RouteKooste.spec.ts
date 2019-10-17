@@ -1,10 +1,12 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteKooste from './RouteKooste.vue';
 import { mocks, stubs, tiedoteStoreMock, perusteKoosteStoreMock } from '@/jestutils';
+import { KieliStore } from '@shared/stores/kieli';
 
 
 describe('RouteHome', () => {
   const localVue = createLocalVue();
+  KieliStore.setup(localVue);
 
   test('Renders spinners and data', async () => {
     const perusteKoosteStore = perusteKoosteStoreMock();

@@ -3,6 +3,8 @@ import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
+import { perusteetQuery } from '@/api/eperusteet';
 
 
 @Store
@@ -12,6 +14,8 @@ export class PerusteDataStore {
   @State() public sisalto: Matala | null = null;
   @State() public suoritustapa: string | null = null;
   @State() public viiteId: number | null = null;
+  @State() public dokumentit: any = {};
+  @State() public korvaavatPerusteet: any[] = [];
   @State() public sidenavFilter: SidenavFilter = {
     label: '',
     isEnabled: false,
@@ -60,6 +64,35 @@ export class PerusteDataStore {
       }
     }
     return null;
+  }
+
+  public async getDokumentit(sisaltoKieli) {
+    if (!this.peruste) {
+      return;
+    }
+
+    const suoritustavat = this.peruste.suoritustavat;
+    if (suoritustavat) {
+      for (let i = 0; i < suoritustavat.length; i++) {
+        const st = suoritustavat[i];
+        const suoritustapakoodi = st.suoritustapakoodi;
+        if (suoritustapakoodi) {
+          const dokumenttiId = await Dokumentit.getDokumenttiId(this.peruste!.id!, sisaltoKieli, suoritustapakoodi);
+          this.dokumentit[sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId.data).url;
+        }
+      }
+    }
+  }
+
+  async getKorvaavatPerusteet() {
+    if (!this.peruste) {
+      return;
+    }
+
+    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, diaarinumero => ({
+      diaarinumero,
+      perusteet: perusteetQuery({ diaarinumero }),
+    })));
   }
 
   public async updateViiteId(value) {
