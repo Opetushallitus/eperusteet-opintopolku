@@ -59,6 +59,7 @@ script:
   - nvm use 10.16.3
   - cd eperusteet-opintopolku-app/v2
   - yarn run lint
+  - yarn run build
   - yarn run test:unit
   - cd ../..
 
