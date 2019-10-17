@@ -1,7 +1,7 @@
 <template>
 <div>
   <header role="banner">
-    <ep-navigation :sticky="true"></ep-navigation>
+    <ep-navigation></ep-navigation>
   </header>
   <main class="router-container" role="main">
     <router-view />
@@ -27,6 +27,10 @@ export default class Root extends Vue {
 
 <style lang="scss">
 @import '../styles/_variables.scss';
+
+header {
+  background-color: white;
+}
 
 main.router-container {
   min-height: calc(100vh - 400px);
