@@ -10,7 +10,7 @@ export class TiedoteStore {
   @State() public tiedotteet: TiedoteDto[] | null = null;
   @State() public filter = {
     nimi: '',
-    kieli: [ 'fi' ],
+    kieli: ['fi'],
     sivu: 0,
     sivukoko: 10,
   };

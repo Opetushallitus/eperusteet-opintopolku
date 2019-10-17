@@ -54,7 +54,7 @@ export default class EpNavigation extends Vue {
       'fi',
       'sv',
       'en'
-    ]
+    ];
   }
 
   get sisaltoKieli() {
