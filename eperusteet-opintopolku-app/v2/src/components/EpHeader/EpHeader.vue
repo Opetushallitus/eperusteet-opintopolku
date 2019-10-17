@@ -12,7 +12,7 @@
               </li>
               <li class="breadcrumb-item"
                   :class="{ 'breadcrumb-truncated': idx < murupolku.length - 1 }"
-                  v-for="(item, idx) in murupolku"
+                  v-for="(item, idx) in murupolkuFiltered"
                   :key="idx">
                 <router-link class="breadcrumb-normal" :to="item.to">
                   {{ item.label }}
@@ -59,11 +59,20 @@ export default class EpHeader extends Vue {
   @Prop({ required: true })
   private murupolku!: Muru[];
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   private koulutustyyppi!: string;
 
+  get murupolkuFiltered() {
+    return _.filter(this.murupolku, (muru) => muru.label && muru.to);
+  }
+
   get theme() {
-    return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
+    if (this.koulutustyyppi) {
+      return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
+    }
+    else {
+      return 'default';
+    }
   }
 
 }
@@ -71,6 +80,8 @@ export default class EpHeader extends Vue {
 
 
 <style scoped lang="scss">
+@import '../../styles/_variables.scss';
+
 .kooste-header {
   height: 238px;
   background-repeat: no-repeat;
@@ -108,6 +119,10 @@ export default class EpHeader extends Vue {
     &.koulutustyyppi-varhaiskasvatus {
       background-color: #ffcc33;
     }
+
+    &.default {
+      background-color: $uutiset-header-background;
+    }
   }
 
   .bg-right {
@@ -143,6 +158,10 @@ export default class EpHeader extends Vue {
       background-image: url('../../../public/img/banners/aalto_taiteet.svg');
     }
 
+    &.default {
+      background-color: $uutiset-header-background;
+    }
+
   }
 
   .murupolku {
@@ -151,7 +170,7 @@ export default class EpHeader extends Vue {
   }
 
   h1.nimi {
-    margin-top: 0px;
+    margin-top: 0;
     height: 75px;
     font-weight: bold;
     font-size: 32px;
@@ -161,8 +180,8 @@ export default class EpHeader extends Vue {
   ol.breadcrumb {
     font-size: 14px;
     background: none;
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 
     .breadcrumb-home {
       color: #fff;
@@ -186,8 +205,8 @@ export default class EpHeader extends Vue {
 }
 
 .container.sisalto {
-  margin-top: 40px;
-  margin-bottom: 40px;
+  margin-top: $sisalto-container-margin;
+  margin-bottom: $sisalto-container-margin;
 }
 
 </style>

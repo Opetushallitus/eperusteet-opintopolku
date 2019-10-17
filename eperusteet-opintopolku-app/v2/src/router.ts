@@ -33,7 +33,24 @@ const tiedoteStore = new TiedoteStore();
 
 
 export const router = new Router({
-  // scrollBehavior: () => ({ x: 0, y: 0 }),
+  scrollBehavior: (to, from, savedPosition) => {
+    // if (savedPosition) {
+    //   return savedPosition;
+    // }
+    // else if (to.hash) {
+    //   return {
+    //     selector: to.hash
+    //   };
+    // }
+    // else if (to.name === 'tekstikappale') {
+    //   return {
+    //     selector: '#tekstikappale-otsikko'
+    //   };
+    // }
+    // else {
+    //   return { x: 0, y: 0 };
+    // }
+  },
   routes: [{
     path: '/',
     redirect: () => '/fi',
@@ -78,6 +95,18 @@ export const router = new Router({
       path: 'uutiset',
       name: 'uutiset',
       component: RouteUutiset,
+      meta: {
+        resolve: {
+          async props() {
+            return {
+              default: {
+                perusteStore,
+                tiedoteStore,
+              },
+            };
+          },
+        },
+      },
     }, {
       path: ':koulutustyyppi/:perusteId',
       name: 'peruste',
@@ -105,7 +134,7 @@ export const router = new Router({
         component: RouteTiedot,
         name: 'perusteTiedot',
       }, {
-        path: 'tekstikappaleet/:viiteId',
+        path: 'tekstikappale/:viiteId',
         component: RouteTekstikappale,
         name: 'tekstikappale',
         meta: {

@@ -44,5 +44,7 @@ library.add(solid.faEllipsisH);
 library.add(solid.faFolder);
 library.add(solid.faExternalLinkAlt);
 library.add(solid.faEnvelope);
+library.add(solid.faArrowLeft);
+library.add(solid.faArrowRight);
 
 Vue.component('fas', FontAwesomeIcon);

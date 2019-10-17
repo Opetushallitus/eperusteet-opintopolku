@@ -7,6 +7,7 @@ import { RawLocation } from 'vue-router';
 export interface SidenavNode {
   id?: number;
   label: string;
+  depth: number;
   to?: RawLocation;
   isVisible: boolean,
   isFiltered: boolean;
@@ -15,7 +16,7 @@ export interface SidenavNode {
   type: 'root' | 'viite' | 'tiedot';
   perusteenOsa?: object; // todo oikea tyyppi
   children: Array<SidenavNode>;
-  $$path: Array<SidenavNode>;
+  path: Array<SidenavNode>;
 }
 
 export interface SidenavFilter {
@@ -29,33 +30,34 @@ export function nodeToRoute(lapsi: Matala): RawLocation | undefined {
       name: 'tekstikappale',
       params: {
         viiteId: lapsi.id as any,
-      }
+      },
     };
   }
 }
 
-export function traverseSisalto(viiteId: string, sisalto: Matala, path: Array<SidenavNode>, filter: SidenavFilter): SidenavNode[] {
+export function traverseSisalto(viiteId: number, sisalto: Matala, path: Array<SidenavNode>, filter: SidenavFilter): SidenavNode[] {
   return (sisalto.lapset || [])
     .map((lapsi: Matala) => {
       const child: SidenavNode = {
         id: lapsi.id,
         label: handleLabel(lapsi.perusteenOsa!.nimi || 'nimeton'),
+        depth: path.length,
         isVisible: true,
         isFiltered: false,
         isMatch: false,
         isCollapsed: false,
         perusteenOsa: lapsi.perusteenOsa,
         children: [],
-        $$path: path,
+        path,
         type: 'viite',
         to: nodeToRoute(lapsi),
       };
 
       // Collapse if not open
-      handleCollapse(viiteId, child, [...path, child]);
+      handleCollapse(viiteId, child, path);
 
       // Filter by label
-      handleFilter(child, [...path, child], filter);
+      handleFilter(child, path, filter);
 
       child.children = traverseSisalto(viiteId, lapsi, [...path, child], filter);
       return child;
@@ -75,7 +77,7 @@ function handleCollapse(viiteId: number, child, path) {
 }
 
 function handleFilter(child, path, filter) {
-  if (_.includes(_.lowerCase(child.label), _.lowerCase(filter.label))) {
+  if (Kielet.search(filter.label, child.label)) {
     child.isFiltered = true;
     child.isMatch = true;
     for (const node of path) {
@@ -100,25 +102,29 @@ export function buildYksinkertainenNavigation(viiteId: string | number, perusteI
   const root: SidenavNode = {
     type: 'root',
     label: 'root',
+    depth: 0,
     isVisible: false,
     isFiltered: false,
     isMatch: false,
     isCollapsed: false,
     children: [],
-    $$path: [],
+    path: [],
   };
 
   // Lisätään vapaat tekstikappaleet
   root.children = traverseSisalto(
     _.isString(viiteId) ? _.parseInt(viiteId) : viiteId,
     sisalto,
-    [],
+    [
+      root
+    ],
     filter);
 
   // Lisätään tiedot
   const tiedot: SidenavNode = {
     type: 'tiedot',
     label: handleLabel('tiedot'),
+    depth: 1,
     isVisible: true,
     isFiltered: false,
     isMatch: false,
@@ -130,7 +136,9 @@ export function buildYksinkertainenNavigation(viiteId: string | number, perusteI
       }
     },
     children: [],
-    $$path: [],
+    path: [
+      root
+    ],
   };
 
   handleFilter(tiedot, [], filter);

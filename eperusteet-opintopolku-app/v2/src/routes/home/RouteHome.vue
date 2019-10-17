@@ -35,7 +35,7 @@
           <ep-spinner-slot :is-loading="!uusimmat">
             <div class="box" v-for="(peruste, idx) in uusimmat" :key="idx">
               <div class="nimi">
-                <router-link :to="peruste.$$route">
+                <router-link :to="peruste.route">
                   {{ $kaanna(peruste.nimi) }}
                 </router-link>
               </div>
@@ -51,7 +51,7 @@
           <div class="d-flex align-items-center">
             <div class="raita"></div>
             <div class="nimi flex-fill">
-              <router-link :to="peruste.$$route">
+              <router-link :to="peruste.route">
                 {{ $kaanna(peruste.nimi) }}
               </router-link>
             </div>
@@ -66,15 +66,11 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
-import { Opetussuunnitelmat } from '@shared/api/ylops';
-import { PerusteDto, PerusteHakuDto, TiedoteDto } from '@shared/api/tyypit';
+import { PerusteDto } from '@shared/api/tyypit';
 import { PerusteStore } from '@/stores/PerusteStore';
-import { Perusteet, Tiedotteet } from '@shared/api/eperusteet';
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
-import { delay } from '@shared/utils/delay';
 import { koulutustyyppiStateName } from '@/utils/perusteet';
 
 
@@ -86,7 +82,7 @@ function mapRoutes(perusteet: PerusteDto[] | null) {
       }
       return {
         ...peruste,
-        $$route: {
+        route: {
           name: 'kooste',
           params: {
             koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
@@ -147,7 +143,7 @@ export default class RouteHome extends Vue {
     }
   }
 
-  background: #fee; /* TODO: Lisää kuva */
+  background: $etusivu-header-background; /* TODO: Lisää kuva */
 
   .laatikko {
     padding: 25px;

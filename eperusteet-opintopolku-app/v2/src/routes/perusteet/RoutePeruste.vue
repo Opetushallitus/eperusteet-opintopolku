@@ -23,21 +23,25 @@
 </template>
 
 <script lang="ts">
-import { Prop, Mixins, Component } from 'vue-property-decorator';
+import { Vue, Prop, Mixins, Component } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
+import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import { SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+
 
 @Component({
   components: {
     EpSidebar,
     EpPerusteSidenav,
     EpHeader,
+    EpPreviousNextNavigation,
   },
 })
-export default class RoutePeruste extends Mixins(EpPerusteRoute) {
+export default class RoutePeruste extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
@@ -45,24 +49,27 @@ export default class RoutePeruste extends Mixins(EpPerusteRoute) {
     return this.perusteDataStore.sidenav;
   }
 
+  get peruste() {
+    return this.perusteDataStore.peruste;
+  }
+
   get current(): SidenavNode | null {
     return this.perusteDataStore.current;
   }
 
   get murupolku() {
-    let result = [{
-      label: (this as any).$kaanna(this.peruste.nimi),
-      to: this.$route
-    }];
-
-    if (this.current) {
-      result = [
-        ...result,
-        ...this.current.$$path,
+    if (this.peruste && this.current) {
+      return [{
+          label: (this as any).$kaanna(this.peruste.nimi),
+          to: this.$route
+        },
+        ...this.current.path,
         this.current,
       ];
     }
-    return result;
+    else {
+      return [];
+    }
   }
 
 }

@@ -82,21 +82,25 @@
       <!-- todo: kv-liitteet -->
     </div>
   </div>
+  <ep-previous-next-navigation :sidenav="sidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Mixins } from 'vue-property-decorator';
+import { Prop, Vue, Component, Mixins } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSelect from '@shared/components/forms/EpSelect.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
+
 
 @Component({
   components: {
@@ -105,26 +109,40 @@ import { Kielet } from '@shared/stores/kieli';
     EpSelect,
     EpDatepicker,
     EpSpinner,
+    EpPreviousNextNavigation,
   },
 })
-export default class RouteTiedot extends Mixins(EpPerusteRoute) {
+export default class RouteTiedot extends Vue {
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
+
+  private isLoading = true;
   private maarayskirjeObj;
   private muutosmaarayksetObj = {};
   private korvaavatPerusteet: object[] = [];
   private dokumenttiObj = {};
 
-  public async init() {
+  async mounted() {
     await this.handleMaarayskirje();
     await this.handleMuutosmaaraykset();
     await this.handleKorvaavatPerusteet();
     await this.handleDokumentti();
+    this.isLoading = false;
   }
 
-  private handleMaarayskirje() {
+  get peruste() {
+    return this.perusteDataStore.peruste;
+  }
+
+  get sidenav() {
+    return this.perusteDataStore.sidenav;
+  }
+
+  handleMaarayskirje() {
     this.maarayskirjeObj = this.handleMaarays(this.peruste.maarayskirje);
   }
 
-  private handleMuutosmaaraykset() {
+  handleMuutosmaaraykset() {
     _.each(this.peruste.muutosmaaraykset, muutosmaarays => {
       const maaraysObj = this.handleMaarays(muutosmaarays);
       _.each(maaraysObj, (maarays, kieli) => {
@@ -136,7 +154,7 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
     });
   }
 
-  private handleMaarays(maaraysObj) {
+  handleMaarays(maaraysObj) {
     const result = {};
     if (maaraysObj) {
       // Käytetään ensisijaisesti liitteitä
@@ -160,7 +178,7 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
     return result;
   }
 
-  private async handleKorvaavatPerusteet() {
+  async handleKorvaavatPerusteet() {
     const diaarinumerot = this.peruste.korvattavatDiaarinumerot;
     if (!diaarinumerot) {
       return;
@@ -186,41 +204,41 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
     return Kielet.getSisaltoKieli();
   }
 
-  private async handleDokumentti() {
+  async handleDokumentti() {
     const suoritustavat = this.peruste.suoritustavat;
     if (suoritustavat) {
       for (let i = 0; i < suoritustavat.length; i++) {
         const st = suoritustavat[i];
         const suoritustapakoodi = st.suoritustapakoodi;
         if (suoritustapakoodi) {
-          const dokumenttiId = await Dokumentit.getDokumenttiId(this.perusteId, this.sisaltoKieli, suoritustapakoodi);
+          const dokumenttiId = await Dokumentit.getDokumenttiId(this.peruste.id, this.sisaltoKieli, suoritustapakoodi);
           this.dokumenttiObj[this.sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId.data).url;
         }
       }
     }
   }
 
-  private get maarayskirje() {
+  get maarayskirje() {
     return (this as any).$kaanna(this.maarayskirjeObj);
   }
 
-  private get hasMaarayskirje() {
+  get hasMaarayskirje() {
     return this.peruste.maarayskirje && (this as any).$kaanna(this.maarayskirjeObj);
   }
 
-  private get hasMuutosmaaraykset() {
+  get hasMuutosmaaraykset() {
     return !_.isEmpty(this.peruste.muutosmaaraykset);
   }
 
-  private get muutosmaaraykset() {
+  get muutosmaaraykset() {
     return (this as any).$kaanna(this.muutosmaarayksetObj);
   }
 
-  private get hasKorvattavatDiaarinumerot() {
+  get hasKorvattavatDiaarinumerot() {
     return !_.isEmpty(this.peruste.korvattavatDiaarinumerot);
   }
 
-  private get korvattavatDiaarinumerotFields() {
+  get korvattavatDiaarinumerotFields() {
     return [{
       key: 'diaarinumero',
       label: this.$t('diaarinumero'),
@@ -230,11 +248,11 @@ export default class RouteTiedot extends Mixins(EpPerusteRoute) {
     }];
   }
 
-  private get hasDokumentti() {
+  get hasDokumentti() {
     return this.dokumenttiObj && (this as any).$kaanna(this.dokumenttiObj);
   }
 
-  private get dokumentti() {
+  get dokumentti() {
     return (this as any).$kaanna(this.dokumenttiObj);
   }
 }
