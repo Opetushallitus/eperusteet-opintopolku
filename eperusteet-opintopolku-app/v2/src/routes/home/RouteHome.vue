@@ -48,14 +48,16 @@
       <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
       <ep-spinner-slot :is-loading="!perusteet">
         <div class="valtakunnallinen" v-for="(peruste, idx) in perusteet" :key="idx">
-          <div class="d-flex align-items-center">
-            <div class="raita"></div>
-            <div class="nimi flex-fill">
+          <div class="d-flex justify-content-between align-content-stretch">
+            <div class="raita m-2"></div>
+            <div class="nimi flex-fill m-2">
               <router-link :to="peruste.route">
                 {{ $kaanna(peruste.nimi) }}
               </router-link>
             </div>
-            <div class="luotu">{{ $sd(peruste.luotu) }}</div>
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <div class="luotu m-2">{{ $sd(peruste.luotu) }}</div>
+            </div>
           </div>
         </div>
       </ep-spinner-slot>
@@ -170,16 +172,17 @@ export default class RouteHome extends Vue {
 
 .container {
   .valtakunnallinen {
-    height: 80px;
+    min-height: 80px;
     border: 2px solid #DADADA;
     margin-bottom: 5px;
-    border-radius: 2px;
+
+    .nimi {
+      overflow-x: auto;
+    }
 
     .raita {
-      display: block;
-      width: 5px;
-      height: 50px;
-      margin: 15px 20px 15px 15px;
+      flex: 0 0 5px;
+      min-height: 60px;
       background-color: #368715;
       border-radius: 3px;
     }
@@ -187,7 +190,6 @@ export default class RouteHome extends Vue {
     .luotu {
       color: #878787;
       font-size: 80%;
-      margin-right: 15px;
     }
   }
 
