@@ -67,8 +67,8 @@ export default class EpNavigation extends Vue {
   }
 
   get activeClass() {
-    const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
-    if (koulutustyyppi) {
+    if (this.$route && this.$route.params.koulutustyyppi) {
+      const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
       return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
     }
     else {
