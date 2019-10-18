@@ -28,6 +28,7 @@ import EpPerusteSidenavNode from '@/components/EpPerusteSidenav/EpPerusteSidenav
 export default class EpPerusteSidenav extends Vue {
     @Prop({ required: true })
     private perusteDataStore!: PerusteDataStore;
+
     private query = '';
 
     private setValue(value) {

@@ -1,8 +1,11 @@
 <template>
-<div>
+<div class="peruste">
   <ep-header :koulutustyyppi="peruste.koulutustyyppi" :murupolku="murupolku">
     <template slot="header">
       {{ $kaanna(peruste.nimi) }}
+      <div class="diaarinumero">
+        {{ peruste.diaarinumero }}
+      </div>
     </template>
   </ep-header>
   <div class="container">
@@ -75,4 +78,9 @@ export default class RoutePeruste extends Vue {
 </script>
 
 <style scoped lang="scss">
+.peruste {
+  .diaarinumero {
+    font-size: small;
+  }
+}
 </style>
