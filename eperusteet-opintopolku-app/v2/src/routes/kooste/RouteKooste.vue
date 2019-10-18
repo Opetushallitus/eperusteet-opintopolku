@@ -9,7 +9,7 @@
       <b-row>
         <b-col lg="8" class="tile">
           <h2>{{ $t('perusteet') }}</h2>
-          <div class="perustebox d-flex">
+          <div class="perustebox d-flex" v-if="perusteet">
             <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
               <div class="upper">
                 <div class="peruste-ikoni">
@@ -41,6 +41,7 @@
               <!-- </router-link>                                                                  -->
             </div>
           </div>
+          <ep-spinner v-else />
         </b-col>
         <b-col lg="4" class="tile">
           <h2>{{ $t('tiedotteet') }}</h2>
@@ -114,78 +115,20 @@ export default class RouteKooste extends Vue {
 @import '../../styles/_variables.scss';
 
 .container {
-  .paikalliset {
-    margin-top: 31px;
-
-    h2.otsikko {
-      font-weight: bolder;
-      margin-bottom: 43px;
-      font-size: 29px;
-    }
-  }
-
-  .paikalliset {
-    margin: 0 10px 10px 10px;
-
-    .peruste-nav {
-      .peruste {
-        color: #575757;
-      }
-    }
-
-    .opetussuunnitelma {
-      border: 1px solid #DADADA;
-      border-radius: 2px;
-      min-height: 80px;
-      margin-bottom: 10px;
-
-      .opsicon-wrapper {
-        padding: 20px 25px 20px 25px;
-
-        .opsicon {
-          height: 40px;
-          width: 40px;
-          background: url('../../../public/img/icons/opskortti.svg');
-          background-size: 40px 40px;
-        }
-
-      }
-
-      .nimi {
-        padding: 0px;
-
-        .ops {
-          margin-bottom: 8px;
-        }
-      }
-
-      .perusteen-nimi {
-        padding: 20px;
-      }
-
-      .organisaatiot {
-        .toimijat {
-          color: #555;
-          font-size: smaller;
-        }
-
-        .otsikko {
-          color: #2B2B2B;
-          font-size: smaller;
-        }
-      }
-    }
-  }
-
   .tile {
-    margin-top: 31px;
+    // Todo: käytä muuttujia
+    @media (max-width: 991.98px) {
+      &:not(:first-child) {
+        margin-top: 3rem;
+      }
+    }
 
     h2 {
       font-weight: bolder;
     }
 
     .perustebox {
-      margin-top: 43px;
+      margin-top: 3rem;
 
       .peruste {
         border-radius: 10px;
@@ -198,7 +141,7 @@ export default class RouteKooste extends Vue {
         .voimaantulo {
           border-top: 1px solid #EBEBEB;
           color: #001A58;
-          font-size: 15px;
+          font-size: smaller;
           height: 40px;
           padding-top: 4px;
           text-align: center;
@@ -206,6 +149,7 @@ export default class RouteKooste extends Vue {
 
         .upper {
           height: 180px;
+          overflow-y: auto;
 
           .peruste-ikoni {
             color: #0041DC;
@@ -219,6 +163,8 @@ export default class RouteKooste extends Vue {
           }
 
           .nimi {
+            hyphens: auto;
+            overflow-x: auto;
             width: 100%;
             padding: 12px;
             padding-top: 0;
@@ -230,12 +176,11 @@ export default class RouteKooste extends Vue {
     }
 
     .tiedotebox {
-      margin-top: 43px;
-      min-height: 310px;
+      margin-top: 3rem;
 
       .tiedote {
-        margin-bottom: 15px;
         padding: 5px;
+        margin-bottom: 1rem;
 
         &:nth-child(odd) {
           background-color: #F9F9F9;
@@ -249,4 +194,9 @@ export default class RouteKooste extends Vue {
     }
   }
 }
+
+.row {
+  margin-bottom: 3rem;
+}
+
 </style>

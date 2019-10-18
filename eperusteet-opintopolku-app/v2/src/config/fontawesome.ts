@@ -46,5 +46,6 @@ library.add(solid.faExternalLinkAlt);
 library.add(solid.faEnvelope);
 library.add(solid.faArrowLeft);
 library.add(solid.faArrowRight);
+library.add(solid.faLanguage);
 
 Vue.component('fas', FontAwesomeIcon);

@@ -1,14 +1,13 @@
 <template>
-<div class="d-flex justify-content-between mt-5" v-if="previous || next">
+<div class="d-flex flex-column flex-lg-row justify-content-between mt-5" v-if="previous || next">
     <b-link v-if="previous && previous.to" :to="previous.to">
         <div class="d-flex align-items-center">
             <fas icon="arrow-left"></fas>
             <span class="mx-2">{{ previous.label }}</span>
         </div>
     </b-link>
-    <div v-else class="d-flex align-items-center"><!-- placeholder for next --></div>
 
-    <b-link v-if="next && next.to" :to="next.to">
+    <b-link v-if="next && next.to" :to="next.to" class="ml-auto">
         <div class="d-flex align-items-center">
             <span class="mx-2">{{ next.label }}</span>
             <fas icon="arrow-right"></fas>
@@ -85,5 +84,4 @@ export default class EpPreviousNextNavigation extends Vue {
 
 
 <style scoped lang="scss">
-
 </style>

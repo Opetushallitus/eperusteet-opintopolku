@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <div class="kooste-header">
-      <div class="container">
+<div>
+  <div class="kooste-header" :class="theme">
+    <div class="container">
+      <div class="col">
         <div class="murupolku">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <router-link class="breadcrumb-home" :to="{ name: 'root' }">
+           <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" :style="style">
+              <li class="breadcrumb-item" :style="style">
+                <router-link class="breadcrumb-home" :to="{ name: 'root' }" :style="style">
                   {{ $t('eperusteet') }}
                 </router-link>
               </li>
@@ -14,7 +15,7 @@
                   :class="{ 'breadcrumb-truncated': idx < murupolku.length - 2 }"
                   v-for="(item, idx) in murupolkuFiltered"
                   :key="idx">
-                <router-link class="breadcrumb-normal" :to="item.to">
+                <router-link class="breadcrumb-normal" :style="style" :to="item.to">
                   {{ item.label }}
                 </router-link>
               </li>
@@ -22,33 +23,30 @@
           </nav>
           <slot name="murupolku"></slot>
         </div>
-        <h1 class="nimi">
+        <h1 class="nimi" :style="style">
           <slot name="header"></slot>
         </h1>
       </div>
-      <div class="bg-left" :class="theme"></div>
-      <div class="bg-right" :class="theme"></div>
-    </div>
-    <div class="container sisalto">
-      <slot></slot>
     </div>
   </div>
+  <div class="container sisalto">
+    <slot></slot>
+  </div>
+</div>
 </template>
 
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme } from '@/utils/perusteet';
 import Tausta from './Tausta.vue';
 import { RawLocation } from 'vue-router';
+import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@/utils/perusteet';
 import _ from 'lodash';
-
 
 export interface Muru {
   label: string;
   to: RawLocation;
 }
-
 
 @Component({
   components: {
@@ -71,117 +69,83 @@ export default class EpHeader extends Vue {
     if (this.koulutustyyppi) {
       return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
     }
-    else {
-      return 'default';
-    }
   }
 
+  get bgColor() {
+    return koulutustyyppiThemeColor(this.koulutustyyppi);
+  }
+
+  get textColor() {
+    return calculateVisibleColor(this.bgColor, 125);
+  }
+
+  get style() {
+    return {
+      color: this.textColor === 'black' ? '#001A58' : '#fff',
+    };
+  }
 }
 </script>
 
 
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
+$kooste-padding: 80px;
 
 .kooste-header {
-  height: 238px;
-  background-repeat: no-repeat;
+  min-height: 238px;
+  max-height: 238px;
   position: relative;
   width: 100%;
-  z-index: -999;
-  padding-left: 25px;
-
-  @media(max-width: 768px) {
-    padding-left: 15px;
+  padding: 80px 0;
+  @media (max-width: 991.98px) {
+      padding-top: 40px;
+      padding-bottom: 40px;
+      background: none;
+      min-height: 0px;
   }
 
-  .bg-left {
-    left: 0;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-    width: calc(100vw - 1440px);
-    z-index: -1000;
+  background-repeat: no-repeat;
+  background-color: $uutiset-header-background;
+  background-position-x: right;
 
-    &.koulutustyyppi-ammatillinen {
-      background-color: #008800;
-    }
-
-    &.koulutustyyppi-esiopetus {
-      background-color: #84d2ff;
-    }
-
-    &.koulutustyyppi-lukio {
-      background-color: #0143da;
-    }
-
-    &.koulutustyyppi-perusopetus {
-      background-color: #67cccc;
-    }
-
-    &.koulutustyyppi-taiteenperusopetus {
-      background-color: #f3d3f1;
-    }
-
-    &.koulutustyyppi-varhaiskasvatus {
-      background-color: #ffcc33;
-    }
-
-    &.default {
-      background-color: $uutiset-header-background;
-    }
+  &.koulutustyyppi-ammatillinen {
+    background-color: $koulutustyyppi-ammatillinen-color;
+    background-image: url('../../../public/img/banners/aallot_ammatillinen.svg');
   }
-
-  .bg-right {
-    background-position: right;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-    width: 1440px;
-    z-index: -1000;
-
-    &.koulutustyyppi-ammatillinen {
-      background-image: url('../../../public/img/banners/aallot_ammatillinen.svg');
-    }
-
-    &.koulutustyyppi-esiopetus {
-      background-image: url('../../../public/img/banners/aallot_esiopetus.svg');
-    }
-
-    &.koulutustyyppi-lukio {
-      background-image: url('../../../public/img/banners/aallot_lukio.svg');
-    }
-
-    &.koulutustyyppi-perusopetus {
-      background-image: url('../../../public/img/banners/aallot_perusopetus.svg');
-    }
-
-    &.koulutustyyppi-varhaiskasvatus {
-      background-image: url('../../../public/img/banners/aallot_varhaiskasvatus.svg');
-    }
-
-    &.koulutustyyppi-taiteenperusopetus {
-      background-image: url('../../../public/img/banners/aalto_taiteet.svg');
-    }
-
-    &.default {
-      background-color: $uutiset-header-background;
-    }
-
+  &.koulutustyyppi-esiopetus {
+    background-color: $koulutustyyppi-esiopetus-color;
+    background-image: url('../../../public/img/banners/aallot_esiopetus.svg');
+  }
+  &.koulutustyyppi-lukio {
+    background-color: $koulutustyyppi-lukio-color;
+    background-image: url('../../../public/img/banners/aallot_lukio.svg');
+  }
+  &.koulutustyyppi-perusopetus {
+    background-color: $koulutustyyppi-perusopetus-color;
+    background-image: url('../../../public/img/banners/aallot_perusopetus.svg');
+  }
+  &.koulutustyyppi-varhaiskasvatus {
+    background-color: $koulutustyyppi-varhaiskasvatus-color;
+    background-image: url('../../../public/img/banners/aallot_varhaiskasvatus.svg');
+  }
+  &.koulutustyyppi-taiteenperusopetus {
+    background-color: $koulutustyyppi-taiteenperusopetus-color;
+    background-image: url('../../../public/img/banners/aallot_taiteenperusopetus.svg');
   }
 
   .murupolku {
-    padding-top: 81px;
-    height: 119px;
+    margin-bottom: 0.5rem;
   }
 
   h1.nimi {
     margin-top: 0;
-    height: 75px;
     font-weight: bold;
-    font-size: 32px;
+    font-size: 2rem;
     color: #fff;
+    @media (max-width: 991.98px) {
+      font-size: 1.5rem;
+    }
   }
 
   ol.breadcrumb {
@@ -191,24 +155,17 @@ export default class EpHeader extends Vue {
     padding: 0;
 
     .breadcrumb-home {
-      color: #fff;
       font-weight: bolder;
     }
 
     .breadcrumb-truncated {
-      color: #fff;
       max-width: 140px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
-
-    .breadcrumb-item {
-      .breadcrumb-normal {
-        color: #fff;
-      }
-    }
   }
+
 }
 
 .container.sisalto {

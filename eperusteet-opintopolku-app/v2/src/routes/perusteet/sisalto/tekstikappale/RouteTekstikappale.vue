@@ -1,13 +1,13 @@
 <template>
 <div class="content">
-  <h1 class="teksti" id="tekstikappale-otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h1>
+  <h2 class="otsikko" id="tekstikappale-otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
   <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
 
   <!-- Alikappaleet -->
   <ep-spinner v-if="isLoading" />
   <div v-else>
     <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
-      <h2 class="teksti">{{ $kaanna(alikappale.nimi) }}</h2>
+      <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
       <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
     </div>
   </div>
@@ -94,8 +94,9 @@ export default class RouteTekstikappale extends Vue {
 
 .content {
   padding: 0 $content-padding;
+  overflow-x: auto;
 
-  .teksti {
+  .otsikko, .teksti {
     hyphens: auto;
 
     & /deep/ p {

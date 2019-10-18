@@ -31,6 +31,7 @@ export default class EpPerusteSidenav extends Vue {
     private query = '';
 
     private setValue(value) {
+      this.query = value;
       this.perusteDataStore.updateFilter({
         isEnabled: !_.isEmpty(value),
         label: value,

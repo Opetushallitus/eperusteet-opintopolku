@@ -162,7 +162,6 @@ export default class Paikalliset extends Vue {
 
   h2.otsikko {
     font-weight: bolder;
-    margin-bottom: 43px;
   }
 
   .peruste-nav {

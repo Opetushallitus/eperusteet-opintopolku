@@ -72,7 +72,6 @@ export default class EpFooter extends Vue {
 footer {
   border-top: 1px solid #ccc;
   padding: 0;
-  hyphens: none;
 
   img {
     width: 200px;
