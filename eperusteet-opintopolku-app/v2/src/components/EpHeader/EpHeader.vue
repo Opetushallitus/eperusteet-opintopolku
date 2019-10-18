@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="kooste-header">
+    <div class="kooste-header" :class="theme">
       <div class="container">
         <div class="col">
           <div class="murupolku">
@@ -23,8 +23,6 @@
           </h1>
         </div>
       </div>
-      <div class="bg-left" :class="theme"></div>
-      <div class="bg-right" :class="theme"></div>
     </div>
     <div class="container sisalto">
       <slot></slot>
@@ -49,9 +47,6 @@ export default class EpHeader extends Vue {
   get theme() {
     if (this.koulutustyyppi) {
       return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
-    }
-    else {
-      return 'default';
     }
   }
 
@@ -78,86 +73,57 @@ export default class EpHeader extends Vue {
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
 
+$kooste-padding: 80px;
+
 .kooste-header {
   min-height: 238px;
-  background-repeat: no-repeat;
   position: relative;
   width: 100%;
+  padding: 80px 0;
 
-  .bg-left {
-    left: 0;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-    width: calc(100vw - 1440px);
-    z-index: -1000;
-
-    &.koulutustyyppi-ammatillinen {
-      background-color: #008800;
-    }
-
-    &.koulutustyyppi-esiopetus {
-      background-color: #84d2ff;
-    }
-
-    &.koulutustyyppi-lukio {
-      background-color: #0143da;
-    }
-
-    &.koulutustyyppi-perusopetus {
-      background-color: #67cccc;
-    }
-
-    &.koulutustyyppi-varhaiskasvatus {
-      background-color: #ffcc33;
-    }
-
-    &.default {
-      background-color: $uutiset-header-background;
-    }
+  @media (max-width: 991.98px) {
+      padding-top: 40px;
+      padding-bottom: 40px;
+      background: none;
+      min-height: 0px;
   }
 
-  .bg-right {
-    background-position: right;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    position: absolute;
-    width: 1440px;
-    z-index: -1000;
+  background-repeat: no-repeat;
+  background-color: $uutiset-header-background;
+  background-position-x: right;
 
-    &.koulutustyyppi-ammatillinen {
-      background-image: url('../../../public/img/banners/aallot_ammatillinen.svg');
-    }
+  &.koulutustyyppi-ammatillinen {
+    background-color: $koulutustyyppi-ammatillinen-color;
+    background-image: url('../../../public/img/banners/aallot_ammatillinen.svg');
+  }
 
-    &.koulutustyyppi-esiopetus {
-      background-image: url('../../../public/img/banners/aallot_esiopetus.svg');
-    }
+  &.koulutustyyppi-esiopetus {
+    background-color: $koulutustyyppi-esiopetus-color;
+    background-image: url('../../../public/img/banners/aallot_esiopetus.svg');
+  }
 
-    &.koulutustyyppi-lukio {
-      background-image: url('../../../public/img/banners/aallot_lukio.svg');
-    }
+  &.koulutustyyppi-lukio {
+    background-color: $koulutustyyppi-lukio-color;
+    background-image: url('../../../public/img/banners/aallot_lukio.svg');
+  }
 
-    &.koulutustyyppi-perusopetus {
-      background-image: url('../../../public/img/banners/aallot_perusopetus.svg');
-    }
+  &.koulutustyyppi-perusopetus {
+    background-color: $koulutustyyppi-perusopetus-color;
+    background-image: url('../../../public/img/banners/aallot_perusopetus.svg');
+  }
 
-    &.koulutustyyppi-varhaiskasvatus {
-      background-image: url('../../../public/img/banners/aallot_varhaiskasvatus.svg');
-    }
+  &.koulutustyyppi-varhaiskasvatus {
+    background-color: $koulutustyyppi-varhaiskasvatus-color;
+    background-image: url('../../../public/img/banners/aallot_varhaiskasvatus.svg');
+  }
 
-    &.default {
-      background-color: $uutiset-header-background;
-    }
+  &.koulutustyyppi-taiteenperusopetus {
+    background-color: $koulutustyyppi-taiteenperusopetus-color;
+    background-image: url('../../../public/img/banners/aallot_taiteenperusopetus.svg');
   }
 
   .murupolku {
-    padding-top: 80px;
-    padding-bottom: 1rem;
-
-    @media (max-width: 991.98px) {
-      padding-top: 40px;
-    }
+    margin-bottom: 0.5rem;
   }
 
   h1.nimi {

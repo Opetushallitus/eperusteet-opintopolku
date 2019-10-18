@@ -138,23 +138,23 @@ export default class EpNavigation extends Vue {
         border-bottom: gray 0.25rem solid;
 
         &.koulutustyyppi-ammatillinen {
-          border-bottom-color: #008800;
+          border-bottom-color: $koulutustyyppi-ammatillinen-color;
         }
 
         &.koulutustyyppi-esiopetus {
-          border-bottom-color: #84d2ff;
+          border-bottom-color: $koulutustyyppi-esiopetus-color;
         }
 
         &.koulutustyyppi-lukio {
-          border-bottom-color: #0143da;
+          border-bottom-color: $koulutustyyppi-lukio-color;
         }
 
         &.koulutustyyppi-perusopetus {
-          border-bottom-color: #67cccc;
+          border-bottom-color: $koulutustyyppi-perusopetus-color;
         }
 
         &.koulutustyyppi-varhaiskasvatus {
-          border-bottom-color: #ffcc33;
+          border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
         }
       }
     }
