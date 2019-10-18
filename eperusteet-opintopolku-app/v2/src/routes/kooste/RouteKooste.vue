@@ -7,7 +7,7 @@
   <div>
     <b-container fluid>
       <b-row>
-        <b-col lg="8" class="tile">
+        <b-col lg="7" class="tile">
           <h2>{{ $t('perusteet') }}</h2>
           <div class="perustebox d-flex" v-if="perusteet">
             <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
@@ -43,7 +43,7 @@
           </div>
           <ep-spinner v-else />
         </b-col>
-        <b-col lg="4" class="tile">
+        <b-col lg="5" class="tile">
           <h2>{{ $t('tiedotteet') }}</h2>
           <div class="tiedotebox">
             <div v-if="tiedotteet">

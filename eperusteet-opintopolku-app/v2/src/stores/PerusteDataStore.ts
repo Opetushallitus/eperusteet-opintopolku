@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Getter, Store, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/utils/NavigationBuilder';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 

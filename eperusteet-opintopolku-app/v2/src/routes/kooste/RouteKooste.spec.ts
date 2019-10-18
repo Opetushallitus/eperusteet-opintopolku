@@ -4,11 +4,11 @@ import { mocks, stubs, tiedoteStoreMock, perusteKoosteStoreMock } from '@/jestut
 import { KieliStore } from '@shared/stores/kieli';
 
 
-describe('RouteHome', () => {
+describe('RouteKooste', () => {
   const localVue = createLocalVue();
   KieliStore.setup(localVue);
 
-  test('Renders spinners and data', async () => {
+  test('Renders', async () => {
     const perusteKoosteStore = perusteKoosteStoreMock();
     const tiedoteStore = tiedoteStoreMock();
 

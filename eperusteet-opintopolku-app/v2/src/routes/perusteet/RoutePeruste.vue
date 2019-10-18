@@ -27,10 +27,9 @@ import { Vue, Prop, Mixins, Component } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
-import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import { SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+import { SidenavNode } from '@/utils/NavigationBuilder';
 
 
 @Component({

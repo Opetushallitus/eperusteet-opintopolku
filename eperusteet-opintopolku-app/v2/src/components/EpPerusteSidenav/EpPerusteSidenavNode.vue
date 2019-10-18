@@ -18,7 +18,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SidenavFilter, SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+import { SidenavFilter, SidenavNode } from '@/utils/NavigationBuilder';
 
 @Component({
   components: {

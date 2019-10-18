@@ -6,7 +6,7 @@
             class="navbar-ep">
     <b-navbar-brand href="#">
       <b-link :to="{ name: 'root' }">
-        <img src="../../../public/img/icons/eperusteet-logo.svg">
+        <img src="../../../public/img/icons/eperusteet-logo.svg" :alt="$t('eperusteet')">
       </b-link>
     </b-navbar-brand>
 
