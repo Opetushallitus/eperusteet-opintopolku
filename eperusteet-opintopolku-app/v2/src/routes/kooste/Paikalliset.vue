@@ -14,38 +14,41 @@
     </div>
   </div>
 
-  <div class="opetussuunnitelma" v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
-    <div class="d-flex align-items-center">
-      <div class="opsicon-wrapper">
-        <div class="opsicon"></div>
-      </div>
-      <div class="nimi flex-fill">
-        <div class="ops">
-          <router-link :to="{ name: 'ops', params: { 'opsId': ops.id } }">
-            {{ $kaanna(ops.nimi) }}
-          </router-link>
+  <div v-if="perusteKoosteStore.opetussuunnitelmat">
+    <div class="opetussuunnitelma" v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
+      <div class="d-flex align-items-center">
+        <div class="opsicon-wrapper">
+          <div class="opsicon"></div>
         </div>
-        <div class="organisaatiot">
-          <div v-if="ops.toimijat.length > 0">
-            <span class="otsikko">{{ $t('toimijat') }}</span>
-            <span class="mr-1">:</span>
-            <span class="toimijat" v-for="(toimija, tidx) in ops.toimijat" :key="tidx">
-              {{ $kaanna(toimija.nimi) }}<span v-if="tidx < ops.toimijat.length - 1">, </span>
-            </span>
+        <div class="nimi flex-fill">
+          <div class="ops">
+            <router-link :to="{ name: 'ops', params: { 'opsId': ops.id } }">
+              {{ $kaanna(ops.nimi) }}
+            </router-link>
           </div>
-          <div v-if="ops.oppilaitokset.length > 0">
-            <span class="otsikko">{{ $t('oppilaitokset') }}</span>
-            <span class="mr-1">:</span>
-            <span class="toimijat" v-for="(oppilaitos, tidx) in ops.oppilaitokset" :key="tidx">
-              {{ $kaanna(oppilaitos.nimi) }}<span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
-            </span>
+          <div class="organisaatiot">
+            <div v-if="ops.toimijat.length > 0">
+              <span class="otsikko">{{ $t('toimijat') }}</span>
+              <span class="mr-1">:</span>
+              <span class="toimijat" v-for="(toimija, tidx) in ops.toimijat" :key="tidx">
+                {{ $kaanna(toimija.nimi) }}<span v-if="tidx < ops.toimijat.length - 1">, </span>
+              </span>
+            </div>
+            <div v-if="ops.oppilaitokset.length > 0">
+              <span class="otsikko">{{ $t('oppilaitokset') }}</span>
+              <span class="mr-1">:</span>
+              <span class="toimijat" v-for="(oppilaitos, tidx) in ops.oppilaitokset" :key="tidx">
+                {{ $kaanna(oppilaitos.nimi) }}<span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
+              </span>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="perusteen-nimi">
+        <div class="perusteen-nimi">
+        </div>
       </div>
     </div>
   </div>
+  <ep-spinner v-else />
 </div>
 </template>
 
