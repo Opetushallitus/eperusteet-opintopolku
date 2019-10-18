@@ -19,6 +19,13 @@
                   div(ng-if='tavoite.$editing || tavoite.sisaltoalueet')
                     h4(kaanna="'sisaltoalueet'")
                     div(tag-cloud='tavoite.$sisaltoalueet', openable='true', edit-mode='tavoite.$editing', add-label='lisaa-sisaltoalue')
+                  div
+                    h4(kaanna="'arvioinnin-kohde'")
+                    div
+                      p
+                        span(ng-bind="getArvioinninKohteenTeksti(tavoite) | kaanna")
                   div(ng-if='tavoite.$editing || hasArviointi(tavoite)')
                     h4(ng-if='!tavoite.$editing', ng-bind="(tavoite.arvioinninOtsikko || 'arviointi') | kaanna")
                     div(ng-show='hasArviointi(tavoite)', atavoite='tavoite', perusopetuksen-arviointi='tavoite.arvioinninkohteet', edit-mode='tavoite.$editing')
+                  div(ng-if='tavoite.vapaaTeksti')
+                    span(ng-bind-html='tavoite.vapaaTeksti | kaanna | unsafe')

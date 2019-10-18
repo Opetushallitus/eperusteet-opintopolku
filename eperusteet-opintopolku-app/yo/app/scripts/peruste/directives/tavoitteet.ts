@@ -156,6 +156,19 @@ angular
             tavoite.arvioinninkohteet = [{ arvioinninKohde: {}, hyvanOsaamisenKuvaus: {} }];
         };
 
+        $scope.getArvioinninKohteenTeksti = (tavoite) => {
+            
+            const hyvanOsaamisenArvio = _.find(tavoite.arvioinninkohteet, (arvioinninkohde: any) => {
+                return arvioinninkohde.arvosana == 8
+            });
+
+            if(hyvanOsaamisenArvio && !_.isEmpty(hyvanOsaamisenArvio.arvioinninKohde)) {
+                return hyvanOsaamisenArvio.arvioinninKohde;
+            }
+
+            return tavoite.arvioinninKuvaus;
+        }
+
         //var cloner = CloneHelper.init(['tavoite', 'sisaltoalueet', 'laajattavoitteet', 'arvioinninkohteet']);
         //var idFn = function(item) { return item.id; };
         //var filterFn = function(item) { return !item.$hidden; };
