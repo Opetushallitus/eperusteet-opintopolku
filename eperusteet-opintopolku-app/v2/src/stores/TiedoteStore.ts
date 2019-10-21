@@ -16,15 +16,6 @@ export class TiedoteStore {
   };
   @State() public amount = 0;
 
-  @Getter()
-  public data() {
-    return {
-      tiedotteet: this.tiedotteet,
-      filter: this.filter,
-      amount: this.amount,
-    };
-  }
-
   async getUusimmat() {
     this.uusimmatTiedotteet = ((await Tiedotteet.findTiedotteetBy(
       0, 5, this.filter.kieli, undefined, undefined, undefined, true, true)).data as any).data;

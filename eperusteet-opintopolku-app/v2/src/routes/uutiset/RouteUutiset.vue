@@ -64,7 +64,11 @@ export default class RouteUutiset extends Vue {
   }
 
   get tiedotteet() {
-    return this.tiedoteStore.data();
+    return {
+      tiedotteet: this.tiedoteStore.tiedotteet,
+      filter: this.tiedoteStore.filter,
+      amount: this.tiedoteStore.amount,
+    }
   }
 
   get isTiedotteetEmpty() {
@@ -87,7 +91,7 @@ export default class RouteUutiset extends Vue {
   }
 
   get sisaltoKieli() {
-    return Kielet.getSisaltoKieli();
+    return Kielet.getSisaltoKieli;
   }
 }
 </script>
