@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Getter, Store, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/utils/NavigationBuilder';
+import { SidenavFilter, SidenavNode, buildSidenav } from '@/utils/NavigationBuilder';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 
@@ -38,16 +38,33 @@ export class PerusteDataStore {
   }
 
   get sidenav(): SidenavNode | null {
-    if (this.perusteId && this.sisalto) {
-      return buildYksinkertainenNavigation(
-        this.viiteId!,
-        this.perusteId!,
-        this.sisalto!,
-        this.sidenavFilter);
+    if (this.peruste && this.sisalto) {
+      const viiteId = this.viiteId ? this.viiteId : undefined;
+      return buildSidenav(this.peruste, this.sisalto, this.sidenavFilter, viiteId);
     }
     else {
       return null;
     }
+  }
+
+  get flattenedSidenav(): Array<SidenavNode> {
+    const root = this.sidenav;
+    const result: Array<SidenavNode> = [];
+
+    function traverseTree(node: SidenavNode) {
+      result.push(node);
+      (node.children || [])
+          .map(child => {
+            traverseTree(child);
+            return child;
+          });
+    }
+
+    if (root) {
+      traverseTree(root);
+    }
+
+    return result;
   }
 
   get current(): SidenavNode | null {

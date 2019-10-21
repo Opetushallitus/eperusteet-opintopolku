@@ -1,5 +1,5 @@
 <template>
-<div class="node">
+<div class="node" :class="{ 'node-root': isRoot }">
   <div v-if="!isRoot">
     <b-link v-if="node.to" :to="node.to">
       <span class="label" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
@@ -58,9 +58,10 @@ export default class EpPerusteSidenavNode extends Vue {
 
 .node {
   color: $sidenav-color;
-  padding: 0.25em 0;
   hyphens: auto;
-  margin-top: 10px;
+  &:not(.node-root) {
+    padding-top: 1em;
+  }
 
   &.root {
     padding: 0;
@@ -77,12 +78,15 @@ export default class EpPerusteSidenavNode extends Vue {
     margin: 0;
   }
 
+  // First element shouldn't has top padding
   ul.root-list {
     padding-left: 0;
+    & > li:first-child > .node {
+      padding-top: 0;
+    }
   }
 
   .router-link-active {
-    //text-decoration: underline;
     color: $sidenav-active-color;
   }
 

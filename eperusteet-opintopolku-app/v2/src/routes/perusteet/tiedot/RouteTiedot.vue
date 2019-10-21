@@ -89,13 +89,13 @@
       <!-- todo: kv-liitteet -->
     </div>
   </div>
-  <ep-previous-next-navigation :sidenav="sidenav"></ep-previous-next-navigation>
+  <ep-previous-next-navigation :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
 <script lang="ts">
 import _ from 'lodash';
-import { Prop, Vue, Component, Mixins } from 'vue-property-decorator';
+import { Prop, Vue, Component } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSelect from '@shared/components/forms/EpSelect.vue';
@@ -141,8 +141,8 @@ export default class RouteTiedot extends Vue {
     return this.perusteDataStore.peruste!;
   }
 
-  get sidenav() {
-    return this.perusteDataStore.sidenav;
+  get flattenedSidenav() {
+    return this.perusteDataStore.flattenedSidenav;
   }
 
   handleMaarayskirje() {
