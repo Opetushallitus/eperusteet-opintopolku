@@ -48,10 +48,12 @@ const proxy = {
 module.exports = {
   lintOnSave: false,
   publicPath: process.env.NODE_ENV === 'production' ? '/v2/' : '/',
+  runtimeCompiler: true,
+  productionSourceMap: true,
   configureWebpack: {
     resolve: {
       alias: {
-        vue: path.resolve(__dirname, 'node_modules/vue'),
+        'vue$': path.resolve(__dirname, 'node_modules/vue'),
         '@shared': path.resolve(__dirname, 'node_modules/eperusteet-frontend-utils/vue/src'),
       },
     },
