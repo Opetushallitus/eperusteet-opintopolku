@@ -18,7 +18,7 @@
       "jest"
     ],
     "paths": {
-      "@shared/*": ["node_modules/eperusteet-frontend-utils/vue/src/*"],
+      "@shared/*": ["eperusteet-frontend-utils/vue/src/*"],
       "@/*": ["src/*"],
       "&/*": ["tests/*"]
     },
@@ -34,12 +34,13 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "node_modules/eperusteet-frontend-utils/vue/src/**/*.ts",
-    "node_modules/eperusteet-frontend-utils/vue/src/**/*.vue",
+    "eperusteet-frontend-utils/vue/src/**/*.ts",
+    "eperusteet-frontend-utils/vue/src/**/*.vue",
     "tests/integration/**/*.ts",
     "tests/integration/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "eperusteet-frontend-utils"
   ]
 }

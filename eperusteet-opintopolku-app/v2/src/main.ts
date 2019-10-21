@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 import { rootConfig  } from '@/mainvue';
-import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
+import { createLogger } from '@shared/utils/logger';
 import '@/config/styles';
 const logger = createLogger('Main');
 

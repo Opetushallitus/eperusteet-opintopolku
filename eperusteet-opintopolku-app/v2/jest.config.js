@@ -28,14 +28,14 @@ module.exports = {
     '/node_modules/'
   ],
   moduleNameMapper: {
-    '^@shared/(.*)$': 'eperusteet-frontend-utils/vue/src/$1',
+    '^@shared/(.*)$': '<rootDir>/eperusteet-frontend-utils/vue/src/$1',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   snapshotSerializers: [
     'jest-serializer-vue'
   ],
   testMatch: [
-    '**/src/**/*.spec.ts|**/__tests__/*.ts'
+    '<rootDir>/src/**/*.spec.ts'
   ],
   testURL: 'http://localhost/',
   watchPlugins: [
