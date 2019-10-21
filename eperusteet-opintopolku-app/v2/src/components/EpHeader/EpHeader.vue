@@ -6,23 +6,6 @@
         <div class="murupolku">
           <nav aria-label="breadcrumb">
             <b-breadcrumb :items="items" :class="{ 'black': isBlack, 'white': !isBlack }"></b-breadcrumb>
-            <!--
-            <ol class="breadcrumb" :style="style">
-              <li class="breadcrumb-item" :style="style">
-                <router-link class="breadcrumb-home" :to="{ name: 'root' }" :style="style">
-                  {{ $t('eperusteet') }}
-                </router-link>
-              </li>
-              <li class="breadcrumb-item"
-                  v-for="(item, idx) in murupolkuFiltered"
-                  :key="idx"
-                  :class="{ active: item.isActive }">
-                <router-link class="breadcrumb-normal" :style="style" :to="item.to">
-                  {{ item.label }}
-                </router-link>
-              </li>
-            </ol>
-            -->
           </nav>
           <slot name="murupolku"></slot>
         </div>
