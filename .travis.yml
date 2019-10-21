@@ -30,7 +30,7 @@ install:
   - nvm install 10.16.3
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-ylops
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
-  - git submodule update --recursive --init
+  - git submodule update --init --remote --recursive
 
   - echo 'Generate API code' && echo -en 'travis_fold:start:script.1\\r'
   - cd eperusteet/eperusteet && mvn dependency:resolve -o -B && cd ../..
