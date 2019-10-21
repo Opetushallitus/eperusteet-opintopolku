@@ -8,7 +8,7 @@ export interface SidenavNodeBase {
   label: string;
   type: 'root' | 'viite' | 'tiedot';
   children: Array<SidenavNode>;
-  path: Array<SidenavNode>; // polku rootista, alkioiden määrä määrittää syvyyden
+  path: Array<SidenavNode>; // parent polku rootiin saakka, alkioiden määrä määrittää syvyyden
 }
 
 export interface SidenavNodeFilter {
@@ -42,7 +42,6 @@ export interface SidenavFilter {
 export function buildSidenav(peruste: PerusteDto, sisalto: Matala, filter?: SidenavFilter, viiteId?: number): SidenavNode {
   const koulutustyyppi = peruste.koulutustyyppi ? Koulutustyyppi[peruste.koulutustyyppi] : undefined;
   const koulutustyyppiToteutus = peruste.toteutus ? KoulutustyyppiToteutus[peruste.toteutus] : undefined;
-  console.log('buildSidenav', koulutustyyppi, koulutustyyppiToteutus);
 
   // Kaikille koulutustyypeille ja toteutuksille tehtävät
   const root = buildTreeBase(peruste, sisalto, filter, viiteId);

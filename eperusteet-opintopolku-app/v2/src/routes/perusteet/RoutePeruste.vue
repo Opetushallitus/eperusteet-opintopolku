@@ -26,13 +26,15 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Mixins, Component } from 'vue-property-decorator';
+import _ from 'lodash';
+import { Vue, Prop, Component } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { SidenavNode } from '@/utils/NavigationBuilder';
+import { MurupolkuOsa } from '@/tyypit';
 
 
 @Component({
@@ -59,19 +61,56 @@ export default class RoutePeruste extends Vue {
     return this.perusteDataStore.current;
   }
 
-  get murupolku() {
-    if (this.peruste && this.current) {
-      return [{
-        label: (this as any).$kaanna(this.peruste.nimi),
-        to: this.$route
-      },
-      ...this.current.path,
-      this.current,
-      ];
+  get murupolku(): Array<MurupolkuOsa> {
+    const polku: Array<MurupolkuOsa> = [{
+      to: { name: 'root' },
+      text: this.$t('eperusteet') as string,
+      active: false,
+    }];
+
+    if (this.peruste) {
+      polku.push({
+        text: (this as any).$kaanna(this.peruste.nimi),
+        to: this.$route,
+        active: false,
+      });
     }
-    else {
-      return [];
+
+    const route = this.$route;
+    if (route) {
+      // Jos tekstikappale
+      if (route.name === 'tekstikappale' && this.current) {
+        const path: Array<MurupolkuOsa> = _.map(this.current.path, node => {
+          return {
+            text: node.label,
+            to: node.to,
+            active: false
+          };
+        });
+        // Rajataan root pois murupolusta
+        if (path.length > 0) {
+          path.shift();
+        }
+
+        // Lisätään jatkeeksi
+        polku.push(...path);
+        polku.push({
+          text: this.current.label,
+          to: this.current.to,
+          active: true,
+        });
+      }
+
+      if (route.name === 'perusteTiedot' && this.peruste) {
+        polku.push({
+          text: this.$t('tiedot') as string,
+          to: { name: 'perusteTiedot', params: { perusteId: this.peruste.id } } as any,
+          active: true,
+        });
+      }
     }
+
+    return polku;
   }
 
 }

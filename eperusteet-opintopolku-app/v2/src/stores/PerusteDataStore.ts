@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Getter, Store, State } from '@shared/stores/store';
+import { Store, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
 import { SidenavFilter, SidenavNode, buildSidenav } from '@/utils/NavigationBuilder';
@@ -37,6 +37,7 @@ export class PerusteDataStore {
     this.perusteId = perusteId;
   }
 
+  // Fixme: Rakenna uudestaan vain jos jokin muuttuu
   get sidenav(): SidenavNode | null {
     if (this.peruste && this.sisalto) {
       const viiteId = this.viiteId ? this.viiteId : undefined;

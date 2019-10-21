@@ -39,9 +39,7 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
-import { Watch, Prop, Component, Vue } from 'vue-property-decorator';
-import { Tiedotteet } from '@shared/api/eperusteet';
+import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
