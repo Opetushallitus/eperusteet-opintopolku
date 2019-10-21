@@ -8,22 +8,13 @@ import { Tiedotteet } from '@shared/api/eperusteet';
 export class TiedoteStore {
   @State() public uusimmatTiedotteet: TiedoteDto[] | null = null;
   @State() public tiedotteet: TiedoteDto[] | null = null;
+  @State() public amount = 0;
   @State() public filter = {
     nimi: '',
     kieli: ['fi'],
     sivu: 0,
     sivukoko: 10,
   };
-  @State() public amount = 0;
-
-  @Getter()
-  public data() {
-    return {
-      tiedotteet: this.tiedotteet,
-      filter: this.filter,
-      amount: this.amount,
-    };
-  }
 
   async getUusimmat() {
     this.uusimmatTiedotteet = ((await Tiedotteet.findTiedotteetBy(

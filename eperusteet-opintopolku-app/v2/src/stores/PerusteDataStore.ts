@@ -16,6 +16,8 @@ export class PerusteDataStore {
   @State() public viiteId: number | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
+  @State() public testisyote = '';
+  @State() public testisyote2 = '';
   @State() public sidenavFilter: SidenavFilter = {
     label: '',
     isEnabled: false,
@@ -37,24 +39,32 @@ export class PerusteDataStore {
     this.perusteId = perusteId;
   }
 
-  get sidenav(): SidenavNode | null {
-    if (this.perusteId && this.sisalto) {
+  @Getter((state, getters) => {
+    return state.testisyote + '!';
+  })
+  public readonly riippuvuus!: string;
+
+
+  @Getter((state, getters) => {
+    if (state.perusteId && state.sisalto) {
       return buildYksinkertainenNavigation(
-        this.viiteId!,
-        this.perusteId!,
-        this.sisalto!,
-        this.sidenavFilter);
+        state.viiteId!,
+        state.perusteId!,
+        state.sisalto!,
+        state.sidenavFilter);
     }
     else {
       return null;
     }
-  }
+  })
+  public readonly sidenav!: SidenavNode | null;
 
-  get current(): SidenavNode | null {
-    if (this.viiteId && this.sidenav) {
-      const root = this.sidenav;
+
+  @Getter((state, getters) => {
+    if (state.viiteId && getters.sidenav) {
+      const root = getters.sidenav;
       const stack = [root];
-      const viiteId = this.viiteId;
+      const viiteId = state.viiteId;
       while (stack.length > 0) {
         const head = stack.pop();
         if (head!.id === viiteId) {
@@ -63,8 +73,12 @@ export class PerusteDataStore {
         stack.push(...head!.children);
       }
     }
-    return null;
-  }
+    else {
+      return null;
+    }
+  })
+  public readonly current!: SidenavNode | null;
+
 
   public async getDokumentit(sisaltoKieli) {
     if (!this.peruste) {
