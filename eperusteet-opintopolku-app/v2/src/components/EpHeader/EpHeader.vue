@@ -33,7 +33,7 @@ export default class EpHeader extends Vue {
   @Prop({ required: true })
   private murupolku!: Array<MurupolkuOsa>;
 
-  @Prop({ required: false })
+  @Prop({ required: false, type: String })
   private koulutustyyppi!: string;
 
   get items() {

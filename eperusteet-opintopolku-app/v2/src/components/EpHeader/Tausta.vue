@@ -23,7 +23,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Tausta extends Vue {
-  @Prop({ default: '#008800' })
+  @Prop({ default: '#008800', type: String })
   private color!: string;
 }
 

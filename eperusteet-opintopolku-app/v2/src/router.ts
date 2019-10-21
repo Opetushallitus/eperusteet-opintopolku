@@ -143,7 +143,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  viiteId: route.params.viiteId,
+                  viiteId: _.parseInt(route.params.viiteId),
                   perusteenOsaStore: await PerusteenOsaStore.create(
                     _.parseInt(route.params.viiteId)),
                 },

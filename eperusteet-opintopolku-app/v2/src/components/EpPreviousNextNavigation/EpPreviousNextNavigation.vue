@@ -25,10 +25,10 @@ import { SidenavNode } from '@/utils/NavigationBuilder';
 @Component
 export default class EpPreviousNextNavigation extends Vue {
 
-  @Prop({ required: false, default: null })
+  @Prop({ required: false, default: null, type: Number })
   private viiteId!: number | null;
 
-  @Prop({ required: false, default: () => [] })
+  @Prop({ required: false, default: () => [], type: Array })
   private flattenedSidenav!: Array<SidenavNode>;
 
   get current(): SidenavNode | null {

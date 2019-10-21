@@ -41,8 +41,8 @@ export default class RouteTekstikappale extends Vue {
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
 
-  @Prop({ required: true })
-  private viiteId!: string;
+  @Prop({ required: true, type: Number })
+  private viiteId!: number;
 
   private alikappaleet: Laaja[] = [];
   private isLoading = true;
@@ -79,7 +79,7 @@ export default class RouteTekstikappale extends Vue {
   }
 
   @Watch('viiteId', { immediate: true })
-  onViiteUpdate(value) {
+  onViiteUpdate(value: number) {
     this.perusteDataStore.updateViiteId(value);
   }
 

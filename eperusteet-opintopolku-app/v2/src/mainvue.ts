@@ -73,10 +73,6 @@ function errorCaptured(err: Error, vm: Vue, info: string) {
   }
 }
 
-if (!KieliStore.i18n) {
-  console.log('MITÄÄ');
-}
-
 export const rootConfig: any = {
   i18n: KieliStore.i18n,
   router,

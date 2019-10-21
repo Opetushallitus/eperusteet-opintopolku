@@ -118,7 +118,7 @@ export class PerusteDataStore {
     })));
   }
 
-  public async updateViiteId(value) {
+  public async updateViiteId(value: number) {
     this.viiteId = value;
   }
 
