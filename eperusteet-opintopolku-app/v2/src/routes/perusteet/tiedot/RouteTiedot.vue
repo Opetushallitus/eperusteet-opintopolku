@@ -186,7 +186,7 @@ export default class RouteTiedot extends Vue {
   }
 
   get sisaltoKieli() {
-    return Kielet.getSisaltoKieli();
+    return Kielet.getSisaltoKieli;
   }
 
   get maarayskirje() {

@@ -49,7 +49,7 @@ import _ from 'lodash';
 @Component
 export default class EpNavigation extends Vue {
   get valittuKieli() {
-    return Kielet.getUiKieli();
+    return Kielet.getUiKieli;
   }
 
   get kielet() {
@@ -61,7 +61,7 @@ export default class EpNavigation extends Vue {
   }
 
   get sisaltoKieli() {
-    return Kielet.getSisaltoKieli();
+    return Kielet.getSisaltoKieli;
   }
 
   get activeClass() {
