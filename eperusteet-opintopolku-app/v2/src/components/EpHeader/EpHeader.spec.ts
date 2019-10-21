@@ -26,8 +26,6 @@ describe('EpHeader', () => {
       },
     });
 
-    expect(wrapper.html()).toContain('eperusteet');
-
     propsData.murupolku = [{
       'to': { name: 'root' },
       label: 'parent jolla todella pitkä teksti',
