@@ -30,18 +30,19 @@ install:
   - nvm install 10.16.3
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-ylops
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
-  - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-frontend-utils
+  - git submodule update --recursive --init
 
   - echo 'Generate API code' && echo -en 'travis_fold:start:script.1\\r'
   - cd eperusteet/eperusteet && mvn dependency:resolve -o -B && cd ../..
   - cd eperusteet-ylops && mvn dependency:resolve -o -B && cd ..
-  - (cd eperusteet-frontend-utils/vue && yarn install && yarn gen:api && cd .. && yarn link && cd ..) > /dev/null
   - echo -en 'travis_fold:end:script.1\\r'
 
   - cd eperusteet-opintopolku-app/v2
-  - yarn link eperusteet-frontend-utils
-  - yarn install > /dev/null
-  - cd ../..
+  - yarn install
+  - cd eperusteet-frontend-utils/vue
+  - yarn install
+  - yarn gen:api
+  - cd ../../../..
 
   - git clone https://github.com/Opetushallitus/ci-tools.git
   - source ci-tools/common/setup-tools.sh

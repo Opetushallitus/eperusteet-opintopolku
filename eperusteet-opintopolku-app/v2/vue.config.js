@@ -54,7 +54,7 @@ module.exports = {
     resolve: {
       alias: {
         'vue$': path.resolve(__dirname, 'node_modules/vue'),
-        '@shared': path.resolve(__dirname, 'node_modules/eperusteet-frontend-utils/vue/src'),
+        '@shared': path.resolve(__dirname, 'eperusteet-frontend-utils/vue/src'),
       },
     },
     plugins: [

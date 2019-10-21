@@ -6,10 +6,10 @@ import '@/config/bootstrap';
 import '@/config/fontawesome';
 
 import { router } from '@/router';
-import { KieliStore } from 'eperusteet-frontend-utils/vue/src/stores/kieli';
-import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
+import { KieliStore } from '@shared/stores/kieli';
+import { Virheet } from '@shared/stores/virheet';
 
-import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
+import { createLogger } from '@shared/utils/logger';
 import _ from 'lodash';
 
 import App from '@/App.vue';
@@ -71,6 +71,10 @@ function errorCaptured(err: Error, vm: Vue, info: string) {
     //   info,
     // });
   }
+}
+
+if (!KieliStore.i18n) {
+  console.log('MITÄÄ');
 }
 
 export const rootConfig: any = {

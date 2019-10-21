@@ -18,10 +18,10 @@ import { attachRouterMetaProps } from '@shared/utils/router';
 
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
-import { Virheet } from 'eperusteet-frontend-utils/vue/src/stores/virheet';
-import { SovellusVirhe } from 'eperusteet-frontend-utils/vue/src/tyypit';
+import { Virheet } from '@shared/stores/virheet';
+import { SovellusVirhe } from '@shared/tyypit';
 
-import { createLogger } from 'eperusteet-frontend-utils/vue/src/utils/logger';
+import { createLogger } from '@shared/utils/logger';
 import _ from 'lodash';
 
 Vue.use(Router);
