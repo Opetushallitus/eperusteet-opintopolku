@@ -28,29 +28,8 @@ export default class EpPreviousNextNavigation extends Vue {
   @Prop({ required: false, default: null })
   private viiteId!: number | null;
 
-  @Prop({ required: true })
-  private sidenav!: SidenavNode | null;
-
-
-  get flattenedSidenav(): Array<SidenavNode> {
-    const root = this.sidenav;
-    const result: Array<SidenavNode> = [];
-
-    function traverseTree(node: SidenavNode) {
-      result.push(node);
-      (node.children || [])
-        .map(child => {
-          traverseTree(child);
-          return child;
-        });
-    }
-
-    if (root) {
-      traverseTree(root);
-    }
-
-    return result;
-  }
+  @Prop({ required: false, default: () => [] })
+  private flattenedSidenav!: Array<SidenavNode>;
 
   get current(): SidenavNode | null {
     for (const node of this.flattenedSidenav) {

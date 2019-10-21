@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { Getter, Store, State } from '@shared/stores/store';
+import { Store, Getter, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/utils/NavigationBuilder';
+import { SidenavFilter, SidenavNode, buildSidenav } from '@/utils/NavigationBuilder';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 
@@ -16,8 +16,6 @@ export class PerusteDataStore {
   @State() public viiteId: number | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
-  @State() public testisyote = '';
-  @State() public testisyote2 = '';
   @State() public sidenavFilter: SidenavFilter = {
     label: '',
     isEnabled: false,
@@ -40,18 +38,9 @@ export class PerusteDataStore {
   }
 
   @Getter((state, getters) => {
-    return state.testisyote + '!';
-  })
-  public readonly riippuvuus!: string;
-
-
-  @Getter((state, getters) => {
     if (state.perusteId && state.sisalto) {
-      return buildYksinkertainenNavigation(
-        state.viiteId!,
-        state.perusteId!,
-        state.sisalto!,
-        state.sidenavFilter);
+      const viiteId = state.viiteId ? state.viiteId : undefined;
+      return buildSidenav(state.peruste, state.sisalto, state.sidenavFilter, viiteId);
     }
     else {
       return null;
@@ -59,6 +48,25 @@ export class PerusteDataStore {
   })
   public readonly sidenav!: SidenavNode | null;
 
+  get flattenedSidenav(): Array<SidenavNode> {
+    const root = this.sidenav;
+    const result: Array<SidenavNode> = [];
+
+    function traverseTree(node: SidenavNode) {
+      result.push(node);
+      (node.children || [])
+        .map(child => {
+          traverseTree(child);
+          return child;
+        });
+    }
+
+    if (root) {
+      traverseTree(root);
+    }
+
+    return result;
+  }
 
   @Getter((state, getters) => {
     if (state.viiteId && getters.sidenav) {
@@ -78,6 +86,7 @@ export class PerusteDataStore {
     }
   })
   public readonly current!: SidenavNode | null;
+
 
 
   public async getDokumentit(sisaltoKieli) {

@@ -26,17 +26,15 @@ describe('EpHeader', () => {
       },
     });
 
-    expect(wrapper.html()).toContain('eperusteet');
-
     propsData.murupolku = [{
-      'to': { name: 'root' },
-      label: 'parent jolla todella pitkä teksti',
+      to: { name: 'root' },
+      text: 'parent jolla todella pitkä teksti',
     }];
     expect(wrapper.html()).toContain('parent jolla todella pitkä teksti');
 
     propsData.murupolku = [...propsData.murupolku, {
-      'to': { name: 'root' },
-      label: 'uusi alikappale',
+      to: { name: 'root' },
+      text: 'uusi alikappale',
     }];
 
     expect(wrapper.html()).toContain('parent jolla todella pitkä teksti');

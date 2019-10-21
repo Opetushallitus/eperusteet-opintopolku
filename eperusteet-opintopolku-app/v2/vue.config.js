@@ -34,14 +34,23 @@ const proxy = {
   '/eperusteet-service': {
     target: eperusteetService || 'http://localhost:' + eperusteetServicePort,
     secure: !!eperusteetService,
+    onProxyReq: function(proxyReq, req, res) {
+      proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet');
+    },
   },
   '/eperusteet-ylops-service': {
     target: eperusteetYlopsService || 'http://localhost:' + eperusteetYlopsServicePort,
     secure: !!eperusteetYlopsService,
+    onProxyReq: function(proxyReq, req, res) {
+      proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-ylops');
+    },
   },
   '/eperusteet-amosaa-service': {
     target: eperusteetAmosaaService || 'http://localhost:' + eperusteetAmosaaServicePort,
     secure: !!eperusteetAmosaaService,
+    onProxyReq: function(proxyReq, req, res) {
+      proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-amosaa');
+    },
   },
 };
 

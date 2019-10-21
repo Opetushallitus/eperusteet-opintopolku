@@ -58,6 +58,7 @@ export function stateToKoulutustyyppi(statename: string) {
   return stateToKt[statename];
 }
 
+// Koulutustyyppi on oltava myös alityyppinä
 export function koulutustyyppiRelaatiot() {
   return [{
     koulutustyyppi: 'koulutustyyppi_20',
@@ -98,11 +99,10 @@ export function ryhmat(koulutustyyppi: string) {
   }
 }
 
-
-export function koulutustyyppiGroups(koulutustyyppi: string) {
-  return themes[koulutustyyppi] || koulutustyyppi;
+export function isAmmatillinen(statename: string): boolean {
+  const koulutustyyppi = stateToKoulutustyyppi(statename);
+  return themes[koulutustyyppi] === 'ammatillinen';
 }
-
 
 export function koulutustyyppiTheme(koulutustyyppi: string) {
   return themes[koulutustyyppi] || koulutustyyppi;

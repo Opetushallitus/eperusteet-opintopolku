@@ -1,36 +1,186 @@
 import _ from 'lodash';
-import { PerusteDto, Matala } from '@shared/api/tyypit';
+import { PerusteDto, Matala, Laaja } from '@shared/api/tyypit';
+import { Koulutustyyppi, KoulutustyyppiToteutus } from '@shared/tyypit';
 import { Kielet } from '@shared/stores/kieli';
 import { RawLocation } from 'vue-router';
 
-
-export interface SidenavNode {
-  id?: number;
+export interface SidenavNodeBase {
   label: string;
-  depth: number;
-  to?: RawLocation;
+  type: 'root' | 'viite' | 'tiedot';
+  children: Array<SidenavNode>;
+  path: Array<SidenavNode>; // parent polku rootiin saakka, alkioiden määrä määrittää syvyyden
+}
+
+export interface SidenavNodeFilter {
   isVisible: boolean,
   isFiltered: boolean;
   isMatch: boolean;
   isCollapsed: boolean;
-  type: 'root' | 'viite' | 'tiedot';
-  perusteenOsa?: object; // todo oikea tyyppi
-  children: Array<SidenavNode>;
-  path: Array<SidenavNode>;
 }
 
-
-export function buildSidenav(viiteId: number, peruste: PerusteDto, sisalto: Matala) {
-  console.log(peruste.toteutus);
+export interface SidenavNodeRoute {
+  to?: RawLocation;
 }
 
+export interface SidenavNode extends SidenavNodeBase, SidenavNodeFilter, SidenavNodeRoute {
+  id?: number;
+  perusteenOsa?: Laaja;
+}
 
 export interface SidenavFilter {
   label: string;
   isEnabled: boolean;
 }
 
-export function nodeToRoute(lapsi: Matala): RawLocation | undefined {
+/**
+ * Rakennetaan sivunavigaatio
+ * @param peruste Peruste
+ * @param sisalto Perusteen sisältö
+ * @param filter  Rajaus
+ * @param viiteId Nykyisen tilan viite id jos määritetty
+ */
+export function buildSidenav(peruste: PerusteDto, sisalto: Matala, filter?: SidenavFilter, viiteId?: number): SidenavNode {
+  const koulutustyyppi: Koulutustyyppi | undefined = peruste.koulutustyyppi as Koulutustyyppi;
+  const koulutustyyppiToteutus: KoulutustyyppiToteutus | undefined = (peruste.toteutus as any) as KoulutustyyppiToteutus;
+
+  // Kaikille koulutustyypeille ja toteutuksille tehtävät
+  const root = buildTreeBase(peruste, sisalto, filter, viiteId);
+
+  // Rakenne perustepalvelun mukaisesta sisällöstä
+  if (koulutustyyppi) {
+    switch (koulutustyyppi) {
+    case Koulutustyyppi.lisaopetus:
+    case Koulutustyyppi.esiopetus:
+    case Koulutustyyppi.varhaiskasvatus:
+    case Koulutustyyppi.perusopetusvalmistava:
+      // todo
+      break;
+    case Koulutustyyppi.perusopetus:
+      // todo
+      break;
+    case Koulutustyyppi.aikuistenperusopetus:
+      // todo
+      break;
+    case Koulutustyyppi.lukiokoulutus:
+    case Koulutustyyppi.lukiovalmistavakoulutus:
+    case Koulutustyyppi.aikuistenlukiokoulutus:
+      if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
+        buildLaajaAlaisetOsaamiset(peruste, root, filter);
+        buildOppiaineet(peruste, root, filter);
+        break;
+      }
+      else {
+        // todo
+        break;
+      }
+    case Koulutustyyppi.tpo:
+      // todo
+      break;
+    case Koulutustyyppi.telma:
+    case Koulutustyyppi.perustutkinto:
+    case Koulutustyyppi.ammattitutkinto:
+    case Koulutustyyppi.erikoisammattitutkinto:
+      // todo
+      break;
+    default:
+      throw new Error('koulutustyyppin-sivunavigaatio-ei-toteutettu');
+    }
+  }
+
+  // Lopuksi vapaat tekstikappaleet
+  buildVapaatTekstikappaleet(sisalto, root, filter, viiteId);
+
+  return root;
+}
+
+function buildTreeBase(peruste: PerusteDto, sisalto: Matala, filter?: SidenavFilter, viiteId?: number): SidenavNode {
+  const root: SidenavNode = {
+    type: 'root',
+    label: 'root',
+    isVisible: false,
+    isFiltered: false,
+    isMatch: false,
+    isCollapsed: false,
+    children: [],
+    path: [],
+  };
+
+  buildTiedot(peruste, root, filter);
+
+  return root;
+}
+
+function buildTiedot(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFilter) {
+  const tiedot: SidenavNode = {
+    type: 'tiedot',
+    label: handleLabel('tiedot'),
+    isVisible: true,
+    isFiltered: false,
+    isMatch: false,
+    isCollapsed: false,
+    to: {
+      name: 'perusteTiedot',
+      params: {
+        perusteId: _.toString(peruste.id),
+      }
+    },
+    children: [],
+    path: [
+      root
+    ],
+  };
+
+  handleFilter(tiedot, [], filter);
+  root.children.push(tiedot);
+}
+
+function buildVapaatTekstikappaleet(sisalto: Matala, root: SidenavNode, filter?: SidenavFilter, viiteId?: number) {
+  root.children.push(...traverseSisalto(
+    sisalto,
+    [
+      root
+    ],
+    filter,
+    viiteId));
+}
+
+function buildLaajaAlaisetOsaamiset(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFilter) {
+  const laajaAlaisetOsaamiset: SidenavNode = {
+    type: 'tiedot',
+    label: handleLabel('laaja-alaiset-osaamiset'),
+    isVisible: true,
+    isFiltered: false,
+    isMatch: false,
+    isCollapsed: false,
+    children: [],
+    path: [
+      root
+    ],
+  };
+
+  handleFilter(laajaAlaisetOsaamiset, [], filter);
+  root.children.push(laajaAlaisetOsaamiset);
+}
+
+function buildOppiaineet(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFilter) {
+  const laajaAlaisetOsaamiset: SidenavNode = {
+    type: 'tiedot',
+    label: handleLabel('oppiaineet'),
+    isVisible: true,
+    isFiltered: false,
+    isMatch: false,
+    isCollapsed: false,
+    children: [],
+    path: [
+      root
+    ],
+  };
+
+  handleFilter(laajaAlaisetOsaamiset, [], filter);
+  root.children.push(laajaAlaisetOsaamiset);
+}
+
+function nodeToRoute(lapsi: Matala): RawLocation | undefined {
   if (lapsi.perusteenOsa) {
     return {
       name: 'tekstikappale',
@@ -41,13 +191,17 @@ export function nodeToRoute(lapsi: Matala): RawLocation | undefined {
   }
 }
 
-export function traverseSisalto(viiteId: number, sisalto: Matala, path: Array<SidenavNode>, filter: SidenavFilter): SidenavNode[] {
+function traverseSisalto(
+  sisalto: Matala,
+  path: Array<SidenavNode>,
+  filter?: SidenavFilter,
+  viiteId?: number
+): SidenavNode[] {
   return (sisalto.lapset || [])
     .map((lapsi: Matala) => {
       const child: SidenavNode = {
         id: lapsi.id,
         label: handleLabel(lapsi.perusteenOsa!.nimi || 'nimeton'),
-        depth: path.length,
         isVisible: true,
         isFiltered: false,
         isMatch: false,
@@ -60,17 +214,17 @@ export function traverseSisalto(viiteId: number, sisalto: Matala, path: Array<Si
       };
 
       // Collapse if not open
-      handleCollapse(viiteId, child, path);
+      handleCollapse(child, path, viiteId);
 
       // Filter by label
       handleFilter(child, path, filter);
 
-      child.children = traverseSisalto(viiteId, lapsi, [...path, child], filter);
+      child.children = traverseSisalto(lapsi, [...path, child], filter, viiteId);
       return child;
     });
 }
 
-function handleCollapse(viiteId: number, child, path) {
+function handleCollapse(child: SidenavNode, path: Array<SidenavNode>, viiteId?: number) {
   if (viiteId && viiteId === child.id) {
     child.isCollapsed = false;
     for (const node of path) {
@@ -82,8 +236,8 @@ function handleCollapse(viiteId: number, child, path) {
   }
 }
 
-function handleFilter(child, path, filter) {
-  if (Kielet.search(filter.label, child.label)) {
+function handleFilter(child: SidenavNode, path: Array<SidenavNode>, filter?: SidenavFilter) {
+  if (filter && Kielet.search(filter.label, child.label)) {
     child.isFiltered = true;
     child.isMatch = true;
     for (const node of path) {
@@ -102,53 +256,4 @@ function handleLabel(label) {
   else {
     return label;
   }
-}
-
-export function buildYksinkertainenNavigation(viiteId: string | number, perusteId: number, sisalto: Matala, filter: SidenavFilter): SidenavNode {
-  const root: SidenavNode = {
-    type: 'root',
-    label: 'root',
-    depth: 0,
-    isVisible: false,
-    isFiltered: false,
-    isMatch: false,
-    isCollapsed: false,
-    children: [],
-    path: [],
-  };
-
-  // Lisätään vapaat tekstikappaleet
-  root.children = traverseSisalto(
-    _.isString(viiteId) ? _.parseInt(viiteId) : viiteId,
-    sisalto,
-    [
-      root
-    ],
-    filter);
-
-  // Lisätään tiedot
-  const tiedot: SidenavNode = {
-    type: 'tiedot',
-    label: handleLabel('tiedot'),
-    depth: 1,
-    isVisible: true,
-    isFiltered: false,
-    isMatch: false,
-    isCollapsed: false,
-    to: {
-      name: 'perusteTiedot',
-      params: {
-        perusteId: perusteId as any,
-      }
-    },
-    children: [],
-    path: [
-      root
-    ],
-  };
-
-  handleFilter(tiedot, [], filter);
-  root.children.unshift(tiedot);
-
-  return root;
 }

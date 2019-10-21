@@ -1,25 +1,11 @@
 <template>
 <div>
-  <div class="kooste-header" :class="theme">
-    <div class="container">
+  <div class="vari-header" :class="theme">
+    <div class="container header">
       <div class="col">
         <div class="murupolku">
-           <nav aria-label="breadcrumb">
-            <ol class="breadcrumb" :style="style">
-              <li class="breadcrumb-item" :style="style">
-                <router-link class="breadcrumb-home" :to="{ name: 'root' }" :style="style">
-                  {{ $t('eperusteet') }}
-                </router-link>
-              </li>
-              <li class="breadcrumb-item"
-                  :class="{ 'breadcrumb-truncated': idx < murupolku.length - 2 }"
-                  v-for="(item, idx) in murupolkuFiltered"
-                  :key="idx">
-                <router-link class="breadcrumb-normal" :style="style" :to="item.to">
-                  {{ item.label }}
-                </router-link>
-              </li>
-            </ol>
+          <nav aria-label="breadcrumb">
+            <b-breadcrumb :items="items" :class="{ 'black': isBlack, 'white': !isBlack }"></b-breadcrumb>
           </nav>
           <slot name="murupolku"></slot>
         </div>
@@ -37,32 +23,21 @@
 
 
 <script lang="ts">
-import Tausta from './Tausta.vue';
-import { RawLocation } from 'vue-router';
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@/utils/perusteet';
-import _ from 'lodash';
+import { MurupolkuOsa } from '@/tyypit';
 
-export interface Muru {
-  label: string;
-  to: RawLocation;
-}
-
-@Component({
-  components: {
-    Tausta,
-  },
-})
+@Component
 export default class EpHeader extends Vue {
 
   @Prop({ required: true })
-  private murupolku!: Muru[];
+  private murupolku!: Array<MurupolkuOsa>;
 
   @Prop({ required: false })
   private koulutustyyppi!: string;
 
-  get murupolkuFiltered() {
-    return _.filter(this.murupolku, (muru) => muru.label && muru.to);
+  get items() {
+    return this.murupolku;
   }
 
   get theme() {
@@ -79,6 +54,10 @@ export default class EpHeader extends Vue {
     return calculateVisibleColor(this.bgColor, 125);
   }
 
+  get isBlack() {
+    return this.textColor === 'black';
+  }
+
   get style() {
     return {
       color: this.textColor === 'black' ? '#001A58' : '#fff',
@@ -90,21 +69,20 @@ export default class EpHeader extends Vue {
 
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
-$kooste-padding: 80px;
 
-.kooste-header {
+.vari-header {
   min-height: 238px;
-  max-height: 238px;
-  position: relative;
-  width: 100%;
   padding: 80px 0;
+
+  // Todo: käytä muuttujia
   @media (max-width: 991.98px) {
       padding-top: 40px;
       padding-bottom: 40px;
       background: none;
-      min-height: 0px;
+      min-height: 0;
   }
 
+  // Taustat
   background-repeat: no-repeat;
   background-color: $uutiset-header-background;
   background-position-x: right;
@@ -134,38 +112,43 @@ $kooste-padding: 80px;
     background-image: url('../../../public/img/banners/aallot_taiteenperusopetus.svg');
   }
 
-  .murupolku {
-    margin-bottom: 0.5rem;
+
+  // Murupolku
+  nav ol.breadcrumb {
+    background: none;
+    padding-left: 0;
+    padding-right: 0;
+    margin: 0;
+
+    li:first-child {
+      font-weight: bolder;
+    }
+
+    &.black /deep/ li, &.black /deep/ li a {
+      color: black;
+    }
+
+    &.white /deep/ li, &.white /deep/ li a {
+      color: white;
+    }
   }
 
+  // Koosteen / perusteen nimi
   h1.nimi {
     margin-top: 0;
     font-weight: bold;
     font-size: 2rem;
     color: #fff;
+
     @media (max-width: 991.98px) {
       font-size: 1.5rem;
     }
   }
 
-  ol.breadcrumb {
-    font-size: 14px;
-    background: none;
-    margin: 0;
-    padding: 0;
-
-    .breadcrumb-home {
-      font-weight: bolder;
-    }
-
-    .breadcrumb-truncated {
-      max-width: 140px;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
+  // Jos nimi tai murupolun osa ei mahdu ruudulle
+  .container.header {
+    overflow-x: auto;
   }
-
 }
 
 .container.sisalto {

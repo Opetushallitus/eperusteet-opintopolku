@@ -12,13 +12,12 @@
     </div>
   </div>
 
-  <ep-previous-next-navigation :viite-id="viiteId" :sidenav="sidenav"></ep-previous-next-navigation>
+  <ep-previous-next-navigation :viite-id="viiteId" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
-import { Vue, Component, Watch, Mixins, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { SidenavNode } from '@/utils/NavigationBuilder';
@@ -64,8 +63,8 @@ export default class RouteTekstikappale extends Vue {
     return this.perusteenOsaStore.perusteenOsa;
   }
 
-  get sidenav() {
-    return this.perusteDataStore.sidenav;
+  get flattenedSidenav() {
+    return this.perusteDataStore.flattenedSidenav;
   }
 
   get current() {
@@ -73,7 +72,7 @@ export default class RouteTekstikappale extends Vue {
   }
 
   get alikappaleNodes(): Array<SidenavNode> | null {
-    if (this.current && this.current.depth === 1) {
+    if (this.current && this.current.path.length === 1) {
       return this.current.children;
     }
     return null;

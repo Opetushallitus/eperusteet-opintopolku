@@ -81,12 +81,12 @@
 </template>
 
 <script lang="ts">
-import { Watch, Component, Vue, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import Paikalliset from './Paikalliset.vue';
-import _ from 'lodash';
+import { MurupolkuOsa } from '@/tyypit';
 
 @Component({
   components: {
@@ -99,12 +99,17 @@ export default class RouteKooste extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
-  get murupolku() {
+  get murupolku(): Array<MurupolkuOsa> {
     return [{
+      to: { name: 'root' },
+      text: this.$t('eperusteet') as string,
+      active: false
+    }, {
       to: {
         ...this.$route,
       },
-      label: (this as any).$t('kooste'),
+      text: (this as any).$t('kooste'),
+      active: false,
     }];
   }
 

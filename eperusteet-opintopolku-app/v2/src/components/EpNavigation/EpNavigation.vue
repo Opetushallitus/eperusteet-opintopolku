@@ -13,11 +13,12 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav>
+      <b-navbar-nav class="flex-wrap">
         <b-nav-item v-for="(item, idx) in items"
                     :key="idx"
                     active
                     :active-class="activeClass"
+                    :class="item.activeClass"
                     :to="item.route">
           {{ $t(item.nimi) }}
         </b-nav-item>
@@ -42,7 +43,8 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, koulutustyyppiStateName, stateToKoulutustyyppi, koulutustyyppiRelaatiot } from '@/utils/perusteet';
+import { koulutustyyppiTheme, koulutustyyppiStateName, stateToKoulutustyyppi,
+  koulutustyyppiRelaatiot, ryhmat } from '@/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import _ from 'lodash';
 
@@ -74,6 +76,22 @@ export default class EpNavigation extends Vue {
     }
   }
 
+  private isActiveRoute(kt) {
+    if (this.$route) {
+      const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
+      return _.includes(ryhmat(kt.koulutustyyppi), koulutustyyppi);
+    }
+    return false;
+  }
+
+  private setActiveClass(kt) {
+    if (this.isActiveRoute(kt)) {
+      return {
+        activeClass: this.activeClass,
+      };
+    }
+  }
+
   get items() {
     return _.map(koulutustyyppiRelaatiot(), kt => {
       return {
@@ -85,6 +103,7 @@ export default class EpNavigation extends Vue {
             koulutustyyppi: koulutustyyppiStateName(kt.koulutustyyppi),
           },
         },
+        ...this.setActiveClass(kt)
       };
     });
   }
@@ -136,6 +155,7 @@ export default class EpNavigation extends Vue {
       &.router-link-active {
         padding-bottom: 0.25rem;
         border-bottom: #001A58 0.25rem solid;
+
         &.koulutustyyppi-ammatillinen {
           border-bottom-color: $koulutustyyppi-ammatillinen-color;
         }
@@ -152,6 +172,44 @@ export default class EpNavigation extends Vue {
           border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
         }
         &.koulutustyyppi-taiteenperusopetus {
+          border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
+        }
+      }
+    }
+
+    // Tätä ei tarvittaisi, jos nav-itemin alielementin router-link tilan voisi asettaa proppina
+    .navbar-nav .nav-item.router-link-active {
+      /deep/ .nav-link {
+        padding-bottom: 0.25rem;
+        border-bottom: #001A58 0.25rem solid;
+      }
+      &.koulutustyyppi-ammatillinen {
+        /deep/ .nav-link {
+          border-bottom-color: $koulutustyyppi-ammatillinen-color;
+        }
+      }
+      &.koulutustyyppi-esiopetus {
+        /deep/ .nav-link {
+          border-bottom-color: $koulutustyyppi-esiopetus-color;
+        }
+      }
+      &.koulutustyyppi-lukio {
+        /deep/ .nav-link {
+          border-bottom-color: $koulutustyyppi-lukio-color;
+        }
+      }
+      &.koulutustyyppi-perusopetus {
+        /deep/ .nav-link {
+          border-bottom-color: $koulutustyyppi-perusopetus-color;
+        }
+      }
+      &.koulutustyyppi-varhaiskasvatus {
+        /deep/ .nav-link {
+          border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
+        }
+      }
+      &.koulutustyyppi-taiteenperusopetus {
+        /deep/ .nav-link {
           border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
         }
       }

@@ -89,13 +89,13 @@
       <!-- todo: kv-liitteet -->
     </div>
   </div>
-  <ep-previous-next-navigation :sidenav="sidenav"></ep-previous-next-navigation>
+  <ep-previous-next-navigation :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
 <script lang="ts">
 import _ from 'lodash';
-import { Prop, Vue, Component, Mixins } from 'vue-property-decorator';
+import { Prop, Vue, Component } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSelect from '@shared/components/forms/EpSelect.vue';
@@ -105,6 +105,7 @@ import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPr
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
+import { isAmmatillinen } from '@/utils/perusteet';
 
 
 @Component({
@@ -129,7 +130,10 @@ export default class RouteTiedot extends Vue {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
     await this.perusteDataStore.getKorvaavatPerusteet();
-    await this.perusteDataStore.getDokumentit(this.sisaltoKieli);
+    // Dokumentti on toteuttu vain ammatillisille
+    if (this.$route && isAmmatillinen(this.$route.params.koulutustyyppi)) {
+      await this.perusteDataStore.getDokumentit(this.sisaltoKieli);
+    }
     this.isLoading = false;
   }
 
@@ -141,8 +145,8 @@ export default class RouteTiedot extends Vue {
     return this.perusteDataStore.peruste!;
   }
 
-  get sidenav() {
-    return this.perusteDataStore.sidenav;
+  get flattenedSidenav() {
+    return this.perusteDataStore.flattenedSidenav;
   }
 
   handleMaarayskirje() {
