@@ -49,41 +49,41 @@ export function buildSidenav(peruste: PerusteDto, sisalto: Matala, filter?: Side
   // Rakenne perustepalvelun mukaisesta sisällöstä
   if (koulutustyyppi) {
     switch (koulutustyyppi) {
-      case Koulutustyyppi.lisaopetus:
-      case Koulutustyyppi.esiopetus:
-      case Koulutustyyppi.varhaiskasvatus:
-      case Koulutustyyppi.perusopetusvalmistava:
+    case Koulutustyyppi.lisaopetus:
+    case Koulutustyyppi.esiopetus:
+    case Koulutustyyppi.varhaiskasvatus:
+    case Koulutustyyppi.perusopetusvalmistava:
+      // todo
+      break;
+    case Koulutustyyppi.perusopetus:
+      // todo
+      break;
+    case Koulutustyyppi.aikuistenperusopetus:
+      // todo
+      break;
+    case Koulutustyyppi.lukiokoulutus:
+    case Koulutustyyppi.lukiovalmistavakoulutus:
+    case Koulutustyyppi.aikuistenlukiokoulutus:
+      if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
+        buildLaajaAlaisetOsaamiset(peruste, root, filter);
+        buildOppiaineet(peruste, root, filter);
+        break;
+      }
+      else {
         // todo
         break;
-      case Koulutustyyppi.perusopetus:
-        // todo
-        break;
-      case Koulutustyyppi.aikuistenperusopetus:
-        // todo
-        break;
-      case Koulutustyyppi.lukiokoulutus:
-      case Koulutustyyppi.lukiovalmistavakoulutus:
-      case Koulutustyyppi.aikuistenlukiokoulutus:
-        if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
-          buildLaajaAlaisetOsaamiset(peruste, root, filter);
-          buildOppiaineet(peruste, root, filter);
-          break;
-        }
-        else {
-          // todo
-          break;
-        }
-      case Koulutustyyppi.tpo:
-        // todo
-        break;
-      case Koulutustyyppi.telma:
-      case Koulutustyyppi.perustutkinto:
-      case Koulutustyyppi.ammattitutkinto:
-      case Koulutustyyppi.erikoisammattitutkinto:
-        // todo
-        break;
-      default:
-        throw new Error('koulutustyyppin-sivunavigaatio-ei-toteutettu');
+      }
+    case Koulutustyyppi.tpo:
+      // todo
+      break;
+    case Koulutustyyppi.telma:
+    case Koulutustyyppi.perustutkinto:
+    case Koulutustyyppi.ammattitutkinto:
+    case Koulutustyyppi.erikoisammattitutkinto:
+      // todo
+      break;
+    default:
+      throw new Error('koulutustyyppin-sivunavigaatio-ei-toteutettu');
     }
   }
 
@@ -136,12 +136,12 @@ function buildTiedot(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFil
 
 function buildVapaatTekstikappaleet(sisalto: Matala, root: SidenavNode, filter?: SidenavFilter, viiteId?: number) {
   root.children.push(...traverseSisalto(
-      sisalto,
-      [
-        root
-      ],
-      filter,
-      viiteId));
+    sisalto,
+    [
+      root
+    ],
+    filter,
+    viiteId));
 }
 
 function buildLaajaAlaisetOsaamiset(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFilter) {
@@ -192,10 +192,10 @@ function nodeToRoute(lapsi: Matala): RawLocation | undefined {
 }
 
 function traverseSisalto(
-    sisalto: Matala,
-    path: Array<SidenavNode>,
-    filter?: SidenavFilter,
-    viiteId?: number
+  sisalto: Matala,
+  path: Array<SidenavNode>,
+  filter?: SidenavFilter,
+  viiteId?: number
 ): SidenavNode[] {
   return (sisalto.lapset || [])
     .map((lapsi: Matala) => {

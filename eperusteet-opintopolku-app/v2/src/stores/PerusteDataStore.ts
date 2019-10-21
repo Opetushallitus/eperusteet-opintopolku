@@ -55,10 +55,10 @@ export class PerusteDataStore {
     function traverseTree(node: SidenavNode) {
       result.push(node);
       (node.children || [])
-          .map(child => {
-            traverseTree(child);
-            return child;
-          });
+        .map(child => {
+          traverseTree(child);
+          return child;
+        });
     }
 
     if (root) {
