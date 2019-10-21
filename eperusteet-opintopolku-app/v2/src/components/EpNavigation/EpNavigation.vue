@@ -20,7 +20,7 @@
                     :active-class="activeClass"
                     :class="item.activeClass"
                     :to="item.route">
-          {{ $t(item.nimi) }}
+          {{ $t(item.name) }}
         </b-nav-item>
       </b-navbar-nav>
 
@@ -92,11 +92,20 @@ export default class EpNavigation extends Vue {
     }
   }
 
-  get items() {
+  get ammatilliset() {
+    return [{
+      name: 'ammatillinen-koulutus',
+      route: {
+        name: 'ammatillinenSelaus',
+      },
+    }];
+  }
+
+  get yleissivistavat() {
     return _.map(koulutustyyppiRelaatiot(), kt => {
       return {
         ...kt,
-        nimi: koulutustyyppiStateName(kt.koulutustyyppi),
+        name: koulutustyyppiStateName(kt.koulutustyyppi),
         route: {
           name: 'kooste',
           params: {
@@ -106,6 +115,12 @@ export default class EpNavigation extends Vue {
         ...this.setActiveClass(kt)
       };
     });
+  }
+
+  get items() {
+    return [
+      ...this.yleissivistavat,
+      ...this.ammatilliset];
   }
 
   valitseKieli(kieli) {

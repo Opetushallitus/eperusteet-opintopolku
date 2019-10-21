@@ -34,14 +34,14 @@ export class PerusteKoosteStore {
   async reload() {
     if (this.koulutustyyppi) {
       const koulutustyypit = ryhmat(this.koulutustyyppi);
-      this.perusteet = await perusteetQuery({
+      this.perusteet = (await perusteetQuery({
         sivukoko: 100,
         koulutustyyppi: koulutustyypit,
         siirtyma: false,
         poistunut: false,
         voimassaolo: true,
         tuleva: true,
-      });
+      })).data;
 
       const id = _.get(this, 'perusteet[0].id');
       if (id) {
