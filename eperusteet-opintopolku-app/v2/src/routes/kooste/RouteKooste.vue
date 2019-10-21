@@ -7,7 +7,7 @@
   <div>
     <b-container fluid>
       <b-row>
-        <b-col lg="6" class="tile">
+        <b-col lg="7" class="tile">
           <h2>{{ $t('perusteet') }}</h2>
           <div class="perustebox d-flex flex-wrap" v-if="perusteet">
             <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
@@ -46,7 +46,7 @@
           </div>
           <ep-spinner v-else />
         </b-col>
-        <b-col lg="6" class="tile">
+        <b-col lg="5" class="tile">
           <h2>{{ $t('tiedotteet') }}</h2>
           <div class="tiedotebox">
             <div v-if="tiedotteet">
@@ -153,7 +153,7 @@ export default class RouteKooste extends Vue {
         box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
         min-height: 230px;
         margin: 0 8px 8px 0;
-        width: 254px;
+        width: 300px;
 
         @media(max-width: 575.98px) {
           width: 100%;
@@ -186,6 +186,7 @@ export default class RouteKooste extends Vue {
           .nimi {
             hyphens: auto;
             overflow-x: hide;
+            overflow: hidden;
             width: 100%;
             padding: 12px;
             padding-top: 0;

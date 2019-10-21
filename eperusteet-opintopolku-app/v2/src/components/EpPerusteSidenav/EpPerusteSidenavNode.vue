@@ -6,10 +6,11 @@
     </b-link>
     <span v-else class="label label-plain" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
   </div>
+
   <!-- children -->
-  <ul v-if="!isCollapsed && children && children.length" :class="{ 'root-list': isRoot }">
+  <ul v-if="!isCollapsed && children && children.length > 0" :class="{ 'root-list': isRoot }">
     <li v-for="(child, idx) in children" :key="idx">
-      <ep-peruste-sidenav-node :node="child" :filter="filter"></ep-peruste-sidenav-node>
+      <ep-peruste-sidenav-node :key="idx" :node="child" :sidenav-filter="sidenavFilter" />
     </li>
   </ul>
 </div>
@@ -21,34 +22,32 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { SidenavFilter, SidenavNode } from '@/utils/NavigationBuilder';
 
 @Component({
-  components: {
-    EpPerusteSidenavNode
-  }
+  name: 'EpPerusteSidenavNode',
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  private node!: SidenavNode;
+  node!: SidenavNode;
 
   @Prop({ required: true })
-  private filter!: SidenavFilter;
+  sidenavFilter!: SidenavFilter;
 
-  private get children() {
+  get children() {
     return _.filter(this.node.children, {
       isVisible: true,
       isFiltered: true
     });
   }
 
-  private get isRoot() {
+  get isRoot() {
     return this.node.type === 'root';
   }
 
-  private get isCollapsed() {
-    return this.node.isCollapsed && !this.filter.isEnabled;
+  get isCollapsed() {
+    return this.node.isCollapsed && !this.sidenavFilter.isEnabled;
   }
 
-  private get isMatch() {
-    return this.node.isMatch && this.filter.isEnabled;
+  get isMatch() {
+    return this.node.isMatch && this.sidenavFilter.isEnabled;
   }
 }
 </script>
