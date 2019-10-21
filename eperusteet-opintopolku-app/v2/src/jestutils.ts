@@ -1,9 +1,10 @@
 import { PerusteStore } from '@/stores/PerusteStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import Vue from 'vue';
 import _ from 'lodash';
-import { Wrapper } from '@vue/test-utils';
+import { RouterLinkStub, Wrapper } from '@vue/test-utils';
 
 import '@/config/bootstrap';
 import '@/config/fontawesome';
@@ -29,7 +30,7 @@ export const mocks = Object.freeze({
 }) as any;
 
 export const stubs = Object.freeze({
-  RouterLink: true,
+  RouterLink: RouterLinkStub,
 }) as any;
 
 function wrap<T extends object>(original: T, value: T) {
@@ -94,4 +95,11 @@ export const tiedoteStoreMock = (config: Partial<TiedoteStore> = {}) => {
     async getUusimmat() {},
     ...config,
   } as TiedoteStore);
+};
+
+
+export const perusteDataStoreMock = (config: Partial<PerusteDataStore> = {}) => {
+  return wrap(PerusteDataStore.prototype, {
+    ...config,
+  } as PerusteDataStore);
 };

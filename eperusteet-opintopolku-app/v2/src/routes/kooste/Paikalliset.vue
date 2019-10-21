@@ -1,85 +1,123 @@
 <template>
 <div class="paikalliset">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
-
-  <div class="peruste-nav">
-    <div class="d-flex">
-      <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
-        <div class="peruste-select" :class="{ active: activePeruste === peruste.id}">
-          <button class="btn btn-link" @click="setActivePeruste(peruste)">
-            {{ $kaanna(peruste.nimi) }}
-          </button>
+  <div class="search">
+    <ep-search v-model="query" />
+  </div>
+  <div>
+    <div class="peruste-nav">
+      <div class="d-flex">
+        <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
+          <div class="peruste-select" :class="{ active: activePeruste === peruste.id}">
+            <button class="btn btn-link" @click="setActivePeruste(peruste)">
+              {{ $kaanna(peruste.nimi) }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div v-if="perusteKoosteStore.opetussuunnitelmat">
-    <div class="opetussuunnitelma" v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
-      <div class="d-flex align-items-center">
-        <div class="opsicon-wrapper">
-          <div class="opsicon"></div>
-        </div>
-        <div class="nimi flex-fill">
-          <div class="ops">
-            <router-link :to="{ name: 'ops', params: { 'opsId': ops.id } }">
-              {{ $kaanna(ops.nimi) }}
-            </router-link>
-          </div>
-          <div class="organisaatiot">
-            <div v-if="ops.toimijat.length > 0">
-              <span class="otsikko">{{ $t('toimijat') }}</span>
-              <span class="mr-1">:</span>
-              <span class="toimijat" v-for="(toimija, tidx) in ops.toimijat" :key="tidx">
-                {{ $kaanna(toimija.nimi) }}<span v-if="tidx < ops.toimijat.length - 1">, </span>
-              </span>
-            </div>
-            <div v-if="ops.oppilaitokset.length > 0">
-              <span class="otsikko">{{ $t('oppilaitokset') }}</span>
-              <span class="mr-1">:</span>
-              <span class="toimijat" v-for="(oppilaitos, tidx) in ops.oppilaitokset" :key="tidx">
-                {{ $kaanna(oppilaitos.nimi) }}<span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div class="perusteen-nimi">
-        </div>
+    <ep-spinner v-if="isLoading" />
+    <div v-else-if="opetussuunnitelmat.length === 0">
+      <div class="alert alert-info">
+        {{ $t('perusteen-pohjalta-ei-toteutettu-opetussuunnitelmia') }}
       </div>
     </div>
+    <div v-else-if="opetussuunnitelmatFiltered.length === 0">
+      <div class="alert alert-info">
+        {{ $t('ei-hakutuloksia') }}
+      </div>
+    </div>
+    <div v-else>
+      <div class="opetussuunnitelma" v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
+        <div class="d-flex align-items-center">
+          <div class="opsicon-wrapper">
+            <div class="opsicon"></div>
+          </div>
+          <div class="nimi flex-fill">
+            <div class="ops">
+              <router-link :to="{ name: 'ops', params: { 'opsId': ops.id } }">
+                {{ $kaanna(ops.nimi) }}
+              </router-link>
+            </div>
+            <div class="organisaatiot">
+              <div v-if="ops.toimijat.length > 0">
+                <span class="otsikko">{{ $t('toimijat') }}</span>
+                <span class="mr-1">:</span>
+                <span class="toimijat" v-for="(toimija, tidx) in ops.toimijat" :key="tidx">
+                  {{ $kaanna(toimija.nimi) }}<span v-if="tidx < ops.toimijat.length - 1">, </span>
+                </span>
+              </div>
+              <div v-if="ops.oppilaitokset.length > 0">
+                <span class="otsikko">{{ $t('oppilaitokset') }}</span>
+                <span class="mr-1">:</span>
+                <span class="toimijat" v-for="(oppilaitos, tidx) in ops.oppilaitokset" :key="tidx">
+                  {{ $kaanna(oppilaitos.nimi) }}<span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="perusteen-nimi">
+          </div>
+        </div>
+      </div>
+      <b-pagination
+        v-if="total >= perPage"
+        v-model="page"
+        :total-rows="total"
+        :per-page="perPage"
+        :first-text="$t('alkuun')"
+        prev-text="«"
+        next-text="»"
+        :last-text="$t('loppuun')" />
+    </div>
   </div>
-  <ep-spinner v-else />
 </div>
 </template>
 
 <script lang="ts">
 import { Watch, Component, Vue, Prop } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
+import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpSearch from '@shared/components/forms/EpSearch.vue';
 import _ from 'lodash';
 
 @Component({
   components: {
-    EpSpinner,
     EpHeader,
+    EpSearch,
+    EpSpinner,
   },
 })
-export default class RouteKooste extends Vue {
+export default class Paikalliset extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
+
+  private query = '';
+  private page = 1;
+  private perPage = 10;
+
+  get total() {
+    return _.size(this.opetussuunnitelmatFiltered);
+  }
 
   get activePeruste() {
     return this.perusteKoosteStore.perusteId;
   }
 
   setActivePeruste(peruste) {
-    console.log(peruste);
-    this.perusteKoosteStore.perusteId = peruste.id;
+    this.query = '';
+    this.perusteKoosteStore.setPerusteId(peruste.id);
   }
 
   get perusteet() {
     return this.perusteKoosteStore.perusteet;
+  }
+
+  get isLoading() {
+    return !this.perusteKoosteStore.opetussuunnitelmat;
   }
 
   get opetussuunnitelmat() {
@@ -91,6 +129,20 @@ export default class RouteKooste extends Vue {
         oppilaitokset: _.filter(ops.organisaatiot, org =>
           _.includes(org.tyypit, 'Oppilaitos')),
       }))
+      .sortBy(ops => Kielet.sortValue(ops.nimi))
+      .value();
+  }
+
+  get opetussuunnitelmatFiltered() {
+    return _.chain(this.opetussuunnitelmat)
+      .filter(ops => Kielet.search(this.query, ops.nimi))
+      .value();
+  }
+
+  get opetussuunnitelmatPaginated() {
+    return _.chain(this.opetussuunnitelmatFiltered)
+      .drop(this.perPage * (this.page - 1))
+      .take(this.perPage)
       .value();
   }
 
@@ -101,6 +153,13 @@ export default class RouteKooste extends Vue {
 @import '../../styles/_variables.scss';
 
 .paikalliset {
+  margin: 0 10px 10px 10px;
+  margin-top: 31px;
+
+  .search {
+    margin: 20px 0 20px 0;
+  }
+
   h2.otsikko {
     font-weight: bolder;
   }

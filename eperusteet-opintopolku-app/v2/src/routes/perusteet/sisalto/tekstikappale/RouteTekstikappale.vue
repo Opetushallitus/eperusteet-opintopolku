@@ -18,12 +18,11 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Watch, Mixins, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch, Mixins, Prop } from 'vue-property-decorator';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+import { SidenavNode } from '@/utils/NavigationBuilder';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import EpPerusteRoute from '@/mixins/EpPerusteRoute';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { Perusteenosat } from '@shared/api/eperusteet';
 import { Laaja } from '@shared/api/tyypit';
@@ -35,9 +34,10 @@ import { Laaja } from '@shared/api/tyypit';
     EpSpinner,
   }
 })
-export default class RouteTekstikappale extends Mixins(EpPerusteRoute) {
+export default class RouteTekstikappale extends Vue {
 
-  private alikappaleet: Array<Laaja> = [];
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
 
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
@@ -45,7 +45,10 @@ export default class RouteTekstikappale extends Mixins(EpPerusteRoute) {
   @Prop({ required: true })
   private viiteId!: string;
 
-  async init() {
+  private alikappaleet: Laaja[] = [];
+  private isLoading = true;
+
+  async mounted() {
     if (this.alikappaleNodes) {
       for (const node of this.alikappaleNodes) {
         if (node.id) {
@@ -54,6 +57,7 @@ export default class RouteTekstikappale extends Mixins(EpPerusteRoute) {
         }
       }
     }
+    this.isLoading = false;
   }
 
   get perusteenOsa() {
@@ -61,23 +65,11 @@ export default class RouteTekstikappale extends Mixins(EpPerusteRoute) {
   }
 
   get sidenav() {
-    return this.store.sidenav();
+    return this.perusteDataStore.sidenav;
   }
 
-  get current(): SidenavNode | null {
-    if (this.viiteId && this.sidenav) {
-      const root = this.sidenav;
-      const stack = [root];
-      const viiteId = _.parseInt(this.viiteId);
-      while (stack.length > 0) {
-        const head = stack.pop();
-        if (head!.id === viiteId) {
-          return head || null;
-        }
-        stack.push(...head!.children);
-      }
-    }
-    return null;
+  get current() {
+    return this.perusteDataStore.current;
   }
 
   get alikappaleNodes(): Array<SidenavNode> | null {
@@ -89,7 +81,7 @@ export default class RouteTekstikappale extends Mixins(EpPerusteRoute) {
 
   @Watch('viiteId', { immediate: true })
   onViiteUpdate(value) {
-    this.store.viiteId = value;
+    this.perusteDataStore.updateViiteId(value);
   }
 
 }

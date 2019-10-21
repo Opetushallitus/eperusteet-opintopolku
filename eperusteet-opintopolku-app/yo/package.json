@@ -12,6 +12,7 @@
     "dev:qa": "export EPERUSTEET_API=qa; grunt dev",
     "build": "grunt build",
     "test": "grunt test",
+    "copy": "pwd && cp -R ../v2/dist ./dist/uusi",
     "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\""
   },
   "dependencies": {

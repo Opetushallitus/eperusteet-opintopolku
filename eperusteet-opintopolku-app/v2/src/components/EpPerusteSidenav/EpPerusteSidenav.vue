@@ -28,6 +28,7 @@ import EpPerusteSidenavNode from '@/components/EpPerusteSidenav/EpPerusteSidenav
 export default class EpPerusteSidenav extends Vue {
     @Prop({ required: true })
     private perusteDataStore!: PerusteDataStore;
+
     private query = '';
 
     private setValue(value) {
@@ -43,7 +44,7 @@ export default class EpPerusteSidenav extends Vue {
     }
 
     get treeData() {
-      return this.perusteDataStore.sidenav();
+      return this.perusteDataStore.sidenav;
     }
 
 }

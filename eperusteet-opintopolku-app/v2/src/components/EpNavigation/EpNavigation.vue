@@ -6,7 +6,7 @@
             class="navbar-ep">
     <b-navbar-brand href="#">
       <b-link :to="{ name: 'root' }">
-        <img src="../../../public/img/icons/eperusteet-logo.svg">
+        <img src="../../../public/img/icons/eperusteet-logo.svg" :alt="$t('eperusteet')">
       </b-link>
     </b-navbar-brand>
 
@@ -41,29 +41,27 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, koulutustyyppiStateName, stateToKoulutustyyppi, koulutustyyppiRelaatiot } from '@/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
+import _ from 'lodash';
 
 @Component
 export default class EpNavigation extends Vue {
+  get valittuKieli() {
+    return Kielet.getUiKieli();
+  }
 
   get kielet() {
     return [
       'fi',
       'sv',
-      'en'
+      'en',
     ];
   }
 
   get sisaltoKieli() {
     return Kielet.getSisaltoKieli();
-  }
-
-  valitseKieli(kieli) {
-    Kielet.setUiKieli(kieli);
-    Kielet.setSisaltoKieli(kieli);
   }
 
   get activeClass() {
@@ -90,6 +88,12 @@ export default class EpNavigation extends Vue {
       };
     });
   }
+
+  valitseKieli(kieli) {
+    Kielet.setUiKieli(kieli);
+    Kielet.setSisaltoKieli(kieli);
+  }
+
 }
 </script>
 
@@ -99,7 +103,6 @@ export default class EpNavigation extends Vue {
 .navbar-ep {
   padding-left: 15px;
   padding-right: 15px;
-
   .navbar-nav .nav-item {
     white-space: nowrap;
     color: #000;
@@ -111,7 +114,6 @@ export default class EpNavigation extends Vue {
     }
   }
 }
-
 // Mobiilivalikko auki kun alle 992px
 // Todo: käytä muuttujia
 @media (max-width: 991.98px) {
@@ -128,36 +130,33 @@ export default class EpNavigation extends Vue {
     .navbar-nav .nav-link {
       padding-right: 1rem;
       padding-left: 1rem;
-
       &:not(.router-link-active) {
         padding-bottom: 0.5rem;
       }
-
       &.router-link-active {
         padding-bottom: 0.25rem;
-        border-bottom: gray 0.25rem solid;
-
+        border-bottom: #001A58 0.25rem solid;
         &.koulutustyyppi-ammatillinen {
           border-bottom-color: $koulutustyyppi-ammatillinen-color;
         }
-
         &.koulutustyyppi-esiopetus {
           border-bottom-color: $koulutustyyppi-esiopetus-color;
         }
-
         &.koulutustyyppi-lukio {
           border-bottom-color: $koulutustyyppi-lukio-color;
         }
-
         &.koulutustyyppi-perusopetus {
           border-bottom-color: $koulutustyyppi-perusopetus-color;
         }
-
         &.koulutustyyppi-varhaiskasvatus {
           border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
+        }
+        &.koulutustyyppi-taiteenperusopetus {
+          border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
         }
       }
     }
   }
 }
+
 </style>

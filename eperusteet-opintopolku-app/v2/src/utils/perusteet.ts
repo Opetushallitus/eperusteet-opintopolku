@@ -61,16 +61,16 @@ export function stateToKoulutustyyppi(statename: string) {
 export function koulutustyyppiRelaatiot() {
   return [{
     koulutustyyppi: 'koulutustyyppi_20',
-    alityypit: [],
+    alityypit: ['koulutustyyppi_20'],
   }, {
     koulutustyyppi: 'koulutustyyppi_15',
-    alityypit: [],
+    alityypit: ['koulutustyyppi_15'],
   }, {
     koulutustyyppi: 'koulutustyyppi_16',
     alityypit: [
-      'koulutustyyppi_22',
-      'koulutustyyppi_6',
+      'koulutustyyppi_16',
       'koulutustyyppi_17',
+      'koulutustyyppi_22',
     ],
   }, {
     koulutustyyppi: 'koulutustyyppi_999907',
@@ -80,8 +80,8 @@ export function koulutustyyppiRelaatiot() {
   }, {
     koulutustyyppi: 'koulutustyyppi_2',
     alityypit: [
+      'koulutustyyppi_2',
       'koulutustyyppi_23',
-      'koulutustyyppi_14',
     ],
   }];
 }
@@ -91,7 +91,7 @@ export function ryhmat(koulutustyyppi: string) {
   const relaatiot = koulutustyyppiRelaatiot();
   const idx = _.findIndex(relaatiot, { koulutustyyppi });
   if (idx >= 0) {
-    return relaatiot[idx];
+    return relaatiot[idx].alityypit;
   }
   else {
     return [koulutustyyppi];

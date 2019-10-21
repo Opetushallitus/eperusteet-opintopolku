@@ -20,7 +20,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { SidenavNode } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+import { SidenavNode } from '@/utils/NavigationBuilder';
 
 @Component
 export default class EpPreviousNextNavigation extends Vue {

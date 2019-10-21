@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Matala } from '@shared/api/tyypit';
+import { PerusteDto, Matala } from '@shared/api/tyypit';
 import { Kielet } from '@shared/stores/kieli';
 import { RawLocation } from 'vue-router';
 
@@ -18,6 +18,12 @@ export interface SidenavNode {
   children: Array<SidenavNode>;
   path: Array<SidenavNode>;
 }
+
+
+export function buildSidenav(viiteId: number, peruste: PerusteDto, sisalto: Matala) {
+  console.log(peruste.toteutus);
+}
+
 
 export interface SidenavFilter {
   label: string;

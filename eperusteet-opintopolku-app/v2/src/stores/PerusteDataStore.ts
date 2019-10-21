@@ -2,7 +2,9 @@ import _ from 'lodash';
 import { Getter, Store, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/components/EpPerusteSidenav/PerusteBuildingMethods';
+import { SidenavFilter, SidenavNode, buildYksinkertainenNavigation } from '@/utils/NavigationBuilder';
+import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
+import { perusteetQuery } from '@/api/eperusteet';
 
 
 @Store
@@ -12,12 +14,14 @@ export class PerusteDataStore {
   @State() public sisalto: Matala | null = null;
   @State() public suoritustapa: string | null = null;
   @State() public viiteId: number | null = null;
+  @State() public dokumentit: any = {};
+  @State() public korvaavatPerusteet: any[] = [];
   @State() public sidenavFilter: SidenavFilter = {
     label: '',
     isEnabled: false,
   };
 
-  public static readonly create = _.memoize(async (perusteId: number) => {
+  public static async create(perusteId: number) {
     try {
       const result = new PerusteDataStore(perusteId);
       await result.init();
@@ -27,14 +31,13 @@ export class PerusteDataStore {
     catch (err) {
       console.error(err);
     }
-  });
+  }
 
   constructor(perusteId: number) {
     this.perusteId = perusteId;
   }
 
-  @Getter()
-  public sidenav(): SidenavNode | null {
+  get sidenav(): SidenavNode | null {
     if (this.perusteId && this.sisalto) {
       return buildYksinkertainenNavigation(
         this.viiteId!,
@@ -45,6 +48,55 @@ export class PerusteDataStore {
     else {
       return null;
     }
+  }
+
+  get current(): SidenavNode | null {
+    if (this.viiteId && this.sidenav) {
+      const root = this.sidenav;
+      const stack = [root];
+      const viiteId = this.viiteId;
+      while (stack.length > 0) {
+        const head = stack.pop();
+        if (head!.id === viiteId) {
+          return head || null;
+        }
+        stack.push(...head!.children);
+      }
+    }
+    return null;
+  }
+
+  public async getDokumentit(sisaltoKieli) {
+    if (!this.peruste) {
+      return;
+    }
+
+    const suoritustavat = this.peruste.suoritustavat;
+    if (suoritustavat) {
+      for (let i = 0; i < suoritustavat.length; i++) {
+        const st = suoritustavat[i];
+        const suoritustapakoodi = st.suoritustapakoodi;
+        if (suoritustapakoodi) {
+          const dokumenttiId = await Dokumentit.getDokumenttiId(this.peruste!.id!, sisaltoKieli, suoritustapakoodi);
+          this.dokumentit[sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId.data).url;
+        }
+      }
+    }
+  }
+
+  async getKorvaavatPerusteet() {
+    if (!this.peruste) {
+      return;
+    }
+
+    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, diaarinumero => ({
+      diaarinumero,
+      perusteet: perusteetQuery({ diaarinumero }),
+    })));
+  }
+
+  public async updateViiteId(value) {
+    this.viiteId = value;
   }
 
   public readonly updateFilter = _.debounce((filter: SidenavFilter) => {

@@ -1,15 +1,15 @@
 <template>
 <ep-spinner v-if="!koulutustyyppi" />
-<ep-header :murupolku="[]" :koulutustyyppi="koulutustyyppi" v-else>
+<ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
   <template slot="header">
     {{ $t(koulutustyyppi) }}
   </template>
   <div>
     <b-container fluid>
       <b-row>
-        <b-col lg="8" class="tile">
+        <b-col lg="6" class="tile">
           <h2>{{ $t('perusteet') }}</h2>
-          <div class="perustebox d-flex" v-if="perusteet">
+          <div class="perustebox d-flex flex-wrap" v-if="perusteet">
             <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
               <div class="upper">
                 <div class="peruste-ikoni">
@@ -25,6 +25,9 @@
               <div>
                 <div class="d-flex align-items-center justify-content-center">
                   <div class="voimaantulo">
+                    <div>
+                      {{ peruste.diaarinumero }}
+                    </div>
                     {{ $t('voimaantulo') }}:
                     {{ $sd(peruste.voimaantulopvm) }}
                   </div>
@@ -43,7 +46,7 @@
           </div>
           <ep-spinner v-else />
         </b-col>
-        <b-col lg="4" class="tile">
+        <b-col lg="6" class="tile">
           <h2>{{ $t('tiedotteet') }}</h2>
           <div class="tiedotebox">
             <div v-if="tiedotteet">
@@ -96,6 +99,15 @@ export default class RouteKooste extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
+  get murupolku() {
+    return [{
+      to: {
+        ...this.$route,
+      },
+      label: (this as any).$t('kooste'),
+    }];
+  }
+
   get koulutustyyppi() {
     return this.perusteKoosteStore.koulutustyyppi;
   }
@@ -106,18 +118,6 @@ export default class RouteKooste extends Vue {
 
   get perusteet() {
     return this.perusteKoosteStore.perusteet;
-  }
-
-  get opetussuunnitelmat() {
-    return _.chain(this.perusteKoosteStore.opetussuunnitelmat)
-      .map(ops => ({
-        ...ops,
-        toimijat: _.filter(ops.organisaatiot, org =>
-          _.includes(org.tyypit, 'Koulutustoimija')),
-        oppilaitokset: _.filter(ops.organisaatiot, org =>
-          _.includes(org.tyypit, 'Oppilaitos')),
-      }))
-      .value();
   }
 
 }
@@ -146,12 +146,12 @@ export default class RouteKooste extends Vue {
         border-radius: 10px;
         border: 1px solid #E7E7E7;
         box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
-        height: 230px;
-        width: 192px;
-        margin-right: 8px;
+        min-height: 230px;
+        margin: 0 8px 8px 0;
+        width: 254px;
 
-        .voimaantulo-viiva {
-          width: 152px;
+        @media(max-width: 575.98px) {
+          width: 100%;
         }
 
         .voimaantulo {
@@ -180,7 +180,7 @@ export default class RouteKooste extends Vue {
 
           .nimi {
             hyphens: auto;
-            overflow-x: auto;
+            overflow-x: hide;
             width: 100%;
             padding: 12px;
             padding-top: 0;

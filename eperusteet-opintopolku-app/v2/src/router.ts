@@ -34,22 +34,22 @@ const tiedoteStore = new TiedoteStore();
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
-    if (savedPosition) {
-      return savedPosition;
-    }
-    else if (to.hash) {
-      return {
-        selector: to.hash
-      };
-    }
-    else if (to.name === 'tekstikappale') {
-      return {
-        selector: '#tekstikappale-otsikko'
-      };
-    }
-    else {
-      return { x: 0, y: 0 };
-    }
+    // if (savedPosition) {
+    //   return savedPosition;
+    // }
+    // else if (to.hash) {
+    //   return {
+    //     selector: to.hash
+    //   };
+    // }
+    // else if (to.name === 'tekstikappale') {
+    //   return {
+    //     selector: '#tekstikappale-otsikko'
+    //   };
+    // }
+    // else {
+    //   return { x: 0, y: 0 };
+    // }
   },
   routes: [{
     path: '/',
