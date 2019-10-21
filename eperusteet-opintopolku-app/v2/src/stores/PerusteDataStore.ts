@@ -16,8 +16,6 @@ export class PerusteDataStore {
   @State() public viiteId: number | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
-  @State() public testisyote = '';
-  @State() public testisyote2 = '';
   @State() public sidenavFilter: SidenavFilter = {
     label: '',
     isEnabled: false,
@@ -38,12 +36,6 @@ export class PerusteDataStore {
   constructor(perusteId: number) {
     this.perusteId = perusteId;
   }
-
-  @Getter((state, getters) => {
-    return state.testisyote + '!';
-  })
-  public readonly riippuvuus!: string;
-
 
   @Getter((state, getters) => {
     if (state.perusteId && state.sisalto) {
@@ -67,7 +59,7 @@ export class PerusteDataStore {
       const viiteId = state.viiteId;
       while (stack.length > 0) {
         const head = stack.pop();
-        if (head!.id === viiteId) {
+        if (head.id === viiteId) {
           return head || null;
         }
         stack.push(...head!.children);
@@ -103,14 +95,14 @@ export class PerusteDataStore {
       return;
     }
 
-    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, diaarinumero => ({
+    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, async diaarinumero => ({
       diaarinumero,
-      perusteet: perusteetQuery({ diaarinumero }),
+      perusteet: (await perusteetQuery({ diaarinumero })).data,
     })));
   }
 
   public async updateViiteId(value) {
-    this.viiteId = value;
+    this.viiteId = _.isString(value) ? _.parseInt(value) : value;
   }
 
   public readonly updateFilter = _.debounce((filter: SidenavFilter) => {

@@ -1,6 +1,6 @@
-import { Perusteet, Tiedotteet } from '@shared/api/eperusteet';
+import { Api, Perusteet, Tiedotteet } from '@shared/api/eperusteet';
 
-interface PerusteQuery {
+export interface PerusteQuery {
   sivu?: number;
   sivukoko?: number;
   tuleva?: boolean;
@@ -17,12 +17,13 @@ interface PerusteQuery {
   diaarinumero?: string;
   muokattu?: number;
   tutkintonimikkeet?: boolean;
+  perusteTyyppi?: string;
   tutkinnonosat?: boolean;
   osaamisalat?: boolean;
   koulutusvienti?: boolean;
 }
 
-interface TiedoteQuery {
+export interface TiedoteQuery {
   sivu?: number;
   sivukoko?: number;
   kieli?: Array<string>;
@@ -52,25 +53,27 @@ export async function tiedoteQuery(query: TiedoteQuery = {
 
 export async function perusteetQuery(query: PerusteQuery = {
 }, options?: any) {
-  return ((await Perusteet.getAllPerusteet(
-    query.sivu,
-    query.sivukoko,
-    query.tuleva,
-    query.siirtyma,
-    query.voimassaolo,
-    query.poistunut,
-    query.nimi,
-    query.koulutusala,
-    query.koulutustyyppi,
-    query.kieli,
-    query.opintoala,
-    query.suoritustapa,
-    query.koulutuskoodi,
-    query.diaarinumero,
-    query.muokattu,
-    query.tutkintonimikkeet,
-    query.tutkinnonosat,
-    query.osaamisalat,
-    query.koulutusvienti,
-    options)).data as any).data;
+  const response = await Api.get('/perusteet', {
+    params: query,
+  });
+  return response.data;
+    // query.sivu,
+    // query.sivukoko,
+    // query.tuleva,
+    // query.siirtyma,
+    // query.voimassaolo,
+    // query.poistunut,
+    // query.nimi,
+    // query.koulutusala,
+    // query.koulutustyyppi,
+    // query.kieli,
+    // query.opintoala,
+    // query.suoritustapa,
+    // query.koulutuskoodi,
+    // query.diaarinumero,
+    // query.muokattu,
+    // query.tutkintonimikkeet,
+    // query.tutkinnonosat,
+    // query.osaamisalat,
+    // query.koulutusvienti,
 }

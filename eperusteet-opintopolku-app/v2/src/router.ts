@@ -4,6 +4,7 @@ import Router from 'vue-router';
 import Root from '@/routes/Root.vue';
 import Home from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
+import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 import RouteTiedot from '@/routes/perusteet/tiedot/RouteTiedot.vue';
@@ -14,8 +15,9 @@ import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
-import { attachRouterMetaProps } from '@shared/utils/router';
+import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 
+import { attachRouterMetaProps } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
@@ -91,6 +93,10 @@ export const router = new Router({
           },
         },
       },
+    }, {
+      path: 'selaus',
+      name: 'ammatillinenSelaus',
+      component: RouteAmmatillinenSelaus,
     }, {
       path: 'uutiset',
       name: 'uutiset',

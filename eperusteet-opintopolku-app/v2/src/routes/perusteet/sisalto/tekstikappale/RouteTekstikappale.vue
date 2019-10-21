@@ -12,7 +12,9 @@
     </div>
   </div>
 
-  <ep-previous-next-navigation :viite-id="viiteId" :sidenav="sidenav"></ep-previous-next-navigation>
+  <ep-previous-next-navigation
+      :viite-id="viiteIdNumber"
+      :sidenav="sidenav" />
 </div>
 </template>
 
@@ -44,6 +46,13 @@ export default class RouteTekstikappale extends Vue {
 
   @Prop({ required: true })
   private viiteId!: string;
+
+  get viiteIdNumber() {
+    if (this.viiteId) {
+      return _.parseInt(this.viiteId);
+    }
+    return null;
+  }
 
   private alikappaleet: Laaja[] = [];
   private isLoading = true;

@@ -15,6 +15,7 @@ import _ from 'lodash';
 import App from '@/App.vue';
 const logger = createLogger('main');
 
+Vue.config.devtools = true;
 Vue.use(Notifications);
 
 if (process.env.NODE_ENV !== 'production') {
