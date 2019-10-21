@@ -13,7 +13,7 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav>
+      <b-navbar-nav class="flex-wrap">
         <b-nav-item v-for="(item, idx) in items"
                     :key="idx"
                     active
