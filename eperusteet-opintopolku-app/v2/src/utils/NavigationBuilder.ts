@@ -1,22 +1,29 @@
 import _ from 'lodash';
-import { PerusteDto, Matala } from '@shared/api/tyypit';
+import { PerusteDto, Matala, Laaja } from '@shared/api/tyypit';
 import { Kielet } from '@shared/stores/kieli';
 import { RawLocation } from 'vue-router';
 
-
-export interface SidenavNode {
-  id?: number;
+export interface SidenavNodeBase {
   label: string;
-  depth: number;
-  to?: RawLocation;
+  type: 'root' | 'viite' | 'tiedot';
+  children: Array<SidenavNode>;
+  path: Array<SidenavNode>; // polku rootista, kertoo myös syvyyden
+}
+
+export interface SidenavNodeFilter {
   isVisible: boolean,
   isFiltered: boolean;
   isMatch: boolean;
   isCollapsed: boolean;
-  type: 'root' | 'viite' | 'tiedot';
-  perusteenOsa?: object; // todo oikea tyyppi
-  children: Array<SidenavNode>;
-  path: Array<SidenavNode>;
+}
+
+export interface SidenavNodeRoute {
+  to?: RawLocation;
+}
+
+export interface SidenavNode extends SidenavNodeBase, SidenavNodeFilter, SidenavNodeRoute {
+  id?: number;
+  perusteenOsa?: Laaja;
 }
 
 
@@ -47,7 +54,6 @@ export function traverseSisalto(viiteId: number, sisalto: Matala, path: Array<Si
       const child: SidenavNode = {
         id: lapsi.id,
         label: handleLabel(lapsi.perusteenOsa!.nimi || 'nimeton'),
-        depth: path.length,
         isVisible: true,
         isFiltered: false,
         isMatch: false,
@@ -108,7 +114,6 @@ export function buildYksinkertainenNavigation(viiteId: string | number, perusteI
   const root: SidenavNode = {
     type: 'root',
     label: 'root',
-    depth: 0,
     isVisible: false,
     isFiltered: false,
     isMatch: false,
@@ -130,7 +135,6 @@ export function buildYksinkertainenNavigation(viiteId: string | number, perusteI
   const tiedot: SidenavNode = {
     type: 'tiedot',
     label: handleLabel('tiedot'),
-    depth: 1,
     isVisible: true,
     isFiltered: false,
     isMatch: false,

@@ -73,7 +73,7 @@ export default class RouteTekstikappale extends Vue {
   }
 
   get alikappaleNodes(): Array<SidenavNode> | null {
-    if (this.current && this.current.depth === 1) {
+    if (this.current && this.current.path.length === 1) {
       return this.current.children;
     }
     return null;
