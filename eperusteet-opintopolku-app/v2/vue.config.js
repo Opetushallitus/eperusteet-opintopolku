@@ -47,7 +47,7 @@ const proxy = {
 
 module.exports = {
   lintOnSave: false,
-  publicPath: process.env.NODE_ENV === 'production' ? '/eperusteet-opintopolku-app/v2/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/v2/' : '/',
   configureWebpack: {
     resolve: {
       alias: {
