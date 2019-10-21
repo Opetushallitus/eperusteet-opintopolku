@@ -77,9 +77,9 @@ export default class EpNavigation extends Vue {
   }
 
   private isActiveRoute(kt) {
-    if (this.$route && this.$route.params.koulutustyyppi) {
+    if (this.$route) {
       const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
-      return koulutustyyppi === kt.koulutustyyppi || _.includes(ryhmat(kt.alityypit), koulutustyyppi);
+      return _.includes(ryhmat(kt.koulutustyyppi), koulutustyyppi);
     }
     return false;
   }

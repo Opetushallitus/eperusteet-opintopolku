@@ -40,8 +40,8 @@ export interface SidenavFilter {
  * @param viiteId Nykyisen tilan viite id jos määritetty
  */
 export function buildSidenav(peruste: PerusteDto, sisalto: Matala, filter?: SidenavFilter, viiteId?: number): SidenavNode {
-  const koulutustyyppi = peruste.koulutustyyppi ? Koulutustyyppi[peruste.koulutustyyppi] : undefined;
-  const koulutustyyppiToteutus = peruste.toteutus ? KoulutustyyppiToteutus[peruste.toteutus] : undefined;
+  const koulutustyyppi: Koulutustyyppi | undefined = peruste.koulutustyyppi as Koulutustyyppi;
+  const koulutustyyppiToteutus: KoulutustyyppiToteutus | undefined = (peruste.toteutus as any) as KoulutustyyppiToteutus;
 
   // Kaikille koulutustyypeille ja toteutuksille tehtävät
   const root = buildTreeBase(peruste, sisalto, filter, viiteId);
@@ -65,7 +65,8 @@ export function buildSidenav(peruste: PerusteDto, sisalto: Matala, filter?: Side
       case Koulutustyyppi.lukiovalmistavakoulutus:
       case Koulutustyyppi.aikuistenlukiokoulutus:
         if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
-          // todo
+          buildLaajaAlaisetOsaamiset(peruste, root, filter);
+          buildOppiaineet(peruste, root, filter);
           break;
         }
         else {
@@ -86,6 +87,9 @@ export function buildSidenav(peruste: PerusteDto, sisalto: Matala, filter?: Side
     }
   }
 
+  // Lopuksi vapaat tekstikappaleet
+  buildVapaatTekstikappaleet(sisalto, root, filter, viiteId);
+
   return root;
 }
 
@@ -102,7 +106,6 @@ function buildTreeBase(peruste: PerusteDto, sisalto: Matala, filter?: SidenavFil
   };
 
   buildTiedot(peruste, root, filter);
-  buildVapaatTekstikappaleet(sisalto, root, filter, viiteId);
 
   return root;
 }
@@ -128,7 +131,7 @@ function buildTiedot(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFil
   };
 
   handleFilter(tiedot, [], filter);
-  root.children.unshift(tiedot);
+  root.children.push(tiedot);
 }
 
 function buildVapaatTekstikappaleet(sisalto: Matala, root: SidenavNode, filter?: SidenavFilter, viiteId?: number) {
@@ -139,6 +142,42 @@ function buildVapaatTekstikappaleet(sisalto: Matala, root: SidenavNode, filter?:
       ],
       filter,
       viiteId));
+}
+
+function buildLaajaAlaisetOsaamiset(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFilter) {
+  const laajaAlaisetOsaamiset: SidenavNode = {
+    type: 'tiedot',
+    label: handleLabel('laaja-alaiset-osaamiset'),
+    isVisible: true,
+    isFiltered: false,
+    isMatch: false,
+    isCollapsed: false,
+    children: [],
+    path: [
+      root
+    ],
+  };
+
+  handleFilter(laajaAlaisetOsaamiset, [], filter);
+  root.children.push(laajaAlaisetOsaamiset);
+}
+
+function buildOppiaineet(peruste: PerusteDto, root: SidenavNode, filter?: SidenavFilter) {
+  const laajaAlaisetOsaamiset: SidenavNode = {
+    type: 'tiedot',
+    label: handleLabel('oppiaineet'),
+    isVisible: true,
+    isFiltered: false,
+    isMatch: false,
+    isCollapsed: false,
+    children: [],
+    path: [
+      root
+    ],
+  };
+
+  handleFilter(laajaAlaisetOsaamiset, [], filter);
+  root.children.push(laajaAlaisetOsaamiset);
 }
 
 function nodeToRoute(lapsi: Matala): RawLocation | undefined {

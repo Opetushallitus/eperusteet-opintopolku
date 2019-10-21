@@ -4,7 +4,7 @@
     <b-link v-if="node.to" :to="node.to">
       <span class="label" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
     </b-link>
-    <span v-else class="label" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
+    <span v-else class="label label-plain" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
   </div>
   <!-- children -->
   <ul v-if="!isCollapsed && children && children.length" :class="{ 'root-list': isRoot }">
@@ -88,6 +88,10 @@ export default class EpPerusteSidenavNode extends Vue {
 
   .router-link-active {
     color: $sidenav-active-color;
+  }
+
+  .label-plain {
+    cursor: not-allowed;
   }
 
   .label-match {
