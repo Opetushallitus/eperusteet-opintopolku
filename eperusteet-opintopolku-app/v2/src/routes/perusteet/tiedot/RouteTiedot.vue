@@ -105,6 +105,7 @@ import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPr
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
+import { isAmmatillinen } from '@/utils/perusteet';
 
 
 @Component({
@@ -129,7 +130,10 @@ export default class RouteTiedot extends Vue {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
     await this.perusteDataStore.getKorvaavatPerusteet();
-    await this.perusteDataStore.getDokumentit(this.sisaltoKieli);
+    // Dokumentti on toteuttu vain ammatillisille
+    if (this.$route && isAmmatillinen(this.$route.params.koulutustyyppi)) {
+      await this.perusteDataStore.getDokumentit(this.sisaltoKieli);
+    }
     this.isLoading = false;
   }
 
