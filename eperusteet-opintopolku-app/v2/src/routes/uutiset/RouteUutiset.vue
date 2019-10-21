@@ -68,7 +68,7 @@ export default class RouteUutiset extends Vue {
       tiedotteet: this.tiedoteStore.tiedotteet,
       filter: this.tiedoteStore.filter,
       amount: this.tiedoteStore.amount,
-    }
+    };
   }
 
   get isTiedotteetEmpty() {
