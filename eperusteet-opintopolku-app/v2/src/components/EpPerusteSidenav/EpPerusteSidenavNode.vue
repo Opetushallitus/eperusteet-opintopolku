@@ -1,15 +1,16 @@
 <template>
 <div class="node" :class="{ 'node-root': isRoot }">
   <div v-if="!isRoot">
-    <b-link v-if="node.to" :to="node.to">
-      <span class="label" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
+    <b-link v-if="node.location" :to="node.location">
+      <span class="label" :class="{ 'label-match': isMatch }">
+        {{ node.label }}
+      </span>
     </b-link>
     <span v-else class="label label-plain" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
   </div>
   <!-- children -->
-  <ul v-if="!isCollapsed && children && children.length" :class="{ 'root-list': isRoot }">
-    <li v-for="(child, idx) in children" :key="idx">
-      <ep-peruste-sidenav-node :node="child" :filter="filter"></ep-peruste-sidenav-node>
+  <ul :class="{ 'root-list': isRoot }">
+      <ep-peruste-sidenav-node :key="idx" :node="child" />
     </li>
   </ul>
 </div>
@@ -18,7 +19,9 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SidenavFilter, SidenavNode } from '@/utils/NavigationBuilder';
+import { FilteredSidenavNode } from '@/utils/NavigationBuilder';
+import { Kielet } from '@shared/stores/kieli';
+
 
 @Component({
   components: {
@@ -27,29 +30,20 @@ import { SidenavFilter, SidenavNode } from '@/utils/NavigationBuilder';
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  private node!: SidenavNode;
+  node!: FilteredSidenavNode;
 
-  @Prop({ required: true })
-  private filter!: SidenavFilter;
-
-  private get children() {
-    return _.filter(this.node.children, {
-      isVisible: true,
-      isFiltered: true
-    });
+  get children() {
+    return this.node.children;
   }
 
   private get isRoot() {
     return this.node.type === 'root';
   }
 
-  private get isCollapsed() {
-    return this.node.isCollapsed && !this.filter.isEnabled;
+  get isMatch() {
+    return this.node.isMatch;
   }
 
-  private get isMatch() {
-    return this.node.isMatch && this.filter.isEnabled;
-  }
 }
 </script>
 

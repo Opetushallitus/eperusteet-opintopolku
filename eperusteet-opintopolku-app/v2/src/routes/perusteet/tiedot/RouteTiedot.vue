@@ -89,7 +89,7 @@
       <!-- todo: kv-liitteet -->
     </div>
   </div>
-  <ep-previous-next-navigation :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+  <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
@@ -143,6 +143,10 @@ export default class RouteTiedot extends Vue {
 
   get peruste() {
     return this.perusteDataStore.peruste!;
+  }
+
+  get current() {
+    return this.perusteDataStore.current;
   }
 
   get flattenedSidenav() {
