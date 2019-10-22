@@ -62,11 +62,7 @@ export default class RoutePeruste extends Vue {
   }
 
   get murupolku(): Array<MurupolkuOsa> {
-    const polku: Array<MurupolkuOsa> = [{
-      to: { name: 'root' },
-      text: this.$t('eperusteet') as string,
-      active: false,
-    }];
+    const polku: Array<MurupolkuOsa> = [];
 
     if (this.peruste) {
       polku.push({
