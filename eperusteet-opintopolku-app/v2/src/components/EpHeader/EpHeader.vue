@@ -4,7 +4,7 @@
     <div class="container header">
       <div class="col">
         <div class="murupolku">
-          <nav aria-label="breadcrumb">
+          <nav :aria-label="$t('murupolku')">
             <b-breadcrumb :items="items" :class="{ 'black': isBlack, 'white': !isBlack }"></b-breadcrumb>
           </nav>
           <slot name="murupolku"></slot>

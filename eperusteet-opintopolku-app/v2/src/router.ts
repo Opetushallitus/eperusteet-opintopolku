@@ -15,9 +15,8 @@ import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
-import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 
-import { attachRouterMetaProps } from '@shared/utils/router';
+import { changeTitleAndLang, resolveRouterMetaProps } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
@@ -36,22 +35,22 @@ const tiedoteStore = new TiedoteStore();
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
-    // if (savedPosition) {
-    //   return savedPosition;
-    // }
-    // else if (to.hash) {
-    //   return {
-    //     selector: to.hash
-    //   };
-    // }
-    // else if (to.name === 'tekstikappale') {
-    //   return {
-    //     selector: '#tekstikappale-otsikko'
-    //   };
-    // }
-    // else {
-    //   return { x: 0, y: 0 };
-    // }
+    if (savedPosition) {
+      return savedPosition;
+    }
+    else if (to.hash) {
+      return {
+        selector: to.hash
+      };
+    }
+    else if (to.name === 'tekstikappale') {
+      return {
+        selector: '#tekstikappale-otsikko'
+      };
+    }
+    else {
+      return { x: 0, y: 0 };
+    }
   },
   routes: [{
     path: '/',
@@ -177,7 +176,11 @@ export const router = new Router({
   }],
 });
 
-attachRouterMetaProps(router);
+router.beforeEach(async (to, from, next) => {
+  changeTitleAndLang(to);
+  await resolveRouterMetaProps(to);
+  next();
+});
 
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);
