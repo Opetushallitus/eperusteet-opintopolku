@@ -148,6 +148,12 @@ function buildLaajaAlaisetOsaamiset(peruste: PerusteDto, root: SidenavNode, filt
   const laajaAlaisetOsaamiset: SidenavNode = {
     type: 'tiedot',
     label: handleLabel('laaja-alaiset-osaamiset'),
+    to: {
+      name: 'lops2019laajaalaiset',
+      params: {
+        perusteId: _.toString(peruste.id),
+      }
+    },
     isVisible: true,
     isFiltered: false,
     isMatch: false,
@@ -166,6 +172,12 @@ function buildOppiaineet(peruste: PerusteDto, root: SidenavNode, filter?: Sidena
   const laajaAlaisetOsaamiset: SidenavNode = {
     type: 'tiedot',
     label: handleLabel('oppiaineet'),
+    to: {
+      name: 'lops2019oppiaineet',
+      params: {
+        perusteId: _.toString(peruste.id),
+      }
+    },
     isVisible: true,
     isFiltered: false,
     isMatch: false,

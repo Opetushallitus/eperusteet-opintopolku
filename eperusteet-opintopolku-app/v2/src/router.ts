@@ -9,6 +9,9 @@ import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 import RouteTiedot from '@/routes/perusteet/tiedot/RouteTiedot.vue';
 import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
+import RouteLaajaalaiset from '@/routes/perusteet/sisalto/lops2019/laajaalaiset/RouteLaajaalaiset.vue';
+import RouteOppiaineet from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaineet.vue';
+import RouteOppiaine from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaine.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -156,6 +159,18 @@ export const router = new Router({
             },
           },
         },
+      }, {
+        path: 'laajaalaiset',
+        component: RouteLaajaalaiset,
+        name: 'lops2019laajaalaiset',
+      }, {
+        path: 'oppiaine',
+        component: RouteOppiaineet,
+        name: 'lops2019oppiaineet',
+      }, {
+        path: 'oppiaine/:oppiaineId',
+        component: RouteOppiaine,
+        name: 'lops2019oppiaine',
       }],
     }],
   }, {
