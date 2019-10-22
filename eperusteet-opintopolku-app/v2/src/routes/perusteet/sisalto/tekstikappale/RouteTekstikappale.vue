@@ -1,5 +1,5 @@
 <template>
-<div class="content">
+<div class="content" v-if="perusteenOsa">
   <h2 class="otsikko" id="tekstikappale-otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
   <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
 
@@ -25,6 +25,7 @@ import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpP
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { Perusteenosat } from '@shared/api/eperusteet';
 import { Laaja } from '@shared/api/tyypit';
+import _ from 'lodash';
 
 
 @Component({
@@ -42,7 +43,14 @@ export default class RouteTekstikappale extends Vue {
   private perusteenOsaStore!: PerusteenOsaStore;
 
   @Prop({ required: true, type: Number })
-  private viiteId!: number;
+  private viiteId!: string | number;
+
+  get viiteIdNumber() {
+    if (_.isString(this.viiteId)) {
+      return _.parseInt(this.viiteId);
+    }
+    return this.viiteId;
+  }
 
   private alikappaleet: Laaja[] = [];
   private isLoading = false;

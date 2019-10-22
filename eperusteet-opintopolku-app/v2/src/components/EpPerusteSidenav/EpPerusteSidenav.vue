@@ -39,7 +39,7 @@ export default class EpPerusteSidenav extends Vue {
       });
     }
 
-    get filter() {
+    get sidenavFilter() {
       return this.perusteDataStore.sidenavFilter;
     }
 

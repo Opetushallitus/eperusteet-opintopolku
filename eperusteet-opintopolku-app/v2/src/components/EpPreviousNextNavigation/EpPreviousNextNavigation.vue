@@ -39,14 +39,14 @@ export default class EpPreviousNextNavigation extends Vue {
   }
 
   get previous(): SidenavNode | null {
-    if (this.activeIdx >= 0) {
+    if (this.activeIdx >= 0 && this.flattenedSidenav) {
       return this.flattenedSidenav[this.activeIdx - 1] || null;
     }
     return null;
   }
 
   get next(): SidenavNode | null {
-    if (this.activeIdx >= 0) {
+    if (this.activeIdx >= 0 && this.flattenedSidenav) {
       return this.flattenedSidenav[this.activeIdx + 1] || null;
     }
     return null;

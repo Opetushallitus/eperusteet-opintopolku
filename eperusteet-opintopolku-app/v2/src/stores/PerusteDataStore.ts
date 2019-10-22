@@ -143,9 +143,9 @@ export class PerusteDataStore {
       return;
     }
 
-    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, diaarinumero => ({
+    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, async diaarinumero => ({
       diaarinumero,
-      perusteet: perusteetQuery({ diaarinumero }),
+      perusteet: (await perusteetQuery({ diaarinumero })).data,
     })));
   }
 

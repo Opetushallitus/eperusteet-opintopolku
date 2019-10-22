@@ -8,8 +8,10 @@
     </b-link>
     <span v-else class="label label-plain" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
   </div>
+
   <!-- children -->
   <ul :class="{ 'root-list': isRoot }">
+    <li v-for="(child, idx) in children" :key="idx">
       <ep-peruste-sidenav-node :key="idx" :node="child" />
     </li>
   </ul>
@@ -24,9 +26,7 @@ import { Kielet } from '@shared/stores/kieli';
 
 
 @Component({
-  components: {
-    EpPerusteSidenavNode
-  }
+  name: 'EpPerusteSidenavNode',
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
@@ -36,14 +36,13 @@ export default class EpPerusteSidenavNode extends Vue {
     return this.node.children;
   }
 
-  private get isRoot() {
+  get isRoot() {
     return this.node.type === 'root';
   }
 
   get isMatch() {
     return this.node.isMatch;
   }
-
 }
 </script>
 
