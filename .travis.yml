@@ -32,23 +32,17 @@ install:
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
   - git submodule update --init --remote --recursive
 
-  - echo 'Install eperusteet  & eperusteet-ylops' && echo -en 'travis_fold:start:install\\r'
   - cd eperusteet/eperusteet && mvn dependency:resolve -o -B && cd ../..
   - cd eperusteet-ylops && mvn dependency:resolve -o -B && cd ..
-  - echo -en 'travis_fold:end:install\\r'
 
   - cd eperusteet-opintopolku-app/v2
   - yarn install
 
-  - echo 'Install eperusteet-frontend-utils/vue' && echo -en 'travis_fold:start:install\\r'
   - cd eperusteet-frontend-utils/vue
   - yarn install
-  - echo -en 'travis_fold:end:install\\r'
 
-  - echo 'Generate eperusteet & eperusteet-ylops API code' && echo -en 'travis_fold:start:install\\r'
   - yarn gen:api
   - cd ../../../..
-  - echo -en 'travis_fold:end:install\\r'
 
   - git clone https://github.com/Opetushallitus/ci-tools.git
   - source ci-tools/common/setup-tools.sh

@@ -7,7 +7,7 @@ import '@/config/fontawesome';
 
 import { router } from '@/router';
 import { KieliStore } from '@shared/stores/kieli';
-import { Virheet } from '@shared/stores/virheet';
+// import { Virheet } from '@shared/stores/virheet';
 
 import { createLogger } from '@shared/utils/logger';
 import _ from 'lodash';
