@@ -1,5 +1,5 @@
 <template>
-<div class="content">
+<div class="content" v-if="perusteenOsa">
   <h2 class="otsikko" id="tekstikappale-otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
   <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
 
@@ -12,7 +12,7 @@
     </div>
   </div>
 
-  <ep-previous-next-navigation :viite-id="viiteId" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+  <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
 </div>
 </template>
 
@@ -53,16 +53,18 @@ export default class RouteTekstikappale extends Vue {
   }
 
   private alikappaleet: Laaja[] = [];
-  private isLoading = true;
+  private isLoading = false;
 
-  async mounted() {
+  @Watch('alikappaleNodes')
+  async updateAlikappaleet() {
+    this.isLoading = true;
     if (this.alikappaleNodes) {
-      for (const node of this.alikappaleNodes) {
-        if (node.id) {
-          const alikappale = (await Perusteenosat.getPerusteenOsatByViite(node.id)).data;
-          this.alikappaleet.push(alikappale);
-        }
-      }
+      this.alikappaleet = await Promise.all(_(this.alikappaleNodes)
+        .filter(node => node.type === 'viite')
+        .filter('location')
+        .map(async (node: any) =>
+          (await Perusteenosat.getPerusteenOsatByViite(node.location.params.viiteId)).data)
+        .value());
     }
     this.isLoading = false;
   }
@@ -75,12 +77,20 @@ export default class RouteTekstikappale extends Vue {
     return this.perusteDataStore.flattenedSidenav;
   }
 
+  get currentRoute() {
+    return this.perusteDataStore.currentRoute;
+  }
+
+  get sidenav() {
+    return this.perusteDataStore.sidenav;
+  }
+
   get current() {
-    return this.perusteDataStore.current;
+    return this.perusteDataStore.current || null;
   }
 
   get alikappaleNodes(): Array<SidenavNode> | null {
-    if (this.current && this.current.path.length === 1) {
+    if (this.current && this.current.path.length === 2) {
       return this.current.children;
     }
     return null;
@@ -88,7 +98,7 @@ export default class RouteTekstikappale extends Vue {
 
   @Watch('viiteId', { immediate: true })
   onViiteUpdate(value: number) {
-    this.perusteDataStore.updateViiteId(value);
+    this.perusteDataStore.updateRoute(this.$route);
   }
 
 }

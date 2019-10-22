@@ -82,42 +82,34 @@ export default class PerusteHaku extends Vue {
   }
 
   get toggles() {
-    return [
-      'tuleva',
-      'voimassaolo',
-      'siirtyma',
-      'poistunut',
-      'tutkintonimikkeet',
-      'tutkinnonosat',
-      'osaamisalat',
-    ];
+    return this.perusteHakuStore.toggles;
   }
 
   get perusteet() {
-    return this.perusteHakuStore.perusteet; 
+    return this.perusteHakuStore.perusteet;
   }
   get total() {
-    return this.perusteHakuStore.total; 
+    return this.perusteHakuStore.total;
   }
   get pages() {
-    return this.perusteHakuStore.pages; 
+    return this.perusteHakuStore.pages;
   }
   get perPage() {
-    return this.perusteHakuStore.perPage; 
+    return this.perusteHakuStore.perPage;
   }
   get filters() {
-    return this.perusteHakuStore.filters; 
+    return this.perusteHakuStore.filters;
   }
 
   get query() {
-    return this.filters.nimi; 
+    return this.filters.nimi;
   }
   set query(value) {
-    this.perusteHakuStore.updateFilters({ nimi: value }); 
+    this.perusteHakuStore.updateFilters({ nimi: value });
   }
 
   get page() {
-    return this.perusteHakuStore.page + 1; 
+    return this.perusteHakuStore.page + 1;
   }
   set page(value) {
     this.perusteHakuStore.page = value - 1;

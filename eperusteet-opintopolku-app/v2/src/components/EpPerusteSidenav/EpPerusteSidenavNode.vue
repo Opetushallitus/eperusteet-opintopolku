@@ -1,16 +1,18 @@
 <template>
 <div class="node" :class="{ 'node-root': isRoot }">
   <div v-if="!isRoot">
-    <b-link v-if="node.to" :to="node.to">
-      <span class="label" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
+    <b-link v-if="node.location" :to="node.location">
+      <span class="label" :class="{ 'label-match': isMatch }">
+        {{ node.label }}
+      </span>
     </b-link>
     <span v-else class="label label-plain" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
   </div>
 
   <!-- children -->
-  <ul v-if="!isCollapsed && children && children.length > 0" :class="{ 'root-list': isRoot }">
+  <ul :class="{ 'root-list': isRoot }">
     <li v-for="(child, idx) in children" :key="idx">
-      <ep-peruste-sidenav-node :key="idx" :node="child" :sidenav-filter="sidenavFilter" />
+      <ep-peruste-sidenav-node :key="idx" :node="child" />
     </li>
   </ul>
 </div>
@@ -19,35 +21,27 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SidenavFilter, SidenavNode } from '@/utils/NavigationBuilder';
+import { FilteredSidenavNode } from '@/utils/NavigationBuilder';
+import { Kielet } from '@shared/stores/kieli';
+
 
 @Component({
   name: 'EpPerusteSidenavNode',
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  node!: SidenavNode;
-
-  @Prop({ required: true })
-  sidenavFilter!: SidenavFilter;
+  node!: FilteredSidenavNode;
 
   get children() {
-    return _.filter(this.node.children, {
-      isVisible: true,
-      isFiltered: true
-    });
+    return this.node.children;
   }
 
   get isRoot() {
     return this.node.type === 'root';
   }
 
-  get isCollapsed() {
-    return this.node.isCollapsed && !this.sidenavFilter.isEnabled;
-  }
-
   get isMatch() {
-    return this.node.isMatch && this.sidenavFilter.isEnabled;
+    return this.node.isMatch;
   }
 }
 </script>
