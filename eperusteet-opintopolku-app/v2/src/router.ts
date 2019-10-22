@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
 
@@ -12,6 +13,7 @@ import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTe
 import RouteLaajaalaiset from '@/routes/perusteet/sisalto/lops2019/laajaalaiset/RouteLaajaalaiset.vue';
 import RouteOppiaineet from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaineet.vue';
 import RouteOppiaine from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaine.vue';
+import RouteModuuli from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteModuuli.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -26,7 +28,10 @@ import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
 
 import { createLogger } from '@shared/utils/logger';
-import _ from 'lodash';
+import { Lops2019LaajaalaisetStore } from '@/stores/Lops2019LaajaalaisetStore';
+import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
+import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
+import { Lops2019ModuuliStore } from "@/stores/Lops2019ModuuliStore";
 
 Vue.use(Router);
 const logger = createLogger('Router');
@@ -163,14 +168,73 @@ export const router = new Router({
         path: 'laajaalaiset',
         component: RouteLaajaalaiset,
         name: 'lops2019laajaalaiset',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019LaajaalaisetStore: await Lops2019LaajaalaisetStore.create(_.parseInt(route.params.perusteId)),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'oppiaine',
         component: RouteOppiaineet,
         name: 'lops2019oppiaineet',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(_.parseInt(route.params.perusteId)),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'oppiaine/:oppiaineId',
         component: RouteOppiaine,
         name: 'lops2019oppiaine',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId', 'oppiaineId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019oppiaineStore: await Lops2019OppiaineStore.create(
+                      _.parseInt(route.params.perusteId),
+                      _.parseInt(route.params.oppiaineId)
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'oppiaine/:oppiaineId/moduuli/:moduuliId',
+        component: RouteModuuli,
+        name: 'lops2019moduuli',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId', 'oppiaineId', 'moduuliId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019moduuliStore: await Lops2019ModuuliStore.create(
+                      _.parseInt(route.params.perusteId),
+                      _.parseInt(route.params.oppiaineId),
+                      _.parseInt(route.params.moduuliId)
+                  ),
+                },
+              };
+            },
+          },
+        },
       }],
     }],
   }, {
