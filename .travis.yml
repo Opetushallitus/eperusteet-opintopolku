@@ -45,10 +45,10 @@ install:
   - yarn install
   - echo -en 'travis_fold:end:install\\r'
 
-  - echo 'Generate eperusteet & eperusteet-ylops API code' && echo -en 'travis_fold:start:build\\r'
+  - echo 'Generate eperusteet & eperusteet-ylops API code' && echo -en 'travis_fold:start:install\\r'
   - yarn gen:api
   - cd ../../../..
-  - echo -en 'travis_fold:end:build\\r'
+  - echo -en 'travis_fold:end:install\\r'
 
   - git clone https://github.com/Opetushallitus/ci-tools.git
   - source ci-tools/common/setup-tools.sh
