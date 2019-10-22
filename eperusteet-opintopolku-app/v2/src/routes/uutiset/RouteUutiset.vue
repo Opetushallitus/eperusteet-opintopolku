@@ -10,7 +10,7 @@
       </div>
       <div v-if="tiedotteet.tiedotteet">
         <div v-if="!isTiedotteetEmpty">
-          <div class="tiedotteet">
+          <div class="tiedotteet" id="tiedotteet-lista">
             <div class="tiedote" v-for="(tiedote, idx) in tiedotteet.tiedotteet" :key="idx">
               <div class="otsikko">
                 {{ $kaanna(tiedote.otsikko) }}
@@ -28,7 +28,11 @@
                         :total-rows="tiedotteet.amount"
                         :per-page="tiedotteet.filter.sivukoko"
                         align="center"
-                        aria-controls="uutiset-sivut"></b-pagination>
+                        aria-controls="tiedotteet-lista"
+                        :first-text="$t('alkuun')"
+                        prev-text="«"
+                        next-text="»"
+                        :last-text="$t('loppuun')" />
         </div>
       <div v-else>{{ $t('ei-hakutuloksia') }}</div>
       </div>

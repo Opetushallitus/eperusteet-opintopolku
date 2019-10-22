@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="content">
-    <div class="perusteet">
+    <div class="perusteet" id="perusteet-lista">
       <div class="d-flex peruste" v-for="(peruste, idx) in perusteet" :key="idx">
         <div class="colorbox"></div>
         <div class="perustecard">
@@ -41,16 +41,15 @@
       </div>
     </div>
     <div class="pagination d-flex justify-content-center">
-      <b-pagination
-        class=""
-        v-if="total >= perPage"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        :first-text="$t('alkuun')"
-        prev-text="«"
-        next-text="»"
-        :last-text="$t('loppuun')" />
+      <b-pagination v-model="page"
+                    :total-rows="total"
+                    :per-page="perPage"
+                    align="center"
+                    aria-controls="perusteet-lista"
+                    :first-text="$t('alkuun')"
+                    prev-text="«"
+                    next-text="»"
+                    :last-text="$t('loppuun')" />
     </div>
   </div>
 
@@ -94,30 +93,30 @@ export default class PerusteHaku extends Vue {
   }
 
   get perusteet() {
-    return this.perusteHakuStore.perusteet; 
+    return this.perusteHakuStore.perusteet;
   }
   get total() {
-    return this.perusteHakuStore.total; 
+    return this.perusteHakuStore.total;
   }
   get pages() {
-    return this.perusteHakuStore.pages; 
+    return this.perusteHakuStore.pages;
   }
   get perPage() {
-    return this.perusteHakuStore.perPage; 
+    return this.perusteHakuStore.perPage;
   }
   get filters() {
-    return this.perusteHakuStore.filters; 
+    return this.perusteHakuStore.filters;
   }
 
   get query() {
-    return this.filters.nimi; 
+    return this.filters.nimi;
   }
   set query(value) {
-    this.perusteHakuStore.updateFilters({ nimi: value }); 
+    this.perusteHakuStore.updateFilters({ nimi: value });
   }
 
   get page() {
-    return this.perusteHakuStore.page + 1; 
+    return this.perusteHakuStore.page + 1;
   }
   set page(value) {
     this.perusteHakuStore.page = value - 1;
