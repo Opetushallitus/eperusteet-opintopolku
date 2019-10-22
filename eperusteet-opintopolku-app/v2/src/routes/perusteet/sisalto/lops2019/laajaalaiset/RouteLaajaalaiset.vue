@@ -1,5 +1,7 @@
 <template>
-<div class="content">laaja-alaiset</div>
+<div class="content">
+    <h2 class="otsikko" slot="header">{{ $t('laaja-alaiset-osaamiset') }}</h2>
+</div>
 </template>
 
 <script lang="ts">

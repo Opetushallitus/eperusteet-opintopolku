@@ -1,5 +1,7 @@
 <template>
-<div class="content">oppiaineet</div>
+<div class="content">
+    <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
+</div>
 </template>
 
 <script lang="ts">
