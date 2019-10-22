@@ -37,7 +37,14 @@ export default class EpHeader extends Vue {
   private koulutustyyppi!: string;
 
   get items() {
-    return this.murupolku;
+    return [
+      {
+        to: { name: 'root' },
+        text: this.$t('eperusteet') as string,
+        active: false,
+      },
+      ...this.murupolku
+    ];
   }
 
   get theme() {
@@ -124,11 +131,11 @@ export default class EpHeader extends Vue {
       font-weight: bolder;
     }
 
-    &.black /deep/ li, &.black /deep/ li a {
+    &.black /deep/ li, &.black /deep/ li::before, &.black /deep/ li a {
       color: black;
     }
 
-    &.white /deep/ li, &.white /deep/ li a {
+    &.white /deep/ li, &.white /deep/ li::before, &.white /deep/ li a {
       color: white;
     }
   }
