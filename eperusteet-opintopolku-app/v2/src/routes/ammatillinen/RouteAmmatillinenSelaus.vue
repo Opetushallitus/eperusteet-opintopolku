@@ -6,7 +6,7 @@
       {{ $t('ammatillinen-koulutus') }}
     </template>
     <!-- Todo: UX-kuvien mukaiseksi -->
-    <b-tabs content-class="mt-3" no-fade="true">
+    <b-tabs content-class="mt-3" :no-fade="true">
       <b-tab :title="$t('perusteet')">
         <p class="kuvaus" v-html="$t('kooste-kuvaus-ammatillinen-koulutus')"></p>
         <p class="kuvaus" v-html="$t('kooste-kuvaus-perusteet')"></p>

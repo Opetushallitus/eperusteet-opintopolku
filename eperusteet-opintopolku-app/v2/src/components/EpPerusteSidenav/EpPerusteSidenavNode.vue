@@ -24,8 +24,6 @@
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { SidenavNode } from '@/utils/NavigationBuilder';
-import { SidenavNode } from '@/utils/NavigationBuilder';
-import { Kielet } from '@shared/stores/kieli';
 
 
 @Component({
