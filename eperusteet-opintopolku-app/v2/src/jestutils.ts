@@ -30,7 +30,7 @@ export const mocks = Object.freeze({
 }) as any;
 
 export const stubs = Object.freeze({
-  RouterLink: RouterLinkStub,
+  RouterLink: true,
 }) as any;
 
 function wrap<T extends object>(original: T, value: T) {
