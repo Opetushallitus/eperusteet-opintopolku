@@ -16,12 +16,13 @@ export interface SidenavNode {
   children: SidenavNode[];
   path: SidenavNode[]; // parent polku rootiin saakka, alkioiden määrä määrittää syvyyden
   location?: Location;
+  isMatch?: boolean;
+  isVisible?: boolean;
 }
 
 export interface FilteredSidenavNode extends SidenavNode {
   children: FilteredSidenavNode[];
   path: FilteredSidenavNode[]; // parent polku rootiin saakka, alkioiden määrä määrittää syvyyden
-  isMatch?: boolean;
 }
 
 export interface SidenavFilter {

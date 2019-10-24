@@ -45,22 +45,18 @@ export default class RouteTekstikappale extends Vue {
   @Prop({ required: true, type: Number })
   private viiteId!: string | number;
 
-  get viiteIdNumber() {
-    if (_.isString(this.viiteId)) {
-      return _.parseInt(this.viiteId);
-    }
-    return this.viiteId;
-  }
-
   private alikappaleet: Laaja[] = [];
   private isLoading = false;
 
-  @Watch('alikappaleNodes')
+  @Watch('current', { immediate: true })
   async updateAlikappaleet() {
+    if (!this.current) {
+      return;
+    }
+
     this.isLoading = true;
-    if (this.alikappaleNodes) {
-      this.alikappaleet = await Promise.all(_(this.alikappaleNodes)
-        .filter(node => node.type === 'viite')
+    if (this.current.children) {
+      this.alikappaleet = await Promise.all(_(this.current.children)
         .filter('location')
         .map(async (node: any) =>
           (await Perusteenosat.getPerusteenOsatByViite(node.location.params.viiteId)).data)
@@ -87,18 +83,6 @@ export default class RouteTekstikappale extends Vue {
 
   get current() {
     return this.perusteDataStore.current || null;
-  }
-
-  get alikappaleNodes(): Array<SidenavNode> | null {
-    if (this.current && this.current.path.length === 2) {
-      return this.current.children;
-    }
-    return null;
-  }
-
-  @Watch('viiteId', { immediate: true })
-  onViiteUpdate(value: number) {
-    this.perusteDataStore.updateRoute(this.$route);
   }
 
 }

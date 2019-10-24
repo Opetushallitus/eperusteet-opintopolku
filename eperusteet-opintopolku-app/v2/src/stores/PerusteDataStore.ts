@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
@@ -39,33 +39,24 @@ export class PerusteDataStore {
   }
 
   @Getter((state, getters) => {
-    function closeSubmenus(node) {
-      return {
-        ...node,
-        children: _.map(node.children, child => ({
-          ...child,
-          children: [],
-        })),
-      };
+    if (!state.sidenav || !getters.current) {
+      return null;
     }
 
-    if (getters.current) {
-      let stack = _.reverse([...getters.current.path]);
-      let head = stack.pop();
-      while (!_.isEmpty(stack)) {
-        let head = stack.pop();
-      }
-      return {};
-    }
-    else {
-      return {
-        ...state.sidenav,
-        children: _.map(state.sidenav.children, child => ({
-          ...child,
-          children: [],
-        })),
-      };
-    }
+    const pathKeys = _.map(getters.current.path, 'key');
+    const onPath = node => {
+      const parent = node.path[_.size(node.path) - 2];
+      return _.includes(pathKeys, node.key)
+        || (parent && _.includes(pathKeys, parent.key));
+    };
+
+    const map = (v, depth = 0) => ({
+      ...v,
+      isVisible: depth === 1 || onPath(v),
+      children: _.map(v.children, child => map(child, depth + 1)),
+    });
+
+    return map(state.sidenav);
   })
   public readonly collapsedSidenav!: SidenavNode | null;
 
@@ -74,12 +65,12 @@ export class PerusteDataStore {
       return filterSidenav(state.sidenav, state.sidenavFilter);
     }
     else {
-      return state.sidenav;
+      return getters.collapsedSidenav;
     }
   })
   public readonly filteredSidenav!: SidenavNode | null;
 
-  @Getter((state) => {
+  @Getter((state, getters) => {
     const root = state.sidenav;
     const result: Array<SidenavNode> = [];
 

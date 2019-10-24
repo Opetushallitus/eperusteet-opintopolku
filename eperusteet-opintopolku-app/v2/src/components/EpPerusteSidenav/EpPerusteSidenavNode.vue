@@ -6,7 +6,9 @@
         {{ node.label }}
       </span>
     </b-link>
-    <span v-else class="label label-plain" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
+    <span v-else
+          class="label label-plain"
+          :class="{ 'label-match': isMatch }">{{ node.label }}</span>
   </div>
 
   <!-- children -->
@@ -21,7 +23,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { FilteredSidenavNode } from '@/utils/NavigationBuilder';
+import { SidenavNode } from '@/utils/NavigationBuilder';
 import { Kielet } from '@shared/stores/kieli';
 
 
@@ -30,10 +32,10 @@ import { Kielet } from '@shared/stores/kieli';
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  node!: FilteredSidenavNode;
+  node!: SidenavNode;
 
   get children() {
-    return this.node.children;
+    return _.filter(this.node.children, 'isVisible');
   }
 
   get isRoot() {
@@ -43,6 +45,7 @@ export default class EpPerusteSidenavNode extends Vue {
   get isMatch() {
     return this.node.isMatch;
   }
+
 }
 </script>
 
