@@ -1,78 +1,81 @@
 <template>
 <div class="content">
-    <h2 class="otsikko" slot="header">{{ $kaanna(oppiaine.nimi) }}</h2>
+    <div v-if="oppiaine">
+        <h2 class="otsikko" slot="header">{{ $kaanna(oppiaine.nimi) }}</h2>
 
-    <div class="teksti">
-        <div v-if="koodi">
-            <strong>{{ $t('koodi') }}</strong>
-            <p>{{ koodi.arvo }}</p>
-        </div>
-
-        <div v-if="hasTehtava">
-            <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
-            <div v-html="$kaanna(oppiaine.tehtava.kuvaus)"></div>
-        </div>
-
-        <div v-if="hasLaajaAlaiset">
-            <h3>{{ $t('laaja-alaiset-osaamiset') }}</h3>
-            <div v-html="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"></div>
-        </div>
-
-        <div v-if="hasTavoitteet">
-            <h3>{{ $t('tavoitteet') }}</h3>
-            <div v-if="tavoitteet.kuvaus" v-html="$kaanna(tavoitteet.kuvaus)"></div>
-            <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="idx">
-                <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
-                <p v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</p>
-                <ul>
-                    <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
-                        <span>{{ localize(tavoite) }}</span>
-                    </li>
-                </ul>
+        <div class="teksti">
+            <div v-if="koodi">
+                <strong>{{ $t('koodi') }}</strong>
+                <p>{{ koodi.arvo }}</p>
             </div>
-        </div>
 
-        <div v-if="hasArviointi">
-            <h3>{{ $t('arviointi') }}</h3>
-            <div v-html="$kaanna(oppiaine.arviointi.kuvaus)"></div>
-        </div>
+            <div v-if="hasTehtava">
+                <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
+                <div v-html="$kaanna(oppiaine.tehtava.kuvaus)"></div>
+            </div>
 
-        <div v-if="hasModuulit">
-            <h3>{{ $t('moduulit') }}</h3>
+            <div v-if="hasLaajaAlaiset">
+                <h3>{{ $t('laaja-alaiset-osaamiset') }}</h3>
+                <div v-html="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"></div>
+            </div>
 
-            <div v-if="hasPakollisetModuulit">
-                <h4>{{ $t('pakolliset-moduulit') }}</h4>
-                <div v-if="oppiaine.pakollisetModuulitKuvaus" v-html="$kaanna(oppiaine.pakollisetModuulitKuvaus)"></div>
-                <div v-for="(moduuli, idx) in pakollisetModuulit"
-                     :key="idx">
-                    <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
-                        {{ $kaanna(moduuli.nimi) }}
-                    </router-link>
+            <div v-if="hasTavoitteet">
+                <h3>{{ $t('tavoitteet') }}</h3>
+                <div v-if="tavoitteet.kuvaus" v-html="$kaanna(tavoitteet.kuvaus)"></div>
+                <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="idx">
+                    <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
+                    <p v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</p>
+                    <ul>
+                        <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
+                            <span>{{ $kaanna(tavoite) }}</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
-            <div v-if="hasValinnaisetModuulit">
-                <h4>{{ $t('valinnaiset-moduulit') }}</h4>
-                <div v-if="oppiaine.valinnaisetModuulitKuvaus" v-html="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"></div>
-                <div v-for="(moduuli, idx) in valinnaisetModuulit"
-                     :key="idx">
-                    <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
-                        {{ $kaanna(moduuli.nimi) }}
-                    </router-link>
+            <div v-if="hasArviointi">
+                <h3>{{ $t('arviointi') }}</h3>
+                <div v-html="$kaanna(oppiaine.arviointi.kuvaus)"></div>
+            </div>
+
+            <div v-if="hasModuulit">
+                <h3>{{ $t('moduulit') }}</h3>
+
+                <div v-if="hasPakollisetModuulit">
+                    <h4>{{ $t('pakolliset-moduulit') }}</h4>
+                    <div v-if="oppiaine.pakollisetModuulitKuvaus" v-html="$kaanna(oppiaine.pakollisetModuulitKuvaus)"></div>
+                    <div v-for="(moduuli, idx) in pakollisetModuulit"
+                         :key="idx">
+                        <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
+                            {{ $kaanna(moduuli.nimi) }}
+                        </router-link>
+                    </div>
+                </div>
+
+                <div v-if="hasValinnaisetModuulit">
+                    <h4>{{ $t('valinnaiset-moduulit') }}</h4>
+                    <div v-if="oppiaine.valinnaisetModuulitKuvaus" v-html="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"></div>
+                    <div v-for="(moduuli, idx) in valinnaisetModuulit"
+                         :key="idx">
+                        <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
+                            {{ $kaanna(moduuli.nimi) }}
+                        </router-link>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div v-if="hasOppimaarat">
-            <h3>{{ $t('oppimaarat') }}</h3>
-            <div v-for="(oppimaara, idx) in oppimaarat"
-                 :key="idx">
-                <router-link :to="{ name: 'lops2019oppiaine', params: { oppiaineId: oppimaara.id } }">
-                    {{ $kaanna(oppimaara.nimi) }}
-                </router-link>
+            <div v-if="hasOppimaarat">
+                <h3>{{ $t('oppimaarat') }}</h3>
+                <div v-for="(oppimaara, idx) in oppimaarat"
+                     :key="idx">
+                    <router-link :to="{ name: 'lops2019oppiaine', params: { oppiaineId: oppimaara.id } }">
+                        {{ $kaanna(oppimaara.nimi) }}
+                    </router-link>
+                </div>
             </div>
         </div>
     </div>
+    <ep-spinner v-else />
 </div>
 </template>
 
@@ -80,14 +83,22 @@
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
-@Component({})
+@Component({
+  components: {
+    EpSpinner,
+  }
+})
 export default class RouteOppiaine extends Vue {
   @Prop({ required: true })
   private lops2019oppiaineStore!: Lops2019OppiaineStore;
 
-  private localize(tavoite) {
-    return _.isObject(tavoite) ? (this as any).$kaanna(tavoite) : this.$t(tavoite);
+  created() {
+    this.lops2019oppiaineStore.getOppiaine(
+      _.parseInt(this.$route.params.perusteId),
+      _.parseInt(this.$route.params.oppiaineId),
+    );
   }
 
   get oppiaine() {

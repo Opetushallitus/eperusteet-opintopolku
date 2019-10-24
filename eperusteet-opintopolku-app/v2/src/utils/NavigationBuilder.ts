@@ -32,6 +32,10 @@ export interface SidenavFilter {
   isEnabled: boolean;
 }
 
+export interface SidenavBuilder {
+  sidenav: SidenavNode | null
+}
+
 /**
  * Rakennetaan sivunavigaatio
  * @param peruste Peruste

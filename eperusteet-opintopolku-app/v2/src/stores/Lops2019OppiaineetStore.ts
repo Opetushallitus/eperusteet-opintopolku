@@ -1,35 +1,30 @@
-import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
-import { Lops2019 } from "@shared/api/eperusteet";
+import { Lops2019 } from '@shared/api/eperusteet';
 import { Lops2019OppiaineDto } from '@shared/api/tyypit';
+import { SidenavNode, SidenavBuilder } from '@/utils/NavigationBuilder';
 
 @Store
-export class Lops2019OppiaineetStore {
-  @State() public perusteId: number | null = null;
+export class Lops2019OppiaineetStore implements SidenavBuilder {
+  @State() public perusteId: number;
   @State() public oppiaineet: Array<Lops2019OppiaineDto> | null = null;
+  @State() public sidenav: SidenavNode | null = null;
 
-  public static readonly create = _.memoize(async (perusteId: number) => {
-    try {
-      const result = new Lops2019OppiaineetStore(perusteId);
-      await result.init();
-      return result;
-    }
-    catch (err) {
-      console.error(err);
-    }
-  });
+  public static async create(perusteId: number) {
+    const store = new Lops2019OppiaineetStore(perusteId);
+    store.fetchOppiaineet();
+    return store;
+  }
+
 
   constructor(perusteId: number) {
     this.perusteId = perusteId;
   }
 
-  async init() {
-    if (this.perusteId) {
-      console.log(this.perusteId);
-      this.oppiaineet = (await Lops2019.getOppiaineet(this.perusteId)).data;
-    }
-    else {
-      throw new Error('peruste-id-puuttuu');
-    }
+  /**
+   * Haetaan oppiaineet jos perusteId on muuttunut
+   */
+  async fetchOppiaineet() {
+    this.oppiaineet = null;
+    this.oppiaineet = (await Lops2019.getOppiaineet(this.perusteId)).data;
   }
 }

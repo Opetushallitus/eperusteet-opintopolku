@@ -9,28 +9,20 @@ export class Lops2019OppiaineStore {
   @State() public oppiaineId: number | null = null;
   @State() public oppiaine: Lops2019OppiaineKaikkiDto | null = null;
 
-  public static readonly create = _.memoize(async (perusteId: number, oppiaineId: number) => {
-    try {
-      const result = new Lops2019OppiaineStore(perusteId, oppiaineId);
-      await result.init();
-      return result;
+  /**
+   * Haetaan oppiaine asetetuilla parametreillä jos ei ole jo haettu
+   */
+  async getOppiaine(perusteId: number, oppiaineId: number) {
+    if (!perusteId || !oppiaineId) {
+      this.perusteId = null;
+      this.oppiaineId = null;
+      this.oppiaine = null;
     }
-    catch (err) {
-      console.error(err);
-    }
-  });
-
-  constructor(perusteId: number, oppiaineId: number) {
-    this.perusteId = perusteId;
-    this.oppiaineId = oppiaineId;
-  }
-
-  async init() {
-    if (this.perusteId && this.oppiaineId) {
+    else if (perusteId !== this.perusteId || oppiaineId !== this.oppiaineId || !this.oppiaine) {
+      this.perusteId = perusteId;
+      this.oppiaineId = oppiaineId;
+      this.oppiaine = null;
       this.oppiaine = (await Lops2019.getOppiaine(this.perusteId, this.oppiaineId)).data;
-    }
-    else {
-      throw new Error('peruste-tai-oppiaine-id-puuttuu');
     }
   }
 }

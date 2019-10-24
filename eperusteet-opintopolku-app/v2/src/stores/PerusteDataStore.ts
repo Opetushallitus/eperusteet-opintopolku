@@ -5,12 +5,14 @@ import { Perusteet, Sisallot } from '@shared/api/eperusteet';
 import { SidenavFilter, SidenavNode, buildSidenav } from '@/utils/NavigationBuilder';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
+import { Koulutustyyppi, KoulutustyyppiToteutus } from "@shared/tyypit";
+import { Lops2019OppiaineetStore } from "@/stores/Lops2019OppiaineetStore";
 
 
 @Store
 export class PerusteDataStore {
   @State() public peruste: PerusteDto | null = null;
-  @State() public perusteId: number | null = null;
+  @State() public perusteId: number;
   @State() public sisalto: Matala | null = null;
   @State() public suoritustapa: string | null = null;
   @State() public viiteId: number | null = null;
@@ -22,15 +24,76 @@ export class PerusteDataStore {
   };
 
   public static async create(perusteId: number) {
-    try {
-      const result = new PerusteDataStore(perusteId);
-      await result.init();
-      await result.initSisalto();
-      return result;
+    const result = new PerusteDataStore(perusteId);
+    await result.init();
+
+    result.initSisalto();
+
+    const stores = {
+      perusteDataStore: result,
+      ...await result.createStoresForPeruste(),
+    };
+
+    return stores;
+  }
+
+  private async createStoresForPeruste() {
+    if (!this.peruste) {
+      throw new Error('peruste-ei-alustettu');
     }
-    catch (err) {
-      console.error(err);
+
+    const peruste =  this.peruste;
+
+    const koulutustyyppi = peruste.koulutustyyppi!;
+    const koulutustyyppiToteutus = peruste.toteutus as KoulutustyyppiToteutus | undefined;
+
+    const base = {
+
+    };
+
+    switch (koulutustyyppi) {
+      case Koulutustyyppi.lisaopetus:
+      case Koulutustyyppi.esiopetus:
+      case Koulutustyyppi.varhaiskasvatus:
+      case Koulutustyyppi.perusopetusvalmistava:
+      case Koulutustyyppi.tpo:
+        return {
+
+        };
+      case Koulutustyyppi.perusopetus:
+        return {
+
+        };
+      case Koulutustyyppi.aikuistenperusopetus:
+        return {
+
+        };
+      case Koulutustyyppi.lukiokoulutus:
+      case Koulutustyyppi.lukiovalmistavakoulutus:
+      case Koulutustyyppi.aikuistenlukiokoulutus:
+        if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
+          return {
+            ...base,
+            lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId),
+          };
+        }
+        /*
+        else {
+          // todo
+          break;
+        }
+        */
+      /*
+      case Koulutustyyppi.telma:
+      case Koulutustyyppi.perustutkinto:
+      case Koulutustyyppi.ammattitutkinto:
+      case Koulutustyyppi.erikoisammattitutkinto:
+        // todo
+        break;
+      */
     }
+
+    throw new Error('koulutustyyppin-storet-ei-toteutettu');
   }
 
   constructor(perusteId: number) {

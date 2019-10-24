@@ -15,9 +15,7 @@
           <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
         </template>
         <template slot="view">
-        <transition name="fade" mode="out-in">
           <router-view :key="$route.fullPath" />
-        </transition>
         </template>
       </ep-sidebar>
     </div>
