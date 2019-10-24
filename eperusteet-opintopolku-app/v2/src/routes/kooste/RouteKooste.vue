@@ -101,11 +101,10 @@ export default class RouteKooste extends Vue {
 
   get murupolku(): Array<MurupolkuOsa> {
     return [{
-      to: {
+      label: (this as any).$t('kooste'),
+      location: {
         ...this.$route,
       },
-      text: (this as any).$t('kooste'),
-      active: false,
     }];
   }
 

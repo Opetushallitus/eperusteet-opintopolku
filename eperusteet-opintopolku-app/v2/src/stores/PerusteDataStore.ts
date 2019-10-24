@@ -2,9 +2,10 @@ import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import { SidenavFilter, SidenavNode, buildSidenav } from '@/utils/NavigationBuilder';
+import { SidenavFilter, SidenavNode, buildSidenav, filterSidenav } from '@/utils/NavigationBuilder';
 import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
+import { Location } from 'vue-router';
 import { Koulutustyyppi, KoulutustyyppiToteutus } from "@shared/tyypit";
 import { Lops2019OppiaineetStore } from "@/stores/Lops2019OppiaineetStore";
 
@@ -15,9 +16,10 @@ export class PerusteDataStore {
   @State() public perusteId: number;
   @State() public sisalto: Matala | null = null;
   @State() public suoritustapa: string | null = null;
-  @State() public viiteId: number | null = null;
+  @State() public currentRoute: Location | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
+  @State() public sidenav: SidenavNode | null = null;
   @State() public sidenavFilter: SidenavFilter = {
     label: '',
     isEnabled: false,
@@ -101,18 +103,48 @@ export class PerusteDataStore {
   }
 
   @Getter((state, getters) => {
-    if (state.perusteId && state.sisalto) {
-      const viiteId = state.viiteId ? state.viiteId : undefined;
-      return buildSidenav(state.peruste, state.sisalto, state.sidenavFilter, viiteId);
+    function closeSubmenus(node) {
+      return {
+        ...node,
+        children: _.map(node.children, child => ({
+          ...child,
+          children: [],
+        })),
+      };
+    }
+
+    if (getters.current) {
+      let stack = _.reverse([...getters.current.path]);
+      let head = stack.pop();
+      while (!_.isEmpty(stack)) {
+        let head = stack.pop();
+      }
+      return {};
     }
     else {
-      return null;
+      return {
+        ...state.sidenav,
+        children: _.map(state.sidenav.children, child => ({
+          ...child,
+          children: [],
+        })),
+      };
     }
   })
-  public readonly sidenav!: SidenavNode | null;
+  public readonly collapsedSidenav!: SidenavNode | null;
 
-  get flattenedSidenav(): Array<SidenavNode> {
-    const root = this.sidenav;
+  @Getter((state, getters) => {
+    if (state.sidenavFilter.isEnabled) {
+      return filterSidenav(state.sidenav, state.sidenavFilter);
+    }
+    else {
+      return state.sidenav;
+    }
+  })
+  public readonly filteredSidenav!: SidenavNode | null;
+
+  @Getter((state) => {
+    const root = state.sidenav;
     const result: Array<SidenavNode> = [];
 
     function traverseTree(node: SidenavNode) {
@@ -129,19 +161,20 @@ export class PerusteDataStore {
     }
 
     return result;
-  }
+  })
+  public readonly flattenedSidenav!: SidenavNode[];
 
   @Getter((state, getters) => {
-    if (state.viiteId && getters.sidenav) {
-      const root = getters.sidenav;
-      const stack = [root];
-      const viiteId = state.viiteId;
+    if (state.currentRoute && state.sidenav) {
+      const stack = [state.sidenav];
       while (stack.length > 0) {
         const head = stack.pop();
-        if (head.id === viiteId) {
-          return head || null;
+        if (head && head.location) {
+          if (_.isMatch(state.currentRoute as any, head!.location! as any)) {
+            return head || null;
+          }
         }
-        stack.push(...head!.children);
+        _.forEach(head!.children, child => stack.push(child));
       }
     }
     else {
@@ -149,7 +182,6 @@ export class PerusteDataStore {
     }
   })
   public readonly current!: SidenavNode | null;
-
 
 
   public async getDokumentit(sisaltoKieli) {
@@ -181,8 +213,8 @@ export class PerusteDataStore {
     })));
   }
 
-  public async updateViiteId(value) {
-    this.viiteId = _.isString(value) ? _.parseInt(value) : value;
+  public async updateRoute(route) {
+    this.currentRoute = route;
   }
 
   public readonly updateFilter = _.debounce((filter: SidenavFilter) => {
@@ -192,19 +224,11 @@ export class PerusteDataStore {
   private async init() {
     if (this.perusteId) {
       this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
+      this.sidenav = await buildSidenav(this.peruste!);
     }
     else {
       throw new Error('peruste-id-puuttuu');
     }
   }
 
-  private async initSisalto() {
-    if (this.perusteId && this.peruste) {
-      // Todo: erikoisammattitutkinto vaatii oikean suoritustapakoodin
-      this.sisalto = (await Sisallot.getSuoritustapaSisaltoUUSI(this.perusteId, 'LUKIOKOULUTUS2019')).data;
-    }
-    else {
-      throw new Error('peruste-id-tai-peruste-puuttuu');
-    }
-  }
 }

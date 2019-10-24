@@ -81,15 +81,7 @@ export default class PerusteHaku extends Vue {
   }
 
   get toggles() {
-    return [
-      'tuleva',
-      'voimassaolo',
-      'siirtyma',
-      'poistunut',
-      'tutkintonimikkeet',
-      'tutkinnonosat',
-      'osaamisalat',
-    ];
+    return this.perusteHakuStore.toggles;
   }
 
   get perusteet() {

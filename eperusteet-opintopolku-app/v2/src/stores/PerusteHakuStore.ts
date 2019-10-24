@@ -86,29 +86,4 @@ export class PerusteHakuStore {
     this.fetch();
   }
 
-  async updatePerusteet() {
-    // this.perusteet = ((await Perusteet.getAllPerusteet(
-    //   0,
-    //   100,
-    //   true,
-    //   true,
-    //   true,
-    //   false,
-    //   undefined,
-    //   undefined,
-    //   [
-    //     'koulutustyyppi_2',
-    //     'koulutustyyppi_5',
-    //     'koulutustyyppi_6',
-    //     'koulutustyyppi_14',
-    //     'koulutustyyppi_15',
-    //     'koulutustyyppi_16',
-    //     'koulutustyyppi_17',
-    //     'koulutustyyppi_18',
-    //     'koulutustyyppi_20',
-    //     'koulutustyyppi_22',
-    //     'koulutustyyppi_23',
-    //     'koulutustyyppi_999907',
-    //   ])).data as any).data;
-  }
 }

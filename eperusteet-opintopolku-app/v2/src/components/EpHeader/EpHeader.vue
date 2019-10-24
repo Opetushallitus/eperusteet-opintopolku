@@ -4,8 +4,22 @@
     <div class="container header">
       <div class="col">
         <div class="murupolku">
-          <nav :aria-label="$t('murupolku')">
-            <b-breadcrumb :items="items" :class="{ 'black': isBlack, 'white': !isBlack }"></b-breadcrumb>
+           <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" :style="style">
+              <li class="breadcrumb-item" :style="style">
+                <router-link class="breadcrumb-home" :to="{ name: 'root' }" :style="style">
+                  {{ $t('eperusteet') }}
+                </router-link>
+              </li>
+              <li class="breadcrumb-item"
+                  :class="{ 'breadcrumb-truncated': idx < murupolku.length - 2 }"
+                  v-for="(item, idx) in murupolkuFiltered"
+                  :key="idx">
+                <router-link class="breadcrumb-normal" :style="style" :to="item.location">
+                  {{ item.label }}
+                </router-link>
+              </li>
+            </ol>
           </nav>
           <slot name="murupolku"></slot>
         </div>
@@ -26,25 +40,20 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@/utils/perusteet';
 import { MurupolkuOsa } from '@/tyypit';
+import _ from 'lodash';
+
 
 @Component
 export default class EpHeader extends Vue {
 
   @Prop({ required: true })
-  private murupolku!: Array<MurupolkuOsa>;
+  private murupolku!: MurupolkuOsa[];
 
   @Prop({ required: false, type: String })
   private koulutustyyppi!: string;
 
-  get items() {
-    return [
-      {
-        to: { name: 'root' },
-        text: this.$t('eperusteet') as string,
-        active: false,
-      },
-      ...this.murupolku
-    ];
+  get murupolkuFiltered() {
+    return _.filter(this.murupolku, (muru) => muru.label && muru.location);
   }
 
   get theme() {
