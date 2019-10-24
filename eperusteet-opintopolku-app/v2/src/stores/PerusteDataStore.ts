@@ -2,13 +2,12 @@ import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import { SidenavFilter, SidenavNode, buildSidenav, filterSidenav } from '@/utils/NavigationBuilder';
-import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
+import { SidenavFilter, SidenavNode, buildSidenav, filterSidenav, traverseSisalto } from '@/utils/NavigationBuilder';
+import { baseURL, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Koulutustyyppi, KoulutustyyppiToteutus } from "@shared/tyypit";
 import { Lops2019OppiaineetStore } from "@/stores/Lops2019OppiaineetStore";
-
 
 @Store
 export class PerusteDataStore {
@@ -19,24 +18,50 @@ export class PerusteDataStore {
   @State() public currentRoute: Location | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
-  @State() public sidenav: SidenavNode | null = null;
   @State() public sidenavFilter: SidenavFilter = {
     label: '',
     isEnabled: false,
   };
+  @State() private sidenavNodes: {
+    [key: string]: SidenavNode[] | null
+  } = {};
+
 
   public static async create(perusteId: number) {
     const result = new PerusteDataStore(perusteId);
     await result.init();
 
-    result.initSisalto();
-
-    const stores = {
+    return {
       perusteDataStore: result,
       ...await result.createStoresForPeruste(),
     };
+  }
 
-    return stores;
+  constructor(perusteId: number) {
+    this.perusteId = perusteId;
+  }
+
+  private async init() {
+    if (this.perusteId) {
+      this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
+      this.fetchSisalto();
+    }
+    else {
+      throw new Error('peruste-id-puuttuu');
+    }
+  }
+
+  private setSidenavNode(key) {
+    this.sidenavNodes = {
+      ...this.sidenavNodes,
+      [key]: null
+    };
+    return node => {
+      this.sidenavNodes = {
+        ...this.sidenavNodes,
+        [key]: node
+      }
+    };
   }
 
   private async createStoresForPeruste() {
@@ -60,15 +85,15 @@ export class PerusteDataStore {
       case Koulutustyyppi.perusopetusvalmistava:
       case Koulutustyyppi.tpo:
         return {
-
+          ...base,
         };
       case Koulutustyyppi.perusopetus:
         return {
-
+          ...base,
         };
       case Koulutustyyppi.aikuistenperusopetus:
         return {
-
+          ...base,
         };
       case Koulutustyyppi.lukiokoulutus:
       case Koulutustyyppi.lukiovalmistavakoulutus:
@@ -76,7 +101,7 @@ export class PerusteDataStore {
         if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
           return {
             ...base,
-            lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId),
+            lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId, this.setSidenavNode('oppiaineet')),
           };
         }
         /*
@@ -98,53 +123,69 @@ export class PerusteDataStore {
     throw new Error('koulutustyyppin-storet-ei-toteutettu');
   }
 
-  constructor(perusteId: number) {
-    this.perusteId = perusteId;
+  async fetchSisalto() {
+    const suoritustapakoodi = this.peruste!.suoritustavat
+        ? this.peruste!.suoritustavat![0].suoritustapakoodi as any
+        : 'LUKIOKOULUTUS2019';
+    this.sisalto = null;
+    const fn = this.setSidenavNode('tekstikappaleet');
+    this.sisalto = (await Sisallot.getSuoritustapaSisaltoUUSI(this.perusteId, suoritustapakoodi)).data;
+    fn(traverseSisalto(this.sisalto));
   }
 
-  @Getter((state, getters) => {
-    function closeSubmenus(node) {
-      return {
-        ...node,
-        children: _.map(node.children, child => ({
-          ...child,
-          children: [],
-        })),
-      };
-    }
 
-    if (getters.current) {
-      let stack = _.reverse([...getters.current.path]);
-      let head = stack.pop();
-      while (!_.isEmpty(stack)) {
-        let head = stack.pop();
-      }
-      return {};
+
+  @Getter(state => {
+    return !state.peruste || !_.every(_.values(state.sidenavNodes));
+  })
+  public readonly sidenavLoading!: boolean;
+
+  @Getter(state => {
+    if (!state.peruste) {
+      return null;
     }
     else {
-      return {
-        ...state.sidenav,
-        children: _.map(state.sidenav.children, child => ({
-          ...child,
-          children: [],
-        })),
-      };
+      return buildSidenav(state.peruste, _.values(state.sidenavNodes));
     }
+  })
+  public readonly sidenav!: SidenavNode | null;
+
+  @Getter((state, getters) => {
+    if (!getters.sidenav) {
+      return null;
+    }
+
+    const pathKeys = _.map(_.get(getters, 'current.path'), 'key');
+    const onPath = node => {
+      const parent = node.path[_.size(node.path) - 2];
+      return _.includes(pathKeys, node.key)
+          || (parent && _.includes(pathKeys, parent.key));
+    };
+
+    const map = (value, depth = 0) => {
+      return {
+        ...value,
+        isVisible: !getters.current || depth === 1 || onPath(value),
+        children: _.map(value.children, child => map(child, depth + 1)),
+      };
+    };
+
+    return map(getters.sidenav);
   })
   public readonly collapsedSidenav!: SidenavNode | null;
 
   @Getter((state, getters) => {
     if (state.sidenavFilter.isEnabled) {
-      return filterSidenav(state.sidenav, state.sidenavFilter);
+      return filterSidenav(getters.sidenav, state.sidenavFilter);
     }
     else {
-      return state.sidenav;
+      return getters.collapsedSidenav;
     }
   })
   public readonly filteredSidenav!: SidenavNode | null;
 
-  @Getter((state) => {
-    const root = state.sidenav;
+  @Getter((state, getters) => {
+    const root = getters.sidenav;
     const result: Array<SidenavNode> = [];
 
     function traverseTree(node: SidenavNode) {
@@ -165,21 +206,14 @@ export class PerusteDataStore {
   public readonly flattenedSidenav!: SidenavNode[];
 
   @Getter((state, getters) => {
-    if (state.currentRoute && state.sidenav) {
-      const stack = [state.sidenav];
-      while (stack.length > 0) {
-        const head = stack.pop();
-        if (head && head.location) {
-          if (_.isMatch(state.currentRoute as any, head!.location! as any)) {
-            return head || null;
-          }
+    if (getters.flattenedSidenav && state.currentRoute) {
+      for (const node of getters.flattenedSidenav) {
+        if (node!.location && _.isMatch(state.currentRoute, node!.location)) {
+          return node || null;
         }
-        _.forEach(head!.children, child => stack.push(child));
       }
     }
-    else {
-      return null;
-    }
+    return null;
   })
   public readonly current!: SidenavNode | null;
 
@@ -213,22 +247,15 @@ export class PerusteDataStore {
     })));
   }
 
-  public async updateRoute(route) {
-    this.currentRoute = route;
+  public updateRoute(route) {
+    this.currentRoute = {
+      name: route.name,
+      params: _.mapValues(route.params, param => '' + param),
+    };
   }
 
   public readonly updateFilter = _.debounce((filter: SidenavFilter) => {
     this.sidenavFilter = filter;
   }, 300);
-
-  private async init() {
-    if (this.perusteId) {
-      this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
-      this.sidenav = await buildSidenav(this.peruste!);
-    }
-    else {
-      throw new Error('peruste-id-puuttuu');
-    }
-  }
 
 }

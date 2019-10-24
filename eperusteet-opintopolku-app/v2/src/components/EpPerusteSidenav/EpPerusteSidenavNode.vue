@@ -6,7 +6,9 @@
         {{ node.label }}
       </span>
     </b-link>
-    <span v-else class="label label-plain" :class="{ 'label-match': isMatch }">{{ node.label }}</span>
+    <span v-else
+          class="label label-plain"
+          :class="{ 'label-match': isMatch }">{{ node.label }}</span>
   </div>
 
   <!-- children -->
@@ -21,8 +23,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { FilteredSidenavNode } from '@/utils/NavigationBuilder';
-import { Kielet } from '@shared/stores/kieli';
+import { SidenavNode } from '@/utils/NavigationBuilder';
 
 
 @Component({
@@ -30,16 +31,14 @@ import { Kielet } from '@shared/stores/kieli';
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  node!: FilteredSidenavNode;
+  node!: SidenavNode;
 
   get children() {
-    return this.node.children;
+    return _.filter(this.node.children, 'isVisible');
   }
-
   get isRoot() {
     return this.node.type === 'root';
   }
-
   get isMatch() {
     return this.node.isMatch;
   }
@@ -48,29 +47,24 @@ export default class EpPerusteSidenavNode extends Vue {
 
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
-
 .node {
   color: $sidenav-color;
   hyphens: auto;
   &:not(.node-root) {
     padding-top: 1em;
   }
-
   &.root {
     padding: 0;
   }
-
   a {
     color: $sidenav-color;
   }
-
   ul {
     // Remove default list styles
     list-style: none;
     padding-left: $sidenav-depth-padding;
     margin: 0;
   }
-
   // First element shouldn't has top padding
   ul.root-list {
     padding-left: 0;
@@ -78,15 +72,12 @@ export default class EpPerusteSidenavNode extends Vue {
       padding-top: 0;
     }
   }
-
   .router-link-active {
     color: $sidenav-active-color;
   }
-
   .label-plain {
     cursor: not-allowed;
   }
-
   .label-match {
     font-weight: bold;
   }

@@ -57,8 +57,8 @@ export default class RouteAmmatillinenSelaus extends Vue {
 
   get murupolku() {
     return [{
-      text: this.$t('ammatillinen-koulutus'),
-      to: {
+      label: this.$t('ammatillinen-koulutus'),
+      location: {
         name: 'ammatillinenSelaus',
       },
     }];

@@ -1,13 +1,16 @@
 <template>
 <div class="sidebar">
-  <div class="search">
-    <ep-search :value="query" @input="setValue" />
-  </div>
+  <ep-spinner v-if="sidenavLoading" />
+  <div v-else>
+    <div class="search">
+      <ep-search :value="query" @input="setValue" />
+    </div>
 
-  <div class="navigation-tree">
-      <ep-peruste-sidenav-node v-if="treeData"
-                               :node="treeData"
-                               :sidenav-filter="sidenavFilter" />
+    <div class="navigation-tree">
+        <ep-peruste-sidenav-node v-if="treeData"
+                                 :node="treeData"
+                                 :sidenav-filter="sidenavFilter" />
+    </div>
   </div>
 </div>
 </template>
@@ -17,12 +20,14 @@ import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPerusteSidenavNode from '@/components/EpPerusteSidenav/EpPerusteSidenavNode.vue';
 
 @Component({
   components: {
     EpSearch,
     EpPerusteSidenavNode,
+    EpSpinner,
   }
 })
 export default class EpPerusteSidenav extends Vue {
@@ -37,6 +42,10 @@ export default class EpPerusteSidenav extends Vue {
         isEnabled: !_.isEmpty(value),
         label: value,
       });
+    }
+
+    get sidenavLoading() {
+      return this.perusteDataStore.sidenavLoading;
     }
 
     get sidenavFilter() {

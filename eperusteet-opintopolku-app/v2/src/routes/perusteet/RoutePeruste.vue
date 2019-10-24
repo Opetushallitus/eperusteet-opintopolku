@@ -24,8 +24,7 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
-import { Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
@@ -60,13 +59,16 @@ export default class RoutePeruste extends Vue {
 
   get murupolku() {
     if (this.peruste && this.current) {
-      return [{
-        label: (this as any).$kaanna(this.peruste.nimi),
-        location: this.$route,
-      },
-      ...this.current.path];
+      return [
+        ...this.current.path,
+      ];
     }
     return [];
+  }
+
+  @Watch('$route', { immediate: true })
+  onRouteUpdate(route) {
+    this.perusteDataStore.updateRoute(route);
   }
 
 }

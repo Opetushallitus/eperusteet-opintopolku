@@ -42,16 +42,6 @@ export default class RouteTekstikappale extends Vue {
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
 
-  @Prop({ required: true, type: Number })
-  private viiteId!: string | number;
-
-  get viiteIdNumber() {
-    if (_.isString(this.viiteId)) {
-      return _.parseInt(this.viiteId);
-    }
-    return this.viiteId;
-  }
-
   private alikappaleet: Laaja[] = [];
   private isLoading = false;
 
@@ -94,11 +84,6 @@ export default class RouteTekstikappale extends Vue {
       return this.current.children;
     }
     return null;
-  }
-
-  @Watch('viiteId', { immediate: true })
-  onViiteUpdate(value: number) {
-    this.perusteDataStore.updateRoute(this.$route);
   }
 
 }

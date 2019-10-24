@@ -29,7 +29,6 @@ import { SovellusVirhe } from '@shared/tyypit';
 
 import { createLogger } from '@shared/utils/logger';
 import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
-import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from "@/stores/Lops2019ModuuliStore";
 
@@ -156,7 +155,6 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  viiteId: _.parseInt(route.params.viiteId),
                   perusteenOsaStore: await PerusteenOsaStore.create(
                     _.parseInt(route.params.viiteId)),
                 },
