@@ -17,7 +17,6 @@ export class Lops2019OppiaineetStore {
     return store;
   }
 
-
   constructor(perusteId: number, sidenavNodeBuilderFunction) {
     this.perusteId = perusteId;
     this.sidenavNodeBuilderFunction = sidenavNodeBuilderFunction;
