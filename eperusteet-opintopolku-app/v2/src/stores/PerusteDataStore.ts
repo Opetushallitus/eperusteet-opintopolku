@@ -6,8 +6,8 @@ import { SidenavFilter, SidenavNode, buildSidenav, filterSidenav, traverseSisalt
 import { baseURL, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
-import { Koulutustyyppi, KoulutustyyppiToteutus } from "@shared/tyypit";
-import { Lops2019OppiaineetStore } from "@/stores/Lops2019OppiaineetStore";
+import { Koulutustyyppi, KoulutustyyppiToteutus } from '@shared/tyypit';
+import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 
 @Store
 export class PerusteDataStore {
@@ -60,7 +60,7 @@ export class PerusteDataStore {
       this.sidenavNodes = {
         ...this.sidenavNodes,
         [key]: node
-      }
+      };
     };
   }
 
@@ -79,31 +79,31 @@ export class PerusteDataStore {
     };
 
     switch (koulutustyyppi) {
-      case Koulutustyyppi.lisaopetus:
-      case Koulutustyyppi.esiopetus:
-      case Koulutustyyppi.varhaiskasvatus:
-      case Koulutustyyppi.perusopetusvalmistava:
-      case Koulutustyyppi.tpo:
+    case Koulutustyyppi.lisaopetus:
+    case Koulutustyyppi.esiopetus:
+    case Koulutustyyppi.varhaiskasvatus:
+    case Koulutustyyppi.perusopetusvalmistava:
+    case Koulutustyyppi.tpo:
+      return {
+        ...base,
+      };
+    case Koulutustyyppi.perusopetus:
+      return {
+        ...base,
+      };
+    case Koulutustyyppi.aikuistenperusopetus:
+      return {
+        ...base,
+      };
+    case Koulutustyyppi.lukiokoulutus:
+    case Koulutustyyppi.lukiovalmistavakoulutus:
+    case Koulutustyyppi.aikuistenlukiokoulutus:
+      if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
         return {
           ...base,
+          lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId, this.setSidenavNode('oppiaineet')),
         };
-      case Koulutustyyppi.perusopetus:
-        return {
-          ...base,
-        };
-      case Koulutustyyppi.aikuistenperusopetus:
-        return {
-          ...base,
-        };
-      case Koulutustyyppi.lukiokoulutus:
-      case Koulutustyyppi.lukiovalmistavakoulutus:
-      case Koulutustyyppi.aikuistenlukiokoulutus:
-        if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
-          return {
-            ...base,
-            lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId, this.setSidenavNode('oppiaineet')),
-          };
-        }
+      }
         /*
         else {
           // todo
@@ -125,8 +125,8 @@ export class PerusteDataStore {
 
   async fetchSisalto() {
     const suoritustapakoodi = this.peruste!.suoritustavat
-        ? this.peruste!.suoritustavat![0].suoritustapakoodi as any
-        : 'LUKIOKOULUTUS2019';
+      ? this.peruste!.suoritustavat![0].suoritustapakoodi as any
+      : 'LUKIOKOULUTUS2019';
     this.sisalto = null;
     const fn = this.setSidenavNode('tekstikappaleet');
     this.sisalto = (await Sisallot.getSuoritustapaSisaltoUUSI(this.perusteId, suoritustapakoodi)).data;

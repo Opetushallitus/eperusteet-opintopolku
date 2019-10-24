@@ -30,7 +30,7 @@ import { SovellusVirhe } from '@shared/tyypit';
 import { createLogger } from '@shared/utils/logger';
 import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
-import { Lops2019ModuuliStore } from "@/stores/Lops2019ModuuliStore";
+import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 
 Vue.use(Router);
 const logger = createLogger('Router');
@@ -191,9 +191,9 @@ export const router = new Router({
               return {
                 default: {
                   lops2019moduuliStore: await Lops2019ModuuliStore.create(
-                      _.parseInt(route.params.perusteId),
-                      _.parseInt(route.params.oppiaineId),
-                      _.parseInt(route.params.moduuliId)
+                    _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.oppiaineId),
+                    _.parseInt(route.params.moduuliId)
                   ),
                 },
               };

@@ -5,7 +5,7 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { Lops2019OppiaineetStore } from "@/stores/Lops2019OppiaineetStore";
+import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 import { RouterLinkStub, Wrapper } from '@vue/test-utils';
 
 import '@/config/bootstrap';
