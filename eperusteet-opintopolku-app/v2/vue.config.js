@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const
   eperusteetService = process.env.EPERUSTEET_SERVICE,
@@ -57,8 +58,6 @@ const proxy = {
 module.exports = {
   lintOnSave: false,
   publicPath: process.env.NODE_ENV === 'production' ? '/v2/' : '/',
-  runtimeCompiler: true,
-  productionSourceMap: true,
   configureWebpack: {
     resolve: {
       alias: {
@@ -69,6 +68,48 @@ module.exports = {
     plugins: [
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
+  },
+  chainWebpack: config => {
+    config.optimization.minimizer([
+      new TerserPlugin({
+        terserOptions: {
+          output: {
+            comments: /^\**!|@preserve|@license|@cc_on/i
+          },
+          parallel: true,
+          keep_classnames: true,
+          compress: {
+            arrows: false,
+            booleans: true,
+            collapse_vars: false,
+            comparisons: false,
+            computed_props: false,
+            conditionals: true,
+            dead_code: true,
+            evaluate: true,
+            hoist_funs: false,
+            hoist_props: false,
+            hoist_vars: false,
+            if_return: true,
+            inline: false,
+            loops: false,
+            negate_iife: false,
+            properties: false,
+            reduce_funcs: false,
+            reduce_vars: false,
+            sequences: true,
+            switches: false,
+            toplevel: false,
+            typeofs: false,
+            unused: true,
+          },
+          mangle: {
+            safari10: true
+          }
+        }
+
+      })
+    ]);
   },
   devServer: {
     overlay: {

@@ -53,7 +53,8 @@ export default class EpHeader extends Vue {
   private koulutustyyppi!: string;
 
   get murupolkuFiltered() {
-    return _.filter(this.murupolku, (muru) => muru.label && muru.location);
+    const result = _.filter(this.murupolku, (muru) => muru.label && muru.location);
+    return result;
   }
 
   get theme() {

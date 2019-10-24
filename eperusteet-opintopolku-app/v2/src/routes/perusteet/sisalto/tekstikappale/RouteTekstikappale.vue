@@ -45,12 +45,15 @@ export default class RouteTekstikappale extends Vue {
   private alikappaleet: Laaja[] = [];
   private isLoading = false;
 
-  @Watch('alikappaleNodes')
+  @Watch('current', { immediate: true })
   async updateAlikappaleet() {
+    if (!this.current) {
+      return;
+    }
+
     this.isLoading = true;
-    if (this.alikappaleNodes) {
-      this.alikappaleet = await Promise.all(_(this.alikappaleNodes)
-        .filter(node => node.type === 'viite')
+    if (this.current.children) {
+      this.alikappaleet = await Promise.all(_(this.current.children)
         .filter('location')
         .map(async (node: any) =>
           (await Perusteenosat.getPerusteenOsatByViite(node.location.params.viiteId)).data)
