@@ -333,6 +333,7 @@ angular
         );
         $scope.nimiOrder = Utils.sort;
         $scope.vuosi = "vuosiluokka_" + $state.params.vuosi;
+        $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
 
         function setMurupolku() {
             let item: any = _.reduce(
@@ -426,7 +427,7 @@ angular
         $scope.oppiaine = oppiaine;
         $scope.vlk = vuosiluokkakokonaisuus;
         $scope.vuosiluokka = vuosiluokkaSisalto.vuosiluokka;
-
+        
         const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, "_vuosiluokkakokonaisuus");
         $scope.perusteOppiaine = oppiainePeruste;
         $scope.perusteOppiaineVlkMap = oppiainePeruste
@@ -497,4 +498,6 @@ angular
         $scope.activeClass = id => {
             return id + "" === $state.params.vuosiId + "";
         };
+
+        $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
     });

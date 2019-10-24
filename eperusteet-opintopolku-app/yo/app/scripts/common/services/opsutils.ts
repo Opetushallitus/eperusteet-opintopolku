@@ -99,10 +99,24 @@ angular.module("app").factory("opsUtils", function(Algoritmit, $state, Kieli, Ut
             .value();
     };
 
+    const arvioinninKohteenTeksti = (tavoite) => {
+            
+        const hyvanOsaamisenArvio = _.find(tavoite.arvioinninkohteet, (arvioinninkohde: any) => {
+            return arvioinninkohde.arvosana == 8
+        });
+
+        if(hyvanOsaamisenArvio && !_.isEmpty(hyvanOsaamisenArvio.arvioinninKohde)) {
+            return hyvanOsaamisenArvio.arvioinninKohde;
+        }
+
+        return tavoite.arvioinninKuvaus;
+    };
+
     return {
         sortVlk: sortVlk,
         getVlkId: getVlkId,
         getVuosiId: getVuosiId,
-        makeSisalto: makeSisalto
+        makeSisalto: makeSisalto,
+        arvioinninKohteenTeksti
     };
 });

@@ -41,7 +41,7 @@ angular.module("app").directive("aipeTavoitteet", () => {
             laajaalaiset: "=",
             vaihe: "="
         },
-        controller: function($scope) {
+        controller: function($scope, opsUtils) {
             _.each($scope.model, tavoite => {
                 tavoite.$accordionOpen = true;
 
@@ -74,6 +74,9 @@ angular.module("app").directive("aipeTavoitteet", () => {
                     tavoite.$accordionOpen = !tavoite.$accordionOpen;
                 });
             };
+
+            $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
+
         }
     };
 });

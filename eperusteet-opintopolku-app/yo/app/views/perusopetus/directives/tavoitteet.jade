@@ -23,7 +23,7 @@
                     h4(kaanna="'arvioinnin-kohde'")
                     div
                       p
-                        span(ng-bind="getArvioinninKohteenTeksti(tavoite) | kaanna")
+                        span(ng-bind="arvioinninKohteenTeksti(tavoite) | kaanna")
                   div(ng-if='tavoite.$editing || hasArviointi(tavoite)')
                     h4(ng-if='!tavoite.$editing', ng-bind="(tavoite.arvioinninOtsikko || 'arviointi') | kaanna")
                     div(ng-show='hasArviointi(tavoite)', atavoite='tavoite', perusopetuksen-arviointi='tavoite.arvioinninkohteet', edit-mode='tavoite.$editing')

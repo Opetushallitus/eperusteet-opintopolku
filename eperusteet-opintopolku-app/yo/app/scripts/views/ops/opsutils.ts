@@ -217,6 +217,7 @@ angular.module("app").factory("opsUtils", function(Algoritmit, $state, Kieli, Ut
                     var perusteTavoite = _.find(perusteOpVlk.tavoitteet, function(pTavoite: any) {
                         return pTavoite.tunniste === item.tunniste;
                     });
+
                     item.$tavoite = perusteTavoite.tavoite;
                     var alueet = _.map(perusteTavoite.sisaltoalueet, function(tunniste: string) {
                         return perusteSisaltoAlueet[tunniste] || {};
@@ -251,12 +252,12 @@ angular.module("app").factory("opsUtils", function(Algoritmit, $state, Kieli, Ut
                     item.$laajaalaiset = _.map(perusteTavoite.laajaalaisetosaamiset, function(tunniste: any) {
                         return laajaalaiset[tunniste];
                     });
-                    item.$arvioinninkohteet = perusteTavoite.arvioinninkohteet;
                 }
             })
             .sortBy("$tavoite")
             .value();
     };
+
     return {
         sortVlk: sortVlk,
         rakennaOppiaineetMenu: rakennaOppiaineetMenu,
