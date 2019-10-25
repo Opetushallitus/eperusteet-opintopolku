@@ -1,5 +1,5 @@
 <template>
-<div class="content">
+<div id="default-anchor" class="content">
     <div v-if="laajaAlaisetKokonaisuus">
         <h2 class="otsikko" slot="header">{{ $t('laaja-alaiset-osaamiset') }}</h2>
         <div class="teksti">
@@ -33,12 +33,6 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 export default class RouteLaajaAlaiset extends Vue {
   @Prop({ required: true })
   private lops2019LaajaAlaisetStore!: Lops2019LaajaAlaisetStore;
-
-  created() {
-    this.lops2019LaajaAlaisetStore.getLaajaAlaisetKokonaisuus(
-      _.parseInt(this.$route.params.perusteId),
-    );
-  }
 
   get laajaAlaisetKokonaisuus() {
     return this.lops2019LaajaAlaisetStore.laajaAlaisetKokonaisuus;

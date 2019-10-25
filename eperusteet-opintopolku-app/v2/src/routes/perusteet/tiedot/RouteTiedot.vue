@@ -1,5 +1,5 @@
 <template>
-<div class="content">
+<div id="default-anchor" class="content">
   <h2 class="otsikko" slot="header">{{ $t('perusteen-tiedot') }}</h2>
   <ep-spinner v-if="isLoading"></ep-spinner>
   <div v-else>

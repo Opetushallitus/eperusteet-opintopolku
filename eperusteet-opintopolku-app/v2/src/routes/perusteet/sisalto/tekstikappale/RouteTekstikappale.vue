@@ -1,18 +1,20 @@
 <template>
-<div class="content" v-if="perusteenOsa">
-  <h2 class="otsikko" id="tekstikappale-otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
-  <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
+<div id="default-anchor" class="content">
+  <div v-if="perusteenOsa">
+    <h2 class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+    <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
 
-  <!-- Alikappaleet -->
-  <ep-spinner v-if="isLoading" />
-  <div v-else>
-    <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
-      <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
-      <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
+    <!-- Alikappaleet -->
+    <ep-spinner v-if="isLoading" />
+    <div v-else>
+      <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
+        <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
+        <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
+      </div>
     </div>
-  </div>
 
-  <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+  </div>
 </div>
 </template>
 

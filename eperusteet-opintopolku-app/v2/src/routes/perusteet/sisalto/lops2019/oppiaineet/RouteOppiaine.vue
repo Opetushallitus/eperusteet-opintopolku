@@ -1,5 +1,5 @@
 <template>
-<div class="content">
+<div id="default-anchor" class="content">
     <div v-if="oppiaine">
         <h2 class="otsikko" slot="header">{{ $kaanna(oppiaine.nimi) }}</h2>
 
