@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
 import { Lops2019 } from '@shared/api/eperusteet';
 import { Lops2019LaajaAlainenOsaaminenKokonaisuusDto } from '@shared/api/tyypit';
-import { handleLabel, SidenavNode } from "@/utils/NavigationBuilder";
+import { handleLabel, SidenavNode } from '@/utils/NavigationBuilder';
 
 @Store
 export class Lops2019LaajaAlaisetStore {

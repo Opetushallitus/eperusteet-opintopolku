@@ -114,14 +114,14 @@ export class PerusteDataStore {
           // todo: muut osat
         };
       }
-      case Koulutustyyppi.telma:
-      case Koulutustyyppi.perustutkinto:
-      case Koulutustyyppi.ammattitutkinto:
-      case Koulutustyyppi.erikoisammattitutkinto:
-        return {
-          ...base,
-          // todo: tutkinnon osat yms.
-        };
+    case Koulutustyyppi.telma:
+    case Koulutustyyppi.perustutkinto:
+    case Koulutustyyppi.ammattitutkinto:
+    case Koulutustyyppi.erikoisammattitutkinto:
+      return {
+        ...base,
+        // todo: tutkinnon osat yms.
+      };
     }
 
     throw new Error('koulutustyyppin-storet-ei-toteutettu');
