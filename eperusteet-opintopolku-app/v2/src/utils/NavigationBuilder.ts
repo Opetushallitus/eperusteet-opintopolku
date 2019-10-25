@@ -5,7 +5,7 @@ import { Location } from 'vue-router';
 import { Sisallot } from '@shared/api/eperusteet';
 
 export type SidenavType =
-  'root' | 'viite' | 'tiedot' | 'oppiaineet';
+  'root' | 'viite' | 'tiedot' | 'laajaalaiset' | 'oppiaineet';
 
 export interface SidenavNode {
   key?: number; // Unique identifier

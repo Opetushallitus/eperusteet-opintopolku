@@ -44,17 +44,16 @@ export const router = new Router({
       return savedPosition;
     }
     else if (to.hash) {
+      // Elementti johon navigoidaan. Elementin täytyy olla luotu jo tilanvaihdoksen yhteydessä!
       return {
         selector: to.hash
       };
     }
-    else if (to.name === 'tekstikappale') {
-      return {
-        selector: '#tekstikappale-otsikko'
-      };
-    }
     else {
-      return { x: 0, y: 0 };
+      // Elementti johon navigoidaan. Elementin täytyy olla luotu jo tilanvaihdoksen yhteydessä!
+      return {
+        selector: '#default-anchor'
+      };
     }
   },
   routes: [{
@@ -163,9 +162,6 @@ export const router = new Router({
         path: 'laajaalaiset',
         component: RouteLaajaAlaiset,
         name: 'lops2019laajaalaiset',
-        props: {
-          lops2019LaajaAlaisetStore: Lops2019LaajaAlaisetStore.create(),
-        }
       }, {
         path: 'oppiaine',
         component: RouteOppiaineet,

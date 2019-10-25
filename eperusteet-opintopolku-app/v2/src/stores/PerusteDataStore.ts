@@ -8,6 +8,7 @@ import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Koulutustyyppi, KoulutustyyppiToteutus } from '@shared/tyypit';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
+import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 
 @Store
 export class PerusteDataStore {
@@ -103,6 +104,7 @@ export class PerusteDataStore {
       if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
         return {
           ...base,
+          lops2019LaajaAlaisetStore: await Lops2019LaajaAlaisetStore.create(this.perusteId, this.setSidenavNode('laajaalaiset')),
           lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId, this.setSidenavNode('oppiaineet')),
         };
       }
