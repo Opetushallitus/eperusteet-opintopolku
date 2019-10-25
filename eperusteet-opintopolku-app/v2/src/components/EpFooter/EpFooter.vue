@@ -49,7 +49,7 @@ export default class EpFooter extends Vue {
       },
       opintopolku: {
         fi: 'https://opintopolku.fi/wp/fi',
-        sv: 'https://studieinfo.fi/wp/sv/',
+        sv: 'https://studieinfo.fi/wp/sv',
       },
       virkailija: {
         fi: 'http://virkailija.opintopolku.fi',
@@ -71,7 +71,7 @@ export default class EpFooter extends Vue {
 <style scoped lang="scss">
 footer {
   border-top: 1px solid #ccc;
-  padding: 40px;;
+  padding: 0;
 
   img {
     width: 200px;
