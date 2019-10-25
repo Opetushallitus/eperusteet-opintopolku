@@ -427,7 +427,6 @@ angular
         $scope.oppiaine = oppiaine;
         $scope.vlk = vuosiluokkakokonaisuus;
         $scope.vuosiluokka = vuosiluokkaSisalto.vuosiluokka;
-        
         const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, "_vuosiluokkakokonaisuus");
         $scope.perusteOppiaine = oppiainePeruste;
         $scope.perusteOppiaineVlkMap = oppiainePeruste
