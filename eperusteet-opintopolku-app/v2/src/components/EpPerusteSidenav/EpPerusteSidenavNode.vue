@@ -80,7 +80,7 @@ export default class EpPerusteSidenavNode extends Vue {
     }
   }
 
-  .router-link-active {
+  .router-link-exact-active.router-link-active {
     color: $sidenav-active-color;
   }
 

@@ -5,21 +5,20 @@
       <div class="col">
         <div class="murupolku">
            <nav aria-label="breadcrumb">
-            <ol class="breadcrumb" :style="style">
-              <li class="breadcrumb-item" :style="style">
-                <router-link class="breadcrumb-home" :to="{ name: 'root' }" :style="style">
-                  {{ $t('eperusteet') }}
-                </router-link>
-              </li>
-              <li class="breadcrumb-item"
-                  :class="{ 'breadcrumb-truncated': idx < murupolku.length - 2 }"
-                  v-for="(item, idx) in murupolkuFiltered"
-                  :key="idx">
-                <router-link class="breadcrumb-normal" :style="style" :to="item.location">
-                  {{ item.label }}
-                </router-link>
-              </li>
-            </ol>
+             <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
+               <li class="breadcrumb-item">
+                 <router-link class="breadcrumb-home" :to="{ name: 'root' }">
+                   {{ $t('eperusteet') }}
+                 </router-link>
+               </li>
+               <li class="breadcrumb-item"
+                   v-for="(item, idx) in murupolkuFiltered"
+                   :key="idx">
+                 <router-link class="breadcrumb-normal" :to="item.location">
+                   {{ item.label }}
+                 </router-link>
+               </li>
+             </ol>
           </nav>
           <slot name="murupolku"></slot>
         </div>
@@ -53,8 +52,7 @@ export default class EpHeader extends Vue {
   private koulutustyyppi!: string;
 
   get murupolkuFiltered() {
-    const result = _.filter(this.murupolku, (muru) => muru.label && muru.location);
-    return result;
+    return _.filter(this.murupolku, (muru) => muru.label && muru.location);
   }
 
   get theme() {
@@ -77,7 +75,7 @@ export default class EpHeader extends Vue {
 
   get style() {
     return {
-      color: this.textColor === 'black' ? '#001A58' : '#fff',
+      color: this.isBlack ? '#001A58' : '#fff',
     };
   }
 }
@@ -142,11 +140,14 @@ export default class EpHeader extends Vue {
     }
 
     &.black /deep/ li, &.black /deep/ li::before, &.black /deep/ li a {
-      color: black;
+      color: #001A58;
     }
 
     &.white /deep/ li, &.white /deep/ li::before, &.white /deep/ li a {
       color: white;
+    }
+    .router-link-exact-active.router-link-active {
+      cursor: auto;
     }
   }
 
