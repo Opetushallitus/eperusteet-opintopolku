@@ -1,27 +1,27 @@
 <template>
 <footer role="contentinfo">
   <div class="footer-content">
-    <div class="d-flex justify-content-center">
-      <div class="col-xl">
+    <div class="row">
+      <div class="col-xl col-slot">
         <img src="../../../public/img/banners/oph_logo.svg" :alt="$t('alt-oph-logo')" slot="footer-logo" />
       </div>
-      <div class="col-lg">
+      <div class="col-lg col-slot">
         <b>{{ $t('opetushallitus') }}</b>
         <ep-linkki :url="$kaanna(linkit.oph)" icon="external-link-alt"></ep-linkki>
       </div>
-      <div class="col-lg">
+      <div class="col-lg col-slot">
         <b>{{ $t('opintopolku') }}</b>
         <ep-linkki :url="$kaanna(linkit.opintopolku)" icon="external-link-alt"></ep-linkki>
       </div>
-      <div class="col-lg">
+      <div class="col-lg col-slot">
         <b>{{ $t('eperusteet-virkailija-linkki') }}</b>
         <ep-linkki :url="$kaanna(linkit.virkailija)" icon="external-link-alt"></ep-linkki>
       </div>
-      <div class="col-lg">
+      <div class="col-lg col-slot">
         <b>{{ $t('anna-palautetta') }}</b>
         <ep-linkki :url="$kaanna(linkit.palaute)" icon="envelope"></ep-linkki>
       </div>
-      <div class="col-lg">
+      <div class="col-lg col-slot">
         <a :href="$kaanna(linkit.seloste)">{{ $t('tietosuojaseloste') }}</a>
       </div>
     </div>
@@ -78,12 +78,12 @@ footer {
   }
 
   .footer-content {
-    // margin: 0 auto;
-    // padding: 0;
+    margin: 0 auto;
+    padding: 0;
 
     .row {
-      // margin-left: 0;
-      // margin-right: 0;
+      margin-left: 0;
+      margin-right: 0;
       align-items: center;
       .col-slot {
         padding: 15px;
