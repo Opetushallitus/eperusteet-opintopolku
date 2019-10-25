@@ -35,11 +35,8 @@ import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 Vue.use(Router);
 const logger = createLogger('Router');
 
-
 const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
-const lops2019Store = new Lops2019OppiaineStore();
-
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
@@ -177,9 +174,21 @@ export const router = new Router({
         path: 'oppiaine/:oppiaineId',
         component: RouteOppiaine,
         name: 'lops2019oppiaine',
-        props: {
-          lops2019oppiaineStore: lops2019Store,
-        }
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId', 'oppiaineId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019oppiaineStore: await Lops2019OppiaineStore.create(
+                    _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.oppiaineId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'oppiaine/:oppiaineId/moduuli/:moduuliId',
         component: RouteModuuli,

@@ -94,13 +94,6 @@ export default class RouteOppiaine extends Vue {
   @Prop({ required: true })
   private lops2019oppiaineStore!: Lops2019OppiaineStore;
 
-  created() {
-    this.lops2019oppiaineStore.getOppiaine(
-      _.parseInt(this.$route.params.perusteId),
-      _.parseInt(this.$route.params.oppiaineId),
-    );
-  }
-
   get oppiaine() {
     return this.lops2019oppiaineStore.oppiaine;
   }
@@ -181,27 +174,13 @@ export default class RouteOppiaine extends Vue {
 
 <style scoped lang="scss">
 @import '../../../../../styles/_variables.scss';
+@import '../../../../../styles/_mixins.scss';
 
 .content {
     padding: 0 $content-padding;
-    overflow-x: auto;
 
     .otsikko, .teksti {
-        hyphens: auto;
-
-        & /deep/ p {
-            text-align: justify;
-        }
-
-        & /deep/ img {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        & /deep/ table {
-            max-width: 100%;
-            margin: 0 auto;
-        }
+        @include teksti-sisalto;
     }
 }
 </style>

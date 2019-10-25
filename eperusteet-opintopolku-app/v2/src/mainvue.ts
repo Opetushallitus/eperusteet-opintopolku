@@ -25,6 +25,9 @@ if (process.env.NODE_ENV !== 'production') {
       rules: [
         { id: 'heading-order', enabled: true },
         { id: 'label-title-only', enabled: true },
+        { id: 'landmark-one-main', enabled: false },
+        { id: 'page-has-heading-one', enabled: false },
+        { id: 'region', enabled: false },
       ],
     },
     clearConsoleOnUpdate: false,

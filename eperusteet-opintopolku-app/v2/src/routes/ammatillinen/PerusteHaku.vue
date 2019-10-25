@@ -130,7 +130,7 @@ export default class PerusteHaku extends Vue {
   .checkboxes {
     padding: 10px;
     .custom-switch {
-      margin: 5px 15px 0px 0;
+      margin: 5px 15px 0 0;
     }
   }
 

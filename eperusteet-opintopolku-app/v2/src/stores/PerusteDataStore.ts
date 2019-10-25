@@ -90,10 +90,12 @@ export class PerusteDataStore {
     case Koulutustyyppi.perusopetus:
       return {
         ...base,
+        // todo: muut osat
       };
     case Koulutustyyppi.aikuistenperusopetus:
       return {
         ...base,
+        // todo: muut osat
       };
     case Koulutustyyppi.lukiokoulutus:
     case Koulutustyyppi.lukiovalmistavakoulutus:
@@ -104,20 +106,20 @@ export class PerusteDataStore {
           lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId, this.setSidenavNode('oppiaineet')),
         };
       }
-        /*
-        else {
-          // todo
-          break;
-        }
-        */
-      /*
+      else {
+        return {
+          ...base,
+          // todo: muut osat
+        };
+      }
       case Koulutustyyppi.telma:
       case Koulutustyyppi.perustutkinto:
       case Koulutustyyppi.ammattitutkinto:
       case Koulutustyyppi.erikoisammattitutkinto:
-        // todo
-        break;
-      */
+        return {
+          ...base,
+          // todo: tutkinnon osat yms.
+        };
     }
 
     throw new Error('koulutustyyppin-storet-ei-toteutettu');

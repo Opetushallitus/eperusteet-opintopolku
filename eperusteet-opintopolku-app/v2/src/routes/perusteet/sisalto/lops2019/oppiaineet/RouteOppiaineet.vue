@@ -38,27 +38,13 @@ export default class RouteOppiaineet extends Vue {
 
 <style scoped lang="scss">
 @import '../../../../../styles/_variables.scss';
+@import '../../../../../styles/_mixins.scss';
 
 .content {
-    padding: 0 $content-padding;
-    overflow-x: auto;
+  padding: 0 $content-padding;
 
-    .otsikko, .teksti {
-        hyphens: auto;
-
-        & /deep/ p {
-            text-align: justify;
-        }
-
-        & /deep/ img {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        & /deep/ table {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-    }
+  .otsikko, .teksti {
+    @include teksti-sisalto;
+  }
 }
 </style>
