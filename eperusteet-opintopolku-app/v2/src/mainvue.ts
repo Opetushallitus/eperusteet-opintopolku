@@ -7,7 +7,7 @@ import '@/config/fontawesome';
 
 import { router } from '@/router';
 import { KieliStore } from '@shared/stores/kieli';
-import { Virheet } from '@shared/stores/virheet';
+// import { Virheet } from '@shared/stores/virheet';
 
 import { createLogger } from '@shared/utils/logger';
 import _ from 'lodash';
@@ -25,6 +25,9 @@ if (process.env.NODE_ENV !== 'production') {
       rules: [
         { id: 'heading-order', enabled: true },
         { id: 'label-title-only', enabled: true },
+        { id: 'landmark-one-main', enabled: false },
+        { id: 'page-has-heading-one', enabled: false },
+        { id: 'region', enabled: false },
       ],
     },
     clearConsoleOnUpdate: false,

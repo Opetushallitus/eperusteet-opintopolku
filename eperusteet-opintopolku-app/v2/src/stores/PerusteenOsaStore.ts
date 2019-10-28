@@ -1,7 +1,6 @@
 import { Store, State } from '@shared/stores/store';
 import { Laaja } from '@shared/api/tyypit';
 import { Perusteenosat } from '@shared/api/eperusteet';
-import _ from 'lodash';
 
 
 @Store
@@ -9,7 +8,7 @@ export class PerusteenOsaStore {
   @State() public perusteenOsa: Laaja | null = null;
   @State() public perusteenOsaId: number | null = null;
 
-  public static readonly create = _.memoize(async (perusteenOsaId: number) => {
+  public static async create(perusteenOsaId: number) {
     try {
       const result = new PerusteenOsaStore(perusteenOsaId);
       await result.init();
@@ -18,7 +17,7 @@ export class PerusteenOsaStore {
     catch (err) {
       console.error(err);
     }
-  });
+  }
 
   constructor(perusteenOsaId: number) {
     this.perusteenOsaId = perusteenOsaId;

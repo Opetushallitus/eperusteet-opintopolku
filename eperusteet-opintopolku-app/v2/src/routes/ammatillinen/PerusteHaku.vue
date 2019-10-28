@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="content">
-    <div class="perusteet">
+    <div class="perusteet" id="perusteet-lista">
       <div class="d-flex peruste" v-for="(peruste, idx) in perusteet" :key="idx">
         <div class="colorbox"></div>
         <div class="perustecard">
@@ -41,16 +41,15 @@
       </div>
     </div>
     <div class="pagination d-flex justify-content-center">
-      <b-pagination
-        class=""
-        v-if="total >= perPage"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        :first-text="$t('alkuun')"
-        prev-text="«"
-        next-text="»"
-        :last-text="$t('loppuun')" />
+      <b-pagination v-model="page"
+                    :total-rows="total"
+                    :per-page="perPage"
+                    align="center"
+                    aria-controls="perusteet-lista"
+                    :first-text="$t('alkuun')"
+                    prev-text="«"
+                    next-text="»"
+                    :last-text="$t('loppuun')" />
     </div>
   </div>
 
@@ -131,7 +130,7 @@ export default class PerusteHaku extends Vue {
   .checkboxes {
     padding: 10px;
     .custom-switch {
-      margin: 5px 15px 0px 0;
+      margin: 5px 15px 0 0;
     }
   }
 

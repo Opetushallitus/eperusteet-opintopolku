@@ -15,9 +15,7 @@
           <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
         </template>
         <template slot="view">
-        <transition name="fade" mode="out-in">
           <router-view :key="$route.fullPath" />
-        </transition>
         </template>
       </ep-sidebar>
     </div>
@@ -26,14 +24,13 @@
 </template>
 
 <script lang="ts">
-import { Watch, Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { SidenavNode } from '@/utils/NavigationBuilder';
-import { MurupolkuOsa } from '@/tyypit';
 
 
 @Component({

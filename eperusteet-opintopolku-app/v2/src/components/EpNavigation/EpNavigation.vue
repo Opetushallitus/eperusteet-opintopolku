@@ -42,11 +42,16 @@
 </template>
 
 <script lang="ts">
+import _ from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, koulutustyyppiStateName, stateToKoulutustyyppi,
   koulutustyyppiRelaatiot, ryhmat } from '@/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
-import _ from 'lodash';
+import { Route } from 'vue-router';
+import { VueRouter } from 'vue-router/types/router';
+import { createLogger } from '@shared/stores/logger';
+
+const logger = createLogger('EpNavigation');
 
 @Component
 export default class EpNavigation extends Vue {
@@ -70,6 +75,9 @@ export default class EpNavigation extends Vue {
     if (this.$route && this.$route.params.koulutustyyppi) {
       const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
       return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
+    }
+    else if (this.$route && this.$route.name === 'ammatillinenSelaus') {
+      return 'router-link-active koulutustyyppi-ammatillinen';
     }
     else {
       return 'router-link-active';
@@ -123,9 +131,29 @@ export default class EpNavigation extends Vue {
       ...this.ammatilliset];
   }
 
-  valitseKieli(kieli) {
-    Kielet.setUiKieli(kieli);
-    Kielet.setSisaltoKieli(kieli);
+  async valitseKieli(kieli) {
+    // Vaihdetaan kieli päivittämällä route
+    const router: VueRouter = this.$router;
+    const current: Route = router.currentRoute;
+
+    // Replacella ei muodostu historiatietoa
+    // Muut parametrit ja tiedot näyttäisi säilyvän replacella
+    try {
+      await router.replace({
+        name: current.name,
+        params: {
+          lang: kieli || this.$i18n.fallbackLocale,
+        }
+      });
+    }
+    catch (e) {
+      if (e.name === 'NavigationDuplicated') {
+        logger.warn('Uusi kieli on sama kuin nykyinen');
+      }
+      else {
+        throw e;
+      }
+    }
   }
 
 }

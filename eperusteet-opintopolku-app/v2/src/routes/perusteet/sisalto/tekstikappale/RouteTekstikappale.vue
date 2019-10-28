@@ -1,18 +1,20 @@
 <template>
-<div class="content" v-if="perusteenOsa">
-  <h2 class="otsikko" id="tekstikappale-otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
-  <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
+<div id="default-anchor" class="content">
+  <div v-if="perusteenOsa">
+    <h2 class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+    <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
 
-  <!-- Alikappaleet -->
-  <ep-spinner v-if="isLoading" />
-  <div v-else>
-    <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
-      <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
-      <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
+    <!-- Alikappaleet -->
+    <ep-spinner v-if="isLoading" />
+    <div v-else>
+      <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
+        <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
+        <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
+      </div>
     </div>
-  </div>
 
-  <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+  </div>
 </div>
 </template>
 
@@ -41,9 +43,6 @@ export default class RouteTekstikappale extends Vue {
 
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
-
-  @Prop({ required: true, type: Number })
-  private viiteId!: string | number;
 
   private alikappaleet: Laaja[] = [];
   private isLoading = false;
@@ -85,33 +84,26 @@ export default class RouteTekstikappale extends Vue {
     return this.perusteDataStore.current || null;
   }
 
+  get alikappaleNodes(): Array<SidenavNode> | null {
+    if (this.current && this.current.path.length === 2) {
+      return this.current.children;
+    }
+    return null;
+  }
+
 }
 
 </script>
 
 <style scoped lang="scss">
 @import '../../../../styles/_variables.scss';
+@import '../../../../styles/_mixins.scss';
 
 .content {
   padding: 0 $content-padding;
-  overflow-x: auto;
 
   .otsikko, .teksti {
-    hyphens: auto;
-
-    & /deep/ p {
-      text-align: justify;
-    }
-
-    & /deep/ img {
-      max-width: 100%;
-      margin: 0 auto;
-    }
-
-    & /deep/ table {
-      max-width: 100%;
-      margin: 0 auto;
-    }
+    @include teksti-sisalto;
   }
 }
 </style>

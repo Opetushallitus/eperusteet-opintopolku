@@ -24,7 +24,6 @@
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { SidenavNode } from '@/utils/NavigationBuilder';
-import { Kielet } from '@shared/stores/kieli';
 
 
 @Component({
@@ -45,7 +44,6 @@ export default class EpPerusteSidenavNode extends Vue {
   get isMatch() {
     return this.node.isMatch;
   }
-
 }
 </script>
 
@@ -82,7 +80,7 @@ export default class EpPerusteSidenavNode extends Vue {
     }
   }
 
-  .router-link-active {
+  .router-link-exact-active.router-link-active {
     color: $sidenav-active-color;
   }
 

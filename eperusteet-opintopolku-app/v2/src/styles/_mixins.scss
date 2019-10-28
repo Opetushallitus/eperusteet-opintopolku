@@ -1,3 +1,5 @@
+@import './_variables.scss';
+
 @mixin tile-background-shadow {
   box-shadow: 5px 5px 20px rgba(0, 45, 153, 0.08);
 }
@@ -5,4 +7,36 @@
 
 @mixin tile-background-shadow-selected {
   box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+@mixin teksti-sisalto {
+  hyphens: auto;
+  // Jos sisältö ei mahdu edes tavutettuna, lisätään scrollbar
+  overflow-x: auto;
+
+  & /deep/ p {
+    text-align: justify;
+  }
+
+  & /deep/ img {
+    max-width: 100%;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 auto;
+  }
+
+  & /deep/ table {
+    max-width: 100%;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 auto;
+
+    td {
+      padding: $content-table-padding;
+
+      p:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
 }

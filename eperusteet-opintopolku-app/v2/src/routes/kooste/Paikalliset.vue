@@ -29,7 +29,10 @@
       </div>
     </div>
     <div v-else>
-      <div class="opetussuunnitelma" v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
+      <div class="opetussuunnitelma"
+           v-for="(ops, idx) in opetussuunnitelmatPaginated"
+           :key="idx"
+           id="opetussuunnitelmat-lista">
         <div class="d-flex align-items-center">
           <div class="opsicon-wrapper">
             <div class="opsicon"></div>
@@ -61,15 +64,15 @@
           </div>
         </div>
       </div>
-      <b-pagination
-        v-if="total >= perPage"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        :first-text="$t('alkuun')"
-        prev-text="«"
-        next-text="»"
-        :last-text="$t('loppuun')" />
+      <b-pagination v-model="page"
+                    :total-rows="total"
+                    :per-page="perPage"
+                    align="center"
+                    aria-controls="opetussuunnitelmat-lista"
+                    :first-text="$t('alkuun')"
+                    prev-text="«"
+                    next-text="»"
+                    :last-text="$t('loppuun')" />
     </div>
   </div>
 </div>

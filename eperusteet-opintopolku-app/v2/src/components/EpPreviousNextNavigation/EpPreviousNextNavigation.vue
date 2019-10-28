@@ -26,10 +26,10 @@ import { SidenavNode } from '@/utils/NavigationBuilder';
 export default class EpPreviousNextNavigation extends Vue {
 
   @Prop({ required: true })
-  private activeNode!: SidenavNode | null;
+  private activeNode!: SidenavNode;
 
   @Prop({ required: true })
-  private flattenedSidenav!: Array<SidenavNode> | null;
+  private flattenedSidenav!: Array<SidenavNode>;
 
   get activeIdx(): number {
     if (this.flattenedSidenav && this.activeNode) {
@@ -39,14 +39,26 @@ export default class EpPreviousNextNavigation extends Vue {
   }
 
   get previous(): SidenavNode | null {
-    if (this.activeIdx >= 0 && this.flattenedSidenav) {
+    if (this.activeNode && _.size(this.activeNode.path) === 2) {
+      // Jos päätason node, otetaan edellinen samalta tasolta
+      const rootChildren = this.activeNode.path[0].children;
+      const idx = _.findIndex(rootChildren, { key: this.activeNode.key });
+      return rootChildren[idx - 1];
+    }
+    else if (this.activeIdx >= 0 && this.flattenedSidenav) {
       return this.flattenedSidenav[this.activeIdx - 1] || null;
     }
     return null;
   }
 
   get next(): SidenavNode | null {
-    if (this.activeIdx >= 0 && this.flattenedSidenav) {
+    if (this.activeNode && _.size(this.activeNode.path) === 2) {
+      // Jos päätason node, otetaan seuraava samalta tasolta
+      const rootChildren = this.activeNode.path[0].children;
+      const idx = _.findIndex(rootChildren, { key: this.activeNode.key });
+      return rootChildren[idx + 1];
+    }
+    else if (this.activeIdx >= 0 && this.flattenedSidenav) {
       return this.flattenedSidenav[this.activeIdx + 1] || null;
     }
     return null;
