@@ -36,7 +36,7 @@
           </div>
           <div class="nimi flex-fill">
             <div class="ops">
-              <router-link :to="{ name: 'ops', params: { 'opsId': ops.id } }">
+              <router-link :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
                 {{ $kaanna(ops.nimi) }}
               </router-link>
             </div>

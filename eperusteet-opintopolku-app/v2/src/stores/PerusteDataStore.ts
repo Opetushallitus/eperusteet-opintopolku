@@ -1,17 +1,18 @@
 import * as _ from 'lodash';
+import { Location } from 'vue-router';
 import { Store, Getter, State } from '@shared/stores/store';
 import { Matala, PerusteDto } from '@shared/api/tyypit';
-import { Perusteet, Sisallot } from '@shared/api/eperusteet';
+import { Perusteet } from '@shared/api/eperusteet';
 import { SidenavFilter, SidenavNode, buildSidenav, filterSidenav } from '@/utils/NavigationBuilder';
-import { baseURL, LiitetiedostotParam, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
+import { baseURL, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
-import { Location } from 'vue-router';
+import { Kielet } from '@shared/stores/kieli';
 
 
 @Store
 export class PerusteDataStore {
   @State() public peruste: PerusteDto | null = null;
-  @State() public perusteId: number | null = null;
+  @State() public perusteId: number;
   @State() public sisalto: Matala | null = null;
   @State() public suoritustapa: string | null = null;
   @State() public currentRoute: Location | null = null;
@@ -111,19 +112,23 @@ export class PerusteDataStore {
   public readonly current!: SidenavNode | null;
 
 
-  public async getDokumentit(sisaltoKieli) {
+  // Fixme: ota huomioon kielen vaihtaminen
+  public async getDokumentit() {
     if (!this.peruste) {
       return;
     }
 
+    const sisaltoKieli = Kielet.getSisaltoKieli;
     const suoritustavat = this.peruste.suoritustavat;
     if (suoritustavat) {
       for (let i = 0; i < suoritustavat.length; i++) {
         const st = suoritustavat[i];
         const suoritustapakoodi = st.suoritustapakoodi;
         if (suoritustapakoodi) {
-          const dokumenttiId = await Dokumentit.getDokumenttiId(this.peruste!.id!, sisaltoKieli, suoritustapakoodi);
-          this.dokumentit[sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId.data).url;
+          const dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
+          if (dokumenttiId) {
+            this.dokumentit[sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(dokumenttiId).url;
+          }
         }
       }
     }
@@ -149,13 +154,8 @@ export class PerusteDataStore {
   }, 300);
 
   private async init() {
-    if (this.perusteId) {
-      this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
-      this.sidenav = await buildSidenav(this.peruste!);
-    }
-    else {
-      throw new Error('peruste-id-puuttuu');
-    }
+    this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
+    this.sidenav = await buildSidenav(this.peruste!);
   }
 
 }

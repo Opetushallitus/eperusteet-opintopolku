@@ -1,10 +1,10 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import RouteTiedot from './RouteTiedot.vue';
+import RoutePerusteTiedot from './RoutePerusteTiedot.vue';
 import { mocks, stubs, perusteDataStoreMock } from '@/jestutils';
 import { KieliStore } from '@shared/stores/kieli';
 
 
-describe('RouteTiedot', async () => {
+describe('RoutePerusteTiedot', async () => {
   const localVue = createLocalVue();
   KieliStore.setup(localVue);
 
@@ -37,7 +37,7 @@ describe('RouteTiedot', async () => {
       }],
     };
 
-    const wrapper = mount(RouteTiedot as any, {
+    const wrapper = mount(RoutePerusteTiedot as any, {
       localVue,
       propsData: {
         perusteDataStore,

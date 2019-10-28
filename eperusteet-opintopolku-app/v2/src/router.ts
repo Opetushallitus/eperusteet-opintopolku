@@ -5,17 +5,21 @@ import Root from '@/routes/Root.vue';
 import Home from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
+
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
-import RouteTiedot from '@/routes/perusteet/tiedot/RouteTiedot.vue';
+import RoutePerusteTiedot from '@/routes/perusteet/tiedot/RoutePerusteTiedot.vue';
 import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
+
+import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
+import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
-import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
+import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
 import { attachRouterMetaProps } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
@@ -137,7 +141,7 @@ export const router = new Router({
       },
       children: [{
         path: 'tiedot',
-        component: RouteTiedot,
+        component: RoutePerusteTiedot,
         name: 'perusteTiedot',
       }, {
         path: 'tekstikappale/:viiteId',
@@ -158,6 +162,51 @@ export const router = new Router({
           },
         },
       }],
+    }, {
+      path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
+      name: 'opetussuunnitelma',
+      component: RouteOpetussuunnitelma,
+      redirect(to) {
+        return {
+          name: 'opetussuunnitelmaTiedot',
+        };
+      },
+      meta: {
+        resolve: {
+          cacheBy: ['opetussuunnitelmaId'],
+          async props(route) {
+            return {
+              default: {
+                opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
+                  _.parseInt(route.params.opetussuunnitelmaId)),
+              },
+            };
+          },
+        },
+      },
+      children: [{
+        path: 'tiedot',
+        component: RouteOpetussuunnitelmaTiedot,
+        name: 'opetussuunnitelmaTiedot',
+      }/*, {
+        path: 'tekstikappale/:viiteId',
+        component: RouteTekstikappale,
+        name: 'tekstikappale',
+        meta: {
+          resolve: {
+            cacheBy: ['viiteId'],
+            async props(route) {
+              return {
+                default: {
+                  viiteId: _.parseInt(route.params.viiteId),
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.viiteId)),
+                },
+              };
+            },
+          },
+        },
+      }*/],
     }],
   }, {
     path: '*',

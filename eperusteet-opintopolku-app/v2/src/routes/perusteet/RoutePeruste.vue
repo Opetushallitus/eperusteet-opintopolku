@@ -26,7 +26,6 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
 import { Watch, Vue, Prop, Component } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';

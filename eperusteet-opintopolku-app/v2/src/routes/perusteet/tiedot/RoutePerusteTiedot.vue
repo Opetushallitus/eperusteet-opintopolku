@@ -98,27 +98,25 @@ import _ from 'lodash';
 import { Prop, Vue, Component } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
-import EpSelect from '@shared/components/forms/EpSelect.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
-import { Kielet } from '@shared/stores/kieli';
 import { isAmmatillinen } from '@/utils/perusteet';
+import { Kielet } from '@shared/stores/kieli';
 
 
 @Component({
   components: {
     EpFormContent,
     EpField,
-    EpSelect,
     EpDatepicker,
     EpSpinner,
     EpPreviousNextNavigation,
   },
 })
-export default class RouteTiedot extends Vue {
+export default class RoutePerusteTiedot extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
@@ -132,7 +130,7 @@ export default class RouteTiedot extends Vue {
     await this.perusteDataStore.getKorvaavatPerusteet();
     // Dokumentti on toteuttu vain ammatillisille
     if (this.$route && isAmmatillinen(this.$route.params.koulutustyyppi)) {
-      await this.perusteDataStore.getDokumentit(this.sisaltoKieli);
+      await this.perusteDataStore.getDokumentit();
     }
     this.isLoading = false;
   }
@@ -191,10 +189,6 @@ export default class RouteTiedot extends Vue {
       }
     }
     return result;
-  }
-
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli;
   }
 
   get maarayskirje() {
