@@ -276,8 +276,12 @@ export const router = new Router({
   }],
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   changeTitleAndLang(to);
+  next();
+});
+
+router.beforeEach(async (to, from, next) => {
   await resolveRouterMetaProps(to);
   next();
 });
