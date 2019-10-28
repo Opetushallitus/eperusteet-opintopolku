@@ -21,7 +21,7 @@ import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
-import { attachRouterMetaProps } from '@shared/utils/router';
+import { resolveRouterMetaProps } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
@@ -225,8 +225,10 @@ export const router = new Router({
     },
   }],
 });
-
-attachRouterMetaProps(router);
+router.beforeEach(async (to, from, next) => {
+  await resolveRouterMetaProps(to);
+  next();
+});
 
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);
