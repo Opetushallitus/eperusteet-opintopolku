@@ -26,17 +26,24 @@ describe('EpHeader', () => {
       },
     });
 
+    expect(wrapper.html()).toContain('eperusteet');
+
     propsData.murupolku = [{
-      location: { name: 'root' },
       label: 'parent jolla todella pitkä teksti',
+      location: { name: 'root' },
     }];
+    expect(wrapper.html()).toContain('eperusteet');
     expect(wrapper.html()).toContain('parent jolla todella pitkä teksti');
 
-    propsData.murupolku = [...propsData.murupolku, {
-      label: 'uusi alikappale',
-      location: { name: 'root' },
-    }];
+    propsData.murupolku = [
+      ...propsData.murupolku,
+      {
+        label: 'uusi alikappale',
+        location: { name: 'root' },
+      }
+    ];
 
+    expect(wrapper.html()).toContain('eperusteet');
     expect(wrapper.html()).toContain('parent jolla todella pitkä teksti');
     expect(wrapper.html()).toContain('uusi alikappale');
   });

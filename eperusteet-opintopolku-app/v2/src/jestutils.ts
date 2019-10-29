@@ -103,6 +103,13 @@ export const tiedoteStoreMock = (config: Partial<TiedoteStore> = {}) => {
 export const perusteDataStoreMock = (config: Partial<PerusteDataStore> = {}) => {
   return wrap(PerusteDataStore.prototype, {
     ...config,
+    current: {
+      children: [
+        {
+          label: 'Matematiikka',
+        },
+      ],
+    },
   } as PerusteDataStore);
 };
 

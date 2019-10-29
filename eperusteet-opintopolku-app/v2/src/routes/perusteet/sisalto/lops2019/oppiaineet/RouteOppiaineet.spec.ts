@@ -26,13 +26,6 @@ describe('RouteOppiaineet', () => {
       },
     });
 
-    lops2019oppiaineetStore.oppiaineet = [{
-      id: 1,
-      nimi: {
-        fi: 'Matematiikka'
-      } as any
-    }];
-
     expect(wrapper.html()).toContain('Matematiikka');
 
   });

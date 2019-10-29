@@ -3,12 +3,12 @@
   <div v-if="!isRoot">
     <b-link v-if="node.location" :to="node.location">
       <span class="label" :class="{ 'label-match': isMatch }">
-        {{ $kaanna(node.label) }}
+        {{ $kaannaOlioTaiTeksti(node.label) }}
       </span>
     </b-link>
     <span v-else
           class="label label-plain"
-          :class="{ 'label-match': isMatch }">{{ $kaanna(node.label) }}</span>
+          :class="{ 'label-match': isMatch }">{{ $kaannaOlioTaiTeksti(node.label) }}</span>
   </div>
 
   <!-- children -->

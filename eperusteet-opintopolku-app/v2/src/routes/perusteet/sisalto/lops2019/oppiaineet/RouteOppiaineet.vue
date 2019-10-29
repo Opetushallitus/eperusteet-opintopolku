@@ -5,7 +5,7 @@
     <div class="teksti">
       <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineet" :key="idx">
         <router-link :to="oppiaine.location">
-          {{ $kaanna(oppiaine.label) }}
+          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
         </router-link>
       </div>
     </div>

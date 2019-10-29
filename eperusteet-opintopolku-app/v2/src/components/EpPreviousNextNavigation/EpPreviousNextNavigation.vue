@@ -3,13 +3,13 @@
   <b-link v-if="previous && previous.location" :to="previous.location">
     <div class="d-flex align-items-center">
       <fas icon="arrow-left"></fas>
-      <span class="mx-2">{{ $kaanna(previous.label) }}</span>
+      <span class="mx-2">{{ $kaannaOlioTaiTeksti(previous.label) }}</span>
     </div>
   </b-link>
 
   <b-link v-if="next && next.location" :to="next.location" class="ml-auto">
     <div class="d-flex align-items-center">
-      <span class="mx-2">{{ $kaanna(next.label) }}</span>
+      <span class="mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
       <fas icon="arrow-right"></fas>
     </div>
   </b-link>
