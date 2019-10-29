@@ -8,6 +8,7 @@ import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
 
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
+
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 import RoutePerusteTiedot from '@/routes/perusteet/tiedot/RoutePerusteTiedot.vue';
 import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
@@ -43,6 +44,7 @@ const logger = createLogger('Router');
 
 const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
+
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
@@ -211,52 +213,34 @@ export const router = new Router({
             },
           },
         },
-      }],
-    }, {
-      path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
-      name: 'opetussuunnitelma',
-      component: RouteOpetussuunnitelma,
-      redirect(to) {
-        return {
-          name: 'opetussuunnitelmaTiedot',
-        };
-      },
-      meta: {
-        resolve: {
-          cacheBy: ['opetussuunnitelmaId'],
-          async props(route) {
-            return {
-              default: {
-                opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
-                  _.parseInt(route.params.opetussuunnitelmaId)),
-              },
-            };
-          },
+      }, {
+        path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
+        name: 'opetussuunnitelma',
+        component: RouteOpetussuunnitelma,
+        redirect(to) {
+          return {
+            name: 'opetussuunnitelmaTiedot',
+          };
         },
-      },
-      children: [{
-        path: 'tiedot',
-        component: RouteOpetussuunnitelmaTiedot,
-        name: 'opetussuunnitelmaTiedot',
-      }/*, {
-        path: 'tekstikappale/:viiteId',
-        component: RouteTekstikappale,
-        name: 'tekstikappale',
         meta: {
           resolve: {
-            cacheBy: ['viiteId'],
+            cacheBy: ['opetussuunnitelmaId'],
             async props(route) {
               return {
                 default: {
-                  viiteId: _.parseInt(route.params.viiteId),
-                  perusteenOsaStore: await PerusteenOsaStore.create(
-                    _.parseInt(route.params.viiteId)),
+                  opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
+                      _.parseInt(route.params.opetussuunnitelmaId)),
                 },
               };
             },
           },
         },
-      }*/],
+        children: [{
+          path: 'tiedot',
+          component: RouteOpetussuunnitelmaTiedot,
+          name: 'opetussuunnitelmaTiedot',
+        }],
+      }],
     }],
   }, {
     path: '*',

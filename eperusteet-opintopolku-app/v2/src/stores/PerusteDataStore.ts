@@ -11,6 +11,7 @@ import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Kielet } from '@shared/stores/kieli';
 
+
 @Store
 export class PerusteDataStore {
   @State() public peruste: PerusteDto | null = null;
