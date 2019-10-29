@@ -213,33 +213,33 @@ export const router = new Router({
             },
           },
         },
-      }, {
-        path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
-        name: 'opetussuunnitelma',
-        component: RouteOpetussuunnitelma,
-        redirect(to) {
-          return {
-            name: 'opetussuunnitelmaTiedot',
-          };
-        },
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId'],
-            async props(route) {
-              return {
-                default: {
-                  opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
-                      _.parseInt(route.params.opetussuunnitelmaId)),
-                },
-              };
-            },
+      }],
+    }, {
+      path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
+      name: 'opetussuunnitelma',
+      component: RouteOpetussuunnitelma,
+      redirect(to) {
+        return {
+          name: 'opetussuunnitelmaTiedot',
+        };
+      },
+      meta: {
+        resolve: {
+          cacheBy: ['opetussuunnitelmaId'],
+          async props(route) {
+            return {
+              default: {
+                opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
+                    _.parseInt(route.params.opetussuunnitelmaId)),
+              },
+            };
           },
         },
-        children: [{
-          path: 'tiedot',
-          component: RouteOpetussuunnitelmaTiedot,
-          name: 'opetussuunnitelmaTiedot',
-        }],
+      },
+      children: [{
+        path: 'tiedot',
+        component: RouteOpetussuunnitelmaTiedot,
+        name: 'opetussuunnitelmaTiedot',
       }],
     }],
   }, {
