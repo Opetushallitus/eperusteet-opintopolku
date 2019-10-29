@@ -45,52 +45,52 @@ function traverseNavigation(rawNode: NavigationNodeDto): NavigationNode {
 
   // Lisätään tiettyihin node tyyppeihin liittyiä asioita
   switch (rawNode.type as string) {
-    case 'viite':
-    case 'liite':
-      // Route linkki
-      node.location = {
-        name: 'tekstikappale',
-        params: {
-          viiteId: _.toString(rawNode.id),
-        }
-      };
-      break;
-    case 'laajaalaiset':
-      node.label = 'laaja-alaiset-osaamiset';
+  case 'viite':
+  case 'liite':
+    // Route linkki
+    node.location = {
+      name: 'tekstikappale',
+      params: {
+        viiteId: _.toString(rawNode.id),
+      }
+    };
+    break;
+  case 'laajaalaiset':
+    node.label = 'laaja-alaiset-osaamiset';
+    node.location = {
+      name: 'lops2019laajaalaiset',
+    };
+    break;
+  case 'laajaalainen':
+    if (rawNode.id) {
       node.location = {
         name: 'lops2019laajaalaiset',
+        hash: '#' + getLaajaAlainenId(rawNode),
       };
-      break;
-    case 'laajaalainen':
-      if (rawNode.id) {
-        node.location = {
-          name: 'lops2019laajaalaiset',
-          hash: '#' + getLaajaAlainenId(rawNode),
-        };
+    }
+    break;
+  case 'oppiaineet':
+    node.label = 'oppiaineet';
+    node.location = {
+      name: 'lops2019oppiaineet',
+    };
+    break;
+  case 'oppiaine':
+    node.location = {
+      name: 'lops2019oppiaine',
+      params: {
+        oppiaineId: _.toString(rawNode.id),
       }
-      break;
-    case 'oppiaineet':
-      node.label = 'oppiaineet';
-      node.location = {
-        name: 'lops2019oppiaineet',
-      };
-      break;
-    case 'oppiaine':
-      node.location = {
-        name: 'lops2019oppiaine',
-        params: {
-          oppiaineId: _.toString(rawNode.id),
-        }
-      };
-      break;
-    case 'moduulit':
-      node.label = 'moduulit';
-      break;
-    case 'oppimaarat':
-      node.label = 'oppimaarat';
-      break;
-    default:
-      break;
+    };
+    break;
+  case 'moduulit':
+    node.label = 'moduulit';
+    break;
+  case 'oppimaarat':
+    node.label = 'oppimaarat';
+    break;
+  default:
+    break;
   }
 
   return node;

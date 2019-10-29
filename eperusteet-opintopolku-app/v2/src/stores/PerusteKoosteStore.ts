@@ -28,9 +28,9 @@ export class PerusteKoosteStore {
     this.opetussuunnitelmat = null;
     this.opetussuunnitelmat = (await OpetussuunnitelmatJulkiset.getAllJulkiset(
       undefined,
-        undefined,
-        undefined,
-        _.toString(id)
+      undefined,
+      undefined,
+      _.toString(id)
     )).data;
   }
 
@@ -49,7 +49,8 @@ export class PerusteKoosteStore {
       const id = _.get(this, 'perusteet[0].id');
       if (id) {
         this.setPerusteId(id);
-      } else {
+      }
+      else {
         // Jos ei yhtään perustetta
         this.opetussuunnitelmat = [];
       }

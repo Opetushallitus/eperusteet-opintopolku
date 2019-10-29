@@ -38,7 +38,7 @@ import { createLogger } from '@shared/utils/logger';
 import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
-import { Lops2019OppiaineetStore } from "@/stores/Lops2019OppiaineetStore";
+import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 
 Vue.use(Router);
 const logger = createLogger('Router');
@@ -178,7 +178,7 @@ export const router = new Router({
               return {
                 default: {
                   lops2019LaajaAlaisetStore: await Lops2019LaajaAlaisetStore.create(
-                      _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.perusteId),
                   ),
                 },
               };
@@ -196,7 +196,7 @@ export const router = new Router({
               return {
                 default: {
                   lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(
-                      _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.perusteId),
                   ),
                 },
               };
@@ -259,7 +259,7 @@ export const router = new Router({
             return {
               default: {
                 opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId)),
+                  _.parseInt(route.params.opetussuunnitelmaId)),
               },
             };
           },
