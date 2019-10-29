@@ -1,20 +1,18 @@
 <template>
 <div id="default-anchor" class="content">
-  <div v-if="perusteenOsa">
+  <div v-if="perusteenOsa && !isLoading">
     <h2 class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
     <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
 
     <!-- Alikappaleet -->
-    <ep-spinner v-if="isLoading" />
-    <div v-else>
-      <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
-        <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
-        <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
-      </div>
+    <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
+      <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
+      <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
     </div>
 
     <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
   </div>
+  <ep-spinner v-else />
 </div>
 </template>
 
@@ -22,7 +20,7 @@
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { SidenavNode } from '@/utils/NavigationBuilder';
+import { NavigationNode } from '@/utils/NavigationBuilder';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { Perusteenosat } from '@shared/api/eperusteet';
@@ -84,7 +82,7 @@ export default class RouteTekstikappale extends Vue {
     return this.perusteDataStore.current || null;
   }
 
-  get alikappaleNodes(): Array<SidenavNode> | null {
+  get alikappaleNodes(): Array<NavigationNode> | null {
     if (this.current && this.current.path.length === 2) {
       return this.current.children;
     }

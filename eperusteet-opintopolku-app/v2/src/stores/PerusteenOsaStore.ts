@@ -11,7 +11,7 @@ export class PerusteenOsaStore {
   public static async create(perusteenOsaId: number) {
     try {
       const result = new PerusteenOsaStore(perusteenOsaId);
-      await result.init();
+      result.init();
       return result;
     }
     catch (err) {

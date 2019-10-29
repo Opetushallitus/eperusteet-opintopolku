@@ -3,33 +3,32 @@
   <b-link v-if="previous && previous.location" :to="previous.location">
     <div class="d-flex align-items-center">
       <fas icon="arrow-left"></fas>
-      <span class="mx-2">{{ previous.label }}</span>
+      <span class="mx-2">{{ $kaanna(previous.label) }}</span>
     </div>
   </b-link>
 
   <b-link v-if="next && next.location" :to="next.location" class="ml-auto">
     <div class="d-flex align-items-center">
-      <span class="mx-2">{{ next.label }}</span>
+      <span class="mx-2">{{ $kaanna(next.label) }}</span>
       <fas icon="arrow-right"></fas>
     </div>
   </b-link>
 </div>
 </template>
 
-
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { SidenavNode } from '@/utils/NavigationBuilder';
+import { NavigationNode } from '@/utils/NavigationBuilder';
 
 @Component
 export default class EpPreviousNextNavigation extends Vue {
 
   @Prop({ required: true })
-  private activeNode!: SidenavNode;
+  private activeNode!: NavigationNode;
 
   @Prop({ required: true })
-  private flattenedSidenav!: Array<SidenavNode>;
+  private flattenedSidenav!: Array<NavigationNode>;
 
   get activeIdx(): number {
     if (this.flattenedSidenav && this.activeNode) {
@@ -38,7 +37,7 @@ export default class EpPreviousNextNavigation extends Vue {
     return -1;
   }
 
-  get previous(): SidenavNode | null {
+  get previous(): NavigationNode | null {
     if (this.activeNode && _.size(this.activeNode.path) === 2) {
       // Jos päätason node, otetaan edellinen samalta tasolta
       const rootChildren = this.activeNode.path[0].children;
@@ -51,7 +50,7 @@ export default class EpPreviousNextNavigation extends Vue {
     return null;
   }
 
-  get next(): SidenavNode | null {
+  get next(): NavigationNode | null {
     if (this.activeNode && _.size(this.activeNode.path) === 2) {
       // Jos päätason node, otetaan seuraava samalta tasolta
       const rootChildren = this.activeNode.path[0].children;
@@ -65,7 +64,6 @@ export default class EpPreviousNextNavigation extends Vue {
   }
 }
 </script>
-
 
 <style scoped lang="scss">
 </style>

@@ -15,7 +15,7 @@
                    v-for="(item, idx) in murupolkuFiltered"
                    :key="idx">
                  <router-link class="breadcrumb-normal" :to="item.location">
-                   {{ item.label }}
+                   {{ $kaanna(item.label) }}
                  </router-link>
                </li>
              </ol>

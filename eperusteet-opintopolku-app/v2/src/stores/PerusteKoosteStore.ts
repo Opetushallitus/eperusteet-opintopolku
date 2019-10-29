@@ -9,26 +9,29 @@ import _ from 'lodash';
 
 @Store
 export class PerusteKoosteStore {
+  @State() public koulutustyyppi: string;
+  @State() public perusteId: number;
   @State() public perusteet: PerusteDto[] | null = null;
   @State() public tiedotteet: TiedoteDto[] | null = null;
-  @State() public koulutustyyppi: string | null = null;
-  @State() public perusteId: number | null = null;
   @State() public opetussuunnitelmat: OpetussuunnitelmaJulkinenDto[] | null = null;
 
   constructor(
     koulutustyyppi: string,
-    perusteId?: number) {
+    perusteId: number) {
     this.koulutustyyppi = koulutustyyppi;
-    this.perusteId = perusteId || null;
+    this.perusteId = perusteId;
     this.reload();
   }
 
   async setPerusteId(id: number) {
     this.perusteId = id;
     this.opetussuunnitelmat = null;
-    const opsit = await OpetussuunnitelmatJulkiset.getAllJulkiset(
-      undefined, undefined, undefined, '' + id);
-    this.opetussuunnitelmat = opsit.data;
+    this.opetussuunnitelmat = (await OpetussuunnitelmatJulkiset.getAllJulkiset(
+      undefined,
+        undefined,
+        undefined,
+        _.toString(id)
+    )).data;
   }
 
   async reload() {
@@ -46,6 +49,9 @@ export class PerusteKoosteStore {
       const id = _.get(this, 'perusteet[0].id');
       if (id) {
         this.setPerusteId(id);
+      } else {
+        // Jos ei yhtään perustetta
+        this.opetussuunnitelmat = [];
       }
     }
 

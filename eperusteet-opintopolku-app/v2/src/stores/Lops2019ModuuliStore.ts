@@ -5,15 +5,15 @@ import { Lops2019ModuuliDto } from '@shared/api/tyypit';
 
 @Store
 export class Lops2019ModuuliStore {
-  @State() public perusteId: number | null = null;
-  @State() public oppiaineId: number | null = null;
-  @State() public moduuliId: number | null = null;
+  @State() public perusteId: number;
+  @State() public oppiaineId: number;
+  @State() public moduuliId: number;
   @State() public moduuli: Lops2019ModuuliDto | null = null;
 
   public static readonly create = _.memoize(async (perusteId: number, oppiaineId: number, moduuliId: number) => {
     try {
       const result = new Lops2019ModuuliStore(perusteId, oppiaineId, moduuliId);
-      await result.init();
+      result.init();
       return result;
     }
     catch (err) {
@@ -28,11 +28,6 @@ export class Lops2019ModuuliStore {
   }
 
   async init() {
-    if (this.perusteId && this.oppiaineId && this.moduuliId) {
-      this.moduuli = (await Lops2019.getModuuli(this.perusteId, this.oppiaineId, this.moduuliId)).data;
-    }
-    else {
-      throw new Error('peruste-tai-oppiaine-tai-moduuli-id-puuttuu');
-    }
+    this.moduuli = (await Lops2019.getModuuli(this.perusteId, this.oppiaineId, this.moduuliId)).data;
   }
 }

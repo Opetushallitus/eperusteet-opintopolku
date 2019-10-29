@@ -79,13 +79,13 @@
 </template>
 
 <script lang="ts">
-import { Watch, Component, Vue, Prop } from 'vue-property-decorator';
+import _ from 'lodash';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import _ from 'lodash';
 
 @Component({
   components: {

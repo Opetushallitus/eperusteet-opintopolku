@@ -31,30 +31,30 @@ import EpPerusteSidenavNode from '@/components/EpPerusteSidenav/EpPerusteSidenav
   }
 })
 export default class EpPerusteSidenav extends Vue {
-    @Prop({ required: true })
-    private perusteDataStore!: PerusteDataStore;
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
 
-    private query = '';
+  private query = '';
 
-    private setValue(value) {
-      this.query = value;
-      this.perusteDataStore.updateFilter({
-        isEnabled: !_.isEmpty(value),
-        label: value,
-      });
-    }
+  private setValue(value) {
+    this.query = value;
+    this.perusteDataStore.updateFilter({
+      isEnabled: !_.isEmpty(value),
+      label: value,
+    });
+  }
 
-    get sidenavLoading() {
-      return this.perusteDataStore.sidenavLoading;
-    }
+  get sidenavLoading() {
+    return this.perusteDataStore.sidenavLoading;
+  }
 
-    get sidenavFilter() {
-      return this.perusteDataStore.sidenavFilter;
-    }
+  get sidenavFilter() {
+    return this.perusteDataStore.sidenavFilter;
+  }
 
-    get treeData() {
-      return this.perusteDataStore.filteredSidenav;
-    }
+  get treeData() {
+    return this.perusteDataStore.filteredSidenav;
+  }
 
 }
 </script>

@@ -1,14 +1,11 @@
 import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
-import { Matala, PerusteDto } from '@shared/api/tyypit';
-import { Perusteet, Sisallot } from '@shared/api/eperusteet';
-import { SidenavFilter, SidenavNode, buildSidenav, filterSidenav, traverseSisalto } from '@/utils/NavigationBuilder';
+import { NavigationNodeDto, PerusteDto } from '@shared/api/tyypit';
+import { Perusteet } from '@shared/api/eperusteet';
+import { NavigationFilter, NavigationNode, buildNavigation, filterNavigation } from '@/utils/NavigationBuilder';
 import { baseURL, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
-import { Koulutustyyppi, KoulutustyyppiToteutus } from '@shared/tyypit';
-import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
-import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Kielet } from '@shared/stores/kieli';
 
 
@@ -16,28 +13,21 @@ import { Kielet } from '@shared/stores/kieli';
 export class PerusteDataStore {
   @State() public peruste: PerusteDto | null = null;
   @State() public perusteId: number;
-  @State() public sisalto: Matala | null = null;
+  @State() public navigation: NavigationNodeDto | null = null;
   @State() public suoritustapa: string | null = null;
   @State() public currentRoute: Location | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
-  @State() public sidenavFilter: SidenavFilter = {
+  @State() public sidenavFilter: NavigationFilter = {
     label: '',
     isEnabled: false,
   };
-  @State() private sidenavNodes: {
-    [key: string]: SidenavNode[] | null
-  } = {};
-
 
   public static async create(perusteId: number) {
     const result = new PerusteDataStore(perusteId);
     await result.init();
 
-    return {
-      perusteDataStore: result,
-      ...await result.createStoresForPeruste(),
-    };
+    return result;
   }
 
   constructor(perusteId: number) {
@@ -47,114 +37,31 @@ export class PerusteDataStore {
   private async init() {
     if (this.perusteId) {
       this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
-      this.fetchSisalto();
+      this.fetchNavigation();
     }
     else {
       throw new Error('peruste-id-puuttuu');
     }
   }
 
-  private setSidenavNode(key) {
-    this.sidenavNodes = {
-      ...this.sidenavNodes,
-      [key]: null
-    };
-    return node => {
-      this.sidenavNodes = {
-        ...this.sidenavNodes,
-        [key]: node
-      };
-    };
+  async fetchNavigation() {
+    this.navigation = (await Perusteet.getNavigation(this.perusteId)).data;
   }
-
-  private async createStoresForPeruste() {
-    if (!this.peruste) {
-      throw new Error('peruste-ei-alustettu');
-    }
-
-    const peruste =  this.peruste;
-
-    const koulutustyyppi = peruste.koulutustyyppi!;
-    const koulutustyyppiToteutus = peruste.toteutus as KoulutustyyppiToteutus | undefined;
-
-    const base = {
-
-    };
-
-    switch (koulutustyyppi) {
-    case Koulutustyyppi.lisaopetus:
-    case Koulutustyyppi.esiopetus:
-    case Koulutustyyppi.varhaiskasvatus:
-    case Koulutustyyppi.perusopetusvalmistava:
-    case Koulutustyyppi.tpo:
-      return {
-        ...base,
-      };
-    case Koulutustyyppi.perusopetus:
-      return {
-        ...base,
-        // todo: muut osat
-      };
-    case Koulutustyyppi.aikuistenperusopetus:
-      return {
-        ...base,
-        // todo: muut osat
-      };
-    case Koulutustyyppi.lukiokoulutus:
-    case Koulutustyyppi.lukiovalmistavakoulutus:
-    case Koulutustyyppi.aikuistenlukiokoulutus:
-      if (koulutustyyppiToteutus && koulutustyyppiToteutus === KoulutustyyppiToteutus.lops2019) {
-        return {
-          ...base,
-          lops2019LaajaAlaisetStore: await Lops2019LaajaAlaisetStore.create(this.perusteId, this.setSidenavNode('laajaalaiset')),
-          lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(this.perusteId, this.setSidenavNode('oppiaineet')),
-        };
-      }
-      else {
-        return {
-          ...base,
-          // todo: muut osat
-        };
-      }
-    case Koulutustyyppi.telma:
-    case Koulutustyyppi.perustutkinto:
-    case Koulutustyyppi.ammattitutkinto:
-    case Koulutustyyppi.erikoisammattitutkinto:
-      return {
-        ...base,
-        // todo: tutkinnon osat yms.
-      };
-    }
-
-    throw new Error('koulutustyyppin-storet-ei-toteutettu');
-  }
-
-  async fetchSisalto() {
-    const suoritustapakoodi = this.peruste!.suoritustavat
-      ? this.peruste!.suoritustavat![0].suoritustapakoodi as any
-      : 'LUKIOKOULUTUS2019';
-    this.sisalto = null;
-    const fn = this.setSidenavNode('tekstikappaleet');
-    this.sisalto = (await Sisallot.getSuoritustapaSisaltoUUSI(this.perusteId, suoritustapakoodi)).data;
-    fn(traverseSisalto(this.sisalto));
-  }
-
-
 
   @Getter(state => {
-    return !state.peruste || !_.every(_.values(state.sidenavNodes));
+    return !state.peruste || !state.navigation;
   })
   public readonly sidenavLoading!: boolean;
 
   @Getter(state => {
-    if (!state.peruste) {
+    if (!state.peruste || !state.navigation) {
       return null;
     }
     else {
-      return buildSidenav(state.peruste, _.values(state.sidenavNodes));
+      return buildNavigation(state.peruste, state.navigation);
     }
   })
-  public readonly sidenav!: SidenavNode | null;
+  public readonly sidenav!: NavigationNode | null;
 
   @Getter((state, getters) => {
     if (!getters.sidenav) {
@@ -178,23 +85,23 @@ export class PerusteDataStore {
 
     return map(getters.sidenav);
   })
-  public readonly collapsedSidenav!: SidenavNode | null;
+  public readonly collapsedSidenav!: NavigationNode | null;
 
   @Getter((state, getters) => {
     if (state.sidenavFilter.isEnabled) {
-      return filterSidenav(getters.sidenav, state.sidenavFilter);
+      return filterNavigation(getters.sidenav, state.sidenavFilter);
     }
     else {
       return getters.collapsedSidenav;
     }
   })
-  public readonly filteredSidenav!: SidenavNode | null;
+  public readonly filteredSidenav!: NavigationNode | null;
 
   @Getter((state, getters) => {
     const root = getters.sidenav;
-    const result: Array<SidenavNode> = [];
+    const result: Array<NavigationNode> = [];
 
-    function traverseTree(node: SidenavNode) {
+    function traverseTree(node: NavigationNode) {
       result.push(node);
       (node.children || [])
         .map(child => {
@@ -209,7 +116,7 @@ export class PerusteDataStore {
 
     return result;
   })
-  public readonly flattenedSidenav!: SidenavNode[];
+  public readonly flattenedSidenav!: NavigationNode[];
 
   @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
@@ -221,7 +128,7 @@ export class PerusteDataStore {
     }
     return null;
   })
-  public readonly current!: SidenavNode | null;
+  public readonly current!: NavigationNode | null;
 
 
   // Fixme: ota huomioon kielen vaihtaminen
@@ -260,11 +167,11 @@ export class PerusteDataStore {
   public updateRoute(route) {
     this.currentRoute = {
       name: route.name,
-      params: _.mapValues(route.params, param => '' + param),
+      params: _.mapValues(route.params, param => _.toString(param)),
     };
   }
 
-  public readonly updateFilter = _.debounce((filter: SidenavFilter) => {
+  public readonly updateFilter = _.debounce((filter: NavigationFilter) => {
     this.sidenavFilter = filter;
   }, 300);
 

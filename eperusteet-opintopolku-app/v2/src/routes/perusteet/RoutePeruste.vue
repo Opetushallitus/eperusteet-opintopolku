@@ -30,7 +30,7 @@ import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import { SidenavNode } from '@/utils/NavigationBuilder';
+import { NavigationNode } from '@/utils/NavigationBuilder';
 
 
 @Component({
@@ -53,7 +53,7 @@ export default class RoutePeruste extends Vue {
     return this.perusteDataStore.peruste;
   }
 
-  get current(): SidenavNode | null {
+  get current(): NavigationNode | null {
     return this.perusteDataStore.current;
   }
 

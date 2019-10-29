@@ -1,8 +1,8 @@
 <template>
 <div id="default-anchor" class="content">
-  <h2 class="otsikko" slot="header">{{ $t('perusteen-tiedot') }}</h2>
   <ep-spinner v-if="isLoading"></ep-spinner>
   <div v-else>
+    <h2 class="otsikko" slot="header">{{ $t('perusteen-tiedot') }}</h2>
     <div class="row">
       <div class="col-md-12" v-if="peruste.nimi">
         <ep-form-content name="peruste-nimi">
@@ -88,8 +88,8 @@
       </div>
       <!-- todo: kv-liitteet -->
     </div>
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
   </div>
-  <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
 </div>
 </template>
 

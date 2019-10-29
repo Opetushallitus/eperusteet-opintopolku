@@ -6,7 +6,7 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
-import { RouterLinkStub, Wrapper } from '@vue/test-utils';
+import { Wrapper } from '@vue/test-utils';
 
 import '@/config/bootstrap';
 import '@/config/fontawesome';
@@ -71,9 +71,9 @@ export const perusteKoosteStoreMock = (config: Partial<PerusteKoosteStore> = {})
     perusteId: null,
     async reload() {},
     constructor(koulutustyyppi: string,
-      perusteId?: number) {
+      perusteId: number) {
       this.koulutustyyppi = koulutustyyppi;
-      this.perusteId = perusteId || null;
+      this.perusteId = perusteId;
     },
     ...config,
   } as PerusteKoosteStore);

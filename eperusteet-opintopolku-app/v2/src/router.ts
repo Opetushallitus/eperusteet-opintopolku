@@ -38,6 +38,7 @@ import { createLogger } from '@shared/utils/logger';
 import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
+import { Lops2019OppiaineetStore } from "@/stores/Lops2019OppiaineetStore";
 
 Vue.use(Router);
 const logger = createLogger('Router');
@@ -98,7 +99,7 @@ export const router = new Router({
               default: {
                 perusteKoosteStore: new PerusteKoosteStore(
                   stateToKoulutustyyppi(route.params.koulutustyyppi),
-                  route.params.perusteId ? _.parseInt(route.params.perusteId) : undefined),
+                  _.parseInt(route.params.perusteId)),
               },
             };
           },
@@ -139,7 +140,7 @@ export const router = new Router({
           async props(route) {
             return {
               default: {
-                ...await PerusteDataStore.create(_.parseInt(route.params.perusteId)),
+                perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId)),
               },
             };
           },
@@ -170,10 +171,38 @@ export const router = new Router({
         path: 'laajaalaiset',
         component: RouteLaajaAlaiset,
         name: 'lops2019laajaalaiset',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019LaajaAlaisetStore: await Lops2019LaajaAlaisetStore.create(
+                      _.parseInt(route.params.perusteId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'oppiaine',
         component: RouteOppiaineet,
         name: 'lops2019oppiaineet',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(
+                      _.parseInt(route.params.perusteId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'oppiaine/:oppiaineId',
         component: RouteOppiaine,

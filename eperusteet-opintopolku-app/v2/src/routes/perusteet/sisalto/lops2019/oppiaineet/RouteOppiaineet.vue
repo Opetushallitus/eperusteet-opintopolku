@@ -1,20 +1,18 @@
 <template>
 <div class="content">
-    <div v-if="oppiaineet">
-        <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
-        <div class="teksti">
-            <div class="oppiaineet" id="oppiaineet-lista">
-                <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineet" :key="idx">
-                    <router-link :to="{ name: 'lops2019oppiaine', params: { oppiaineId: oppiaine.id } }">
-                        {{ $kaanna(oppiaine.nimi) }}
-                    </router-link>
-                </div>
-            </div>
-        </div>
-
-      <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+  <div v-if="oppiaineet">
+    <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
+    <div class="teksti">
+      <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineet" :key="idx">
+        <router-link :to="oppiaine.location">
+          {{ $kaanna(oppiaine.label) }}
+        </router-link>
+      </div>
     </div>
-    <ep-spinner v-else />
+
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+  </div>
+  <ep-spinner v-else />
 </div>
 </template>
 
@@ -39,12 +37,15 @@ export default class RouteOppiaineet extends Vue {
   private lops2019oppiaineetStore!: Lops2019OppiaineetStore;
 
   get oppiaineet() {
-    return this.lops2019oppiaineetStore.oppiaineet;
+    if (this.current) {
+      return this.current.children;
+    }
   }
 
   get current() {
     return this.perusteDataStore.current;
   }
+
 
   get flattenedSidenav() {
     return this.perusteDataStore.flattenedSidenav;

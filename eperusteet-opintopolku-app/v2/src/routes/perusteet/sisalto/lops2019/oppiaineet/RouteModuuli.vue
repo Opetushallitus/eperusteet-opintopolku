@@ -1,42 +1,45 @@
 <template>
 <div class="content">
+  <div v-if="moduuli">
     <h2 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi)}}</h2>
 
     <div class="teksti">
-        <div v-if="koodi">
-            <strong>{{ $t('koodi') }}</strong>
-            <p>{{ koodi.arvo }}</p>
-        </div>
+      <div v-if="koodi">
+        <strong>{{ $t('koodi') }}</strong>
+        <p>{{ koodi.arvo }}</p>
+      </div>
 
-        <div v-if="tyyppi">
-            <strong>{{ $t('tyyppi') }}</strong>
-            <p>{{ $t(tyyppi) }}</p>
-        </div>
+      <div v-if="tyyppi">
+        <strong>{{ $t('tyyppi') }}</strong>
+        <p>{{ $t(tyyppi) }}</p>
+      </div>
 
-        <div v-if="moduuli.laajuus">
-            <strong>{{ $t('laajuus') }}</strong>
-            <p>{{ moduuli.laajuus }}</p>
-        </div>
+      <div v-if="moduuli.laajuus">
+        <strong>{{ $t('laajuus') }}</strong>
+        <p>{{ moduuli.laajuus }}</p>
+      </div>
 
-        <div v-if="hasTavoitteet">
-            <h3>{{ $t('tavoitteet') }}</h3>
-            <p v-if="tavoitteet.kohde">{{ $kaanna(tavoitteet.kohde) }}</p>
-            <ul>
-                <li v-for="(tavoite, idx) in tavoitteet.tavoitteet" :key="idx">{{ $kaanna(tavoite) }}</li>
-            </ul>
-        </div>
+      <div v-if="hasTavoitteet">
+        <h3>{{ $t('tavoitteet') }}</h3>
+        <p v-if="tavoitteet.kohde">{{ $kaanna(tavoitteet.kohde) }}</p>
+        <ul>
+          <li v-for="(tavoite, idx) in tavoitteet.tavoitteet" :key="idx">{{ $kaanna(tavoite) }}</li>
+        </ul>
+      </div>
 
-        <div v-if="hasSisallot">
-            <h3>{{ $t('sisallot') }}</h3>
-            <div v-for="(sisalto, idx) in sisallot"
-                 :key="idx">
-                <p v-if="sisallot.kohde">{{ $kaanna(sisalto.kohde) }}</p>
-                <ul>
-                    <li v-for="(osa, idx) in sisalto.sisallot" :key="idx">{{ $kaanna(osa) }}</li>
-                </ul>
-            </div>
+      <div v-if="hasSisallot">
+        <h3>{{ $t('sisallot') }}</h3>
+        <div v-for="(sisalto, idx) in sisallot"
+             :key="idx">
+          <p v-if="sisallot.kohde">{{ $kaanna(sisalto.kohde) }}</p>
+          <ul>
+            <li v-for="(osa, idx) in sisalto.sisallot" :key="idx">{{ $kaanna(osa) }}</li>
+          </ul>
         </div>
+      </div>
     </div>
+  </div>
+  <ep-spinner v-else />
 </div>
 </template>
 
@@ -44,8 +47,15 @@
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 
-@Component({})
+@Component({
+  components: {
+    EpSpinner,
+    EpPreviousNextNavigation,
+  }
+})
 export default class RouteModuuli extends Vue {
   @Prop({ required: true })
   private lops2019moduuliStore!: Lops2019ModuuliStore;

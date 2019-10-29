@@ -3,12 +3,12 @@
   <div v-if="!isRoot">
     <b-link v-if="node.location" :to="node.location">
       <span class="label" :class="{ 'label-match': isMatch }">
-        {{ node.label }}
+        {{ $kaanna(node.label) }}
       </span>
     </b-link>
     <span v-else
           class="label label-plain"
-          :class="{ 'label-match': isMatch }">{{ node.label }}</span>
+          :class="{ 'label-match': isMatch }">{{ $kaanna(node.label) }}</span>
   </div>
 
   <!-- children -->
@@ -23,7 +23,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { SidenavNode } from '@/utils/NavigationBuilder';
+import { NavigationNode } from '@/utils/NavigationBuilder';
 
 
 @Component({
@@ -31,7 +31,7 @@ import { SidenavNode } from '@/utils/NavigationBuilder';
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
-  node!: SidenavNode;
+  node!: NavigationNode;
 
   get children() {
     return _.filter(this.node.children, 'isVisible');
