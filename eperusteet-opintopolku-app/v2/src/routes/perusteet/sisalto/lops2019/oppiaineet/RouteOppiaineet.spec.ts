@@ -9,7 +9,15 @@ describe('RouteOppiaineet', () => {
   KieliStore.setup(localVue);
 
   test('Renders', async () => {
-    const perusteDataStore = perusteDataStoreMock();
+    const perusteDataStore = perusteDataStoreMock({
+      current: {
+        children: [
+          {
+            label: 'Matematiikka',
+          },
+        ],
+      } as any
+    });
     const lops2019oppiaineetStore = lops2019OppiaineetStoreMock();
 
     const wrapper = mount(RouteOppiaineet as any, {
