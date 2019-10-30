@@ -14,7 +14,7 @@
   <!-- children -->
   <ul :class="{ 'root-list': isRoot }">
     <li v-for="(child, idx) in children" :key="idx">
-      <ep-peruste-sidenav-node :key="idx" :node="child" />
+      <ep-peruste-sidenav-node :node="child" :current="current" />
     </li>
   </ul>
 </div>
@@ -33,8 +33,23 @@ export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
   node!: NavigationNode;
 
+  @Prop({ required: true })
+  current!: NavigationNode;
+
   get children() {
-    return _.filter(this.node.children, 'isVisible');
+    const node = this.node;
+    const type = this.node.type;
+
+    const current = this.current;
+    const parent = node.path[_.size(node.path) - 2];
+    if ((current && (node.key === current.key ||  (parent && parent.key === current.key)))
+        && (type === 'oppiaine' || type === 'oppimaarat' || type === 'moduulit' || type === 'moduuli')) {
+      console.log('asd');
+      return node.children;
+    }
+    else {
+      return _.filter(node.children, 'isVisible');
+    }
   }
 
   get isRoot() {
