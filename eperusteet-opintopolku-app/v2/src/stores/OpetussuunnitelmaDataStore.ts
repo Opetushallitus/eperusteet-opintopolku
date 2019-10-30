@@ -1,4 +1,3 @@
-import * as _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import { OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
@@ -14,14 +13,9 @@ export class OpetussuunnitelmaDataStore {
   @State() public currentRoute: Location | null = null;
 
   public static async create(opetussuunnitelmaId: number) {
-    try {
-      const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId);
-      await result.init();
-      return result;
-    }
-    catch (err) {
-      console.error(err);
-    }
+    const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId);
+    await result.init();
+    return result;
   }
 
   constructor(opetussuunnitelmaId: number) {

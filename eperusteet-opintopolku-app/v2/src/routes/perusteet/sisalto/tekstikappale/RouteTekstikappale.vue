@@ -1,37 +1,40 @@
 <template>
-<div id="default-anchor" class="content">
-  <div v-if="perusteenOsa && !isLoading">
-    <h2 class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+<div class="content">
+  <div v-if="perusteenOsa">
+    <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
     <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
 
     <!-- Alikappaleet -->
-    <div v-for="(alikappale, idx) in alikappaleet" :key="idx">
-      <h3 class="otsikko">{{ $kaanna(alikappale.nimi) }}</h3>
-      <div class="teksti" v-html="$kaanna(alikappale.teksti)"></div>
+    <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
+      <ep-heading class="otsikko"
+                  :level="alikappaleViite.level + 2">
+        {{ $kaanna(alikappaleViite.perusteenOsa.nimi) }}
+      </ep-heading>
+      <div class="teksti" v-html="$kaanna(alikappaleViite.perusteenOsa.teksti)"></div>
     </div>
 
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
   </div>
   <ep-spinner v-else />
 </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
+import _ from 'lodash';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { NavigationNode } from '@/utils/NavigationBuilder';
+import { ViiteLaaja } from '@shared/api/tyypit';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { Perusteenosat } from '@shared/api/eperusteet';
-import { Laaja } from '@shared/api/tyypit';
-import _ from 'lodash';
+import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 
 
 @Component({
   components: {
     EpPreviousNextNavigation,
     EpSpinner,
+    EpHeading,
   }
 })
 export default class RouteTekstikappale extends Vue {
@@ -42,51 +45,57 @@ export default class RouteTekstikappale extends Vue {
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
 
-  private alikappaleet: Laaja[] = [];
-  private isLoading = false;
-
   @Watch('current', { immediate: true })
-  async updateAlikappaleet() {
+  async fetchAlikappaleet() {
     if (!this.current) {
       return;
     }
 
-    this.isLoading = true;
-    if (this.current.children) {
-      this.alikappaleet = await Promise.all(_(this.current.children)
-        .filter('location')
-        .map(async (node: any) =>
-          (await Perusteenosat.getPerusteenOsatByViite(node.location.params.viiteId)).data)
-        .value());
-    }
-    this.isLoading = false;
+    const isHeading = !!this.current && this.current.path.length === 2;
+    await this.perusteenOsaStore.fetchPerusteenOsa(isHeading);
   }
 
   get perusteenOsa() {
     return this.perusteenOsaStore.perusteenOsa;
   }
 
+  get perusteenOsaViite() {
+    return this.perusteenOsaStore.perusteenOsaViite;
+  }
+
+  get alikappaleet(): any[] {
+    if (!_.isEmpty(this.perusteenOsaViite)) {
+      const viitteet: ViiteLaaja[] = [];
+
+      const stack: ViiteLaaja[] = [this.perusteenOsaViite!];
+
+      while (!_.isEmpty(stack)) {
+        const head: any = stack.shift()!;
+
+        if (head.perusteenOsa) {
+          viitteet.push(head);
+        }
+
+        stack.unshift(..._.map(head.lapset, viite => ({
+          ...viite,
+          level: (head.level || 0) + 1
+        })));
+      }
+
+      // Poistetaan nykyinen viite alikappaleista
+      return _.slice(viitteet, 1);
+    }
+    else {
+      return [];
+    }
+  }
+
   get flattenedSidenav() {
     return this.perusteDataStore.flattenedSidenav;
   }
 
-  get currentRoute() {
-    return this.perusteDataStore.currentRoute;
-  }
-
-  get sidenav() {
-    return this.perusteDataStore.sidenav;
-  }
-
   get current() {
     return this.perusteDataStore.current || null;
-  }
-
-  get alikappaleNodes(): Array<NavigationNode> | null {
-    if (this.current && this.current.path.length === 2) {
-      return this.current.children;
-    }
-    return null;
   }
 
 }

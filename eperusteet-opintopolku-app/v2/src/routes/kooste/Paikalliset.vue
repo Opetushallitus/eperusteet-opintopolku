@@ -156,11 +156,8 @@ export default class Paikalliset extends Vue {
 @import '../../styles/_variables.scss';
 
 .paikalliset {
-  margin: 0 10px 10px 10px;
-  margin-top: 31px;
-
   .search {
-    margin: 20px 0 20px 0;
+    margin: 20px 0;
   }
 
   h2.otsikko {

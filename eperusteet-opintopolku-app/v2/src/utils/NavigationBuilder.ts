@@ -157,5 +157,6 @@ function checkMatch(node: NavigationNode, filter?: NavigationFilter) {
 }
 
 export function getLaajaAlainenId(laajaAlainen) {
-  return 'laaja-alainen-' + laajaAlainen.id;
+  const koodiUri = _.get(laajaAlainen, 'meta.koodi.uri');
+  return koodiUri || 'laaja-alainen-' + laajaAlainen.id;
 }

@@ -10,7 +10,10 @@
         <b-col lg="7" class="tile">
           <h2>{{ $t('perusteet') }}</h2>
           <div class="perustebox d-flex flex-wrap" v-if="perusteet">
-            <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
+            <div v-if="perusteet.length === 0">
+              {{ $t('perusteita-ei-saatavilla') }}
+            </div>
+            <div v-else class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
               <div class="upper">
                 <div class="peruste-ikoni">
                   <img src="../../../public/img/icons/hallitus.svg" :alt="$t('peruste')" style="fill: #0041DC" />
@@ -147,8 +150,9 @@ export default class RouteKooste extends Vue {
         border: 1px solid #E7E7E7;
         box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
         min-height: 230px;
-        margin: 0 8px 8px 0;
-        width: 300px;
+        //margin: 0 8px 8px 0;
+        width: 340px;
+        overflow-x: auto;
 
         @media(max-width: 575.98px) {
           width: 100%;
