@@ -54,13 +54,12 @@
 </template>
 
 <script lang="ts">
-import { Watch, Component, Vue, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
-import _ from 'lodash';
-import EpToggle from "@shared/components/forms/EpToggle.vue";
+import EpToggle from '@shared/components/forms/EpToggle.vue';
 
 
 @Component({
