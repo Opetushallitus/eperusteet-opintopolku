@@ -30,7 +30,7 @@ install:
   - nvm install 10.16.3
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-ylops
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
-  - git submodule update --init --remote --recursive
+  - git submodule update --init --recursive
 
   - cd eperusteet/eperusteet && mvn dependency:resolve -o -B && cd ../..
   - cd eperusteet-ylops && mvn dependency:resolve -o -B && cd ..
