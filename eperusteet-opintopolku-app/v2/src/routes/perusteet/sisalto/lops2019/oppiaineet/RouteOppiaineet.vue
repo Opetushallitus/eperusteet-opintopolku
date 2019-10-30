@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
   </div>
   <ep-spinner v-else />
 </div>

@@ -75,11 +75,26 @@ export class PerusteDataStore {
           || (parent && _.includes(pathKeys, parent.key));
     };
 
-    const map = (value, depth = 0) => {
+    const map = (value, depth = 0, isVisibleDeep = false) => {
+
+      // Esitetään oppiaineen sisältö oppimääriin saakka
+      if ((value.type === 'oppiaine') && getters.current && getters.current.key === value.key) {
+        isVisibleDeep = true;
+      }
+
+      // Etsitään valitun oppiaineen oppimäärät ja näytetään ne
+      let isCurrentVisible = false;
+      const parent = value.path[_.size(value.path) - 2];
+      if (parent && parent.type === 'oppimaarat' && isVisibleDeep && getters.current && getters.current.key === parent.key) {
+        isVisibleDeep = false;
+        isCurrentVisible = true;
+      }
+
+
       return {
         ...value,
-        isVisible: !getters.current || depth === 1 || onPath(value),
-        children: _.map(value.children, child => map(child, depth + 1)),
+        isVisible: !getters.current || depth === 1 || onPath(value) || isVisibleDeep || isCurrentVisible,
+        children: _.map(value.children, child => map(child, depth + 1, isVisibleDeep)),
       };
     };
 

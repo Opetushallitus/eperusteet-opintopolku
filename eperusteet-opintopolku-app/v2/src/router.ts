@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
+import VueScrollTo from 'vue-scrollto';
 
 import Root from '@/routes/Root.vue';
 import Home from '@/routes/home/RouteHome.vue';
@@ -54,15 +55,13 @@ export const router = new Router({
     }
     else if (to.hash) {
       // Elementti johon navigoidaan. Elementin täytyy olla luotu jo tilanvaihdoksen yhteydessä!
-      return {
-        selector: to.hash
-      };
+      VueScrollTo.scrollTo(to.hash);
+      return { selector: to.hash };
     }
     else {
       // Elementti johon navigoidaan. Elementin täytyy olla luotu jo tilanvaihdoksen yhteydessä!
-      return {
-        selector: '#default-anchor'
-      };
+      VueScrollTo.scrollTo('#scroll-anchor');
+      return { selector: '#scroll-anchor' };
     }
   },
   routes: [{

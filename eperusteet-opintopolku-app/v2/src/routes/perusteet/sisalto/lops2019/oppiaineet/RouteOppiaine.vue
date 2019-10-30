@@ -1,5 +1,5 @@
 <template>
-<div id="default-anchor" class="content">
+<div class="content">
     <div v-if="oppiaine">
         <h2 class="otsikko" slot="header">{{ $kaanna(oppiaine.nimi) }}</h2>
 
@@ -39,7 +39,7 @@
             </div>
 
             <div v-if="hasModuulit">
-                <h3>{{ $t('moduulit') }}</h3>
+                <h3 id="moduulit">{{ $t('moduulit') }}</h3>
 
                 <div v-if="hasPakollisetModuulit">
                     <h4>{{ $t('pakolliset-moduulit') }}</h4>
@@ -65,7 +65,7 @@
             </div>
 
             <div v-if="hasOppimaarat">
-                <h3>{{ $t('oppimaarat') }}</h3>
+                <h3 id="oppimaarat">{{ $t('oppimaarat') }}</h3>
                 <div v-for="(oppimaara, idx) in oppimaarat"
                      :key="idx">
                     <router-link :to="{ name: 'lops2019oppiaine', params: { oppiaineId: oppimaara.id } }">
@@ -75,7 +75,7 @@
             </div>
         </div>
 
-        <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+        <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
     </div>
     <ep-spinner v-else />
 </div>
@@ -84,6 +84,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import VueScrollTo from 'vue-scrollto';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
@@ -102,6 +103,20 @@ export default class RouteOppiaine extends Vue {
 
   @Prop({ required: true })
   private lops2019oppiaineStore!: Lops2019OppiaineStore;
+
+  updated() {
+    // Odotetaan myös alikomponenttien päivittymistä
+    this.$nextTick(() => {
+      if (this.$route && this.$route.hash && this.oppiaine) {
+        if (this.$route.hash === '#moduulit' && this.hasModuulit) {
+          VueScrollTo.scrollTo('#moduulit');
+        }
+        else if (this.$route.hash === '#oppimaarat' && this.hasOppimaarat) {
+          VueScrollTo.scrollTo('#oppimaarat');
+        }
+      }
+    });
+  }
 
   get oppiaine() {
     return this.lops2019oppiaineStore.oppiaine;

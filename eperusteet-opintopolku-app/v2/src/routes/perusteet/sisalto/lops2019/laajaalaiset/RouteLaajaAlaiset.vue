@@ -1,5 +1,5 @@
 <template>
-<div id="default-anchor" class="content">
+<div class="content">
   <div v-if="laajaAlaisetKokonaisuus">
     <h2 class="otsikko" slot="header">{{ $t('laaja-alaiset-osaamiset') }}</h2>
     <div class="teksti">
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
   </div>
   <ep-spinner v-else />
 </div>
@@ -24,11 +24,12 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import VueScrollTo from 'vue-scrollto';
 import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { getLaajaAlainenId } from '@/utils/NavigationBuilder';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 
 @Component({
   components: {
@@ -46,6 +47,15 @@ export default class RouteLaajaAlaiset extends Vue {
 
   get laajaAlaisetKokonaisuus() {
     return this.lops2019LaajaAlaisetStore.laajaAlaisetKokonaisuus;
+  }
+
+  updated() {
+    // Odotetaan myös alikomponenttien päivittymistä
+    this.$nextTick(() => {
+      if (this.$route && this.$route.hash && this.laajaAlaisetKokonaisuus) {
+        VueScrollTo.scrollTo(this.$route.hash);
+      }
+    });
   }
 
   get laajaAlaiset() {
@@ -67,6 +77,8 @@ export default class RouteLaajaAlaiset extends Vue {
   }
 
   private getLaajaAlainenId(laajaAlainen) {
+    const koodiUri = _.get(laajaAlainen, 'koodi.uri');
+    _.set(laajaAlainen, 'meta.koodi.uri', koodiUri);
     return getLaajaAlainenId(laajaAlainen);
   }
 }

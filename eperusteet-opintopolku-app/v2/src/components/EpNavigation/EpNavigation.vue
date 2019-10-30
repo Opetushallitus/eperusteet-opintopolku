@@ -28,7 +28,7 @@
       <b-navbar-nav class="ml-auto">
         <b-nav-item-dropdown right>
           <template slot="button-content">
-            <fas icon="language" class="mr-2"></fas>
+            <fas fixed-width icon="language" class="mr-2"></fas>
             <span>{{ $t(sisaltoKieli) }}</span>
           </template>
           <b-dropdown-item v-for="(kieli, idx) in kielet"
