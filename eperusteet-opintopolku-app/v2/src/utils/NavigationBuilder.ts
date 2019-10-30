@@ -4,7 +4,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { Location } from 'vue-router';
 
 export type NavigationType =
-    'root' | 'viite' | 'tiedot' | 'laajaalaiset' | 'oppiaineet';
+    'root' | 'viite' | 'tiedot' | 'laajaalaiset' | 'oppiaineet' | 'oppiaine' | 'oppimaarat' | 'moduulit' | 'moduuli';
 
 export interface NavigationNode {
   key?: number; // Unique identifier

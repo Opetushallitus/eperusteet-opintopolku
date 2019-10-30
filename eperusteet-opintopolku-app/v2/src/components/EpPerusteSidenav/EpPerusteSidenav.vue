@@ -9,7 +9,7 @@
     <div class="navigation-tree">
         <ep-peruste-sidenav-node v-if="treeData"
                                  :node="treeData"
-                                 :sidenav-filter="sidenavFilter" />
+                                 :current="current" />
     </div>
   </div>
 </div>
@@ -48,14 +48,13 @@ export default class EpPerusteSidenav extends Vue {
     return this.perusteDataStore.sidenavLoading;
   }
 
-  get sidenavFilter() {
-    return this.perusteDataStore.sidenavFilter;
-  }
-
   get treeData() {
     return this.perusteDataStore.filteredSidenav;
   }
 
+  get current() {
+    return this.perusteDataStore.current;
+  }
 }
 </script>
 
