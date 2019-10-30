@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Loading from 'vue-loading-overlay';
 import Notifications from 'vue-notification';
+import VueScrollTo from 'vue-scrollto';
 
 import '@/config/bootstrap';
 import '@/config/fontawesome';
@@ -38,6 +39,10 @@ Vue.use(Loading, {
   fullPage: true,
   color: '#159ecb',
   loader: 'dots',
+});
+
+Vue.use(VueScrollTo, {
+  duration: 1000,
 });
 
 

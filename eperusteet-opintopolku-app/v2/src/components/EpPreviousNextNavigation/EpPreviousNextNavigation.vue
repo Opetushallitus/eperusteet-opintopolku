@@ -2,7 +2,7 @@
 <div class="d-flex flex-column flex-lg-row justify-content-between mt-5" v-if="previous || next">
   <b-link v-if="previous && previous.location" :to="previous.location">
     <div class="d-flex align-items-center">
-      <fas icon="arrow-left"></fas>
+      <fas fixed-width icon="arrow-left"></fas>
       <span class="mx-2">{{ $kaannaOlioTaiTeksti(previous.label) }}</span>
     </div>
   </b-link>
@@ -10,7 +10,7 @@
   <b-link v-if="next && next.location" :to="next.location" class="ml-auto">
     <div class="d-flex align-items-center">
       <span class="mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
-      <fas icon="arrow-right"></fas>
+      <fas fixed-width icon="arrow-right"></fas>
     </div>
   </b-link>
 </div>

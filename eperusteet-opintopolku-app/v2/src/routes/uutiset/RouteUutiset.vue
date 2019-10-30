@@ -105,6 +105,7 @@ export default class RouteUutiset extends Vue {
 
 .search {
   margin-bottom: 40px;
+  padding: 0 15px;
 }
 
 .tiedotteet {

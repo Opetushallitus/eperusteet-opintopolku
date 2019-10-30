@@ -6,14 +6,11 @@
   <div class="search">
     <ep-search v-model="query" />
     <div class="checkboxes d-flex align-self-center flex-wrap">
-      <b-form-checkbox
-        v-for="(toggle, idx) in toggles"
-        :key="idx"
-        v-model="filters[toggle]"
-        @change="onToggleChange(toggle)"
-        switch>
+      <ep-toggle v-for="(toggle, idx) in toggles"
+                 :key="idx"
+                 v-model="filters[toggle]">
         {{ $t('switch-' + toggle) }}
-      </b-form-checkbox>
+      </ep-toggle>
     </div>
   </div>
   <div class="content">
@@ -63,10 +60,12 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import _ from 'lodash';
+import EpToggle from "@shared/components/forms/EpToggle.vue";
 
 
 @Component({
   components: {
+    EpToggle,
     EpHeader,
     EpSearch,
     EpSpinner,

@@ -1,5 +1,5 @@
 <template>
-<div id="default-anchor" class="content">
+<div class="content">
   <ep-spinner v-if="isLoading"></ep-spinner>
   <div v-else>
     <h2 class="otsikko" slot="header">{{ $t('perusteen-tiedot') }}</h2>
@@ -88,7 +88,7 @@
       </div>
       <!-- todo: kv-liitteet -->
     </div>
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>
+    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
   </div>
 </div>
 </template>
@@ -104,7 +104,6 @@ import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPr
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
 import { isAmmatillinen } from '@/utils/perusteet';
-import { Kielet } from '@shared/stores/kieli';
 
 
 @Component({

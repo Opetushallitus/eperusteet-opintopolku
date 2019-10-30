@@ -75,6 +75,15 @@ function traverseNavigation(rawNode: NavigationNodeDto): NavigationNode {
       name: 'lops2019oppiaineet',
     };
     break;
+  case 'oppimaarat':
+    node.label = 'oppimaarat';
+    /*
+    node.location = {
+      name: 'lops2019oppiaine',
+      hash: '#oppimaarat',
+    };
+    */
+    break;
   case 'oppiaine':
     node.location = {
       name: 'lops2019oppiaine',
@@ -85,9 +94,20 @@ function traverseNavigation(rawNode: NavigationNodeDto): NavigationNode {
     break;
   case 'moduulit':
     node.label = 'moduulit';
+    /*
+    node.location = {
+      name: 'lops2019oppiaine',
+      hash: '#moduulit',
+    };
+    */
     break;
-  case 'oppimaarat':
-    node.label = 'oppimaarat';
+  case 'moduuli':
+    node.location = {
+      name: 'lops2019moduuli',
+      params: {
+        moduuliId: _.toString(rawNode.id),
+      }
+    };
     break;
   default:
     break;

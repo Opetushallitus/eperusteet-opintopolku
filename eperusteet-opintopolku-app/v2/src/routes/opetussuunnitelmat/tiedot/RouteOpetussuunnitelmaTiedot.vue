@@ -60,7 +60,6 @@
       </div>
     </div>
   </div>
-  <!--<ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav"></ep-previous-next-navigation>-->
 </div>
 </template>
 

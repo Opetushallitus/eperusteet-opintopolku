@@ -1,6 +1,6 @@
 <template>
 <div>
-  <div class="vari-header" :class="theme">
+  <div class="vari-header" :class="theme" id="scroll-anchor">
     <div class="container header">
       <div class="col">
         <div class="murupolku">
