@@ -105,8 +105,8 @@ export default class RouteUutiset extends Vue {
 
 .search {
   margin-bottom: 40px;
-  padding: 15px;
 }
+
 .tiedotteet {
   padding: 15px;
 
@@ -115,7 +115,7 @@ export default class RouteUutiset extends Vue {
 
     .otsikko {
       color: #001A58;
-      font-size: 22px;
+      font-size: 1.5rem;
     }
 
     .aikaleima {

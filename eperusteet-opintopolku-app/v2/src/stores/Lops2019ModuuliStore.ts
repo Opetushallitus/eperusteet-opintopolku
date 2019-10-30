@@ -11,14 +11,9 @@ export class Lops2019ModuuliStore {
   @State() public moduuli: Lops2019ModuuliDto | null = null;
 
   public static readonly create = _.memoize(async (perusteId: number, oppiaineId: number, moduuliId: number) => {
-    try {
-      const result = new Lops2019ModuuliStore(perusteId, oppiaineId, moduuliId);
-      result.init();
-      return result;
-    }
-    catch (err) {
-      console.error(err);
-    }
+    const result = new Lops2019ModuuliStore(perusteId, oppiaineId, moduuliId);
+    result.init();
+    return result;
   });
 
   constructor(perusteId: number, oppiaineId: number, moduuliId: number) {

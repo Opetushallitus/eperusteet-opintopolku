@@ -145,10 +145,10 @@ export default class RouteHome extends Vue {
     }
   }
 
-  background: $etusivu-header-background; /* TODO: Lisää kuva */
+  background-color: $etusivu-header-background; /* TODO: Lisää kuva */
   // background-image: /* TODO: Lisää kuva */
   background-size: cover;
-  background-position: 50% 33%;;
+  background-position: 50% 33%;
 
   .laatikko {
     padding: 15px;
@@ -157,15 +157,18 @@ export default class RouteHome extends Vue {
     opacity: 0.95;
 
     @media (min-width: 768px) {
-      max-width: 406px;
-      min-height: 285px;
-      padding: 25px;
+      max-width: 400px;
+      padding: 20px;
     }
 
     h1.otsikko {
-      font-size: 28px;
+      font-size: 1.5rem;
       font-weight: bolder;
-      margin-bottom: 27px;
+      margin-bottom: 20px;
+    }
+
+    .kuvaus {
+      margin-bottom: 0;
     }
   }
 }
