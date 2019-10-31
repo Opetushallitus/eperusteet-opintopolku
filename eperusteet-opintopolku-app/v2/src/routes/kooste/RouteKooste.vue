@@ -7,7 +7,7 @@
   <div>
     <b-container fluid>
       <b-row>
-        <b-col lg="7" class="tile">
+        <b-col xl="7" class="tile">
           <h2>{{ $t('perusteet') }}</h2>
           <div class="perustebox d-flex flex-wrap" v-if="perusteet">
             <div v-if="perusteet.length === 0">
@@ -49,7 +49,7 @@
           </div>
           <ep-spinner v-else />
         </b-col>
-        <b-col lg="5" class="tile">
+        <b-col xl="5" class="tile">
           <h2>{{ $t('tiedotteet') }}</h2>
           <div class="tiedotebox">
             <div v-if="tiedotteet">
@@ -132,9 +132,9 @@ export default class RouteKooste extends Vue {
 .container {
   .tile {
     // Todo: käytä muuttujia
-    @media (max-width: 991.98px) {
+    @media (max-width: 1199.98px) {
       &:not(:first-child) {
-        margin-top: 3rem;
+        margin-top: 30px;
       }
     }
 
@@ -143,18 +143,18 @@ export default class RouteKooste extends Vue {
     }
 
     .perustebox {
-      margin-top: 3rem;
+      margin-top: 30px;
 
       .peruste {
         border-radius: 10px;
         border: 1px solid #E7E7E7;
         box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
         min-height: 230px;
-        //margin: 0 8px 8px 0;
-        width: 340px;
+        margin: 0 8px 8px 0;
+        width: 292px;
         overflow-x: auto;
 
-        @media(max-width: 575.98px) {
+        @media(max-width: 648.98px) {
           width: 100%;
         }
 
@@ -197,7 +197,7 @@ export default class RouteKooste extends Vue {
     }
 
     .tiedotebox {
-      margin-top: 3rem;
+      margin-top: 30px;
 
       .tiedote {
         padding: 5px;

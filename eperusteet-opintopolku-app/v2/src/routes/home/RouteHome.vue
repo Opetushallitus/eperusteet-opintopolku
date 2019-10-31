@@ -146,7 +146,7 @@ export default class RouteHome extends Vue {
   }
 
   background-color: $etusivu-header-background; /* TODO: Lisää kuva */
-  // background-image: /* TODO: Lisää kuva */
+  background-image: url('../../../public/img/banners/opiskelijat.png');
   background-size: cover;
   background-position: 50% 33%;
 
