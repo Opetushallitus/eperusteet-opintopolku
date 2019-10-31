@@ -33,18 +33,19 @@ export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
   node!: NavigationNode;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   current!: NavigationNode;
 
   get children() {
     const node = this.node;
     const type = this.node.type;
-
     const current = this.current;
     const parent = node.path[_.size(node.path) - 2];
-    if ((current && (node.key === current.key ||  (parent && parent.key === current.key)))
-        && (type === 'oppiaine' || type === 'oppimaarat' || type === 'moduulit' || type === 'moduuli')) {
-      console.log('asd');
+
+    const isCurrentOrParentSelected = (current && (node.key === current.key ||  (parent && parent.key === current.key)));
+    const isErikoistyyppi = type === 'oppiaine' || type === 'oppimaarat' || type === 'moduulit' || type === 'moduuli';
+
+    if (isCurrentOrParentSelected && isErikoistyyppi) {
       return node.children;
     }
     else {

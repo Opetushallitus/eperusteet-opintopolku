@@ -53,13 +53,15 @@ export const router = new Router({
     if (savedPosition) {
       return savedPosition;
     }
-    else if (to.hash) {
-      // Elementti johon navigoidaan. Elementin täytyy olla luotu jo tilanvaihdoksen yhteydessä!
+
+    const hashAnchorElement = document.getElementById(to.hash.substring(1));
+    if (hashAnchorElement) {
       VueScrollTo.scrollTo(to.hash);
       return { selector: to.hash };
     }
-    else {
-      // Elementti johon navigoidaan. Elementin täytyy olla luotu jo tilanvaihdoksen yhteydessä!
+
+    const anchorElement = document.getElementById('scroll-anchor');
+    if (anchorElement) {
       VueScrollTo.scrollTo('#scroll-anchor');
       return { selector: '#scroll-anchor' };
     }

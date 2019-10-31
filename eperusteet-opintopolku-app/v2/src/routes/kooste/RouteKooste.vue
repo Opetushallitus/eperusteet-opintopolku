@@ -104,7 +104,7 @@ export default class RouteKooste extends Vue {
 
   get murupolku(): Array<MurupolkuOsa> {
     return [{
-      label: (this as any).$t('kooste'),
+      label: 'kooste',
       location: {
         ...this.$route,
       },
@@ -184,7 +184,6 @@ export default class RouteKooste extends Vue {
 
           .nimi {
             hyphens: auto;
-            overflow-x: hide;
             overflow: hidden;
             width: 100%;
             padding: 12px;
