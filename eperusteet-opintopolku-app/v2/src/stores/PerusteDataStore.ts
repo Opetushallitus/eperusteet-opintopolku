@@ -121,7 +121,11 @@ export class PerusteDataStore {
   @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
       for (const node of getters.flattenedSidenav) {
-        if (node!.location && _.isMatch(state.currentRoute, node!.location)) {
+        // Fixme: Jokin parempi ratkaisu tähän
+        if (node.location && node.location.params) {
+          node.location.params = _.mapValues(node.location.params, param => _.toString(param));
+        }
+        if (node.location && _.isMatch(state.currentRoute, node.location)) {
           return node || null;
         }
       }

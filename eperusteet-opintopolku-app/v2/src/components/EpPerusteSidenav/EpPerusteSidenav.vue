@@ -5,7 +5,6 @@
     <div class="search">
       <ep-search :value="query" @input="setValue" />
     </div>
-
     <div class="navigation-tree">
         <ep-peruste-sidenav-node v-if="treeData"
                                  :node="treeData"
