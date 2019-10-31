@@ -190,8 +190,6 @@ export default class EpNavigation extends Vue {
 @media (min-width: 992px) {
   .navbar-ep {
     .navbar-nav .nav-link {
-      padding-right: 1rem;
-      padding-left: 1rem;
       &:not(.router-link-active) {
         padding-bottom: 0.5rem;
       }
