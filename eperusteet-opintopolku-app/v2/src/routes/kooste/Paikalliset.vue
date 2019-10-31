@@ -166,6 +166,7 @@ export default class Paikalliset extends Vue {
 
   .peruste-nav {
     margin-bottom: 8px;
+    overflow-x: auto;
 
     .peruste {
       .peruste-select {

@@ -91,10 +91,14 @@ export default class EpHeader extends Vue {
 
   // Todo: käytä muuttujia
   @media (max-width: 991.98px) {
-      padding-top: 40px;
-      padding-bottom: 40px;
-      background: none;
-      min-height: 0;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    min-height: 0;
+    background-size: auto 160px;
+  }
+  // Todo: käytä muuttujia
+  @media (max-width: 767.98px) {
+    background-size: auto 80px;
   }
 
   // Taustat
