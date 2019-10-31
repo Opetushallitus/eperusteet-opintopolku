@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Loading from 'vue-loading-overlay';
 import Notifications from 'vue-notification';
 import VueScrollTo from 'vue-scrollto';
+import VueMatomo from 'vue-matomo';
 
 import '@/config/bootstrap';
 import '@/config/fontawesome';
@@ -19,7 +20,9 @@ const logger = createLogger('main');
 Vue.config.devtools = true;
 Vue.use(Notifications);
 
-if (process.env.NODE_ENV !== 'production') {
+const isDevelopmentMode = () => process.env.NODE_ENV === 'development';
+
+if (isDevelopmentMode()) {
   const VueAxe = require('vue-axe');
   Vue.use(VueAxe, {
     config: {
@@ -45,6 +48,13 @@ Vue.use(VueScrollTo, {
   duration: 1000,
 });
 
+if (!isDevelopmentMode()) {
+  Vue.use(VueMatomo, {
+    host: 'https://analytiikka.opintopolku.fi/piwik',
+    siteId: 11,
+    router: router,
+  });
+}
 
 KieliStore.setup(Vue, {
   messages: {
@@ -66,9 +76,6 @@ declare module 'vue/types/vue' {
     $n: typeof VueI18n.prototype.n;
   }
 }
-
-
-const isDevelopmentMode = () => _.get(process.env.NODE_ENV, '') === 'development';
 
 function errorCaptured(err: Error, vm: Vue, info: string) {
   logger.error(err, info);
