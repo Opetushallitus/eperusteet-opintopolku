@@ -6,12 +6,18 @@
 
 ## Project setup
 ```
+cd eperusteet-opintopolku-app/v2
+git submodule update --init --recursive  
 yarn install
+
+cd eperusteet-opintopolku-app/v2/eperusteet-frontend-utils/vue
+yarn install
+yarn gen:api
 ```
 
 ### Compiles and hot-reloads for development
 ```
-yarn run serve
+yarn server
 ```
 
 ### Compiles and minifies for production
