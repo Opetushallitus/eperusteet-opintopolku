@@ -34,7 +34,7 @@ export default class RouteOppiaineet extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   @Prop({ required: true })
-  private lops2019oppiaineetStore!: Lops2019OppiaineetStore;
+  private lops2019OppiaineetStore!: Lops2019OppiaineetStore;
 
   get oppiaineet() {
     if (this.current) {

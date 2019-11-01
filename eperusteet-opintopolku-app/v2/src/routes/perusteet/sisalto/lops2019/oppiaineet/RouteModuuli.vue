@@ -29,9 +29,8 @@
 
       <div v-if="hasSisallot">
         <h3>{{ $t('sisallot') }}</h3>
-        <div v-for="(sisalto, idx) in sisallot"
-             :key="idx">
-          <p v-if="sisallot.kohde">{{ $kaanna(sisalto.kohde) }}</p>
+        <div v-for="(sisalto, idx) in sisallot" :key="idx">
+          <p v-if="sisalto.kohde">{{ $kaanna(sisalto.kohde) }}</p>
           <ul>
             <li v-for="(osa, idx) in sisalto.sisallot" :key="idx">{{ $kaanna(osa) }}</li>
           </ul>
@@ -58,10 +57,10 @@ import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpP
 })
 export default class RouteModuuli extends Vue {
   @Prop({ required: true })
-  private lops2019moduuliStore!: Lops2019ModuuliStore;
+  private lops2019ModuuliStore!: Lops2019ModuuliStore;
 
   get moduuli() {
-    return this.lops2019moduuliStore.moduuli;
+    return this.lops2019ModuuliStore.moduuli;
   }
 
   get koodi() {

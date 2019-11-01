@@ -13,18 +13,25 @@ describe('RouteOppiaineet', () => {
       current: {
         children: [
           {
-            label: 'Matematiikka',
+            label: {
+              fi: 'Matematiikka',
+            }
+          },
+          {
+            label: {
+              fi: 'Äidinkieli ja kirjallisuus',
+            }
           },
         ],
       } as any
     });
-    const lops2019oppiaineetStore = lops2019OppiaineetStoreMock();
+    const lops2019OppiaineetStore = lops2019OppiaineetStoreMock();
 
     const wrapper = mount(RouteOppiaineet as any, {
       localVue,
       propsData: {
         perusteDataStore,
-        lops2019oppiaineetStore,
+        lops2019OppiaineetStore,
       },
       stubs: {
         ...stubs,
@@ -35,6 +42,6 @@ describe('RouteOppiaineet', () => {
     });
 
     expect(wrapper.html()).toContain('Matematiikka');
-
+    expect(wrapper.html()).toContain('Äidinkieli ja kirjallisuus');
   });
 });
