@@ -1,5 +1,8 @@
 <template>
 <div class="node" :class="{ 'node-root': isRoot }">
+  <ep-color-indicator v-if="node.type === 'moduuli'"
+                      :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'"
+                      class="mr-2" />
   <div v-if="!isRoot">
     <b-link v-if="node.location" :to="node.location">
       <span class="label" :class="{ 'label-match': isMatch }">
@@ -24,10 +27,14 @@
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 
 
 @Component({
   name: 'EpPerusteSidenavNode',
+  components: {
+    EpColorIndicator,
+  }
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })

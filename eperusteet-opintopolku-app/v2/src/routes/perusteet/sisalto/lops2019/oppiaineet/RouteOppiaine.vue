@@ -44,8 +44,8 @@
                 <div v-if="hasPakollisetModuulit">
                     <h4>{{ $t('pakolliset-moduulit') }}</h4>
                     <div v-if="oppiaine.pakollisetModuulitKuvaus" v-html="$kaanna(oppiaine.pakollisetModuulitKuvaus)"></div>
-                    <div v-for="(moduuli, idx) in pakollisetModuulit"
-                         :key="idx">
+                    <div v-for="(moduuli, idx) in pakollisetModuulit" :key="idx">
+                         <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
                         <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
                             {{ $kaanna(moduuli.nimi) }}
                         </router-link>
@@ -55,8 +55,8 @@
                 <div v-if="hasValinnaisetModuulit">
                     <h4>{{ $t('valinnaiset-moduulit') }}</h4>
                     <div v-if="oppiaine.valinnaisetModuulitKuvaus" v-html="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"></div>
-                    <div v-for="(moduuli, idx) in valinnaisetModuulit"
-                         :key="idx">
+                    <div v-for="(moduuli, idx) in valinnaisetModuulit" :key="idx">
+                         <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
                         <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
                             {{ $kaanna(moduuli.nimi) }}
                         </router-link>
@@ -89,11 +89,13 @@ import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpPreviousNextNavigation,
+    EpColorIndicator,
   }
 })
 export default class RouteOppiaine extends Vue {
