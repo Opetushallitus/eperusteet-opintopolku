@@ -18,7 +18,9 @@
       <div class="d-flex peruste" v-for="(peruste, idx) in perusteet" :key="idx">
         <div class="colorbox"></div>
         <div class="perustecard">
-          <div class="nimi">{{ $kaanna(peruste.nimi) }}</div>
+          <div class="nimi">
+            <ep-external-link class="medium" :url="ulkoinenlinkki(peruste)">{{ $kaanna(peruste.nimi) }}</ep-external-link>
+          </div>
           <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
             <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
             <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">
@@ -60,6 +62,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
+import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 
 
 @Component({
@@ -68,11 +71,15 @@ import EpToggle from '@shared/components/forms/EpToggle.vue';
     EpHeader,
     EpSearch,
     EpSpinner,
+    EpExternalLink,
   },
 })
 export default class PerusteHaku extends Vue {
   @Prop({ required: true })
   private perusteHakuStore!: PerusteHakuStore;
+
+  @Prop({ type: String })
+  private tyyppi!: string;
 
   mounted() {
     this.perusteHakuStore.fetch();
@@ -115,6 +122,10 @@ export default class PerusteHaku extends Vue {
 
   onToggleChange(toggle) {
     this.perusteHakuStore.updateFilters({ [toggle]: !this.filters[toggle] });
+  }
+
+  ulkoinenlinkki(peruste) {
+    return 'https://eperusteet.opintopolku.fi/#/fi/' + this.tyyppi+'/' + peruste.id;
   }
 
 }
