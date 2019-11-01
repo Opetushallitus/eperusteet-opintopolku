@@ -16,6 +16,16 @@ yarn gen:api
 ```
 
 ### Compiles and hot-reloads for development
+
+Oletuksellisesti opintopolku käyttää sovelluksien localhost-osoitteita. Lisää ympäristömuuttujiin haluttu sovelluksen osoite: 
+
+```
+export EPERUSTEET_SERVICE=https://eperusteet.testiopintopolku.fi
+export EPERUSTEET_YLOPS_SERVICE=https://eperusteet.testiopintopolku.fi
+export EPERUSTEET_AMOSAA_SERVICE=https://eperusteet.testiopintopolku.fi
+```
+
+Sovelluksen käynnistäminen
 ```
 yarn server
 ```
