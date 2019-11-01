@@ -19,7 +19,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { NavigationNode } from '@/utils/NavigationBuilder';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 @Component
 export default class EpPreviousNextNavigation extends Vue {

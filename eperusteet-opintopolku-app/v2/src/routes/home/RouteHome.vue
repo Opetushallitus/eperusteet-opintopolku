@@ -73,7 +73,7 @@ import { PerusteDto } from '@shared/api/tyypit';
 import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
-import { koulutustyyppiStateName } from '@/utils/perusteet';
+import { koulutustyyppiStateName } from '@shared/utils/perusteet';
 
 
 function mapRoutes(perusteet: PerusteDto[] | null) {

@@ -1,7 +1,8 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RoutePerusteTiedot from './RoutePerusteTiedot.vue';
-import { mocks, stubs, perusteDataStoreMock } from '@/jestutils';
+import { perusteDataStoreMock } from '@/storeMocks';
 import { KieliStore } from '@shared/stores/kieli';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('RoutePerusteTiedot', async () => {

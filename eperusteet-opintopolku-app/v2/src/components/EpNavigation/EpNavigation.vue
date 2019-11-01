@@ -45,7 +45,7 @@
 import _ from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, koulutustyyppiStateName, stateToKoulutustyyppi,
-  koulutustyyppiRelaatiot, ryhmat } from '@/utils/perusteet';
+  koulutustyyppiRelaatiot, ryhmat } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter } from 'vue-router/types/router';

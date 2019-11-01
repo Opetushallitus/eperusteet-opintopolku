@@ -40,8 +40,8 @@ install:
 
   - cd eperusteet-frontend-utils/vue
   - yarn install
-
   - yarn gen:api
+  - rm -rf node_modules
   - cd ../../../..
 
   - git clone https://github.com/Opetushallitus/ci-tools.git

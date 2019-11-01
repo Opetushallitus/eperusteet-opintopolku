@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteUutiset from './RouteUutiset.vue';
-import { mocks, stubs, tiedoteStoreMock } from '@/jestutils';
-
+import { tiedoteStoreMock } from '@/storeMocks';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 describe('RouteHome', () => {
   const localVue = createLocalVue();

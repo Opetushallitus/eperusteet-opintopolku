@@ -23,7 +23,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { NavigationNode } from '@/utils/NavigationBuilder';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 
 @Component({

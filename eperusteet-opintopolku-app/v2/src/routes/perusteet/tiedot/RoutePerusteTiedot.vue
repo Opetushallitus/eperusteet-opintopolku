@@ -103,7 +103,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
-import { isAmmatillinen } from '@/utils/perusteet';
+import { isAmmatillinen } from '@shared/utils/perusteet';
 
 
 @Component({

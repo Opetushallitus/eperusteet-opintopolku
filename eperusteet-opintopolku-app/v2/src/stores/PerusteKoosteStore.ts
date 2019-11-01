@@ -2,7 +2,7 @@ import { Store, Getter, State } from '@shared/stores/store';
 import { OpetussuunnitelmaJulkinenDto, PerusteDto, TiedoteDto } from '@shared/api/tyypit';
 import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 import { Perusteet } from '@shared/api/eperusteet';
-import { ryhmat } from '@/utils/perusteet';
+import { ryhmat } from '@shared/utils/perusteet';
 import { tiedoteQuery, perusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 

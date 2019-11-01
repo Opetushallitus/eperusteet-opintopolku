@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import Root from './Root.vue';
-import { mocks, stubs } from '@/jestutils';
 import { KieliStore } from '@shared/stores/kieli';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('Root', () => {

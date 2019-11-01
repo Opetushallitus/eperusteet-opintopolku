@@ -37,7 +37,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@/utils/perusteet';
+import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@shared/utils/perusteet';
 import { MurupolkuOsa } from '@/tyypit';
 import _ from 'lodash';
 
