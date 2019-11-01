@@ -31,6 +31,7 @@ import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { NavigationNode } from '@/utils/NavigationBuilder';
+import { Meta } from '@shared/utils/meta';
 
 
 @Component({
@@ -39,7 +40,7 @@ import { NavigationNode } from '@/utils/NavigationBuilder';
     EpPerusteSidenav,
     EpHeader,
     EpPreviousNextNavigation,
-  },
+  }
 })
 export default class RoutePeruste extends Vue {
   @Prop({ required: true })
@@ -69,6 +70,15 @@ export default class RoutePeruste extends Vue {
   @Watch('$route', { immediate: true })
   onRouteUpdate(route) {
     this.perusteDataStore.updateRoute(route);
+  }
+
+  @Meta
+  getMetaInfo() {
+    if (this.peruste) {
+      return {
+        title: (this as any).$kaanna(this.peruste.nimi),
+      };
+    }
   }
 
 }

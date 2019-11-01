@@ -42,7 +42,9 @@ import { MurupolkuOsa } from '@/tyypit';
 import _ from 'lodash';
 
 
-@Component
+@Component({
+  name: 'EpHeader',
+})
 export default class EpHeader extends Vue {
 
   @Prop({ required: true })

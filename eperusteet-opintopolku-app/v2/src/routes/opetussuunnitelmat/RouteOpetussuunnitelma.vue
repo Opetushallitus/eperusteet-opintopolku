@@ -30,12 +30,13 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
+import { Meta } from '@shared/utils/meta';
 
 @Component({
   components: {
     EpHeader,
     EpSidebar,
-  },
+  }
 })
 export default class RouteOpetussuunnitelma extends Vue {
   @Prop({ required: true })
@@ -62,6 +63,15 @@ export default class RouteOpetussuunnitelma extends Vue {
   @Watch('$route', { immediate: true })
   onRouteUpdate(route) {
     this.opetussuunnitelmaDataStore.updateRoute(route);
+  }
+
+  @Meta
+  getMetaInfo() {
+    if (this.opetussuunnitelma) {
+      return {
+        title: (this as any).$kaanna(this.opetussuunnitelma.nimi),
+      };
+    }
   }
 }
 </script>

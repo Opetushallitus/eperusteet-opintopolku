@@ -90,6 +90,8 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import Paikalliset from './Paikalliset.vue';
 import { MurupolkuOsa } from '@/tyypit';
+import { Meta } from '@shared/utils/meta';
+
 
 @Component({
   components: {
@@ -121,6 +123,13 @@ export default class RouteKooste extends Vue {
 
   get perusteet() {
     return this.perusteKoosteStore.perusteet;
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t(this.koulutustyyppi),
+    };
   }
 
 }

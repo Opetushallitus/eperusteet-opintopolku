@@ -6,14 +6,20 @@ import { KieliStore } from '@shared/stores/kieli';
 
 describe('RouteOppiaineet', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  KieliStore.setup(localVue, {
+    messages: {
+      fi: {
+        'matematiikka': 'Matematiikka',
+      }
+    },
+  });
 
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock({
       current: {
         children: [
           {
-            label: 'Matematiikka',
+            label: 'matematiikka',
           },
         ],
       } as any

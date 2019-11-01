@@ -3,6 +3,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import * as solid from '@fortawesome/free-solid-svg-icons';
 import * as regular from '@fortawesome/free-regular-svg-icons';
+import * as brands from '@fortawesome/free-brands-svg-icons';
 
 library.add(regular.faComment);
 library.add(regular.faTrashAlt);
@@ -47,5 +48,14 @@ library.add(solid.faEnvelope);
 library.add(solid.faArrowLeft);
 library.add(solid.faArrowRight);
 library.add(solid.faLanguage);
+library.add(solid.faStar);
+library.add(solid.faShareAlt);
+library.add(brands.faFacebookF);
+library.add(brands.faGoogle);
+library.add(brands.faLinkedin);
+library.add(brands.faReddit);
+library.add(brands.faTwitter);
+library.add(brands.faWhatsapp);
+library.add(brands.faTelegram);
 
 Vue.component('fas', FontAwesomeIcon);

@@ -11,9 +11,11 @@
 </template>
 
 <script lang="ts">
+import _ from 'lodash';
 import { Component, Vue } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
+import { Meta } from '@shared/utils/meta';
 
 @Component({
   components: {
@@ -22,6 +24,52 @@ import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
   },
 })
 export default class Root extends Vue {
+  get titleTemplate() {
+    return '%s - ' + this.$t('eperusteet');
+  }
+
+  @Meta
+  getMetaInfo() {
+    const lang = _.get(this.$route, 'params.lang');
+    return {
+      titleTemplate: this.titleTemplate,
+      htmlAttrs: {
+        lang: lang || 'fi',
+      },
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: this.$t('eperusteet-kuvaus'),
+        },
+        {
+          vmid: 'keywords',
+          name: 'keywords',
+          content: this.$t('avainsanalista'),
+        },
+        {
+          vmid: 'author',
+          name: 'author',
+          content: this.$t('opetushallitus'),
+        },
+        {
+          vmid: 'og:site_name',
+          property: 'og:site_name',
+          content: this.$t('eperusteet'),
+        },
+        {
+          vmid: 'og:description',
+          property: 'og:description',
+          content: this.$t('eperusteet-kuvaus'),
+        },
+        {
+          vmid: 'og:locale',
+          property: 'og:locale',
+          content: lang + '_FI',
+        },
+      ],
+    };
+  }
 }
 </script>
 

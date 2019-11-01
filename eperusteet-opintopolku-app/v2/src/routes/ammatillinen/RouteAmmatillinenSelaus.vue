@@ -34,6 +34,7 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import PerusteHaku from './PerusteHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
+import { Meta } from '@shared/utils/meta';
 
 
 @Component({
@@ -41,7 +42,7 @@ import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
     EpSpinner,
     EpHeader,
     PerusteHaku,
-  },
+  }
 })
 export default class RouteAmmatillinenSelaus extends Vue {
   private perusteHakuStoreNormaali = new PerusteHakuStore();
@@ -62,6 +63,13 @@ export default class RouteAmmatillinenSelaus extends Vue {
         name: 'ammatillinenSelaus',
       },
     }];
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t('ammatillinen-koulutus'),
+    };
   }
 }
 </script>

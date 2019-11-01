@@ -42,8 +42,8 @@ export default class EpPerusteSidenavNode extends Vue {
     const current = this.current;
     const parent = node.path[_.size(node.path) - 2];
 
-    const isCurrentOrParentSelected = (current && (node.key === current.key ||  (parent && parent.key === current.key)));
-    const isErikoistyyppi = type === 'oppiaine' || type === 'oppimaarat' || type === 'moduulit' || type === 'moduuli';
+    const isCurrentOrParentSelected = (current && (node.key === current.key ||  (parent && parent.key === current.key && current.type !== 'oppiaineet')));
+    const isErikoistyyppi = type === 'oppiaineet' ||type === 'oppiaine' || type === 'oppimaarat' || type === 'moduulit' || type === 'moduuli';
 
     if (isCurrentOrParentSelected && isErikoistyyppi) {
       return node.children;
