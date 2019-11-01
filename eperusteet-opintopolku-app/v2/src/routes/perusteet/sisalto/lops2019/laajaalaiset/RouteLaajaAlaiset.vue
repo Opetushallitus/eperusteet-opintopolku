@@ -26,7 +26,7 @@ import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import VueScrollTo from 'vue-scrollto';
 import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
-import { getLaajaAlainenId } from '@/utils/NavigationBuilder';
+import { getLaajaAlainenId } from '@shared/utils/NavigationBuilder';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';

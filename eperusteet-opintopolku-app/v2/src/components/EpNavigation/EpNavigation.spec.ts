@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import EpNavigation from './EpNavigation.vue';
-import { findAllContaining, findContaining, mocks, stubs, tiedoteStoreMock, perusteKoosteStoreMock } from '@/jestutils';
 import { KieliStore } from '@shared/stores/kieli';
+import { findAllContaining, findContaining, mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('EpNavigation', () => {

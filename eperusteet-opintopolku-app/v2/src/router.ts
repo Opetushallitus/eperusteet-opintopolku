@@ -30,7 +30,7 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 
 
 import { changeTitleAndLang, resolveRouterMetaProps } from '@shared/utils/router';
-import { stateToKoulutustyyppi } from '@/utils/perusteet';
+import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';

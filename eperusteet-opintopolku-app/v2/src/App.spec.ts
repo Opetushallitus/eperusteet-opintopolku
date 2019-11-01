@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import App from './App.vue';
-import { mocks, stubs } from '@/jestutils';
 import { delay } from '@shared/utils/delay';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('App', () => {

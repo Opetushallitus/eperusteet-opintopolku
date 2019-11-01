@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
 import { NavigationNodeDto, PerusteDto } from '@shared/api/tyypit';
 import { Perusteet } from '@shared/api/eperusteet';
-import { NavigationFilter, NavigationNode, buildNavigation, filterNavigation } from '@/utils/NavigationBuilder';
+import { NavigationFilter, NavigationNode, buildNavigation, filterNavigation } from '@shared/utils/NavigationBuilder';
 import { baseURL, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';

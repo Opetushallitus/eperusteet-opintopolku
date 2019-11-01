@@ -1,8 +1,8 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import Vue from 'vue';
 import EpHeader from './EpHeader.vue';
-import { mocks, stubs, tiedoteStoreMock, perusteKoosteStoreMock } from '@/jestutils';
 import { KieliStore } from '@shared/stores/kieli';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('EpHeader', () => {

@@ -1,9 +1,8 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import Vue from 'vue';
 import EpFooter from './EpFooter.vue';
-import { mocks, stubs, tiedoteStoreMock, perusteKoosteStoreMock } from '@/jestutils';
 import { Kielet, KieliStore } from '@shared/stores/kieli';
-import { Kieli } from '@shared/tyypit';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('EpFooter', () => {

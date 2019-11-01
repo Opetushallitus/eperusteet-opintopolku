@@ -1,7 +1,8 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteOppiaineet from './RouteOppiaineet.vue';
-import { mocks, stubs, lops2019OppiaineetStoreMock, perusteDataStoreMock } from '@/jestutils';
+import { lops2019OppiaineetStoreMock, perusteDataStoreMock } from '@/storeMocks';
 import { KieliStore } from '@shared/stores/kieli';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('RouteOppiaineet', () => {

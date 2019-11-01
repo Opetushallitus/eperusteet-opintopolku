@@ -1,7 +1,8 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteKooste from './RouteKooste.vue';
-import { mocks, stubs, tiedoteStoreMock, perusteKoosteStoreMock } from '@/jestutils';
+import { tiedoteStoreMock, perusteKoosteStoreMock } from '@/storeMocks';
 import { KieliStore } from '@shared/stores/kieli';
+import { mocks, stubs } from '@shared/utils/jestutils';
 
 
 describe('RouteKooste', () => {
