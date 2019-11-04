@@ -19,7 +19,7 @@
         <div class="colorbox"></div>
         <div class="perustecard">
           <div class="nimi">
-            <ep-external-link class="medium" :url="ulkoinenlinkki(peruste)">{{ $kaanna(peruste.nimi) }}</ep-external-link>
+            <ep-external-link :url="peruste.ulkoinenlinkki">{{ $kaanna(peruste.nimi) }}</ep-external-link>
           </div>
           <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
             <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
@@ -64,6 +64,7 @@ import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 
+const PREFIX = process.env.NODE_ENV === 'production' ? '': 'https://eperusteet.opintopolku.fi';
 
 @Component({
   components: {
@@ -90,7 +91,12 @@ export default class PerusteHaku extends Vue {
   }
 
   get perusteet() {
-    return this.perusteHakuStore.perusteet;
+    return _.chain(this.perusteHakuStore.perusteet)
+            .map(peruste => ({
+            ...peruste,
+            ulkoinenlinkki: this.ulkoinenlinkki(peruste)
+          }))
+          .value();
   }
   get total() {
     return this.perusteHakuStore.total;
@@ -125,7 +131,7 @@ export default class PerusteHaku extends Vue {
   }
 
   ulkoinenlinkki(peruste) {
-    return 'https://eperusteet.opintopolku.fi/#/fi/' + this.tyyppi+'/' + peruste.id;
+    return `${PREFIX}/#/${this.$route.params.lang || 'fi'}/${this.tyyppi}/${peruste.id}`;
   }
 
 }

@@ -31,7 +31,11 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
 
+<<<<<<< HEAD
 import { changeLang, resolveRouterMetaProps } from '@shared/utils/router';
+=======
+import { changeTitleAndLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
+>>>>>>> paikalliset perusteet external link
 import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
@@ -42,6 +46,7 @@ import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
+import QueryString from 'qs';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -323,6 +328,10 @@ router.beforeEach(async (to, from, next) => {
   next();
 });
 
+router.afterEach((to, from) => {
+  removeQueryParam(to, router, 'paluuosoite');
+});
+
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);
   router.push({
@@ -332,3 +341,4 @@ Virheet.onError((virhe: SovellusVirhe) => {
     },
   });
 });
+  
