@@ -10,6 +10,7 @@ import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
 
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
+import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
 
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 import RoutePerusteTiedot from '@/routes/perusteet/tiedot/RoutePerusteTiedot.vue';
@@ -120,6 +121,22 @@ export const router = new Router({
       path: 'uutiset',
       name: 'uutiset',
       component: RouteUutiset,
+      meta: {
+        resolve: {
+          async props() {
+            return {
+              default: {
+                perusteStore,
+                tiedoteStore,
+              },
+            };
+          },
+        },
+      },
+    }, {
+      path: 'uutiset/:tiedoteId',
+      name: 'uutinen',
+      component: RouteUutinen,
       meta: {
         resolve: {
           async props() {

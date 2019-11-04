@@ -1,17 +1,17 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import RouteUutiset from './RouteUutiset.vue';
+import RouteUutinen from './RouteUutinen.vue';
 import { tiedoteStoreMock } from '@/storeMocks';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import { KieliStore } from '@shared/stores/kieli';
 
-describe('RouteUutinen', () => {
+describe('RouteHome', () => {
   const localVue = createLocalVue();
   KieliStore.setup(localVue);
 
   test('Renders spinners and data', async () => {
     const tiedoteStore = tiedoteStoreMock();
 
-    const wrapper = mount(RouteUutiset as any, {
+    const wrapper = mount(RouteUutinen as any, {
       localVue,
       propsData: {
         tiedoteStore,

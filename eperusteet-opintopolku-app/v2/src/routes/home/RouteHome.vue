@@ -16,7 +16,9 @@
           <ep-spinner-slot :is-loading="!tiedotteet">
             <div class="box" v-for="(tiedote, idx) in tiedotteet" :key="idx">
               <div class="nimi">
-                {{ $kaanna(tiedote.otsikko) }}
+                <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
+                  {{ $kaanna(tiedote.otsikko) }}
+                </router-link>
               </div>
               <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
             </div>
@@ -185,8 +187,9 @@ export default class RouteHome extends Vue {
 .container {
   .valtakunnallinen {
     min-height: 80px;
-    border: 2px solid #DADADA;
+    border: 1px solid #DADADA;
     margin-bottom: 5px;
+    border-radius: 2px;
 
     .nimi {
       overflow-x: auto;

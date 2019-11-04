@@ -1,7 +1,7 @@
 <template>
 <div>
   <div>
-    <ep-header :murupolku="[]">
+    <ep-header :murupolku="murupolku">
       <template slot="header">
         {{ $t('uutiset') }}
       </template>
@@ -13,7 +13,9 @@
           <div class="tiedotteet" id="tiedotteet-lista">
             <div class="tiedote" v-for="(tiedote, idx) in tiedotteet.tiedotteet" :key="idx">
               <div class="otsikko">
-                {{ $kaanna(tiedote.otsikko) }}
+                <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
+                  {{ $kaanna(tiedote.otsikko) }}
+                </router-link>
               </div>
               <div class="aikaleima">
                 {{ $sd(tiedote.luotu) }}
@@ -65,7 +67,7 @@ export default class RouteUutiset extends Vue {
   private query = '';
 
   public mounted() {
-    this.tiedoteStore.getUutiset();
+    this.tiedoteStore.fetchUutiset();
   }
 
   get tiedotteet() {
@@ -97,6 +99,15 @@ export default class RouteUutiset extends Vue {
 
   get sisaltoKieli() {
     return Kielet.getSisaltoKieli;
+  }
+
+  get murupolku() {
+    return [{
+      label: 'uutiset',
+      location: {
+        name: 'uutiset',
+      },
+    }];
   }
 
   @Meta
