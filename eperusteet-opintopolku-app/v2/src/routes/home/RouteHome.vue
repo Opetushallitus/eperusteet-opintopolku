@@ -75,7 +75,7 @@ import { PerusteDto } from '@shared/api/tyypit';
 import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
-import { koulutustyyppiStateName } from '@shared/utils/perusteet';
+import { koulutustyyppiStateName, koulutustyyppiTheme } from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
 
 
@@ -111,8 +111,22 @@ export default class RouteHome extends Vue {
   @Prop({ required: true })
   private tiedoteStore!: TiedoteStore;
 
+  async mounted() {
+    this.perusteStore.getYleisetPerusteet();
+    this.perusteStore.getUusimmat();
+    this.tiedoteStore.getUusimmat();
+  }
+
   get perusteet() {
-    return mapRoutes(this.perusteStore.perusteet);
+    if (this.perusteStore.perusteet) {
+      return _.map(mapRoutes(this.perusteStore.perusteet), peruste => ({
+        ...peruste,
+        theme: peruste && peruste.koulutustyyppi && 'koulutustyyppi-' + koulutustyyppiTheme(peruste.koulutustyyppi),
+      }));
+    }
+    else {
+      return null;
+    }
   }
 
   get uusimmat() {
@@ -121,12 +135,6 @@ export default class RouteHome extends Vue {
 
   get tiedotteet() {
     return this.tiedoteStore.uusimmatTiedotteet;
-  }
-
-  async mounted() {
-    this.perusteStore.getYleisetPerusteet();
-    this.perusteStore.getUusimmat();
-    this.tiedoteStore.getUusimmat();
   }
 
   @Meta
@@ -156,7 +164,7 @@ export default class RouteHome extends Vue {
     }
   }
 
-  background-color: $etusivu-header-background; /* TODO: Lisää kuva */
+  background-color: $etusivu-header-background;
   background-image: url('../../../public/img/banners/opiskelijat.png');
   background-size: cover;
   background-position: 50% 33%;
@@ -204,7 +212,25 @@ export default class RouteHome extends Vue {
       flex: 0 0 5px;
       min-height: 60px;
       background-color: #368715;
-      border-radius: 3px;
+      border-radius: 4px;
+      &.koulutustyyppi-ammatillinen {
+        background-color: $koulutustyyppi-ammatillinen-color;
+      }
+      &.koulutustyyppi-esiopetus {
+        background-color: $koulutustyyppi-esiopetus-color;
+      }
+      &.koulutustyyppi-lukio {
+        background-color: $koulutustyyppi-lukio-color;
+      }
+      &.koulutustyyppi-perusopetus {
+        background-color: $koulutustyyppi-perusopetus-color;
+      }
+      &.koulutustyyppi-varhaiskasvatus {
+        background-color: $koulutustyyppi-varhaiskasvatus-color;
+      }
+      &.koulutustyyppi-taiteenperusopetus {
+        background-color: $koulutustyyppi-taiteenperusopetus-color;
+      }
     }
 
     .luotu {

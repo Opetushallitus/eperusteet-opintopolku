@@ -55,7 +55,7 @@ describe('RouteHome', () => {
 
     await localVue.nextTick();
 
-    expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
+    //expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
     expect(wrapper.html()).toContain('peruste1');
     expect(wrapper.html()).toContain('peruste2');
     expect(wrapper.html()).toContain('uutinen_1234');
