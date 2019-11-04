@@ -49,9 +49,15 @@ Vue.use(VueScrollTo, {
 });
 
 if (!isDevelopmentMode()) {
+  const siteDomain = document.domain;
+  let siteId = 2;
+  if (siteDomain === 'eperusteet.opintopolku.fi') {
+    siteId = 11;
+  }
+
   Vue.use(VueMatomo, {
     host: 'https://analytiikka.opintopolku.fi/piwik',
-    siteId: 11,
+    siteId: siteId,
     router: router,
   });
 }
