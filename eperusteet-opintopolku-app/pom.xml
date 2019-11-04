@@ -34,22 +34,22 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <id>install node and npm</id>
+                        <id>install node and yarn</id>
                         <goals>
-                            <goal>install-node-and-npm</goal>
+                            <goal>install-node-and-yarn</goal>
                         </goals>
                         <configuration>
                             <nodeVersion>v10.15.0</nodeVersion>
-                            <npmVersion>6.4.1</npmVersion>
+                            <yarnVersion>v1.19.1</yarnVersion>
                         </configuration>
                     </execution>
                     <execution>
-                        <id>npm install</id>
+                        <id>yarn install</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>install --no-color</arguments>
+                            <arguments>install</arguments>
                         </configuration>
                     </execution>
                     <execution>

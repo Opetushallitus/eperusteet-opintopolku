@@ -6,7 +6,6 @@
     "alwaysStrict": true
   },
   "files": [
-    "typings/index.d.ts",
     "app/globals.ts",
     "app/components/dynamic/dynamic.ts",
     "app/components/injector/injector.ts",

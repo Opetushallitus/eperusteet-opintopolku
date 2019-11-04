@@ -10,3 +10,4 @@ tscommand-*.tmp.txt
 app/**/*.js
 app/**/*.js.map
 app/**/*.html
+package-lock.json

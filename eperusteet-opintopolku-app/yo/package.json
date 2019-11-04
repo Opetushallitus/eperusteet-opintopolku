@@ -42,6 +42,8 @@
     "restangular": "1.5.2"
   },
   "devDependencies": {
+    "@types/angular": "1.5.8",
+    "@types/lodash": "3.10.2",
     "angular-mocks": "1.4.11",
     "angular-timeline": "^1.7.0",
     "autoprefixer": "6.3.6",
@@ -73,7 +75,6 @@
     "grunt-svgmin": "3.3.0",
     "grunt-timer": "0.6.0",
     "grunt-ts": "6.0.0-beta.14",
-    "grunt-typings": "0.1.5",
     "grunt-usemin": "3.1.1",
     "jasmine-core": "2.4.1",
     "karma": "0.13.22",
@@ -82,7 +83,7 @@
     "karma-ng-scenario": "1.0.0",
     "load-grunt-tasks": "3.5.0",
     "nightwatch": "0.9.15",
-    "node-sass": "4.9.0",
+    "node-sass": "^4.9.0",
     "prettier": "1.6.1",
     "typescript": "2.5.2",
     "webdriver-manager": "12.0.6"
