@@ -7,7 +7,13 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  KieliStore.setup(localVue, {
+    messages: {
+      fi: {
+        'kooste': 'Kooste',
+      }
+    },
+  });
 
   test('Renders', async () => {
     const perusteKoosteStore = perusteKoosteStoreMock();

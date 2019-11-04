@@ -163,7 +163,7 @@ export default class RouteHome extends Vue {
     padding: 15px;
     color: #000;
     background: #fff;
-    opacity: 0.95;
+    opacity: 0.80;
 
     @media (min-width: 768px) {
       max-width: 400px;

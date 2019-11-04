@@ -10,7 +10,7 @@ describe('EpHeader', () => {
   KieliStore.setup(localVue, {
     messages: {
       fi: {
-        'parent-jolla-todella-pitkä-teksti': 'Parent jolla todella pitkä teksti',
+        'parent-jolla-todella-pitka-teksti': 'Parent jolla todella pitkä teksti',
         'uusi-alikappale': 'Uusi alikappale',
       }
     },
@@ -38,7 +38,7 @@ describe('EpHeader', () => {
     expect(wrapper.html()).toContain('eperusteet');
 
     propsData.murupolku = [{
-      label: 'parent-jolla-todella-pitkä-teksti',
+      label: 'parent-jolla-todella-pitka-teksti',
       location: { name: 'root' },
     }];
     expect(wrapper.html()).toContain('eperusteet');
