@@ -51,8 +51,8 @@ export default class RouteTekstikappale extends Vue {
       return;
     }
 
-    const isHeading = !!this.current && this.current.path.length === 2;
-    await this.perusteenOsaStore.fetchPerusteenOsa(isHeading);
+    const isMainHeading = !!this.current && this.current.path.length === 2;
+    await this.perusteenOsaStore.fetchPerusteenOsa(isMainHeading);
   }
 
   get perusteenOsa() {

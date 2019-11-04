@@ -7,7 +7,16 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 
 describe('EpHeader', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  KieliStore.setup(localVue, {
+    messages: {
+      fi: {
+        'parent-jolla-todella-pitkä-teksti': 'Parent jolla todella pitkä teksti',
+        'uusi-alikappale': 'Uusi alikappale',
+      }
+    },
+  });
+
+
 
   test('Renders spinners and data', async () => {
     const propsData = Vue.observable({
@@ -29,22 +38,22 @@ describe('EpHeader', () => {
     expect(wrapper.html()).toContain('eperusteet');
 
     propsData.murupolku = [{
-      label: 'parent jolla todella pitkä teksti',
+      label: 'parent-jolla-todella-pitkä-teksti',
       location: { name: 'root' },
     }];
     expect(wrapper.html()).toContain('eperusteet');
-    expect(wrapper.html()).toContain('parent jolla todella pitkä teksti');
+    expect(wrapper.html()).toContain('Parent jolla todella pitkä teksti');
 
     propsData.murupolku = [
       ...propsData.murupolku,
       {
-        label: 'uusi alikappale',
+        label: 'uusi-alikappale',
         location: { name: 'root' },
       }
     ];
 
     expect(wrapper.html()).toContain('eperusteet');
-    expect(wrapper.html()).toContain('parent jolla todella pitkä teksti');
-    expect(wrapper.html()).toContain('uusi alikappale');
+    expect(wrapper.html()).toContain('Parent jolla todella pitkä teksti');
+    expect(wrapper.html()).toContain('Uusi alikappale');
   });
 });

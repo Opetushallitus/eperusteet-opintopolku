@@ -202,7 +202,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  lops2019oppiaineetStore: await Lops2019OppiaineetStore.create(
+                  lops2019OppiaineetStore: await Lops2019OppiaineetStore.create(
                     _.parseInt(route.params.perusteId),
                   ),
                 },
@@ -220,7 +220,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  lops2019oppiaineStore: await Lops2019OppiaineStore.create(
+                  lops2019OppiaineStore: await Lops2019OppiaineStore.create(
                     _.parseInt(route.params.perusteId),
                     _.parseInt(route.params.oppiaineId),
                   ),
@@ -239,7 +239,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  lops2019moduuliStore: await Lops2019ModuuliStore.create(
+                  lops2019ModuuliStore: await Lops2019ModuuliStore.create(
                     _.parseInt(route.params.perusteId),
                     _.parseInt(route.params.oppiaineId),
                     _.parseInt(route.params.moduuliId)

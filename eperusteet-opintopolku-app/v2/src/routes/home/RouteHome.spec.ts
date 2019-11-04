@@ -1,8 +1,7 @@
-import Vue from 'vue';
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteHome from './RouteHome.vue';
-import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 import { mocks, stubs } from '@shared/utils/jestutils';
+import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 
 
 describe('RouteHome', () => {

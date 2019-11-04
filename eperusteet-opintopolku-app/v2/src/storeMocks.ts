@@ -1,12 +1,12 @@
-import Vue from 'vue';
-import _ from 'lodash';
-
 import { PerusteStore } from '@/stores/PerusteStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
+import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
-import { Wrapper } from '@vue/test-utils';
+import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
+import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 
 import '@/config/bootstrap';
 import '@/config/fontawesome';
@@ -56,8 +56,32 @@ export const perusteDataStoreMock = (config: Partial<PerusteDataStore> = {}) => 
   } as PerusteDataStore);
 };
 
+export const perusteenOsaStoreMock = (config: Partial<PerusteenOsaStore> = {}) => {
+  return wrap(PerusteenOsaStore.prototype, {
+    ...config,
+  } as PerusteenOsaStore);
+};
+
+export const lops2019LaajaAlaisetStoreMock = (config: Partial<Lops2019LaajaAlaisetStore> = {}) => {
+  return wrap(Lops2019LaajaAlaisetStore.prototype, {
+    ...config,
+  } as Lops2019LaajaAlaisetStore);
+};
+
 export const lops2019OppiaineetStoreMock = (config: Partial<Lops2019OppiaineetStore> = {}) => {
   return wrap(Lops2019OppiaineetStore.prototype, {
     ...config,
   } as Lops2019OppiaineetStore);
+};
+
+export const lops2019OppiaineStoreMock = (config: Partial<Lops2019OppiaineStore> = {}) => {
+  return wrap(Lops2019OppiaineStore.prototype, {
+    ...config,
+  } as Lops2019OppiaineStore);
+};
+
+export const lops2019ModuuliStoreMock = (config: Partial<Lops2019ModuuliStore> = {}) => {
+  return wrap(Lops2019ModuuliStore.prototype, {
+    ...config,
+  } as Lops2019ModuuliStore);
 };

@@ -104,7 +104,7 @@ export default class RouteOppiaine extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   @Prop({ required: true })
-  private lops2019oppiaineStore!: Lops2019OppiaineStore;
+  private lops2019OppiaineStore!: Lops2019OppiaineStore;
 
   updated() {
     // Odotetaan myös alikomponenttien päivittymistä
@@ -121,7 +121,7 @@ export default class RouteOppiaine extends Vue {
   }
 
   get oppiaine() {
-    return this.lops2019oppiaineStore.oppiaine;
+    return this.lops2019OppiaineStore.oppiaine;
   }
 
   get koodi() {
