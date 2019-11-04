@@ -1,17 +1,22 @@
 <template>
 <div class="node" :class="{ 'node-root': isRoot }">
-  <ep-color-indicator v-if="node.type === 'moduuli'"
-                      :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'"
-                      class="mr-2" />
   <div v-if="!isRoot">
     <b-link v-if="node.location" :to="node.location">
       <span class="label" :class="{ 'label-match': isMatch }">
+        <ep-color-indicator v-if="node.type === 'moduuli'"
+                            :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'"
+                            class="mr-2" />
         {{ $kaannaOlioTaiTeksti(node.label) }}
       </span>
     </b-link>
     <span v-else
           class="label label-plain"
-          :class="{ 'label-match': isMatch }">{{ $kaannaOlioTaiTeksti(node.label) }}</span>
+          :class="{ 'label-match': isMatch }">
+      <ep-color-indicator v-if="node.type === 'moduuli'"
+                          :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'"
+                          class="mr-2" />
+      {{ $kaannaOlioTaiTeksti(node.label) }}
+    </span>
   </div>
 
   <!-- children -->
@@ -49,8 +54,13 @@ export default class EpPerusteSidenavNode extends Vue {
     const current = this.current;
     const parent = node.path[_.size(node.path) - 2];
 
-    const isCurrentOrParentSelected = (current && (node.key === current.key ||  (parent && parent.key === current.key)));
-    const isErikoistyyppi = type === 'oppiaine' || type === 'oppimaarat' || type === 'moduulit' || type === 'moduuli';
+    const isCurrentOrParentSelected = (current && (node.key === current.key
+        ||  (parent && parent.key === current.key && current.type !== 'oppiaineet')));
+    const isErikoistyyppi = type === 'oppiaineet'
+        || type === 'oppiaine'
+        || type === 'oppimaarat'
+        || type === 'moduulit'
+        || type === 'moduuli';
 
     if (isCurrentOrParentSelected && isErikoistyyppi) {
       return node.children;
