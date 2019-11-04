@@ -92,9 +92,6 @@ module.exports = grunt => {
 
   grunt.initConfig({
     config: pathConfig,
-    typings: {
-      install: {}
-    },
     ts: {
       default: {
         tsconfig: true,
@@ -451,7 +448,6 @@ module.exports = grunt => {
 
   grunt.registerTask('dev', [
     'clean:dist',
-    'typings',
     'useminPrepare',
     'concurrent:dist',
     'postcss',
@@ -468,7 +464,6 @@ module.exports = grunt => {
 
   grunt.registerTask('test', [
     'clean:server',
-    'typings',
     'copy:fonts',
     'concurrent:test',
     'postcss',
@@ -478,7 +473,6 @@ module.exports = grunt => {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'typings',
     'copy:imgutils',
     'useminPrepare',
     'concurrent:dist',

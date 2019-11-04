@@ -3,4 +3,3 @@ target/
 npm-debug.log
 *.iml
 .idea/
-yo/yarn.lock

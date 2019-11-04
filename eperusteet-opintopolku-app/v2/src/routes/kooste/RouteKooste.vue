@@ -163,6 +163,8 @@ export default class RouteKooste extends Vue {
 
         @media(max-width: 648.98px) {
           width: 100%;
+          margin-left: 0;
+          margin-right: 0;
         }
 
         .voimaantulo {

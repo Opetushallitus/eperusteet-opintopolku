@@ -33,7 +33,6 @@ describe('RouteKooste', () => {
       },
     });
 
-
     perusteKoosteStore.koulutustyyppi = 'koulutustyyppi_2';
 
     perusteKoosteStore.tiedotteet = [{
