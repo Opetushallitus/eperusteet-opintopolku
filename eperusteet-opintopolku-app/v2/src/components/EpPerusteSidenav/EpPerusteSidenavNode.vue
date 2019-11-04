@@ -1,22 +1,21 @@
 <template>
 <div class="node" :class="{ 'node-root': isRoot }">
   <div v-if="!isRoot">
-    <b-link v-if="node.location" :to="node.location">
+    <div class="indicator-wrapper" v-if="isModuuli">
+      <ep-color-indicator :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
+    </div>
+    <div class="label-wrapper">
+      <b-link v-if="node.location" :to="node.location">
       <span class="label" :class="{ 'label-match': isMatch }">
-        <ep-color-indicator v-if="node.type === 'moduuli'"
-                            :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'"
-                            class="mr-2" />
         {{ $kaannaOlioTaiTeksti(node.label) }}
       </span>
-    </b-link>
-    <span v-else
-          class="label label-plain"
-          :class="{ 'label-match': isMatch }">
-      <ep-color-indicator v-if="node.type === 'moduuli'"
-                          :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'"
-                          class="mr-2" />
+      </b-link>
+      <span v-else
+            class="label label-plain"
+            :class="{ 'label-match': isMatch }">
       {{ $kaannaOlioTaiTeksti(node.label) }}
     </span>
+    </div>
   </div>
 
   <!-- children -->
@@ -68,6 +67,10 @@ export default class EpPerusteSidenavNode extends Vue {
     else {
       return _.filter(node.children, 'isVisible');
     }
+  }
+
+  get isModuuli() {
+    return this.node.type === 'moduuli' && typeof _.get(this.node, 'meta.pakollinen') === 'boolean';
   }
 
   get isRoot() {
@@ -123,6 +126,18 @@ export default class EpPerusteSidenavNode extends Vue {
 
   .label-match {
     font-weight: bold;
+  }
+
+  .indicator-wrapper {
+    position: absolute;
+  }
+
+  // Lisätään margini indikaattorille, jotta rivitys menee samalle tasolle.
+  // Esim.
+  // o Tekstien tulkinta ja
+  //   kirjoittaminen
+  .indicator-wrapper + .label-wrapper {
+    margin-left: 20px;
   }
 }
 </style>

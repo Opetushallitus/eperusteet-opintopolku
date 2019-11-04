@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
 import { Lops2019 } from '@shared/api/eperusteet';
 import { Lops2019ModuuliDto } from '@shared/api/tyypit';
@@ -10,11 +9,11 @@ export class Lops2019ModuuliStore {
   @State() public moduuliId: number;
   @State() public moduuli: Lops2019ModuuliDto | null = null;
 
-  public static readonly create = _.memoize(async (perusteId: number, oppiaineId: number, moduuliId: number) => {
+  public static async create(perusteId: number, oppiaineId: number, moduuliId: number) {
     const result = new Lops2019ModuuliStore(perusteId, oppiaineId, moduuliId);
-    result.init();
+    result.fetchModuuli();
     return result;
-  });
+  }
 
   constructor(perusteId: number, oppiaineId: number, moduuliId: number) {
     this.perusteId = perusteId;
@@ -22,7 +21,8 @@ export class Lops2019ModuuliStore {
     this.moduuliId = moduuliId;
   }
 
-  async init() {
+  async fetchModuuli() {
+    this.moduuli = null;
     this.moduuli = (await Lops2019.getModuuli(this.perusteId, this.oppiaineId, this.moduuliId)).data;
   }
 }
