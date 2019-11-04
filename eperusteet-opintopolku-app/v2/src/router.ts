@@ -2,6 +2,7 @@ import _ from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
 import VueScrollTo from 'vue-scrollto';
+import VueMeta from 'vue-meta';
 
 import Root from '@/routes/Root.vue';
 import Home from '@/routes/home/RouteHome.vue';
@@ -29,7 +30,7 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
 
-import { changeTitleAndLang, resolveRouterMetaProps } from '@shared/utils/router';
+import { changeLang, resolveRouterMetaProps } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
@@ -42,6 +43,11 @@ import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 
 Vue.use(Router);
+Vue.use(VueMeta, {
+  refreshOnceOnNavigation: true
+});
+
+
 const logger = createLogger('Router');
 
 const perusteStore = new PerusteStore();
@@ -291,7 +297,7 @@ export const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  changeTitleAndLang(to);
+  changeLang(to);
   next();
 });
 

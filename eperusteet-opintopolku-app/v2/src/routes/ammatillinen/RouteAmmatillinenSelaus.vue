@@ -29,11 +29,12 @@
 </template>
 
 <script lang="ts">
-import { Watch, Component, Vue, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import PerusteHaku from './PerusteHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
+import { Meta } from '@shared/utils/decorators';
 
 
 @Component({
@@ -62,6 +63,13 @@ export default class RouteAmmatillinenSelaus extends Vue {
         name: 'ammatillinenSelaus',
       },
     }];
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t('ammatillinen-koulutus'),
+    };
   }
 }
 </script>

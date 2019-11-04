@@ -74,6 +74,7 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { koulutustyyppiStateName } from '@shared/utils/perusteet';
+import { Meta } from '@shared/utils/decorators';
 
 
 function mapRoutes(perusteet: PerusteDto[] | null) {
@@ -124,6 +125,14 @@ export default class RouteHome extends Vue {
     this.perusteStore.getYleisetPerusteet();
     this.perusteStore.getUusimmat();
     this.tiedoteStore.getUusimmat();
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t('eperusteet'),
+      titleTemplate: null,
+    };
   }
 }
 </script>
