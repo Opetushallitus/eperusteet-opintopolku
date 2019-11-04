@@ -31,11 +31,7 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
 
-<<<<<<< HEAD
-import { changeLang, resolveRouterMetaProps } from '@shared/utils/router';
-=======
-import { changeTitleAndLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
->>>>>>> paikalliset perusteet external link
+import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
