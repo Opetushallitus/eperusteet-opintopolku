@@ -92,11 +92,11 @@ export default class PerusteHaku extends Vue {
 
   get perusteet() {
     return _.chain(this.perusteHakuStore.perusteet)
-            .map(peruste => ({
-            ...peruste,
-            ulkoinenlinkki: this.ulkoinenlinkki(peruste)
-          }))
-          .value();
+      .map(peruste => ({
+        ...peruste,
+        ulkoinenlinkki: this.ulkoinenlinkki(peruste)
+      }))
+      .value();
   }
   get total() {
     return this.perusteHakuStore.total;
