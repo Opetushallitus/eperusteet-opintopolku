@@ -49,16 +49,16 @@
 
       <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
       <ep-spinner-slot :is-loading="!perusteet">
-        <div class="valtakunnallinen" v-for="(peruste, idx) in perusteet" :key="idx">
-          <div class="d-flex justify-content-between align-content-stretch">
-            <div class="raita m-2" :class="peruste.theme"></div>
-            <div class="nimi flex-fill m-2">
-              <router-link :to="peruste.route">
-                {{ $kaanna(peruste.nimi) }}
-              </router-link>
-            </div>
-            <div class="d-flex flex-column justify-content-center align-items-center">
-              <div class="luotu m-2">{{ $sd(peruste.luotu) }}</div>
+        <div class="d-flex flex-wrap justify-content-between">
+          <div class="valtakunnallinen" v-for="(peruste, idx) in perusteet" :key="idx">
+            <div class="d-flex justify-content-between align-content-stretch">
+              <div class="raita mx-3 my-2" :class="peruste.theme"></div>
+              <div class="nimi flex-fill my-3 mr-3">
+                <router-link :to="peruste.route">
+                  {{ $kaanna(peruste.nimi) }}
+                </router-link>
+                <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -77,7 +77,6 @@ import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { koulutustyyppiStateName } from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
-import { koulutustyyppiTheme } from '@shared/utils/perusteet';
 
 
 function mapRoutes(perusteet: PerusteDto[] | null) {
@@ -112,17 +111,8 @@ export default class RouteHome extends Vue {
   @Prop({ required: true })
   private tiedoteStore!: TiedoteStore;
 
-  async mounted() {
-    this.perusteStore.getYleisetPerusteet();
-    this.perusteStore.getUusimmat();
-    this.tiedoteStore.getUusimmat();
-  }
-
   get perusteet() {
-    return _.map(mapRoutes(this.perusteStore.perusteet), (peruste) => ({
-      ...peruste,
-      theme: peruste && peruste.koulutustyyppi && 'koulutustyyppi-' + koulutustyyppiTheme(peruste.koulutustyyppi),
-    }));
+    return mapRoutes(this.perusteStore.perusteet);
   }
 
   get uusimmat() {
@@ -131,6 +121,12 @@ export default class RouteHome extends Vue {
 
   get tiedotteet() {
     return this.tiedoteStore.uusimmatTiedotteet;
+  }
+
+  async mounted() {
+    this.perusteStore.getYleisetPerusteet();
+    this.perusteStore.getUusimmat();
+    this.tiedoteStore.getUusimmat();
   }
 
   @Meta
@@ -160,7 +156,7 @@ export default class RouteHome extends Vue {
     }
   }
 
-  background-color: $etusivu-header-background;
+  background-color: $etusivu-header-background; /* TODO: Lisää kuva */
   background-image: url('../../../public/img/banners/opiskelijat.png');
   background-size: cover;
   background-position: 50% 33%;
@@ -192,8 +188,13 @@ export default class RouteHome extends Vue {
   .valtakunnallinen {
     min-height: 80px;
     border: 1px solid #DADADA;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     border-radius: 2px;
+    width: calc(1 / 2 * 100% - (1 - 1 / 2) * 10px);
+
+    @media (max-width: 991.98px) {
+      width: 100%;
+    }
 
     .nimi {
       overflow-x: auto;
@@ -203,26 +204,7 @@ export default class RouteHome extends Vue {
       flex: 0 0 5px;
       min-height: 60px;
       background-color: #368715;
-      border-radius: 4px;
-
-      &.koulutustyyppi-ammatillinen {
-        background-color: $koulutustyyppi-ammatillinen-color;
-      }
-      &.koulutustyyppi-esiopetus {
-        background-color: $koulutustyyppi-esiopetus-color;
-      }
-      &.koulutustyyppi-lukio {
-        background-color: $koulutustyyppi-lukio-color;
-      }
-      &.koulutustyyppi-perusopetus {
-        background-color: $koulutustyyppi-perusopetus-color;
-      }
-      &.koulutustyyppi-varhaiskasvatus {
-        background-color: $koulutustyyppi-varhaiskasvatus-color;
-      }
-      &.koulutustyyppi-taiteenperusopetus {
-        background-color: $koulutustyyppi-taiteenperusopetus-color;
-      }
+      border-radius: 3px;
     }
 
     .luotu {
