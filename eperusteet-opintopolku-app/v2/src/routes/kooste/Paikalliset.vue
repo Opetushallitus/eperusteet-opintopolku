@@ -118,8 +118,6 @@ export default class Paikalliset extends Vue {
   }
 
   setActivePeruste(peruste) {
-    // console.log('peruste : ', peruste.toteutus);
-    // console.log('activePeruste', this.perusteKoosteStore.activePeruste);
     this.query = '';
     this.perusteKoosteStore.setPerusteId(peruste.id);
   }
