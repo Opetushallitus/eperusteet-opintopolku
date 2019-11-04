@@ -49,6 +49,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import { Kielet } from '@shared/stores/kieli';
+import { Meta } from '@shared/utils/decorators';
 
 @Component({
   components: {
@@ -96,6 +97,13 @@ export default class RouteUutiset extends Vue {
 
   get sisaltoKieli() {
     return Kielet.getSisaltoKieli;
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: (this as any).$t('uutiset'),
+    };
   }
 }
 </script>
