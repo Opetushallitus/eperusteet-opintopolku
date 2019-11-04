@@ -51,7 +51,7 @@
       <ep-spinner-slot :is-loading="!perusteet">
         <div class="valtakunnallinen" v-for="(peruste, idx) in perusteet" :key="idx">
           <div class="d-flex justify-content-between align-content-stretch">
-            <div class="raita m-2"></div>
+            <div class="raita m-2" :class="peruste.theme"></div>
             <div class="nimi flex-fill m-2">
               <router-link :to="peruste.route">
                 {{ $kaanna(peruste.nimi) }}
@@ -77,6 +77,7 @@ import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { koulutustyyppiStateName } from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
+import { koulutustyyppiTheme } from '@shared/utils/perusteet';
 
 
 function mapRoutes(perusteet: PerusteDto[] | null) {
@@ -111,8 +112,17 @@ export default class RouteHome extends Vue {
   @Prop({ required: true })
   private tiedoteStore!: TiedoteStore;
 
+  async mounted() {
+    this.perusteStore.getYleisetPerusteet();
+    this.perusteStore.getUusimmat();
+    this.tiedoteStore.getUusimmat();
+  }
+
   get perusteet() {
-    return mapRoutes(this.perusteStore.perusteet);
+    return _.map(mapRoutes(this.perusteStore.perusteet), (peruste) => ({
+      ...peruste,
+      theme: peruste && peruste.koulutustyyppi && 'koulutustyyppi-' + koulutustyyppiTheme(peruste.koulutustyyppi),
+    }));
   }
 
   get uusimmat() {
@@ -121,12 +131,6 @@ export default class RouteHome extends Vue {
 
   get tiedotteet() {
     return this.tiedoteStore.uusimmatTiedotteet;
-  }
-
-  async mounted() {
-    this.perusteStore.getYleisetPerusteet();
-    this.perusteStore.getUusimmat();
-    this.tiedoteStore.getUusimmat();
   }
 
   @Meta
@@ -156,7 +160,7 @@ export default class RouteHome extends Vue {
     }
   }
 
-  background-color: $etusivu-header-background; /* TODO: Lisää kuva */
+  background-color: $etusivu-header-background;
   background-image: url('../../../public/img/banners/opiskelijat.png');
   background-size: cover;
   background-position: 50% 33%;
@@ -199,7 +203,26 @@ export default class RouteHome extends Vue {
       flex: 0 0 5px;
       min-height: 60px;
       background-color: #368715;
-      border-radius: 3px;
+      border-radius: 4px;
+
+      &.koulutustyyppi-ammatillinen {
+        background-color: $koulutustyyppi-ammatillinen-color;
+      }
+      &.koulutustyyppi-esiopetus {
+        background-color: $koulutustyyppi-esiopetus-color;
+      }
+      &.koulutustyyppi-lukio {
+        background-color: $koulutustyyppi-lukio-color;
+      }
+      &.koulutustyyppi-perusopetus {
+        background-color: $koulutustyyppi-perusopetus-color;
+      }
+      &.koulutustyyppi-varhaiskasvatus {
+        background-color: $koulutustyyppi-varhaiskasvatus-color;
+      }
+      &.koulutustyyppi-taiteenperusopetus {
+        background-color: $koulutustyyppi-taiteenperusopetus-color;
+      }
     }
 
     .luotu {
