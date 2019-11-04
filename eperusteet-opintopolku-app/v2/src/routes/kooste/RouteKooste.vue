@@ -59,7 +59,7 @@
               <div v-else>
                 <div class="tiedote" v-for="(tiedote, idx) in tiedotteet" :key="idx">
                   <div class="otsikko">
-                    <router-link :to="{ name: 'uutiset', params: { uutinenId: tiedote.id } }">
+                    <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
                       {{ $kaanna(tiedote.otsikko) }}
                     </router-link>
                   </div>

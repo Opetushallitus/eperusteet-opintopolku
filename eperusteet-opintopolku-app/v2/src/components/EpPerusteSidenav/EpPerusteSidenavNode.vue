@@ -13,13 +13,13 @@
       <span v-else
             class="label label-plain"
             :class="{ 'label-match': isMatch }">
-      {{ $kaannaOlioTaiTeksti(node.label) }}
+        {{ $kaannaOlioTaiTeksti(node.label) }}
     </span>
     </div>
   </div>
 
   <!-- children -->
-  <ul :class="{ 'root-list': isRoot }">
+  <ul :class="{ 'root-list': isRoot }" v-if="hasChildren">
     <li v-for="(child, idx) in children" :key="idx">
       <ep-peruste-sidenav-node :node="child" :current="current" />
     </li>
@@ -67,6 +67,9 @@ export default class EpPerusteSidenavNode extends Vue {
     else {
       return _.filter(node.children, 'isVisible');
     }
+  }
+  get hasChildren() {
+    return !_.isEmpty(this.children);
   }
 
   get isModuuli() {
