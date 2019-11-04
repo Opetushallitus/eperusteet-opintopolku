@@ -72,4 +72,7 @@ export class PerusteKoosteStore {
       .sortBy('luotu')
       .value();
   }
+
+  @Getter(state => _.find(state.perusteet, _.find(state.perusteet, ['id', state.perusteId])))
+  public readonly activePeruste!: PerusteDto;
 }

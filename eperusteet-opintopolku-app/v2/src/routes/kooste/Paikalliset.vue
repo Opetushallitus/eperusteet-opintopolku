@@ -39,9 +39,10 @@
           </div>
           <div class="nimi flex-fill">
             <div class="ops">
-              <router-link :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
+              <router-link v-if="!ops.ulkoinenlinkki" :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
                 {{ $kaanna(ops.nimi) }}
               </router-link>
+              <ep-external-link v-else :url="ulkoinenlinkki(ops)">{{ $kaanna(ops.nimi) }}</ep-external-link>
             </div>
             <div class="organisaatiot">
               <div v-if="ops.toimijat.length > 0">
@@ -86,12 +87,18 @@ import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
+import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
+import { koulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
+import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
+
+const PREFIX = process.env.NODE_ENV === 'production' ? '': 'https://eperusteet.opintopolku.fi';
 
 @Component({
   components: {
     EpHeader,
     EpSearch,
     EpSpinner,
+    EpExternalLink,
   },
 })
 export default class Paikalliset extends Vue {
@@ -111,6 +118,8 @@ export default class Paikalliset extends Vue {
   }
 
   setActivePeruste(peruste) {
+    // console.log('peruste : ', peruste.toteutus);
+    // console.log('activePeruste', this.perusteKoosteStore.activePeruste);
     this.query = '';
     this.perusteKoosteStore.setPerusteId(peruste.id);
   }
@@ -146,7 +155,20 @@ export default class Paikalliset extends Vue {
     return _.chain(this.opetussuunnitelmatFiltered)
       .drop(this.perPage * (this.page - 1))
       .take(this.perPage)
+      .map(ops => ({
+        ...ops,
+        ulkoinenlinkki: this.ulkoinenlinkki(ops)
+      }))
       .value();
+  }
+
+  ulkoinenlinkki(ops) {
+    if (this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.yksinkertainen
+        || this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.lops2019) {
+      return undefined;      
+    }
+
+    return `${PREFIX}/#/${this.$route.params.lang || 'fi'}/ops/${ops.id}/${koulutustyyppiUrlShortParamName(ops.koulutustyyppi)}/tiedot`;
   }
 
 }
