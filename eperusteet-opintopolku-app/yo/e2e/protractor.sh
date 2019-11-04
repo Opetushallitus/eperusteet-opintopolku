@@ -1,6 +1,6 @@
 #!/bin/bash
 protractor="./node_modules/protractor"
-[[ ! -d $protractor ]] && npm install protractor
+[[ ! -d $protractor ]] && yarn protractor
 tsc conf.ts
 tsc --outFile e2e/result.js
 $protractor/bin/webdriver-manager update --standalone

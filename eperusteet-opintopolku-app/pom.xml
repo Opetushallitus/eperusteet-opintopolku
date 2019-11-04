@@ -62,12 +62,12 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>npm copy</id>
+                        <id>yarn copy</id>
                         <goals>
-                            <goal>npm</goal>
+                            <goal>yarn</goal>
                         </goals>
                         <configuration>
-                            <arguments>run copy</arguments>
+                            <arguments>copy</arguments>
                         </configuration>
                     </execution>
                 </executions>
