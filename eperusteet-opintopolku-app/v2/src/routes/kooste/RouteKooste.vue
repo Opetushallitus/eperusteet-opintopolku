@@ -19,9 +19,11 @@
                   <img src="../../../public/img/icons/hallitus.svg" :alt="$t('peruste')" style="fill: #0041DC" />
                 </div>
                 <div class="nimi">
-                  <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
+                  <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
+
+                  <ep-external-link v-else :url="peruste.ulkoinenlinkki">{{ $kaanna(peruste.nimi) }}</ep-external-link>
                 </div>
               </div>
               <div class="voimaantulo-viiva"></div>
@@ -82,12 +84,19 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import Paikalliset from './Paikalliset.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { Meta } from '@shared/utils/decorators';
+import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
+import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
+import { perusteKoulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
+import _ from 'lodash';
+
+const PREFIX = process.env.NODE_ENV === 'production' ? '': 'https://eperusteet.opintopolku.fi';
 
 @Component({
   components: {
     EpSpinner,
     EpHeader,
     Paikalliset,
+    EpExternalLink,
   },
 })
 export default class RouteKooste extends Vue {
@@ -112,7 +121,22 @@ export default class RouteKooste extends Vue {
   }
 
   get perusteet() {
-    return this.perusteKoosteStore.perusteet;
+    return _.chain(this.perusteKoosteStore.perusteet)
+      .map(peruste => ({
+        ...peruste,
+        ulkoinenlinkki: this.ulkoinenlinkki(peruste)
+      }))
+      .value();
+  }
+
+  ulkoinenlinkki(peruste) {
+
+    if (peruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
+        || peruste.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()) {
+      return undefined;      
+    }
+
+    return `${PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}`;
   }
 
   @Meta

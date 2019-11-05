@@ -42,7 +42,7 @@
               <router-link v-if="!ops.ulkoinenlinkki" :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
                 {{ $kaanna(ops.nimi) }}
               </router-link>
-              <ep-external-link v-else :url="ulkoinenlinkki(ops)">{{ $kaanna(ops.nimi) }}</ep-external-link>
+              <ep-external-link v-else :url="ops.ulkoinenlinkki">{{ $kaanna(ops.nimi) }}</ep-external-link>
             </div>
             <div class="organisaatiot">
               <div v-if="ops.toimijat.length > 0">
