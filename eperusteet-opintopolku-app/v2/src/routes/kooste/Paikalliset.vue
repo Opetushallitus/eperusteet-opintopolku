@@ -161,8 +161,8 @@ export default class Paikalliset extends Vue {
   }
 
   ulkoinenlinkki(ops) {
-    
-    if (this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
+
+    if (!this.perusteKoosteStore.activePeruste || this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
         || this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()) {
       return undefined;      
     }
