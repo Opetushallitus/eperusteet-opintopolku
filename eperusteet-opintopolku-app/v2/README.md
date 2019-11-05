@@ -6,11 +6,11 @@
 
 ## Project setup
 ```
-cd eperusteet-opintopolku-app/v2
+cd eperusteet-opintopolku-app/beta
 git submodule update --init --recursive  
 yarn install
 
-cd eperusteet-opintopolku-app/v2/eperusteet-frontend-utils/vue
+cd eperusteet-opintopolku-app/beta/eperusteet-frontend-utils/vue
 yarn install
 yarn gen:api
 ```
