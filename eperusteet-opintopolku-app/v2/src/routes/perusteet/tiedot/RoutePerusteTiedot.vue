@@ -88,7 +88,7 @@
       </div>
       <!-- todo: kv-liitteet -->
     </div>
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+    <slot name="previous-next-navigation" />
   </div>
 </div>
 </template>
@@ -100,7 +100,6 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
 import { isAmmatillinen } from '@shared/utils/perusteet';
@@ -112,7 +111,6 @@ import { isAmmatillinen } from '@shared/utils/perusteet';
     EpField,
     EpDatepicker,
     EpSpinner,
-    EpPreviousNextNavigation,
   },
 })
 export default class RoutePerusteTiedot extends Vue {
@@ -140,14 +138,6 @@ export default class RoutePerusteTiedot extends Vue {
 
   get peruste() {
     return this.perusteDataStore.peruste!;
-  }
-
-  get current() {
-    return this.perusteDataStore.current;
-  }
-
-  get flattenedSidenav() {
-    return this.perusteDataStore.flattenedSidenav;
   }
 
   handleMaarayskirje() {

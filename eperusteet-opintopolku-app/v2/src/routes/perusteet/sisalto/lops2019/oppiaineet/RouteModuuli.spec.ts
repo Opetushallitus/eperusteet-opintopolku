@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteModuuli from './RouteModuuli.vue';
 import { mocks, stubs } from '@shared/utils/jestutils';
-import { lops2019ModuuliStoreMock } from '@/storeMocks';
+import { lops2019ModuuliStoreMock, perusteDataStoreMock } from '@/storeMocks';
 import { KieliStore } from '@shared/stores/kieli';
 
 
@@ -11,7 +11,7 @@ describe('RouteModuuli', () => {
 
   test('Renders', async () => {
 
-
+    const perusteDataStore = perusteDataStoreMock();
     const lops2019ModuuliStore = lops2019ModuuliStoreMock();
     lops2019ModuuliStore.moduuli = {
       nimi: {
@@ -49,6 +49,7 @@ describe('RouteModuuli', () => {
     const wrapper = mount(RouteModuuli as any, {
       localVue,
       propsData: {
+        perusteDataStore,
         lops2019ModuuliStore,
       },
       stubs: {

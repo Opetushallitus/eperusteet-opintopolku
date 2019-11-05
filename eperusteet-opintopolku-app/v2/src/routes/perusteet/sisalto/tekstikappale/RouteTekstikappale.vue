@@ -13,7 +13,7 @@
       <div class="teksti" v-html="$kaanna(alikappaleViite.perusteenOsa.teksti)"></div>
     </div>
 
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+    <slot name="previous-next-navigation" />
   </div>
   <ep-spinner v-else />
 </div>
@@ -25,14 +25,12 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { ViiteLaaja } from '@shared/api/tyypit';
-import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 
 
 @Component({
   components: {
-    EpPreviousNextNavigation,
     EpSpinner,
     EpHeading,
   }
@@ -88,10 +86,6 @@ export default class RouteTekstikappale extends Vue {
     else {
       return [];
     }
-  }
-
-  get flattenedSidenav() {
-    return this.perusteDataStore.flattenedSidenav;
   }
 
   get current() {
