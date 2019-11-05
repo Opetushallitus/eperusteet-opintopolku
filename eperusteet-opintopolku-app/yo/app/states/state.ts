@@ -3,6 +3,13 @@ angular.module("app").config($stateProvider =>
         url: "/:lang",
         templateUrl: "views/navisisalto.html",
         abstract: true,
+        controller: ($scope, $location, $window) => {
+            $scope.redirectAddrs = $location.$$search.paluuosoite; 
+
+            $scope.paluu = () => {
+                $window.location.href = $scope.redirectAddrs;
+            }
+        },    
         resolve: {
             serviceConfig: eperusteetConfig => eperusteetConfig.init(),
             configCheck: serviceConfig => {
