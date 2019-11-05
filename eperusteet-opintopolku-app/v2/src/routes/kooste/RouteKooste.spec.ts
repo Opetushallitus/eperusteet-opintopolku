@@ -16,6 +16,10 @@ describe('RouteKooste', () => {
     },
   });
 
+  const $route = {
+    params: {lang: 'fi'}
+  }
+
   test('Renders', async () => {
     const perusteKoosteStore = perusteKoosteStoreMock();
     const tiedoteStore = tiedoteStoreMock();
@@ -31,6 +35,7 @@ describe('RouteKooste', () => {
       },
       mocks: {
         ...mocks,
+        $route
       },
     });
 
