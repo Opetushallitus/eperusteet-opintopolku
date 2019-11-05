@@ -57,7 +57,7 @@ const proxy = {
 
 module.exports = {
   lintOnSave: false,
-  publicPath: process.env.NODE_ENV === 'production' ? '/v2/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/beta/' : '/',
   configureWebpack: {
     resolve: {
       alias: {
