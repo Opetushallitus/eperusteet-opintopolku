@@ -20,9 +20,9 @@ const logger = createLogger('main');
 Vue.config.devtools = true;
 Vue.use(Notifications);
 
-const isDevelopmentMode = () => process.env.NODE_ENV === 'development';
+const isProduction = () => process.env.NODE_ENV === 'production';
 
-if (isDevelopmentMode()) {
+if (!isProduction()) {
   const VueAxe = require('vue-axe');
   Vue.use(VueAxe, {
     config: {
@@ -48,7 +48,7 @@ Vue.use(VueScrollTo, {
   duration: 1000,
 });
 
-if (!isDevelopmentMode()) {
+if (isProduction()) {
   const siteDomain = document.domain;
   let siteId = 2;
   if (siteDomain === 'eperusteet.opintopolku.fi') {
@@ -88,7 +88,7 @@ declare module 'vue/types/vue' {
 
 function errorCaptured(err: Error, vm: Vue, info: string) {
   logger.error(err, info);
-  if (!isDevelopmentMode()) {
+  if (isProduction()) {
     // Virheet.lisaaVirhe({
     //   path: vm.$route.path,
     //   state: _.cloneDeep(vm.$data),
