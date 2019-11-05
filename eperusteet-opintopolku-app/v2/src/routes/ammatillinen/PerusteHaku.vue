@@ -63,6 +63,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
+import _ from 'lodash';
 
 const PREFIX = process.env.NODE_ENV === 'production' ? '': 'https://eperusteet.opintopolku.fi';
 
