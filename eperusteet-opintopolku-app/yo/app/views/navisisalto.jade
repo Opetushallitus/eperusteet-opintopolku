@@ -1,5 +1,8 @@
+div.redirectbanner(ng-if='redirectAddrs' ng-click='paluu()') 
+  div.inner-container
+    span {{'uusi-opintopolku-paluu' | kaanna}}
 .container-fluid
-  div(ng-include="'views/navigaatio/ylanavigaatio.html'")
+  div( ng-if='!redirectAddrs' ng-include="'views/navigaatio/ylanavigaatio.html'")
   .row.sisalto-container
     .col-md-12
       #ylasivuankkuri.inner-container
