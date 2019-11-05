@@ -1877,9 +1877,9 @@ entities@^2.0.0:
   resolved "https://registry.yarnpkg.com/entities/-/entities-2.0.0.tgz#68d6084cab1b079767540d80e56a39b423e4abf4"
   integrity sha512-D9f7V0JSRwIxlRI2mjMqufDrRDnx8p+eEOz7aUM9SuvF8gsBzra0/6tbjl1m8eQHrZlYj6PxqE00hZ1SAIKPLw==
 
-"eperusteet-frontend-utils@git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git#master":
+"eperusteet-frontend-utils@git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git":
   version "1.0.0"
-  resolved "git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git#e97f797db7847979d6b149cc2eb4694c40fe7611"
+  resolved "git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git#91e13ff1016a5f0aedaa5c0882081960b3bc5695"
 
 error-ex@^1.2.0:
   version "1.3.2"
