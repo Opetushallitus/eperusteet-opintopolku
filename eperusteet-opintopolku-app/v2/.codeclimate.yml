@@ -1,0 +1,57 @@
+version: "2"
+
+exclude_patterns:
+  - "**/*.d.ts"
+  - "**/*.js"
+  - "**/*.spec.ts"
+  - "**/*.vue"
+  - "**/__tests__/"
+  - "**/node_modules"
+  - "eperusteet-frontend-utils"
+  - "coverage/"
+  - "public"
+  - "src/generated"
+  - "tests"
+
+checks:
+  argument-count:
+    config:
+      threshold: 4
+  complex-logic:
+    config:
+      threshold: 4
+  file-lines:
+    config:
+      threshold: 250
+  method-complexity:
+    config:
+      threshold: 5
+  method-count:
+    config:
+      threshold: 20
+  method-lines:
+    config:
+      threshold: 25
+  nested-control-flow:
+    config:
+      threshold: 4
+  return-statements:
+    config:
+      threshold: 4
+  similar-code:
+    config:
+      threshold: 45
+  identical-code:
+    config:
+      threshold: 45
+
+plugins:
+  scss-lint:
+    enabled: false
+  shellcheck:
+    enabled: true
+  markdownlint:
+    enabled: true
+  tslint:
+    enabled: false
+    config: tslint.json
