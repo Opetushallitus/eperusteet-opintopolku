@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
-import { NavigationNodeDto, PerusteDto } from '@shared/api/tyypit';
+import { NavigationNodeDto, PerusteDto, TermiDto } from '@shared/api/tyypit';
 import { Perusteet } from '@shared/api/eperusteet';
 import { NavigationFilter, NavigationNode, buildNavigation, filterNavigation } from '@shared/utils/NavigationBuilder';
-import { baseURL, Dokumentit, DokumentitParam } from '@shared/api/eperusteet';
+import { baseURL, Dokumentit, DokumentitParam, Termit } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
@@ -16,6 +16,7 @@ export class PerusteDataStore {
   @State() public navigation: NavigationNodeDto | null = null;
   @State() public suoritustapa: string | null = null;
   @State() public currentRoute: Location | null = null;
+  @State() public termit: TermiDto[] | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
   @State() public sidenavFilter: NavigationFilter = {
@@ -35,13 +36,9 @@ export class PerusteDataStore {
   }
 
   private async init() {
-    if (this.perusteId) {
-      this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
-      this.fetchNavigation();
-    }
-    else {
-      throw new Error('peruste-id-puuttuu');
-    }
+    this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
+    this.termit = (await Termit.getAll(this.perusteId)).data;
+    this.fetchNavigation();
   }
 
   async fetchNavigation() {

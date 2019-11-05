@@ -3,6 +3,7 @@ import Vue from 'vue';
 import { rootConfig  } from '@/mainvue';
 import { createLogger } from '@shared/utils/logger';
 import '@/config/styles';
+
 const logger = createLogger('Main');
 
 Vue.config.productionTip = false;
