@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+    <slot name="previous-next-navigation" />
   </div>
   <ep-spinner v-else />
 </div>
@@ -86,15 +86,13 @@ import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import VueScrollTo from 'vue-scrollto';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 
 @Component({
   components: {
     EpSpinner,
-    EpPreviousNextNavigation,
     EpColorIndicator,
   }
 })
@@ -194,14 +192,6 @@ export default class RouteOppiaine extends Vue {
 
   get hasOppimaarat() {
     return !_.isEmpty(this.oppimaarat);
-  }
-
-  get current() {
-    return this.perusteDataStore.current;
-  }
-
-  get flattenedSidenav() {
-    return this.perusteDataStore.flattenedSidenav;
   }
 }
 </script>

@@ -12,57 +12,65 @@
     <b-container fluid>
       <b-row>
         <b-col md="6" class="tile">
-          <h2 class="tile-heading">{{ $t('uutisia') }}</h2>
-          <ep-spinner-slot :is-loading="!tiedotteet">
-            <div class="box" v-for="(tiedote, idx) in tiedotteet" :key="idx">
-              <div class="nimi">
-                <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                  {{ $kaanna(tiedote.otsikko) }}
-                </router-link>
+          <section>
+            <h2 class="tile-heading">{{ $t('uutisia') }}</h2>
+            <ep-spinner-slot :is-loading="!tiedotteet">
+              <div class="box" v-for="(tiedote, idx) in tiedotteet" :key="idx">
+                <div class="nimi">
+                  <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
+                    {{ $kaanna(tiedote.otsikko) }}
+                  </router-link>
+                </div>
+                <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
               </div>
-              <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
-            </div>
-            <div class="box">
-              <div class="nimi">
-                <router-link :to="{ name: 'uutiset' }">
-                  {{ $t('nayta-kaikki-uutiset') }}
-                </router-link>
+              <div class="box">
+                <div class="nimi">
+                  <router-link :to="{ name: 'uutiset' }">
+                    {{ $t('nayta-kaikki-uutiset') }}
+                  </router-link>
+                </div>
               </div>
-            </div>
-          </ep-spinner-slot>
+            </ep-spinner-slot>
+          </section>
         </b-col>
 
         <b-col md="6" class="tile">
-          <h2 class="tile-heading">{{ $t('uusimmat-eperusteet') }}</h2>
-          <ep-spinner-slot :is-loading="!uusimmat">
-            <div class="box" v-for="(peruste, idx) in uusimmat" :key="idx">
-              <div class="nimi">
-                <router-link :to="peruste.route">
-                  {{ $kaanna(peruste.nimi) }}
-                </router-link>
+          <section>
+            <h2 class="tile-heading">{{ $t('uusimmat-eperusteet') }}</h2>
+            <ep-spinner-slot :is-loading="!uusimmat">
+              <div class="box" v-for="(peruste, idx) in uusimmat" :key="idx">
+                <div class="nimi">
+                  <router-link :to="peruste.route">
+                    {{ $kaanna(peruste.nimi) }}
+                  </router-link>
+                </div>
+                <div class="luotu">{{ $sd(peruste.paatospvm) }}</div>
               </div>
-              <div class="luotu">{{ $sd(peruste.paatospvm) }}</div>
-            </div>
-          </ep-spinner-slot>
+            </ep-spinner-slot>
+          </section>
         </b-col>
       </b-row>
 
-      <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
-      <ep-spinner-slot :is-loading="!perusteet">
-        <div class="d-flex flex-wrap justify-content-between">
-          <div class="valtakunnallinen" v-for="(peruste, idx) in perusteet" :key="idx">
-            <div class="d-flex justify-content-between align-content-stretch">
-              <div class="raita mx-3 my-2" :class="peruste.theme"></div>
-              <div class="nimi flex-fill my-3 mr-3">
-                <router-link :to="peruste.route">
-                  {{ $kaanna(peruste.nimi) }}
-                </router-link>
-                <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+      <section>
+        <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
+        <ep-spinner-slot :is-loading="!perusteetSorted">
+          <div class="d-flex flex-wrap justify-content-between">
+            <div class="valtakunnallinen" v-for="(peruste, idx) in perusteetSorted" :key="idx">
+              <div class="sisalto d-flex justify-content-between align-content-stretch">
+                <div class="raita mx-3 my-2" :class="peruste.theme"></div>
+                <div class="d-flex flex-fill align-items-center">
+                  <div class="nimi my-3 mr-3">
+                    <router-link :to="peruste.route">
+                      {{ $kaanna(peruste.nimi) }}
+                    </router-link>
+                    <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </ep-spinner-slot>
+        </ep-spinner-slot>
+      </section>
     </b-container>
   </div>
 </div>
@@ -75,7 +83,7 @@ import { PerusteDto } from '@shared/api/tyypit';
 import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
-import { koulutustyyppiStateName, koulutustyyppiTheme } from '@shared/utils/perusteet';
+import { koulutustyyppiStateName, koulutustyyppiTheme, yleissivistavat } from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
 
 
@@ -123,6 +131,27 @@ export default class RouteHome extends Vue {
         ...peruste,
         theme: peruste && peruste.koulutustyyppi && 'koulutustyyppi-' + koulutustyyppiTheme(peruste.koulutustyyppi),
       }));
+    }
+    else {
+      return null;
+    }
+  }
+
+  get perusteetSorted() {
+    const ktJarjestys = _(yleissivistavat())
+      .filter((el: any) => el.koulutustyyppi)
+      .map((el: any) => el.alityypit ? [...el.alityypit] : el.koulutustyyppi)
+      .flatten()
+      .value();
+
+    const sorted: any = [];
+    _.each(ktJarjestys, kt => {
+      const matches = _.filter(this.perusteet, (p: any) => p.koulutustyyppi === kt);
+      sorted.push(...matches);
+    });
+
+    if (!_.isEmpty(sorted)) {
+      return sorted;
     }
     else {
       return null;
@@ -194,7 +223,6 @@ export default class RouteHome extends Vue {
 
 .container {
   .valtakunnallinen {
-    min-height: 80px;
     border: 1px solid #DADADA;
     margin-bottom: 10px;
     border-radius: 2px;
@@ -204,15 +232,19 @@ export default class RouteHome extends Vue {
       width: 100%;
     }
 
+    .sisalto {
+      height: 100%;
+    }
+
     .nimi {
       overflow-x: auto;
     }
 
     .raita {
-      flex: 0 0 5px;
+      flex: 0 0 6px;
       min-height: 60px;
       background-color: #368715;
-      border-radius: 4px;
+      border-radius: 3px;
       &.koulutustyyppi-ammatillinen {
         background-color: $koulutustyyppi-ammatillinen-color;
       }

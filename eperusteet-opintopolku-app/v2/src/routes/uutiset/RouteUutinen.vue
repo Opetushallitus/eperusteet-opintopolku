@@ -7,14 +7,16 @@
       </div>
       <ep-spinner v-else />
     </template>
-    <div v-if="tiedote" class="tiedote">
-      <div class="otsikko">
-        {{ $kaanna(tiedote.otsikko) }}
-      </div>
+    <template slot="subheader">
+    <div v-if="tiedote">
       <div class="aikaleima">
         {{ $sd(tiedote.luotu) }}
       </div>
-      <div class="tiedote-sisalto">
+    </div>
+    <ep-spinner v-else />
+    </template>
+    <div v-if="tiedote" class="tiedote">
+      <div class="sisalto">
         <p v-html="$kaanna(tiedote.sisalto)"></p>
       </div>
     </div>
@@ -97,25 +99,21 @@ export default class RouteUutinen extends Vue {
 
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
+@import '../../styles/_mixins.scss';
+
+.aikaleima {
+  font-weight: bold;
+  font-size: small;
+}
+
 
 .tiedote {
   padding-left: 15px;
   padding-right: 15px;
 
-  .otsikko {
-    color: #001A58;
-    font-size: 1.5rem;
-  }
-
-  .aikaleima {
-    color: #555;
-    font-weight: lighter;
-  }
-
-  .tiedote-sisalto {
-    margin-top: 10px;
+  .sisalto {
+    @include teksti-sisalto;
   }
 }
-
 </style>
 

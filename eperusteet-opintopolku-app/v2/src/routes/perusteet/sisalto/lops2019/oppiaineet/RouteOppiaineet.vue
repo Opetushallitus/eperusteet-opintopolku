@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+    <slot name="previous-next-navigation" />
   </div>
   <ep-spinner v-else />
 </div>
@@ -21,12 +21,10 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 
 @Component({
   components: {
     EpSpinner,
-    EpPreviousNextNavigation,
   }
 })
 export default class RouteOppiaineet extends Vue {
@@ -44,11 +42,6 @@ export default class RouteOppiaineet extends Vue {
 
   get current() {
     return this.perusteDataStore.current;
-  }
-
-
-  get flattenedSidenav() {
-    return this.perusteDataStore.flattenedSidenav;
   }
 }
 </script>

@@ -41,15 +41,16 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, koulutustyyppiStateName, stateToKoulutustyyppi,
-  koulutustyyppiRelaatiot, ryhmat } from '@shared/utils/perusteet';
+import { Vue, Component } from 'vue-property-decorator';
+import { koulutustyyppiTheme, stateToKoulutustyyppi,
+  ryhmat, yleissivistavat, ammatilliset } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter } from 'vue-router/types/router';
-import { createLogger } from '@shared/stores/logger';
+import { createLogger } from '@shared/utils/logger';
 
 const logger = createLogger('EpNavigation');
+
 
 @Component
 export default class EpNavigation extends Vue {
@@ -99,34 +100,21 @@ export default class EpNavigation extends Vue {
   }
 
   get ammatilliset() {
-    return [{
-      name: 'ammatillinen-koulutus',
-      route: {
-        name: 'ammatillinenSelaus',
-      },
-    }];
+    return ammatilliset();
   }
 
   get yleissivistavat() {
-    return _.map(koulutustyyppiRelaatiot(), kt => {
-      return {
-        ...kt,
-        name: koulutustyyppiStateName(kt.koulutustyyppi),
-        route: {
-          name: 'kooste',
-          params: {
-            koulutustyyppi: koulutustyyppiStateName(kt.koulutustyyppi),
-          },
-        },
-        ...this.setActiveClass(kt)
-      };
-    });
+    return _.map(yleissivistavat(), kt => ({
+      ...kt,
+      ...this.setActiveClass(kt),
+    }));
   }
 
   get items() {
     return [
       ...this.yleissivistavat,
-      ...this.ammatilliset];
+      ...this.ammatilliset
+    ];
   }
 
   async valitseKieli(kieli) {
@@ -194,6 +182,7 @@ export default class EpNavigation extends Vue {
       &.router-link-active {
         padding-bottom: 0.25rem;
         border-bottom: #001A58 0.25rem solid;
+        transition: all .3s ease;
 
         &.koulutustyyppi-ammatillinen {
           border-bottom-color: $koulutustyyppi-ammatillinen-color;

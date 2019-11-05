@@ -30,35 +30,45 @@ export default class EpPreviousNextNavigation extends Vue {
   @Prop({ required: true })
   private flattenedSidenav!: Array<NavigationNode>;
 
+  get filteredFlattenedSidenav(): Array<NavigationNode> {
+    return _.filter(this.flattenedSidenav, node => node.location) as Array<NavigationNode>;
+  }
+
   get activeIdx(): number {
-    if (this.flattenedSidenav && this.activeNode) {
-      return _.findIndex(this.flattenedSidenav, { key: this.activeNode.key });
+    if (this.filteredFlattenedSidenav && this.activeNode) {
+      return _.findIndex(this.filteredFlattenedSidenav, { key: this.activeNode.key });
     }
     return -1;
   }
 
   get previous(): NavigationNode | null {
-    if (this.activeNode && _.size(this.activeNode.path) === 2) {
+    if (this.activeNode
+        && (this.activeNode.type === 'viite' || this.activeNode.type === 'laajaalaiset')
+        && _.size(this.activeNode.path) === 2
+    ) {
       // Jos päätason node, otetaan edellinen samalta tasolta
       const rootChildren = this.activeNode.path[0].children;
       const idx = _.findIndex(rootChildren, { key: this.activeNode.key });
       return rootChildren[idx - 1];
     }
-    else if (this.activeIdx >= 0 && this.flattenedSidenav) {
-      return this.flattenedSidenav[this.activeIdx - 1] || null;
+    else if (this.activeIdx >= 0 && this.filteredFlattenedSidenav) {
+      return this.filteredFlattenedSidenav[this.activeIdx - 1] || null;
     }
     return null;
   }
 
   get next(): NavigationNode | null {
-    if (this.activeNode && _.size(this.activeNode.path) === 2) {
+    if (this.activeNode
+        && (this.activeNode.type === 'viite' || this.activeNode.type === 'laajaalaiset')
+        && _.size(this.activeNode.path) === 2
+    ) {
       // Jos päätason node, otetaan seuraava samalta tasolta
       const rootChildren = this.activeNode.path[0].children;
       const idx = _.findIndex(rootChildren, { key: this.activeNode.key });
       return rootChildren[idx + 1];
     }
-    else if (this.activeIdx >= 0 && this.flattenedSidenav) {
-      return this.flattenedSidenav[this.activeIdx + 1] || null;
+    else if (this.activeIdx >= 0 && this.filteredFlattenedSidenav) {
+      return this.filteredFlattenedSidenav[this.activeIdx + 1] || null;
     }
     return null;
   }

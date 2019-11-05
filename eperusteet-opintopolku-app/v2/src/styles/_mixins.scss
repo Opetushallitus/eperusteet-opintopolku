@@ -10,9 +10,10 @@
 }
 
 @mixin teksti-sisalto {
-  hyphens: auto;
   // Jos sisältö ei mahdu edes tavutettuna, lisätään scrollbar
-  overflow-x: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
 
   & /deep/ p {
     text-align: justify;

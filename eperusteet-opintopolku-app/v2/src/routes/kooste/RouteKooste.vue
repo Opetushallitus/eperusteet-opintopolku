@@ -9,7 +9,7 @@
       <b-row>
         <b-col xl="7" class="tile">
           <h2>{{ $t('perusteet') }}</h2>
-          <div class="perustebox d-flex flex-wrap" v-if="perusteet">
+          <div class="perustebox d-flex flex-wrap justify-content-between" v-if="perusteet">
             <div v-if="perusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
@@ -36,15 +36,6 @@
                   </div>
                 </div>
               </div>
-              <!-- <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }" -->
-              <!--              tag="a">                                                           -->
-              <!--   <div class="nimi d-flex justify-content-center align-items-center">           -->
-              <!--     <div class="">                                                              -->
-              <!--       {{ $kaanna(peruste.nimi) }}                                               -->
-              <!--     </div>                                                                      -->
-              <!--   </div>                                                                        -->
-              <!--   <div class="kuvaus" v-html="$kaanna(peruste.kuvaus)"></div>                   -->
-              <!-- </router-link>                                                                  -->
             </div>
           </div>
           <ep-spinner v-else />
@@ -157,9 +148,10 @@ export default class RouteKooste extends Vue {
         border: 1px solid #E7E7E7;
         box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
         min-height: 230px;
-        margin: 0 8px 8px 0;
-        width: 292px;
         overflow-x: auto;
+
+        margin-bottom: 10px;
+        width: calc(1 / 2 * 100% - (1 - 1 / 2) * 10px);
 
         @media(max-width: 648.98px) {
           width: 100%;

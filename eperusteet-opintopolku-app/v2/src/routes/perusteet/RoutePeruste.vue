@@ -3,6 +3,8 @@
   <ep-header :koulutustyyppi="peruste.koulutustyyppi" :murupolku="murupolku">
     <template slot="header">
       {{ $kaanna(peruste.nimi) }}
+    </template>
+    <template slot="subheader">
       <div class="diaarinumero">
         {{ peruste.diaarinumero }}
       </div>
@@ -15,7 +17,11 @@
           <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
         </template>
         <template slot="view">
-          <router-view :key="$route.fullPath" />
+          <router-view :key="$route.fullPath">
+            <template slot="previous-next-navigation">
+              <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+            </template>
+          </router-view>
         </template>
       </ep-sidebar>
     </div>
@@ -58,6 +64,10 @@ export default class RoutePeruste extends Vue {
     return this.perusteDataStore.current;
   }
 
+  get flattenedSidenav() {
+    return this.perusteDataStore.flattenedSidenav;
+  }
+
   get murupolku() {
     if (this.peruste && this.current) {
       return [
@@ -86,6 +96,7 @@ export default class RoutePeruste extends Vue {
 <style scoped lang="scss">
 .peruste {
   .diaarinumero {
+    font-weight: bold;
     font-size: small;
   }
 }

@@ -37,6 +37,8 @@
         </div>
       </div>
     </div>
+
+    <slot name="previous-next-navigation" />
   </div>
   <ep-spinner v-else />
 </div>
@@ -46,16 +48,19 @@
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 
 @Component({
   components: {
     EpSpinner,
-    EpPreviousNextNavigation,
   }
 })
 export default class RouteModuuli extends Vue {
+
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
+
   @Prop({ required: true })
   private lops2019ModuuliStore!: Lops2019ModuuliStore;
 
