@@ -90,8 +90,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import { koulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
-
-const PREFIX = process.env.NODE_ENV === 'production' ? '': 'https://eperusteet.opintopolku.fi';
+import { ENV_PREFIX } from '@shared/utils/defaults';
 
 @Component({
   components: {
@@ -167,7 +166,7 @@ export default class Paikalliset extends Vue {
       return undefined;      
     }
 
-    return `${PREFIX}/#/${this.$route.params.lang || 'fi'}/ops/${ops.id}/${koulutustyyppiUrlShortParamName(ops.koulutustyyppi)}/tiedot`;
+    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/ops/${ops.id}/${koulutustyyppiUrlShortParamName(ops.koulutustyyppi)}/tiedot`;
   }
 
 }

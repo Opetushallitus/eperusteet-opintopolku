@@ -88,8 +88,7 @@ import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue
 import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
 import { perusteKoulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 import _ from 'lodash';
-
-const PREFIX = process.env.NODE_ENV === 'production' ? '': 'https://eperusteet.opintopolku.fi';
+import { ENV_PREFIX } from '@shared/utils/defaults';
 
 @Component({
   components: {
@@ -136,7 +135,7 @@ export default class RouteKooste extends Vue {
       return undefined;      
     }
 
-    return `${PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}`;
+    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
   }
 
   @Meta
