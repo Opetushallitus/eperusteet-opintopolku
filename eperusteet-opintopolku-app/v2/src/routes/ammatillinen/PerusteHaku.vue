@@ -64,8 +64,7 @@ import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import _ from 'lodash';
-
-const PREFIX = process.env.NODE_ENV === 'production' ? '': 'https://eperusteet.opintopolku.fi';
+import { ENV_PREFIX } from '@shared/utils/defaults';
 
 @Component({
   components: {
@@ -132,7 +131,7 @@ export default class PerusteHaku extends Vue {
   }
 
   ulkoinenlinkki(peruste) {
-    return `${PREFIX}/#/${this.$route.params.lang || 'fi'}/${this.tyyppi}/${peruste.id}`;
+    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${this.tyyppi}/${peruste.id}`;
   }
 
 }
