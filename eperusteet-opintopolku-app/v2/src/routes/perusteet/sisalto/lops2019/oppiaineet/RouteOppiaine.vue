@@ -11,17 +11,25 @@
 
       <div v-if="hasTehtava">
         <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
-        <div v-html="$kaanna(oppiaine.tehtava.kuvaus)"></div>
+        <ep-content-viewer v-if="oppiaine.tehtava.kuvaus"
+                          :value="$kaanna(oppiaine.tehtava.kuvaus)"
+                          :termit="termit"
+                          :kuvat="kuvat" />
       </div>
 
       <div v-if="hasLaajaAlaiset">
         <h3>{{ $t('laaja-alaiset-osaamiset') }}</h3>
-        <div v-html="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"></div>
+        <ep-content-viewer v-if="oppiaine.laajaAlaisetOsaamiset.kuvaus"
+                          :value="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"
+                          :termit="termit"
+                          :kuvat="kuvat" />
       </div>
 
       <div v-if="hasTavoitteet">
         <h3>{{ $t('tavoitteet') }}</h3>
-        <div v-if="tavoitteet.kuvaus" v-html="$kaanna(tavoitteet.kuvaus)"></div>
+        <ep-content-viewer v-if="tavoitteet.kuvaus"
+                          :value="$kaanna(tavoitteet.kuvaus)"
+                          :termit="termit" :kuvat="kuvat" />
         <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="idx">
           <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
           <p v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</p>
@@ -35,7 +43,9 @@
 
       <div v-if="hasArviointi">
         <h3>{{ $t('arviointi') }}</h3>
-        <div v-html="$kaanna(oppiaine.arviointi.kuvaus)"></div>
+        <ep-content-viewer :value="$kaanna(oppiaine.arviointi.kuvaus)"
+                           :termit="termit"
+                           :kuvat="kuvat" />
       </div>
 
       <div v-if="hasModuulit">
@@ -43,7 +53,10 @@
 
         <div v-if="hasPakollisetModuulit">
           <h4>{{ $t('pakolliset-moduulit') }}</h4>
-          <div v-if="oppiaine.pakollisetModuulitKuvaus" v-html="$kaanna(oppiaine.pakollisetModuulitKuvaus)"></div>
+          <ep-content-viewer v-if="oppiaine.pakollisetModuulitKuvaus"
+                             :value="$kaanna(oppiaine.pakollisetModuulitKuvaus)"
+                             :termit="termit"
+                             :kuvat="kuvat" />
           <div v-for="(moduuli, idx) in pakollisetModuulit" :key="idx">
             <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
             <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
@@ -54,7 +67,10 @@
 
         <div v-if="hasValinnaisetModuulit">
           <h4>{{ $t('valinnaiset-moduulit') }}</h4>
-          <div v-if="oppiaine.valinnaisetModuulitKuvaus" v-html="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"></div>
+          <ep-content-viewer v-if="oppiaine.valinnaisetModuulitKuvaus"
+                             :value="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"
+                             :termit="termit"
+                             :kuvat="kuvat" />
           <div v-for="(moduuli, idx) in valinnaisetModuulit" :key="idx">
             <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
             <router-link :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
@@ -89,11 +105,13 @@ import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpColorIndicator,
+    EpContentViewer,
   }
 })
 export default class RouteOppiaine extends Vue {
@@ -116,6 +134,14 @@ export default class RouteOppiaine extends Vue {
         }
       }
     });
+  }
+
+  get termit() {
+    return this.perusteDataStore.termit;
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
   }
 
   get oppiaine() {

@@ -10,12 +10,12 @@
             <strong>{{ $t('koodi') }}</strong>
             <p>{{ laajaAlainen.koodi.arvo }}</p>
           </div>
-          <div class="teksti" v-html="$kaanna(laajaAlainen.kuvaus)"></div>
+          <ep-content-viewer :value="$kaanna(laajaAlainen.kuvaus)" :termit="termit" :kuvat="kuvat" />
         </div>
       </div>
     </div>
 
-    <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+    <slot name="previous-next-navigation" />
   </div>
   <ep-spinner v-else />
 </div>
@@ -30,11 +30,13 @@ import { getLaajaAlainenId } from '@shared/utils/NavigationBuilder';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpPreviousNextNavigation,
+    EpContentViewer,
   }
 })
 export default class RouteLaajaAlaiset extends Vue {
@@ -68,12 +70,12 @@ export default class RouteLaajaAlaiset extends Vue {
     return !_.isEmpty(this.laajaAlaiset);
   }
 
-  get flattenedSidenav() {
-    return this.perusteDataStore.flattenedSidenav;
+  get termit() {
+    return this.perusteDataStore.termit;
   }
 
-  get current() {
-    return this.perusteDataStore.current || null;
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
   }
 
   private getLaajaAlainenId(laajaAlainen) {

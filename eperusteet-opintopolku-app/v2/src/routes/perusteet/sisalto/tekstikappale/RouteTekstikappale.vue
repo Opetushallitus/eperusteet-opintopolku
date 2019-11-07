@@ -2,7 +2,7 @@
 <div class="content">
   <div v-if="perusteenOsa">
     <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
-    <div class="teksti" v-html="$kaanna(perusteenOsa.teksti)"></div>
+    <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
 
     <!-- Alikappaleet -->
     <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
@@ -10,7 +10,7 @@
                   :level="alikappaleViite.level + 2">
         {{ $kaanna(alikappaleViite.perusteenOsa.nimi) }}
       </ep-heading>
-      <div class="teksti" v-html="$kaanna(alikappaleViite.perusteenOsa.teksti)"></div>
+      <ep-content-viewer :value="$kaanna(alikappaleViite.perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
     </div>
 
     <slot name="previous-next-navigation" />
@@ -27,12 +27,14 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { ViiteLaaja } from '@shared/api/tyypit';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 
 @Component({
   components: {
     EpSpinner,
     EpHeading,
+    EpContentViewer,
   }
 })
 export default class RouteTekstikappale extends Vue {
@@ -88,6 +90,14 @@ export default class RouteTekstikappale extends Vue {
     }
   }
 
+  get termit() {
+    return this.perusteDataStore.termit;
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
+  }
+
   get current() {
     return this.perusteDataStore.current || null;
   }
@@ -102,9 +112,5 @@ export default class RouteTekstikappale extends Vue {
 
 .content {
   padding: 0 $content-padding;
-
-  .otsikko, .teksti {
-    @include teksti-sisalto;
-  }
 }
 </style>

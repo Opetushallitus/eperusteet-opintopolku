@@ -61,9 +61,8 @@ export const router = new Router({
     if (savedPosition) {
       return savedPosition;
     }
-
-    const hashAnchorElement = document.getElementById(to.hash.substring(1));
-    if (hashAnchorElement) {
+    const elementId = to.hash.substring(1);
+    if (elementId && document.getElementById(elementId)) {
       VueScrollTo.scrollTo(to.hash);
       return { selector: to.hash };
     }
@@ -337,4 +336,3 @@ Virheet.onError((virhe: SovellusVirhe) => {
     },
   });
 });
-  

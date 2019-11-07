@@ -8,19 +8,19 @@
     <!-- Todo: UX-kuvien mukaiseksi -->
     <b-tabs content-class="mt-3" :no-fade="true">
       <b-tab :title="$t('perusteet')">
-        <p class="kuvaus" v-html="$t('kooste-kuvaus-ammatillinen-koulutus')"></p>
-        <p class="kuvaus" v-html="$t('kooste-kuvaus-perusteet')"></p>
+        <p class="kuvaus">{{ $t('kooste-kuvaus-ammatillinen-koulutus') }}</p>
+        <p class="kuvaus">{{ $t('kooste-kuvaus-perusteet') }}</p>
         <peruste-haku :peruste-haku-store="perusteHakuStoreNormaali" tyyppi="kooste"/>
       </b-tab>
       <b-tab :title="$t('koulutuksen-jarjestajat')">
-        <p class="kuvaus" v-html="$t('kooste-kuvaus-jarjestajat')"></p>
+        <p class="kuvaus">{{ $t('kooste-kuvaus-jarjestajat') }}</p>
       </b-tab>
       <b-tab :title="$t('ohjeet-ja-materiaalit')">
-        <p class="kuvaus" v-html="$t('kooste-kuvaus-ohjeet')"></p>
+        <p class="kuvaus">{{ $t('kooste-kuvaus-ohjeet') }}</p>
         <peruste-haku :peruste-haku-store="perusteHakuStoreOhjeet" tyyppi="opas"/>
       </b-tab>
       <b-tab :title="$t('koulutusvienti')">
-        <p class="kuvaus" v-html="$t('kooste-kuvaus-koulutusvienti')"></p>
+        <p class="kuvaus">{{ $t('kooste-kuvaus-koulutusvienti') }}</p>
         <peruste-haku :peruste-haku-store="perusteHakuStoreKoulutusvienti" tyyppi="kooste"/>
       </b-tab>
     </b-tabs>
