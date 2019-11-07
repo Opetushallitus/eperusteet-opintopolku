@@ -1,7 +1,7 @@
 <template>
 <div class="content">
   <div v-if="laajaAlaisetKokonaisuus">
-    <h2 class="otsikko" slot="header">{{ $t('laaja-alaiset-osaamiset') }}</h2>
+    <h2 class="otsikko" slot="header">{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h2>
     <div>
       <div v-if="hasLaajaAlaiset" class="laaja-alaiset">
         <div v-for="(laajaAlainen, idx) in laajaAlaiset" :key="idx" :id="getLaajaAlainenId(laajaAlainen)">

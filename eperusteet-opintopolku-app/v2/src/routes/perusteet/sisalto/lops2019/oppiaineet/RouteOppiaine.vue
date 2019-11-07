@@ -18,7 +18,7 @@
       </div>
 
       <div v-if="hasLaajaAlaiset">
-        <h3>{{ $t('laaja-alaiset-osaamiset') }}</h3>
+        <h3>{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h3>
         <ep-content-viewer v-if="oppiaine.laajaAlaisetOsaamiset.kuvaus"
                           :value="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"
                           :termit="termit"
