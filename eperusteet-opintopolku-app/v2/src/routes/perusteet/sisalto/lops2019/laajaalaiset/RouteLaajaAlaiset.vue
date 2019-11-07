@@ -10,7 +10,7 @@
             <strong>{{ $t('koodi') }}</strong>
             <p>{{ laajaAlainen.koodi.arvo }}</p>
           </div>
-          <ep-termi-content :value="$kaanna(laajaAlainen.kuvaus)" :termit="termit" />
+          <ep-content-viewer :value="$kaanna(laajaAlainen.kuvaus)" :termit="termit" :kuvat="kuvat" />
         </div>
       </div>
     </div>
@@ -30,13 +30,13 @@ import { getLaajaAlainenId } from '@shared/utils/NavigationBuilder';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import EpTermiContent from '@shared/components/EpTermiContent/EpTermiContent.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpPreviousNextNavigation,
-    EpTermiContent,
+    EpContentViewer,
   }
 })
 export default class RouteLaajaAlaiset extends Vue {
@@ -72,6 +72,10 @@ export default class RouteLaajaAlaiset extends Vue {
 
   get termit() {
     return this.perusteDataStore.termit;
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
   }
 
   private getLaajaAlainenId(laajaAlainen) {

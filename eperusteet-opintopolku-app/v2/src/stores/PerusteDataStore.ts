@@ -1,9 +1,12 @@
 import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
-import { NavigationNodeDto, PerusteDto, TermiDto } from '@shared/api/tyypit';
+import { NavigationNodeDto, PerusteDto, TermiDto, LiiteDtoWrapper } from '@shared/api/tyypit';
 import { Perusteet } from '@shared/api/eperusteet';
 import { NavigationFilter, NavigationNode, buildNavigation, filterNavigation } from '@shared/utils/NavigationBuilder';
-import { baseURL, Dokumentit, DokumentitParam, Termit } from '@shared/api/eperusteet';
+import { baseURL,
+  Dokumentit, DokumentitParam,
+  Termit,
+  Liitetiedostot, LiitetiedostotParam } from '@shared/api/eperusteet';
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
@@ -17,6 +20,7 @@ export class PerusteDataStore {
   @State() public suoritustapa: string | null = null;
   @State() public currentRoute: Location | null = null;
   @State() public termit: TermiDto[] | null = null;
+  @State() public kuvat: LiiteDtoWrapper[] | null = null;
   @State() public dokumentit: any = {};
   @State() public korvaavatPerusteet: any[] = [];
   @State() public sidenavFilter: NavigationFilter = {
@@ -37,7 +41,12 @@ export class PerusteDataStore {
 
   private async init() {
     this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
-    this.termit = (await Termit.getAll(this.perusteId)).data;
+    this.termit = (await Termit.getAllTermit(this.perusteId)).data;
+    this.kuvat =_.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
+      id: kuva.id!,
+      kuva,
+      src: baseURL + LiitetiedostotParam.getKuva(this.perusteId, kuva.id!).url
+    }));
     this.fetchNavigation();
   }
 
