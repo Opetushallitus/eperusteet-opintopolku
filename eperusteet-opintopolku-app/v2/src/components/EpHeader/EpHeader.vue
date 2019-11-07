@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="container sisalto">
+  <div id="main-content" class="container sisalto">
     <slot></slot>
   </div>
 </div>

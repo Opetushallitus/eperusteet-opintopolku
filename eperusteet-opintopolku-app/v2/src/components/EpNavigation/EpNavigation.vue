@@ -11,6 +11,7 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
+
       <b-navbar-nav class="flex-wrap">
         <b-nav-item v-for="(item, idx) in items"
                     :key="idx"
@@ -21,6 +22,10 @@
           {{ $t(item.name) }}
         </b-nav-item>
       </b-navbar-nav>
+
+      <b-navbar-nav class="ml-auto"> 
+         <li><b-nav-text><button @click="setFocusToFirstOfContent" class="button--skip-link">{{ $t('siirry-sisaltoon') }}</button></b-nav-text> </li>
+      </b-navbar-nav>  
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
@@ -80,6 +85,18 @@ export default class EpNavigation extends Vue {
     }
     else {
       return 'router-link-active';
+    }
+  }
+
+  setFocusToFirstOfContent() {
+    const dokumentti = document;
+
+    if (dokumentti) {
+      if (document && dokumentti!.getElementById('main-content').getElementsByTagName('a').length > 0) {
+        document.getElementById('main-content').getElementsByTagName('a')[0].focus();
+      } else if(document.getElementById('main-content').getElementsByTagName('input').length > 0) {
+        document.getElementById('main-content').getElementsByTagName('input')[0].focus();
+      }
     }
   }
 
@@ -243,6 +260,32 @@ export default class EpNavigation extends Vue {
       }
     }
   }
+}
+
+.button--skip-link:not(:focus):not(:hover) {
+    -webkit-transform: translateY(-4em);
+    -ms-transform: translateY(-4em);
+    transform: translateY(-4em);
+    opacity: 0;
+}
+
+.button--skip-link:focus {  
+    background-color: #fff;
+    text-decoration: none;
+    text-align: center;
+    padding: 5px;
+    border-color: #062434;
+}
+
+.button--skip-link {
+    margin: 0 auto;
+    position: absolute;
+    z-index: 20;
+    left: 45em;
+    right: 1em;
+    top: 1em;
+    width: 10em;
+    opacity: 1;
 }
 
 </style>
