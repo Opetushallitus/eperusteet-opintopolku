@@ -5,8 +5,11 @@
   overflow-y: scroll;
 
   a {
+    color: #007bff;
+
     &:hover {
       text-decoration: none;
+      color: #0070f4;
     }
   }
 

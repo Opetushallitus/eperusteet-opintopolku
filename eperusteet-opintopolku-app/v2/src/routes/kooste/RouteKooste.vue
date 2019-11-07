@@ -13,32 +13,14 @@
             <div v-if="perusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-            <div v-else class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
-              <div class="upper">
-                <div class="peruste-ikoni">
-                  <img src="../../../public/img/icons/hallitus.svg" :alt="$t('peruste')" style="fill: #0041DC" />
-                </div>
-                <div class="nimi">
-                  <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
-                    {{ $kaanna(peruste.nimi) }}
-                  </router-link>
-
-                  <ep-external-link v-else :url="peruste.ulkoinenlinkki">{{ $kaanna(peruste.nimi) }}</ep-external-link>
-                </div>
+              <div v-else class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
+                <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
+                  <peruste-tile :peruste="peruste"></peruste-tile>
+                </router-link>
+                <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">  
+                  <peruste-tile :peruste="peruste"></peruste-tile>
+                </ep-external-link>  
               </div>
-              <div class="voimaantulo-viiva"></div>
-              <div>
-                <div class="d-flex align-items-center justify-content-center">
-                  <div class="voimaantulo">
-                    <div>
-                      {{ peruste.diaarinumero }}
-                    </div>
-                    {{ $t('voimaantulo') }}:
-                    {{ $sd(peruste.voimaantulopvm) }}
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
           <ep-spinner v-else />
         </b-col>
@@ -82,6 +64,7 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import Paikalliset from './Paikalliset.vue';
+import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { Meta } from '@shared/utils/decorators';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
@@ -96,6 +79,7 @@ import { ENV_PREFIX } from '@shared/utils/defaults';
     EpHeader,
     Paikalliset,
     EpExternalLink,
+    PerusteTile,
   },
 })
 export default class RouteKooste extends Vue {
