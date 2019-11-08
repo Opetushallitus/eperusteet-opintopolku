@@ -2,7 +2,7 @@
   <div>
     <div class="upper">
       <div class="peruste-ikoni">
-        <img src="../../../public/img/icons/hallitus.svg" :alt="$t('peruste')" style="fill: #0041DC" />
+        <img src="../../../public/img/icons/hallitus.svg" alt="" style="fill: #0041DC" />
       </div>
       <div class="nimi">
         <fas fixed-width icon="external-link-alt" class="mr-1" v-if="peruste.ulkoinenlinkki"></fas>
@@ -26,17 +26,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
-import EpHeader from '@/components/EpHeader/EpHeader.vue';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import Paikalliset from './Paikalliset.vue';
-import { MurupolkuOsa } from '@/tyypit';
-import { Meta } from '@shared/utils/decorators';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
-import { perusteKoulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
-import _ from 'lodash';
-import { ENV_PREFIX } from '@shared/utils/defaults';
 import { PerusteDto } from '../../../eperusteet-frontend-utils/vue/src/api/tyypit';
 
 @Component
@@ -48,7 +37,6 @@ export default class PerusteTile extends Vue {
 
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
-
 
 .container {
   .tile {

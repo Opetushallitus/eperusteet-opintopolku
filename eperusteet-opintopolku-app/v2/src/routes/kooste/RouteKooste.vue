@@ -13,7 +13,7 @@
             <div v-if="perusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-              <div v-else class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
+              <div v-else class="peruste tile-background-shadow-selected" v-for="(peruste, idx) in perusteet" :key="idx">
                 <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
                   <peruste-tile :peruste="peruste"></peruste-tile>
                 </router-link>
@@ -219,6 +219,10 @@ export default class RouteKooste extends Vue {
           color: #555;
         }
       }
+    }
+
+    .tile-background-shadow-selected:hover, .tile-background-shadow-selected:focus {
+      box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
     }
   }
 }

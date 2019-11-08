@@ -5,57 +5,57 @@
   <div v-else>
     <div class="row">
       <div class="col-md-12" v-if="opetussuunnitelma.nimi">
-        <ep-form-content name="opetussuunnitelman-nimi">
+        <ep-form-content name="opetussuunnitelman-nimi" headerType="h3" headerClass="h6">
           <ep-field v-model="opetussuunnitelma.nimi"></ep-field>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="opetussuunnitelma.perusteenDiaarinumero">
-        <ep-form-content name="maarayksen-diaarinumero">
+        <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
           <ep-field v-model="opetussuunnitelma.perusteenDiaarinumero"></ep-field>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="koulutustyyppi">
-        <ep-form-content name="koulutustyyppi">
+        <ep-form-content name="koulutustyyppi" headerType="h3" headerClass="h6">
           <ep-field v-model="koulutustyyppi"></ep-field>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasKunnat">
-        <ep-form-content name="kunnat">
+        <ep-form-content name="kunnat" headerType="h3" headerClass="h6">
           <div v-for="(kunta, idx) in kunnat" :key="idx">
             <ep-field v-model="kunta.nimi"></ep-field>
           </div>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasOrganisaatiot">
-        <ep-form-content name="organisaatiot">
+        <ep-form-content name="organisaatiot" headerType="h3" headerClass="h6">
           <div v-for="(organisaatio, idx) in organisaatiot" :key="idx">
             {{ getOrganisaatioNimi(organisaatio) }}
           </div>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="opetussuunnitelma.luotu">
-        <ep-form-content name="luotu">
+        <ep-form-content name="luotu" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="opetussuunnitelma.luotu"></ep-datepicker>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="opetussuunnitelma.muokattu">
-        <ep-form-content name="muokattu">
+        <ep-form-content name="muokattu" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="opetussuunnitelma.muokattu"></ep-datepicker>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="opetussuunnitelma.paatospaivamaara">
-        <ep-form-content name="paatospaivamaara">
+        <ep-form-content name="paatospaivamaara" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="opetussuunnitelma.paatospaivamaara"></ep-datepicker>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="opetussuunnitelma.kuvaus">
-        <ep-form-content name="tiivistelma">
+        <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
           <ep-field v-model="opetussuunnitelma.kuvaus"></ep-field>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="dokumentti">
-        <ep-form-content name="dokumentti-osoite">
-          <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-dokumentti') }}</a>
+        <ep-form-content name="dokumentti-osoite" headerType="h3" headerClass="h6">
+          <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-pdf-dokumentti') }}</a>
         </ep-form-content>
       </div>
     </div>

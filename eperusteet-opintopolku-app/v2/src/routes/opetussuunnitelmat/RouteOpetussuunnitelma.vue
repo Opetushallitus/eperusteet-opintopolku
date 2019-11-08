@@ -3,8 +3,10 @@
   <ep-header :koulutustyyppi="opetussuunnitelma.koulutustyyppi" :murupolku="murupolku">
     <template slot="header">
       {{ $kaanna(opetussuunnitelma.nimi) }}
+    </template>
+    <template slot="subheader">
       <div class="diaarinumero">
-        {{ opetussuunnitelma.perusteenDiaarinumero }}
+        {{ opetussuunnitelma.perusteenDiaarinumero }} 
       </div>
     </template>
   </ep-header>
