@@ -9,9 +9,11 @@
       <div class="d-flex">
         <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
           <div class="peruste-select" :class="{ active: activePeruste === peruste.id}">
-            <button class="btn btn-link" @click="setActivePeruste(peruste)">
-              {{ $kaanna(peruste.nimi) }}
-            </button>
+            <a href="javascript:;" @click="setActivePeruste(peruste)">
+              <div>
+                {{ $kaanna(peruste.nimi) }}
+              </div>
+            </a>
           </div>
         </div>
       </div>
@@ -190,15 +192,20 @@ export default class Paikalliset extends Vue {
 
     .peruste {
       .peruste-select {
+        text-align: center;
         margin: 8px;
-        button {
+        button, a {
           font-weight: bold;
           color: #575757;
         }
 
+        a:hover {
+          text-decoration: underline;
+        }
+
         &.active {
           border-bottom: #0143da 5px solid;
-          button {
+          button, a {
             color: #0143da;
           }
         }

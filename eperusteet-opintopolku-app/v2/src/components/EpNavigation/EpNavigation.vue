@@ -11,7 +11,6 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
-
       <b-navbar-nav class="flex-wrap">
         <b-nav-item v-for="(item, idx) in items"
                     :key="idx"
@@ -22,7 +21,7 @@
           {{ $t(item.name) }}
         </b-nav-item>
       </b-navbar-nav>
-
+      
       <b-navbar-nav class="ml-auto"> 
          <li><b-nav-text><button @click="setFocusToFirstOfContent" class="button--skip-link">{{ $t('siirry-sisaltoon') }}</button></b-nav-text> </li>
       </b-navbar-nav>  
@@ -89,13 +88,14 @@ export default class EpNavigation extends Vue {
   }
 
   setFocusToFirstOfContent() {
-    const dokumentti = document;
+    const maincontent = document.getElementById('main-content');
 
-    if (dokumentti) {
-      if (document && dokumentti!.getElementById('main-content').getElementsByTagName('a').length > 0) {
-        document.getElementById('main-content').getElementsByTagName('a')[0].focus();
-      } else if(document.getElementById('main-content').getElementsByTagName('input').length > 0) {
-        document.getElementById('main-content').getElementsByTagName('input')[0].focus();
+    if (maincontent) {
+      if (maincontent.getElementsByTagName('a').length > 0) {
+        maincontent.getElementsByTagName('a')[0].focus();
+      }
+      else if(maincontent.getElementsByTagName('input').length > 0) {
+        maincontent.getElementsByTagName('input')[0].focus();
       }
     }
   }
