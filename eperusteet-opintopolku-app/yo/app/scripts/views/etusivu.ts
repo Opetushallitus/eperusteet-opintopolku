@@ -182,10 +182,9 @@ angular
 
         const isPerusteUusiToteutus = peruste => _.includes(uudetToteutukset, peruste.toteutus);
 
-        const getPerusteUusiToteutusUrl = peruste => {
-            return 'beta/' + $state.href(this.getStateTila(peruste.koulutustyyppi), {perusteId: peruste.id, suoritustapa: peruste.suoritustavat[0].suoritustapakoodi});
-        }
-
+        const getPerusteToteutusUrl = peruste => (this.isPerusteUusiToteutus(peruste) ? 'beta/': '') 
+                    + $state.href(this.getStateTila(peruste.koulutustyyppi), {perusteId: peruste.id, suoritustapa: _.get(peruste, 'suoritustavat[0].suoritustapakoodi')});
+           
         const getStateTila = tyyppi => paramMap[tyyppi].stateTila;
 
         this.getPerusopetus = getPerusopetus;
@@ -202,7 +201,7 @@ angular
         this.getAikuisLukio = getAikuisLukio;
         this.getStateTila = getStateTila;
         this.isPerusteUusiToteutus = isPerusteUusiToteutus;
-        this.getPerusteUusiToteutusUrl = getPerusteUusiToteutusUrl;
+        this.getPerusteToteutusUrl = getPerusteToteutusUrl;
     })
     .controller("EtusivuController", function(
         $scope,
@@ -224,7 +223,12 @@ angular
         $scope.uusimmatLadattu = false;
         $scope.uusimmatVirhe = false;
         Perusteet.uusimmat({ kieli: $scope.kieli }).$promise.then(res => {
-            $scope.uusimmatLista = res;
+            $scope.uusimmatLista = _.chain(res)
+                .map(peruste => ({
+                    ...peruste,
+                    linkki: UusimmatPerusteetService.getPerusteToteutusUrl(peruste)
+                }))
+                .value();
             $scope.uusimmatLadattu = true;
         }).catch(err => {
             $scope.uusimmatVirhe = true;
