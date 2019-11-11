@@ -23,8 +23,10 @@ angular
         var FIELD_ORDER = {
             tavoitteet: 3,
             ammattitaitovaatimukset: 4,
+            ammattitaitovaatimukset2019: 4,
             ammattitaidonOsoittamistavat: 7,
             arviointi: 5,
+            geneerinenArviointiasteikko: 5,
             lisatiedot: 5,
             arvioinninKohdealueet: 6
         };
