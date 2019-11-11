@@ -108,6 +108,10 @@ angular
             }
         };
 
+        const uudetToteutukset = [
+            'lops2019'
+        ];
+
         const getGeneric = key => {
             const now = (new Date()).getTime();
             const params = paramMap[key];
@@ -176,6 +180,12 @@ angular
             });
         };
 
+        const isPerusteUusiToteutus = peruste => _.includes(uudetToteutukset, peruste.toteutus);
+
+        const getPerusteUusiToteutusUrl = peruste => {
+            return 'beta/' + $state.href(this.getStateTila(peruste.koulutustyyppi), {perusteId: peruste.id, suoritustapa: peruste.suoritustavat[0].suoritustapakoodi});
+        }
+
         const getStateTila = tyyppi => paramMap[tyyppi].stateTila;
 
         this.getPerusopetus = getPerusopetus;
@@ -191,6 +201,8 @@ angular
         this.getTelma = getTelma;
         this.getAikuisLukio = getAikuisLukio;
         this.getStateTila = getStateTila;
+        this.isPerusteUusiToteutus = isPerusteUusiToteutus;
+        this.getPerusteUusiToteutusUrl = getPerusteUusiToteutusUrl;
     })
     .controller("EtusivuController", function(
         $scope,
