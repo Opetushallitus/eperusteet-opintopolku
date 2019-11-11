@@ -74,7 +74,7 @@
         .linkit
           ul
             li.lista-elementti(ng-repeat='peruste in uusimmatLista | limitTo:10')
-              a(ui-sref='{{UusimmatPerusteetService.getStateTila(peruste.koulutustyyppi)}}({perusteId: peruste.id, suoritustapa: peruste.suoritustavat[0].suoritustapakoodi})')
+              a(ng-href='{{peruste.linkki}}')
                 span(ng-bind='peruste.nimi | kaanna')
               p
                 span(ng-bind='peruste.paatospvm | date')

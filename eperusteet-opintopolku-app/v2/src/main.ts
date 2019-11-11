@@ -6,6 +6,7 @@ import { createLogger } from '@shared/utils/logger';
 import { Lokalisointi } from '@shared/api/eperusteet';
 import * as _ from 'lodash';
 import '@/config/styles';
+
 const logger = createLogger('Main');
 
 Vue.config.productionTip = false;

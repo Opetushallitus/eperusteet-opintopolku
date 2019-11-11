@@ -96,9 +96,10 @@ function mapRoutes(perusteet: PerusteDto[] | null) {
       return {
         ...peruste,
         route: {
-          name: 'kooste',
+          name: 'peruste',
           params: {
             koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
+            perusteId: peruste.id,
           },
         }
       };

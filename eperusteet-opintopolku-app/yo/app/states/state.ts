@@ -7,7 +7,7 @@ angular.module("app").config($stateProvider =>
             $scope.redirectAddrs = $location.$$search.paluuosoite; 
 
             $scope.paluu = () => {
-                $window.location.href = $scope.redirectAddrs;
+                $window.location.href = decodeURIComponent($scope.redirectAddrs);
             }
         },    
         resolve: {
