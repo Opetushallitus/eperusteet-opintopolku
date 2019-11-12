@@ -12,12 +12,14 @@
     <div class="lower">
       <ep-sidebar>
         <template slot="bar">
-          <!-- Todo: sidenav -->
+        <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
         </template>
         <template slot="view">
-        <transition name="fade" mode="out-in">
-          <router-view :key="$route.fullPath" />
-        </transition>
+          <router-view :key="$route.fullPath">
+            <template slot="previous-next-navigation">
+              <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+            </template>
+          </router-view>
         </template>
       </ep-sidebar>
     </div>
@@ -31,9 +33,12 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import { Meta } from '@shared/utils/decorators';
+import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenav.vue';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 @Component({
   components: {
+    EpOpetussuunnitelmaSidenav,
     EpHeader,
     EpSidebar,
   },
@@ -46,9 +51,12 @@ export default class RouteOpetussuunnitelma extends Vue {
     return this.opetussuunnitelmaDataStore.opetussuunnitelma;
   }
 
-  get current(): any | null {
-    // Todo
-    return null;
+  get current(): NavigationNode | null {
+    return this.opetussuunnitelmaDataStore.current;
+  }
+
+  get flattenedSidenav() {
+    return this.opetussuunnitelmaDataStore.flattenedSidenav;
   }
 
   get murupolku() {
@@ -77,8 +85,6 @@ export default class RouteOpetussuunnitelma extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/_variables.scss";
-
 .opetussuunnitelma {
   .diaarinumero {
     font-size: small;

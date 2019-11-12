@@ -50,7 +50,7 @@ export class PerusteDataStore {
     this.fetchNavigation();
   }
 
-  async fetchNavigation() {
+  private async fetchNavigation() {
     this.navigation = (await Perusteet.getNavigation(this.perusteId)).data;
   }
 
