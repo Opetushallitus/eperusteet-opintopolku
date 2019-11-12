@@ -16,8 +16,9 @@
           <div>
             {{ peruste.diaarinumero }}
           </div>
-          {{ $t('voimaantulo') }}:
-          {{ $sd(peruste.voimaantulopvm) }}
+          <span v-if="peruste.voimassaoloAlkaa">
+            {{ $t('voimaantulo') }}: {{ $sd(peruste.voimassaoloAlkaa) }}
+          </span>
         </div>
       </div>
     </div>
@@ -52,7 +53,6 @@ export default class PerusteTile extends Vue {
 
     .upper {
       height: 180px;
-      overflow-y: auto;
 
       .peruste-ikoni {
         color: #0041DC;
