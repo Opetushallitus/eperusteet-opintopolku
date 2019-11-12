@@ -164,7 +164,7 @@ export default class RoutePerusteTiedot extends Vue {
         _.each(maaraysObj.liitteet, (liite, kieli) => {
           result[kieli] = {
             ...liite,
-            url: baseURL + LiitetiedostotParam.getAllLiitteet(this.peruste!.id!, liite.id!).url
+            url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, liite.id!).url
           };
         });
       }
