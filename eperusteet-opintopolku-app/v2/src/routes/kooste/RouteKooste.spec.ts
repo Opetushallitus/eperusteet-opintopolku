@@ -3,7 +3,6 @@ import RouteKooste from './RouteKooste.vue';
 import { tiedoteStoreMock, perusteKoosteStoreMock } from '@/storeMocks';
 import { KieliStore } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
-import { PerusteDto } from '@shared/generated/eperusteet';
 
 
 describe('RouteKooste', () => {
@@ -71,8 +70,8 @@ describe('RouteKooste', () => {
       nimi: {
         fi: 'peruste42',
       } as any,
-      toteutus: PerusteDto.ToteutusEnum.YKSINKERTAINEN
-    }];
+      toteutus: 'yksinkertainen'
+    }] as any;
 
     await localVue.nextTick();
     expect(wrapper.html()).toContain('ops100');
