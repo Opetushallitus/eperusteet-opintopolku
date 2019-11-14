@@ -2,7 +2,14 @@ import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
 import { NavigationNodeDto, PerusteDto, TermiDto, LiiteDtoWrapper } from '@shared/api/tyypit';
 import { Perusteet } from '@shared/api/eperusteet';
-import { NavigationFilter, NavigationNode, buildNavigation, filterNavigation } from '@shared/utils/NavigationBuilder';
+import {
+  buildNavigation,
+  filterNavigation,
+  buildTiedot,
+  setPerusteData,
+  NavigationFilter,
+  NavigationNode,
+} from '@shared/utils/NavigationBuilder';
 import { baseURL,
   Dokumentit, DokumentitParam,
   Termit,
@@ -64,7 +71,10 @@ export class PerusteDataStore {
       return null;
     }
     else {
-      return buildNavigation(state.peruste, state.navigation);
+      const tiedot = buildTiedot('perusteTiedot', {
+        perusteId: _.toString(state.perusteId),
+      });
+      return buildNavigation(state.navigation, tiedot);
     }
   })
   public readonly sidenav!: NavigationNode | null;

@@ -59,6 +59,7 @@
         </ep-form-content>
       </div>
     </div>
+    <slot name="previous-next-navigation" />
   </div>
 </div>
 </template>

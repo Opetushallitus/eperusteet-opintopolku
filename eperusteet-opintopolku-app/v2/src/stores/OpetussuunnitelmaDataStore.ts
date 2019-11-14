@@ -4,7 +4,14 @@ import { Location } from 'vue-router';
 import { NavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
 import { baseURL, Opetussuunnitelmat, Dokumentit, DokumentitParam } from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
-import { buildNavigation, filterNavigation, NavigationFilter, NavigationNode } from "@shared/utils/NavigationBuilder";
+import {
+  buildNavigation,
+  buildTiedot,
+  filterNavigation,
+  setOpetussuunnitelmaData,
+  NavigationFilter,
+  NavigationNode
+} from "@shared/utils/NavigationBuilder";
 
 
 @Store
@@ -35,20 +42,23 @@ export class OpetussuunnitelmaDataStore {
   }
 
   private async fetchNavigation() {
-    //this.navigation = (await Opetussuunnitelmat.getNavigation(this.opetussuunnitelmaId)).data;
+    this.navigation = (await Opetussuunnitelmat.getNavigation(this.opetussuunnitelmaId)).data;
   }
 
   @Getter(state => {
-    return !state.peruste || !state.navigation;
+    return !state.opetussuunnitelma || !state.navigation;
   })
   public readonly sidenavLoading!: boolean;
 
   @Getter(state => {
-    if (!state.peruste || !state.navigation) {
+    if (!state.opetussuunnitelma || !state.navigation) {
       return null;
     }
     else {
-      return buildNavigation(state.peruste, state.navigation);
+      const tiedot = buildTiedot('opetussuunnitelmaTiedot', {
+        opetussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
+      });
+      return buildNavigation(state.navigation, tiedot, true);
     }
   })
   public readonly sidenav!: NavigationNode | null;

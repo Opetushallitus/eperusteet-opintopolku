@@ -29,18 +29,22 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Meta } from '@shared/utils/decorators';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
+
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
-import { Meta } from '@shared/utils/decorators';
+import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenav.vue';
-import { NavigationNode } from '@shared/utils/NavigationBuilder';
+
 
 @Component({
   components: {
     EpOpetussuunnitelmaSidenav,
     EpHeader,
     EpSidebar,
+    EpPreviousNextNavigation,
   },
 })
 export default class RouteOpetussuunnitelma extends Vue {
