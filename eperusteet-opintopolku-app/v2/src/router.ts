@@ -272,6 +272,7 @@ export const router = new Router({
       }],
     }, {
       path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
+      alias: 'opetussuunnitelma/:opetussuunnitelmaId/:koulutustyyppi',
       name: 'opetussuunnitelma',
       component: RouteOpetussuunnitelma,
       redirect(to) {
