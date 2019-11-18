@@ -22,13 +22,16 @@
       </ep-heading>
 
       <!-- Perusteen teksti -->
-      <ep-content-viewer v-if="perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
+      <ep-content-viewer v-if="perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
                          :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
                          :termit="termit"
                          :kuvat="kuvat" />
 
       <!-- Pohjan teksti -->
-      <ep-content-viewer v-if="originalAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]" :value="$kaanna(originalAlikappaleetObj.teksti)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer v-if="originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
+                         :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
+                         :termit="termit"
+                         :kuvat="kuvat" />
 
       <!-- Opetussuunnitelman teksti -->
       <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
@@ -68,11 +71,8 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
   private isLoading = true;
 
   async mounted() {
-    await Promise.all([
-      this.opetussuunnitelmaTekstikappaleStore.fetchOriginalTekstikappale(),
-      this.opetussuunnitelmaTekstikappaleStore.fetchTekstikappale(true)]
-    );
-    // Voidaan hakea vasta kun tekstikappale on haettu
+    await this.opetussuunnitelmaTekstikappaleStore.fetchTekstikappale(true);
+    await this.opetussuunnitelmaTekstikappaleStore.fetchOriginalTekstikappale();
     await this.opetussuunnitelmaTekstikappaleStore.fetchPerusteTekstikappale();
     this.isLoading = false;
   }
@@ -104,7 +104,7 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
   }
 
   get originalAlikappaleetObj() {
-    return null;
+    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginalViitteetObj;
   }
 
   get perusteAlikappaleetObj() {
