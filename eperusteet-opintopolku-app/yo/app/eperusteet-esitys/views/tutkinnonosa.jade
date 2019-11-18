@@ -40,7 +40,7 @@
       div(ng-show='(!tutkinnonOsa.arviointi.arvioinninKohdealueet || tutkinnonOsa.arviointi.arvioinninKohdealueet.length === 0) && tutkinnonOsa.arviointi.lisatiedot')
         h3(kaanna="'arviointi'")
         div(ng-bind-html='tutkinnonOsa.arviointi.lisatiedot | kaanna | unsafe')
-    div(ng-if="k === 'geneerinenArviointiasteikko'")
+    div(ng-if="k === 'geneerinenArviointiasteikko' && hasGeneerinenArviointi()")
       h3(kaanna="'arviointi'")
       div
         .arviointi
