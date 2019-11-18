@@ -324,7 +324,7 @@ angular
             },
             {
                 query: epResource.GENEERINENARVIOINTI
-            }
+            },
         );
     })
     .service("PerusteenTutkintonimikkeet", function(PerusteTutkintonimikekoodit, YleinenData) {
