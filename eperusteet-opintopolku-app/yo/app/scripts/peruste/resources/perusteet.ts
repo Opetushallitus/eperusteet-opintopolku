@@ -31,6 +31,7 @@ angular
         this.ARVIOINTIASTEIKOT = serviceLoc + "/arviointiasteikot/:asteikkoId";
         this.CACHEDGET = { method: "GET", cache: true };
         this.CACHEDQUERY = { method: "GET", isArray: true, cache: true };
+        this.GENEERINENARVIOINTI = serviceLoc + "/geneerinenarviointi/:geneerinenarviointiId";
     })
     .factory("Arviointiasteikot", function($resource, epResource) {
         return $resource(
@@ -312,6 +313,17 @@ angular
             {
                 get: epResource.CACHEDGET,
                 query: epResource.CACHEDQUERY
+            }
+        );
+    })
+    .factory("Geneerinenarviointi", function($resource, epResource) {
+        return $resource(
+            epResource.SERVICE + "/geneerinenarviointi/:geneerinenarviointiId",
+            {
+                geneerinenarviointiId: "@id"
+            },
+            {
+                query: epResource.GENEERINENARVIOINTI
             }
         );
     })

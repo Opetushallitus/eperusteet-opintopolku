@@ -19,7 +19,7 @@ angular
     .factory("TutkinnonOsanKoodiUniqueResource", function($resource, SERVICE_LOC) {
         return $resource(SERVICE_LOC + "/tutkinnonosat/koodi/uniikki/:tutkinnonosakoodi");
     })
-    .service("TutkinnonosanTiedotService", function(PerusteenOsat, $q, TutkinnonOsanOsaAlue, Osaamistavoite) {
+    .service("TutkinnonosanTiedotService", function(PerusteenOsat, $q, TutkinnonOsanOsaAlue, Osaamistavoite, Geneerinenarviointi) {
         var FIELD_ORDER = {
             tavoitteet: 3,
             ammattitaitovaatimukset: 4,
@@ -38,6 +38,7 @@ angular
 
             PerusteenOsat.get({ osanId: stateParams.perusteenOsaId }, function(vastaus) {
                 tutkinnonOsa = vastaus;
+                tutkinnonOsa.geneerinenArviointiasteikko = Geneerinenarviointi.get({geneerinenarviointiId: tutkinnonOsa._geneerinenArviointiasteikko});
                 if (vastaus.tyyppi === "tutke2" || vastaus.tyyppi === "reformi_tutke2") {
                     TutkinnonOsanOsaAlue.list({ osanId: stateParams.perusteenOsaId }, function(osaAlueet) {
                         tutkinnonOsa.osaAlueet = osaAlueet;
