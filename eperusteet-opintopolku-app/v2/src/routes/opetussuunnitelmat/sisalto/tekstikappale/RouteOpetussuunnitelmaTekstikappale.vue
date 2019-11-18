@@ -5,7 +5,7 @@
     <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(tekstiKappale.nimi) }}</h2>
 
     <!-- Perusteen teksti -->
-    <ep-content-viewer v-if="perusteTekstikappale" :value="$kaanna(perusteTekstikappale.teksti)" :termit="termit" :kuvat="kuvat" />
+    <ep-content-viewer v-if="perusteTekstikappale" :value="$kaanna(perusteTekstikappale.teksti)" :termit="perusteTermit" :kuvat="perusteKuvat" />
 
     <!-- Pohjan teksti -->
     <ep-content-viewer v-if="tekstiKappaleOriginal" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
@@ -15,26 +15,28 @@
 
 
     <!-- Alikappaleet -->
-    <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
-      <ep-heading class="otsikko"
-                  :level="alikappaleViite.level + 2">
-        {{ $kaanna(alikappaleViite.tekstiKappale.nimi) }}
-      </ep-heading>
+    <div v-if="alikappaleet">
+      <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
+        <ep-heading class="otsikko"
+                    :level="alikappaleViite.level + 2">
+          {{ $kaanna(alikappaleViite.tekstiKappale.nimi) }}
+        </ep-heading>
 
-      <!-- Perusteen teksti -->
-      <ep-content-viewer v-if="perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
-                         :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
-                         :termit="termit"
-                         :kuvat="kuvat" />
+        <!-- Perusteen teksti -->
+        <ep-content-viewer v-if="perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
+                           :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
+                           :termit="perusteTermit"
+                           :kuvat="perusteKuvat" />
 
-      <!-- Pohjan teksti -->
-      <ep-content-viewer v-if="originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
-                         :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
-                         :termit="termit"
-                         :kuvat="kuvat" />
+        <!-- Pohjan teksti -->
+        <ep-content-viewer v-if="originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
+                           :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
+                           :termit="termit"
+                           :kuvat="kuvat" />
 
-      <!-- Opetussuunnitelman teksti -->
-      <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
+        <!-- Opetussuunnitelman teksti -->
+        <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
+      </div>
     </div>
 
     <slot name="previous-next-navigation" />
@@ -155,12 +157,20 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
     }
   }
 
+  get perusteTermit() {
+    return null;
+  }
+
   get termit() {
+    return this.opetussuunnitelmaDataStore.termit;
+  }
+
+  get perusteKuvat() {
     return null;
   }
 
   get kuvat() {
-    return null;
+    return this.opetussuunnitelmaDataStore.kuvat;
   }
 }
 

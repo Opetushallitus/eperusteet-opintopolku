@@ -1,14 +1,17 @@
 import _ from 'lodash';
 import { Store, State, Getter } from '@shared/stores/store';
 import { Location } from 'vue-router';
+import mime from 'mime-types';
 import { NavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
-import { baseURL, Opetussuunnitelmat, Dokumentit, DokumentitParam } from '@shared/api/ylops';
+import { baseURL, Opetussuunnitelmat,
+  Dokumentit, DokumentitParam,
+  Liitetiedostot, LiitetiedostotParam,
+  Termisto } from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
 import {
   buildNavigation,
   buildTiedot,
   filterNavigation,
-  setOpetussuunnitelmaData,
   NavigationFilter,
   NavigationNode
 } from "@shared/utils/NavigationBuilder";
@@ -25,6 +28,8 @@ export class OpetussuunnitelmaDataStore {
     label: '',
     isEnabled: false,
   };
+  @State() public termit: object[] | null = null;
+  @State() public kuvat: object[] | null = null;
 
   public static async create(opetussuunnitelmaId: number) {
     const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId);
@@ -38,7 +43,17 @@ export class OpetussuunnitelmaDataStore {
 
   private async init() {
     this.opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opetussuunnitelmaId)).data;
+    this.termit = (await Termisto.getAllTermit(this.opetussuunnitelmaId)).data;
+    this.kuvat =_.map((await Liitetiedostot.getAllLiitteet(this.opetussuunnitelmaId)).data, kuva => ({
+      id: kuva.id!,
+      kuva,
+      src: baseURL + LiitetiedostotParam.getLiitetiedosto(this.opetussuunnitelmaId, this.getLiiteFilename(kuva)).url
+    }));
     this.fetchNavigation();
+  }
+
+  private getLiiteFilename(liite) {
+    return liite.id! + '.' +  mime.extension(liite.tyyppi);
   }
 
   private async fetchNavigation() {

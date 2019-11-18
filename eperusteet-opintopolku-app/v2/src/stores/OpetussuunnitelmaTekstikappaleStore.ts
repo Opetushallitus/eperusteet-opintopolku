@@ -41,6 +41,11 @@ export class OpetussuunnitelmaTekstikappaleStore {
     }
     this.tekstiKappale = this.tekstiKappaleViite.tekstiKappale as TekstiKappaleKevytDto;
 
+    // Kerätään aliviitteet taulukoksi
+    this.getAliviiteIds();
+  }
+
+  private getAliviiteIds() {
     if (!_.isEmpty(this.tekstiKappaleViite)) {
       const viitteet: any[] = [];
       const stack = [this.tekstiKappaleViite!];
@@ -48,7 +53,8 @@ export class OpetussuunnitelmaTekstikappaleStore {
       while (!_.isEmpty(stack)) {
         const head: any = stack.shift()!;
 
-        if (head.id) {
+        // Lisätään vain ne, joilla halutaan näyttää pohjan sisältö
+        if (head.id && head.naytaPohjanTeksti) {
           viitteet.push(head.id);
         }
 
