@@ -318,12 +318,12 @@ angular
     })
     .factory("Geneerinenarviointi", function($resource, epResource) {
         return $resource(
-            epResource.SERVICE + "/geneerinenarviointi/:geneerinenarviointiId",
+            epResource.GENEERINENARVIOINTI,
             {
                 geneerinenarviointiId: "@id"
             },
             {
-                query: epResource.GENEERINENARVIOINTI
+                get: epResource.CACHEDGET
             },
         );
     })
