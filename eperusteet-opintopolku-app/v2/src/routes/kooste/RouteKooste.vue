@@ -34,7 +34,7 @@
                       {{ peruste.diaarinumero }}
                     </div>
                     {{ $t('voimaantulo') }}:
-                    {{ $sd(peruste.voimaantulopvm) }}
+                    {{ $sd(peruste.voimassaoloAlkaa) }}
                   </div>
                 </div>
               </div>
@@ -132,7 +132,7 @@ export default class RouteKooste extends Vue {
 
     if (peruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
         || peruste.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()) {
-      return undefined;      
+      return undefined;
     }
 
     return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
