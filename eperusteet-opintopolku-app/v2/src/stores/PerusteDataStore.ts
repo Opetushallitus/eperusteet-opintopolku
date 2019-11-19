@@ -137,7 +137,7 @@ export class PerusteDataStore {
   @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
       for (const node of getters.flattenedSidenav) {
-        // Fixme: Jokin parempi ratkaisu tähän
+        // Fixme: Jokin parempi ratkaisu stringin pakottamiseksi
         if (node.location && node.location.params) {
           node.location.params = _.mapValues(node.location.params, param => _.toString(param));
         }

@@ -1,7 +1,6 @@
 <template>
 <div class="content">
-  <ep-spinner v-if="isLoading" />
-  <div v-else>
+  <div v-if="istekstiKappaleAllLoaded">
     <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(tekstiKappale.nimi) }}</h2>
 
     <!-- Perusteen teksti -->
@@ -23,13 +22,13 @@
         </ep-heading>
 
         <!-- Perusteen teksti -->
-        <ep-content-viewer v-if="perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
+        <ep-content-viewer v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
                            :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
                            :termit="perusteTermit"
                            :kuvat="perusteKuvat" />
 
         <!-- Pohjan teksti -->
-        <ep-content-viewer v-if="originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
+        <ep-content-viewer v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
                            :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
                            :termit="termit"
                            :kuvat="kuvat" />
@@ -41,12 +40,13 @@
 
     <slot name="previous-next-navigation" />
   </div>
+  <ep-spinner v-else />
 </div>
 </template>
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -70,17 +70,21 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaTekstikappaleStore!: OpetussuunnitelmaTekstikappaleStore;
 
-  private isLoading = true;
-
-  async mounted() {
-    await this.opetussuunnitelmaTekstikappaleStore.fetchTekstikappale(true);
-    await this.opetussuunnitelmaTekstikappaleStore.fetchOriginalTekstikappale();
-    await this.opetussuunnitelmaTekstikappaleStore.fetchPerusteTekstikappale();
-    this.isLoading = false;
+  @Watch('current', { immediate: true })
+  async fetchTekstikappale() {
+    if (!this.current) {
+      return;
+    }
+    // Haetaan navigaation mukainen tekstikappale
+    await this.opetussuunnitelmaTekstikappaleStore.fetchTekstikappaleAll(true);
   }
 
   get tekstiKappaleViite() {
     return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleViite;
+  }
+
+  get istekstiKappaleAllLoaded() {
+    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleAllLoaded;
   }
 
   get tekstiKappale() {
@@ -158,7 +162,7 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
   }
 
   get perusteTermit() {
-    return null;
+    return this.opetussuunnitelmaDataStore.perusteTermit;
   }
 
   get termit() {
@@ -166,11 +170,15 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
   }
 
   get perusteKuvat() {
-    return null;
+    return this.opetussuunnitelmaDataStore.perusteKuvat;
   }
 
   get kuvat() {
     return this.opetussuunnitelmaDataStore.kuvat;
+  }
+
+  get current() {
+    return this.opetussuunnitelmaDataStore.current || null;
   }
 }
 

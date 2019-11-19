@@ -8,18 +8,23 @@ import { baseURL, Opetussuunnitelmat,
   Liitetiedostot, LiitetiedostotParam,
   Termisto } from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
+import { baseURL as perusteBaseURL,
+  Liitetiedostot as PerusteLiitetiedostot,
+  LiitetiedostotParam as PerusteLiitetiedostotParam,
+  Termit} from '@shared/api/eperusteet';
 import {
   buildNavigation,
   buildTiedot,
   filterNavigation,
   NavigationFilter,
   NavigationNode
-} from "@shared/utils/NavigationBuilder";
+} from '@shared/utils/NavigationBuilder';
 
 
 @Store
 export class OpetussuunnitelmaDataStore {
   @State() public opetussuunnitelma: OpetussuunnitelmaKevytDto | null = null;
+  @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
   @State() public navigation: NavigationNodeDto | null = null;
   @State() public dokumentit: any = {};
@@ -28,6 +33,8 @@ export class OpetussuunnitelmaDataStore {
     label: '',
     isEnabled: false,
   };
+  @State() public perusteTermit: object[] | null = null;
+  @State() public perusteKuvat: object[] | null = null;
   @State() public termit: object[] | null = null;
   @State() public kuvat: object[] | null = null;
 
@@ -41,22 +48,64 @@ export class OpetussuunnitelmaDataStore {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
   }
 
-  private async init() {
+  async init() {
+    await this.fetchOpetussuunnitelma();
+
+    if (this.opetussuunnitelmaPerusteenId) {
+      this.fetchPerusteTermit(this.opetussuunnitelmaPerusteenId);
+      this.fetchPerusteKuvat(this.opetussuunnitelmaPerusteenId);
+    }
+    this.fetchTermit();
+    this.fetchKuvat();
+
+    this.fetchNavigation();
+  }
+
+  async fetchOpetussuunnitelma() {
+    this.opetussuunnitelma = null;
+    this.opetussuunnitelmaPerusteenId = null;
     this.opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opetussuunnitelmaId)).data;
+    this.opetussuunnitelmaPerusteenId = this.opetussuunnitelma.perusteenId ? this.opetussuunnitelma.perusteenId : null;
+  }
+
+  async fetchPerusteTermit(perusteenId: number) {
+    this.perusteTermit = null;
+    this.perusteTermit = (await Termit.getAllTermit(perusteenId)).data;
+  }
+
+  async fetchPerusteKuvat(perusteenId: number) {
+    this.perusteKuvat = null;
+    this.perusteKuvat = _.map((await PerusteLiitetiedostot.getAllKuvat(perusteenId)).data, kuva => ({
+      id: kuva.id!,
+      kuva,
+      src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, this.getKuvaFilename(kuva)).url
+    }));
+  }
+
+  private getKuvaFilename(liite) {
+    return liite.id! + '.' +  mime.extension(liite.mime);
+  }
+
+  async fetchTermit() {
+    this.termit = null;
     this.termit = (await Termisto.getAllTermit(this.opetussuunnitelmaId)).data;
+  }
+
+  async fetchKuvat() {
+    this.kuvat = null;
     this.kuvat =_.map((await Liitetiedostot.getAllLiitteet(this.opetussuunnitelmaId)).data, kuva => ({
       id: kuva.id!,
       kuva,
       src: baseURL + LiitetiedostotParam.getLiitetiedosto(this.opetussuunnitelmaId, this.getLiiteFilename(kuva)).url
     }));
-    this.fetchNavigation();
   }
 
   private getLiiteFilename(liite) {
     return liite.id! + '.' +  mime.extension(liite.tyyppi);
   }
 
-  private async fetchNavigation() {
+  async fetchNavigation() {
+    this.navigation = null;
     this.navigation = (await Opetussuunnitelmat.getNavigation(this.opetussuunnitelmaId)).data;
   }
 
@@ -119,10 +168,10 @@ export class OpetussuunnitelmaDataStore {
     function traverseTree(node: NavigationNode) {
       result.push(node);
       (node.children || [])
-          .map(child => {
-            traverseTree(child);
-            return child;
-          });
+        .map(child => {
+          traverseTree(child);
+          return child;
+        });
     }
 
     if (root) {
@@ -136,7 +185,7 @@ export class OpetussuunnitelmaDataStore {
   @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
       for (const node of getters.flattenedSidenav) {
-        // Fixme: Jokin parempi ratkaisu tähän
+        // Fixme: Jokin parempi ratkaisu stringin pakottamiseksi
         if (node.location && node.location.params) {
           node.location.params = _.mapValues(node.location.params, param => _.toString(param));
         }

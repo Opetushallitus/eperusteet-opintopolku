@@ -309,8 +309,8 @@ export const router = new Router({
               return {
                 default: {
                   opetussuunnitelmaTekstikappaleStore: await OpetussuunnitelmaTekstikappaleStore.create(
-                      _.parseInt(route.params.opetussuunnitelmaId),
-                      _.parseInt(route.params.viiteId),
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.viiteId),
                   ),
                 },
               };
