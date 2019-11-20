@@ -16,7 +16,7 @@
     "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\""
   },
   "dependencies": {
-    "angular": "1.5.8",
+    "angular": "1.7.9",
     "angular-animate": "1.5.8",
     "angular-cache": "4.6.0",
     "angular-elastic": "2.5.1",
@@ -24,8 +24,8 @@
     "angular-resource": "1.5.8",
     "angular-sanitize": "1.5.8",
     "angular-spinner": "1.0.1",
-    "angular-translate": "2.13.0",
-    "angular-translate-loader-static-files": "2.13.0",
+    "angular-translate": "2.18.0",
+    "angular-translate-loader-static-files": "2.18.0",
     "angular-ui-bootstrap": "2.2.0",
     "angular-ui-router": "0.3.2",
     "angulartics": "1.5.0",
