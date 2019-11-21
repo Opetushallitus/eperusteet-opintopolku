@@ -102,6 +102,7 @@ export default class EpPerusteSidenavNode extends Vue {
 
   a {
     color: $sidenav-color;
+    display: block;
   }
 
   ul {

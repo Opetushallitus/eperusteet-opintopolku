@@ -44,7 +44,11 @@ import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
-import QueryString from 'qs';
+import RouteOpetussuunnitelmaOppiaineet
+  from "@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaineet.vue";
+import RouteOpetussuunnitelmaOppiaine
+  from "@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaine.vue";
+import { Lops2019OpetussuunnitelmaOppiaineStore } from "@/stores/Lops2019OpetussuunnitelmaOppiaineStore";
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -271,8 +275,16 @@ export const router = new Router({
         },
       }],
     }, {
-      path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
-      alias: 'opetussuunnitelma/:opetussuunnitelmaId/:koulutustyyppi',
+      path: 'ops/:opetussuunnitelmaId/:koulutustyyppi*',
+      name: 'ops',
+      component: RouteOpetussuunnitelma,
+      redirect(to) {
+        return {
+          name: 'opetussuunnitelma',
+        };
+      },
+    }, {
+      path: 'opetussuunnitelma/:opetussuunnitelmaId/:koulutustyyppi',
       name: 'opetussuunnitelma',
       component: RouteOpetussuunnitelma,
       redirect(to) {
@@ -311,6 +323,29 @@ export const router = new Router({
                   opetussuunnitelmaTekstikappaleStore: await OpetussuunnitelmaTekstikappaleStore.create(
                     _.parseInt(route.params.opetussuunnitelmaId),
                     _.parseInt(route.params.viiteId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'oppiaine',
+        component: RouteOpetussuunnitelmaOppiaineet,
+        name: 'lops2019OpetussuunnitelmaOppiaineet',
+      }, {
+        path: 'oppiaine/:oppiaineId',
+        component: RouteOpetussuunnitelmaOppiaine,
+        name: 'lops2019OpetussuunnitelmaOppiaine',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019OpetussuunnitelmaOppiaineStore: await Lops2019OpetussuunnitelmaOppiaineStore.create(
+                      _.parseInt(route.params.opetussuunnitelmaId),
+                      _.parseInt(route.params.oppiaineId),
                   ),
                 },
               };

@@ -92,6 +92,7 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
 .node {
   color: $sidenav-color;
   hyphens: auto;
+
   &:not(.node-root) {
     padding-top: 1em;
   }
@@ -102,17 +103,31 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
 
   a {
     color: $sidenav-color;
+    display: block;
   }
 
-  ul {
+  ul, ol {
     // Remove default list styles
     list-style: none;
-    padding-left: $sidenav-depth-padding;
     margin: 0;
+    padding-left: $sidenav-depth-padding;
+    counter-reset: item;
+  }
+
+  ol {
+    a:before {
+      content: counters(item, ".");
+      counter-increment: item;
+      padding-right: 1em;
+    }
+  }
+
+  li {
+    display: block;
   }
 
   // First element shouldn't has top padding
-  ul.root-list {
+  ul.root-list, ol.root-list {
     padding-left: 0;
     & > li:first-child > .node {
       padding-top: 0;
