@@ -89,7 +89,6 @@ export default class EpHeader extends Vue {
 @import '../../styles/_variables.scss';
 
 .vari-header {
-  transition: all .3s ease;
   min-height: 238px;
   padding: 80px 0;
 

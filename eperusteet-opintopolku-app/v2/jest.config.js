@@ -17,7 +17,6 @@ module.exports = {
     '!<rootDir>/src/**/script.ts',
     '!<rootDir>/**/*.d.ts',
     '!<rootDir>/src/main.ts',
-    '!<rootDir>/src/registerServiceWorker.ts',
   ],
   transform: {
     '^.+\\.vue$': 'vue-jest',
