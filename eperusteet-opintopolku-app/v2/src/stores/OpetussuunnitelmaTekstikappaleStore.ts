@@ -48,11 +48,11 @@ export class OpetussuunnitelmaTekstikappaleStore {
   async fetchTekstikappale(deep: boolean = false) {
     if (deep) {
       this.tekstiKappaleViite = (await OpetussuunnitelmanSisalto
-          .getTekstiKappaleViiteSyva(this.opsId, this.tekstiKappaleViiteId)).data;
+        .getTekstiKappaleViiteSyva(this.opsId, this.tekstiKappaleViiteId)).data;
     }
     else {
       this.tekstiKappaleViite = (await OpetussuunnitelmanSisalto
-          .getTekstiKappaleViite(this.opsId, this.tekstiKappaleViiteId)).data;
+        .getTekstiKappaleViite(this.opsId, this.tekstiKappaleViiteId)).data;
     }
     this.tekstiKappale = this.tekstiKappaleViite.tekstiKappale as TekstiKappaleKevytDto;
   }
@@ -91,12 +91,12 @@ export class OpetussuunnitelmaTekstikappaleStore {
 
   async fetchOriginalAlikappale(viite: number) {
     return (await OpetussuunnitelmanSisalto
-        .getTekstiKappaleViiteOriginal(this.opsId, viite)).data;
+      .getTekstiKappaleViiteOriginal(this.opsId, viite)).data;
   }
 
   async fetchOriginalTekstikappale() {
     this.tekstiKappaleOriginalViite = (await OpetussuunnitelmanSisalto
-        .getTekstiKappaleViiteOriginal(this.opsId, this.tekstiKappaleViiteId)).data;
+      .getTekstiKappaleViiteOriginal(this.opsId, this.tekstiKappaleViiteId)).data;
     this.tekstiKappaleOriginal = this.tekstiKappaleOriginalViite.tekstiKappale as TekstiKappaleKevytDto;
   }
 

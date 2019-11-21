@@ -3,7 +3,7 @@ import RouteOpetussuunnitelmaTekstikappale from './RouteOpetussuunnitelmaTekstik
 import { mocks, stubs } from '@shared/utils/jestutils';
 import { opetussuunnitelmaDataStoreMock, opetussuunnitelmaTekstikappaleStoreMock } from '@/storeMocks';
 import { Kielet, KieliStore } from '@shared/stores/kieli';
-import { Kieli } from "@shared/tyypit";
+import { Kieli } from '@shared/tyypit';
 
 
 describe('RouteOpetussuunnitelmaTekstikappale', async () => {
@@ -112,7 +112,7 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
             },
           }
         ]
-      }
+      };
     },
     async fetchOriginalTekstikappale() {
       this.tekstiKappaleOriginalViite  = {
@@ -154,7 +154,7 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
           nimi: { fi: 'pohjan alikappaleen nimi' } as any,
           teksti: { fi: 'pohjan alikappaleen teksti' } as any,
         }
-      }
+      };
     },
   });
 

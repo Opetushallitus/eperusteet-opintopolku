@@ -11,7 +11,7 @@ import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
+import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 
 
