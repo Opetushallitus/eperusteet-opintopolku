@@ -2,6 +2,7 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import { PerusteDataStore } from '@/stores/PerusteDataStore.ts';
 import EpPerusteSidenav from './EpPerusteSidenav.vue';
 import EpPerusteSidenavNode from './EpPerusteSidenavNode.vue';
+import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { KieliStore } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -243,4 +244,69 @@ describe('EpPerusteSidenav', async () => {
     });
 
   });
+
+  describe('Navigation to previous and next', async () => {
+    const perusteDataStore = new PerusteDataStore(42);
+
+    perusteDataStore.peruste = perusteData;
+    perusteDataStore.navigation = {
+      ...navigationData,
+      children: [
+        navigationDataViitteet as any,
+        ...navigationDataLoput as any,
+      ],
+    };
+
+    perusteDataStore.currentRoute = {
+      name: 'perusteTiedot',
+      params: {
+        perusteId: '42',
+      },
+    };
+
+    const wrapper = mount(EpPreviousNextNavigation as any, {
+      localVue,
+      propsData: {
+        activeNode: perusteDataStore.current,
+        flattenedSidenav: perusteDataStore.flattenedSidenav,
+      },
+      stubs: {
+        ...stubs,
+      },
+      mocks: {
+        ...mocks,
+      },
+    });
+
+    test('Navigation next and previous', async () => {
+      expect(wrapper.html()).toContain('Päätaso');
+
+      perusteDataStore.currentRoute = {
+        name: 'tekstikappale',
+        params: {
+          perusteId: '42',
+          viiteId: '1',
+        },
+      };
+      wrapper.setProps({ activeNode: perusteDataStore.current });
+
+      expect(wrapper.html()).toContain('Tiedot');
+      expect(wrapper.html()).toContain('Oppiaineet');
+
+      perusteDataStore.currentRoute = {
+        name: 'tekstikappale',
+        params: {
+          perusteId: '42',
+          viiteId: '3',
+        },
+      };
+      wrapper.setProps({ activeNode: perusteDataStore.current });
+
+      expect(wrapper.html()).toContain('Alitaso 1');
+      expect(wrapper.html()).toContain('Oppiaineet');
+
+    });
+
+  });
+
 });
