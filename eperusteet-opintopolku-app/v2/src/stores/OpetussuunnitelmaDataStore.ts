@@ -1,17 +1,25 @@
 import _ from 'lodash';
-import { Store, State, Getter } from '@shared/stores/store';
+import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
-import { NavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
-import { baseURL, Opetussuunnitelmat,
-  Dokumentit, DokumentitParam,
-  Liitetiedostot, LiitetiedostotParam,
-  Termisto } from '@shared/api/ylops';
+import { Lops2019OpintojaksoDto, NavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
+import {
+  baseURL,
+  Dokumentit,
+  DokumentitParam,
+  Liitetiedostot,
+  LiitetiedostotParam,
+  Opetussuunnitelmat,
+  Opintojaksot,
+  Termisto
+} from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
-import { baseURL as perusteBaseURL,
+import {
+  baseURL as perusteBaseURL,
   Liitetiedostot as PerusteLiitetiedostot,
   LiitetiedostotParam as PerusteLiitetiedostotParam,
-  Termit} from '@shared/api/eperusteet';
+  Termit
+} from '@shared/api/eperusteet';
 import {
   buildNavigation,
   buildTiedot,
@@ -27,6 +35,7 @@ export class OpetussuunnitelmaDataStore {
   @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
   @State() public navigation: NavigationNodeDto | null = null;
+  @State() public opintojaksot: Lops2019OpintojaksoDto[] | null = null;
   @State() public dokumentit: any = {};
   @State() public currentRoute: Location | null = null;
   @State() public sidenavFilter: NavigationFilter = {
@@ -57,6 +66,10 @@ export class OpetussuunnitelmaDataStore {
     }
     this.fetchTermit();
     this.fetchKuvat();
+
+    if (this.opetussuunnitelma && (this.opetussuunnitelma.toteutus as any) === 'lops2019') {
+      this.fetchOpintojaksot();
+    }
 
     this.fetchNavigation();
   }
@@ -107,6 +120,10 @@ export class OpetussuunnitelmaDataStore {
   async fetchNavigation() {
     this.navigation = null;
     this.navigation = (await Opetussuunnitelmat.getNavigation(this.opetussuunnitelmaId)).data;
+  }
+
+  async fetchOpintojaksot() {
+    this.opintojaksot = (await Opintojaksot.getAllOpintojaksot(this.opetussuunnitelmaId)).data;
   }
 
   @Getter(state => {

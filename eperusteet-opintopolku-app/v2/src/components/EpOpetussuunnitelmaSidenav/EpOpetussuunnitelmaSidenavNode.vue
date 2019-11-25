@@ -59,7 +59,9 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
         || type === 'oppiaine'
         || type === 'oppimaarat'
         || type === 'moduulit'
-        || type === 'moduuli';
+        || type === 'moduuli'
+        || type === 'opintojaksot'
+        || type === 'opintojakso';
 
     if (isCurrentOrParentSelected && isErikoistyyppi) {
       return node.children;
@@ -68,6 +70,7 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
       return _.filter(node.children, 'isVisible');
     }
   }
+
   get hasChildren() {
     return !_.isEmpty(this.children);
   }

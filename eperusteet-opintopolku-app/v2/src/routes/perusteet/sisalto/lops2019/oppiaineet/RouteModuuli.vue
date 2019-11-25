@@ -1,41 +1,10 @@
 <template>
 <div class="content">
   <div v-if="moduuli">
-    <h2 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi)}}</h2>
+    <h2 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')'  : '') }}</h2>
 
     <div class="teksti">
-      <div v-if="koodi">
-        <strong>{{ $t('koodi') }}</strong>
-        <p>{{ koodi.arvo }}</p>
-      </div>
-
-      <div v-if="tyyppi">
-        <strong>{{ $t('tyyppi') }}</strong>
-        <p>{{ $t(tyyppi) }}</p>
-      </div>
-
-      <div v-if="moduuli.laajuus">
-        <strong>{{ $t('laajuus') }}</strong>
-        <p>{{ moduuli.laajuus }}</p>
-      </div>
-
-      <div v-if="hasTavoitteet">
-        <h3>{{ $t('tavoitteet') }}</h3>
-        <p v-if="tavoitteet.kohde">{{ $kaanna(tavoitteet.kohde) }}</p>
-        <ul>
-          <li v-for="(tavoite, idx) in tavoitteet.tavoitteet" :key="idx">{{ $kaanna(tavoite) }}</li>
-        </ul>
-      </div>
-
-      <div v-if="hasSisallot">
-        <h3>{{ $t('sisallot') }}</h3>
-        <div v-for="(sisalto, idx) in sisallot" :key="idx">
-          <p v-if="sisalto.kohde">{{ $kaanna(sisalto.kohde) }}</p>
-          <ul>
-            <li v-for="(osa, idx) in sisalto.sisallot" :key="idx">{{ $kaanna(osa) }}</li>
-          </ul>
-        </div>
-      </div>
+      <moduuli-esitys :moduuli="moduuli" :termit="termit" :kuvat="kuvat" />
     </div>
 
     <slot name="previous-next-navigation" />
@@ -45,15 +14,16 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/ModuuliEsitys.vue';
 
 @Component({
   components: {
     EpSpinner,
+    ModuuliEsitys,
   }
 })
 export default class RouteModuuli extends Vue {
@@ -68,37 +38,20 @@ export default class RouteModuuli extends Vue {
     return this.lops2019ModuuliStore.moduuli;
   }
 
+  get termit() {
+    return this.perusteDataStore.termit;
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
+  }
+
   get koodi() {
     if (this.moduuli) {
       return this.moduuli.koodi;
     }
   }
 
-  get tyyppi() {
-    if (this.moduuli) {
-      return this.moduuli.pakollinen ? 'pakollinen' : 'valinnainen';
-    }
-  }
-
-  get tavoitteet() {
-    if (this.moduuli) {
-      return this.moduuli.tavoitteet;
-    }
-  }
-
-  get hasTavoitteet() {
-    return !_.isEmpty(this.tavoitteet);
-  }
-
-  get sisallot() {
-    if (this.moduuli) {
-      return this.moduuli.sisallot;
-    }
-  }
-
-  get hasSisallot() {
-    return !_.isEmpty(this.sisallot);
-  }
 }
 </script>
 

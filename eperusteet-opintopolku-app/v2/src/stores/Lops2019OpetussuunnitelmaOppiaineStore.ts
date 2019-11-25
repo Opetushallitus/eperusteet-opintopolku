@@ -14,7 +14,7 @@ export class Lops2019OpetussuunnitelmaOppiaineStore {
     return store;
   }
 
-  constructor(opsId: number, oppiaineId:number) {
+  constructor(opsId: number, oppiaineId: number) {
     this.opsId = opsId;
     this.oppiaineId = oppiaineId;
   }
