@@ -127,12 +127,15 @@ export class PerusteDataStore {
   @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
       for (const node of getters.flattenedSidenav) {
-        // Fixme: Jokin parempi ratkaisu tähän
+        // FIXME: Jokin parempi ratkaisu tähän
         if (node.location && node.location.params) {
           node.location.params = _.mapValues(node.location.params, param => _.toString(param));
         }
-        if (node.location && _.isMatch(state.currentRoute, node.location)) {
-          return node || null;
+        if (node.location) {
+          const isAMatch = _.isMatch(state.currentRoute, node.location);
+          if (isAMatch) {
+            return node || null;
+          }
         }
       }
     }
@@ -168,21 +171,16 @@ export class PerusteDataStore {
       return;
     }
 
-    this.korvaavatPerusteet = [{
-      diaarinumero: "123",
-      perusteet: [],
-    }];
-
-    // this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, async diaarinumero => ({
-    //   diaarinumero,
-    //   perusteet: (await perusteetQuery({ diaarinumero })).data,
-    // })));
+    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, async diaarinumero => ({
+      diaarinumero,
+      perusteet: (await perusteetQuery({ diaarinumero })).data,
+    })));
   }
 
   public updateRoute(route) {
     this.currentRoute = {
       name: route.name,
-      params: _.mapValues(route.params, param => _.toString(param)),
+      params: _.mapValues(route.params || {}, param => _.toString(param)),
     };
   }
 
