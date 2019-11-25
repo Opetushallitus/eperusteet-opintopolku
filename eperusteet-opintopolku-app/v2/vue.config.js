@@ -2,13 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 const TerserPlugin = require('terser-webpack-plugin');
 
-const
-  eperusteetService = process.env.EPERUSTEET_SERVICE,
-  eperusteetServicePort = process.env.EPERUSTEET_SERVICE_PORT || 8080,
-  eperusteetYlopsService = process.env.EPERUSTEET_YLOPS_SERVICE,
-  eperusteetYlopsServicePort = process.env.EPERUSTEET_SERVICE_PORT || 8081,
-  eperusteetAmosaaService = process.env.EPERUSTEET_AMOSAA_SERVICE,
-  eperusteetAmosaaServicePort = process.env.EPERUSTEET_SERVICE_PORT || 8082;
+const eperusteetService = process.env.EPERUSTEET_SERVICE || 'http://localhost:8080';
+const eperusteetYlopsService = process.env.EPERUSTEET_YLOPS_SERVICE || 'http://localhost:8081';
+const eperusteetAmosaaService = process.env.EPERUSTEET_AMOSAA_SERVICE || 'http://localhost:8082';
 
 if (process.env.EPERUSTEET_SERVICE) {
   console.log('Using eperusteet-service proxy:', process.env.EPERUSTEET_SERVICE);
@@ -33,21 +29,21 @@ else {
 
 const proxy = {
   '/eperusteet-service': {
-    target: eperusteetService || 'http://localhost:' + eperusteetServicePort,
+    target: eperusteetService,
     secure: !!eperusteetService,
     onProxyReq: function(proxyReq, req, res) {
       proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet');
     },
   },
   '/eperusteet-ylops-service': {
-    target: eperusteetYlopsService || 'http://localhost:' + eperusteetYlopsServicePort,
+    target: eperusteetYlopsService,
     secure: !!eperusteetYlopsService,
     onProxyReq: function(proxyReq, req, res) {
       proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-ylops');
     },
   },
   '/eperusteet-amosaa-service': {
-    target: eperusteetAmosaaService || 'http://localhost:' + eperusteetAmosaaServicePort,
+    target: eperusteetAmosaaService,
     secure: !!eperusteetAmosaaService,
     onProxyReq: function(proxyReq, req, res) {
       proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-amosaa');

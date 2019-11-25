@@ -124,10 +124,10 @@ export default class RoutePerusteTiedot extends Vue {
   async mounted() {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
-    await this.perusteDataStore.getKorvaavatPerusteet();
+    this.perusteDataStore.getKorvaavatPerusteet();
     // Dokumentti on toteuttu vain ammatillisille
     if (this.$route && isAmmatillinen(this.$route.params.koulutustyyppi)) {
-      await this.perusteDataStore.getDokumentit();
+      this.perusteDataStore.getDokumentit();
     }
     this.isLoading = false;
   }
@@ -197,7 +197,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get hasKorvattavatDiaarinumerot() {
-    return !_.isEmpty(this.peruste.korvattavatDiaarinumerot);
+    return !_.isEmpty(this.korvaavatPerusteet);
   }
 
   get korvattavatDiaarinumerotFields() {

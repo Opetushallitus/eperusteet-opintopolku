@@ -168,10 +168,15 @@ export class PerusteDataStore {
       return;
     }
 
-    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, async diaarinumero => ({
-      diaarinumero,
-      perusteet: (await perusteetQuery({ diaarinumero })).data,
-    })));
+    this.korvaavatPerusteet = [{
+      diaarinumero: "123",
+      perusteet: [],
+    }];
+
+    // this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, async diaarinumero => ({
+    //   diaarinumero,
+    //   perusteet: (await perusteetQuery({ diaarinumero })).data,
+    // })));
   }
 
   public updateRoute(route) {
