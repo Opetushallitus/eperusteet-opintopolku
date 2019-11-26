@@ -1,8 +1,6 @@
 <template>
 <div>
-  <header role="banner">
-    <ep-navigation></ep-navigation>
-  </header>
+  <ep-navigation role="banner"></ep-navigation>
   <main class="router-container" role="main">
     <router-view />
   </main>

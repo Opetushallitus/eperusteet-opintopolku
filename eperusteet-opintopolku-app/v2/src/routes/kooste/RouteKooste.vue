@@ -8,24 +8,24 @@
     <b-container fluid>
       <b-row>
         <b-col xl="7" class="tile">
-          <h2>{{ $t('perusteet') }}</h2>
+          <h2 class="otsikko">{{ $t('perusteet') }}</h2>
           <div class="perustebox d-flex flex-wrap justify-content-between" v-if="perusteet">
             <div v-if="perusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
               <div v-else class="peruste tile-background-shadow-selected" v-for="(peruste, idx) in perusteet" :key="idx">
                 <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
-                  <peruste-tile :peruste="peruste"></peruste-tile>
+                  <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
                 </router-link>
-                <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">  
-                  <peruste-tile :peruste="peruste"></peruste-tile>
-                </ep-external-link>  
+                <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">
+                  <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+                </ep-external-link>
               </div>
           </div>
           <ep-spinner v-else />
         </b-col>
         <b-col xl="5" class="tile">
-          <h2>{{ $t('tiedotteet') }}</h2>
+          <h2 class="otsikko">{{ $t('tiedotteet') }}</h2>
           <div class="tiedotebox">
             <div v-if="tiedotteet">
               <div v-if="tiedotteet.length === 0">
@@ -88,7 +88,7 @@ export default class RouteKooste extends Vue {
 
   get murupolku(): Array<MurupolkuOsa> {
     return [{
-      label: 'kooste',
+      label: this.koulutustyyppi,
       location: {
         ...this.$route,
       },
@@ -116,7 +116,7 @@ export default class RouteKooste extends Vue {
 
     if (peruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
         || peruste.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()) {
-      return undefined;      
+      return undefined;
     }
 
     return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
@@ -143,10 +143,6 @@ export default class RouteKooste extends Vue {
       }
     }
 
-    h2 {
-      font-weight: bolder;
-    }
-
     .perustebox {
       margin-top: 30px;
 
@@ -159,6 +155,8 @@ export default class RouteKooste extends Vue {
 
         margin-bottom: 10px;
         width: calc(1 / 2 * 100% - (1 - 1 / 2) * 10px);
+        // width: 343px;
+        // height: 172px;
 
         @media(max-width: 648.98px) {
           width: 100%;
@@ -217,6 +215,14 @@ export default class RouteKooste extends Vue {
         .aikaleima {
           font-size: smaller;
           color: #555;
+        }
+
+        a {
+            color: #2B2B2B;
+        }
+
+        a:hover {
+          color: #0070f4;
         }
       }
     }
