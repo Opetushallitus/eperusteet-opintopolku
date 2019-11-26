@@ -200,6 +200,18 @@ export class OpetussuunnitelmaDataStore {
   public readonly flattenedSidenav!: NavigationNode[];
 
   @Getter((state, getters) => {
+    if (!getters.flattenedSidenav) {
+      return {};
+    }
+
+    return _.chain(getters.flattenedSidenav)
+        .filter('meta.koodi.uri')
+        .keyBy('meta.koodi.uri')
+        .value();
+  })
+  public readonly navigationByUri!: { [uri: string]: NavigationNode };
+
+  @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
 
       // Fixme: Jokin parempi ratkaisu stringin pakottamiseksi

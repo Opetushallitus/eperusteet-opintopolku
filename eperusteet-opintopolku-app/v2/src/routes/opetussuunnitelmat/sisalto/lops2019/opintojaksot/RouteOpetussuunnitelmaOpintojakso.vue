@@ -5,36 +5,40 @@
 
     <div class="teksti">
       <div v-if="opintojakso.koodi">
-        <strong>{{ $t('koodi') }}</strong>
+        <h3 class="opintojakso-tieto-otsikko">{{ $t('koodi') }}</h3>
         <p>{{ opintojakso.koodi }}</p>
       </div>
 
       <div v-if="hasOppiaineet">
-        <strong>{{ $t('oppiaineet') }}</strong>
+        <h3 class="opintojakso-tieto-otsikko">{{ $t('oppiaineet') }}</h3>
         <ul>
-          <li v-for="(oppiaine, idx) in oppiaineet" :key="idx">
-            {{ oppiaine.koodi }}
+          <li v-for="(oppiaine, idx) in oppiaineetExtended" :key="idx">
+            <router-link v-if="oppiaine.node" :to="oppiaine.node.location">
+              {{ $kaanna(oppiaine.node.label) }}
+            </router-link>
+            <span v-else>
+              {{ oppiaine.koodi }}
+            </span>
           </li>
         </ul>
       </div>
 
       <div v-if="opintojakso.laajuus">
-        <strong>{{ $t('laajuus') }}</strong>
+        <h3 class="opintojakso-tieto-otsikko">{{ $t('laajuus') }}</h3>
         <p>{{ opintojakso.laajuus }}</p>
       </div>
+    </div>
 
-      <div v-if="hasModuulit">
-        <strong>{{ $t('opintojakson-moduulit') }}</strong>
-        <ul>
-          <li v-for="(moduuli, idx) in moduulit" :key="idx">
-            {{ moduuli.koodiUri }}
-          </li>
-        </ul>
+    <div v-if="hasModuulit">
+      <h3>{{ $t('opintojakson-moduulit') }}</h3>
+      <div class="d-flex flex-wrap">
+        <div v-for="(moduuli, idx) in moduulitExtended" :key="idx">
+          <ep-opintojakson-moduuli :moduuli="moduuli" class="mr-2 mb-2" />
+        </div>
       </div>
 
       <div v-if="hasTavoitteet">
         <h3>{{ $t('tavoitteet') }}</h3>
-        <pre>todo peruste</pre>
         <ul>
           <li v-for="(tavoite, idx) in tavoitteet" :key="idx">
             <ep-content-viewer :value="$kaanna(tavoite.kuvaus)"
@@ -46,7 +50,6 @@
 
       <div v-if="hasKeskeisetSisallot">
         <h3>{{ $t('keskeiset-sisallot') }}</h3>
-        <pre>todo peruste</pre>
         <ul>
           <li v-for="(ks, idx) in keskeisetSisallot" :key="idx">
             <ep-content-viewer :value="$kaanna(ks.kuvaus)"
@@ -58,20 +61,16 @@
 
       <div v-if="hasLaajaAlainenOsaaminen">
         <h3>{{ $t('laaja-alaiset-sisallot') }}</h3>
-        <pre>todo peruste</pre>
-        <ul>
-          <li v-for="(lao, idx) in laajaAlainenOsaaminen" :key="idx">
-            <pre>{{ lao.koodi }}</pre>
-            <ep-content-viewer :value="$kaanna(lao.kuvaus)"
-                               :termit="termit"
-                               :kuvat="kuvat" />
-          </li>
-        </ul>
+        <div v-for="(lao, idx) in laajaAlainenOsaaminenExtended" :key="idx">
+          <h4 class="opintojakso-lao-otsikko">{{ $kaanna(lao.nimi) }}</h4>
+          <ep-content-viewer :value="$kaanna(lao.kuvaus)"
+                             :termit="termit"
+                             :kuvat="kuvat" />
+        </div>
       </div>
 
       <div v-if="hasArviointi">
         <h3>{{ $t('arviointi') }}</h3>
-        <pre>todo peruste</pre>
         <ep-content-viewer v-if="opintojakso.arviointi"
                            :value="$kaanna(opintojakso.arviointi)"
                            :termit="termit"
@@ -101,12 +100,15 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 import { Lops2019OpintojaksoDto } from '@shared/api/tyypit';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
+import { getLaajaAlaisetKoodit } from '@shared/utils/perusteet';
 
 
 @Component({
   components: {
     EpSpinner,
     EpContentViewer,
+    EpOpintojaksonModuuli,
   }
 })
 export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
@@ -136,6 +138,19 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     }
   }
 
+  get oppiaineetExtended() {
+    return _.map(this.oppiaineet, (oa: any) => {
+      if (oa.koodi) {
+        const node = this.navigationByUri[oa.koodi];
+        if (node) {
+          oa.node = node;
+        }
+      }
+
+      return oa;
+    });
+  }
+
   get hasOppiaineet() {
     return !_.isEmpty(this.oppiaineet);
   }
@@ -144,6 +159,23 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     if (this.opintojakso) {
       return this.opintojakso.moduulit;
     }
+  }
+
+  get moduulitExtended() {
+    return _.map(this.moduulit, (moduuli: any) => {
+      if (moduuli.koodiUri) {
+        const node = this.navigationByUri[moduuli.koodiUri];
+        if (node) {
+          const { path, children, ...filtered } = node;
+          moduuli.node = filtered;
+          if (path && path.length >= 3) {
+            const oaNode = path[path.length - 3];
+            moduuli.node.location.params.oppiaineId = _.get(oaNode, 'location.params.oppiaineId');
+            return moduuli;
+          }
+        }
+      }
+    });
   }
 
   get hasModuulit() {
@@ -176,6 +208,16 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     }
   }
 
+  get laajaAlainenOsaaminenExtended() {
+    return _.chain(getLaajaAlaisetKoodit())
+      .map(lo => ({
+        ...lo,
+        ..._.find(this.laajaAlainenOsaaminen, { koodi: lo.koodi }),
+      }))
+      .filter('kuvaus')
+      .value();
+  }
+
   get hasLaajaAlainenOsaaminen() {
     return !_.isEmpty(this.laajaAlainenOsaaminen);
   }
@@ -191,6 +233,10 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
       return this.opintojakso.kuvaus;
     }
   }
+
+  get navigationByUri() {
+    return this.opetussuunnitelmaDataStore.navigationByUri;
+  }
 }
 </script>
 
@@ -203,6 +249,16 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 
   .otsikko, .teksti {
     @include teksti-sisalto;
+  }
+
+  .opintojakso-tieto-otsikko {
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  .opintojakso-lao-otsikko {
+    font-size: 1em;
+    font-weight: bold;
   }
 }
 </style>
