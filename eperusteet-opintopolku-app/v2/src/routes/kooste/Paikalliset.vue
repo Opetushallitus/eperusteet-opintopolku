@@ -6,7 +6,7 @@
   </div>
   <div>
     <div class="peruste-nav">
-      <div class="d-flex">
+      <div class="d-md-flex">
         <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
           <div class="peruste-select" :class="{ active: activePeruste === peruste.id}">
             <a href="javascript:;" @click="setActivePeruste(peruste)">
@@ -166,9 +166,15 @@ export default class Paikalliset extends Vue {
     overflow-x: auto;
 
     .peruste {
+
+      @media (max-width: 767.98px) {
+          padding-bottom:10px;
+      }
+
       .peruste-select {
         text-align: center;
         margin: 8px;
+
         button, a {
           font-weight: bold;
           color: #3367E3;
