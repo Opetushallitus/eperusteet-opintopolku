@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="upper">
-      <div class="peruste-ikoni">
-        <img src="../../../public/img/icons/hallitus.svg" alt="" style="fill: #0041DC" />
+      <div class="peruste-ikoni" :style="imgStyle">
+        <ep-hallitus-img class="img"/>
       </div>
       <div class="nimi">
         <fas fixed-width icon="external-link-alt" class="mr-1" v-if="peruste.ulkoinenlinkki"></fas>
@@ -28,11 +28,24 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { PerusteDto } from '../../../eperusteet-frontend-utils/vue/src/api/tyypit';
+import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
+import EpHallitusImg from '../../../eperusteet-frontend-utils/vue/src/components/EpImage/EpHallitusImg.vue';
 
-@Component
+@Component({
+  components: {
+    EpHallitusImg,
+  }
+})
 export default class PerusteTile extends Vue {
   @Prop({ required: true })
   private peruste!: PerusteDto;
+
+  @Prop({ required: false, type: String })
+  private koulutustyyppi!: string;
+
+  get imgStyle() {
+    return 'fill: ' + rgb2string(koulutustyyppiThemeColor(this.koulutustyyppi));
+  }
 }
 </script>
 
@@ -49,6 +62,8 @@ export default class PerusteTile extends Vue {
       height: 40px;
       padding-top: 4px;
       text-align: center;
+      width: 100%;
+      margin: 0px 20px;
     }
 
     .upper {
@@ -58,7 +73,7 @@ export default class PerusteTile extends Vue {
         color: #0041DC;
         text-align: center;
 
-        img {
+        .img {
           margin: 20px;
           height: 32px;
           width: 32px;
@@ -73,6 +88,7 @@ export default class PerusteTile extends Vue {
         padding-top: 0;
         font-weight: bold;
         text-align: center;
+        color: #2B2B2B
       }
     }
   }

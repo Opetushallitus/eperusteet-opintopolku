@@ -1,4 +1,5 @@
 @import './variables';
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Poppins:100,200,300,400,500,600,700,800&display=swap');
 
 // html element
 :root {
@@ -41,5 +42,19 @@
     h4 { font-size: 1.2rem; }
     h5 { font-size: 1.1rem; }
     h6 { font-size: 1.0rem; }
+  }
+
+  h2.otsikko {
+    font-family: 'Poppins';
+    font-size: 1.5rem;
+    color: #2B2B2B;
+  }
+
+  .shadow-tile {
+    box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
+  }
+
+  .shadow-tile:hover, .shadow-tile:focus {
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
   }
 }

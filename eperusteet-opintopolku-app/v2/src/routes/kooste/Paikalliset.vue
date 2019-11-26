@@ -30,42 +30,19 @@
         {{ $t('ei-hakutuloksia') }}
       </div>
     </div>
-    <div v-else>
-      <div class="opetussuunnitelma"
+    <div v-else id="opetussuunnitelmat-lista">
+      <div class="opetussuunnitelma shadow-tile"
            v-for="(ops, idx) in opetussuunnitelmatPaginated"
-           :key="idx"
-           id="opetussuunnitelmat-lista">
-        <div class="d-flex align-items-center">
-          <div class="opsicon-wrapper">
-            <div class="opsicon"></div>
-          </div>
-          <div class="nimi flex-fill">
-            <div class="ops">
-              <router-link v-if="!ops.ulkoinenlinkki" :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
-                {{ $kaanna(ops.nimi) }}
-              </router-link>
-              <ep-external-link v-else :url="ops.ulkoinenlinkki">{{ $kaanna(ops.nimi) }}</ep-external-link>
-            </div>
-            <div class="organisaatiot">
-              <div v-if="ops.toimijat.length > 0">
-                <span class="otsikko">{{ $t('toimijat') }}</span>
-                <span class="mr-1">:</span>
-                <span class="toimijat" v-for="(toimija, tidx) in ops.toimijat" :key="tidx">
-                  {{ $kaanna(toimija.nimi) }}<span v-if="tidx < ops.toimijat.length - 1">, </span>
-                </span>
-              </div>
-              <div v-if="ops.oppilaitokset.length > 0">
-                <span class="otsikko">{{ $t('oppilaitokset') }}</span>
-                <span class="mr-1">:</span>
-                <span class="toimijat" v-for="(oppilaitos, tidx) in ops.oppilaitokset" :key="tidx">
-                  {{ $kaanna(oppilaitos.nimi) }}<span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
-                </span>
-              </div>
-            </div>
-          </div>
-          <div class="perusteen-nimi">
-          </div>
-        </div>
+           :key="idx">
+
+        <router-link v-if="!ops.ulkoinenlinkki" :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
+          <opetussuunnitelma-tile :ops="ops" />
+        </router-link>
+
+        <ep-external-link v-else :url="ops.ulkoinenlinkki" :showIcon="false">
+          <opetussuunnitelma-tile :ops="ops" />
+        </ep-external-link>
+
       </div>
       <b-pagination v-model="page"
                     :total-rows="total"
@@ -93,6 +70,7 @@ import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue
 import { koulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
 import { ENV_PREFIX } from '@shared/utils/defaults';
+import OpetussuunnitelmaTile from './OpetussuunnitelmaTile';
 
 @Component({
   components: {
@@ -100,6 +78,7 @@ import { ENV_PREFIX } from '@shared/utils/defaults';
     EpSearch,
     EpSpinner,
     EpExternalLink,
+    OpetussuunnitelmaTile,
   },
 })
 export default class Paikalliset extends Vue {
@@ -165,7 +144,7 @@ export default class Paikalliset extends Vue {
 
     if (!this.perusteKoosteStore.activePeruste || this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
         || this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()) {
-      return undefined;      
+      return undefined;
     }
 
     return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/ops/${ops.id}/${koulutustyyppiUrlShortParamName(ops.koulutustyyppi)}/tiedot`;
@@ -182,10 +161,6 @@ export default class Paikalliset extends Vue {
     margin: 20px 0;
   }
 
-  h2.otsikko {
-    font-weight: bolder;
-  }
-
   .peruste-nav {
     margin-bottom: 8px;
     overflow-x: auto;
@@ -196,15 +171,16 @@ export default class Paikalliset extends Vue {
         margin: 8px;
         button, a {
           font-weight: bold;
-          color: #575757;
+          color: #3367E3;
         }
 
         a:hover {
-          text-decoration: underline;
+          color: #578aff;
         }
 
         &.active {
           border-bottom: #0143da 5px solid;
+          padding-bottom: 15px;
           button, a {
             color: #0143da;
           }
@@ -219,40 +195,6 @@ export default class Paikalliset extends Vue {
     min-height: 80px;
     margin-bottom: 10px;
 
-    .opsicon-wrapper {
-      padding: 20px 25px 20px 25px;
-
-      .opsicon {
-        height: 40px;
-        width: 40px;
-        background: url('../../../public/img/icons/opskortti.svg');
-        background-size: 40px 40px;
-      }
-    }
-
-    .nimi {
-      padding: 0px;
-
-      .ops {
-        margin-bottom: 8px;
-      }
-    }
-
-    .perusteen-nimi {
-      padding: 20px;
-    }
-
-    .organisaatiot {
-      .toimijat {
-        color: #555;
-        font-size: smaller;
-      }
-
-      .otsikko {
-        color: #2B2B2B;
-        font-size: smaller;
-      }
-    }
   }
 }
 

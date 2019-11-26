@@ -143,8 +143,12 @@ export default class EpHeader extends Vue {
     padding-right: 0;
     margin: 0;
 
-    li:first-child {
-      font-weight: bolder;
+    li {
+      font-weight: 600;
+    }
+
+    li:last-child {
+      font-weight: 400;
     }
 
     &.black /deep/ li, &.black /deep/ li::before, &.black /deep/ li a {
@@ -165,6 +169,7 @@ export default class EpHeader extends Vue {
     font-weight: bold;
     font-size: 2rem;
     color: #fff;
+    font-family: 'Poppins';
 
     @media (max-width: 991.98px) {
       font-size: 1.5rem;
