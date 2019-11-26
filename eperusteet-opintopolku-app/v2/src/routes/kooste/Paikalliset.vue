@@ -70,7 +70,7 @@ import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue
 import { koulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
 import { ENV_PREFIX } from '@shared/utils/defaults';
-import OpetussuunnitelmaTile from './OpetussuunnitelmaTile';
+import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 
 @Component({
   components: {
