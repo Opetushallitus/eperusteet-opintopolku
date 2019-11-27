@@ -55,6 +55,9 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
 
     const isCurrentOrParentSelected = (current && (node.key === current.key
         ||  (parent && parent.key === current.key && current.type !== 'oppiaineet')));
+
+    const isOppiaineenSisalto = node.type === 'opintojaksot' || node.type === 'moduulit';
+
     const isErikoistyyppi = type === 'oppiaineet'
         || type === 'oppiaine'
         || type === 'oppimaarat'
@@ -63,7 +66,7 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
         || type === 'opintojaksot'
         || type === 'opintojakso';
 
-    if (isCurrentOrParentSelected && isErikoistyyppi) {
+    if (isCurrentOrParentSelected && isErikoistyyppi || isOppiaineenSisalto) {
       return node.children;
     }
     else {
