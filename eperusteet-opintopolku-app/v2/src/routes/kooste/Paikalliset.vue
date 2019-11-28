@@ -36,11 +36,11 @@
            :key="idx">
 
         <router-link v-if="!ops.ulkoinenlinkki" :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
-          <opetussuunnitelma-tile :ops="ops" />
+          <opetussuunnitelma-tile :ops="ops" :query="query"/>
         </router-link>
 
         <ep-external-link v-else :url="ops.ulkoinenlinkki" :showIcon="false">
-          <opetussuunnitelma-tile :ops="ops" />
+          <opetussuunnitelma-tile :ops="ops" :query="query"/>
         </ep-external-link>
 
       </div>
@@ -67,8 +67,8 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { koulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
-import { KoulutustyyppiToteutus, Koulutustyyppi } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
+import { koulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
+import { KoulutustyyppiToteutus, Koulutustyyppi } from '@shared/tyypit';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import {uusiJulkinenToteutus} from '@/utils/peruste';
@@ -138,25 +138,6 @@ export default class Paikalliset extends Vue {
         ...ops,
         ulkoinenlinkki: this.ulkoinenlinkki(ops)
       }))
-      .value();
-  }
-
-  @Watch('opetussuunnitelmatPaginated')
-  async opetussuunnitelmatPaginatedChange(val, oldVal) {
-
-    await Vue.nextTick();
-
-    _.chain(document.getElementsByClassName('ops-toimijat'))
-      .map(opsToimija => Array.from(opsToimija.getElementsByClassName('koulutusjarjestaja-nimi')))
-      .flatten()
-      .forEach(toimija => {
-
-        toimija.innerHTML = toimija.innerHTML.replace(new RegExp('<strong>|</strong>', 'ig'), '');
-
-        if (this.query.length > 0) {
-          toimija.innerHTML = toimija.innerHTML.replace(new RegExp(this.query, 'ig'), (match) => '<strong>' + match + '</strong>');
-        }
-      })
       .value();
   }
 
