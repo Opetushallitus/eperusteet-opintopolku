@@ -45,7 +45,7 @@ export default class PerusteTile extends Vue {
   private query!: string;
 
   get nimi() {
-    return highlight((this as any).$kaanna(this.ops.nimi), this.query);
+    return highlight(this.$kaanna(this.ops.nimi), this.query);
   }
 
   get toimijat() {
