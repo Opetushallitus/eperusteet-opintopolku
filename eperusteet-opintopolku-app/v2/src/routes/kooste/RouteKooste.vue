@@ -7,13 +7,13 @@
   <div>
     <b-container fluid>
       <b-row>
-        <b-col xl="7" class="tile">
+        <b-col cols="12" xl="auto" class="tile">
           <h2 class="otsikko">{{ $t('perusteet') }}</h2>
-          <div class="perustebox d-flex flex-wrap justify-content-between" v-if="perusteet">
+          <div class="perustebox d-sm-flex flex-wrap justify-content-start" v-if="perusteet">
             <div v-if="perusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-              <div v-else class="peruste tile-background-shadow-selected" v-for="(peruste, idx) in perusteet" :key="idx">
+              <div v-else class="peruste tile-background-shadow-selected shadow-tile" v-for="(peruste, idx) in perusteet" :key="idx">
                 <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
                   <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
                 </router-link>
@@ -72,6 +72,7 @@ import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/s
 import { perusteKoulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 import _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
+import {uusiJulkinenToteutus} from '@/utils/peruste';
 
 @Component({
   components: {
@@ -114,8 +115,7 @@ export default class RouteKooste extends Vue {
 
   ulkoinenlinkki(peruste) {
 
-    if (peruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
-        || peruste.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()) {
+    if (uusiJulkinenToteutus(peruste)) {
       return undefined;
     }
 
@@ -133,6 +133,9 @@ export default class RouteKooste extends Vue {
 
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
+@import '../../styles/_mixins.scss';
+
+@include shadow-tile;
 
 .container {
   .tile {
@@ -145,59 +148,27 @@ export default class RouteKooste extends Vue {
 
     .perustebox {
       margin-top: 30px;
+      margin-bottom: 30px;
 
       .peruste {
+        margin: 5px;
         border-radius: 10px;
         border: 1px solid #E7E7E7;
-        box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
         min-height: 230px;
         overflow-x: auto;
+        width: 343px;
+        height: 172px;
 
-        margin-bottom: 10px;
-        width: calc(1 / 2 * 100% - (1 - 1 / 2) * 10px);
-        // width: 343px;
-        // height: 172px;
+        @media(max-width: 991.98px) {
+          width: calc(1 / 2 * 100% - (1 - 1 / 2) * 20px);
+        }
 
-        @media(max-width: 648.98px) {
+        @media(max-width: 735.98px) {
           width: 100%;
           margin-left: 0;
           margin-right: 0;
         }
 
-        .voimaantulo {
-          border-top: 1px solid #EBEBEB;
-          color: #001A58;
-          font-size: smaller;
-          height: 40px;
-          padding-top: 4px;
-          text-align: center;
-        }
-
-        .upper {
-          height: 180px;
-          overflow-y: auto;
-
-          .peruste-ikoni {
-            color: #0041DC;
-            text-align: center;
-
-            img {
-              margin: 20px;
-              height: 32px;
-              width: 32px;
-            }
-          }
-
-          .nimi {
-            hyphens: auto;
-            overflow: hidden;
-            width: 100%;
-            padding: 12px;
-            padding-top: 0;
-            font-weight: bold;
-            text-align: center;
-          }
-        }
       }
     }
 
@@ -227,9 +198,6 @@ export default class RouteKooste extends Vue {
       }
     }
 
-    .tile-background-shadow-selected:hover, .tile-background-shadow-selected:focus {
-      box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
-    }
   }
 }
 

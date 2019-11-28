@@ -86,7 +86,6 @@ export default class PerusteTile extends Vue {
         width: 100%;
         padding: 12px;
         padding-top: 0;
-        font-weight: bold;
         text-align: center;
         color: #2B2B2B
       }

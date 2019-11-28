@@ -44,17 +44,24 @@
     h6 { font-size: 1.0rem; }
   }
 
-  h2.otsikko {
+  h1, h2, h3 {
     font-family: 'Poppins';
-    font-size: 1.5rem;
     color: #2B2B2B;
   }
 
-  .shadow-tile {
-    box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
+  h1, h2 {
+    font-weight: 500;
   }
 
-  .shadow-tile:hover, .shadow-tile:focus {
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+  h3 {
+    font-weight: 400;
   }
+
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.3rem; }
+  h3 { font-size: 1.2rem; }
+  h4 { font-size: 1.2rem; }
+  h5 { font-size: 1.1rem; }
+  h6 { font-size: 1.0rem; }
+
 }

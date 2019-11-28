@@ -1,5 +1,4 @@
 <template>
-<!-- <div class="container"> -->
   <b-navbar type="light"
             role="navigation"
             toggleable="lg"
@@ -41,7 +40,6 @@
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
-<!-- </div> -->
 </template>
 
 <script lang="ts">
@@ -175,6 +173,11 @@ export default class EpNavigation extends Vue {
     color: #000;
     font-weight: 600;
   }
+
+  .nav-item:hover {
+    background-color:#F2F2F2;
+  }
+
   .navbar-nav.ml-auto .nav-item.dropdown {
     /deep/ .nav-link.dropdown-toggle {
       color: #001A58;

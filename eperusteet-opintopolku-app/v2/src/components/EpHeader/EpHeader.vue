@@ -166,8 +166,7 @@ export default class EpHeader extends Vue {
   // Koosteen / perusteen nimi
   h1.nimi {
     margin-top: 0;
-    font-weight: bold;
-    font-size: 2rem;
+    font-weight: 500;
     color: #fff;
     font-family: 'Poppins';
 
