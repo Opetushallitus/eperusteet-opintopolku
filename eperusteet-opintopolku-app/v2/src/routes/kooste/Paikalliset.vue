@@ -4,11 +4,11 @@
   <div class="search">
     <ep-search v-model="query" />
   </div>
-  <div>
+  <div class="opetussuunnitelma-container">
     <div class="peruste-nav">
       <div class="d-md-flex">
-        <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx">
-          <div class="peruste-select" :class="{ active: activePeruste === peruste.id}">
+        <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx" :class="{ active: activePeruste === peruste.id}">
+          <div class="peruste-select">
             <a href="javascript:;" @click="setActivePeruste(peruste)">
               <div>
                 {{ $kaanna(peruste.nimi) }}
@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
@@ -68,9 +68,10 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import { koulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
-import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
+import { KoulutustyyppiToteutus, Koulutustyyppi } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
+import {uusiJulkinenToteutus} from '@/utils/peruste';
 
 @Component({
   components: {
@@ -140,10 +141,28 @@ export default class Paikalliset extends Vue {
       .value();
   }
 
+  @Watch('opetussuunnitelmatPaginated')
+  async opetussuunnitelmatPaginatedChange(val, oldVal) {
+
+    await Vue.nextTick();
+
+    _.chain(document.getElementsByClassName('ops-toimijat'))
+      .map(opsToimija => Array.from(opsToimija.getElementsByClassName('koulutusjarjestaja-nimi')))
+      .flatten()
+      .forEach(toimija => {
+
+        toimija.innerHTML = toimija.innerHTML.replace(new RegExp('<strong>|</strong>', 'ig'), '');
+
+        if (this.query.length > 0) {
+          toimija.innerHTML = toimija.innerHTML.replace(new RegExp(this.query, 'ig'), (match) => '<strong>' + match + '</strong>');
+        }
+      })
+      .value();
+  }
+
   ulkoinenlinkki(ops) {
 
-    if (!this.perusteKoosteStore.activePeruste || this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
-        || this.perusteKoosteStore.activePeruste.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()) {
+    if (uusiJulkinenToteutus(this.perusteKoosteStore.activePeruste)) {
       return undefined;
     }
 
@@ -154,42 +173,61 @@ export default class Paikalliset extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
+@import '@/styles/_variables.scss';
+@import '@/styles/_mixins.scss';
+
+@include shadow-tile-hover;
 
 .paikalliset {
   .search {
     margin: 20px 0;
   }
 
-  .peruste-nav {
-    margin-bottom: 8px;
-    overflow-x: auto;
+  .opetussuunnitelma-container {
+    min-height: 700px;
 
-    .peruste {
+    .peruste-nav {
+      margin-bottom: 8px;
+      overflow-x: auto;
 
-      @media (max-width: 767.98px) {
-          padding-bottom:10px;
-      }
+      .peruste {
 
-      .peruste-select {
-        text-align: center;
-        margin: 8px;
-
-        button, a {
-          font-weight: bold;
-          color: #3367E3;
+        @media (max-width: 767.98px) {
+            margin-bottom:10px;
+            border-left: #0143da 5px solid;
         }
 
-        a:hover {
-          color: #578aff;
+        @media (max-width: 767.98px) {
+          &.active {
+            background-color: #F2F2F2;
+          }
+        }
+
+        @media (min-width: 768px) {
+          &.active{
+            border-bottom: #0143da 5px solid;
+          }
         }
 
         &.active {
-          border-bottom: #0143da 5px solid;
-          padding-bottom: 15px;
           button, a {
             color: #0143da;
           }
+        }
+
+        .peruste-select {
+          text-align: center;
+          padding: 5px;
+
+          button, a {
+            font-weight: bold;
+            color: #3367E3;
+          }
+
+          a:hover {
+            color: #578aff;
+          }
+
         }
       }
     }
@@ -202,6 +240,7 @@ export default class Paikalliset extends Vue {
     margin-bottom: 10px;
 
   }
+
 }
 
 </style>
