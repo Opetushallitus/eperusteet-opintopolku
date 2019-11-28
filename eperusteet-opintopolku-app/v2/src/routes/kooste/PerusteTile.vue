@@ -27,9 +27,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { PerusteDto } from '../../../eperusteet-frontend-utils/vue/src/api/tyypit';
+import { PerusteDto } from '@shared/api/tyypit';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
-import EpHallitusImg from '../../../eperusteet-frontend-utils/vue/src/components/EpImage/EpHallitusImg.vue';
+import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
 
 @Component({
   components: {

@@ -132,8 +132,8 @@ export default class RouteKooste extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
-@import '../../styles/_mixins.scss';
+@import '@/styles/_variables.scss';
+@import '@/styles/_mixins.scss';
 
 @include shadow-tile;
 
