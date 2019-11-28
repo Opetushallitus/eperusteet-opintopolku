@@ -1,4 +1,4 @@
-import { PerusteDtoToteutusEnum as PerusteToteutusEnum, } from '@shared/generated/eperusteet';
+import { PerusteDtoToteutusEnum as PerusteToteutusEnum } from '@shared/generated/eperusteet';
 import { PerusteDtoToteutusEnum as YlopsToteutusEnum} from '@shared/generated/ylops';
 import { KoulutustyyppiToteutus, Koulutustyyppi } from '@shared/tyypit';
 
@@ -13,7 +13,7 @@ export function uusiJulkinenToteutus(hasToteutus: HasKoulutustyyppiToteutus) {
         || hasToteutus.koulutustyyppi !== Koulutustyyppi.aikuistenperusopetus
         && (hasToteutus.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
         || hasToteutus.toteutus === KoulutustyyppiToteutus.lops2019.valueOf())) {
-      return true;
+    return true;
   }
 
   return false;
