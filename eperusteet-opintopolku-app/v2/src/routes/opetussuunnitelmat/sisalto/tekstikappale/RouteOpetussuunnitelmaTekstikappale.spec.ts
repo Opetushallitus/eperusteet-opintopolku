@@ -4,6 +4,7 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import { opetussuunnitelmaDataStoreMock, opetussuunnitelmaTekstikappaleStoreMock } from '@/storeMocks';
 import { Kielet, KieliStore } from '@shared/stores/kieli';
 import { Kieli } from '@shared/tyypit';
+import { TekstiKappaleKevytDto } from '@shared/api/tyypit';
 
 
 describe('RouteOpetussuunnitelmaTekstikappale', async () => {

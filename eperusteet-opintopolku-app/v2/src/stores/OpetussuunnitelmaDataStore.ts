@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
-import { Lops2019OpintojaksoDto, NavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
+import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
 import {
   baseURL,
   Dokumentit,
@@ -34,7 +34,7 @@ export class OpetussuunnitelmaDataStore {
   @State() public opetussuunnitelma: OpetussuunnitelmaKevytDto | null = null;
   @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
-  @State() public navigation: NavigationNodeDto | null = null;
+  @State() public navigation: YlopsNavigationNodeDto | null = null;
   @State() public opintojaksot: Lops2019OpintojaksoDto[] | null = null;
   @State() public dokumentit: any = {};
   @State() public currentRoute: Location | null = null;
@@ -137,7 +137,7 @@ export class OpetussuunnitelmaDataStore {
     }
     else {
       const tiedot = buildTiedot('opetussuunnitelmaTiedot', {
-        opetussuunnitelmaId: state.opetussuunnitelmaId,
+        opetussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
       });
       return buildNavigation(state.navigation, tiedot, true);
     }

@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
-import { TekstiKappaleKevytDto, Puu, PerusteTekstiKappaleViiteDto, Matala } from '@shared/api/tyypit';
+import {
+  TekstiKappaleDto,
+  Puu,
+  Matala,
+  PerusteTekstiKappaleViiteDto,
+} from '@shared/api/tyypit';
 import { Lops2019Perusteet, OpetussuunnitelmanSisalto } from '@shared/api/ylops';
 
 
@@ -11,9 +16,9 @@ export class OpetussuunnitelmaTekstikappaleStore {
   @State() public tekstiKappaleViite: Puu | null = null;
   @State() public tekstiKappaleViitteet: number[] | null = null;
   @State() public tekstiKappaleOriginalViite: Puu | null = null;
-  @State() public tekstiKappaleOriginal: TekstiKappaleKevytDto | null = null;
+  @State() public tekstiKappaleOriginal: TekstiKappaleDto | null = null;
   @State() public tekstiKappaleOriginalViitteetObj: object | null = null;
-  @State() public tekstiKappale: TekstiKappaleKevytDto | null = null;
+  @State() public tekstiKappale: TekstiKappaleDto | null = null;
   @State() public perusteTekstikappaleViite: PerusteTekstiKappaleViiteDto | null = null;
   @State() public tekstiKappaleAllLoaded: boolean = false;
 
@@ -52,16 +57,20 @@ export class OpetussuunnitelmaTekstikappaleStore {
     }
     else {
       this.tekstiKappaleViite = (await OpetussuunnitelmanSisalto
-        .getTekstiKappaleViite(this.opsId, this.tekstiKappaleViiteId)).data;
+        .getTekstiKappaleViite(this.opsId, this.tekstiKappaleViiteId)).data as Puu;
     }
-    this.tekstiKappale = this.tekstiKappaleViite.tekstiKappale as TekstiKappaleKevytDto;
+
+    if (this.tekstiKappaleViite.tekstiKappale) {
+      this.tekstiKappale = this.tekstiKappaleViite.tekstiKappale;
+    }
   }
 
   async fetchPerusteTekstikappale() {
     this.perusteTekstikappaleViite = null;
     if (this.tekstiKappaleViite && this.tekstiKappaleViite.perusteTekstikappaleId) {
       this.perusteTekstikappaleViite = (await Lops2019Perusteet
-        .getAllLops2019PerusteTekstikappale(this.opsId, this.tekstiKappaleViite.perusteTekstikappaleId)).data;
+        .getAllLops2019PerusteTekstikappale(this.opsId,
+          this.tekstiKappaleViite.perusteTekstikappaleId)).data as PerusteTekstiKappaleViiteDto;
     }
   }
 
@@ -96,8 +105,10 @@ export class OpetussuunnitelmaTekstikappaleStore {
 
   async fetchOriginalTekstikappale() {
     this.tekstiKappaleOriginalViite = (await OpetussuunnitelmanSisalto
-      .getTekstiKappaleViiteOriginal(this.opsId, this.tekstiKappaleViiteId)).data;
-    this.tekstiKappaleOriginal = this.tekstiKappaleOriginalViite.tekstiKappale as TekstiKappaleKevytDto;
+      .getTekstiKappaleViiteOriginal(this.opsId, this.tekstiKappaleViiteId)).data as Puu;
+    if (this.tekstiKappaleOriginalViite.tekstiKappale) {
+      this.tekstiKappaleOriginal = this.tekstiKappaleOriginalViite.tekstiKappale;
+    }
   }
 
   private getAliviiteIds() {

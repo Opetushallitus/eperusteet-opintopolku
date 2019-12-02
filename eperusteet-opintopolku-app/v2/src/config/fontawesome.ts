@@ -58,5 +58,4 @@ library.add(brands.faWhatsapp);
 library.add(brands.faTelegram);
 
 
-
 Vue.component('fas', FontAwesomeIcon);

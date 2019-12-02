@@ -52,7 +52,7 @@ import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
-import { TekstiKappaleViiteKevytDto } from '@shared/api/tyypit';
+import { Puu } from '@shared/api/tyypit';
 
 
 @Component({
@@ -137,8 +137,8 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
 
   get alikappaleet() {
     if (!_.isEmpty(this.tekstiKappaleViite)) {
-      const viitteet: TekstiKappaleViiteKevytDto[] = [];
-      const stack: TekstiKappaleViiteKevytDto[] = [this.tekstiKappaleViite!];
+      const viitteet: Puu[] = [];
+      const stack: Puu[] = [this.tekstiKappaleViite!];
 
       while (!_.isEmpty(stack)) {
         const head: any = stack.shift()!;

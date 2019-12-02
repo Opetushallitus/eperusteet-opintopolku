@@ -72,7 +72,7 @@ export class PerusteDataStore {
     }
     else {
       const tiedot = buildTiedot('perusteTiedot', {
-        perusteId: state.perusteId,
+        perusteId: _.toString(state.perusteId),
       });
       return buildNavigation(state.navigation, tiedot);
     }
