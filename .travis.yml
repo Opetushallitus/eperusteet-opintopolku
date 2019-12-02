@@ -45,7 +45,6 @@ install:
   - cd ../../../..
 
   - git clone https://github.com/Opetushallitus/ci-tools.git
-  - source ci-tools/common/setup-tools.sh
   - export ARTIFACT_NAME="eperusteet-opintopolku"
 
 
@@ -71,6 +70,7 @@ script:
   - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
 
   - export BASE_IMAGE="baseimage-war:master"
+  - source ci-tools/common/setup-tools.sh
   - ./ci-tools/common/pull-image.sh
   - ./ci-tools/build/build-war.sh ${ARTIFACT_NAME}
 
