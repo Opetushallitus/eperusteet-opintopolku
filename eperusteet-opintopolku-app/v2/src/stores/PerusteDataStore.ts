@@ -72,7 +72,7 @@ export class PerusteDataStore {
     }
     else {
       const tiedot = buildTiedot('perusteTiedot', {
-        perusteId: _.toString(state.perusteId),
+        perusteId: state.perusteId,
       });
       return buildNavigation(state.navigation, tiedot);
     }
@@ -136,19 +136,7 @@ export class PerusteDataStore {
 
   @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
-
-      // Fixme: Jokin parempi ratkaisu stringin pakottamiseksi
-      const keys = _.keys(state.currentRoute.params);
-      _.each(keys, key => {
-        state.currentRoute.params[key] = _.toString(state.currentRoute.params[key]) ;
-      });
-
       for (const node of getters.flattenedSidenav) {
-        // Fixme: Jokin parempi ratkaisu stringin pakottamiseksi
-        if (node.location && node.location.params) {
-          node.location.params = _.mapValues(node.location.params, param => _.toString(param));
-        }
-
         if (node.location && _.isMatch(state.currentRoute, node.location)) {
           return node || null;
         }
@@ -193,10 +181,7 @@ export class PerusteDataStore {
   }
 
   public updateRoute(route) {
-    this.currentRoute = {
-      name: route.name,
-      params: _.mapValues(route.params, param => _.toString(param)),
-    };
+    this.currentRoute = route;
   }
 
   public readonly updateFilter = _.debounce((filter: NavigationFilter) => {

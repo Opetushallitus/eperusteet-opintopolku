@@ -78,7 +78,7 @@ export default class RoutePeruste extends Vue {
     return [];
   }
 
-  @Watch('$route', { immediate: true })
+  @Watch('$route', { deep: true, immediate: true })
   onRouteUpdate(route) {
     this.perusteDataStore.updateRoute(route);
   }

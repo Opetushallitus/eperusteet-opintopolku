@@ -13,12 +13,11 @@
         <h3 class="opintojakso-tieto-otsikko">{{ $t('oppiaineet') }}</h3>
         <ul>
           <li v-for="(oppiaine, idx) in oppiaineetExtended" :key="idx">
-            <router-link v-if="oppiaine.node" :to="oppiaine.node.location">
-              {{ $kaanna(oppiaine.node.label) }}
-            </router-link>
-            <span v-else>
-              {{ oppiaine.koodi }}
-            </span>
+            <div v-if="oppiaine.node">
+              <router-link v-if="oppiaine.node.location" :to="oppiaine.node.location">
+                {{ $kaanna(oppiaine.node.label) }}
+              </router-link>
+            </div>
           </li>
         </ul>
       </div>
@@ -28,6 +27,7 @@
         <p>{{ opintojakso.laajuus }}</p>
       </div>
     </div>
+
 
     <div v-if="hasModuulit">
       <h3>{{ $t('opintojakson-moduulit') }}</h3>
@@ -127,7 +127,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   get opintojakso() {
     if (this.$route) {
       return _.find(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
-        return _.toString(oj.id) === _.toString(this.$route.params.opintojaksoId);
+        return oj.id === _.parseInt(this.$route.params.opintojaksoId);
       }) as Lops2019OpintojaksoDto;
     }
   }
@@ -143,7 +143,11 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
       if (oa.koodi) {
         const node = this.navigationByUri[oa.koodi];
         if (node) {
-          oa.node = node;
+          const { location, label } = node;
+          oa.node = {
+            location,
+            label
+          };
         }
       }
 
@@ -237,6 +241,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   get navigationByUri() {
     return this.opetussuunnitelmaDataStore.navigationByUri;
   }
+
 }
 </script>
 

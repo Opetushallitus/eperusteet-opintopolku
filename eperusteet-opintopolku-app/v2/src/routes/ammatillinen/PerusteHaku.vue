@@ -33,7 +33,7 @@
               {{ $kaanna(osaamisala.nimi) }}
             </span>
           </div>
-          <div class="voimaantulo">
+          <div class="voimaantulo" v-if="peruste.voimassaoloAlkaa">
             {{ $ld(peruste.voimassaoloAlkaa) }}
           </div>
         </div>
