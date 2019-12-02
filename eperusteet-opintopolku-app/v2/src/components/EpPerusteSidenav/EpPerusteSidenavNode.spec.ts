@@ -5,7 +5,6 @@ import EpPerusteSidenavNode from './EpPerusteSidenavNode.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { KieliStore } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
 
 const navigationData = {
@@ -206,7 +205,7 @@ describe('EpPerusteSidenav', async () => {
 
     test('Navigation with viite active', async () => {
       perusteDataStore.currentRoute = {
-        name: 'tekstikappale',
+        name: 'perusteTekstikappale',
         params: {
           perusteId: '42',
           viiteId: '1',
@@ -282,7 +281,7 @@ describe('EpPerusteSidenav', async () => {
       expect(wrapper.html()).toContain('Päätaso');
 
       perusteDataStore.currentRoute = {
-        name: 'tekstikappale',
+        name: 'perusteTekstikappale',
         params: {
           perusteId: '42',
           viiteId: '1',
@@ -294,7 +293,7 @@ describe('EpPerusteSidenav', async () => {
       expect(wrapper.html()).toContain('Oppiaineet');
 
       perusteDataStore.currentRoute = {
-        name: 'tekstikappale',
+        name: 'perusteTekstikappale',
         params: {
           perusteId: '42',
           viiteId: '3',

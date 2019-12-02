@@ -68,8 +68,7 @@ import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { Meta } from '@shared/utils/decorators';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { KoulutustyyppiToteutus } from '../../../eperusteet-frontend-utils/vue/src/tyypit';
-import { perusteKoulutustyyppiUrlShortParamName } from '../../../eperusteet-frontend-utils/vue/src/utils/perusteet';
+import { perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
 import _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import {uusiJulkinenToteutus} from '@/utils/peruste';
@@ -108,6 +107,7 @@ export default class RouteKooste extends Vue {
     return _.chain(this.perusteKoosteStore.perusteet)
       .map(peruste => ({
         ...peruste,
+        id: _.toString(peruste.id),
         ulkoinenlinkki: this.ulkoinenlinkki(peruste)
       }))
       .value();

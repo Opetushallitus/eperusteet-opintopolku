@@ -1,7 +1,7 @@
 <template>
 <div class="content">
   <div v-if="moduuli">
-    <h2 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi)}}</h2>
+    <h2 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')'  : '') }}</h2>
 
     <div class="teksti">
       <moduuli-esitys :moduuli="moduuli"
@@ -41,6 +41,11 @@ export default class RouteOpetussuunnitelmaModuuli extends Vue {
     return this.lops2019OpetussuunnitelmaModuuliStore.moduuli;
   }
 
+  get koodi() {
+    if (this.moduuli) {
+      return this.moduuli.koodi;
+    }
+  }
   get perusteTermit() {
     return this.opetussuunnitelmaDataStore.perusteTermit;
   }
