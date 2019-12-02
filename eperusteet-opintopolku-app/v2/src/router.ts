@@ -49,7 +49,7 @@ import RouteOpetussuunnitelmaOppiaineet
 import RouteOpetussuunnitelmaOppiaine
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaine.vue';
 import RouteOpetussuunnitelmaModuuli
-  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaModuuli.vue'
+  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaModuuli.vue';
 import RouteOpetussuunnitelmaOpintojakso
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/opintojaksot/RouteOpetussuunnitelmaOpintojakso.vue';
 import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
@@ -348,8 +348,8 @@ export const router = new Router({
               return {
                 default: {
                   lops2019OpetussuunnitelmaOppiaineStore: await Lops2019OpetussuunnitelmaOppiaineStore.create(
-                      _.parseInt(route.params.opetussuunnitelmaId),
-                      _.parseInt(route.params.oppiaineId),
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.oppiaineId),
                   ),
                 },
               };
@@ -367,9 +367,9 @@ export const router = new Router({
               return {
                 default: {
                   lops2019OpetussuunnitelmaModuuliStore: await Lops2019OpetussuunnitelmaModuuliStore.create(
-                      _.parseInt(route.params.opetussuunnitelmaId),
-                      _.parseInt(route.params.oppiaineId),
-                      _.parseInt(route.params.moduuliId)
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.oppiaineId),
+                    _.parseInt(route.params.moduuliId)
                   ),
                 },
               };

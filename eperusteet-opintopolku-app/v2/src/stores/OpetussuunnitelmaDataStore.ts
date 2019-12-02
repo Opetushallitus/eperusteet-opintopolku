@@ -205,9 +205,9 @@ export class OpetussuunnitelmaDataStore {
     }
 
     return _.chain(getters.flattenedSidenav)
-        .filter('meta.koodi.uri')
-        .keyBy('meta.koodi.uri')
-        .value();
+      .filter('meta.koodi.uri')
+      .keyBy('meta.koodi.uri')
+      .value();
   })
   public readonly navigationByUri!: { [uri: string]: NavigationNode };
 

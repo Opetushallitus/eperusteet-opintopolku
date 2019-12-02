@@ -1,6 +1,6 @@
 import { Store, State } from '@shared/stores/store';
 import { Lops2019ModuuliDto } from '@shared/api/tyypit';
-import { Lops2019Perusteet } from "@shared/api/ylops";
+import { Lops2019Perusteet } from '@shared/api/ylops';
 
 @Store
 export class Lops2019OpetussuunnitelmaModuuliStore {
@@ -24,6 +24,6 @@ export class Lops2019OpetussuunnitelmaModuuliStore {
   async fetchModuuli() {
     this.moduuli = null;
     this.moduuli = (await Lops2019Perusteet
-        .getAllLops2019PerusteModuuli(this.opsId, this.oppiaineId, this.moduuliId)).data;
+      .getAllLops2019PerusteModuuli(this.opsId, this.oppiaineId, this.moduuliId)).data;
   }
 }
