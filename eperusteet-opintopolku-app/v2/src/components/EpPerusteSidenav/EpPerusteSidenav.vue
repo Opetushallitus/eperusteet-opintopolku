@@ -1,17 +1,17 @@
 <template>
-<div class="sidebar">
-  <ep-spinner v-if="sidenavLoading" />
-  <div v-else>
-    <div class="search">
-      <ep-search :value="query" @input="setValue" />
-    </div>
-    <div class="navigation-tree">
+  <div class="sidebar">
+    <ep-spinner v-if="sidenavLoading" />
+    <div v-else>
+      <div class="search">
+        <ep-search :value="query" @input="setValue" />
+      </div>
+      <div class="navigation-tree">
         <ep-peruste-sidenav-node v-if="treeData"
-                                 :node="treeData"
-                                 :current="current" />
+                                  :node="treeData"
+                                  :current="current" />
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

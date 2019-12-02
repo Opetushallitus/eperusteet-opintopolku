@@ -5,50 +5,50 @@
     <h2 class="otsikko" slot="header">{{ $t('perusteen-tiedot') }}</h2>
     <div class="row">
       <div class="col-md-12" v-if="peruste.nimi">
-        <ep-form-content name="peruste-nimi">
+        <ep-form-content name="peruste-nimi" headerType="h3" headerClass="h6">
           <ep-field v-model="peruste.nimi"></ep-field>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="peruste.diaarinumero">
-        <ep-form-content name="maarayksen-diaarinumero">
+        <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
           <ep-field v-model="peruste.diaarinumero"></ep-field>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="peruste.paatospvm">
-        <ep-form-content name="maarayksen-paatospaivamaara">
+        <ep-form-content name="maarayksen-paatospaivamaara" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="peruste.paatospvm"></ep-datepicker>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="peruste.voimassaoloAlkaa">
-        <ep-form-content name="voimaantulo-pvm">
+      <div class="col-md-12" v-if="peruste.voimassaoloAlkaa" >
+        <ep-form-content name="voimaantulo-pvm" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="peruste.voimassaoloAlkaa"></ep-datepicker>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="peruste.voimassaoloLoppuu">
-        <ep-form-content name="voimassaolo-paattymispvm">
+        <ep-form-content name="voimassaolo-paattymispvm" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="peruste.voimassaoloLoppuu"></ep-datepicker>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="peruste.siirtymaPaattyy">
-        <ep-form-content name="siirtyman-paattyminen">
+        <ep-form-content name="siirtyman-paattyminen" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="peruste.siirtymaPaattyy"></ep-datepicker>
           <p class="help">{{ $t('siirtyman-kuvaus') }}</p>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasMaarayskirje">
-        <ep-form-content name="maarayskirje">
+        <ep-form-content name="maarayskirje" headerType="h3" headerClass="h6">
           <a :href="maarayskirje.url" target="_blank" rel="noopener noreferrer">{{ maarayskirje.nimi }}</a>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasMuutosmaaraykset">
-        <ep-form-content name="muutosmaaraykset">
+        <ep-form-content name="muutosmaaraykset" headerType="h3" headerClass="h6">
           <div v-for="(muutosmaarays, idx) in muutosmaaraykset" :key="idx">
             <a :href="muutosmaarays.url" target="_blank" rel="noopener noreferrer">{{ muutosmaarays.nimi }}</a>
           </div>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasKorvattavatDiaarinumerot">
-        <ep-form-content name="korvattavat-perusteet">
+        <ep-form-content name="korvattavat-perusteet" headerType="h3" headerClass="h6">
           <b-table striped
                    fixed
                    responsive
@@ -82,8 +82,8 @@
         <!-- todo: osaamisalojen-kuvaukset -->
       <!-- todo: kuvaus -->
       <div class="col-md-12" v-if="dokumentti">
-        <ep-form-content name="dokumentti-osoite">
-          <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-dokumentti') }}</a>
+        <ep-form-content name="dokumentti-osoite" headerType="h3" headerClass="h6">
+          <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-pdf-dokumentti') }}</a>
         </ep-form-content>
       </div>
       <!-- todo: kv-liitteet -->
@@ -124,10 +124,10 @@ export default class RoutePerusteTiedot extends Vue {
   async mounted() {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
-    await this.perusteDataStore.getKorvaavatPerusteet();
+    this.perusteDataStore.getKorvaavatPerusteet();
     // Dokumentti on toteuttu vain ammatillisille
     if (this.$route && isAmmatillinen(this.$route.params.koulutustyyppi)) {
-      await this.perusteDataStore.getDokumentit();
+      this.perusteDataStore.getDokumentit();
     }
     this.isLoading = false;
   }
@@ -197,7 +197,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get hasKorvattavatDiaarinumerot() {
-    return !_.isEmpty(this.peruste.korvattavatDiaarinumerot);
+    return !_.isEmpty(this.korvaavatPerusteet);
   }
 
   get korvattavatDiaarinumerotFields() {

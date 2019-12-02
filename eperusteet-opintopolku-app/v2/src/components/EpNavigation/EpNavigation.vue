@@ -1,16 +1,16 @@
 <template>
-<div class="container">
   <b-navbar type="light"
             role="navigation"
             toggleable="lg"
-            class="navbar-ep">
+            class="navbar-ep"
+            :sticky="true">
     <b-navbar-brand :to="{ name: 'root' }">
       <img src="../../../public/img/icons/eperusteet-logo.svg" :alt="$t('eperusteet')">
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-    <b-collapse id="nav-collapse" is-nav>
+    <b-collapse id="nav-collapse" is-nav >
       <b-navbar-nav class="flex-wrap">
         <b-nav-item v-for="(item, idx) in items"
                     :key="idx"
@@ -18,8 +18,12 @@
                     :active-class="activeClass"
                     :class="item.activeClass"
                     :to="item.route">
-          {{ $t(item.name) }}
+          {{ $t('navi-'+item.name) }}
         </b-nav-item>
+      </b-navbar-nav>
+
+      <b-navbar-nav class="ml-auto">
+         <li><b-nav-text><button @click="setFocusToFirstOfContent" class="button--skip-link">{{ $t('siirry-sisaltoon') }}</button></b-nav-text> </li>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -36,7 +40,6 @@
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
-</div>
 </template>
 
 <script lang="ts">
@@ -80,6 +83,19 @@ export default class EpNavigation extends Vue {
     }
     else {
       return 'router-link-active';
+    }
+  }
+
+  setFocusToFirstOfContent() {
+    const maincontent = document.getElementById('main-content');
+
+    if (maincontent) {
+      if (maincontent.getElementsByTagName('a').length > 0) {
+        maincontent.getElementsByTagName('a')[0].focus();
+      }
+      else if(maincontent.getElementsByTagName('input').length > 0) {
+        maincontent.getElementsByTagName('input')[0].focus();
+      }
     }
   }
 
@@ -149,13 +165,19 @@ export default class EpNavigation extends Vue {
 @import '../../styles/_variables.scss';
 
 .navbar-ep {
-  padding-left: 15px;
-  padding-right: 15px;
+
+  background-color: #fff;
+
   .navbar-nav .nav-item {
     white-space: nowrap;
     color: #000;
-    font-weight: bold;
+    font-weight: 600;
   }
+
+  .nav-item:hover {
+    background-color:#F2F2F2;
+  }
+
   .navbar-nav.ml-auto .nav-item.dropdown {
     /deep/ .nav-link.dropdown-toggle {
       color: #001A58;
@@ -173,8 +195,21 @@ export default class EpNavigation extends Vue {
     max-width: 100% !important;
   }
 }
-@media (min-width: 992px) {
+
+@media (min-width: 1300px) {
   .navbar-ep {
+    .navbar-nav.flex-wrap {
+      margin-left: calc((100% - 1140px) / 2);
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .navbar-ep {
+
+    padding-left: 50px;
+    padding-right: 50px;
+
     .navbar-nav .nav-link {
       &:not(.router-link-active) {
         padding-bottom: 0.5rem;
@@ -243,6 +278,32 @@ export default class EpNavigation extends Vue {
       }
     }
   }
+}
+
+.button--skip-link:not(:focus):not(:hover) {
+    -webkit-transform: translateY(-4em);
+    -ms-transform: translateY(-4em);
+    transform: translateY(-4em);
+    opacity: 0;
+}
+
+.button--skip-link:focus {
+    background-color: #fff;
+    text-decoration: none;
+    text-align: center;
+    padding: 5px;
+    border-color: #062434;
+}
+
+.button--skip-link {
+    margin: 0 auto;
+    position: absolute;
+    z-index: 20;
+    left: 45em;
+    right: 1em;
+    top: 1em;
+    width: 10em;
+    opacity: 1;
 }
 
 </style>

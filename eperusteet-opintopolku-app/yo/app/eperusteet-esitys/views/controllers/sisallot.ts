@@ -177,6 +177,11 @@ namespace Controllers {
             osaamistavoite.arviointi.arvioinninKohdealueet[0].arvioinninKohteet &&
             osaamistavoite.arviointi.arvioinninKohdealueet[0].arvioinninKohteet.length > 0;
 
+        $scope.hasGeneerinenArviointi = () =>
+            $scope.tutkinnonOsa.geneerinenArviointiasteikko &&
+            $scope.tutkinnonOsa.geneerinenArviointiasteikko.osaamistasonKriteerit &&
+            $scope.tutkinnonOsa.geneerinenArviointiasteikko.osaamistasonKriteerit.length > 0;
+
         $scope.osaAlueFilter = item => _.contains(item.$kielet, Kieli.getSisaltokieli());
     };
 

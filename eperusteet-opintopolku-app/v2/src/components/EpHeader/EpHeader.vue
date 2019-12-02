@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="container sisalto">
+  <div id="main-content" class="container sisalto">
     <slot></slot>
   </div>
 </div>
@@ -142,8 +142,12 @@ export default class EpHeader extends Vue {
     padding-right: 0;
     margin: 0;
 
-    li:first-child {
-      font-weight: bolder;
+    li {
+      font-weight: 600;
+    }
+
+    li:last-child {
+      font-weight: 400;
     }
 
     &.black /deep/ li, &.black /deep/ li::before, &.black /deep/ li a {
@@ -161,9 +165,9 @@ export default class EpHeader extends Vue {
   // Koosteen / perusteen nimi
   h1.nimi {
     margin-top: 0;
-    font-weight: bold;
-    font-size: 2rem;
+    font-weight: 500;
     color: #fff;
+    font-family: 'Poppins';
 
     @media (max-width: 991.98px) {
       font-size: 1.5rem;

@@ -45,7 +45,6 @@ install:
   - cd ../../../..
 
   - git clone https://github.com/Opetushallitus/ci-tools.git
-  - source ci-tools/common/setup-tools.sh
   - export ARTIFACT_NAME="eperusteet-opintopolku"
 
 
@@ -66,6 +65,8 @@ script:
   - cd ../..
 
   - mvn clean install -B -Dbranch=${TRAVIS_BRANCH} -Drevision=${TRAVIS_COMMIT} -DbuildNumber=${TRAVIS_BUILD_NUMBER}
+
+  - source ci-tools/common/setup-tools.sh
 
   - mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
   - cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/

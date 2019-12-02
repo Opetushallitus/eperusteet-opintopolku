@@ -41,7 +41,8 @@ angular
         $timeout,
         $stateParams,
         Oppiaineet,
-        Kaanna
+        Kaanna,
+        opsUtils
     ) {
         $scope.osaamiset = $scope.providedOsaamiset;
         if (_.isEmpty($scope.osaamiset)) {
@@ -155,6 +156,8 @@ angular
         $scope.addArviointi = function(tavoite) {
             tavoite.arvioinninkohteet = [{ arvioinninKohde: {}, hyvanOsaamisenKuvaus: {} }];
         };
+
+        $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
 
         //var cloner = CloneHelper.init(['tavoite', 'sisaltoalueet', 'laajattavoitteet', 'arvioinninkohteet']);
         //var idFn = function(item) { return item.id; };

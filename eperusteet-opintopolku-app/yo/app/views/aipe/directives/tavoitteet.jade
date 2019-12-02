@@ -12,8 +12,14 @@ mixin tavoite-naytto
     h4(kaanna="'laaja-alainen-osaaminen'")
     div(tag-cloud="tavoite.$osaaminen", openable="true", edit-mode="false", add-label="lisaa-laaja-alainen-osaaminen")
 
+    h4(kaanna="'arvioinnin-kohde'")
+    p(kaanna="arvioinninKohteenTeksti(tavoite) || 'ei-asetettu'")
+
     h4(kaanna="tavoite.arvioinninOtsikko || 'arviointi'")
     +arviointi
+    
+    div(ng-if='tavoite.vapaaTeksti')
+      span(ng-bind-html='tavoite.vapaaTeksti | kaanna | unsafe')
 
   .div(ng-hide="tavoite.$accordionOpen")
     .tavoite-collapser.action-link(ng-click="tavoite.$accordionOpen = true") …
@@ -22,14 +28,14 @@ mixin arviointi
   table.table.table-default.table-bordered.perusopetuksen-arviointi
     thead
       tr
-        th(ng-bind="tavoite.arvioinninKuvaus || 'arvioinnin-kohde' | kaanna")
-        th(ng-bind="tavoite.arvioinninOsaamisenKuvaus || 'arvion-hyva-osaaminen' | kaanna")
+        th(ng-bind="'osaamisen-kuvaus' | kaanna")
+        th(ng-bind="'arvion-kuvaus' | kaanna")
     tbody
       tr(ng-repeat="arvioinninKohde in tavoite.arvioinninkohteet")
         td
-          span(kaanna="arvioinninKohde.arvioinninKohde")
+          span(kaanna="'osaamisen-kuvaus-arvosanalle_' + arvioinninKohde.arvosana")
         td
-          span(kaanna="arvioinninKohde.hyvanOsaamisenKuvaus")
+          span(kaanna="arvioinninKohde.osaamisenKuvaus")
 
 mixin tavoite-sisalto
   .tavoite-sisalto

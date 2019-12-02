@@ -39,3 +39,17 @@
     }
   }
 }
+
+@mixin shadow-tile {
+  .shadow-tile {
+    box-shadow: 5px 5px 20px 1px rgba(27,61,142,0.08);
+  }
+
+  @include shadow-tile-hover;
+}
+
+@mixin shadow-tile-hover {
+  .shadow-tile:hover, .shadow-tile:focus {
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+  }
+}
