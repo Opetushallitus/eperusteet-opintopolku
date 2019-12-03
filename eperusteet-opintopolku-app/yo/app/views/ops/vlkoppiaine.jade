@@ -43,7 +43,10 @@ div(ng-show='!missingVlk()')
                       div
                         i.pull-left.glyphicon(ng-class="{'glyphicon-chevron-down': status.avoin, 'glyphicon-chevron-right': !status.avoin}")
                         h4(ng-bind-html="'nayta-perusteen-teksti' | kaanna | unsafe")
-                    termisto-tekstikentta(perusteteksti='perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus')            
+                    termisto-tekstikentta(perusteteksti='perustenSisaltoMap[sisaltoalue.sisaltoalueet.tunniste].kuvaus')
+        .lista(ng-if='sa.tavoitteistaJohdetutOppimisenTavoitteet')
+          h4(kaanna="'tavoitteista-johdetut-oppimisen-tavoitteet'")
+          span(ng-bind-html='sa.tavoitteistaJohdetutOppimisenTavoitteet | kaanna | unsafe')
         .lista
           h4(kaanna="'laaja-alaisen-osaamisen-alueet'")
           ul
@@ -53,8 +56,8 @@ div(ng-show='!missingVlk()')
                 span.label.label-default Peruste
               span(ng-show='paikalliset[laajaalainen.tunniste].teksti', ohje='false', ohje-click-anywhere='false', teksti='paikalliset[laajaalainen.tunniste].teksti', otsikko='laajaalainen.nimi', suunta='bottom')
                 span.label.label-warning Paikallinen
-      h4(kaanna="'arvioinnin-kohde'")   
-      p(kaanna="arvioinninKohteenTeksti(sa) || 'ei-asetettu'")                      
+      h4(kaanna="'arvioinnin-kohde'")
+      p(kaanna="arvioinninKohteenTeksti(sa) || 'ei-asetettu'")
       .tavoitteet-arviointi(ng-show='sa.$arvioinninkohteet.length > 0')
         h4(kaanna="'arviointi-vuosiluokan-paatteeksi'")
         table.table.table-bordered.kriteerit
@@ -65,7 +68,7 @@ div(ng-show='!missingVlk()')
             td(ng-bind="'osaamisen-kuvaus-arvosanalle_' + kohde.arvosana | kaanna")
             td(ng-bind='kohde.osaamisenKuvaus | kaanna')
       div(ng-if='sa.vapaaTeksti')
-        span(ng-bind-html='sa.vapaaTeksti | kaanna | unsafe')      
+        span(ng-bind-html='sa.vapaaTeksti | kaanna | unsafe')
 h2(ng-show='sisaltoAlueet.length', ng-bind-html="'keskeiset-sisaltoalueet' | kaanna")
 .tavoite(ng-repeat='alue in sisaltoAlueet')
   h4.tavoite-otsikko(ng-bind-html='alue[0].nimi | kaanna | unsafe')
