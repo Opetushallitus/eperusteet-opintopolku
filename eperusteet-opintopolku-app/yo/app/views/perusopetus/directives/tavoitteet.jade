@@ -13,6 +13,8 @@
                 .collapsible(uib-collapse='!tavoite.$accordionOpen')
                   h4(ng-show='tavoite.$valittuKohdealue || tavoite.$editing', kaanna="'kohdealue'")
                   p(ng-if='tavoite.$valittuKohdealue && !tavoite.$editing') {{ tavoite.$valittuKohdealue ? tavoite.$valittuKohdealue.nimi : '' | kaanna }}
+                  h4(ng-show='tavoite.tavoitteistaJohdetutOppimisenTavoitteet || tavoite.$editing', kaanna="'tavoitteista-johdetut-oppimisen-tavoitteet'")
+                  span(ng-if='tavoite.tavoitteistaJohdetutOppimisenTavoitteet && !tavoite.$editing' ng-bind-html='tavoite.tavoitteistaJohdetutOppimisenTavoitteet | kaanna | unsafe')
                   div(ng-if='tavoite.$editing || tavoite.laajattavoitteet')
                     h4(kaanna="'laaja-alaisen-osaamisen-alueet'")
                     div(tag-cloud='tavoite.$osaaminen', openable='true', edit-mode='tavoite.$editing', add-label='lisaa-laaja-alainen-osaaminen')
