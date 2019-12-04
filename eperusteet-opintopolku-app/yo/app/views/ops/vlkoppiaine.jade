@@ -18,6 +18,7 @@ div(ng-show='!vlk.vuosiluokat.length && !noYleistavoitteet()')
 div(ng-show='!missingVlk()')
   h2.vuosiluokka-otsikko(ng-bind='vuosi | kaanna')
   h3(kaanna="'tavoitteet'")
+  span(ng-if="vapaaTeksti" ng-bind-html='vapaaTeksti | kaanna | unsafe')
   uib-accordion.tavoitteet-box(ng-repeat='sa in sisalto')
     .panel-default(uib-accordion-group, is-open='status.open')
       uib-accordion-heading

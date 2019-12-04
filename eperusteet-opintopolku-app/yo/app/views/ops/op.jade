@@ -5,6 +5,7 @@ div(ng-if='!vlk.vuosiluokat.length && !noYleistavoitteet()')
 div(ng-if='!missingVlk()')
   h2.vuosiluokka-otsikko(ng-bind='vuosiluokka | kaanna')
   h3(kaanna="'tavoitteet'")
+  span(ng-if="vapaaTeksti" ng-bind-html='vapaaTeksti | kaanna | unsafe')
   uib-accordion.tavoitteet-box(ng-repeat='sa in sisalto')
     div(uib-accordion-group, is-open='status.open')
       uib-accordion-heading

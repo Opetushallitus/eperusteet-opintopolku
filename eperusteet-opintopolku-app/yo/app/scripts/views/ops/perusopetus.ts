@@ -302,6 +302,7 @@ angular
     ) {
         $scope.oppiaine = oppiaine;
         $scope.vlk = vuosiluokkakokonaisuus;
+        $scope.vapaaTeksti = vuosiluokkaSisalto ? vuosiluokkaSisalto.vapaaTeksti : {};
         const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, "_vuosiluokkakokonaisuus");
         $scope.perusteOppiaine = oppiainePeruste;
         $scope.perusteOppiaineVlkMap = oppiainePeruste
@@ -426,6 +427,7 @@ angular
     ) {
         $scope.oppiaine = oppiaine;
         $scope.vlk = vuosiluokkakokonaisuus;
+        $scope.vapaaTeksti = vuosiluokkaSisalto ? vuosiluokkaSisalto.vapaaTeksti : {};
         $scope.vuosiluokka = vuosiluokkaSisalto.vuosiluokka;
         const perusteSisaltoMap = _.indexBy(oppiainePeruste.vuosiluokkakokonaisuudet, "_vuosiluokkakokonaisuus");
         $scope.perusteOppiaine = oppiainePeruste;

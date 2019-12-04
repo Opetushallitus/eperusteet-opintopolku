@@ -59,6 +59,7 @@
 
     div(ng-if="oppiaine.tavoitteet.length > 0")
       h2(kaanna="'tavoitteet'")
+      span(ng-if="oppiaine.vapaaTeksti" ng-bind-html='oppiaine.vapaaTeksti | kaanna | unsafe')
       aipe-tavoitteet(model="oppiaine.tavoitteet", laajaalaiset="laajaalaiset", vaihe="vaihe", editing="false")
 
   div(ui-view="")
