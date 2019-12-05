@@ -4,7 +4,10 @@
     <h2 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')'  : '') }}</h2>
 
     <div class="teksti">
-      <moduuli-esitys :moduuli="moduuli" :termit="termit" :kuvat="kuvat" />
+      <moduuli-esitys :moduuli="moduuli"
+                      :termit="perusteTermit"
+                      :kuvat="perusteKuvat"
+                      :isPerusteView="false" />
     </div>
 
     <slot name="previous-next-navigation" />
@@ -15,8 +18,8 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { Lops2019OpetussuunnitelmaModuuliStore } from '@/stores/Lops2019OpetussuunnitelmaModuuliStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/ModuuliEsitys.vue';
 
@@ -26,30 +29,29 @@ import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/Moduul
     ModuuliEsitys,
   }
 })
-export default class RouteModuuli extends Vue {
+export default class RouteOpetussuunnitelmaModuuli extends Vue {
 
   @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
   @Prop({ required: true })
-  private lops2019ModuuliStore!: Lops2019ModuuliStore;
+  private lops2019OpetussuunnitelmaModuuliStore!: Lops2019OpetussuunnitelmaModuuliStore;
 
   get moduuli() {
-    return this.lops2019ModuuliStore.moduuli;
-  }
-
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
-
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
+    return this.lops2019OpetussuunnitelmaModuuliStore.moduuli;
   }
 
   get koodi() {
     if (this.moduuli) {
       return this.moduuli.koodi;
     }
+  }
+  get perusteTermit() {
+    return this.opetussuunnitelmaDataStore.perusteTermit;
+  }
+
+  get perusteKuvat() {
+    return this.opetussuunnitelmaDataStore.perusteKuvat;
   }
 
 }

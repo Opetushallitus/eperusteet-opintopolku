@@ -22,6 +22,7 @@ import RouteModuuli from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteMo
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
+import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sisalto/tekstikappale/RouteOpetussuunnitelmaTekstikappale.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -29,6 +30,7 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 
 
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
@@ -42,19 +44,27 @@ import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
-import QueryString from 'qs';
+import RouteOpetussuunnitelmaOppiaineet
+  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaineet.vue';
+import RouteOpetussuunnitelmaOppiaine
+  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaine.vue';
+import RouteOpetussuunnitelmaModuuli
+  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaModuuli.vue';
+import RouteOpetussuunnitelmaOpintojakso
+  from '@/routes/opetussuunnitelmat/sisalto/lops2019/opintojaksot/RouteOpetussuunnitelmaOpintojakso.vue';
+import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
+import { Lops2019OpetussuunnitelmaModuuliStore } from '@/stores/Lops2019OpetussuunnitelmaModuuliStore';
+
 
 Vue.use(Router);
 Vue.use(VueMeta, {
   refreshOnceOnNavigation: true
 });
 
-
 const logger = createLogger('Router');
 
 const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
-
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
@@ -177,7 +187,7 @@ export const router = new Router({
       }, {
         path: 'tekstikappale/:viiteId',
         component: RouteTekstikappale,
-        name: 'tekstikappale',
+        name: 'perusteTekstikappale',
         meta: {
           resolve: {
             cacheBy: ['viiteId'],
@@ -185,7 +195,8 @@ export const router = new Router({
               return {
                 default: {
                   perusteenOsaStore: await PerusteenOsaStore.create(
-                    _.parseInt(route.params.viiteId)),
+                    _.parseInt(route.params.viiteId),
+                  ),
                 },
               };
             },
@@ -268,7 +279,16 @@ export const router = new Router({
         },
       }],
     }, {
-      path: 'ops/:opetussuunnitelmaId/:koulutustyyppi',
+      path: 'ops/:opetussuunnitelmaId/:koulutustyyppi*',
+      name: 'ops',
+      component: RouteOpetussuunnitelma,
+      redirect(to) {
+        return {
+          name: 'opetussuunnitelma',
+        };
+      },
+    }, {
+      path: 'opetussuunnitelma/:opetussuunnitelmaId/:koulutustyyppi',
       name: 'opetussuunnitelma',
       component: RouteOpetussuunnitelma,
       redirect(to) {
@@ -283,7 +303,8 @@ export const router = new Router({
             return {
               default: {
                 opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
-                  _.parseInt(route.params.opetussuunnitelmaId)),
+                  _.parseInt(route.params.opetussuunnitelmaId),
+                ),
               },
             };
           },
@@ -293,6 +314,72 @@ export const router = new Router({
         path: 'tiedot',
         component: RouteOpetussuunnitelmaTiedot,
         name: 'opetussuunnitelmaTiedot',
+      }, {
+        path: 'tekstikappale/:viiteId',
+        component: RouteOpetussuunnitelmaTekstikappale,
+        name: 'opetussuunnitelmaTekstikappale',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'viiteId'],
+            async props(route) {
+              return {
+                default: {
+                  opetussuunnitelmaTekstikappaleStore: await OpetussuunnitelmaTekstikappaleStore.create(
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.viiteId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'oppiaine',
+        component: RouteOpetussuunnitelmaOppiaineet,
+        name: 'lops2019OpetussuunnitelmaOppiaineet',
+      }, {
+        path: 'oppiaine/:oppiaineId',
+        component: RouteOpetussuunnitelmaOppiaine,
+        name: 'lops2019OpetussuunnitelmaOppiaine',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019OpetussuunnitelmaOppiaineStore: await Lops2019OpetussuunnitelmaOppiaineStore.create(
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.oppiaineId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'oppiaine/:oppiaineId/moduuli/:moduuliId',
+        component: RouteOpetussuunnitelmaModuuli,
+        name: 'lops2019OpetussuunnitelmaModuuli',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'oppiaineId', 'moduuliId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019OpetussuunnitelmaModuuliStore: await Lops2019OpetussuunnitelmaModuuliStore.create(
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.oppiaineId),
+                    _.parseInt(route.params.moduuliId)
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'opintojakso/:opintojaksoId',
+        component: RouteOpetussuunnitelmaOpintojakso,
+        name: 'lops2019OpetussuunnitelmaOpintojakso',
       }],
     }],
   }, {

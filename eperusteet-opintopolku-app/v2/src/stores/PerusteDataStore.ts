@@ -2,7 +2,14 @@ import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
 import { NavigationNodeDto, PerusteDto, TermiDto, LiiteDtoWrapper } from '@shared/api/tyypit';
 import { Perusteet } from '@shared/api/eperusteet';
-import { NavigationFilter, NavigationNode, buildNavigation, filterNavigation } from '@shared/utils/NavigationBuilder';
+import {
+  buildNavigation,
+  filterNavigation,
+  buildTiedot,
+  setPerusteData,
+  NavigationFilter,
+  NavigationNode,
+} from '@shared/utils/NavigationBuilder';
 import { baseURL,
   Dokumentit, DokumentitParam,
   Termit,
@@ -50,7 +57,7 @@ export class PerusteDataStore {
     this.fetchNavigation();
   }
 
-  async fetchNavigation() {
+  private async fetchNavigation() {
     this.navigation = (await Perusteet.getNavigation(this.perusteId)).data;
   }
 
@@ -64,7 +71,10 @@ export class PerusteDataStore {
       return null;
     }
     else {
-      return buildNavigation(state.peruste, state.navigation);
+      const tiedot = buildTiedot('perusteTiedot', {
+        perusteId: _.toString(state.perusteId),
+      });
+      return buildNavigation(state.navigation, tiedot);
     }
   })
   public readonly sidenav!: NavigationNode | null;
@@ -127,15 +137,8 @@ export class PerusteDataStore {
   @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
       for (const node of getters.flattenedSidenav) {
-        // FIXME: Jokin parempi ratkaisu tähän
-        if (node.location && node.location.params) {
-          node.location.params = _.mapValues(node.location.params, param => _.toString(param));
-        }
-        if (node.location) {
-          const isAMatch = _.isMatch(state.currentRoute, node.location);
-          if (isAMatch) {
-            return node || null;
-          }
+        if (node.location && _.isMatch(state.currentRoute, node.location)) {
+          return node || null;
         }
       }
     }
@@ -178,10 +181,7 @@ export class PerusteDataStore {
   }
 
   public updateRoute(route) {
-    this.currentRoute = {
-      name: route.name,
-      params: _.mapValues(route.params || {}, param => _.toString(param)),
-    };
+    this.currentRoute = route;
   }
 
   public readonly updateFilter = _.debounce((filter: NavigationFilter) => {

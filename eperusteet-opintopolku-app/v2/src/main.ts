@@ -1,16 +1,16 @@
+import * as _ from 'lodash';
 import Vue from 'vue';
 
 import { Kielet, KieliStore } from '@shared/stores/kieli';
 import { rootConfig  } from '@/mainvue';
 import { createLogger } from '@shared/utils/logger';
 import { Lokalisointi } from '@shared/api/eperusteet';
-import * as _ from 'lodash';
+import { registerIconColorSchemeChange } from '@shared/utils/icon';
 import '@/config/styles';
 
 const logger = createLogger('Main');
 
 Vue.config.productionTip = false;
-
 
 async function getKaannokset() {
   const [fi, sv, en] = await Promise.all(
@@ -22,6 +22,7 @@ async function main() {
   try {
     logger.info('Mounting #app');
     KieliStore.load(getKaannokset);
+    registerIconColorSchemeChange();
     (new Vue(rootConfig)).$mount('#app');
   }
   catch (err) {

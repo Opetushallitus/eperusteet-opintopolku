@@ -21,7 +21,7 @@
   <!-- children -->
   <ul :class="{ 'root-list': isRoot }" v-if="hasChildren">
     <li v-for="(child, idx) in children" :key="idx">
-      <ep-peruste-sidenav-node :node="child" :current="current" />
+      <ep-opetussuunnitelma-sidenav-node :node="child" :current="current" />
     </li>
   </ul>
 </div>
@@ -35,12 +35,12 @@ import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicat
 
 
 @Component({
-  name: 'EpPerusteSidenavNode',
+  name: 'EpOpetussuunnitelmaSidenavNode',
   components: {
     EpColorIndicator,
   }
 })
-export default class EpPerusteSidenavNode extends Vue {
+export default class EpOpetussuunnitelmaSidenavNode extends Vue {
   @Prop({ required: true })
   node!: NavigationNode;
 
@@ -55,19 +55,25 @@ export default class EpPerusteSidenavNode extends Vue {
 
     const isCurrentOrParentSelected = (current && (node.key === current.key
         ||  (parent && parent.key === current.key && current.type !== 'oppiaineet')));
+
+    const isOppiaineenSisalto = node.type === 'opintojaksot' || node.type === 'moduulit';
+
     const isErikoistyyppi = type === 'oppiaineet'
         || type === 'oppiaine'
         || type === 'oppimaarat'
         || type === 'moduulit'
-        || type === 'moduuli';
+        || type === 'moduuli'
+        || type === 'opintojaksot'
+        || type === 'opintojakso';
 
-    if (isCurrentOrParentSelected && isErikoistyyppi) {
+    if (isCurrentOrParentSelected && isErikoistyyppi || isOppiaineenSisalto) {
       return node.children;
     }
     else {
       return _.filter(node.children, 'isVisible');
     }
   }
+
   get hasChildren() {
     return !_.isEmpty(this.children);
   }
@@ -92,6 +98,7 @@ export default class EpPerusteSidenavNode extends Vue {
 .node {
   color: $sidenav-color;
   hyphens: auto;
+
   &:not(.node-root) {
     padding-top: 1em;
   }
@@ -105,15 +112,28 @@ export default class EpPerusteSidenavNode extends Vue {
     display: block;
   }
 
-  ul {
+  ul, ol {
     // Remove default list styles
     list-style: none;
-    padding-left: $sidenav-depth-padding;
     margin: 0;
+    padding-left: $sidenav-depth-padding;
+    counter-reset: item;
+  }
+
+  ol {
+    a:before {
+      content: counters(item, ".");
+      counter-increment: item;
+      padding-right: 1em;
+    }
+  }
+
+  li {
+    display: block;
   }
 
   // First element shouldn't has top padding
-  ul.root-list {
+  ul.root-list, ol.root-list {
     padding-left: 0;
     & > li:first-child > .node {
       padding-top: 0;

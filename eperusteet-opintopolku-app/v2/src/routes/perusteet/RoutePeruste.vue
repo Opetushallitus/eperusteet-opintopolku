@@ -31,13 +31,14 @@
 
 <script lang="ts">
 import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
+import { Meta } from '@shared/utils/decorators';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
+
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import { NavigationNode } from '@shared/utils/NavigationBuilder';
-import { Meta } from '@shared/utils/decorators';
 
 
 @Component({
@@ -77,7 +78,7 @@ export default class RoutePeruste extends Vue {
     return [];
   }
 
-  @Watch('$route', { immediate: true })
+  @Watch('$route', { deep: true, immediate: true })
   onRouteUpdate(route) {
     this.perusteDataStore.updateRoute(route);
   }

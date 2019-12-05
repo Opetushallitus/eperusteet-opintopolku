@@ -63,7 +63,7 @@ export default class RouteTekstikappale extends Vue {
     return this.perusteenOsaStore.perusteenOsaViite;
   }
 
-  get alikappaleet(): any[] {
+  get alikappaleet() {
     if (!_.isEmpty(this.perusteenOsaViite)) {
       const viitteet: ViiteLaaja[] = [];
 

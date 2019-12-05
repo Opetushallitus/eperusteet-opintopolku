@@ -32,6 +32,7 @@ if (!isProduction()) {
         { id: 'landmark-one-main', enabled: false },
         { id: 'page-has-heading-one', enabled: false },
         { id: 'region', enabled: false },
+        { id: 'scope-attr-valid', enabled: false }, // https://github.com/vue-a11y/vue-axe/issues/4
       ],
     },
     clearConsoleOnUpdate: false,
