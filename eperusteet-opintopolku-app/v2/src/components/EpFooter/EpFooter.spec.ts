@@ -1,7 +1,6 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import Vue from 'vue';
 import EpFooter from './EpFooter.vue';
-import { Kielet, KieliStore } from '@shared/stores/kieli';
+import { KieliStore } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 
 
