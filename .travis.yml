@@ -76,9 +76,6 @@ script:
   - ./ci-tools/build/build-war.sh ${ARTIFACT_NAME}
 
 after_script:
-  - pwd
-  - ls
-  - ls eperusteet-opintopolku-app/v2/coverage/lcov.info
   - ./cc-test-reporter format-coverage -t lcov eperusteet-opintopolku-app/v2/coverage/lcov.info
   - ./cc-test-reporter upload-coverage
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
