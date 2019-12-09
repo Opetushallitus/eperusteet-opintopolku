@@ -4,7 +4,14 @@
     <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(tekstiKappale.nimi) }}</h2>
 
     <!-- Perusteen teksti -->
-    <ep-content-viewer v-if="perusteTekstikappale" :value="$kaanna(perusteTekstikappale.teksti)" :termit="perusteTermit" :kuvat="perusteKuvat" />
+    <ep-collapse tyyppi="perusteteksti"
+                 v-if="perusteTekstikappale && perusteTekstikappale.teksti">
+      <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
+      <ep-content-viewer v-if="perusteTekstikappale"
+                         :value="$kaanna(perusteTekstikappale.teksti)"
+                         :termit="perusteTermit"
+                         :kuvat="perusteKuvat" />
+    </ep-collapse>
 
     <!-- Pohjan teksti -->
     <ep-content-viewer v-if="tekstiKappaleOriginal" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
@@ -12,20 +19,23 @@
     <!-- Opetussuunnitelman teksti -->
     <ep-content-viewer :value="$kaanna(tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
 
-
     <!-- Alikappaleet -->
     <div v-if="alikappaleet">
       <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
-        <ep-heading class="otsikko"
+        <ep-heading class="aliotsikko"
                     :level="alikappaleViite.level + 2">
           {{ $kaanna(alikappaleViite.tekstiKappale.nimi) }}
         </ep-heading>
 
         <!-- Perusteen teksti -->
-        <ep-content-viewer v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
-                           :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
-                           :termit="perusteTermit"
-                           :kuvat="perusteKuvat" />
+        <ep-collapse tyyppi="perusteteksti"
+                     v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId] && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti">
+          <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
+          <ep-content-viewer v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
+                             :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
+                             :termit="perusteTermit"
+                             :kuvat="perusteKuvat" />
+        </ep-collapse>
 
         <!-- Pohjan teksti -->
         <ep-content-viewer v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
@@ -50,6 +60,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 import { Puu } from '@shared/api/tyypit';
@@ -60,6 +71,7 @@ import { Puu } from '@shared/api/tyypit';
     EpSpinner,
     EpHeading,
     EpContentViewer,
+    EpCollapse,
   }
 })
 export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
@@ -189,5 +201,14 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
 
 .content {
   padding: 0 $content-padding;
+
+  .aliotsikko {
+    margin-top: 42px;
+  }
+
+  .collapse-header {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.125rem;
+  }
 }
 </style>
