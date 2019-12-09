@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import Vue from 'vue';
 
-import { Kielet, KieliStore } from '@shared/stores/kieli';
+import { KieliStore } from '@shared/stores/kieli';
 import { rootConfig  } from '@/mainvue';
 import { createLogger } from '@shared/utils/logger';
 import { Lokalisointi } from '@shared/api/eperusteet';
