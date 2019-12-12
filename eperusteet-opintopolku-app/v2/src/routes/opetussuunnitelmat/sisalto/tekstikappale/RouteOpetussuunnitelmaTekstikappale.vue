@@ -15,7 +15,7 @@
 
     <!-- Pohjan teksti -->
     <ep-collapse tyyppi="pohjateksti"
-                 v-if="tekstiKappaleOriginal.teksti">
+                 v-if="tekstiKappaleOriginal && tekstiKappaleOriginal.teksti">
       <div class="collapse-header" slot="header">{{ $t('pohjan-teksti') }}</div>
       <ep-content-viewer v-if="tekstiKappaleOriginal" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
     </ep-collapse>
