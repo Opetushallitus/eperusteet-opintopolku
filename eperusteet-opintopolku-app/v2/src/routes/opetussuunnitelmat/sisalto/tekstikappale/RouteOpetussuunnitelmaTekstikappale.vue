@@ -14,7 +14,11 @@
     </ep-collapse>
 
     <!-- Pohjan teksti -->
-    <ep-content-viewer v-if="tekstiKappaleOriginal" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
+    <ep-collapse tyyppi="pohjateksti"
+                 v-if="tekstiKappaleOriginal.teksti">
+      <div class="collapse-header" slot="header">{{ $t('pohjan-teksti') }}</div>
+      <ep-content-viewer v-if="tekstiKappaleOriginal" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
+    </ep-collapse>
 
     <!-- Opetussuunnitelman teksti -->
     <ep-content-viewer :value="$kaanna(tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
@@ -38,10 +42,14 @@
         </ep-collapse>
 
         <!-- Pohjan teksti -->
-        <ep-content-viewer v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
-                           :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
-                           :termit="termit"
-                           :kuvat="kuvat" />
+        <ep-collapse tyyppi="pohjateksti"
+                     v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti">
+          <div class="collapse-header" slot="header">{{ $t('pohjan-teksti') }}</div>
+          <ep-content-viewer v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
+                             :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
+                             :termit="termit"
+                             :kuvat="kuvat" />
+        </ep-collapse>
 
         <!-- Opetussuunnitelman teksti -->
         <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />

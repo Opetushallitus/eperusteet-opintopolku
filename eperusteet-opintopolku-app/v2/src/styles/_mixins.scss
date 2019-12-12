@@ -13,11 +13,6 @@
   // Jos sisältö ei mahdu edes tavutettuna, lisätään scrollbar
   overflow-wrap: break-word;
   word-wrap: break-word;
-  hyphens: auto;
-
-  & /deep/ p {
-    text-align: justify;
-  }
 
   & /deep/ img {
     max-width: 100%;
