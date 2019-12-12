@@ -32,8 +32,8 @@ install:
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
   - git submodule update --init --recursive
 
-  - cd eperusteet/eperusteet && mvn dependency:resolve -o -B && cd ../..
-  - cd eperusteet-ylops && mvn dependency:resolve -o -B && cd ..
+  - cd eperusteet/eperusteet && mvn dependency:resolve -B && cd ../..
+  - cd eperusteet-ylops && mvn dependency:resolve -B && cd ..
 
   - cd eperusteet-opintopolku-app/v2
   - yarn install
