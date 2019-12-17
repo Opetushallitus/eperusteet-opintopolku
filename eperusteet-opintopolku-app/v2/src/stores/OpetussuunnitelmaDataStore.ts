@@ -210,10 +210,10 @@ export class OpetussuunnitelmaDataStore {
       .value();
 
     const rawKoodit = _.chain(getters.flattenedSidenav)
-        .filter('meta.koodi')
-        .filter(node => _.isString(node.meta.koodi))
-        .keyBy('meta.koodi')
-        .value();
+      .filter('meta.koodi')
+      .filter(node => _.isString(node.meta.koodi))
+      .keyBy('meta.koodi')
+      .value();
 
     return _.assign(koodit, rawKoodit);
   })
