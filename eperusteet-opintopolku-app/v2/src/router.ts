@@ -54,6 +54,9 @@ import RouteOpetussuunnitelmaOpintojakso
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/opintojaksot/RouteOpetussuunnitelmaOpintojakso.vue';
 import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
 import { Lops2019OpetussuunnitelmaModuuliStore } from '@/stores/Lops2019OpetussuunnitelmaModuuliStore';
+import { Lops2019OpetussuunnitelmaPoppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaPoppiaineStore';
+import RouteOpetussuunnitelmaPoppiaine
+  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaPoppiaine.vue';
 
 
 Vue.use(Router);
@@ -73,14 +76,38 @@ export const router = new Router({
     }
     const elementId = to.hash.substring(1);
     if (elementId && document.getElementById(elementId)) {
-      VueScrollTo.scrollTo(to.hash);
-      return { selector: to.hash };
+      const navbar = document.getElementById('navigation-bar');
+      const navbarHeight = navbar ? (-1 * navbar.getBoundingClientRect().height) : 0;
+      VueScrollTo.scrollTo(to.hash, {
+        offset: navbarHeight,
+        x: false,
+        y: true,
+      });
+      return {
+        selector: to.hash,
+        offset : {
+          x: 0,
+          y: navbarHeight
+        },
+      };
     }
 
     const anchorElement = document.getElementById('scroll-anchor');
     if (anchorElement) {
-      VueScrollTo.scrollTo('#scroll-anchor');
-      return { selector: '#scroll-anchor' };
+      const navbar = document.getElementById('navigation-bar');
+      const navbarHeight = navbar ? (-1 * navbar.getBoundingClientRect().height) : 0;
+      VueScrollTo.scrollTo('#scroll-anchor', {
+        offset: navbarHeight,
+        x: false,
+        y: true,
+      });
+      return {
+        selector: '#scroll-anchor',
+        offset : {
+          x: 0,
+          y: navbarHeight
+        },
+      };
     }
   },
   routes: [{
@@ -350,6 +377,25 @@ export const router = new Router({
                   lops2019OpetussuunnitelmaOppiaineStore: await Lops2019OpetussuunnitelmaOppiaineStore.create(
                     _.parseInt(route.params.opetussuunnitelmaId),
                     _.parseInt(route.params.oppiaineId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'poppiaine/:oppiaineId',
+        component: RouteOpetussuunnitelmaPoppiaine,
+        name: 'lops2019OpetussuunnitelmaPoppiaine',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
+            async props(route) {
+              return {
+                default: {
+                  lops2019OpetussuunnitelmaPoppiaineStore: await Lops2019OpetussuunnitelmaPoppiaineStore.create(
+                      _.parseInt(route.params.opetussuunnitelmaId),
+                      _.parseInt(route.params.oppiaineId),
                   ),
                 },
               };

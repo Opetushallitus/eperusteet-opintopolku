@@ -53,14 +53,14 @@
                          :value="$kaanna(oppiaine.pakollisetModuulitKuvaus)"
                          :termit="termit"
                          :kuvat="kuvat" />
-      <div v-for="(moduuli, idx) in pakollisetModuulit" :key="idx">
+      <div v-for="(moduuli, idx) in pakollisetModuulitExtended" :key="idx">
         <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
-        <router-link v-if="isPerusteView" :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
+        <router-link v-if="moduuli.location" :to="moduuli.location">
           {{ $kaanna(moduuli.nimi) }}
         </router-link>
-        <router-link v-else :to="{ name: 'lops2019OpetussuunnitelmaModuuli', params: { moduuliId: moduuli.id } }">
+        <div v-else>
           {{ $kaanna(moduuli.nimi) }}
-        </router-link>
+        </div>
       </div>
     </div>
 
@@ -70,27 +70,27 @@
                          :value="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"
                          :termit="termit"
                          :kuvat="kuvat" />
-      <div v-for="(moduuli, idx) in valinnaisetModuulit" :key="idx">
+      <div v-for="(moduuli, idx) in valinnaisetModuulitExtended" :key="idx">
         <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
-        <router-link v-if="isPerusteView" :to="{ name: 'lops2019moduuli', params: { moduuliId: moduuli.id } }">
+        <router-link v-if="moduuli.location" :to="moduuli.location">
           {{ $kaanna(moduuli.nimi) }}
         </router-link>
-        <router-link v-else :to="{ name: 'lops2019OpetussuunnitelmaModuuli', params: { moduuliId: moduuli.id } }">
+        <div v-else>
           {{ $kaanna(moduuli.nimi) }}
-        </router-link>
+        </div>
       </div>
     </div>
   </div>
 
   <div v-if="hasOppimaarat">
     <h3 id="oppimaarat">{{ $t('oppimaarat') }}</h3>
-    <div v-for="(oppimaara, idx) in oppimaarat" :key="idx">
-      <router-link v-if="isPerusteView" :to="{ name: 'lops2019oppiaine', params: { oppiaineId: oppimaara.id } }">
+    <div v-for="(oppimaara, idx) in oppimaaratExtended" :key="idx">
+      <router-link v-if="oppimaara.location" :to="oppimaara.location">
         {{ $kaanna(oppimaara.nimi) }}
       </router-link>
-      <router-link v-else :to="{ name: 'lops2019OpetussuunnitelmaOppiaine', params: { oppiaineId: oppimaara.id } }">
+      <div v-else>
         {{ $kaanna(oppimaara.nimi) }}
-      </router-link>
+      </div>
     </div>
   </div>
 </div>
@@ -191,12 +191,40 @@ export default class OppiaineEsitys extends Vue {
     return _.filter(this.moduulit, { pakollinen: true });
   }
 
+  get pakollisetModuulitExtended() {
+    if (this.pakollisetModuulit) {
+      return _.map(this.pakollisetModuulit, moduuli => {
+        return {
+          ...moduuli,
+          location: {
+            name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
+            params: { moduuliId: _.toString(moduuli.id) },
+          }
+        };
+      });
+    }
+  }
+
   get hasPakollisetModuulit() {
     return !_.isEmpty(this.pakollisetModuulit);
   }
 
   get valinnaisetModuulit() {
     return _.filter(this.moduulit, { pakollinen: false });
+  }
+
+  get valinnaisetModuulitExtended() {
+    if (this.valinnaisetModuulit) {
+      return _.map(this.valinnaisetModuulit, moduuli => {
+        return {
+          ...moduuli,
+          location: {
+            name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
+            params: { moduuliId: _.toString(moduuli.id) },
+          }
+        };
+      });
+    }
   }
 
   get hasValinnaisetModuulit() {
@@ -206,6 +234,20 @@ export default class OppiaineEsitys extends Vue {
   get oppimaarat() {
     if (this.oppiaine) {
       return this.oppiaine.oppimaarat;
+    }
+  }
+
+  get oppimaaratExtended() {
+    if (this.oppimaarat) {
+      return _.map(this.oppimaarat, oppimaara => {
+        return {
+          ...oppimaara,
+          location: {
+            name: this.isPerusteView ? 'lops2019oppiaine' : 'lops2019OpetussuunnitelmaOppiaine',
+            params: { oppiaineId: _.toString(oppimaara.id) },
+          }
+        };
+      });
     }
   }
 

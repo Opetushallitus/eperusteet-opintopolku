@@ -3,7 +3,8 @@
             role="navigation"
             toggleable="lg"
             class="navbar-ep"
-            :sticky="true">
+            :sticky="true"
+            id="navigation-bar">
     <b-navbar-brand :to="{ name: 'root' }">
       <img src="../../../public/img/icons/eperusteet-logo.svg" :alt="$t('eperusteet')">
     </b-navbar-brand>

@@ -4,9 +4,12 @@
     <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
     <div class="teksti">
       <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineet" :key="idx">
-        <router-link :to="oppiaine.location">
+        <router-link v-if="oppiaine.location" :to="oppiaine.location">
           {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
         </router-link>
+        <span v-else>
+          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
+        </span>
       </div>
     </div>
 
