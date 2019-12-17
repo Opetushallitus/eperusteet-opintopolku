@@ -3,6 +3,13 @@
   <div v-if="opintojakso">
     <h2 class="otsikko" slot="header">{{ $kaanna(opintojakso.nimi)}}</h2>
 
+    <div v-if="hasKuvaus">
+      <ep-content-viewer v-if="opintojakso.kuvaus"
+                         :value="$kaanna(opintojakso.kuvaus)"
+                         :termit="termit"
+                         :kuvat="kuvat" />
+    </div>
+
     <div class="teksti">
       <div v-if="opintojakso.koodi">
         <h3 class="opintojakso-tieto-otsikko">{{ $t('koodi') }}</h3>
@@ -18,13 +25,16 @@
                 {{ $kaanna(oppiaine.node.label) }}
               </router-link>
             </div>
+            <div v-else>
+              {{ oppiaine.koodi }}
+            </div>
           </li>
         </ul>
       </div>
 
       <div v-if="opintojakso.laajuus">
         <h3 class="opintojakso-tieto-otsikko">{{ $t('laajuus') }}</h3>
-        <p>{{ opintojakso.laajuus }}</p>
+        <p>{{ opintojakso.laajuus }} {{ $t('opintopiste') }}</p>
       </div>
     </div>
 
@@ -36,54 +46,46 @@
           <ep-opintojakson-moduuli :moduuli="moduuli" class="mr-2 mb-2" />
         </div>
       </div>
+    </div>
 
-      <div v-if="hasTavoitteet">
-        <h3>{{ $t('tavoitteet') }}</h3>
-        <ul>
-          <li v-for="(tavoite, idx) in tavoitteet" :key="idx">
-            <ep-content-viewer :value="$kaanna(tavoite.kuvaus)"
-                               :termit="termit"
-                               :kuvat="kuvat" />
-          </li>
-        </ul>
-      </div>
+    <div v-if="hasTavoitteet">
+    <h3>{{ $t('tavoitteet') }}</h3>
+    <ul>
+      <li v-for="(tavoite, idx) in tavoitteet" :key="idx">
+        <ep-content-viewer :value="$kaanna(tavoite.kuvaus)"
+                           :termit="termit"
+                           :kuvat="kuvat" />
+      </li>
+    </ul>
+  </div>
 
-      <div v-if="hasKeskeisetSisallot">
-        <h3>{{ $t('keskeiset-sisallot') }}</h3>
-        <ul>
-          <li v-for="(ks, idx) in keskeisetSisallot" :key="idx">
-            <ep-content-viewer :value="$kaanna(ks.kuvaus)"
-                               :termit="termit"
-                               :kuvat="kuvat" />
-          </li>
-        </ul>
-      </div>
-
-      <div v-if="hasLaajaAlainenOsaaminen">
-        <h3>{{ $t('laaja-alaiset-sisallot') }}</h3>
-        <div v-for="(lao, idx) in laajaAlainenOsaaminenExtended" :key="idx">
-          <h4 class="opintojakso-lao-otsikko">{{ $kaanna(lao.nimi) }}</h4>
-          <ep-content-viewer :value="$kaanna(lao.kuvaus)"
+    <div v-if="hasKeskeisetSisallot">
+      <h3>{{ $t('keskeiset-sisallot') }}</h3>
+      <ul>
+        <li v-for="(ks, idx) in keskeisetSisallot" :key="idx">
+          <ep-content-viewer :value="$kaanna(ks.kuvaus)"
                              :termit="termit"
                              :kuvat="kuvat" />
-        </div>
-      </div>
+        </li>
+      </ul>
+    </div>
 
-      <div v-if="hasArviointi">
-        <h3>{{ $t('arviointi') }}</h3>
-        <ep-content-viewer v-if="opintojakso.arviointi"
-                           :value="$kaanna(opintojakso.arviointi)"
+    <div v-if="hasLaajaAlainenOsaaminen">
+      <h3>{{ $t('laaja-alaiset-sisallot') }}</h3>
+      <div v-for="(lao, idx) in laajaAlainenOsaaminenExtended" :key="idx">
+        <h4 class="opintojakso-lao-otsikko">{{ $kaanna(lao.nimi) }}</h4>
+        <ep-content-viewer :value="$kaanna(lao.kuvaus)"
                            :termit="termit"
                            :kuvat="kuvat" />
       </div>
+    </div>
 
-
-      <div v-if="hasKuvaus">
-        <ep-content-viewer v-if="opintojakso.kuvaus"
-                           :value="$kaanna(opintojakso.kuvaus)"
-                           :termit="termit"
-                           :kuvat="kuvat" />
-      </div>
+    <div v-if="hasArviointi">
+      <h3>{{ $t('opintojakson-arviointi') }}</h3>
+      <ep-content-viewer v-if="opintojakso.arviointi"
+                         :value="$kaanna(opintojakso.arviointi)"
+                         :termit="termit"
+                         :kuvat="kuvat" />
     </div>
 
     <slot name="previous-next-navigation" />

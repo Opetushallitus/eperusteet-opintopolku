@@ -11,8 +11,8 @@
 
       <div v-if="hasOpintojaksot">
         <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
-        <div v-for="(opintojakso, idx) in opintojaksot" :key="idx">
-          <router-link :to="{ name: 'lops2019OpetussuunnitelmaOpintojakso', params: { opintojaksoId: opintojakso.id } }">
+        <div v-for="(opintojakso, idx) in opintojaksotExtended" :key="idx">
+          <router-link v-if="opintojakso.location" :to="opintojakso.location">
             {{ $kaanna(opintojakso.nimi) }}
             <span v-if="opintojakso.laajuus">
               ({{ opintojakso.laajuus }} op)
@@ -73,6 +73,20 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
       return _.filter(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
         const uri = this.oppiaine!.koodi!.uri;
         return _.some(oj.oppiaineet, { koodi: uri });
+      });
+    }
+  }
+
+  get opintojaksotExtended() {
+    if (this.opintojaksot) {
+      return _.map(this.opintojaksot, oj => {
+        return {
+          ...oj,
+          location: {
+            name: 'lops2019OpetussuunnitelmaOpintojakso',
+            params: { opintojaksoId: _.toString(oj.id) },
+          }
+        };
       });
     }
   }
