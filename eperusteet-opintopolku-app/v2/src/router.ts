@@ -394,8 +394,8 @@ export const router = new Router({
               return {
                 default: {
                   lops2019OpetussuunnitelmaPoppiaineStore: await Lops2019OpetussuunnitelmaPoppiaineStore.create(
-                      _.parseInt(route.params.opetussuunnitelmaId),
-                      _.parseInt(route.params.oppiaineId),
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.oppiaineId),
                   ),
                 },
               };
