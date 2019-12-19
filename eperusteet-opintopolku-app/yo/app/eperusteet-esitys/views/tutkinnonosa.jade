@@ -64,12 +64,14 @@
           kaanna="tutkinnonOsa.ammattitaitovaatimukset2019.kohde")
       ul
         li(ng-repeat="vaatimus in tutkinnonOsa.ammattitaitovaatimukset2019.vaatimukset") {{vaatimus.vaatimus | kaanna}}
+          span(ng-if="vaatimus.koodi && vaatimus.koodi.arvo")  ({{vaatimus.koodi.arvo}})
       div(ng-repeat="kohdealue in tutkinnonOsa.ammattitaitovaatimukset2019.kohdealueet")
         div
           strong(kaanna="kohdealue.kuvaus")
         div(ng-if="tutkinnonOsa.ammattitaitovaatimukset2019.kohde" kaanna="tutkinnonOsa.ammattitaitovaatimukset2019.kohde")
         ul
           li(ng-repeat="kohdealuevaatimus in kohdealue.vaatimukset") {{kohdealuevaatimus.vaatimus | kaanna}}
+            span(ng-if="kohdealuevaatimus.koodi && kohdealuevaatimus.koodi.arvo")  ({{kohdealuevaatimus.koodi.arvo}})
 
     div(ng-if="k !== 'arviointi' && k !== 'ammattitaitovaatimukset2019' && k !== 'geneerinenArviointiasteikko' && tutkinnonOsa[k]")
       h3 {{k | kaanna}}
