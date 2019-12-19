@@ -40,6 +40,8 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "file-loader": "^4.2.0",
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
     "lodash": "^4.17.15",
     "mime-types": "^2.1.25",
     "moment": "^2.24.0",
