@@ -1,4 +1,11 @@
 .etusivu
+  .row(ng-if="('beta-kuvaus' | kaanna) !== 'beta-kuvaus'")
+    .col-md-12
+      .alert.alert-success.alert-dismissible(role="alert")
+        button.close(type='button', data-dismiss='alert', aria-label='Close')
+          span(aria-hidden='true') ×
+        span(kaanna="'beta-kuvaus'")
+
   .row
     .col-md-12
       .banneri-box
@@ -7,8 +14,8 @@
             .banneri-sisalto
               h2(kaanna="'etusivu.eperusteet'")
               span(kaanna="'etusivu.eperusteet.kuvaus'")
-  .row
 
+  .row
     // Uutiset / Tiedotteet
     div(ng-class="{'col-md-12': kieli !== 'en','col-lg-4': kieli !== 'en', 'col-lg-push-8': kieli !== 'en', 'col-lg-6': kieli === 'en', 'col-lg-push-6': kieli === 'en', 'col-md-6': kieli === 'en', 'col-md-push-6': kieli === 'en'}")
       .sisalto-box
