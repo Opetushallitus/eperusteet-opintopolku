@@ -447,7 +447,7 @@ export const router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  changeLang(to);
+  changeLang(to, from);
   next();
 });
 
