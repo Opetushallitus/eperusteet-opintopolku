@@ -65,11 +65,15 @@ h1(esitys-sivu-otsikko="'perusteen-tiedot'")
     strong
       span(kaanna="'muutosmaaraykset'")
   .col-xs-6.col-sm-8
-    div(ng-repeat='muutosmaaraykset in peruste.muutosmaaraykset')
+    div(ng-repeat='muutosmaarays in peruste.muutosmaaraykset' ng-if="!muutosmaarays.$$hide")
       .row.row-margin
         .col-xs-12
-          a(ng-href='{{muutosmaaraykset.url| kaanna}}')
-            | {{(muutosmaaraykset.nimi | kaanna) ? (muutosmaaraykset.nimi | kaanna) : (muutosmaaraykset.url | kaanna)}}
+          a(ng-if="!muutosmaarays.$$naytaUrl"
+            ng-href='{{"/eperusteet-service/api/perusteet/" + peruste.id + "/liitteet/" + (muutosmaarays.liitteet | kaanna).id}}'
+            target="_blank"
+            rel="noopener noreferrer") {{(muutosmaarays.liitteet | kaanna).nimi || (muutosmaarays.liitteet | kaanna).id}}
+          a(ng-if="muutosmaarays.$$naytaUrl" ng-href='{{muutosmaarays.url| kaanna}}')
+            | {{(muutosmaarays.nimi | kaanna) ? (muutosmaarays.nimi | kaanna) : (muutosmaarays.url | kaanna)}}
 
 .row.row-margin(ng-if='peruste.korvattavatDiaarinumerot && peruste.korvattavatDiaarinumerot.length > 0')
   .col-xs-6.col-sm-4

@@ -66,7 +66,8 @@ namespace Controllers {
         epLukioStateService,
         oppiaineRakenne,
         epLukioUtils,
-        Kieli
+        Kieli,
+        Dokumentit
     ) => {
         $scope.oppiaineRakenne = oppiaineRakenne;
         $scope.isNaviVisible = _.constant(true);
@@ -75,13 +76,8 @@ namespace Controllers {
         $scope.oppiaineet = _.zipBy($scope.oppiaineRakenne.oppiaineet, "id");
         $scope.oppiaineetJaOppimaarat = epLukioUtils.flattenAndZipOppiaineet($scope.oppiaineRakenne.oppiaineet);
         TermistoService.setResource(peruste);
-
-        if (_.isEmpty($scope.peruste.maarayskirje.liitteet)) {
-            $scope.peruste.maarayskirje.$$naytaUrl = true;
-            if (_.isEmpty($scope.peruste.maarayskirje.url)) {
-                $scope.peruste.maarayskirje.$$hide = true;
-            }
-        }
+        Dokumentit.maarayskirjeHandler()($scope);
+        Dokumentit.muutosmaarayksetHandler()($scope);
 
         $scope.scrollToHash = function(id) {
             $state.go("root.lukio.tekstikappale");

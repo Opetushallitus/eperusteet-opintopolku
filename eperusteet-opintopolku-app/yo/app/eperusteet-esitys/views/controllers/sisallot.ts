@@ -84,6 +84,8 @@ namespace Controllers {
         $scope.opintoalaNimi = $scope.Opintoalat.haeOpintoalaNimi;
         $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen($scope.peruste.koulutustyyppi);
 
+        Dokumentit.maarayskirjeHandler()($scope);
+        Dokumentit.muutosmaarayksetHandler()($scope);
         Dokumentit.dokumenttiUrlLataaja(PerusteApi, $scope.peruste.id, "peruste")($scope);
         $scope.isAmmatillinen = PerusteenRakenne.isAmmatillinen($scope.peruste.koulutustyyppi);
 
