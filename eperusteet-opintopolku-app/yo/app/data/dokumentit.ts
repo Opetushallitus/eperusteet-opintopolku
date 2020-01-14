@@ -1,6 +1,6 @@
 angular.module("app").service("Dokumentit", ($timeout, $stateParams) => {
     function dokumenttiUrlLataaja(Api, id, tyyppi = "peruste", kieli?) {
-        return async function(scope, target = "dokumenttiUrl", loading = "$$ladataanDokumenttia") {
+        return async function (scope, target = "dokumenttiUrl", loading = "$$ladataanDokumenttia") {
             scope[loading] = true;
             try {
                 const doc = await Api.all("dokumentit").customGET(tyyppi, {
@@ -22,7 +22,35 @@ angular.module("app").service("Dokumentit", ($timeout, $stateParams) => {
         };
     }
 
+    function maarayskirjeHandler() {
+        return function (scope) {
+            if (_.isEmpty(scope.peruste.maarayskirje.liitteet)) {
+                scope.peruste.maarayskirje.$$naytaUrl = true;
+                if (_.isEmpty(scope.peruste.maarayskirje.url)) {
+                    scope.peruste.maarayskirje.$$hide = true;
+                }
+            }
+        }
+    }
+
+    function muutosmaarayksetHandler() {
+        return function (scope) {
+            if (!_.isEmpty(scope.peruste.muutosmaaraykset)) {
+                _.each(scope.peruste.muutosmaaraykset, muutosmaarays => {
+                    if (_.isEmpty(muutosmaarays.liitteet)) {
+                        muutosmaarays.$$naytaUrl = true;
+                        if (_.isEmpty(muutosmaarays.url)) {
+                            muutosmaarays.$$hide = true;
+                        }
+                    }
+                });
+            }
+        }
+    }
+
     return {
-        dokumenttiUrlLataaja
+        dokumenttiUrlLataaja,
+        maarayskirjeHandler,
+        muutosmaarayksetHandler
     };
 });
