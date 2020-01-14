@@ -309,8 +309,10 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
     await opetussuunnitelmaDataStore.fetchKuvat();
 
     // Testataan haetuilla kuvien datalla
-    expect(wrapper.html()).toContain('<figure><img data-uid="d9dc2bb8-f694-46c9-b2d3-c7ca9b250917" src="eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b" alt="kuva3"><figcaption>kuva3</figcaption></figure>');
-    expect(wrapper.html()).toContain('<figure><img data-uid="87259960-fa2c-48a8-8e4c-e52e67b46896" src="eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d" alt="kuva4"><figcaption>kuva4</figcaption></figure>');
+    //expect(wrapper.html()).toContain('<figure><img data-uid="d9dc2bb8-f694-46c9-b2d3-c7ca9b250917" src="eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b" alt="kuva3"><figcaption>kuva3</figcaption></figure>');
+    //expect(wrapper.html()).toContain('<figure><img data-uid="87259960-fa2c-48a8-8e4c-e52e67b46896" src="eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d" alt="kuva4"><figcaption>kuva4</figcaption></figure>');
+    expect(wrapper.html()).toContain('<figure><img data-uid="d9dc2bb8-f694-46c9-b2d3-c7ca9b250917" src="eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b"></figure>');
+    expect(wrapper.html()).toContain('<figure><img data-uid="87259960-fa2c-48a8-8e4c-e52e67b46896" src="eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d"></figure>');
   });
 
   test('Renders perusteen kuvat', async () => {
@@ -331,8 +333,10 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
     await opetussuunnitelmaDataStore.fetchKuvat();
 
     // Testataan haetuilla kuvien datalla
-    expect(wrapper.html()).toContain('<figure><img data-uid="5777d209-1b61-4c48-a59b-9d7077bbfe15" src="eperusteet-service/api/perusteet/a/kuvat/b" alt="kuva1.png"><figcaption>kuva1.png</figcaption></figure>');
-    expect(wrapper.html()).toContain('<figure><img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3" src="eperusteet-service/api/perusteet/c/kuvat/d" alt="kuva2.jpg"><figcaption>kuva2.jpg</figcaption></figure>');
+    //expect(wrapper.html()).toContain('<figure><img data-uid="5777d209-1b61-4c48-a59b-9d7077bbfe15" src="eperusteet-service/api/perusteet/a/kuvat/b" alt="kuva1.png"><figcaption>kuva1.png</figcaption></figure>');
+    //expect(wrapper.html()).toContain('<figure><img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3" src="eperusteet-service/api/perusteet/c/kuvat/d" alt="kuva2.jpg"><figcaption>kuva2.jpg</figcaption></figure>');
+    expect(wrapper.html()).toContain('<figure><img data-uid="5777d209-1b61-4c48-a59b-9d7077bbfe15" src="eperusteet-service/api/perusteet/a/kuvat/b"></figure>');
+    expect(wrapper.html()).toContain('<figure><img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3" src="eperusteet-service/api/perusteet/c/kuvat/d"></figure>');
   });
 
   test('Renders opsin termit', async () => {
