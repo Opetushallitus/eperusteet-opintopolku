@@ -3,6 +3,7 @@ import RouteKooste from './RouteKooste.vue';
 import { tiedoteStoreMock, perusteKoosteStoreMock } from '@/storeMocks';
 import { KieliStore } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
+import * as _ from 'lodash';
 
 
 describe('RouteKooste', () => {
@@ -42,9 +43,16 @@ describe('RouteKooste', () => {
     perusteKoosteStore.koulutustyyppi = 'koulutustyyppi_2';
 
     perusteKoosteStore.tiedotteet = [{
+      luotu: new Date(100),
       id: 100,
       otsikko: {
-        fi: 'tiedote100',
+        fi: 'tiedote101',
+      } as any,
+    }, {
+      luotu: new Date(200),
+      id: 200,
+      otsikko: {
+        fi: 'tiedote102',
       } as any,
     }];
 
@@ -77,8 +85,10 @@ describe('RouteKooste', () => {
     }] as any;
 
     await localVue.nextTick();
+    expect(_.map((wrapper.vm as any).tiedotteet, 'id')).toEqual([200, 100]);
     expect(wrapper.html()).toContain('ops100');
-    expect(wrapper.html()).toContain('tiedote100');
+    expect(wrapper.html()).toContain('tiedote101');
+    expect(wrapper.html()).toContain('tiedote102');
     expect(wrapper.html()).toContain('peruste42');
     expect(wrapper.html()).toContain('1234-1234');
     expect(wrapper.html()).toContain('sd_123456');

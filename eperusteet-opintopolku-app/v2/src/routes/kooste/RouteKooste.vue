@@ -100,7 +100,10 @@ export default class RouteKooste extends Vue {
   }
 
   get tiedotteet() {
-    return this.perusteKoosteStore.tiedotteet;
+    return _.chain(this.perusteKoosteStore.tiedotteet)
+      .sortBy('luotu')
+      .reverse()
+      .value();
   }
 
   get perusteet() {
