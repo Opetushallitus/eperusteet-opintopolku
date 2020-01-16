@@ -68,7 +68,6 @@ export class PerusteKoosteStore {
 
     this.tiedotteet = _.chain(tiedotteet)
       .filter('otsikko')
-      .sortBy('luotu')
       .value();
   }
 
