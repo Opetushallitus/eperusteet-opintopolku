@@ -32,8 +32,26 @@ angular.module("app").config($stateProvider =>
             pTosat: (Api, osa, ops) =>
                 (osa.tyyppi === "suorituspolku" || osa.tyyppi === "osasuorituspolku") && Api.all("perusteet/" + ops.peruste.id + "/tutkinnonosat").getList(),
             pTosa: (Api, osa, ops) => {
-                if (osa.tyyppi === "tutkinnonosa" && osa.tosa.tyyppi === "perusteesta") {
-                    return Api.one("perusteet/" + ops.peruste.id + "/tutkinnonosat/" + osa.tosa.perusteentutkinnonosa).get();
+                if (osa.tyyppi === "tutkinnonosa") {
+                    let perusteId = null;
+                    let tosaId = null;
+                    console.log(osa);
+                    if (osa.tosa.tyyppi === "perusteesta") {
+                        if (osa.peruste) {
+                            // Tuotu toisesta perusteesta
+                            perusteId = osa.peruste.id;
+                        } else {
+                            perusteId = ops.peruste.id;
+                        }
+                        tosaId = osa.tosa.perusteentutkinnonosa;
+                    } else if (osa.tosa.tyyppi === "vieras") {
+                        perusteId = osa.tosa.vierastutkinnonosa._cperuste;
+                        tosaId = osa.tosa.vierastutkinnonosa.tosaId;
+                    } else {
+                        return;
+                    }
+
+                    return Api.one("perusteet/" + perusteId + "/tutkinnonosat/" + tosaId).get();
                 }
             },
             pTosaViite: async (Api, osa, ops) => {
@@ -41,7 +59,13 @@ angular.module("app").config($stateProvider =>
                     let perusteId = null;
                     let tosaId = null;
                     if (osa.tosa.tyyppi === "perusteesta") {
-                        perusteId = ops.peruste.id;
+                        console.log(osa);
+                        if (osa.peruste) {
+                            // Tuotu toisesta perusteesta
+                            perusteId = osa.peruste.id;
+                        } else {
+                            perusteId = ops.peruste.id;
+                        }
                         tosaId = osa.tosa.perusteentutkinnonosa;
                     } else if (osa.tosa.tyyppi === "vieras") {
                         perusteId = osa.tosa.vierastutkinnonosa._cperuste;
@@ -58,7 +82,7 @@ angular.module("app").config($stateProvider =>
                             return await getSuoritustapaSisalto(_.tail(suoritustavat));
                         }
                         else {
-                            const url = "perusteet/" + ops.peruste.id + "/suoritustavat/" + _.head(suoritustavat) + "/tutkinnonosat/" + tosaId;
+                            const url = "perusteet/" + perusteId + "/suoritustavat/" + _.head(suoritustavat) + "/tutkinnonosat/" + tosaId;
                             try {
                                 return await Api.one(url).get();
                             }
