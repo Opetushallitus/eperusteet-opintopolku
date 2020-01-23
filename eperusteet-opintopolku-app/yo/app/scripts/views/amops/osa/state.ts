@@ -35,7 +35,6 @@ angular.module("app").config($stateProvider =>
                 if (osa.tyyppi === "tutkinnonosa") {
                     let perusteId = null;
                     let tosaId = null;
-                    console.log(osa);
                     if (osa.tosa.tyyppi === "perusteesta") {
                         if (osa.peruste) {
                             // Tuotu toisesta perusteesta
@@ -59,7 +58,6 @@ angular.module("app").config($stateProvider =>
                     let perusteId = null;
                     let tosaId = null;
                     if (osa.tosa.tyyppi === "perusteesta") {
-                        console.log(osa);
                         if (osa.peruste) {
                             // Tuotu toisesta perusteesta
                             perusteId = osa.peruste.id;
