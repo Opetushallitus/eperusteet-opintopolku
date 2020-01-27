@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
@@ -68,10 +68,9 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import { koulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
-import { KoulutustyyppiToteutus, Koulutustyyppi } from '@shared/tyypit';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import {uusiJulkinenToteutus} from '@/utils/peruste';
+import { uusiJulkinenToteutus } from '@/utils/peruste';
 
 @Component({
   components: {
