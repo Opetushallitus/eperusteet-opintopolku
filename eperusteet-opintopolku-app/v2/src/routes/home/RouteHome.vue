@@ -40,9 +40,12 @@
             <ep-spinner-slot :is-loading="!uusimmat">
               <div class="box" v-for="(peruste, idx) in uusimmat" :key="idx">
                 <div class="nimi">
-                  <router-link :to="peruste.route">
+                  <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
+                  <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="true">
+                    {{ $kaanna(peruste.nimi) }}
+                  </ep-external-link>
                 </div>
                 <div class="luotu">{{ $sd(peruste.paatospvm) }}</div>
               </div>
@@ -60,9 +63,12 @@
                 <div class="raita mx-3 my-2" :class="peruste.theme"></div>
                 <div class="d-flex flex-fill align-items-center">
                   <div class="nimi my-3 mr-3">
-                    <router-link :to="peruste.route">
+                    <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
                       {{ $kaanna(peruste.nimi) }}
                     </router-link>
+                    <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="true">
+                      {{ $kaanna(peruste.nimi) }}
+                    </ep-external-link>
                     <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
                   </div>
                 </div>
@@ -79,15 +85,24 @@
 <script lang="ts">
 import _ from 'lodash';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import { PerusteDto } from '@shared/api/tyypit';
 import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
-import { koulutustyyppiStateName, koulutustyyppiTheme, yleissivistavat } from '@shared/utils/perusteet';
+import {
+  koulutustyyppiStateName,
+  koulutustyyppiTheme,
+  perusteKoulutustyyppiUrlShortParamName,
+  yleissivistavat
+} from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
+import { uusiJulkinenToteutus } from '@/utils/peruste';
+import { ENV_PREFIX } from '@shared/utils/defaults';
+import { Koulutustyyppi } from "@shared/tyypit";
 
 
-function mapRoutes(perusteet: PerusteDto[] | null) {
+function mapRoutes(perusteet: PerusteDto[] | null, ulkoinenlinkki: Function) {
   return perusteet
     ? _.map(perusteet, peruste => {
       if (!peruste.koulutustyyppi) {
@@ -95,11 +110,12 @@ function mapRoutes(perusteet: PerusteDto[] | null) {
       }
       return {
         ...peruste,
+        ulkoinenlinkki: ulkoinenlinkki(peruste),
         route: {
           name: 'peruste',
           params: {
             koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
-            perusteId: peruste.id,
+            perusteId: _.toString(peruste.id),
           },
         }
       };
@@ -111,6 +127,7 @@ function mapRoutes(perusteet: PerusteDto[] | null) {
 @Component({
   components: {
     EpSpinnerSlot,
+    EpExternalLink,
   },
 })
 export default class RouteHome extends Vue {
@@ -128,7 +145,7 @@ export default class RouteHome extends Vue {
 
   get perusteet() {
     if (this.perusteStore.perusteet) {
-      return _.map(mapRoutes(this.perusteStore.perusteet), peruste => ({
+      return _.map(mapRoutes(this.perusteStore.perusteet, this.ulkoinenlinkki), peruste => ({
         ...peruste,
         theme: peruste && peruste.koulutustyyppi && 'koulutustyyppi-' + koulutustyyppiTheme(peruste.koulutustyyppi),
       }));
@@ -160,7 +177,7 @@ export default class RouteHome extends Vue {
   }
 
   get uusimmat() {
-    return mapRoutes(this.perusteStore.uusimmat);
+    return mapRoutes(this.perusteStore.uusimmat, this.ulkoinenlinkki);
   }
 
   get tiedotteet() {
@@ -173,6 +190,20 @@ export default class RouteHome extends Vue {
       title: this.$t('eperusteet'),
       titleTemplate: null,
     };
+  }
+
+  ulkoinenlinkki(peruste) {
+
+    if (uusiJulkinenToteutus(peruste)) {
+      return undefined;
+    }
+
+    if (koulutustyyppiTheme(peruste.koulutustyyppi) === 'ammatillinen') {
+      return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/kooste/${peruste.id}`;
+    }
+    else {
+      return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
+    }
   }
 }
 </script>

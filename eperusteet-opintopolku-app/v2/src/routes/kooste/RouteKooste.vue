@@ -71,7 +71,7 @@ import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue
 import { perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
 import _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
-import {uusiJulkinenToteutus} from '@/utils/peruste';
+import { uusiJulkinenToteutus } from '@/utils/peruste';
 
 @Component({
   components: {

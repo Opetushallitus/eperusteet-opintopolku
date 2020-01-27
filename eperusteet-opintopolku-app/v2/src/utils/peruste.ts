@@ -8,13 +8,11 @@ interface HasKoulutustyyppiToteutus {
 }
 
 export function uusiJulkinenToteutus(hasToteutus: HasKoulutustyyppiToteutus) {
-
-  if (!hasToteutus
-        || hasToteutus.koulutustyyppi !== Koulutustyyppi.aikuistenperusopetus
-        && (hasToteutus.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
-        || hasToteutus.toteutus === KoulutustyyppiToteutus.lops2019.valueOf())) {
-    return true;
-  }
-
-  return false;
+  return !hasToteutus
+      || hasToteutus.koulutustyyppi !== Koulutustyyppi.aikuistenperusopetus
+      && ((hasToteutus.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
+          && !(hasToteutus.koulutustyyppi === Koulutustyyppi.aikuistenlukiokoulutus
+              || hasToteutus.koulutustyyppi === Koulutustyyppi.lukiovalmistavakoulutus))
+          || hasToteutus.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()
+          || hasToteutus.toteutus === KoulutustyyppiToteutus.lops2019.valueOf());
 }
