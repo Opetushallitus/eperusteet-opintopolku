@@ -99,7 +99,6 @@ import {
 import { Meta } from '@shared/utils/decorators';
 import { uusiJulkinenToteutus } from '@/utils/peruste';
 import { ENV_PREFIX } from '@shared/utils/defaults';
-import { Koulutustyyppi } from "@shared/tyypit";
 
 
 function mapRoutes(perusteet: PerusteDto[] | null, ulkoinenlinkki: Function) {
