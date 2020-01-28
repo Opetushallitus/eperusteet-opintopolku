@@ -35,7 +35,7 @@
            v-for="(ops, idx) in opetussuunnitelmatPaginated"
            :key="idx">
 
-        <router-link v-if="!ops.ulkoinenlinkki" :to="{ name: 'opetussuunnitelma', params: { 'opetussuunnitelmaId': ops.id } }">
+        <router-link v-if="!ops.ulkoinenlinkki" :to="ops.route">
           <opetussuunnitelma-tile :ops="ops" :query="query"/>
         </router-link>
 
@@ -67,7 +67,7 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { koulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
+import { koulutustyyppiStateName, koulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import { uusiJulkinenToteutus } from '@/utils/peruste';
@@ -118,6 +118,12 @@ export default class Paikalliset extends Vue {
           _.includes(org.tyypit, 'Koulutustoimija')),
         oppilaitokset: _.filter(ops.organisaatiot, org =>
           _.includes(org.tyypit, 'Oppilaitos')),
+        route: {
+          name: 'opetussuunnitelma',
+          params: {
+            opetussuunnitelmaId: _.toString(ops.id),
+          },
+        }
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
       .value();
