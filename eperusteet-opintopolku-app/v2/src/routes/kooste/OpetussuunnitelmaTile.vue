@@ -67,7 +67,7 @@ export default class PerusteTile extends Vue {
     .opsicon {
       height: 40px;
       width: 40px;
-      background: url('../../../public/img/icons/opskortti.svg');
+      background: url('../../../public/img/images/opskortti.svg');
       background-size: 40px 40px;
     }
   }
