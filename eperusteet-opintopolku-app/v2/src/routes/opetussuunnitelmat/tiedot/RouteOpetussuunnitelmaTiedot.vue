@@ -21,15 +21,29 @@
       </div>
       <div class="col-md-12" v-if="hasKunnat">
         <ep-form-content name="kunnat" headerType="h3" headerClass="h6">
-          <div v-for="(kunta, idx) in kunnat" :key="idx">
-            <ep-field v-model="kunta.nimi"></ep-field>
+          <ul v-if="kunnat && kunnat.length > 1">
+            <li v-for="(kunta, idx) in kunnat" :key="idx">
+              <ep-field v-model="kunta.nimi"></ep-field>
+            </li>
+          </ul>
+          <div v-else>
+            <div v-for="(kunta, idx) in kunnat" :key="idx">
+              <ep-field v-model="kunta.nimi"></ep-field>
+            </div>
           </div>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasOrganisaatiot">
         <ep-form-content name="organisaatiot" headerType="h3" headerClass="h6">
-          <div v-for="(organisaatio, idx) in organisaatiot" :key="idx">
-            {{ getOrganisaatioNimi(organisaatio) }}
+          <ul v-if="organisaatiot && organisaatiot.length > 1">
+            <li v-for="(organisaatio, idx) in organisaatiot" :key="idx">
+              {{ getOrganisaatioNimi(organisaatio) }}
+            </li>
+          </ul>
+          <div v-else>
+            <div v-for="(organisaatio, idx) in organisaatiot" :key="idx">
+              {{ getOrganisaatioNimi(organisaatio) }}
+            </div>
           </div>
         </ep-form-content>
       </div>

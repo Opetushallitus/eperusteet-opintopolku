@@ -56,6 +56,7 @@ describe('RoutePerusteTiedot', async () => {
     await localVue.nextTick();
     await localVue.nextTick();
     await localVue.nextTick();
+    await localVue.nextTick();
 
     expect(perusteDataStore.getKorvaavatPerusteet).toHaveBeenCalledTimes(1);
     expect(wrapper.html()).toContain('perusteen nimi');

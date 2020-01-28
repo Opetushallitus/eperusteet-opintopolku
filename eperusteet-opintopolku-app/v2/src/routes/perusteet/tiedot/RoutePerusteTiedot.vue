@@ -1,4 +1,4 @@
-<template>
+v-for="<template>
 <div class="content">
   <ep-spinner v-if="isLoading"></ep-spinner>
   <div v-else>
@@ -42,8 +42,15 @@
       </div>
       <div class="col-md-12" v-if="hasMuutosmaaraykset">
         <ep-form-content name="muutosmaaraykset" headerType="h3" headerClass="h6">
-          <div v-for="(muutosmaarays, idx) in muutosmaaraykset" :key="idx">
-            <a :href="muutosmaarays.url" target="_blank" rel="noopener noreferrer">{{ muutosmaarays.nimi }}</a>
+          <ul v-if="muutosmaaraykset && muutosmaaraykset.length > 1">
+            <li v-for="(muutosmaarays, idx) in muutosmaaraykset" :key="idx">
+              <a :href="muutosmaarays.url" target="_blank" rel="noopener noreferrer">{{ muutosmaarays.nimi }}</a>
+            </li>
+          </ul>
+          <div v-else>
+            <div v-for="(muutosmaarays, idx) in muutosmaaraykset" :key="idx">
+              <a :href="muutosmaarays.url" target="_blank" rel="noopener noreferrer">{{ muutosmaarays.nimi }}</a>
+            </div>
           </div>
         </ep-form-content>
       </div>
