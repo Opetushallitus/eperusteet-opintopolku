@@ -7,6 +7,12 @@ import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 describe('RouteHome', () => {
   const localVue = createLocalVue();
 
+  const $route = {
+    params: {
+      lang: 'fi'
+    }
+  };
+
   test('Renders spinners and data', async () => {
     const perusteStore = perusteStoreMock();
     const tiedoteStore = tiedoteStoreMock();
@@ -22,6 +28,7 @@ describe('RouteHome', () => {
       },
       mocks: {
         ...mocks,
+        $route
       },
     });
 
