@@ -6,7 +6,7 @@
             :sticky="true"
             id="navigation-bar">
     <b-navbar-brand :to="{ name: 'root' }">
-      <img src="../../../public/img/icons/eperusteet-logo.svg" :alt="$t('eperusteet')">
+      <img src="../../../public/img/images/eperusteet-logo.svg" :alt="$t('eperusteet')">
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

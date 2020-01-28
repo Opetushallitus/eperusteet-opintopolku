@@ -1,0 +1,39 @@
+<svg width="60" height="60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="b">
+            <stop stop-color="#FFF" offset="0%"/>
+            <stop offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="c">
+            <stop stop-color="#9DDA75" offset="0%"/>
+            <stop stop-color="#B7E59B" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="e">
+            <stop offset="0%"/>
+            <stop stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="30.19%" y1="100%" x2="30.19%" y2="0%" id="f">
+            <stop stop-color="#88CA4A" offset="0%"/>
+            <stop stop-color="#7DBC55" offset="100%"/>
+        </linearGradient>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="h">
+            <stop offset="0%"/>
+            <stop stop-opacity=".5" offset="100%"/>
+        </linearGradient>
+        <path d="M13.1 30.3v18.91C13.09 55.17 11.27 60 5.23 60h.91C2.74 60 0 57.6 0 53.97V24.25h7c3.38 0 6.1 2.73 6.1 6.06z" id="a"/>
+        <path d="M59.58 6.06c-.04 10.12 0 15.25 0 20.31v22.84c0 5.96-4.9 10.78-10.94 10.79H4.96a5.88 5.88 0 006.12-5.44c-.19-10.78-.18-26.96.03-48.53A6.06 6.06 0 0117.25 0h36.2a6.1 6.1 0 016.13 6.06z" id="d"/>
+        <path d="M48.4 37.89h-25v6.06h25v-6.06zm-8-24.25h-17v6.06h17v-6.06zm-17 18.18h24.58v-6.06H23.4v6.06z" id="g"/>
+    </defs>
+    <g fill="none">
+        <g transform="matrix(-1 0 0 1 13.1 0)">
+            <use fill="#85CD56" xlink:href="#a"/>
+            <use fill-opacity=".3" fill="url(#b)" style="mix-blend-mode:overlay" xlink:href="#a"/>
+        </g>
+        <use fill="url(#c)" xlink:href="#d"/>
+        <use fill-opacity=".1" fill="url(#e)" style="mix-blend-mode:overlay" xlink:href="#d"/>
+        <g transform="matrix(1 0 0 -1 0 57.59)">
+            <use fill="url(#f)" xlink:href="#g"/>
+            <use fill-opacity=".03" fill="url(#h)" xlink:href="#g"/>
+        </g>
+    </g>
+</svg>
