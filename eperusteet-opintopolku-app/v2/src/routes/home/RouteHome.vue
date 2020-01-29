@@ -24,7 +24,7 @@
                 <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
               </div>
               <div class="box">
-                <div class="nimi">
+                <div class="kaikki-uutiset">
                   <router-link :to="{ name: 'uutiset' }">
                     {{ $t('nayta-kaikki-uutiset') }}
                   </router-link>
@@ -47,7 +47,7 @@
                     {{ $kaanna(peruste.nimi) }}
                   </ep-external-link>
                 </div>
-                <div class="luotu">{{ $sd(peruste.paatospvm) }}</div>
+                <div class="luotu">{{ $sd(peruste.paatospvm) }} {{ $t(peruste.koulutustyyppi)}}</div>
               </div>
             </ep-spinner-slot>
           </section>
@@ -57,20 +57,37 @@
       <section>
         <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
         <ep-spinner-slot :is-loading="!perusteetSorted">
-          <div class="d-flex flex-wrap justify-content-between">
-            <div class="valtakunnallinen" v-for="(peruste, idx) in perusteetSorted" :key="idx">
-              <div class="sisalto d-flex justify-content-between align-content-stretch">
-                <div class="raita mx-3 my-2" :class="peruste.theme"></div>
-                <div class="d-flex flex-fill align-items-center">
-                  <div class="nimi my-3 mr-3">
-                    <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
-                      {{ $kaanna(peruste.nimi) }}
-                    </router-link>
-                    <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="true">
-                      {{ $kaanna(peruste.nimi) }}
-                    </ep-external-link>
-                    <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+          <div >
+            <div v-for="(peruste, idx) in perusteetSorted" :key="idx">
+
+              <h3 v-if="peruste.first">{{ $t(peruste.theme) }}</h3>
+
+              <div class="d-flex flex-wrap justify-content-between">
+                <div class="valtakunnallinen">
+                  <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
+                    <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
+                      <div class="raita mx-3 my-2" :class="peruste.theme"></div>
+                      <div class="d-flex flex-fill align-items-center">
+                        <div class="nimi my-3 mr-3">
+                          {{ $kaanna(peruste.nimi) }}
+                          <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </router-link>
+
+                  <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">
+                    <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
+                    <div class="raita mx-3 my-2" :class="peruste.theme"></div>
+                    <div class="d-flex flex-fill align-items-center">
+                      <div class="nimi my-3 mr-3">
+                        <fas fixed-width icon="external-link-alt" class="mr-1"></fas>
+                        {{ $kaanna(peruste.nimi) }}
+                        <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                      </div>
+                    </div>
                   </div>
+                  </ep-external-link>
                 </div>
               </div>
             </div>
@@ -161,10 +178,17 @@ export default class RouteHome extends Vue {
       .flatten()
       .value();
 
-    const sorted: any = [];
+    const tyypeittain = _.groupBy(this.perusteet, 'theme');
+
+    let sorted: any = [];
     _.each(ktJarjestys, kt => {
       const matches = _.filter(this.perusteet, (p: any) => p.koulutustyyppi === kt);
-      sorted.push(...matches);
+      sorted.push(..._.map(matches, (peruste: any) => {
+        return {
+          ...peruste,
+          first: _.isEqual(_.head(tyypeittain[peruste.theme]), peruste),
+        };
+      }));
     });
 
     if (!_.isEmpty(sorted)) {
@@ -209,6 +233,9 @@ export default class RouteHome extends Vue {
 
 <style scoped lang="scss">
 @import '../../styles/_variables.scss';
+@import '@/styles/_mixins.scss';
+
+@include shadow-tile;
 
 .ylaosa {
   .container {
@@ -253,11 +280,23 @@ export default class RouteHome extends Vue {
 }
 
 .container {
+
+  .nimi {
+    color: #2B2B2B;
+    /deep/ a, div.linkki a {
+      color: #2B2B2B;
+    }
+  }
+
+  .kaikki-uutiset {
+    font-weight: 600;
+  }
+
   .valtakunnallinen {
     border: 1px solid #DADADA;
     margin-bottom: 10px;
     border-radius: 2px;
-    width: calc(1 / 2 * 100% - (1 - 1 / 2) * 10px);
+    width: calc(2 / 3 * 100% - (1 - 1 / 2) * 10px);
 
     @media (max-width: 991.98px) {
       width: 100%;
