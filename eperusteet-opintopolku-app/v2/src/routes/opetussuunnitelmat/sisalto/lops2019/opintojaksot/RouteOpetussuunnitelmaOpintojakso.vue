@@ -96,15 +96,15 @@
 
 <script lang="ts">
 import * as _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { Lops2019OpintojaksoDto } from '@shared/api/tyypit';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
-import { getLaajaAlaisetKoodit } from '@shared/utils/perusteet';
-
+import { KoodistoLops2019LaajaAlaiset } from '@shared/utils/perusteet';
+import { Ulkopuoliset } from '@shared/api/ylops';
 
 @Component({
   components: {
@@ -117,6 +117,15 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+  private laajaAlaisetKoodit: any | null = null;
+
+  @Watch('opintojakso', {immediate: true})
+  async opintojaksoChange(val) {
+    if(this.opintojakso) {
+      const koodit = await Promise.all(_.map(this.opintojakso.laajaAlainenOsaaminen, (lao) => Ulkopuoliset.yksiKoodistokoodi(KoodistoLops2019LaajaAlaiset, (lao as any).koodi)));
+      this.laajaAlaisetKoodit = _.map(koodit, 'data');
+    }
+  }
 
   get termit() {
     return this.opetussuunnitelmaDataStore.termit;
@@ -215,10 +224,10 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get laajaAlainenOsaaminenExtended() {
-    return _.chain(getLaajaAlaisetKoodit())
+    return _.chain(this.laajaAlaisetKoodit)
       .map(lo => ({
         ...lo,
-        ..._.find(this.laajaAlainenOsaaminen, { koodi: lo.koodi }),
+        ..._.find(this.laajaAlainenOsaaminen, { koodi: lo.koodiUri }) as {},
       }))
       .filter('kuvaus')
       .value();
