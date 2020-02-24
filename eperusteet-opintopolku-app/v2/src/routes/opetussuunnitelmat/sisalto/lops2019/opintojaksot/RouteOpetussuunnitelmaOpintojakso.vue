@@ -32,14 +32,14 @@
         </ul>
       </div>
 
-      <div v-if="opintojakso.laajuus">
+      <div v-if="opintojakso.laajuus" class="mb-5">
         <h3 class="opintojakso-tieto-otsikko">{{ $t('laajuus') }}</h3>
         <p>{{ opintojakso.laajuus }} {{ $t('opintopiste') }}</p>
       </div>
     </div>
 
 
-    <div v-if="hasModuulit">
+    <div v-if="hasModuulit" class="mb-4">
       <h3>{{ $t('opintojakson-moduulit') }}</h3>
       <div class="d-flex flex-wrap">
         <div v-for="(moduuli, idx) in moduulitExtended" :key="idx">
@@ -48,7 +48,23 @@
       </div>
     </div>
 
-    <div v-if="hasTavoitteet">
+    <div v-if="paikallisetOpintojaksot" class="mb-4">
+      <h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3>
+
+      <div v-for="(paikallinenOpintojakso, idx) in paikallisetOpintojaksot" :key="idx">
+        <router-link :to="{name:'lops2019OpetussuunnitelmaOpintojakso', params:{opintojaksoId: paikallinenOpintojakso.id}}" tabindex="0">
+          <div class="paikallinen-opintojakso-content">
+            <span class="nimi">
+              <span class="mr-2">{{ $kaanna(paikallinenOpintojakso.nimi) }}</span>
+              <span v-if="paikallinenOpintojakso.koodi">({{ paikallinenOpintojakso.koodi }})</span>
+            </span>
+            <span class="pituus">{{ paikallinenOpintojakso.laajuus }} {{ $t('opintopiste') }}</span>
+          </div>
+        </router-link>
+      </div>
+    </div>
+
+    <div v-if="hasTavoitteet" class="mb-4">
     <h3>{{ $t('tavoitteet') }}</h3>
     <ul>
       <li v-for="(tavoite, idx) in tavoitteet" :key="idx">
@@ -57,9 +73,21 @@
                            :kuvat="kuvat" />
       </li>
     </ul>
+    <div v-if="paikallistenOpintojaksojenTavoitteet" class="mb-5">
+      <div v-for="(paikallinenOpintojakso, idx) in paikallistenOpintojaksojenTavoitteet" :key="idx">
+        <h5>{{ $kaanna(paikallinenOpintojakso.nimi)}}</h5>
+        <ul>
+          <li v-for="(tavoite, idx) in paikallinenOpintojakso.tavoitteet" :key="idx">
+            <ep-content-viewer :value="$kaanna(tavoite.kuvaus)"
+                              :termit="termit"
+                              :kuvat="kuvat" />
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 
-    <div v-if="hasKeskeisetSisallot">
+    <div v-if="hasKeskeisetSisallot" class="mb-4">
       <h3>{{ $t('keskeiset-sisallot') }}</h3>
       <ul>
         <li v-for="(ks, idx) in keskeisetSisallot" :key="idx">
@@ -70,22 +98,57 @@
       </ul>
     </div>
 
-    <div v-if="hasLaajaAlainenOsaaminen">
+    <div v-if="paikallistenOpintojaksojenKeskeisetSisallot" class="mb-5">
+      <div v-for="(paikallinenOpintojakso, idx) in paikallistenOpintojaksojenKeskeisetSisallot" :key="idx">
+        <h5>{{ $kaanna(paikallinenOpintojakso.nimi)}}</h5>
+        <ul>
+          <li v-for="(ks, idx) in paikallinenOpintojakso.keskeisetSisallot" :key="idx">
+            <ep-content-viewer :value="$kaanna(ks.kuvaus)"
+                              :termit="termit"
+                              :kuvat="kuvat" />
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div v-if="hasLaajaAlainenOsaaminen" class="mb-4">
       <h3>{{ $t('laaja-alaiset-sisallot') }}</h3>
       <div v-for="(lao, idx) in laajaAlainenOsaaminenExtended" :key="idx">
-        <h4 class="opintojakso-lao-otsikko">{{ $kaanna(lao.nimi) }}</h4>
+        <h4 class="opintojakso-lao-otsikko">{{ $kaanna(lao.nimi) }} ({{lao.koodiArvo}})</h4>
         <ep-content-viewer :value="$kaanna(lao.kuvaus)"
                            :termit="termit"
                            :kuvat="kuvat" />
       </div>
     </div>
 
-    <div v-if="hasArviointi">
+    <div v-if="paikallistenOpintojaksojenLaajaAlainenOsaaminenExtended" class="mb-5">
+      <div v-for="(paikallinenOpintojakso, idx) in paikallistenOpintojaksojenLaajaAlainenOsaaminenExtended" :key="idx">
+        <h5>{{ $kaanna(paikallinenOpintojakso.nimi)}}</h5>
+        <div v-for="(lao, idx) in paikallinenOpintojakso.laajaAlainenOsaaminen" :key="idx">
+          <h6 class="opintojakso-lao-otsikko">{{ $kaanna(lao.nimi) }} ({{lao.koodiArvo}})</h6>
+          <ep-content-viewer :value="$kaanna(lao.kuvaus)"
+                            :termit="termit"
+                            :kuvat="kuvat" />
+        </div>
+      </div>
+    </div>
+
+    <div v-if="hasArviointi" class="mb-4">
       <h3>{{ $t('opintojakson-arviointi') }}</h3>
       <ep-content-viewer v-if="opintojakso.arviointi"
                          :value="$kaanna(opintojakso.arviointi)"
                          :termit="termit"
                          :kuvat="kuvat" />
+    </div>
+
+    <div v-if="paikallistenOpintojaksojenArviointi" class="mb-5">
+      <div v-for="(paikallinenOpintojakso, idx) in paikallistenOpintojaksojenArviointi" :key="idx">
+        <h5>{{ $kaanna(paikallinenOpintojakso.nimi)}}</h5>
+        <ep-content-viewer v-if="paikallinenOpintojakso.arviointi"
+                          :value="$kaanna(paikallinenOpintojakso.arviointi)"
+                          :termit="termit"
+                          :kuvat="kuvat" />
+      </div>
     </div>
 
     <slot name="previous-next-navigation" />
@@ -122,7 +185,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   @Watch('opintojakso', {immediate: true})
   async opintojaksoChange(val) {
     if(this.opintojakso) {
-      const koodit = await Promise.all(_.map(this.opintojakso.laajaAlainenOsaaminen, (lao) => Ulkopuoliset.yksiKoodistokoodi(KoodistoLops2019LaajaAlaiset, (lao as any).koodi)));
+      const koodit = await Promise.all(_.map(this.kaikkiLaajaalaisetOsaamiset, (lao) => Ulkopuoliset.yksiKoodistokoodi(KoodistoLops2019LaajaAlaiset, (lao as any).koodi)));
       this.laajaAlaisetKoodit = _.map(koodit, 'data');
     }
   }
@@ -140,6 +203,24 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
       return _.find(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
         return oj.id === _.parseInt(this.$route.params.opintojaksoId);
       }) as Lops2019OpintojaksoDto;
+    }
+  }
+
+  get kaikkiLaajaalaisetOsaamiset() {
+    if(this.laajaAlainenOsaaminen) {
+      return [
+        ...this.laajaAlainenOsaaminen,
+        ..._.chain(this.opintojakso!.paikallisetOpintojaksot)
+          .map('laajaAlainenOsaaminen')
+          .flatMap()
+          .value(),
+      ];
+    }
+  }
+
+  get paikallisetOpintojaksot() {
+    if(!_.isEmpty(this.opintojakso!.paikallisetOpintojaksot)) {
+      return this.opintojakso!.paikallisetOpintojaksot;
     }
   }
 
@@ -207,10 +288,22 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     return !_.isEmpty(this.tavoitteet);
   }
 
+  get paikallistenOpintojaksojenTavoitteet() {
+    return _.chain(this.paikallisetOpintojaksot)
+      .filter((paikallinenOpintojakso) => !_.isEmpty(paikallinenOpintojakso.tavoitteet))
+      .value();
+  }
+
   get keskeisetSisallot() {
     if (this.opintojakso) {
       return this.opintojakso.keskeisetSisallot;
     }
+  }
+
+  get paikallistenOpintojaksojenKeskeisetSisallot() {
+    return _.chain(this.paikallisetOpintojaksot)
+      .filter((paikallinenOpintojakso) => !_.isEmpty(paikallinenOpintojakso.keskeisetSisallot))
+      .value();
   }
 
   get hasKeskeisetSisallot() {
@@ -227,7 +320,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     return _.chain(this.laajaAlaisetKoodit)
       .map(lo => ({
         ...lo,
-        ..._.find(this.laajaAlainenOsaaminen, { koodi: lo.koodiUri }) as {},
+        ..._.find(this.laajaAlainenOsaaminen, { koodi: lo.koodiUri }) as any,
       }))
       .filter('kuvaus')
       .value();
@@ -237,10 +330,32 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     return !_.isEmpty(this.laajaAlainenOsaaminen);
   }
 
+  get paikallistenOpintojaksojenLaajaAlainenOsaaminenExtended() {
+    return _.chain(this.paikallisetOpintojaksot)
+      .filter((paikallinenOpintojakso) => !_.isEmpty(paikallinenOpintojakso.laajaAlainenOsaaminen))
+      .map(paikallinenOpintojakso => ({
+        ...paikallinenOpintojakso,
+        laajaAlainenOsaaminen: _.chain(this.laajaAlaisetKoodit)
+          .map(lo => ({
+            ...lo,
+            ..._.find(paikallinenOpintojakso.laajaAlainenOsaaminen, { koodi: lo.koodiUri }) as any,
+          }))
+          .filter('kuvaus')
+          .value()
+      }))
+      .value();
+  }
+
   get hasArviointi() {
     if (this.opintojakso) {
       return this.opintojakso.arviointi;
     }
+  }
+
+  get paikallistenOpintojaksojenArviointi() {
+    return _.chain(this.paikallisetOpintojaksot)
+      .filter((paikallinenOpintojakso) => !_.isEmpty(paikallinenOpintojakso.arviointi))
+      .value();
   }
 
   get hasKuvaus() {
@@ -275,6 +390,41 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   .opintojakso-lao-otsikko {
     font-size: 1em;
     font-weight: bold;
+  }
+
+  .paikallinen-opintojakso-content {
+    border-radius: 24px;
+    border: 1px solid #CDEEFF;
+    padding: 14px 30px;
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #E6F6FF;
+
+    &.selectable{
+      cursor:pointer;
+    }
+
+    span.nimi {
+      flex: 1 0 auto;
+    }
+
+    span.pituus {
+      min-width: 4em;
+    }
+
+    span.tyyppi {
+      min-width: 6em;
+    }
+
+    &.selected {
+      background-color: #3367E3;
+      color: $white;
+    }
+
+    &:hover:not(.selected.selectable) {
+      background-color: #C3EAFF;
+    }
   }
 }
 </style>
