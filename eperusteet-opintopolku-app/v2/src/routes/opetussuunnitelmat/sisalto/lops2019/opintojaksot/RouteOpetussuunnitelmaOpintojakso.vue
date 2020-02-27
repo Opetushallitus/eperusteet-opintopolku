@@ -307,7 +307,10 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get hasKeskeisetSisallot() {
-    return !_.isEmpty(this.keskeisetSisallot);
+    return !_.isEmpty(_.chain(this.keskeisetSisallot)
+      .map('kuvaus')
+      .filter(null)
+      .value());
   }
 
   get laajaAlainenOsaaminen() {
@@ -327,7 +330,10 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get hasLaajaAlainenOsaaminen() {
-    return !_.isEmpty(this.laajaAlainenOsaaminen);
+    return !_.isEmpty(_.chain(this.laajaAlainenOsaaminen)
+      .map('kuvaus')
+      .filter(null)
+      .value());
   }
 
   get paikallistenOpintojaksojenLaajaAlainenOsaaminenExtended() {
