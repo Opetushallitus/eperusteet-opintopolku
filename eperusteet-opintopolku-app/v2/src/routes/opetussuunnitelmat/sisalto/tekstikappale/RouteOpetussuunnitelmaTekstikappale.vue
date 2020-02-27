@@ -21,7 +21,11 @@
     </ep-collapse>
 
     <!-- Opetussuunnitelman teksti -->
-    <ep-content-viewer :value="$kaanna(tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
+    <ep-collapse tyyppi="paikallinen-teksti"
+                 v-if="tekstiKappale && tekstiKappale.teksti">
+      <div class="collapse-header" slot="header">{{ $t('paikallinen-teksti') }}</div>
+      <ep-content-viewer :value="$kaanna(tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
+    </ep-collapse>
 
     <!-- Alikappaleet -->
     <div v-if="alikappaleet">
@@ -52,7 +56,11 @@
         </ep-collapse>
 
         <!-- Opetussuunnitelman teksti -->
-        <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
+        <ep-collapse tyyppi="paikallinen-teksti"
+                 v-if="alikappaleViite.tekstiKappale.teksti">
+          <div class="collapse-header" slot="header">{{ $t('paikallinen-teksti') }}</div>
+          <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
+        </ep-collapse>
       </div>
     </div>
 
