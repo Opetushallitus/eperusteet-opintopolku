@@ -40,10 +40,9 @@
 
 
     <div v-if="hasModuulit" class="mb-4">
-      <h3>{{ $t('opintojakson-moduulit') }}</h3>
       <div class="d-flex flex-wrap">
-        <div v-for="(moduuli, idx) in moduulitExtended" :key="idx">
-          <ep-opintojakson-moduuli :moduuli="moduuli" class="mr-2 mb-2" />
+        <div v-for="(moduuli, idx) in moduulit" :key="idx">
+          <ep-opintojakson-moduuli :moduuli="moduuli" :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore" class="mr-2 mb-2" />
         </div>
       </div>
     </div>
@@ -168,6 +167,8 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
 import { KoodistoLops2019LaajaAlaiset } from '@shared/utils/perusteet';
 import { Ulkopuoliset } from '@shared/api/ylops';
+import { Lops2019ModuuliDto } from '@shared/api/tyypit';
+import { Lops2019Perusteet } from '@shared/api/ylops';
 
 @Component({
   components: {
@@ -181,12 +182,17 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
   private laajaAlaisetKoodit: any | null = null;
+  private moduulit: Lops2019ModuuliDto[] | null = null;
 
   @Watch('opintojakso', {immediate: true})
   async opintojaksoChange(val) {
     if(this.opintojakso) {
       const koodit = await Promise.all(_.map(this.kaikkiLaajaalaisetOsaamiset, (lao) => Ulkopuoliset.yksiKoodistokoodi(KoodistoLops2019LaajaAlaiset, (lao as any).koodi)));
       this.laajaAlaisetKoodit = _.map(koodit, 'data');
+
+      if (this.moduuliKoodiUrit) {
+        this.moduulit = (await Lops2019Perusteet.getAllLops2019PerusteModuulit(this.opetussuunnitelmaDataStore.opetussuunnitelmaId, (this.moduuliKoodiUrit as any))).data;
+      }
     }
   }
 
@@ -251,27 +257,10 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     return !_.isEmpty(this.oppiaineet);
   }
 
-  get moduulit() {
+  get moduuliKoodiUrit() {
     if (this.opintojakso) {
-      return this.opintojakso.moduulit;
+      return _.map(this.opintojakso.moduulit, 'koodiUri');
     }
-  }
-
-  get moduulitExtended() {
-    return _.map(this.moduulit, (moduuli: any) => {
-      if (moduuli.koodiUri) {
-        const node = this.navigationByUri[moduuli.koodiUri];
-        if (node) {
-          const { path, children, ...filtered } = node;
-          moduuli.node = filtered;
-          if (path && path.length >= 3) {
-            const oaNode = path[path.length - 3];
-            moduuli.node.location.params.oppiaineId = _.get(oaNode, 'location.params.oppiaineId');
-            return moduuli;
-          }
-        }
-      }
-    });
   }
 
   get hasModuulit() {
@@ -308,8 +297,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 
   get hasKeskeisetSisallot() {
     return !_.isEmpty(_.chain(this.keskeisetSisallot)
-      .map('kuvaus')
-      .filter(null)
+      .filter('kuvaus')
       .value());
   }
 
@@ -331,8 +319,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 
   get hasLaajaAlainenOsaaminen() {
     return !_.isEmpty(_.chain(this.laajaAlainenOsaaminen)
-      .map('kuvaus')
-      .filter(null)
+      .filter('kuvaus')
       .value());
   }
 
