@@ -313,7 +313,6 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
         ...lo,
         ..._.find(this.laajaAlainenOsaaminen, { koodi: lo.koodiUri }) as any,
       }))
-      .filter('kuvaus')
       .value();
   }
 
