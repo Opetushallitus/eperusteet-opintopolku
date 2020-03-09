@@ -1,12 +1,16 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import EpNavigation from './EpNavigation.vue';
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 import { findAllContaining, findContaining, mocks, stubs } from '@shared/utils/jestutils';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 describe('EpNavigation', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  localVue.use(VueI18n);
+  Kielet.install(localVue);
+  localVue.use(new Kaannos());
 
   test('Renders spinners and data', async () => {
 

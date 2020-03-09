@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { PerusteDto } from '@shared/api/tyypit';
+import { PerusteDto } from '@shared/api/eperusteet';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
 
@@ -50,7 +50,7 @@ export default class PerusteTile extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 .container {
   .tile {

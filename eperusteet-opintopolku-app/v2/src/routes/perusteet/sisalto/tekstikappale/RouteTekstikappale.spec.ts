@@ -2,13 +2,17 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import RouteTekstikappale from './RouteTekstikappale.vue';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import { perusteDataStoreMock, perusteenOsaStoreMock } from '@/storeMocks';
-import { KieliStore } from '@shared/stores/kieli';
-import { ViiteLaaja } from '@shared/api/tyypit';
+import { Kielet } from '@shared/stores/kieli';
+import { ViiteLaaja } from '@shared/api/eperusteet';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 describe('RouteTekstikappale', async () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  localVue.use(VueI18n);
+  Kielet.install(localVue);
+  localVue.use(new Kaannos());
 
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock({});

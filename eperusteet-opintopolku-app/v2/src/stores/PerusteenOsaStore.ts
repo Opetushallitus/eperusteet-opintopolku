@@ -1,5 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { Laaja, ViiteLaaja } from '@shared/api/tyypit';
+import { Laaja, ViiteLaaja } from '@shared/api/eperusteet';
 import { Perusteenosat } from '@shared/api/eperusteet';
 
 

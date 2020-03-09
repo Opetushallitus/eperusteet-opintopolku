@@ -1,13 +1,17 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteOppiaineet from './RouteOppiaineet.vue';
 import { lops2019OppiaineetStoreMock, perusteDataStoreMock } from '@/storeMocks';
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 describe('RouteOppiaineet', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  localVue.use(VueI18n);
+  Kielet.install(localVue);
+  localVue.use(new Kaannos());
 
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock({

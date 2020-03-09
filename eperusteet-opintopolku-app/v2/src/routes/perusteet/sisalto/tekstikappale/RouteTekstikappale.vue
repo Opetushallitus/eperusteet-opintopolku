@@ -24,7 +24,7 @@ import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { ViiteLaaja } from '@shared/api/tyypit';
+import { ViiteLaaja } from '@shared/api/eperusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -107,8 +107,8 @@ export default class RouteTekstikappale extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../../../styles/_variables.scss';
-@import '../../../../styles/_mixins.scss';
+@import '@shared/styles/_variables.scss';
+@import '@shared/styles/_mixins.scss';
 
 .content {
   padding: 0 $content-padding;

@@ -65,48 +65,48 @@ module.exports = {
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
     ],
   },
-  chainWebpack: config => {
-    config.optimization.minimizer([
-      new TerserPlugin({
-        terserOptions: {
-          output: {
-            comments: /^\**!|@preserve|@license|@cc_on/i
-          },
-          parallel: true,
-          keep_classnames: true,
-          compress: {
-            arrows: false,
-            booleans: true,
-            collapse_vars: false,
-            comparisons: false,
-            computed_props: false,
-            conditionals: true,
-            dead_code: true,
-            evaluate: true,
-            hoist_funs: false,
-            hoist_props: false,
-            hoist_vars: false,
-            if_return: true,
-            inline: false,
-            loops: false,
-            negate_iife: false,
-            properties: false,
-            reduce_funcs: false,
-            reduce_vars: false,
-            sequences: true,
-            switches: false,
-            toplevel: false,
-            typeofs: false,
-            unused: true,
-          },
-          mangle: {
-            safari10: true
-          }
-        }
+  // chainWebpack: config => {
+  //   config.optimization.minimizer([
+  //     new TerserPlugin({
+  //       terserOptions: {
+  //         output: {
+  //           comments: /^\**!|@preserve|@license|@cc_on/i
+  //         },
+  //         parallel: true,
+  //         keep_classnames: true,
+  //         compress: {
+  //           arrows: false,
+  //           booleans: true,
+  //           collapse_vars: false,
+  //           comparisons: false,
+  //           computed_props: false,
+  //           conditionals: true,
+  //           dead_code: true,
+  //           evaluate: true,
+  //           hoist_funs: false,
+  //           hoist_props: false,
+  //           hoist_vars: false,
+  //           if_return: true,
+  //           inline: false,
+  //           loops: false,
+  //           negate_iife: false,
+  //           properties: false,
+  //           reduce_funcs: false,
+  //           reduce_vars: false,
+  //           sequences: true,
+  //           switches: false,
+  //           toplevel: false,
+  //           typeofs: false,
+  //           unused: true,
+  //         },
+  //         mangle: {
+  //           safari10: true
+  //         }
+  //       }
 
-      })
-    ]);
-  },
+  //     })
+  //   ]);
+  // },
   devServer: {
     overlay: {
       warnings: false,

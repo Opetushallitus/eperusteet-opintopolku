@@ -50,7 +50,7 @@ import { koulutustyyppiTheme, stateToKoulutustyyppi,
   ryhmat, yleissivistavat, ammatilliset } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
-import { VueRouter } from 'vue-router/types/router';
+import { VueRouter, RawLocation } from 'vue-router/types/router';
 import { createLogger } from '@shared/utils/logger';
 
 const logger = createLogger('EpNavigation');
@@ -71,7 +71,7 @@ export default class EpNavigation extends Vue {
   }
 
   get sisaltoKieli() {
-    return Kielet.getSisaltoKieli;
+    return Kielet.getSisaltoKieli.value;
   }
 
   get activeClass() {
@@ -147,7 +147,7 @@ export default class EpNavigation extends Vue {
         params: {
           lang: kieli || this.$i18n.fallbackLocale,
         }
-      });
+      } as RawLocation);
     }
     catch (e) {
       if (e.name === 'NavigationDuplicated') {
@@ -163,7 +163,7 @@ export default class EpNavigation extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 .navbar-ep {
 

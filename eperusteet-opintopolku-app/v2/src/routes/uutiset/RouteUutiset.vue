@@ -98,7 +98,7 @@ export default class RouteUutiset extends Vue {
   }
 
   get sisaltoKieli() {
-    return Kielet.getSisaltoKieli;
+    return Kielet.getSisaltoKieli.value;
   }
 
   get murupolku() {
@@ -120,7 +120,7 @@ export default class RouteUutiset extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 .search {
   margin-bottom: 40px;

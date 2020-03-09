@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
-import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/tyypit';
+import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/ylops';
 import {
   baseURL,
   Dokumentit,
@@ -236,7 +236,7 @@ export class OpetussuunnitelmaDataStore {
     if (!this.opetussuunnitelma) {
       return;
     }
-    const sisaltoKieli = Kielet.getSisaltoKieli;
+    const sisaltoKieli = Kielet.getSisaltoKieli.value;
     const dokumenttiId = (await Dokumentit.getDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
     if (dokumenttiId) {
       this.dokumentit[sisaltoKieli] = baseURL + DokumentitParam.get(_.toString(dokumenttiId)).url;

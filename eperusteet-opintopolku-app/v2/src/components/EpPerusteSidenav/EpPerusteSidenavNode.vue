@@ -87,7 +87,7 @@ export default class EpPerusteSidenavNode extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 .node {
   color: $sidenav-color;

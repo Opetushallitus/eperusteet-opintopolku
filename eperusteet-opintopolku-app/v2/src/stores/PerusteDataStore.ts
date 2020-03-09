@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
-import { NavigationNodeDto, PerusteDto, TermiDto, LiiteDtoWrapper } from '@shared/api/tyypit';
+import { NavigationNodeDto, PerusteDto } from '@shared/api/eperusteet';
+import { TermiDto } from '@shared/api/ylops';
+import { LiiteDtoWrapper } from '@shared/tyypit';
 import { Perusteet } from '@shared/api/eperusteet';
 import {
   buildNavigation,
@@ -153,7 +155,7 @@ export class PerusteDataStore {
       return;
     }
 
-    const sisaltoKieli = Kielet.getSisaltoKieli;
+    const sisaltoKieli = Kielet.getSisaltoKieli.value;
     const suoritustavat = this.peruste.suoritustavat;
     if (suoritustavat) {
       for (let i = 0; i < suoritustavat.length; i++) {

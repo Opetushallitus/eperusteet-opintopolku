@@ -79,7 +79,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
-import { Puu } from '@shared/api/tyypit';
+import { Puu } from '@shared/api/ylops';
 
 
 @Component({
@@ -213,7 +213,7 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../../../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 .content {
   padding: 0 $content-padding;

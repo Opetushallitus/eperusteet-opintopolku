@@ -1,6 +1,6 @@
 import { Store, State } from '@shared/stores/store';
 import { Lops2019 } from '@shared/api/eperusteet';
-import { Lops2019LaajaAlainenOsaaminenKokonaisuusDto } from '@shared/api/tyypit';
+import { Lops2019LaajaAlainenOsaaminenKokonaisuusDto } from '@shared/api/ylops';
 
 @Store
 export class Lops2019LaajaAlaisetStore {

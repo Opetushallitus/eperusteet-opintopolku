@@ -161,13 +161,13 @@ import * as _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { Lops2019OpintojaksoDto } from '@shared/api/tyypit';
+import { Lops2019OpintojaksoDto } from '@shared/api/ylops';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
+import EpOpintojaksonModuuli from './EpOpintojaksonModuuli.vue';
 import { KoodistoLops2019LaajaAlaiset } from '@shared/utils/perusteet';
 import { Ulkopuoliset } from '@shared/api/ylops';
-import { Lops2019ModuuliDto } from '@shared/api/tyypit';
+import { Lops2019ModuuliDto } from '@shared/api/ylops';
 import { Lops2019Perusteet } from '@shared/api/ylops';
 
 @Component({
@@ -364,8 +364,8 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../../../../styles/_variables.scss';
-@import '../../../../../styles/_mixins.scss';
+@import '@shared/styles/_variables.scss';
+@import '@shared/styles/_mixins.scss';
 
 .content {
   padding: 0 $content-padding;

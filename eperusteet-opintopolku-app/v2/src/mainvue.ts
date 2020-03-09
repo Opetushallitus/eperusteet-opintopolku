@@ -3,12 +3,15 @@ import Loading from 'vue-loading-overlay';
 import Notifications from 'vue-notification';
 import VueScrollTo from 'vue-scrollto';
 import VueMatomo from 'vue-matomo';
+import VueCompositionApi from '@vue/composition-api';
+import Aikaleima from '@shared/plugins/aikaleima';
+import Kaannos from '@shared/plugins/kaannos';
 
 import '@/config/bootstrap';
 import '@/config/fontawesome';
 
 import { router } from '@/router';
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 // import { Virheet } from '@shared/stores/virheet';
 
 import { createLogger } from '@shared/utils/logger';
@@ -19,6 +22,10 @@ const logger = createLogger('main');
 
 Vue.config.devtools = true;
 Vue.use(Notifications);
+Vue.use(VueI18n);
+Vue.use(VueCompositionApi);
+Vue.use(Kaannos);
+Vue.use(Aikaleima);
 
 const isProduction = () => process.env.NODE_ENV === 'production';
 
@@ -66,7 +73,7 @@ if (isProduction()) {
 const SocialSharing = require('vue-social-sharing');
 Vue.use(SocialSharing);
 
-KieliStore.setup(Vue, {
+Kielet.install(Vue, {
   messages: {
     fi: require('@/translations/locale-fi.json'),
     sv: require('@/translations/locale-sv.json'),
@@ -75,18 +82,6 @@ KieliStore.setup(Vue, {
 
 
 import VueI18n, { IVueI18n } from 'vue-i18n';
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    readonly $i18n: VueI18n & IVueI18n;
-    $t: typeof VueI18n.prototype.t;
-    $tc: typeof VueI18n.prototype.tc;
-    $te: typeof VueI18n.prototype.te;
-    $d: typeof VueI18n.prototype.d;
-    $n: typeof VueI18n.prototype.n;
-    $kaanna: (localizationObject: object | null | undefined) => string;
-  }
-}
 
 function errorCaptured(err: Error, vm: Vue, info: string) {
   logger.error(err, info);
@@ -101,7 +96,7 @@ function errorCaptured(err: Error, vm: Vue, info: string) {
 }
 
 export const rootConfig: any = {
-  i18n: KieliStore.i18n,
+  i18n: Kielet.i18n,
   router,
   render: (h: any) => h(App),
   errorCaptured,

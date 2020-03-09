@@ -2,12 +2,16 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import RouteModuuli from './RouteModuuli.vue';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import { lops2019ModuuliStoreMock, perusteDataStoreMock } from '@/storeMocks';
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 describe('RouteModuuli', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  localVue.use(VueI18n);
+  Kielet.install(localVue);
+  localVue.use(new Kaannos());
 
   test('Renders', async () => {
 

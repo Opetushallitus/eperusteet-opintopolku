@@ -1,13 +1,16 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import Vue from 'vue';
 import EpHeader from './EpHeader.vue';
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 describe('EpHeader', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue, {
+  localVue.use(VueI18n);
+  Kielet.install(localVue, {
     messages: {
       fi: {
         'parent-jolla-todella-pitka-teksti': 'Parent jolla todella pitkä teksti',
@@ -15,8 +18,7 @@ describe('EpHeader', () => {
       }
     },
   });
-
-
+  localVue.use(new Kaannos());
 
   test('Renders spinners and data', async () => {
     const propsData = Vue.observable({

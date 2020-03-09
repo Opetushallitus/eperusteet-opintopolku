@@ -86,7 +86,7 @@ export default class EpHeader extends Vue {
 
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 .vari-header {
   min-height: 238px;

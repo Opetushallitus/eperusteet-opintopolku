@@ -1,5 +1,5 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { PerusteDto, TiedoteDto } from '@shared/api/tyypit';
+import { PerusteDto, TiedoteDto } from '@shared/api/eperusteet';
 import { Perusteet, Tiedotteet } from '@shared/api/eperusteet';
 import _ from 'lodash';
 
