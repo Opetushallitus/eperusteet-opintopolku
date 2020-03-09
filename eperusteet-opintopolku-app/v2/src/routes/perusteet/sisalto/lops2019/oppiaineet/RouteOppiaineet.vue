@@ -47,8 +47,8 @@ export default class RouteOppiaineet extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../../../../styles/_variables.scss';
-@import '../../../../../styles/_mixins.scss';
+@import '@shared/styles/_variables.scss';
+@import '@shared/styles/_mixins.scss';
 
 .content {
   padding: 0 $content-padding;

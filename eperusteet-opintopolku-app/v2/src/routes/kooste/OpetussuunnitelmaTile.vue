@@ -32,7 +32,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { OpetussuunnitelmaJulkinenDto } from '@shared/api/tyypit';
+import { OpetussuunnitelmaJulkinenDto } from '@shared/api/ylops';
 import { highlight } from '@/utils/kieli';
 import _ from 'lodash';
 
@@ -45,7 +45,7 @@ export default class PerusteTile extends Vue {
   private query!: string;
 
   get nimi() {
-    return highlight(this.$kaanna(this.ops.nimi), this.query);
+    return highlight(this.$kaanna((this.ops.nimi as Object)), this.query);
   }
 
   get toimijat() {
@@ -59,7 +59,7 @@ export default class PerusteTile extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '@/styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
   .opsicon-wrapper {
     padding: 20px 25px 20px 25px;

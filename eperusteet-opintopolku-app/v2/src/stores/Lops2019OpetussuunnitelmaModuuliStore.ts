@@ -1,5 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { Lops2019ModuuliDto } from '@shared/api/tyypit';
+import { Lops2019ModuuliDto } from '@shared/api/ylops';
 import { Lops2019Perusteet } from '@shared/api/ylops';
 
 @Store

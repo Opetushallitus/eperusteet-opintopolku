@@ -101,7 +101,8 @@ import * as _ from 'lodash';
 import VueScrollTo from 'vue-scrollto';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
-import { LiiteDtoWrapper, Lops2019OppiaineKaikkiDto, TermiDto } from '@shared/api/tyypit';
+import { Lops2019OppiaineKaikkiDto, TermiDto } from '@shared/api/ylops';
+import { LiiteDtoWrapper } from '@shared/tyypit';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 

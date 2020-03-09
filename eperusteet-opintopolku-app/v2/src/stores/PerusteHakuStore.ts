@@ -1,5 +1,5 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { PerusteDto } from '@shared/api/tyypit';
+import { PerusteDto } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { PerusteQuery, perusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
@@ -65,7 +65,7 @@ export class PerusteHakuStore {
     ...state.filterdata,
     sivu: state.page,
     sivukoko: state.perPage,
-    kieli: Kielet.getSisaltoKieli,
+    kieli: Kielet.getSisaltoKieli.value,
   }))
   public readonly filters!: PerusteQuery;
 

@@ -1,20 +1,24 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteKooste from './RouteKooste.vue';
 import { tiedoteStoreMock, perusteKoosteStoreMock } from '@/storeMocks';
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import * as _ from 'lodash';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue, {
+  localVue.use(VueI18n);
+  Kielet.install(localVue, {
     messages: {
       fi: {
         'kooste': 'Kooste',
       }
     },
   });
+  localVue.use(new Kaannos());
 
   const $route = {
     params: {lang: 'fi'}

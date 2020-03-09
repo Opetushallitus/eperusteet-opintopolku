@@ -7,25 +7,8 @@
                        :kuvat="kuvat" />
   </div>
 
-  <!-- Halutaanko esittää tässä myös?
-  <div v-if="koodi">
-    <strong>{{ $t('koodi') }}</strong>
-    <p>{{ koodi.arvo }}</p>
-  </div>
-
-  <div v-if="tyyppi">
-    <strong>{{ $t('tyyppi') }}</strong>
-    <p>{{ $t(tyyppi) }}</p>
-  </div>
-
-  <div v-if="moduuli.laajuus">
-    <strong>{{ $t('laajuus') }}</strong>
-    <p>{{ moduuli.laajuus }}</p>
-  </div>
-  -->
-
   <div v-if="hasTavoitteet">
-    <h3>{{ $t('yleiset-tavoitteet') }}</h3>
+    <h4>{{ $t('yleiset-tavoitteet') }}</h4>
     <div v-if="tavoitteet.kohde">{{ $kaanna(tavoitteet.kohde) }}</div>
     <ul>
       <li v-for="(tavoite, idx) in tavoitteet.tavoitteet" :key="idx">{{ $kaanna(tavoite) }}</li>
@@ -33,7 +16,7 @@
   </div>
 
   <div v-if="hasSisallot">
-    <h3>{{ $t('keskeiset-sisallot') }}</h3>
+    <h4>{{ $t('keskeiset-sisallot') }}</h4>
     <div v-for="(sisalto, idx) in sisallot" :key="idx">
       <div v-if="sisalto.kohde">{{ $kaanna(sisalto.kohde) }}</div>
       <ul>
@@ -73,10 +56,6 @@ export default class ModuuliEsitys extends Vue {
 
   @Prop({ required: false, type: Array })
   private kuvat!: LiiteDtoWrapper[];
-
-  get koodi() {
-    return this.moduuli.koodi;
-  }
 
   get hasKuvaus() {
     if (this.moduuli) {

@@ -72,7 +72,7 @@ export default class Root extends Vue {
 </script>
 
 <style lang="scss">
-@import '../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 header {
   background-color: white;

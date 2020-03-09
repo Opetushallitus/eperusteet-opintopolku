@@ -58,7 +58,7 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
 </script>
 
 <style scoped lang="scss">
-@import '../../styles/_variables.scss';
+@import '@shared/styles/_variables.scss';
 
 .sidebar {
   .search {

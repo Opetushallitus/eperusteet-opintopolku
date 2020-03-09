@@ -2,14 +2,17 @@ import { mount, createLocalVue } from '@vue/test-utils';
 import RouteOpetussuunnitelmaTekstikappale from './RouteOpetussuunnitelmaTekstikappale.vue';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import { opetussuunnitelmaDataStoreMock, opetussuunnitelmaTekstikappaleStoreMock } from '@/storeMocks';
-import { Kielet, KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 import { Kieli } from '@shared/tyypit';
-import { TekstiKappaleKevytDto } from '@shared/api/tyypit';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 describe('RouteOpetussuunnitelmaTekstikappale', async () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  localVue.use(VueI18n);
+  Kielet.install(localVue);
+  localVue.use(new Kaannos());
 
   beforeEach(() => {
     Kielet.setSisaltoKieli(Kieli.fi);

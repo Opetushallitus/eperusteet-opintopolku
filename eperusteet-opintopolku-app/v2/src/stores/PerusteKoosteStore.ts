@@ -1,5 +1,6 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { OpetussuunnitelmaJulkinenDto, PerusteDto, TiedoteDto } from '@shared/api/tyypit';
+import { PerusteDto, TiedoteDto } from '@shared/api/eperusteet';
+import { OpetussuunnitelmaJulkinenDto } from '@shared/api/ylops';
 import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 import { ryhmat } from '@shared/utils/perusteet';
 import { tiedoteQuery, perusteetQuery } from '@/api/eperusteet';

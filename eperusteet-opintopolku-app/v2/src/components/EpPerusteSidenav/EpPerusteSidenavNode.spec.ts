@@ -3,8 +3,10 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore.ts';
 import EpPerusteSidenav from './EpPerusteSidenav.vue';
 import EpPerusteSidenavNode from './EpPerusteSidenavNode.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
+import VueI18n from 'vue-i18n';
+import { Kaannos } from '@shared/plugins/kaannos';
 
 
 const navigationData = {
@@ -92,7 +94,9 @@ const perusteData = {
 
 describe('EpPerusteSidenav', async () => {
   const localVue = createLocalVue();
-  KieliStore.setup(localVue);
+  localVue.use(VueI18n);
+  Kielet.install(localVue);
+  localVue.use(new Kaannos());
 
   describe('Rendering Root and spinners', async () => {
     const perusteDataStore = new PerusteDataStore(42);

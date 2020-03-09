@@ -1,13 +1,8 @@
 import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
-import {
-  TekstiKappaleDto,
-  Puu,
-  Matala,
-  PerusteTekstiKappaleViiteDto,
-} from '@shared/api/tyypit';
+import { TekstiKappaleDto, Puu, PerusteTekstiKappaleViiteDto } from '@shared/api/ylops';
+import { Matala } from '@shared/api/eperusteet';
 import { Lops2019Perusteet, OpetussuunnitelmanSisalto } from '@shared/api/ylops';
-
 
 @Store
 export class OpetussuunnitelmaTekstikappaleStore {

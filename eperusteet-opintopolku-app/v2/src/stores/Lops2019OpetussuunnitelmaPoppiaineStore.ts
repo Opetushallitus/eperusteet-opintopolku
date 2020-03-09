@@ -1,5 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { KoodistoKoodiDto, Lops2019PaikallinenOppiaineDto } from '@shared/api/tyypit';
+import { KoodistoKoodiDto, Lops2019PaikallinenOppiaineDto } from '@shared/api/ylops';
 import { Oppiaineet, Opetussuunnitelmat } from '@shared/api/ylops';
 import { KoodistoLops2019LaajaAlaiset } from '@shared/utils/perusteet';
 

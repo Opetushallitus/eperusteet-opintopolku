@@ -21,7 +21,6 @@ async function getKaannokset() {
 async function main() {
   try {
     logger.info('Mounting #app');
-    KieliStore.load(getKaannokset);
     registerIconColorSchemeChange();
     (new Vue(rootConfig)).$mount('#app');
   }
