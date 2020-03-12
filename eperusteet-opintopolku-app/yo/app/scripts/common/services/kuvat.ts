@@ -27,9 +27,14 @@ angular
             if (this.getOpsId()) {
                 if ($state.includes("root.amops")) {
                     const opsId = (params && params.amosaa && params.amosaa.opsId) || $stateParams.opsId;
-                    return (opsBase.AMOSAA_OPS + "/kuvat")
-                        .replace(":opsId", "" + opsId || this.getOpsId()) +
-                        "/" + image.id;
+                    const ktId = (params && params.amosaa && params.amosaa.ktId);
+                    let url = (opsBase.AMOSAA_OPS + "/kuvat").replace(":opsId", "" + opsId || this.getOpsId()) + "/" + image.id;
+
+                    if (ktId) {
+                        url = url.replace(':ktId', ktId);
+                    }
+
+                    return url;
                 }  else {
                     return (opsBase.OPS + "/kuvat").replace(":opsId", "" + this.getOpsId()) + "/" + image.id;
                 }
