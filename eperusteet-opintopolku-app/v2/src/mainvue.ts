@@ -73,7 +73,7 @@ if (isProduction()) {
 const SocialSharing = require('vue-social-sharing');
 Vue.use(SocialSharing);
 
-Kielet.install(Vue, {
+Vue.use(Kielet, {
   messages: {
     fi: require('@/translations/locale-fi.json'),
     sv: require('@/translations/locale-sv.json'),
