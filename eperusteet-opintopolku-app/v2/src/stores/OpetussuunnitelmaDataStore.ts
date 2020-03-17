@@ -123,7 +123,15 @@ export class OpetussuunnitelmaDataStore {
   }
 
   async fetchOpintojaksot() {
-    this.opintojaksot = (await Opintojaksot.getAllOpintojaksot(this.opetussuunnitelmaId)).data;
+    this.opintojaksot = _.chain(await Promise.all(
+      [
+        Opintojaksot.getAllOpintojaksot(this.opetussuunnitelmaId),
+        Opintojaksot.getTuodutOpintojaksot(this.opetussuunnitelmaId)
+      ]
+    ))
+      .map('data')
+      .flatMap()
+      .value();
   }
 
   @Getter(state => {
