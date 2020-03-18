@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 import Vue from 'vue';
 
-import { KieliStore } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 import { rootConfig  } from '@/mainvue';
 import { createLogger } from '@shared/utils/logger';
 import { Lokalisointi } from '@shared/api/eperusteet';
@@ -13,8 +13,7 @@ const logger = createLogger('Main');
 Vue.config.productionTip = false;
 
 async function getKaannokset() {
-  const [fi, sv, en] = await Promise.all(
-    _.map(['fi', 'sv', 'en'], lang => Lokalisointi.getAllKaannokset(lang)));
+  const [fi, sv, en] = _.map(await Promise.all(_.map(['fi', 'sv', 'en'], lang => Lokalisointi.getAllKaannokset(lang))), 'data');
   return { fi, sv, en } as any;
 }
 
@@ -23,6 +22,7 @@ async function main() {
     logger.info('Mounting #app');
     registerIconColorSchemeChange();
     (new Vue(rootConfig)).$mount('#app');
+    Kielet.load(await getKaannokset());
   }
   catch (err) {
     logger.error('Top level error:" ', err);
