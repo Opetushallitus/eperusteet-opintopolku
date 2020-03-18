@@ -1,9 +1,8 @@
 import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
 import { NavigationNodeDto, PerusteDto } from '@shared/api/eperusteet';
-import { TermiDto } from '@shared/api/ylops';
 import { LiiteDtoWrapper } from '@shared/tyypit';
-import { Perusteet } from '@shared/api/eperusteet';
+import { Perusteet, TermiDto } from '@shared/api/eperusteet';
 import {
   buildNavigation,
   filterNavigation,
