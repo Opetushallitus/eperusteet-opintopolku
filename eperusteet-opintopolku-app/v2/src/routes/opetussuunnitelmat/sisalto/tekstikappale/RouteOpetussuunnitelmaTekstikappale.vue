@@ -15,9 +15,9 @@
 
     <!-- Pohjan teksti -->
     <ep-collapse tyyppi="pohjateksti"
-                 v-if="tekstiKappaleOriginal && tekstiKappaleOriginal.teksti">
+                 v-if="hasTekstikappaleOriginalsTeksteja">
       <div class="collapse-header" slot="header">{{ $t('pohjan-teksti') }}</div>
-      <ep-content-viewer v-if="tekstiKappaleOriginal" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer v-for="(tekstiKappaleOriginal, index) in tekstiKappaleOriginals" :key="'tekstiKappaleOriginal'+index" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
     </ep-collapse>
 
     <!-- Opetussuunnitelman teksti -->
@@ -119,12 +119,16 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
     return this.opetussuunnitelmaTekstikappaleStore.tekstiKappale;
   }
 
-  get tekstiKappaleOriginalViite() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginalViite;
+  get tekstiKappaleOriginalViites() {
+    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginalViites;
   }
 
-  get tekstiKappaleOriginal() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginal;
+  get tekstiKappaleOriginals() {
+    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginals;
+  }
+
+  get hasTekstikappaleOriginalsTeksteja() {
+    return _.size(_.filter(this.tekstiKappaleOriginals, 'teksti')) > 0;
   }
 
   get perusteTekstikappaleViite() {
