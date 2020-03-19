@@ -10,8 +10,8 @@ export class OpetussuunnitelmaTekstikappaleStore {
   @State() public tekstiKappaleViiteId: number;
   @State() public tekstiKappaleViite: Puu | null = null;
   @State() public tekstiKappaleViitteet: number[] | null = null;
-  @State() public tekstiKappaleOriginalViite: Puu | null = null;
-  @State() public tekstiKappaleOriginal: TekstiKappaleDto | null = null;
+  @State() public tekstiKappaleOriginalViites: Puu[] | null = null;
+  @State() public tekstiKappaleOriginals: TekstiKappaleDto[] | null = null;
   @State() public tekstiKappaleOriginalViitteetObj: object | null = null;
   @State() public tekstiKappale: TekstiKappaleDto | null = null;
   @State() public perusteTekstikappaleViite: PerusteTekstiKappaleViiteDto | null = null;
@@ -32,8 +32,8 @@ export class OpetussuunnitelmaTekstikappaleStore {
     this.tekstiKappale = null;
     this.tekstiKappaleViitteet = null;
     this.perusteTekstikappaleViite = null;
-    this.tekstiKappaleOriginalViite = null;
-    this.tekstiKappaleOriginal = null;
+    this.tekstiKappaleOriginalViites = null;
+    this.tekstiKappaleOriginals = null;
 
     await this.fetchTekstikappale(deep);
 
@@ -70,8 +70,8 @@ export class OpetussuunnitelmaTekstikappaleStore {
   }
 
   async fetchOriginalTekstikappaleDeep() {
-    this.tekstiKappaleOriginalViite = null;
-    this.tekstiKappaleOriginal = null;
+    this.tekstiKappaleOriginalViites = null;
+    this.tekstiKappaleOriginals = null;
     this.tekstiKappaleOriginalViitteetObj = {};
 
     // Saman tason pohjan viite
@@ -99,10 +99,10 @@ export class OpetussuunnitelmaTekstikappaleStore {
   }
 
   async fetchOriginalTekstikappale() {
-    this.tekstiKappaleOriginalViite = (await OpetussuunnitelmanSisalto
-      .getTekstiKappaleViiteOriginal(this.opsId, this.tekstiKappaleViiteId)).data as Puu;
-    if (this.tekstiKappaleOriginalViite.tekstiKappale) {
-      this.tekstiKappaleOriginal = this.tekstiKappaleOriginalViite.tekstiKappale;
+    this.tekstiKappaleOriginalViites = (await OpetussuunnitelmanSisalto
+      .getTekstiKappaleViiteOriginals(this.opsId, this.tekstiKappaleViiteId)).data as Puu[];
+    if (_.size(_.filter(this.tekstiKappaleOriginalViites, 'tekstiKappale')) > 0) {
+      this.tekstiKappaleOriginals = _.map(this.tekstiKappaleOriginalViites, 'tekstiKappale') as TekstiKappaleDto[];
     }
   }
 

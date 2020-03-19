@@ -6,6 +6,8 @@ import { Kielet } from '@shared/stores/kieli';
 import { Kieli } from '@shared/tyypit';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
+import { TekstiKappaleDto } from '@shared/api/ylops';
+import * as _ from 'lodash';
 
 
 describe('RouteOpetussuunnitelmaTekstikappale', async () => {
@@ -119,13 +121,20 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
       };
     },
     async fetchOriginalTekstikappale() {
-      this.tekstiKappaleOriginalViite  = {
-        tekstiKappale: {
-          nimi: { fi: 'pohjan tekstikappaleen nimi' } as any,
-          teksti: { fi: 'pohjan tekstikappaleen teksti' } as any,
+      this.tekstiKappaleOriginalViites  = [
+        {
+          tekstiKappale: {
+            nimi: { fi: 'pohjan tekstikappaleen nimi' } as any,
+            teksti: { fi: 'pohjan tekstikappaleen teksti' } as any,
+          }
+        },{
+          tekstiKappale: {
+            nimi: { fi: 'ops2 tekstikappaleen nimi' } as any,
+            teksti: { fi: 'ops2 tekstikappaleen teksti' } as any,
+          }
         }
-      };
-      this.tekstiKappaleOriginal = this.tekstiKappaleOriginalViite.tekstiKappale;
+      ];
+      this.tekstiKappaleOriginals = _.map(this.tekstiKappaleOriginalViites, 'tekstiKappale') as TekstiKappaleDto[];
     },
     async fetchTekstikappale() {
       this.tekstiKappaleViite = {
@@ -232,6 +241,7 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
     expect(wrapper.html()).toContain('pohjan tekstikappaleen teksti');
+    expect(wrapper.html()).toContain('ops2 tekstikappaleen teksti');
     expect(wrapper.html()).toContain('tekstikappaleen nimi');
     expect(wrapper.html()).toContain('tekstikappaleen teksti');
   });
@@ -250,6 +260,7 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
     expect(wrapper.html()).toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
     expect(wrapper.html()).toContain('pohjan tekstikappaleen teksti');
+    expect(wrapper.html()).toContain('ops2 tekstikappaleen teksti');
     expect(wrapper.html()).toContain('tekstikappaleen nimi');
     expect(wrapper.html()).toContain('tekstikappaleen teksti');
   });
@@ -283,6 +294,7 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
     expect(wrapper.html()).toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
     expect(wrapper.html()).toContain('pohjan tekstikappaleen teksti');
+    expect(wrapper.html()).toContain('ops2 tekstikappaleen teksti');
     expect(wrapper.html()).toContain('tekstikappaleen nimi');
     expect(wrapper.html()).toContain('tekstikappaleen teksti');
 
