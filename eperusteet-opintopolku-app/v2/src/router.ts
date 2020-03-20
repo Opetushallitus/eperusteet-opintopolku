@@ -8,6 +8,10 @@ import Root from '@/routes/Root.vue';
 import Home from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
+import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
+import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatillinenKoulutusviennit.vue';
+import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
+
 
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
@@ -154,6 +158,22 @@ export const router = new Router({
       path: 'selaus',
       name: 'ammatillinenSelaus',
       component: RouteAmmatillinenSelaus,
+      children: [
+        {
+          path: 'koulutuksenjarjestajat',
+          component: RouteAmmatillinenKoulutuksenJarjestajat,
+          name: 'koulutuksenjarjestajat',
+        },
+        {
+          path: 'koulutusviennit',
+          component: RouteAmmatillinenKoulutusviennit,
+          name: 'koulutusviennit',
+        },{
+          path: 'ohjeet',
+          component: RouteAmmatillinenOhjeet,
+          name: 'ammatillinenohjeet',
+        },
+      ]
     }, {
       path: 'uutiset',
       name: 'uutiset',

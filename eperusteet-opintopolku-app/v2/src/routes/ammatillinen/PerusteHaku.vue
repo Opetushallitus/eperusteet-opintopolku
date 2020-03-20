@@ -8,7 +8,7 @@
     <div class="checkboxes d-flex align-self-center flex-wrap">
       <ep-toggle v-for="(toggle, idx) in toggles"
                  :key="idx"
-                 v-model="filters[toggle]">
+                 v-model="filters[toggle]" :isSWitch="false">
         {{ $t('switch-' + toggle) }}
       </ep-toggle>
     </div>
