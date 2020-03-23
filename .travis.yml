@@ -25,15 +25,18 @@ env:
     - secure: "beoLQkKO0H2zqhRla3Me/epQtTkITmOpDNF1Dzd3P1e9gGGC+R36qokezAcN/l7ZCoxD19LZO/G4BCTQw8YQY8VASkLUdFgNiwtRgF1VeHkFpcebVpMTMN8p5TFA6GDMmEmh9gFCEC1U4apllQjsSPGF+e/3UaxceWNQZ/PbS8ro5H5zh/NWlUAcx0BeoKSBPAo+Q6d7gFvQ+jJw3dFXVx62LSStqGwA+mJWywhXGVouqO5DrwFVwgd/5CKDHAqbhkSeJVsqf7WSiLWVuh55iBDjQFNYevTyBsvFRnPl2khjEzHe7FdBnXDgyTQmG5s0WbkkDGmGhXyOOapDO9hdsW+O1rnjZVz1D9AoxEvP/Lw+7VWDZyqlCYDZxfPdMdM+E7+tZBLJJBS5J1aXS0/ZQm3Ps+4ZZefDLLBmqGDBs++Cymq23ubIuTAJ+4YdcUrsedKi8gjYpQPxW8bdi47k6zAxMi/OMi52poRDaGrmOj8infwglvBorMsY84oCiFvp/y70+58pZbkrosedtefHDjGFOu0X7UpYjE0MGFGayFdSkmxT9Uj6IUeSYtmSFRV95bf8uqDT22jnXSJAzdGJytzxscVEH/7tJ0uFPjTyo+985ClZOYZfEFYBRHirZrZKCtZaDF0NFg3WdqM3dmdnZy+mwr1gNk9xrGhCc9Gl7v4="
     - YLOPS_SERVICE_DIR=$PWD/eperusteet-ylops/eperusteet-ylops-service
     - EPERUSTEET_SERVICE_DIR=$PWD/eperusteet/eperusteet/eperusteet-service
+    - AMOSAA_SERVICE_DIR=$PWD/eperusteet-ylops/eperusteet-amosaa-service
 
 install:
   - nvm install 10.16.3
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-ylops
   - git clone --depth=1 https://github.com/Opetushallitus/eperusteet
+  - git clone --depth=1 https://github.com/Opetushallitus/eperusteet-amosaa
   - git submodule update --init --recursive
 
   - cd eperusteet/eperusteet && mvn dependency:resolve -B && cd ../..
   - cd eperusteet-ylops && mvn dependency:resolve -B && cd ..
+  - cd eperusteet-amosaa && mvn dependency:resolve -B && cd ..
 
   - cd eperusteet-opintopolku-app/v2
   - yarn install

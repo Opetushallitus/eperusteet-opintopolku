@@ -61,6 +61,8 @@ import { Lops2019OpetussuunnitelmaModuuliStore } from '@/stores/Lops2019Opetussu
 import { Lops2019OpetussuunnitelmaPoppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaPoppiaineStore';
 import RouteOpetussuunnitelmaPoppiaine
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaPoppiaine.vue';
+import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
+import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 
 
 Vue.use(Router);
@@ -72,6 +74,8 @@ const logger = createLogger('Router');
 
 const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
+const ammatillistenTiedotteetStore = new AmmatillistenTiedoteStore();
+const koulutuksenJarjestajatStore = new KoulutuksenJarjestajatStore();
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
@@ -158,11 +162,13 @@ export const router = new Router({
       path: 'selaus',
       name: 'ammatillinenSelaus',
       component: RouteAmmatillinenSelaus,
+      props: { ammatillistenTiedotteetStore },
       children: [
         {
           path: 'koulutuksenjarjestajat',
           component: RouteAmmatillinenKoulutuksenJarjestajat,
           name: 'koulutuksenjarjestajat',
+          props: { koulutuksenJarjestajatStore },
         },
         {
           path: 'koulutusviennit',
