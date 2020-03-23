@@ -33,7 +33,14 @@
         </div>
 
         <div class="flex-fill w-50">
-          <h2 class="mb-4">{{$t('tiedotteet')}}</h2>
+          <h2 class="mb-4">{{$t('ammatillisten-tutkintojen-tiedotteet')}}</h2>
+          <ep-tiedote-list :tiedotteet="tiedotteet" @avaaTiedote="avaaTiedote">
+            <template v-slot:lisaaBtnText>
+              <div class="mt-2">
+                {{$t('katso-lisaa-ajankohtaisia')}}
+              </div>
+            </template>
+          </ep-tiedote-list>
         </div>
       </div>
 
@@ -55,13 +62,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpTiedoteList from '@shared/components/EpTiedoteList/EpTiedoteList.vue';
 import PerusteHaku from './PerusteHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import { Meta } from '@shared/utils/decorators';
+import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
+import { koulutustyyppiRyhmat, KoulutustyyppiRyhma } from '@shared/utils/perusteet';
+import * as _ from 'lodash';
+import { TiedoteDto } from '@shared/api/eperusteet';
 
 interface Ylalinkki {
   route: string;
@@ -79,18 +90,29 @@ interface Ylalinkki {
 })
 export default class RouteAmmatillinenSelaus extends Vue {
   private perusteHakuStoreNormaali = new PerusteHakuStore();
-  private perusteHakuStoreKoulutusvienti = new PerusteHakuStore({ koulutusvienti: true });
-  private perusteHakuStoreOhjeet = new PerusteHakuStore({
-    perusteTyyppi: 'opas',
-    koulutustyyppi: [],
-  });
+
+  @Prop({ required: true})
+  private ammatillistenTiedotteetStore!: AmmatillistenTiedoteStore;
+
+  async mounted() {
+    this.ammatillistenTiedotteetStore.init(this.ammatillisetkoulutusryhmat.koulutustyypit);
+    this.ammatillistenTiedotteetStore.fetch();
+  }
+
+  get tiedotteet() {
+    return this.ammatillistenTiedotteetStore.tiedotteet.value;
+  }
+
+  get ammatillisetkoulutusryhmat(): KoulutustyyppiRyhma {
+    return _.filter(koulutustyyppiRyhmat(), koulutusryhma => koulutusryhma.ryhma === 'ammatillinen')[0];
+  }
 
   get linkit(): Ylalinkki[] {
     return [
       {
         route: 'koulutuksenjarjestajat',
         text: 'selaa-koulutuksen-jarjestajia',
-        icon:'ohjeet',
+        icon:'lokaatio',
       },
       {
         route: 'ammatillinenohjeet',
@@ -100,7 +122,7 @@ export default class RouteAmmatillinenSelaus extends Vue {
       {
         route: 'koulutusviennit',
         text: 'selaa-koulutusvienteja',
-        icon:'ohjeet',
+        icon:'lokaatio-nuoli',
       }
     ];
   }
@@ -132,6 +154,15 @@ export default class RouteAmmatillinenSelaus extends Vue {
     return {
       title: this.$t('ammatillinen-koulutus'),
     };
+  }
+
+  avaaTiedote(tiedote: TiedoteDto) {
+    this.$router.push({
+      name: 'uutinen',
+      params: {
+        tiedoteId: '' + tiedote.id,
+      },
+    });
   }
 }
 </script>

@@ -8,7 +8,7 @@ import Aikaleima from '@shared/plugins/aikaleima';
 import Kaannos from '@shared/plugins/kaannos';
 
 import '@/config/bootstrap';
-import '@/config/fontawesome';
+import '@shared/config/fontawesome';
 
 import { router } from '@/router';
 import { Kielet } from '@shared/stores/kieli';
@@ -101,3 +101,4 @@ export const rootConfig: any = {
   render: (h: any) => h(App),
   errorCaptured,
 };
+

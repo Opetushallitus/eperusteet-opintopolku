@@ -8,35 +8,37 @@
     <div class="checkboxes d-flex align-self-center flex-wrap">
       <ep-toggle v-for="(toggle, idx) in toggles"
                  :key="idx"
-                 v-model="filters[toggle]" :isSWitch="false">
+                 v-model="filters[toggle]"
+                 :isSWitch="false">
         {{ $t('switch-' + toggle) }}
       </ep-toggle>
     </div>
   </div>
   <div class="content">
     <div class="perusteet" id="perusteet-lista">
-      <div class="d-flex peruste" v-for="(peruste, idx) in perusteet" :key="idx">
-        <div class="colorbox"></div>
-        <div class="perustecard">
-          <div class="nimi">
-            <ep-external-link :url="peruste.ulkoinenlinkki">{{ $kaanna(peruste.nimi) }}</ep-external-link>
+      <div class="d-flex peruste tile-background-shadow-selected shadow-tile" v-for="(peruste, idx) in perusteet" :key="idx">
+        <ep-external-link :url="peruste.ulkoinenlinkki" :showIcon="false">
+          <div class="perustecard">
+            <div class="nimi">
+              <fas icon="ulkoinen-linkki" /> {{ $kaanna(peruste.nimi) }}
+            </div>
+            <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
+              <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
+              <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">
+                {{ $kaanna(tutkintonimike.nimi) }}
+              </span>
+            </div>
+            <div class="nimikkeet" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
+              <span class="kohde">{{ $t('osaamisalat') }}:</span>
+              <span v-for="(osaamisala, oidx) in peruste.osaamisalat" :key="oidx">
+                {{ $kaanna(osaamisala.nimi) }}
+              </span>
+            </div>
+            <div class="voimaantulo" v-if="peruste.voimassaoloAlkaa">
+              {{ $ld(peruste.voimassaoloAlkaa) }}
+            </div>
           </div>
-          <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
-            <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-            <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">
-              {{ $kaanna(tutkintonimike.nimi) }}
-            </span>
-          </div>
-          <div class="nimikkeet" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-            <span class="kohde">{{ $t('osaamisalat') }}:</span>
-            <span v-for="(osaamisala, oidx) in peruste.osaamisalat" :key="oidx">
-              {{ $kaanna(osaamisala.nimi) }}
-            </span>
-          </div>
-          <div class="voimaantulo" v-if="peruste.voimassaoloAlkaa">
-            {{ $ld(peruste.voimassaoloAlkaa) }}
-          </div>
-        </div>
+        </ep-external-link>
       </div>
     </div>
     <div class="pagination d-flex justify-content-center">
@@ -56,7 +58,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -126,8 +128,9 @@ export default class PerusteHaku extends Vue {
     this.perusteHakuStore.fetch();
   }
 
+  @Watch('filters', { immediate: true })
   onToggleChange(toggle) {
-    this.perusteHakuStore.updateFilters({ [toggle]: !this.filters[toggle] });
+    this.perusteHakuStore.fetch();
   }
 
   ulkoinenlinkki(peruste) {
@@ -138,6 +141,10 @@ export default class PerusteHaku extends Vue {
 </script>
 
 <style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
+@import '@shared/styles/_mixins.scss';
+
+@include shadow-tile;
 
 .haku {
   width: 100%;
@@ -154,13 +161,10 @@ export default class PerusteHaku extends Vue {
 
     .peruste {
       border-radius: 0;
-      padding: 5px;
+      margin: 5px;
 
-      .colorbox {
-        top: 0;
-        right: 0;
-        position: relative;
-        width: 1px;
+      .linkki {
+        width: 100%;
         border-left: 6px solid rgb(0, 136, 0);
       }
 
