@@ -67,6 +67,7 @@ import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
+import { Kielet } from '../../../eperusteet-frontend-utils/vue/src/stores/kieli';
 
 @Component({
   components: {
@@ -96,7 +97,7 @@ export default class PerusteHaku extends Vue {
     return _.chain(this.perusteHakuStore.perusteet)
       .map(peruste => ({
         ...peruste,
-        ulkoinenlinkki: this.ulkoinenlinkki(peruste)
+        ulkoinenlinkki: this.ulkoinenlinkki(peruste),
       }))
       .value();
   }
