@@ -11,7 +11,7 @@
       <ep-search v-model="query" />
     </div>
     <div class="content">
-      <div class="d-flex koulutuksenjarjestaja tile-background-shadow-selected shadow-tile" v-for="(koulutustoimija, index) in koulutustoimijat" :key="'koulutuksenjarjestaja' + index">
+      <div class="d-flex koulutuksenjarjestaja tile-background-shadow-selected shadow-tile" v-for="(koulutustoimija, index) in koulutustoimijatPaged" :key="'koulutuksenjarjestaja' + index">
         <ep-external-link :url="koulutustoimija.ulkoinenlinkki" :showIcon="false">
           <div class="kjcard">
             <fas icon="ulkoinen-linkki" /> {{ $kaanna(koulutustoimija.nimi) }}
@@ -50,10 +50,6 @@ import * as _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import { Kielet } from '@shared/stores/kieli';
 
-interface KoulutustoimijaLinkilla extends KoulutustoimijaJulkinenDto {
-  ulkoinenlinkki: string;
-}
-
 @Component({
   components: {
     PerusteHaku,
@@ -75,16 +71,27 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
     this.koulutuksenJarjestajatStore.fetch();
   }
 
-  get koulutustoimijat(): KoulutustoimijaLinkilla[] {
-    return _.chain(this.koulutuksenJarjestajatStore.koulutustoimijat.value)
-      .filter(koulutustoimija => Kielet.search(this.query, koulutustoimija.nimi))
-      .map(koulutustoimija => {
-        return {
-          ...koulutustoimija,
-          ulkoinenlinkki: this.ulkoinenlinkki(koulutustoimija),
-        };
-      })
-      .value();
+  get koulutustoimijat() {
+    if (this.koulutuksenJarjestajatStore.koulutustoimijat.value) {
+      return _.chain(this.koulutuksenJarjestajatStore.koulutustoimijat.value)
+        .filter(koulutustoimija => Kielet.search(this.query, koulutustoimija.nimi))
+        .map(koulutustoimija => {
+          return {
+            ...koulutustoimija,
+            ulkoinenlinkki: this.ulkoinenlinkki(koulutustoimija),
+          };
+        })
+        .value();
+    }
+  }
+
+  get koulutustoimijatPaged() {
+    if (this.koulutustoimijat) {
+      return _.chain(this.koulutustoimijat)
+        .drop(this.perPage * (this.page - 1))
+        .take(this.perPage)
+        .value();
+    }
   }
 
   ulkoinenlinkki(kj) {
