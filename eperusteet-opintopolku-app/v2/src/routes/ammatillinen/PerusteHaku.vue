@@ -1,20 +1,21 @@
 <template>
-<div v-if="!perusteet">
-  <ep-spinner />
-</div>
-<div v-else class="haku">
+<div class="haku">
   <div class="search">
     <ep-search v-model="query" />
     <div class="checkboxes d-flex align-self-center flex-wrap">
       <ep-toggle v-for="(toggle, idx) in toggles"
                  :key="idx"
                  v-model="filters[toggle]"
+                 @input="onToggleChange()"
                  :isSWitch="false">
         {{ $t('switch-' + toggle) }}
       </ep-toggle>
     </div>
   </div>
-  <div class="content">
+  <div v-if="!perusteet">
+    <ep-spinner />
+  </div>
+  <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
       <div class="d-flex peruste tile-background-shadow-selected shadow-tile" v-for="(peruste, idx) in perusteet" :key="idx">
         <ep-external-link :url="peruste.ulkoinenlinkki" :showIcon="false">
@@ -94,12 +95,14 @@ export default class PerusteHaku extends Vue {
   }
 
   get perusteet() {
-    return _.chain(this.perusteHakuStore.perusteet)
-      .map(peruste => ({
-        ...peruste,
-        ulkoinenlinkki: this.ulkoinenlinkki(peruste),
-      }))
-      .value();
+    if (this.perusteHakuStore.perusteet) {
+      return _.chain(this.perusteHakuStore.perusteet)
+        .map(peruste => ({
+          ...peruste,
+          ulkoinenlinkki: this.ulkoinenlinkki(peruste),
+        }))
+        .value();
+    }
   }
   get total() {
     return this.perusteHakuStore.total;
@@ -129,7 +132,6 @@ export default class PerusteHaku extends Vue {
     this.perusteHakuStore.fetch();
   }
 
-  @Watch('filters', { immediate: true })
   onToggleChange(toggle) {
     this.perusteHakuStore.fetch();
   }

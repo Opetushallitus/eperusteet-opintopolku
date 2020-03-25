@@ -70,6 +70,7 @@ export class PerusteHakuStore {
   public readonly filters!: PerusteQuery;
 
   public readonly fetch = _.debounce(async () => {
+    this.perusteet = null;
     const result = await perusteetQuery(this.filters);
     this.total = result['kokonaismäärä'];
     this.page = result.sivu;
@@ -80,7 +81,7 @@ export class PerusteHakuStore {
 
   public updateFilters(filters: PerusteQuery) {
     this.filterdata = {
-      ...this.filterdata,
+      ...this.filters,
       ...filters,
     };
     this.fetch();
