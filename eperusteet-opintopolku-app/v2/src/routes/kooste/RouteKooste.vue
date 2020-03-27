@@ -24,28 +24,39 @@
           </div>
           <ep-spinner v-else />
         </b-col>
-        <b-col xl="5" class="tile">
-          <h2 class="otsikko">{{ $t('tiedotteet') }}</h2>
-          <div class="tiedotebox">
-            <div v-if="tiedotteet">
-              <div v-if="tiedotteet.length === 0">
-                {{ $t('ei-tiedotteita') }}
+      </b-row>
+      <b-row>
+        <b-col md class="mb-4">
+          <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
+          <ep-spinner v-if="!tiedotteet"/>
+          <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote" v-else>
+            <template v-slot:lisaaBtnText>
+              <div class="mt-2">
+                {{$t('katso-lisaa-ajankohtaisia')}}
               </div>
-              <div v-else>
-                <div class="tiedote" v-for="(tiedote, idx) in tiedotteet" :key="idx">
-                  <div class="otsikko">
-                    <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                      {{ $kaanna(tiedote.otsikko) }}
-                    </router-link>
-                  </div>
-                  <div class="aikaleima">
-                    {{ $ld(tiedote.luotu) }}
-                  </div>
-                </div>
+            </template>
+            <template v-slot:eiTietoja>
+              <div class="mt-2">
+                {{$t('ei-tiedotteita')}}
               </div>
-            </div>
-            <ep-spinner v-else />
-          </div>
+            </template>
+          </ep-julki-lista>
+        </b-col>
+        <b-col md>
+          <h2 class="mb-4">{{$t('ohjeet-ja-materiaalit')}}</h2>
+          <ep-spinner v-if="!tiedotteet"/>
+          <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas" v-else>
+            <template v-slot:lisaaBtnText>
+              <div class="mt-2">
+                {{$t('katso-lisaa-ohjeita')}}
+              </div>
+            </template>
+            <template v-slot:eiTietoja>
+              <div class="mt-2">
+                {{$t('ei-ohjeita')}}
+              </div>
+            </template>
+          </ep-julki-lista>
         </b-col>
       </b-row>
       <b-row>
@@ -73,6 +84,9 @@ import _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import { uusiJulkinenToteutus } from '@/utils/peruste';
 import { RawLocation } from 'vue-router';
+import { TiedoteDto } from '@shared/api/eperusteet';
+import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import { OpasStore } from '@/stores/OpasStore';
 
 @Component({
   components: {
@@ -81,11 +95,15 @@ import { RawLocation } from 'vue-router';
     Paikalliset,
     EpExternalLink,
     PerusteTile,
+    EpJulkiLista,
   },
 })
 export default class RouteKooste extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
+
+  @Prop({ required: true })
+  private opasStore!: OpasStore;
 
   get murupolku(): Array<MurupolkuOsa> {
     return [{
@@ -101,10 +119,27 @@ export default class RouteKooste extends Vue {
   }
 
   get tiedotteet() {
-    return _.chain(this.perusteKoosteStore.tiedotteet)
-      .sortBy('luotu')
-      .reverse()
-      .value();
+    if (this.perusteKoosteStore.tiedotteet) {
+      return _.chain(this.perusteKoosteStore.tiedotteet)
+        .sortBy('luotu')
+        .reverse()
+        .value();
+    }
+  }
+
+  get ohjeet() {
+    if (this.opasStore.oppaat.value) {
+      return _.chain(this.opasStore.oppaat.value)
+        .map(opas => {
+          return {
+            ...opas,
+            otsikko: opas.nimi,
+          } as JulkiRivi;
+        })
+        .sortBy('muokattu')
+        .reverse()
+        .value();
+    }
   }
 
   get perusteet() {
@@ -130,6 +165,25 @@ export default class RouteKooste extends Vue {
     return {
       title: this.$t(this.koulutustyyppi),
     };
+  }
+
+  avaaTiedote(tiedote: TiedoteDto) {
+    this.$router.push({
+      name: 'uutinen',
+      params: {
+        tiedoteId: '' + tiedote.id,
+      },
+    });
+  }
+
+  avaaOpas(ohje: any) {
+    this.$router.push({
+      name: 'peruste',
+      params: {
+        koulutustyyppi: 'opas',
+        perusteId: ohje.id,
+      },
+    });
   }
 }
 </script>

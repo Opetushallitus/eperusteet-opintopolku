@@ -19,7 +19,13 @@ import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 export default class RouteAmmatillinenOhjeet extends Vue {
   private perusteHakuStoreOhjeet = new PerusteHakuStore({
     perusteTyyppi: 'opas',
-    koulutustyyppi: [],
+    koulutustyyppi: [
+      'koulutustyyppi_1',
+      'koulutustyyppi_11',
+      'koulutustyyppi_12',
+      'koulutustyyppi_5',
+      'koulutustyyppi_18'
+    ],
   });
 }
 </script>

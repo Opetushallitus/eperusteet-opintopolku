@@ -59,7 +59,7 @@ export class PerusteKoosteStore {
     for (const peruste of this.perusteet || []) {
       tiedotteet = [...tiedotteet,
         ...(await tiedoteQuery({
-          sivukoko: 5,
+          sivukoko: 100,
           perusteId: peruste.id,
         })),
       ];

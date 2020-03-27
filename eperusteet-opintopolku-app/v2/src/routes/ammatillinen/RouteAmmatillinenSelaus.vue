@@ -33,14 +33,14 @@
         </div>
 
         <div class="flex-fill w-50">
-          <h2 class="mb-4">{{$t('ammatillisten-tutkintojen-tiedotteet')}}</h2>
-          <ep-tiedote-list :tiedotteet="tiedotteet" @avaaTiedote="avaaTiedote">
+          <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
+          <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
             <template v-slot:lisaaBtnText>
               <div class="mt-2">
                 {{$t('katso-lisaa-ajankohtaisia')}}
               </div>
             </template>
-          </ep-tiedote-list>
+          </ep-julki-lista>
         </div>
       </div>
 
@@ -65,7 +65,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpTiedoteList from '@shared/components/EpTiedoteList/EpTiedoteList.vue';
+import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import PerusteHaku from './PerusteHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import { Meta } from '@shared/utils/decorators';
@@ -85,7 +85,7 @@ interface Ylalinkki {
     EpSpinner,
     EpHeader,
     PerusteHaku,
-    EpTiedoteList,
+    EpJulkiLista,
   },
 })
 export default class RouteAmmatillinenSelaus extends Vue {
