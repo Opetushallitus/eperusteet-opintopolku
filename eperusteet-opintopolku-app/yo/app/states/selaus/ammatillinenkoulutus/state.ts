@@ -586,7 +586,15 @@ angular.module("app").config($stateProvider => {
                         tila: "valmis",
                         tuleva: true,
                         voimassaolo: true,
-                        jarjestys: "nimi"
+                        jarjestys: "nimi",
+                        tyyppi: [
+                            'koulutustyyppi_1',
+                            'koulutustyyppi_11',
+                            'koulutustyyppi_12',
+                            'koulutustyyppi_5',
+                            'koulutustyyppi_18'
+                        ],
+                        koulutustyyppityhja:true,
                     });
 
                     {

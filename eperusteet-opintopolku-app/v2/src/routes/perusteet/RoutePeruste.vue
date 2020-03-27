@@ -1,10 +1,13 @@
 <template>
 <div class="peruste">
   <ep-header :koulutustyyppi="peruste.koulutustyyppi" :murupolku="murupolku">
-    <template slot="header">
+    <template slot="header" v-if="peruste.tyyppi ==='opas'">
+      {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
+    </template>
+    <template slot="header" v-else>
       {{ $kaanna(peruste.nimi) }}
     </template>
-    <template slot="subheader">
+    <template slot="subheader" v-if="peruste.tyyppi !=='opas'">
       <div class="diaarinumero">
         {{ peruste.diaarinumero }}
       </div>
@@ -18,6 +21,14 @@
         </template>
         <template slot="view">
           <router-view :key="$route.fullPath">
+            <template v-slot:header v-if="peruste.tyyppi ==='opas'">
+              {{$t('oppaan-tiedot')}}
+            </template>
+            <template v-slot:nimi v-if="peruste.tyyppi ==='opas'">
+              <ep-form-content name="oppaan-nimi" headerType="h3" headerClass="h6">
+                <ep-field v-model="peruste.nimi"></ep-field>
+              </ep-form-content>
+            </template>
             <template slot="previous-next-navigation">
               <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
             </template>
@@ -35,6 +46,8 @@ import { Meta } from '@shared/utils/decorators';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
+import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpField from '@shared/components/forms/EpField.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
@@ -46,6 +59,8 @@ import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPr
     EpPerusteSidenav,
     EpHeader,
     EpPreviousNextNavigation,
+    EpFormContent,
+    EpField,
   },
 })
 export default class RoutePeruste extends Vue {

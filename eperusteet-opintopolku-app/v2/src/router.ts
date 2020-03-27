@@ -61,6 +61,7 @@ import RouteOpetussuunnitelmaPoppiaine
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaPoppiaine.vue';
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
+import { OpasStore } from '@/stores/OpasStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -150,6 +151,7 @@ export const router = new Router({
                 perusteKoosteStore: new PerusteKoosteStore(
                   stateToKoulutustyyppi(route.params.koulutustyyppi),
                   _.parseInt(route.params.perusteId)),
+                opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
               },
             };
           },

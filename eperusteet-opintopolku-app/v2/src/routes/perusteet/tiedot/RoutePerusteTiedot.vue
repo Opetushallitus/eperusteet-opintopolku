@@ -2,12 +2,18 @@ v-for="<template>
 <div class="content">
   <ep-spinner v-if="isLoading"></ep-spinner>
   <div v-else>
-    <h2 class="otsikko" slot="header">{{ $t('perusteen-tiedot') }}</h2>
+    <h2 class="otsikko" slot="header">
+      <slot name="header">
+        {{ $t('perusteen-tiedot') }}
+      </slot>
+    </h2>
     <div class="row">
       <div class="col-md-12" v-if="peruste.nimi">
-        <ep-form-content name="peruste-nimi" headerType="h3" headerClass="h6">
-          <ep-field v-model="peruste.nimi"></ep-field>
-        </ep-form-content>
+        <slot name="nimi">
+          <ep-form-content name="peruste-nimi" headerType="h3" headerClass="h6">
+            <ep-field v-model="peruste.nimi"></ep-field>
+          </ep-form-content>
+        </slot>
       </div>
       <div class="col-md-12" v-if="peruste.diaarinumero">
         <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
