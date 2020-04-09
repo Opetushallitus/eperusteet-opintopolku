@@ -89,7 +89,6 @@ import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPr
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { Kielet } from '@shared/stores/kieli';
 
-
 @Component({
   components: {
     EpFormContent,
@@ -143,7 +142,7 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
     const nimi = (this as any).$kaanna(organisaatio.nimi);
     const tyypit = organisaatio.tyypit;
     if (!_.isEmpty(tyypit)) {
-      return nimi + ' (' + _.join(tyypit, ', ')  + ')';
+      return nimi + ' (' + _.join(tyypit, ', ') + ')';
     }
     else {
       return nimi;

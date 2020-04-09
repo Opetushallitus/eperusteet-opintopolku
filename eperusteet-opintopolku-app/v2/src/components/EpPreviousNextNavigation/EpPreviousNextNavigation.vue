@@ -23,7 +23,6 @@ import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 @Component
 export default class EpPreviousNextNavigation extends Vue {
-
   @Prop({ required: true })
   private activeNode!: NavigationNode;
 

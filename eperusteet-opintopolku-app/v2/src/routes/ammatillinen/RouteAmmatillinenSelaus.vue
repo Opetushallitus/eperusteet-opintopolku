@@ -91,7 +91,7 @@ interface Ylalinkki {
 export default class RouteAmmatillinenSelaus extends Vue {
   private perusteHakuStoreNormaali = new PerusteHakuStore();
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   private ammatillistenTiedotteetStore!: AmmatillistenTiedoteStore;
 
   async mounted() {
@@ -112,18 +112,18 @@ export default class RouteAmmatillinenSelaus extends Vue {
       {
         route: 'koulutuksenjarjestajat',
         text: 'selaa-koulutuksen-jarjestajia',
-        icon:'lokaatio',
+        icon: 'lokaatio',
       },
       {
         route: 'ammatillinenohjeet',
         text: 'selaa-ohjeita-ja-materiaaleja',
-        icon:'ohjeet',
+        icon: 'ohjeet',
       },
       {
         route: 'koulutusviennit',
         text: 'selaa-koulutusvienteja',
-        icon:'lokaatio-nuoli',
-      }
+        icon: 'lokaatio-nuoli',
+      },
     ];
   }
 

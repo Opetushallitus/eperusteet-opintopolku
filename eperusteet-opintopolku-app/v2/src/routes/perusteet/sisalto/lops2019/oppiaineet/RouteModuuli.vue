@@ -24,10 +24,9 @@ import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/Moduul
   components: {
     EpSpinner,
     ModuuliEsitys,
-  }
+  },
 })
 export default class RouteModuuli extends Vue {
-
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
@@ -51,7 +50,6 @@ export default class RouteModuuli extends Vue {
       return this.moduuli.koodi;
     }
   }
-
 }
 </script>
 

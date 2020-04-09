@@ -85,17 +85,15 @@ import OppiaineEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/Oppia
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { Lops2019OpetussuunnitelmaPoppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaPoppiaineStore';
 
-
 @Component({
   components: {
     EpSpinner,
     EpColorIndicator,
     EpContentViewer,
     OppiaineEsitys,
-  }
+  },
 })
 export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
-
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
@@ -175,7 +173,7 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
           location: {
             name: 'lops2019OpetussuunnitelmaOpintojakso',
             params: { opintojaksoId: _.toString(oj.id) },
-          }
+          },
         };
       });
     }

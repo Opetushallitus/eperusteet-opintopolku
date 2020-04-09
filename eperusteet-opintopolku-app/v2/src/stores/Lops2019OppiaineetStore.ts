@@ -1,6 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { Lops2019 } from '@shared/api/eperusteet';
-import { Lops2019OppiaineDto } from '@shared/api/eperusteet';
+import { Lops2019, Lops2019OppiaineDto } from '@shared/api/eperusteet';
 
 @Store
 export class Lops2019OppiaineetStore {
@@ -10,7 +9,7 @@ export class Lops2019OppiaineetStore {
   public static async create(perusteId: number) {
     const store = new Lops2019OppiaineetStore(perusteId);
     // Jos halutaan näyttää enemmän tietoja kuin nimi
-    //store.fetchOppiaineet();
+    // store.fetchOppiaineet();
     return store;
   }
 
@@ -25,5 +24,4 @@ export class Lops2019OppiaineetStore {
     this.oppiaineet = null;
     this.oppiaineet = (await Lops2019.getOppiaineet(this.perusteId)).data;
   }
-
 }

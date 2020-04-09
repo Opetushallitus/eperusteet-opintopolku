@@ -50,7 +50,6 @@ export async function tiedoteQuery(query: TiedoteQuery = {
     options)).data as any).data;
 }
 
-
 export async function perusteetQuery(query: PerusteQuery = {
 }, options?: any) {
   const response = await Api.get('/perusteet', {

@@ -12,7 +12,6 @@ import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/Route
 import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatillinenKoulutusviennit.vue';
 import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
 
-
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
 
@@ -35,7 +34,6 @@ import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
-
 
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
@@ -64,10 +62,9 @@ import RouteOpetussuunnitelmaPoppiaine
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 
-
 Vue.use(Router);
 Vue.use(VueMeta, {
-  refreshOnceOnNavigation: true
+  refreshOnceOnNavigation: true,
 });
 
 const logger = createLogger('Router');
@@ -93,9 +90,9 @@ export const router = new Router({
       });
       return {
         selector: to.hash,
-        offset : {
+        offset: {
           x: 0,
-          y: navbarHeight
+          y: navbarHeight,
         },
       };
     }
@@ -111,9 +108,9 @@ export const router = new Router({
       });
       return {
         selector: '#scroll-anchor',
-        offset : {
+        offset: {
           x: 0,
-          y: navbarHeight
+          y: navbarHeight,
         },
       };
     }
@@ -174,12 +171,12 @@ export const router = new Router({
           path: 'koulutusviennit',
           component: RouteAmmatillinenKoulutusviennit,
           name: 'koulutusviennit',
-        },{
+        }, {
           path: 'ohjeet',
           component: RouteAmmatillinenOhjeet,
           name: 'ammatillinenohjeet',
         },
-      ]
+      ],
     }, {
       path: 'uutiset',
       name: 'uutiset',

@@ -7,7 +7,6 @@ import * as _ from 'lodash';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -15,13 +14,13 @@ describe('RouteKooste', () => {
     messages: {
       fi: {
         'kooste': 'Kooste',
-      }
+      },
     },
   });
   localVue.use(new Kaannos());
 
   const $route = {
-    params: {lang: 'fi'}
+    params: { lang: 'fi' },
   };
 
   test('Renders', async () => {
@@ -40,7 +39,7 @@ describe('RouteKooste', () => {
       mocks: {
         ...mocks,
         $sd: (x) => 'sd_' + x,
-        $route
+        $route,
       },
     });
 

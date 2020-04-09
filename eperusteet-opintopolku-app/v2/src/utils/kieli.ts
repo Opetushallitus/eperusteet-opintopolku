@@ -1,5 +1,5 @@
 export function highlight(nimi, query: string) {
-  if(!query) {
+  if (!query) {
     return nimi;
   }
 

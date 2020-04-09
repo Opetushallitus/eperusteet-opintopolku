@@ -27,7 +27,7 @@ import EpPerusteSidenavNode from '@/components/EpPerusteSidenav/EpPerusteSidenav
     EpSearch,
     EpPerusteSidenavNode,
     EpSpinner,
-  }
+  },
 })
 export default class EpPerusteSidenav extends Vue {
   @Prop({ required: true })

@@ -6,7 +6,6 @@ import { Kielet } from '@shared/stores/kieli';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('RouteModuuli', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -14,40 +13,39 @@ describe('RouteModuuli', () => {
   localVue.use(new Kaannos());
 
   test('Renders', async () => {
-
     const perusteDataStore = perusteDataStoreMock();
     const lops2019ModuuliStore = lops2019ModuuliStoreMock();
     lops2019ModuuliStore.moduuli = {
       nimi: {
-        fi: 'Luvut ja yhtälöt'
+        fi: 'Luvut ja yhtälöt',
       } as any,
       koodi: {
-        arvo: 'MAY'
+        arvo: 'MAY',
       },
       pakollinen: true,
       laajuus: 2,
       tavoitteet: {
         kohde: {
-          fi: 'Tavoitteiden kohde'
+          fi: 'Tavoitteiden kohde',
         } as any,
         tavoitteet: [
           {
-            fi: 'Tavoitteiden tavoite'
+            fi: 'Tavoitteiden tavoite',
           } as any,
-        ]
+        ],
       },
       sisallot: [
         {
           kohde: {
-            fi: 'Sisältöjen kohde'
+            fi: 'Sisältöjen kohde',
           } as any,
           sisallot: [
             {
-              fi: 'Sisältöjen sisältö'
+              fi: 'Sisältöjen sisältö',
             } as any,
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     };
 
     const wrapper = mount(RouteModuuli as any, {
@@ -66,8 +64,8 @@ describe('RouteModuuli', () => {
 
     expect(wrapper.html()).toContain('Luvut ja yhtälöt');
     expect(wrapper.html()).toContain('MAY');
-    //expect(wrapper.html()).toContain('pakollinen');
-    //expect(wrapper.html()).toContain('<div><strong>laajuus</strong> <p>2</p></div>');
+    // expect(wrapper.html()).toContain('pakollinen');
+    // expect(wrapper.html()).toContain('<div><strong>laajuus</strong> <p>2</p></div>');
     expect(wrapper.html()).toContain('Tavoitteiden kohde');
     expect(wrapper.html()).toContain('Tavoitteiden tavoite');
     expect(wrapper.html()).toContain('Sisältöjen kohde');

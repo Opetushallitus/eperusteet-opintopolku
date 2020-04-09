@@ -7,7 +7,6 @@ import { ViiteLaaja } from '@shared/api/eperusteet';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('RouteTekstikappale', async () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -33,7 +32,7 @@ describe('RouteTekstikappale', async () => {
       localVue,
       propsData: {
         perusteDataStore,
-        perusteenOsaStore
+        perusteenOsaStore,
       },
       stubs: {
         ...stubs,
@@ -90,18 +89,18 @@ describe('RouteTekstikappale', async () => {
                 teksti: {
                   fi: 'alialiluvun teksti',
                 },
-              }
-            }
-          ]
-        }
-      ]
+              },
+            },
+          ],
+        },
+      ],
     } as ViiteLaaja;
 
     const wrapper = mount(RouteTekstikappale as any, {
       localVue,
       propsData: {
         perusteDataStore,
-        perusteenOsaStore
+        perusteenOsaStore,
       },
       stubs: {
         ...stubs,

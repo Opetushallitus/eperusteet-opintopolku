@@ -123,7 +123,7 @@ export default class Paikalliset extends Vue {
           params: {
             opetussuunnitelmaId: _.toString(ops.id),
           },
-        }
+        },
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
       .value();
@@ -141,20 +141,18 @@ export default class Paikalliset extends Vue {
       .take(this.perPage)
       .map(ops => ({
         ...ops,
-        ulkoinenlinkki: this.ulkoinenlinkki(ops)
+        ulkoinenlinkki: this.ulkoinenlinkki(ops),
       }))
       .value();
   }
 
   ulkoinenlinkki(ops) {
-
     if (uusiJulkinenToteutus(this.perusteKoosteStore.activePeruste)) {
       return undefined;
     }
 
     return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/ops/${ops.id}/${koulutustyyppiUrlShortParamName(ops.koulutustyyppi)}/tiedot`;
   }
-
 }
 </script>
 
@@ -230,4 +228,3 @@ export default class Paikalliset extends Vue {
 }
 
 </style>
-

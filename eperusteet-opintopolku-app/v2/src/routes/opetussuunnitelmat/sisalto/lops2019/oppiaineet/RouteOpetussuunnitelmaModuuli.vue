@@ -27,10 +27,9 @@ import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/Moduul
   components: {
     EpSpinner,
     ModuuliEsitys,
-  }
+  },
 })
 export default class RouteOpetussuunnitelmaModuuli extends Vue {
-
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
@@ -53,7 +52,6 @@ export default class RouteOpetussuunnitelmaModuuli extends Vue {
   get perusteKuvat() {
     return this.opetussuunnitelmaDataStore.perusteKuvat;
   }
-
 }
 </script>
 

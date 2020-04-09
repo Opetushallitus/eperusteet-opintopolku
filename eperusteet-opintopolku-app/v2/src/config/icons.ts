@@ -248,7 +248,6 @@ export const listaNumerointi: IconDefinition = {
   icon: [20, 20, [], null as any, 'M0 15h2v.5H1v1h1v.5H0v1h3v-4H0v1zm1-9h1V2H0v1h1v3zM0 9h1.8L0 11.1v.9h3v-1H1.2L3 8.9V8H0v1zm5-6v2h14V3H5zm0 14h14v-2H5v2zm0-6h14V9H5v2z'],
 };
 
-
 export const luoPdf: IconDefinition = {
   prefix: 'fas',
   iconName: 'luo-pdf' as any,

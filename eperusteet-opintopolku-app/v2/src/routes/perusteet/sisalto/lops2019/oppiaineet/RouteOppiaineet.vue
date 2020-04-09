@@ -25,7 +25,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 @Component({
   components: {
     EpSpinner,
-  }
+  },
 })
 export default class RouteOppiaineet extends Vue {
   @Prop({ required: true })

@@ -5,7 +5,6 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('PerusteTile ', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -23,7 +22,7 @@ describe('PerusteTile ', () => {
   } as any;
 
   test('Renders', async () => {
-    const wrapper = mount(PerusteTile  as any, {
+    const wrapper = mount(PerusteTile as any, {
       localVue,
       propsData: {
         peruste,
@@ -43,4 +42,3 @@ describe('PerusteTile ', () => {
     expect(wrapper.html()).toContain('sd_123456');
   });
 });
-

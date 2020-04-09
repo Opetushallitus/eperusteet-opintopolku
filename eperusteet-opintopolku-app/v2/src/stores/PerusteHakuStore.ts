@@ -4,7 +4,6 @@ import { Kielet } from '@shared/stores/kieli';
 import { PerusteQuery, perusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 
-
 @Store
 export class PerusteHakuStore {
   @State() public perusteet: PerusteDto[] | null = null;
@@ -86,5 +85,4 @@ export class PerusteHakuStore {
     };
     this.fetch();
   }
-
 }

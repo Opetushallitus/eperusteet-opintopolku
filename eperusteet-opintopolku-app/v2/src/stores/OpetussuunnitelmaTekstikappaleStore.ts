@@ -1,8 +1,7 @@
 import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
-import { TekstiKappaleDto, Puu, PerusteTekstiKappaleViiteDto } from '@shared/api/ylops';
+import { TekstiKappaleDto, Puu, PerusteTekstiKappaleViiteDto, Lops2019Perusteet, OpetussuunnitelmanSisalto } from '@shared/api/ylops';
 import { Matala } from '@shared/api/eperusteet';
-import { Lops2019Perusteet, OpetussuunnitelmanSisalto } from '@shared/api/ylops';
 
 @Store
 export class OpetussuunnitelmaTekstikappaleStore {
@@ -38,8 +37,8 @@ export class OpetussuunnitelmaTekstikappaleStore {
     await this.fetchTekstikappale(deep);
 
     await Promise.all([
-      this.tekstiKappaleViite!.naytaPerusteenTeksti ? this.fetchPerusteTekstikappale(): new Promise<void>(res => res()),
-      this.tekstiKappaleViite!.naytaPohjanTeksti ? this.fetchOriginalTekstikappaleDeep() : new Promise<void>(res => res()),
+      this.tekstiKappaleViite!.naytaPerusteenTeksti ? this.fetchPerusteTekstikappale() : new Promise<void>(resolve => resolve()),
+      this.tekstiKappaleViite!.naytaPohjanTeksti ? this.fetchOriginalTekstikappaleDeep() : new Promise<void>(resolve => resolve()),
     ]);
 
     this.tekstiKappaleAllLoaded = true;
@@ -111,7 +110,6 @@ export class OpetussuunnitelmaTekstikappaleStore {
       const viitteet: any[] = [];
       const stack = [this.tekstiKappaleViite!];
 
-
       while (!_.isEmpty(stack)) {
         const head: any = stack.shift()!;
 
@@ -121,7 +119,7 @@ export class OpetussuunnitelmaTekstikappaleStore {
         }
 
         stack.unshift(..._.map(head.lapset, viite => ({
-          ...viite
+          ...viite,
         })));
       }
 

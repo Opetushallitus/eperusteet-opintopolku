@@ -29,16 +29,14 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
-
 @Component({
   components: {
     EpSpinner,
     EpHeading,
     EpContentViewer,
-  }
+  },
 })
 export default class RouteTekstikappale extends Vue {
-
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
@@ -78,7 +76,7 @@ export default class RouteTekstikappale extends Vue {
 
         stack.unshift(..._.map(head.lapset, viite => ({
           ...viite,
-          level: (head.level || 0) + 1
+          level: (head.level || 0) + 1,
         })));
       }
 
@@ -101,7 +99,6 @@ export default class RouteTekstikappale extends Vue {
   get current() {
     return this.perusteDataStore.current || null;
   }
-
 }
 
 </script>

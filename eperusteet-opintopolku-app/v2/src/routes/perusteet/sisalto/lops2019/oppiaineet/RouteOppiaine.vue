@@ -25,10 +25,9 @@ import OppiaineEsitys from './OppiaineEsitys.vue';
   components: {
     EpSpinner,
     OppiaineEsitys,
-  }
+  },
 })
 export default class RouteOppiaine extends Vue {
-
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 

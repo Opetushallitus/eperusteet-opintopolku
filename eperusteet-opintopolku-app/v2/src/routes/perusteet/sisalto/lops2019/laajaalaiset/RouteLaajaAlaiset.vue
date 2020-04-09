@@ -29,7 +29,7 @@ import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
 import { getLaajaAlainenId } from '@shared/utils/NavigationBuilder';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
@@ -37,10 +37,9 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
     EpSpinner,
     EpPreviousNextNavigation,
     EpContentViewer,
-  }
+  },
 })
 export default class RouteLaajaAlaiset extends Vue {
-
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 

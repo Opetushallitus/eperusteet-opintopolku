@@ -18,6 +18,8 @@ import { createLogger } from '@shared/utils/logger';
 import _ from 'lodash';
 
 import App from '@/App.vue';
+
+import VueI18n, { IVueI18n } from 'vue-i18n';
 const logger = createLogger('main');
 
 Vue.config.devtools = true;
@@ -80,9 +82,6 @@ Vue.use(Kielet, {
   },
 });
 
-
-import VueI18n, { IVueI18n } from 'vue-i18n';
-
 function errorCaptured(err: Error, vm: Vue, info: string) {
   logger.error(err, info);
   if (isProduction()) {
@@ -101,4 +100,3 @@ export const rootConfig: any = {
   render: (h: any) => h(App),
   errorCaptured,
 };
-

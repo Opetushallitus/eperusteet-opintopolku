@@ -139,7 +139,6 @@ export default class PerusteHaku extends Vue {
   ulkoinenlinkki(peruste) {
     return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${this.tyyppi}/${peruste.id}`;
   }
-
 }
 </script>
 

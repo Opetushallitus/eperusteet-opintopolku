@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
-import { TiedoteDto, Tiedotteet } from '@shared/api/eperusteet';
+import { TiedoteDto, Tiedotteet, PageTiedoteDto } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { ITiedotteetProvider } from '@shared/stores/types';
 import { TiedoteQuery } from '@shared/api/types';
-import { PageTiedoteDto } from '@shared/api/eperusteet';
+
 import { faThemeisle } from '@fortawesome/free-brands-svg-icons';
 
 Vue.use(VueCompositionApi);
