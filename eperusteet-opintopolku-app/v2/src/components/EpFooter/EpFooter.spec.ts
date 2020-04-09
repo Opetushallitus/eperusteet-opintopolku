@@ -5,7 +5,6 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('EpFooter', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);

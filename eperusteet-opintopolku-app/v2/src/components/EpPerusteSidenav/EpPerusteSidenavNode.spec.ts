@@ -8,11 +8,10 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 const navigationData = {
   type: 'root' as any,
   meta: { },
-  children: []
+  children: [],
 };
 
 const navigationDataViitteet = {
@@ -164,7 +163,6 @@ describe('EpPerusteSidenav', async () => {
       expect(nodes.at(10).text()).toContain('M1');
       expect(nodes.length).toEqual(11);
     });
-
   });
 
   describe('SidenavNode', async () => {
@@ -245,7 +243,6 @@ describe('EpPerusteSidenav', async () => {
       expect(nodes.at(3).text()).toContain('Oppimäärät');
       expect(nodes.at(4).text()).toContain('OM1');
     });
-
   });
 
   describe('Navigation to previous and next', async () => {
@@ -307,9 +304,6 @@ describe('EpPerusteSidenav', async () => {
 
       expect(wrapper.html()).toContain('Alitaso 1');
       expect(wrapper.html()).toContain('Oppiaineet');
-
     });
-
   });
-
 });

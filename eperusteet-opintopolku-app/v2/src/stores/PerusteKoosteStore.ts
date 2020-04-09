@@ -1,11 +1,10 @@
 import { Store, Getter, State } from '@shared/stores/store';
 import { PerusteDto, TiedoteDto } from '@shared/api/eperusteet';
-import { OpetussuunnitelmaJulkinenDto } from '@shared/api/ylops';
-import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
+import { OpetussuunnitelmaJulkinenDto, OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
+
 import { ryhmat } from '@shared/utils/perusteet';
 import { tiedoteQuery, perusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
-
 
 @Store
 export class PerusteKoosteStore {
@@ -56,14 +55,13 @@ export class PerusteKoosteStore {
       }
     }
 
-
     let tiedotteet: TiedoteDto[] = [];
     for (const peruste of this.perusteet || []) {
       tiedotteet = [...tiedotteet,
         ...(await tiedoteQuery({
           sivukoko: 5,
           perusteId: peruste.id,
-        }))
+        })),
       ];
     }
 

@@ -41,7 +41,7 @@ export default class PerusteTile extends Vue {
   @Prop({ required: true })
   private ops!: OpetussuunnitelmaJulkinenDto;
 
-  @Prop({ default: ''})
+  @Prop({ default: '' })
   private query!: string;
 
   get nimi() {

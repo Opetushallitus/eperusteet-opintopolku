@@ -2,8 +2,7 @@ import _ from 'lodash';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
-import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto } from '@shared/api/ylops';
-import {
+import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto,
   baseURL,
   Dokumentit,
   DokumentitParams,
@@ -11,23 +10,23 @@ import {
   LiitetiedostotParam,
   Opetussuunnitelmat,
   Opintojaksot,
-  Termisto
+  Termisto,
 } from '@shared/api/ylops';
+
 import { Kielet } from '@shared/stores/kieli';
 import {
   baseURL as perusteBaseURL,
   Liitetiedostot as PerusteLiitetiedostot,
   LiitetiedostotParam as PerusteLiitetiedostotParam,
-  Termit
+  Termit,
 } from '@shared/api/eperusteet';
 import {
   buildNavigation,
   buildTiedot,
   filterNavigation,
   NavigationFilter,
-  NavigationNode
+  NavigationNode,
 } from '@shared/utils/NavigationBuilder';
-
 
 @Store
 export class OpetussuunnitelmaDataStore {
@@ -91,12 +90,12 @@ export class OpetussuunnitelmaDataStore {
     this.perusteKuvat = _.map((await PerusteLiitetiedostot.getAllKuvat(perusteenId)).data, kuva => ({
       id: kuva.id!,
       kuva,
-      src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, this.getKuvaFilename(kuva)).url
+      src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, this.getKuvaFilename(kuva)).url,
     }));
   }
 
   private getKuvaFilename(liite) {
-    return liite.id! + '.' +  mime.extension(liite.mime);
+    return liite.id! + '.' + mime.extension(liite.mime);
   }
 
   async fetchTermit() {
@@ -106,15 +105,15 @@ export class OpetussuunnitelmaDataStore {
 
   async fetchKuvat() {
     this.kuvat = null;
-    this.kuvat =_.map((await Liitetiedostot.getAllLiitteet(this.opetussuunnitelmaId)).data, kuva => ({
+    this.kuvat = _.map((await Liitetiedostot.getAllLiitteet(this.opetussuunnitelmaId)).data, kuva => ({
       id: kuva.id!,
       kuva,
-      src: baseURL + LiitetiedostotParam.getLiitetiedosto(this.opetussuunnitelmaId, this.getLiiteFilename(kuva)).url
+      src: baseURL + LiitetiedostotParam.getLiitetiedosto(this.opetussuunnitelmaId, this.getLiiteFilename(kuva)).url,
     }));
   }
 
   private getLiiteFilename(liite) {
-    return liite.id! + '.' +  mime.extension(liite.tyyppi);
+    return liite.id! + '.' + mime.extension(liite.tyyppi);
   }
 
   async fetchNavigation() {
@@ -126,7 +125,7 @@ export class OpetussuunnitelmaDataStore {
     this.opintojaksot = _.chain(await Promise.all(
       [
         Opintojaksot.getAllOpintojaksot(this.opetussuunnitelmaId),
-        Opintojaksot.getTuodutOpintojaksot(this.opetussuunnitelmaId)
+        Opintojaksot.getTuodutOpintojaksot(this.opetussuunnitelmaId),
       ]
     ))
       .map('data')
@@ -258,5 +257,4 @@ export class OpetussuunnitelmaDataStore {
   public readonly updateFilter = _.debounce((filter: NavigationFilter) => {
     this.sidenavFilter = filter;
   }, 300);
-
 }

@@ -77,9 +77,9 @@ export default class RouteUutinen extends Vue {
         location: {
           name: 'uutinen',
           params: {
-            tiedoteId: this.tiedote.id
-          }
-        }
+            tiedoteId: this.tiedote.id,
+          },
+        },
       } as any);
     }
 
@@ -106,7 +106,6 @@ export default class RouteUutinen extends Vue {
   font-size: small;
 }
 
-
 .tiedote {
   padding-left: 15px;
   padding-right: 15px;
@@ -116,4 +115,3 @@ export default class RouteUutinen extends Vue {
   }
 }
 </style>
-

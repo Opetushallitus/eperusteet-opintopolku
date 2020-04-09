@@ -11,7 +11,6 @@ import { Vue, Component } from 'vue-property-decorator';
 import PerusteHaku from './PerusteHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 
-
 @Component({
   components: {
     PerusteHaku,

@@ -33,12 +33,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 
-
 @Component({
   name: 'EpPerusteSidenavNode',
   components: {
     EpColorIndicator,
-  }
+  },
 })
 export default class EpPerusteSidenavNode extends Vue {
   @Prop({ required: true })
@@ -54,7 +53,7 @@ export default class EpPerusteSidenavNode extends Vue {
     const parent = node.path[_.size(node.path) - 2];
 
     const isCurrentOrParentSelected = (current && (node.key === current.key
-        ||  (parent && parent.key === current.key && current.type !== 'oppiaineet')));
+        || (parent && parent.key === current.key && current.type !== 'oppiaineet')));
     const isErikoistyyppi = type === 'oppiaineet'
         || type === 'oppiaine'
         || type === 'oppimaarat'

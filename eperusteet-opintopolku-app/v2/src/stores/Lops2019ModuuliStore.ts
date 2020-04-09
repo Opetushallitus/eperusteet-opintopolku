@@ -1,6 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { Lops2019 } from '@shared/api/eperusteet';
-import { Lops2019ModuuliDto } from '@shared/api/eperusteet';
+import { Lops2019, Lops2019ModuuliDto } from '@shared/api/eperusteet';
 
 @Store
 export class Lops2019ModuuliStore {

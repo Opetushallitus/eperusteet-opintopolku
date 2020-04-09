@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
-import { TiedoteDto } from '@shared/api/eperusteet';
-import { Tiedotteet } from '@shared/api/eperusteet';
-
+import { TiedoteDto, Tiedotteet } from '@shared/api/eperusteet';
 
 @Store
 export class TiedoteStore {
@@ -41,7 +39,7 @@ export class TiedoteStore {
   }
 
   async fetchUutinen(tiedoteId: number) {
-    this.tiedoteId  = tiedoteId;
+    this.tiedoteId = tiedoteId;
     this.tiedote = null;
     this.tiedote = (await Tiedotteet.getTiedote(this.tiedoteId)).data;
   }

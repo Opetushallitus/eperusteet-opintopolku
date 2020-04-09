@@ -5,7 +5,6 @@ import { findAllContaining, findContaining, mocks, stubs } from '@shared/utils/j
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('EpNavigation', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -13,7 +12,6 @@ describe('EpNavigation', () => {
   localVue.use(new Kaannos());
 
   test('Renders spinners and data', async () => {
-
     const wrapper = mount(EpNavigation as any, {
       localVue,
       stubs: {
@@ -32,4 +30,3 @@ describe('EpNavigation', () => {
     expect(findAllContaining(wrapper, 'a', 'perusopetus').length).toBeGreaterThanOrEqual(1);
   });
 });
-

@@ -37,17 +37,14 @@
 </div>
 </template>
 
-
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@shared/utils/perusteet';
 import { MurupolkuOsa } from '@/tyypit';
 import _ from 'lodash';
 
-
 @Component
 export default class EpHeader extends Vue {
-
   @Prop({ required: true })
   private murupolku!: MurupolkuOsa[];
 
@@ -83,7 +80,6 @@ export default class EpHeader extends Vue {
   }
 }
 </script>
-
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
@@ -133,7 +129,6 @@ export default class EpHeader extends Vue {
     background-color: $koulutustyyppi-taiteenperusopetus-color;
     background-image: url('../../../public/img/banners/aallot_taiteenperusopetus.svg');
   }
-
 
   // Murupolku
   nav ol.breadcrumb {

@@ -6,7 +6,6 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('RouteOppiaineet', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -28,7 +27,7 @@ describe('RouteOppiaineet', () => {
             },
           },
         ],
-      } as any
+      } as any,
     });
     const lops2019OppiaineetStore = lops2019OppiaineetStoreMock();
 
@@ -48,6 +47,5 @@ describe('RouteOppiaineet', () => {
 
     expect(wrapper.html()).toContain('Matematiikka');
     expect(wrapper.html()).toContain('Äidinkieli ja kirjallisuus');
-
   });
 });

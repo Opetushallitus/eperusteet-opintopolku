@@ -27,7 +27,7 @@ import EpOpetussuunnitelmaSidenavNode from '@/components/EpOpetussuunnitelmaSide
     EpSearch,
     EpOpetussuunnitelmaSidenavNode,
     EpSpinner,
-  }
+  },
 })
 export default class EpOpetussuunnitelmaSidenav extends Vue {
   @Prop({ required: true })

@@ -112,13 +112,12 @@ export default class RouteKooste extends Vue {
       .map(peruste => ({
         ...peruste,
         id: _.toString(peruste.id),
-        ulkoinenlinkki: this.ulkoinenlinkki(peruste)
+        ulkoinenlinkki: this.ulkoinenlinkki(peruste),
       }))
       .value();
   }
 
   ulkoinenlinkki(peruste) {
-
     if (uusiJulkinenToteutus(peruste)) {
       return undefined;
     }

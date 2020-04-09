@@ -106,7 +106,6 @@ import { LiiteDtoWrapper } from '@shared/tyypit';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
-
 @Component({
   components: {
     EpColorIndicator,
@@ -114,7 +113,6 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
   },
 })
 export default class OppiaineEsitys extends Vue {
-
   @Prop({ required: false, default: true })
   private isPerusteView!: boolean;
 
@@ -146,7 +144,6 @@ export default class OppiaineEsitys extends Vue {
       return this.oppiaine.koodi;
     }
   }
-
 
   get hasTehtava() {
     if (this.oppiaine) {
@@ -200,7 +197,7 @@ export default class OppiaineEsitys extends Vue {
           location: {
             name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
             params: { moduuliId: _.toString(moduuli.id) },
-          }
+          },
         };
       });
     }
@@ -222,7 +219,7 @@ export default class OppiaineEsitys extends Vue {
           location: {
             name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
             params: { moduuliId: _.toString(moduuli.id) },
-          }
+          },
         };
       });
     }
@@ -246,7 +243,7 @@ export default class OppiaineEsitys extends Vue {
           location: {
             name: this.isPerusteView ? 'lops2019oppiaine' : 'lops2019OpetussuunnitelmaOppiaine',
             params: { oppiaineId: _.toString(oppimaara.id) },
-          }
+          },
         };
       });
     }
@@ -255,10 +252,8 @@ export default class OppiaineEsitys extends Vue {
   get hasOppimaarat() {
     return !_.isEmpty(this.oppimaarat);
   }
-
 }
 </script>
 
 <style scoped lang="scss">
 </style>
-

@@ -33,12 +33,11 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 
-
 @Component({
   name: 'EpOpetussuunnitelmaSidenavNode',
   components: {
     EpColorIndicator,
-  }
+  },
 })
 export default class EpOpetussuunnitelmaSidenavNode extends Vue {
   @Prop({ required: true })
@@ -54,7 +53,7 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
     const parent = node.path[_.size(node.path) - 2];
 
     const isCurrentOrParentSelected = (current && (node.key === current.key
-        ||  (parent && parent.key === current.key && current.type !== 'oppiaineet')));
+        || (parent && parent.key === current.key && current.type !== 'oppiaineet')));
 
     const isOppiaineenSisalto = node.type === 'opintojaksot' || node.type === 'moduulit';
 
@@ -66,7 +65,7 @@ export default class EpOpetussuunnitelmaSidenavNode extends Vue {
         || type === 'opintojaksot'
         || type === 'opintojakso';
 
-    if (isCurrentOrParentSelected && isErikoistyyppi || isOppiaineenSisalto) {
+    if ((isCurrentOrParentSelected && isErikoistyyppi) || isOppiaineenSisalto) {
       return node.children;
     }
     else {

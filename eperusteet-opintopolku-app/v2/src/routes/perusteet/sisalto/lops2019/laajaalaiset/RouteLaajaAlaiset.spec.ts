@@ -6,7 +6,6 @@ import { Kielet } from '@shared/stores/kieli';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('RouteLaajaAlaiset', async () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -21,27 +20,27 @@ describe('RouteLaajaAlaiset', async () => {
       laajaAlaisetOsaamiset: [
         {
           nimi: {
-            fi: 'Hyvinvointiosaaminen'
+            fi: 'Hyvinvointiosaaminen',
           } as any,
           koodi: {
-            arvo: '01'
+            arvo: '01',
           },
           kuvaus: {
-            fi: 'Hyvinvointiosaaminen kuvaus'
-          } as any
+            fi: 'Hyvinvointiosaaminen kuvaus',
+          } as any,
         },
         {
           nimi: {
-            fi: 'Vuorovaikutusosaaminen'
+            fi: 'Vuorovaikutusosaaminen',
           } as any,
           koodi: {
-            arvo: '02'
+            arvo: '02',
           },
           kuvaus: {
-            fi: 'Vuorovaikutusosaaminen kuvaus'
-          } as any
-        }
-      ]
+            fi: 'Vuorovaikutusosaaminen kuvaus',
+          } as any,
+        },
+      ],
     };
 
     const wrapper = mount(RouteLaajaAlaiset as any, {

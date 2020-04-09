@@ -59,8 +59,7 @@ import { Kielet } from '@shared/stores/kieli';
   },
 })
 export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
-
-  @Prop({ required: true})
+  @Prop({ required: true })
   koulutuksenJarjestajatStore!: KoulutuksenJarjestajatStore;
 
   private query = '';
@@ -101,7 +100,6 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
   get total() {
     return _.size(this.koulutustoimijat);
   }
-
 }
 </script>
 

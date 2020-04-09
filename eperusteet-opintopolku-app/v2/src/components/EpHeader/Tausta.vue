@@ -29,7 +29,6 @@ export default class Tausta extends Vue {
 
 </script>
 
-
 <style scoped>
 svg {
   width: 100%;

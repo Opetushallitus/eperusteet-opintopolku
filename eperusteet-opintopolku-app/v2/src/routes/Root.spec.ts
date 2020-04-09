@@ -5,7 +5,6 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('Root', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -26,6 +25,4 @@ describe('Root', () => {
 
     await localVue.nextTick();
   });
-
 });
-

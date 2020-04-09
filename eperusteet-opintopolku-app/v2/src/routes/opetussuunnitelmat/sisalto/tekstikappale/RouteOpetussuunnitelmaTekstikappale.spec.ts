@@ -9,7 +9,6 @@ import { Kaannos } from '@shared/plugins/kaannos';
 import { TekstiKappaleDto } from '@shared/api/ylops';
 import * as _ from 'lodash';
 
-
 describe('RouteOpetussuunnitelmaTekstikappale', async () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -40,24 +39,24 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
         {
           id: '5777d209-1b61-4c48-a59b-9d7077bbfe15',
           kuva: {
-            id : '5777d209-1b61-4c48-a59b-9d7077bbfe15',
-            nimi : 'kuva1.png',
-            tyyppi : 'kuva',
-            luotu : 1573480668308,
-            mime : 'image/png',
+            id: '5777d209-1b61-4c48-a59b-9d7077bbfe15',
+            nimi: 'kuva1.png',
+            tyyppi: 'kuva',
+            luotu: 1573480668308,
+            mime: 'image/png',
           },
-          src: 'eperusteet-service/api/perusteet/a/kuvat/b'
+          src: 'eperusteet-service/api/perusteet/a/kuvat/b',
         },
         {
           id: 'd6e37b6a-1aa9-4a21-b125-55c38a9e25d3',
           kuva: {
-            id : 'd6e37b6a-1aa9-4a21-b125-55c38a9e25d3',
-            nimi : 'kuva2.jpg',
-            tyyppi : 'kuva',
-            luotu : 1573480668308,
-            mime : 'image/jpeg',
+            id: 'd6e37b6a-1aa9-4a21-b125-55c38a9e25d3',
+            nimi: 'kuva2.jpg',
+            tyyppi: 'kuva',
+            luotu: 1573480668308,
+            mime: 'image/jpeg',
           },
-          src: 'eperusteet-service/api/perusteet/c/kuvat/d'
+          src: 'eperusteet-service/api/perusteet/c/kuvat/d',
         },
       ];
     },
@@ -79,20 +78,20 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
         {
           id: 'd9dc2bb8-f694-46c9-b2d3-c7ca9b250917',
           kuva: {
-            id : 'd9dc2bb8-f694-46c9-b2d3-c7ca9b250917',
-            tyyppi : 'image/png',
-            nimi : 'kuva3',
-            luotu : 1574068484973
+            id: 'd9dc2bb8-f694-46c9-b2d3-c7ca9b250917',
+            tyyppi: 'image/png',
+            nimi: 'kuva3',
+            luotu: 1574068484973,
           },
           src: 'eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b',
         },
         {
           id: '87259960-fa2c-48a8-8e4c-e52e67b46896',
           kuva: {
-            id : '87259960-fa2c-48a8-8e4c-e52e67b46896',
-            tyyppi : 'image/jpeg',
-            nimi : 'kuva4',
-            luotu : 1574068704786
+            id: '87259960-fa2c-48a8-8e4c-e52e67b46896',
+            tyyppi: 'image/jpeg',
+            nimi: 'kuva4',
+            luotu: 1574068704786,
           },
           src: 'eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d',
         },
@@ -116,23 +115,23 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
               nimi: { fi: 'perusteen alikappaleen nimi' } as any,
               teksti: { fi: 'perusteen alikappaleen teksti<img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3"><abbr data-viite="Perusteentermi2notsikko1572852406893">perustetermi2</abbr>' } as any,
             },
-          }
-        ]
+          },
+        ],
       };
     },
     async fetchOriginalTekstikappale() {
-      this.tekstiKappaleOriginalViites  = [
+      this.tekstiKappaleOriginalViites = [
         {
           tekstiKappale: {
             nimi: { fi: 'pohjan tekstikappaleen nimi' } as any,
             teksti: { fi: 'pohjan tekstikappaleen teksti' } as any,
-          }
-        },{
+          },
+        }, {
           tekstiKappale: {
             nimi: { fi: 'ops2 tekstikappaleen nimi' } as any,
             teksti: { fi: 'ops2 tekstikappaleen teksti' } as any,
-          }
-        }
+          },
+        },
       ];
       this.tekstiKappaleOriginals = _.map(this.tekstiKappaleOriginalViites, 'tekstiKappale') as TekstiKappaleDto[];
     },
@@ -155,8 +154,8 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
             naytaPerusteenTeksti,
             naytaPohjanTeksti,
             _original: 3,
-          } as any
-        ]
+          } as any,
+        ],
       };
       this.tekstiKappale = this.tekstiKappaleViite.tekstiKappale;
     },
@@ -166,7 +165,7 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
         tekstiKappale: {
           nimi: { fi: 'pohjan alikappaleen nimi' } as any,
           teksti: { fi: 'pohjan alikappaleen teksti' } as any,
-        }
+        },
       };
     },
   });
@@ -324,8 +323,8 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
     await opetussuunnitelmaDataStore.fetchKuvat();
 
     // Testataan haetuilla kuvien datalla
-    //expect(wrapper.html()).toContain('<figure><img data-uid="d9dc2bb8-f694-46c9-b2d3-c7ca9b250917" src="eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b" alt="kuva3"><figcaption>kuva3</figcaption></figure>');
-    //expect(wrapper.html()).toContain('<figure><img data-uid="87259960-fa2c-48a8-8e4c-e52e67b46896" src="eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d" alt="kuva4"><figcaption>kuva4</figcaption></figure>');
+    // expect(wrapper.html()).toContain('<figure><img data-uid="d9dc2bb8-f694-46c9-b2d3-c7ca9b250917" src="eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b" alt="kuva3"><figcaption>kuva3</figcaption></figure>');
+    // expect(wrapper.html()).toContain('<figure><img data-uid="87259960-fa2c-48a8-8e4c-e52e67b46896" src="eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d" alt="kuva4"><figcaption>kuva4</figcaption></figure>');
     expect(wrapper.html()).toContain('<figure><img data-uid="d9dc2bb8-f694-46c9-b2d3-c7ca9b250917" src="eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b"></figure>');
     expect(wrapper.html()).toContain('<figure><img data-uid="87259960-fa2c-48a8-8e4c-e52e67b46896" src="eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d"></figure>');
   });
@@ -348,8 +347,8 @@ describe('RouteOpetussuunnitelmaTekstikappale', async () => {
     await opetussuunnitelmaDataStore.fetchKuvat();
 
     // Testataan haetuilla kuvien datalla
-    //expect(wrapper.html()).toContain('<figure><img data-uid="5777d209-1b61-4c48-a59b-9d7077bbfe15" src="eperusteet-service/api/perusteet/a/kuvat/b" alt="kuva1.png"><figcaption>kuva1.png</figcaption></figure>');
-    //expect(wrapper.html()).toContain('<figure><img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3" src="eperusteet-service/api/perusteet/c/kuvat/d" alt="kuva2.jpg"><figcaption>kuva2.jpg</figcaption></figure>');
+    // expect(wrapper.html()).toContain('<figure><img data-uid="5777d209-1b61-4c48-a59b-9d7077bbfe15" src="eperusteet-service/api/perusteet/a/kuvat/b" alt="kuva1.png"><figcaption>kuva1.png</figcaption></figure>');
+    // expect(wrapper.html()).toContain('<figure><img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3" src="eperusteet-service/api/perusteet/c/kuvat/d" alt="kuva2.jpg"><figcaption>kuva2.jpg</figcaption></figure>');
     expect(wrapper.html()).toContain('<figure><img data-uid="5777d209-1b61-4c48-a59b-9d7077bbfe15" src="eperusteet-service/api/perusteet/a/kuvat/b"></figure>');
     expect(wrapper.html()).toContain('<figure><img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3" src="eperusteet-service/api/perusteet/c/kuvat/d"></figure>');
   });

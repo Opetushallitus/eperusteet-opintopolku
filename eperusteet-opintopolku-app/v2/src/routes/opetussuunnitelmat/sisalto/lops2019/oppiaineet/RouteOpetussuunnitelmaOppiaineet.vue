@@ -25,11 +25,10 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
-
 @Component({
   components: {
     EpSpinner,
-  }
+  },
 })
 export default class RouteOpetussuunnitelmaOppiaineet extends Vue {
   @Prop({ required: true })

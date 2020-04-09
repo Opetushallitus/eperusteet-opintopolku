@@ -111,12 +111,11 @@ import {
   koulutustyyppiStateName,
   koulutustyyppiTheme,
   perusteKoulutustyyppiUrlShortParamName,
-  yleissivistavat
+  yleissivistavat,
 } from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
 import { uusiJulkinenToteutus } from '@/utils/peruste';
 import { ENV_PREFIX } from '@shared/utils/defaults';
-
 
 function mapRoutes(perusteet: PerusteDto[] | null, ulkoinenlinkki: Function) {
   return perusteet
@@ -133,12 +132,11 @@ function mapRoutes(perusteet: PerusteDto[] | null, ulkoinenlinkki: Function) {
             koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
             perusteId: _.toString(peruste.id),
           },
-        }
+        },
       };
     })
     : null;
 }
-
 
 @Component({
   components: {
@@ -216,7 +214,6 @@ export default class RouteHome extends Vue {
   }
 
   ulkoinenlinkki(peruste) {
-
     if (uusiJulkinenToteutus(peruste)) {
       return undefined;
     }

@@ -6,7 +6,6 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('EpHeader', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -15,7 +14,7 @@ describe('EpHeader', () => {
       fi: {
         'parent-jolla-todella-pitka-teksti': 'Parent jolla todella pitkä teksti',
         'uusi-alikappale': 'Uusi alikappale',
-      }
+      },
     },
   });
   localVue.use(new Kaannos());
@@ -51,7 +50,7 @@ describe('EpHeader', () => {
       {
         label: 'uusi-alikappale',
         location: { name: 'root' },
-      }
+      },
     ];
 
     expect(wrapper.html()).toContain('eperusteet');

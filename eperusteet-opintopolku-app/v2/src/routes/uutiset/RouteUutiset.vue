@@ -150,4 +150,3 @@ export default class RouteUutiset extends Vue {
 }
 
 </style>
-

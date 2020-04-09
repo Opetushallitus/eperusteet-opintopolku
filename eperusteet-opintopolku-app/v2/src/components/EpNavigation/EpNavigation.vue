@@ -55,7 +55,6 @@ import { createLogger } from '@shared/utils/logger';
 
 const logger = createLogger('EpNavigation');
 
-
 @Component
 export default class EpNavigation extends Vue {
   get valittuKieli() {
@@ -94,7 +93,7 @@ export default class EpNavigation extends Vue {
       if (maincontent.getElementsByTagName('a').length > 0) {
         maincontent.getElementsByTagName('a')[0].focus();
       }
-      else if(maincontent.getElementsByTagName('input').length > 0) {
+      else if (maincontent.getElementsByTagName('input').length > 0) {
         maincontent.getElementsByTagName('input')[0].focus();
       }
     }
@@ -130,7 +129,7 @@ export default class EpNavigation extends Vue {
   get items() {
     return [
       ...this.yleissivistavat,
-      ...this.ammatilliset
+      ...this.ammatilliset,
     ];
   }
 
@@ -146,7 +145,7 @@ export default class EpNavigation extends Vue {
         name: current.name,
         params: {
           lang: kieli || this.$i18n.fallbackLocale,
-        }
+        },
       } as RawLocation);
     }
     catch (e) {
@@ -158,7 +157,6 @@ export default class EpNavigation extends Vue {
       }
     }
   }
-
 }
 </script>
 

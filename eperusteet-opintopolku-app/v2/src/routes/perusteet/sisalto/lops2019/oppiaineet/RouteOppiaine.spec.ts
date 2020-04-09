@@ -6,7 +6,6 @@ import { Kielet } from '@shared/stores/kieli';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-
 describe('RouteOppiaine', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
@@ -21,21 +20,21 @@ describe('RouteOppiaine', () => {
         fi: 'Matematiikka',
       } as any,
       koodi: {
-        arvo: 'MA'
+        arvo: 'MA',
       },
       tehtava: {
         kuvaus: {
-          fi: 'Oppiaineen tehtavä'
-        } as any
+          fi: 'Oppiaineen tehtavä',
+        } as any,
       },
       laajaAlaisetOsaamiset: {
         kuvaus: {
-          fi: 'Oppiaineen laaja-alaiset osaamiset'
-        } as any
+          fi: 'Oppiaineen laaja-alaiset osaamiset',
+        } as any,
       },
       tavoitteet: {
         kuvaus: {
-          fi: 'Oppiaineen tavoitteet'
+          fi: 'Oppiaineen tavoitteet',
         } as any,
         tavoitealueet: [
           {
@@ -47,38 +46,38 @@ describe('RouteOppiaine', () => {
             } as any,
             tavoitteet: [
               {
-                fi: 'Tavoite 1'
-              } as any
-            ]
-          }
-        ]
+                fi: 'Tavoite 1',
+              } as any,
+            ],
+          },
+        ],
       },
       arviointi: {
         kuvaus: {
-          fi: 'Oppiaineen arviointi'
-        } as any
+          fi: 'Oppiaineen arviointi',
+        } as any,
       },
       moduulit: [
         {
           nimi: {
             fi: 'Pakollinen moduuli',
-          }  as any,
+          } as any,
           pakollinen: true,
         },
         {
           nimi: {
             fi: 'Valinnainen moduuli',
-          }  as any,
+          } as any,
           pakollinen: false,
-        }
+        },
       ],
       oppimaarat: [
         {
           nimi: {
             fi: 'Oppimaara',
-          }  as any,
-        }
-      ]
+          } as any,
+        },
+      ],
     };
 
     const wrapper = mount(RouteOppiaine as any, {

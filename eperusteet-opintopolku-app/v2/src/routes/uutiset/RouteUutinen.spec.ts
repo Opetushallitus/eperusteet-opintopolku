@@ -30,6 +30,4 @@ describe('RouteHome', () => {
 
     await localVue.nextTick();
   });
-
 });
-

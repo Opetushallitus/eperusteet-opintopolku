@@ -18,5 +18,4 @@ export class KoulutuksenJarjestajatStore {
       9999)).data as any;
     this.state.koulutustoimijat = res.data;
   }
-
 }

@@ -81,17 +81,15 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 import { Puu } from '@shared/api/ylops';
 
-
 @Component({
   components: {
     EpSpinner,
     EpHeading,
     EpContentViewer,
     EpCollapse,
-  }
+  },
 })
 export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
-
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
@@ -158,7 +156,7 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
         }
 
         stack.unshift(..._.map(head.lapset, viite => ({
-          ...viite
+          ...viite,
         })));
       }
 
@@ -181,7 +179,7 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
 
         stack.unshift(..._.map(head.lapset, viite => ({
           ...viite,
-          level: (head.level || 0) + 1
+          level: (head.level || 0) + 1,
         })));
       }
 

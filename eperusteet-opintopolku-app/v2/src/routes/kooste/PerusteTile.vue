@@ -34,7 +34,7 @@ import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
 @Component({
   components: {
     EpHallitusImg,
-  }
+  },
 })
 export default class PerusteTile extends Vue {
   @Prop({ required: true })

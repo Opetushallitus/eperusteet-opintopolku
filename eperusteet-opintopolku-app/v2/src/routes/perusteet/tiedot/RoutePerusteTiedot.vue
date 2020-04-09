@@ -111,7 +111,6 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
 import { isAmmatillinen } from '@shared/utils/perusteet';
 
-
 @Component({
   components: {
     EpFormContent,
@@ -171,7 +170,7 @@ export default class RoutePerusteTiedot extends Vue {
         _.each(maaraysObj.liitteet, (liite, kieli) => {
           result[kieli] = {
             ...liite,
-            url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, liite.id!).url
+            url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, liite.id!).url,
           };
         });
       }
@@ -179,7 +178,7 @@ export default class RoutePerusteTiedot extends Vue {
         _.each(maaraysObj.url, (url, kieli) => {
           result[kieli] = {
             nimi: url,
-            url
+            url,
           };
         });
       }
@@ -220,7 +219,6 @@ export default class RoutePerusteTiedot extends Vue {
   get dokumentti() {
     return this.perusteDataStore.dokumentit && (this as any).$kaanna(this.perusteDataStore.dokumentit);
   }
-
 }
 </script>
 

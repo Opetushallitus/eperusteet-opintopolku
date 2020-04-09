@@ -6,7 +6,7 @@
     </template>
     <template slot="subheader">
       <div class="diaarinumero">
-        {{ opetussuunnitelma.perusteenDiaarinumero }} 
+        {{ opetussuunnitelma.perusteenDiaarinumero }}
       </div>
     </template>
   </ep-header>
@@ -37,9 +37,8 @@ import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
-import EpPreviousNextNavigation from  '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenav.vue';
-
 
 @Component({
   components: {

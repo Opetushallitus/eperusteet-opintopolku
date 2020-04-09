@@ -3,14 +3,13 @@ import RouteHome from './RouteHome.vue';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 
-
 describe('RouteHome', () => {
   const localVue = createLocalVue();
 
   const $route = {
     params: {
-      lang: 'fi'
-    }
+      lang: 'fi',
+    },
   };
 
   test('Renders spinners and data', async () => {
@@ -28,7 +27,7 @@ describe('RouteHome', () => {
       },
       mocks: {
         ...mocks,
-        $route
+        $route,
       },
     });
 
@@ -99,7 +98,5 @@ describe('RouteHome', () => {
     }];
 
     expect(consoleSpy).toHaveBeenCalled();
-
   });
-
 });

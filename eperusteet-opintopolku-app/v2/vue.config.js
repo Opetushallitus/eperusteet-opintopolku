@@ -114,6 +114,6 @@ module.exports = {
     },
     clientLogLevel: 'none',
     port: 9020,
-    proxy
+    proxy,
   },
 };

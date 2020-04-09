@@ -1,8 +1,11 @@
 import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
-import { NavigationNodeDto, PerusteDto } from '@shared/api/eperusteet';
+import { NavigationNodeDto, PerusteDto, Perusteet, TermiDto, baseURL,
+  Dokumentit, DokumentitParam,
+  Termit,
+  Liitetiedostot, LiitetiedostotParam } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
-import { Perusteet, TermiDto } from '@shared/api/eperusteet';
+
 import {
   buildNavigation,
   filterNavigation,
@@ -11,14 +14,10 @@ import {
   NavigationFilter,
   NavigationNode,
 } from '@shared/utils/NavigationBuilder';
-import { baseURL,
-  Dokumentit, DokumentitParam,
-  Termit,
-  Liitetiedostot, LiitetiedostotParam } from '@shared/api/eperusteet';
+
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
-
 
 @Store
 export class PerusteDataStore {
@@ -50,10 +49,10 @@ export class PerusteDataStore {
   private async init() {
     this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
     this.termit = (await Termit.getAllTermit(this.perusteId)).data;
-    this.kuvat =_.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
+    this.kuvat = _.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
       id: kuva.id!,
       kuva,
-      src: baseURL + LiitetiedostotParam.getKuva(this.perusteId, kuva.id!).url
+      src: baseURL + LiitetiedostotParam.getKuva(this.perusteId, kuva.id!).url,
     }));
     this.fetchNavigation();
   }
@@ -147,7 +146,6 @@ export class PerusteDataStore {
   })
   public readonly current!: NavigationNode | null;
 
-
   // Fixme: ota huomioon kielen vaihtaminen
   public async getDokumentit() {
     if (!this.peruste) {
@@ -188,5 +186,4 @@ export class PerusteDataStore {
   public readonly updateFilter = _.debounce((filter: NavigationFilter) => {
     this.sidenavFilter = filter;
   }, 300);
-
 }
