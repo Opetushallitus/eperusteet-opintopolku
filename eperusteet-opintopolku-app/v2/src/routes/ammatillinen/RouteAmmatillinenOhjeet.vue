@@ -24,7 +24,7 @@ export default class RouteAmmatillinenOhjeet extends Vue {
       'koulutustyyppi_11',
       'koulutustyyppi_12',
       'koulutustyyppi_5',
-      'koulutustyyppi_18'
+      'koulutustyyppi_18',
     ],
   });
 }
