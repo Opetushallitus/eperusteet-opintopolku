@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
-import {  PerusteHakuDto, Oppaat, PerusteQuery } from '@shared/api/eperusteet';
+import { PerusteHakuDto, Oppaat, PerusteQuery } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { ryhmat } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
@@ -8,7 +8,7 @@ import { Kielet } from '@shared/stores/kieli';
 Vue.use(VueCompositionApi);
 
 export class OpasStore {
-  private state = reactive({
+  public state = reactive({
     oppaat: null as PerusteHakuDto[] | null,
     query: {} as PerusteQuery,
   })
@@ -38,5 +38,4 @@ export class OpasStore {
 
     this.state.oppaat = res.data;
   }
-
 }
