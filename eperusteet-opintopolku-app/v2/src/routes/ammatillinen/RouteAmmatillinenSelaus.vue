@@ -6,7 +6,7 @@
       {{ $t(ylaotsikko) }}
     </template>
   </ep-header>
-  <div class="container-md container-fluid">
+  <div class="container-md">
 
     <div v-if="$route.name === 'ammatillinenSelaus'">
       <div class="d-flex justify-content-between flex-lg-row flex-column">
@@ -24,15 +24,15 @@
 
       </div>
 
-      <div class="d-flex mb-4">
-        <div class="flex-fill w-50 pr-5">
+      <div class="row mb-4">
+        <div class="col-12 col-lg-6 pr-5">
           <h2 class="mb-4">{{$t('mita-ovat-ammatilliset-tutkinnot')}}</h2>
 
           <p class="kuvaus">{{ $t('kooste-kuvaus-ammatillinen-koulutus') }}</p>
           <p class="kuvaus">{{ $t('kooste-kuvaus-perusteet') }}</p>
         </div>
 
-        <div class="flex-fill w-50">
+        <div class="col-12 col-lg-6">
           <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
           <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
             <template v-slot:lisaaBtnText>
