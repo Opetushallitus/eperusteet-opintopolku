@@ -77,8 +77,14 @@ Vue.use(SocialSharing);
 
 Vue.use(Kielet, {
   messages: {
-    fi: require('@/translations/locale-fi.json'),
-    sv: require('@/translations/locale-sv.json'),
+    fi: {
+      ...require('@shared/translations/locale-fi.json'),
+      ...require('@/translations/locale-fi.json'),
+    },
+    sv: {
+      ...require('@shared/translations/locale-sv.json'),
+      ...require('@/translations/locale-sv.json'),
+    },
   },
 });
 

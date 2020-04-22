@@ -13,7 +13,7 @@
       <b-row>
         <b-col md="6" class="tile">
           <section>
-            <h2 class="tile-heading">{{ $t('uutisia') }}</h2>
+            <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
             <ep-spinner-slot :is-loading="!tiedotteet">
               <div class="box" v-for="(tiedote, idx) in tiedotteet" :key="idx">
                 <div class="nimi">
@@ -26,7 +26,7 @@
               <div class="box">
                 <div class="kaikki-uutiset">
                   <router-link :to="{ name: 'uutiset' }">
-                    {{ $t('nayta-kaikki-uutiset') }}
+                    {{ $t('nayta-kaikki') }}
                   </router-link>
                 </div>
               </div>

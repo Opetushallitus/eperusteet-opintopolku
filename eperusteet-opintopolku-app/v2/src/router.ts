@@ -180,7 +180,7 @@ export const router = new Router({
         },
       ],
     }, {
-      path: 'uutiset',
+      path: 'ajankohtaista',
       name: 'uutiset',
       component: RouteUutiset,
       meta: {
@@ -196,7 +196,7 @@ export const router = new Router({
         },
       },
     }, {
-      path: 'uutiset/:tiedoteId',
+      path: 'ajankohtaista/:tiedoteId',
       name: 'uutinen',
       component: RouteUutinen,
       meta: {
