@@ -65,7 +65,7 @@ export default class RouteUutinen extends Vue {
 
   get murupolku() {
     const murut = [{
-      label: 'uutiset',
+      label: 'ajankohtaista',
       location: {
         name: 'uutiset',
       },

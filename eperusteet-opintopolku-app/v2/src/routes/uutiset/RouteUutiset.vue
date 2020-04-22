@@ -3,7 +3,7 @@
   <div>
     <ep-header :murupolku="murupolku">
       <template slot="header">
-        {{ $t('uutiset') }}
+        {{ $t('ajankohtaista') }}
       </template>
       <div class="search">
         <ep-search :value="query" @input="setValue" />
@@ -103,7 +103,7 @@ export default class RouteUutiset extends Vue {
 
   get murupolku() {
     return [{
-      label: 'uutiset',
+      label: 'ajankohtaista',
       location: {
         name: 'uutiset',
       },
@@ -113,7 +113,7 @@ export default class RouteUutiset extends Vue {
   @Meta
   getMetaInfo() {
     return {
-      title: (this as any).$t('uutiset'),
+      title: (this as any).$t('ajankohtaista'),
     };
   }
 }
