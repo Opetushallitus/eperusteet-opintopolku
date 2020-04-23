@@ -118,7 +118,7 @@ export class OpetussuunnitelmaDataStore {
 
   async fetchNavigation() {
     this.navigation = null;
-    this.navigation = (await Opetussuunnitelmat.getNavigation(this.opetussuunnitelmaId)).data;
+    this.navigation = (await Opetussuunnitelmat.getNavigationJulkinen(this.opetussuunnitelmaId)).data;
   }
 
   async fetchOpintojaksot() {
