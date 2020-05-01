@@ -13,7 +13,9 @@
     "build": "grunt build",
     "test": "grunt test",
     "copy": "pwd && cp -R ../v2/dist ./dist/beta",
-    "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\""
+    "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\"",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "angular": "1.5.8",
@@ -34,12 +36,13 @@
     "eperusteet-frontend-utils": "git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git",
     "es5-shim": "4.5.9",
     "es6-promise": "4.1.0",
-    "jquery": "3.1.1",
+    "jquery": "3.5.0",
     "json3": "3.3.2",
     "lodash": "3.10.1",
     "moment": "2.22.2",
     "ngstorage": "0.3.11",
-    "restangular": "1.5.2"
+    "restangular": "1.5.2",
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "@types/angular": "1.5.8",
@@ -87,5 +90,6 @@
     "prettier": "1.6.1",
     "typescript": "2.5.2",
     "webdriver-manager": "12.0.6"
-  }
+  },
+  "snyk": true
 }
