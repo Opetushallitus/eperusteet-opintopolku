@@ -1,5 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { KoodistoKoodiDto, Lops2019PaikallinenOppiaineDto, Oppiaineet, Opetussuunnitelmat } from '@shared/api/ylops';
+import { KoodistoKoodiDto, Lops2019PaikallinenOppiaineDto, Opetussuunnitelmat, Lops2019Oppiaineet } from '@shared/api/ylops';
 
 import { KoodistoLops2019LaajaAlaiset } from '@shared/utils/perusteet';
 
@@ -24,7 +24,7 @@ export class Lops2019OpetussuunnitelmaPoppiaineStore {
   async fetchPoppiaine() {
     this.oppiaine = null;
     this.koodit = [];
-    this.oppiaine = (await Oppiaineet.getLops2019PaikallinenOppiaine(this.opsId, this.oppiaineId)).data;
+    this.oppiaine = (await Lops2019Oppiaineet.getLops2019PaikallinenOppiaine(this.opsId, this.oppiaineId)).data;
     this.koodit = (await Opetussuunnitelmat.getKoodistonKoodit(this.opsId, KoodistoLops2019LaajaAlaiset)).data;
   }
 }
