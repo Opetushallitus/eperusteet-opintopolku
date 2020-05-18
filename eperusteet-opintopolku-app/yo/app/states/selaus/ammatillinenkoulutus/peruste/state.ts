@@ -80,6 +80,7 @@ angular.module("app").config($stateProvider => {
                                 )
                                 .get({
                                     perusteId: peruste.id,
+                                    perusteenDiaarinumero: peruste.diaarinumero,
                                     nimi: $scope.haku,
                                     sivu: $scope.sivu - 1,
                                     sivukoko: $scope.sivukoko,
