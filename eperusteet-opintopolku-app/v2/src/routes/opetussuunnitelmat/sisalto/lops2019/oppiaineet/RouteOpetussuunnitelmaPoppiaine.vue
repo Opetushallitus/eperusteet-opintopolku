@@ -10,46 +10,91 @@
           <p>{{ koodi }}</p>
         </div>
 
-        <div v-if="hasTehtava">
+        <div v-if="hasTehtava || hasPerusteenOppianeenTehtava">
           <h3>{{ $t('tehtava') }}</h3>
-          <ep-content-viewer v-if="oppiaine.tehtava.kuvaus"
+          <ep-content-viewer v-if="hasPerusteenOppianeenTehtava"
+                             :value="$kaanna(perusteenOppiaine.tehtava.kuvaus)"
+                             :termit="termit"
+                             :kuvat="kuvat" />
+          <ep-content-viewer v-if="hasTehtava"
                              :value="$kaanna(oppiaine.tehtava.kuvaus)"
                              :termit="termit"
                              :kuvat="kuvat" />
         </div>
 
-        <div v-if="hasTavoitteet">
+        <div v-if="hasTavoitteet || hasPerusteenOppiaineenTavoitteet">
           <h3>{{ $t('tavoitteet') }}</h3>
-          <ep-content-viewer v-if="tavoitteet.kuvaus"
-                             :value="$kaanna(tavoitteet.kuvaus)"
-                             :termit="termit" :kuvat="kuvat" />
-          <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="idx">
-            <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
-            <div>
-              <em v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</em>
+          <div v-if="hasPerusteenOppiaineenTavoitteet">
+            <ep-content-viewer v-if="perusteenOppiaineenTavoitteet"
+                              :value="$kaanna(perusteenOppiaineenTavoitteet.kuvaus)"
+                              :termit="termit" :kuvat="kuvat" />
+            <div v-for="(tavoitealue, idx) in perusteenOppiaineenTavoitteet.tavoitealueet" :key="'perusteenoppianeentavoite'+idx">
+              <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
+              <div>
+                <em v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</em>
+              </div>
+              <ul>
+                <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
+                  <span>{{ $kaanna(tavoite) }}</span>
+                </li>
+              </ul>
             </div>
-            <ul>
-              <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
-                <span>{{ $kaanna(tavoite.tavoite) }}</span>
-              </li>
-            </ul>
+          </div>
+
+          <div v-if="hasTavoitteet">
+            <ep-content-viewer v-if="tavoitteet.kuvaus"
+                              :value="$kaanna(tavoitteet.kuvaus)"
+                              :termit="termit" :kuvat="kuvat" />
+            <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="'tavoite'+idx">
+              <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
+              <div>
+                <em v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</em>
+              </div>
+              <ul>
+                <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
+                  <span>{{ $kaanna(tavoite.tavoite) }}</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
 
-        <div v-if="hasLaajaAlainenOsaaminen">
+        <div v-if="hasArviointi || hasPerusteenOppianeenArviointi">
+          <h3>{{ $t('arviointi') }}</h3>
+
+          <ep-content-viewer v-if="hasPerusteenOppianeenArviointi"
+                            :value="$kaanna(perusteenOppiaine.arviointi.kuvaus)"
+                            :termit="termit"
+                            :kuvat="kuvat" />
+
+          <ep-content-viewer v-if="hasArviointi"
+                            :value="$kaanna(oppiaine.arviointi.kuvaus)"
+                            :termit="termit"
+                            :kuvat="kuvat" />
+        </div>
+
+        <div v-if="hasLaajaAlainenOsaaminen || hasPerusteenOppiaineenLaajaAlainenOsaaminen">
           <h3>{{ $t('laaja-alainen-osaaminen') }}</h3>
-          <ep-content-viewer v-if="oppiaine.laajaAlainenOsaaminen.kuvaus"
-                             :value="$kaanna(oppiaine.laajaAlainenOsaaminen.kuvaus)"
+
+          <ep-content-viewer v-if="hasPerusteenOppiaineenLaajaAlainenOsaaminen"
+                             :value="$kaanna(perusteenOppiaine.laajaAlaisetOsaamiset.kuvaus)"
                              :termit="termit"
                              :kuvat="kuvat" />
-          <div v-for="(lao, idx) in oppiaine.laajaAlainenOsaaminen" :key="idx">
-            <div v-if="kooditFormatted[lao.koodi]">
-              <strong>
-                {{ $kaanna(kooditFormatted[lao.koodi].nimi) }}{{ kooditFormatted[lao.koodi].koodiArvo ? ' (' + kooditFormatted[lao.koodi].koodiArvo + ')' : ''}}
-              </strong>
-              <ep-content-viewer :value="$kaanna(lao.kuvaus)"
-                                 :termit="termit"
-                                 :kuvat="kuvat" />
+
+          <div v-if="hasLaajaAlainenOsaaminen">
+            <ep-content-viewer v-if="oppiaine.laajaAlainenOsaaminen.kuvaus"
+                              :value="$kaanna(oppiaine.laajaAlainenOsaaminen.kuvaus)"
+                              :termit="termit"
+                              :kuvat="kuvat" />
+            <div v-for="(lao, idx) in oppiaine.laajaAlainenOsaaminen" :key="'lao'+idx">
+              <div v-if="kooditFormatted[lao.koodi]">
+                <strong>
+                  {{ $kaanna(kooditFormatted[lao.koodi].nimi) }}{{ kooditFormatted[lao.koodi].koodiArvo ? ' (' + kooditFormatted[lao.koodi].koodiArvo + ')' : ''}}
+                </strong>
+                <ep-content-viewer :value="$kaanna(lao.kuvaus)"
+                                  :termit="termit"
+                                  :kuvat="kuvat" />
+              </div>
             </div>
           </div>
         </div>
@@ -57,7 +102,7 @@
 
       <div v-if="hasOpintojaksot">
         <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
-        <div v-for="(opintojakso, idx) in opintojaksotExtended" :key="idx">
+        <div v-for="(opintojakso, idx) in opintojaksotExtended" :key="'opintojakso'+idx">
           <router-link v-if="opintojakso.location" :to="opintojakso.location">
             {{ $kaanna(opintojakso.nimi) }}
             <span v-if="opintojakso.laajuus">
@@ -112,6 +157,10 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
     return this.lops2019OpetussuunnitelmaPoppiaineStore.oppiaine;
   }
 
+  get perusteenOppiaine() {
+    return this.lops2019OpetussuunnitelmaPoppiaineStore.perusteenOppiaine;
+  }
+
   get koodit() {
     return this.lops2019OpetussuunnitelmaPoppiaineStore.koodit;
   }
@@ -138,9 +187,27 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
     }
   }
 
+  get hasPerusteenOppianeenTehtava() {
+    if (this.perusteenOppiaine) {
+      return this.perusteenOppiaine.tehtava && this.perusteenOppiaine.tehtava.kuvaus;
+    }
+  }
+
   get tavoitteet() {
     if (this.oppiaine) {
       return this.oppiaine.tavoitteet;
+    }
+  }
+
+  get hasArviointi() {
+    if (this.oppiaine) {
+      return this.oppiaine.arviointi && this.oppiaine.arviointi.kuvaus;
+    }
+  }
+
+  get hasPerusteenOppianeenArviointi() {
+    if (this.perusteenOppiaine) {
+      return this.perusteenOppiaine.arviointi && this.perusteenOppiaine.arviointi.kuvaus;
     }
   }
 
@@ -150,9 +217,27 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
     }
   }
 
+  get hasPerusteenOppiaineenTavoitteet() {
+    if (this.perusteenOppiaineenTavoitteet) {
+      return !_.isEmpty(this.perusteenOppiaineenTavoitteet) && !_.isEmpty(this.perusteenOppiaineenTavoitteet.tavoitealueet);
+    }
+  }
+
+  get perusteenOppiaineenTavoitteet() {
+    if (this.perusteenOppiaine) {
+      return this.perusteenOppiaine.tavoitteet;
+    }
+  }
+
   get hasLaajaAlainenOsaaminen() {
     if (this.oppiaine) {
       return !_.isEmpty(this.oppiaine.laajaAlainenOsaaminen);
+    }
+  }
+
+  get hasPerusteenOppiaineenLaajaAlainenOsaaminen() {
+    if (this.perusteenOppiaine) {
+      return this.perusteenOppiaine.laajaAlaisetOsaamiset && this.perusteenOppiaine.laajaAlaisetOsaamiset.kuvaus;
     }
   }
 
