@@ -67,11 +67,13 @@
           <ep-field v-model="opetussuunnitelma.kuvaus"></ep-field>
         </ep-form-content>
       </div>
+      <!-- EP-1558
       <div class="col-md-12" v-if="dokumentti">
         <ep-form-content name="dokumentti-osoite" headerType="h3" headerClass="h6">
           <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-pdf-dokumentti') }}</a>
         </ep-form-content>
       </div>
+      -->
     </div>
     <slot name="previous-next-navigation" />
   </div>
@@ -133,10 +135,12 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
     return !_.isEmpty(this.organisaatiot);
   }
 
+  /*
   get dokumentti() {
     const dokumentit = this.opetussuunnitelmaDataStore.dokumentit;
     return dokumentit && (this as any).$kaanna(dokumentit);
   }
+  */
 
   private getOrganisaatioNimi(organisaatio) {
     const nimi = (this as any).$kaanna(organisaatio.nimi);
