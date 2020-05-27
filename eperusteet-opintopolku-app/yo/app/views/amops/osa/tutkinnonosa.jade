@@ -22,24 +22,6 @@ mixin paikallinenKoodi()
         input.form-control(type="text"
         ng-model="osa.tosa.omatutkinnonosa.koodi"
         disabled)
-      div.koodi-kaytossa.alert.alert-info(ng-show="$$ekEditing && $$koodiFormaattiVaara" style="margin-top: 10px")
-        div(ng-bind="'paikallinen-koodi-info' | kaanna")
-      div.koodi-kaytossa.alert(ng-show="tormaavatKoodit.length > 0")
-        div(ng-bind="'paikallinen-koodi-jo-kaytossa' | kaanna")
-        table.table
-          thead
-            tr
-              th(ng-bind="'opetussuunnitelma' | kaanna")
-              th(ng-bind="'osa' | kaanna")
-              th(ng-bind="'tila' | kaanna")
-          tbody
-            tr(ng-repeat="collision in tormaavatKoodit")
-              td
-                a(href="" ui-sref="root.koulutustoimija.opetussuunnitelmat.sisalto.tiedot({ opsId: ops.id })" ng-bind="collision.owner.nimi | kaanna")
-              td
-                a(href="" ui-sref="root.koulutustoimija.opetussuunnitelmat.sisalto.osa({ opsId: collision.owner.id, osaId: collision.id })" ng-bind="collision.tekstiKappale.nimi | kaanna")
-              td
-                a(href="" ng-bind="'tila-' + collision.owner.tila | kaanna")
 
 
 mixin vaatimus()
