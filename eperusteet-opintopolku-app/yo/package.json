@@ -32,7 +32,7 @@
     "angulartics-piwik": "1.0.6",
     "bootstrap-sass": "3.3.7",
     "eperusteet-frontend-utils": "git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git",
-    "es5-shim": "4.5.9",
+    "es5-shim": "4.5.14",
     "es6-promise": "4.1.0",
     "jquery": "3.1.1",
     "json3": "3.3.2",
