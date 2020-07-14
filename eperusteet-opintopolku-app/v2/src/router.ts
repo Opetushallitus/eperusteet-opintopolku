@@ -7,6 +7,7 @@ import VueMeta from 'vue-meta';
 import Root from '@/routes/Root.vue';
 import Home from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
+import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue';
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
 import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
 import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatillinenKoulutusviennit.vue';
@@ -62,6 +63,7 @@ import RouteOpetussuunnitelmaPoppiaine
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { OpasStore } from '@/stores/OpasStore';
+import { AmmatillinenPerusteKoosteStore } from './stores/AmmatillinenPerusteKoosteStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -133,6 +135,21 @@ export const router = new Router({
               default: {
                 perusteStore,
                 tiedoteStore,
+              },
+            };
+          },
+        },
+      },
+    }, {
+      path: 'kooste/ammmatillinen/:perusteId',
+      name: 'ammatillinenkooste',
+      component: RouteKoosteAmmatillinen,
+      meta: {
+        resolve: {
+          async props(route) {
+            return {
+              default: {
+                ammatillinenPerusteKoosteStore: new AmmatillinenPerusteKoosteStore(_.parseInt(route.params.perusteId)),
               },
             };
           },

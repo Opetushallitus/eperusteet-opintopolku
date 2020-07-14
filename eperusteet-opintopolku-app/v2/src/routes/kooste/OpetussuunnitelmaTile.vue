@@ -9,19 +9,25 @@
         <span v-html="nimi"></span>
       </div>
       <div class="organisaatiot">
-        <div class="ops-toimijat" v-if="ops.toimijat.length > 0">
+        <div class="ops-toimijat" v-if="ops.toimijat && ops.toimijat.length > 0">
           <span class="otsikko">{{ $t('toimijat') }}</span>
           <span class="mr-1">:</span>
           <span class="toimijat" v-for="(toimija, tidx) in toimijat" :key="tidx">
             <span v-html="toimija"></span><span v-if="tidx < ops.toimijat.length - 1">, </span>
           </span>
         </div>
-        <div class="ops-oppilaitokset" v-if="ops.oppilaitokset.length > 0">
+        <div class="ops-oppilaitokset" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
           <span class="otsikko">{{ $t('oppilaitokset') }}</span>
           <span class="mr-1">:</span>
           <span class="toimijat" v-for="(oppilaitos, tidx) in oppilaitokset" :key="tidx">
             <span v-html="oppilaitos" /><span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
           </span>
+        </div>
+
+        <div class="ops-koulutustoimija" v-if="ops.koulutustoimija">
+          <span class="otsikko">{{ $t('organisaatiot') }}</span>
+          <span class="mr-1">:</span>
+          <span class="toimijat">{{$kaanna(ops.koulutustoimija.nimi)}}</span>
         </div>
       </div>
     </div>
@@ -86,15 +92,8 @@ export default class PerusteTile extends Vue {
   }
 
   .organisaatiot {
-    .toimijat {
-      color: #555;
-      font-size: smaller;
-    }
-
-    .otsikko {
-      color: #2B2B2B;
-      font-size: smaller;
-    }
+    color: #2B2B2B;
+    font-size: smaller;
   }
 
 </style>

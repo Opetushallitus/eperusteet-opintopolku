@@ -1,6 +1,8 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { PerusteDto, TiedoteDto } from '@shared/api/eperusteet';
+import { PerusteDto, TiedoteDto, Perusteet } from '@shared/api/eperusteet';
 import { OpetussuunnitelmaJulkinenDto, OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
+
+import { Opetussuunnitelmat } from '@shared/api/amosaa';
 
 import { ryhmat } from '@shared/utils/perusteet';
 import { tiedoteQuery, perusteetQuery } from '@/api/eperusteet';
@@ -34,7 +36,12 @@ export class PerusteKoosteStore {
   }
 
   async reload() {
-    if (this.koulutustyyppi) {
+    if (this.perusteId) {
+      this.perusteet = [(await Perusteet.getPerusteenTiedot(this.perusteId)).data];
+
+      this.setPerusteId(this.perusteId);
+    }
+    else if (this.koulutustyyppi) {
       const koulutustyypit = ryhmat(this.koulutustyyppi);
       this.perusteet = (await perusteetQuery({
         sivukoko: 100,
