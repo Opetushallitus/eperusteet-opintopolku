@@ -39,7 +39,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import PerusteHaku from './PerusteHaku.vue';
+import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { KoulutustoimijaJulkinenDto } from '@shared/api/amosaa';
@@ -52,7 +52,7 @@ import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
-    PerusteHaku,
+    PerusteAmmatillinenHaku,
     EpSpinner,
     EpSearch,
     EpExternalLink,

@@ -2,18 +2,18 @@
 <div>
   <slot />
   <p class="kuvaus">{{ $t('kooste-kuvaus-koulutusvienti') }}</p>
-  <peruste-haku :peruste-haku-store="perusteHakuStoreKoulutusvienti" tyyppi="kooste"/>
+  <peruste-ammatillinen-haku :peruste-haku-store="perusteHakuStoreKoulutusvienti" tyyppi="kooste"/>
 </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator';
-import PerusteHaku from './PerusteHaku.vue';
+import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 
 @Component({
   components: {
-    PerusteHaku,
+    PerusteAmmatillinenHaku,
   },
 })
 export default class RouteAmmatillinenKoulutusviennit extends Vue {

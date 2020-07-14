@@ -1,7 +1,7 @@
 <template>
 <div class="haku">
   <div class="search">
-    <ep-search v-model="query" />
+    <ep-search v-model="query" :placeholder="$t('etsi-ammatillinen-tutkinto-peruste-placeholder')"/>
     <div class="checkboxes d-flex align-self-center flex-wrap">
       <ep-toggle v-for="(toggle, idx) in toggles"
                  :key="idx"
@@ -18,11 +18,9 @@
   <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
       <div class="d-flex peruste tile-background-shadow-selected shadow-tile" v-for="(peruste, idx) in perusteet" :key="idx">
-        <ep-external-link :url="peruste.ulkoinenlinkki" :showIcon="false">
+        <router-link class="w-100" :to="{ name: 'ammatillinenkooste', params: { perusteId: peruste.id } }">
           <div class="perustecard">
-            <div class="nimi">
-              <fas icon="ulkoinen-linkki" /> {{ $kaanna(peruste.nimi) }}
-            </div>
+            <div class="nimi">{{ $kaanna(peruste.nimi) }}</div>
             <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
               <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
               <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">
@@ -36,10 +34,10 @@
               </span>
             </div>
             <div class="voimaantulo" v-if="peruste.voimassaoloAlkaa">
-              {{ $ld(peruste.voimassaoloAlkaa) }}
+              {{$t('voimaantulo')}} {{ $sd(peruste.voimassaoloAlkaa) }}
             </div>
           </div>
-        </ep-external-link>
+        </router-link>
       </div>
     </div>
     <div class="pagination d-flex justify-content-center">
@@ -79,7 +77,7 @@ import { Kielet } from '../../../eperusteet-frontend-utils/vue/src/stores/kieli'
     EpExternalLink,
   },
 })
-export default class PerusteHaku extends Vue {
+export default class PerusteAmmatillinenHaku extends Vue {
   @Prop({ required: true })
   private perusteHakuStore!: PerusteHakuStore;
 
@@ -146,10 +144,14 @@ export default class PerusteHaku extends Vue {
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
-@include shadow-tile;
+@include shadow-tile-hover;
 
 .haku {
   width: 100%;
+
+  ::v-deep .filter {
+    max-width: 100%;
+  }
 
   .checkboxes {
     padding: 10px;
@@ -164,6 +166,7 @@ export default class PerusteHaku extends Vue {
     .peruste {
       border-radius: 0;
       margin: 5px;
+      border: 1px solid rgb(232, 232, 233);
 
       .linkki {
         width: 100%;
@@ -171,9 +174,12 @@ export default class PerusteHaku extends Vue {
       }
 
       .perustecard {
-        width: 100%;
-        border: 1px solid rgb(232, 232, 233);
-        padding: 10px;
+        padding: 3px 10px;
+
+        border-left: 3px solid $green;
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
 
         .nimi {
           font-size: normal;
@@ -191,6 +197,7 @@ export default class PerusteHaku extends Vue {
         .voimaantulo {
           font-size: smaller;
           color: #666;
+          padding-top: 10px;
         }
       }
     }

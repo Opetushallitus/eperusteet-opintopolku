@@ -27,9 +27,9 @@ export class PerusteHakuStore {
     siirtyma: true,
     voimassaolo: true,
     poistunut: false,
-    tutkintonimikkeet: false,
-    tutkinnonosat: false,
-    osaamisalat: false,
+    tutkintonimikkeet: true,
+    tutkinnonosat: true,
+    osaamisalat: true,
   };
 
   constructor(data: PerusteQuery = {}) {
@@ -52,9 +52,6 @@ export class PerusteHakuStore {
         'voimassaolo',
         'siirtyma',
         'poistunut',
-        'tutkintonimikkeet',
-        'tutkinnonosat',
-        'osaamisalat',
       ];
     }
   })

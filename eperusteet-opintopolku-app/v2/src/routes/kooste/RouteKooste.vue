@@ -1,5 +1,5 @@
 <template>
-<ep-spinner v-if="!koulutustyyppi" />
+<ep-spinner v-if="!koulutustyyppi && !perusteet" />
 <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
   <template slot="header">
     {{ $t(koulutustyyppi) }}
@@ -13,7 +13,7 @@
             <div v-if="perusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-              <div v-else class="peruste tile-background-shadow-selected shadow-tile" v-for="(peruste, idx) in perusteet" :key="idx">
+              <div v-else v-for="(peruste, idx) in perusteet" :key="idx">
                 <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
                   <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
                 </router-link>
@@ -207,26 +207,6 @@ export default class RouteKooste extends Vue {
       margin-top: 30px;
       margin-bottom: 30px;
 
-      .peruste {
-        margin: 5px;
-        border-radius: 10px;
-        border: 1px solid #E7E7E7;
-        min-height: 230px;
-        overflow-x: auto;
-        width: 343px;
-        height: 172px;
-
-        @media(max-width: 991.98px) {
-          width: calc(1 / 2 * 100% - (1 - 1 / 2) * 20px);
-        }
-
-        @media(max-width: 735.98px) {
-          width: 100%;
-          margin-left: 0;
-          margin-right: 0;
-        }
-
-      }
     }
 
     .tiedotebox {

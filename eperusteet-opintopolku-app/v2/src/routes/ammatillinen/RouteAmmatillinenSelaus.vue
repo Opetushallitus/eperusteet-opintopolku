@@ -45,7 +45,7 @@
       </div>
 
       <h2 class="mb-2">{{$t('ammatillisten-tutkintojen-perusteet')}}</h2>
-      <peruste-haku :peruste-haku-store="perusteHakuStoreNormaali" tyyppi="kooste"/>
+      <peruste-ammatillinen-haku :peruste-haku-store="perusteHakuStoreNormaali" tyyppi="kooste"/>
     </div>
 
     <router-view v-else>
@@ -66,7 +66,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import PerusteHaku from './PerusteHaku.vue';
+import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import { Meta } from '@shared/utils/decorators';
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
@@ -84,7 +84,7 @@ interface Ylalinkki {
   components: {
     EpSpinner,
     EpHeader,
-    PerusteHaku,
+    PerusteAmmatillinenHaku,
     EpJulkiLista,
   },
 })
