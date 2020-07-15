@@ -43,7 +43,7 @@ import { highlight } from '@/utils/kieli';
 import _ from 'lodash';
 
 @Component
-export default class PerusteTile extends Vue {
+export default class OpetussuunnitelmaTile extends Vue {
   @Prop({ required: true })
   private ops!: OpetussuunnitelmaJulkinenDto;
 

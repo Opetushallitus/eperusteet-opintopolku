@@ -1,6 +1,6 @@
 <template>
 <div class="opetussuunnitelma">
-  <ep-header :koulutustyyppi="opetussuunnitelma.koulutustyyppi" :murupolku="murupolku">
+  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku">
     <template slot="header">
       {{ $kaanna(opetussuunnitelma.nimi) }}
     </template>
@@ -39,6 +39,7 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenav.vue';
+import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
 
 @Component({
   components: {
@@ -50,10 +51,14 @@ import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/
 })
 export default class RouteOpetussuunnitelma extends Vue {
   @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+  private opetussuunnitelmaDataStore!: IOpetussuunnitelmaStore;
 
   get opetussuunnitelma() {
     return this.opetussuunnitelmaDataStore.opetussuunnitelma;
+  }
+
+  get koulutustyyppi() {
+    return this.opetussuunnitelmaDataStore.koulutustyyppi;
   }
 
   get current(): NavigationNode | null {

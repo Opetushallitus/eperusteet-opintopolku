@@ -2,14 +2,16 @@
   <ep-spinner v-if="!peruste" />
   <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
     <template slot="header">
-      {{ $t(koulutustyyppi) }}
+      {{ $kaanna(peruste.nimi) }}
     </template>
     <div>
       <b-container fluid>
         <b-row>
           <b-col cols="6" class="tile">
             <h2 class="otsikko">{{ $t('perusteet') }}</h2>
-            <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+            <router-link :to="{ name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: peruste.id } }">
+              <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+            </router-link>
           </b-col>
           <b-col cols="6" class="mb-4">
             <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
@@ -48,7 +50,7 @@
             <div v-else id="opetussuunnitelmat-lista">
               <div class="opetussuunnitelma shadow-tile" v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
 
-                <router-link :to="{name: 'opetussuunnitelma', params: { opetussuunnitelmaId: ops.id}}">
+                <router-link :to="{name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: ops.id}}">
                   <opetussuunnitelma-tile :ops="ops" :query="query"/>
                 </router-link>
 
@@ -115,7 +117,7 @@ export default class RouteKoosteAmmatillinen extends Vue {
         ...this.$route,
       } as RawLocation,
     }, {
-      label: this.$kaanna(this.peruste!.nimi as any),
+      label: this.peruste!.nimi!,
       location: {
         ...this.$route,
       } as RawLocation,

@@ -180,6 +180,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
         margin-left: 10px;
         margin-top: 10px;
         margin-bottom: 10px;
+        color: $black;
 
         .nimi {
           font-size: normal;
@@ -188,10 +189,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
         }
         .nimikkeet {
           font-size: small;
-          color: #666;
 
           .kohde {
-            font-weight: bolder;
+            font-weight: 600;
           }
         }
         .voimaantulo {

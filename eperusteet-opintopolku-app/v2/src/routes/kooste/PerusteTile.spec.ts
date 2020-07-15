@@ -38,7 +38,6 @@ describe('PerusteTile ', () => {
 
     await localVue.nextTick();
     expect(wrapper.html()).toContain('peruste42');
-    expect(wrapper.html()).toContain('1234-1234');
     expect(wrapper.html()).toContain('sd_123456');
   });
 });
