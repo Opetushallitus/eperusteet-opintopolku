@@ -55,6 +55,11 @@ import { createLogger } from '@shared/utils/logger';
 
 const logger = createLogger('EpNavigation');
 
+const ammatillisetRoute: string[] = [
+  'ammatillinen',
+  'toteutussuunnitelma',
+];
+
 @Component
 export default class EpNavigation extends Vue {
   get valittuKieli() {
@@ -74,12 +79,12 @@ export default class EpNavigation extends Vue {
   }
 
   get activeClass() {
-    if (this.$route && this.$route.params.koulutustyyppi) {
+    if (this.routeAmmatillinen) {
+      return 'router-link-active koulutustyyppi-ammatillinen';
+    }
+    else if (this.$route && this.$route.params.koulutustyyppi) {
       const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
       return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
-    }
-    else if (this.$route && this.$route.name === 'ammatillinenSelaus') {
-      return 'router-link-active koulutustyyppi-ammatillinen';
     }
     else {
       return 'router-link-active';
@@ -99,16 +104,27 @@ export default class EpNavigation extends Vue {
     }
   }
 
+  get routeAmmatillinen() {
+    if (this.$route) {
+      return (this.$route.params.koulutustyyppi && this.$route.params.koulutustyyppi === 'ammatillinen')
+          || _.some(ammatillisetRoute, route => _.includes(this.$route.name, route));
+    }
+  }
+
   private isActiveRoute(kt) {
     if (this.$route) {
+      if (kt === 'ammatillinen' && this.routeAmmatillinen) {
+        return true;
+      }
+
       const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
-      return _.includes(ryhmat(kt.koulutustyyppi), koulutustyyppi);
+      return koulutustyyppi && _.includes(ryhmat(kt.koulutustyyppi), koulutustyyppi);
     }
     return false;
   }
 
   private setActiveClass(kt) {
-    if (this.isActiveRoute(kt)) {
+    if ((this.isActiveRoute(kt))) {
       return {
         activeClass: this.activeClass,
       };
@@ -116,7 +132,12 @@ export default class EpNavigation extends Vue {
   }
 
   get ammatilliset() {
-    return ammatilliset();
+    return _.map(ammatilliset(), am => {
+      return {
+        ...am,
+        ...this.setActiveClass('ammatillinen'),
+      };
+    });
   }
 
   get yleissivistavat() {

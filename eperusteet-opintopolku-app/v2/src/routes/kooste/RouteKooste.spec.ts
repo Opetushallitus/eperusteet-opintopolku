@@ -102,7 +102,6 @@ describe('RouteKooste', () => {
     expect(wrapper.html()).toContain('tiedote101');
     expect(wrapper.html()).toContain('tiedote102');
     expect(wrapper.html()).toContain('peruste42');
-    expect(wrapper.html()).toContain('1234-1234');
     expect(wrapper.html()).toContain('sd_123456');
     expect(wrapper.html()).toContain('peruste42');
     expect(wrapper.html()).toContain('Oppilaitoksen nimi');

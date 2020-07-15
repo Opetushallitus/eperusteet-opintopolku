@@ -27,9 +27,10 @@ import {
   NavigationFilter,
   NavigationNode,
 } from '@shared/utils/NavigationBuilder';
+import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 
 @Store
-export class OpetussuunnitelmaDataStore {
+export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelma: OpetussuunnitelmaKevytDto | null = null;
   @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
@@ -132,6 +133,9 @@ export class OpetussuunnitelmaDataStore {
       .flatMap()
       .value();
   }
+
+  @Getter(state => state.opetussuunnitelma.koulutustyyppi)
+  public readonly koulutustyyppi!: string;
 
   @Getter(state => {
     return !state.opetussuunnitelma || !state.navigation;

@@ -1,15 +1,15 @@
 <template>
-  <div class="peruste tile-background-shadow-selected shadow-tile" >
+  <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column" >
     <div class="upper">
       <div class="peruste-ikoni" :style="imgStyle">
         <ep-hallitus-img class="img"/>
       </div>
       <div class="nimi">
         <fas fixed-width icon="external-link-alt" class="mr-1" v-if="peruste.ulkoinenlinkki"></fas>
-          {{ $kaanna(peruste.nimi) }}
+        {{ $kaanna(peruste.nimi) }}
       </div>
     </div>
-    <div class="d-flex justify-content-center align-items-end">
+    <div class="mt-auto">
       <div class="voimaantulo">
         <span v-if="peruste.voimassaoloAlkaa">
           {{ $t('voimaantulo') }}: {{ $sd(peruste.voimassaoloAlkaa) }}
@@ -58,6 +58,8 @@ export default class PerusteTile extends Vue {
   overflow-x: auto;
   width: 343px;
   height: 172px;
+  padding-left: 20px;
+  padding-right: 20px;
 
   @media(max-width: 991.98px) {
     width: calc(1 / 2 * 100% - (1 - 1 / 2) * 20px);
@@ -75,11 +77,9 @@ export default class PerusteTile extends Vue {
   border-top: 1px solid #EBEBEB;
   color: #001A58;
   font-size: smaller;
-  // height: 40px;
-  padding-top: 4px;
+  padding: 10px;
   text-align: center;
   width: 100%;
-  margin: 0px 20px;
 }
 
 .upper {
@@ -103,7 +103,8 @@ export default class PerusteTile extends Vue {
     padding: 12px;
     padding-top: 0;
     text-align: center;
-    color: #2B2B2B
+    color: #2B2B2B;
+    font-weight: 600;
   }
 }
 

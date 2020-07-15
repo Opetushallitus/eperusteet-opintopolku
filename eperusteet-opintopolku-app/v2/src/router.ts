@@ -27,6 +27,10 @@ import RouteModuuli from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteMo
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
 import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sisalto/tekstikappale/RouteOpetussuunnitelmaTekstikappale.vue';
+import RouteToteutussuunnitelmaTiedot from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTiedot.vue';
+import RouteToteutussuunnitelmaSuorituspolut from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSuorituspolut.vue';
+import RouteToteutussuunnitelmaTekstikappale from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTekstikappale.vue';
+import RouteToteutussuunnitelmaTutkinnonosat from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTutkinnonosat.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -64,6 +68,7 @@ import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { OpasStore } from '@/stores/OpasStore';
 import { AmmatillinenPerusteKoosteStore } from './stores/AmmatillinenPerusteKoosteStore';
+import { ToteutussuunnitelmaDataStore } from './stores/ToteutussuunnitelmaDataStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -183,17 +188,17 @@ export const router = new Router({
         {
           path: 'koulutuksenjarjestajat',
           component: RouteAmmatillinenKoulutuksenJarjestajat,
-          name: 'koulutuksenjarjestajat',
+          name: 'ammatillinenKoulutuksenjarjestajat',
           props: { koulutuksenJarjestajatStore },
         },
         {
           path: 'koulutusviennit',
           component: RouteAmmatillinenKoulutusviennit,
-          name: 'koulutusviennit',
+          name: 'ammatillinenKoulutusviennit',
         }, {
           path: 'ohjeet',
           component: RouteAmmatillinenOhjeet,
-          name: 'ammatillinenohjeet',
+          name: 'ammatillinenOhjeet',
         },
       ],
     }, {
@@ -228,6 +233,46 @@ export const router = new Router({
           },
         },
       },
+    }, {
+      path: 'toteutussuunnitelma/:toteutussuunnitelmaId',
+      name: 'toteutussuunnitelma',
+      component: RouteOpetussuunnitelma,
+      redirect(to) {
+        return {
+          name: 'toteutussuunnitelmaTiedot',
+        };
+      },
+      meta: {
+        resolve: {
+          cacheBy: ['toteutussuunnitelmaId'],
+          async props(route) {
+            return {
+              default: {
+                opetussuunnitelmaDataStore: await ToteutussuunnitelmaDataStore.create(
+                  _.parseInt(route.params.toteutussuunnitelmaId),
+                ),
+              },
+            };
+          },
+        },
+      },
+      children: [{
+        path: 'tiedot',
+        component: RouteToteutussuunnitelmaTiedot,
+        name: 'toteutussuunnitelmaTiedot',
+      }, {
+        path: 'tekstikappale',
+        component: RouteToteutussuunnitelmaTekstikappale,
+        name: 'toteutussuunnitelmaTekstikappale',
+      }, {
+        path: 'tutkinnonosat',
+        component: RouteToteutussuunnitelmaTutkinnonosat,
+        name: 'toteutussuunnitelmaTutkinnonosat',
+      }, {
+        path: 'suorituspolut',
+        component: RouteToteutussuunnitelmaSuorituspolut,
+        name: 'toteutussuunnitelmaSuorituspolut',
+      }],
     }, {
       path: ':koulutustyyppi/:perusteId',
       name: 'peruste',
