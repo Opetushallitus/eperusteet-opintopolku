@@ -17,28 +17,26 @@
   </div>
   <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
-      <div class="d-flex peruste tile-background-shadow-selected shadow-tile" v-for="(peruste, idx) in perusteet" :key="idx">
-        <router-link class="w-100" :to="{ name: 'ammatillinenkooste', params: { perusteId: peruste.id } }">
-          <div class="perustecard">
-            <div class="nimi">{{ $kaanna(peruste.nimi) }}</div>
-            <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
-              <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-              <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">
-                {{ $kaanna(tutkintonimike.nimi) }}
-              </span>
-            </div>
-            <div class="nimikkeet" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-              <span class="kohde">{{ $t('osaamisalat') }}:</span>
-              <span v-for="(osaamisala, oidx) in peruste.osaamisalat" :key="oidx">
-                {{ $kaanna(osaamisala.nimi) }}
-              </span>
-            </div>
-            <div class="voimaantulo" v-if="peruste.voimassaoloAlkaa">
-              {{$t('voimaantulo')}} {{ $sd(peruste.voimassaoloAlkaa) }}
-            </div>
-          </div>
-        </router-link>
-      </div>
+
+      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="{ name: 'ammatillinenkooste', params: { perusteId: peruste.id } }">
+        <div class="nimi">{{ $kaanna(peruste.nimi) }}</div>
+        <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
+          <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
+          <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">
+            {{ $kaanna(tutkintonimike.nimi) }}
+          </span>
+        </div>
+        <div class="nimikkeet" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
+          <span class="kohde">{{ $t('osaamisalat') }}:</span>
+          <span v-for="(osaamisala, oidx) in peruste.osaamisalat" :key="oidx">
+            {{ $kaanna(osaamisala.nimi) }}
+          </span>
+        </div>
+        <div class="voimaantulo" v-if="peruste.voimassaoloAlkaa">
+          {{$t('voimaantulo')}} {{ $sd(peruste.voimassaoloAlkaa) }}
+        </div>
+      </ep-ammatillinen-row>
+
     </div>
     <div class="pagination d-flex justify-content-center">
       <b-pagination v-model="page"
@@ -66,7 +64,8 @@ import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
-import { Kielet } from '../../../eperusteet-frontend-utils/vue/src/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
+import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 
 @Component({
   components: {
@@ -75,6 +74,7 @@ import { Kielet } from '../../../eperusteet-frontend-utils/vue/src/stores/kieli'
     EpSearch,
     EpSpinner,
     EpExternalLink,
+    EpAmmatillinenRow,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -160,47 +160,22 @@ export default class PerusteAmmatillinenHaku extends Vue {
     }
   }
 
-  .perusteet {
-    margin-top: 20px;
+  .nimi {
+    font-size: normal;
+    font-weight: bolder;
+    margin-bottom: 8px;
+  }
+  .nimikkeet {
+    font-size: small;
 
-    .peruste {
-      border-radius: 0;
-      margin: 5px;
-      border: 1px solid rgb(232, 232, 233);
-
-      .linkki {
-        width: 100%;
-        border-left: 6px solid rgb(0, 136, 0);
-      }
-
-      .perustecard {
-        padding: 3px 10px;
-
-        border-left: 3px solid $green;
-        margin-left: 10px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        color: $black;
-
-        .nimi {
-          font-size: normal;
-          font-weight: bolder;
-          margin-bottom: 8px;
-        }
-        .nimikkeet {
-          font-size: small;
-
-          .kohde {
-            font-weight: 600;
-          }
-        }
-        .voimaantulo {
-          font-size: smaller;
-          color: #666;
-          padding-top: 10px;
-        }
-      }
+    .kohde {
+      font-weight: 600;
     }
+  }
+  .voimaantulo {
+    font-size: smaller;
+    color: #666;
+    padding-top: 10px;
   }
 
   .pagination {

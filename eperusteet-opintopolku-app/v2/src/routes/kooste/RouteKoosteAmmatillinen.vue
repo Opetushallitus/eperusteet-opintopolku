@@ -48,7 +48,7 @@
               </div>
             </div>
             <div v-else id="opetussuunnitelmat-lista">
-              <div class="opetussuunnitelma shadow-tile" v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
+              <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
 
                 <router-link :to="{name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: ops.id}}">
                   <opetussuunnitelma-tile :ops="ops" :query="query"/>
@@ -56,6 +56,7 @@
 
               </div>
               <b-pagination v-model="page"
+                            class="mt-4"
                             :total-rows="opetussuunnitelmatFiltered.length"
                             :per-page="perPage"
                             align="center"
@@ -79,14 +80,15 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import { Kielet } from '../../../eperusteet-frontend-utils/vue/src/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
+import { Meta } from '@shared/utils/decorators';
 
 @Component({
   components: {
@@ -160,14 +162,21 @@ export default class RouteKoosteAmmatillinen extends Vue {
       },
     });
   }
+
+  @Meta
+  getMetaInfo() {
+    if (this.peruste) {
+      return {
+        title: (this as any).$kaanna(this.peruste.nimi),
+      };
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
-
-@include shadow-tile;
 
 .container {
   .tile {
@@ -219,13 +228,5 @@ export default class RouteKoosteAmmatillinen extends Vue {
 .search {
   margin: 20px 0;
 }
-
-.opetussuunnitelma {
-    border: 1px solid #DADADA;
-    border-radius: 2px;
-    min-height: 80px;
-    margin-bottom: 10px;
-
-  }
 
 </style>

@@ -14,9 +14,12 @@
                <li class="breadcrumb-item"
                    v-for="(item, idx) in murupolkuFiltered"
                    :key="idx">
-                 <router-link class="breadcrumb-normal" :to="item.location">
+                 <router-link class="breadcrumb-normal" :to="item.location" v-if="item.location">
                    {{ $kaannaOlioTaiTeksti(item.label) }}
                  </router-link>
+                 <span v-else class="breadcrumb-normal">
+                   {{ $kaannaOlioTaiTeksti(item.label) }}
+                 </span>
                </li>
              </ol>
           </nav>
@@ -52,7 +55,7 @@ export default class EpHeader extends Vue {
   private koulutustyyppi!: string;
 
   get murupolkuFiltered() {
-    return _.filter(this.murupolku, (muru) => muru.label && muru.location);
+    return _.filter(this.murupolku, (muru) => muru.label);
   }
 
   get theme() {
