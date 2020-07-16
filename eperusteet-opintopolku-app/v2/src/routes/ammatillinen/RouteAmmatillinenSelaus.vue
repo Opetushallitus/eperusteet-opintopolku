@@ -129,9 +129,9 @@ export default class RouteAmmatillinenSelaus extends Vue {
 
   get ylaotsikko() {
     switch (this.$route.name) {
-    case 'koulutuksenjarjestajat': return 'koulutuksen-jarjestajat';
-    case 'ammatillinenohjeet': return 'ohjeet-ja-materiaalit';
-    case 'koulutusviennit': return 'koulutusviennit';
+    case 'ammatillinenKoulutuksenjarjestajat': return 'koulutuksen-jarjestajat';
+    case 'ammatillinenOhjeet': return 'ohjeet-ja-materiaalit';
+    case 'ammatillinenKoulutusviennit': return 'koulutusviennit';
     default: return 'ammatillinen-koulutus';
     }
   }
@@ -146,7 +146,18 @@ export default class RouteAmmatillinenSelaus extends Vue {
       location: {
         name: 'ammatillinenSelaus',
       },
-    }];
+    },
+    ...this.alamurupolku,
+    ];
+  }
+
+  get alamurupolku() {
+    if (this.ylaotsikko !== 'ammatillinen-koulutus') {
+      return [{
+        label: this.ylaotsikko,
+      }];
+    }
+    return [];
   }
 
   @Meta

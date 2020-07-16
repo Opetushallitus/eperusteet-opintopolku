@@ -31,8 +31,7 @@
       </div>
     </div>
     <div v-else id="opetussuunnitelmat-lista">
-      <div class="opetussuunnitelma shadow-tile"
-           v-for="(ops, idx) in opetussuunnitelmatPaginated"
+      <div v-for="(ops, idx) in opetussuunnitelmatPaginated"
            :key="idx">
 
         <router-link v-if="!ops.ulkoinenlinkki" :to="ops.route">
@@ -160,8 +159,6 @@ export default class Paikalliset extends Vue {
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
-@include shadow-tile-hover;
-
 .paikalliset {
   .search {
     margin: 20px 0;
@@ -215,14 +212,6 @@ export default class Paikalliset extends Vue {
         }
       }
     }
-  }
-
-  .opetussuunnitelma {
-    border: 1px solid #DADADA;
-    border-radius: 2px;
-    min-height: 80px;
-    margin-bottom: 10px;
-
   }
 
 }

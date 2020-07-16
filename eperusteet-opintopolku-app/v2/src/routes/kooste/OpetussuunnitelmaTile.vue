@@ -1,37 +1,39 @@
 <template>
-  <div class="d-flex align-items-center">
-    <div class="opsicon-wrapper">
-      <div class="opsicon"></div>
-    </div>
-    <div class="nimi flex-fill">
-      <div class="ops">
-        <fas fixed-width icon="external-link-alt" class="mr-1" v-if="ops.ulkoinenlinkki"></fas>
-        <span v-html="nimi"></span>
+  <div class="opetussuunnitelma shadow-tile">
+    <div class="d-flex align-items-center">
+      <div class="opsicon-wrapper">
+        <div class="opsicon"></div>
       </div>
-      <div class="organisaatiot">
-        <div class="ops-toimijat" v-if="ops.toimijat && ops.toimijat.length > 0">
-          <span class="otsikko">{{ $t('toimijat') }}</span>
-          <span class="mr-1">:</span>
-          <span class="toimijat" v-for="(toimija, tidx) in toimijat" :key="tidx">
-            <span v-html="toimija"></span><span v-if="tidx < ops.toimijat.length - 1">, </span>
-          </span>
+      <div class="nimi flex-fill">
+        <div class="ops">
+          <fas fixed-width icon="external-link-alt" class="mr-1" v-if="ops.ulkoinenlinkki"></fas>
+          <span v-html="nimi"></span>
         </div>
-        <div class="ops-oppilaitokset" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
-          <span class="otsikko">{{ $t('oppilaitokset') }}</span>
-          <span class="mr-1">:</span>
-          <span class="toimijat" v-for="(oppilaitos, tidx) in oppilaitokset" :key="tidx">
-            <span v-html="oppilaitos" /><span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
-          </span>
-        </div>
+        <div class="organisaatiot">
+          <div class="ops-toimijat" v-if="ops.toimijat && ops.toimijat.length > 0">
+            <span class="otsikko">{{ $t('toimijat') }}</span>
+            <span class="mr-1">:</span>
+            <span class="toimijat" v-for="(toimija, tidx) in toimijat" :key="tidx">
+              <span v-html="toimija"></span><span v-if="tidx < ops.toimijat.length - 1">, </span>
+            </span>
+          </div>
+          <div class="ops-oppilaitokset" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
+            <span class="otsikko">{{ $t('oppilaitokset') }}</span>
+            <span class="mr-1">:</span>
+            <span class="toimijat" v-for="(oppilaitos, tidx) in oppilaitokset" :key="tidx">
+              <span v-html="oppilaitos" /><span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
+            </span>
+          </div>
 
-        <div class="ops-koulutustoimija" v-if="ops.koulutustoimija">
-          <span class="otsikko">{{ $t('organisaatiot') }}</span>
-          <span class="mr-1">:</span>
-          <span class="toimijat">{{$kaanna(ops.koulutustoimija.nimi)}}</span>
+          <div class="ops-koulutustoimija" v-if="ops.koulutustoimija">
+            <span class="otsikko">{{ $t('organisaatiot') }}</span>
+            <span class="mr-1">:</span>
+            <span class="toimijat">{{$kaanna(ops.koulutustoimija.nimi)}}</span>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="perusteen-nimi">
+      <div class="perusteen-nimi">
+      </div>
     </div>
   </div>
 </template>
@@ -66,6 +68,17 @@ export default class OpetussuunnitelmaTile extends Vue {
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
+@import '@shared/styles/_mixins.scss';
+
+@include shadow-tile-hover;
+
+  .opetussuunnitelma {
+    border: 1px solid #DADADA;
+    border-radius: 2px;
+    min-height: 80px;
+    margin-bottom: 10px;
+
+  }
 
   .opsicon-wrapper {
     padding: 20px 25px 20px 25px;

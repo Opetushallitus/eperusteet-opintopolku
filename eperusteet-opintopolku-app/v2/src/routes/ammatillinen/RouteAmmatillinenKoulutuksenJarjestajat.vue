@@ -11,16 +11,18 @@
       <ep-search v-model="query" />
     </div>
     <div class="content">
-      <div class="d-flex koulutuksenjarjestaja tile-background-shadow-selected shadow-tile" v-for="(koulutustoimija, index) in koulutustoimijatPaged" :key="'koulutuksenjarjestaja' + index">
-        <ep-external-link :url="koulutustoimija.ulkoinenlinkki" :showIcon="false">
-          <div class="kjcard">
-            <fas icon="ulkoinen-linkki" /> {{ $kaanna(koulutustoimija.nimi) }}
-          </div>
-        </ep-external-link>
-      </div>
+
+      <ep-ammatillinen-row v-for="(koulutustoimija, index) in koulutustoimijatPaged" :key="'koulutuksenjarjestaja' + index"
+        :route="{name:'ammatillinenKoulutuksenjarjestaja', params: {koulutuksenjarjestajaId: koulutustoimija.id}}">
+        <div :class="{'pt-2 pb-2': !koulutustoimija.kuvaus}">
+          <span class="nimi">{{ $kaanna(koulutustoimija.nimi) }}</span>
+          <span class="kuvaus" v-html="$kaanna(koulutustoimija.kuvaus)"></span>
+        </div>
+      </ep-ammatillinen-row>
 
       <div class="pagination d-flex justify-content-center">
         <b-pagination v-model="page"
+                      class="mt-3"
                       :total-rows="total"
                       :per-page="perPage"
                       align="center"
@@ -49,6 +51,7 @@ import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue
 import * as _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import { Kielet } from '@shared/stores/kieli';
+import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 
 @Component({
   components: {
@@ -56,6 +59,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpSpinner,
     EpSearch,
     EpExternalLink,
+    EpAmmatillinenRow,
   },
 })
 export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
@@ -74,12 +78,6 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
     if (this.koulutuksenJarjestajatStore.koulutustoimijat.value) {
       return _.chain(this.koulutuksenJarjestajatStore.koulutustoimijat.value)
         .filter(koulutustoimija => Kielet.search(this.query, koulutustoimija.nimi))
-        .map(koulutustoimija => {
-          return {
-            ...koulutustoimija,
-            ulkoinenlinkki: this.ulkoinenlinkki(koulutustoimija),
-          };
-        })
         .value();
     }
   }
@@ -93,10 +91,6 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
     }
   }
 
-  ulkoinenlinkki(kj) {
-    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/selaus/jarjestajat/${kj.id}`;
-  }
-
   get total() {
     return _.size(this.koulutustoimijat);
   }
@@ -107,7 +101,7 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
-@include shadow-tile;
+@include shadow-tile-hover;
 
 .kuvaus {
   font-size: small;
@@ -117,21 +111,12 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
 .content {
   margin-top: 20px;
 
-  .koulutuksenjarjestaja {
-    margin: 5px;
+  .nimi {
+    font-weight: 600;
+  }
 
-    .linkki {
-      width: 100%;
-      border-left: 6px solid rgb(0, 136, 0);
-    }
-
-    .kjcard {
-      width: 100%;
-      border: 1px solid rgb(232, 232, 233);
-      padding: 15px;
-      font-size: normal;
-      font-weight: bolder;
-    }
+  .kuvaus {
+    font-size: 0.8rem;
   }
 }
 

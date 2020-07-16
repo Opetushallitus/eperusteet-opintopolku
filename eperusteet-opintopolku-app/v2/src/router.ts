@@ -12,6 +12,7 @@ import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSela
 import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
 import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatillinenKoulutusviennit.vue';
 import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
+import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';
 
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
@@ -67,8 +68,9 @@ import RouteOpetussuunnitelmaPoppiaine
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { OpasStore } from '@/stores/OpasStore';
-import { AmmatillinenPerusteKoosteStore } from './stores/AmmatillinenPerusteKoosteStore';
-import { ToteutussuunnitelmaDataStore } from './stores/ToteutussuunnitelmaDataStore';
+import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
+import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -201,6 +203,22 @@ export const router = new Router({
           name: 'ammatillinenOhjeet',
         },
       ],
+    }, {
+      path: 'selaus/koulutuksenjarjestajat/:koulutuksenjarjestajaId',
+      name: 'ammatillinenKoulutuksenjarjestaja',
+      component: RouteKoulutuksenJarjestaja,
+      meta: {
+        resolve: {
+          cacheBy: ['koulutuksenjarjestajaId'],
+          async props(route) {
+            return {
+              default: {
+                koulutuksenJarjestajaStore: new KoulutuksenJarjestajaStore(route.params.koulutuksenjarjestajaId),
+              },
+            };
+          },
+        },
+      },
     }, {
       path: 'ajankohtaista',
       name: 'uutiset',
