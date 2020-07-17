@@ -31,7 +31,7 @@
         </div>
       </ep-form-content>
 
-      <ep-form-content name="peruste" headerType="h3" headerClass="h6">
+      <ep-form-content name="peruste" headerType="h3" headerClass="h6" v-if="toteutussuunnitelma.peruste">
         <router-link :to="{ name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: toteutussuunnitelma.peruste.perusteId } }">
           <span>{{$kaanna(toteutussuunnitelma.peruste.nimi)}}</span>
         </router-link>

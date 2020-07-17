@@ -71,8 +71,10 @@ export default class RouteOpetussuunnitelma extends Vue {
 
   get murupolku() {
     if (this.opetussuunnitelma && this.current) {
-      return [
-        ...this.current.path,
+      return [{
+        label: this.koulutustyyppi,
+      },
+      ...this.current.path,
       ];
     }
     return [];

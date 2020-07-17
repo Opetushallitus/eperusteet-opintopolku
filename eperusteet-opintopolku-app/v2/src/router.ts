@@ -30,7 +30,7 @@ import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/Rou
 import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sisalto/tekstikappale/RouteOpetussuunnitelmaTekstikappale.vue';
 import RouteToteutussuunnitelmaTiedot from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTiedot.vue';
 import RouteToteutussuunnitelmaSuorituspolut from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSuorituspolut.vue';
-import RouteToteutussuunnitelmaTekstikappale from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTekstikappale.vue';
+import RouteToteutussuunnitelmaSisalto from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSisalto.vue';
 import RouteToteutussuunnitelmaTutkinnonosat from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTutkinnonosat.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
@@ -71,6 +71,8 @@ import { OpasStore } from '@/stores/OpasStore';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
+import { SisaltoviiteStore } from '@/stores/SisaltoviiteStore';
+import { TutkinnonosatStore } from '@/stores/TutkinnonosatStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -279,13 +281,37 @@ export const router = new Router({
         component: RouteToteutussuunnitelmaTiedot,
         name: 'toteutussuunnitelmaTiedot',
       }, {
-        path: 'tekstikappale',
-        component: RouteToteutussuunnitelmaTekstikappale,
-        name: 'toteutussuunnitelmaTekstikappale',
+        path: 'sisalto/:sisaltoviiteId',
+        component: RouteToteutussuunnitelmaSisalto,
+        name: 'toteutussuunnitelmaSisalto',
+        meta: {
+          resolve: {
+            cacheBy: ['toteutussuunnitelmaId', 'sisaltoviiteId'],
+            async props(route) {
+              return {
+                default: {
+                  sisaltoviiteStore: new SisaltoviiteStore(route.params.toteutussuunnitelmaId, route.params.sisaltoviiteId),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'tutkinnonosat',
         component: RouteToteutussuunnitelmaTutkinnonosat,
         name: 'toteutussuunnitelmaTutkinnonosat',
+        meta: {
+          resolve: {
+            cacheBy: ['toteutussuunnitelmaId'],
+            async props(route) {
+              return {
+                default: {
+                  tutkinnonosatStore: new TutkinnonosatStore(route.params.toteutussuunnitelmaId),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'suorituspolut',
         component: RouteToteutussuunnitelmaSuorituspolut,

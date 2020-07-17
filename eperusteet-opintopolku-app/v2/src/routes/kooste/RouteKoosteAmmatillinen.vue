@@ -9,7 +9,7 @@
         <b-row>
           <b-col cols="6" class="tile">
             <h2 class="otsikko">{{ $t('perusteet') }}</h2>
-            <router-link :to="{ name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: peruste.id } }">
+            <router-link :to="perusteRoute">
               <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
             </router-link>
           </b-col>
@@ -50,7 +50,7 @@
             <div v-else id="opetussuunnitelmat-lista">
               <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
 
-                <router-link :to="{name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: ops.id}}">
+                <router-link :to="ops.route">
                   <opetussuunnitelma-tile :ops="ops" :query="query"/>
                 </router-link>
 
@@ -89,6 +89,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { Meta } from '@shared/utils/decorators';
+import { OpetussuunnitelmaDto } from '../../../eperusteet-frontend-utils/vue/src/generated/amosaa';
 
 @Component({
   components: {
@@ -137,8 +138,24 @@ export default class RouteKoosteAmmatillinen extends Vue {
     return this.ammatillinenPerusteKoosteStore.peruste.value;
   }
 
+  get perusteRoute() {
+    return { name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: _.toString(this.peruste!.id) } };
+  }
+
   get opetussuunnitelmat(): any {
-    return this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value;
+    if (this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value) {
+      return _.map(this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value, (opetussuunnitelma: OpetussuunnitelmaDto) => (
+        {
+          ...opetussuunnitelma,
+          route: {
+            name: 'toteutussuunnitelma',
+            params: {
+              toteutussuunnitelmaId: _.toString(opetussuunnitelma.id),
+            },
+          },
+        }
+      ));
+    }
   }
 
   get opetussuunnitelmatFiltered() {
