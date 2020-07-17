@@ -38,7 +38,7 @@
       </ep-form-content>
 
       <ep-form-content name="koulutuksen-jarjestaja" headerType="h3" headerClass="h6">
-        <router-link :to="{}">
+        <router-link :to="{name:'ammatillinenKoulutuksenjarjestaja', params: {koulutuksenjarjestajaId: toteutussuunnitelma.koulutustoimija.id}}">
           <span>{{$kaanna(toteutussuunnitelma.koulutustoimija.nimi)}}</span>
         </router-link>
       </ep-form-content>
@@ -58,6 +58,7 @@ import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataSt
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import { DokumenttiDtoTilaEnum } from '@shared/api/amosaa';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -69,12 +70,21 @@ export default class RouteToteutussuunnitelmaTiedot extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
+  async mounted() {
+    await this.kieliChanged();
+  }
+
   get toteutussuunnitelma() {
     return this.opetussuunnitelmaDataStore.opetussuunnitelma;
   }
 
   get dokumenttiUrl() {
     return this.opetussuunnitelmaDataStore.dokumenttiUrl;
+  }
+
+  @Watch('Kielet.getSisaltoKieli.value')
+  async kieliChanged() {
+    await this.opetussuunnitelmaDataStore.getDokumenttiTila();
   }
 }
 </script>

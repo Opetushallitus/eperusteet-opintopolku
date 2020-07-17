@@ -118,14 +118,16 @@ export default class PerusteAmmatillinenHaku extends Vue {
         name: 'peruste',
         params: {
           koulutustyyppi: 'ammatillinen',
-          perusteId: peruste.id,
+          perusteId: _.toString(peruste.id),
         },
       };
     }
     else {
       return {
         name: 'ammatillinenkooste',
-        params: { perusteId: peruste.id },
+        params: {
+          perusteId: _.toString(peruste.id),
+        },
       };
     }
   }

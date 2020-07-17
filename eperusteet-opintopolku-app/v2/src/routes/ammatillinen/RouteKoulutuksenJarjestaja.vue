@@ -24,7 +24,7 @@
           </div>
 
           <ep-search class="mt-3" v-model="query" :placeholder="$t('etsi-yhteista-osuutta')"/>
-          <ep-ammatillinen-row v-for="(yhteinenOsuus, idx) in yhteisetOsuudetPaginated" :key="'yhteinenOsuus' + idx" :route="{name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: yhteinenOsuus.id}}">
+          <ep-ammatillinen-row v-for="(yhteinenOsuus, idx) in yhteisetOsuudetPaginated" :key="'yhteinenOsuus' + idx" :route="yhteinenOsuus.route">
             <div class="nimi">{{ $kaanna(yhteinenOsuus.nimi) }}</div>
           </ep-ammatillinen-row>
           <b-pagination v-model="page"
@@ -57,7 +57,7 @@
           <div v-else>
             <div v-for="(ops, idx) in toteutussuunnitelmatPaginated" :key="idx">
 
-              <router-link :to="{name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: ops.id}}">
+              <router-link :to="ops.route">
                 <opetussuunnitelma-tile :ops="ops" :query="opsQuery"/>
               </router-link>
 
@@ -121,11 +121,25 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
   }
 
   get yhteisetOsuudet() {
-    return this.koulutuksenJarjestajaStore.yhteisetOsuudet.value;
+    if (this.koulutuksenJarjestajaStore.yhteisetOsuudet.value) {
+      return _.map(this.koulutuksenJarjestajaStore.yhteisetOsuudet.value, yhteinenOsuus => {
+        return {
+          ...yhteinenOsuus,
+          route: { name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: _.toString(yhteinenOsuus.id) } },
+        };
+      });
+    }
   }
 
   get toteutussuunnitelmat() {
-    return this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value;
+    if (this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value) {
+      return _.map(this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value, toteutussuunnitelma => {
+        return {
+          ...toteutussuunnitelma,
+          route: { name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: _.toString(toteutussuunnitelma.id) } },
+        };
+      });
+    }
   }
 
   get yhteisetOsuudetFiltered() {
