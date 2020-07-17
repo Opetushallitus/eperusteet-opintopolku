@@ -45,7 +45,7 @@
       </div>
 
       <h2 class="mb-2">{{$t('ammatillisten-tutkintojen-perusteet')}}</h2>
-      <peruste-ammatillinen-haku :peruste-haku-store="perusteHakuStoreNormaali" tyyppi="kooste"/>
+      <peruste-ammatillinen-haku :peruste-haku-store="perusteHakuStoreNormaali" tyyppi="peruste"/>
     </div>
 
     <router-view v-else>

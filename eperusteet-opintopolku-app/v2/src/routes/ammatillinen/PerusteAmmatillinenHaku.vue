@@ -1,7 +1,7 @@
 <template>
 <div class="haku">
   <div class="search">
-    <ep-search v-model="query" :placeholder="$t('etsi-ammatillinen-tutkinto-peruste-placeholder')"/>
+    <ep-search v-model="query" :placeholder="searchPlaceholder"/>
     <div class="checkboxes d-flex align-self-center flex-wrap">
       <ep-toggle v-for="(toggle, idx) in toggles"
                  :key="idx"
@@ -18,7 +18,7 @@
   <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
 
-      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="{ name: 'ammatillinenkooste', params: { perusteId: peruste.id } }">
+      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route">
         <div class="nimi">{{ $kaanna(peruste.nimi) }}</div>
         <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
           <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
@@ -82,10 +82,19 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private perusteHakuStore!: PerusteHakuStore;
 
   @Prop({ type: String })
-  private tyyppi!: string;
+  private tyyppi!: 'peruste' | 'opas' | 'kooste';
 
   mounted() {
     this.perusteHakuStore.fetch();
+  }
+
+  get searchPlaceholder() {
+    if (this.tyyppi === 'opas') {
+      return this.$t('ohjeen-tai-materiaalin-nimi');
+    }
+    else {
+      return this.$t('etsi-ammatillinen-tutkinto-peruste-placeholder');
+    }
   }
 
   get toggles() {
@@ -97,11 +106,30 @@ export default class PerusteAmmatillinenHaku extends Vue {
       return _.chain(this.perusteHakuStore.perusteet)
         .map(peruste => ({
           ...peruste,
-          ulkoinenlinkki: this.ulkoinenlinkki(peruste),
+          route: this.perusteRoute(peruste),
         }))
         .value();
     }
   }
+
+  perusteRoute(peruste) {
+    if (this.tyyppi === 'opas' || this.tyyppi === 'kooste') {
+      return {
+        name: 'peruste',
+        params: {
+          koulutustyyppi: 'ammatillinen',
+          perusteId: peruste.id,
+        },
+      };
+    }
+    else {
+      return {
+        name: 'ammatillinenkooste',
+        params: { perusteId: peruste.id },
+      };
+    }
+  }
+
   get total() {
     return this.perusteHakuStore.total;
   }
@@ -132,10 +160,6 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   onToggleChange(toggle) {
     this.perusteHakuStore.fetch();
-  }
-
-  ulkoinenlinkki(peruste) {
-    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${this.tyyppi}/${peruste.id}`;
   }
 }
 </script>

@@ -7,9 +7,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
+import { OpasStore } from '@/stores/OpasStore';
 
 @Component({
   components: {
@@ -26,6 +27,12 @@ export default class RouteAmmatillinenOhjeet extends Vue {
       'koulutustyyppi_5',
       'koulutustyyppi_18',
     ],
+    koulutusvienti: false,
+    siirtyma: false,
+    poistunut: false,
+    tutkintonimikkeet: false,
+    tutkinnonosat: false,
+    osaamisalat: false,
   });
 }
 </script>
