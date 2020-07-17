@@ -47,11 +47,11 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   })
   public readonly dokumenttiUrl!: string;
 
-  public readonly fetch = watch([Kielet.getSisaltoKieli], async () => {
+  public async getDokumenttiTila() {
     if (this.opetussuunnitelma) {
       this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
     }
-  });
+  };
 
   @Getter(state => 'ammatillinen')
   public readonly koulutustyyppi!: string;

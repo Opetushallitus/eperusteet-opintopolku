@@ -1,16 +1,15 @@
-import _ from 'lodash';
 import { Store, Getter, State } from '@shared/stores/store';
+import * as _ from 'lodash';
 import { NavigationNodeDto, PerusteDto, Perusteet, TermiDto, baseURL,
   Dokumentit, DokumentitParam,
   Termit,
-  Liitetiedostot, LiitetiedostotParam } from '@shared/api/eperusteet';
+  Liitetiedostot, LiitetiedostotParam, TekstiKappaleDto } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 
 import {
   buildNavigation,
   filterNavigation,
   buildTiedot,
-  setPerusteData,
   NavigationFilter,
   NavigationNode,
 } from '@shared/utils/NavigationBuilder';
@@ -18,6 +17,7 @@ import {
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
+import { isKoulutustyyppiAmmatillinen, stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 @Store
 export class PerusteDataStore {
@@ -34,6 +34,8 @@ export class PerusteDataStore {
     label: '',
     isEnabled: false,
   };
+  @State() public kvLiitteet: any = {};
+  @State() public osaamisalaKuvaukset: { [key: string]: { [key: string]: Array<TekstiKappaleDto>; }; } = {};
 
   public static async create(perusteId: number) {
     const result = new PerusteDataStore(perusteId);
@@ -55,6 +57,11 @@ export class PerusteDataStore {
       src: baseURL + LiitetiedostotParam.getKuva(this.perusteId, kuva.id!).url,
     }));
     this.fetchNavigation();
+
+    if (isKoulutustyyppiAmmatillinen(this.peruste.koulutustyyppi!)) {
+      await this.getKvLiitteet();
+      this.osaamisalaKuvaukset = (await Perusteet.getOsaamisalat(this.perusteId)).data;
+    }
   }
 
   private async fetchNavigation() {
@@ -146,7 +153,6 @@ export class PerusteDataStore {
   })
   public readonly current!: NavigationNode | null;
 
-  // Fixme: ota huomioon kielen vaihtaminen
   public async getDokumentit() {
     if (!this.peruste) {
       return;
@@ -164,6 +170,21 @@ export class PerusteDataStore {
             this.dokumentit[sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
           }
         }
+      }
+    }
+  };
+
+  public async getKvLiitteet() {
+    this.kvLiitteet['fi'] = await this.getKvLiite('fi');
+    this.kvLiitteet['sv'] = await this.getKvLiite('sv');
+    this.kvLiitteet['en'] = await this.getKvLiite('en');
+  }
+
+  public async getKvLiite(kieli) {
+    if (this.peruste && this.peruste.suoritustavat) {
+      const dokumenttiId = (await Dokumentit.getKVLiiteDokumenttiId(this.perusteId, kieli, this.peruste.suoritustavat[0].suoritustapakoodi!)).data;
+      if (dokumenttiId) {
+        return baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
       }
     }
   }

@@ -86,20 +86,86 @@ v-for="<template>
           </b-table>
         </ep-form-content>
       </div>
-      <!-- todo: peruste-koulutukset -->
-      <!-- todo: osaamisalat -->
-      <!-- todo: tutkintonimikkeet -->
-      <!-- todo: kvliite -->
-        <!-- todo: suorittaneen-osaaminen -->
-        <!-- todo: tyotehtavat-joissa-voi-toimia -->
-        <!-- todo: osaamisalojen-kuvaukset -->
-      <!-- todo: kuvaus -->
+
+      <div class="col-md-12" v-if="!isAmmatillinen && peruste.kuvaus">
+        <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
+          <span v-html="$kaanna(peruste.kuvaus)"></span>
+        </ep-form-content>
+      </div>
+
+      <div v-if="isAmmatillinen">
+          <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
+            <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6">
+              <b-table striped
+                      fixed
+                      responsive
+                      hover
+                      :fields="koulutuskooditFields"
+                      :items="peruste.koulutukset">
+              </b-table>
+            </ep-form-content>
+          </div>
+
+          <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
+            <ep-form-content name="osaamisalat" headerType="h3" headerClass="h6">
+              <b-table striped
+                      fixed
+                      responsive
+                      hover
+                      :fields="osaamisalatFields"
+                      :items="peruste.osaamisalat">
+              </b-table>
+            </ep-form-content>
+          </div>
+
+          <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
+            <ep-form-content name="tutkintonimikkeet" headerType="h3" headerClass="h6">
+              <b-table striped
+                      fixed
+                      responsive
+                      hover
+                      :fields="tutkintonimikkeetFields"
+                      :items="peruste.tutkintonimikkeet">
+              </b-table>
+            </ep-form-content>
+          </div>
+
+          <div class="col-md-12 mt-3" v-if="peruste.kvliite && peruste.kvliite.suorittaneenOsaaminen">
+            <ep-form-content name="suorittaneen-osaaminen" headerType="h3" headerClass="h6">
+              <span v-html="$kaanna(peruste.kvliite.suorittaneenOsaaminen)" />
+            </ep-form-content>
+          </div>
+
+          <div class="col-md-12 mt-3" v-if="peruste.kvliite && peruste.kvliite.tyotehtavatJoissaVoiToimia">
+            <ep-form-content name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6">
+              <span v-html="$kaanna(peruste.kvliite.tyotehtavatJoissaVoiToimia)" />
+            </ep-form-content>
+          </div>
+
+        <div class="col-md-12" v-if="osaamisalaKuvaukset && osaamisalaKuvaukset.length > 0">
+          <ep-form-content name="osaamisalojen-kuvaukset" headerType="h3" headerClass="h6">
+            <div v-for="(osaamisalakuvaus, index) in osaamisalaKuvaukset" :key="'osaamisalakuvaus'+index">
+              <h4>{{$kaanna(osaamisalakuvaus.nimi)}}</h4>
+              <span v-html="$kaanna(osaamisalakuvaus.teksti)"></span>
+            </div>
+          </ep-form-content>
+        </div>
+      </div>
+
       <div class="col-md-12" v-if="dokumentti">
         <ep-form-content name="dokumentti-osoite" headerType="h3" headerClass="h6">
           <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-pdf-dokumentti') }}</a>
         </ep-form-content>
       </div>
-      <!-- todo: kv-liitteet -->
+
+      <div class="col-md-12" v-if="kvliitteita">
+        <ep-form-content name="kv-liitteet" headerType="h3" headerClass="h6">
+          <div><a v-if="kvliitteet['fi']" :href="kvliitteet['fi']" target="_blank" rel="noopener noreferrer">{{ $t('lataa-kvliite-fi') }}</a></div>
+          <div><a v-if="kvliitteet['sv']" :href="kvliitteet['sv']" target="_blank" rel="noopener noreferrer">{{ $t('lataa-kvliite-sv') }}</a></div>
+          <div><a v-if="kvliitteet['en']" :href="kvliitteet['en']" target="_blank" rel="noopener noreferrer">{{ $t('lataa-kvliite-en') }}</a></div>
+        </ep-form-content>
+      </div>
+
     </div>
     <slot name="previous-next-navigation" />
   </div>
@@ -108,14 +174,16 @@ v-for="<template>
 
 <script lang="ts">
 import _ from 'lodash';
-import { Prop, Vue, Component } from 'vue-property-decorator';
+import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
-import { isAmmatillinen } from '@shared/utils/perusteet';
+import { isAmmatillinen, isKoulutustyyppiAmmatillinen } from '@shared/utils/perusteet';
+import { watch } from '@vue/composition-api';
+import { Kielet, UiKielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -137,11 +205,24 @@ export default class RoutePerusteTiedot extends Vue {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
     this.perusteDataStore.getKorvaavatPerusteet();
-    // Dokumentti on toteuttu vain ammatillisille
-    if (this.$route && isAmmatillinen(this.$route.params.koulutustyyppi)) {
-      this.perusteDataStore.getDokumentit();
-    }
+    this.kieliChanged();
     this.isLoading = false;
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('Kielet.getSisaltoKieli.value')
+  async kieliChanged() {
+    // Dokumentti on toteuttu vain ammatillisille
+    if (this.isAmmatillinen) {
+      await this.perusteDataStore.getDokumentit();
+    }
+  }
+
+  get isAmmatillinen() {
+    return this.peruste && isKoulutustyyppiAmmatillinen(this.peruste.koulutustyyppi!);
   }
 
   get korvaavatPerusteet() {
@@ -150,6 +231,25 @@ export default class RoutePerusteTiedot extends Vue {
 
   get peruste() {
     return this.perusteDataStore.peruste!;
+  }
+
+  get kvliitteita() {
+    return _.some(UiKielet, uiKieli => {
+      return this.perusteDataStore.kvLiitteet[uiKieli];
+    });
+  }
+
+  get kvliitteet() {
+    return this.perusteDataStore.kvLiitteet;
+  }
+
+  get osaamisalaKuvaukset() {
+    return _.chain(this.peruste.suoritustavat)
+      .map(suoritustapa => this.perusteDataStore.osaamisalaKuvaukset[suoritustapa.suoritustapakoodi!])
+      .map(suoritustavanOsaamisalakuvaukset => _.values(suoritustavanOsaamisalakuvaukset))
+      .flatMap()
+      .flatMap()
+      .value();
   }
 
   handleMaarayskirje() {
@@ -223,7 +323,53 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    return this.perusteDataStore.dokumentit && (this as any).$kaanna(this.perusteDataStore.dokumentit);
+    if (this.perusteDataStore.dokumentit) {
+      return (this as any).$kaanna(this.perusteDataStore.dokumentit);
+    }
+  }
+
+  get koulutuskooditFields() {
+    return [{
+      key: 'koulutuskoodiArvo',
+      label: this.$t('koodi'),
+      thStyle: 'width: 15%',
+    }, {
+      key: 'nimi',
+      label: this.$t('koulutuksen-nimi'),
+      formatter: (value: any, key: string, item: any) => {
+        return this.$kaanna(value);
+      },
+    }];
+  }
+
+  get osaamisalatFields() {
+    return [{
+      key: 'nimi',
+      label: this.$t('nimi'),
+      thStyle: 'width: 75%',
+      formatter: (value: any, key: string, item: any) => {
+        return this.$kaanna(value);
+      },
+    }, {
+      key: 'arvo',
+      label: this.$t('koodi'),
+      thStyle: 'width: 15%',
+    }];
+  }
+
+  get tutkintonimikkeetFields() {
+    return [{
+      key: 'nimi',
+      label: this.$t('nimi'),
+      thStyle: 'width: 75%',
+      formatter: (value: any, key: string, item: any) => {
+        return this.$kaanna(value);
+      },
+    }, {
+      key: 'tutkintonimikeArvo',
+      label: this.$t('koodi'),
+      thStyle: 'width: 15%',
+    }];
   }
 }
 </script>
