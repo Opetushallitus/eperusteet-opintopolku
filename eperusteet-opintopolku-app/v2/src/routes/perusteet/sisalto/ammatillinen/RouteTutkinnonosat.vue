@@ -43,7 +43,7 @@ export default class RouteTutkinnonosat extends Vue {
     if (this.tutkinnonosatStore.tutkinnonosat.value) {
       return _.chain(this.tutkinnonosatStore.tutkinnonosat.value)
         .filter(tutkinnonosa => _.includes(
-          _.toLower(_.get(tutkinnonosa, 'tutkinnonosaViite.tekstiKappale.nimi.' + Kielet.getSisaltoKieli.value)),
+          _.toLower(_.get(tutkinnonosa, 'nimi.' + Kielet.getSisaltoKieli.value)),
           _.toLower(this.queryNimi)
         ))
         .value();

@@ -25,6 +25,7 @@ import RouteOppiaineet from '@/routes/perusteet/sisalto/lops2019/oppiaineet/Rout
 import RouteOppiaine from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaine.vue';
 import RouteModuuli from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteModuuli.vue';
 import RouteTutkinnonosat from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosat.vue';
+import RouteTutkinnonosa from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosa.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -75,6 +76,7 @@ import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore'
 import { SisaltoviiteStore } from '@/stores/SisaltoviiteStore';
 import { TutkinnonosatStore } from '@/stores/TutkinnonosatStore';
 import { PerusteenTutkinnonosatStore } from '@/stores/PerusteenTutkinnonosatStore';
+import { PerusteenTutkinnonosaStore } from '@/stores/PerusteenTutkinnonosaStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -449,6 +451,25 @@ export const router = new Router({
                 default: {
                   tutkinnonosatStore: await new PerusteenTutkinnonosatStore(
                     _.parseInt(route.params.perusteId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'tutkinnonosat/:tutkinnonOsaViiteId',
+        component: RouteTutkinnonosa,
+        name: 'tutkinnonosa',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId', 'tutkinnonOsaViiteId'],
+            async props(route) {
+              return {
+                default: {
+                  tutkinnonosaStore: await new PerusteenTutkinnonosaStore(
+                    _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.tutkinnonOsaViiteId),
                   ),
                 },
               };
