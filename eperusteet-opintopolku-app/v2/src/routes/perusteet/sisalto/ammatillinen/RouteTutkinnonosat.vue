@@ -6,11 +6,10 @@
     <div v-else>
       <h2>{{$t('tutkinnonosat')}}</h2>
       <EpSearch class="mt-3 mb-3" v-model="queryNimi" :placeholder="$t('etsi')"/>
-
       <b-table striped hover responsive :items="tutkinnonosat" :fields="fields">
-        <template v-slot:cell(tutkinnonosaViite.tekstiKappale.nimi)="data">
-          <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: data.item.tutkinnonosaViite.id}}">
-            {{ $kaanna(data.item.tutkinnonosaViite.tekstiKappale.nimi) }}
+        <template v-slot:cell(nimi)="data">
+          <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: data.item.id}}">
+            {{ $kaanna(data.item.nimi) }}
           </router-link>
         </template>
       </b-table>

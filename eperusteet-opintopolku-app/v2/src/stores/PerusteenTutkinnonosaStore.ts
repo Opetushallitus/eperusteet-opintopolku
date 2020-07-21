@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { PerusteenOsatApi, Laaja, TutkinnonRakenne, TutkinnonOsaViiteDto, Arviointiasteikot, GeneerinenArviointiasteikko } from '@shared/api/eperusteet';
+import { PerusteenOsatApi, Laaja, TutkinnonRakenne, TutkinnonOsaViiteDto, Arviointiasteikot, GeneerinenArviointiasteikko, ArviointiAsteikkoDto } from '@shared/api/eperusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -19,34 +19,33 @@ export class PerusteenTutkinnonosaStore {
   public readonly tutkinnonosaViite = computed(() => this.state.tutkinnonosaViite);
 
   public async fetch() {
+    const arviointiasteikot = (await Arviointiasteikot.getAll()).data;
     const tutkinnonOsaViitteet = (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.perusteId, 'REFORMI')).data;
     this.state.tutkinnonosaViite = _.head(_.filter(tutkinnonOsaViitteet, tutkinnonOsaViite => tutkinnonOsaViite.id === this.tutkinnonOsaViiteId));
     this.state.tutkinnonosa = (await PerusteenOsatApi.getPerusteenOsa(_.toNumber(_.get(this.state.tutkinnonosaViite!, '_tutkinnonOsa')))).data as any;
     this.state.tutkinnonosa = {
       ...this.state.tutkinnonosa,
       geneerinenArviointiasteikko: null,
-    };
-
-    const arviointiasteikot = (await Arviointiasteikot.getAll()).data;
-    if (this.state.tutkinnonosa.arviointi) {
-      this.state.tutkinnonosa.arviointi.arvioinninKohdealueet = _.map(this.state.tutkinnonosa.arviointi.arvioinninKohdealueet, arvKohdealue => {
+      osaAlueet: await Promise.all(_.map(this.state.tutkinnonosa.osaAlueet, async (osaAlue) => {
         return {
-          ...arvKohdealue,
-          arvioinninKohteet: _.map(arvKohdealue.arvioinninKohteet, arvioinninKohde => {
-            const arviointiAsteikko = _.keyBy(arviointiasteikot, 'id')[arvioinninKohde._arviointiAsteikko];
-            const osaamistasot = _.keyBy(arviointiAsteikko.osaamistasot, 'id');
-            return {
-              ...arvioinninKohde,
-              osaamistasonKriteerit: _.sortBy(_.map(arvioinninKohde.osaamistasonKriteerit, osaamistasonKriteeri => {
-                return {
-                  ...osaamistasonKriteeri,
-                  osaamistaso: osaamistasot[osaamistasonKriteeri._osaamistaso],
-                };
-              }), '_osaamistaso'),
-            };
+          ...osaAlue,
+          osaamistavoitteet: _.map((await PerusteenOsatApi.getOsaamistavoitteet(this.state.tutkinnonosa.id, osaAlue.id)).data, osaamistavoite => {
+            if (osaamistavoite.arviointi) {
+              return {
+                ...osaamistavoite,
+                arviointi: {
+                  ...osaamistavoite.arviointi,
+                  arvioinninKohdealueet: this.setArvioinninKohdeAlueet(osaamistavoite.arviointi.arvioinninKohdealueet, arviointiasteikot),
+                },
+              };
+            }
           }),
         };
-      });
+      })),
+    };
+
+    if (this.state.tutkinnonosa.arviointi) {
+      this.state.tutkinnonosa.arviointi.arvioinninKohdealueet = this.setArvioinninKohdeAlueet(this.state.tutkinnonosa.arviointi.arvioinninKohdealueet, arviointiasteikot);
     }
 
     if (_.get(this.state.tutkinnonosa, '_geneerinenArviointiasteikko')) {
@@ -61,5 +60,26 @@ export class PerusteenTutkinnonosaStore {
         };
       });
     }
+  }
+
+  private setArvioinninKohdeAlueet(arvioinninKohdealueet:any, arviointiasteikot: ArviointiAsteikkoDto[]) {
+    return _.map(arvioinninKohdealueet, arvKohdealue => {
+      return {
+        ...arvKohdealue,
+        arvioinninKohteet: _.map(arvKohdealue.arvioinninKohteet, arvioinninKohde => {
+          const arviointiAsteikko = _.keyBy(arviointiasteikot, 'id')[arvioinninKohde._arviointiAsteikko];
+          const osaamistasot = _.keyBy(arviointiAsteikko.osaamistasot, 'id');
+          return {
+            ...arvioinninKohde,
+            osaamistasonKriteerit: _.sortBy(_.map(arvioinninKohde.osaamistasonKriteerit, osaamistasonKriteeri => {
+              return {
+                ...osaamistasonKriteeri,
+                osaamistaso: osaamistasot[osaamistasonKriteeri._osaamistaso],
+              };
+            }), '_osaamistaso'),
+          };
+        }),
+      };
+    });
   }
 }
