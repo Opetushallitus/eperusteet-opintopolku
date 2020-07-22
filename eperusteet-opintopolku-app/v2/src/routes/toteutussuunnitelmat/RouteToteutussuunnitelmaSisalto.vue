@@ -3,7 +3,13 @@
     <ep-spinner v-if="!sisaltoviite" />
 
     <ep-toteutussuunnitelma-tekstikappale v-else-if="sisaltoviite.tyyppi === 'tekstikappale'" :sisaltoviite="sisaltoviite" />
-    <ep-toteutussuunnitelma-tutkinnonosa v-else-if="sisaltoviite.tyyppi === 'tutkinnonosa'" :sisaltoviite="sisaltoviite" />
+    <ep-toteutussuunnitelma-tutkinnonosa v-else-if="sisaltoviite.tyyppi === 'tutkinnonosa'"
+      :sisaltoviite="sisaltoviite"
+      :perusteenTutkinnonosa="perusteenTutkinnonosa"
+      :perusteenTutkinnonosaViite="perusteenTutkinnonosaViite"
+      :kuvat="kuvat"
+      :arviointiasteikot="arviointiasteikot"
+    />
     <ep-toteutussuunnitelma-suorituspolku v-else-if="sisaltoviite.tyyppi === 'suorituspolku'" :sisaltoviite="sisaltoviite" />
   </div>
 </template>
@@ -30,9 +36,23 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
   private sisaltoviiteStore!: SisaltoviiteStore;
 
   get sisaltoviite() {
-    if (this.sisaltoviiteStore.sisaltoviite.value) {
-      return this.sisaltoviiteStore.sisaltoviite.value!;
-    }
+    return this.sisaltoviiteStore.sisaltoviite.value!;
+  }
+
+  get perusteenTutkinnonosa() {
+    return this.sisaltoviiteStore.perusteenTutkinnonosa.value;
+  }
+
+  get perusteenTutkinnonosaViite() {
+    return this.sisaltoviiteStore.perusteenTutkinnonosaViite.value;
+  }
+
+  get kuvat() {
+    return this.sisaltoviiteStore.kuvat.value;
+  }
+
+  get arviointiasteikot() {
+    return this.sisaltoviiteStore.arviointiasteikot.value;
   }
 }
 </script>

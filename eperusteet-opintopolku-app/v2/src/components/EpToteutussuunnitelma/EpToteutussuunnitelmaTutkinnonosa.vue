@@ -1,20 +1,199 @@
 <template>
-  <div>
-    EpToteutussuunnitelmaTutkinnonosa
+  <div v-if="sisaltoviite">
+    <h2 class="otsikko mb-4" slot="header">{{ $kaanna(sisaltoviite.tekstiKappale.nimi)}}, {{laajuus}} {{$t('osaamispiste')}}</h2>
+
+    <div class="d-flex">
+      <ep-form-content name="luotu" class="flex-fill" v-if="luotu">
+        {{$sd(luotu)}}
+      </ep-form-content>
+
+      <ep-form-content name="muokattu" class="flex-fill" v-if="muokattu">
+        {{$sd(muokattu)}}
+      </ep-form-content>
+    </div>
+
+    <ep-form-content class="col-md-12 mt-4" name="kuvaus">
+      <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
+    </ep-form-content>
+
+    <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in sisaltoviite.tosa.vapaat" :key="'tosavapaateksti'+index">
+      <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
+      <span v-html="$kaanna(vapaa.teksti)" />
+    </ep-form-content>
+
+    <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus">
+
+      <ep-collapse class="mb-3" v-for="(toteutus, index) in sisaltoviite.tosa.toteutukset" :key="'toteutus'+index"
+        :shadow="true"
+        :borderBottom="false"
+        :togglefull="true"
+        :expandedByDefault="sisaltoviite.tosa.toteutukset.length === 1">
+
+        <div class="font-600" slot="header">{{$kaanna(toteutus.otsikko)}}</div>
+
+        <div class="font-600 mt-3">{{$t('tutkintonimikkeet-ja-osaamisalat')}}</div>
+        <b-table striped :items="toteutus.tutkintonimikkeetJaOsaamisalat" :fields="koodiFields" />
+
+        <div v-if="toteutus.tavatjaymparisto">
+          <ep-form-content class="col-md-12" name="tavat-ja-ymparisto">
+            <span v-html="$kaanna(toteutus.tavatjaymparisto.teksti)" />
+          </ep-form-content>
+
+          <hr/>
+        </div>
+
+        <div v-if="toteutus.arvioinnista">
+          <ep-form-content class="col-md-12" name="osaamisen-arvioinnista">
+            <span v-html="$kaanna(toteutus.arvioinnista.teksti)" />
+          </ep-form-content>
+
+          <hr/>
+        </div>
+
+        <div v-if="toteutus.vapaat && toteutus.vapaat.length > 0">
+          <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in toteutus.vapaat" :key="'vapaa'+index">
+            <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
+            <span v-html="$kaanna(vapaa.teksti)" />
+            <hr v-if="index < toteutus.length-1"/>
+          </ep-form-content>
+        </div>
+
+      </ep-collapse>
+
+    </ep-form-content>
+
+    <div v-if="sisaltoviite.tosa.omatutkinnonosa">
+
+      <div v-if="sisaltoviite.tosa.omatutkinnonosa.tavoitteet" class="mb-4">
+        <ep-form-content class="col-md-12" name="tavoitteet">
+          <span v-html="$kaanna(sisaltoviite.tosa.omatutkinnonosa.tavoitteet)" />
+        </ep-form-content>
+        <hr/>
+      </div>
+
+      <div v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista && sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista.length > 0" class="mb-4">
+        <ep-form-content class="col-md-12" name="ammattitaitovaatimukset">
+
+          <div v-for="(ammattitaitovaatimus, index) in sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista" :key="'atv'+index">
+            <div v-for="(vaatimuskohde, index) in ammattitaitovaatimus.vaatimuksenKohteet" :key="'vkohde'+index">
+              <div class="font-600">{{$kaanna(vaatimuskohde.otsikko)}}</div>
+              <ul>
+                <li v-for="(vaatimus, index) in vaatimuskohde.vaatimukset" :key="'vaatimus'+index">
+                  {{$kaanna(vaatimus.selite)}}
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </ep-form-content>
+        <hr/>
+      </div>
+
+      <div v-if="sisaltoviite.tosa.omatutkinnonosa.arviointi && sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet" class="mb-5">
+        <ep-ammatillinen-arvioinnin-kohdealueet
+          :arviointiasteikot="arviointiasteikot"
+          :arvioinninKohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"/>
+        <hr/>
+      </div>
+
+      <ep-form-content class="col-md-12" v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat" name="tavoitteet">
+        <span v-html="$kaanna(sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat)" />
+      </ep-form-content>
+
+    </div>
+
+    <div v-if="perusteenTutkinnonosa">
+      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
+        <span v-html="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" />
+      </ep-form-content>
+
+      <ep-ammatillinen-arvioinnin-kohdealueet
+        v-if="perusteenTutkinnonosa.arviointi && perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"
+        :arviointiasteikot="arviointiasteikot"
+        :arvioinninKohdealueet="perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"/>
+
+      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
+        <span v-html="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" />
+      </ep-form-content>
+    </div>
+
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Matala } from '@shared/api/amosaa';
+import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
+import * as _ from 'lodash';
 
-@Component
+@Component({
+  components: {
+    EpFormContent,
+    EpContentViewer,
+    EpCollapse,
+    EpAmmatillinenArvioinninKohdealueet,
+  },
+})
 export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   @Prop({ required: true })
-  private sisaltoviite!: Matala;
+  private sisaltoviite!: any;
+
+  @Prop({ required: true })
+  private perusteenTutkinnonosaViite!: any;
+
+  @Prop({ required: true })
+  private perusteenTutkinnonosa!: any;
+
+  @Prop({ required: true })
+  private kuvat!: any[];
+
+  @Prop({ required: true })
+  private arviointiasteikot!: any[];
+
+  get luotu() {
+    if (this.perusteenTutkinnonosaViite) {
+      return this.perusteenTutkinnonosa.luotu;
+    }
+  }
+
+  get muokattu() {
+    if (this.perusteenTutkinnonosaViite) {
+      return this.perusteenTutkinnonosa.muokattu;
+    }
+    else if (this.sisaltoviite.tosa) {
+      return this.sisaltoviite.tosa.muokattu;
+    }
+  }
+
+  get laajuus() {
+    if (this.perusteenTutkinnonosaViite) {
+      return this.perusteenTutkinnonosaViite.laajuus;
+    }
+    else if (this.sisaltoviite.tosa.omatutkinnonosa) {
+      return this.sisaltoviite.tosa.omatutkinnonosa.laajuus;
+    }
+  }
+
+  get koodiFields() {
+    return [{
+      key: 'nimi',
+      label: this.$t('nimi') as string,
+      thStyle: { width: '40%' },
+      formatter: (value:any) => {
+        return this.$kaanna(value);
+      },
+    }, {
+      key: 'koodiArvo',
+      label: this.$t('koodi') as string,
+    }] as any[];
+  }
 }
 </script>
 
 <style scoped lang="scss">
-
+  .font-600 {
+    font-weight: 600;
+  }
 </style>

@@ -6,7 +6,12 @@
 
     <ep-form-content class="col-md-12 mb-5" name="osa-alueet" v-if="tutkinnonosa.osaAlueet">
 
-      <ep-collapse class="mb-3" v-for="(osaalue, index) in tutkinnonosa.osaAlueet" :key="'osaalue'+index" :shadow="true" :borderBottom="false" :expandedByDefault="false">
+      <ep-collapse class="mb-3" v-for="(osaalue, index) in tutkinnonosa.osaAlueet" :key="'osaalue'+index"
+        :shadow="true"
+        :togglefull="true"
+        :borderBottom="false"
+        :expandedByDefault="tutkinnonosa.osaAlueet.length === 1">
+
         <label class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}}</label>
 
         <div class="mt-2" v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet" :key="'osaamistavoite'+ index + otIndex">
@@ -18,34 +23,10 @@
 
           <div class="mt-2" v-html="$kaanna(osaamistavoite.tavoitteet)"></div>
 
-          <ep-form-content class="col-md-12 mt-4" name="arviointi" v-if="osaamistavoite.arviointi && osaamistavoite.arviointi.arvioinninKohdealueet">
-            <div v-for="(arvioinninKohdealue, index) in osaamistavoite.arviointi.arvioinninKohdealueet" :key="'aka'+index" class="mb-5">
-              <h4 class="mt-3">{{$kaanna(arvioinninKohdealue.otsikko)}}</h4>
-
-              <div v-for="(arvioinninkohde, index) in arvioinninKohdealue.arvioinninKohteet" :key="'arvioinninkohde'+index" class="mr-5">
-
-                <div class="mb-3 mt-4">
-                  <h5>{{$t('arvioinnin-kohde')}}</h5>
-                  <span>{{$kaanna(arvioinninkohde.selite)}}</span>
-                </div>
-
-                <b-table striped :items="arvioinninkohde.osaamistasonKriteerit" :fields="osaamistasonKriteeritFields">
-                  <template v-slot:cell(osaamistaso)="{item}">
-                    <span v-if="item.osaamistaso"> {{$kaanna(item.osaamistaso.otsikko)}}</span>
-                  </template>
-
-                  <template v-slot:cell(kriteerit)="{item}">
-                    <ul>
-                      <li v-for="(kriteeri, index) in item.kriteerit" :key="'kriteeri'+index">
-                        {{$kaanna(kriteeri)}}
-                      </li>
-                    </ul>
-                  </template>
-                </b-table>
-
-              </div>
-            </div>
-          </ep-form-content>
+          <ep-ammatillinen-arvioinnin-kohdealueet
+            v-if="osaamistavoite.arviointi && osaamistavoite.arviointi.arvioinninKohdealueet"
+            :arviointiasteikot="arviointiasteikot"
+            :arvioinninKohdealueet="osaamistavoite.arviointi.arvioinninKohdealueet"/>
 
         </div>
 
@@ -60,24 +41,21 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 
 @Component({
   components: {
     EpFormContent,
     EpCollapse,
+    EpAmmatillinenArvioinninKohdealueet,
   },
 })
 export default class EpTutkinnonosaTutke extends Vue {
   @Prop({ required: true })
   private tutkinnonosa: any;
 
-  get hasArviointi() {
-    return (this.tutkinnonosa.arviointi && this.tutkinnonosa.arviointi.arvioinninKohdealueet && this.tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0) || this.tutkinnonosa.geneerinenArviointiasteikko;
-  }
-
-  get hasArvioinninKohdealueet() {
-    return this.tutkinnonosa.arviointi && this.tutkinnonosa.arviointi.arvioinninKohdealueet;
-  }
+  @Prop({ required: true })
+  private arviointiasteikot!: any[];
 
   get osaamistasonKriteeritFields() {
     return [{

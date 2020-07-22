@@ -19,9 +19,23 @@ export class TutkinnonosatStore {
   public async fetch() {
     const koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opsId)).data;
     const opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opsId, _.toString(koulutustoimija.id))).data;
-
     const tutkinnonosaViitteet = (await Sisaltoviitteet.getTutkinnonosat(this.opsId, _.toString(koulutustoimija.id))).data;
-    const perusteenTutkinnonosaViitteet = _.keyBy((await Perusteet.getTutkinnonOsaViitteet(opetussuunnitelma.peruste!.id!, 'reformi')).data as any[], '_tutkinnonOsa');
+
+    const perusteIds = [
+      opetussuunnitelma.peruste!.id!,
+      ..._.chain(tutkinnonosaViitteet)
+        .filter('peruste')
+        .map('peruste.id')
+        .uniq()
+        .value(),
+    ];
+
+    const perusteidenTutkinnonosaViitteet = _.chain(await Promise.all(_.map(perusteIds, (perusteId: number) => Perusteet.getTutkinnonOsaViitteet(perusteId, 'reformi'))))
+      .map('data')
+      .flatMap()
+      .value();
+
+    const perusteenTutkinnonosaViitteet = _.keyBy(perusteidenTutkinnonosaViitteet, '_tutkinnonOsa');
 
     this.state.tutkinnonosat = _.map(tutkinnonosaViitteet, (tutkinnonosaViite, index) => {
       return {
