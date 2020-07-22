@@ -12,8 +12,9 @@
       </ep-form-content>
     </div>
 
-    <ep-form-content class="col-md-12 mt-4" name="kuvaus">
+    <ep-form-content class="col-md-12 mt-4" name="kuvaus" v-if="hasKuvaus">
       <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
+      <ep-content-viewer v-if="perusteenTutkinnonosa && perusteenTutkinnonosa.kuvaus" :value="$kaanna(perusteenTutkinnonosa.kuvaus)" :kuvat="kuvat"/>
     </ep-form-content>
 
     <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in sisaltoviite.tosa.vapaat" :key="'tosavapaateksti'+index">
@@ -21,7 +22,7 @@
       <span v-html="$kaanna(vapaa.teksti)" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus">
+    <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus" v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0">
 
       <ep-collapse class="mb-3" v-for="(toteutus, index) in sisaltoviite.tosa.toteutukset" :key="'toteutus'+index"
         :shadow="true"
@@ -115,6 +116,15 @@
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
         <span v-html="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" />
       </ep-form-content>
+
+      <ep-form-content class="col-md-12 mb-5" v-if="pakollisetOsaAlueet && pakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">
+        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="pakollisetOsaAlueet" />
+      </ep-form-content>
+
+      <ep-form-content class="col-md-12 mb-5" v-if="valinnaisetOsaAlueet && valinnaisetOsaAlueet.length > 0" name="valinnaiset-osa-alueet">
+        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="valinnaisetOsaAlueet" />
+      </ep-form-content>
+
     </div>
 
   </div>
@@ -126,6 +136,7 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
+import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenOsaalueet.vue';
 import * as _ from 'lodash';
 
 @Component({
@@ -134,6 +145,7 @@ import * as _ from 'lodash';
     EpContentViewer,
     EpCollapse,
     EpAmmatillinenArvioinninKohdealueet,
+    EpAmmatillinenOsaalueet,
   },
 })
 export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
@@ -152,14 +164,18 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   @Prop({ required: true })
   private arviointiasteikot!: any[];
 
+  get hasKuvaus() {
+    return this.sisaltoviite.tekstiKappale.teksti || (this.perusteenTutkinnonosa && this.perusteenTutkinnonosa.kuvaus);
+  }
+
   get luotu() {
-    if (this.perusteenTutkinnonosaViite) {
+    if (this.perusteenTutkinnonosa) {
       return this.perusteenTutkinnonosa.luotu;
     }
   }
 
   get muokattu() {
-    if (this.perusteenTutkinnonosaViite) {
+    if (this.perusteenTutkinnonosa) {
       return this.perusteenTutkinnonosa.muokattu;
     }
     else if (this.sisaltoviite.tosa) {
@@ -188,6 +204,30 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
       key: 'koodiArvo',
       label: this.$t('koodi') as string,
     }] as any[];
+  }
+
+  get pakollisetOsaAlueet() {
+    if (this.perusteenTutkinnonosa) {
+      return this.osaAlueFiltered(['pakollinen', true]);
+    }
+  }
+
+  get valinnaisetOsaAlueet() {
+    if (this.perusteenTutkinnonosa) {
+      return this.osaAlueFiltered(['pakollinen', false]);
+    }
+  }
+
+  osaAlueFiltered(osaamistavoiteFilter) {
+    return _.chain(this.perusteenTutkinnonosa.osaAlueet)
+      .map(osaAlue => {
+        return {
+          ...osaAlue,
+          osaamistavoitteet: _.filter(osaAlue.osaamistavoitteet, osaamistavoiteFilter),
+        };
+      })
+      .filter(osaAlue => _.size(osaAlue.osaamistavoitteet) > 0)
+      .value();
   }
 }
 </script>
