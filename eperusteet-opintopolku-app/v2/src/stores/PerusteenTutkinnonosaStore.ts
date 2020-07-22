@@ -9,6 +9,7 @@ export class PerusteenTutkinnonosaStore {
   private state = reactive({
     tutkinnonosa: null as any | null,
     tutkinnonosaViite: null as TutkinnonOsaViiteDto | null | undefined,
+    arviointiasteikot: null as ArviointiAsteikkoDto[] | null,
   })
 
   constructor(private perusteId: number, private tutkinnonOsaViiteId: number) {
@@ -17,9 +18,11 @@ export class PerusteenTutkinnonosaStore {
 
   public readonly tutkinnonosa = computed(() => this.state.tutkinnonosa);
   public readonly tutkinnonosaViite = computed(() => this.state.tutkinnonosaViite);
+  public readonly arviointiasteikot = computed(() => this.state.arviointiasteikot);
 
   public async fetch() {
-    const arviointiasteikot = (await Arviointiasteikot.getAll()).data;
+    this.state.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
+
     const tutkinnonOsaViitteet = (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.perusteId, 'REFORMI')).data;
     this.state.tutkinnonosaViite = _.head(_.filter(tutkinnonOsaViitteet, tutkinnonOsaViite => tutkinnonOsaViite.id === this.tutkinnonOsaViiteId));
     this.state.tutkinnonosa = (await PerusteenOsatApi.getPerusteenOsa(_.toNumber(_.get(this.state.tutkinnonosaViite!, '_tutkinnonOsa')))).data as any;
@@ -29,29 +32,15 @@ export class PerusteenTutkinnonosaStore {
       osaAlueet: await Promise.all(_.map(this.state.tutkinnonosa.osaAlueet, async (osaAlue) => {
         return {
           ...osaAlue,
-          osaamistavoitteet: _.map((await PerusteenOsatApi.getOsaamistavoitteet(this.state.tutkinnonosa.id, osaAlue.id)).data, osaamistavoite => {
-            if (osaamistavoite.arviointi) {
-              return {
-                ...osaamistavoite,
-                arviointi: {
-                  ...osaamistavoite.arviointi,
-                  arvioinninKohdealueet: this.setArvioinninKohdeAlueet(osaamistavoite.arviointi.arvioinninKohdealueet, arviointiasteikot),
-                },
-              };
-            }
-          }),
+          osaamistavoitteet: (await PerusteenOsatApi.getOsaamistavoitteet(this.state.tutkinnonosa.id, osaAlue.id)).data,
         };
       })),
     };
 
-    if (this.state.tutkinnonosa.arviointi) {
-      this.state.tutkinnonosa.arviointi.arvioinninKohdealueet = this.setArvioinninKohdeAlueet(this.state.tutkinnonosa.arviointi.arvioinninKohdealueet, arviointiasteikot);
-    }
-
     if (_.get(this.state.tutkinnonosa, '_geneerinenArviointiasteikko')) {
       this.state.tutkinnonosa.geneerinenArviointiasteikko = (await GeneerinenArviointiasteikko.getOneGeneerisetArviointiasteikko(_.get(this.state.tutkinnonosa, '_geneerinenArviointiasteikko'))).data;
 
-      const arviointiAsteikko = _.keyBy(arviointiasteikot, 'id')[_.get(this.state.tutkinnonosa.geneerinenArviointiasteikko, '_arviointiAsteikko')];
+      const arviointiAsteikko = _.keyBy(this.state.arviointiasteikot, 'id')[_.get(this.state.tutkinnonosa.geneerinenArviointiasteikko, '_arviointiAsteikko')];
       const osaamistasot = _.keyBy(arviointiAsteikko.osaamistasot, 'id');
       this.state.tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit = _.map(this.state.tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit, otKriteeri => {
         return {
@@ -60,26 +49,5 @@ export class PerusteenTutkinnonosaStore {
         };
       });
     }
-  }
-
-  private setArvioinninKohdeAlueet(arvioinninKohdealueet:any, arviointiasteikot: ArviointiAsteikkoDto[]) {
-    return _.map(arvioinninKohdealueet, arvKohdealue => {
-      return {
-        ...arvKohdealue,
-        arvioinninKohteet: _.map(arvKohdealue.arvioinninKohteet, arvioinninKohde => {
-          const arviointiAsteikko = _.keyBy(arviointiasteikot, 'id')[arvioinninKohde._arviointiAsteikko];
-          const osaamistasot = _.keyBy(arviointiAsteikko.osaamistasot, 'id');
-          return {
-            ...arvioinninKohde,
-            osaamistasonKriteerit: _.sortBy(_.map(arvioinninKohde.osaamistasonKriteerit, osaamistasonKriteeri => {
-              return {
-                ...osaamistasonKriteeri,
-                osaamistaso: osaamistasot[osaamistasonKriteeri._osaamistaso],
-              };
-            }), '_osaamistaso'),
-          };
-        }),
-      };
-    });
   }
 }

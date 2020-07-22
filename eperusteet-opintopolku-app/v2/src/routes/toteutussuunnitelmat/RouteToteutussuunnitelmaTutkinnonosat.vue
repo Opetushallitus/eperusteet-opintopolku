@@ -68,7 +68,12 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
       sortable: true,
       label: this.$t('laajuus') as string,
       formatter: (value: any, key: string, item: any) => {
-        return item.perusteenTutkinnonosaViite ? item.perusteenTutkinnonosaViite.laajuus + ' ' + this.$t('osaamispiste') : '';
+        if (item.perusteenTutkinnonosaViite) {
+          return item.perusteenTutkinnonosaViite.laajuus + ' ' + this.$t('osaamispiste');
+        }
+        else if (item.tutkinnonosaViite.tosa.omatutkinnonosa) {
+          return item.tutkinnonosaViite.tosa.omatutkinnonosa.laajuus + ' ' + this.$t('osaamispiste');
+        }
       },
     }];
   }

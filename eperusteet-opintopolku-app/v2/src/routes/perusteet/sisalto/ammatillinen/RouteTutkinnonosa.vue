@@ -4,8 +4,8 @@
     <div v-else>
       <h2 class="otsikko mb-4" slot="header">{{ $kaanna(tutkinnonosaViite.nimi)}}, {{tutkinnonosaViite.laajuus}} {{$t('osaamispiste')}}</h2>
 
-      <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" />
-      <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" />
+      <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
+      <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
 
     </div>
   </div>
@@ -17,14 +17,12 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { PerusteenTutkinnonosaStore } from '@/stores/PerusteenTutkinnonosaStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNormaali.vue';
 import EpTutkinnonosaTutke from '@/components/EpAmmatillinen/EpTutkinnonosaTutke.vue';
 
 @Component({
   components: {
     EpSpinner,
-    EpFormContent,
     EpTutkinnonosaNormaali,
     EpTutkinnonosaTutke,
   },
@@ -39,6 +37,10 @@ export default class RouteTutkinnonosa extends Vue {
 
   get tutkinnonosaViite() {
     return this.tutkinnonosaStore.tutkinnonosaViite.value;
+  }
+
+  get arviointiasteikot() {
+    return this.tutkinnonosaStore.arviointiasteikot.value;
   }
 }
 </script>
