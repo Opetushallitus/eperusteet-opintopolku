@@ -290,36 +290,12 @@ export const router = new Router({
         path: 'sisalto/:sisaltoviiteId',
         component: RouteToteutussuunnitelmaSisalto,
         name: 'toteutussuunnitelmaSisalto',
-        meta: {
-          resolve: {
-            cacheBy: ['toteutussuunnitelmaId', 'sisaltoviiteId'],
-            async props(route) {
-              return {
-                default: {
-                  sisaltoviiteStore: new SisaltoviiteStore(route.params.toteutussuunnitelmaId, route.params.sisaltoviiteId),
-                },
-              };
-            },
-          },
-        },
       }, {
         path: 'tutkinnonosat',
         component: RouteToteutussuunnitelmaTutkinnonosat,
         name: 'toteutussuunnitelmaTutkinnonosat',
-        meta: {
-          resolve: {
-            cacheBy: ['toteutussuunnitelmaId'],
-            async props(route) {
-              return {
-                default: {
-                  tutkinnonosatStore: new TutkinnonosatStore(route.params.toteutussuunnitelmaId),
-                },
-              };
-            },
-          },
-        },
       }, {
-        path: 'suorituspolut',
+        path: 'suorituspolut/:sisaltoviiteId',
         component: RouteToteutussuunnitelmaSuorituspolut,
         name: 'toteutussuunnitelmaSuorituspolut',
       }],

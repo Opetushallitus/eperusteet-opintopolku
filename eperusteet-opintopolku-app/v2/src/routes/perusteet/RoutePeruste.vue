@@ -20,7 +20,7 @@
           <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
         </template>
         <template slot="view">
-          <router-view :key="$route.fullPath" :perusteDataStore="perusteDataStore">
+          <router-view :key="$route.fullPath">
             <template v-slot:header v-if="peruste.tyyppi ==='opas'">
               {{$t('oppaan-tiedot')}}
             </template>

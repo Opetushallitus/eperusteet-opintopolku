@@ -1,10 +1,7 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { JulkinenApi, Matala, Perusteet, Opetussuunnitelmat, baseURL, LiitetiedostotParam, Arviointiasteikot, ArviointiasteikkoDto, Koodistot } from '@shared/api/amosaa';
-import { faThemeisle } from '@fortawesome/free-brands-svg-icons';
-import { KoodistoApi } from '@shared/generated/eperusteet';
-import { metadataToLocalized } from '@shared/utils/perusteet';
+import { JulkinenApi, Matala, Perusteet, OpetussuunnitelmaDto, Koodistot, Sisaltoviitteet } from '@shared/api/amosaa';
 
 Vue.use(VueCompositionApi);
 
@@ -14,30 +11,21 @@ export class SisaltoviiteStore {
     perusteenTutkinnonosa: null as any | null,
     perusteenTutkinnonosaViite: null as any | null,
     kuvat: null as any[] | null,
-    arviointiasteikot: null as ArviointiasteikkoDto[] | null,
+    fetching: true as boolean,
   })
 
-  constructor(private opsId: number, private sisaltoviiteId: number) {
+  constructor(private opetussuunnitelma: OpetussuunnitelmaDto, private sisaltoviiteId: number) {
     this.fetch();
   }
 
   public readonly sisaltoviite = computed(() => this.state.sisaltoviite);
   public readonly perusteenTutkinnonosa = computed(() => this.state.perusteenTutkinnonosa);
   public readonly perusteenTutkinnonosaViite = computed(() => this.state.perusteenTutkinnonosaViite);
-  public readonly kuvat = computed(() => this.state.kuvat);
-  public readonly arviointiasteikot = computed(() => this.state.arviointiasteikot);
+  public readonly fetching = computed(() => this.state.fetching);
 
   public async fetch() {
-    const koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opsId)).data;
-    const opetussuunnitelma = (await JulkinenApi.getOpetussuunnitelmaJulkinen(this.opsId, _.toString(koulutustoimija.id))).data;
-    this.state.arviointiasteikot = (await Arviointiasteikot.getAllArviointiasteikot()).data;
-
-    this.state.kuvat = _.map(opetussuunnitelma.liitteet, liite => ({
-      id: liite.id!,
-      src: baseURL + LiitetiedostotParam.getImage(this.opsId, liite.id!).url,
-    }));
-
-    this.state.sisaltoviite = (await JulkinenApi.getOpetussuunnitelmaTekstit(this.opsId, this.sisaltoviiteId, _.toString(koulutustoimija.id))).data;
+    this.state.fetching = true;
+    this.state.sisaltoviite = (await JulkinenApi.getOpetussuunnitelmaTekstit(this.opetussuunnitelma.id!, this.sisaltoviiteId, _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data;
     if (this.state.sisaltoviite.tosa && _.size(this.state.sisaltoviite.tosa.toteutukset) > 0) {
       const koodit = _.chain(await Promise.all(
         _.chain(this.state.sisaltoviite.tosa?.toteutukset)
@@ -65,10 +53,12 @@ export class SisaltoviiteStore {
     }
 
     if (this.state.sisaltoviite.tosa?.perusteentutkinnonosa) {
-      const perusteId = _.get(this.state.sisaltoviite, 'peruste.id') || _.get(opetussuunnitelma, 'peruste.id');
+      const perusteId = _.get(this.state.sisaltoviite, 'peruste.id') || _.get(this.opetussuunnitelma, 'peruste.id');
 
       this.state.perusteenTutkinnonosa = (await Perusteet.getPerusteTutkinnonOsa(perusteId, this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
       this.state.perusteenTutkinnonosaViite = (await Perusteet.getTutkinnonOsaViite(perusteId, 'reformi', this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
     }
+
+    this.state.fetching = false;
   }
 }

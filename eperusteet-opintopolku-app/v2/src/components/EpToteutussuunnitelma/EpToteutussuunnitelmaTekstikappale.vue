@@ -1,24 +1,26 @@
 <template>
   <div>
-    <h2>{{$kaanna(tekstikappale.nimi)}}</h2>
-    <div v-html="$kaanna(tekstikappale.teksti)" />
+    <h2>{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</h2>
+    <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Matala } from '@shared/api/amosaa';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
-@Component
+@Component({
+  components: {
+    EpContentViewer,
+  },
+})
 export default class EpToteutussuunnitelmaTekstikappale extends Vue {
   @Prop({ required: true })
   private sisaltoviite!: Matala;
 
-  get tekstikappale() {
-    if (this.sisaltoviite.tekstiKappale) {
-      return this.sisaltoviite.tekstiKappale;
-    }
-  }
+  @Prop({ required: true })
+  private kuvat!: any[];
 }
 </script>
 

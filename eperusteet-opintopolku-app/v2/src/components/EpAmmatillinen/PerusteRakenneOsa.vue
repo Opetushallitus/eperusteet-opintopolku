@@ -10,7 +10,7 @@
               <fas icon="chevron-up" v-if="!naytaRakenne"></fas>
               <fas icon="chevron-down" v-else></fas>
             </div>
-            <div class="ml-3 w-75">
+            <div class="w-75" :class="{'ml-3' : rakenneosa.osat && rakenneosa.osat.length > 0}">
               <slot name="nimi" v-bind:rakenneosa="rakenneosa">
                 {{$kaanna(nimi)}}
               </slot>
@@ -37,12 +37,8 @@
         :viimeinen="index + 1 === rakenneosa.osat.length">
 
         <template v-slot:nimi="{ rakenneosa }">
-          <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}" v-if="rakenneosa.tutkinnonosa">
-            {{$kaanna(rakenneosa.tutkinnonosa.nimi)}}
-          </router-link>
-          <span v-else>
-            {{$kaanna(rakenneosa.nimi)}}
-          </span>
+          <slot name="nimi" v-bind:rakenneosa="rakenneosa"></slot>
+
         </template>
       </peruste-rakenne-osa>
     </div>
@@ -126,11 +122,12 @@ export default class PerusteRakenneOsa extends Vue {
     }
 
     if (!this.eiVanhempaa) {
-      if (this.rakenneosa.pakollinen) {
+      if (_.size(this.rakenneosa.osat) > 0
+        && _.size(this.rakenneosa.osat) === _.size(_.filter(this.rakenneosa.osat, 'pakollinen'))) {
         return '#5BCA13';
       }
       else {
-        return '#e44e4e';
+        return '#f166c0';
       }
     }
 

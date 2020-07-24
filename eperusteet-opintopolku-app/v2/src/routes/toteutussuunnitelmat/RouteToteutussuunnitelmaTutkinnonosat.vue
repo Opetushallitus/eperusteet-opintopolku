@@ -26,6 +26,7 @@ import { TutkinnonosatStore } from '@/stores/TutkinnonosatStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 
 @Component({
   components: {
@@ -35,12 +36,17 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 })
 export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
   @Prop({ required: true })
-  private tutkinnonosatStore!: TutkinnonosatStore;
+  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
+  private tutkinnonosatStore: TutkinnonosatStore | null = null;
   private queryNimi = '';
 
+  async mounted() {
+    this.tutkinnonosatStore = new TutkinnonosatStore(this.opetussuunnitelmaDataStore.opetussuunnitelma!);
+  }
+
   get tutkinnonosat() {
-    if (this.tutkinnonosatStore.tutkinnonosat.value) {
+    if (this.tutkinnonosatStore && this.tutkinnonosatStore.tutkinnonosat.value) {
       return _.chain(this.tutkinnonosatStore.tutkinnonosat.value)
         .filter(tutkinnonosa => _.includes(
           _.toLower(_.get(tutkinnonosa, 'tutkinnonosaViite.tekstiKappale.nimi.' + Kielet.getSisaltoKieli.value)),
