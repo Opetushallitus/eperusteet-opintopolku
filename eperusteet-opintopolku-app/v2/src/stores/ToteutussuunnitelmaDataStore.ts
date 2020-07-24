@@ -1,23 +1,24 @@
 import { Store, State, Getter } from '@shared/stores/store';
-import { OpetussuunnitelmaDto, NavigationNodeDto, Opetussuunnitelmat, JulkinenApi, DokumenttiDto, baseURL, JulkinenApiParams } from '@shared/api/amosaa';
+import { OpetussuunnitelmaDto, NavigationNodeDto, Opetussuunnitelmat, JulkinenApi, DokumenttiDto, baseURL, JulkinenApiParams, KoulutustoimijaJulkinenDto, Arviointiasteikot, ArviointiasteikkoDto, LiitetiedostotParam } from '@shared/api/amosaa';
 import * as _ from 'lodash';
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { NavigationNode, buildTiedot, buildNavigation, filterNavigation, NavigationFilter } from '@shared/utils/NavigationBuilder';
 import { Kielet } from '@shared/stores/kieli';
 import { DokumenttiDtoTilaEnum } from '@shared/api/eperusteet';
-import { watch } from '@vue/composition-api';
 
 @Store
 export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelmaId: number;
   @State() public navigation: NavigationNodeDto | null = null;
   @State() public opetussuunnitelma: OpetussuunnitelmaDto | null = null;
+  @State() public koulutustoimija: KoulutustoimijaJulkinenDto | null = null;
   @State() public dokumenttiTila: DokumenttiDto | null = null;
   @State() public currentRoute: Location | null = null;
   @State() public sidenavFilter: NavigationFilter = {
     label: '',
     isEnabled: false,
   };
+  @State() public arviointiasteikot: ArviointiasteikkoDto[] | null = null;
 
   constructor(opetussuunnitelmaId: number) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
@@ -30,14 +31,15 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   }
 
   async init() {
-    const koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
-    this.opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opetussuunnitelmaId, _.toString(koulutustoimija.id))).data;
-    this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value, _.toString(koulutustoimija.id))).data;
-    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigation(this.opetussuunnitelmaId, _.toString(koulutustoimija.id))).data;
+    this.koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
+    this.opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
+    this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value, _.toString(this.koulutustoimija.id))).data;
+    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigation(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
     this.navigation = {
       ...navigation,
       children: _.filter(navigation.children, child => child.type !== 'tiedot'),
     };
+    this.arviointiasteikot = (await Arviointiasteikot.getAllArviointiasteikot()).data;
   }
 
   @Getter(state => {
@@ -55,6 +57,12 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   @Getter(state => 'ammatillinen')
   public readonly koulutustyyppi!: string;
+
+  @Getter(state => _.map(state.opetussuunnitelma.liitteet, liite => ({
+    id: liite.id!,
+    src: baseURL + LiitetiedostotParam.getImage(state.opetussuunnitelma.id!, liite.id!).url,
+  })))
+  public readonly kuvat!: any[];
 
   @Getter(state => {
     return !state.opetussuunnitelma || !state.navigation;

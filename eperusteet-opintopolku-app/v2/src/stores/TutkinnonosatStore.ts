@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { JulkinenApi, Perusteet, Sisaltoviitteet, Opetussuunnitelmat } from '@shared/api/amosaa';
+import { JulkinenApi, Perusteet, Sisaltoviitteet, Opetussuunnitelmat, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 
 Vue.use(VueCompositionApi);
 
@@ -10,19 +10,17 @@ export class TutkinnonosatStore {
     tutkinnonosat: null as any[] | null,
   })
 
-  constructor(private opsId: number) {
+  constructor(private opetussuunnitelma: OpetussuunnitelmaDto) {
     this.fetch();
   }
 
   public readonly tutkinnonosat = computed(() => this.state.tutkinnonosat);
 
   public async fetch() {
-    const koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opsId)).data;
-    const opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opsId, _.toString(koulutustoimija.id))).data;
-    const tutkinnonosaViitteet = (await Sisaltoviitteet.getTutkinnonosat(this.opsId, _.toString(koulutustoimija.id))).data;
+    const tutkinnonosaViitteet = (await Sisaltoviitteet.getTutkinnonosat(this.opetussuunnitelma.id!, _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data;
 
     const perusteIds = [
-      opetussuunnitelma.peruste!.id!,
+      this.opetussuunnitelma.peruste!.id!,
       ..._.chain(tutkinnonosaViitteet)
         .filter('peruste')
         .map('peruste.id')

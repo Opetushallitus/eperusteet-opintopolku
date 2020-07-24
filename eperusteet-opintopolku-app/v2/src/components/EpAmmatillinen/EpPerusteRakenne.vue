@@ -1,34 +1,29 @@
 <template>
-  <div class="content">
-    <ep-spinner v-if="!rakenne" />
-    <div v-else>
+  <div class="peruste-rakenne">
+    <ep-search v-model="query" :placeholder="$t('etsi-rakenteesta')"/>
 
-      <h2>{{$t('tutkinnon-muodostuminen')}}</h2>
+    <div class="rakennepohja mt-3">
+      <div class="d-flex">
+        <ep-button class="rakennetoggle" variant="link" @click="toggleRakenne()">{{$t(rakenneOsaSuljeTeksti)}}</ep-button>
+        <ep-button variant="link" @click="toggleKuvaukset()">{{$t(rakenneOsaKuvasTeksti)}}</ep-button>
 
-      <div class="mb-5" v-html="$kaanna(rakenne.kuvaus)" />
+      </div>
+      <div class="text-right rakenneotsikko">{{$t('osaamispiste')}}</div>
+      <div class="rakenneosat">
+        <peruste-rakenne-osa
+          ref="rakenneosa"
+          v-for="(osa, index) in filteredRakenneOsat"
+          :key="'osa'+index"
+          :rakenneosa="osa"
+          :eiVanhempaa="true"
+          :viimeinen="true">
 
-      <h3>{{$kaanna(peruste.nimi)}} {{laajuus}} {{$t('osaamispiste')}}</h3>
+          <template v-slot:nimi="{ rakenneosa }">
+            <slot name="nimi" v-bind:rakenneosa="rakenneosa"></slot>
+          </template>
 
-      <ep-peruste-rakenne :rakenneOsat="rakenneOsat">
-        <template v-slot:nimi="{ rakenneosa }">
-
-          <div v-if="rakenneosa.tutkinnonosa">
-            <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}">
-              <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa._tutkinnonOsaViite" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
-              {{$kaanna(rakenneosa.tutkinnonosa.nimi)}}
-            </router-link>
-            <b-popover :target="'tutkinto'+rakenneosa._tutkinnonOsaViite" :placement="'bottom'" triggers="hover">
-              <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
-              <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
-            </b-popover>
-          </div>
-          <span v-else>
-            {{$kaanna(rakenneosa.nimi)}}
-          </span>
-
-        </template>
-      </ep-peruste-rakenne>
-
+        </peruste-rakenne-osa>
+      </div>
     </div>
   </div>
 </template>
@@ -43,41 +38,21 @@ import PerusteRakenneOsa from '@/components/EpAmmatillinen/PerusteRakenneOsa.vue
 import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
-import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 
 @Component({
   components: {
-    EpSpinner,
     PerusteRakenneOsa,
     EpButton,
     EpSearch,
-    EpPerusteRakenne,
-    EpColorIndicator,
   },
 })
-export default class RouteRakenne extends Vue {
+export default class EpPerusteRakenne extends Vue {
   @Prop({ required: true })
-  private rakenneStore!: PerusteRakenneStore;
-
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+  private rakenneOsat!: any[];
 
   private naytaRakenteet = false;
   private naytaKuvaukset = false;
   private query = '';
-
-  get peruste() {
-    return this.perusteDataStore.peruste;
-  }
-
-  get rakenne(): any {
-    return this.rakenneStore.rakenne.value;
-  }
-
-  get rakenneOsat() {
-    return this.rakenne.osat;
-  }
 
   get filteredRakenneOsat() {
     return this.filterRakenneOsat(this.rakenneOsat);
@@ -120,12 +95,6 @@ export default class RouteRakenne extends Vue {
       .value();
   }
 
-  get laajuus() {
-    if (this.rakenne.muodostumisSaanto && this.rakenne.muodostumisSaanto.laajuus) {
-      return this.rakenne.muodostumisSaanto.laajuus.maksimi;
-    }
-  }
-
   get rakenneOsaSuljeTeksti() {
     if (!this.naytaRakenteet) {
       return 'avaa-kaikki';
@@ -159,8 +128,24 @@ export default class RouteRakenne extends Vue {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-  .content {
-    padding: 0 $content-padding;
+  .peruste-rakenne {
+
+    .rakennepohja {
+      background-color: $gray-lighten-5;
+      padding: 20px;
+    }
+
+    .rakenneosat div:first-child {
+      margin-top: -15px;
+    }
+
+    .rakenneotsikko {
+      padding-right: 20px;
+    }
+
+    ::v-deep .rakennetoggle .btn, ::v-deep .rakennetoggle .btn .teksti {
+        padding-left: 0px !important;
+    }
   }
 
 </style>
