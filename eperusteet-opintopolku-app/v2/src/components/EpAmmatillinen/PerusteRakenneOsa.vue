@@ -104,7 +104,10 @@ export default class PerusteRakenneOsa extends Vue {
   }
 
   get nimi() {
-    return this.rakenneosa.nimi || this.rakenneosa.tutkinnonosa.nimi;
+    if (this.rakenneosa.tutkinnonosa) {
+      return this.rakenneosa.tutkinnonosa.nimi;
+    }
+    return this.rakenneosa.nimi;
   }
 
   get rakenneStyle() {
