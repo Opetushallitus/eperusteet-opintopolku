@@ -5,6 +5,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
+import { Kieli } from '@shared/tyypit';
 
 describe('RoutePerusteTiedot', async () => {
   const localVue = createLocalVue();
@@ -40,6 +41,7 @@ describe('RoutePerusteTiedot', async () => {
         },
       }],
     };
+    perusteDataStore.kvLiitteet = { fi: 'kvliiteurl-fi' };
 
     const wrapper = mount(RoutePerusteTiedot as any, {
       localVue,
@@ -63,5 +65,8 @@ describe('RoutePerusteTiedot', async () => {
 
     expect(perusteDataStore.getKorvaavatPerusteet).toHaveBeenCalledTimes(1);
     expect(wrapper.html()).toContain('perusteen nimi');
+
+    expect(wrapper.html()).toContain('kvliiteurl-fi');
+    expect(wrapper.html()).toContain('lataa-kvliite-fi');
   });
 });
