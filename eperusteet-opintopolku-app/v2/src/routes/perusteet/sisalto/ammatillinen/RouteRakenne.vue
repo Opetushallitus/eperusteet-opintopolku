@@ -1,6 +1,6 @@
 <template>
   <div class="content">
-    <ep-spinner v-if="!rakenne" />
+    <ep-spinner v-if="!rakenne || !peruste" />
     <div v-else>
 
       <h2>{{$t('tutkinnon-muodostuminen')}}</h2>
@@ -9,7 +9,7 @@
 
       <h3>{{$kaanna(peruste.nimi)}} {{laajuus}} {{$t('osaamispiste')}}</h3>
 
-      <ep-peruste-rakenne :rakenneOsat="rakenneOsat">
+      <ep-peruste-rakenne v-if="rakenneOsat" :rakenneOsat="rakenneOsat">
         <template v-slot:nimi="{ rakenneosa }">
 
           <div v-if="rakenneosa.tutkinnonosa">
@@ -77,47 +77,6 @@ export default class RouteRakenne extends Vue {
 
   get rakenneOsat() {
     return this.rakenne.osat;
-  }
-
-  get filteredRakenneOsat() {
-    return this.filterRakenneOsat(this.rakenneOsat);
-  }
-
-  private filterRakenneOsat(osat: any[]) {
-    return _.chain(osat)
-      .map(osa => {
-        return {
-          ...osa,
-          osat: this.filterRakenneOsat(osa.osat),
-        };
-      })
-      .filter(osa => {
-        const nimi = osa.nimi || osa.tutkinnonosa.nimi;
-        return _.size(osa.osat) > 0 || Kielet.search(this.query, nimi);
-      })
-      .map(osa => {
-        return {
-          ...osa,
-          osat: _.size(osa.osat) > 0 ? osa.osat : this.flattenedRakenneOsat[osa.tunniste].osat,
-        };
-      })
-      .value();
-  }
-
-  get flattenedRakenneOsat() {
-    return _.keyBy(this.flattenRakenneOsat(this.rakenneOsat), 'tunniste');
-  }
-
-  private flattenRakenneOsat(osat: any[]) {
-    return _.chain(osat)
-      .map(osa => {
-        return [
-          osa,
-          ...this.flattenRakenneOsat(osa.osat),
-        ];
-      })
-      .flatMap()
-      .value();
   }
 
   get laajuus() {

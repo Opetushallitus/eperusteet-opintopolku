@@ -1,11 +1,11 @@
 <template>
   <div class="peruste-rakenne">
-    <ep-search v-model="query" :placeholder="$t('etsi-rakenteesta')"/>
+    <ep-search class="query" v-model="query" :placeholder="$t('etsi-rakenteesta')"/>
 
     <div class="rakennepohja mt-3">
       <div class="d-flex">
         <ep-button class="rakennetoggle" variant="link" @click="toggleRakenne()">{{$t(rakenneOsaSuljeTeksti)}}</ep-button>
-        <ep-button variant="link" @click="toggleKuvaukset()">{{$t(rakenneOsaKuvasTeksti)}}</ep-button>
+        <ep-button class="kuvaustoggle" variant="link" @click="toggleKuvaukset()">{{$t(rakenneOsaKuvasTeksti)}}</ep-button>
 
       </div>
       <div class="text-right rakenneotsikko">{{$t('osaamispiste')}}</div>
@@ -67,8 +67,11 @@ export default class EpPerusteRakenne extends Vue {
         };
       })
       .filter(osa => {
-        const nimi = osa.nimi || osa.tutkinnonosa.nimi;
-        return _.size(osa.osat) > 0 || Kielet.search(this.query, nimi);
+        let nimi = osa.nimi;
+        if (osa.tutkinnonosa) {
+          nimi = osa.tutkinnonosa.nimi;
+        }
+        return _.size(osa.osat) > 0 || (nimi && Kielet.search(this.query, nimi));
       })
       .map(osa => {
         return {
