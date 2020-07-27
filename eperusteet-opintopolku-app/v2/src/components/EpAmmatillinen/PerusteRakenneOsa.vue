@@ -50,8 +50,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import _ from 'lodash';
 
 @Component({
-  components: {
-  },
+  name: 'PerusteRakenneOsa',
 })
 export default class PerusteRakenneOsa extends Vue {
   @Prop({ required: true })
@@ -99,7 +98,7 @@ export default class PerusteRakenneOsa extends Vue {
       return this.rakenneosa.muodostumisSaanto.laajuus.maksimi;
     }
 
-    if (this.rakenneosa.tutkinnonosa.laajuus) {
+    if (this.rakenneosa.tutkinnonosa) {
       return this.rakenneosa.tutkinnonosa.laajuus;
     }
   }
