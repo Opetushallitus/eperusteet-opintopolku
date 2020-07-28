@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { PerusteenOsatApi, Laaja, TutkinnonRakenne, TutkinnonOsaViiteDto, Arviointiasteikot, GeneerinenArviointiasteikko, ArviointiAsteikkoDto } from '@shared/api/eperusteet';
+import { PerusteenOsatApi, Laaja, TutkinnonRakenne, TutkinnonOsaViiteDto, Arviointiasteikot, GeneerinenArviointiasteikko, ArviointiAsteikkoDto, PerusteDto } from '@shared/api/eperusteet';
+import { perusteenSuoritustapa } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -12,7 +13,7 @@ export class PerusteenTutkinnonosaStore {
     arviointiasteikot: null as ArviointiAsteikkoDto[] | null,
   })
 
-  constructor(private perusteId: number, private tutkinnonOsaViiteId: number) {
+  constructor(private peruste: PerusteDto, private tutkinnonOsaViiteId: number) {
     this.fetch();
   }
 
@@ -22,8 +23,7 @@ export class PerusteenTutkinnonosaStore {
 
   public async fetch() {
     this.state.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
-
-    const tutkinnonOsaViitteet = (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.perusteId, 'REFORMI')).data;
+    const tutkinnonOsaViitteet = (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.peruste.id!, perusteenSuoritustapa(this.peruste))).data;
     this.state.tutkinnonosaViite = _.head(_.filter(tutkinnonOsaViitteet, tutkinnonOsaViite => tutkinnonOsaViite.id === this.tutkinnonOsaViiteId));
     this.state.tutkinnonosa = (await PerusteenOsatApi.getPerusteenOsa(_.toNumber(_.get(this.state.tutkinnonosaViite!, '_tutkinnonOsa')))).data as any;
     this.state.tutkinnonosa = {

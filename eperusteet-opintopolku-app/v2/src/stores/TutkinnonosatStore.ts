@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
 import { JulkinenApi, Perusteet, Sisaltoviitteet, Opetussuunnitelmat, OpetussuunnitelmaDto } from '@shared/api/amosaa';
+import { perusteenSuoritustapa } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -19,16 +20,16 @@ export class TutkinnonosatStore {
   public async fetch() {
     const tutkinnonosaViitteet = (await Sisaltoviitteet.getTutkinnonosat(this.opetussuunnitelma.id!, _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data;
 
-    const perusteIds = [
+    const perusteIds = _.uniq([
       this.opetussuunnitelma.peruste!.id!,
       ..._.chain(tutkinnonosaViitteet)
         .filter('peruste')
         .map('peruste.id')
         .uniq()
         .value(),
-    ];
+    ]);
 
-    const perusteidenTutkinnonosaViitteet = _.chain(await Promise.all(_.map(perusteIds, (perusteId: number) => Perusteet.getTutkinnonOsaViitteet(perusteId, 'reformi'))))
+    const perusteidenTutkinnonosaViitteet = _.chain(await Promise.all(_.map(perusteIds, perusteId => Perusteet.getTutkinnonOsaViitteet(perusteId, this.opetussuunnitelma.suoritustapa!))))
       .map('data')
       .flatMap()
       .value();
