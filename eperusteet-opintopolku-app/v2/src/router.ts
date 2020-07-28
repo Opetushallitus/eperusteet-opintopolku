@@ -45,7 +45,7 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
-import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { stateToKoulutustyyppi, perusteenSuoritustapa } from '@shared/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
@@ -425,10 +425,11 @@ export const router = new Router({
           resolve: {
             cacheBy: ['perusteId'],
             async props(route) {
+              const perusteDataStore = getRouteStore(route, 'peruste', 'perusteDataStore');
               return {
                 default: {
                   tutkinnonosatStore: await new PerusteenTutkinnonosatStore(
-                    _.parseInt(route.params.perusteId),
+                    perusteDataStore.peruste,
                   ),
                 },
               };
@@ -443,10 +444,11 @@ export const router = new Router({
           resolve: {
             cacheBy: ['perusteId', 'tutkinnonOsaViiteId'],
             async props(route) {
+              const perusteDataStore = getRouteStore(route, 'peruste', 'perusteDataStore');
               return {
                 default: {
                   tutkinnonosaStore: await new PerusteenTutkinnonosaStore(
-                    _.parseInt(route.params.perusteId),
+                    perusteDataStore.peruste,
                     _.parseInt(route.params.tutkinnonOsaViiteId),
                   ),
                 },
@@ -462,10 +464,12 @@ export const router = new Router({
           resolve: {
             cacheBy: ['perusteId'],
             async props(route) {
+              const perusteDataStore = getRouteStore(route, 'peruste', 'perusteDataStore');
               return {
                 default: {
                   rakenneStore: await new PerusteRakenneStore(
-                    _.parseInt(route.params.perusteId),
+                    perusteDataStore.peruste.id,
+                    perusteenSuoritustapa(perusteDataStore.peruste),
                   ),
                 },
               };
@@ -637,3 +641,8 @@ Virheet.onError((virhe: SovellusVirhe) => {
     },
   });
 });
+
+function getRouteStore(route: any, routeName: string, store: string) {
+  const filteredRoute = _.head(_.filter(route.matched, match => match.name === routeName));
+  return _.get(filteredRoute, 'props.default.' + store);
+}

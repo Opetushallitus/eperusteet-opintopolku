@@ -91,11 +91,13 @@ export default class PerusteRakenneOsa extends Vue {
 
   get laajuus() {
     if (this.rakenneosa.muodostumisSaanto) {
-      if (this.rakenneosa.muodostumisSaanto.laajuus.maksimi !== this.rakenneosa.muodostumisSaanto.laajuus.minimi) {
-        return this.rakenneosa.muodostumisSaanto.laajuus.minimi + '-' + this.rakenneosa.muodostumisSaanto.laajuus.maksimi;
+      const tyyppi = this.rakenneosa.muodostumisSaanto.laajuus || this.rakenneosa.muodostumisSaanto.koko;
+
+      if (tyyppi.maksimi !== tyyppi.minimi) {
+        return tyyppi.minimi + '-' + tyyppi.maksimi;
       }
 
-      return this.rakenneosa.muodostumisSaanto.laajuus.maksimi;
+      return tyyppi.maksimi;
     }
 
     if (this.rakenneosa.tutkinnonosa) {

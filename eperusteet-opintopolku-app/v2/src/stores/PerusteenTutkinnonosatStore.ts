@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { TutkinnonRakenne } from '@shared/api/eperusteet';
+import { TutkinnonRakenne, PerusteDto } from '@shared/api/eperusteet';
+import { perusteenSuoritustapa } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -10,13 +11,13 @@ export class PerusteenTutkinnonosatStore {
     tutkinnonosat: null as any[] | null,
   })
 
-  constructor(private perusteId: number) {
+  constructor(private peruste: PerusteDto) {
     this.fetch();
   }
 
   public readonly tutkinnonosat = computed(() => this.state.tutkinnonosat);
 
   public async fetch() {
-    this.state.tutkinnonosat = (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.perusteId, 'REFORMI')).data as any[];
+    this.state.tutkinnonosat = (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.peruste.id!, perusteenSuoritustapa(this.peruste))).data as any[];
   }
 }

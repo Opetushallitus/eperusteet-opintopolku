@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
 import { JulkinenApi, Matala, Perusteet, OpetussuunnitelmaDto, Koodistot, Sisaltoviitteet } from '@shared/api/amosaa';
+import { perusteenSuoritustapa } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -56,7 +57,7 @@ export class SisaltoviiteStore {
       const perusteId = _.get(this.state.sisaltoviite, 'peruste.id') || _.get(this.opetussuunnitelma, 'peruste.id');
 
       this.state.perusteenTutkinnonosa = (await Perusteet.getPerusteTutkinnonOsa(perusteId, this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
-      this.state.perusteenTutkinnonosaViite = (await Perusteet.getTutkinnonOsaViite(perusteId, 'reformi', this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
+      this.state.perusteenTutkinnonosaViite = (await Perusteet.getTutkinnonOsaViite(perusteId, this.opetussuunnitelma.suoritustapa!, this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
     }
 
     this.state.fetching = false;

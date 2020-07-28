@@ -8,7 +8,7 @@
         <ep-button class="kuvaustoggle" variant="link" @click="toggleKuvaukset()">{{$t(rakenneOsaKuvasTeksti)}}</ep-button>
 
       </div>
-      <div class="text-right rakenneotsikko">{{$t('osaamispiste')}}</div>
+      <div class="text-right rakenneotsikko">{{laajuustyyppi}}</div>
       <div class="rakenneosat">
         <peruste-rakenne-osa
           ref="rakenneosa"
@@ -124,6 +124,26 @@ export default class EpPerusteRakenne extends Vue {
   toggleKuvaukset() {
     this.naytaKuvaukset = !this.naytaKuvaukset;
     _.forEach(this.$refs.rakenneosa, (rakenneosa: any) => rakenneosa.toggleKuvaus(this.naytaKuvaukset));
+  }
+
+  get laajuustyyppi() {
+    const laajuustyypit = _.chain(this.flattenRakenneOsat(this.rakenneOsat))
+      .map(osa => {
+        return {
+          ..._.pickBy(osa.muodostumisSaanto, _.identity),
+        };
+      })
+      .filter(muodostumisSaanto => !_.isEmpty(muodostumisSaanto))
+      .map(muodostumisSaanto => _.keys(muodostumisSaanto))
+      .flatMap()
+      .uniq()
+      .value();
+
+    if (_.size(laajuustyypit) === 0 || _.size(laajuustyypit) > 1) {
+      return '';
+    }
+
+    return _.includes(laajuustyypit, 'laajuus') ? this.$t('osaamispiste') : this.$t('kpl');
   }
 }
 </script>

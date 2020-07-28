@@ -63,7 +63,7 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   private tutkinnonosaViitteetStore: TutkinnonosaViitteetStore | null = null;
 
   mounted() {
-    this.perusteRakenneStore = new PerusteRakenneStore(this.opetussuunnitelma.peruste!.perusteId!);
+    this.perusteRakenneStore = new PerusteRakenneStore(this.opetussuunnitelma.peruste!.perusteId!, this.opetussuunnitelma.suoritustapa!);
     this.tutkinnonosaViitteetStore = new TutkinnonosaViitteetStore(this.opetussuunnitelma);
   }
 
