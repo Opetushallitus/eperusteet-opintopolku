@@ -65,7 +65,7 @@ export class PerusteDataStore {
   }
 
   private async fetchNavigation() {
-    this.navigation = (await Perusteet.getNavigation(this.perusteId)).data;
+    this.navigation = (await Perusteet.getNavigation(this.perusteId, Kielet.getUiKieli.value)).data;
   }
 
   @Getter(state => {

@@ -38,6 +38,10 @@ import RouteToteutussuunnitelmaTiedot from '@/routes/toteutussuunnitelmat/RouteT
 import RouteToteutussuunnitelmaSuorituspolut from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSuorituspolut.vue';
 import RouteToteutussuunnitelmaSisalto from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSisalto.vue';
 import RouteToteutussuunnitelmaTutkinnonosat from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTutkinnonosat.vue';
+import RoutePerusopetusVuosiluokkakokonaisuus from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RoutePerusopetusVuosiluokkakokonaisuus.vue';
+import RouteOpetussuunnitelmaPerusopetusOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaineet.vue';
+import RouteOpetussuunnitelmaPerusopetusOppiaine from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaine.vue';
+import RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -84,6 +88,8 @@ import { PerusteenTutkinnonosaStore } from '@/stores/PerusteenTutkinnonosaStore'
 import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
 import { PerusteVuosiluokkakokonaisuusStore } from '@/stores/PerusteVuosiluokkakokonaisuusStore';
 import { PerusopetusOppiaineStore } from '@/stores/PerusopetusOppiaineStore';
+import { OpetussuunnitelmaVuosiluokkakokonaisuusStore } from '@/stores/OpetussuunnitelmaVuosiluokkakokonaisuusStore';
+import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiaineStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -665,6 +671,78 @@ export const router = new Router({
         path: 'opintojakso/:opintojaksoId',
         component: RouteOpetussuunnitelmaOpintojakso,
         name: 'lops2019OpetussuunnitelmaOpintojakso',
+      }, {
+        path: 'vuosiluokkakokonaisuus/:vlkId',
+        component: RoutePerusopetusVuosiluokkakokonaisuus,
+        name: 'opetussuunnitelmanvuosiluokkakokonaisuus',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'vlkId'],
+            async props(route) {
+              return {
+                default: {
+                  opetussuunnitelmaVuosiluokkakokonaisuusStore: await OpetussuunnitelmaVuosiluokkakokonaisuusStore.create(
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.vlkId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+        children: [{
+          path: 'oppiaine/:oppiaineId',
+          component: RouteOpetussuunnitelmaPerusopetusOppiaine,
+          name: 'opetussuunnitelmaperusopetusvuosiluokanoppiaine',
+          meta: {
+            resolve: {
+              cacheBy: ['opetussuunnitelmaId', 'vlkId', 'oppiaineId'],
+              async props(route) {
+                const opetussuunnitelmaDataStore = getRouteStore(route, 'opetussuunnitelma', 'opetussuunnitelmaDataStore');
+                return {
+                  default: {
+                    opetussuunnitelmaOppiaineStore: await OpetussuunnitelmaOppiaineStore.create(
+                      opetussuunnitelmaDataStore.opetussuunnitelma,
+                      _.parseInt(route.params.opetussuunnitelmaId),
+                      _.parseInt(route.params.oppiaineId),
+                      _.parseInt(route.params.vlkId),
+                    ),
+                  },
+                };
+              },
+            },
+          },
+        }],
+      }, {
+        path: 'oppiaineet',
+        component: RouteOpetussuunnitelmaPerusopetusOppiaineet,
+        name: 'opetussuunnitelmaperusopetusoppiaineet',
+      }, {
+        path: 'valinnaisetoppiaineet',
+        component: RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet,
+        name: 'opetussuunnitelmaperusopetusvalinnaisetoppiaineet',
+        alias: 'valinnaisetoppiaineet/:vlkId',
+      }, {
+        path: 'oppiaineet/:oppiaineId',
+        component: RouteOpetussuunnitelmaPerusopetusOppiaine,
+        name: 'opetussuunnitelmaperusopetusoppiaine',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
+            async props(route) {
+              const opetussuunnitelmaDataStore = getRouteStore(route, 'opetussuunnitelma', 'opetussuunnitelmaDataStore');
+              return {
+                default: {
+                  opetussuunnitelmaOppiaineStore: await OpetussuunnitelmaOppiaineStore.create(
+                    opetussuunnitelmaDataStore.opetussuunnitelma,
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.oppiaineId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }],
     }],
   }, {
