@@ -119,7 +119,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   async fetchNavigation() {
     this.navigation = null;
-    this.navigation = (await Opetussuunnitelmat.getNavigationJulkinen(this.opetussuunnitelmaId)).data;
+    this.navigation = (await Opetussuunnitelmat.getNavigationJulkinen(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value)).data;
   }
 
   async fetchOpintojaksot() {
