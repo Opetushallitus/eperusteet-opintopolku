@@ -27,6 +27,9 @@ import RouteModuuli from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteMo
 import RouteTutkinnonosat from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosat.vue';
 import RouteTutkinnonosa from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosa.vue';
 import RouteRakenne from '@/routes/perusteet/sisalto/ammatillinen/RouteRakenne.vue';
+import RouteVuosiluokkakokonaisuus from '@/routes/perusteet/sisalto/perusopetus/RouteVuosiluokkakokonaisuus.vue';
+import RoutePerusopetusOppiaine from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaine.vue';
+import RoutePerusopetusOppiaineet from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaineet.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -79,6 +82,8 @@ import { TutkinnonosatStore } from '@/stores/TutkinnonosatStore';
 import { PerusteenTutkinnonosatStore } from '@/stores/PerusteenTutkinnonosatStore';
 import { PerusteenTutkinnonosaStore } from '@/stores/PerusteenTutkinnonosaStore';
 import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
+import { PerusteVuosiluokkakokonaisuusStore } from '@/stores/PerusteVuosiluokkakokonaisuusStore';
+import { PerusopetusOppiaineStore } from '@/stores/PerusopetusOppiaineStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -437,6 +442,45 @@ export const router = new Router({
           },
         },
       }, {
+        path: 'vuosiluokkakokonaisuus/:vlkId',
+        component: RouteVuosiluokkakokonaisuus,
+        name: 'vuosiluokkakokonaisuus',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId', 'vlkId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteVuosiluokkakokonaisuusStore: await PerusteVuosiluokkakokonaisuusStore.create(
+                    _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.vlkId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+        children: [{
+          path: 'oppiaine/:oppiaineId',
+          component: RoutePerusopetusOppiaine,
+          name: 'vuosiluokanoppiaine',
+          meta: {
+            resolve: {
+              cacheBy: ['perusteId', 'vlkId', 'oppiaineId'],
+              async props(route) {
+                return {
+                  default: {
+                    perusopetusOppiaineStore: await PerusopetusOppiaineStore.create(
+                      _.parseInt(route.params.perusteId),
+                      _.parseInt(route.params.oppiaineId),
+                    ),
+                  },
+                };
+              },
+            },
+          },
+        }],
+      }, {
         path: 'tutkinnonosat/:tutkinnonOsaViiteId',
         component: RouteTutkinnonosa,
         name: 'tutkinnonosa',
@@ -470,6 +514,29 @@ export const router = new Router({
                   rakenneStore: await new PerusteRakenneStore(
                     perusteDataStore.peruste.id,
                     perusteenSuoritustapa(perusteDataStore.peruste),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'oppiaineet',
+        component: RoutePerusopetusOppiaineet,
+        name: 'perusopetusoppiaineet',
+      }, {
+        path: 'oppiaineet/:oppiaineId',
+        component: RoutePerusopetusOppiaine,
+        name: 'perusopetusoppiaine',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId', 'oppiaineId'],
+            async props(route) {
+              return {
+                default: {
+                  perusopetusOppiaineStore: await PerusopetusOppiaineStore.create(
+                    _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.oppiaineId),
                   ),
                 },
               };
