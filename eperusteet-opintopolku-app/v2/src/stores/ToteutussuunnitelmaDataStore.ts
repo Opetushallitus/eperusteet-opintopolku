@@ -148,7 +148,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     const map = (value, depth = 0) => {
       return {
         ...value,
-        isVisible: !getters.current || depth === 1 || onPath(value),
+        isVisible: !getters.current || depth === 1 || onPath(value) || getters.current.type === 'tiedot',
         children: _.map(value.children, child => map(child, depth + 1)),
       };
     };
