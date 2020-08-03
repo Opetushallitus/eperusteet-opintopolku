@@ -28,7 +28,7 @@ export class PerusteDataStore {
   @State() public currentRoute: Location | null = null;
   @State() public termit: TermiDto[] | null = null;
   @State() public kuvat: LiiteDtoWrapper[] | null = null;
-  @State() public dokumentit: any = {};
+  @State() public dokumentti: string | null = null;
   @State() public korvaavatPerusteet: any[] = [];
   @State() public sidenavFilter: NavigationFilter = {
     label: '',
@@ -167,7 +167,7 @@ export class PerusteDataStore {
         if (suoritustapakoodi) {
           const dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
           if (dokumenttiId) {
-            this.dokumentit[sisaltoKieli] = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
+            this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
           }
         }
       }
