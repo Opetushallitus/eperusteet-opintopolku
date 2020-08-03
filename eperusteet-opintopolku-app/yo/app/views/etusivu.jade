@@ -66,9 +66,9 @@
               a(ui-sref='root.selaus.koostenakyma({ perusteluokitus: "ammatillinenkoulutus" })')
                 span(kaanna="'navi.ammatillinenkoulutus'")
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_5'][0]")
-              a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_5'][0].id, suoritustapa: 'ops'})", ng-bind="uusimmat['koulutustyyppi_5'][0].nimi | kaanna")
+              a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_5'][0].id, suoritustapa: uusimmat['koulutustyyppi_5'][0].suoritustavat[0].suoritustapakoodi})", ng-bind="uusimmat['koulutustyyppi_5'][0].nimi | kaanna")
             li.peruste-linkki(ng-show="uusimmat['koulutustyyppi_18'][0]")
-              a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: 'ops'})", ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna")
+              a(ui-sref="root.esitys.peruste({perusteId: uusimmat['koulutustyyppi_18'][0].id, suoritustapa: uusimmat['koulutustyyppi_18'][0].suoritustavat[0].suoritustapakoodi})", ng-bind="uusimmat['koulutustyyppi_18'][0].nimi | kaanna")
 
         p.text-center(ng-hide="uusimmatValtakunnallisetLadattu || uusimmatValtakunnallisetVirhe")
           small-spinner
