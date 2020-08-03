@@ -21,7 +21,7 @@
                 {{ $sd(tiedote.luotu) }}
               </div>
               <div class="tiedote-sisalto">
-                <p v-html="$kaanna(tiedote.sisalto)"></p>
+                <ep-content-viewer :value="$kaanna(tiedote.sisalto)"/>
               </div>
             </div>
           </div>
@@ -50,6 +50,7 @@ import { TiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { Meta } from '@shared/utils/decorators';
 
@@ -58,6 +59,7 @@ import { Meta } from '@shared/utils/decorators';
     EpSpinner,
     EpHeader,
     EpSearch,
+    EpContentViewer,
   },
 })
 export default class RouteUutiset extends Vue {

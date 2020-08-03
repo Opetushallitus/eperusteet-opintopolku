@@ -1,4 +1,4 @@
-v-for="<template>
+<template>
 <div class="content">
   <ep-spinner v-if="isLoading"></ep-spinner>
   <div v-else>
@@ -89,7 +89,9 @@ v-for="<template>
 
       <div class="col-md-12" v-if="!isAmmatillinen && peruste.kuvaus">
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
-          <span v-html="$kaanna(peruste.kuvaus)"></span>
+          <ep-content-viewer :value="$kaanna(peruste.kuvaus)"
+                           :termit="termit"
+                           :kuvat="kuvat" />
         </ep-form-content>
       </div>
 
@@ -132,13 +134,17 @@ v-for="<template>
 
           <div class="col-md-12 mt-3" v-if="peruste.kvliite && peruste.kvliite.suorittaneenOsaaminen">
             <ep-form-content name="suorittaneen-osaaminen" headerType="h3" headerClass="h6">
-              <span v-html="$kaanna(peruste.kvliite.suorittaneenOsaaminen)" />
+              <ep-content-viewer :value="$kaanna(peruste.kvliite.suorittaneenOsaaminen)"
+                  :termit="termit"
+                  :kuvat="kuvat" />
             </ep-form-content>
           </div>
 
           <div class="col-md-12 mt-3" v-if="peruste.kvliite && peruste.kvliite.tyotehtavatJoissaVoiToimia">
             <ep-form-content name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6">
-              <span v-html="$kaanna(peruste.kvliite.tyotehtavatJoissaVoiToimia)" />
+              <ep-content-viewer :value="$kaanna(peruste.kvliite.tyotehtavatJoissaVoiToimia)"
+                  :termit="termit"
+                  :kuvat="kuvat" />
             </ep-form-content>
           </div>
 
@@ -146,7 +152,9 @@ v-for="<template>
           <ep-form-content name="osaamisalojen-kuvaukset" headerType="h3" headerClass="h6">
             <div v-for="(osaamisalakuvaus, index) in osaamisalaKuvaukset" :key="'osaamisalakuvaus'+index">
               <h4>{{$kaanna(osaamisalakuvaus.nimi)}}</h4>
-              <span v-html="$kaanna(osaamisalakuvaus.teksti)"></span>
+              <ep-content-viewer :value="$kaanna(osaamisalakuvaus.teksti)"
+                  :termit="termit"
+                  :kuvat="kuvat" />
             </div>
           </ep-form-content>
         </div>
@@ -205,7 +213,7 @@ export default class RoutePerusteTiedot extends Vue {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
     this.perusteDataStore.getKorvaavatPerusteet();
-    this.kieliChanged();
+    this.perusteDataStore.getDokumentit();
     this.isLoading = false;
   }
 
@@ -213,7 +221,7 @@ export default class RoutePerusteTiedot extends Vue {
     return Kielet.getSisaltoKieli.value;
   }
 
-  @Watch('Kielet.getSisaltoKieli.value')
+  @Watch('kieli')
   async kieliChanged() {
     // Dokumentti on toteuttu vain ammatillisille
     if (this.isAmmatillinen) {
@@ -241,6 +249,14 @@ export default class RoutePerusteTiedot extends Vue {
 
   get kvliitteet() {
     return this.perusteDataStore.kvLiitteet;
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
+  }
+
+  get termit() {
+    return this.perusteDataStore.termit;
   }
 
   get osaamisalaKuvaukset() {
@@ -323,9 +339,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    if (this.perusteDataStore.dokumentit) {
-      return (this as any).$kaanna(this.perusteDataStore.dokumentit);
-    }
+    return this.perusteDataStore.dokumentti;
   }
 
   get koulutuskooditFields() {

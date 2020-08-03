@@ -9,7 +9,8 @@
       </ep-form-content>
 
       <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
-        <span v-html="$kaanna(toteutussuunnitelma.kuvaus)"></span>
+        <ep-content-viewer :value="$kaanna(toteutussuunnitelma.kuvaus)"
+                           :kuvat="kuvat" />
       </ep-form-content>
 
       <ep-form-content name="paatosnumero" headerType="h3" headerClass="h6">
@@ -56,12 +57,14 @@ import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import { DokumenttiDtoTilaEnum } from '@shared/api/amosaa';
 import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
+    EpContentViewer,
     EpFormContent,
     EpField,
   },
@@ -71,7 +74,7 @@ export default class RouteToteutussuunnitelmaTiedot extends Vue {
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
   async mounted() {
-    await this.kieliChanged();
+    this.kieliChanged();
   }
 
   get toteutussuunnitelma() {
@@ -82,7 +85,15 @@ export default class RouteToteutussuunnitelmaTiedot extends Vue {
     return this.opetussuunnitelmaDataStore.dokumenttiUrl;
   }
 
-  @Watch('Kielet.getSisaltoKieli.value')
+  get kuvat() {
+    return this.opetussuunnitelmaDataStore.kuvat;
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('kieli')
   async kieliChanged() {
     await this.opetussuunnitelmaDataStore.getDokumenttiTila();
   }

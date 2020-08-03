@@ -19,7 +19,7 @@
 
     <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in sisaltoviite.tosa.vapaat" :key="'tosavapaateksti'+index">
       <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
-      <span v-html="$kaanna(vapaa.teksti)" />
+      <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
     </ep-form-content>
 
     <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus" v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0">
@@ -37,7 +37,7 @@
 
         <div v-if="toteutus.tavatjaymparisto">
           <ep-form-content class="col-md-12" name="tavat-ja-ymparisto">
-            <span v-html="$kaanna(toteutus.tavatjaymparisto.teksti)" />
+            <ep-content-viewer :value="$kaanna(toteutus.tavatjaymparisto.teksti)" :kuvat="kuvat"/>
           </ep-form-content>
 
           <hr/>
@@ -45,7 +45,7 @@
 
         <div v-if="toteutus.arvioinnista">
           <ep-form-content class="col-md-12" name="osaamisen-arvioinnista">
-            <span v-html="$kaanna(toteutus.arvioinnista.teksti)" />
+            <ep-content-viewer :value="$kaanna(toteutus.arvioinnista.teksti)" :kuvat="kuvat"/>
           </ep-form-content>
 
           <hr/>
@@ -54,7 +54,7 @@
         <div v-if="toteutus.vapaat && toteutus.vapaat.length > 0">
           <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in toteutus.vapaat" :key="'vapaa'+index">
             <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
-            <span v-html="$kaanna(vapaa.teksti)" />
+            <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
             <hr v-if="index < toteutus.length-1"/>
           </ep-form-content>
         </div>
@@ -67,7 +67,7 @@
 
       <div v-if="sisaltoviite.tosa.omatutkinnonosa.tavoitteet" class="mb-4">
         <ep-form-content class="col-md-12" name="tavoitteet">
-          <span v-html="$kaanna(sisaltoviite.tosa.omatutkinnonosa.tavoitteet)" />
+          <ep-content-viewer :value="$kaanna(sisaltoviite.tosa.omatutkinnonosa.tavoitteet)" :kuvat="kuvat"/>
         </ep-form-content>
         <hr/>
       </div>
@@ -98,14 +98,14 @@
       </div>
 
       <ep-form-content class="col-md-12" v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat" name="tavoitteet">
-        <span v-html="$kaanna(sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat)" />
+        <ep-content-viewer :value="$kaanna(sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
       </ep-form-content>
 
     </div>
 
     <div v-if="perusteenTutkinnonosa">
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
-        <span v-html="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" />
+        <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" :kuvat="kuvat"/>
       </ep-form-content>
 
       <ep-ammatillinen-arvioinnin-kohdealueet
@@ -114,7 +114,7 @@
         :arvioinninKohdealueet="perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"/>
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
-        <span v-html="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" />
+        <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
       </ep-form-content>
 
       <ep-form-content class="col-md-12 mb-5" v-if="pakollisetOsaAlueet && pakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">

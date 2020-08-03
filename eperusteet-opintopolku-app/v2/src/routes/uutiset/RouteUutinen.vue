@@ -17,7 +17,7 @@
     </template>
     <div v-if="tiedote" class="tiedote">
       <div class="sisalto">
-        <p v-html="$kaanna(tiedote.sisalto)"></p>
+        <ep-content-viewer :value="$kaanna(tiedote.sisalto)"/>
       </div>
     </div>
     <ep-spinner v-else />
@@ -32,6 +32,7 @@ import { TiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Meta } from '@shared/utils/decorators';
 
 @Component({
@@ -39,6 +40,7 @@ import { Meta } from '@shared/utils/decorators';
     EpSpinner,
     EpHeader,
     EpSearch,
+    EpContentViewer,
   },
 })
 export default class RouteUutinen extends Vue {
