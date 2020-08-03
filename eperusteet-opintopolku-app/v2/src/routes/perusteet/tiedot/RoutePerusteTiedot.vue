@@ -192,6 +192,7 @@ import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperu
 import { isAmmatillinen, isKoulutustyyppiAmmatillinen } from '@shared/utils/perusteet';
 import { watch } from '@vue/composition-api';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
@@ -199,6 +200,7 @@ import { Kielet, UiKielet } from '@shared/stores/kieli';
     EpField,
     EpDatepicker,
     EpSpinner,
+    EpContentViewer,
   },
 })
 export default class RoutePerusteTiedot extends Vue {
