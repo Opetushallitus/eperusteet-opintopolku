@@ -215,7 +215,9 @@ export default class RoutePerusteTiedot extends Vue {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
     this.perusteDataStore.getKorvaavatPerusteet();
-    this.perusteDataStore.getDokumentit();
+    if (this.isAmmatillinen) {
+      this.perusteDataStore.getDokumentit();
+    }
     this.isLoading = false;
   }
 
