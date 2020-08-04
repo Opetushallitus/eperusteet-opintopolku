@@ -27,7 +27,7 @@
     "angular-translate": "2.13.0",
     "angular-translate-loader-static-files": "2.13.0",
     "angular-ui-bootstrap": "2.2.0",
-    "angular-ui-router": "0.3.2",
+    "angular-ui-router": "0.4.3",
     "angulartics": "1.5.0",
     "angulartics-piwik": "1.0.6",
     "bootstrap-sass": "3.3.7",
