@@ -22,8 +22,7 @@ angular
             scope: { model: "=tekstikentta", perusteModel: "=perusteteksti" },
             transclude: true,
             template:
-                "" +
-                '<div ng-if="teksti" ng-bind-html="teksti | kuvalinkit | unsafe" termisto-viitteet="model"></div>' +
+                '<div ng-if="teksti" class="esitys-ops" ng-bind-html="teksti | kuvalinkit | unsafe" termisto-viitteet="model"></div>' +
                 '<div ng-if="perusteTeksti" class="esitys-peruste" termisto-viitteet="perusteTeksti" ng-bind-html="perusteTeksti | kaanna | kuvalinkit | unsafe"></div>',
             controller: function($scope, Utils, Kaanna, Kieli) {
                 const altLang = Kaanna.getAltLang();

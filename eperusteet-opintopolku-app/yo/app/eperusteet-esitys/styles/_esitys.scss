@@ -226,5 +226,11 @@ $border-color: #0c566e;
     }
 }
 
+.esitys-ops {
+    table {
+        width: auto !important;
+    }
+}
+
 @import "sivunavi";
 @import "perusopetus";
