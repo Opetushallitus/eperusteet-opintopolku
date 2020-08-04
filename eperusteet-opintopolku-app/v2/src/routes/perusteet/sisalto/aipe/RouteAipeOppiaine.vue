@@ -109,9 +109,9 @@
 
           </ep-collapse>
 
-          <div class="mt-4" v-if="tavoite.arvioinninKuvaus">
+          <div class="mt-4" v-if="tavoite.kohdeTeksti">
             <h4>{{ $t('arvioinnin-kohde') }}</h4>
-            <span v-html="$kaanna(tavoite.arvioinninKuvaus)"></span>
+            <span v-html="$kaanna(tavoite.kohdeTeksti)"></span>
           </div>
         </div>
 
@@ -185,10 +185,21 @@ export default class RouteAipeOppiaine extends Vue {
           ...tavoite,
           kohdealue: this.kohdealueetById[_.head(tavoite.kohdealueet) as any],
           laajaalaisetosaamiset: _.map(tavoite.laajattavoitteet, lao => this.laajaAlaisetOsaamisetById[lao as any]),
+          kohdeTeksti: this.arvioinninKohteenTeksti(tavoite),
         };
       });
     }
   }
+
+  arvioinninKohteenTeksti(tavoite) {
+    const hyvanOsaamisenArvio = _.find(tavoite.arvioinninkohteet, (arvioinninkohde: any) => arvioinninkohde.arvosana === 8);
+
+    if (hyvanOsaamisenArvio && !_.isEmpty(hyvanOsaamisenArvio.arvioinninKohde)) {
+      return hyvanOsaamisenArvio.arvioinninKohde;
+    }
+
+    return tavoite.arvioinninKuvaus;
+  };
 
   get laajaAlaisetOsaamisetById() {
     if (this.aipeOppiaineStore.laajaAlaisetOsaamiset.value) {
