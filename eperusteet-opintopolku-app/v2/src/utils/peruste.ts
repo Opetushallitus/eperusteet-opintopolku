@@ -9,12 +9,11 @@ interface HasKoulutustyyppiToteutus {
 
 export function uusiJulkinenToteutus(hasToteutus: HasKoulutustyyppiToteutus) {
   return !hasToteutus
-    || (hasToteutus.koulutustyyppi !== Koulutustyyppi.aikuistenperusopetus
-      && ((hasToteutus.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
-        && !(hasToteutus.koulutustyyppi === Koulutustyyppi.aikuistenlukiokoulutus
-          || hasToteutus.koulutustyyppi === Koulutustyyppi.lukiovalmistavakoulutus))
+    || ((hasToteutus.toteutus === KoulutustyyppiToteutus.yksinkertainen.valueOf()
+        && hasToteutus.koulutustyyppi !== Koulutustyyppi.lukiovalmistavakoulutus)
         || hasToteutus.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()
         || hasToteutus.toteutus === KoulutustyyppiToteutus.lops2019.valueOf()
         || hasToteutus.toteutus === KoulutustyyppiToteutus.tpo.valueOf()
-        || hasToteutus.toteutus === KoulutustyyppiToteutus.perusopetus.valueOf()));
+        || hasToteutus.toteutus === KoulutustyyppiToteutus.perusopetus.valueOf()
+        || hasToteutus.koulutustyyppi === Koulutustyyppi.aikuistenperusopetus);
 }

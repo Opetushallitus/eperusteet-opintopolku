@@ -30,6 +30,9 @@ import RouteRakenne from '@/routes/perusteet/sisalto/ammatillinen/RouteRakenne.v
 import RouteVuosiluokkakokonaisuus from '@/routes/perusteet/sisalto/perusopetus/RouteVuosiluokkakokonaisuus.vue';
 import RoutePerusopetusOppiaine from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaine.vue';
 import RoutePerusopetusOppiaineet from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaineet.vue';
+import RouteAipeKurssi from '@/routes/perusteet/sisalto/aipe/RouteAipeKurssi.vue';
+import RouteAipeOppiaine from '@/routes/perusteet/sisalto/aipe/RouteAipeOppiaine.vue';
+import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -81,8 +84,6 @@ import { OpasStore } from '@/stores/OpasStore';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
-import { SisaltoviiteStore } from '@/stores/SisaltoviiteStore';
-import { TutkinnonosatStore } from '@/stores/TutkinnonosatStore';
 import { PerusteenTutkinnonosatStore } from '@/stores/PerusteenTutkinnonosatStore';
 import { PerusteenTutkinnonosaStore } from '@/stores/PerusteenTutkinnonosaStore';
 import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
@@ -90,6 +91,9 @@ import { PerusteVuosiluokkakokonaisuusStore } from '@/stores/PerusteVuosiluokkak
 import { PerusopetusOppiaineStore } from '@/stores/PerusopetusOppiaineStore';
 import { OpetussuunnitelmaVuosiluokkakokonaisuusStore } from '@/stores/OpetussuunnitelmaVuosiluokkakokonaisuusStore';
 import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiaineStore';
+import { AipeVaiheStore } from '@/stores/AipeVaiheStore';
+import { AipeOppiaineStore } from '@/stores/AipeOppiaineStore';
+import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -549,6 +553,68 @@ export const router = new Router({
             },
           },
         },
+      }, {
+        path: 'vaihe/:vaiheId',
+        component: RouteAipeVaihe,
+        name: 'aipevaihe',
+        meta: {
+          resolve: {
+            cacheBy: ['perusteId', 'vaiheId'],
+            async props(route) {
+              return {
+                default: {
+                  aipeVaiheStore: await AipeVaiheStore.create(
+                    _.parseInt(route.params.perusteId),
+                    _.parseInt(route.params.vaiheId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+        children: [{
+          path: 'oppiaine/:oppiaineId',
+          component: RouteAipeOppiaine,
+          name: 'aipeoppiaine',
+          meta: {
+            resolve: {
+              cacheBy: ['perusteId', 'vaiheId', 'oppiaineId'],
+              async props(route) {
+                return {
+                  default: {
+                    aipeOppiaineStore: await AipeOppiaineStore.create(
+                      _.parseInt(route.params.perusteId),
+                      _.parseInt(route.params.vaiheId),
+                      _.parseInt(route.params.oppiaineId),
+                    ),
+                  },
+                };
+              },
+            },
+          },
+          children: [{
+            path: 'kurssi/:kurssiId',
+            component: RouteAipeKurssi,
+            name: 'aipekurssi',
+            meta: {
+              resolve: {
+                cacheBy: ['perusteId', 'vaiheId', 'oppiaineId', 'kurssiId'],
+                async props(route) {
+                  return {
+                    default: {
+                      aipeKurssiStore: await AipeKurssiStore.create(
+                        _.parseInt(route.params.perusteId),
+                        _.parseInt(route.params.vaiheId),
+                        _.parseInt(route.params.oppiaineId),
+                        _.parseInt(route.params.kurssiId),
+                      ),
+                    },
+                  };
+                },
+              },
+            },
+          }],
+        }],
       }],
     }, {
       path: 'ops/:opetussuunnitelmaId/:koulutustyyppi*',
