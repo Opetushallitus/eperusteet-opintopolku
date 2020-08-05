@@ -20,6 +20,7 @@ import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 import RoutePerusteTiedot from '@/routes/perusteet/tiedot/RoutePerusteTiedot.vue';
 import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
+import RouteTekstikappaleOsa from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappaleOsa.vue';
 import RouteLaajaAlaiset from '@/routes/perusteet/sisalto/lops2019/laajaalaiset/RouteLaajaAlaiset.vue';
 import RouteOppiaineet from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaineet.vue';
 import RouteOppiaine from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaine.vue';
@@ -357,6 +358,11 @@ export const router = new Router({
             },
           },
         },
+        children: [{
+          path: 'osa/:osa',
+          component: RouteTekstikappaleOsa,
+          name: 'tekstikappaleOsa',
+        }],
       }, {
         path: 'laajaalaiset',
         component: RouteLaajaAlaiset,

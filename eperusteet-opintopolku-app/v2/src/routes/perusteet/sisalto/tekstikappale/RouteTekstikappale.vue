@@ -1,5 +1,11 @@
 <template>
-<div class="content">
+<router-view v-if="tekstikappaleenOsa">
+  <template slot="previous-next-navigation">
+    <slot name="previous-next-navigation" />
+  </template>
+</router-view>
+
+<div v-else class="content">
   <div v-if="perusteenOsa">
     <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
     <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
@@ -98,6 +104,10 @@ export default class RouteTekstikappale extends Vue {
 
   get current() {
     return this.perusteDataStore.current || null;
+  }
+
+  get tekstikappaleenOsa() {
+    return this.$route.params.osa;
   }
 }
 
