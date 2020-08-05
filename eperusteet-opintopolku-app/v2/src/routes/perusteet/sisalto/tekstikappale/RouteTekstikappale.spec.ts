@@ -39,6 +39,9 @@ describe('RouteTekstikappale', async () => {
       },
       mocks: {
         ...mocks,
+        $route: {
+          params: {},
+        },
       },
     });
 
@@ -107,6 +110,9 @@ describe('RouteTekstikappale', async () => {
       },
       mocks: {
         ...mocks,
+        $route: {
+          params: {},
+        },
       },
     });
 
