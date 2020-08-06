@@ -6,9 +6,10 @@
       <ep-search :value="query" @input="setValue" />
     </div>
     <div class="navigation-tree">
-      <ep-opetussuunnitelma-sidenav-node v-if="treeData"
-                               :node="treeData"
-                               :current="current" />
+      <ep-sidenav-node v-if="treeData"
+                        :node="treeData"
+                        :current="current"
+                        :getChildren="getChildren" />
     </div>
   </div>
 </div>
@@ -20,13 +21,13 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpOpetussuunnitelmaSidenavNode from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenavNode.vue';
+import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
 
 @Component({
   components: {
     EpSearch,
-    EpOpetussuunnitelmaSidenavNode,
     EpSpinner,
+    EpSidenavNode,
   },
 })
 export default class EpOpetussuunnitelmaSidenav extends Vue {
@@ -41,6 +42,32 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
       isEnabled: !_.isEmpty(value),
       label: value,
     });
+  }
+
+  getChildren(node) {
+    const type = node.type;
+    const current = this.current;
+    const parent = node.path[_.size(node.path) - 2];
+
+    const isCurrentOrParentSelected = (current && (node.key === current.key
+        || (parent && parent.key === current.key && current.type !== 'oppiaineet')));
+
+    const isOppiaineenSisalto = node.type === 'opintojaksot' || node.type === 'moduulit';
+
+    const isErikoistyyppi = type === 'oppiaineet'
+        || type === 'oppiaine'
+        || type === 'oppimaarat'
+        || type === 'moduulit'
+        || type === 'moduuli'
+        || type === 'opintojaksot'
+        || type === 'opintojakso';
+
+    if ((isCurrentOrParentSelected && isErikoistyyppi) || isOppiaineenSisalto) {
+      return node.children;
+    }
+    else {
+      return _.filter(node.children, 'isVisible');
+    }
   }
 
   get sidenavLoading() {
