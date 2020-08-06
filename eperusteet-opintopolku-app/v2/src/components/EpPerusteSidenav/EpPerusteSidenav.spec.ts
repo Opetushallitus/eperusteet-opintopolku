@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import { PerusteDataStore } from '@/stores/PerusteDataStore.ts';
 import EpPerusteSidenav from './EpPerusteSidenav.vue';
-import EpPerusteSidenavNode from './EpPerusteSidenavNode.vue';
+import EpSidenavNode from '../EpSidenav/EpSidenavNode.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
@@ -139,7 +139,7 @@ describe('EpPerusteSidenav', async () => {
     });
 
     test('Works with simple root node', () => {
-      const nodes = wrapper.findAll(EpPerusteSidenavNode);
+      const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');
     });
 
@@ -149,7 +149,7 @@ describe('EpPerusteSidenav', async () => {
         children: navigationDataViitteet as any,
       };
 
-      const nodes = wrapper.findAll(EpPerusteSidenavNode);
+      const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');
       expect(nodes.length).toEqual(7);
     });
@@ -163,7 +163,7 @@ describe('EpPerusteSidenav', async () => {
         ],
       };
 
-      const nodes = wrapper.findAll(EpPerusteSidenavNode);
+      const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');
       expect(nodes.at(5).text()).toContain('Oppiaineet');
       expect(nodes.at(6).text()).toContain('OA1');
@@ -209,7 +209,7 @@ describe('EpPerusteSidenav', async () => {
         },
       };
 
-      const nodes = wrapper.findAll(EpPerusteSidenavNode);
+      const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(4);
       expect(nodes.at(1).text()).toContain('Tiedot');
       expect(nodes.at(2).text()).toContain('Päätaso');
@@ -225,7 +225,7 @@ describe('EpPerusteSidenav', async () => {
         },
       };
 
-      const nodes = wrapper.findAll(EpPerusteSidenavNode);
+      const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(6);
       expect(nodes.at(1).text()).toContain('Tiedot');
       expect(nodes.at(2).text()).toContain('Päätaso');
@@ -247,7 +247,7 @@ describe('EpPerusteSidenav', async () => {
         isEnabled: true,
       };
 
-      const nodes = wrapper.findAll(EpPerusteSidenavNode);
+      const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(5);
       expect(nodes.at(1).text()).toContain('Oppiaineet');
       expect(nodes.at(2).text()).toContain('OA1');
