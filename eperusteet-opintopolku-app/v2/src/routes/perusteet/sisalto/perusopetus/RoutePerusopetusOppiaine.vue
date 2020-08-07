@@ -9,7 +9,7 @@
 
       <div class="mt-4" v-if="hasContent(oppiaine.tehtava)">
         <h3>{{$kaanna(oppiaine.tehtava.otsikko)}}</h3>
-        <div v-html="$kaanna(oppiaine.tehtava.teksti)" />
+        <ep-content-viewer :value="$kaanna(oppiaine.tehtava.teksti)" :kuvat="kuvat" />
       </div>
 
       <b-tabs class="ml-0 pl-0 mt-4" v-model="tabIndex">
@@ -19,27 +19,27 @@
 
           <div class="mt-4" v-if="hasContent(vlk.tehtava)">
             <h3>{{$kaanna(vlk.tehtava.otsikko)}}</h3>
-            <div v-html="$kaanna(vlk.tehtava.teksti)" />
+            <ep-content-viewer :value="$kaanna(vlk.tehtava.teksti)" :kuvat="kuvat" />
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.tyotavat)">
             <h3>{{$kaanna(vlk.tyotavat.otsikko)}}</h3>
-            <div v-html="$kaanna(vlk.tyotavat.teksti)" />
+            <ep-content-viewer :value="$kaanna(vlk.tyotavat.teksti)" :kuvat="kuvat" />
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.ohjaus)">
             <h3>{{$kaanna(vlk.ohjaus.otsikko)}}</h3>
-            <div v-html="$kaanna(vlk.ohjaus.teksti)" />
+            <ep-content-viewer :value="$kaanna(vlk.ohjaus.teksti)" :kuvat="kuvat" />
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.arviointi)">
             <h3>{{$kaanna(vlk.arviointi.otsikko)}}</h3>
-            <div v-html="$kaanna(vlk.arviointi.teksti)" />
+            <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" />
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.arviointi)">
             <h3>{{$kaanna(vlk.arviointi.otsikko)}}</h3>
-            <div v-html="$kaanna(vlk.arviointi.teksti)" />
+            <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" />
           </div>
 
         </b-tab>
@@ -72,15 +72,21 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusopetusOppiaineStore } from '@/stores/PerusopetusOppiaineStore';
 import { Kielet } from '@shared/stores/kieli';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 
 @Component({
   components: {
     EpSpinner,
+    EpContentViewer,
   },
 })
 export default class RoutePerusopetusOppiaine extends Vue {
   @Prop({ required: true })
   private perusopetusOppiaineStore!: PerusopetusOppiaineStore;
+
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
 
   private tabIndex = 0;
 
@@ -106,6 +112,10 @@ export default class RoutePerusopetusOppiaine extends Vue {
         display: 'none',
       },
     }];
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
   }
 
   get oppimaarat() {

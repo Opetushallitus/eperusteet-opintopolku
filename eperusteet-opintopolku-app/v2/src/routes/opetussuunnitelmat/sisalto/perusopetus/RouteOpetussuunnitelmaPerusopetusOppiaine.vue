@@ -6,11 +6,11 @@
 
     <b-tabs class="ml-0 pl-0 mt-4" v-if="!vlkId">
       <b-tab class="mt-4" v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudet" :key="'vlk'+index" :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)">
-        <oppiaineen-vuosiluokkakokonaisuus :tietue="opVlk" />
+        <oppiaineen-vuosiluokkakokonaisuus :tietue="opVlk" :kuvat="kuvat" />
       </b-tab>
     </b-tabs>
 
-    <oppiaineen-vuosiluokkakokonaisuus v-else :tietue="oppiaineenVuosiluokkakokonaisuus" />
+    <oppiaineen-vuosiluokkakokonaisuus v-else :tietue="oppiaineenVuosiluokkakokonaisuus" :kuvat="kuvat"/>
   </div>
 </template>
 
@@ -21,6 +21,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiaineStore';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import OppiaineenVuosiluokkakokonaisuus from './OppiaineenVuosiluokkakokonaisuus.vue';
+import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
 @Component({
   components: {
@@ -31,6 +32,13 @@ import OppiaineenVuosiluokkakokonaisuus from './OppiaineenVuosiluokkakokonaisuus
 export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaOppiaineStore!: OpetussuunnitelmaOppiaineStore;
+
+  @Prop({ required: true })
+  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+
+  get kuvat() {
+    return this.opetussuunnitelmaDataStore.kuvat;
+  }
 
   get vlkId() {
     return this.$route.params.vlkId;

@@ -9,7 +9,7 @@
 
     <div class="mt-4" v-if="kurssi.kuvaus">
       <h3>{{ $t('kuvaus')}}</h3>
-      <span v-html="$kaanna(kurssi.kuvaus)"></span>
+      <ep-content-viewer :value="$kaanna(kurssi.kuvaus)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-5" v-if="tavoitteet && tavoitteet.length > 0">
@@ -28,11 +28,20 @@
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 
-@Component
+@Component({
+  components: {
+    EpContentViewer,
+  },
+})
 export default class RouteAipeKurssi extends Vue {
   @Prop({ required: true })
   private aipeKurssiStore!: AipeKurssiStore;
+
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
 
   get kurssi() {
     return this.aipeKurssiStore.kurssi.value;
@@ -57,6 +66,10 @@ export default class RouteAipeKurssi extends Vue {
         display: 'none',
       },
     }];
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
   }
 }
 
