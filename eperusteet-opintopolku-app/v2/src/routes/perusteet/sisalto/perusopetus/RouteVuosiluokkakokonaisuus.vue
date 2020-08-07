@@ -11,22 +11,22 @@
 
         <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.tehtava)">
           <h3>{{$kaanna(vuosiluokkakokonaisuus.tehtava.otsikko)}}</h3>
-          <div v-html="$kaanna(vuosiluokkakokonaisuus.tehtava.teksti)" />
+          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" />
         </div>
 
         <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.siirtymaEdellisesta)">
           <h3>{{$kaanna(vuosiluokkakokonaisuus.siirtymaEdellisesta.otsikko)}}</h3>
-          <div v-html="$kaanna(vuosiluokkakokonaisuus.siirtymaEdellisesta.teksti)" />
+         <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.siirtymaEdellisesta.teksti)" :kuvat="kuvat" />
         </div>
 
         <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.siirtymaSeuraavaan)">
           <h3>{{$kaanna(vuosiluokkakokonaisuus.siirtymaSeuraavaan.otsikko)}}</h3>
-          <div v-html="$kaanna(vuosiluokkakokonaisuus.siirtymaSeuraavaan.teksti)" />
+          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.siirtymaSeuraavaan.teksti)" :kuvat="kuvat" />
         </div>
 
         <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.laajaalainenOsaaminen)">
           <h3>{{$kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.otsikko)}}</h3>
-          <div v-html="$kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.teksti)" />
+          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.teksti)" :kuvat="kuvat" />
         </div>
 
         <div class="mt-4" v-if="vuosiluokkakokonaisuus.laajaalaisetOsaamiset && vuosiluokkakokonaisuus.laajaalaisetOsaamiset.length > 0">
@@ -34,14 +34,14 @@
 
           <div class="mt-4" v-for="(lao, index) in vuosiluokkakokonaisuus.laajaalaisetOsaamiset" :key="'lao'+index">
             <h4>{{$kaanna(lao.nimi)}}</h4>
-            <div v-html="$kaanna(lao.kuvaus)" />
+            <ep-content-viewer :value="$kaanna(lao.kuvaus)" :kuvat="kuvat" />
           </div>
 
         </div>
 
         <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat)">
           <h3>{{$kaanna(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat.otsikko)}}</h3>
-          <div v-html="$kaanna(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat.teksti)" />
+          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat.teksti)" :kuvat="kuvat" />
         </div>
 
       </div>
@@ -57,15 +57,21 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusteVuosiluokkakokonaisuusStore } from '@/stores/PerusteVuosiluokkakokonaisuusStore';
 import { Kielet } from '@shared/stores/kieli';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 
 @Component({
   components: {
     EpSpinner,
+    EpContentViewer,
   },
 })
 export default class RouteVuosiluokkakokonaisuus extends Vue {
   @Prop({ required: true })
   private perusteVuosiluokkakokonaisuusStore!: PerusteVuosiluokkakokonaisuusStore;
+
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
 
   get oppiaine() {
     return this.$route.params.oppiaineId;
@@ -77,6 +83,10 @@ export default class RouteVuosiluokkakokonaisuus extends Vue {
 
   hasContent(obj) {
     return _.isObject(obj) && _.get(obj, 'teksti') && _.get(obj, 'teksti')[Kielet.getSisaltoKieli.value];
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
   }
 }
 </script>

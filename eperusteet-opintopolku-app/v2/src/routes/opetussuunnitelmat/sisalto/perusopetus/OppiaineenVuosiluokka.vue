@@ -20,14 +20,14 @@
 
       <div v-if="valinnainen">
         <div v-for="(sisaltoalue, index) in tavoite.sisaltoalueet" :key="'sisaltoalue'+index">
-          <div v-html="$kaanna(sisaltoalue.sisaltoalueet.kuvaus)" />
+          <ep-content-viewer :value="$kaanna(sisaltoalue.sisaltoalueet.kuvaus)" :kuvat="kuvat" />
         </div>
       </div>
 
       <div v-else>
         <div v-if="tavoite.tavoitteistaJohdetutOppimisenTavoitteet">
           <h4>{{$t('tavoitteista-johdetut-oppimisen-tavoitteet')}}</h4>
-          <span v-html="$kaanna(tavoite.tavoitteistaJohdetutOppimisenTavoitteet)"></span>
+          <ep-content-viewer :value="$kaanna(tavoite.tavoitteistaJohdetutOppimisenTavoitteet)" :kuvat="kuvat" />
         </div>
 
         <div class="inner-collapse mb-4" v-if="tavoite.sisaltoalueet.length > 0">
@@ -60,7 +60,7 @@
               <h5 v-html="$kaanna(lao.nimi)"></h5>
             </template>
 
-            <div v-html="$kaanna(lao.kuvaus)" />
+            <ep-content-viewer :value="$kaanna(lao.kuvaus)" :kuvat="kuvat" />
 
           </ep-collapse>
 
@@ -106,6 +106,7 @@ import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteConte
 import EpContent from '@shared/components/EpContent/EpContent.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
@@ -113,6 +114,7 @@ import EpButton from '@shared/components/EpButton/EpButton.vue';
     EpContent,
     EpCollapse,
     EpButton,
+    EpContentViewer,
   },
 })
 export default class OppiaineenVuosiluokka extends Vue {
@@ -121,6 +123,9 @@ export default class OppiaineenVuosiluokka extends Vue {
 
   @Prop({ required: false })
   private valinnainen!: boolean;
+
+  @Prop({ required: true })
+  private kuvat!: any[];
 
   get arvioinninSarakkeet() {
     return [{

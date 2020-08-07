@@ -12,42 +12,42 @@
 
     <div class="mt-4" v-if="oppiaine.tehtava">
       <h3>{{ $kaanna(oppiaine.tehtava.otsikko)}}</h3>
-      <span v-html="$kaanna(oppiaine.tehtava.teksti)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.tehtava.teksti)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-4" v-if="oppiaine.tyotavat">
       <h3>{{ $kaanna(oppiaine.tyotavat.otsikko)}}</h3>
-      <span v-html="$kaanna(oppiaine.tyotavat.teksti)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.tyotavat.teksti)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-4" v-if="oppiaine.ohjaus">
       <h3>{{ $kaanna(oppiaine.ohjaus.otsikko)}}</h3>
-      <span v-html="$kaanna(oppiaine.ohjaus.teksti)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.ohjaus.teksti)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-4" v-if="oppiaine.arviointi">
       <h3>{{ $kaanna(oppiaine.arviointi.otsikko)}}</h3>
-      <span v-html="$kaanna(oppiaine.arviointi.teksti)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.arviointi.teksti)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-4" v-if="oppiaine.sisaltoalueinfo">
       <h3>{{ $kaanna(oppiaine.sisaltoalueinfo.otsikko)}}</h3>
-      <span v-html="$kaanna(oppiaine.sisaltoalueinfo.teksti)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.sisaltoalueinfo.teksti)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-4" v-if="oppiaine.pakollinenKurssiKuvaus">
       <h3>{{ $t('pakollinen-kurssi-kuvaus-header')}}</h3>
-      <span v-html="$kaanna(oppiaine.pakollinenKurssiKuvaus)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.pakollinenKurssiKuvaus)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-4" v-if="oppiaine.syventavaKurssiKuvaus">
       <h3>{{ $t('syventava-kurssi-kuvaus-header')}}</h3>
-      <span v-html="$kaanna(oppiaine.syventavaKurssiKuvaus)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.syventavaKurssiKuvaus)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-4" v-if="oppiaine.soveltavaKurssiKuvaus">
       <h3>{{ $t('soveltava-kurssi-kuvaus-header')}}</h3>
-      <span v-html="$kaanna(oppiaine.soveltavaKurssiKuvaus)"></span>
+      <ep-content-viewer :value="$kaanna(oppiaine.soveltavaKurssiKuvaus)" :kuvat="kuvat" />
     </div>
 
     <div class="mt-5" v-if="oppimaarat && oppimaarat.length > 0">
@@ -121,7 +121,7 @@
         </div>
 
         <div class="mt-4" v-if="tavoite.vapaaTeksti ">
-          <div v-if="tavoite.vapaaTeksti" v-html="$kaanna(tavoite.vapaaTeksti)"></div>
+          <ep-content-viewer :value="$kaanna(tavoite.vapaaTeksti)" :kuvat="kuvat" />
         </div>
 
       </div>
@@ -138,11 +138,14 @@ import { AipeOppiaineStore } from '@/stores/AipeOppiaineStore';
 import { AipeVaiheStore } from '@/stores/AipeVaiheStore';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 
 @Component({
   components: {
     EpCollapse,
     EpButton,
+    EpContentViewer,
   },
 })
 export default class RouteAipeOppiaine extends Vue {
@@ -151,6 +154,9 @@ export default class RouteAipeOppiaine extends Vue {
 
   @Prop({ required: true })
   private aipeVaiheStore!: AipeVaiheStore;
+
+  @Prop({ required: true })
+  private perusteDataStore!: PerusteDataStore;
 
   get oppiaine() {
     return this.aipeOppiaineStore.oppiaine.value;
@@ -252,6 +258,10 @@ export default class RouteAipeOppiaine extends Vue {
 
   toggleTavoite() {
     _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle());
+  }
+
+  get kuvat() {
+    return this.perusteDataStore.kuvat;
   }
 }
 
