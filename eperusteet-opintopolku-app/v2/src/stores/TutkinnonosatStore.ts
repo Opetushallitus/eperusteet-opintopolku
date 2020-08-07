@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { JulkinenApi, Perusteet, Sisaltoviitteet, Opetussuunnitelmat, OpetussuunnitelmaDto } from '@shared/api/amosaa';
+import { JulkinenApi, Perusteet, Sisaltoviitteet, Opetussuunnitelmat, OpetussuunnitelmaDto, SisaltoViiteKevytDtoTyyppiEnum } from '@shared/api/amosaa';
 import { perusteenSuoritustapa } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
@@ -18,7 +18,14 @@ export class TutkinnonosatStore {
   public readonly tutkinnonosat = computed(() => this.state.tutkinnonosat);
 
   public async fetch() {
-    const tutkinnonosaViitteet = (await Sisaltoviitteet.getTutkinnonosat(this.opetussuunnitelma.id!, _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data;
+    const tutkinnonosaViitteetById = _.keyBy((await Sisaltoviitteet.getTutkinnonosat(this.opetussuunnitelma.id!, _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data, 'id');
+    const sisaltoviitteet = (await Sisaltoviitteet.getOtsikot(this.opetussuunnitelma.id!, _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data;
+    const tutkinnonosaViitteet = _.chain(sisaltoviitteet)
+      .filter(sisaltoviite => sisaltoviite.tyyppi === _.toLower(SisaltoViiteKevytDtoTyyppiEnum.TUTKINNONOSAT))
+      .map(tutkinnonosatViite => tutkinnonosatViite.lapset as any)
+      .flatMap()
+      .map(tutkinnonosaId => tutkinnonosaViitteetById[tutkinnonosaId])
+      .value();
 
     const perusteIds = _.uniq([
       this.opetussuunnitelma.peruste!.id!,
