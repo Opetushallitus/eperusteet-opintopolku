@@ -40,6 +40,7 @@
                 {{$t('katso-lisaa-ajankohtaisia')}}
               </div>
             </template>
+            <div slot="eiTietoja">{{$t('ei-tiedotteita')}}</div>
           </ep-julki-lista>
         </div>
       </div>
