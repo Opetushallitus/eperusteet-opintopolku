@@ -12,7 +12,7 @@
         <h2>{{$t('koulutuksen-jarjestajan-yhteinen-osuus')}}</h2>
 
         <ep-spinner v-if="!yhteisetOsuudet" />
-        <div class="mb-4" v-else-if="yhteisetOsuudet.length === 0">{{$t('koulutuksen-jarjestaja-ei-ole-lisannyt-yhteista-osuutta')}}</div>
+        <div v-else-if="yhteisetOsuudet.length === 0">{{$t('koulutuksen-jarjestaja-ei-ole-lisannyt-yhteista-osuutta')}}</div>
         <div v-else>
           <span v-if="yhteisetOsuudet.length === 1">{{$t('koulutuksen-jarjestaja-otsikko-selite-lyhyt')}}</span>
           <div v-else>
@@ -39,7 +39,7 @@
                         :last-text="$t('loppuun')" />
         </div>
 
-        <h2>{{$t('toteutussuunnitelmat')}}</h2>
+        <h2 class="mt-5">{{$t('toteutussuunnitelmat')}}</h2>
 
         <ep-spinner v-if="!toteutussuunnitelmat" />
         <div v-else>
