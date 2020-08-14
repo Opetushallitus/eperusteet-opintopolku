@@ -185,7 +185,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
       const koodit = await Promise.all(_.map(this.kaikkiLaajaalaisetOsaamiset, (lao) => Ulkopuoliset.yksiKoodistokoodi(KoodistoLops2019LaajaAlaiset, (lao as any).koodi)));
       this.laajaAlaisetKoodit = _.map(koodit, 'data');
 
-      if (this.moduuliKoodiUrit) {
+      if (!_.isEmpty(this.moduuliKoodiUrit)) {
         this.moduulit = (await Lops2019Perusteet.getAllLops2019PerusteModuulit(this.opetussuunnitelmaDataStore.opetussuunnitelmaId, (this.moduuliKoodiUrit as any))).data;
       }
     }
