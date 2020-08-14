@@ -6,7 +6,7 @@ import { Kielet } from '@shared/stores/kieli';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-describe('RouteLaajaAlaiset', async () => {
+describe('RouteLaajaAlaiset', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
   Kielet.install(localVue);

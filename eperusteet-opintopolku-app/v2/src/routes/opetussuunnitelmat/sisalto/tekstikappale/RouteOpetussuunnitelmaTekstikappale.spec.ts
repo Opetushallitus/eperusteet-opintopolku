@@ -9,7 +9,7 @@ import { Kaannos } from '@shared/plugins/kaannos';
 import { TekstiKappaleDto } from '@shared/api/ylops';
 import * as _ from 'lodash';
 
-describe('RouteOpetussuunnitelmaTekstikappale', async () => {
+describe('RouteOpetussuunnitelmaTekstikappale', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
   Kielet.install(localVue);

@@ -7,7 +7,8 @@
       <oppiaine-esitys :oppiaine="oppiaine"
                        :termit="perusteTermit"
                        :kuvat="perusteKuvat"
-                       :isPerusteView="false" />
+                       :is-peruste-view="false"
+                       :nav-oppimaarat="oppimaarat" />
 
       <div v-if="hasOpintojaksot">
         <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
@@ -29,7 +30,7 @@
 </template>
 
 <script lang="ts">
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -38,6 +39,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import OppiaineEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/OppiaineEsitys.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 @Component({
   components: {
@@ -91,6 +93,27 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
 
   get hasOpintojaksot() {
     return !_.isEmpty(this.opintojaksot);
+  }
+
+  get oppimaarat() {
+    function traverseTree(node, result) {
+      (node.children || [])
+        .map(child => {
+          result.push(child);
+          traverseTree(child, result);
+          return child;
+        });
+    }
+
+    if (this.opetussuunnitelmaDataStore.current) {
+      const result: NavigationNode[] = [];
+      traverseTree(this.opetussuunnitelmaDataStore.current, result);
+      _.filter(result, node => node.type === 'oppiaine');
+      return _.filter(result, node => node.type === 'oppiaine');
+    }
+    else {
+      return [];
+    }
   }
 }
 </script>

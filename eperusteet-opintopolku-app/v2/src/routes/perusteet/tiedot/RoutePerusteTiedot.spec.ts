@@ -7,7 +7,7 @@ import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 import { Kieli } from '@shared/tyypit';
 
-describe('RoutePerusteTiedot', async () => {
+describe('RoutePerusteTiedot', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
   Kielet.install(localVue);

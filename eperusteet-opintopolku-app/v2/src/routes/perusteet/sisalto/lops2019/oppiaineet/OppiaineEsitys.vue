@@ -105,6 +105,7 @@ import { Lops2019OppiaineKaikkiDto, TermiDto } from '@shared/api/ylops';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 @Component({
   components: {
@@ -124,6 +125,9 @@ export default class OppiaineEsitys extends Vue {
 
   @Prop({ required: false, type: Array })
   private kuvat!: LiiteDtoWrapper[];
+
+  @Prop({ required: false, type: Array })
+  private navOppimaarat!: NavigationNode[];
 
   updated() {
     // Odotetaan myös alikomponenttien päivittymistä
@@ -236,7 +240,13 @@ export default class OppiaineEsitys extends Vue {
   }
 
   get oppimaaratExtended() {
-    if (this.oppimaarat) {
+    if (!_.isEmpty(this.navOppimaarat)) {
+      return _.map(this.navOppimaarat, oppimaara => ({
+        ...oppimaara,
+        nimi: oppimaara.label,
+      }));
+    }
+    else if (this.oppimaarat) {
       return _.map(this.oppimaarat, oppimaara => {
         return {
           ...oppimaara,
