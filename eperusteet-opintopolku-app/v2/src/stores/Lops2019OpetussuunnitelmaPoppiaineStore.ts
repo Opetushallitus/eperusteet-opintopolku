@@ -27,6 +27,8 @@ export class Lops2019OpetussuunnitelmaPoppiaineStore {
     this.koodit = [];
     this.oppiaine = (await Lops2019Oppiaineet.getLops2019PaikallinenOppiaine(this.opsId, this.oppiaineId)).data;
     this.koodit = (await Opetussuunnitelmat.getKoodistonKoodit(this.opsId, KoodistoLops2019LaajaAlaiset)).data;
-    this.perusteenOppiaine = (await Lops2019Perusteet.getAllLops2019PerusteOppiaine(this.opsId, this.oppiaine.perusteenOppiaineUri!)).data;
+    if (this.oppiaine.perusteenOppiaineUri) {
+      this.perusteenOppiaine = (await Lops2019Perusteet.getAllLops2019PerusteOppiaine(this.opsId, this.oppiaine.perusteenOppiaineUri)).data;
+    }
   }
 }
