@@ -7,7 +7,7 @@ import { ViiteLaaja } from '@shared/api/eperusteet';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 
-describe('RouteTekstikappale', async () => {
+describe('RouteTekstikappale', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
   Kielet.install(localVue);

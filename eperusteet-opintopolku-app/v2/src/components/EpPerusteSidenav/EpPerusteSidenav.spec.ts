@@ -91,7 +91,7 @@ const perusteData = {
   voimassaoloAlkaa: 123456,
 } as any;
 
-describe('EpPerusteSidenav', async () => {
+describe('EpPerusteSidenav', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
   localVue.use(Kielet, {
@@ -108,7 +108,7 @@ describe('EpPerusteSidenav', async () => {
   });
   localVue.use(new Kaannos());
 
-  describe('Rendering Root and spinners', async () => {
+  describe('Rendering Root and spinners', () => {
     const perusteDataStore = new PerusteDataStore(42);
 
     const wrapper = mount(EpPerusteSidenav as any, {
@@ -176,7 +176,7 @@ describe('EpPerusteSidenav', async () => {
     });
   });
 
-  describe('SidenavNode', async () => {
+  describe('SidenavNode', () => {
     const perusteDataStore = new PerusteDataStore(42);
 
     perusteDataStore.peruste = perusteData;
@@ -256,7 +256,7 @@ describe('EpPerusteSidenav', async () => {
     });
   });
 
-  describe('Navigation to previous and next', async () => {
+  describe('Navigation to previous and next', () => {
     const perusteDataStore = new PerusteDataStore(42);
 
     perusteDataStore.peruste = perusteData;
