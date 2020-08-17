@@ -251,21 +251,25 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
   }
 
   get opintojaksotExtended() {
-    if (this.opintojaksot) {
-      return _.map(this.opintojaksot, oj => {
-        return {
-          ...oj,
-          location: {
-            name: 'lops2019OpetussuunnitelmaOpintojakso',
-            params: { opintojaksoId: _.toString(oj.id) },
-          },
-        };
-      });
+    if (this.current) {
+      const opintojaksot = _.find(this.current.children, { type: 'opintojaksot' });
+      if (opintojaksot) {
+        return _.map(opintojaksot.children, oj => {
+          return {
+            ...oj,
+            nimi: oj.label,
+          };
+        });
+      }
     }
   }
 
+  get current() {
+    return this.opetussuunnitelmaDataStore.current;
+  }
+
   get hasOpintojaksot() {
-    return !_.isEmpty(this.opintojaksot);
+    return !_.isEmpty(this.opintojaksotExtended);
   }
 }
 </script>
