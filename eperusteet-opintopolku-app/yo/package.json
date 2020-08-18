@@ -30,7 +30,7 @@
     "angular-ui-router": "0.3.2",
     "angulartics": "1.5.0",
     "angulartics-piwik": "1.0.6",
-    "bootstrap-sass": "3.3.7",
+    "bootstrap-sass": "3.4.0",
     "eperusteet-frontend-utils": "git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git",
     "es5-shim": "4.5.9",
     "es6-promise": "4.1.0",
