@@ -96,7 +96,7 @@ export default class RouteAmmatillinenSelaus extends Vue {
   private ammatillistenTiedotteetStore!: AmmatillistenTiedoteStore;
 
   async mounted() {
-    this.ammatillistenTiedotteetStore.init(this.ammatillisetkoulutusryhmat.koulutustyypit);
+    this.ammatillistenTiedotteetStore.init({ koulutusTyyppi: this.ammatillisetkoulutusryhmat.koulutustyypit });
     this.ammatillistenTiedotteetStore.fetch();
   }
 
