@@ -14,7 +14,7 @@
     <div class="lower">
       <ep-sidebar>
         <template slot="bar">
-        <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
+          <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
         </template>
         <template slot="view">
           <router-view :key="$route.fullPath">
