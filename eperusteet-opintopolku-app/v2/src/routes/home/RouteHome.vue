@@ -333,7 +333,7 @@ export default class RouteHome extends Vue {
     }
 
     .luotu {
-      color: #878787;
+      color: #2b2b2b;
       font-size: 80%;
     }
   }
