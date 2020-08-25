@@ -15,9 +15,7 @@
         <div v-for="(opintojakso, idx) in opintojaksotExtended" :key="idx">
           <router-link v-if="opintojakso.location" :to="opintojakso.location">
             {{ $kaanna(opintojakso.nimi) }}
-            <span v-if="opintojakso.laajuus">
-              ({{ opintojakso.laajuus }} op)
-            </span>
+            <span v-if="opintojakso.koodiLabel" class="code-field">({{ opintojakso.koodiLabel }})</span>
           </router-link>
         </div>
       </div>
@@ -86,6 +84,7 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
             name: 'lops2019OpetussuunnitelmaOpintojakso',
             params: { opintojaksoId: _.toString(oj.id) },
           },
+          koodiLabel: _.get(oj, 'koodi'),
         };
       });
     }
@@ -123,5 +122,11 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
 
 .content {
   padding: 0 $content-padding;
+
+  span.code-field {
+    margin-left: 5px;
+    font-size: 80%;
+    text-transform: uppercase;
+  }
 }
 </style>
