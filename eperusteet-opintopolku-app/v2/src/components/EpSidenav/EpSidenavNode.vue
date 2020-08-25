@@ -73,7 +73,7 @@ export default class EpSidenavNode extends Vue {
   get subtype() {
     return _.get(this.node.meta, 'navigation-subtype');
   }
-  
+
   get koodi() {
     return _.get(this.node, 'meta.koodi.arvo') || _.get(this.node, 'meta.koodi');
   }
