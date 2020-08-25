@@ -57,9 +57,11 @@
         <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
         <router-link v-if="moduuli.location" :to="moduuli.location">
           {{ $kaanna(moduuli.nimi) }}
+          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
         </router-link>
         <div v-else>
           {{ $kaanna(moduuli.nimi) }}
+          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
         </div>
       </div>
     </div>
@@ -74,9 +76,11 @@
         <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
         <router-link v-if="moduuli.location" :to="moduuli.location">
           {{ $kaanna(moduuli.nimi) }}
+          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
         </router-link>
         <div v-else>
           {{ $kaanna(moduuli.nimi) }}
+          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
         </div>
       </div>
     </div>
@@ -202,6 +206,7 @@ export default class OppiaineEsitys extends Vue {
             name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
             params: { moduuliId: _.toString(moduuli.id) },
           },
+          koodiLabel: _.get(moduuli, 'koodi.arvo'),
         };
       });
     }
@@ -224,6 +229,7 @@ export default class OppiaineEsitys extends Vue {
             name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
             params: { moduuliId: _.toString(moduuli.id) },
           },
+          koodiLabel: _.get(moduuli, 'koodi.arvo'),
         };
       });
     }
@@ -266,4 +272,9 @@ export default class OppiaineEsitys extends Vue {
 </script>
 
 <style scoped lang="scss">
+span.code-field {
+  margin-left: 5px;
+  font-size: 80%;
+  text-transform: uppercase;
+}
 </style>

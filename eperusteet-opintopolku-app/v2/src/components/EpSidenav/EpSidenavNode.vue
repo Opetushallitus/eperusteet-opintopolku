@@ -8,12 +8,14 @@
       <b-link v-if="node.location && !subtype" :to="node.location">
         <span class="label" :class="{ 'label-match': isMatch }">
           {{ $kaannaOlioTaiTeksti(node.label) }}
+          <span v-if="koodi" class="code-field">({{ koodi }})</span>
         </span>
       </b-link>
       <div v-else
             class="label label-plain"
             :class="{ 'label-match': isMatch, 'subtype': subtype }">
         {{ $kaannaOlioTaiTeksti(node.label) }}
+        <span v-if="koodi" class="code-field">({{ koodi }})</span>
       </div>
     </div>
   </div>
@@ -70,6 +72,10 @@ export default class EpSidenavNode extends Vue {
 
   get subtype() {
     return _.get(this.node.meta, 'navigation-subtype');
+  }
+  
+  get koodi() {
+    return _.get(this.node, 'meta.koodi.arvo') || _.get(this.node, 'meta.koodi');
   }
 }
 </script>
@@ -158,5 +164,10 @@ export default class EpSidenavNode extends Vue {
     color: $sidenav-navigation-subtype-color;
   }
 
+  span.code-field {
+    margin-left: 5px;
+    font-size: 80%;
+    text-transform: uppercase;
+  }
 }
 </style>
