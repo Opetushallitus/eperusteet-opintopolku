@@ -7,9 +7,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
+import { Kielet } from '@shared/stores/kieli';
+import { Kieli } from '@shared/tyypit';
 
 @Component({
   components: {
@@ -18,6 +20,17 @@ import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 })
 export default class RouteAmmatillinenKoulutusviennit extends Vue {
   private perusteHakuStoreKoulutusvienti = new PerusteHakuStore({ koulutusvienti: true });
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('kieli')
+  async kieliChanged() {
+    if (this.kieli === Kieli.en) {
+      this.perusteHakuStoreKoulutusvienti.perusteet = [];
+    }
+  }
 }
 </script>
 
