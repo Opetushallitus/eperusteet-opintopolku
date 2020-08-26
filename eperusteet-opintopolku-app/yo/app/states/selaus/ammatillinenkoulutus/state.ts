@@ -528,11 +528,22 @@ angular.module("app").config($stateProvider => {
                             SpinnerService.enable();
                             canceler = $q.defer();
                             $scope.isSearching = true;
-                            perusteParsinta(
-                                await perustehaku
-                                    .withHttpConfig({ timeout: canceler.promise })
-                                    .get({ ...$scope.hakuparametrit, sivu })
-                            );
+
+                            if (Kieli.getUiKieli() === 'en' || Kieli.getSisaltokieli() === 'en') {
+                                perusteParsinta(
+                                    {data: [],
+                                        kokonaismäärä: 0,
+                                        sivu: 0,
+                                        sivuja: 0,
+                                        sivukoko: 5
+                                    });
+                            } else {
+                                perusteParsinta(
+                                    await perustehaku
+                                        .withHttpConfig({ timeout: canceler.promise })
+                                        .get({ ...$scope.hakuparametrit, sivu })
+                                );
+                            }
 
                             if ($scope.hakuparametrit.koulutusala) {
                                 $scope.opintoalat = (<any>_.findWhere($scope.koulutusalat, {
