@@ -99,7 +99,6 @@
       </ep-collapse>
     </div>
 
-
     <div class="paikallisen-oppiaineen-opintojaksot">
       <ep-collapse :border-bottom="false">
         <div class="alueotsikko" slot="header"><h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3></div>
@@ -137,7 +136,6 @@ import EpOpintojaksonKeskeisetSisallot from '@shared/components/lops2019/EpOpint
 import EpOpintojaksonLaajaAlaisetOsaamiset from '@shared/components/lops2019/EpOpintojaksonLaajaAlaisetOsaamiset.vue';
 import EpOpintojaksonArviointi from '@shared/components/lops2019/EpOpintojaksonArviointi.vue';
 import EpOpintojaksonOpintojaksot from '@shared/components/lops2019/EpOpintojaksonOpintojaksot.vue';
-
 
 @Component({
   components: {
@@ -181,7 +179,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   get kuvat() {
     return this.opetussuunnitelmaDataStore.kuvat;
   }
-  
+
   get opintojakso() {
     if (this.$route) {
       return _.find(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
@@ -190,7 +188,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     }
   }
 
-   get paikallisetOppiaineet() {
+  get paikallisetOppiaineet() {
     return _.chain(this.poppiaineet)
       .filter('koodi')
       .map((oa) => {

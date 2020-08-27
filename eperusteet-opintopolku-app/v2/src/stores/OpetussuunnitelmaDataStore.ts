@@ -236,13 +236,13 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
 
     const koodit = _.chain(getters.flattenedSidenav)
-      .filter(node => node.type == 'oppiaine' || node.type == 'poppiaine')
+      .filter(node => node.type === 'oppiaine' || node.type === 'poppiaine')
       .filter('meta.koodi.uri')
       .keyBy('meta.koodi.uri')
       .value();
 
     const rawKoodit = _.chain(getters.flattenedSidenav)
-      .filter(node => node.type == 'oppiaine' || node.type == 'poppiaine')
+      .filter(node => node.type === 'oppiaine' || node.type === 'poppiaine')
       .filter('meta.koodi')
       .filter(node => _.isString(node.meta.koodi))
       .keyBy('meta.koodi')
