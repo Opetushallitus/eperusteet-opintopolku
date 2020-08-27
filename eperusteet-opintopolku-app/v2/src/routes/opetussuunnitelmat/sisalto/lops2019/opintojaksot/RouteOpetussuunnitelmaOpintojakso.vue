@@ -99,13 +99,17 @@
       </ep-collapse>
     </div>
 
-    <!--
-    <div class="opintojakson-paikalliset-opintojaksot">
+
+    <div class="paikallisen-oppiaineen-opintojaksot">
       <ep-collapse :border-bottom="false">
-        <div class="alueotsikko" slot="header"><h3>{{ $t('opintojakson-paikalliset-opintojaksot') }}</h3></div>
+        <div class="alueotsikko" slot="header"><h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3></div>
+        <Ep-opintojakson-opintojaksot :value="opintojakso"
+                                      :opintojaksot="opintojaksot"
+                                      :oppiaineet-map="oppiaineetMap"
+                                      :oppiaineet-ja-oppimaarat="oppiaineetJaOppimaarat"
+                                      :oppiaineet="oppiaineetExtended" />
       </ep-collapse>
     </div>
-    -->
 
     <slot name="previous-next-navigation" />
   </div>
@@ -118,7 +122,7 @@ import * as _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { Lops2019OpintojaksoDto, Ulkopuoliset, Lops2019ModuuliDto, Lops2019Oppiaineet, Lops2019Perusteet, Opetussuunnitelmat } from '@shared/api/ylops';
+import { Lops2019OpintojaksoDto, Ulkopuoliset, Lops2019ModuuliDto, Lops2019Oppiaineet, Lops2019Perusteet, Opetussuunnitelmat, Opintojaksot } from '@shared/api/ylops';
 import { KoodistoLops2019LaajaAlaiset, koodiSorters } from '@shared/utils/perusteet';
 import { PerusteCache } from '@shared/stores/peruste';
 
@@ -132,6 +136,8 @@ import EpOpintojaksonTavoitteet from '@shared/components/lops2019/EpOpintojakson
 import EpOpintojaksonKeskeisetSisallot from '@shared/components/lops2019/EpOpintojaksonKeskeisetSisallot.vue';
 import EpOpintojaksonLaajaAlaisetOsaamiset from '@shared/components/lops2019/EpOpintojaksonLaajaAlaisetOsaamiset.vue';
 import EpOpintojaksonArviointi from '@shared/components/lops2019/EpOpintojaksonArviointi.vue';
+import EpOpintojaksonOpintojaksot from '@shared/components/lops2019/EpOpintojaksonOpintojaksot.vue';
+
 
 @Component({
   components: {
@@ -145,12 +151,14 @@ import EpOpintojaksonArviointi from '@shared/components/lops2019/EpOpintojaksonA
     EpOpintojaksonKeskeisetSisallot,
     EpOpintojaksonLaajaAlaisetOsaamiset,
     EpOpintojaksonArviointi,
+    EpOpintojaksonOpintojaksot,
   },
 })
 export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   private cache!: PerusteCache;
   private laajaAlaisetKoodit: any | null = null;
-  private paikallisetOppiaineet: any | null = null;
+  private poppiaineet: any | null = null;
+  private opintojaksot: any[] | null = null;
 
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
@@ -161,7 +169,8 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
       const id = _.parseInt(this.$route.params.opetussuunnitelmaId);
       this.cache = await PerusteCache.of(id);
       this.laajaAlaisetKoodit = (await Opetussuunnitelmat.getKoodistonKoodit(id, KoodistoLops2019LaajaAlaiset)).data;
-      this.paikallisetOppiaineet = (await Lops2019Oppiaineet.getAllLops2019PaikallisetOppiainet(id)).data;
+      this.poppiaineet = (await Lops2019Oppiaineet.getAllLops2019PaikallisetOppiainet(id)).data;
+      this.opintojaksot = (await Opintojaksot.getAllOpintojaksot(id)).data;
     }
   }
 
@@ -172,13 +181,27 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   get kuvat() {
     return this.opetussuunnitelmaDataStore.kuvat;
   }
-
+  
   get opintojakso() {
     if (this.$route) {
       return _.find(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
         return oj.id === _.parseInt(this.$route.params.opintojaksoId);
       }) as Lops2019OpintojaksoDto;
     }
+  }
+
+   get paikallisetOppiaineet() {
+    return _.chain(this.poppiaineet)
+      .filter('koodi')
+      .map((oa) => {
+        return {
+          ...oa,
+          koodi: {
+            uri: oa.koodi,
+          },
+        };
+      })
+      .value();
   }
 
   get laajaAlaistenKoodit() {
@@ -208,25 +231,37 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     }
   }
 
-  get paikallisetOppiaineetFormatted() {
-    return _.chain(this.paikallisetOppiaineet)
-      .filter('koodi')
-      .map((oa) => {
-        return {
-          ...oa,
-          koodi: {
-            uri: oa.koodi,
-          },
-        };
+  get oppiaineet() {
+    return [
+      ...this.cache ? this.cache.peruste.oppiaineet : [],
+      ...this.paikallisetOppiaineet,
+    ];
+  }
+
+  get oppiaineidenModuulit() {
+    return _.chain(this.oppiaineetJaOppimaarat)
+      .map((oa: any) => {
+        if (oa.perusteenOppiaineUri) {
+          return {
+            ...oa,
+            moduulit: this.oppiaineetMap[oa.perusteenOppiaineUri].moduulit,
+          };
+        }
+        else {
+          return oa;
+        }
       })
       .value();
   }
 
-  get oppiaineet() {
-    return [
-      ...this.cache ? this.cache.peruste.oppiaineet : [],
-      ...this.paikallisetOppiaineetFormatted,
-    ];
+  get oppiaineidenModuulitMap() {
+    return _.chain(this.oppiaineidenModuulit)
+      .keyBy('koodi.uri')
+      .value();
+  }
+
+  isModuuliton(oa: any) {
+    return !_.isNil(oa.laajuus) || _.isEmpty(this.oppiaineidenModuulitMap[oa.koodi]) || _.isEmpty(this.oppiaineidenModuulitMap[oa.koodi].moduulit);
   }
 
   get oppiaineetExtended() {
@@ -234,7 +269,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
       return _.map(this.opintojakso.oppiaineet, (oa: any) => {
         let koodiLabel;
         if (oa.koodi) {
-          const node = this.navigationByUri[oa.koodi];
+          const node = this.oppiaineetNavigationByUri[oa.koodi];
           if (node) {
             const { location, label } = node;
             oa.node = {
@@ -248,6 +283,8 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
         return {
           ...oa,
           koodiLabel,
+          isPaikallinenOppiaine: _.includes(_.map(this.paikallisetOppiaineet, 'koodi.uri'), oa.koodi),
+          isModuuliton: this.isModuuliton(oa),
         };
       });
     }
@@ -379,8 +416,8 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     }
   }
 
-  get navigationByUri() {
-    return this.opetussuunnitelmaDataStore.navigationByUri;
+  get oppiaineetNavigationByUri() {
+    return this.opetussuunnitelmaDataStore.oppiaineetNavigationByUri;
   }
 
   get oppiaineetJaOppimaarat() {

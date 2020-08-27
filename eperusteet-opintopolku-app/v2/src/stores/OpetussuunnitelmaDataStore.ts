@@ -231,6 +231,27 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   public readonly navigationByUri!: { [uri: string]: NavigationNode };
 
   @Getter((state, getters) => {
+    if (!getters.flattenedSidenav) {
+      return {};
+    }
+
+    const koodit = _.chain(getters.flattenedSidenav)
+      .filter(node => node.type == 'oppiaine' || node.type == 'poppiaine')
+      .filter('meta.koodi.uri')
+      .keyBy('meta.koodi.uri')
+      .value();
+
+    const rawKoodit = _.chain(getters.flattenedSidenav)
+      .filter(node => node.type == 'oppiaine' || node.type == 'poppiaine')
+      .filter('meta.koodi')
+      .filter(node => _.isString(node.meta.koodi))
+      .keyBy('meta.koodi')
+      .value();
+    return _.assign(koodit, rawKoodit);
+  })
+  public readonly oppiaineetNavigationByUri!: { [uri: string]: NavigationNode };
+
+  @Getter((state, getters) => {
     if (getters.flattenedSidenav && state.currentRoute) {
       for (const node of getters.flattenedSidenav) {
         if (node.location && _.isMatch(state.currentRoute, node.location)) {
