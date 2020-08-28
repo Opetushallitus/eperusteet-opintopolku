@@ -4,6 +4,7 @@ import Notifications from 'vue-notification';
 import VueScrollTo from 'vue-scrollto';
 import VueMatomo from 'vue-matomo';
 import VueCompositionApi from '@vue/composition-api';
+import PortalVue from 'portal-vue';
 import Aikaleima from '@shared/plugins/aikaleima';
 import Kaannos from '@shared/plugins/kaannos';
 
@@ -26,6 +27,7 @@ Vue.config.devtools = true;
 Vue.use(Notifications);
 Vue.use(VueI18n);
 Vue.use(VueCompositionApi);
+Vue.use(PortalVue);
 Vue.use(Kaannos);
 Vue.use(Aikaleima);
 

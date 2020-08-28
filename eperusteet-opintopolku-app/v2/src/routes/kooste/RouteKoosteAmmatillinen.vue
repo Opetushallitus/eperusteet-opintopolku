@@ -4,7 +4,7 @@
     <template slot="header">
       {{ $kaanna(peruste.nimi) }}
     </template>
-    <div>
+    <div class="selaus">
       <b-container fluid>
         <b-row>
           <b-col cols="6" class="tile">
@@ -246,4 +246,10 @@ export default class RouteKoosteAmmatillinen extends Vue {
   margin: 20px 0;
 }
 
+@media (max-width: 991.98px) {
+  .selaus {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
 </style>

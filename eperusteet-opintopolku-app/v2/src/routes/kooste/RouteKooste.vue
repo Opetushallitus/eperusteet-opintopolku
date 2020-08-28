@@ -242,4 +242,9 @@ export default class RouteKooste extends Vue {
   margin-bottom: 3rem;
 }
 
+@media (max-width: 991.98px) {
+  .row {
+    margin: 0;
+  }
+}
 </style>
