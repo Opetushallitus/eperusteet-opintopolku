@@ -92,4 +92,9 @@ export default class EpPerusteSidenav extends Vue {
     padding: $sidenav-padding;
   }
 }
+@media (max-width: 991.98px) {
+  .navigation-tree {
+    padding: 15px !important;
+  }
+}
 </style>

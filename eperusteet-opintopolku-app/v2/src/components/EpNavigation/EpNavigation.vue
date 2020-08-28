@@ -197,6 +197,27 @@ export default class EpNavigation extends Vue {
     margin-right: 0 !important;
     max-width: 100% !important;
   }
+  .navbar-ep {
+    padding: 0;
+    .navbar-brand {
+      padding: 10px 15px;
+      margin: 0;
+    }
+    .navbar-toggler {
+      padding: 15px;
+    }
+    /deep/ .nav-link {
+      padding: 0.5rem 1rem !important;
+      border: 0 !important;
+    }
+    /deep/ .dropdown-menu {
+      border-radius: 0;
+      border: 0;
+      .dropdown-item {
+        padding: 0.5rem 1rem !important;
+      }
+    }
+  }
 }
 
 @media (min-width: 1300px) {
@@ -207,77 +228,77 @@ export default class EpNavigation extends Vue {
   }
 }
 
-@media (min-width: 1200px) {
-  .navbar-ep {
+.navbar-ep {
 
+  @media (min-width: 1200px) {
     padding-left: 50px;
     padding-right: 50px;
+  }
 
-    .navbar-nav .nav-link {
-      &:not(.router-link-active) {
-        padding-bottom: 0.5rem;
-      }
-      &.router-link-active {
-        padding-bottom: 0.25rem;
-        border-bottom: #001A58 0.25rem solid;
-        transition: all .3s ease;
-
-        &.koulutustyyppi-ammatillinen {
-          border-bottom-color: $koulutustyyppi-ammatillinen-color;
-        }
-        &.koulutustyyppi-esiopetus {
-          border-bottom-color: $koulutustyyppi-esiopetus-color;
-        }
-        &.koulutustyyppi-lukio {
-          border-bottom-color: $koulutustyyppi-lukio-color;
-        }
-        &.koulutustyyppi-perusopetus {
-          border-bottom-color: $koulutustyyppi-perusopetus-color;
-        }
-        &.koulutustyyppi-varhaiskasvatus {
-          border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
-        }
-        &.koulutustyyppi-taiteenperusopetus {
-          border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
-        }
-      }
+  .navbar-nav .nav-link {
+    &:not(.router-link-active) {
+      padding-bottom: 0.5rem;
     }
+    &.router-link-active {
+      padding-bottom: 0.25rem;
+      border-bottom: #001A58 0.25rem solid;
+      transition: all .3s ease;
 
-    // Tätä ei tarvittaisi, jos nav-itemin alielementin router-link tilan voisi asettaa proppina
-    .navbar-nav .nav-item.router-link-active {
-      /deep/ .nav-link {
-        padding-bottom: 0.25rem;
-        border-bottom: #001A58 0.25rem solid;
-      }
       &.koulutustyyppi-ammatillinen {
-        /deep/ .nav-link {
-          border-bottom-color: $koulutustyyppi-ammatillinen-color;
-        }
+        border-bottom-color: $koulutustyyppi-ammatillinen-color;
       }
       &.koulutustyyppi-esiopetus {
-        /deep/ .nav-link {
-          border-bottom-color: $koulutustyyppi-esiopetus-color;
-        }
+        border-bottom-color: $koulutustyyppi-esiopetus-color;
       }
       &.koulutustyyppi-lukio {
-        /deep/ .nav-link {
-          border-bottom-color: $koulutustyyppi-lukio-color;
-        }
+        border-bottom-color: $koulutustyyppi-lukio-color;
       }
       &.koulutustyyppi-perusopetus {
-        /deep/ .nav-link {
-          border-bottom-color: $koulutustyyppi-perusopetus-color;
-        }
+        border-bottom-color: $koulutustyyppi-perusopetus-color;
       }
       &.koulutustyyppi-varhaiskasvatus {
-        /deep/ .nav-link {
-          border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
-        }
+        border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
       }
       &.koulutustyyppi-taiteenperusopetus {
-        /deep/ .nav-link {
-          border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
-        }
+        border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
+      }
+    }
+  }
+
+  // Tätä ei tarvittaisi, jos nav-itemin alielementin router-link tilan voisi asettaa proppina
+  .navbar-nav .nav-item.router-link-active {
+    /deep/ .nav-link {
+      padding-bottom: 0.25rem;
+      border-bottom: #001A58 0.25rem solid;
+    }
+    &.koulutustyyppi-ammatillinen {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-ammatillinen-color;
+      }
+    }
+    &.koulutustyyppi-esiopetus {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-esiopetus-color;
+      }
+    }
+    &.koulutustyyppi-lukio {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-lukio-color;
+      }
+    }
+    &.koulutustyyppi-perusopetus {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-perusopetus-color;
+      }
+    }
+    &.koulutustyyppi-varhaiskasvatus {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
+      }
+    }
+    &.koulutustyyppi-taiteenperusopetus {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
       }
     }
   }

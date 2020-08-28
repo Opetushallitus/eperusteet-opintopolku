@@ -54,7 +54,7 @@
         </b-col>
       </b-row>
 
-      <section>
+      <section class="valtakunnalliset">
         <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
         <ep-spinner-slot :is-loading="!perusteetSorted">
           <div >
@@ -354,6 +354,17 @@ export default class RouteHome extends Vue {
       }
     }
 
+  }
+
+}
+
+@media (max-width: 991.98px) {
+  .row {
+    margin: 0;
+  }
+  .valtakunnalliset {
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 

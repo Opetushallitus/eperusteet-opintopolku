@@ -203,4 +203,10 @@ export default class RouteAmmatillinenSelaus extends Vue {
   font-size: small;
   color: #555;
 }
+
+@media (max-width: 991.98px) {
+  .container-md {
+    padding: 0px 15px;
+  }
+}
 </style>
