@@ -80,7 +80,7 @@ export default class RouteToteutussuunnitelmaSuorituspolut extends Vue {
         if (item.tyyppi === 'osasuorituspolku') {
           return item.suorituspolku.osasuorituspolkuLaajuus + ' ' + this.$t('osaamispiste');
         }
-        else if (item.tyyppi === 'suorituspolku') {
+        else if (item.tyyppi === 'suorituspolku' && item.perusteenLaajuus) {
           return item.perusteenLaajuus.laajuus.maksimi + ' ' + this.$t('osaamispiste');
         }
       },

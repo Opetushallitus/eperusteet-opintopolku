@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="main">
   <div class="ylaosa">
     <div class="container">
       <div class="laatikko">
