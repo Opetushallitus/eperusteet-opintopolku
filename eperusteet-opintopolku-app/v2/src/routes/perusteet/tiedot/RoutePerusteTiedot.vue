@@ -65,16 +65,19 @@
           <b-table striped
                    fixed
                    responsive
-                   bordered
                    hover
                    :fields="korvattavatDiaarinumerotFields"
                    :items="korvaavatPerusteet">
             <template v-slot:cell(perusteet)="data">
               <div v-if="data.item.perusteet.length > 0">
                 <div v-for="(peruste, idx) in data.item.perusteet" :key="idx">
-                  <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
+                  <router-link v-if="!peruste.ulkoinenlinkki"
+                              :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
+                  <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="true">
+                    {{ $kaanna(peruste.nimi) }}
+                  </ep-external-link>
                 </div>
               </div>
               <div v-else>
@@ -183,16 +186,20 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
+
+import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
+import { isAmmatillinen, isKoulutustyyppiAmmatillinen, perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
+import { Kielet, UiKielet } from '@shared/stores/kieli';
+import { ENV_PREFIX } from '@shared/utils/defaults';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { uusiJulkinenToteutus } from '@/utils/peruste';
+
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
-import { isAmmatillinen, isKoulutustyyppiAmmatillinen } from '@shared/utils/perusteet';
-import { watch } from '@vue/composition-api';
-import { Kielet, UiKielet } from '@shared/stores/kieli';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 
 @Component({
   components: {
@@ -201,6 +208,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
     EpDatepicker,
     EpSpinner,
     EpContentViewer,
+    EpExternalLink,
   },
 })
 export default class RoutePerusteTiedot extends Vue {
@@ -237,8 +245,22 @@ export default class RoutePerusteTiedot extends Vue {
     return this.peruste && isKoulutustyyppiAmmatillinen(this.peruste.koulutustyyppi!);
   }
 
+  ulkoinenlinkki(peruste) {
+    if (uusiJulkinenToteutus(peruste)) {
+      return undefined;
+    }
+
+    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
+  }
+
   get korvaavatPerusteet() {
-    return this.perusteDataStore.korvaavatPerusteet;
+    return _.map(this.perusteDataStore.korvaavatPerusteet, rivi => ({
+      ...rivi,
+      perusteet: _.map(rivi.perusteet || [], peruste => ({
+        ...peruste,
+        ulkoinenlinkki: this.ulkoinenlinkki(peruste),
+      })),
+    }));
   }
 
   get peruste() {
@@ -313,11 +335,11 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get maarayskirje() {
-    return (this as any).$kaanna(this.maarayskirjeObj);
+    return this.maarayskirjeObj[Kielet.sisaltoKieli.value];
   }
 
   get hasMaarayskirje() {
-    return this.peruste.maarayskirje && (this as any).$kaanna(this.maarayskirjeObj);
+    return this.peruste.maarayskirje && this.maarayskirjeObj[Kielet.sisaltoKieli.value];
   }
 
   get hasMuutosmaaraykset() {
@@ -325,7 +347,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get muutosmaaraykset() {
-    return (this as any).$kaanna(this.muutosmaarayksetObj);
+    return this.muutosmaarayksetObj[Kielet.sisaltoKieli.value];
   }
 
   get hasKorvattavatDiaarinumerot() {
