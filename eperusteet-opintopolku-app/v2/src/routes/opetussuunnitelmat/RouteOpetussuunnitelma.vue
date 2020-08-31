@@ -12,6 +12,7 @@
   </ep-header>
   <div class="container">
     <div class="lower">
+      <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar>
         <template slot="bar">
           <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />

@@ -15,6 +15,7 @@
   </ep-header>
   <div class="container">
     <div class="lower">
+      <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar>
         <template slot="bar">
           <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
