@@ -18,7 +18,7 @@ export class TiedoteStore {
 
   async getUusimmat() {
     this.uusimmatTiedotteet = ((await Tiedotteet.findTiedotteetBy(
-      0, 5, this.filter.kieli, undefined, undefined, undefined, true, true)).data as any).data;
+      0, 5, this.filter.kieli, undefined, undefined, undefined, undefined, undefined, ['opintopolku_etusivu'])).data as any).data;
   }
 
   public readonly updateFilter = _.debounce(async (filter) => {
@@ -33,7 +33,7 @@ export class TiedoteStore {
   async fetchUutiset() {
     const result = (await Tiedotteet.findTiedotteetBy(
       this.filter.sivu, this.filter.sivukoko, this.filter.kieli, this.filter.nimi,
-      undefined, undefined, true, true)).data as any;
+      undefined, undefined, undefined, undefined, ['opintopolku_etusivu'])).data as any;
     this.amount = result['kokonaismäärä'];
     this.tiedotteet = result.data;
   }

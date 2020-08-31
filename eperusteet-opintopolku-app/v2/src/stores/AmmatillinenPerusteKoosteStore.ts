@@ -37,9 +37,23 @@ export class AmmatillinenPerusteKoosteStore {
       Kielet.getUiKieli.value
     )).data as any).data;
 
-    this.state.tiedotteet = (await tiedoteQuery({
+    const vanhat = (await tiedoteQuery({
       sivukoko: 100,
       perusteId: this.perusteId,
     }));
+
+    const uudet = (await tiedoteQuery({
+      sivukoko: 100,
+      perusteIds: [this.perusteId],
+    }));
+
+    this.state.tiedotteet = _.chain([
+      ...vanhat,
+      ...uudet,
+    ])
+      .uniqBy('id')
+      .sortBy('luotu')
+      .reverse()
+      .value() as any;
   }
 }
