@@ -32,6 +32,9 @@ export interface TiedoteQuery {
   perusteeton?: boolean;
   julkinen?: boolean;
   yleinen?: boolean;
+  tiedoteJulkaisuPaikka?: Array<string>;
+  perusteIds?: Array<number>;
+  koulutusTyyppi?: Array<string>;
 }
 
 export async function tiedoteQuery(query: TiedoteQuery = {
@@ -47,6 +50,9 @@ export async function tiedoteQuery(query: TiedoteQuery = {
     query.perusteeton,
     query.julkinen,
     query.yleinen,
+    query.tiedoteJulkaisuPaikka,
+    query.perusteIds,
+    query.koulutusTyyppi,
     options)).data as any).data;
 }
 
