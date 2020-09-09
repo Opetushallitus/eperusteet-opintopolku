@@ -42,7 +42,7 @@
             </template>
           </ep-julki-lista>
         </b-col>
-        <b-col md>
+        <b-col md class="mb-4">
           <h2 class="mb-4">{{$t('ohjeet-ja-materiaalit')}}</h2>
           <ep-spinner v-if="!tiedotteet"/>
           <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas" v-else>

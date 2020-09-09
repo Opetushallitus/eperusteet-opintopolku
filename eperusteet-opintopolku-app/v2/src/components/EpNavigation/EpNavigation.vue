@@ -207,8 +207,9 @@ export default class EpNavigation extends Vue {
       padding: 15px;
     }
     /deep/ .nav-link {
-      padding: 0.5rem 1rem !important;
-      border: 0 !important;
+      padding: 0.5rem 0rem 0.5rem 0rem !important;
+      margin-left: 1rem;
+      margin-right: 1rem;
     }
     /deep/ .dropdown-menu {
       border-radius: 0;
