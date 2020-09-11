@@ -8,17 +8,8 @@
                        :termit="perusteTermit"
                        :kuvat="perusteKuvat"
                        :is-peruste-view="false"
-                       :nav-oppimaarat="oppimaarat" />
-
-      <div v-if="hasOpintojaksot">
-        <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
-        <div v-for="(opintojakso, idx) in opintojaksotExtended" :key="idx">
-          <router-link v-if="opintojakso.location" :to="opintojakso.location">
-            {{ $kaanna(opintojakso.nimi) }}
-            <span v-if="opintojakso.koodiLabel" class="code-field">({{ opintojakso.koodiLabel }})</span>
-          </router-link>
-        </div>
-      </div>
+                       :nav-oppimaarat="oppimaarat"
+                       :opintojaksot="opintojaksot"/>
     </div>
 
     <slot name="previous-next-navigation" />
@@ -73,25 +64,6 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
         return _.some(oj.oppiaineet, { koodi: uri });
       });
     }
-  }
-
-  get opintojaksotExtended() {
-    if (this.opintojaksot) {
-      return _.map(this.opintojaksot, oj => {
-        return {
-          ...oj,
-          location: {
-            name: 'lops2019OpetussuunnitelmaOpintojakso',
-            params: { opintojaksoId: _.toString(oj.id) },
-          },
-          koodiLabel: _.get(oj, 'koodi'),
-        };
-      });
-    }
-  }
-
-  get hasOpintojaksot() {
-    return !_.isEmpty(this.opintojaksot);
   }
 
   get oppimaarat() {
