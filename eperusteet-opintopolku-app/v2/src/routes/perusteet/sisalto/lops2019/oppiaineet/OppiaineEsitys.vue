@@ -44,43 +44,54 @@
                        :kuvat="kuvat" />
   </div>
 
+  <hr v-if="hasOpintojaksot || hasModuulit" class="mt-4 mb-4"/>
+
+  <div v-if="hasOpintojaksot" class="mb-4">
+    <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
+    <router-link :to="opintojakso.location" v-for="(opintojakso, idx) in opintojaksotExtended" :key="idx">
+      <div class="d-flex justify-content-between opintojakso mb-2" >
+        <div class="font-weight-bold">
+          <span>{{ $kaanna(opintojakso.nimi) }}</span>
+          <span v-if="opintojakso.koodiLabel" class="koodi ml-2">({{ opintojakso.koodiLabel }})</span>
+        </div>
+        <div v-if="opintojakso.laajuus" class="opintopiste">
+          {{opintojakso.laajuus}} {{$t('opintopiste')}}
+        </div>
+      </div>
+    </router-link>
+  </div>
+
   <div v-if="hasModuulit">
     <h3 id="moduulit">{{ $t('moduulit') }}</h3>
 
-    <div v-if="hasPakollisetModuulit">
+    <div v-if="hasPakollisetModuulit" class="mb-4">
       <h4>{{ $t('pakolliset-moduulit') }}</h4>
       <ep-content-viewer v-if="oppiaine.pakollisetModuulitKuvaus"
                          :value="$kaanna(oppiaine.pakollisetModuulitKuvaus)"
                          :termit="termit"
                          :kuvat="kuvat" />
-      <div v-for="(moduuli, idx) in pakollisetModuulitExtended" :key="idx">
-        <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
-        <router-link v-if="moduuli.location" :to="moduuli.location">
-          {{ $kaanna(moduuli.nimi) }}
-          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
-        </router-link>
-        <div v-else>
-          {{ $kaanna(moduuli.nimi) }}
-          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
+
+      <div class="d-flex flex-wrap">
+        <div v-for="(moduuli, idx) in pakollisetModuulitExtended" :key="idx">
+          <router-link :to="moduuli.location">
+            <ep-opintojakson-moduuli class="m-1" :moduuli="moduuli"/>
+          </router-link>
         </div>
       </div>
     </div>
 
-    <div v-if="hasValinnaisetModuulit">
+    <div v-if="hasValinnaisetModuulit" class="mb-4">
       <h4>{{ $t('valinnaiset-moduulit') }}</h4>
       <ep-content-viewer v-if="oppiaine.valinnaisetModuulitKuvaus"
                          :value="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"
                          :termit="termit"
                          :kuvat="kuvat" />
-      <div v-for="(moduuli, idx) in valinnaisetModuulitExtended" :key="idx">
-        <ep-color-indicator :kind="moduuli.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2" />
-        <router-link v-if="moduuli.location" :to="moduuli.location">
-          {{ $kaanna(moduuli.nimi) }}
-          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
-        </router-link>
-        <div v-else>
-          {{ $kaanna(moduuli.nimi) }}
-          <span v-if="moduuli.koodiLabel" class="code-field">({{ moduuli.koodiLabel }})</span>
+
+      <div class="d-flex flex-wrap">
+        <div v-for="(moduuli, idx) in valinnaisetModuulitExtended" :key="idx">
+          <router-link :to="moduuli.location">
+            <ep-opintojakson-moduuli class="m-1" :moduuli="moduuli"/>
+          </router-link>
         </div>
       </div>
     </div>
@@ -105,16 +116,18 @@ import * as _ from 'lodash';
 import VueScrollTo from 'vue-scrollto';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 
-import { Lops2019OppiaineKaikkiDto, TermiDto } from '@shared/api/ylops';
+import { Lops2019OppiaineKaikkiDto, TermiDto, Lops2019OpintojaksoDto } from '@shared/api/ylops';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
 
 @Component({
   components: {
     EpColorIndicator,
     EpContentViewer,
+    EpOpintojaksonModuuli,
   },
 })
 export default class OppiaineEsitys extends Vue {
@@ -132,6 +145,9 @@ export default class OppiaineEsitys extends Vue {
 
   @Prop({ required: false, type: Array })
   private navOppimaarat!: NavigationNode[];
+
+  @Prop({ required: false })
+  private opintojaksot!: Lops2019OpintojaksoDto[];
 
   updated() {
     // Odotetaan myös alikomponenttien päivittymistä
@@ -268,13 +284,48 @@ export default class OppiaineEsitys extends Vue {
   get hasOppimaarat() {
     return !_.isEmpty(this.oppimaarat);
   }
+
+  get hasOpintojaksot() {
+    return !_.isEmpty(this.opintojaksot);
+  }
+
+  get opintojaksotExtended() {
+    if (this.opintojaksot) {
+      return _.map(this.opintojaksot, oj => {
+        return {
+          ...oj,
+          location: {
+            name: 'lops2019OpetussuunnitelmaOpintojakso',
+            params: { opintojaksoId: _.toString(oj.id) },
+          },
+          koodiLabel: _.get(oj, 'koodi'),
+        };
+      });
+    }
+  }
 }
 </script>
 
 <style scoped lang="scss">
-span.code-field {
-  margin-left: 5px;
-  font-size: 80%;
-  text-transform: uppercase;
-}
+@import '@shared/styles/_variables.scss';
+  span.code-field {
+    margin-left: 5px;
+    font-size: 80%;
+    text-transform: uppercase;
+  }
+
+  .opintojakso {
+    border-radius: 1rem;
+    padding: 10px 20px;
+    background-color: $blue-lighten-4;
+    color: $blue-darken-1;
+
+    .opintopiste {
+      color: $gray;
+    }
+  }
+
+  .opintojakso:hover {
+    background-color: $blue-lighten-3;
+  }
 </style>

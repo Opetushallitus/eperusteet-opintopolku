@@ -63,12 +63,18 @@ describe('RouteOppiaine', () => {
             fi: 'Pakollinen moduuli',
           } as any,
           pakollinen: true,
+          koodi: {
+            arvo: 'a',
+          },
         },
         {
           nimi: {
             fi: 'Valinnainen moduuli',
           } as any,
           pakollinen: false,
+          koodi: {
+            arvo: 'b',
+          },
         },
       ],
       oppimaarat: [
