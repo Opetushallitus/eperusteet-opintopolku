@@ -1,38 +1,41 @@
 <template>
-<footer role="contentinfo">
-  <div class="footer-content">
-    <div class="row">
-      <div class="col-xl col-slot">
-        <img src="../../../public/img/banners/oph_logo.svg" :alt="$t('alt-oph-logo')" slot="footer-logo" />
-      </div>
-      <div class="col-lg col-slot">
-        <b>{{ $t('opetushallitus') }}</b>
-        <ep-linkki :url="$kaanna(linkit.oph)" icon="external-link-alt"></ep-linkki>
-      </div>
-      <div class="col-lg col-slot">
-        <b>{{ $t('opintopolku') }}</b>
-        <ep-linkki :url="$kaanna(linkit.opintopolku)" icon="external-link-alt"></ep-linkki>
-      </div>
-      <div class="col-lg col-slot">
-        <b>{{ $t('eperusteet-virkailija-linkki') }}</b>
-        <ep-linkki :url="$kaanna(linkit.virkailija)" icon="external-link-alt"></ep-linkki>
-      </div>
-      <div class="col-lg col-slot">
-        <b>{{ $t('anna-palautetta') }}</b>
-        <ep-linkki :url="$kaanna(linkit.palaute)" icon="envelope"></ep-linkki>
-      </div>
-      <div class="col-lg col-slot">
-        <a :href="$kaanna(linkit.seloste)">{{ $t('tietosuojaseloste') }}</a>
+  <footer>
+
+    <div class="horizontal-line">
+      <a :href="$kaanna(linkit.oph)">
+        <img :src="ophLogo" :alt="$t('oph')" />
+      </a>
+    </div>
+
+    <div class="footer-content">
+      <div class="row justify-content-around">
+        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
+          <a :href="$kaanna(linkit.opintopolku)">
+            <img class="opintopolku" :src="opintopolkuLogo" :alt="$t('opintopolku')" />
+          </a>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
+          <span class="font-weight-bold">{{ $t('eperusteet-virkailija-linkki') }}</span>
+          <ep-linkki :url="$kaanna(linkit.virkailija)" icon="ulkoinen-linkki"></ep-linkki>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
+          <span class="font-weight-bold">{{ $t('anna-palautetta') }}</span>
+          <ep-linkki :url="$kaanna(linkit.palaute)" icon="envelope"></ep-linkki>
+        </div>
+        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
+          <a :href="$kaanna(linkit.seloste)">{{ $t('tietosuojaseloste') }}</a>
+        </div>
       </div>
     </div>
-  </div>
-</footer>
+  </footer>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import ophLogo from '@assets/img/banners/oph_logo.svg';
+import opintopolkuLogo from '@assets/img/banners/opintopolku_logo.svg';
 
 @Component({
   name: 'EpFooter',
@@ -41,6 +44,14 @@ import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
   },
 })
 export default class EpFooter extends Vue {
+  get ophLogo() {
+    return ophLogo;
+  }
+
+  get opintopolkuLogo() {
+    return opintopolkuLogo;
+  }
+
   get linkit() {
     return {
       oph: {
@@ -69,26 +80,45 @@ export default class EpFooter extends Vue {
 </script>
 
 <style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
+
 footer {
-  border-top: 1px solid #ccc;
   padding: 0;
+  hyphens: none;
+  margin-top: 100px;
+
+  .horizontal-line {
+    width: 100%;
+    border: none;
+    padding: 0;
+    overflow: visible;
+    text-align: center;
+    background-color: #FFF;
+    border-top-color: $gray-lighten-3;
+    border-top-style: solid;
+    border-top-width: 1px;
+
+    img {
+      top: -30px;
+      padding: 0 50px;
+      position: relative;
+      background-color: #FFF;
+
+    }
+  }
 
   img {
-    width: 200px;
+    width: 300px;
+
+    &.opintopolku {
+      width: 200px;
+    }
   }
 
   .footer-content {
+    max-width: 90%;
     margin: 0 auto;
-    padding: 0;
-
-    .row {
-      margin-left: 0;
-      margin-right: 0;
-      align-items: center;
-      .col-slot {
-        padding: 15px;
-      }
-    }
+    padding: 20px 0;
 
   }
 }
