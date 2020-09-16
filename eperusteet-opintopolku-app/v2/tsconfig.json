@@ -19,6 +19,7 @@
     ],
     "paths": {
       "@shared/*": ["eperusteet-frontend-utils/vue/src/*"],
+      "@assets/*": ["./eperusteet-frontend-utils/vue/public/*"],
       "@/*": ["src/*"],
       "&/*": ["tests/*"]
     },
@@ -34,6 +35,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
+    "src/**/*.svg",
     "eperusteet-frontend-utils/vue/src/**/*.ts",
     "eperusteet-frontend-utils/vue/src/**/*.vue",
     "tests/integration/**/*.ts",
