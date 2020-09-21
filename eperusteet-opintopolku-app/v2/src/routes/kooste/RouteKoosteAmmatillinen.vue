@@ -6,14 +6,14 @@
     </template>
     <div class="selaus">
       <b-container fluid>
-        <b-row>
-          <b-col cols="6" class="tile">
-            <h2 class="otsikko">{{ $t('perusteet') }}</h2>
+        <b-row class="mb-0">
+          <b-col cols="12" lg="6" class="tile mb-5">
+            <h2 class="otsikko mb-4">{{ $t('peruste') }}</h2>
             <router-link :to="perusteRoute">
               <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
             </router-link>
           </b-col>
-          <b-col cols="6" class="mb-4">
+          <b-col cols="12" lg="6" class="mb-5">
             <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
             <ep-spinner v-if="!tiedotteet"/>
             <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote" v-else>
