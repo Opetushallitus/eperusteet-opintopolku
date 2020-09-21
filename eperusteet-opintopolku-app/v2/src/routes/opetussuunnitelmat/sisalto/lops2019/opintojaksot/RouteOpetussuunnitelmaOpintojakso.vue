@@ -51,22 +51,24 @@
       </ep-collapse>
     </div>
 
-    <div class="osio">
+    <div class="osio" v-if="hasLaajaAlainenOsaaminen">
       <ep-collapse>
         <div class="alueotsikko" slot="header"><h3>{{ $t('laaja-alaiset-sisallot') }}</h3></div>
         <ep-opintojakson-laaja-alaiset-osaamiset :value="opintojakso"
                                                  :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
                                                  :laaja-alaisten-koodit="laajaAlaistenKoodit"
-                                                 :show-empty-alert="false" />
+                                                 :show-empty-alert="false"
+                                                 :showPerustesisalto="false" />
       </ep-collapse>
     </div>
 
-    <div class="opintojakson-arviointi">
+    <div class="opintojakson-arviointi" v-if="hasArviointi">
       <ep-collapse>
         <div class="alueotsikko" slot="header"><h3>{{ $t('arviointi') }}</h3></div>
         <ep-opintojakson-arviointi :value="opintojakso"
                                    :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
-                                   :show-empty-alert="false" />
+                                   :show-empty-alert="false"
+                                   :showPerustesisalto="false" />
       </ep-collapse>
     </div>
 
@@ -99,7 +101,7 @@
       </ep-collapse>
     </div>
 
-    <div class="paikallisen-oppiaineen-opintojaksot">
+    <div class="paikallisen-oppiaineen-opintojaksot" v-if="esitettavaPaikallistenOppiaineidenOpintojaksot.length > 0">
       <ep-collapse :border-bottom="false">
         <div class="alueotsikko" slot="header"><h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3></div>
         <Ep-opintojakson-opintojaksot :value="opintojakso"
@@ -397,8 +399,12 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get hasArviointi() {
-    if (this.opintojakso) {
-      return this.opintojakso.arviointi;
+    if (this.opintojakso && this.opintojakso.arviointi) {
+      const template = document.createElement('div');
+      template.innerHTML = this.$kaanna(this.opintojakso.arviointi);
+      if (template.textContent || template.innerText) {
+        return this.opintojakso.arviointi;
+      }
     }
   }
 
@@ -477,6 +483,20 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     }
 
     return {};
+  }
+
+  get esitettavaPaikallistenOppiaineidenOpintojaksot() {
+    return _.chain(this.oppiaineetExtended)
+      .filter('isPaikallinenOppiaine')
+      .map((oppiaine) => {
+        return {
+          oppiaine,
+          opintojaksot: _.filter(this.opintojakso!.paikallisetOpintojaksot, (paikallinenOpintojakso) => _.includes(_.map(paikallinenOpintojakso.oppiaineet, 'koodi'), oppiaine.koodi)),
+        };
+      })
+      .filter(oppiaineOpintojakso => !_.isEmpty(oppiaineOpintojakso.opintojaksot))
+      .sortBy(...koodiSorters())
+      .value();
   }
 }
 </script>
