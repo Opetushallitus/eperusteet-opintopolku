@@ -349,7 +349,7 @@ export default class RouteHome extends Vue {
       margin-bottom: 1rem;
 
       .luotu {
-        color: #878787;
+        color: #595959;
         font-size: 80%;
       }
     }
