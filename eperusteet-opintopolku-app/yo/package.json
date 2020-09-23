@@ -28,7 +28,7 @@
     "angular-translate-loader-static-files": "2.13.0",
     "angular-ui-bootstrap": "2.2.0",
     "angular-ui-router": "0.3.2",
-    "angulartics": "1.5.0",
+    "angulartics": "1.6.0",
     "angulartics-piwik": "1.0.6",
     "bootstrap-sass": "3.3.7",
     "eperusteet-frontend-utils": "git+https://github.com/Opetushallitus/eperusteet-frontend-utils.git",
