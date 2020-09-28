@@ -77,6 +77,10 @@ angular.module("app").directive("aipeTavoitteet", () => {
 
             $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
 
+            $scope.osaamisenKuvauksetTyhjia = function(arvioinninKohteet: any[]) {
+                return _.size(_.filter(arvioinninKohteet, kohde => kohde.arvosana !== null)) === 0;
+            }
+
         }
     };
 });

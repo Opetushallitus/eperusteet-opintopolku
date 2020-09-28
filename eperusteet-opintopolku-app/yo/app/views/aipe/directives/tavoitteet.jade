@@ -17,7 +17,7 @@ mixin tavoite-naytto
 
     h4(kaanna="tavoite.arvioinninOtsikko || 'arviointi'")
     +arviointi
-    
+
     div(ng-if='tavoite.vapaaTeksti')
       span(ng-bind-html='tavoite.vapaaTeksti | kaanna | unsafe')
 
@@ -28,12 +28,13 @@ mixin arviointi
   table.table.table-default.table-bordered.perusopetuksen-arviointi
     thead
       tr
-        th(ng-bind="'osaamisen-kuvaus' | kaanna")
+        th(ng-hide='osaamisenKuvauksetTyhjia(tavoite.arvioinninkohteet)' ng-bind="'osaamisen-kuvaus' | kaanna")
         th(ng-bind="'arvion-kuvaus' | kaanna")
     tbody
       tr(ng-repeat="arvioinninKohde in tavoite.arvioinninkohteet")
-        td
-          span(kaanna="'osaamisen-kuvaus-arvosanalle_' + arvioinninKohde.arvosana")
+        td(ng-hide='osaamisenKuvauksetTyhjia(tavoite.arvioinninkohteet)')
+          span(ng-if="arvioinninKohde.arvosana !== null" kaanna="'osaamisen-kuvaus-arvosanalle_' + arvioinninKohde.arvosana")
+          span {{arvioinninKohde.arvosana}}
         td
           span(kaanna="arvioinninKohde.osaamisenKuvaus")
 

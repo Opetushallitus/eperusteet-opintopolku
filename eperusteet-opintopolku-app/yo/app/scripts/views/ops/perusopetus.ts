@@ -336,6 +336,10 @@ angular
         $scope.vuosi = "vuosiluokka_" + $state.params.vuosi;
         $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
 
+        $scope.osaamisenKuvauksetTyhjia = function(arvioinninKohteet: any[]) {
+            return _.size(_.filter(arvioinninKohteet, kohde => kohde.arvosana !== null)) === 0;
+        }
+
         function setMurupolku() {
             let item: any = _.reduce(
                 $scope.navi.sections[1].items,
@@ -501,4 +505,8 @@ angular
         };
 
         $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
+
+        $scope.osaamisenKuvauksetTyhjia = function(arvioinninKohteet: any[]) {
+            return _.size(_.filter(arvioinninKohteet, kohde => kohde.arvosana !== null)) === 0;
+        }
     });
