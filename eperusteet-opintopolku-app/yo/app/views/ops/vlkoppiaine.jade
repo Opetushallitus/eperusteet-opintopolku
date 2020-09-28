@@ -63,10 +63,12 @@ div(ng-show='!missingVlk()')
         h4(kaanna="'arviointi-vuosiluokan-paatteeksi'")
         table.table.table-bordered.kriteerit
           tr
-            th(width='45%', kaanna="'osaamisen-kuvaus'")
+            th(ng-hide='osaamisenKuvauksetTyhjia(sa.$arvioinninkohteet)' width='45%', kaanna="'osaamisen-kuvaus'")
             th(kaanna="'arvion-kuvaus'")
           tr.peruste-arviointi-text(ng-repeat='kohde in sa.$arvioinninkohteet | orderBy:"-arvosana"')
-            td(ng-bind="'osaamisen-kuvaus-arvosanalle_' + kohde.arvosana | kaanna")
+            td(ng-hide='osaamisenKuvauksetTyhjia(sa.$arvioinninkohteet)')
+              span(ng-if="kohde.arvosana") {{'osaamisen-kuvaus-arvosanalle_' + kohde.arvosana | kaanna}}
+              span(ng-if="!kohde.arvosana")
             td(ng-bind='kohde.osaamisenKuvaus | kaanna')
       div(ng-if='sa.vapaaTeksti')
         span(ng-bind-html='sa.vapaaTeksti | kaanna | unsafe')

@@ -1,6 +1,5 @@
 .opetuksen-tavoitteet
   span(ng-if="model.vapaaTeksti" ng-bind-html='model.vapaaTeksti | kaanna | unsafe')
-
   .panel.panel-default.panel-small.arviointi-kohdealueet
     span.toggler(ng-show='model.tavoitteet.length')
       a.action-link(kaanna='', ng-click='toggleAll()') avaa-sulje-kaikki
@@ -30,6 +29,7 @@
                         span(ng-bind="arvioinninKohteenTeksti(tavoite) | kaanna")
                   div(ng-if='tavoite.$editing || hasArviointi(tavoite)')
                     h4(ng-if='!tavoite.$editing', ng-bind="(tavoite.arvioinninOtsikko || 'arviointi') | kaanna")
-                    div(ng-show='hasArviointi(tavoite)', atavoite='tavoite', perusopetuksen-arviointi='tavoite.arvioinninkohteet', edit-mode='tavoite.$editing')
+                    div(ng-show='hasArviointi(tavoite)', atavoite='tavoite', perusopetuksen-arviointi='tavoite.arvioinninkohteet', edit-mode='tavoite.$editing',
+                          osaamisen-kuvaukset-tyhjia='osaamisenKuvauksetTyhjia(tavoite.arvioinninkohteet)')
                   div(ng-if='tavoite.vapaaTeksti')
                     span(ng-bind-html='tavoite.vapaaTeksti | kaanna | unsafe')

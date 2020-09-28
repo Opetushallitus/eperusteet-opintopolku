@@ -157,6 +157,10 @@ angular
             tavoite.arvioinninkohteet = [{ arvioinninKohde: {}, hyvanOsaamisenKuvaus: {} }];
         };
 
+        $scope.osaamisenKuvauksetTyhjia = function(arvioinninKohteet: any[]) {
+            return _.size(_.filter(arvioinninKohteet, kohde => kohde.arvosana !== null)) === 0;
+        }
+
         $scope.arvioinninKohteenTeksti = (tavoite) =>  opsUtils.arvioinninKohteenTeksti(tavoite);
 
         //var cloner = CloneHelper.init(['tavoite', 'sisaltoalueet', 'laajattavoitteet', 'arvioinninkohteet']);
@@ -181,7 +185,8 @@ angular
             scope: {
                 model: "=perusopetuksenArviointi",
                 editMode: "=",
-                atavoite: "=atavoite"
+                atavoite: "=atavoite",
+                osaamisenKuvauksetTyhjia: "=osaamisenKuvauksetTyhjia"
             }
         };
     });

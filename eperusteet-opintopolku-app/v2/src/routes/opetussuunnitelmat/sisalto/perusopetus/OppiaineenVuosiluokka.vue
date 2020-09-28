@@ -82,7 +82,7 @@
 
         <div class="mb-4" v-if="tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0">
           <h4 class="mb-0 pb-0">{{$t('arviointi-vuosiluokan-paatteeksi')}}</h4>
-          <b-table :items="tavoite.arvioinninkohteet" :fields="arvioinninSarakkeet"/>
+          <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
         </div>
 
         <div class="mb-4" v-if="tavoite.vuosiluokanTavoite ">
@@ -107,6 +107,7 @@ import EpContent from '@shared/components/EpContent/EpContent.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
 
 @Component({
   components: {
@@ -115,6 +116,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
     EpCollapse,
     EpButton,
     EpContentViewer,
+    EpArvioinninkohteetTable,
   },
 })
 export default class OppiaineenVuosiluokka extends Vue {
@@ -126,24 +128,6 @@ export default class OppiaineenVuosiluokka extends Vue {
 
   @Prop({ required: true })
   private kuvat!: any[];
-
-  get arvioinninSarakkeet() {
-    return [{
-      key: 'arvosana',
-      label: this.$t('osaamistaso'),
-      thStyle: { width: '20%' },
-      formatter: (value, key, item) => {
-        return (this as any).$t('arvosana') + ' ' + value;
-      },
-    }, {
-      key: 'osaamisenKuvaus',
-      label: this.$t('kuvaus'),
-      formatter: (value, key, item) => {
-        return (this as any).$kaanna(value);
-      },
-    },
-    ];
-  }
 
   toggleTavoite() {
     _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle());

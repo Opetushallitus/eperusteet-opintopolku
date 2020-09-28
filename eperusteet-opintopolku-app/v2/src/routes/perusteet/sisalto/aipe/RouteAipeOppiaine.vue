@@ -117,7 +117,7 @@
 
         <div class="mt-4" v-if="tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0">
           <h4 class="mb-0 pb-0">{{$kaanna(tavoite.arvioinninOtsikko)}}</h4>
-          <b-table striped :items="tavoite.arvioinninkohteet" :fields="arvioinninSarakkeet"/>
+          <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
         </div>
 
         <div class="mt-4" v-if="tavoite.vapaaTeksti ">
@@ -140,12 +140,14 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
 
 @Component({
   components: {
     EpCollapse,
     EpButton,
     EpContentViewer,
+    EpArvioinninkohteetTable,
   },
 })
 export default class RouteAipeOppiaine extends Vue {
@@ -186,7 +188,7 @@ export default class RouteAipeOppiaine extends Vue {
 
   get tavoitteet() {
     if (this.oppiaine) {
-      return _.map(this.oppiaine.tavoitteet, tavoite => {
+      return _.map(this.oppiaine.tavoitteet, (tavoite: any) => {
         return {
           ...tavoite,
           kohdealue: this.kohdealueetById[_.head(tavoite.kohdealueet) as any],
@@ -236,24 +238,6 @@ export default class RouteAipeOppiaine extends Vue {
         display: 'none',
       },
     }];
-  }
-
-  get arvioinninSarakkeet() {
-    return [{
-      key: 'arvosana',
-      label: this.$t('osaamisen-kuvaus'),
-      thStyle: { width: '30%' },
-      formatter: (value, key, item) => {
-        return (this as any).$t('arvosana') + ' ' + value;
-      },
-    }, {
-      key: 'osaamisenKuvaus',
-      label: this.$t('arvion-kuvaus'),
-      formatter: (value, key, item) => {
-        return (this as any).$kaanna(value);
-      },
-    },
-    ];
   }
 
   toggleTavoite() {
