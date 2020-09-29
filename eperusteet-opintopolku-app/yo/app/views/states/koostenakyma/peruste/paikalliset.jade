@@ -1,7 +1,7 @@
 mixin haku()
   .haku-box
     input.form-control(type="text"
-                       placeholder="{{ 'hae-paikallisista' | kaanna }}"
+                       placeholder="{{ isAmmatillinen ? 'hae-paikallisista-toteutussuunnitelmista' : 'hae-paikallisista' | kaanna }}"
                        ng-model-options="{ debounce: 300 }"
                        ng-model="haku"
                        ng-change="hakuMuuttui(haku)")
@@ -46,8 +46,8 @@ mixin opslistaus()
 
 .paikalliset
   h3
-    span(ng-bind="'paikalliset-opetussuunnitelmat' | kaanna")
-    =" "
+    span(ng-show="!isAmmatillinen" ng-bind="'paikalliset-opetussuunnitelmat' | kaanna")
+    span(ng-show="isAmmatillinen" ng-bind="'paikalliset-toteutussuunnitelmat' | kaanna")
     span(style="margin-left: 4px" ng-if="isLoading")
       small-spinner()
     span(ng-show="kokonaismaara > 0")
@@ -55,6 +55,7 @@ mixin opslistaus()
   +haku
   div(ng-show="!isLoading && opetussuunnitelmat.length === 0" style="margin-top: 8px")
     .alert.alert-info
-      span(ng-bind="'perusteella-ei-paikallisia-opetussuunnitelmia' | kaanna")
+      span(ng-show="!isAmmatillinen" ng-bind="'perusteella-ei-paikallisia-opetussuunnitelmia' | kaanna")
+      span(ng-show="isAmmatillinen" ng-bind="'perusteella-ei-paikallisia-toteutussuunnitelmia' | kaanna")
   div(ng-show="opetussuunnitelmat.length > 0")
     +opslistaus
