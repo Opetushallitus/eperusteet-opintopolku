@@ -31,7 +31,7 @@ mixin arviointi
         th(ng-hide='osaamisenKuvauksetTyhjia(tavoite.arvioinninkohteet)' ng-bind="'osaamisen-kuvaus' | kaanna")
         th(ng-bind="'arvion-kuvaus' | kaanna")
     tbody
-      tr(ng-repeat="arvioinninKohde in tavoite.arvioinninkohteet")
+      tr(ng-repeat="arvioinninKohde in tavoite.arvioinninkohteet | orderBy:'arvosana'")
         td(ng-hide='osaamisenKuvauksetTyhjia(tavoite.arvioinninkohteet)')
           span(ng-if="arvioinninKohde.arvosana !== null" kaanna="'osaamisen-kuvaus-arvosanalle_' + arvioinninKohde.arvosana")
           span {{arvioinninKohde.arvosana}}
