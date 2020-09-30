@@ -52,7 +52,7 @@ div(ng-if='!missingVlk()')
           tr
             th(width='35%', kaanna="'osaamisen-kuvaus'" ng-hide='osaamisenKuvauksetTyhjia(sa.$arvioinninkohteet)')
             th(kaanna="'arvion-kuvaus'")
-          tr.peruste-arviointi-text(ng-repeat='kohde in sa.$arvioinninkohteet | orderBy:"-arvosana"')
+          tr.peruste-arviointi-text(ng-repeat='kohde in sa.$arvioinninkohteet | orderBy:"arvosana"')
             td(ng-hide='osaamisenKuvauksetTyhjia(sa.$arvioinninkohteet)')
               span(ng-if="kohde.arvosana") {{'osaamisen-kuvaus-arvosanalle_' + kohde.arvosana | kaanna}}
               span(ng-if="!kohde.arvosana")
