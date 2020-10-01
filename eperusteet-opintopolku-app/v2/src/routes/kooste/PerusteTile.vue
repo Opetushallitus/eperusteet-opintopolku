@@ -56,19 +56,13 @@ export default class PerusteTile extends Vue {
   border: 1px solid #E7E7E7;
   min-height: 230px;
   overflow-x: auto;
-  width: 343px;
+  width: 330px;
   height: 172px;
   padding-left: 20px;
   padding-right: 20px;
 
-  @media(max-width: 991.98px) {
-    width: calc(1 / 2 * 100% - (1 - 1 / 2) * 20px);
-  }
-
-  @media(max-width: 735.98px) {
+  @media(max-width: 767.98px) {
     width: 100%;
-    margin-left: 0;
-    margin-right: 0;
   }
 
 }
