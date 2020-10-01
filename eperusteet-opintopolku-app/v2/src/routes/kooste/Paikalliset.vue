@@ -59,7 +59,8 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
@@ -82,23 +83,33 @@ import { uusiJulkinenToteutus } from '@/utils/peruste';
 })
 export default class Paikalliset extends Vue {
   @Prop({ required: true })
+  private paikallinenStore!: IPaikallinenStore;
+
+  @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
   private query = '';
   private page = 1;
   private perPage = 10;
 
+  @Watch('perusteet', { immediate: true })
+  async perusteetChange() {
+    if (_.size(this.perusteKoosteStore.perusteet) > 0) {
+      await this.paikallinenStore.setPerusteId(this.perusteKoosteStore.perusteet![0].id!);
+    }
+  }
+
   get total() {
     return _.size(this.opetussuunnitelmatFiltered);
   }
 
   get activePeruste() {
-    return this.perusteKoosteStore.perusteId;
+    return this.paikallinenStore.perusteId.value;
   }
 
   setActivePeruste(peruste) {
     this.query = '';
-    this.perusteKoosteStore.setPerusteId(peruste.id);
+    this.paikallinenStore.setPerusteId(peruste.id);
   }
 
   get perusteet() {
@@ -106,11 +117,11 @@ export default class Paikalliset extends Vue {
   }
 
   get isLoading() {
-    return !this.perusteKoosteStore.opetussuunnitelmat;
+    return !this.paikallinenStore.opetussuunnitelmat.value;
   }
 
   get opetussuunnitelmat() {
-    return _.chain(this.perusteKoosteStore.opetussuunnitelmat)
+    return _.chain(this.paikallinenStore.opetussuunnitelmat.value)
       .map(ops => ({
         ...ops,
         toimijat: _.filter(ops.organisaatiot, org =>
@@ -145,8 +156,12 @@ export default class Paikalliset extends Vue {
       .value();
   }
 
+  get currentPeruste() {
+    return _.find(this.perusteet, ['id', this.paikallinenStore.perusteId.value]);
+  }
+
   ulkoinenlinkki(ops) {
-    if (uusiJulkinenToteutus(this.perusteKoosteStore.activePeruste)) {
+    if (this.currentPeruste && uusiJulkinenToteutus(this.currentPeruste)) {
       return undefined;
     }
 

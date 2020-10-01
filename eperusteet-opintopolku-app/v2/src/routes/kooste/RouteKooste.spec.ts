@@ -7,6 +7,8 @@ import * as _ from 'lodash';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 import { OpasStore } from '@/stores/OpasStore';
+import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
+import { computed } from '@vue/composition-api';
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
@@ -34,11 +36,34 @@ describe('RouteKooste', () => {
       } as any,
     }] as any;
 
+    const paikallinenStore: IPaikallinenStore = {
+      opetussuunnitelmat: computed(() => [{
+        id: 100,
+        nimi: {
+          fi: 'ops100',
+        } as any,
+        organisaatiot: [{
+          tyypit: ['Oppilaitos'],
+          nimi: {
+            fi: 'Oppilaitoksen nimi',
+          } as any,
+        }, {
+          tyypit: ['Koulutustoimija'],
+          nimi: {
+            fi: 'Toimijan nimi',
+          } as any,
+        }],
+      }]),
+      perusteId: computed(() => 0),
+      setPerusteId: (id) => new Promise<void>(resolve => resolve()),
+    };
+
     const wrapper = mount(RouteKooste as any, {
       localVue,
       propsData: {
         perusteKoosteStore,
         opasStore,
+        paikallinenStore,
       },
       stubs: {
         ...stubs,
@@ -66,24 +91,6 @@ describe('RouteKooste', () => {
       otsikko: {
         fi: 'tiedote102',
       } as any,
-    }];
-
-    perusteKoosteStore.opetussuunnitelmat = [{
-      id: 100,
-      nimi: {
-        fi: 'ops100',
-      } as any,
-      organisaatiot: [{
-        tyypit: ['Oppilaitos'],
-        nimi: {
-          fi: 'Oppilaitoksen nimi',
-        } as any,
-      }, {
-        tyypit: ['Koulutustoimija'],
-        nimi: {
-          fi: 'Toimijan nimi',
-        } as any,
-      }],
     }];
 
     perusteKoosteStore.perusteet = [{
