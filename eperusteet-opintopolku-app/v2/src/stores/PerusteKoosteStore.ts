@@ -24,22 +24,9 @@ export class PerusteKoosteStore {
     this.reload();
   }
 
-  async setPerusteId(id: number) {
-    this.perusteId = id;
-    this.opetussuunnitelmat = null;
-    this.opetussuunnitelmat = (await OpetussuunnitelmatJulkiset.getAllJulkiset(
-      undefined,
-      undefined,
-      undefined,
-      _.toString(id)
-    )).data;
-  }
-
   async reload() {
     if (this.perusteId) {
       this.perusteet = [(await Perusteet.getPerusteenTiedot(this.perusteId)).data];
-
-      this.setPerusteId(this.perusteId);
     }
     else if (this.koulutustyyppi) {
       const koulutustyypit = ryhmat(this.koulutustyyppi);
@@ -51,15 +38,6 @@ export class PerusteKoosteStore {
         voimassaolo: true,
         tuleva: true,
       })).data;
-
-      const id = _.get(this, 'perusteet[0].id');
-      if (id) {
-        this.setPerusteId(id);
-      }
-      else {
-        // Jos ei yhtään perustetta
-        this.opetussuunnitelmat = [];
-      }
     }
 
     let tiedotteet: TiedoteDto[] = [];

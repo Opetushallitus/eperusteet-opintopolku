@@ -61,7 +61,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <paikalliset :peruste-kooste-store="perusteKoosteStore" />
+          <paikalliset :peruste-kooste-store="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
         </b-col>
       </b-row>
     </b-container>
@@ -87,6 +87,7 @@ import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { OpasStore } from '@/stores/OpasStore';
+import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 
 @Component({
   components: {
@@ -101,6 +102,9 @@ import { OpasStore } from '@/stores/OpasStore';
 export default class RouteKooste extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
+
+  @Prop({ required: true })
+  private paikallinenStore!: IPaikallinenStore;
 
   @Prop({ required: true })
   private opasStore!: OpasStore;

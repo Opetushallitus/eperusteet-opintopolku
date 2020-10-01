@@ -34,6 +34,7 @@ import RoutePerusopetusOppiaineet from '@/routes/perusteet/sisalto/perusopetus/R
 import RouteAipeKurssi from '@/routes/perusteet/sisalto/aipe/RouteAipeKurssi.vue';
 import RouteAipeOppiaine from '@/routes/perusteet/sisalto/aipe/RouteAipeOppiaine.vue';
 import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
+import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -95,6 +96,9 @@ import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiai
 import { AipeVaiheStore } from '@/stores/AipeVaiheStore';
 import { AipeOppiaineStore } from '@/stores/AipeOppiaineStore';
 import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
+import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
+import { YleissivistavatPaikallisetStore } from './stores/YleissivistavatPaikallisetStore';
+import { VapaasivistystyoPaikallisetStore } from './stores/VapaasivistystyoPaikallisetStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -187,6 +191,26 @@ export const router = new Router({
         },
       },
     }, {
+      path: 'kooste/vapaasivistystyo',
+      name: 'vapaasivistystyokooste',
+      component: RouteKooste,
+      meta: {
+        resolve: {
+          cacheBy: ['koulutustyyppi'],
+          async props(route) {
+            return {
+              default: {
+                perusteKoosteStore: new PerusteKoosteStore(
+                  stateToKoulutustyyppi(route.params.koulutustyyppi),
+                  _.parseInt(route.params.perusteId)),
+                opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
+                paikallinenStore: new VapaasivistystyoPaikallisetStore(),
+              },
+            };
+          },
+        },
+      },
+    }, {
       path: 'kooste/:koulutustyyppi/:perusteId?',
       name: 'kooste',
       component: RouteKooste,
@@ -200,6 +224,7 @@ export const router = new Router({
                   stateToKoulutustyyppi(route.params.koulutustyyppi),
                   _.parseInt(route.params.perusteId)),
                 opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
+                paikallinenStore: new YleissivistavatPaikallisetStore(),
               },
             };
           },
@@ -621,6 +646,25 @@ export const router = new Router({
             },
           }],
         }],
+      }, {
+        path: 'opintokokonaisuus/:opintokokonaisuusId',
+        component: RouteOpintokokonaisuus,
+        name: 'perusteOpintokokonaisuus',
+        meta: {
+          resolve: {
+            cacheBy: ['opintokokonaisuusId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.opintokokonaisuusId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+
       }],
     }, {
       path: 'ops/:opetussuunnitelmaId/:koulutustyyppi*',
