@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-  <div id="main" class="container sisalto">
+  <div id="main" class="container-lg sisalto">
     <slot></slot>
   </div>
 </div>
@@ -173,12 +173,12 @@ export default class EpHeader extends Vue {
   }
 
   // Jos nimi tai murupolun osa ei mahdu ruudulle
-  .container.header {
+  .container-lg.header {
     overflow-x: auto;
   }
 }
 
-.container.sisalto {
+.container-lg.sisalto {
   margin-top: $sisalto-container-margin;
   margin-bottom: $sisalto-container-margin;
 }

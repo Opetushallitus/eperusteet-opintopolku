@@ -6,10 +6,10 @@
   </template>
   <div>
     <b-container fluid>
-      <b-row>
+      <b-row class="mb-5">
         <b-col cols="12" xl="auto" class="tile">
           <h2 class="otsikko">{{ $t('perusteet') }}</h2>
-          <div class="perustebox d-sm-flex flex-wrap justify-content-start" v-if="perusteet">
+          <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="perusteet">
             <div v-if="perusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
