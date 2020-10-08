@@ -10,7 +10,7 @@
         </div>
         <div class="col-lg-6 col-md-12 mb-4">
           <h3>{{$t('laajuus')}}</h3>
-          <div>{{perusteenOsa.laajuus}}</div>
+          <div>{{perusteenOsa.minimilaajuus}}</div>
         </div>
       </div>
 
