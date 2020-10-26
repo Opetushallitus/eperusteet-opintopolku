@@ -2,7 +2,9 @@
   <div class="opetussuunnitelma shadow-tile">
     <div class="d-flex align-items-center">
       <div class="opsicon-wrapper">
-        <div class="opsicon"></div>
+        <slot name="icon">
+          <div class="opsicon"></div>
+        </slot>
       </div>
       <div class="nimi flex-fill">
         <div class="ops">

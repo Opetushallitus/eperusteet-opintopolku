@@ -89,7 +89,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { Meta } from '@shared/utils/decorators';
-import { OpetussuunnitelmaDto } from '../../../eperusteet-frontend-utils/vue/src/generated/amosaa';
+import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 
 @Component({
   components: {

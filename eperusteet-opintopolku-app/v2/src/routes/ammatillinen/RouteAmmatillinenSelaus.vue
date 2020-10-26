@@ -6,7 +6,7 @@
       {{ $t(ylaotsikko) }}
     </template>
   </ep-header>
-  <div class="container-md">
+  <div class="container-lg">
 
     <div v-if="$route.name === 'ammatillinenSelaus'">
       <div class="d-flex justify-content-between flex-lg-row flex-column">
@@ -125,6 +125,11 @@ export default class RouteAmmatillinenSelaus extends Vue {
         text: 'selaa-koulutuksen-jarjestajia',
         icon: 'lokaatio',
       },
+      {
+        route: 'ammatillinenTyopajat',
+        text: 'selaa-tyopajoja',
+        icon: 'osaamisen-arviointi',
+      },
     ];
   }
 
@@ -133,6 +138,7 @@ export default class RouteAmmatillinenSelaus extends Vue {
     case 'ammatillinenKoulutuksenjarjestajat': return 'koulutuksen-jarjestajat';
     case 'ammatillinenOhjeet': return 'ohjeet-ja-materiaalit';
     case 'ammatillinenKoulutusviennit': return 'koulutusviennit';
+    case 'ammatillinenTyopajat': return 'selaa-tyopajoja';
     default: return 'ammatillinen-koulutus';
     }
   }

@@ -12,6 +12,7 @@ import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSela
 import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
 import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatillinenKoulutusviennit.vue';
 import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
+import RouteAmmatillinenTyopajat from '@/routes/ammatillinen/RouteAmmatillinenTyopajat.vue';
 import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';
 
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
@@ -250,6 +251,10 @@ export const router = new Router({
           path: 'ohjeet',
           component: RouteAmmatillinenOhjeet,
           name: 'ammatillinenOhjeet',
+        }, {
+          path: 'tyopajat',
+          component: RouteAmmatillinenTyopajat,
+          name: 'ammatillinenTyopajat',
         },
       ],
     }, {
