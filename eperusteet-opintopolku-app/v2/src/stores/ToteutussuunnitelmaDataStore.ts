@@ -34,7 +34,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     this.koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
     this.opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
     this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value, _.toString(this.koulutustoimija.id))).data;
-    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigation(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
+    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationJulkinen(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
     this.navigation = {
       ...navigation,
       children: _.filter(navigation.children, child => child.type !== 'tiedot'),
