@@ -111,6 +111,11 @@ export default class RouteAmmatillinenSelaus extends Vue {
   get linkit(): Ylalinkki[] {
     return [
       {
+        route: 'ammatillinenKoulutuksenjarjestajat',
+        text: 'selaa-koulutuksen-jarjestajia',
+        icon: 'lokaatio',
+      },
+      {
         route: 'ammatillinenOhjeet',
         text: 'selaa-ohjeita-ja-materiaaleja',
         icon: 'ohjeet',
@@ -119,11 +124,6 @@ export default class RouteAmmatillinenSelaus extends Vue {
         route: 'ammatillinenKoulutusviennit',
         text: 'selaa-koulutusvienteja',
         icon: 'lokaatio-nuoli',
-      },
-      {
-        route: 'ammatillinenKoulutuksenjarjestajat',
-        text: 'selaa-koulutuksen-jarjestajia',
-        icon: 'lokaatio',
       },
       {
         route: 'ammatillinenTyopajat',

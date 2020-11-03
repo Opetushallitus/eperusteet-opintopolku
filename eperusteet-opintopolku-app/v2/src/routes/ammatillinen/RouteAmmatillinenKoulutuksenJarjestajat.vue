@@ -41,7 +41,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { KoulutustoimijaJulkinenDto } from '@shared/api/amosaa';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -54,7 +53,6 @@ import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue
 
 @Component({
   components: {
-    PerusteAmmatillinenHaku,
     EpSpinner,
     EpSearch,
     EpExternalLink,
