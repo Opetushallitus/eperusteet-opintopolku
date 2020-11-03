@@ -6,7 +6,7 @@ import { rootConfig } from '@/mainvue';
 import { createLogger } from '@shared/utils/logger';
 import { Lokalisointi } from '@shared/api/eperusteet';
 import { registerIconColorSchemeChange } from '@shared/utils/icon';
-import '@/config/styles';
+import '@shared/config/styles';
 
 const logger = createLogger('Main');
 

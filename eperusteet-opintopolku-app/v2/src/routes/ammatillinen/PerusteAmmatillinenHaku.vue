@@ -1,8 +1,38 @@
 <template>
 <div class="haku">
   <div class="search">
-    <ep-search v-model="query" :placeholder="searchPlaceholder"/>
-    <div class="checkboxes d-flex align-self-center flex-wrap">
+
+    <div v-if="tyyppi === 'peruste'">
+      <div class="placeholderText">{{searchPlaceholder}}</div>
+
+      <div class="d-flex flex-lg-row flex-column">
+        <b-form-group :label="$t('hae')" class="flex-fill">
+          <ep-search v-model="query"/>
+        </b-form-group>
+        <b-form-group :label="$t('tutkintotyyppi')">
+          <EpMultiSelect
+            class="multiselect"
+            v-model="tutkintotyyppi"
+            :enable-empty-option="true"
+            :placeholder="$t('kaikki')"
+            :is-editing="true"
+            :options="tutkintotyypit">
+
+            <template slot="singleLabel" slot-scope="{ option }">
+              {{ $t(option) }}
+            </template>
+
+            <template slot="option" slot-scope="{ option }">
+              {{ $t(option) }}
+            </template>
+          </EpMultiSelect>
+        </b-form-group>
+      </div>
+    </div>
+
+    <ep-search v-else v-model="query" :placeholder="searchPlaceholder"/>
+
+    <div class="checkboxes d-flex align-self-center flex-wrap flex-lg-row flex-column">
       <ep-toggle v-for="(toggle, idx) in toggles"
                  :key="idx"
                  v-model="filters[toggle]"
@@ -66,6 +96,7 @@ import _ from 'lodash';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import { Kielet } from '@shared/stores/kieli';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
+import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 
 @Component({
   components: {
@@ -75,6 +106,7 @@ import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue
     EpSpinner,
     EpExternalLink,
     EpAmmatillinenRow,
+    EpMultiSelect,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -86,6 +118,27 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   mounted() {
     this.perusteHakuStore.fetch();
+  }
+
+  private tutkintotyyppi = 'kaikki';
+
+  get tutkintotyypit() {
+    return [
+      'kaikki',
+      'koulutustyyppi_1',
+      'koulutustyyppi_11',
+      'koulutustyyppi_12',
+    ];
+  }
+
+  @Watch('tutkintotyyppi')
+  tutkintotyyppiChange() {
+    if (this.tutkintotyyppi === 'kaikki') {
+      this.perusteHakuStore.updateFilters({ koulutustyyppi: [] });
+    }
+    else {
+      this.perusteHakuStore.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
+    }
   }
 
   get searchPlaceholder() {
@@ -171,6 +224,17 @@ export default class PerusteAmmatillinenHaku extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile-hover;
+
+.placeholderText {
+  font-size: small;
+  color: #555;
+}
+
+@media(min-width: 992px){
+  .multiselect {
+    width: 400px;
+  }
+}
 
 .haku {
   width: 100%;
