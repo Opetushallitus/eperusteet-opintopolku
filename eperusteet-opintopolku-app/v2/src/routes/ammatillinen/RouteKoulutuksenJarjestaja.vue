@@ -125,7 +125,12 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
       return _.map(this.koulutuksenJarjestajaStore.yhteisetOsuudet.value, yhteinenOsuus => {
         return {
           ...yhteinenOsuus,
-          route: { name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: _.toString(yhteinenOsuus.id) } },
+          route: { name: 'toteutussuunnitelma',
+            params: {
+              toteutussuunnitelmaId: _.toString(yhteinenOsuus.id),
+              koulutustyyppi: 'ammatillinen',
+            },
+          },
         };
       });
     }
@@ -136,7 +141,12 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
       return _.map(this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value, toteutussuunnitelma => {
         return {
           ...toteutussuunnitelma,
-          route: { name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: _.toString(toteutussuunnitelma.id) } },
+          route: {
+            name: 'toteutussuunnitelma',
+            params: { toteutussuunnitelmaId: _.toString(toteutussuunnitelma.id),
+              koulutustyyppi: 'ammatillinen',
+            },
+          },
         };
       });
     }

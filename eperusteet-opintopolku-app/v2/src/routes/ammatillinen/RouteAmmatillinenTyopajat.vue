@@ -80,6 +80,7 @@ export default class RouteAmmatillinenTyopajat extends Vue {
             name: 'toteutussuunnitelma',
             params: {
               toteutussuunnitelmaId: _.toString(opetussuunnitelma.id),
+              koulutustyyppi: 'ammatillinen',
             },
           },
         }

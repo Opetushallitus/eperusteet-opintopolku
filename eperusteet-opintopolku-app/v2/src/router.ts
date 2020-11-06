@@ -100,6 +100,7 @@ import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
 import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 import { YleissivistavatPaikallisetStore } from './stores/YleissivistavatPaikallisetStore';
 import { VapaasivistystyoPaikallisetStore } from './stores/VapaasivistystyoPaikallisetStore';
+import { getKoostePaikallinenStore } from './utils/toteutustypes';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -192,26 +193,6 @@ export const router = new Router({
         },
       },
     }, {
-      path: 'kooste/vapaasivistystyo',
-      name: 'vapaasivistystyokooste',
-      component: RouteKooste,
-      meta: {
-        resolve: {
-          cacheBy: ['koulutustyyppi'],
-          async props(route) {
-            return {
-              default: {
-                perusteKoosteStore: new PerusteKoosteStore(
-                  stateToKoulutustyyppi(route.params.koulutustyyppi),
-                  _.parseInt(route.params.perusteId)),
-                opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
-                paikallinenStore: new VapaasivistystyoPaikallisetStore(),
-              },
-            };
-          },
-        },
-      },
-    }, {
       path: 'kooste/:koulutustyyppi/:perusteId?',
       name: 'kooste',
       component: RouteKooste,
@@ -225,17 +206,28 @@ export const router = new Router({
                   stateToKoulutustyyppi(route.params.koulutustyyppi),
                   _.parseInt(route.params.perusteId)),
                 opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
-                paikallinenStore: new YleissivistavatPaikallisetStore(),
+                paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
               },
             };
           },
         },
       },
     }, {
-      path: 'selaus',
+      path: 'selaus/:koulutustyyppi',
       name: 'ammatillinenSelaus',
       component: RouteAmmatillinenSelaus,
-      props: { ammatillistenTiedotteetStore },
+      meta: {
+        resolve: {
+          cacheBy: ['koulutustyyppi'],
+          async props(route) {
+            return {
+              default: {
+                ammatillistenTiedotteetStore,
+              },
+            };
+          },
+        },
+      },
       children: [
         {
           path: 'koulutuksenjarjestajat',
@@ -306,7 +298,7 @@ export const router = new Router({
         },
       },
     }, {
-      path: 'toteutussuunnitelma/:toteutussuunnitelmaId',
+      path: 'toteutussuunnitelma/:toteutussuunnitelmaId/:koulutustyyppi',
       name: 'toteutussuunnitelma',
       component: RouteOpetussuunnitelma,
       redirect(to) {
