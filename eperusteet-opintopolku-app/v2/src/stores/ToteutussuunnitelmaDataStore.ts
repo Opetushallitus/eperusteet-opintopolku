@@ -55,7 +55,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
   };
 
-  @Getter(state => 'ammatillinen')
+  @Getter(state => state.opetussuunnitelma.peruste.koulutustyyppi)
   public readonly koulutustyyppi!: string;
 
   @Getter(state => _.map(state.opetussuunnitelma.liitteet, liite => ({

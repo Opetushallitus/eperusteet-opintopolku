@@ -151,6 +151,7 @@ export default class RouteKoosteAmmatillinen extends Vue {
             name: 'toteutussuunnitelma',
             params: {
               toteutussuunnitelmaId: _.toString(opetussuunnitelma.id),
+              koulutustyyppi: 'ammatillinen',
             },
           },
         }

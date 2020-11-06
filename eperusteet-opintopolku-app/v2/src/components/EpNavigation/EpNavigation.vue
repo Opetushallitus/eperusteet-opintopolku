@@ -51,11 +51,6 @@ import { createLogger } from '@shared/utils/logger';
 
 const logger = createLogger('EpNavigation');
 
-const ammatillisetRoute: string[] = [
-  'ammatillinen',
-  'toteutussuunnitelma',
-];
-
 @Component
 export default class EpNavigation extends Vue {
   get valittuKieli() {
@@ -79,7 +74,7 @@ export default class EpNavigation extends Vue {
       return 'router-link-active koulutustyyppi-ammatillinen';
     }
     else if (this.$route && this.$route.params.koulutustyyppi) {
-      const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
+      const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi) || this.$route.params.koulutustyyppi;
       return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
     }
     else {
@@ -89,19 +84,13 @@ export default class EpNavigation extends Vue {
 
   get routeAmmatillinen() {
     if (this.$route) {
-      return (this.$route.params.koulutustyyppi && this.$route.params.koulutustyyppi === 'ammatillinen')
-          || _.some(ammatillisetRoute, route => _.includes(this.$route.name, route));
+      return this.$route.name === 'ammatillinenkooste';
     }
   }
 
   private isActiveRoute(kt) {
     if (this.$route) {
-      if (kt === 'ammatillinen' && this.routeAmmatillinen) {
-        return true;
-      }
-
-      const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi);
-      return koulutustyyppi && _.includes(ryhmat(kt.koulutustyyppi), koulutustyyppi);
+      return kt.name === this.$route.params.koulutustyyppi || (this.routeAmmatillinen && kt.name === 'ammatillinen');
     }
     return false;
   }
@@ -118,7 +107,7 @@ export default class EpNavigation extends Vue {
     return _.map(ammatilliset(), am => {
       return {
         ...am,
-        ...this.setActiveClass('ammatillinen'),
+        ...this.setActiveClass({ name: 'ammatillinen' }),
       };
     });
   }
