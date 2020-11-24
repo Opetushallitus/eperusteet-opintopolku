@@ -28,12 +28,14 @@
         :shadow="true"
         :borderBottom="false"
         :togglefull="true"
-        :expandedByDefault="sisaltoviite.tosa.toteutukset.length === 1">
+        :expandedByDefault="false">
 
         <div class="font-600" slot="header">{{$kaanna(toteutus.otsikko)}}</div>
 
-        <div class="font-600 mt-3">{{$t('tutkintonimikkeet-ja-osaamisalat')}}</div>
-        <b-table striped :items="toteutus.tutkintonimikkeetJaOsaamisalat" :fields="koodiFields" />
+        <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">
+          <div class="font-600 mt-3">{{$t('tutkintonimikkeet-ja-osaamisalat')}}</div>
+          <b-table striped :items="toteutus.tutkintonimikkeetJaOsaamisalat" :fields="koodiFields" />
+        </template>
 
         <div v-if="toteutus.tavatjaymparisto">
           <ep-form-content class="col-md-12" name="tavat-ja-ymparisto">
