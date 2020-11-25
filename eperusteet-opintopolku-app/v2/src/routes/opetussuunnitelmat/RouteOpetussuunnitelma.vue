@@ -6,7 +6,7 @@
     </template>
     <template slot="subheader">
       <div class="diaarinumero">
-        {{ opetussuunnitelma.perusteenDiaarinumero }}
+        {{ diaariNumero }}
       </div>
     </template>
   </ep-header>
@@ -79,6 +79,10 @@ export default class RouteOpetussuunnitelma extends Vue {
       ];
     }
     return [];
+  }
+
+  get diaariNumero(): string {
+    return this.opetussuunnitelma.perusteenDiaarinumero || this.opetussuunnitelma.perusteDiaarinumero || '';
   }
 
   @Watch('$route', { deep: true, immediate: true })
