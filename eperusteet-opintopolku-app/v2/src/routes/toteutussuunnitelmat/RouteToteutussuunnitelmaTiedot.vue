@@ -1,12 +1,12 @@
 <template>
-<div>
-  <ep-toteutussuunnitelma-tiedot
-    v-if="isAmmatillinen"
-    :store="opetussuunnitelmaDataStore" />
-  <ep-opetussuunnitelma-tiedot
-    v-if="isVapaasivistystyo"
-    :store="opetussuunnitelmaDataStore" />
-</div>
+  <div>
+    <ep-toteutussuunnitelma-tiedot
+      v-if="isAmmatillinen"
+      :store="opetussuunnitelmaDataStore" />
+    <ep-opetussuunnitelma-tiedot
+      v-if="isVapaasivistystyo"
+      :store="opetussuunnitelmaDataStore" />
+  </div>
 </template>
 
 <script lang="ts">

@@ -7,17 +7,13 @@
         <span>{{$kaanna(opetussuunnitelma.nimi)}}</span>
       </ep-form-content>
 
-      <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
-        <span v-html="$kaanna(opetussuunnitelma.kuvaus)"></span>
-      </ep-form-content>
+      <!-- Tiivistelmä -->
 
       <ep-form-content name="hyvaksyja" headerType="h3" headerClass="h6">
         <ep-field v-model="opetussuunnitelma.hyvaksyja" />
       </ep-form-content>
 
-      <ep-form-content name="paatospaivamaara" headerType="h3" headerClass="h6">
-        <span>{{ $sd(opetussuunnitelma.paatospaivamaara) }}</span>
-      </ep-form-content>
+      <!-- Hyväksymispäivämäärä -->
 
       <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
         <ep-field v-model="opetussuunnitelma.perusteDiaarinumero" />
@@ -27,18 +23,7 @@
         <ep-field v-model="koulutustyyppiName" />
       </ep-form-content>
 
-      <ep-form-content v-if="opetussuunnitelma.kunnat" name="kunnat" headerType="h3" headerClass="h6">
-        <ul v-if="opetussuunnitelma.kunnat && opetussuunnitelma.kunnat.length > 1">
-          <li v-for="(kunta, id) in opetussuunnitelma.kunnat" :key="kunta+id">
-            <ep-field v-model="kunta.nimi" />
-          </li>
-        </ul>
-        <div v-else>
-          <div v-for="(kunta, id) in opetussuunnitelma.kunnat" :key="kunta+id">
-            <ep-field v-model="kunta.nimi" />
-          </div>
-        </div>
-      </ep-form-content>
+      <!-- Kunnat -->
 
       <ep-form-content name="organisaatio" headerType="h3" headerClass="h6">
         <ep-field v-model="koulutustoimija.nimi" />
