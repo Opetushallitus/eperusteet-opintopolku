@@ -88,8 +88,8 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 
 @Component({
   components: {
-    EpFormContent
-  }
+    EpFormContent,
+  },
 })
 export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
     @Prop({ required: true })

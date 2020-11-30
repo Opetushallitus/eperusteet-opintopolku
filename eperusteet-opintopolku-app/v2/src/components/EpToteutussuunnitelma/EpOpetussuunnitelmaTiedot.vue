@@ -58,7 +58,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
     EpFormContent,
     EpField,
     EpSpinner,
-  }
+  },
 })
 export default class EpOpetussuunnitelmaTiedot extends Vue {
   @Prop({ required: true })
@@ -75,7 +75,6 @@ export default class EpOpetussuunnitelmaTiedot extends Vue {
   get koulutustyyppiName() {
     return this.$t(this.store!.koulutustyyppi as Koulutustyyppi);
   }
-
 }
 </script>
 

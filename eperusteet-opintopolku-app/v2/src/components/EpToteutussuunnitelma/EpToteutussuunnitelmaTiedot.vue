@@ -71,7 +71,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpFormContent,
     EpField,
     EpSpinner,
-  }
+  },
 })
 export default class EpToteutussuunnitelmaTiedot extends Vue {
   @Prop({ required: true })
