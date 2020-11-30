@@ -20,6 +20,10 @@
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
       />
+      <ep-toteutussuunnitelma-opintokokonaisuus
+        v-else-if="sisaltoviite.tyyppi === 'opintokokonaisuus'"
+        :sisaltoviite="sisaltoviite"
+      />
     </div>
   </div>
 </template>
@@ -32,6 +36,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpToteutussuunnitelmaTekstikappale from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTekstikappale.vue';
 import EpToteutussuunnitelmaTutkinnonosa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTutkinnonosa.vue';
 import EpToteutussuunnitelmaSuorituspolku from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaSuorituspolku.vue';
+import EpToteutussuunnitelmaOpintokokonaisuus from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOpintokokonaisuus.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 
 @Component({
@@ -40,6 +45,7 @@ import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataSt
     EpToteutussuunnitelmaTekstikappale,
     EpToteutussuunnitelmaTutkinnonosa,
     EpToteutussuunnitelmaSuorituspolku,
+    EpToteutussuunnitelmaOpintokokonaisuus,
   },
 })
 export default class RouteToteutussuunnitelmaSisalto extends Vue {
