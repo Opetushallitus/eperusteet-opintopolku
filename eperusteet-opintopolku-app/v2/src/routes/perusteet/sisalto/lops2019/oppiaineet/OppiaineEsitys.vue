@@ -122,6 +122,7 @@ import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicat
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
+import { koodiSorters } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -291,16 +292,21 @@ export default class OppiaineEsitys extends Vue {
 
   get opintojaksotExtended() {
     if (this.opintojaksot) {
-      return _.map(this.opintojaksot, oj => {
-        return {
-          ...oj,
-          location: {
-            name: 'lops2019OpetussuunnitelmaOpintojakso',
-            params: { opintojaksoId: _.toString(oj.id) },
-          },
-          koodiLabel: _.get(oj, 'koodi'),
-        };
-      });
+      return _.chain(this.opintojaksot)
+        .map(oj => {
+          const ojOm: any = _.find(oj.oppiaineet, { koodi: this.oppiaine!.koodi!.uri });
+          return {
+            ...oj,
+            location: {
+              name: 'lops2019OpetussuunnitelmaOpintojakso',
+              params: { opintojaksoId: _.toString(oj.id) },
+            },
+            koodiLabel: _.get(oj, 'koodi'),
+            jarjestys: ojOm.jarjestys,
+          };
+        })
+        .sortBy('jarjestys', ...koodiSorters())
+        .value();
     }
   }
 }
