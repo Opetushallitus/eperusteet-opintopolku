@@ -7,7 +7,7 @@ table.table.table-bordered.perusopetuksen-arviointi
   tbody
     tr(ng-repeat='arviointi in model | orderBy:"arvosana"')
       td(ng-hide="osaamisenKuvauksetTyhjia")
-        span(ng-if="arviointi.arvosana") {{'osaamisen-kuvaus-arvosanalle_' + arviointi.arvosana | kaanna}}
+        span(ng-if="arviointi.arvosana === 0 || arviointi.arvosana") {{'osaamisen-kuvaus-arvosanalle_' + arviointi.arvosana | kaanna}}
         span(ng-if="!arviointi.arvosana")
       td
         span {{arviointi.osaamisenKuvaus | kaanna}}
