@@ -23,6 +23,7 @@
       <ep-toteutussuunnitelma-opintokokonaisuus
         v-else-if="sisaltoviite.tyyppi === 'opintokokonaisuus'"
         :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
       />
     </div>
   </div>

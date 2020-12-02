@@ -5,21 +5,20 @@
     </b-row>
     <b-row>
       <b-col md="6">
-        <ep-form-content name="opintokokonaisuuden-nimi">
+        <ep-form-content name="opintokokonaisuuden-nimi" headerType="h4">
           <span>{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</span>
         </ep-form-content>
       </b-col>
       <b-col md="6">
-        <ep-form-content name="laajuus">
+        <ep-form-content name="laajuus" headerType="h4">
           <span>{{ opintokokonaisuus.laajuus }} {{$t('opintopiste')}}</span>
         </ep-form-content>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <ep-form-content name="kuvaus">
-          <span v-html="$kaanna(opintokokonaisuus.kuvaus)"></span>
-        </ep-form-content>
+        <h4 role="presentation">{{ $t('kuvaus') }}</h4>
+        <ep-content-viewer :value="$kaanna(opintokokonaisuus.kuvaus)" :kuvat="kuvat"/>
       </b-col>
     </b-row>
     <hr>
@@ -28,9 +27,8 @@
     </b-row>
     <b-row>
       <b-col>
-        <ep-form-content name="tavoitteiden-kuvaus">
-          <span v-html="$kaanna(opintokokonaisuus.tavoitteidenKuvaus)"></span>
-        </ep-form-content>
+        <h4>{{ $t('tavoitteiden-kuvaus') }}</h4>
+        <ep-content-viewer :value="$kaanna(opintokokonaisuus.tavoitteidenKuvaus)" :kuvat="kuvat"/>
       </b-col>
     </b-row>
     <b-row>
@@ -38,7 +36,7 @@
         <h4>{{ $kaanna(opintokokonaisuus.opetuksenTavoiteOtsikko) }}</h4>
         <ul>
           <li v-for="tavoiteItem in opintokokonaisuus.tavoitteet" :key="tavoiteItem.id">
-            {{ tavoiteItem.tavoite }}
+            {{ $kaanna(tavoiteItem.tavoite) }}
           </li>
         </ul>
       </b-col>
@@ -47,9 +45,8 @@
       <hr>
       <b-row>
         <b-col>
-          <ep-form-content name="keskeiset-sisallot" headerType="h3" headerClass="mt-3 mb-4">
-            <span v-html="$kaanna(opintokokonaisuus.keskeisetSisallot)"></span>
-          </ep-form-content>
+          <h3 class="mt-3 mb-4">{{ $t('keskeiset-sisallot') }}</h3>
+          <ep-content-viewer :value="$kaanna(opintokokonaisuus.keskeisetSisallot)" :kuvat="kuvat"/>
         </b-col>
       </b-row>
     </template>
@@ -61,9 +58,8 @@
     </b-row>
     <b-row v-if="opintokokonaisuus.arvioinninKuvaus">
       <b-col>
-        <ep-form-content name="arvioinnin-kuvaus">
-          <span v-html="$kaanna(opintokokonaisuus.arvioinninKuvaus)"></span>
-        </ep-form-content>
+        <h4>{{ $t('arvioinnin-kuvaus') }}</h4>
+        <ep-content-viewer :value="$kaanna(opintokokonaisuus.arvioinninKuvaus)" :kuvat="kuvat"/>
       </b-col>
     </b-row>
     <b-row>
@@ -85,15 +81,20 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
     EpFormContent,
+    EpContentViewer,
   },
 })
 export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
     @Prop({ required: true })
     private sisaltoviite!: Matala;
+
+    @Prop({ required: true })
+    private kuvat!: any[];
 
     get opintokokonaisuus() {
       return this.sisaltoviite.opintokokonaisuus;
