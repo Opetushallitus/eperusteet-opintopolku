@@ -100,7 +100,7 @@ import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
 import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 import { YleissivistavatPaikallisetStore } from './stores/YleissivistavatPaikallisetStore';
 import { VapaasivistystyoPaikallisetStore } from './stores/VapaasivistystyoPaikallisetStore';
-import { getKoostePaikallinenStore } from './utils/toteutustypes';
+import { getKoostePaikallinenComponent, getKoostePaikallinenStore } from './utils/toteutustypes';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -207,6 +207,7 @@ export const router = new Router({
                   _.parseInt(route.params.perusteId)),
                 opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                 paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
+                paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),
               },
             };
           },

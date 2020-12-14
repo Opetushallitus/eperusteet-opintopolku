@@ -60,8 +60,8 @@
         </b-col>
       </b-row>
       <b-row>
-        <b-col>
-          <paikalliset :peruste-kooste-store="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
+        <b-col >
+          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
         </b-col>
       </b-row>
     </b-container>
@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Prop, Component } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -108,6 +108,9 @@ export default class RouteKooste extends Vue {
 
   @Prop({ required: true })
   private opasStore!: OpasStore;
+
+  @Prop({ required: true })
+  private paikallinenComponent!: any;
 
   get murupolku(): Array<MurupolkuOsa> {
     return [{

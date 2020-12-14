@@ -16,14 +16,14 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat);
   public readonly perusteId = computed(() => this.state.perusteId);
 
-  public async setPerusteId(id: number) {
-    this.state.perusteId = id;
+  public async fetch(perusteId?: number) {
+    this.state.perusteId = perusteId!;
     this.state.opetussuunnitelmat = null;
     this.state.opetussuunnitelmat = (await OpetussuunnitelmatJulkiset.getAllJulkiset(
       undefined,
       undefined,
       undefined,
-      _.toString(id)
+      _.toString(perusteId)
     )).data;
   }
 }
