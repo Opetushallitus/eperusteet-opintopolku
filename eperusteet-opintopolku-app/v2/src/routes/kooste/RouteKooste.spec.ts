@@ -9,6 +9,7 @@ import { Kaannos } from '@shared/plugins/kaannos';
 import { OpasStore } from '@/stores/OpasStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { computed } from '@vue/composition-api';
+import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
@@ -55,7 +56,7 @@ describe('RouteKooste', () => {
         }],
       }]),
       perusteId: computed(() => 0),
-      setPerusteId: (id) => new Promise<void>(resolve => resolve()),
+      fetch: (id) => new Promise<void>(resolve => resolve()),
     };
 
     const wrapper = mount(RouteKooste as any, {
@@ -64,6 +65,7 @@ describe('RouteKooste', () => {
         perusteKoosteStore,
         opasStore,
         paikallinenStore,
+        paikallinenComponent: Paikalliset,
       },
       stubs: {
         ...stubs,

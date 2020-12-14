@@ -34,7 +34,7 @@ export class AmmatillinenPerusteKoosteStore {
       0,
       100,
       '',
-      Kielet.getUiKieli.value
+      Kielet.getUiKieli.value,
     )).data as any).data;
 
     const vanhat = (await tiedoteQuery({
