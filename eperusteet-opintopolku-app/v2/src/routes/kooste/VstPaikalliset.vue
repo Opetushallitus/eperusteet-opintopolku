@@ -68,7 +68,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { Koulutustyyppi } from '@shared/tyypit';
 import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaikallisetStore';
-import { Koodisto } from '@shared/api/eperusteet';
+import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
 
 @Component({
@@ -96,7 +96,7 @@ export default class VstPaikalliset extends Vue {
 
   private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({
     async query(query: string, sivu = 0) {
-      return (await Koodisto.kaikkiSivutettuna('vapaasivistystyooppilaitostyyppi', query, {
+      return (await Ulkopuoliset.getKoodisto('vapaasivistystyooppilaitostyyppi', query, {
         params: {
           sivu,
           sivukoko: 50,
