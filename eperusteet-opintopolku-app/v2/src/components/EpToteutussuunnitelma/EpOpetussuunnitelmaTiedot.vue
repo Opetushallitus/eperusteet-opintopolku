@@ -29,6 +29,10 @@
         <ep-field v-model="koulutustoimija.nimi" />
       </ep-form-content>
 
+      <ep-form-content name="oppilaitoksen-tyyppi" headerType="h3" headerClass="h6" v-if="oppilaitosTyyppiNimi">
+        <ep-field v-model="oppilaitosTyyppiNimi" />
+      </ep-form-content>
+
       <ep-form-content name="luotu" headerType="h3" headerClass="h6">
         <span>{{ $sd(opetussuunnitelma.luotu) }}</span>
       </ep-form-content>
@@ -42,15 +46,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
-
 import { Koulutustyyppi } from '@shared/tyypit';
-
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -74,6 +76,12 @@ export default class EpOpetussuunnitelmaTiedot extends Vue {
 
   get koulutustyyppiName() {
     return this.$t(this.store!.koulutustyyppi as Koulutustyyppi);
+  }
+
+  get oppilaitosTyyppiNimi() {
+    if (this.opetussuunnitelma?.oppilaitosTyyppiKoodi) {
+      return _.mapValues(_.keyBy(this.opetussuunnitelma?.oppilaitosTyyppiKoodi.metadata, v => _.toLower(v.kieli)), v => v.nimi);
+    }
   }
 }
 </script>
