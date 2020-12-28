@@ -7,6 +7,7 @@ import VueCompositionApi from '@vue/composition-api';
 import PortalVue from 'portal-vue';
 import Aikaleima from '@shared/plugins/aikaleima';
 import Kaannos from '@shared/plugins/kaannos';
+import { Vahvistus } from '@shared/plugins/vahvistus';
 
 import '@/config/bootstrap';
 import '@shared/config/fontawesome';
@@ -30,6 +31,7 @@ Vue.use(VueCompositionApi);
 Vue.use(PortalVue);
 Vue.use(Kaannos);
 Vue.use(Aikaleima);
+Vue.use(Vahvistus);
 
 const isProduction = () => process.env.NODE_ENV === 'production';
 

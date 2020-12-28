@@ -4,41 +4,52 @@
       <span v-html="$kaanna(tutkinnonosa.ammattitaitovaatimukset)" />
     </ep-form-content>
 
-    <div v-if="hasArviointi">
+    <ep-form-content class="col-md-12 mb-5" :showHeader="false" v-if="tutkinnonosa.kuvaus">
+      <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
+    </ep-form-content>
+
+    <ep-form-content class="col-md-12 mb-5" v-if="tutkinnonosa.ammattitaitovaatimukset2019" name="ammattitaitovaatimukset">
+      <EpAmmattitaitovaatimukset v-model="tutkinnonosa.ammattitaitovaatimukset2019" :is-editing="false" />
+    </ep-form-content>
+
+    <template v-if="hasArviointi">
       <ep-ammatillinen-arvioinnin-kohdealueet
               v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.arvioinninKohdealueet"
               :arviointiasteikot="arviointiasteikot"
               :arvioinninKohdealueet="tutkinnonosa.arviointi.arvioinninKohdealueet"/>
 
-      <div v-if="tutkinnonosa.geneerinenArviointiasteikko && tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit" class="ml-2">
+      <div v-if="tutkinnonosa.geneerinenArviointiasteikko && tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit">
 
-        <div class="mb-3 mt-3">
-          <div class="mb-1">{{$t('arvioinnin-kohde')}}</div>
+        <ep-form-content class="col-md-12 mb-5" name="arviointi">
           <span>{{$kaanna(tutkinnonosa.geneerinenArviointiasteikko.kohde)}}</span>
-        </div>
 
-        <b-table striped :items="tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit" :fields="osaamistasonKriteeritFields">
-          <template v-slot:cell(osaamistaso)="{item}">
-            <span v-if="item.osaamistaso">{{$kaanna(item.osaamistaso.otsikko)}}</span>
-          </template>
+          <b-table
+            class="mt-3"
+            striped
+            :items="tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit"
+            :fields="osaamistasonKriteeritFields">
+            <template v-slot:cell(osaamistaso)="{item}">
+              <span v-if="item.osaamistaso">{{$kaanna(item.osaamistaso.otsikko)}}</span>
+            </template>
 
-          <template v-slot:cell(kriteerit)="{item}">
-            <ul>
-              <li v-for="(kriteeri, index) in item.kriteerit" :key="'kriteeri'+index">
-                {{$kaanna(kriteeri)}}
-              </li>
-            </ul>
-          </template>
-        </b-table>
+            <template v-slot:cell(kriteerit)="{item}">
+              <ul>
+                <li v-for="(kriteeri, index) in item.kriteerit" :key="'kriteeri'+index">
+                  {{$kaanna(kriteeri)}}
+                </li>
+              </ul>
+            </template>
+          </b-table>
+        </ep-form-content>
       </div>
 
       <hr class="mt-5 mb-5"/>
-    </div>
+    </template>
 
     <ep-form-content class="col-md-12" v-if="tutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
       <span v-html="$kaanna(tutkinnonosa.ammattitaidonOsoittamistavat)" />
 
-      <hr class="mt-5 mb-5"/>
+      <hr class="mt-5 mb-5" v-if="tutkinnonosa.vapaatTekstit.length > 0"/>
     </ep-form-content>
 
     <div class="col-md-12" v-for="(vapaaTeksti, index) in tutkinnonosa.vapaatTekstit" :key="'vapaateksti'+index">
@@ -54,11 +65,13 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
+import EpAmmattitaitovaatimukset from '@shared/components/EpAmmattitaitovaatimukset/EpAmmattitaitovaatimukset.vue';
 
 @Component({
   components: {
     EpFormContent,
     EpAmmatillinenArvioinninKohdealueet,
+    EpAmmattitaitovaatimukset,
   },
 })
 export default class EpTutkinnonosaNormaali extends Vue {
@@ -76,10 +89,11 @@ export default class EpTutkinnonosaNormaali extends Vue {
     return [{
       key: 'osaamistaso',
       label: this.$t('osaamistaso') as string,
-      thStyle: { width: '40%' },
+      thStyle: { display: 'none' },
     }, {
       key: 'kriteerit',
       label: this.$t('kriteerit') as string,
+      thStyle: { display: 'none' },
     }] as any[];
   }
 }
