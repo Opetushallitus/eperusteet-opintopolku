@@ -43,7 +43,7 @@
 import _ from 'lodash';
 import { Vue, Component } from 'vue-property-decorator';
 import { koulutustyyppiTheme, stateToKoulutustyyppi,
-  ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo } from '@shared/utils/perusteet';
+  ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter, RawLocation } from 'vue-router/types/router';
@@ -126,11 +126,19 @@ export default class EpNavigation extends Vue {
     }));
   }
 
+  get tutkintoonvalmentava() {
+    return _.map(tutkintoonvalmentava(), kt => ({
+      ...kt,
+      ...this.setActiveClass(kt),
+    }));
+  }
+
   get items() {
     return [
       ...this.yleissivistavat,
       ...this.ammatilliset,
       ...this.vapaasivistystyo,
+      ...this.tutkintoonvalmentava,
     ];
   }
 
@@ -263,6 +271,9 @@ export default class EpNavigation extends Vue {
       &.koulutustyyppi-vapaasivistystyo {
         border-bottom-color: $koulutustyyppi-vapaasivistystyo-color;
       }
+      &.koulutustyyppi-tutkintoonvalmentava {
+        border-bottom-color: $koulutustyyppi-tutkintoonvalmentava-color;
+      }
     }
   }
 
@@ -302,10 +313,14 @@ export default class EpNavigation extends Vue {
         border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
       }
     }
-
     &.koulutustyyppi-vapaasivistystyo {
       /deep/ .nav-link {
         border-bottom-color: $koulutustyyppi-vapaasivistystyo-color;
+      }
+    }
+    &.koulutustyyppi-tutkintoonvalmentava {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-tutkintoonvalmentava-color;
       }
     }
   }
