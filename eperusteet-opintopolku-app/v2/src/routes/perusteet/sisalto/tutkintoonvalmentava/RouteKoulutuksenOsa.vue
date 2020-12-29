@@ -89,8 +89,8 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
   components: {
     EpContentViewer,
     EpFormContent,
-    EpSpinner
-  }
+    EpSpinner,
+  },
 })
 export default class RouteKoulutuksenOsa extends Vue {
   @Prop({ required: true })
