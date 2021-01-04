@@ -24,6 +24,24 @@
         </template>
       </EpMultiSelect>
     </b-form-group>
+    <b-form-group :label="$t('oppilaitos')">
+      <EpMultiSelect
+        class="multiselect"
+        v-model="organisaatio"
+        :enable-empty-option="true"
+        :placeholder="$t('kaikki')"
+        :is-editing="true"
+        :options="oppilaitokset">
+
+        <template slot="singleLabel" slot-scope="{ option }">
+          {{ $kaanna(option.nimi) }}
+        </template>
+
+        <template slot="option" slot-scope="{ option }">
+          {{ $kaanna(option.nimi) }}
+        </template>
+      </EpMultiSelect>
+    </b-form-group>
   </div>
 
   <div class="opetussuunnitelma-container">
@@ -92,6 +110,7 @@ export default class VstPaikalliset extends Vue {
     oppilaitosTyyppiKoodiUri: null,
     nimi: null,
     sivukoko: 100,
+    organisaatio: null,
   };
 
   private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({
@@ -184,6 +203,29 @@ export default class VstPaikalliset extends Vue {
 
     return this.$t(koodiUri);
   }
+
+  get oppilaitokset() {
+    return [{
+      organisaatio: 'kaikki',
+      nimi: {
+        [Kielet.getSisaltoKieli.value]: this.$t('kaikki'),
+      } },
+    ...(this.paikallinenStore?.oppilaitokset.value ? this.paikallinenStore?.oppilaitokset.value : []),
+    ];
+  }
+
+  get organisaatio() {
+    return _.find(this.oppilaitokset, oppilaitos => oppilaitos.organisaatio === this.query.organisaatio);
+  }
+
+  set organisaatio(value) {
+    if (value?.organisaatio === 'kaikki') {
+      this.query.organisaatio = null;
+    }
+    else {
+      this.query.organisaatio = value?.organisaatio as any;
+    }
+  }
 }
 </script>
 
@@ -199,7 +241,7 @@ export default class VstPaikalliset extends Vue {
 
   @media(min-width: 992px){
     .multiselect {
-      width: 400px;
+      width: 300px;
     }
   }
 
