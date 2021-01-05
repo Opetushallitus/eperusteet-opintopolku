@@ -29,7 +29,7 @@
 
       <div v-if="opintojakso.laajuus" class="mb-5">
         <h3 class="opintojakso-tieto-otsikko">{{ $t('laajuus') }}</h3>
-        <p>{{ opintojakso.laajuus }} {{ $t('opintopiste') }}</p>
+        <p>{{ opintojakso.laajuus }} {{ $t('opintopiste') }}<template v-if="hasModulesWithLisalaajuus"> {{ laajuusInfo }}</template></p>
       </div>
     </div>
 
@@ -188,6 +188,22 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
         return oj.id === _.parseInt(this.$route.params.opintojaksoId);
       }) as Lops2019OpintojaksoDto;
     }
+  }
+
+  get laajuusInfo(): string {
+    return `(${_.toLower(this.$t('moduulit') as string)} ${this.laajuusModuuleista} ${this.$t('op')}, ${_.toLower(this.$t('lisalaajuus') as string)} ${this.lisaLaajuus} ${this.$t('op')})`;
+  }
+
+  get laajuusModuuleista(): number {
+    return this.opintojakso!.laajuus! - this.lisaLaajuus;
+  }
+
+  get lisaLaajuus(): number {
+    return this.opintojakso!.oppiaineet!.reduce((acc, { laajuus }) => acc + laajuus!, 0);
+  }
+
+  get hasModulesWithLisalaajuus(): boolean {
+    return this.opintojakso!.moduulit!.length > 0 && this.lisaLaajuus > 0;
   }
 
   get paikallisetOppiaineet() {
