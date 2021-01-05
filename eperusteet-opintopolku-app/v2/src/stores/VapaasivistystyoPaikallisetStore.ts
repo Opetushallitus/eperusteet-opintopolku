@@ -1,11 +1,10 @@
 import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
 import _ from 'lodash';
 import { IPaikallinenStore } from './IPaikallinenStore';
 import { OpetussuunnitelmaQuery, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto, JulkinenApi, KoulutustoimijaJulkinenDto } from '@shared/api/amosaa';
 import { Debounced } from '@shared/utils/delay';
 import { Page, Koulutustyyppi } from '@shared/tyypit';
-import { textChangeRangeIsUnchanged } from 'typescript';
 
 Vue.use(VueCompositionApi);
 
