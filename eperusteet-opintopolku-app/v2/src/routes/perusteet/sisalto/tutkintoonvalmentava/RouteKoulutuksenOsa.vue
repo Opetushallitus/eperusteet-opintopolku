@@ -16,7 +16,7 @@
       </b-row>
       <b-row v-if="perusteenOsa.kuvaus">
         <b-col>
-          <h4 role="presentation">{{$t('kuvaus')}}</h4>
+          <h4>{{$t('kuvaus')}}</h4>
           <ep-content-viewer name="kuvaus" :value="$kaanna(perusteenOsa.kuvaus)" :kuvat="kuvat" />
         </b-col>
       </b-row>
@@ -29,7 +29,8 @@
         </b-row>
         <b-row>
           <b-col>
-            <h4 role="presentation">{{ $t('opiskelija') }}</h4>
+            <h4 v-if="perusteenOsa.tavoitteenKuvaus">{{$kaanna(perusteenOsa.tavoitteenKuvaus)}}</h4>
+            <h4 v-else>{{ $t('opiskelija') }}</h4>
             <ul>
               <li v-for="tavoite in perusteenOsa.tavoitteet" :key="tavoite._id">
                 {{ $kaanna(tavoite) }}
@@ -39,7 +40,7 @@
         </b-row>
       </template>
       <template v-if="perusteenOsa.keskeinenSisalto">
-        <hr>
+        <hr/>
         <b-row>
           <b-col>
             <h3 class="mt-3 mb-4">{{ $t('keskeinen-sisalto') }}</h3>
@@ -47,22 +48,24 @@
           </b-col>
         </b-row>
       </template>
-      <hr>
-      <b-row>
-        <b-col>
-          <h3 class="mt-3 mb-4">{{ $t('arviointi') }}</h3>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <h4 role="presentation">{{ $t('koulutuksen-osa-hyvaksytty-kun-opiskelija') }}</h4>
-          <ul>
-            <li v-for="arviointi in perusteenOsa.arvioinnit" :key="arviointi._id">
-              {{ $kaanna(arviointi) }}
-            </li>
-          </ul>
-        </b-col>
-      </b-row>
+      <template v-if="perusteenOsa.laajaAlaisenOsaamisenKuvaus">
+        <hr/>
+        <b-row>
+          <b-col>
+            <h3 class="mt-3 mb-4">{{ $t('laaja-alainen-osaaminen') }}</h3>
+            <ep-content-viewer :value="$kaanna(perusteenOsa.laajaAlaisenOsaamisenKuvaus)" :kuvat="kuvat"/>
+          </b-col>
+        </b-row>
+      </template>
+      <template v-if="perusteenOsa.arvioinninKuvaus">
+        <hr/>
+        <b-row>
+          <b-col>
+            <h3 class="mt-3 mb-4">{{ $t('arviointi') }}</h3>
+            <ep-content-viewer :value="$kaanna(perusteenOsa.arvioinninKuvaus)" :kuvat="kuvat"/>
+          </b-col>
+        </b-row>
+      </template>
       <b-row v-if="perusteenOsa.osaamisenArvioinnista">
         <b-col>
           <h4>{{ $t('osaamisen-arvioinnista') }}</h4>
