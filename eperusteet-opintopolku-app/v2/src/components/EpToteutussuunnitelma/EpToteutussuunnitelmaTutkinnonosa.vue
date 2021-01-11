@@ -24,11 +24,11 @@
 
     <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus" v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0">
 
-      <ep-collapse class="mb-3" v-for="(toteutus, index) in sisaltoviite.tosa.toteutukset" :key="toteutus.id"
+      <ep-collapse class="mb-3" v-for="toteutus in sisaltoviite.tosa.toteutukset" :key="toteutus.id"
         :shadow="true"
         :borderBottom="false"
         :togglefull="true"
-        :expandedByDefault="index === 0">
+        :expandedByDefault="sisaltoviite.tosa.toteutukset.length === 1">
         <div class="font-600" slot="header">{{$kaanna(toteutus.otsikko)}}</div>
 
         <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">
