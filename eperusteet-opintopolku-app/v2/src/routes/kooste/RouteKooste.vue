@@ -150,13 +150,15 @@ export default class RouteKooste extends Vue {
   }
 
   get perusteet() {
-    return _.chain(this.perusteKoosteStore.perusteet)
-      .map(peruste => ({
-        ...peruste,
-        id: _.toString(peruste.id),
-        ulkoinenlinkki: this.ulkoinenlinkki(peruste),
-      }))
-      .value();
+    if (this.perusteKoosteStore.perusteet) {
+      return _.chain(this.perusteKoosteStore.perusteet)
+        .map(peruste => ({
+          ...peruste,
+          id: _.toString(peruste.id),
+          ulkoinenlinkki: this.ulkoinenlinkki(peruste),
+        }))
+        .value();
+    }
   }
 
   ulkoinenlinkki(peruste) {

@@ -223,9 +223,7 @@ export default class RoutePerusteTiedot extends Vue {
     this.handleMaarayskirje();
     this.handleMuutosmaaraykset();
     this.perusteDataStore.getKorvaavatPerusteet();
-    if (this.isAmmatillinen) {
-      this.perusteDataStore.getDokumentit();
-    }
+    this.perusteDataStore.getDokumentit();
     this.isLoading = false;
   }
 
@@ -235,10 +233,7 @@ export default class RoutePerusteTiedot extends Vue {
 
   @Watch('kieli')
   async kieliChanged() {
-    // Dokumentti on toteuttu vain ammatillisille
-    if (this.isAmmatillinen) {
-      await this.perusteDataStore.getDokumentit();
-    }
+    await this.perusteDataStore.getDokumentit();
   }
 
   get isAmmatillinen() {

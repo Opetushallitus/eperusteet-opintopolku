@@ -21,6 +21,7 @@ export interface PerusteQuery {
   tutkinnonosat?: boolean;
   osaamisalat?: boolean;
   koulutusvienti?: boolean;
+  julkaistu?: boolean;
 }
 
 export interface TiedoteQuery {

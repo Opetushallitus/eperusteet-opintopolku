@@ -37,6 +37,7 @@ export class PerusteKoosteStore {
         poistunut: false,
         voimassaolo: true,
         tuleva: true,
+        julkaistu: true,
       })).data;
     }
 
