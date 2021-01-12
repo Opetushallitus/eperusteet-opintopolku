@@ -159,7 +159,7 @@ export class PerusteDataStore {
     }
 
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
-    const suoritustavat = this.peruste.suoritustavat;
+    const suoritustavat = this.peruste.suoritustavat ? this.peruste.suoritustavat : [{ suoritustapakoodi: 'REFORMI' }] as any[];
     if (suoritustavat) {
       for (let i = 0; i < suoritustavat.length; i++) {
         const st = suoritustavat[i];
