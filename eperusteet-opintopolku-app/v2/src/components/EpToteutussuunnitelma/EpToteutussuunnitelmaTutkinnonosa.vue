@@ -64,8 +64,6 @@
 
     </ep-form-content>
 
-    <h3>{{ $t('perusteen-sisalto') }}</h3>
-
     <div v-if="sisaltoviite.tosa.omatutkinnonosa">
 
       <div v-if="sisaltoviite.tosa.omatutkinnonosa.tavoitteet" class="mb-4">
@@ -107,6 +105,8 @@
     </div>
 
     <div v-if="perusteenTutkinnonosa">
+      <h3>{{ $t('perusteen-sisalto') }}</h3>
+
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
         <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" :kuvat="kuvat"/>
       </ep-form-content>
