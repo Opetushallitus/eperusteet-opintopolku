@@ -11,11 +11,12 @@
   <div class="container">
     <b-container fluid>
       <b-row>
-        <b-col md="6" class="tile">
+        <b-col md="12" class="tile">
           <section>
             <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
             <ep-spinner-slot :is-loading="!tiedotteet">
-              <div class="box" v-for="(tiedote, idx) in tiedotteet" :key="idx">
+            <div class="d-flex flex-wrap">
+              <div class="box w-50" v-for="(tiedote, idx) in tiedotteet" :key="idx">
                 <div class="nimi">
                   <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
                     {{ $kaanna(tiedote.otsikko) }}
@@ -23,32 +24,14 @@
                 </div>
                 <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
               </div>
-              <div class="box">
-                <div class="kaikki-uutiset">
-                  <router-link :to="{ name: 'uutiset' }">
-                    {{ $t('nayta-kaikki') }}
-                  </router-link>
-                </div>
+            </div>
+            <div class="box">
+              <div class="kaikki-uutiset">
+                <router-link :to="{ name: 'uutiset' }">
+                  {{ $t('nayta-kaikki') }}
+                </router-link>
               </div>
-            </ep-spinner-slot>
-          </section>
-        </b-col>
-
-        <b-col md="6" class="tile">
-          <section>
-            <h2 class="tile-heading">{{ $t('uusimmat-eperusteet') }}</h2>
-            <ep-spinner-slot :is-loading="!uusimmat">
-              <div class="box" v-for="(peruste, idx) in uusimmat" :key="idx">
-                <div class="nimi">
-                  <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
-                    {{ $kaanna(peruste.nimi) }}
-                  </router-link>
-                  <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="true">
-                    {{ $kaanna(peruste.nimi) }}
-                  </ep-external-link>
-                </div>
-                <div class="luotu">{{ $sd(peruste.paatospvm) }} {{ $t(peruste.koulutustyyppi)}}</div>
-              </div>
+            </div>
             </ep-spinner-slot>
           </section>
         </b-col>
@@ -56,21 +39,36 @@
 
       <section class="valtakunnalliset">
         <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
-        <ep-spinner-slot :is-loading="!perusteetSorted">
-          <div >
-            <div v-for="(peruste, idx) in perusteetSorted" :key="idx">
+        <ep-spinner-slot :is-loading="!perusteet">
+           <div v-for="(ryhma, idx) in perusteetRyhmittain" :key="idx" class="mb-4">
 
-              <h3 v-if="peruste.first">{{ $t(peruste.theme) }}</h3>
+              <h3>{{ $t(ryhma.theme) }}</h3>
 
-              <div class="d-flex flex-wrap justify-content-between">
+              <div v-if="ryhma.kooste" class="d-flex flex-wrap justify-content-between">
+                <div class="valtakunnallinen">
+                  <router-link :to="ryhma.route">
+                    <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
+                      <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
+                      <div class="d-flex flex-fill align-items-center">
+                        <div class="nimi my-3 mr-3">
+                          {{ $t(ryhma.theme) }}
+                          <div class="luotu" >{{ $t('useampia')}}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </router-link>
+                </div>
+              </div>
+
+              <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.id">
                 <div class="valtakunnallinen">
                   <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
                     <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
-                      <div class="raita mx-3 my-2" :class="peruste.theme"></div>
+                      <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
                       <div class="d-flex flex-fill align-items-center">
                         <div class="nimi my-3 mr-3">
                           {{ $kaanna(peruste.nimi) }}
-                          <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                          <div class="luotu" v-if="peruste.luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
                         </div>
                       </div>
                     </div>
@@ -91,7 +89,6 @@
                 </div>
               </div>
             </div>
-          </div>
         </ep-spinner-slot>
       </section>
     </b-container>
@@ -108,35 +105,19 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import {
+  EperusteetKoulutustyyppiRyhmaSort,
+  EperusteetKoulutustyyppiRyhmat,
   koulutustyyppiStateName,
   koulutustyyppiTheme,
   perusteKoulutustyyppiUrlShortParamName,
+  Toteutus,
   yleissivistavat,
 } from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
 import { uusiJulkinenToteutus } from '@/utils/peruste';
 import { ENV_PREFIX } from '@shared/utils/defaults';
-
-function mapRoutes(perusteet: PerusteDto[] | null, ulkoinenlinkki: Function) {
-  return perusteet
-    ? _.map(perusteet, peruste => {
-      if (!peruste.koulutustyyppi) {
-        throw new Error('koulutustyyppi-ei-maaritelty');
-      }
-      return {
-        ...peruste,
-        ulkoinenlinkki: ulkoinenlinkki(peruste),
-        route: {
-          name: 'peruste',
-          params: {
-            koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
-            perusteId: _.toString(peruste.id),
-          },
-        },
-      };
-    })
-    : null;
-}
+import { Kielet } from '@shared/stores/kieli';
+import { Koulutustyyppi } from '@shared/tyypit';
 
 @Component({
   components: {
@@ -153,52 +134,70 @@ export default class RouteHome extends Vue {
 
   async mounted() {
     this.perusteStore.getYleisetPerusteet();
-    this.perusteStore.getUusimmat();
     this.tiedoteStore.getUusimmat();
   }
 
   get perusteet() {
     if (this.perusteStore.perusteet) {
-      return _.map(mapRoutes(this.perusteStore.perusteet, this.ulkoinenlinkki), peruste => ({
-        ...peruste,
-        theme: peruste && peruste.koulutustyyppi && 'koulutustyyppi-' + koulutustyyppiTheme(peruste.koulutustyyppi),
-      }));
-    }
-    else {
-      return null;
-    }
-  }
-
-  get perusteetSorted() {
-    const ktJarjestys = _(yleissivistavat())
-      .filter((el: any) => el.koulutustyyppi)
-      .map((el: any) => el.alityypit ? [...el.alityypit] : el.koulutustyyppi)
-      .flatten()
-      .value();
-
-    const tyypeittain = _.groupBy(this.perusteet, 'theme');
-
-    let sorted: any = [];
-    _.each(ktJarjestys, kt => {
-      const matches = _.filter(this.perusteet, (p: any) => p.koulutustyyppi === kt);
-      sorted.push(..._.map(matches, (peruste: any) => {
+      return _.map(this.perusteStore.perusteet, peruste => {
+        if (!peruste.koulutustyyppi) {
+          throw new Error('koulutustyyppi-ei-maaritelty');
+        }
         return {
           ...peruste,
-          first: _.isEqual(_.head(tyypeittain[peruste.theme]), peruste),
+          ulkoinenlinkki: this.ulkoinenlinkki(peruste),
+          route: {
+            name: 'peruste',
+            params: {
+              koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
+              perusteId: _.toString(peruste.id),
+            },
+          },
         };
-      }));
-    });
-
-    if (!_.isEmpty(sorted)) {
-      return sorted;
+      });
     }
     else {
       return null;
     }
   }
 
-  get uusimmat() {
-    return mapRoutes(this.perusteStore.uusimmat, this.ulkoinenlinkki);
+  get perusteetRyhmittain() {
+    const ryhmatPerusteista = _.chain(EperusteetKoulutustyyppiRyhmat)
+      .keys()
+      .map(toteutus => {
+        return {
+          toteutus,
+          perusteet: _.filter(this.perusteet, peruste => _.includes(EperusteetKoulutustyyppiRyhmat[toteutus], peruste.koulutustyyppi)),
+        };
+      })
+      .filter(ryhma => _.size(ryhma.perusteet) > 0)
+      .map(ryhma => {
+        return {
+          ...ryhma,
+          theme: 'koulutustyyppi-' + koulutustyyppiTheme(ryhma.perusteet[0].koulutustyyppi!),
+        };
+      })
+      .value();
+
+    return _.sortBy([
+      ...ryhmatPerusteista,
+      this.ammatillinenPerusteRyhma,
+    ], ryhma => EperusteetKoulutustyyppiRyhmaSort[ryhma.toteutus]);
+  }
+
+  get ammatillinenPerusteRyhma() {
+    return {
+      toteutus: Toteutus.AMMATILLINEN,
+      theme: 'koulutustyyppi-ammatillinen',
+      perusteet: [],
+      kooste: true,
+      route: {
+        name: 'ammatillinenSelaus',
+        params: {
+          koulutustyyppi: koulutustyyppiStateName(Koulutustyyppi.ammattitutkinto),
+        },
+      },
+    };
   }
 
   get tiedotteet() {
@@ -329,6 +328,12 @@ export default class RouteHome extends Vue {
       }
       &.koulutustyyppi-taiteenperusopetus {
         background-color: $koulutustyyppi-taiteenperusopetus-color;
+      }
+      &.koulutustyyppi-vapaasivistystyo {
+        background-color: $koulutustyyppi-vapaasivistystyo-color;
+      }
+      &.koulutustyyppi-tutkintoonvalmentava {
+        background-color: $koulutustyyppi-tutkintoonvalmentava-color;
       }
     }
 

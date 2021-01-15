@@ -1,6 +1,5 @@
 <template>
 <div>
-  <!-- https://getbootstrap.com/docs/4.5/getting-started/accessibility/#visually-hidden-content -->
   <a class="sr-only sr-only-focusable skip-to-content" href="#main">{{ $t('siirry-sisaltoon') }}</a>
   <ep-navigation role="banner"></ep-navigation>
   <main class="router-container" role="main">
