@@ -32,22 +32,13 @@ describe('RouteHome', () => {
     });
 
     expect(perusteStore.getYleisetPerusteet).toBeCalledTimes(1);
-    expect(perusteStore.getUusimmat).toBeCalledTimes(1);
     expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
-    expect(wrapper.findAll('.oph-spinner').length).toEqual(3);
+    expect(wrapper.findAll('.oph-spinner').length).toEqual(2);
 
     tiedoteStore.uusimmatTiedotteet = [{
       luotu: 'aikaleima_1234' as any,
       otsikko: {
         fi: 'uutinen_1234',
-      } as any,
-    }];
-
-    perusteStore.uusimmat = [{
-      id: 1,
-      koulutustyyppi: 'koulutustyyppi_2',
-      nimi: {
-        fi: 'peruste1',
       } as any,
     }];
 
@@ -62,8 +53,8 @@ describe('RouteHome', () => {
     await localVue.nextTick();
 
     expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
-    expect(wrapper.html()).toContain('peruste1');
     expect(wrapper.html()).toContain('peruste2');
+    expect(wrapper.html()).toContain('koulutustyyppi-ammatillinen');
     expect(wrapper.html()).toContain('uutinen_1234');
   });
 

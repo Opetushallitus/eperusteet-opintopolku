@@ -18,7 +18,7 @@ export class TiedoteStore {
 
   async getUusimmat() {
     this.uusimmatTiedotteet = ((await Tiedotteet.findTiedotteetBy(
-      0, 5, this.filter.kieli, undefined, undefined, undefined, undefined, undefined, ['opintopolku_etusivu'])).data as any).data;
+      0, 10, this.filter.kieli, undefined, undefined, undefined, undefined, undefined, ['opintopolku_etusivu'])).data as any).data;
   }
 
   public readonly updateFilter = _.debounce(async (filter) => {

@@ -58,12 +58,14 @@ export class PerusteKoosteStore {
       })),
     ];
 
-    tiedotteet = [...tiedotteet,
-      ...(await tiedoteQuery({
-        sivukoko: 100,
-        perusteIds: _.map(this.perusteet, 'id') as number[],
-      })),
-    ];
+    if (_.size(this.perusteet) > 0) {
+      tiedotteet = [...tiedotteet,
+        ...(await tiedoteQuery({
+          sivukoko: 100,
+          perusteIds: _.map(this.perusteet, 'id') as number[],
+        })),
+      ];
+    }
 
     this.tiedotteet = _.chain(tiedotteet)
       .uniqBy('id')
