@@ -68,7 +68,7 @@
                       <div class="d-flex flex-fill align-items-center">
                         <div class="nimi my-3 mr-3">
                           {{ $kaanna(peruste.nimi) }}
-                          <div class="luotu" v-if="peruste.luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                          <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
                         </div>
                       </div>
                     </div>
@@ -76,7 +76,7 @@
 
                   <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">
                     <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
-                    <div class="raita mx-3 my-2" :class="peruste.theme"></div>
+                    <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
                     <div class="d-flex flex-fill align-items-center">
                       <div class="nimi my-3 mr-3">
                         <fas fixed-width icon="external-link-alt" class="mr-1"></fas>
