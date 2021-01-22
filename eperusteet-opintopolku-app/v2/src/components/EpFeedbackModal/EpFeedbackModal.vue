@@ -4,41 +4,73 @@
       id="feedback-modal"
       centered>
       <template #modal-header>
-        <h3 id="feedback-header" aria-level="2" class="text-center mt-2">{{ $t('mita-mielta-uudesta-eperusteet-palvelusta') }}</h3>
+        <h3
+          id="feedback-header"
+          aria-level="2"
+          class="text-center mt-2"
+          ref="feedbackHeader"
+          tabindex="-1">
+          {{ feedbackSent ? $t('kiitos-palautteestasi') : $t('mita-mielta-uudesta-eperusteet-palvelusta') }}
+        </h3>
       </template>
-      <div
-        class="d-flex align-items-center justify-content-center my-2"
-        role="radiogroup"
-        :aria-label="$t('arvio-1-5')">
-        <fas
-          v-for="rating in currentRatings"
-          :key="rating.value"
-          icon="tahti-taytetty"
-          class="icon-tahti fa-lg mx-3"
-          :class="{ 'icon-tahti--active': isActiveRating(rating) }"
-          role="radio"
-          aria-hidden="false"
-          :aria-selected="'' + rating.selected + ''"
-          :aria-label="$t('tahti-arvio-' + rating.value)"
-          @click="onSelectRating(rating)"
-          @mouseover="onRatingHover(rating.value)"
-          @mouseout="onRatingBlur()" />
-      </div>
-      <b-form-group v-if="hasSelectedRating" class="my-4">
-        <label for="textarea-feedback">{{ $t('anna-palautetta') }}</label>
-        <b-form-textarea
-          id="textarea-feedback"
-          rows="6"/>
-      </b-form-group>
+      <p v-if="feedbackSent">{{ $t('eperusteet-palautemodal-kiitos-sisalto') }}</p>
+      <template v-else>
+        <div
+          class="d-flex align-items-center justify-content-center my-2"
+          role="radiogroup"
+          :aria-label="$t('arviointi')">
+          <fas
+            v-for="rating in currentRatings"
+            :key="rating.value"
+            icon="tahti-taytetty"
+            class="icon-tahti fa-lg mx-3"
+            :class="{ 'icon-tahti--active': isActiveRating(rating) }"
+            role="radio"
+            aria-hidden="false"
+            :aria-checked="'' + rating.selected + ''"
+            :aria-label="$t('tahti-arvio-' + rating.value)"
+            @click="onSelectRating(rating)"
+            @mouseover="onRatingHover(rating.value)"
+            @mouseout="onRatingBlur()" />
+        </div>
+        <b-form-group v-if="hasSelectedRating" class="mt-4 mb-0">
+          <input type="hidden" v-model="selectedRating">
+          <label for="textarea-feedback">{{ $t('anna-palautetta') }}</label>
+          <b-form-textarea
+            v-model="feedbackMessage"
+            id="textarea-feedback"
+            rows="4"/>
+        </b-form-group>
+      </template>
       <template #modal-footer="{ hide }">
-        <b-button
+        <template v-if="feedbackSent">
+          <b-button
+            size="md"
+            variant="link"
+            @click="hide()">
+            <span class="mx-3">{{ $t('sulje') }}</span>
+          </b-button>
+          <a
+            class="btn btn-primary btn-md text-white"
+            target="_blank"
+            :href="futherFeedbackUrl"
+            @click="hide()">
+            <span class="mx-3">
+              {{ $t('kerro-ehdotuksesi') }}
+              <span class="sr-only"> ({{ $t('linkki-aukeaa-uuteen-ikkunaan') }})</span>
+            </span>
+          </a>
+        </template>
+        <ep-button
+          v-else
+          @click="onFeedbackSubmit()"
           size="md"
+          :disabled="!hasSelectedRating || isSending"
           variant="primary"
           pill
-          @click="onRatingSubmit()"
-          :disabled="!hasSelectedRating">
-          {{ $t('laheta') }}
-        </b-button>
+          :show-spinner="isSending">
+          <span class="mx-3">{{ $t('laheta') }}</span>
+        </ep-button>
         <fas
           class="close-btn"
           aria-hidden="false"
@@ -63,50 +95,47 @@
 <script lang="ts">
   import { Component, Vue } from 'vue-property-decorator';
 
-  import _ from 'lodash';
-
   import EpContent from '@shared/components/EpContent/EpContent.vue';
+  import EpButton from '@shared/components/EpButton/EpButton.vue';
+
+  import { Palautteet } from '@shared/api/eperusteet';
+
+  import { Kielet } from '@shared/stores/kieli';
 
   interface Rating {
     value: number,
-    label: { [key: string]: any },
     selected: boolean,
   }
 
   @Component({
     components: {
       EpContent,
+      EpButton,
     }
   })
   export default class EpFeedbackModal extends Vue {
-    private hoverValue = 0;
-    private selectedValue = 0;
-    private ratings = [
-      {
-        value: 1,
-        selected: false,
-      }, {
-        value: 2,
-        selected: false,
-      }, {
-        value: 3,
-        selected: false,
-      }, {
-        value: 4,
-        selected: false,
-      }, {
-        value: 5,
-        selected: false,
-      }
-    ];
-    private message;
+    private hoveredRating = 0;
+    private selectedRating = 0;
+    private ratings = Array.from({length: 5}, (v, k) => ({ value: k + 1, selected: false }));
+    private feedbackMessage = '';
+    private feedbackSent = false;
+    private isSending = false;
+
+    mounted() {
+      this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+        this.feedbackSent = false;
+        this.feedbackMessage = '';
+        this.selectedRating = 0;
+        this.ratings = this.ratings.map(rating => ({ ...rating, selected: false }));
+      })
+    }
 
     showModal() {
       this.$bvModal.show('feedback-modal');
     }
 
     onSelectRating(selectedRating: Rating) {
-      this.selectedValue = selectedRating.value;
+      this.selectedRating = selectedRating.value;
       this.ratings = this.currentRatings.map(rating => ({
           ...rating,
           selected: rating.value === selectedRating.value,
@@ -115,23 +144,26 @@
     }
 
     onRatingHover(val: number) {
-      this.hoverValue = val;
+      this.hoveredRating = val;
     }
 
     onRatingBlur() {
-      this.hoverValue = 0;
+      this.hoveredRating = 0;
     }
 
-    onRatingSubmit() {
-      this.$bvModal.hide('feedback-modal')
+    async onFeedbackSubmit() {
+      this.isSending = true;
+      await Palautteet.sendPalaute({
+        stars: this.selectedRating,
+        feedback: this.feedbackMessage,
+      });
+      this.isSending = false;
+      this.feedbackSent = true;
+      (this.$refs.feedbackHeader as HTMLElement).focus();
     }
 
     isActiveRating(rating: Rating) {
-      return rating.value <= this.currentHoveredRating || rating.selected || rating.value < this.selectedValue
-    }
-
-    get currentHoveredRating() {
-      return this.hoverValue;
+      return rating.value <= this.hoveredRating || rating.selected || rating.value < this.selectedRating
     }
 
     get currentRatings() {
@@ -140,6 +172,14 @@
 
     get hasSelectedRating() {
       return this.currentRatings.some(rating => rating.selected);
+    }
+
+    get sisaltokieli() {
+      return Kielet.getSisaltoKieli.value;
+    }
+
+    get futherFeedbackUrl() {
+      return `https://www.oph.fi/${this.sisaltokieli}/koulutus-ja-tutkinnot/tutkintorakenne/lomake`
     }
   }
 </script>
@@ -169,7 +209,7 @@
     font-size: 2.75rem;
   }
   .icon-tahti {
-    color: $gray-lighten-11;
+    color: $gray-lighten-12;
     cursor: pointer;
 
     &:focus,
