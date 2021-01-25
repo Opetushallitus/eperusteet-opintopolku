@@ -7,7 +7,7 @@
         <h3
           id="feedback-header"
           aria-level="2"
-          class="text-center mt-2"
+          class="mt-2 pr-4"
           ref="feedbackHeader"
           tabindex="-1">
           {{ feedbackSent ? $t('kiitos-palautteestasi') : $t('mita-mielta-uudesta-eperusteet-palvelusta') }}
@@ -30,12 +30,12 @@
             :aria-checked="'' + rating.selected + ''"
             :aria-label="$t('tahti-arvio-' + rating.value)"
             @click="onSelectRating(rating)"
-            @mouseover="onRatingHover(rating.value)"
-            @mouseout="onRatingBlur()" />
+            @mouseenter="onRatingHover(rating.value)"
+            @mouseleave="onRatingBlur" />
         </div>
         <b-form-group v-if="hasSelectedRating" class="mt-4 mb-0">
           <input type="hidden" v-model="selectedRating">
-          <label for="textarea-feedback">{{ $t('anna-palautetta') }}</label>
+          <label for="textarea-feedback">{{ $t('anna-palautetta-eperusteista') }}</label>
           <b-form-textarea
             v-model="feedbackMessage"
             id="textarea-feedback"
@@ -83,24 +83,37 @@
       </template>
     </b-modal>
     <button
+      id="open-btn"
       class="open-btn"
       @click="showModal"
       :aria-label="$t('mita-mielta-uudesta-eperusteet-palvelusta')"
       tabindex="0">
       <fas aria-hidden="true" icon="hymio" class="icon-hymio fa-2x fa-inverse" />
     </button>
+    <b-tooltip
+      aria-hidden="true"
+      :show.sync="showTooltip"
+      target="open-btn"
+      placement="topleft">
+      {{ $t('anna-palautetta-eperusteista') }}
+      <fas
+        class="close-btn close-btn--tooltip"
+        icon="sulje"
+        v-if="tooltipFirstShown"
+        @click="closeTooltip" />
+    </b-tooltip>
   </div>
 </template>
 
 <script lang="ts">
-  import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
-  import EpContent from '@shared/components/EpContent/EpContent.vue';
-  import EpButton from '@shared/components/EpButton/EpButton.vue';
+import EpContent from '@shared/components/EpContent/EpContent.vue';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
 
-  import { Palautteet } from '@shared/api/eperusteet';
+import { Palautteet } from '@shared/api/eperusteet';
 
-  import { Kielet } from '@shared/stores/kieli';
+import { Kielet } from '@shared/stores/kieli';
 
   interface Rating {
     value: number,
@@ -111,35 +124,47 @@
     components: {
       EpContent,
       EpButton,
-    }
+    },
   })
-  export default class EpFeedbackModal extends Vue {
+export default class EpFeedbackModal extends Vue {
     private hoveredRating = 0;
     private selectedRating = 0;
-    private ratings = Array.from({length: 5}, (v, k) => ({ value: k + 1, selected: false }));
+    private ratings = Array.from({ length: 5 }, (v, k) => ({ value: k + 1, selected: false }));
     private feedbackMessage = '';
     private feedbackSent = false;
     private isSending = false;
+    private showTooltip = true;
+    private tooltipFirstShown = true;
 
     mounted() {
-      this.$root.$on('bv::modal::hidden', (bvEvent, modalId) => {
+      this.$root.$on('bv::modal::hidden', () => {
         this.feedbackSent = false;
         this.feedbackMessage = '';
         this.selectedRating = 0;
         this.ratings = this.ratings.map(rating => ({ ...rating, selected: false }));
-      })
+      });
+
+      this.$root.$on('bv::tooltip::hide', bvEvent => {
+        if (this.tooltipFirstShown) bvEvent.preventDefault();
+      });
     }
 
     showModal() {
       this.$bvModal.show('feedback-modal');
+      this.showTooltip = false;
+    }
+
+    closeTooltip() {
+      this.showTooltip = false;
+      this.tooltipFirstShown = false;
     }
 
     onSelectRating(selectedRating: Rating) {
       this.selectedRating = selectedRating.value;
       this.ratings = this.currentRatings.map(rating => ({
-          ...rating,
-          selected: rating.value === selectedRating.value,
-        })
+        ...rating,
+        selected: rating.value === selectedRating.value,
+      })
       );
     }
 
@@ -163,7 +188,7 @@
     }
 
     isActiveRating(rating: Rating) {
-      return rating.value <= this.hoveredRating || rating.selected || rating.value < this.selectedRating
+      return rating.value <= this.hoveredRating || rating.selected || rating.value < this.selectedRating;
     }
 
     get currentRatings() {
@@ -179,9 +204,9 @@
     }
 
     get futherFeedbackUrl() {
-      return `https://www.oph.fi/${this.sisaltokieli}/koulutus-ja-tutkinnot/tutkintorakenne/lomake`
+      return `https://www.oph.fi/${this.sisaltokieli}/koulutus-ja-tutkinnot/tutkintorakenne/lomake`;
     }
-  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -211,6 +236,7 @@
   .icon-tahti {
     color: $gray-lighten-12;
     cursor: pointer;
+    font-size: 1.2rem;
 
     &:focus,
     &:hover,
@@ -221,8 +247,27 @@
     outline-color: transparent;
   }
   .close-btn {
+    cursor: pointer;
     position: absolute;
     top: 1rem;
     right: 1rem;
+
+    &--tooltip {
+      font-size: 1.1rem;
+      right: 0.5rem;
+    }
+  }
+  ::v-deep .tooltip-inner {
+    color: $gray;
+    background-color: $white;
+    border-radius: 0;
+    border: 1px solid $gray-lighten-2;
+    padding: 1rem 0.5rem;
+    font-size: 0.7rem;
+    max-width: 130px;
+    text-align: left;
+  }
+  ::v-deep .arrow::before {
+    display: none;
   }
 </style>
