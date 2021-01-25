@@ -215,7 +215,7 @@
     &:focus,
     &:hover,
     &--active {
-      color: $yellow;
+      color: $blue-lighten-5;
     }
 
     outline-color: transparent;
