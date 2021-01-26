@@ -53,7 +53,7 @@
           <a
             class="btn btn-primary btn-md text-white"
             target="_blank"
-            :href="futherFeedbackUrl"
+            :href="furtherFeedbackUrl"
             @click="hide()">
             <span class="mx-3">
               {{ $t('kerro-ehdotuksesi') }}
@@ -94,7 +94,7 @@
       aria-hidden="true"
       :show.sync="showTooltip"
       target="open-btn"
-      placement="topleft">
+      placement="top">
       {{ $t('anna-palautetta-eperusteista') }}
       <fas
         class="close-btn close-btn--tooltip"
@@ -203,7 +203,7 @@ export default class EpFeedbackModal extends Vue {
       return Kielet.getSisaltoKieli.value;
     }
 
-    get futherFeedbackUrl() {
+    get furtherFeedbackUrl() {
       return `https://www.oph.fi/${this.sisaltokieli}/koulutus-ja-tutkinnot/tutkintorakenne/lomake`;
     }
 }
