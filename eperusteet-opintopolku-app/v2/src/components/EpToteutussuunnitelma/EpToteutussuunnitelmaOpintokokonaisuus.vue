@@ -5,7 +5,7 @@
     </b-row>
     <b-row>
       <b-col md="6">
-        <ep-form-content name="opintokokonaisuuden-nimi" headerType="h4">
+        <ep-form-content :name="$t(opintokokonaisuusNimiOtsikko(opintokokonaisuus.tyyppi))" headerType="h4">
           <span>{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</span>
         </ep-form-content>
       </b-col>
@@ -77,11 +77,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-
-import { Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
-
+import { Matala, OpintokokonaisuusDtoTyyppiEnum } from '@shared/api/amosaa';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -98,6 +97,13 @@ export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
 
     get opintokokonaisuus() {
       return this.sisaltoviite.opintokokonaisuus;
+    }
+
+    opintokokonaisuusNimiOtsikko(tyyppi: OpintokokonaisuusDtoTyyppiEnum): string {
+      return {
+        [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'opintokokonaisuuden-nimi',
+        [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'osaamiskokonaisuuden-nimi',
+      }[tyyppi];
     }
 }
 </script>
