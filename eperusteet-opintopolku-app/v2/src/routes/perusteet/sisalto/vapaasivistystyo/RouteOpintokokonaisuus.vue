@@ -86,33 +86,6 @@ export default class RouteOpintokokonaisuus extends Vue {
     return this.perusteenOsaStore.perusteenOsaViite;
   }
 
-  // get alikappaleet() {
-  //   if (!_.isEmpty(this.perusteenOsaViite)) {
-  //     const viitteet: ViiteLaaja[] = [];
-
-  //     const stack: ViiteLaaja[] = [this.perusteenOsaViite!];
-
-  //     while (!_.isEmpty(stack)) {
-  //       const head: any = stack.shift()!;
-
-  //       if (head.perusteenOsa) {
-  //         viitteet.push(head);
-  //       }
-
-  //       stack.unshift(..._.map(head.lapset, viite => ({
-  //         ...viite,
-  //         level: (head.level || 0) + 1,
-  //       })));
-  //     }
-
-  //     // Poistetaan nykyinen viite alikappaleista
-  //     return _.slice(viitteet, 1);
-  //   }
-  //   else {
-  //     return [];
-  //   }
-  // }
-
   get termit() {
     return this.perusteDataStore.termit;
   }
@@ -124,10 +97,6 @@ export default class RouteOpintokokonaisuus extends Vue {
   get current() {
     return this.perusteDataStore.current || null;
   }
-
-  // get tekstikappaleenOsa() {
-  //   return this.$route.params.osa;
-  // }
 }
 
 </script>
