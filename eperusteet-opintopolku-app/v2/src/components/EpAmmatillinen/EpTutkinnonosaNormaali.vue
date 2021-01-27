@@ -9,7 +9,11 @@
     </ep-form-content>
 
     <ep-form-content class="col-md-12 mb-5" v-if="tutkinnonosa.ammattitaitovaatimukset2019" name="ammattitaitovaatimukset">
-      <EpAmmattitaitovaatimukset v-model="tutkinnonosa.ammattitaitovaatimukset2019" :is-editing="false" />
+      <EpAmmattitaitovaatimukset v-model="tutkinnonosa.ammattitaitovaatimukset2019" :is-editing="false">
+        <template v-slot:koodi="{koodi}">
+          <span>{{ $kaanna(koodi.nimi) }}</span>
+        </template>
+      </EpAmmattitaitovaatimukset>
     </ep-form-content>
 
     <template v-if="hasArviointi">
