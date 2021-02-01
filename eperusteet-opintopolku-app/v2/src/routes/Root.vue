@@ -1,6 +1,7 @@
 <template>
 <div>
   <a class="sr-only sr-only-focusable skip-to-content" href="#main">{{ $t('siirry-sisaltoon') }}</a>
+  <EpFeedbackModal/>
   <ep-navigation role="banner"></ep-navigation>
   <main class="router-container" role="main">
     <router-view />
@@ -14,12 +15,14 @@ import _ from 'lodash';
 import { Component, Vue } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
+import EpFeedbackModal from '@/components/EpFeedbackModal/EpFeedbackModal.vue';
 import { Meta } from '@shared/utils/decorators';
 
 @Component({
   components: {
     EpFooter,
     EpNavigation,
+    EpFeedbackModal,
   },
 })
 export default class Root extends Vue {
