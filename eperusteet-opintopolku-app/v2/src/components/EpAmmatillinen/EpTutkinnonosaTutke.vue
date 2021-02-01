@@ -4,8 +4,8 @@
       <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" name="osa-alueet" v-if="tutkinnonosa.osaAlueet">
-      <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="tutkinnonosa.osaAlueet" />
+    <ep-form-content class="col-md-12 mb-5" name="osa-alueet" v-if="tutkinnonosa.osaAlueet && osaAlueet.length > 0">
+      <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="osaAlueet" />
     </ep-form-content>
 
   </div>
@@ -17,6 +17,8 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenOsaalueet.vue';
+import * as _ from 'lodash';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -32,6 +34,10 @@ export default class EpTutkinnonosaTutke extends Vue {
 
   @Prop({ required: true })
   private arviointiasteikot!: any[];
+
+  get osaAlueet() {
+    return _.filter(this.tutkinnonosa.osaAlueet, osaAlue => !osaAlue.kieli || osaAlue.kieli === Kielet.getSisaltoKieli.value);
+  }
 }
 </script>
 
