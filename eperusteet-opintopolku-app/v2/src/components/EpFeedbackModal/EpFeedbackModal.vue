@@ -181,6 +181,7 @@ export default class EpFeedbackModal extends Vue {
       await Palautteet.sendPalaute({
         stars: this.selectedRating,
         feedback: this.feedbackMessage,
+        user_agent: navigator.userAgent,
       });
       this.isSending = false;
       this.feedbackSent = true;
