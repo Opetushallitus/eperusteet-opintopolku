@@ -10,6 +10,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import * as _ from 'lodash';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component
 export default class App extends Vue {
@@ -18,6 +19,8 @@ export default class App extends Vue {
       let recaptchaScript = document.createElement('script');
       recaptchaScript.setAttribute('id', 'apply-modal');
       recaptchaScript.setAttribute('type', 'text/javascript');
+      recaptchaScript.setAttribute('sdg', 'false');
+      recaptchaScript.setAttribute('lang', Kielet.getUiKieli.value);
       recaptchaScript.setAttribute('src', this.opintopolkuUrl + '/oppija-raamit/js/apply-modal.js');
       document.head.appendChild(recaptchaScript);
     }
