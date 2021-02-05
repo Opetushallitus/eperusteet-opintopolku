@@ -9,37 +9,44 @@
       </ep-header>
       <div class="container-md">
 
-        <h2>{{$t('koulutuksen-jarjestajan-yhteinen-osuus')}}</h2>
-
-        <ep-spinner v-if="!yhteisetOsuudet" />
-        <div v-else-if="yhteisetOsuudet.length === 0">{{$t('koulutuksen-jarjestaja-ei-ole-lisannyt-yhteista-osuutta')}}</div>
-        <div v-else>
-          <span v-if="yhteisetOsuudet.length === 1">{{$t('koulutuksen-jarjestaja-otsikko-selite-lyhyt')}}</span>
-          <div v-else>
-            <span v-if="naytaOtsikkoKaikki" v-html="$t('koulutuksen-jarjestaja-otsikko-selite')" />
-            <span v-else v-html="$t('koulutuksen-jarjestaja-otsikko-selite-vahemman')" />
-
-            <ep-button v-if="naytaOtsikkoKaikki" variant="link" @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki">{{$t('nayta-vahemman')}}</ep-button>
-            <ep-button v-else variant="link" @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki">{{$t('nayta-lisaa')}}</ep-button>
-          </div>
-
-          <ep-search class="mt-3" v-model="query" :placeholder="$t('etsi-yhteista-osuutta')"/>
-          <ep-ammatillinen-row v-for="(yhteinenOsuus, idx) in yhteisetOsuudetPaginated" :key="'yhteinenOsuus' + idx" :route="yhteinenOsuus.route">
-            <div class="nimi">{{ $kaanna(yhteinenOsuus.nimi) }}</div>
-          </ep-ammatillinen-row>
-          <b-pagination v-model="page"
-                        class="mt-4"
-                        :total-rows="yhteisetOsuudetFiltered.length"
-                        :per-page="perPage"
-                        align="center"
-                        aria-controls="yhteisetosuudet-lista"
-                        :first-text="$t('alkuun')"
-                        prev-text="«"
-                        next-text="»"
-                        :last-text="$t('loppuun')" />
+        <div v-if="this.koulutustoimija.kuvaus" class="mb-5">
+          <h2>{{$t('kuvaus')}}</h2>
+          <div v-html="$kaanna(this.koulutustoimija.kuvaus)"></div>
         </div>
 
-        <h2 class="mt-5">{{$t('toteutussuunnitelmat')}}</h2>
+        <div v-if="!this.koulutustoimija.organisaatioRyhma" class="mb-5">
+          <h2>{{$t('koulutuksen-jarjestajan-yhteinen-osuus')}}</h2>
+
+          <ep-spinner v-if="!yhteisetOsuudet" />
+          <div v-else-if="yhteisetOsuudet.length === 0">{{$t('koulutuksen-jarjestaja-ei-ole-lisannyt-yhteista-osuutta')}}</div>
+          <div v-else>
+            <span v-if="yhteisetOsuudet.length === 1">{{$t('koulutuksen-jarjestaja-otsikko-selite-lyhyt')}}</span>
+            <div v-else>
+              <span v-if="naytaOtsikkoKaikki" v-html="$t('koulutuksen-jarjestaja-otsikko-selite')" />
+              <span v-else v-html="$t('koulutuksen-jarjestaja-otsikko-selite-vahemman')" />
+
+              <ep-button v-if="naytaOtsikkoKaikki" variant="link" @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki">{{$t('nayta-vahemman')}}</ep-button>
+              <ep-button v-else variant="link" @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki">{{$t('nayta-lisaa')}}</ep-button>
+            </div>
+
+            <ep-search class="mt-3" v-model="query" :placeholder="$t('etsi-yhteista-osuutta')"/>
+            <ep-ammatillinen-row v-for="(yhteinenOsuus, idx) in yhteisetOsuudetPaginated" :key="'yhteinenOsuus' + idx" :route="yhteinenOsuus.route">
+              <div class="nimi">{{ $kaanna(yhteinenOsuus.nimi) }}</div>
+            </ep-ammatillinen-row>
+            <b-pagination v-model="page"
+                          class="mt-4"
+                          :total-rows="yhteisetOsuudetFiltered.length"
+                          :per-page="perPage"
+                          align="center"
+                          aria-controls="yhteisetosuudet-lista"
+                          :first-text="$t('alkuun')"
+                          prev-text="«"
+                          next-text="»"
+                          :last-text="$t('loppuun')" />
+          </div>
+        </div>
+
+        <h2>{{$t('toteutussuunnitelmat')}}</h2>
 
         <ep-spinner v-if="!toteutussuunnitelmat" />
         <div v-else>
@@ -186,7 +193,7 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
       },
     },
     {
-      label: 'koulutuksen-jarjestajat',
+      label: !this.koulutustoimija?.organisaatioRyhma ? 'koulutuksen-jarjestajat' : 'tyopajatoimija',
       location: {
         name: 'ammatillinenKoulutuksenjarjestajat',
       },
