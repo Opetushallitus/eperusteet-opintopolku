@@ -1,18 +1,21 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { JulkinenApi, OpetussuunnitelmaDto } from '@shared/api/amosaa';
+import { JulkinenApi, OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaQuery } from '@shared/api/amosaa';
 import { PerusteDto, TiedoteDto, Perusteet } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { tiedoteQuery } from '@/api/eperusteet';
+import { Page } from '@shared/tyypit';
+import { Debounced } from '@shared/utils/delay';
 
 Vue.use(VueCompositionApi);
 
 export class AmmatillinenPerusteKoosteStore {
   public state = reactive({
     peruste: null as PerusteDto | null,
-    opetussuunnitelmat: null as OpetussuunnitelmaDto | null,
+    opetussuunnitelmat: null as Page<OpetussuunnitelmaDto> | null,
     tiedotteet: null as TiedoteDto | null,
+    opsQuery: null as OpetussuunnitelmaQuery | null,
   })
 
   constructor(private perusteId: number) {
@@ -26,16 +29,15 @@ export class AmmatillinenPerusteKoosteStore {
   public async fetch() {
     this.state.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
 
-    this.state.opetussuunnitelmat = ((await JulkinenApi.findOpetussuunnitelmat(
-      this.state.peruste.diaarinumero,
-      this.state.peruste.id,
-      undefined,
-      undefined,
-      0,
-      100,
-      '',
-      Kielet.getUiKieli.value,
-    )).data as any).data;
+    this.state.opsQuery = {
+      perusteenDiaarinumero: this.state.peruste.diaarinumero,
+      perusteId: this.state.peruste.id,
+      sivu: 0,
+      sivukoko: 2,
+      kieli: Kielet.getUiKieli.value,
+    };
+
+    this.fetchOpetussuunnitelmat(this.state.opsQuery);
 
     const vanhat = (await tiedoteQuery({
       sivukoko: 100,
@@ -55,5 +57,11 @@ export class AmmatillinenPerusteKoosteStore {
       .sortBy('luotu')
       .reverse()
       .value() as any;
+  }
+
+  @Debounced(300)
+  public async fetchOpetussuunnitelmat(query) {
+    this.state.opetussuunnitelmat = null;
+    this.state.opetussuunnitelmat = ((await getJulkisetOpetussuunnitelmat({ ...this.state.opsQuery, ...query })).data as any);
   }
 }

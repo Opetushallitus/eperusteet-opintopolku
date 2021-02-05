@@ -34,21 +34,22 @@
           <b-col>
             <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
             <div class="search">
-              <ep-search v-model="query" :placeholder="$t('etsi-toteutussuunnitelmaa')"/>
+              <div class="placeholder mb-2">{{$t('etsi-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla')}}</div>
+              <ep-search v-model="query" :placeholder="$t('etsi')"/>
             </div>
-            <ep-spinner v-if="!opetussuunnitelmat" />
-            <div v-else-if="opetussuunnitelmat.length === 0">
+            <ep-spinner v-if="!opetussuunnitelmatPage" />
+            <div v-else-if="opetussuunnitelmat.length === 0 && !query">
               <div class="alert alert-info">
                 {{ $t('perusteen-pohjalta-ei-toteutettu-toteutussuunnitelmia') }}
               </div>
             </div>
-            <div v-else-if="opetussuunnitelmatFiltered.length === 0">
+            <div v-else-if="opetussuunnitelmat.length === 0 && query">
               <div class="alert alert-info">
                 {{ $t('ei-hakutuloksia') }}
               </div>
             </div>
             <div v-else id="opetussuunnitelmat-lista">
-              <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
+              <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
 
                 <router-link :to="ops.route">
                   <opetussuunnitelma-tile :ops="ops" :query="query"/>
@@ -57,8 +58,8 @@
               </div>
               <b-pagination v-model="page"
                             class="mt-4"
-                            :total-rows="opetussuunnitelmatFiltered.length"
-                            :per-page="perPage"
+                            :total-rows="opetussuunnitelmatPage.kokonaismäärä"
+                            :perPage="perPage"
                             align="center"
                             aria-controls="opetussuunnitelmat-lista"
                             :first-text="$t('alkuun')"
@@ -106,8 +107,6 @@ export default class RouteKoosteAmmatillinen extends Vue {
   private ammatillinenPerusteKoosteStore!: AmmatillinenPerusteKoosteStore;
 
   private query = '';
-  private page = 1;
-  private perPage = 10;
 
   get koulutustyyppi() {
     return 'ammatillinen';
@@ -142,9 +141,13 @@ export default class RouteKoosteAmmatillinen extends Vue {
     return { name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: _.toString(this.peruste!.id) } };
   }
 
+  get opetussuunnitelmatPage() {
+    return this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value;
+  }
+
   get opetussuunnitelmat(): any {
-    if (this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value) {
-      return _.map(this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value, (opetussuunnitelma: OpetussuunnitelmaDto) => (
+    if (this.opetussuunnitelmatPage) {
+      return _.map(this.opetussuunnitelmatPage.data, (opetussuunnitelma: OpetussuunnitelmaDto) => (
         {
           ...opetussuunnitelma,
           route: {
@@ -159,17 +162,25 @@ export default class RouteKoosteAmmatillinen extends Vue {
     }
   }
 
-  get opetussuunnitelmatFiltered() {
-    return _.chain(this.opetussuunnitelmat)
-      .filter(ops => Kielet.search(this.query, ops.nimi))
-      .value();
+  get page() {
+    return this.opetussuunnitelmatPage!.sivu + 1;
   }
 
-  get opetussuunnitelmatPaginated() {
-    return _.chain(this.opetussuunnitelmatFiltered)
-      .drop(this.perPage * (this.page - 1))
-      .take(this.perPage)
-      .value();
+  set page(page) {
+    this.fetch(this.query, page - 1);
+  }
+
+  get perPage() {
+    return this.opetussuunnitelmatPage!.sivukoko;
+  }
+
+  @Watch('query')
+  queryChange(val) {
+    this.fetch(this.query);
+  }
+
+  fetch(nimi?, page?) {
+    this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: nimi, sivu: page });
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -245,6 +256,11 @@ export default class RouteKoosteAmmatillinen extends Vue {
 
 .search {
   margin: 20px 0;
+
+  .placeholder {
+    font-size: small;
+    color: $gray;
+  }
 }
 
 @media (max-width: 991.98px) {
