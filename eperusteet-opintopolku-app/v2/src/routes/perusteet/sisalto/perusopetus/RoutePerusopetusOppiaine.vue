@@ -42,6 +42,79 @@
             <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" />
           </div>
 
+          <div class="mt-4" v-if="vlk.tavoitteet.length > 0">
+            <h3>{{$t('oppiaineen-tavoitteet')}}</h3>
+            <ep-button variant="link" @click="toggleTavoitteet()">
+              {{$t('avaa-sulje-kaikki')}}
+            </ep-button>
+
+            <ep-collapse
+              ref="tavoitecollapse"
+              v-for="(tavoite, index) in vlk.tavoitteet"
+              :key="'tavoite'+index"
+              :border-bottom="false"
+              :expandedByDefault="vlk.tavoitteet.length === 1"
+              :shadow="true">
+
+              <template v-slot:header>
+                <h3 v-html="$kaanna(tavoite.tavoite)"></h3>
+              </template>
+
+              <div v-if="tavoite.kohdealueet.length > 0" class="mb-4">
+                <h4>{{$t('tavoitealue')}}</h4>
+                <span v-html="$kaanna(kohdealueetById[tavoite.kohdealueet[0]].nimi)"></span>
+              </div>
+
+              <div class="mb-4">
+                <h4>{{$t('tavoitteista-johdetut-oppimisen-tavoitteet')}}</h4>
+                <span v-html="$kaanna(tavoite.tavoitteistaJohdetutOppimisenTavoitteet)"></span>
+              </div>
+
+              <div class="mb-4" v-if="tavoite.sisaltoalueet.length > 0">
+                <h4>{{$t('sisaltoalueet')}}</h4>
+
+                <ep-collapse class="sisaltoalueet" v-for="(sisaltoalue, index) in tavoite.sisaltoalueet" :key="'lao'+index"
+                  :borderBottom="false" :expanded-by-default="false" chevronLocation="left">
+                  <template v-slot:header>
+                    <h5 v-html="$kaanna(sisaltoalue.nimi)"></h5>
+                  </template>
+
+                  <div v-html="$kaanna(sisaltoalue.kuvaus)" />
+
+                </ep-collapse>
+              </div>
+
+              <div class="mb-4" v-if="tavoite.laajattavoitteet.length > 0">
+                <h4>{{$t('laaja-alaisen-osaamisen-alueet')}}</h4>
+
+                <ep-collapse class="lao" v-for="(lao, index) in tavoite.laajattavoitteet" :key="'lao'+index"
+                  :borderBottom="false" :expanded-by-default="false" chevronLocation="left">
+                  <template v-slot:header>
+                    <h5 v-html="$kaanna(lao.nimi)"></h5>
+                  </template>
+
+                  <div v-html="$kaanna(lao.kuvaus)" />
+
+                </ep-collapse>
+
+              </div>
+                <div class="mt-4" v-if="tavoite.arvioinninKuvaus">
+                  <h4>{{ $t('arvioinnin-kohde') }}</h4>
+                  <span v-html="$kaanna(tavoite.arvioinninKuvaus)"></span>
+                </div>
+
+                <div class="mt-4" v-if="tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0">
+                  <h4 class="mb-0 pb-0">{{$kaanna(tavoite.arvioinninOtsikko)}}</h4>
+                  <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
+                </div>
+
+                <div class="mt-4" v-if="tavoite.vapaaTeksti">
+                  <ep-content-viewer :value="$kaanna(tavoite.vapaaTeksti)" :kuvat="kuvat" />
+                </div>
+
+            </ep-collapse>
+
+          </div>
         </b-tab>
       </b-tabs>
 
@@ -60,8 +133,8 @@
 
       </div>
 
+      <slot name="previous-next-navigation" />
     </div>
-
   </div>
 </template>
 
@@ -69,16 +142,21 @@
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusopetusOppiaineStore } from '@/stores/PerusopetusOppiaineStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
+import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpContentViewer,
+    EpCollapse,
+    EpButton,
+    EpArvioinninkohteetTable,
   },
 })
 export default class RoutePerusopetusOppiaine extends Vue {
@@ -132,6 +210,19 @@ export default class RoutePerusopetusOppiaine extends Vue {
       };
     });
   }
+
+  toggleTavoitteet() {
+    _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle());
+  }
+
+  get kohdealueetById() {
+    if (this.oppiaine) {
+      return _.keyBy(this.oppiaine.kohdealueet, 'id');
+    }
+    else {
+      return {};
+    }
+  }
 }
 </script>
 
@@ -143,6 +234,20 @@ export default class RoutePerusopetusOppiaine extends Vue {
 
     ::v-deep .nav-tabs li a {
       margin-left: 0px !important;
+    }
+
+    ::v-deep .ep-button .btn  {
+      padding-left: 0 !important;
+      .teksti {
+        padding-left: 0 !important;
+      }
+    }
+
+    .lao, .sisaltoalueet {
+      ::v-deep .ep-collapse {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+      }
     }
   }
 </style>
