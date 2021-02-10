@@ -11735,6 +11735,11 @@ vue-axe@^1.0.7:
   dependencies:
     axe-core "^3.0.2"
 
+vue-class-component@^7.0.1:
+  version "7.2.6"
+  resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
+  integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
+
 vue-class-component@^7.0.2:
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.1.0.tgz#b33efcb10e17236d684f70b1e96f1946ec793e87"
@@ -11907,6 +11912,19 @@ vuedraggable@^2.23.2:
   integrity sha512-PgHCjUpxEAEZJq36ys49HfQmXglattf/7ofOzUrW2/rRdG7tu6fK84ir14t1jYv4kdXewTEa2ieKEAhhEMdwkQ==
   dependencies:
     sortablejs "^1.10.1"
+
+vuelidate-property-decorators@^1.0.28:
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/vuelidate-property-decorators/-/vuelidate-property-decorators-1.0.28.tgz#4d90e3be0291ca3703ce35fcb76028c673ba4618"
+  integrity sha512-ktb+9bYkTSmUFLi9g7gMGY035F5WvNnBQ/yl1U8MlclcFT65bYU/vBQ5HcZ4T1Ko6IL5wIPD4XJ+KkllKvgycg==
+  dependencies:
+    vue-class-component "^7.0.1"
+    vuelidate "^0.7.4"
+
+vuelidate@^0.7.4:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/vuelidate/-/vuelidate-0.7.6.tgz#84100c13b943470660d0416642845cd2a1edf4b2"
+  integrity sha512-suzIuet1jGcyZ4oUSW8J27R2tNrJ9cIfklAh63EbAkFjE380iv97BAiIeolRYoB9bF9usBXCu4BxftWN1Dkn3g==
 
 vuelidate@^0.7.5:
   version "0.7.5"
