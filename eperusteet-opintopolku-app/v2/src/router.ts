@@ -10,6 +10,7 @@ import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue';
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
 import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
+import RouteAmmatillinenValmisteillaOlevat from '@/routes/ammatillinen/RouteAmmatillinenValmisteillaOlevat.vue';
 import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatillinenKoulutusviennit.vue';
 import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
 import RouteAmmatillinenTyopajat from '@/routes/ammatillinen/RouteAmmatillinenTyopajat.vue';
@@ -98,10 +99,8 @@ import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiai
 import { AipeVaiheStore } from '@/stores/AipeVaiheStore';
 import { AipeOppiaineStore } from '@/stores/AipeOppiaineStore';
 import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
-import { OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
-import { YleissivistavatPaikallisetStore } from './stores/YleissivistavatPaikallisetStore';
-import { VapaasivistystyoPaikallisetStore } from './stores/VapaasivistystyoPaikallisetStore';
 import { getKoostePaikallinenComponent, getKoostePaikallinenStore } from './utils/toteutustypes';
+import { ValmisteillaOlevatStore } from './stores/ValmisteillaOlevatStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -114,6 +113,7 @@ const perusteStore = new PerusteStore();
 const tiedoteStore = new TiedoteStore();
 const ammatillistenTiedotteetStore = new AmmatillistenTiedoteStore();
 const koulutuksenJarjestajatStore = new KoulutuksenJarjestajatStore();
+const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
@@ -249,6 +249,11 @@ export const router = new Router({
           path: 'tyopajat',
           component: RouteAmmatillinenTyopajat,
           name: 'ammatillinenTyopajat',
+        }, {
+          path: 'valmisteilla',
+          component: RouteAmmatillinenValmisteillaOlevat,
+          name: 'ammatillinenValmisteillaOlevat',
+          props: { valmisteillaOlevatStore },
         },
       ],
     }, {

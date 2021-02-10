@@ -3,7 +3,15 @@
   <div class="search">
 
     <div v-if="tyyppi === 'peruste'">
-      <div class="placeholderText">{{searchPlaceholder}}</div>
+      <div class="placeholderText d-flex">
+        <span class="pr-1">{{searchPlaceholder}}</span>
+        <ep-spinner v-if="!valmisteillaOlevat" small/>
+        <span v-else-if="valmisteillaOlevat.data.length > 0">{{$t('katso-myos')}}
+          <router-link class="w-100" :to="{name: 'ammatillinenValmisteillaOlevat'}">
+            {{$t('valmisteilla-olevien-perusteiden-julkaisuaikataulu')}}
+          </router-link>
+        </span>
+      </div>
 
       <div class="d-flex flex-lg-row flex-column">
         <b-form-group :label="$t('hae')" class="flex-fill">
@@ -93,10 +101,10 @@ import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import _ from 'lodash';
-import { ENV_PREFIX } from '@shared/utils/defaults';
-import { Kielet } from '@shared/stores/kieli';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
+import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
+import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -116,8 +124,11 @@ export default class PerusteAmmatillinenHaku extends Vue {
   @Prop({ type: String })
   private tyyppi!: 'peruste' | 'opas' | 'kooste';
 
-  mounted() {
-    this.perusteHakuStore.fetch();
+  private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
+
+  async mounted() {
+    await this.perusteHakuStore.fetch();
+    await this.valmisteillaOlevatStore.fetch(0, 1, ammatillisetKoulutustyypit);
   }
 
   private tutkintotyyppi = 'kaikki';
@@ -215,6 +226,10 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   onToggleChange(toggle) {
     this.perusteHakuStore.fetch();
+  }
+
+  get valmisteillaOlevat() {
+    return this.valmisteillaOlevatStore.perusteet.value;
   }
 }
 </script>
