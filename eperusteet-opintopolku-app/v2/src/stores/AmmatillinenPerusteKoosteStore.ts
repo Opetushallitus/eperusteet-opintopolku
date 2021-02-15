@@ -33,7 +33,7 @@ export class AmmatillinenPerusteKoosteStore {
       perusteenDiaarinumero: this.state.peruste.diaarinumero,
       perusteId: this.state.peruste.id,
       sivu: 0,
-      sivukoko: 2,
+      sivukoko: 10,
       kieli: Kielet.getUiKieli.value,
     };
 
