@@ -158,7 +158,7 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
     EpButton,
     EpArvioinninkohteetTable,
   },
-})
+} as any)
 export default class RoutePerusopetusOppiaine extends Vue {
   @Prop({ required: true })
   private perusopetusOppiaineStore!: PerusopetusOppiaineStore;

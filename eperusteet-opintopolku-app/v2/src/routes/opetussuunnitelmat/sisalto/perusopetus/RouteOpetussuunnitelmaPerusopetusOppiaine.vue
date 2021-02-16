@@ -17,7 +17,6 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiaineStore';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import OppiaineenVuosiluokkakokonaisuus from './OppiaineenVuosiluokkakokonaisuus.vue';
@@ -28,7 +27,7 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
     EpPerusteContent,
     OppiaineenVuosiluokkakokonaisuus,
   },
-})
+} as any)
 export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaOppiaineStore!: OpetussuunnitelmaOppiaineStore;
