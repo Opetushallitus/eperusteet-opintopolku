@@ -54,8 +54,13 @@
           <b-col class="inner-list" v-if="tavoite.laajaalaisetosaamiset.length > 0">
             <h4>{{$t('laaja-alaisen-osaamisen-alueet')}}</h4>
 
-          <ep-collapse v-for="(lao, index) in tavoite.laajaalaisetosaamiset" :key="'lao'+index"
-            :borderBottom="false" :expanded-by-default="false" chevronLocation="left">
+          <ep-collapse v-for="(lao, index) in tavoite.laajaalaisetosaamiset"
+            :key="'lao'+index"
+            :borderBottom="false"
+            :expanded-by-default="false"
+            chevronLocation="left"
+            class="mt-0 pt-0">
+
             <template v-slot:header>
               <h5 v-html="$kaanna(lao.nimi)"></h5>
             </template>
@@ -67,7 +72,7 @@
           </b-col>
           <b-col v-if="tavoite.kohdealueet.length > 0">
             <h4>{{$t('tavoitealue')}}</h4>
-            <div v-for="(kohdealue, index) in tavoite.kohdealueet" :key="'kohdealue'+index">
+            <div v-for="(kohdealue, index) in tavoite.kohdealueet" :key="'kohdealue'+index" class="mt-4 pt-1">
               <ep-order-color-ball class="pr-2" :index="kohdealue.index" />
               <span>{{$kaanna(kohdealue.nimi)}}</span>
             </div>
@@ -100,14 +105,13 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiaineStore';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import EpContent from '@shared/components/EpContent/EpContent.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
+import EpOrderColorBall from '@shared/components/EpColorIndicator/EpOrderColorBall.vue';
 
 @Component({
   components: {
@@ -117,8 +121,9 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
     EpButton,
     EpContentViewer,
     EpArvioinninkohteetTable,
+    EpOrderColorBall,
   },
-})
+} as any)
 export default class OppiaineenVuosiluokka extends Vue {
   @Prop({ required: true })
   private oppiaineenVuosiluokka!: any;

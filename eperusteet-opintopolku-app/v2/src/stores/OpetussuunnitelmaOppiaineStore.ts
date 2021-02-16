@@ -80,6 +80,8 @@ export class OpetussuunnitelmaOppiaineStore {
     const sisaltoalueetMap = _.keyBy(perusteenVlk.sisaltoalueet, 'tunniste');
     const laajaalaisetOsaamisetMap = _.keyBy(laajaalaisetOsaamiset, 'tunniste');
     const vuosiluokanTavoitteet = _.keyBy(vuosiluokka.tavoitteet, 'tunniste');
+    const vuosiluokanSisaltoalueet = _.keyBy(vuosiluokka.sisaltoalueet, 'tunniste');
+    const kohdealueetById = _.keyBy(perusteenOppiaine.kohdealueet, 'id');
     let kohdealueGlobalIndex = 0;
 
     return _.chain(perusteenVlk.tavoitteet)
@@ -89,6 +91,7 @@ export class OpetussuunnitelmaOppiaineStore {
           ...tavoite,
           sisaltoalueet: _.chain(tavoite.sisaltoalueet)
             .map((sisaltoalue: string) => sisaltoalueetMap[sisaltoalue])
+            .filter((sisaltoalue:any) => vuosiluokanSisaltoalueet[sisaltoalue.tunniste] && !vuosiluokanSisaltoalueet[sisaltoalue.tunniste].piilotettu)
             .map((sisaltoalue: any) => {
               return {
                 ...sisaltoalue,
@@ -100,14 +103,12 @@ export class OpetussuunnitelmaOppiaineStore {
                       kaytaOmaaKuvausta: vlSisaltoalue.omaKuvaus !== null,
                     } as any;
                   })
+                  .sortBy('id')
                   .head()
                   .value(),
               };
             })
-            .filter(sisaltoalue => !sisaltoalue.vuosiluokanSisaltoalue || !sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.piilotettu)
-            .sortBy([(sisaltoalue: any) => {
-              return sisaltoalue.nimi[Kielet.getSisaltoKieli.value];
-            }])
+            .sortBy([(sisaltoalue: any) => sisaltoalue.nimi[Kielet.getSisaltoKieli.value]])
             .value(),
           laajaalaisetosaamiset: _.chain(tavoite.laajaalaisetosaamiset)
             .map((lao: string) => laajaalaisetOsaamisetMap[lao])
@@ -117,7 +118,7 @@ export class OpetussuunnitelmaOppiaineStore {
             .value(),
           kohdealueet: _.map(tavoite.kohdealueet, kohdealue => {
             return {
-              ...kohdealue,
+              ...kohdealueetById[kohdealue as string],
               index: kohdealueGlobalIndex++,
             };
           }),
