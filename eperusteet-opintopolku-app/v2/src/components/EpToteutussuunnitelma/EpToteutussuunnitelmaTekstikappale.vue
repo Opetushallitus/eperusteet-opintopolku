@@ -2,7 +2,8 @@
   <div>
     <h2>{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</h2>
     <ep-content-viewer :value="$kaanna(sisaltoviite.perusteteksti)" :kuvat="kuvat" v-if="sisaltoviite.naytaPerusteenTeksti"/>
-    <ep-content-viewer :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)" :kuvat="kuvat" v-if="sisaltoviite.naytaPohjanTeksti"/>
+    <ep-content-viewer :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)" :kuvat="kuvat"
+      v-if="sisaltoviite.naytaPohjanTeksti && sisaltoviite.pohjanTekstikappale"/>
     <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
   </div>
 </template>
