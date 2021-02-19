@@ -651,7 +651,7 @@ export const router = new Router({
           }],
         }],
       }, {
-        path: 'opintokokonaisuus/:opintokokonaisuusId',
+        path: 'osaamiskokonaisuus/:opintokokonaisuusId',
         component: RouteOpintokokonaisuus,
         name: 'perusteOpintokokonaisuus',
         meta: {

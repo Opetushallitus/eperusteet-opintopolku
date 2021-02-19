@@ -5,7 +5,7 @@
 
       <div class="row">
         <div class="col-lg-6 col-md-12 mb-4">
-          <h3>{{$t('opintokokonaisuuden-nimi')}}</h3>
+          <h3>{{$t('osaamiskokonaisuuden-nimi')}}</h3>
           <div>{{$kaanna(perusteenOsa.nimi)}}</div>
         </div>
         <div class="col-lg-6 col-md-12 mb-4">
