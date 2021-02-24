@@ -16,6 +16,14 @@
     <ep-spinner v-else />
     </template>
     <div v-if="tiedote" class="tiedote">
+      <div class="mb-4" v-if="perusteet">
+        {{$t('katso-peruste')}}:
+        <span class="peruste" v-for="(peruste, index) in perusteRoutes" :key="'peruste'+peruste.id">
+          <span v-if="index > 0">, </span>
+          <router-link :to="peruste.route">{{$kaanna(peruste.nimi)}}</router-link>
+        </span>
+      </div>
+
       <div class="sisalto">
         <ep-content-viewer :value="$kaanna(tiedote.sisalto)"/>
       </div>
@@ -34,6 +42,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Meta } from '@shared/utils/decorators';
+import { koulutustyyppiStateName } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -57,6 +66,25 @@ export default class RouteUutinen extends Vue {
 
   get tiedote() {
     return this.tiedoteStore.tiedote;
+  }
+
+  get perusteet() {
+    return this.tiedoteStore.tiedote?.perusteet;
+  }
+
+  get perusteRoutes() {
+    return _.map(this.perusteet, peruste => {
+      return {
+        ...peruste,
+        route: {
+          name: 'peruste',
+          params: {
+            perusteId: peruste.id,
+            koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi!),
+          },
+        },
+      };
+    });
   }
 
   get koulutustyyppi() {
