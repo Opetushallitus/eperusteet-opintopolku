@@ -64,7 +64,7 @@ export class OpetussuunnitelmaTekstikappaleStore {
   async fetchPerusteTekstikappale() {
     this.perusteTekstikappaleViite = null;
     if (this.tekstiKappaleViite && this.tekstiKappaleViite.perusteTekstikappaleId) {
-      if (this.opstoteutus === 'lukio') {
+      if (this.opstoteutus === 'lukio' || this.opstoteutus === 'lukiokoulutus') {
         this.perusteTekstikappaleViite = (await Lops2019Perusteet
           .getAllLops2019PerusteTekstikappale(this.opsId,
             this.tekstiKappaleViite.perusteTekstikappaleId)).data as PerusteTekstiKappaleViiteDto;
