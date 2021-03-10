@@ -1,5 +1,5 @@
 <template>
-<div class="paikalliset">
+<div class="paikalliset" v-if="perusteet && perusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <div class="search">
     <ep-search v-model="query" />

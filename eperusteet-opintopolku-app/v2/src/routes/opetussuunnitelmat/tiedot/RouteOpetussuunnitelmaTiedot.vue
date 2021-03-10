@@ -62,18 +62,17 @@
           <ep-datepicker v-model="opetussuunnitelma.paatospaivamaara"></ep-datepicker>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="opetussuunnitelma.kuvaus">
+      <div class="col-md-12" v-if="hasTiivistelma">
         <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
-          <ep-field v-model="opetussuunnitelma.kuvaus"></ep-field>
+          <ep-content-viewer v-model="opetussuunnitelma.kuvaus"/>
         </ep-form-content>
       </div>
-      <!-- EP-1558
       <div class="col-md-12" v-if="dokumentti">
         <ep-form-content name="dokumentti-osoite" headerType="h3" headerClass="h6">
           <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-pdf-dokumentti') }}</a>
         </ep-form-content>
       </div>
-      -->
+
     </div>
     <slot name="previous-next-navigation" />
   </div>
@@ -85,6 +84,7 @@ import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
@@ -98,6 +98,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpDatepicker,
     EpSpinner,
     EpPreviousNextNavigation,
+    EpContentViewer,
   },
 })
 export default class RouteOpetussuunnitelmaTiedot extends Vue {
@@ -135,12 +136,14 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
     return !_.isEmpty(this.organisaatiot);
   }
 
-  /*
+  get hasTiivistelma() {
+    return !_.isEmpty(_.get(this.opetussuunnitelma.kuvaus, Kielet.getUiKieli.value));
+  }
+
   get dokumentti() {
     const dokumentit = this.opetussuunnitelmaDataStore.dokumentit;
     return dokumentit && (this as any).$kaanna(dokumentit);
   }
-  */
 
   private getOrganisaatioNimi(organisaatio) {
     const nimi = (this as any).$kaanna(organisaatio.nimi);

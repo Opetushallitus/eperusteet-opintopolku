@@ -40,12 +40,16 @@
       <ep-form-content name="muokattu" headerType="h3" headerClass="h6">
         <span>{{ $sd(opetussuunnitelma.muokattu) }}</span>
       </ep-form-content>
+
+      <ep-form-content name="dokumentti" headerType="h3" headerClass="h6" v-if="dokumenttiUrl">
+          <a :href="dokumenttiUrl" target="_blank" rel="noopener noreferrer">{{ $t('avaa-opetussuunnitelma-pdf') }}</a>
+        </ep-form-content>
     </template>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { Koulutustyyppi } from '@shared/tyypit';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
@@ -53,6 +57,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import * as _ from 'lodash';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -65,6 +70,19 @@ import * as _ from 'lodash';
 export default class EpOpetussuunnitelmaTiedot extends Vue {
   @Prop({ required: true })
   private store!: ToteutussuunnitelmaDataStore | null;
+
+  @Watch('kieli')
+  async kieliChanged() {
+    await this.store!.getDokumenttiTila();
+  }
+
+  get dokumenttiUrl() {
+    return this.store!.dokumenttiUrl;
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
 
   get opetussuunnitelma() {
     return this.store!.opetussuunnitelma;
