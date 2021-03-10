@@ -1,6 +1,6 @@
 <template>
 <div class="peruste">
-  <ep-header :koulutustyyppi="peruste.koulutustyyppi" :murupolku="murupolku">
+  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku">
     <template slot="header" v-if="peruste.tyyppi ==='opas'">
       {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
     </template>
@@ -46,7 +46,7 @@ import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 import { Meta } from '@shared/utils/decorators';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
-
+import * as _ from 'lodash';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
@@ -91,6 +91,16 @@ export default class RoutePeruste extends Vue {
       ];
     }
     return [];
+  }
+
+  get koulutustyyppi() {
+    return this.peruste?.koulutustyyppi || this.oppaanKoulutustyyppi;
+  }
+
+  get oppaanKoulutustyyppi() {
+    if (_.size(this.peruste?.oppaanKoulutustyypit) === 1) {
+      return _.take(this.peruste?.oppaanKoulutustyypit);
+    }
   }
 
   @Watch('$route', { deep: true, immediate: true })
