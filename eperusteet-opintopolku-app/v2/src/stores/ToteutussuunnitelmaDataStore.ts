@@ -51,6 +51,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   public async getDokumenttiTila() {
     if (this.opetussuunnitelma) {
+      this.dokumenttiTila = null;
       this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
     }
   };
