@@ -23,7 +23,9 @@ export class PerusteenTutkinnonosaStore {
 
   public async fetch() {
     this.state.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
-    const tutkinnonOsaViitteet = (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.peruste.id!, perusteenSuoritustapa(this.peruste))).data;
+    const tutkinnonOsaViitteet = _.flatMap(await Promise.all(_.map(this.peruste.suoritustavat, async (suoritustapa) => {
+      return (await TutkinnonRakenne.getPerusteenTutkinnonOsat(this.peruste.id!, suoritustapa.suoritustapakoodi!)).data;
+    })));
     this.state.tutkinnonosaViite = _.head(_.filter(tutkinnonOsaViitteet, tutkinnonOsaViite => tutkinnonOsaViite.id === this.tutkinnonOsaViiteId));
     this.state.tutkinnonosa = (await PerusteenOsatApi.getPerusteenOsa(_.toNumber(_.get(this.state.tutkinnonosaViite!, '_tutkinnonOsa')))).data as any;
     this.state.tutkinnonosa = {
