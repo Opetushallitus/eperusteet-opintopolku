@@ -146,7 +146,7 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
   private lops2019OpetussuunnitelmaPoppiaineStore!: Lops2019OpetussuunnitelmaPoppiaineStore;
 
   get termit() {
-    return this.opetussuunnitelmaDataStore.termit;
+    return this.opetussuunnitelmaDataStore.kaikkiTermit;
   }
 
   get kuvat() {
