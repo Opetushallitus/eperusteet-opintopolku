@@ -134,6 +134,9 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       .value();
   }
 
+  @Getter(state => [...(state.termit || []), ...(state.perusteTermit || [])])
+  public readonly kaikkiTermit!: any[];
+
   @Getter(state => state.opetussuunnitelma.koulutustyyppi)
   public readonly koulutustyyppi!: string;
 

@@ -2,15 +2,15 @@
   <div class="content">
     <h2>{{$kaanna(oppiaine.nimi)}}</h2>
 
-    <ep-peruste-content v-if="perusteOppiaine" :perusteObject="perusteOppiaine.tehtava"/>
+    <ep-peruste-content v-if="perusteOppiaine" :perusteObject="perusteOppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
 
     <b-tabs class="ml-0 pl-0 mt-4" v-if="!vlkId">
       <b-tab class="mt-4" v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudet" :key="'vlk'+index" :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)">
-        <oppiaineen-vuosiluokkakokonaisuus :tietue="opVlk" :kuvat="kuvat" />
+        <oppiaineen-vuosiluokkakokonaisuus :tietue="opVlk" :kuvat="kuvat" :termit="termit"/>
       </b-tab>
     </b-tabs>
 
-    <oppiaineen-vuosiluokkakokonaisuus v-else :tietue="oppiaineenVuosiluokkakokonaisuus" :kuvat="kuvat"/>
+    <oppiaineen-vuosiluokkakokonaisuus v-else :tietue="oppiaineenVuosiluokkakokonaisuus" :kuvat="kuvat" :termit="termit"/>
   </div>
 </template>
 
@@ -37,6 +37,10 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
 
   get kuvat() {
     return this.opetussuunnitelmaDataStore.kuvat;
+  }
+
+  get termit() {
+    return this.opetussuunnitelmaDataStore.kaikkiTermit;
   }
 
   get vlkId() {

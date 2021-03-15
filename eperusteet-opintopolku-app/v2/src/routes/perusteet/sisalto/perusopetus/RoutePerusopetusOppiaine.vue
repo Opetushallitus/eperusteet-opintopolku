@@ -9,7 +9,7 @@
 
       <div class="mt-4" v-if="hasContent(oppiaine.tehtava)">
         <h3>{{$kaanna(oppiaine.tehtava.otsikko)}}</h3>
-        <ep-content-viewer :value="$kaanna(oppiaine.tehtava.teksti)" :kuvat="kuvat" />
+        <ep-content-viewer :value="$kaanna(oppiaine.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
       </div>
 
       <b-tabs class="ml-0 pl-0 mt-4" v-model="tabIndex">
@@ -19,27 +19,27 @@
 
           <div class="mt-4" v-if="hasContent(vlk.tehtava)">
             <h3>{{$kaanna(vlk.tehtava.otsikko)}}</h3>
-            <ep-content-viewer :value="$kaanna(vlk.tehtava.teksti)" :kuvat="kuvat" />
+            <ep-content-viewer :value="$kaanna(vlk.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.tyotavat)">
             <h3>{{$kaanna(vlk.tyotavat.otsikko)}}</h3>
-            <ep-content-viewer :value="$kaanna(vlk.tyotavat.teksti)" :kuvat="kuvat" />
+            <ep-content-viewer :value="$kaanna(vlk.tyotavat.teksti)" :kuvat="kuvat" :termit="termit"/>
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.ohjaus)">
             <h3>{{$kaanna(vlk.ohjaus.otsikko)}}</h3>
-            <ep-content-viewer :value="$kaanna(vlk.ohjaus.teksti)" :kuvat="kuvat" />
+            <ep-content-viewer :value="$kaanna(vlk.ohjaus.teksti)" :kuvat="kuvat" :termit="termit"/>
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.arviointi)">
             <h3>{{$kaanna(vlk.arviointi.otsikko)}}</h3>
-            <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" />
+            <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
           </div>
 
           <div class="mt-4" v-if="hasContent(vlk.arviointi)">
             <h3>{{$kaanna(vlk.arviointi.otsikko)}}</h3>
-            <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" />
+            <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
           </div>
 
           <div class="mt-4" v-if="vlk.tavoitteet.length > 0">
@@ -109,7 +109,7 @@
                 </div>
 
                 <div class="mt-4" v-if="tavoite.vapaaTeksti">
-                  <ep-content-viewer :value="$kaanna(tavoite.vapaaTeksti)" :kuvat="kuvat" />
+                  <ep-content-viewer :value="$kaanna(tavoite.vapaaTeksti)" :kuvat="kuvat" :termit="termit"/>
                 </div>
 
             </ep-collapse>
@@ -194,6 +194,10 @@ export default class RoutePerusopetusOppiaine extends Vue {
 
   get kuvat() {
     return this.perusteDataStore.kuvat;
+  }
+
+  get termit() {
+    return this.perusteDataStore.termit;
   }
 
   get oppimaarat() {

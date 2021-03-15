@@ -7,6 +7,7 @@
         :perusteObject="perusteenVuosiluokkakokonaisuus.tehtava"
         :object="oppiaineenVuosiluokkakokonaisuus.tehtava"
         :kuvat="kuvat"
+        :termit="termit"
       />
 
       <ep-peruste-content
@@ -14,6 +15,7 @@
         :perusteObject="perusteenVuosiluokkakokonaisuus.tyotavat"
         :object="oppiaineenVuosiluokkakokonaisuus.tyotavat"
         :kuvat="kuvat"
+        :termit="termit"
       />
 
       <ep-peruste-content
@@ -21,6 +23,7 @@
         :perusteObject="perusteenVuosiluokkakokonaisuus.ohjaus"
         :object="oppiaineenVuosiluokkakokonaisuus.ohjaus"
         :kuvat="kuvat"
+        :termit="termit"
       />
 
       <ep-peruste-content
@@ -28,6 +31,7 @@
         :perusteObject="perusteenVuosiluokkakokonaisuus.arviointi"
         :object="oppiaineenVuosiluokkakokonaisuus.arviointi"
         :kuvat="kuvat"
+        :termit="termit"
       />
     </div>
 
@@ -45,27 +49,27 @@
 
       <hr class="mt-5 mb-5" />
       <h3>{{$t('valinnaisen-tehtava')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" />
+      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
 
       <hr class="mt-5 mb-5" />
 
       <h3>{{$t('oppiaine-tyotavat')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti)" :kuvat="kuvat" />
+      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti)" :kuvat="kuvat" :termit="termit"/>
 
       <hr class="mt-5 mb-5" />
 
       <h3>{{$t('oppiaine-ohjaus')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti)" :kuvat="kuvat" />
+      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti)" :kuvat="kuvat" :termit="termit"/>
 
       <hr class="mt-5 mb-5" />
 
       <h3>{{$t('oppiaine-arviointi')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.arviointi.teksti)" :kuvat="kuvat" />
+      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
 
       <hr class="mt-5 mb-5" />
 
       <h3>{{$t('oppiaine-tavoitteista-johdetut-oppimisen-tavoitteet')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)" :kuvat="kuvat" />
+      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)" :kuvat="kuvat" :termit="termit"/>
 
     </div>
 
@@ -76,7 +80,7 @@
     <b-tabs>
       <b-tab v-for="(vuosiluokka,index) in vuosiluokat" :key="'vuosiluokka'+index" :title="$t(vuosiluokka.vuosiluokka)">
 
-        <oppiaineen-vuosiluokka :oppiaineenVuosiluokka="vuosiluokka" :valinnainen="!perusteenVuosiluokkakokonaisuus" :kuvat="kuvat"/>
+        <oppiaineen-vuosiluokka :oppiaineenVuosiluokka="vuosiluokka" :valinnainen="!perusteenVuosiluokkakokonaisuus" :kuvat="kuvat" :termit="termit"/>
 
       </b-tab>
     </b-tabs>
@@ -87,8 +91,6 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiaineStore';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import OppiaineenVuosiluokka from './OppiaineenVuosiluokka.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -106,6 +108,9 @@ export default class OppiaineenVuosiluokkakokonaisuus extends Vue {
 
   @Prop({ required: true })
   private kuvat!: any[];
+
+  @Prop({ required: true })
+  private termit!: any[];
 
   get perusteenVuosiluokkakokonaisuus() {
     return this.tietue.oppiaineenPerusteenVuosiluokkakokonaisuus;
