@@ -26,10 +26,22 @@
 
       <div class="row mb-4">
         <div class="col-12 col-lg-6 pr-5">
-          <h2 class="mb-4">{{$t('mita-ovat-ammatilliset-tutkinnot')}}</h2>
+          <h2 class="mb-2">{{$t('mita-ovat-ammatilliset-tutkinnot')}}</h2>
 
           <p class="kuvaus">{{ $t('kooste-kuvaus-ammatillinen-koulutus') }}</p>
           <p class="kuvaus">{{ $t('kooste-kuvaus-perusteet') }}</p>
+
+          <h2 class="mb-2 mt-4">{{$t('osallistu-kehitystyohon')}}</h2>
+          <p class="kuvaus">
+            {{ $t('ammatillinen-kehitystyo-kuvaus') }}
+            <a target="_blank" :href="furtherFeedbackUrl">
+            <span>
+              {{ $t('kerro-ehdotuksesi') }}
+              <span class="sr-only"> ({{ $t('linkki-aukeaa-uuteen-ikkunaan') }})</span>
+            </span>
+          </a>
+          </p>
+
         </div>
 
         <div class="col-12 col-lg-6">
@@ -74,6 +86,7 @@ import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { koulutustyyppiRyhmat, KoulutustyyppiRyhma } from '@shared/utils/perusteet';
 import * as _ from 'lodash';
 import { TiedoteDto } from '@shared/api/eperusteet';
+import { Kielet } from '@shared/stores/kieli';
 
 interface Ylalinkki {
   route: string;
@@ -182,6 +195,14 @@ export default class RouteAmmatillinenSelaus extends Vue {
         tiedoteId: '' + tiedote.id,
       },
     });
+  }
+
+  get sisaltokieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  get furtherFeedbackUrl() {
+    return `https://www.oph.fi/${this.sisaltokieli}/koulutus-ja-tutkinnot/tutkintorakenne/lomake`;
   }
 }
 </script>
