@@ -39,8 +39,11 @@
 
       <section class="valtakunnalliset">
         <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
+        <ep-search class="query" v-model="query" :placeholder="$t('etsi-perusteista')"/>
+
         <ep-spinner-slot :is-loading="!perusteet">
-           <div v-for="(ryhma, idx) in perusteetRyhmittain" :key="idx" class="mb-4">
+
+            <div v-for="(ryhma, idx) in perusteetRyhmittain" :key="idx" class="mb-4 mt-4">
 
               <h3>{{ $t(ryhma.theme) }}</h3>
 
@@ -89,6 +92,11 @@
                 </div>
               </div>
             </div>
+
+            <div v-if="perusteet && perusteetRyhmittain.length === 0" class="alert alert-info mt-4">
+              {{$t('ei-hakutuloksia')}}
+            </div>
+
         </ep-spinner-slot>
       </section>
     </b-container>
@@ -102,7 +110,7 @@ import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import { PerusteDto } from '@shared/api/eperusteet';
 import { PerusteStore } from '@/stores/PerusteStore';
-import { Prop, Component, Vue } from 'vue-property-decorator';
+import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import {
   EperusteetKoulutustyyppiRyhmaSort,
@@ -118,11 +126,13 @@ import { uusiJulkinenToteutus } from '@/utils/peruste';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import { Kielet } from '@shared/stores/kieli';
 import { Koulutustyyppi } from '@shared/tyypit';
+import EpSearch from '@shared/components/forms/EpSearch.vue';
 
 @Component({
   components: {
     EpSpinnerSlot,
     EpExternalLink,
+    EpSearch,
   },
 })
 export default class RouteHome extends Vue {
@@ -132,8 +142,10 @@ export default class RouteHome extends Vue {
   @Prop({ required: true })
   private tiedoteStore!: TiedoteStore;
 
+  private query = '';
+
   async mounted() {
-    this.perusteStore.getYleisetPerusteet();
+    this.fetcPerusteet();
     this.tiedoteStore.getUusimmat();
   }
 
@@ -161,6 +173,25 @@ export default class RouteHome extends Vue {
     }
   }
 
+  private async fetcPerusteet() {
+    await this.perusteStore.getYleisetPerusteet(
+      {
+        nimi: this.query,
+        ...(!_.isEmpty(this.query) && { koulutustyyppi: undefined }),
+      });
+  }
+
+  @Watch('query')
+  private async queryChange() {
+    if (_.isEmpty(this.query) || _.size(this.query) > 2) {
+      await this.fetcPerusteet();
+    }
+  }
+
+  get latestQueryWithNimi() {
+    return !_.isEmpty(this.perusteStore.query?.nimi);
+  }
+
   get perusteetRyhmittain() {
     const ryhmatPerusteista = _.chain(EperusteetKoulutustyyppiRyhmat)
       .keys()
@@ -181,7 +212,7 @@ export default class RouteHome extends Vue {
 
     return _.sortBy([
       ...ryhmatPerusteista,
-      this.ammatillinenPerusteRyhma,
+      ...(!this.latestQueryWithNimi ? [this.ammatillinenPerusteRyhma] : []),
     ], ryhma => EperusteetKoulutustyyppiRyhmaSort[ryhma.toteutus]);
   }
 
@@ -371,6 +402,11 @@ export default class RouteHome extends Vue {
     padding-left: 15px;
     padding-right: 15px;
   }
+
+  ::v-deep .filter.query {
+    max-width: 100%;
+  }
+
 }
 
 </style>
