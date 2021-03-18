@@ -16,7 +16,7 @@
     <ep-spinner v-else />
     </template>
     <div v-if="tiedote" class="tiedote">
-      <div class="mb-4" v-if="perusteet">
+      <div class="mb-4" v-if="perusteRoutes.length > 0">
         {{$t('katso-peruste')}}:
         <span class="peruste" v-for="(peruste, index) in perusteRoutes" :key="'peruste'+peruste.id">
           <span v-if="index > 0">, </span>
