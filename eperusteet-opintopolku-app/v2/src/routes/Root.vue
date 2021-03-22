@@ -1,7 +1,7 @@
 <template>
 <div>
   <a class="sr-only sr-only-focusable skip-to-content" href="#main">{{ $t('siirry-sisaltoon') }}</a>
-  <EpFeedbackModal/>
+  <EpFeedbackModal :palauteProvider="palauteStore"/>
   <ep-navigation role="banner"></ep-navigation>
   <main class="router-container" role="main">
     <router-view />
@@ -12,11 +12,12 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
-import EpFeedbackModal from '@/components/EpFeedbackModal/EpFeedbackModal.vue';
+import EpFeedbackModal from '@shared/components/EpFeedback/EpFeedbackModal.vue';
 import { Meta } from '@shared/utils/decorators';
+import { PalauteStore } from '@/stores/PalauteStore';
 
 @Component({
   components: {
@@ -26,6 +27,9 @@ import { Meta } from '@shared/utils/decorators';
   },
 })
 export default class Root extends Vue {
+  @Prop({ required: true })
+  private palauteStore!: PalauteStore;
+
   get titleTemplate() {
     return '%s - ' + this.$t('eperusteet');
   }
