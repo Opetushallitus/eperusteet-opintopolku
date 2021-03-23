@@ -23,28 +23,7 @@
               :arvioinninKohdealueet="tutkinnonosa.arviointi.arvioinninKohdealueet"/>
 
       <div v-if="tutkinnonosa.geneerinenArviointiasteikko && tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit">
-
-        <ep-form-content class="col-md-12 mb-5" name="arviointi">
-          <span>{{$kaanna(tutkinnonosa.geneerinenArviointiasteikko.kohde)}}</span>
-
-          <b-table
-            class="mt-3"
-            striped
-            :items="tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit"
-            :fields="osaamistasonKriteeritFields">
-            <template v-slot:cell(osaamistaso)="{item}">
-              <span v-if="item.osaamistaso">{{$kaanna(item.osaamistaso.otsikko)}}</span>
-            </template>
-
-            <template v-slot:cell(kriteerit)="{item}">
-              <ul>
-                <li v-for="(kriteeri, index) in item.kriteerit" :key="'kriteeri'+index">
-                  {{$kaanna(kriteeri)}}
-                </li>
-              </ul>
-            </template>
-          </b-table>
-        </ep-form-content>
+        <GeneerinenArviointiTaulukko :arviointi="tutkinnonosa.geneerinenArviointiasteikko" />
       </div>
 
       <hr class="mt-5 mb-5"/>
@@ -70,12 +49,14 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmattitaitovaatimukset from '@shared/components/EpAmmattitaitovaatimukset/EpAmmattitaitovaatimukset.vue';
+import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 
 @Component({
   components: {
     EpFormContent,
     EpAmmatillinenArvioinninKohdealueet,
     EpAmmattitaitovaatimukset,
+    GeneerinenArviointiTaulukko,
   },
 })
 export default class EpTutkinnonosaNormaali extends Vue {
