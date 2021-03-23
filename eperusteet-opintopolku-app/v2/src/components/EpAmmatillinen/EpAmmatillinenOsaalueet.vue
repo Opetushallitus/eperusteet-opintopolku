@@ -6,7 +6,7 @@
       :borderBottom="false"
       :expandedByDefault="osaalueet.length === 1">
 
-      <label class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}}</label>
+      <h3 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}}</h3>
 
       <div class="mt-2" v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet" :key="'osaamistavoite'+ index + otIndex">
         <div class="osaamistavoiteotsikko">
@@ -24,6 +24,32 @@
 
       </div>
 
+      <h4 class="mt-4">{{ $t('pakolliset-osaamistavoitteet') }}, {{osaalue.pakollisetOsaamistavoitteet.laajuus}} {{$t('osp')}}</h4>
+      <Osaamistavoite v-model="osaalue.pakollisetOsaamistavoitteet"
+                      v-if="osaalue.pakollisetOsaamistavoitteet"
+                      :is-valinnainen="false"
+                      :showLaajuus="false">
+        <div slot="osaamistavoitteet" />
+      </Osaamistavoite>
+
+      <template v-if="osaalue.valinnaisetOsaamistavoitteet">
+        <hr/>
+        <h4>{{ $t('valinnaiset-osaamistavoitteet') }}, {{osaalue.valinnaisetOsaamistavoitteet.laajuus}} {{$t('osp')}}</h4>
+        <Osaamistavoite v-model="osaalue.valinnaisetOsaamistavoitteet"
+                        :is-valinnainen="true"
+                        :showLaajuus="false">
+          <div slot="osaamistavoitteet" />
+        </Osaamistavoite>
+      </template>
+
+      <hr/>
+
+      <div v-if="osaalue.arviointi && osaalue.arviointi.osaamistasonKriteerit">
+        <GeneerinenArviointiTaulukko :arviointi="osaalue.arviointi">
+          <h4 slot="header">{{ $t('arviointi')}} </h4>
+        </GeneerinenArviointiTaulukko>
+      </div>
+
     </ep-collapse>
   </div>
 </template>
@@ -33,6 +59,9 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
+import Osaamistavoite from '@shared/components/EpOsaamistavoite/Osaamistavoite.vue';
+import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
+
 import * as _ from 'lodash';
 
 @Component({
@@ -40,6 +69,8 @@ import * as _ from 'lodash';
     EpFormContent,
     EpCollapse,
     EpAmmatillinenArvioinninKohdealueet,
+    Osaamistavoite,
+    GeneerinenArviointiTaulukko,
   },
 })
 export default class EpAmmatillinenOsaalueet extends Vue {
