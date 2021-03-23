@@ -111,6 +111,7 @@ export default class VstPaikalliset extends Vue {
     nimi: null,
     sivukoko: 100,
     organisaatio: null,
+    kieli: this.kieli,
   };
 
   private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({
@@ -130,6 +131,18 @@ export default class VstPaikalliset extends Vue {
     }
 
     await this.oppilaitostyyppiKoodisto.query();
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('kieli')
+  kieliChange(val) {
+    this.query = {
+      ...this.query,
+      kieli: val,
+    };
   }
 
   @Watch('query', { deep: true })
