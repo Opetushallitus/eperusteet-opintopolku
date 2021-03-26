@@ -16,10 +16,10 @@
             <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
             <ep-spinner-slot :is-loading="!tiedotteet">
             <div class="d-flex flex-wrap">
-              <div class="box w-50" v-for="(tiedote, idx) in tiedotteet" :key="idx">
+              <div class="box w-50" v-for="(tiedote, idx) in tiedotteetMapped" :key="idx">
                 <div class="nimi">
                   <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                    {{ $kaanna(tiedote.otsikko) }}
+                    {{ $kaanna(tiedote.otsikko) }} <span class="uusi" v-if="tiedote.uusi">{{$t('uusi')}}</span>
                   </router-link>
                 </div>
                 <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
@@ -127,6 +127,7 @@ import { ENV_PREFIX } from '@shared/utils/defaults';
 import { Kielet } from '@shared/stores/kieli';
 import { Koulutustyyppi } from '@shared/tyypit';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
+import { onkoUusi } from '@shared/utils/tiedote';
 
 @Component({
   components: {
@@ -235,6 +236,15 @@ export default class RouteHome extends Vue {
     return this.tiedoteStore.uusimmatTiedotteet;
   }
 
+  get tiedotteetMapped() {
+    return _.map(this.tiedotteet, tiedote => {
+      return {
+        ...tiedote,
+        uusi: onkoUusi((tiedote as any).luotu),
+      };
+    });
+  }
+
   @Meta
   getMetaInfo() {
     return {
@@ -313,6 +323,15 @@ export default class RouteHome extends Vue {
     /deep/ a, div.linkki a {
       color: #2B2B2B;
     }
+
+    .uusi {
+      background-color: $blue-lighten-3;
+      border-radius: 5px;
+      padding: 2px 4px;
+      font-size: 0.7rem;
+      margin-left: 5px;
+    }
+
   }
 
   .kaikki-uutiset {
