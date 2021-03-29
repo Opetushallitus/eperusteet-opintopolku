@@ -44,7 +44,6 @@
         <ep-spinner-slot :is-loading="!perusteet">
 
             <div v-for="(ryhma, idx) in perusteetRyhmittain" :key="idx" class="mb-4 mt-4">
-
               <h3>{{ $t(ryhma.theme) }}</h3>
 
               <div v-if="ryhma.kooste" class="d-flex flex-wrap justify-content-between">
@@ -55,7 +54,12 @@
                       <div class="d-flex flex-fill align-items-center">
                         <div class="nimi my-3 mr-3">
                           {{ $t(ryhma.theme) }}
-                          <div class="luotu" >{{ $t('useampia')}}</div>
+                          <div class="luotu" >{{ $t('useampia')}}:
+                            <span v-for="(maara, index) in ryhma.perustemaarat" :key="'kt'+maara.koulutustyyppi">
+                              <span v-if="index > 0">, </span>
+                              <span>{{$t(maara.koulutustyyppi)}} {{maara.lukumaara}} {{$t('kpl')}}</span>
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -63,34 +67,36 @@
                 </div>
               </div>
 
-              <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.id">
-                <div class="valtakunnallinen">
-                  <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
-                    <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
+              <template v-else>
+                <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.id">
+                  <div class="valtakunnallinen">
+                    <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
+                      <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
+                        <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
+                        <div class="d-flex flex-fill align-items-center">
+                          <div class="nimi my-3 mr-3">
+                            {{ $kaanna(peruste.nimi) }}
+                            <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </router-link>
+
+                    <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">
+                      <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
                       <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
                       <div class="d-flex flex-fill align-items-center">
                         <div class="nimi my-3 mr-3">
+                          <fas fixed-width icon="external-link-alt" class="mr-1"></fas>
                           {{ $kaanna(peruste.nimi) }}
                           <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
                         </div>
                       </div>
                     </div>
-                  </router-link>
-
-                  <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">
-                    <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
-                    <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
-                    <div class="d-flex flex-fill align-items-center">
-                      <div class="nimi my-3 mr-3">
-                        <fas fixed-width icon="external-link-alt" class="mr-1"></fas>
-                        {{ $kaanna(peruste.nimi) }}
-                        <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
-                      </div>
-                    </div>
+                    </ep-external-link>
                   </div>
-                  </ep-external-link>
                 </div>
-              </div>
+              </template>
             </div>
 
             <div v-if="perusteet && perusteetRyhmittain.length === 0" class="alert alert-info mt-4">
@@ -113,6 +119,7 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import {
+  AmmatillisetKoulutustyypit,
   EperusteetKoulutustyyppiRyhmaSort,
   EperusteetKoulutustyyppiRyhmat,
   koulutustyyppiStateName,
@@ -221,7 +228,7 @@ export default class RouteHome extends Vue {
     return {
       toteutus: Toteutus.AMMATILLINEN,
       theme: 'koulutustyyppi-ammatillinen',
-      perusteet: [],
+      perustemaarat: this.perusteStore.ammatillisetLukumaarat,
       kooste: true,
       route: {
         name: 'ammatillinenSelaus',
