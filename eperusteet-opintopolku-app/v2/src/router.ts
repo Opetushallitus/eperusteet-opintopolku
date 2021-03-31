@@ -37,6 +37,7 @@ import RouteAipeKurssi from '@/routes/perusteet/sisalto/aipe/RouteAipeKurssi.vue
 import RouteAipeOppiaine from '@/routes/perusteet/sisalto/aipe/RouteAipeOppiaine.vue';
 import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
 import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
+import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
 import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
@@ -673,7 +674,24 @@ export const router = new Router({
             },
           },
         },
-
+      }, {
+        path: 'tavoitesisaltoalue/:tavoitesisaltoalueId',
+        component: RouteTavoitesisaltoalue,
+        name: 'perusteTavoitesisaltoalue',
+        meta: {
+          resolve: {
+            cacheBy: ['tavoitesisaltoalueId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.tavoitesisaltoalueId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'koulutuksenosa/:koulutuksenosaId',
         component: RouteKoulutuksenOsa,
