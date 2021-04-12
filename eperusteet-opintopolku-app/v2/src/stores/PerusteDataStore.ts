@@ -17,7 +17,7 @@ import {
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
-import { isKoulutustyyppiAmmatillinen, stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { isKoulutustyyppiAmmatillinen } from '@shared/utils/perusteet';
 
 @Store
 export class PerusteDataStore {

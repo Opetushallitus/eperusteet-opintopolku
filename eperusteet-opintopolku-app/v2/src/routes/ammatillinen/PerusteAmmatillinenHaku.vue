@@ -57,7 +57,7 @@
     <div class="perusteet" id="perusteet-lista">
 
       <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route">
-        <div class="nimi">{{ $kaanna(peruste.nimi) }}</div>
+        <div class="nimi">{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
         <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
           <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
           <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">

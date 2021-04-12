@@ -5,7 +5,7 @@
       {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
     </template>
     <template slot="header" v-else>
-      {{ $kaanna(peruste.nimi) }}
+      {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
     </template>
     <template slot="subheader" v-if="peruste.tyyppi !=='opas'">
       <div class="diaarinumero">

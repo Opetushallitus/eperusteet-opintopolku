@@ -2,7 +2,7 @@
   <ep-spinner v-if="!peruste" />
   <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
     <template slot="header">
-      {{ $kaanna(peruste.nimi) }}
+      {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
     </template>
     <div class="selaus">
       <b-container fluid>

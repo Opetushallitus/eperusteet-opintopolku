@@ -75,7 +75,7 @@
                         <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
                         <div class="d-flex flex-fill align-items-center">
                           <div class="nimi my-3 mr-3">
-                            {{ $kaanna(peruste.nimi) }}
+                            {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
                             <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
                           </div>
                         </div>
