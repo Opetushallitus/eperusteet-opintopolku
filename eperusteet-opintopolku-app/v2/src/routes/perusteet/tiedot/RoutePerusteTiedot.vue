@@ -2,7 +2,7 @@
 <div class="content">
   <ep-spinner v-if="isLoading"></ep-spinner>
   <div v-else>
-    <h2 class="otsikko" slot="header">
+    <h2 class="otsikko mb-4" slot="header">
       <slot name="header">
         {{ $t('perusteen-tiedot') }}
       </slot>
@@ -11,7 +11,7 @@
       <div class="col-md-12" v-if="peruste.nimi">
         <slot name="nimi">
           <ep-form-content name="peruste-nimi" headerType="h3" headerClass="h6">
-            <ep-field v-model="peruste.nimi"></ep-field>
+            <div>{{$kaanna(peruste.nimi)}} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
           </ep-form-content>
         </slot>
       </div>
