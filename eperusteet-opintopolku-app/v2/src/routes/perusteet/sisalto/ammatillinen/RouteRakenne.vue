@@ -7,7 +7,7 @@
 
       <div class="mb-5" v-html="$kaanna(rakenne.kuvaus)" />
 
-      <h3>{{$kaanna(peruste.nimi)}} {{laajuus}} {{$t('osaamispiste')}}</h3>
+      <h3>{{$kaanna(peruste.nimi)}} <span v-if="laajuus">{{laajuus}} {{$t('osaamispiste')}}</span></h3>
 
       <ep-peruste-rakenne v-if="rakenneOsat" :rakenneOsat="rakenneOsat">
         <template v-slot:nimi="{ rakenneosa }">
