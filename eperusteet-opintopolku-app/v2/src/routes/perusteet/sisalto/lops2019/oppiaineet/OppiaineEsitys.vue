@@ -202,12 +202,20 @@ export default class OppiaineEsitys extends Vue {
 
   get moduulit() {
     if (this.oppiaine) {
-      return this.oppiaine.moduulit;
+      return _.filter(this.oppiaine.moduulit, moduuli => _.size(this.opintojaksojenModuuliUrit) === 0 || _.includes(this.opintojaksojenModuuliUrit, _.get(moduuli, 'koodi.uri')));
     }
   }
 
   get hasModuulit() {
     return !_.isEmpty(this.moduulit);
+  }
+
+  get opintojaksojenModuuliUrit() {
+    return _.chain(this.opintojaksot)
+      .map(opintojakso => opintojakso.moduulit)
+      .flatMap()
+      .map(moduuli => moduuli.koodiUri)
+      .value();
   }
 
   get pakollisetModuulit() {
