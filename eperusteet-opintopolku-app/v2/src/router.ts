@@ -39,6 +39,8 @@ import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
 import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
 import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
 import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
+import RouteKotoKielitaitotaso from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoKielitaitotaso.vue';
+import RouteKotoOpinto from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoOpinto.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -711,6 +713,43 @@ export const router = new Router({
           },
         },
 
+      }, {
+        path: 'koto/kielitaitotaso/:kotokielitaitotasoId',
+        component: RouteKotoKielitaitotaso,
+        name: 'perusteKotoKielitaitotaso',
+        meta: {
+          resolve: {
+            cacheBy: ['kotokielitaitotasoId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.kotokielitaitotasoId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+
+      }, {
+        path: 'koto/opinto/:kotoOpintoId',
+        component: RouteKotoOpinto,
+        name: 'perusteKotoOpinto',
+        meta: {
+          resolve: {
+            cacheBy: ['kotoOpintoId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.kotoOpintoId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }],
     }, {
       path: 'ops/:opetussuunnitelmaId/:koulutustyyppi*',

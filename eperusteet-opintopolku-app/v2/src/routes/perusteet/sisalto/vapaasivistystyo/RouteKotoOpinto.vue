@@ -4,13 +4,14 @@
       <h2 id="tekstikappale-otsikko" class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
 
       <div class="mb-4">
-        <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
+        <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :termit="termit" :kuvat="kuvat" />
         <hr/>
       </div>
 
-      <h3 class="mb-4">{{$t('tavoitteet-ja-keskeiset-sisaltoalueet')}}</h3>
-
-      <EpTavoitesisaltoalueTavoitealueet :value="perusteenOsa.tavoitealueet"/>
+      <EpKotoTaitotasot
+        :value="perusteenOsa.taitotasot"
+        :termit="termit"
+        :kuvat="kuvat"/>
 
       <slot name="previous-next-navigation" />
     </div>
@@ -26,17 +27,17 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import EpTavoitesisaltoalueTavoitealueet from '@shared/components/EpTavoitesisaltoalue/EpTavoitesisaltoalueTavoitealueet.vue';
+import EpKotoTaitotasot from '@shared/components/EpKotoTaitotasot/EpKotoTaitotasot.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpHeading,
     EpContentViewer,
-    EpTavoitesisaltoalueTavoitealueet,
+    EpKotoTaitotasot,
   },
 })
-export default class RouteTavoitesisaltoalue extends Vue {
+export default class RouteKotoOpinto extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
