@@ -5,7 +5,7 @@
     <p>{{ koodi.arvo }}</p>
   </div>
 
-  <div v-if="hasTehtava">
+  <div v-if="hasTehtava" class="mt-4">
     <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
     <ep-content-viewer v-if="oppiaine.tehtava.kuvaus"
                        :value="$kaanna(oppiaine.tehtava.kuvaus)"
@@ -13,7 +13,7 @@
                        :kuvat="kuvat" />
   </div>
 
-  <div v-if="hasLaajaAlaiset">
+  <div v-if="hasLaajaAlaiset" class="mt-4">
     <h3>{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h3>
     <ep-content-viewer v-if="oppiaine.laajaAlaisetOsaamiset.kuvaus"
                        :value="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"
@@ -21,7 +21,14 @@
                        :kuvat="kuvat" />
   </div>
 
-  <div v-if="hasTavoitteet">
+  <div v-if="hasOpiskeluymparistoTyotavat" class="mt-4">
+    <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
+    <ep-content-viewer :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
+                       :termit="termit"
+                       :kuvat="kuvat" />
+  </div>
+
+  <div v-if="hasTavoitteet" class="mt-4">
     <h3>{{ $t('tavoitteet') }}</h3>
     <ep-content-viewer v-if="tavoitteet.kuvaus"
                        :value="$kaanna(tavoitteet.kuvaus)"
@@ -37,7 +44,7 @@
     </div>
   </div>
 
-  <div v-if="hasArviointi">
+  <div v-if="hasArviointi" class="mt-4">
     <h3>{{ $t('arviointi') }}</h3>
     <ep-content-viewer :value="$kaanna(oppiaine.arviointi.kuvaus)"
                        :termit="termit"
@@ -61,7 +68,7 @@
     </router-link>
   </div>
 
-  <div v-if="hasModuulit">
+  <div v-if="hasModuulit" class="mt-4">
     <h3 id="moduulit">{{ $t('moduulit') }}</h3>
 
     <div v-if="hasPakollisetModuulit" class="mb-4">
@@ -97,7 +104,7 @@
     </div>
   </div>
 
-  <div v-if="hasOppimaarat">
+  <div v-if="hasOppimaarat" class="mt-4">
     <h3 id="oppimaarat">{{ $t('oppimaarat') }}</h3>
     <div v-for="(oppimaara, idx) in oppimaaratExtended" :key="idx">
       <router-link v-if="oppimaara.location" :to="oppimaara.location">
@@ -197,6 +204,12 @@ export default class OppiaineEsitys extends Vue {
   get hasArviointi() {
     if (this.oppiaine) {
       return this.oppiaine.arviointi && this.oppiaine.arviointi.kuvaus;
+    }
+  }
+
+  get hasOpiskeluymparistoTyotavat() {
+    if (this.oppiaine) {
+      return this.oppiaine.opiskeluymparistoTyotavat && this.oppiaine.opiskeluymparistoTyotavat.kuvaus;
     }
   }
 

@@ -72,6 +72,26 @@
       </ep-collapse>
     </div>
 
+    <div class="opintojakson-opiskeluymparistoTyotavat" v-if="hasOpiskeluymparistoTyotavat">
+      <ep-collapse>
+        <div class="alueotsikko" slot="header"><h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3></div>
+        <ep-content-viewer
+            :value="$kaanna(opintojakso.opiskeluymparistoTyotavat)"
+            :termit="termit"
+            :kuvat="kuvat" />
+
+        <div v-for="(paikallinenOpintojakso, index) in opintojakso.paikallisetOpintojaksot" :key="index+'paik-opiskeluymparistoTyotavat'" class="mt-4">
+          <div v-if="paikallinenOpintojakso.opiskeluymparistoTyotavat && paikallinenOpintojakso.opiskeluymparistoTyotavat">
+            <div class="moduuliotsikko"><h4>{{ $kaanna(paikallinenOpintojakso.nimi) }}</h4></div>
+             <ep-content-viewer
+              :value="$kaanna(paikallinenOpintojakso.opiskeluymparistoTyotavat)"
+              :termit="termit"
+              :kuvat="kuvat" />
+          </div>
+        </div>
+      </ep-collapse>
+    </div>
+
     <div class="opintojakson-vapaa-kuvaus" v-if="hasKuvaus">
       <ep-collapse>
         <div class="alueotsikko" slot="header"><h3>{{ $t('opintojakson-vapaa-kuvaus') }}</h3></div>
@@ -138,6 +158,7 @@ import EpOpintojaksonKeskeisetSisallot from '@shared/components/lops2019/EpOpint
 import EpOpintojaksonLaajaAlaisetOsaamiset from '@shared/components/lops2019/EpOpintojaksonLaajaAlaisetOsaamiset.vue';
 import EpOpintojaksonArviointi from '@shared/components/lops2019/EpOpintojaksonArviointi.vue';
 import EpOpintojaksonOpintojaksot from '@shared/components/lops2019/EpOpintojaksonOpintojaksot.vue';
+import EpContent from '@shared/components/EpContent/EpContent.vue';
 
 @Component({
   components: {
@@ -152,6 +173,7 @@ import EpOpintojaksonOpintojaksot from '@shared/components/lops2019/EpOpintojaks
     EpOpintojaksonLaajaAlaisetOsaamiset,
     EpOpintojaksonArviointi,
     EpOpintojaksonOpintojaksot,
+    EpContent,
   },
 })
 export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
@@ -428,6 +450,12 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     return _.chain(this.paikallisetOpintojaksot)
       .filter((paikallinenOpintojakso) => !_.isEmpty(paikallinenOpintojakso.arviointi))
       .value();
+  }
+
+  get hasOpiskeluymparistoTyotavat() {
+    if (this.opintojakso) {
+      return this.opintojakso.opiskeluymparistoTyotavat;
+    }
   }
 
   get hasKuvaus() {

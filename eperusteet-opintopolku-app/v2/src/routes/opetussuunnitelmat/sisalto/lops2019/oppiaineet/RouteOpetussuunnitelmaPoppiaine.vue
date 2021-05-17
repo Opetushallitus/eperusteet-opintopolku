@@ -10,7 +10,7 @@
           <p>{{ koodi }}</p>
         </div>
 
-        <div v-if="hasTehtava || hasPerusteenOppianeenTehtava">
+        <div v-if="hasTehtava || hasPerusteenOppianeenTehtava" class="mt-4">
           <h3>{{ $t('tehtava') }}</h3>
           <ep-content-viewer v-if="hasPerusteenOppianeenTehtava"
                              :value="$kaanna(perusteenOppiaine.tehtava.kuvaus)"
@@ -22,7 +22,7 @@
                              :kuvat="kuvat" />
         </div>
 
-        <div v-if="hasTavoitteet || hasPerusteenOppiaineenTavoitteet">
+        <div v-if="hasTavoitteet || hasPerusteenOppiaineenTavoitteet" class="mt-4">
           <h3>{{ $t('tavoitteet') }}</h3>
           <div v-if="hasPerusteenOppiaineenTavoitteet">
             <ep-content-viewer v-if="perusteenOppiaineenTavoitteet"
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <div v-if="hasArviointi || hasPerusteenOppianeenArviointi">
+        <div v-if="hasArviointi || hasPerusteenOppianeenArviointi" class="mt-4">
           <h3>{{ $t('arviointi') }}</h3>
 
           <ep-content-viewer v-if="hasPerusteenOppianeenArviointi"
@@ -73,7 +73,7 @@
                             :kuvat="kuvat" />
         </div>
 
-        <div v-if="hasLaajaAlainenOsaaminen || hasPerusteenOppiaineenLaajaAlainenOsaaminen">
+        <div v-if="hasLaajaAlainenOsaaminen || hasPerusteenOppiaineenLaajaAlainenOsaaminen" class="mt-4">
           <h3>{{ $t('laaja-alainen-osaaminen') }}</h3>
 
           <ep-content-viewer v-if="hasPerusteenOppiaineenLaajaAlainenOsaaminen"
@@ -100,7 +100,19 @@
         </div>
       </div>
 
-      <div v-if="hasOpintojaksot">
+      <div v-if="hasOpiskeluymparistoTyotavat || hasPerusteenOpiskeluymparistoTyotavat" class="mt-4">
+        <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
+        <ep-content-viewer v-if="hasPerusteenOpiskeluymparistoTyotavat"
+                            :value="$kaanna(perusteenOppiaine.opiskeluymparistoTyotavat.kuvaus)"
+                            :termit="termit"
+                            :kuvat="kuvat" />
+        <ep-content-viewer v-if="hasOpiskeluymparistoTyotavat"
+                            :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
+                            :termit="termit"
+                            :kuvat="kuvat" />
+      </div>
+
+      <div v-if="hasOpintojaksot" class="mt-4">
         <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
         <div v-for="(opintojakso, idx) in opintojaksotExtended" :key="'opintojakso'+idx">
           <router-link v-if="opintojakso.location" :to="opintojakso.location">
@@ -211,16 +223,12 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
     }
   }
 
-  get hasTavoitteet() {
-    if (this.tavoitteet) {
-      return !_.isEmpty(this.tavoitteet) && !_.isEmpty(this.tavoitteet.tavoitealueet);
-    }
+  get hasOpiskeluymparistoTyotavat() {
+    return this.oppiaine && this.oppiaine.opiskeluymparistoTyotavat && !_.isEmpty(this.oppiaine.opiskeluymparistoTyotavat.kuvaus);
   }
 
-  get hasPerusteenOppiaineenTavoitteet() {
-    if (this.perusteenOppiaineenTavoitteet) {
-      return !_.isEmpty(this.perusteenOppiaineenTavoitteet) && !_.isEmpty(this.perusteenOppiaineenTavoitteet.tavoitealueet);
-    }
+  get hasPerusteenOpiskeluymparistoTyotavat() {
+    return this.perusteenOppiaine && this.perusteenOppiaine.opiskeluymparistoTyotavat && !_.isEmpty(this.perusteenOppiaine.opiskeluymparistoTyotavat.kuvaus);
   }
 
   get perusteenOppiaineenTavoitteet() {
@@ -238,6 +246,18 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
   get hasPerusteenOppiaineenLaajaAlainenOsaaminen() {
     if (this.perusteenOppiaine) {
       return this.perusteenOppiaine.laajaAlaisetOsaamiset && this.perusteenOppiaine.laajaAlaisetOsaamiset.kuvaus;
+    }
+  }
+
+  get hasTavoitteet() {
+    if (this.tavoitteet) {
+      return !_.isEmpty(this.tavoitteet) && !_.isEmpty(this.tavoitteet.tavoitealueet);
+    }
+  }
+
+  get hasPerusteenOppiaineenTavoitteet() {
+    if (this.perusteenOppiaineenTavoitteet) {
+      return !_.isEmpty(this.perusteenOppiaineenTavoitteet) && !_.isEmpty(this.perusteenOppiaineenTavoitteet.tavoitealueet);
     }
   }
 
