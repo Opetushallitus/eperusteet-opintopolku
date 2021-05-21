@@ -41,6 +41,7 @@ import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo
 import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
 import RouteKotoKielitaitotaso from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoKielitaitotaso.vue';
 import RouteKotoOpinto from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoOpinto.vue';
+import RouteLaajaalainenOsaaminen from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteLaajaalainenOsaaminen.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -712,7 +713,24 @@ export const router = new Router({
             },
           },
         },
-
+      }, {
+        path: 'laajaalainenosaaminen/:laajaalainenosaaminenId',
+        component: RouteLaajaalainenOsaaminen,
+        name: 'perusteLaajaalainenOsaaminen',
+        meta: {
+          resolve: {
+            cacheBy: ['laajaalainenosaaminenId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.laajaalainenosaaminenId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'koto/kielitaitotaso/:kotokielitaitotasoId',
         component: RouteKotoKielitaitotaso,
