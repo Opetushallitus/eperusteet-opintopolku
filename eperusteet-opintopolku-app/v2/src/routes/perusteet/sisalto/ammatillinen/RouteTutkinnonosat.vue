@@ -9,7 +9,7 @@
       <b-table striped hover responsive :items="tutkinnonosat" :fields="fields">
         <template v-slot:cell(nimi)="data">
           <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: data.item.id}}">
-            {{ $kaanna(data.item.nimi) }}
+            {{ $kaanna(data.item.tutkinnonOsa.nimi) }}
           </router-link>
         </template>
       </b-table>
