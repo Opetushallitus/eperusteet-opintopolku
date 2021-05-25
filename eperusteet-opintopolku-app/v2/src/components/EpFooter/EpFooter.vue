@@ -23,7 +23,7 @@
           <ep-linkki :url="$kaanna(linkit.palaute)" icon="envelope"></ep-linkki>
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
-          <a :href="$kaanna(linkit.seloste)">{{ $t('tietosuojaseloste') }}</a>
+          <a :href="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</a>
         </div>
       </div>
     </div>
@@ -70,9 +70,13 @@ export default class EpFooter extends Vue {
         fi: 'mailto:eperusteet@opintopolku.fi',
         sv: 'mailto:eperusteet@opintopolku.fi',
       },
-      seloste: {
+      tietosuojaseloste: {
         fi: 'https://opintopolku.fi/wp/tietosuojaseloste',
         sv: 'https://studieinfo.fi/wp/dataskyddsbeskrivning',
+      },
+      saavutettavuusseloste: {
+        fi: 'https://opintopolku.fi/wp/saavutettavuusseloste/eperusteet-saavutettavuusseloste/',
+        sv: 'https://studieinfo.fi/wp/tillganglighetsutlatande/tillganglighetsutlatande-for-egrunder/',
       },
     };
   }
