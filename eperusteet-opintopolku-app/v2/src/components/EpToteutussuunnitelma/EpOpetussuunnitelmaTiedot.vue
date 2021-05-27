@@ -7,26 +7,20 @@
         <span>{{$kaanna(opetussuunnitelma.nimi)}}</span>
       </ep-form-content>
 
-      <!-- Tiivistelmä -->
+      <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
+        <ep-content-viewer :value="$kaanna(opetussuunnitelma.kuvaus)" :kuvat="kuvat" />
+      </ep-form-content>
 
       <ep-form-content name="hyvaksyja" headerType="h3" headerClass="h6">
         <ep-field v-model="opetussuunnitelma.hyvaksyja" />
-      </ep-form-content>
-
-      <!-- Hyväksymispäivämäärä -->
-
-      <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
-        <ep-field v-model="opetussuunnitelma.perusteDiaarinumero" />
       </ep-form-content>
 
       <ep-form-content name="koulutustyyppi" headerType="h3" headerClass="h6">
         <ep-field v-model="koulutustyyppiName" />
       </ep-form-content>
 
-      <!-- Kunnat -->
-
       <ep-form-content name="organisaatio" headerType="h3" headerClass="h6">
-        <ep-field v-model="koulutustoimija.nimi" />
+        <span>{{$kaanna(koulutustoimija.nimi)}}</span>
       </ep-form-content>
 
       <ep-form-content name="oppilaitoksen-tyyppi" headerType="h3" headerClass="h6" v-if="oppilaitosTyyppiNimi">
@@ -100,6 +94,10 @@ export default class EpOpetussuunnitelmaTiedot extends Vue {
     if (this.opetussuunnitelma?.oppilaitosTyyppiKoodi) {
       return _.mapValues(_.keyBy(this.opetussuunnitelma?.oppilaitosTyyppiKoodi.metadata, v => _.toLower(v.kieli)), v => v.nimi);
     }
+  }
+
+  get kuvat() {
+    return this.store!.kuvat;
   }
 }
 </script>
