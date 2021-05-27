@@ -7,7 +7,7 @@
         <span>{{$kaanna(opetussuunnitelma.nimi)}}</span>
       </ep-form-content>
 
-      <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
+      <ep-form-content name="opetussuunnitelma-tiivistelma" headerType="h3" headerClass="h6">
         <ep-content-viewer :value="$kaanna(opetussuunnitelma.kuvaus)" :kuvat="kuvat" />
       </ep-form-content>
 
