@@ -8,7 +8,7 @@
           <span>{{$kaanna(toteutussuunnitelma.nimi)}}</span>
         </ep-form-content>
 
-        <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
+        <ep-form-content name="tutkinnon-suorittaneen-osaaminen" headerType="h3" headerClass="h6">
           <ep-content-viewer :value="$kaanna(toteutussuunnitelma.kuvaus)"
                             :kuvat="kuvat" />
         </ep-form-content>
