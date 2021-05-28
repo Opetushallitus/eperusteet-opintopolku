@@ -25,6 +25,7 @@ export class PerusteStore {
         voimassaolo: true,
         poistunut: false,
         koulutustyyppi: _.filter(EperusteetKoulutustyypit, kt => !_.includes(AmmatillisetKoulutustyypit, kt)),
+        kieli: query?.kieli,
         julkaistu: true,
         ...(query || {}),
       }

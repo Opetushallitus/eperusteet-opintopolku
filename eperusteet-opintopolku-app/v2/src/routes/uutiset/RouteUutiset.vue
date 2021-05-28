@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { Prop, Component, Vue } from 'vue-property-decorator';
+import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -53,6 +53,7 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { Meta } from '@shared/utils/decorators';
+import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 
 @Component({
   components: {
@@ -65,11 +66,29 @@ import { Meta } from '@shared/utils/decorators';
 export default class RouteUutiset extends Vue {
   @Prop({ required: true })
   private tiedoteStore!: TiedoteStore;
+
+  @Prop({ required: true })
+  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+
   private page = 1;
   private query = '';
 
   public mounted() {
-    this.tiedoteStore.fetchUutiset();
+    this.tiedoteStore.updateFilter({
+      koulutustyypit: this.julkaistutKoulutustyypit,
+      kieli: Kielet.getSisaltoKieli.value,
+    });
+  }
+
+  get julkaistutKoulutustyypit() {
+    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
+  }
+
+  @Watch('sisaltoKieli')
+  async sisaltoKieliChange() {
+    await this.tiedoteStore.updateFilter({
+      kieli: [Kielet.getSisaltoKieli.value],
+    });
   }
 
   get tiedotteet() {

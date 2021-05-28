@@ -13,6 +13,7 @@ import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
+import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
 
 export const perusteKoosteStoreMock = (config: Partial<PerusteKoosteStore> = {}) => {
   return wrap(PerusteKoosteStore.prototype, {
