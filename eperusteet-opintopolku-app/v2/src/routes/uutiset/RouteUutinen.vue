@@ -72,6 +72,7 @@ import { Meta } from '@shared/utils/decorators';
 import { koulutustyyppiStateName } from '@shared/utils/perusteet';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import UutisenKoodit from './UutisenKoodit.vue';
+import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 
 @Component({
   components: {
@@ -86,6 +87,10 @@ import UutisenKoodit from './UutisenKoodit.vue';
 export default class RouteUutinen extends Vue {
   @Prop({ required: true })
   private tiedoteStore!: TiedoteStore;
+
+  @Prop({ required: true })
+  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+
   private page = 1;
   private query = '';
 
@@ -106,8 +111,12 @@ export default class RouteUutinen extends Vue {
     };
   }
 
+  get julkaistutKoulutustyypit() {
+    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
+  }
+
   get perusteet() {
-    return this.tiedoteStore.tiedote?.perusteet;
+    return _.filter(this.tiedoteStore.tiedote?.perusteet, peruste => _.includes(this.julkaistutKoulutustyypit, peruste.koulutustyyppi));
   }
 
   get osaamisalojenPerusteet() {

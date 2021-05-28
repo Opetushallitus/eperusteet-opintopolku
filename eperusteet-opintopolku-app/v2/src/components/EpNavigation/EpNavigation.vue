@@ -13,7 +13,8 @@
 
     <b-collapse id="nav-collapse" is-nav >
       <b-navbar-nav class="flex-wrap">
-        <b-nav-item v-for="(item, idx) in items"
+        <EpSpinner v-if="!julkaistutKoulutustyypit" />
+        <b-nav-item v-else v-for="(item, idx) in items"
                     :key="idx"
                     active
                     :active-class="activeClass"
@@ -41,18 +42,32 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, stateToKoulutustyyppi,
   ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter, RawLocation } from 'vue-router/types/router';
 import { createLogger } from '@shared/utils/logger';
+import { Perusteet } from '@shared/api/eperusteet';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 
 const logger = createLogger('EpNavigation');
 
-@Component
+@Component({
+  components: {
+    EpSpinner,
+  },
+})
 export default class EpNavigation extends Vue {
+  @Prop({ required: true })
+  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+
+  get julkaistutKoulutustyypit() {
+    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
+  }
+
   get valittuKieli() {
     return Kielet.getUiKieli;
   }
@@ -134,12 +149,12 @@ export default class EpNavigation extends Vue {
   }
 
   get items() {
-    return [
+    return _.filter([
       ...this.yleissivistavat,
       ...this.ammatilliset,
       ...this.vapaasivistystyo,
       ...this.tutkintoonvalmentava,
-    ];
+    ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi)));
   }
 
   async valitseKieli(kieli) {

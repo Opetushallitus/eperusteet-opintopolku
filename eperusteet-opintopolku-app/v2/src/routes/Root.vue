@@ -2,9 +2,9 @@
 <div>
   <a class="sr-only sr-only-focusable skip-to-content" href="#main">{{ $t('siirry-sisaltoon') }}</a>
   <EpFeedbackModal :palauteProvider="palauteStore"/>
-  <ep-navigation role="banner"></ep-navigation>
+  <ep-navigation role="banner" :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"></ep-navigation>
   <main class="router-container" role="main">
-    <router-view />
+    <router-view v-if="julkaistutKoulutustyypit"/>
   </main>
   <ep-footer />
 </div>
@@ -12,12 +12,14 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
 import EpFeedbackModal from '@shared/components/EpFeedback/EpFeedbackModal.vue';
 import { Meta } from '@shared/utils/decorators';
 import { PalauteStore } from '@/stores/PalauteStore';
+import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -29,6 +31,26 @@ import { PalauteStore } from '@/stores/PalauteStore';
 export default class Root extends Vue {
   @Prop({ required: true })
   private palauteStore!: PalauteStore;
+
+  @Prop({ required: true })
+  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+
+  async mounted() {
+    await this.sisaltoKieliChange();
+  }
+
+  @Watch('sisaltoKieli')
+  async sisaltoKieliChange() {
+    await this.julkaistutKoulutustyypitStore.fetch(this.sisaltoKieli);
+  }
+
+  get julkaistutKoulutustyypit() {
+    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
+  }
+
+  get sisaltoKieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
 
   get titleTemplate() {
     return '%s - ' + this.$t('eperusteet');

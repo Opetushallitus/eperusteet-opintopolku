@@ -1,10 +1,12 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteHome from './RouteHome.vue';
-import { mocks, stubs } from '@shared/utils/jestutils';
+import { mock, mocks, stubs } from '@shared/utils/jestutils';
 import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
+import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 
 describe('RouteHome', () => {
   const localVue = createLocalVue();
+  const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
 
   const $route = {
     params: {
@@ -21,6 +23,7 @@ describe('RouteHome', () => {
       propsData: {
         perusteStore,
         tiedoteStore,
+        julkaistutKoulutustyypitStore,
       },
       stubs: {
         ...stubs,
@@ -70,6 +73,7 @@ describe('RouteHome', () => {
       propsData: {
         perusteStore,
         tiedoteStore,
+        julkaistutKoulutustyypitStore,
       },
       stubs: {
         ...stubs,

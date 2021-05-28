@@ -135,6 +135,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { Koulutustyyppi } from '@shared/tyypit';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { onkoUusi } from '@shared/utils/tiedote';
+import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 
 @Component({
   components: {
@@ -150,11 +151,22 @@ export default class RouteHome extends Vue {
   @Prop({ required: true })
   private tiedoteStore!: TiedoteStore;
 
+  @Prop({ required: true })
+  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+
   private query = '';
 
   async mounted() {
+    await this.fetchAll();
+  }
+
+  async fetchAll() {
     this.fetcPerusteet();
-    this.tiedoteStore.getUusimmat();
+    this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
+  }
+
+  get julkaistutKoulutustyypit() {
+    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
   }
 
   get perusteet() {
@@ -181,10 +193,20 @@ export default class RouteHome extends Vue {
     }
   }
 
+  @Watch('sisaltoKieli')
+  async sisaltoKieliChange() {
+    await this.fetchAll();
+  }
+
+  get sisaltoKieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
   private async fetcPerusteet() {
     await this.perusteStore.getYleisetPerusteet(
       {
         nimi: this.query,
+        kieli: [this.sisaltoKieli],
         ...(!_.isEmpty(this.query) && { koulutustyyppi: undefined }),
       });
   }

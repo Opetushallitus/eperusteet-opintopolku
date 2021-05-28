@@ -106,6 +106,7 @@ import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
 import { getKoostePaikallinenComponent, getKoostePaikallinenStore } from '@/utils/toteutustypes';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
+import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -120,6 +121,7 @@ const ammatillistenTiedotteetStore = new AmmatillistenTiedoteStore();
 const koulutuksenJarjestajatStore = new KoulutuksenJarjestajatStore();
 const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
 const palauteStore = new PalauteStore();
+const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
 
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
@@ -170,6 +172,7 @@ export const router = new Router({
     component: Root,
     props: {
       palauteStore,
+      julkaistutKoulutustyypitStore,
     },
     children: [{
       path: '',
@@ -182,6 +185,7 @@ export const router = new Router({
               default: {
                 perusteStore,
                 tiedoteStore,
+                julkaistutKoulutustyypitStore,
               },
             };
           },
@@ -292,6 +296,7 @@ export const router = new Router({
               default: {
                 perusteStore,
                 tiedoteStore,
+                julkaistutKoulutustyypitStore,
               },
             };
           },
@@ -308,6 +313,7 @@ export const router = new Router({
               default: {
                 perusteStore,
                 tiedoteStore,
+                julkaistutKoulutustyypitStore,
               },
             };
           },

@@ -29,7 +29,7 @@ Vue.use(Notifications);
 Vue.use(VueI18n);
 Vue.use(VueCompositionApi);
 Vue.use(PortalVue);
-Vue.use(Kaannos);
+Vue.use(Kaannos, { squareBrackets: false });
 Vue.use(Aikaleima);
 Vue.use(Vahvistus);
 
