@@ -63,8 +63,8 @@
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasTiivistelma">
-        <ep-form-content name="tiivistelma" headerType="h3" headerClass="h6">
-          <ep-content-viewer v-model="opetussuunnitelma.kuvaus"/>
+        <ep-form-content name="ops-kuvaus" headerType="h3" headerClass="h6">
+          <ep-content-viewer :value="$kaanna(opetussuunnitelma.kuvaus)" :termit="termit" :kuvat="kuvat"/>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="dokumentti">
@@ -154,6 +154,14 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
     else {
       return nimi;
     }
+  }
+
+  get termit() {
+    return this.opetussuunnitelmaDataStore.termit;
+  }
+
+  get kuvat() {
+    return this.opetussuunnitelmaDataStore.kuvat;
   }
 }
 </script>
