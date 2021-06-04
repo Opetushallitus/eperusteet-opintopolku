@@ -19,5 +19,6 @@ export function uusiJulkinenToteutus(hasToteutus: HasKoulutustyyppiToteutus) {
         || hasToteutus.toteutus === KoulutustyyppiToteutus.vst.valueOf()
         || hasToteutus.koulutustyyppi === Koulutustyyppi.vapaasivistystyo
         || hasToteutus.koulutustyyppi === Koulutustyyppi.aikuistenperusopetus
+        || hasToteutus.koulutustyyppi === Koulutustyyppi.tutkintoonvalmentava
         || koulutustyyppiTheme(hasToteutus.koulutustyyppi as string) === 'ammatillinen');
 }

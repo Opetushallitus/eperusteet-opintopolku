@@ -19,9 +19,12 @@
       <ep-content-viewer :value="$kaanna(alikappaleViite.perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
     </div>
 
+    <EpOpasKiinnitysLinkki :koodiUri="osaamisalaKoodiUri" v-if="osaamisalaKoodiUri"/>
+
     <slot name="previous-next-navigation" />
   </div>
   <ep-spinner v-else />
+
 </div>
 </template>
 
@@ -34,12 +37,14 @@ import { ViiteLaaja } from '@shared/api/eperusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpHeading,
     EpContentViewer,
+    EpOpasKiinnitysLinkki,
   },
 })
 export default class RouteTekstikappale extends Vue {
@@ -108,6 +113,10 @@ export default class RouteTekstikappale extends Vue {
 
   get tekstikappaleenOsa() {
     return this.$route.params.osa;
+  }
+
+  get osaamisalaKoodiUri() {
+    return (this.perusteenOsa as any)?.osaamisala?.uri;
   }
 }
 

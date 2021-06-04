@@ -38,6 +38,8 @@
         </ul>
       </div>
 
+      <EpOpasKiinnitysLinkki :koodiUri="osaamiskokonaisuusKoodiUri"/>
+
       <slot name="previous-next-navigation" />
     </div>
     <ep-spinner v-else />
@@ -53,12 +55,14 @@ import { ViiteLaaja } from '@shared/api/eperusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpHeading,
     EpContentViewer,
+    EpOpasKiinnitysLinkki,
   },
 })
 export default class RouteOpintokokonaisuus extends Vue {
@@ -96,6 +100,10 @@ export default class RouteOpintokokonaisuus extends Vue {
 
   get current() {
     return this.perusteDataStore.current || null;
+  }
+
+  get osaamiskokonaisuusKoodiUri() {
+    return (this.perusteenOsa as any)?.nimiKoodi.uri;
   }
 }
 

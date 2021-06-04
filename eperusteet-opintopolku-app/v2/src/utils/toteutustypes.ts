@@ -4,6 +4,7 @@ import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 import VstPaikalliset from '@/routes/kooste/VstPaikalliset.vue';
 
 export const koostePaikallinenStore = {
+  'tutkintoonvalmentava': (): any => null,
   'vapaasivistystyo': (): any => new VapaasivistystyoPaikallisetStore(),
   'default': (): any => new YleissivistavatPaikallisetStore(),
 };
