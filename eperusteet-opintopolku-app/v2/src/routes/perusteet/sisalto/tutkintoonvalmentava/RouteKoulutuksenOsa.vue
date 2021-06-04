@@ -65,6 +65,9 @@
           </b-col>
         </b-row>
       </template>
+
+      <EpOpasKiinnitysLinkki :koodiUri="koulutuksenosaKoodiUri"/>
+
       <slot name="previous-next-navigation" />
     </template>
     <ep-spinner v-else />
@@ -80,12 +83,14 @@ import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 
 @Component({
   components: {
     EpContentViewer,
     EpFormContent,
     EpSpinner,
+    EpOpasKiinnitysLinkki,
   },
 })
 export default class RouteKoulutuksenOsa extends Vue {
@@ -114,6 +119,10 @@ export default class RouteKoulutuksenOsa extends Vue {
 
   get kuvat() {
     return this.perusteDataStore.kuvat;
+  }
+
+  get koulutuksenosaKoodiUri() {
+    return (this.perusteenOsa as any)?.nimiKoodi?.uri;
   }
 }
 </script>

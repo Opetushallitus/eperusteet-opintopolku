@@ -59,7 +59,7 @@
           </ep-julki-lista>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="paikallinenStore">
         <b-col >
           <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
         </b-col>

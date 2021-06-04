@@ -7,6 +7,8 @@
       <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
       <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
 
+      <EpOpasKiinnitysLinkki :koodiUri="tutkinnonosaKoodiUri"/>
+
     </div>
   </div>
 </template>
@@ -19,12 +21,14 @@ import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNormaali.vue';
 import EpTutkinnonosaTutke from '@/components/EpAmmatillinen/EpTutkinnonosaTutke.vue';
+import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpTutkinnonosaNormaali,
     EpTutkinnonosaTutke,
+    EpOpasKiinnitysLinkki,
   },
 })
 export default class RouteTutkinnonosa extends Vue {
@@ -41,6 +45,10 @@ export default class RouteTutkinnonosa extends Vue {
 
   get arviointiasteikot() {
     return this.tutkinnonosaStore.arviointiasteikot.value;
+  }
+
+  get tutkinnonosaKoodiUri() {
+    return this.tutkinnonosa.koodi.uri;
   }
 }
 </script>

@@ -8,6 +8,9 @@
                        :termit="termit"
                        :kuvat="kuvat" />
     </div>
+
+    <EpOpasKiinnitysLinkki :koodiUri="oppiaineKoodiUri"/>
+
     <slot name="previous-next-navigation" />
   </div>
   <ep-spinner v-else />
@@ -20,11 +23,13 @@ import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import OppiaineEsitys from './OppiaineEsitys.vue';
+import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 
 @Component({
   components: {
     EpSpinner,
     OppiaineEsitys,
+    EpOpasKiinnitysLinkki,
   },
 })
 export default class RouteOppiaine extends Vue {
@@ -44,6 +49,10 @@ export default class RouteOppiaine extends Vue {
 
   get oppiaine() {
     return this.lops2019OppiaineStore.oppiaine;
+  }
+
+  get oppiaineKoodiUri() {
+    return this.oppiaine?.koodi?.uri;
   }
 }
 </script>
