@@ -37,11 +37,6 @@
             <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
           </div>
 
-          <div class="mt-4" v-if="hasContent(vlk.arviointi)">
-            <h3>{{$kaanna(vlk.arviointi.otsikko)}}</h3>
-            <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
-          </div>
-
           <div class="mt-4" v-if="vlk.tavoitteet.length > 0">
             <h3>{{$t('oppiaineen-tavoitteet')}}</h3>
             <ep-button variant="link" @click="toggleTavoitteet()">
