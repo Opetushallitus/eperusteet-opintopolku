@@ -7,8 +7,8 @@
         <div class="rakenne" :style="rakenneStyle">
           <div class="d-flex w-100 justify-content-between" :class="{'kuvaukseton': !rakenneosa.kuvaus}" @click="toggleRakenne()">
             <div v-if="rakenneosa.osat && rakenneosa.osat.length > 0">
-              <fas icon="chevron-up" v-if="!naytaRakenne"></fas>
-              <fas icon="chevron-down" v-else></fas>
+              <fas icon="chevron-down" v-if="!naytaRakenne"></fas>
+              <fas icon="chevron-up" v-else></fas>
             </div>
             <div class="w-75" :class="{'ml-3' : rakenneosa.osat && rakenneosa.osat.length > 0}">
               <slot name="nimi" v-bind:rakenneosa="rakenneosa">
