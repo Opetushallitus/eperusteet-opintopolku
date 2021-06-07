@@ -12,23 +12,24 @@
       <ep-peruste-rakenne v-if="rakenneOsat" :rakenneOsat="rakenneOsat">
         <template v-slot:nimi="{ rakenneosa }">
 
-          <div v-if="rakenneosa.tutkinnonosa">
-            <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}">
-              <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa._tutkinnonOsaViite" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
-              {{$kaanna(rakenneosa.tutkinnonosa.nimi)}}
-            </router-link>
-            <b-popover :target="'tutkinto'+rakenneosa._tutkinnonOsaViite" :placement="'bottom'" triggers="hover">
-              <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
-              <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
-            </b-popover>
-          </div>
-          <span v-else>
-            {{$kaanna(rakenneosa.nimi)}}
-          </span>
+          <div class="d-flex">
+            <div v-if="rakenneosa.tutkinnonosa">
+              <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}">
+                <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa._tutkinnonOsaViite" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
+                {{$kaanna(rakenneosa.tutkinnonosa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
+              </router-link>
+              <b-popover :target="'tutkinto'+rakenneosa._tutkinnonOsaViite" :placement="'bottom'" triggers="hover">
+                <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
+                <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
+              </b-popover>
+            </div>
+            <span v-else>
+              {{$kaanna(rakenneosa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
+            </span>
 
+          </div>
         </template>
       </ep-peruste-rakenne>
-
     </div>
   </div>
 </template>
@@ -76,7 +77,31 @@ export default class RouteRakenne extends Vue {
   }
 
   get rakenneOsat() {
-    return this.rakenne.osat;
+    return this.setRakenneOsaKoodi(this.rakenne.osat);
+  }
+
+  setRakenneOsaKoodi(rakenneOsat) {
+    return _.map(rakenneOsat, rakenneosa => {
+      return {
+        ...rakenneosa,
+        koodiArvo: this.getRakenneosaKoodiArvo(rakenneosa),
+        osat: this.setRakenneOsaKoodi(rakenneosa.osat),
+      };
+    });
+  }
+
+  getRakenneosaKoodiArvo(rakenneosa) {
+    if (rakenneosa.tutkintonimike?.arvo) {
+      return rakenneosa.tutkintonimike?.arvo;
+    }
+
+    if (rakenneosa.tutkinnonosa?.tutkinnonOsa?.koodi?.arvo) {
+      return rakenneosa.tutkinnonosa?.tutkinnonOsa?.koodi?.arvo;
+    }
+
+    if (rakenneosa.osaamisala?.osaamisalakoodiArvo) {
+      return rakenneosa.osaamisala?.osaamisalakoodiArvo;
+    }
   }
 
   get laajuus() {
