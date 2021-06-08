@@ -10,7 +10,7 @@
         </b-col>
         <b-col lg="6" md="12">
           <ep-form-content name="laajuus" headerType="h4">
-            <span>{{perusteenOsa.laajuusMinimi}} - {{perusteenOsa.laajuusMaksimi}}</span>
+            <span>{{perusteenOsa.laajuusMinimi}} - {{perusteenOsa.laajuusMaksimi}} {{$t('viikkoa')}}</span>
           </ep-form-content>
         </b-col>
       </b-row>
