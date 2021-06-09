@@ -2,7 +2,7 @@
   <div class="content">
     <ep-spinner v-if="!tutkinnonosa"></ep-spinner>
     <div v-else>
-      <h2 class="otsikko mb-4" slot="header">{{ $kaanna(tutkinnonosaViite.nimi)}}, {{tutkinnonosaViite.laajuus}} {{$t('osaamispiste')}}</h2>
+      <h2 class="otsikko mb-4" slot="header">{{ $kaanna(tutkinnonosaViite.tutkinnonOsa.nimi)}}, {{tutkinnonosaViite.laajuus}} {{$t('osaamispiste')}}</h2>
 
       <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
       <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
