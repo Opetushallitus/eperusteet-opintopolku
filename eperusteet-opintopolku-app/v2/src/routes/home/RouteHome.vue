@@ -76,7 +76,7 @@
                         <div class="d-flex flex-fill align-items-center">
                           <div class="nimi my-3 mr-3">
                             {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
-                            <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                            <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.voimassaoloAlkaa) }}</div>
                           </div>
                         </div>
                       </div>
@@ -89,7 +89,7 @@
                         <div class="nimi my-3 mr-3">
                           <fas fixed-width icon="external-link-alt" class="mr-1"></fas>
                           {{ $kaanna(peruste.nimi) }}
-                          <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.luotu) }}</div>
+                          <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.voimassaoloAlkaa) }}</div>
                         </div>
                       </div>
                     </div>
