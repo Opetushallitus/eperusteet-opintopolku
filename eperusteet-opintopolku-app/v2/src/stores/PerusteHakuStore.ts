@@ -73,13 +73,13 @@ export class PerusteHakuStore {
     this.perPage = result.sivukoko;
     this.pages = result.sivuja;
     this.perusteet = result.data;
-  }, 300);
+  }, 1000);
 
-  public updateFilters(filters: PerusteQuery) {
+  async updateFilters(filters: PerusteQuery) {
     this.filterdata = {
       ...this.filters,
       ...filters,
     };
-    this.fetch();
+    await this.fetch();
   }
 }
