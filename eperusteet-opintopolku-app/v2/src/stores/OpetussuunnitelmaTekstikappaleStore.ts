@@ -64,13 +64,18 @@ export class OpetussuunnitelmaTekstikappaleStore {
   async fetchPerusteTekstikappale() {
     this.perusteTekstikappaleViite = null;
     if (this.tekstiKappaleViite && this.tekstiKappaleViite.perusteTekstikappaleId) {
-      if (this.opstoteutus === 'lukio' || this.opstoteutus === 'lukiokoulutus') {
-        this.perusteTekstikappaleViite = (await Lops2019Perusteet
-          .getAllLops2019PerusteTekstikappale(this.opsId,
-            this.tekstiKappaleViite.perusteTekstikappaleId)).data as PerusteTekstiKappaleViiteDto;
+      try {
+        if (this.opstoteutus === 'lukio' || this.opstoteutus === 'lukiokoulutus') {
+          this.perusteTekstikappaleViite = (await Lops2019Perusteet
+            .getAllLops2019PerusteTekstikappale(this.opsId,
+              this.tekstiKappaleViite.perusteTekstikappaleId)).data as PerusteTekstiKappaleViiteDto;
+        }
+        else {
+          this.perusteTekstikappaleViite = (await OpetussuunnitelmanSisalto.getPerusteTekstikappale(this.opsId, this.tekstiKappaleViiteId)).data;
+        }
       }
-      else {
-        this.perusteTekstikappaleViite = (await OpetussuunnitelmanSisalto.getPerusteTekstikappale(this.opsId, this.tekstiKappaleViiteId)).data;
+      catch (err) {
+        console.error(err);
       }
     }
   }
