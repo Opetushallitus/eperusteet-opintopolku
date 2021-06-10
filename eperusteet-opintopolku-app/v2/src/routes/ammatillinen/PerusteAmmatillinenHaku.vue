@@ -13,9 +13,9 @@
         </span>
       </div>
 
-      <div class="d-flex flex-lg-row flex-column">
+      <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
         <b-form-group :label="$t('hae')" class="flex-fill">
-          <ep-search v-model="query"/>
+          <ep-search v-model="query" />
         </b-form-group>
         <b-form-group :label="$t('tutkintotyyppi')">
           <EpMultiSelect
@@ -38,9 +38,9 @@
       </div>
     </div>
 
-    <ep-search v-else v-model="query" :placeholder="searchPlaceholder"/>
+    <ep-search v-else v-model="query" :placeholder="searchPlaceholder" :class="{'disabled-events': !perusteet}"/>
 
-    <div class="checkboxes d-flex align-self-center flex-wrap flex-lg-row flex-column">
+    <div class="checkboxes d-flex align-self-center flex-wrap flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
       <ep-toggle v-for="(toggle, idx) in toggles"
                  :key="idx"
                  v-model="filters[toggle]"
