@@ -39,12 +39,12 @@
             </template>
 
             <div class="pl-4 mb-4 sisaltoaluekuvaus" v-if="sisaltoalue.vuosiluokanSisaltoalue">
-              <div v-if="!sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta && !sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus"
-                v-html="$kaanna(sisaltoalue.kuvaus)"></div>
-              <div v-else-if="sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta"
-                v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.omaKuvaus)"></div>
-              <div v-else-if="sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus"
-                v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus)"></div>
+              <div v-if="sisaltoalue.kuvaus" v-html="$kaanna(sisaltoalue.kuvaus)"></div>
+              <div v-if="sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta || sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus">
+                <div class="font-weight-bold">{{$t('paikallinen-teksti')}}</div>
+                <div v-if="sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta" v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.omaKuvaus)"></div>
+                <div v-else-if="sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus" v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus)"></div>
+              </div>
             </div>
 
           </ep-collapse>
