@@ -38,6 +38,10 @@
       </ep-sidebar>
     </div>
   </div>
+
+  <EpEsikatseluNotifikaatio v-if="perusteEsikatselussa">
+    <div>{{$t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu')}}</div>
+  </EpEsikatseluNotifikaatio>
 </div>
 </template>
 
@@ -53,6 +57,8 @@ import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
+import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
+import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 
 @Component({
   components: {
@@ -62,6 +68,7 @@ import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPr
     EpPreviousNextNavigation,
     EpFormContent,
     EpField,
+    EpEsikatseluNotifikaatio,
   },
 })
 export default class RoutePeruste extends Vue {
@@ -116,14 +123,21 @@ export default class RoutePeruste extends Vue {
       };
     }
   }
+
+  get perusteEsikatselussa() {
+    return this.perusteDataStore.projektitila !== _.toLower(PerusteprojektiDtoTilaEnum.JULKAISTU);
+  }
 }
 </script>
 
 <style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
+
 .peruste {
   .diaarinumero {
     font-weight: bold;
     font-size: small;
   }
 }
+
 </style>

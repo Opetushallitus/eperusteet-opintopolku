@@ -27,6 +27,10 @@
       </ep-sidebar>
     </div>
   </div>
+
+  <EpEsikatseluNotifikaatio v-if="opetussuunnitelmaEsikatselussa">
+    <div>{{$t('olet-esikatselutilassa-suunnitelmaa-ei-ole-viela-julkaistu')}}</div>
+  </EpEsikatseluNotifikaatio>
 </div>
 </template>
 
@@ -41,6 +45,9 @@ import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenav.vue';
 import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
+import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
+import { OpetussuunnitelmaKevytDtoTilaEnum } from '@shared/api/ylops';
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -48,6 +55,7 @@ import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
     EpHeader,
     EpSidebar,
     EpPreviousNextNavigation,
+    EpEsikatseluNotifikaatio,
   },
 })
 export default class RouteOpetussuunnitelma extends Vue {
@@ -97,6 +105,10 @@ export default class RouteOpetussuunnitelma extends Vue {
         title: (this as any).$kaanna(this.opetussuunnitelma.nimi),
       };
     }
+  }
+
+  get opetussuunnitelmaEsikatselussa() {
+    return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU);
   }
 }
 </script>

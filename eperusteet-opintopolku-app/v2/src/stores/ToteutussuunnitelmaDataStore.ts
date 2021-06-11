@@ -59,6 +59,9 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @Getter(state => state.opetussuunnitelma.peruste ? state.opetussuunnitelma.peruste.koulutustyyppi : state.opetussuunnitelma.koulutustyyppi)
   public readonly koulutustyyppi!: string;
 
+  @Getter(state => state.opetussuunnitelma.tila)
+  public readonly tila!: string;
+
   @Getter(state => _.map(state.opetussuunnitelma.liitteet, liite => ({
     id: liite.id!,
     src: baseURL + LiitetiedostotParam.getImage(state.opetussuunnitelma.id!, liite.id!).url,

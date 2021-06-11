@@ -22,6 +22,7 @@ import { isKoulutustyyppiAmmatillinen } from '@shared/utils/perusteet';
 @Store
 export class PerusteDataStore {
   @State() public peruste: PerusteDto | null = null;
+  @State() public projektitila: string | null = null;
   @State() public perusteId: number;
   @State() public navigation: NavigationNodeDto | null = null;
   @State() public suoritustapa: string | null = null;
@@ -50,6 +51,7 @@ export class PerusteDataStore {
 
   private async init() {
     this.peruste = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
+    this.projektitila = (await Perusteet.getPerusteProjektiTila(this.perusteId)).data;
     this.termit = (await Termit.getAllTermit(this.perusteId)).data;
     this.kuvat = _.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
       id: kuva.id!,
