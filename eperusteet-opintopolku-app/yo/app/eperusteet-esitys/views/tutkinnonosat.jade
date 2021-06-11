@@ -26,7 +26,7 @@ div
         span.badge.jarjestysnumero(ng-show='v.jarjestys') {{v.jarjestys || '-' }}
       .otsikko.otsikko-esitys
         h3
-          a(ui-sref='root.esitys.peruste.tutkinnonosa({ id: v.id })') {{ v.nimi | kaanna }}
+          a(ui-sref='root.esitys.peruste.tutkinnonosa({ id: v.id })') {{ v.tutkinnonOsa.nimi || v.nimi | kaanna }}
         .pienet-tiedot
           .osan-laajuus(ng-if="v.laajuus") {{ v.laajuus }} {{ yksikko || '' | kaanna }}
   .clearfix
