@@ -3,6 +3,7 @@ import { Cancelable } from 'lodash';
 
 export interface IOpetussuunnitelmaStore {
   opetussuunnitelma: any;
+  tila: any,
   koulutustyyppi: string;
   current: NavigationNode | null;
   sidenavFilter: NavigationFilter;

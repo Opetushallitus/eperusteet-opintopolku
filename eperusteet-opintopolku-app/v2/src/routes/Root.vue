@@ -7,6 +7,8 @@
     <router-view v-if="julkaistutKoulutustyypit"/>
   </main>
   <ep-footer />
+
+  <portal-target name="footernotifikaatio" slim/>
 </div>
 </template>
 
@@ -20,12 +22,14 @@ import { Meta } from '@shared/utils/decorators';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { Kielet } from '@shared/stores/kieli';
+import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
 
 @Component({
   components: {
     EpFooter,
     EpNavigation,
     EpFeedbackModal,
+    EpEsikatseluNotifikaatio,
   },
 })
 export default class Root extends Vue {
