@@ -7,7 +7,7 @@
       <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
       <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
 
-      <EpOpasKiinnitysLinkki :koodiUri="tutkinnonosaKoodiUri"/>
+      <EpOpasKiinnitysLinkki v-if="tutkinnonosaKoodiUri" :koodiUri="tutkinnonosaKoodiUri"/>
 
     </div>
   </div>
@@ -48,7 +48,7 @@ export default class RouteTutkinnonosa extends Vue {
   }
 
   get tutkinnonosaKoodiUri() {
-    return this.tutkinnonosa.koodi.uri;
+    return this.tutkinnonosa.koodi?.uri;
   }
 }
 </script>
