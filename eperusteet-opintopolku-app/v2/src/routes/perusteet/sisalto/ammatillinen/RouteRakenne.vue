@@ -16,7 +16,7 @@
             <div v-if="rakenneosa.tutkinnonosa">
               <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}">
                 <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa._tutkinnonOsaViite" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
-                {{$kaanna(rakenneosa.tutkinnonosa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
+                {{$kaanna(rakenneosa.tutkinnonosa.tutkinnonOsa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
               </router-link>
               <b-popover :target="'tutkinto'+rakenneosa._tutkinnonOsaViite" :placement="'bottom'" triggers="hover">
                 <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
