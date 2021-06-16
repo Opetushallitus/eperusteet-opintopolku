@@ -276,7 +276,7 @@ angular
 
         $scope.tutkinnonOsaSolmunNimi = function(solmu) {
             if (solmu._tutkinnonOsaViite) {
-                return $scope.tutkinnonOsaViitteet[solmu._tutkinnonOsaViite].nimi;
+                return $scope.tutkinnonOsaViitteet[solmu._tutkinnonOsaViite].tutkinnonOsa.nimi;
             } else if (solmu.erikoisuus) {
                 return (solmu.vieras && solmu.vieras.nimi) || "nimeton-vierastutkinto";
             } else {
