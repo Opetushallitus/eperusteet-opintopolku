@@ -25,6 +25,25 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
       />
+
+      <ep-toteutussuunnitelma-laajaalainen-osaaminen
+        v-else-if="sisaltoviite.tyyppi === 'laajaalainenosaaminen'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+      />
+
+      <ep-toteutussuunnitelma-koulutuksen-osat
+        v-else-if="sisaltoviite.tyyppi === 'koulutuksenosat'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+        :opetussuunnitelma="opetussuunnitelma"
+      />
+
+      <ep-toteutussuunnitelma-koulutuksen-osa
+        v-else-if="sisaltoviite.tyyppi === 'koulutuksenosa'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+      />
     </div>
   </div>
 </template>
@@ -38,6 +57,9 @@ import EpToteutussuunnitelmaTekstikappale from '@/components/EpToteutussuunnitel
 import EpToteutussuunnitelmaTutkinnonosa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTutkinnonosa.vue';
 import EpToteutussuunnitelmaSuorituspolku from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaSuorituspolku.vue';
 import EpToteutussuunnitelmaOpintokokonaisuus from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOpintokokonaisuus.vue';
+import EpToteutussuunnitelmaLaajaalainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaLaajaalainenOsaaminen.vue';
+import EpToteutussuunnitelmaKoulutuksenOsat from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsat.vue';
+import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsa.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 
 @Component({
@@ -47,6 +69,9 @@ import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataSt
     EpToteutussuunnitelmaTutkinnonosa,
     EpToteutussuunnitelmaSuorituspolku,
     EpToteutussuunnitelmaOpintokokonaisuus,
+    EpToteutussuunnitelmaLaajaalainenOsaaminen,
+    EpToteutussuunnitelmaKoulutuksenOsat,
+    EpToteutussuunnitelmaKoulutuksenOsa,
   },
 })
 export default class RouteToteutussuunnitelmaSisalto extends Vue {

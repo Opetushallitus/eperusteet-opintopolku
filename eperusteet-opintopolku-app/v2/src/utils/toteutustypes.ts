@@ -2,14 +2,17 @@ import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaika
 import { YleissivistavatPaikallisetStore } from '@/stores/YleissivistavatPaikallisetStore';
 import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 import VstPaikalliset from '@/routes/kooste/VstPaikalliset.vue';
+import TuvaPaikalliset from '@/routes/kooste/TuvaPaikalliset.vue';
+import { TuvaPaikallisetStore } from '@/stores/TuvaPaikallisetStore';
 
 export const koostePaikallinenStore = {
-  'tutkintoonvalmentava': (): any => null,
+  'tutkintoonvalmentava': (): any => new TuvaPaikallisetStore(),
   'vapaasivistystyo': (): any => new VapaasivistystyoPaikallisetStore(),
   'default': (): any => new YleissivistavatPaikallisetStore(),
 };
 
 export const koostePaikallinenComponent = {
+  'tutkintoonvalmentava': TuvaPaikalliset,
   'vapaasivistystyo': VstPaikalliset,
   'default': Paikalliset,
 };
