@@ -1,7 +1,7 @@
 <template>
   <div>
     <ep-toteutussuunnitelma-tiedot
-      v-if="isAmmatillinen"
+      v-if="naytaToteutussuunnitelmaTiedot"
       :store="opetussuunnitelmaDataStore" />
     <ep-opetussuunnitelma-tiedot
       v-if="isVapaasivistystyo"
@@ -16,6 +16,7 @@ import EpToteutussuunnitelmaTiedot from '@/components/EpToteutussuunnitelma/EpTo
 import EpOpetussuunnitelmaTiedot from '@/components/EpToteutussuunnitelma/EpOpetussuunnitelmaTiedot.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { AmmatillisetKoulutustyypit, VapaasivistystyoKoulutustyypit } from '@shared/utils/perusteet';
+import { Koulutustyyppi } from '@shared/tyypit';
 
 @Component({
   components: {
@@ -27,8 +28,12 @@ export default class RouteToteutussuunnitelmaTiedot extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
-  get isAmmatillinen() {
-    return _.includes(AmmatillisetKoulutustyypit, this.opetussuunnitelmaDataStore.koulutustyyppi);
+  get naytaToteutussuunnitelmaTiedot() {
+    return _.includes(
+      [
+        ...AmmatillisetKoulutustyypit,
+        Koulutustyyppi.tutkintoonvalmentava,
+      ], this.opetussuunnitelmaDataStore.koulutustyyppi);
   }
 
   get isVapaasivistystyo() {
