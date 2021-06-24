@@ -7,6 +7,7 @@ import { createLogger } from '@shared/utils/logger';
 import { Lokalisointi } from '@shared/api/eperusteet';
 import { registerIconColorSchemeChange } from '@shared/utils/icon';
 import '@shared/config/styles';
+import { Virheet } from '@shared/stores/virheet';
 
 const logger = createLogger('Main');
 
@@ -26,6 +27,7 @@ async function main() {
   }
   catch (err) {
     logger.error('Top level error:" ', err);
+    Virheet.lisaaVirhe({ err: '500' });
   }
 }
 

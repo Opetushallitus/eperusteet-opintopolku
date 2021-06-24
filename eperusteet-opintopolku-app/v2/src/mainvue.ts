@@ -14,7 +14,6 @@ import '@shared/config/fontawesome';
 
 import { router } from '@/router';
 import { Kielet } from '@shared/stores/kieli';
-// import { Virheet } from '@shared/stores/virheet';
 
 import { createLogger } from '@shared/utils/logger';
 import _ from 'lodash';
@@ -92,21 +91,8 @@ Vue.use(Kielet, {
   },
 });
 
-function errorCaptured(err: Error, vm: Vue, info: string) {
-  logger.error(err, info);
-  if (isProduction()) {
-    // Virheet.lisaaVirhe({
-    //   path: vm.$route.path,
-    //   state: _.cloneDeep(vm.$data),
-    //   err: err.message,
-    //   info,
-    // });
-  }
-}
-
 export const rootConfig: any = {
   i18n: Kielet.i18n,
   router,
   render: (h: any) => h(App),
-  errorCaptured,
 };
