@@ -5,6 +5,7 @@ import VueScrollTo from 'vue-scrollto';
 import VueMeta from 'vue-meta';
 
 import Root from '@/routes/Root.vue';
+import Virhe from '@/routes/Virhe.vue';
 import Home from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue';
@@ -123,6 +124,13 @@ const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
 const palauteStore = new PalauteStore();
 const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
 
+const routeProps = (route: any) => {
+  return {
+    ...route.params,
+    ...route.query,
+  };
+};
+
 export const router = new Router({
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) {
@@ -191,6 +199,11 @@ export const router = new Router({
           },
         },
       },
+    }, {
+      path: 'virhe',
+      name: 'virhe',
+      component: Virhe,
+      props: routeProps,
     }, {
       path: 'kooste/ammmatillinen/:perusteId',
       name: 'ammatillinenkooste',
@@ -989,6 +1002,16 @@ export const router = new Router({
   }],
 });
 
+let loader = null;
+router.beforeEach((to, from, next) => {
+  loader = (Vue as any).$loading.show();
+  next();
+});
+
+router.afterEach(() => {
+  hideLoading();
+});
+
 router.beforeEach((to, from, next) => {
   changeLang(to, from);
   next();
@@ -1005,15 +1028,25 @@ router.afterEach((to, from) => {
 
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);
-  router.push({
-    name: 'virhe',
-    query: {
-      // virhe: JSON.stringify(virhe),
-    },
-  });
+  hideLoading();
+  if (router.currentRoute.name !== 'virhe') {
+    router.replace({
+      name: 'virhe',
+      query: {
+        virhekoodi: virhe.err,
+      },
+    });
+  }
 });
 
 function getRouteStore(route: any, routeName: string, store: string) {
   const filteredRoute = _.head(_.filter(route.matched, match => match.name === routeName));
   return _.get(filteredRoute, 'props.default.' + store);
+}
+
+function hideLoading() {
+  if (loader !== null) {
+    (loader as any).hide();
+    loader = null;
+  }
 }
