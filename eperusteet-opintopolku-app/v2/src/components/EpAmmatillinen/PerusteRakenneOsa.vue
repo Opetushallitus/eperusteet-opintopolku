@@ -34,7 +34,8 @@
         ref="rakenneosa"
         :rakenneosa="osa"
         :class="{'rakennemargin': !eiVanhempaa}"
-        :viimeinen="index + 1 === rakenneosa.osat.length">
+        :viimeinen="index + 1 === rakenneosa.osat.length"
+        :parentMandatory="pakollinen(rakenneosa)">
 
         <template v-slot:nimi="{ rakenneosa }">
           <slot name="nimi" v-bind:rakenneosa="rakenneosa"></slot>
@@ -48,6 +49,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import _ from 'lodash';
+import { rakenneNodecolor } from '@shared/utils/perusterakenne';
 
 @Component({
   name: 'PerusteRakenneOsa',
@@ -64,6 +66,13 @@ export default class PerusteRakenneOsa extends Vue {
 
   @Prop({ required: false, default: false })
   private viimeinen!: boolean;
+
+  @Prop({ default: false, type: Boolean })
+  private parentMandatory!: boolean;
+
+  pakollinen(node) {
+    return (node.rooli === 'määritelty' && this.$kaanna(node.nimi) === this.$t('rakenne-moduuli-pakollinen')) || node.pakollinen;
+  }
 
   toggleKuvaus(naytaKuvaus) {
     if (naytaKuvaus) {
@@ -113,29 +122,7 @@ export default class PerusteRakenneOsa extends Vue {
   }
 
   get rakenneStyle() {
-    return 'border-color: ' + this.vari;
-  }
-
-  get vari() {
-    if (this.rakenneosa.tutkinnonosa) {
-      return '#fff';
-    }
-
-    if (this.rakenneosa.tutkintonimike) {
-      return '#666';
-    }
-
-    if (!this.eiVanhempaa) {
-      if (_.size(this.rakenneosa.osat) > 0
-        && _.size(this.rakenneosa.osat) === _.size(_.filter(this.rakenneosa.osat, 'pakollinen'))) {
-        return '#5BCA13';
-      }
-      else {
-        return '#f166c0';
-      }
-    }
-
-    return '#999';
+    return 'border-color: ' + rakenneNodecolor(this.rakenneosa, this.parentMandatory, this);
   }
 }
 </script>
