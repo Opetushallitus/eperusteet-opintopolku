@@ -95,7 +95,7 @@ export default class Paikalliset extends Vue {
   @Watch('perusteet', { immediate: true })
   async perusteetChange() {
     if (_.size(this.perusteKoosteStore.perusteet) > 0) {
-      await this.paikallinenStore.fetch(this.perusteKoosteStore.perusteet![0].id!);
+      await this.paikallinenStore.fetch(this.perusteKoosteStore.perusteet![0].id!, this.perusteKoosteStore.perusteet![0].diaarinumero!);
     }
   }
 
@@ -109,7 +109,7 @@ export default class Paikalliset extends Vue {
 
   setActivePeruste(peruste) {
     this.query = '';
-    this.paikallinenStore.fetch!(peruste.id);
+    this.paikallinenStore.fetch!(peruste.id, peruste.diaarinumero);
   }
 
   get perusteet() {

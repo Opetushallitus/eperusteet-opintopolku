@@ -1,10 +1,7 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
 import _ from 'lodash';
-import { IPaikallinenStore } from './IPaikallinenStore';
-import { OpetussuunnitelmaQuery, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto, JulkinenApi, KoulutustoimijaJulkinenDto, Sisaltoviitteet, SisaltoViiteDto } from '@shared/api/amosaa';
-import { Debounced } from '@shared/utils/delay';
-import { Page, Koulutustyyppi } from '@shared/tyypit';
+import { Sisaltoviitteet, SisaltoViiteDto } from '@shared/api/amosaa';
 
 Vue.use(VueCompositionApi);
 
