@@ -95,7 +95,7 @@ export default class Paikalliset extends Vue {
   @Watch('perusteet', { immediate: true })
   async perusteetChange() {
     if (_.size(this.perusteKoosteStore.perusteet) > 0) {
-      await this.paikallinenStore.fetch(this.perusteKoosteStore.perusteet![0].id!);
+      await this.setActivePeruste(this.perusteKoosteStore.perusteet![0]);
     }
   }
 
@@ -107,9 +107,9 @@ export default class Paikalliset extends Vue {
     return this.paikallinenStore.perusteId?.value;
   }
 
-  setActivePeruste(peruste) {
+  async setActivePeruste(peruste) {
     this.query = '';
-    this.paikallinenStore.fetch!(peruste.id);
+    await this.paikallinenStore.fetch!(peruste.id, peruste.diaarinumero);
   }
 
   get perusteet() {

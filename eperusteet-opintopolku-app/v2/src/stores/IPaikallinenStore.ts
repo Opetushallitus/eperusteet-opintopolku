@@ -4,5 +4,5 @@ import { OpetussuunnitelmaJulkinenDto } from '@shared/api/ylops';
 export interface IPaikallinenStore {
   perusteId?: Computed<number>;
   opetussuunnitelmat: Computed<any[]>;
-  fetch: (id?: number) => Promise<void>
+  fetch: (id?: number, diaarinumero?: string) => Promise<void>
 };

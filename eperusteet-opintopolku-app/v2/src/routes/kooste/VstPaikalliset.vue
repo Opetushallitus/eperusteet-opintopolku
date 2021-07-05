@@ -80,8 +80,6 @@ import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { koulutustyyppiStateName, koulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { Koulutustyyppi } from '@shared/tyypit';
