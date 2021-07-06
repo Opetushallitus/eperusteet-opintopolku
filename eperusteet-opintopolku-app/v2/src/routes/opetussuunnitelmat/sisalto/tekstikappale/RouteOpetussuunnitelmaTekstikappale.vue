@@ -187,7 +187,7 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
       }
 
       // Poistetaan nykyinen viite alikappaleista
-      return _.slice(viitteet, 1);
+      return _.slice(_.reject(viitteet, 'piilotettu'), 1);
     }
     else {
       return [];
