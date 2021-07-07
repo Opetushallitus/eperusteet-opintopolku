@@ -2,6 +2,9 @@ import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
 import { TekstiKappaleDto, Puu, PerusteTekstiKappaleViiteDto, Lops2019Perusteet, OpetussuunnitelmanSisalto, TekstiKappaleViiteDto } from '@shared/api/ylops';
 import { Matala } from '@shared/api/eperusteet';
+import { createLogger } from '@shared/utils/logger';
+
+const logger = createLogger('OpetussuunnitelmaTekstikappaleStore');
 
 @Store
 export class OpetussuunnitelmaTekstikappaleStore {
@@ -75,7 +78,7 @@ export class OpetussuunnitelmaTekstikappaleStore {
         }
       }
       catch (err) {
-        console.error(err);
+        logger.error(err);
       }
     }
   }
