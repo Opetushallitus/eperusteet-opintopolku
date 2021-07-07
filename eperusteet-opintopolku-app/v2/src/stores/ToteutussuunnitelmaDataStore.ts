@@ -4,7 +4,11 @@ import * as _ from 'lodash';
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { NavigationNode, buildTiedot, buildNavigation, filterNavigation, NavigationFilter } from '@shared/utils/NavigationBuilder';
 import { Kielet } from '@shared/stores/kieli';
-import { DokumenttiDtoTilaEnum } from '@shared/api/eperusteet';
+import { DokumenttiDtoTilaEnum,
+  baseURL as perusteBaseURL,
+  Liitetiedostot as PerusteLiitetiedostot,
+  LiitetiedostotParam as PerusteLiitetiedostotParam } from '@shared/api/eperusteet';
+import mime from 'mime-types';
 
 @Store
 export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
@@ -19,6 +23,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     isEnabled: false,
   };
   @State() public arviointiasteikot: ArviointiasteikkoDto[] | null = null;
+  @State() public perusteKuvat: object[] = [];
 
   constructor(opetussuunnitelmaId: number) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
@@ -40,6 +45,9 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       children: _.filter(navigation.children, child => child.type !== 'tiedot'),
     };
     this.arviointiasteikot = (await Arviointiasteikot.getAllArviointiasteikot()).data;
+    if (this.opetussuunnitelma.peruste) {
+      await this.fetchPerusteKuvat(this.opetussuunnitelma.peruste.perusteId!);
+    }
   }
 
   @Getter(state => {
@@ -67,6 +75,14 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     src: baseURL + LiitetiedostotParam.getImage(state.opetussuunnitelma.id!, liite.id!).url,
   })))
   public readonly kuvat!: any[];
+
+  async fetchPerusteKuvat(perusteenId: number) {
+    this.perusteKuvat = _.map((await PerusteLiitetiedostot.getAllKuvat(perusteenId)).data, kuva => ({
+      id: kuva.id!,
+      kuva,
+      src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, kuva.id! + '.' + mime.extension(kuva.mime)).url,
+    }));
+  }
 
   @Getter(state => {
     return !state.opetussuunnitelma || !state.navigation;

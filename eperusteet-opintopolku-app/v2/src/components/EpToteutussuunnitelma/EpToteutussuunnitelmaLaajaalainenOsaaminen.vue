@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>{{$kaanna(sisaltoviite.tuvaLaajaAlainenOsaaminen.nimi)}}</h2>
+    <ep-content-viewer :value="$kaanna(sisaltoviite.perusteteksti)" :kuvat="kuvat" v-if="sisaltoviite.naytaPerusteenTeksti"/>
     <ep-content-viewer :value="$kaanna(sisaltoviite.tuvaLaajaAlainenOsaaminen.teksti)" :kuvat="kuvat"/>
   </div>
 </template>
