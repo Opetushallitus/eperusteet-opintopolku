@@ -113,7 +113,10 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
   }
 
   get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
+    return [
+      ...this.opetussuunnitelmaDataStore.kuvat,
+      ...this.opetussuunnitelmaDataStore.perusteKuvat,
+    ];
   }
 
   get arviointiasteikot() {
