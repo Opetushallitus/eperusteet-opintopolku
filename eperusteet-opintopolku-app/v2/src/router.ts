@@ -1034,6 +1034,7 @@ Virheet.onError((virhe: SovellusVirhe) => {
       name: 'virhe',
       query: {
         virhekoodi: virhe.err,
+        kohdeUrl: virhe.path,
       },
     });
   }
