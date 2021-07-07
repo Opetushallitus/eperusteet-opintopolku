@@ -1,7 +1,15 @@
 <template>
-  <div class="text-center">
-    <img :src="virhe.img" :alt="$t(virhe.alt)" />
+  <div class="d-flex justify-content-center">
+    <div class="text-left" v-if="kohde">
+      <div class="my-5">
+        <h2>{{$t('sivua-ei-loytynyt')}}</h2>
+        <div>{{$t(kohde+'-esikatselu-ei-mahdollista')}}</div>
+      </div>
+      <img :src="virhe.img" :alt="$t(virhe.alt)" />
+    </div>
+    <img v-else :src="virhe.img" :alt="$t(virhe.alt)" />
   </div>
+
 </template>
 
 <script lang="ts">
@@ -18,8 +26,23 @@ export default class Virhe extends Vue {
   @Prop({ required: false, default: '404' })
   private virhekoodi!:string;
 
+  @Prop({ required: false })
+  private kohdeUrl!:string;
+
   get virhe() {
     return this.virheImage[this.virhekoodi] || this.virheImage['500'];
+  }
+
+  get kohde() {
+    if (this.kohdeUrl && this.virhekoodi === '401') {
+      if (_.includes(this.kohdeUrl, 'peruste')) {
+        return 'peruste';
+      }
+
+      if (_.includes(this.kohdeUrl, 'opetussuunnitelma')) {
+        return 'opetussuunnitelma';
+      }
+    }
   }
 
   get virheImage() {
