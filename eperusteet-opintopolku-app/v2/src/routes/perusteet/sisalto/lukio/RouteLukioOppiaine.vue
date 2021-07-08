@@ -90,7 +90,7 @@ export default class RouteLukioOppiaine extends Vue {
   }
 
   get oppiaine() {
-    return deepFind({ id: this.oppiaineId }, this.perusteDataStore.lukioOppineet);
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
   }
 
   get termit() {

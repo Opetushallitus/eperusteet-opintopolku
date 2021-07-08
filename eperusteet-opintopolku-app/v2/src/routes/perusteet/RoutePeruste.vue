@@ -106,7 +106,7 @@ export default class RoutePeruste extends Vue {
 
   get oppaanKoulutustyyppi() {
     if (_.size(this.peruste?.oppaanKoulutustyypit) === 1) {
-      return _.take(this.peruste?.oppaanKoulutustyypit);
+      return _.take((this.peruste?.oppaanKoulutustyypit as any[]));
     }
   }
 

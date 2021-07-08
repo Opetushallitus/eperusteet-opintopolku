@@ -144,6 +144,7 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
+import { LaajaalainenOsaaminenDto } from '@shared/api/eperusteet';
 
 @Component({
   components: {
@@ -156,9 +157,6 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
 } as any)
 export default class RoutePerusopetusOppiaine extends Vue {
   @Prop({ required: true })
-  private perusopetusOppiaineStore!: PerusopetusOppiaineStore;
-
-  @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
   private tabIndex = 0;
@@ -170,8 +168,60 @@ export default class RoutePerusopetusOppiaine extends Vue {
     }
   }
 
+  get oppiaineId() {
+    return _.toNumber(this.$route.params.oppiaineId);
+  }
+
+  get laajaalaisetOsaamiset() {
+    return this.perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset') as any;
+  }
+
+  get perusteenOppiaine() {
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
+  }
+
+  get vuosiluokkakokonaisuudet() {
+    return _.get(this.perusteenOppiaine, 'vuosiluokkakokonaisuudet');
+  }
+
+  get perusteenVuosiluokkakokonaisuudet() {
+    return this.perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.vuosiluokkakokonaisuudet') as any;
+  }
+
   get oppiaine() {
-    return this.perusopetusOppiaineStore.oppiaine.value;
+    const vuosiluokkakokonaisuudetById = _.keyBy(this.perusteenVuosiluokkakokonaisuudet, 'id');
+    const laajaalaisetOsaamiset = _.keyBy(this.laajaalaisetOsaamiset, 'id');
+    return {
+      ...this.perusteenOppiaine,
+      vuosiluokkakokonaisuudet: _.chain(this.vuosiluokkakokonaisuudet)
+        .map(vlk => {
+          const vlkSisaltoalueetById = _.keyBy(vlk.sisaltoalueet, 'id');
+          return {
+            ...vlk,
+            nimi: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'nimi'),
+            vuosiluokat: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'vuosiluokat'),
+            tavoitteet: _.map(vlk.tavoitteet, tavoite => {
+              return {
+                ...tavoite,
+                laajattavoitteet: _.chain(tavoite.laajattavoitteet)
+                  .map((laajatavoitet: string) => {
+                    return laajaalaisetOsaamiset[laajatavoitet] as LaajaalainenOsaaminenDto;
+                  })
+                  .sortBy((ltavoite: any) => ltavoite.nimi[Kielet.getSisaltoKieli.value])
+                  .value() as any,
+                sisaltoalueet: _.chain(tavoite.sisaltoalueet)
+                  .map((sisaltoalue: string) => {
+                    return vlkSisaltoalueetById[sisaltoalue];
+                  })
+                  .sortBy((sisaltoalue: any) => sisaltoalue.nimi[Kielet.getSisaltoKieli.value])
+                  .value() as any,
+              };
+            }),
+          };
+        })
+        .sortBy('vuosiluokat')
+        .value(),
+    };
   }
 
   hasContent(obj) {

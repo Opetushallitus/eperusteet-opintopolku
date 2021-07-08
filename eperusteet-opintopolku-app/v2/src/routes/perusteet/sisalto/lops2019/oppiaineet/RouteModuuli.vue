@@ -19,6 +19,7 @@ import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/ModuuliEsitys.vue';
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -30,11 +31,12 @@ export default class RouteModuuli extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
-  @Prop({ required: true })
-  private lops2019ModuuliStore!: Lops2019ModuuliStore;
+  get moduuliId() {
+    return _.toNumber(this.$route.params.moduuliId);
+  }
 
   get moduuli() {
-    return this.lops2019ModuuliStore.moduuli;
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.moduuliId }) as any;
   }
 
   get termit() {

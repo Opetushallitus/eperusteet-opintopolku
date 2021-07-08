@@ -1,5 +1,6 @@
 import { Store, State } from '@shared/stores/store';
 import { Laaja, ViiteLaaja, Perusteenosat } from '@shared/api/eperusteet';
+import * as _ from 'lodash';
 
 @Store
 export class PerusteenOsaStore {
@@ -7,23 +8,29 @@ export class PerusteenOsaStore {
   @State() public perusteenOsaId: number;
   @State() public perusteenOsaViite: ViiteLaaja | null = null;
 
-  public static async create(perusteenOsaId: number) {
-    return new PerusteenOsaStore(perusteenOsaId);
+  public static async create(perusteenOsaId: number, julkaistuPerusteenOsaViite?: Laaja) {
+    return new PerusteenOsaStore(perusteenOsaId, julkaistuPerusteenOsaViite);
   }
 
-  constructor(perusteenOsaId: number) {
+  constructor(perusteenOsaId: number, private julkaistuPerusteenOsaViite?: Laaja) {
     this.perusteenOsaId = perusteenOsaId;
   }
 
   async fetchPerusteenOsa(deep: boolean = false) {
-    this.perusteenOsaViite = null;
-    this.perusteenOsa = null;
-    if (deep) {
-      this.perusteenOsaViite = (await Perusteenosat.getPerusteenOsatByViiteSisalto(this.perusteenOsaId)).data;
-      this.perusteenOsa = this.perusteenOsaViite.perusteenOsa as Laaja;
+    if (!this.julkaistuPerusteenOsaViite) {
+      this.perusteenOsaViite = null;
+      this.perusteenOsa = null;
+      if (deep) {
+        this.perusteenOsaViite = (await Perusteenosat.getPerusteenOsatByViiteSisalto(this.perusteenOsaId)).data;
+        this.perusteenOsa = this.perusteenOsaViite.perusteenOsa as Laaja;
+      }
+      else {
+        this.perusteenOsa = (await Perusteenosat.getPerusteenOsatByViite(this.perusteenOsaId)).data;
+      }
     }
     else {
-      this.perusteenOsa = (await Perusteenosat.getPerusteenOsatByViite(this.perusteenOsaId)).data;
+      this.perusteenOsaViite = this.julkaistuPerusteenOsaViite;
+      this.perusteenOsa = _.get(this.julkaistuPerusteenOsaViite, 'perusteenOsa');
     }
   }
 }

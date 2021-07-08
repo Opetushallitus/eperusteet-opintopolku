@@ -10,7 +10,7 @@
           <b-col cols="12" lg="6" class="tile mb-5">
             <h2 class="otsikko mb-4">{{ $t('peruste') }}</h2>
             <router-link :to="perusteRoute">
-              <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+              <peruste-tile :julkaisu="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
             </router-link>
           </b-col>
           <b-col cols="12" lg="6" class="mb-5">
@@ -134,7 +134,10 @@ export default class RouteKoosteAmmatillinen extends Vue {
   }
 
   get peruste() {
-    return this.ammatillinenPerusteKoosteStore.peruste.value;
+    return {
+      ...this.ammatillinenPerusteKoosteStore.peruste.value,
+      laajuus: _.get(this.ammatillinenPerusteKoosteStore.peruste.value, 'suoritustavat[0].rakenne.muodostumisSaanto.laajuus.minimi'),
+    } as any;
   }
 
   get perusteRoute() {

@@ -95,13 +95,14 @@ describe('RouteKooste', () => {
       } as any,
     }];
 
-    perusteKoosteStore.perusteet = [{
-      id: 42,
+    perusteKoosteStore.julkaistutPerusteet = [{
       nimi: {
         fi: 'peruste42',
       } as any,
-      diaarinumero: '1234-1234',
-      toteutus: 'yksinkertainen',
+      peruste: {
+        diaarinumero: '1234-1234',
+        id: 42,
+      },
       voimassaoloAlkaa: 123456,
     }] as any;
 

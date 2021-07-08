@@ -14,51 +14,89 @@ describe('RouteModuuli', () => {
 
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock();
-    const lops2019ModuuliStore = lops2019ModuuliStoreMock();
-    lops2019ModuuliStore.moduuli = {
-      nimi: {
-        fi: 'Luvut ja yhtälöt',
-      } as any,
-      koodi: {
-        arvo: 'MAY',
-      },
-      pakollinen: true,
-      laajuus: 2,
-      tavoitteet: {
-        kohde: {
-          fi: 'Tavoitteiden kohde',
+    perusteDataStore.getJulkaistuPerusteSisalto = () => {
+      return {
+        nimi: {
+          fi: 'Luvut ja yhtälöt',
         } as any,
-        tavoitteet: [
-          {
-            fi: 'Tavoitteiden tavoite',
-          } as any,
-        ],
-      },
-      sisallot: [
-        {
+        koodi: {
+          arvo: 'MAY',
+        },
+        pakollinen: true,
+        laajuus: 2,
+        tavoitteet: {
           kohde: {
-            fi: 'Sisältöjen kohde',
+            fi: 'Tavoitteiden kohde',
           } as any,
-          sisallot: [
+          tavoitteet: [
             {
-              fi: 'Sisältöjen sisältö',
+              fi: 'Tavoitteiden tavoite',
             } as any,
           ],
         },
-      ],
+        sisallot: [
+          {
+            kohde: {
+              fi: 'Sisältöjen kohde',
+            } as any,
+            sisallot: [
+              {
+                fi: 'Sisältöjen sisältö',
+              } as any,
+            ],
+          },
+        ],
+      };
     };
+
+    // const lops2019ModuuliStore = lops2019ModuuliStoreMock();
+    // lops2019ModuuliStore.moduuli = {
+    //   nimi: {
+    //     fi: 'Luvut ja yhtälöt',
+    //   } as any,
+    //   koodi: {
+    //     arvo: 'MAY',
+    //   },
+    //   pakollinen: true,
+    //   laajuus: 2,
+    //   tavoitteet: {
+    //     kohde: {
+    //       fi: 'Tavoitteiden kohde',
+    //     } as any,
+    //     tavoitteet: [
+    //       {
+    //         fi: 'Tavoitteiden tavoite',
+    //       } as any,
+    //     ],
+    //   },
+    //   sisallot: [
+    //     {
+    //       kohde: {
+    //         fi: 'Sisältöjen kohde',
+    //       } as any,
+    //       sisallot: [
+    //         {
+    //           fi: 'Sisältöjen sisältö',
+    //         } as any,
+    //       ],
+    //     },
+    //   ],
+    // };
 
     const wrapper = mount(RouteModuuli as any, {
       localVue,
       propsData: {
         perusteDataStore,
-        lops2019ModuuliStore,
+        // lops2019ModuuliStore,
       },
       stubs: {
         ...stubs,
       },
       mocks: {
         ...mocks,
+        $route: {
+          params: {},
+        },
       },
     });
 
