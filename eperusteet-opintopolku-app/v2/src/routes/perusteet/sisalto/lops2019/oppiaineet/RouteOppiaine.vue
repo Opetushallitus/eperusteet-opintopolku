@@ -24,6 +24,7 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import OppiaineEsitys from './OppiaineEsitys.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -36,9 +37,6 @@ export default class RouteOppiaine extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
-  @Prop({ required: true })
-  private lops2019OppiaineStore!: Lops2019OppiaineStore;
-
   get termit() {
     return this.perusteDataStore.termit;
   }
@@ -47,8 +45,12 @@ export default class RouteOppiaine extends Vue {
     return this.perusteDataStore.kuvat;
   }
 
+  get oppiaineId() {
+    return _.toNumber(this.$route.params.oppiaineId);
+  }
+
   get oppiaine() {
-    return this.lops2019OppiaineStore.oppiaine;
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
   }
 
   get oppiaineKoodiUri() {

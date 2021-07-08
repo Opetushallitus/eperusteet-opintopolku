@@ -32,7 +32,7 @@
     <ep-form-content class="col-md-12" v-if="tutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
       <span v-html="$kaanna(tutkinnonosa.ammattitaidonOsoittamistavat)" />
 
-      <hr class="mt-5 mb-5" v-if="tutkinnonosa.vapaatTekstit.length > 0"/>
+      <hr class="mt-5 mb-5" v-if="tutkinnonosa.vapaatTekstit && tutkinnonosa.vapaatTekstit.length > 0"/>
     </ep-form-content>
 
     <div class="col-md-12" v-for="(vapaaTeksti, index) in tutkinnonosa.vapaatTekstit" :key="'vapaateksti'+index">
@@ -67,7 +67,7 @@ export default class EpTutkinnonosaNormaali extends Vue {
   private arviointiasteikot!: any[];
 
   get hasArviointi() {
-    return (this.tutkinnonosa.arviointi && this.tutkinnonosa.arviointi.arvioinninKohdealueet && this.tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0) || this.tutkinnonosa.geneerinenArviointiasteikko;
+    return (this.tutkinnonosa.arviointi && this.tutkinnonosa.arviointi.arvioinninKohdealueet && this.tutkinnonosa.arviointi?.arvioinninKohdealueet?.length > 0) || this.tutkinnonosa.geneerinenArviointiasteikko;
   }
 
   get osaamistasonKriteeritFields() {

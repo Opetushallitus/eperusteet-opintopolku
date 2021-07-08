@@ -54,7 +54,6 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { AipeVaiheStore } from '@/stores/AipeVaiheStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 
@@ -65,13 +64,14 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 })
 export default class RouteAipeVaihe extends Vue {
   @Prop({ required: true })
-  private aipeVaiheStore!: AipeVaiheStore;
-
-  @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
+  get vaiheId() {
+    return _.toNumber(this.$route.params.vaiheId);
+  }
+
   get vaihe() {
-    return this.aipeVaiheStore.vaihe.value;
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vaiheId });
   }
 
   get oppiaineet() {

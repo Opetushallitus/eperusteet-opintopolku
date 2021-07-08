@@ -16,31 +16,31 @@ describe('RoutePerusteTiedot', () => {
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock({
       async getKorvaavatPerusteet() {},
+      peruste: {
+        id: 42,
+        nimi: {
+          fi: 'perusteen nimi',
+        } as any,
+        muutosmaaraykset: [{
+          id: 1234,
+          nimi: {
+            fi: 'muutosmaarays',
+          } as any,
+          url: {
+            fi: 'maarayksenosoite',
+          } as any,
+          liitteet: {
+            liite: {
+              id: '123',
+              nimi: {
+                fi: 'liite',
+              } as any,
+            },
+          },
+        }],
+      },
     });
 
-    perusteDataStore.peruste = {
-      id: 42,
-      nimi: {
-        fi: 'perusteen nimi',
-      } as any,
-      muutosmaaraykset: [{
-        id: 1234,
-        nimi: {
-          fi: 'muutosmaarays',
-        } as any,
-        url: {
-          fi: 'maarayksenosoite',
-        } as any,
-        liitteet: {
-          liite: {
-            id: '123',
-            nimi: {
-              fi: 'liite',
-            } as any,
-          },
-        },
-      }],
-    };
     perusteDataStore.kvLiitteet = { fi: 'kvliiteurl-fi' };
 
     const wrapper = mount(RoutePerusteTiedot as any, {

@@ -1,12 +1,12 @@
 <template>
   <div class="content">
 
-    <ep-spinner v-if="!tutkinnonosat"></ep-spinner>
+    <ep-spinner v-if="!tutkinnonOsaViitteet"></ep-spinner>
 
     <div v-else>
       <h2>{{$t('tutkinnonosat')}}</h2>
       <EpSearch class="mt-3 mb-3" v-model="queryNimi" :placeholder="$t('etsi')"/>
-      <b-table striped hover responsive :items="tutkinnonosat" :fields="fields">
+      <b-table striped hover responsive :items="tutkinnonOsaViitteet" :fields="fields">
         <template v-slot:cell(nimi)="data">
           <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: data.item.id}}">
             {{ $kaanna(data.item.tutkinnonOsa.nimi) }}
@@ -25,6 +25,7 @@ import { PerusteenTutkinnonosatStore } from '@/stores/PerusteenTutkinnonosatStor
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { PerusteDataStore } from '@/stores/PerusteDataStore';
 
 @Component({
   components: {
@@ -34,17 +35,35 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 })
 export default class RouteTutkinnonosat extends Vue {
   @Prop({ required: true })
-  private tutkinnonosatStore!: PerusteenTutkinnonosatStore;
+  private perusteDataStore!: PerusteDataStore;
 
   private queryNimi = '';
 
-  get tutkinnonosat() {
-    if (this.tutkinnonosatStore.tutkinnonosat.value) {
-      return _.chain(this.tutkinnonosatStore.tutkinnonosat.value)
+  get perusteenTutkinnonosatById() {
+    return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('tutkinnonOsat'), 'id');
+  }
+
+  get perusteenTutkinnonosaViitteet() {
+    return _.chain(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat'))
+      .map(st => st.tutkinnonOsaViitteet)
+      .flatMap()
+      .value();
+  }
+
+  get tutkinnonOsaViitteet() {
+    if (this.perusteenTutkinnonosaViitteet) {
+      return _.chain(this.perusteenTutkinnonosaViitteet)
+        .map(viite => {
+          return {
+            ...viite,
+            tutkinnonOsa: this.perusteenTutkinnonosatById[viite._tutkinnonOsa],
+          };
+        })
         .filter(tutkinnonosa => _.includes(
           _.toLower(_.get(tutkinnonosa, 'nimi.' + Kielet.getSisaltoKieli.value)),
           _.toLower(this.queryNimi)
         ))
+        .sortBy('jarjestys')
         .value();
     }
   }

@@ -288,7 +288,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get osaamisalaKuvaukset() {
-    return _.chain(this.peruste.suoritustavat)
+    return _.chain((this.peruste.suoritustavat as any[]))
       .map(suoritustapa => this.perusteDataStore.osaamisalaKuvaukset[suoritustapa.suoritustapakoodi!])
       .map(suoritustavanOsaamisalakuvaukset => _.values(suoritustavanOsaamisalakuvaukset))
       .flatMap()

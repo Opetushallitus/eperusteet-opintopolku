@@ -156,22 +156,34 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
   },
 })
 export default class RouteAipeOppiaine extends Vue {
-  @Prop({ required: true })
-  private aipeOppiaineStore!: AipeOppiaineStore;
+  // @Prop({ required: true })
+  // private aipeOppiaineStore!: AipeOppiaineStore;
 
-  @Prop({ required: true })
-  private aipeVaiheStore!: AipeVaiheStore;
+  // @Prop({ required: true })
+  // private aipeVaiheStore!: AipeVaiheStore;
 
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
+  get oppiaineId() {
+    return _.toNumber(this.$route.params.oppiaineId);
+  }
+
   get oppiaine() {
-    return this.aipeOppiaineStore.oppiaine.value;
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId });
+  }
+
+  get vaiheId() {
+    return _.toNumber(this.$route.params.vaiheId);
+  }
+
+  get vaihe() {
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vaiheId });
   }
 
   get oppimaarat() {
-    if (this.aipeOppiaineStore.oppimaarat.value) {
-      return _.map(this.aipeOppiaineStore.oppimaarat.value, oppimaara => {
+    if (this.oppiaine.oppimaarat) {
+      return _.map(this.oppiaine.oppimaarat, oppimaara => {
         return {
           ...oppimaara,
           route: { name: 'aipeoppiaine', params: { oppiaineId: _.toString(oppimaara.id) } },
@@ -215,8 +227,8 @@ export default class RouteAipeOppiaine extends Vue {
   };
 
   get laajaAlaisetOsaamisetById() {
-    if (this.aipeOppiaineStore.laajaAlaisetOsaamiset.value) {
-      return _.keyBy(this.aipeOppiaineStore.laajaAlaisetOsaamiset.value, 'id');
+    if (this.perusteDataStore.laajaAlaisetOsaamiset) {
+      return _.keyBy(this.perusteDataStore.laajaAlaisetOsaamiset, 'id');
     }
     else {
       return {};
@@ -224,8 +236,8 @@ export default class RouteAipeOppiaine extends Vue {
   }
 
   get kohdealueetById() {
-    if (this.aipeVaiheStore.vaihe.value) {
-      return _.keyBy(this.aipeVaiheStore.vaihe.value.opetuksenKohdealueet, 'id');
+    if (this.vaihe) {
+      return _.keyBy(this.vaihe.opetuksenKohdealueet, 'id');
     }
     else {
       return {};

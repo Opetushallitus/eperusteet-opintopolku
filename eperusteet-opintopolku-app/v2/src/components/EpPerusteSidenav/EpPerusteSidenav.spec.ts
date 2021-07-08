@@ -7,6 +7,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
+import { perusteDataStoreMock } from '@/storeMocks';
 
 const navigationData = {
   type: 'root' as any,
@@ -109,7 +110,10 @@ describe('EpPerusteSidenav', () => {
   localVue.use(new Kaannos());
 
   describe('Rendering Root and spinners', () => {
-    const perusteDataStore = new PerusteDataStore(42);
+    // const perusteDataStore = new PerusteDataStore(42);
+    const perusteDataStore = perusteDataStoreMock({
+      peruste: perusteData,
+    });
 
     const wrapper = mount(EpPerusteSidenav as any, {
       localVue,
@@ -129,7 +133,7 @@ describe('EpPerusteSidenav', () => {
     });
 
     test('Hides spinner', () => {
-      perusteDataStore.peruste = perusteData;
+      perusteDataStore.perusteDto = perusteData;
       perusteDataStore.navigation = {
         ...navigationData,
         children: [],
@@ -144,6 +148,7 @@ describe('EpPerusteSidenav', () => {
     });
 
     test('Works with complex data', () => {
+      perusteDataStore.perusteDto = perusteData;
       perusteDataStore.navigation = {
         ...navigationData,
         children: navigationDataViitteet as any,
@@ -179,7 +184,7 @@ describe('EpPerusteSidenav', () => {
   describe('SidenavNode', () => {
     const perusteDataStore = new PerusteDataStore(42);
 
-    perusteDataStore.peruste = perusteData;
+    perusteDataStore.perusteDto = perusteData;
     perusteDataStore.navigation = {
       ...navigationData,
       children: [
@@ -259,7 +264,7 @@ describe('EpPerusteSidenav', () => {
   describe('Navigation to previous and next', () => {
     const perusteDataStore = new PerusteDataStore(42);
 
-    perusteDataStore.peruste = perusteData;
+    perusteDataStore.perusteDto = perusteData;
     perusteDataStore.navigation = {
       ...navigationData,
       children: [

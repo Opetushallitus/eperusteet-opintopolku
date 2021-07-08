@@ -38,24 +38,33 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 })
 export default class RouteAipeKurssi extends Vue {
   @Prop({ required: true })
-  private aipeKurssiStore!: AipeKurssiStore;
-
-  @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
+  get kurssiId() {
+    return _.toNumber(this.$route.params.kurssiId);
+  }
+
   get kurssi() {
-    return this.aipeKurssiStore.kurssi.value;
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.kurssiId });
+  }
+
+  get oppiaineId() {
+    return _.toNumber(this.$route.params.oppiaineId);
+  }
+
+  get oppiaine() {
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId });
   }
 
   get tavoitteet() {
-    if (this.aipeKurssiStore.kurssi.value) {
-      return _.map(this.aipeKurssiStore.kurssi.value.tavoitteet, tavoite => (this.tavoitteetById![tavoite as any]));
+    if (this.kurssi) {
+      return _.map(this.kurssi.tavoitteet, tavoite => (this.tavoitteetById![tavoite as any]));
     }
   }
 
   get tavoitteetById() {
-    if (this.aipeKurssiStore.oppiaine.value) {
-      return _.keyBy(this.aipeKurssiStore.oppiaine.value.tavoitteet, 'id');
+    if (this.oppiaine) {
+      return _.keyBy(this.oppiaine.tavoitteet, 'id');
     }
   }
 

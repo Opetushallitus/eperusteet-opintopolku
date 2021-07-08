@@ -68,17 +68,34 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 })
 export default class RouteVuosiluokkakokonaisuus extends Vue {
   @Prop({ required: true })
-  private perusteVuosiluokkakokonaisuusStore!: PerusteVuosiluokkakokonaisuusStore;
-
-  @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
   get oppiaine() {
     return this.$route.params.oppiaineId;
   }
 
+  get vlkId() {
+    return _.toNumber(this.$route.params.vlkId);
+  }
+  get laajaalaisetOsaamisetById() {
+    return _.keyBy(this.laajaalaisetOsaamiset, 'id');
+  }
+
+  get laajaalaisetOsaamiset() {
+    return this.perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset') as any;
+  }
+
   get vuosiluokkakokonaisuus() {
-    return this.perusteVuosiluokkakokonaisuusStore.vuosiluokkakokonaisuus.value;
+    let vuosiluokkakokonaisuus = this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vlkId }) as any;
+    return {
+      ...vuosiluokkakokonaisuus,
+      laajaalaisetOsaamiset: _.map(this.laajaalaisetOsaamiset, lao => {
+        return {
+          ...lao,
+          nimi: _.get(this.laajaalaisetOsaamisetById[_.get(lao, 'id')], 'nimi'),
+        };
+      }),
+    };
   }
 
   hasContent(obj) {

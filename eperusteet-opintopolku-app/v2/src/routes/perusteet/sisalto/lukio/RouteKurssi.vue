@@ -84,11 +84,11 @@ export default class RouteKurssi extends Vue {
   }
 
   get kurssi() {
-    return deepFind({ id: this.kurssiId }, this.perusteDataStore.lukioOppineet);
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.kurssiId }) as any;
   }
 
   get oppiaine() {
-    return deepFind({ id: this.oppiaineId }, this.perusteDataStore.lukioOppineet);
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
   }
 
   get termit() {
