@@ -52,6 +52,7 @@
           <template v-if="koulutuksenosa.paikallinenTarkennus">
             <div v-for="(lao, index) in koulutuksenosa.paikallinenTarkennus.laajaalaisetosaamiset" :key="'lao'+index" class="mb-4">
               <div class="font-weight-bold">{{$kaanna(lao.nimi)}}</div>
+              <ep-content-viewer v-if="laajaAlaisetKoodilla[lao.koodiUri]" :value="$kaanna(laajaAlaisetKoodilla[lao.koodiUri].perusteteksti)" :kuvat="kuvat"/>
               <ep-content-viewer :value="$kaanna(lao.laajaAlaisenOsaamisenKuvaus)" :kuvat="kuvat"/>
             </div>
           </template>
@@ -116,10 +117,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Matala } from '@shared/api/amosaa';
+import { Matala, OpetussuunnitelmaDto, Sisaltoviitteet } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpKoulutuksenJarjestajaSelect from '@shared/components/EpKoulutuksenJarjestajaSelect/EpKoulutuksenJarjestajaSelect.vue';
+import _ from 'lodash';
 
 @Component({
   components: {
@@ -134,6 +136,22 @@ export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
 
   @Prop({ required: true })
   private kuvat!: any[];
+
+  @Prop({ required: true })
+  private opetussuunnitelma!: OpetussuunnitelmaDto;
+
+  private laajaAlaisetOsaamiset: any[] = [];
+
+  async mounted() {
+    this.laajaAlaisetOsaamiset = (await Sisaltoviitteet.getSisaltoviitteeTyypilla(
+      this.opetussuunnitelma.id!,
+      'laajaalainenosaaminen',
+      _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data;
+  }
+
+  get laajaAlaisetKoodilla() {
+    return _.keyBy(this.laajaAlaisetOsaamiset, 'tuvaLaajaAlainenOsaaminen.nimiKoodi');
+  }
 
   get koulutuksenosa() {
     return this.sisaltoviite.koulutuksenosa;

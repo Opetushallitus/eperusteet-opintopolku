@@ -43,6 +43,7 @@
         v-else-if="sisaltoviite.tyyppi === 'koulutuksenosa'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
+        :opetussuunnitelma="opetussuunnitelma"
       />
     </div>
   </div>
