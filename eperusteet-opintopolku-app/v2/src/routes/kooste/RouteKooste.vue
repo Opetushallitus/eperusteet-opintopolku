@@ -156,7 +156,9 @@ export default class RouteKooste extends Vue {
           ...peruste,
           id: _.toString(peruste.id),
           ulkoinenlinkki: this.ulkoinenlinkki(peruste),
+          kaannettyNimi: this.$kaanna(peruste.nimi!),
         }))
+        .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
         .value();
     }
   }
