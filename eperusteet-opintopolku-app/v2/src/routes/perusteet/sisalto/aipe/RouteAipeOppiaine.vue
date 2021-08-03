@@ -91,6 +91,11 @@
 
       <div class="mt-4">
 
+        <div v-if="tavoite.tavoitteistaJohdetutOppimisenTavoitteet">
+          <h4>{{$t('tavoitteista-johdetut-oppimisen-tavoitteet')}}</h4>
+          <span v-html="$kaanna(tavoite.tavoitteistaJohdetutOppimisenTavoitteet)"></span>
+        </div>
+
         <div v-if="tavoite.kohdealue">
           <h4>{{$t('kohdealueet')}}</h4>
           <span v-html="$kaanna(tavoite.kohdealue.nimi)"></span>
