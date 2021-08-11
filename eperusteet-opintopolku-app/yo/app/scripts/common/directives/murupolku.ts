@@ -509,7 +509,7 @@ angular
                 useId: "tekstikappaleId",
                 useData: "tekstikappaleNimi",
                 customParents: true
-            }
+            },
         };
 
         function perusTaiYksinkertainen(state) {
