@@ -105,11 +105,35 @@ angular
                 tyyppi: "koulutustyyppi_999907",
                 tila: "valmis",
                 stateTila: "root.tpo.tiedot"
-            }
+            },
         };
 
+        const betaKoulutustyyppiPolut = {
+            'koulutustyyppi_1': 'ammatillinen',
+            'koulutustyyppi_11': 'ammatillinen',
+            'koulutustyyppi_12': 'ammatillinen',
+            'koulutustyyppi_5': 'ammatillinen',
+            'koulutustyyppi_18': 'ammatillinen',
+            'koulutustyyppi_14': 'lukio',
+            'koulutustyyppi_15': 'esiopetus',
+            'koulutustyyppi_16': 'perusopetus',
+            'koulutustyyppi_17': 'perusopetus',
+            'koulutustyyppi_2': 'lukio',
+            'koulutustyyppi_20': 'varhaiskasvatus',
+            'koulutustyyppi_22': 'perusopetus',
+            'koulutustyyppi_23': 'lukio',
+            'koulutustyyppi_6': 'perusopetus',
+            'koulutustyyppi_999907': 'taiteenperusopetus',
+            'koulutustyyppi_10': 'vapaasivistystyo',
+            'koulutustyyppi_30': 'vapaasivistystyo',
+            'koulutustyyppi_35': 'vapaasivistystyo',
+            'koulutustyyppi_40': 'tutkintoonvalmentava',
+          };
+
         const uudetToteutukset = [
-            'lops2019'
+            'lops2019',
+            'vapaasivistystyo',
+            'tutkintoonvalmentava',
         ];
 
         const getGeneric = key => {
@@ -181,10 +205,13 @@ angular
         };
 
         const isPerusteUusiToteutus = peruste => _.includes(uudetToteutukset, peruste.toteutus);
+        const getBetaPerusteUrl = peruste => 'beta/#/'+Kieli.getSisaltokieli()+'/'+betaKoulutustyyppiPolut[peruste.koulutustyyppi]+'/'+peruste.id;
 
-        const getPerusteToteutusUrl = peruste => (this.isPerusteUusiToteutus(peruste) ? 'beta/': '') 
-                    + $state.href(this.getStateTila(peruste.koulutustyyppi), {perusteId: peruste.id, suoritustapa: _.get(peruste, 'suoritustavat[0].suoritustapakoodi')});
-           
+        const getPerusteToteutusUrl = peruste => this.isPerusteUusiToteutus(peruste) ?
+                    this.getBetaPerusteUrl(peruste) :
+                    $state.href(this.getStateTila(peruste.koulutustyyppi), {perusteId: peruste.id, suoritustapa: _.get(peruste, 'suoritustavat[0].suoritustapakoodi')});
+
+
         const getStateTila = tyyppi => paramMap[tyyppi].stateTila;
 
         this.getPerusopetus = getPerusopetus;
@@ -202,6 +229,7 @@ angular
         this.getStateTila = getStateTila;
         this.isPerusteUusiToteutus = isPerusteUusiToteutus;
         this.getPerusteToteutusUrl = getPerusteToteutusUrl;
+        this.getBetaPerusteUrl = getBetaPerusteUrl;
     })
     .controller("EtusivuController", function(
         $scope,
