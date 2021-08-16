@@ -5,7 +5,6 @@
         <ep-hallitus-img class="img"/>
       </div>
       <div class="nimi">
-        <fas fixed-width icon="external-link-alt" class="mr-1" v-if="peruste.ulkoinenlinkki"></fas>
         {{ $kaanna(peruste.nimi) }}
       </div>
     </div>

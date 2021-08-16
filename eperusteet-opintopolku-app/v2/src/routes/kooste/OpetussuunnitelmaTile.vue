@@ -8,7 +8,6 @@
       </div>
       <div class="nimi flex-fill">
         <div class="ops">
-          <fas fixed-width icon="external-link-alt" class="mr-1" v-if="ops.ulkoinenlinkki"></fas>
           <span v-html="nimi"></span>
         </div>
         <div class="organisaatiot">

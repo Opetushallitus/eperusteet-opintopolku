@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 import { NavigationNodeDto, PerusteDto, Perusteet, TermiDto, baseURL,
   Dokumentit, DokumentitParam,
   Termit,
-  Liitetiedostot, LiitetiedostotParam, TekstiKappaleDto } from '@shared/api/eperusteet';
+  Liitetiedostot, LiitetiedostotParam, TekstiKappaleDto, LukioperusteenJulkisetTiedot } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 
 import {
@@ -17,7 +17,7 @@ import {
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
-import { isKoulutustyyppiAmmatillinen } from '@shared/utils/perusteet';
+import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio } from '@shared/utils/perusteet';
 
 @Store
 export class PerusteDataStore {
@@ -38,6 +38,7 @@ export class PerusteDataStore {
   @State() public kvLiitteet: any = {};
   @State() public osaamisalaKuvaukset: { [key: string]: { [key: string]: Array<TekstiKappaleDto>; }; } = {};
   @State() public liitteet: any = {};
+  @State() public lukioOppineet: any[] = [];
 
   public static async create(perusteId: number) {
     const result = new PerusteDataStore(perusteId);
@@ -65,6 +66,11 @@ export class PerusteDataStore {
       await this.getKvLiitteet();
       this.osaamisalaKuvaukset = (await Perusteet.getOsaamisalat(this.perusteId)).data;
     }
+
+    if (isPerusteVanhaLukio(this.peruste)) {
+      this.lukioOppineet = _.get((await LukioperusteenJulkisetTiedot.getOppiainePuuRakenne(this.perusteId)).data, 'oppiaineet')!;
+    }
+
     this.liitteet = (await Liitetiedostot.getAllLiitteet(this.perusteId)).data;
   }
 

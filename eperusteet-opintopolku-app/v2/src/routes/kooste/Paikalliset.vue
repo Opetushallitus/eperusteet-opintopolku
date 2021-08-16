@@ -34,13 +34,9 @@
       <div v-for="(ops, idx) in opetussuunnitelmatPaginated"
            :key="idx">
 
-        <router-link v-if="!ops.ulkoinenlinkki" :to="ops.route">
+        <router-link :to="ops.route">
           <opetussuunnitelma-tile :ops="ops" :query="query"/>
         </router-link>
-
-        <ep-external-link v-else :url="ops.ulkoinenlinkki" :showIcon="false">
-          <opetussuunnitelma-tile :ops="ops" :query="query"/>
-        </ep-external-link>
 
       </div>
       <b-pagination v-model="page"
@@ -113,7 +109,15 @@ export default class Paikalliset extends Vue {
   }
 
   get perusteet() {
-    return this.perusteKoosteStore.perusteet;
+    if (this.perusteKoosteStore.perusteet) {
+      return _.chain(this.perusteKoosteStore.perusteet)
+        .map(peruste => ({
+          ...peruste,
+          kaannettyNimi: this.$kaanna(peruste.nimi!),
+        }))
+        .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
+        .value();
+    }
   }
 
   get isLoading() {
@@ -149,23 +153,11 @@ export default class Paikalliset extends Vue {
     return _.chain(this.opetussuunnitelmatFiltered)
       .drop(this.perPage * (this.page - 1))
       .take(this.perPage)
-      .map(ops => ({
-        ...ops,
-        ulkoinenlinkki: this.ulkoinenlinkki(ops),
-      }))
       .value();
   }
 
   get currentPeruste() {
     return _.find(this.perusteet, ['id', this.paikallinenStore.perusteId?.value]);
-  }
-
-  ulkoinenlinkki(ops) {
-    if (this.currentPeruste && uusiJulkinenToteutus(this.currentPeruste)) {
-      return undefined;
-    }
-
-    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/ops/${ops.id}/${koulutustyyppiUrlShortParamName(ops.koulutustyyppi)}/tiedot`;
   }
 }
 </script>

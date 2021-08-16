@@ -53,6 +53,9 @@ export default class EpPerusteSidenav extends Vue {
         || (parent && parent.key === current.key && current.type !== 'oppiaineet')));
     const isErikoistyyppi = type === 'oppiaineet'
         || type === 'oppiaine'
+        || type === 'lukiooppiaineet_2015'
+        || type === 'lukiooppimaarat_2015'
+        || type === 'lukiokurssit'
         || type === 'oppimaarat'
         || type === 'moduulit'
         || type === 'moduuli'

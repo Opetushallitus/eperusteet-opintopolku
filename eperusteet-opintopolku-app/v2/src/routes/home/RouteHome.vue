@@ -70,7 +70,7 @@
               <template v-else>
                 <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.id">
                   <div class="valtakunnallinen">
-                    <router-link v-if="!peruste.ulkoinenlinkki" :to="peruste.route">
+                    <router-link :to="peruste.route">
                       <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
                         <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
                         <div class="d-flex flex-fill align-items-center">
@@ -81,19 +81,6 @@
                         </div>
                       </div>
                     </router-link>
-
-                    <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">
-                      <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
-                      <div class="raita mx-3 my-2" :class="ryhma.theme"></div>
-                      <div class="d-flex flex-fill align-items-center">
-                        <div class="nimi my-3 mr-3">
-                          <fas fixed-width icon="external-link-alt" class="mr-1"></fas>
-                          {{ $kaanna(peruste.nimi) }}
-                          <div class="luotu">{{ $t('voimaantulo-pvm')}}: {{ $sd(peruste.voimassaoloAlkaa) }}</div>
-                        </div>
-                      </div>
-                    </div>
-                    </ep-external-link>
                   </div>
                 </div>
               </template>
@@ -177,7 +164,6 @@ export default class RouteHome extends Vue {
         }
         return {
           ...peruste,
-          ulkoinenlinkki: this.ulkoinenlinkki(peruste),
           route: {
             name: 'peruste',
             params: {
@@ -280,19 +266,6 @@ export default class RouteHome extends Vue {
       title: this.$t('eperusteet'),
       titleTemplate: null,
     };
-  }
-
-  ulkoinenlinkki(peruste) {
-    if (uusiJulkinenToteutus(peruste)) {
-      return undefined;
-    }
-
-    if (koulutustyyppiTheme(peruste.koulutustyyppi) === 'ammatillinen') {
-      return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/kooste/${peruste.id}`;
-    }
-    else {
-      return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
-    }
   }
 }
 </script>
