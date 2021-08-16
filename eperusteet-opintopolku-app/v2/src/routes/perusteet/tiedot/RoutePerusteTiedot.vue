@@ -99,6 +99,21 @@
       </div>
 
       <div v-if="isAmmatillinen">
+
+          <div class="col-md-12 mt-3" v-if="koulutusvienninOhje">
+            <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
+              <b-table striped
+                      fixed
+                      responsive
+                      :fields="koulutusvienninohjeFields"
+                      :items="[koulutusvienninOhje]">
+                      <template v-slot:cell(nimi)="{ item }">
+                        <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
+                      </template>
+              </b-table>
+            </ep-form-content>
+          </div>
+
           <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
             <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6">
               <b-table striped
@@ -280,6 +295,16 @@ export default class RoutePerusteTiedot extends Vue {
     return this.perusteDataStore.termit;
   }
 
+  get koulutusvienninOhje() {
+    const koulutusvienninohje = _.find(this.perusteDataStore.liitteet, liite => liite.tyyppi === 'KOULUTUSVIENNINOHJE');
+    if (koulutusvienninohje) {
+      return {
+        ...koulutusvienninohje,
+        url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, koulutusvienninohje.id!).url,
+      };
+    }
+  }
+
   get osaamisalaKuvaukset() {
     return _.chain(this.peruste.suoritustavat)
       .map(suoritustapa => this.perusteDataStore.osaamisalaKuvaukset[suoritustapa.suoritustapakoodi!])
@@ -374,6 +399,17 @@ export default class RoutePerusteTiedot extends Vue {
       formatter: (value: any, key: string, item: any) => {
         return this.$kaanna(value);
       },
+    }];
+  }
+
+  get koulutusvienninohjeFields() {
+    return [{
+      key: 'nimi',
+      label: this.$t('tiedosto'),
+    }, {
+      key: 'lisatieto',
+      label: this.$t('diaarinumero'),
+      thStyle: 'width: 30%',
     }];
   }
 

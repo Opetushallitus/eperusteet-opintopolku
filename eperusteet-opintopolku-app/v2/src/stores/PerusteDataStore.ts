@@ -37,6 +37,7 @@ export class PerusteDataStore {
   };
   @State() public kvLiitteet: any = {};
   @State() public osaamisalaKuvaukset: { [key: string]: { [key: string]: Array<TekstiKappaleDto>; }; } = {};
+  @State() public liitteet: any = {};
 
   public static async create(perusteId: number) {
     const result = new PerusteDataStore(perusteId);
@@ -64,6 +65,7 @@ export class PerusteDataStore {
       await this.getKvLiitteet();
       this.osaamisalaKuvaukset = (await Perusteet.getOsaamisalat(this.perusteId)).data;
     }
+    this.liitteet = (await Liitetiedostot.getAllLiitteet(this.perusteId)).data;
   }
 
   private async fetchNavigation() {
