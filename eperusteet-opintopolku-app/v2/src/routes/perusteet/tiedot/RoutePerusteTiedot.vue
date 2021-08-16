@@ -71,13 +71,9 @@
             <template v-slot:cell(perusteet)="data">
               <div v-if="data.item.perusteet.length > 0">
                 <div v-for="(peruste, idx) in data.item.perusteet" :key="idx">
-                  <router-link v-if="!peruste.ulkoinenlinkki"
-                              :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
+                  <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
-                  <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="true">
-                    {{ $kaanna(peruste.nimi) }}
-                  </ep-external-link>
                 </div>
               </div>
               <div v-else>
@@ -255,22 +251,8 @@ export default class RoutePerusteTiedot extends Vue {
     return this.peruste && isKoulutustyyppiAmmatillinen(this.peruste.koulutustyyppi!);
   }
 
-  ulkoinenlinkki(peruste) {
-    if (uusiJulkinenToteutus(peruste)) {
-      return undefined;
-    }
-
-    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
-  }
-
   get korvaavatPerusteet() {
-    return _.map(this.perusteDataStore.korvaavatPerusteet, rivi => ({
-      ...rivi,
-      perusteet: _.map(rivi.perusteet || [], peruste => ({
-        ...peruste,
-        ulkoinenlinkki: this.ulkoinenlinkki(peruste),
-      })),
-    }));
+    return this.perusteDataStore.korvaavatPerusteet;
   }
 
   get peruste() {

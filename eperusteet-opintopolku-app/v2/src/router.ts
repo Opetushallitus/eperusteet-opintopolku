@@ -43,6 +43,10 @@ import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava
 import RouteKotoKielitaitotaso from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoKielitaitotaso.vue';
 import RouteKotoOpinto from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoOpinto.vue';
 import RouteLaajaalainenOsaaminen from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteLaajaalainenOsaaminen.vue';
+import RouteYleisettavoitteet from '@/routes/perusteet/sisalto/lukio/RouteYleisettavoitteet.vue';
+import RouteAihekokonaisuudet from '@/routes/perusteet/sisalto/lukio/RouteAihekokonaisuudet.vue';
+import RouteLukioOppiaine from '@/routes/perusteet/sisalto/lukio/RouteLukioOppiaine.vue';
+import RouteKurssi from '@/routes/perusteet/sisalto/lukio/RouteKurssi.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -88,6 +92,8 @@ import { Lops2019OpetussuunnitelmaModuuliStore } from '@/stores/Lops2019Opetussu
 import { Lops2019OpetussuunnitelmaPoppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaPoppiaineStore';
 import RouteOpetussuunnitelmaPoppiaine
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaPoppiaine.vue';
+import RouteOpetussuunnitelmaOppiaine2015 from '@/routes/opetussuunnitelmat/sisalto/lops/RouteOpetussuunnitelmaOppiaine2015.vue';
+import RouteOpetussuunnitelmaKurssi from '@/routes/opetussuunnitelmat/sisalto/lops/RouteOpetussuunnitelmaKurssi.vue';
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { OpasStore } from '@/stores/OpasStore';
@@ -108,6 +114,7 @@ import { getKoostePaikallinenComponent, getKoostePaikallinenStore } from '@/util
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
+import { LopsOpetussuunnitelmaOppiaineStore } from './stores/LopsOpetussuunnitelmaOppiaineStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -441,21 +448,7 @@ export const router = new Router({
       }, {
         path: 'oppiaine',
         component: RouteOppiaineet,
-        name: 'lops2019oppiaineet',
-        meta: {
-          resolve: {
-            cacheBy: ['perusteId'],
-            async props(route) {
-              return {
-                default: {
-                  lops2019OppiaineetStore: await Lops2019OppiaineetStore.create(
-                    _.parseInt(route.params.perusteId),
-                  ),
-                },
-              };
-            },
-          },
-        },
+        name: 'lukioOppiaineet',
       }, {
         path: 'oppiaine/:oppiaineId',
         component: RouteOppiaine,
@@ -495,6 +488,15 @@ export const router = new Router({
             },
           },
         },
+      }, {
+        path: 'lukiooppiaine/:oppiaineId',
+        component: RouteLukioOppiaine,
+        name: 'lukioOppiaine',
+        children: [{
+          path: 'lukiokurssi/:kurssiId',
+          component: RouteKurssi,
+          name: 'lukiokurssi',
+        }],
       }, {
         path: 'tutkinnonosat',
         component: RouteTutkinnonosat,
@@ -787,6 +789,42 @@ export const router = new Router({
             },
           },
         },
+      }, {
+        path: 'yleisettavoitteet/:yleistavoiteId',
+        component: RouteYleisettavoitteet,
+        name: 'perusteYleisettavoitteet',
+        meta: {
+          resolve: {
+            cacheBy: ['yleistavoiteId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.yleistavoiteId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'aihekokonaisuudet/:aihekokonaisuudetId',
+        component: RouteAihekokonaisuudet,
+        name: 'perusteAihekokonaisuudet',
+        meta: {
+          resolve: {
+            cacheBy: ['aihekokonaisuudetId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.aihekokonaisuudetId),
+                  ),
+                },
+              };
+            },
+          },
+        },
       }],
     }, {
       path: 'ops/:opetussuunnitelmaId/:koulutustyyppi*',
@@ -910,6 +948,30 @@ export const router = new Router({
         path: 'opintojakso/:opintojaksoId',
         component: RouteOpetussuunnitelmaOpintojakso,
         name: 'lops2019OpetussuunnitelmaOpintojakso',
+      }, {
+        path: 'lukiooppiaine/:oppiaineId',
+        component: RouteOpetussuunnitelmaOppiaine2015,
+        name: 'lopsOpetussuunnitelmaOppiaine',
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
+            async props(route) {
+              return {
+                default: {
+                  lopsOpetussuunnitelmaOppiaineStore: await LopsOpetussuunnitelmaOppiaineStore.create(
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    _.parseInt(route.params.oppiaineId),
+                  ),
+                },
+              };
+            },
+          },
+        },
+        children: [{
+          path: 'kurssi/:kurssiId',
+          component: RouteOpetussuunnitelmaKurssi,
+          name: 'lopsOpetussuunnitelmaKurssi',
+        }],
       }, {
         path: 'vuosiluokkakokonaisuus/:vlkId',
         component: RoutePerusopetusVuosiluokkakokonaisuus,

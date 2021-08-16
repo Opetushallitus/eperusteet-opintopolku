@@ -4,6 +4,9 @@
     <div class="indicator-wrapper" v-if="isModuuli">
       <ep-color-indicator :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
     </div>
+    <div class="indicator-wrapper" v-if="isKurssi && kurssiTyyppiVari[node.meta.tyyppi]">
+      <ep-color-indicator :backgroundColor="kurssiTyyppiVari[node.meta.tyyppi]" :tooltip="false"/>
+    </div>
     <div class="label-wrapper">
       <b-link v-if="node.location && !subtype" :to="node.location">
         <span class="label" :class="{ 'label-match': isMatch }">
@@ -60,6 +63,19 @@ export default class EpSidenavNode extends Vue {
 
   get isModuuli() {
     return this.node.type === 'moduuli' && typeof _.get(this.node, 'meta.pakollinen') === 'boolean';
+  }
+
+  get isKurssi() {
+    return this.node.type === 'lukiokurssi' && _.get(this.node, 'meta.tyyppi');
+  }
+
+  get kurssiTyyppiVari() {
+    return {
+      'VALTAKUNNALLINEN_PAKOLLINEN': '#bddb8a',
+      'PAKOLLINEN': '#bddb8a',
+      'VALTAKUNNALLINEN_SYVENTAVA': '#997bb6',
+      'VALTAKUNNALLINEN_SOVELTAVA': '#f8a35e',
+    };
   }
 
   get isRoot() {

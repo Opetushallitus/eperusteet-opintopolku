@@ -19,7 +19,6 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
 @Component({
@@ -30,9 +29,6 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 export default class RouteOppiaineet extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
-
-  @Prop({ required: true })
-  private lops2019OppiaineetStore!: Lops2019OppiaineetStore;
 
   get oppiaineet() {
     if (this.current) {

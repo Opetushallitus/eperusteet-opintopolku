@@ -6,7 +6,7 @@
     <div class="teksti">
       <oppiaine-esitys :oppiaine="oppiaine"
                        :termit="perusteTermit"
-                       :kuvat="perusteKuvat"
+                       :kuvat="kuvat"
                        :is-peruste-view="false"
                        :nav-oppimaarat="oppimaarat"
                        :opintojaksot="opintojaksot"/>
@@ -49,8 +49,8 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
     return this.opetussuunnitelmaDataStore.perusteTermit;
   }
 
-  get perusteKuvat() {
-    return this.opetussuunnitelmaDataStore.perusteKuvat;
+  get kuvat() {
+    return this.opetussuunnitelmaDataStore.kuvat;
   }
 
   get oppiaine() {

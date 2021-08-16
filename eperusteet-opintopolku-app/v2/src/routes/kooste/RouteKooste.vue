@@ -14,12 +14,9 @@
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
               <div v-else v-for="(peruste, idx) in perusteet" :key="idx">
-                <router-link v-if="!peruste.ulkoinenlinkki" :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
+                <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
                   <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
                 </router-link>
-                <ep-external-link v-else :url="peruste.ulkoinenlinkki" :showIcon="false">
-                  <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
-                </ep-external-link>
               </div>
           </div>
           <ep-spinner v-else />
@@ -155,20 +152,11 @@ export default class RouteKooste extends Vue {
         .map(peruste => ({
           ...peruste,
           id: _.toString(peruste.id),
-          ulkoinenlinkki: this.ulkoinenlinkki(peruste),
           kaannettyNimi: this.$kaanna(peruste.nimi!),
         }))
         .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
         .value();
     }
-  }
-
-  ulkoinenlinkki(peruste) {
-    if (uusiJulkinenToteutus(peruste)) {
-      return undefined;
-    }
-
-    return `${ENV_PREFIX}/#/${this.$route.params.lang || 'fi'}/${perusteKoulutustyyppiUrlShortParamName(peruste.koulutustyyppi)}/${peruste.id}/tiedot`;
   }
 
   @Meta
