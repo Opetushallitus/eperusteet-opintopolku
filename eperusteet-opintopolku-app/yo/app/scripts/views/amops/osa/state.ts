@@ -341,7 +341,7 @@ angular.module("app").config($stateProvider =>
                     {
                         // Init block
                         $scope.koodistoTiedot = {};
-                        $scope.$$showToteutus = true;
+                        $scope.$$showToteutus = _.size($scope.osa.tosa.toteutukset) > 0;
                         $scope.koodit = koodit;
                         $scope.peruste = peruste;
                         $scope.sortableOptions = {
