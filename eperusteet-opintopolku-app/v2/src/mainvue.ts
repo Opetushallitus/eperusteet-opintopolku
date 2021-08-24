@@ -11,6 +11,7 @@ import { Vahvistus } from '@shared/plugins/vahvistus';
 
 import '@/config/bootstrap';
 import '@shared/config/fontawesome';
+import 'material-icons/iconfont/material-icons.css';
 
 import { router } from '@/router';
 import { Kielet } from '@shared/stores/kieli';

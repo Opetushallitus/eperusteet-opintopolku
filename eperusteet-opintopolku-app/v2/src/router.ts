@@ -16,6 +16,7 @@ import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatil
 import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
 import RouteAmmatillinenTyopajat from '@/routes/ammatillinen/RouteAmmatillinenTyopajat.vue';
 import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';
+import RouteAmmatillinenMaaraykset from '@/routes/ammatillinen/RouteAmmatillinenMaaraykset.vue';
 
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
@@ -115,6 +116,7 @@ import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
 import { LopsOpetussuunnitelmaOppiaineStore } from './stores/LopsOpetussuunnitelmaOppiaineStore';
+import { MaarayksetStore } from './stores/MaarayksetStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -287,6 +289,21 @@ export const router = new Router({
           component: RouteAmmatillinenValmisteillaOlevat,
           name: 'ammatillinenValmisteillaOlevat',
           props: { valmisteillaOlevatStore },
+        }, {
+          path: 'maaraykset',
+          component: RouteAmmatillinenMaaraykset,
+          name: 'ammatillinenMaaraykset',
+          meta: {
+            resolve: {
+              async props(route) {
+                return {
+                  default: {
+                    maarayksetStore: new MaarayksetStore(),
+                  },
+                };
+              },
+            },
+          },
         },
       ],
     }, {
