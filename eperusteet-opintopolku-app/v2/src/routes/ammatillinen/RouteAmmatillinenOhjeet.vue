@@ -10,7 +10,6 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
-import { OpasStore } from '@/stores/OpasStore';
 
 @Component({
   components: {

@@ -13,10 +13,11 @@
 
         <router-link v-for="(linkki, index) in linkit" :key="'linkki'+index" :to="{ name: linkki.route }">
           <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
-            <div>
-              <fas :icon="linkki.icon" class="icon" />
-            </div>
-            <div>
+            <fas v-if="linkki.fasicon" :icon="linkki.fasicon" class="icon" />
+            <span v-if="linkki.materialicon" class="material-icons-outlined icon">
+              {{linkki.materialicon}}
+            </span>
+            <div class="align-self-center">
               {{$t(linkki.text)}}
             </div>
           </div>
@@ -91,7 +92,8 @@ import { Kielet } from '@shared/stores/kieli';
 interface Ylalinkki {
   route: string;
   text: string;
-  icon: string;
+  fasicon?: string;
+  materialicon?:string;
 }
 
 @Component({
@@ -125,23 +127,28 @@ export default class RouteAmmatillinenSelaus extends Vue {
     return [
       {
         route: 'ammatillinenKoulutuksenjarjestajat',
-        text: 'selaa-koulutuksen-jarjestajia',
-        icon: 'lokaatio',
+        text: 'koulutuksen-jarjestajat',
+        fasicon: 'lokaatio',
       },
       {
         route: 'ammatillinenOhjeet',
-        text: 'selaa-ohjeita-ja-materiaaleja',
-        icon: 'ohjeet',
+        text: 'ohjeet-ja-materiaalit',
+        fasicon: 'ohjeet',
+      },
+      {
+        route: 'ammatillinenMaaraykset',
+        text: 'maaraykset',
+        materialicon: 'picture_as_pdf',
       },
       {
         route: 'ammatillinenKoulutusviennit',
-        text: 'selaa-koulutusvienteja',
-        icon: 'lokaatio-nuoli',
+        text: 'koulutusviennit',
+        fasicon: 'lokaatio-nuoli',
       },
       {
         route: 'ammatillinenTyopajat',
-        text: 'selaa-tyopajoja',
-        icon: 'osaamisen-arviointi',
+        text: 'tyopajat',
+        fasicon: 'osaamisen-arviointi',
       },
     ];
   }
@@ -220,6 +227,7 @@ export default class RouteAmmatillinenSelaus extends Vue {
   margin-bottom: 30px;
   padding: 20px 30px;
   border-radius: 10px;
+  height: 60px;
 }
 
 .icon {
