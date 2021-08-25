@@ -14,83 +14,83 @@ describe('RouteOppiaine', () => {
 
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock();
-    const lops2019OppiaineStore = lops2019OppiaineStoreMock();
-    lops2019OppiaineStore.oppiaine = {
-      nimi: {
-        fi: 'Matematiikka',
-      } as any,
-      koodi: {
-        arvo: 'MA',
-      },
-      tehtava: {
-        kuvaus: {
-          fi: 'Oppiaineen tehtavä',
+    perusteDataStore.getJulkaistuPerusteSisalto = () => {
+      return {
+        nimi: {
+          fi: 'Matematiikka',
         } as any,
-      },
-      laajaAlaisetOsaamiset: {
-        kuvaus: {
-          fi: 'Oppiaineen laaja-alaiset osaamiset',
-        } as any,
-      },
-      tavoitteet: {
-        kuvaus: {
-          fi: 'Oppiaineen tavoitteet',
-        } as any,
-        tavoitealueet: [
-          {
-            kohde: {
-              fi: 'Tavoitealueen kohde',
-            } as any,
-            nimi: {
-              fi: 'Tavoitealueen nimi',
-            } as any,
-            tavoitteet: [
-              {
-                fi: 'Tavoite 1',
+        koodi: {
+          arvo: 'MA',
+        },
+        tehtava: {
+          kuvaus: {
+            fi: 'Oppiaineen tehtavä',
+          } as any,
+        },
+        laajaAlaisetOsaamiset: {
+          kuvaus: {
+            fi: 'Oppiaineen laaja-alaiset osaamiset',
+          } as any,
+        },
+        tavoitteet: {
+          kuvaus: {
+            fi: 'Oppiaineen tavoitteet',
+          } as any,
+          tavoitealueet: [
+            {
+              kohde: {
+                fi: 'Tavoitealueen kohde',
               } as any,
-            ],
+              nimi: {
+                fi: 'Tavoitealueen nimi',
+              } as any,
+              tavoitteet: [
+                {
+                  fi: 'Tavoite 1',
+                } as any,
+              ],
+            },
+          ],
+        },
+        arviointi: {
+          kuvaus: {
+            fi: 'Oppiaineen arviointi',
+          } as any,
+        },
+        moduulit: [
+          {
+            nimi: {
+              fi: 'Pakollinen moduuli',
+            } as any,
+            pakollinen: true,
+            koodi: {
+              arvo: 'a',
+            },
+          },
+          {
+            nimi: {
+              fi: 'Valinnainen moduuli',
+            } as any,
+            pakollinen: false,
+            koodi: {
+              arvo: 'b',
+            },
           },
         ],
-      },
-      arviointi: {
-        kuvaus: {
-          fi: 'Oppiaineen arviointi',
-        } as any,
-      },
-      moduulit: [
-        {
-          nimi: {
-            fi: 'Pakollinen moduuli',
-          } as any,
-          pakollinen: true,
-          koodi: {
-            arvo: 'a',
+        oppimaarat: [
+          {
+            nimi: {
+              fi: 'Oppimaara',
+            } as any,
           },
-        },
-        {
-          nimi: {
-            fi: 'Valinnainen moduuli',
-          } as any,
-          pakollinen: false,
-          koodi: {
-            arvo: 'b',
-          },
-        },
-      ],
-      oppimaarat: [
-        {
-          nimi: {
-            fi: 'Oppimaara',
-          } as any,
-        },
-      ],
+        ],
+      };
     };
 
     const wrapper = mount(RouteOppiaine as any, {
       localVue,
       propsData: {
         perusteDataStore,
-        lops2019OppiaineStore,
       },
       stubs: {
         ...stubs,

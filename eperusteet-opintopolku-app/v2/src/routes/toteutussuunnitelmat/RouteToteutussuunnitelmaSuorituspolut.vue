@@ -39,24 +39,25 @@ export default class RouteToteutussuunnitelmaSuorituspolut extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
-  private sisaltoviiteStore: SisaltoviiteStore | null = null;
-  private suorituspolutStore: SuorituspolutStore | null = null;
-
-  async mounted() {
-    this.sisaltoviiteStore = new SisaltoviiteStore(this.opetussuunnitelmaDataStore.opetussuunnitelma!, _.toNumber(this.$route.params.sisaltoviiteId));
-    this.suorituspolutStore = new SuorituspolutStore(this.opetussuunnitelmaDataStore.opetussuunnitelma!);
-  }
-
-  get sisaltoviite() {
-    if (this.sisaltoviiteStore) {
-      return this.sisaltoviiteStore.sisaltoviite.value;
-    }
+  get sisaltoviiteId() {
+    return _.toNumber(this.$route.params.sisaltoviiteId);
   }
 
   get suorituspolut() {
-    if (this.suorituspolutStore) {
-      return this.suorituspolutStore.suorituspolut.value;
-    }
+    return _.map(_.get(this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId }), 'lapset'), suorituspolku => {
+      return {
+        ...suorituspolku,
+        perusteenLaajuus: this.perusteLaajuus,
+      };
+    });
+  }
+
+  get sisaltoviite() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
+  }
+
+  get perusteLaajuus() {
+    return _.get(_.head(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('suoritustavat')), 'rakenne.muodostumisSaanto');
   }
 
   get kuvat() {

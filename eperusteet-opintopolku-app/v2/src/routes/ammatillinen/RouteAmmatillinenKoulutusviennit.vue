@@ -12,6 +12,7 @@ import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
 import { Kielet } from '@shared/stores/kieli';
 import { Kieli } from '@shared/tyypit';
+import { AmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
 
 @Component({
   components: {
@@ -19,7 +20,7 @@ import { Kieli } from '@shared/tyypit';
   },
 })
 export default class RouteAmmatillinenKoulutusviennit extends Vue {
-  private perusteHakuStoreKoulutusvienti = new PerusteHakuStore({ koulutusvienti: true });
+  private perusteHakuStoreKoulutusvienti = new AmmatillinenPerusteHakuStore({ koulutusvienti: true });
 
   get kieli() {
     return Kielet.getSisaltoKieli.value;

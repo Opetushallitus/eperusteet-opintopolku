@@ -111,48 +111,68 @@ describe('EpPerusteSidenav', () => {
 
   describe('Rendering Root and spinners', () => {
     // const perusteDataStore = new PerusteDataStore(42);
-    const perusteDataStore = perusteDataStoreMock({
-      peruste: perusteData,
-    });
+    // const perusteDataStore = perusteDataStoreMock({
+    // peruste: perusteData,
+    // });
 
-    const wrapper = mount(EpPerusteSidenav as any, {
-      localVue,
-      propsData: {
-        perusteDataStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-      },
-    });
+    const getWrapper = (perusteData?, navigation?) => {
+      return mount(EpPerusteSidenav as any, {
+        localVue,
+        propsData: {
+          perusteDataStore: perusteDataStoreMock(),
+          //   {
+          //     ...(perusteData && { peruste: perusteData }),
+          //     ...(navigation && { navigation }),
+          //   },
+          // ),
+        },
+        stubs: {
+          ...stubs,
+        },
+        mocks: {
+          ...mocks,
+        },
+      });
+    };
+
+    // const wrapper = mount(EpPerusteSidenav as any, {
+    //   localVue,
+    //   propsData: {
+    //     perusteDataStore,
+    //   },
+    //   stubs: {
+    //     ...stubs,
+    //   },
+    //   mocks: {
+    //     ...mocks,
+    //   },
+    // });
 
     test('Works with incomplete data', async () => {
+      const wrapper = getWrapper();
       expect(wrapper.html()).toContain('oph-spinner');
     });
 
     test('Hides spinner', () => {
-      perusteDataStore.perusteDto = perusteData;
-      perusteDataStore.navigation = {
+      const wrapper = getWrapper(perusteData, {
         ...navigationData,
         children: [],
-      };
+      });
 
       expect(wrapper.html()).not.toContain('oph-spinner');
     });
 
     test('Works with simple root node', () => {
+      const wrapper = getWrapper();
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');
     });
 
     test('Works with complex data', () => {
-      perusteDataStore.perusteDto = perusteData;
-      perusteDataStore.navigation = {
+      const wrapper = getWrapper(perusteData, {
         ...navigationData,
         children: navigationDataViitteet as any,
-      };
+      });
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');
@@ -160,13 +180,13 @@ describe('EpPerusteSidenav', () => {
     });
 
     test('Works with oppiaineet', () => {
-      perusteDataStore.navigation = {
+      const wrapper = getWrapper(undefined, {
         ...navigationData,
         children: [
           navigationDataViitteet as any,
           ...navigationDataLoput as any,
         ],
-      };
+      });
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');

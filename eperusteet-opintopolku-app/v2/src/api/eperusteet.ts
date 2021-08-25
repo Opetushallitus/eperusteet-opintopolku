@@ -1,4 +1,5 @@
-import { Api, Perusteet, Tiedotteet } from '@shared/api/eperusteet';
+import { Api, Julkaisut, PerusteenJulkaisuData, Perusteet, Tiedotteet } from '@shared/api/eperusteet';
+import { Page } from '@shared/tyypit';
 
 export interface PerusteQuery {
   sivu?: number;
@@ -36,6 +37,19 @@ export interface TiedoteQuery {
   tiedoteJulkaisuPaikka?: Array<string>;
   perusteIds?: Array<number>;
   koulutusTyyppi?: Array<string>;
+}
+
+export interface JulkaistutPerusteetQuery {
+  sivu?: number;
+  sivukoko?: number;
+  kieli?: string;
+  nimi?: string;
+  koulutustyyppi?: Array<string>;
+  tuleva?: boolean;
+  siirtyma?: boolean;
+  voimassaolo?: boolean;
+  poistunut?: boolean;
+  koulutusvienti?: boolean;
 }
 
 export async function tiedoteQuery(query: TiedoteQuery = {
@@ -82,4 +96,23 @@ export async function perusteetQuery(query: PerusteQuery = {
   // query.tutkinnonosat,
   // query.osaamisalat,
   // query.koulutusvienti,
+}
+
+export async function julkaistutPerusteet(query: JulkaistutPerusteetQuery) {
+  query = {
+    sivukoko: 100,
+    ...query,
+  };
+
+  return (await Julkaisut.getKoulutustyyppienJulkaisut(
+    query.koulutustyyppi || [],
+    query.nimi,
+    query.kieli,
+    query.tuleva,
+    query.voimassaolo,
+    query.siirtyma,
+    query.poistunut,
+    query.koulutusvienti,
+    query.sivu,
+    query.sivukoko)).data as Page<PerusteenJulkaisuData>;
 }
