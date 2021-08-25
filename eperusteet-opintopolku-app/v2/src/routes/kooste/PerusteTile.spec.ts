@@ -11,7 +11,7 @@ describe('PerusteTile ', () => {
   Kielet.install(localVue);
   localVue.use(new Kaannos());
 
-  const peruste = {
+  const julkaisu = {
     id: 42,
     nimi: {
       fi: 'peruste42',
@@ -25,7 +25,7 @@ describe('PerusteTile ', () => {
     const wrapper = mount(PerusteTile as any, {
       localVue,
       propsData: {
-        peruste,
+        julkaisu,
       },
       stubs: {
         ...stubs,

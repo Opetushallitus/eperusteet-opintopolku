@@ -238,9 +238,7 @@ export const router = new Router({
           async props(route) {
             return {
               default: {
-                perusteKoosteStore: new PerusteKoosteStore(
-                  stateToKoulutustyyppi(route.params.koulutustyyppi),
-                  _.parseInt(route.params.perusteId)),
+                perusteKoosteStore: new PerusteKoosteStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                 opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                 paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
                 paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),

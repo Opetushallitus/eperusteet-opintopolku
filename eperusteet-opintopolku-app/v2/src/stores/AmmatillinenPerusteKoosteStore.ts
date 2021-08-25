@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { JulkinenApi, OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaQuery } from '@shared/api/amosaa';
-import { PerusteDto, TiedoteDto, Perusteet, Julkaisut, JulkaisuJulkinenDto, PerusteKaikkiDto } from '@shared/api/eperusteet';
+import { OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaQuery } from '@shared/api/amosaa';
+import { TiedoteDto, Perusteet, PerusteKaikkiDto } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { tiedoteQuery } from '@/api/eperusteet';
 import { Page } from '@shared/tyypit';

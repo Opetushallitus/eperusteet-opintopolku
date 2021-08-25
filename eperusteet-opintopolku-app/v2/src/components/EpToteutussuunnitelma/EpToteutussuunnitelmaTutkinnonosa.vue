@@ -24,7 +24,7 @@
 
     <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus" v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0">
 
-      <ep-collapse class="mb-3" v-for="toteutus in sisaltoviite.tosa.toteutukset" :key="toteutus.id"
+      <ep-collapse class="mb-3" v-for="toteutus in toteutukset" :key="toteutus.id"
         :shadow="true"
         :borderBottom="false"
         :togglefull="true"
@@ -141,6 +141,7 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenOsaalueet.vue';
 import * as _ from 'lodash';
+import { Koodistot } from '@shared/api/amosaa';
 
 @Component({
   components: {
@@ -166,6 +167,35 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
 
   @Prop({ required: true })
   private arviointiasteikot!: any[];
+
+  private tutkintonimikkeetJaOsaamisalatKoodit: any | null = null;
+  private toteutukset: any | null = null;
+
+  async mounted() {
+    this.tutkintonimikkeetJaOsaamisalatKoodit = _.chain(await Promise.all(
+      _.chain(this.sisaltoviite.tosa?.toteutukset)
+        .map(toteutus => toteutus.koodit)
+        .flatten()
+        .uniq()
+        .map(koodi => Koodistot.getKoodistoKoodiByUri(koodi))
+        .value())
+    ).map('data')
+      .map(koodi => {
+        return {
+          ...koodi,
+          nimi: _.mapValues(_.keyBy(koodi.metadata, v => _.toLower(v.kieli)), v => v.nimi),
+        };
+      })
+      .keyBy('koodiUri')
+      .value();
+
+    this.toteutukset = _.map(this.sisaltoviite.tosa?.toteutukset, toteutus => {
+      return {
+        ...toteutus,
+        tutkintonimikkeetJaOsaamisalat: _.map(toteutus.koodit, koodi => this.tutkintonimikkeetJaOsaamisalatKoodit[koodi]),
+      };
+    });
+  }
 
   get hasKuvaus() {
     return this.sisaltoviite.tekstiKappale.teksti || (this.perusteenTutkinnonosa && this.perusteenTutkinnonosa.kuvaus);

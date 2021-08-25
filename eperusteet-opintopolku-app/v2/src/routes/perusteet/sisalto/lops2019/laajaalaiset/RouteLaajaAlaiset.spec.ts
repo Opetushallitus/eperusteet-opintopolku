@@ -14,40 +14,40 @@ describe('RouteLaajaAlaiset', () => {
 
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock();
-    const lops2019LaajaAlaisetStore = lops2019LaajaAlaisetStoreMock();
 
-    lops2019LaajaAlaisetStore.laajaAlaisetKokonaisuus = {
-      laajaAlaisetOsaamiset: [
-        {
-          nimi: {
-            fi: 'Hyvinvointiosaaminen',
-          } as any,
-          koodi: {
-            arvo: '01',
+    perusteDataStore.getJulkaistuPerusteSisalto = () => {
+      return {
+        laajaAlaisetOsaamiset: [
+          {
+            nimi: {
+              fi: 'Hyvinvointiosaaminen',
+            } as any,
+            koodi: {
+              arvo: '01',
+            },
+            kuvaus: {
+              fi: 'Hyvinvointiosaaminen kuvaus',
+            } as any,
           },
-          kuvaus: {
-            fi: 'Hyvinvointiosaaminen kuvaus',
-          } as any,
-        },
-        {
-          nimi: {
-            fi: 'Vuorovaikutusosaaminen',
-          } as any,
-          koodi: {
-            arvo: '02',
+          {
+            nimi: {
+              fi: 'Vuorovaikutusosaaminen',
+            } as any,
+            koodi: {
+              arvo: '02',
+            },
+            kuvaus: {
+              fi: 'Vuorovaikutusosaaminen kuvaus',
+            } as any,
           },
-          kuvaus: {
-            fi: 'Vuorovaikutusosaaminen kuvaus',
-          } as any,
-        },
-      ],
+        ],
+      };
     };
 
     const wrapper = mount(RouteLaajaAlaiset as any, {
       localVue,
       propsData: {
         perusteDataStore,
-        lops2019LaajaAlaisetStore,
       },
       stubs: {
         ...stubs,

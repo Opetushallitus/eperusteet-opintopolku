@@ -19,6 +19,7 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
       />
       <ep-toteutussuunnitelma-opintokokonaisuus
         v-else-if="sisaltoviite.tyyppi === 'opintokokonaisuus'"
@@ -62,6 +63,7 @@ import EpToteutussuunnitelmaLaajaalainenOsaaminen from '@/components/EpToteutuss
 import EpToteutussuunnitelmaKoulutuksenOsat from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsat.vue';
 import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsa.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import { deepFind } from '@shared/utils/helpers';
 
 @Component({
   components: {
@@ -79,33 +81,39 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
-  private sisaltoviiteStore: SisaltoviiteStore | null = null;
-
-  async mounted() {
-    this.sisaltoviiteStore = new SisaltoviiteStore(this.opetussuunnitelmaDataStore.opetussuunnitelma!, _.toNumber(this.$route.params.sisaltoviiteId));
+  get fetching() {
+    return !this.sisaltoviite;
   }
 
-  get fetching() {
-    if (this.sisaltoviiteStore) {
-      return this.sisaltoviiteStore.fetching.value;
-    }
+  get sisaltoviiteId() {
+    return _.toNumber(this.$route.params.sisaltoviiteId);
   }
 
   get sisaltoviite() {
-    if (this.sisaltoviiteStore) {
-      return this.sisaltoviiteStore.sisaltoviite.value;
+    const julkaistuSisalto = this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
+
+    if (_.get(julkaistuSisalto, 'tosa')) {
+      const tutkinnonosat = this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat');
+      const tutkinnonosa = _.find(tutkinnonosat, tutkinnonosa => tutkinnonosa.tosa.id === julkaistuSisalto.tosa.id);
+
+      return {
+        ...julkaistuSisalto,
+        tosa: tutkinnonosa.tosa,
+      };
+    }
+
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
+  }
+
+  get perusteenTutkinnonosaViite() {
+    if (this.sisaltoviite.tosa) {
+      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(this.sisaltoviite.tosa.perusteentutkinnonosa) });
     }
   }
 
   get perusteenTutkinnonosa() {
-    if (this.sisaltoviiteStore) {
-      return this.sisaltoviiteStore.perusteenTutkinnonosa.value;
-    }
-  }
-
-  get perusteenTutkinnonosaViite() {
-    if (this.sisaltoviiteStore) {
-      return this.sisaltoviiteStore.perusteenTutkinnonosaViite.value;
+    if (this.sisaltoviite.tosa) {
+      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: _.toNumber(this.sisaltoviite.tosa.perusteentutkinnonosa) });
     }
   }
 

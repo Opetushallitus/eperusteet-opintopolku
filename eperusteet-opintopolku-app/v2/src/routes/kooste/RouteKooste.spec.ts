@@ -95,7 +95,7 @@ describe('RouteKooste', () => {
       } as any,
     }];
 
-    perusteKoosteStore.julkaistutPerusteet = [{
+    perusteKoosteStore.perusteJulkaisut = [{
       nimi: {
         fi: 'peruste42',
       } as any,

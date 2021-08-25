@@ -8,9 +8,9 @@
       <EpSearch class="mt-3 mb-3" v-model="queryNimi" :placeholder="$t('etsi')"/>
 
       <b-table striped hover responsive :items="tutkinnonosat" :fields="fields">
-        <template v-slot:cell(tutkinnonosaViite.tekstiKappale.nimi)="data">
-          <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: data.item.tutkinnonosaViite.id}}">
-            {{ $kaanna(data.item.tutkinnonosaViite.tekstiKappale.nimi) }}
+        <template v-slot:cell(tekstiKappale.nimi)="data">
+          <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: data.item.id}}">
+            {{ $kaanna(data.item.tekstiKappale.nimi) }}
           </router-link>
         </template>
       </b-table>
@@ -38,31 +38,42 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
-  private tutkinnonosatStore: TutkinnonosatStore | null = null;
   private queryNimi = '';
 
-  async mounted() {
-    this.tutkinnonosatStore = new TutkinnonosatStore(this.opetussuunnitelmaDataStore.opetussuunnitelma!);
+  get julkaistuTutkinnonosaViitteet() {
+    return _.get(this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' }), 'lapset');
+  }
+
+  get julkaistutTutkinnonOsat() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat');
   }
 
   get tutkinnonosat() {
-    if (this.tutkinnonosatStore && this.tutkinnonosatStore.tutkinnonosat.value) {
-      return _.chain(this.tutkinnonosatStore.tutkinnonosat.value)
-        .filter(tutkinnonosa => _.includes(
-          _.toLower(_.get(tutkinnonosa, 'tutkinnonosaViite.tekstiKappale.nimi.' + Kielet.getSisaltoKieli.value)),
-          _.toLower(this.queryNimi)
-        ))
-        .value();
-    }
+    return _.chain(this.julkaistuTutkinnonosaViitteet)
+      .map(tutkinnonosaViite => {
+        const tutkinnonosa = _.find(this.julkaistutTutkinnonOsat, tutkinnonosa => tutkinnonosa.tosa.id === tutkinnonosaViite.tosa.id);
+        return {
+          ...tutkinnonosaViite,
+          perusteenTutkinnonosaViite: this.perusteenTutkinnonosaViite(tutkinnonosa.tosa.perusteentutkinnonosa),
+          tosa: tutkinnonosa.tosa,
+        };
+      })
+      .filter(tutkinnonosaViite => Kielet.search(this.queryNimi, tutkinnonosaViite.tekstiKappale.nimi))
+      .sortBy('perusteenTutkinnonosaViite.jarjestys')
+      .value();
+  }
+
+  perusteenTutkinnonosaViite(perusteenTutkinnonosaId) {
+    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(perusteenTutkinnonosaId) });
   }
 
   get fields() {
     return [{
-      key: 'jarjestysnro',
+      key: 'perusteenTutkinnonosaViite.jarjestys',
       label: this.$t('nro') as string,
       sortable: true,
     }, {
-      key: 'tutkinnonosaViite.tekstiKappale.nimi',
+      key: 'tekstiKappale.nimi',
       sortable: true,
       sortByFormatted: true,
       label: this.$t('nimi') as string,
@@ -77,8 +88,8 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
         if (item.perusteenTutkinnonosaViite) {
           return item.perusteenTutkinnonosaViite.laajuus + ' ' + this.$t('osaamispiste');
         }
-        else if (item.tutkinnonosaViite.tosa.omatutkinnonosa) {
-          return item.tutkinnonosaViite.tosa.omatutkinnonosa.laajuus + ' ' + this.$t('osaamispiste');
+        else if (item.tosa.omatutkinnonosa) {
+          return item.tosa.omatutkinnonosa.laajuus + ' ' + this.$t('osaamispiste');
         }
       },
     }];

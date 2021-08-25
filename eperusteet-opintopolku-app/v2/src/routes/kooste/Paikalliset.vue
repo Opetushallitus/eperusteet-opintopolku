@@ -7,9 +7,9 @@
   <div class="opetussuunnitelma-container">
     <div class="peruste-nav">
       <div class="d-md-flex">
-        <div class="peruste" v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx" :class="{ active: activePeruste === julkaisu.peruste.id}">
+        <div class="peruste" v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx" :class="{ active: activePeruste === julkaisu.perusteId}">
           <div class="peruste-select">
-            <a href="javascript:;" @click="setActivePeruste(julkaisu.peruste)">
+            <a href="javascript:;" @click="setActivePeruste(julkaisu)">
               <div>
                 {{ $kaanna(julkaisu.nimi) }}
               </div>
@@ -88,8 +88,8 @@ export default class Paikalliset extends Vue {
 
   @Watch('julkaistutPerusteet', { immediate: true })
   async perusteetChange() {
-    if (_.size(this.perusteKoosteStore.julkaistutPerusteet) > 0) {
-      await this.setActivePeruste(_.get(this.julkaistutPerusteet![0], 'peruste'));
+    if (_.size(this.perusteKoosteStore.perusteJulkaisut) > 0) {
+      await this.setActivePeruste(this.julkaistutPerusteet![0]);
     }
   }
 
@@ -101,14 +101,14 @@ export default class Paikalliset extends Vue {
     return this.paikallinenStore.perusteId?.value;
   }
 
-  async setActivePeruste(peruste) {
+  async setActivePeruste(perusteJulkaisu) {
     this.query = '';
-    await this.paikallinenStore.fetch!(peruste.id, peruste.diaarinumero);
+    await this.paikallinenStore.fetch!(perusteJulkaisu.perusteId, perusteJulkaisu.diaarinumero);
   }
 
   get julkaistutPerusteet() {
-    if (this.perusteKoosteStore.julkaistutPerusteet) {
-      return _.chain(this.perusteKoosteStore.julkaistutPerusteet)
+    if (this.perusteKoosteStore.perusteJulkaisut) {
+      return _.chain(this.perusteKoosteStore.perusteJulkaisut)
         .map(julkaistuPeruste => ({
           ...julkaistuPeruste,
           kaannettyNimi: this.$kaanna(julkaistuPeruste.nimi!),
@@ -155,7 +155,7 @@ export default class Paikalliset extends Vue {
   }
 
   get currentPeruste() {
-    return _.find(this.julkaistutPerusteet, ['peruste.id', this.paikallinenStore.perusteId?.value]);
+    return _.find(this.julkaistutPerusteet, ['perusteId', this.paikallinenStore.perusteId?.value]);
   }
 }
 </script>

@@ -20,7 +20,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { JulkaisuJulkinenDto } from '@shared/api/eperusteet';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
 
