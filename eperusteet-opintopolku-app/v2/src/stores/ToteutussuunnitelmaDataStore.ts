@@ -49,11 +49,11 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       children: _.filter(navigation.children, child => child.type !== 'tiedot'),
     };
     this.arviointiasteikot = (await Arviointiasteikot.getAllArviointiasteikot()).data;
-    if (this.opetussuunnitelma.peruste) {
+    if (this.opetussuunnitelma?.peruste) {
       await this.fetchPerusteKuvat(this.opetussuunnitelma.peruste.perusteId!);
     }
 
-    if (this.opetussuunnitelma.peruste?.perusteId) {
+    if (this.opetussuunnitelma?.peruste?.perusteId) {
       this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.perusteId)).data;
     }
   }

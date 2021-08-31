@@ -97,6 +97,9 @@ describe('RouteOppiaine', () => {
       },
       mocks: {
         ...mocks,
+        $route: {
+          params: {},
+        },
       },
     });
 

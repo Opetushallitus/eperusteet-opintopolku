@@ -139,8 +139,6 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { AipeOppiaineStore } from '@/stores/AipeOppiaineStore';
-import { AipeVaiheStore } from '@/stores/AipeVaiheStore';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -156,12 +154,6 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
   },
 })
 export default class RouteAipeOppiaine extends Vue {
-  // @Prop({ required: true })
-  // private aipeOppiaineStore!: AipeOppiaineStore;
-
-  // @Prop({ required: true })
-  // private aipeVaiheStore!: AipeVaiheStore;
-
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
