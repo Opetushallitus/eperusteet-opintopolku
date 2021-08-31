@@ -95,7 +95,7 @@ export class PerusteDataStore {
   }
 
   @Getter(state => {
-    return state.perusteKaikki || state.peruste;
+    return state.perusteKaikki || state.perusteDto;
   })
   public readonly peruste!: PerusteDto | PerusteKaikkiDto | null;
 

@@ -49,45 +49,10 @@ describe('RouteModuuli', () => {
       };
     };
 
-    // const lops2019ModuuliStore = lops2019ModuuliStoreMock();
-    // lops2019ModuuliStore.moduuli = {
-    //   nimi: {
-    //     fi: 'Luvut ja yhtälöt',
-    //   } as any,
-    //   koodi: {
-    //     arvo: 'MAY',
-    //   },
-    //   pakollinen: true,
-    //   laajuus: 2,
-    //   tavoitteet: {
-    //     kohde: {
-    //       fi: 'Tavoitteiden kohde',
-    //     } as any,
-    //     tavoitteet: [
-    //       {
-    //         fi: 'Tavoitteiden tavoite',
-    //       } as any,
-    //     ],
-    //   },
-    //   sisallot: [
-    //     {
-    //       kohde: {
-    //         fi: 'Sisältöjen kohde',
-    //       } as any,
-    //       sisallot: [
-    //         {
-    //           fi: 'Sisältöjen sisältö',
-    //         } as any,
-    //       ],
-    //     },
-    //   ],
-    // };
-
     const wrapper = mount(RouteModuuli as any, {
       localVue,
       propsData: {
         perusteDataStore,
-        // lops2019ModuuliStore,
       },
       stubs: {
         ...stubs,

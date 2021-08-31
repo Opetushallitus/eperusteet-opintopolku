@@ -7,7 +7,6 @@ import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
-import { perusteDataStoreMock } from '@/storeMocks';
 
 const navigationData = {
   type: 'root' as any,
@@ -110,69 +109,45 @@ describe('EpPerusteSidenav', () => {
   localVue.use(new Kaannos());
 
   describe('Rendering Root and spinners', () => {
-    // const perusteDataStore = new PerusteDataStore(42);
-    // const perusteDataStore = perusteDataStoreMock({
-    // peruste: perusteData,
-    // });
+    const perusteDataStore = new PerusteDataStore(42);
 
-    const getWrapper = (perusteData?, navigation?) => {
-      return mount(EpPerusteSidenav as any, {
-        localVue,
-        propsData: {
-          perusteDataStore: perusteDataStoreMock(),
-          //   {
-          //     ...(perusteData && { peruste: perusteData }),
-          //     ...(navigation && { navigation }),
-          //   },
-          // ),
-        },
-        stubs: {
-          ...stubs,
-        },
-        mocks: {
-          ...mocks,
-        },
-      });
-    };
-
-    // const wrapper = mount(EpPerusteSidenav as any, {
-    //   localVue,
-    //   propsData: {
-    //     perusteDataStore,
-    //   },
-    //   stubs: {
-    //     ...stubs,
-    //   },
-    //   mocks: {
-    //     ...mocks,
-    //   },
-    // });
+    const wrapper = mount(EpPerusteSidenav as any, {
+      localVue,
+      propsData: {
+        perusteDataStore,
+      },
+      stubs: {
+        ...stubs,
+      },
+      mocks: {
+        ...mocks,
+      },
+    });
 
     test('Works with incomplete data', async () => {
-      const wrapper = getWrapper();
       expect(wrapper.html()).toContain('oph-spinner');
     });
 
     test('Hides spinner', () => {
-      const wrapper = getWrapper(perusteData, {
+      perusteDataStore.perusteDto = perusteData;
+      perusteDataStore.navigation = {
         ...navigationData,
         children: [],
-      });
+      };
 
       expect(wrapper.html()).not.toContain('oph-spinner');
     });
 
     test('Works with simple root node', () => {
-      const wrapper = getWrapper();
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');
     });
 
     test('Works with complex data', () => {
-      const wrapper = getWrapper(perusteData, {
+      perusteDataStore.navigation = {
         ...navigationData,
         children: navigationDataViitteet as any,
-      });
+      };
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');
@@ -180,13 +155,13 @@ describe('EpPerusteSidenav', () => {
     });
 
     test('Works with oppiaineet', () => {
-      const wrapper = getWrapper(undefined, {
+      perusteDataStore.navigation = {
         ...navigationData,
         children: [
           navigationDataViitteet as any,
           ...navigationDataLoput as any,
         ],
-      });
+      };
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Tiedot');

@@ -35,8 +35,6 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
-import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
-import { TutkinnonosaViitteetStore } from '@/stores/TutkinnonosaViitteetStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import * as _ from 'lodash';
@@ -147,14 +145,6 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   perusteenTutkinnonosaViite(perusteenTutkinnonosaId) {
     return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(perusteenTutkinnonosaId) });
   }
-
-  // get tutkinnonosaViitteet() {
-  //   if (this.tutkinnonosaViitteetStore) {
-  //     return _.keyBy(this.tutkinnonosaViitteetStore.tutkinnonosaViitteet.value, 'tosa.perusteentutkinnonosa');
-  //   }
-
-  //   return {};
-  // }
 
   get piilotetutTunnisteet() {
     return _.chain(this.sisaltoviite.suorituspolku!.rivit)

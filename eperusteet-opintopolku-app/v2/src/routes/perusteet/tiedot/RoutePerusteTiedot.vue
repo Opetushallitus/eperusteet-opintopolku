@@ -256,7 +256,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get peruste() {
-    return this.perusteDataStore.peruste!;
+    return this.perusteDataStore.peruste;
   }
 
   get kvliitteita() {
@@ -288,7 +288,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get osaamisalaKuvaukset() {
-    return _.chain((this.peruste.suoritustavat as any[]))
+    return _.chain((this.peruste?.suoritustavat as any[]))
       .map(suoritustapa => this.perusteDataStore.osaamisalaKuvaukset[suoritustapa.suoritustapakoodi!])
       .map(suoritustavanOsaamisalakuvaukset => _.values(suoritustavanOsaamisalakuvaukset))
       .flatMap()
@@ -341,11 +341,11 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get hasMaarayskirje() {
-    return this.peruste.maarayskirje && this.maarayskirjeObj[Kielet.sisaltoKieli.value];
+    return this.peruste?.maarayskirje && this.maarayskirjeObj[Kielet.sisaltoKieli.value];
   }
 
   get hasMuutosmaaraykset() {
-    return !_.isEmpty(this.peruste.muutosmaaraykset);
+    return !_.isEmpty(this.peruste?.muutosmaaraykset);
   }
 
   get muutosmaaraykset() {
