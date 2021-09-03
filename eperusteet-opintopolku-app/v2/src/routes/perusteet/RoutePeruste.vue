@@ -46,10 +46,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
+import { Vue, Prop, Component, Watch, ProvideReactive } from 'vue-property-decorator';
 import { Meta } from '@shared/utils/decorators';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import { NavigationNode, traverseNavigation } from '@shared/utils/NavigationBuilder';
 import * as _ from 'lodash';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
@@ -59,6 +59,7 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
+import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 
 @Component({
   components: {
@@ -127,6 +128,15 @@ export default class RoutePeruste extends Vue {
   get perusteEsikatselussa() {
     return this.perusteDataStore.projektitila !== _.toLower(PerusteprojektiDtoTilaEnum.JULKAISTU);
   }
+
+  @ProvideReactive('linkkiHandler')
+  get linkkiHandler(): ILinkkiHandler {
+    return {
+      nodeToRoute(node) {
+        return traverseNavigation(node, false).location;
+      },
+    } as ILinkkiHandler;
+  };
 }
 </script>
 
