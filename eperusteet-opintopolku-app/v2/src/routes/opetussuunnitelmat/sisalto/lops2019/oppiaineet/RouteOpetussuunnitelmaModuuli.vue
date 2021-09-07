@@ -19,9 +19,9 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { Lops2019OpetussuunnitelmaModuuliStore } from '@/stores/Lops2019OpetussuunnitelmaModuuliStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/ModuuliEsitys.vue';
+import _ from 'lodash';
 
 @Component({
   components: {
@@ -33,11 +33,12 @@ export default class RouteOpetussuunnitelmaModuuli extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  @Prop({ required: true })
-  private lops2019OpetussuunnitelmaModuuliStore!: Lops2019OpetussuunnitelmaModuuliStore;
+  get moduuliId() {
+    return _.toNumber(this.$route.params.moduuliId);
+  }
 
   get moduuli() {
-    return this.lops2019OpetussuunnitelmaModuuliStore.moduuli;
+    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: this.moduuliId });
   }
 
   get koodi() {

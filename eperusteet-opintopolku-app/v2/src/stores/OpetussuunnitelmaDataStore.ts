@@ -11,6 +11,8 @@ import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytD
   Opetussuunnitelmat,
   Opintojaksot,
   Termisto,
+  OpetussuunnitelmatJulkiset,
+  OpetussuunnitelmaExportDto,
 } from '@shared/api/ylops';
 
 import { Kielet } from '@shared/stores/kieli';
@@ -18,6 +20,8 @@ import {
   baseURL as perusteBaseURL,
   Liitetiedostot as PerusteLiitetiedostot,
   LiitetiedostotParam as PerusteLiitetiedostotParam,
+  Perusteet,
+  PerusteKaikkiDto,
   Termit,
 } from '@shared/api/eperusteet';
 import {
@@ -28,10 +32,11 @@ import {
   NavigationNode,
 } from '@shared/utils/NavigationBuilder';
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
+import { deepFind } from '@shared/utils/helpers';
 
 @Store
 export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
-  @State() public opetussuunnitelma: OpetussuunnitelmaKevytDto | null = null;
+  @State() public opetussuunnitelma: OpetussuunnitelmaExportDto | null = null;
   @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
   @State() public navigation: YlopsNavigationNodeDto | null = null;
@@ -46,6 +51,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public perusteKuvat: object[] | null = null;
   @State() public termit: object[] | null = null;
   @State() public kuvat: object[] | null = null;
+  @State() public perusteKaikki: PerusteKaikkiDto | null = null;
 
   public static async create(opetussuunnitelmaId: number) {
     const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId);
@@ -72,13 +78,25 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
 
     this.fetchNavigation();
+
+    if (this.opetussuunnitelma?.peruste?.id) {
+      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id)).data;
+    }
   }
 
   async fetchOpetussuunnitelma() {
     this.opetussuunnitelma = null;
     this.opetussuunnitelmaPerusteenId = null;
-    this.opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opetussuunnitelmaId)).data;
+    this.opetussuunnitelma = (await OpetussuunnitelmatJulkiset.getOpetussuunnitelmaJulkaistu(this.opetussuunnitelmaId)).data;
     this.opetussuunnitelmaPerusteenId = this.opetussuunnitelma.perusteenId ? this.opetussuunnitelma.perusteenId : null;
+  }
+
+  public getJulkaistuSisalto(filter) {
+    return deepFind(filter, this.opetussuunnitelma);
+  }
+
+  public getJulkaistuPerusteSisalto(filter) {
+    return deepFind(filter, this.perusteKaikki);
   }
 
   async fetchPerusteTermit(perusteenId: number) {

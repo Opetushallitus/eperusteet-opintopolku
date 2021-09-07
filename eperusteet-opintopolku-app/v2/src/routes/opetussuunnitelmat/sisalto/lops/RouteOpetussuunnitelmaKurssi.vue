@@ -77,7 +77,7 @@ export default class RouteOpetussuunnitelmaKurssi extends Vue {
   }
 
   get kurssi() {
-    return _.find(this.lopsOpetussuunnitelmaOppiaineStore.oppiaine?.kurssit, kurssi => kurssi.id === this.kurssiId);
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.kurssiId });
   }
 
   get sisaltoAvaimet() {

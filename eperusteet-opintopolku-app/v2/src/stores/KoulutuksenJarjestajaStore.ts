@@ -3,6 +3,7 @@ import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composit
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi, OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat } from '@shared/api/amosaa';
 import { Kielet } from '@shared/stores/kieli';
+import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -29,6 +30,7 @@ export class KoulutuksenJarjestajaStore {
       sivu: 0,
       sivukoko: 100,
       kieli: Kielet.getUiKieli.value,
+      koulutustyyppi: ammatillisetKoulutustyypit,
     })).data as any).data;
     this.state.toteutussuunnitelmat = ((await getJulkisetOpetussuunnitelmat({
       organisaatio: this.state.koulutustoimija.organisaatio,
@@ -36,6 +38,7 @@ export class KoulutuksenJarjestajaStore {
       sivu: 0,
       sivukoko: 100,
       kieli: Kielet.getUiKieli.value,
+      koulutustyyppi: ammatillisetKoulutustyypit,
     })).data as any).data;
   }
 }

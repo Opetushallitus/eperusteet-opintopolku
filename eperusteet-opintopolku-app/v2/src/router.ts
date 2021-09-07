@@ -705,22 +705,6 @@ export const router = new Router({
         path: 'tekstikappale/:viiteId',
         component: RouteOpetussuunnitelmaTekstikappale,
         name: 'opetussuunnitelmaTekstikappale',
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId', 'viiteId'],
-            async props(route) {
-              return {
-                default: {
-                  opetussuunnitelmaTekstikappaleStore: await OpetussuunnitelmaTekstikappaleStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.parseInt(route.params.viiteId),
-                    route.params.koulutustyyppi,
-                  ),
-                },
-              };
-            },
-          },
-        },
       }, {
         path: 'oppiaine',
         component: RouteOpetussuunnitelmaOppiaineet,
@@ -729,60 +713,14 @@ export const router = new Router({
         path: 'oppiaine/:oppiaineId',
         component: RouteOpetussuunnitelmaOppiaine,
         name: 'lops2019OpetussuunnitelmaOppiaine',
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
-            async props(route) {
-              return {
-                default: {
-                  lops2019OpetussuunnitelmaOppiaineStore: await Lops2019OpetussuunnitelmaOppiaineStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.parseInt(route.params.oppiaineId),
-                  ),
-                },
-              };
-            },
-          },
-        },
       }, {
         path: 'poppiaine/:oppiaineId',
         component: RouteOpetussuunnitelmaPoppiaine,
         name: 'lops2019OpetussuunnitelmaPoppiaine',
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
-            async props(route) {
-              return {
-                default: {
-                  lops2019OpetussuunnitelmaPoppiaineStore: await Lops2019OpetussuunnitelmaPoppiaineStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.parseInt(route.params.oppiaineId),
-                  ),
-                },
-              };
-            },
-          },
-        },
       }, {
         path: 'oppiaine/:oppiaineId/moduuli/:moduuliId',
         component: RouteOpetussuunnitelmaModuuli,
         name: 'lops2019OpetussuunnitelmaModuuli',
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId', 'oppiaineId', 'moduuliId'],
-            async props(route) {
-              return {
-                default: {
-                  lops2019OpetussuunnitelmaModuuliStore: await Lops2019OpetussuunnitelmaModuuliStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.parseInt(route.params.oppiaineId),
-                    _.parseInt(route.params.moduuliId)
-                  ),
-                },
-              };
-            },
-          },
-        },
       }, {
         path: 'opintojakso/:opintojaksoId',
         component: RouteOpetussuunnitelmaOpintojakso,
@@ -791,21 +729,6 @@ export const router = new Router({
         path: 'lukiooppiaine/:oppiaineId',
         component: RouteOpetussuunnitelmaOppiaine2015,
         name: 'lopsOpetussuunnitelmaOppiaine',
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
-            async props(route) {
-              return {
-                default: {
-                  lopsOpetussuunnitelmaOppiaineStore: await LopsOpetussuunnitelmaOppiaineStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.parseInt(route.params.oppiaineId),
-                  ),
-                },
-              };
-            },
-          },
-        },
         children: [{
           path: 'kurssi/:kurssiId',
           component: RouteOpetussuunnitelmaKurssi,
@@ -815,43 +738,10 @@ export const router = new Router({
         path: 'vuosiluokkakokonaisuus/:vlkId',
         component: RoutePerusopetusVuosiluokkakokonaisuus,
         name: 'opetussuunnitelmanvuosiluokkakokonaisuus',
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId', 'vlkId'],
-            async props(route) {
-              return {
-                default: {
-                  opetussuunnitelmaVuosiluokkakokonaisuusStore: await OpetussuunnitelmaVuosiluokkakokonaisuusStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.parseInt(route.params.vlkId),
-                  ),
-                },
-              };
-            },
-          },
-        },
         children: [{
           path: 'oppiaine/:oppiaineId',
           component: RouteOpetussuunnitelmaPerusopetusOppiaine,
           name: 'opetussuunnitelmaperusopetusvuosiluokanoppiaine',
-          meta: {
-            resolve: {
-              cacheBy: ['opetussuunnitelmaId', 'vlkId', 'oppiaineId'],
-              async props(route) {
-                const opetussuunnitelmaDataStore = getRouteStore(route, 'opetussuunnitelma', 'opetussuunnitelmaDataStore');
-                return {
-                  default: {
-                    opetussuunnitelmaOppiaineStore: await OpetussuunnitelmaOppiaineStore.create(
-                      opetussuunnitelmaDataStore.opetussuunnitelma,
-                      _.parseInt(route.params.opetussuunnitelmaId),
-                      _.parseInt(route.params.oppiaineId),
-                      _.parseInt(route.params.vlkId),
-                    ),
-                  },
-                };
-              },
-            },
-          },
         }],
       }, {
         path: 'oppiaineet',
@@ -866,23 +756,6 @@ export const router = new Router({
         path: 'oppiaineet/:oppiaineId',
         component: RouteOpetussuunnitelmaPerusopetusOppiaine,
         name: 'opetussuunnitelmaperusopetusoppiaine',
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId', 'oppiaineId'],
-            async props(route) {
-              const opetussuunnitelmaDataStore = getRouteStore(route, 'opetussuunnitelma', 'opetussuunnitelmaDataStore');
-              return {
-                default: {
-                  opetussuunnitelmaOppiaineStore: await OpetussuunnitelmaOppiaineStore.create(
-                    opetussuunnitelmaDataStore.opetussuunnitelma,
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.parseInt(route.params.oppiaineId),
-                  ),
-                },
-              };
-            },
-          },
-        },
       }],
     }],
   }, {

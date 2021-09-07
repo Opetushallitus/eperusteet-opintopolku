@@ -143,9 +143,8 @@ import * as _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { Lops2019OpintojaksoDto, Ulkopuoliset, Lops2019ModuuliDto, Lops2019Oppiaineet, Lops2019Perusteet, Opetussuunnitelmat, Opintojaksot } from '@shared/api/ylops';
+import { Lops2019OpintojaksoDto, Opetussuunnitelmat } from '@shared/api/ylops';
 import { KoodistoLops2019LaajaAlaiset, koodiSorters } from '@shared/utils/perusteet';
-import { PerusteCache } from '@shared/stores/peruste';
 
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -177,23 +176,29 @@ import EpContent from '@shared/components/EpContent/EpContent.vue';
   },
 })
 export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
-  private cache!: PerusteCache;
   private laajaAlaisetKoodit: any | null = null;
-  private poppiaineet: any | null = null;
-  private opintojaksot: any[] | null = null;
 
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  @Watch('opintojakso', { immediate: true })
-  async opintojaksoChange(val) {
-    if (this.opintojakso) {
-      const id = _.parseInt(this.$route.params.opetussuunnitelmaId);
-      this.cache = await PerusteCache.of(id);
-      this.laajaAlaisetKoodit = (await Opetussuunnitelmat.getKoodistonKoodit(id, KoodistoLops2019LaajaAlaiset)).data;
-      this.poppiaineet = (await Lops2019Oppiaineet.getAllLops2019PaikallisetOppiainet(id)).data;
-      this.opintojaksot = (await Opintojaksot.getAllOpintojaksot(id)).data;
-    }
+  get opetussuunnitelmaId() {
+    return _.toNumber(this.$route.params.opetussuunnitelmaId);
+  }
+
+  async mounted() {
+    this.laajaAlaisetKoodit = (await Opetussuunnitelmat.getKoodistonKoodit(this.opetussuunnitelmaId, KoodistoLops2019LaajaAlaiset)).data;
+  }
+
+  get laajaAlaisetOsaamiset() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('laajaAlaisetOsaamiset');
+  }
+
+  get poppiaineet() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('paikallisetOppiaineet');
+  }
+
+  get opintojaksot() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('opintojaksot');
   }
 
   get termit() {
@@ -206,7 +211,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 
   get opintojakso() {
     if (this.$route) {
-      return _.find(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
+      return _.find(this.opintojaksot, oj => {
         return oj.id === _.parseInt(this.$route.params.opintojaksoId);
       }) as Lops2019OpintojaksoDto;
     }
@@ -271,7 +276,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 
   get oppiaineet() {
     return [
-      ...this.cache ? this.cache.peruste.oppiaineet : [],
+      ...this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('lops2019.oppiaineet'),
       ...this.paikallisetOppiaineet,
     ];
   }

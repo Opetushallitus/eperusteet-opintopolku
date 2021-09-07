@@ -140,7 +140,8 @@ import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicat
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import OppiaineEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/OppiaineEsitys.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { Lops2019OpetussuunnitelmaPoppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaPoppiaineStore';
+import { KoodistoKoodiDto, Opetussuunnitelmat } from '@shared/api/ylops';
+import { KoodistoLops2019LaajaAlaiset } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -154,8 +155,15 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  @Prop({ required: true })
-  private lops2019OpetussuunnitelmaPoppiaineStore!: Lops2019OpetussuunnitelmaPoppiaineStore;
+  private koodit: KoodistoKoodiDto[] = [];
+
+  get opetussuunnitelmaId() {
+    return _.toNumber(this.$route.params.opetussuunnitelmaId);
+  }
+
+  async mounted() {
+    this.koodit = (await Opetussuunnitelmat.getKoodistonKoodit(this.opetussuunnitelmaId, KoodistoLops2019LaajaAlaiset)).data;
+  }
 
   get termit() {
     return this.opetussuunnitelmaDataStore.kaikkiTermit;
@@ -165,16 +173,18 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
     return this.opetussuunnitelmaDataStore.kuvat;
   }
 
+  get oppiaineId() {
+    return _.toNumber(this.$route.params.oppiaineId);
+  }
+
   get oppiaine() {
-    return this.lops2019OpetussuunnitelmaPoppiaineStore.oppiaine;
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.oppiaineId });
   }
 
   get perusteenOppiaine() {
-    return this.lops2019OpetussuunnitelmaPoppiaineStore.perusteenOppiaine;
-  }
-
-  get koodit() {
-    return this.lops2019OpetussuunnitelmaPoppiaineStore.koodit;
+    if (this.oppiaine.perusteenOppiaineUri) {
+      return _.find(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('lops2019.oppiaineet'), oppiaine => oppiaine.koodi.uri === this.oppiaine.perusteenOppiaineUri);
+    }
   }
 
   get kooditFormatted() {
