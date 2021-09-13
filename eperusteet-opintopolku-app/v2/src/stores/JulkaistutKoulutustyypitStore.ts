@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
-import { Perusteet } from '@shared/api/eperusteet';
+import { Perusteet, KoulutustyyppiLukumaara } from '@shared/api/eperusteet';
 import { createLogger } from '@shared/utils/logger';
 
 Vue.use(VueCompositionApi);
@@ -10,19 +10,20 @@ const logger = createLogger('Main');
 
 export class JulkaistutKoulutustyypitStore {
   public state = reactive({
-    julkaistutKoulutustyypit: null as string[] | null,
+    koulutustyyppiLukumaarat: null as KoulutustyyppiLukumaara[] | null,
   })
 
-  public readonly julkaistutKoulutustyypit = computed(() => this.state.julkaistutKoulutustyypit);
+  public readonly koulutustyyppiLukumaarat = computed(() => this.state.koulutustyyppiLukumaarat);
+  public readonly julkaistutKoulutustyypit = computed(() => _.map(this.state.koulutustyyppiLukumaarat, 'koulutustyyppi'));
 
   public async fetch(kieli) {
-    this.state.julkaistutKoulutustyypit = null;
+    this.state.koulutustyyppiLukumaarat = null;
     try {
-      this.state.julkaistutKoulutustyypit = (await Perusteet.getJulkaistutKoulutustyypit(kieli)).data;
+      this.state.koulutustyyppiLukumaarat = (await Perusteet.getJulkaistutKoulutustyypit(kieli)).data;
     }
     catch (e) {
       logger.error(e);
-      this.state.julkaistutKoulutustyypit = [];
+      this.state.koulutustyyppiLukumaarat = [];
     }
   }
 }

@@ -77,25 +77,6 @@ export async function perusteetQuery(query: PerusteQuery = {
     params: query,
   });
   return response.data;
-  // query.sivu,
-  // query.sivukoko,
-  // query.tuleva,
-  // query.siirtyma,
-  // query.voimassaolo,
-  // query.poistunut,
-  // query.nimi,
-  // query.koulutusala,
-  // query.koulutustyyppi,
-  // query.kieli,
-  // query.opintoala,
-  // query.suoritustapa,
-  // query.koulutuskoodi,
-  // query.diaarinumero,
-  // query.muokattu,
-  // query.tutkintonimikkeet,
-  // query.tutkinnonosat,
-  // query.osaamisalat,
-  // query.koulutusvienti,
 }
 
 export async function julkaistutPerusteet(query: JulkaistutPerusteetQuery) {

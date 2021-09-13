@@ -5,7 +5,7 @@
 
     <!-- Perusteen teksti -->
     <ep-collapse tyyppi="perusteteksti"
-                 v-if="perusteTekstikappale && perusteTekstikappale.teksti">
+                 v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && perusteTekstikappale && perusteTekstikappale.teksti">
       <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
       <ep-content-viewer v-if="perusteTekstikappale"
                          :value="$kaanna(perusteTekstikappale.teksti)"
@@ -15,7 +15,7 @@
 
     <!-- Pohjan teksti -->
     <ep-collapse tyyppi="pohjateksti"
-                 v-if="hasTekstikappaleOriginalsTeksteja">
+                 v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPohjanTeksti && hasTekstikappaleOriginalsTeksteja">
       <div class="collapse-header" slot="header">
         {{ $t('pohjan-teksti') }}
         <span v-if="pohjaNimi">({{$kaanna(pohjaNimi)}})</span>

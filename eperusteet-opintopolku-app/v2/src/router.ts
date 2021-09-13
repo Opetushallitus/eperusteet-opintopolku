@@ -76,10 +76,6 @@ import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
 
 import { createLogger } from '@shared/utils/logger';
-import { Lops2019LaajaAlaisetStore } from '@/stores/Lops2019LaajaAlaisetStore';
-import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
-import { Lops2019ModuuliStore } from '@/stores/Lops2019ModuuliStore';
-import { Lops2019OppiaineetStore } from '@/stores/Lops2019OppiaineetStore';
 import RouteOpetussuunnitelmaOppiaineet
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaineet.vue';
 import RouteOpetussuunnitelmaOppiaine
@@ -88,9 +84,6 @@ import RouteOpetussuunnitelmaModuuli
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaModuuli.vue';
 import RouteOpetussuunnitelmaOpintojakso
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/opintojaksot/RouteOpetussuunnitelmaOpintojakso.vue';
-import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
-import { Lops2019OpetussuunnitelmaModuuliStore } from '@/stores/Lops2019OpetussuunnitelmaModuuliStore';
-import { Lops2019OpetussuunnitelmaPoppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaPoppiaineStore';
 import RouteOpetussuunnitelmaPoppiaine
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaPoppiaine.vue';
 import RouteOpetussuunnitelmaOppiaine2015 from '@/routes/opetussuunnitelmat/sisalto/lops/RouteOpetussuunnitelmaOppiaine2015.vue';
@@ -101,21 +94,10 @@ import { OpasStore } from '@/stores/OpasStore';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
-import { PerusteenTutkinnonosatStore } from '@/stores/PerusteenTutkinnonosatStore';
-import { PerusteenTutkinnonosaStore } from '@/stores/PerusteenTutkinnonosaStore';
-import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
-import { PerusteVuosiluokkakokonaisuusStore } from '@/stores/PerusteVuosiluokkakokonaisuusStore';
-import { PerusopetusOppiaineStore } from '@/stores/PerusopetusOppiaineStore';
-import { OpetussuunnitelmaVuosiluokkakokonaisuusStore } from '@/stores/OpetussuunnitelmaVuosiluokkakokonaisuusStore';
-import { OpetussuunnitelmaOppiaineStore } from '@/stores/OpetussuunnitelmaOppiaineStore';
-import { AipeVaiheStore } from '@/stores/AipeVaiheStore';
-import { AipeOppiaineStore } from '@/stores/AipeOppiaineStore';
-import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
 import { getKoostePaikallinenComponent, getKoostePaikallinenStore } from '@/utils/toteutustypes';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
-import { LopsOpetussuunnitelmaOppiaineStore } from './stores/LopsOpetussuunnitelmaOppiaineStore';
 import { MaarayksetStore } from './stores/MaarayksetStore';
 
 Vue.use(Router);
