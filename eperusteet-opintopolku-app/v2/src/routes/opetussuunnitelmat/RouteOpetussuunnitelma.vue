@@ -35,10 +35,10 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, ProvideReactive } from 'vue-property-decorator';
 import { Meta } from '@shared/utils/decorators';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import { NavigationNode, traverseNavigation } from '@shared/utils/NavigationBuilder';
 
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
@@ -48,6 +48,7 @@ import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
 import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
 import { OpetussuunnitelmaKevytDtoTilaEnum } from '@shared/api/ylops';
 import * as _ from 'lodash';
+import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 
 @Component({
   components: {
@@ -110,6 +111,15 @@ export default class RouteOpetussuunnitelma extends Vue {
   get opetussuunnitelmaEsikatselussa() {
     return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU);
   }
+
+  @ProvideReactive('linkkiHandler')
+  get linkkiHandler(): ILinkkiHandler {
+    return {
+      nodeToRoute(node) {
+        return traverseNavigation(node, true).location;
+      },
+    } as ILinkkiHandler;
+  };
 }
 </script>
 
