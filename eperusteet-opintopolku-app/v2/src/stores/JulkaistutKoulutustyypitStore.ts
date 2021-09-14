@@ -19,7 +19,7 @@ export class JulkaistutKoulutustyypitStore {
   public async fetch(kieli) {
     this.state.koulutustyyppiLukumaarat = null;
     try {
-      this.state.koulutustyyppiLukumaarat = (await Perusteet.getJulkaistutKoulutustyypit(kieli)).data;
+      this.state.koulutustyyppiLukumaarat = (await Perusteet.getJulkaistutKoulutustyyppiLukumaarat(kieli)).data;
     }
     catch (e) {
       logger.error(e);

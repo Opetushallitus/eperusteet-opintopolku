@@ -50,10 +50,9 @@
 
         <!-- Pohjan teksti -->
         <ep-collapse tyyppi="pohjateksti"
-                     v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti">
+                     v-if="alikappaleViite.naytaPohjanTeksti && alikappaleViite.original && alikappaleViite.tekstiKappale && alikappaleViite.tekstiKappale.teksti">
           <div class="collapse-header" slot="header">{{ $t('pohjan-teksti') }}</div>
-          <ep-content-viewer v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
-                             :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
+          <ep-content-viewer :value="$kaanna(alikappaleViite.original.tekstiKappale.teksti)"
                              :termit="termit"
                              :kuvat="kuvat" />
         </ep-collapse>
@@ -151,44 +150,6 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
 
       // Poistetaan nykyinen viite alikappaleista
       return _.keyBy(_.slice(viitteet, 1), 'id');
-    }
-  }
-
-  get getAliviiteIds() {
-    if (!_.isEmpty(this.tekstiKappaleViite)) {
-      const viitteet: any[] = [];
-      const stack = [this.tekstiKappaleViite!];
-
-      while (!_.isEmpty(stack)) {
-        const head: any = stack.shift()!;
-
-        // Lisätään vain ne, joilla halutaan näyttää pohjan sisältö
-        if (head.id && head.naytaPohjanTeksti) {
-          viitteet.push(head.id);
-        }
-
-        stack.unshift(..._.map(head.lapset, viite => ({
-          ...viite,
-        })));
-      }
-
-      return _.slice(viitteet, 1);
-    }
-  }
-
-  get originalAlikappaleetObj() {
-    if (this.getAliviiteIds) {
-      const viitteet: any[] = [];
-      this.getAliviiteIds.map(async viite => {
-        const tekstiKappaleOriginal = this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: viite });
-        // const tekstiKappaleOriginal = await this.fetchOriginalAlikappale(viite);
-        // Jos alkuperäinen ei löydy, rajapinta palauttaa tyhjän merkkijonon. Sen takia tarkistetaan onko objekti.
-        if (_.isObject(tekstiKappaleOriginal)) {
-          viitteet.push(tekstiKappaleOriginal);
-        }
-      });
-
-      return _.keyBy(viitteet, 'id');
     }
   }
 
