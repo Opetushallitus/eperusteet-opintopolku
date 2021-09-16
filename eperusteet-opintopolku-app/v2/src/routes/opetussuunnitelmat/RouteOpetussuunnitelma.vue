@@ -58,6 +58,7 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
     EpPreviousNextNavigation,
     EpEsikatseluNotifikaatio,
   },
+  inject: [],
 })
 export default class RouteOpetussuunnitelma extends Vue {
   @Prop({ required: true })

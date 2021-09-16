@@ -71,6 +71,7 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
     EpField,
     EpEsikatseluNotifikaatio,
   },
+  inject: [],
 })
 export default class RoutePeruste extends Vue {
   @Prop({ required: true })
