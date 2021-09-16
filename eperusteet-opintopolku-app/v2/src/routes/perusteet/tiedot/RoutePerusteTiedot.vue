@@ -199,7 +199,7 @@ import _ from 'lodash';
 import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
 
 import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
-import { isAmmatillinen, isKoulutustyyppiAmmatillinen, perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
+import { isAmmatillinen, isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettu, perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
 import { ENV_PREFIX } from '@shared/utils/defaults';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
@@ -367,7 +367,9 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    return this.perusteDataStore.dokumentti;
+    if (isKoulutustyyppiPdfTuettu(this.peruste.koulutustyyppi)) {
+      return this.perusteDataStore.dokumentti;
+    }
   }
 
   get koulutuskooditFields() {
