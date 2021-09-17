@@ -53,7 +53,7 @@ export default class RouteTutkinnonosa extends Vue {
   }
 
   get tutkinnonosaKoodiUri() {
-    return this.tutkinnonosa.koodi?.uri;
+    return this.tutkinnonosa?.koodi?.uri;
   }
 
   get tutkinnonosa() {
