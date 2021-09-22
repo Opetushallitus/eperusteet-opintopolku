@@ -4,7 +4,7 @@
     <ep-spinner v-if="!tutkinnonOsaViitteet"></ep-spinner>
 
     <div v-else>
-      <h2>{{$t('tutkinnonosat')}}</h2>
+      <h2>{{$t(otsikko)}}</h2>
       <EpSearch class="mt-3 mb-3" v-model="queryNimi" :placeholder="$t('etsi')"/>
       <b-table striped hover responsive :items="tutkinnonOsaViitteet" :fields="fields">
         <template v-slot:cell(nimi)="data">
@@ -26,6 +26,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { Koulutustyyppi } from '@shared/tyypit';
 
 @Component({
   components: {
@@ -38,6 +39,18 @@ export default class RouteTutkinnonosat extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   private queryNimi = '';
+
+  get otsikko() {
+    if (this.perusteenKoulutustyyppi === Koulutustyyppi.telma || this.perusteenKoulutustyyppi === Koulutustyyppi.valma) {
+      return 'koulutuksenosat';
+    }
+
+    return 'tutkinnonosat';
+  }
+
+  get perusteenKoulutustyyppi() {
+    return this.perusteDataStore.getJulkaistuPerusteSisalto('koulutustyyppi');
+  }
 
   get perusteenTutkinnonosatById() {
     return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('tutkinnonOsat'), 'id');
@@ -88,6 +101,10 @@ export default class RouteTutkinnonosat extends Vue {
       formatter: (value: any, key: string, item: any) => {
         if (value) {
           return value + ' ' + this.$t('osaamispiste');
+        }
+
+        if (_.isNumber(item.laajuus) && _.isNumber(item.laajuusMaksimi)) {
+          return item.laajuus + ' - ' + item.laajuusMaksimi + ' ' + this.$t('osaamispiste');
         }
       },
     }];

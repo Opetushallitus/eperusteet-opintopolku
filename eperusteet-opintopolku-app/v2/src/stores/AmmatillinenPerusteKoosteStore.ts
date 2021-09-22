@@ -28,6 +28,7 @@ export class AmmatillinenPerusteKoosteStore {
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat);
 
   public async fetch() {
+    this.state.peruste = null;
     this.state.peruste = (await Perusteet.getKokoSisalto(this.perusteId)).data;
 
     this.state.opsQuery = {

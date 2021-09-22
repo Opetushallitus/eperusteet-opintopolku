@@ -151,7 +151,7 @@ export default class RouteKooste extends Vue {
       return _.chain(this.perusteKoosteStore.perusteJulkaisut)
         .map(julkaisu => ({
           ...julkaisu,
-          id: _.toString(julkaisu.perusteId),
+          perusteId: _.toString(julkaisu.perusteId),
           kaannettyNimi: this.$kaanna(julkaisu.nimi!),
         }))
         .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])

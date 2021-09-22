@@ -134,10 +134,12 @@ export default class RouteKoosteAmmatillinen extends Vue {
   }
 
   get peruste() {
-    return {
-      ...this.ammatillinenPerusteKoosteStore.peruste.value,
-      laajuus: _.get(this.ammatillinenPerusteKoosteStore.peruste.value, 'suoritustavat[0].rakenne.muodostumisSaanto.laajuus.minimi'),
-    } as any;
+    if (this.ammatillinenPerusteKoosteStore.peruste.value) {
+      return {
+        ...this.ammatillinenPerusteKoosteStore.peruste.value,
+        laajuus: _.get(this.ammatillinenPerusteKoosteStore.peruste.value, 'suoritustavat[0].rakenne.muodostumisSaanto.laajuus.minimi'),
+      } as any;
+    }
   }
 
   get perusteRoute() {
