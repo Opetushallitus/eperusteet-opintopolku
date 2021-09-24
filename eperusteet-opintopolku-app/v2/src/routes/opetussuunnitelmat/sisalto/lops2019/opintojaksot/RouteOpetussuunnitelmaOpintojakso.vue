@@ -416,7 +416,6 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
 
   get hasLaajaAlainenOsaaminen() {
     return !_.isEmpty(_.chain(this.laajaAlainenOsaaminen)
-      .filter('kuvaus')
       .value());
   }
 
