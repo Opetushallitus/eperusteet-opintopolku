@@ -24,7 +24,7 @@ import { deepFind } from '@shared/utils/helpers';
 @Store
 export class PerusteDataStore {
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
-  @State() public perusteDto: PerusteDto | null = null;
+  // @State() public perusteDto: PerusteDto | null = null;
   @State() public projektitila: string | null = null;
   @State() public perusteId: number;
   @State() public navigation: NavigationNodeDto | null = null;
@@ -59,7 +59,7 @@ export class PerusteDataStore {
 
   private async init() {
     this.perusteKaikki = (await Perusteet.getKokoSisalto(this.perusteId)).data;
-    this.perusteDto = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
+    // this.perusteDto = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
     this.projektitila = (await Perusteet.getPerusteProjektiTila(this.perusteId)).data;
     this.termit = (await Termit.getAllTermit(this.perusteId)).data;
     this.kuvat = _.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
@@ -69,13 +69,13 @@ export class PerusteDataStore {
     }));
     this.fetchNavigation();
 
-    if (isKoulutustyyppiAmmatillinen(this.perusteDto.koulutustyyppi!)) {
+    if (isKoulutustyyppiAmmatillinen(this.perusteKaikki.koulutustyyppi!)) {
       await this.getKvLiitteet();
       this.osaamisalaKuvaukset = (await Perusteet.getOsaamisalat(this.perusteId)).data;
       this.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
     }
 
-    if (this.perusteDto.koulutustyyppi === Koulutustyyppi.aikuistenperusopetus) {
+    if (this.perusteKaikki.koulutustyyppi === Koulutustyyppi.aikuistenperusopetus) {
       this.laajaAlaisetOsaamiset = (await Aipeopetuksensisalto.getAipeOsaamiset(this.perusteId)).data;
     }
 
@@ -95,9 +95,9 @@ export class PerusteDataStore {
   }
 
   @Getter(state => {
-    return state.perusteKaikki || state.perusteDto;
+    return state.perusteKaikki;
   })
-  public readonly peruste!: PerusteDto | PerusteKaikkiDto | null;
+  public readonly peruste!: PerusteKaikkiDto | null;
 
   @Getter((state, getters) => {
     return !getters.peruste || !state.navigation;
