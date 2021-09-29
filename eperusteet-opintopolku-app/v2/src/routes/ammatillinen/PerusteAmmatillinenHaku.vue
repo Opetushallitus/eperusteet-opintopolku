@@ -105,6 +105,7 @@ import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -140,6 +141,15 @@ export default class PerusteAmmatillinenHaku extends Vue {
       'koulutustyyppi_11',
       'koulutustyyppi_12',
     ];
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('kieli')
+  async kieliChange() {
+    await this.perusteHakuStore.fetch();
   }
 
   @Watch('tutkintotyyppi')
@@ -224,8 +234,8 @@ export default class PerusteAmmatillinenHaku extends Vue {
     this.perusteHakuStore.fetch();
   }
 
-  onToggleChange(toggle) {
-    this.perusteHakuStore.fetch();
+  async onToggleChange(toggle) {
+    await this.perusteHakuStore.fetch();
   }
 
   get valmisteillaOlevat() {
