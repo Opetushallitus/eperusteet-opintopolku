@@ -149,13 +149,19 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   @Watch('kieli')
   async kieliChange() {
-    await this.perusteHakuStore.fetch();
+    this.perusteHakuStore.updateFilters({ kieli: this.kieli });
   }
 
   @Watch('tutkintotyyppi')
   tutkintotyyppiChange() {
     if (this.tutkintotyyppi === 'kaikki') {
-      this.perusteHakuStore.updateFilters({ koulutustyyppi: [] });
+      this.perusteHakuStore.updateFilters({ koulutustyyppi: [
+        'koulutustyyppi_1',
+        'koulutustyyppi_11',
+        'koulutustyyppi_12',
+        'koulutustyyppi_5',
+        'koulutustyyppi_18',
+      ] });
     }
     else {
       this.perusteHakuStore.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
@@ -231,11 +237,11 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
   set page(value) {
     this.perusteHakuStore.page = value - 1;
-    this.perusteHakuStore.fetch();
+    this.perusteHakuStore.updateFilters({ sivu: this.perusteHakuStore.page });
   }
 
   async onToggleChange(toggle) {
-    await this.perusteHakuStore.fetch();
+    this.perusteHakuStore.updateFilters(this.filters);
   }
 
   get valmisteillaOlevat() {
