@@ -10,12 +10,12 @@
       <ep-peruste-rakenne :rakenneOsat="filteredRakenneOsat">
         <template v-slot:nimi="{ rakenneosa }">
 
-          <div v-if="rakenneosa.tutkinnonosa && rakenneosa.tutkinnonosaViite">
-            <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: rakenneosa.tutkinnonosaViite.id}}">
-              <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.tutkinnonosaViite.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
-              {{$kaanna(rakenneosa.tutkinnonosa.nimi)}}
+          <div v-if="rakenneosa.tutkinnonosa">
+            <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: rakenneosa.tutkinnonosa.id}}">
+              <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.tutkinnonosa.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
+              {{$kaanna(rakenneosa.tutkinnonosa.tekstiKappale.nimi)}}
             </router-link>
-            <b-popover :target="'tutkinto'+rakenneosa.tutkinnonosaViite.id" :placement="'bottom'" triggers="hover">
+            <b-popover :target="'tutkinto'+rakenneosa.tutkinnonosa.id" :placement="'bottom'" triggers="hover">
               <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
               <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
             </b-popover>
@@ -35,11 +35,10 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
-import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
-import { TutkinnonosaViitteetStore } from '@/stores/TutkinnonosaViitteetStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import * as _ from 'lodash';
+import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 
 @Component({
   components: {
@@ -59,18 +58,25 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   @Prop({ required: true })
   private opetussuunnitelma!: OpetussuunnitelmaDto;
 
-  private perusteRakenneStore: PerusteRakenneStore | null = null;
-  private tutkinnonosaViitteetStore: TutkinnonosaViitteetStore | null = null;
-
-  mounted() {
-    this.perusteRakenneStore = new PerusteRakenneStore(this.opetussuunnitelma.peruste!.perusteId!, this.opetussuunnitelma.suoritustapa!);
-    this.tutkinnonosaViitteetStore = new TutkinnonosaViitteetStore(this.opetussuunnitelma);
-  }
+  @Prop({ required: true })
+  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
   get rakenne(): any {
-    if (this.perusteRakenneStore) {
-      return this.perusteRakenneStore.rakenne.value;
-    }
+    const rakenne = _.get(_.find(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('suoritustavat'), suoritustapa => suoritustapa.suoritustapakoodi === this.opetussuunnitelma.suoritustapa!), 'rakenne');
+    return {
+      ...rakenne,
+      osat: this.lisaaTutkinnonOsat(rakenne.osat, this.tutkinnonosaViitteetById),
+    };
+  }
+
+  private lisaaTutkinnonOsat(osat: any[], tutkinnonosatById) {
+    return _.map(osat, osa => {
+      return {
+        ...osa,
+        ...(osa['_tutkinnonOsaViite'] && { tutkinnonosa: tutkinnonosatById[_.toNumber(osa['_tutkinnonOsaViite'])] }),
+        osat: this.lisaaTutkinnonOsat(osa.osat, tutkinnonosatById),
+      };
+    });
   }
 
   get rakenneTutkinnonOsilla() {
@@ -109,12 +115,35 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
       .value();
   }
 
-  get tutkinnonosaViitteet() {
-    if (this.tutkinnonosaViitteetStore) {
-      return _.keyBy(this.tutkinnonosaViitteetStore.tutkinnonosaViitteet.value, 'tosa.perusteentutkinnonosa');
-    }
+  get julkaistuTutkinnonosaViitteet() {
+    return _.get(this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' }), 'lapset');
+  }
 
-    return {};
+  get julkaistutTutkinnonOsat() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat');
+  }
+
+  get tutkinnonosaViitteet() {
+    return _.chain(this.julkaistuTutkinnonosaViitteet)
+      .map(tutkinnonosaViite => {
+        const tutkinnonosa = _.find(this.julkaistutTutkinnonOsat, tutkinnonosa => tutkinnonosa.tosa.id === tutkinnonosaViite.tosa.id);
+        return {
+          ...tutkinnonosaViite,
+          perusteenTutkinnonosaViite: this.perusteenTutkinnonosaViite(tutkinnonosa.tosa.perusteentutkinnonosa),
+          tosa: tutkinnonosa.tosa,
+        };
+      })
+      .sortBy('perusteenTutkinnonosaViite.jarjestys')
+      .keyBy('tosa.perusteentutkinnonosa')
+      .value();
+  }
+
+  get tutkinnonosaViitteetById() {
+    return _.keyBy(this.tutkinnonosaViitteet, 'perusteenTutkinnonosaViite.id');
+  }
+
+  perusteenTutkinnonosaViite(perusteenTutkinnonosaId) {
+    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(perusteenTutkinnonosaId) });
   }
 
   get piilotetutTunnisteet() {

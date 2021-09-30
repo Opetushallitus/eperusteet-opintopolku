@@ -51,6 +51,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { OpetussuunnitelmaVuosiluokkakokonaisuusStore } from '@/stores/OpetussuunnitelmaVuosiluokkakokonaisuusStore';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
+import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
 @Component({
   components: {
@@ -59,22 +60,34 @@ import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteConte
 })
 export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
   @Prop({ required: true })
-  private opetussuunnitelmaVuosiluokkakokonaisuusStore!: OpetussuunnitelmaVuosiluokkakokonaisuusStore
+  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+
+  get vlkId() {
+    return _.toNumber(this.$route.params.vlkId);
+  }
 
   get oppiaine() {
     return this.$route.params.oppiaineId;
   }
 
   get vuosiluokkakokonaisuus() {
-    return this.opetussuunnitelmaVuosiluokkakokonaisuusStore.vuosiluokkakokonaisuus.value;
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.vlkId });
   }
 
   get perusteenVuosiluokkakokonaisuus() {
-    return this.opetussuunnitelmaVuosiluokkakokonaisuusStore.perusteenVuosiluokkakokonaisuus.value;
+    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: this.vuosiluokkakokonaisuus._tunniste });
   }
 
   get laajaalaisetOsaamiset() {
-    return this.opetussuunnitelmaVuosiluokkakokonaisuusStore.perusteenLaajaalaisetOsaamiset.value;
+    return _.chain(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset'))
+      .map(lao => {
+        return {
+          ...lao,
+          opetussuunnitelmanLao: this.vuosiluokanLaot[lao.tunniste!],
+        };
+      })
+      .sortBy(lao => this.$kaanna(lao.nimi))
+      .value();
   }
 
   get siirtymia() {
@@ -85,6 +98,10 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
   get laajaaAlainenOsaaminen() {
     return (this.perusteenVuosiluokkakokonaisuus && this.perusteenVuosiluokkakokonaisuus.laajaalainenOsaaminen)
       || (this.vuosiluokkakokonaisuus && this.vuosiluokkakokonaisuus.laajaalainenosaaminen);
+  }
+
+  get vuosiluokanLaot() {
+    return _.keyBy(this.vuosiluokkakokonaisuus.laajaalaisetosaamiset, '_laajaalainenosaaminen');
   }
 }
 

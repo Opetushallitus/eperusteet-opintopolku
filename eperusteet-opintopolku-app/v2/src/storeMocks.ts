@@ -17,16 +17,14 @@ import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypit
 
 export const perusteKoosteStoreMock = (config: Partial<PerusteKoosteStore> = {}) => {
   return wrap(PerusteKoosteStore.prototype, {
-    perusteet: null,
+    julkaistutPerusteet: null,
     opetussuunnitelmat: null,
     tiedotteet: null,
     koulutustyyppi: null,
     perusteId: null,
     async reload() {},
-    constructor(koulutustyyppi: string,
-      perusteId: number) {
+    constructor(koulutustyyppi: string) {
       this.koulutustyyppi = koulutustyyppi;
-      this.perusteId = perusteId;
     },
     ...config,
   } as PerusteKoosteStore);

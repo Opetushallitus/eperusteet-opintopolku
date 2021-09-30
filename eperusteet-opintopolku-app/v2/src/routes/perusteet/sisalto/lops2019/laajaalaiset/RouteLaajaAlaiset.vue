@@ -43,11 +43,8 @@ export default class RouteLaajaAlaiset extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
-  @Prop({ required: true })
-  private lops2019LaajaAlaisetStore!: Lops2019LaajaAlaisetStore;
-
   get laajaAlaisetKokonaisuus() {
-    return this.lops2019LaajaAlaisetStore.laajaAlaisetKokonaisuus;
+    return this.perusteDataStore.getJulkaistuPerusteSisalto('lops2019.laajaAlainenOsaaminen');
   }
 
   updated() {
@@ -60,9 +57,7 @@ export default class RouteLaajaAlaiset extends Vue {
   }
 
   get laajaAlaiset() {
-    if (this.laajaAlaisetKokonaisuus && this.laajaAlaisetKokonaisuus.laajaAlaisetOsaamiset) {
-      return this.laajaAlaisetKokonaisuus.laajaAlaisetOsaamiset;
-    }
+    return _.get(this.laajaAlaisetKokonaisuus, 'laajaAlaisetOsaamiset');
   }
 
   get hasLaajaAlaiset() {

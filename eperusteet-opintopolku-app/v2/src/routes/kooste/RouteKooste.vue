@@ -1,5 +1,5 @@
 <template>
-<ep-spinner v-if="!koulutustyyppi && !perusteet" />
+<ep-spinner v-if="!koulutustyyppi && !julkaistutPerusteet" />
 <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
   <template slot="header">
     {{ $t(koulutustyyppi) }}
@@ -9,13 +9,13 @@
       <b-row class="mb-5">
         <b-col cols="12" xl="auto" class="tile">
           <h2 class="otsikko">{{ $t('perusteet') }}</h2>
-          <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="perusteet">
-            <div v-if="perusteet.length === 0">
+          <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="julkaistutPerusteet">
+            <div v-if="julkaistutPerusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-              <div v-else v-for="(peruste, idx) in perusteet" :key="idx">
-                <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id } }">
-                  <peruste-tile :peruste="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+              <div v-else v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx">
+                <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.perusteId } }">
+                  <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
                 </router-link>
               </div>
           </div>
@@ -146,13 +146,13 @@ export default class RouteKooste extends Vue {
     }
   }
 
-  get perusteet() {
-    if (this.perusteKoosteStore.perusteet) {
-      return _.chain(this.perusteKoosteStore.perusteet)
-        .map(peruste => ({
-          ...peruste,
-          id: _.toString(peruste.id),
-          kaannettyNimi: this.$kaanna(peruste.nimi!),
+  get julkaistutPerusteet() {
+    if (this.perusteKoosteStore.perusteJulkaisut) {
+      return _.chain(this.perusteKoosteStore.perusteJulkaisut)
+        .map(julkaisu => ({
+          ...julkaisu,
+          perusteId: _.toString(julkaisu.perusteId),
+          kaannettyNimi: this.$kaanna(julkaisu.nimi!),
         }))
         .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
         .value();

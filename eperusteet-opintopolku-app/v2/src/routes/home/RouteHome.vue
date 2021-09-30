@@ -68,7 +68,7 @@
               </div>
 
               <template v-else>
-                <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.id">
+                <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.perusteId">
                   <div class="valtakunnallinen">
                     <router-link :to="peruste.route">
                       <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
@@ -106,7 +106,9 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import {
+  ammatillisetKoulutustyypit,
   AmmatillisetKoulutustyypit,
+  EperusteetKoulutustyypit,
   EperusteetKoulutustyyppiRyhmaSort,
   EperusteetKoulutustyyppiRyhmat,
   koulutustyyppiStateName,
@@ -156,6 +158,11 @@ export default class RouteHome extends Vue {
     return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
   }
 
+  get julkaistutAmmatillisetKoulutustyyppit() {
+    return _.filter(this.julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat.value, koulutustyyppimaara =>
+      _.includes(ammatillisetKoulutustyypit, koulutustyyppimaara.koulutustyyppi));
+  }
+
   get perusteet() {
     if (this.perusteStore.perusteet) {
       return _.map(this.perusteStore.perusteet, peruste => {
@@ -168,7 +175,7 @@ export default class RouteHome extends Vue {
             name: 'peruste',
             params: {
               koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
-              perusteId: _.toString(peruste.id),
+              perusteId: _.toString(peruste.perusteId),
             },
           },
         };
@@ -192,8 +199,8 @@ export default class RouteHome extends Vue {
     await this.perusteStore.getYleisetPerusteet(
       {
         nimi: this.query,
-        kieli: [this.sisaltoKieli],
-        ...(!_.isEmpty(this.query) && { koulutustyyppi: undefined }),
+        kieli: this.sisaltoKieli,
+        ...(!_.isEmpty(this.query) && { koulutustyyppi: EperusteetKoulutustyypit as string[] }),
       });
   }
 
@@ -236,7 +243,7 @@ export default class RouteHome extends Vue {
     return {
       toteutus: Toteutus.AMMATILLINEN,
       theme: 'koulutustyyppi-ammatillinen',
-      perustemaarat: this.perusteStore.ammatillisetLukumaarat,
+      perustemaarat: this.julkaistutAmmatillisetKoulutustyyppit,
       kooste: true,
       route: {
         name: 'ammatillinenSelaus',

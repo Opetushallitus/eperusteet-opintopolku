@@ -59,9 +59,6 @@ import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicat
 })
 export default class RouteRakenne extends Vue {
   @Prop({ required: true })
-  private rakenneStore!: PerusteRakenneStore;
-
-  @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
   private naytaRakenteet = false;
@@ -72,20 +69,41 @@ export default class RouteRakenne extends Vue {
     return this.perusteDataStore.peruste;
   }
 
-  get rakenne(): any {
-    return this.rakenneStore.rakenne.value;
+  get rakenne() {
+    return _.get(_.first(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat')), 'rakenne');
   }
 
   get rakenneOsat() {
     return this.setRakenneOsaKoodi(this.rakenne.osat);
   }
 
+  get perusteenTutkinnonosaViitteetById() {
+    return _.keyBy(_.chain(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat'))
+      .map(st => st.tutkinnonOsaViitteet)
+      .flatMap()
+      .value(), 'id');
+  }
+
+  get perusteenTutkinnonosatById() {
+    return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('tutkinnonOsat'), 'id');
+  }
+
   setRakenneOsaKoodi(rakenneOsat) {
     return _.map(rakenneOsat, rakenneosa => {
+      let tutkinnonosaviite;
+      let tutkinnonOsa;
+      if (_.get(rakenneosa, '_tutkinnonOsaViite')) {
+        tutkinnonosaviite = this.perusteenTutkinnonosaViitteetById[_.get(rakenneosa, '_tutkinnonOsaViite')];
+        tutkinnonOsa = this.perusteenTutkinnonosatById[_.get(tutkinnonosaviite, '_tutkinnonOsa')];
+      }
       return {
         ...rakenneosa,
         koodiArvo: this.getRakenneosaKoodiArvo(rakenneosa),
         osat: this.setRakenneOsaKoodi(rakenneosa.osat),
+        ...(tutkinnonosaviite && { tutkinnonosa: {
+          ...tutkinnonosaviite,
+          tutkinnonOsa,
+        } }),
       };
     });
   }

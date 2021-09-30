@@ -32,7 +32,7 @@
     <ep-form-content class="col-md-12" v-if="tutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
       <span v-html="$kaanna(tutkinnonosa.ammattitaidonOsoittamistavat)" />
 
-      <hr class="mt-5 mb-5" v-if="tutkinnonosa.vapaatTekstit.length > 0"/>
+      <hr class="mt-5 mb-5" v-if="tutkinnonosa.vapaatTekstit && tutkinnonosa.vapaatTekstit.length > 0"/>
     </ep-form-content>
 
     <div class="col-md-12" v-for="(vapaaTeksti, index) in tutkinnonosa.vapaatTekstit" :key="'vapaateksti'+index">
@@ -40,6 +40,24 @@
       <span v-html="$kaanna(vapaaTeksti.teksti)" />
 
       <hr class="mt-5 mb-5"/>
+    </div>
+
+    <div v-if="tutkinnonosa.valmaTelmaSisalto">
+      <template v-if="tutkinnonosa.valmaTelmaSisalto.osaamistavoite && tutkinnonosa.valmaTelmaSisalto.osaamistavoite.length > 0">
+        <div v-for="(osaamistavoite, index) in tutkinnonosa.valmaTelmaSisalto.osaamistavoite" :key="'osaamistavoite'+index" class="mb-5">
+          <h3>{{$kaanna(osaamistavoite.nimi)}}</h3>
+          <h4 class="mt-3">{{$kaanna(osaamistavoite.kohde)}}</h4>
+          <ul>
+            <li v-for="(tavoite, tindex) in osaamistavoite.tavoitteet" :key="'osaamistavoitetavoite'+tindex">
+              {{$kaanna(tavoite)}}
+            </li>
+          </ul>
+        </div>
+
+      </template>
+
+      <EpValmaTelmaSisalto :valmaTelmaSisalto="tutkinnonosa.valmaTelmaSisalto" />
+
     </div>
   </div>
 </template>
@@ -50,6 +68,7 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmattitaitovaatimukset from '@shared/components/EpAmmattitaitovaatimukset/EpAmmattitaitovaatimukset.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
+import EpValmaTelmaSisalto from '@/components/EpAmmatillinen/EpValmaTelmaSisalto.vue';
 
 @Component({
   components: {
@@ -57,6 +76,7 @@ import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenA
     EpAmmatillinenArvioinninKohdealueet,
     EpAmmattitaitovaatimukset,
     GeneerinenArviointiTaulukko,
+    EpValmaTelmaSisalto,
   },
 })
 export default class EpTutkinnonosaNormaali extends Vue {
@@ -67,7 +87,7 @@ export default class EpTutkinnonosaNormaali extends Vue {
   private arviointiasteikot!: any[];
 
   get hasArviointi() {
-    return (this.tutkinnonosa.arviointi && this.tutkinnonosa.arviointi.arvioinninKohdealueet && this.tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0) || this.tutkinnonosa.geneerinenArviointiasteikko;
+    return (this.tutkinnonosa.arviointi && this.tutkinnonosa.arviointi.arvioinninKohdealueet && this.tutkinnonosa.arviointi?.arvioinninKohdealueet?.length > 0) || this.tutkinnonosa.geneerinenArviointiasteikko;
   }
 
   get osaamistasonKriteeritFields() {

@@ -1,5 +1,5 @@
 import { Store, State, Getter } from '@shared/stores/store';
-import { OpetussuunnitelmaDto, NavigationNodeDto, Opetussuunnitelmat, JulkinenApi, DokumenttiDto, baseURL, JulkinenApiParams, KoulutustoimijaJulkinenDto, Arviointiasteikot, ArviointiasteikkoDto, LiitetiedostotParam } from '@shared/api/amosaa';
+import { OpetussuunnitelmaKaikkiDto, NavigationNodeDto, Opetussuunnitelmat, JulkinenApi, DokumenttiDto, baseURL, JulkinenApiParams, KoulutustoimijaJulkinenDto, Arviointiasteikot, ArviointiasteikkoDto, LiitetiedostotParam } from '@shared/api/amosaa';
 import * as _ from 'lodash';
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { NavigationNode, buildTiedot, buildNavigation, filterNavigation, NavigationFilter } from '@shared/utils/NavigationBuilder';
@@ -7,14 +7,17 @@ import { Kielet } from '@shared/stores/kieli';
 import { DokumenttiDtoTilaEnum,
   baseURL as perusteBaseURL,
   Liitetiedostot as PerusteLiitetiedostot,
-  LiitetiedostotParam as PerusteLiitetiedostotParam } from '@shared/api/eperusteet';
+  LiitetiedostotParam as PerusteLiitetiedostotParam,
+  PerusteKaikkiDto,
+  Perusteet } from '@shared/api/eperusteet';
 import mime from 'mime-types';
+import { deepFind } from '@shared/utils/helpers';
 
 @Store
 export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelmaId: number;
   @State() public navigation: NavigationNodeDto | null = null;
-  @State() public opetussuunnitelma: OpetussuunnitelmaDto | null = null;
+  @State() public opetussuunnitelma: OpetussuunnitelmaKaikkiDto | null = null;
   @State() public koulutustoimija: KoulutustoimijaJulkinenDto | null = null;
   @State() public dokumenttiTila: DokumenttiDto | null = null;
   @State() public currentRoute: Location | null = null;
@@ -24,6 +27,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   };
   @State() public arviointiasteikot: ArviointiasteikkoDto[] | null = null;
   @State() public perusteKuvat: object[] = [];
+  @State() public perusteKaikki: PerusteKaikkiDto | null = null;
 
   constructor(opetussuunnitelmaId: number) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
@@ -37,16 +41,20 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   async init() {
     this.koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
-    this.opetussuunnitelma = (await Opetussuunnitelmat.getOpetussuunnitelma(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
+    this.opetussuunnitelma = (await JulkinenApi.getOpetussuunnitelmaJulkaistuSisalto(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
     this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value, _.toString(this.koulutustoimija.id))).data;
-    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationJulkinen(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
+    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationPublic(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
     this.navigation = {
       ...navigation,
       children: _.filter(navigation.children, child => child.type !== 'tiedot'),
     };
     this.arviointiasteikot = (await Arviointiasteikot.getAllArviointiasteikot()).data;
-    if (this.opetussuunnitelma.peruste) {
+    if (this.opetussuunnitelma?.peruste) {
       await this.fetchPerusteKuvat(this.opetussuunnitelma.peruste.perusteId!);
+    }
+
+    if (this.opetussuunnitelma?.peruste?.perusteId) {
+      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.perusteId)).data;
     }
   }
 
@@ -82,6 +90,14 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       kuva,
       src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, kuva.id! + '.' + mime.extension(kuva.mime)).url,
     }));
+  }
+
+  public getJulkaistuSisalto(filter) {
+    return deepFind(filter, this.opetussuunnitelma);
+  }
+
+  public getJulkaistuPerusteSisalto(filter) {
+    return deepFind(filter, this.perusteKaikki);
   }
 
   @Getter(state => {

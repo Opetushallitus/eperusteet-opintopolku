@@ -5,13 +5,13 @@
         <ep-hallitus-img class="img"/>
       </div>
       <div class="nimi">
-        {{ $kaanna(peruste.nimi) }}
+        {{ $kaanna(julkaisu.nimi) }} <span v-if="julkaisu.laajuus">{{julkaisu.laajuus}} {{$t('osaamispiste')}}</span>
       </div>
     </div>
     <div class="mt-auto">
       <div class="voimaantulo">
-        <span v-if="peruste.voimassaoloAlkaa">
-          {{ $t('voimaantulo') }}: {{ $sd(peruste.voimassaoloAlkaa) }}
+        <span v-if="julkaisu.voimassaoloAlkaa">
+          {{ $t('voimaantulo') }}: {{ $sd(julkaisu.voimassaoloAlkaa) }}
         </span>
       </div>
     </div>
@@ -20,9 +20,14 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { PerusteDto } from '@shared/api/eperusteet';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
+
+interface PerusteJulkiData {
+  nimi:{ [key: string]: string; };
+  voimassaoloAlkaa?: Date,
+  laajuus?: number,
+}
 
 @Component({
   components: {
@@ -31,7 +36,7 @@ import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
 })
 export default class PerusteTile extends Vue {
   @Prop({ required: true })
-  private peruste!: PerusteDto;
+  private julkaisu!: PerusteJulkiData;
 
   @Prop({ required: false, type: String })
   private koulutustyyppi!: string;

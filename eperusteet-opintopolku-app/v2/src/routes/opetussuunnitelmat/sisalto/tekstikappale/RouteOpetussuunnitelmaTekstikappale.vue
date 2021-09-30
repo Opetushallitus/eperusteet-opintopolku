@@ -5,7 +5,7 @@
 
     <!-- Perusteen teksti -->
     <ep-collapse tyyppi="perusteteksti"
-                 v-if="perusteTekstikappale && perusteTekstikappale.teksti">
+                 v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && perusteTekstikappale && perusteTekstikappale.teksti">
       <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
       <ep-content-viewer v-if="perusteTekstikappale"
                          :value="$kaanna(perusteTekstikappale.teksti)"
@@ -15,7 +15,7 @@
 
     <!-- Pohjan teksti -->
     <ep-collapse tyyppi="pohjateksti"
-                 v-if="hasTekstikappaleOriginalsTeksteja">
+                 v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPohjanTeksti && hasTekstikappaleOriginalsTeksteja">
       <div class="collapse-header" slot="header">
         {{ $t('pohjan-teksti') }}
         <span v-if="pohjaNimi">({{$kaanna(pohjaNimi)}})</span>
@@ -50,10 +50,9 @@
 
         <!-- Pohjan teksti -->
         <ep-collapse tyyppi="pohjateksti"
-                     v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti">
+                     v-if="alikappaleViite.naytaPohjanTeksti && alikappaleViite.original && alikappaleViite.tekstiKappale && alikappaleViite.tekstiKappale.teksti">
           <div class="collapse-header" slot="header">{{ $t('pohjan-teksti') }}</div>
-          <ep-content-viewer v-if="alikappaleViite.naytaPohjanTeksti && originalAlikappaleetObj && originalAlikappaleetObj[alikappaleViite._original] && originalAlikappaleetObj[alikappaleViite._original].tekstiKappale"
-                             :value="$kaanna(originalAlikappaleetObj[alikappaleViite._original].tekstiKappale.teksti)"
+          <ep-content-viewer :value="$kaanna(alikappaleViite.original.tekstiKappale.teksti)"
                              :termit="termit"
                              :kuvat="kuvat" />
         </ep-collapse>
@@ -81,7 +80,6 @@ import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 import { Puu } from '@shared/api/ylops';
 
 @Component({
@@ -96,44 +94,20 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  @Prop({ required: true })
-  private opetussuunnitelmaTekstikappaleStore!: OpetussuunnitelmaTekstikappaleStore;
-
-  @Watch('current', { immediate: true })
-  async fetchTekstikappale() {
-    if (!this.current) {
-      return;
-    }
-    // Haetaan navigaation mukainen tekstikappale
-    await this.opetussuunnitelmaTekstikappaleStore.fetchTekstikappaleAll(true);
+  get tekstikappaleId() {
+    return _.toNumber(this.$route.params.viiteId);
   }
 
   get tekstiKappaleViite() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleViite;
-  }
-
-  get istekstiKappaleAllLoaded() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleAllLoaded;
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.tekstikappaleId });
   }
 
   get tekstiKappale() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappale;
-  }
-
-  get tekstiKappaleOriginalViites() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginalViites;
-  }
-
-  get tekstiKappaleOriginals() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginals;
-  }
-
-  get hasTekstikappaleOriginalsTeksteja() {
-    return _.size(_.filter(this.tekstiKappaleOriginals, 'teksti')) > 0;
+    return this.tekstiKappaleViite.tekstiKappale;
   }
 
   get perusteTekstikappaleViite() {
-    return this.opetussuunnitelmaTekstikappaleStore.perusteTekstikappaleViite;
+    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ _perusteenOsa: _.toString(this.tekstiKappaleViite.perusteTekstikappaleId) });
   }
 
   get perusteTekstikappale() {
@@ -142,8 +116,19 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
     }
   }
 
-  get originalAlikappaleetObj() {
-    return this.opetussuunnitelmaTekstikappaleStore.tekstiKappaleOriginalViitteetObj;
+  get istekstiKappaleAllLoaded() {
+    return !!this.tekstiKappaleViite;
+  }
+
+  get tekstiKappaleOriginals() {
+    return _.map([
+      ...(this.tekstiKappaleViite.original ? [this.tekstiKappaleViite.original] : []),
+      ...(this.tekstiKappaleViite.original && this.tekstiKappaleViite.original.original && this.tekstiKappaleViite.original.naytaPohjanTeksti ? [this.tekstiKappaleViite.original.original] : []),
+    ], 'tekstiKappale');
+  }
+
+  get hasTekstikappaleOriginalsTeksteja() {
+    return _.size(_.filter(this.tekstiKappaleOriginals, 'teksti')) > 0;
   }
 
   get perusteAlikappaleetObj() {

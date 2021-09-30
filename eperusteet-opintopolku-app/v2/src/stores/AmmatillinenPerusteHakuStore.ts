@@ -1,20 +1,20 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { PerusteDto } from '@shared/api/eperusteet';
+import { Julkaisut, PerusteDto, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
-import { PerusteQuery, perusteetQuery } from '@/api/eperusteet';
+import { PerusteQuery, perusteetQuery, julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteHakuStore } from './IPerusteHakuStore';
 
 @Store
-export class PerusteHakuStore implements IPerusteHakuStore {
-  @State() public perusteet: PerusteDto[] | null = null;
+export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
+  @State() public perusteet: PerusteenJulkaisuData[] | null = null;
   @State() public page = 0;
   @State() public pages = 0;
   @State() public total = 0;
   @State() public perPage = 10;
 
   @State()
-  public filterdata: PerusteQuery = {
+  public filterdata: JulkaistutPerusteetQuery = {
     nimi: '',
     koulutustyyppi: [
       'koulutustyyppi_1',
@@ -28,12 +28,9 @@ export class PerusteHakuStore implements IPerusteHakuStore {
     siirtyma: true,
     voimassaolo: true,
     poistunut: false,
-    tutkintonimikkeet: true,
-    tutkinnonosat: true,
-    osaamisalat: true,
   };
 
-  constructor(data: PerusteQuery = {}) {
+  constructor(data: JulkaistutPerusteetQuery = { }) {
     this.filterdata = {
       ...this.filterdata,
       ...data,
@@ -41,20 +38,12 @@ export class PerusteHakuStore implements IPerusteHakuStore {
   }
 
   @Getter((state) => {
-    if (state.filterdata.perusteTyyppi === 'opas') {
-      return [
-        'tuleva',
-        'voimassaolo',
-      ];
-    }
-    else {
-      return [
-        'tuleva',
-        'voimassaolo',
-        'siirtyma',
-        'poistunut',
-      ];
-    }
+    return [
+      'tuleva',
+      'voimassaolo',
+      'siirtyma',
+      'poistunut',
+    ];
   })
   public readonly toggles!: string[];
 
@@ -64,19 +53,20 @@ export class PerusteHakuStore implements IPerusteHakuStore {
     sivukoko: state.perPage,
     kieli: Kielet.getSisaltoKieli.value,
   }))
-  public readonly filters!: PerusteQuery;
+  public readonly filters!: JulkaistutPerusteetQuery;
 
   public readonly fetch = _.debounce(async () => {
     this.perusteet = null;
-    const result = await perusteetQuery(this.filters);
+    const result = await julkaistutPerusteet(this.filters);
+
     this.total = result['kokonaismäärä'];
     this.page = result.sivu;
     this.perPage = result.sivukoko;
     this.pages = result.sivuja;
     this.perusteet = result.data;
-  }, 1000);
+  }, 500);
 
-  async updateFilters(filters: PerusteQuery) {
+  async updateFilters(filters: JulkaistutPerusteetQuery) {
     this.filterdata = {
       ...this.filters,
       ...filters,

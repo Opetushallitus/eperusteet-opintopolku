@@ -24,13 +24,15 @@
 
       </div>
 
-      <h4 class="mt-4">{{ $t('pakolliset-osaamistavoitteet') }}, {{osaalue.pakollisetOsaamistavoitteet.laajuus}} {{$t('osp')}}</h4>
-      <Osaamistavoite v-model="osaalue.pakollisetOsaamistavoitteet"
-                      v-if="osaalue.pakollisetOsaamistavoitteet"
-                      :is-valinnainen="false"
-                      :showLaajuus="false">
-        <div slot="osaamistavoitteet" />
-      </Osaamistavoite>
+      <template v-if="osaalue.pakollisetOsaamistavoitteet">
+        <h4 class="mt-4">{{ $t('pakolliset-osaamistavoitteet') }}, {{osaalue.pakollisetOsaamistavoitteet.laajuus}} {{$t('osp')}}</h4>
+        <Osaamistavoite v-model="osaalue.pakollisetOsaamistavoitteet"
+                        v-if="osaalue.pakollisetOsaamistavoitteet"
+                        :is-valinnainen="false"
+                        :showLaajuus="false">
+          <div slot="osaamistavoitteet" />
+        </Osaamistavoite>
+      </template>
 
       <template v-if="osaalue.valinnaisetOsaamistavoitteet">
         <hr/>
@@ -50,6 +52,8 @@
         </GeneerinenArviointiTaulukko>
       </div>
 
+      <EpValmaTelmaSisalto :valmaTelmaSisalto="osaalue.valmaTelmaSisalto" />
+
     </ep-collapse>
   </div>
 </template>
@@ -61,6 +65,7 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import Osaamistavoite from '@shared/components/EpOsaamistavoite/Osaamistavoite.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
+import EpValmaTelmaSisalto from '@/components/EpAmmatillinen/EpValmaTelmaSisalto.vue';
 
 import * as _ from 'lodash';
 
@@ -71,6 +76,7 @@ import * as _ from 'lodash';
     EpAmmatillinenArvioinninKohdealueet,
     Osaamistavoite,
     GeneerinenArviointiTaulukko,
+    EpValmaTelmaSisalto,
   },
 })
 export default class EpAmmatillinenOsaalueet extends Vue {

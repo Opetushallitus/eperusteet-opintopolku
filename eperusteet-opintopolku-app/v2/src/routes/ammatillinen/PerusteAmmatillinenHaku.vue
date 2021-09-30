@@ -58,9 +58,9 @@
 
       <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route">
         <div class="nimi">{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
-        <div class="nimikkeet" v-if="peruste.tutkintonimikeKoodit && peruste.tutkintonimikeKoodit.length > 0">
+        <div class="nimikkeet" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
           <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-          <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikeKoodit" :key="tidx">
+          <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikkeet" :key="tidx">
             {{ $kaanna(tutkintonimike.nimi) }}
           </span>
         </div>
@@ -97,7 +97,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
+import { IPerusteHakuStore } from '@/stores/IPerusteHakuStore';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import _ from 'lodash';
@@ -105,6 +105,7 @@ import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -119,7 +120,7 @@ import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
 })
 export default class PerusteAmmatillinenHaku extends Vue {
   @Prop({ required: true })
-  private perusteHakuStore!: PerusteHakuStore;
+  private perusteHakuStore!: IPerusteHakuStore;
 
   @Prop({ type: String })
   private tyyppi!: 'peruste' | 'opas' | 'kooste';
@@ -142,10 +143,25 @@ export default class PerusteAmmatillinenHaku extends Vue {
     ];
   }
 
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('kieli')
+  async kieliChange() {
+    this.perusteHakuStore.updateFilters({ kieli: this.kieli });
+  }
+
   @Watch('tutkintotyyppi')
   tutkintotyyppiChange() {
     if (this.tutkintotyyppi === 'kaikki') {
-      this.perusteHakuStore.updateFilters({ koulutustyyppi: [] });
+      this.perusteHakuStore.updateFilters({ koulutustyyppi: [
+        'koulutustyyppi_1',
+        'koulutustyyppi_11',
+        'koulutustyyppi_12',
+        'koulutustyyppi_5',
+        'koulutustyyppi_18',
+      ] });
     }
     else {
       this.perusteHakuStore.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
@@ -182,7 +198,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
         name: 'peruste',
         params: {
           koulutustyyppi: 'ammatillinen',
-          perusteId: _.toString(peruste.id),
+          perusteId: _.toString(peruste.id || peruste.perusteId),
         },
       };
     }
@@ -190,7 +206,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
       return {
         name: 'ammatillinenkooste',
         params: {
-          perusteId: _.toString(peruste.id),
+          perusteId: _.toString(peruste.perusteId),
         },
       };
     }
@@ -221,11 +237,11 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
   set page(value) {
     this.perusteHakuStore.page = value - 1;
-    this.perusteHakuStore.fetch();
+    this.perusteHakuStore.updateFilters({ sivu: this.perusteHakuStore.page });
   }
 
-  onToggleChange(toggle) {
-    this.perusteHakuStore.fetch();
+  async onToggleChange(toggle) {
+    this.perusteHakuStore.updateFilters(this.filters);
   }
 
   get valmisteillaOlevat() {

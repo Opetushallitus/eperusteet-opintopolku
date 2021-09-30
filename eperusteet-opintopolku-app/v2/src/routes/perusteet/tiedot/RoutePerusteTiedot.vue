@@ -78,13 +78,13 @@
               </div>
               <div v-else>
                 <i>
-                  {{ $t('perusteita-ei-saatavilla') }}
+                  {{ $t('perusteita-ei-saatavilla-koska-perustetta-ei-loydy-eperusteet-palvelusta') }}
                 </i>
               </div>
             </template>
           </b-table>
         </ep-form-content>
-      </div>
+      </div>§
 
       <div class="col-md-12" v-if="!isAmmatillinen && peruste.kuvaus">
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
@@ -256,7 +256,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get peruste() {
-    return this.perusteDataStore.peruste!;
+    return this.perusteDataStore.peruste;
   }
 
   get kvliitteita() {
@@ -288,7 +288,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get osaamisalaKuvaukset() {
-    return _.chain(this.peruste.suoritustavat)
+    return _.chain((this.peruste?.suoritustavat as any[]))
       .map(suoritustapa => this.perusteDataStore.osaamisalaKuvaukset[suoritustapa.suoritustapakoodi!])
       .map(suoritustavanOsaamisalakuvaukset => _.values(suoritustavanOsaamisalakuvaukset))
       .flatMap()
@@ -341,11 +341,11 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get hasMaarayskirje() {
-    return this.peruste.maarayskirje && this.maarayskirjeObj[Kielet.sisaltoKieli.value];
+    return this.peruste?.maarayskirje && this.maarayskirjeObj[Kielet.sisaltoKieli.value];
   }
 
   get hasMuutosmaaraykset() {
-    return !_.isEmpty(this.peruste.muutosmaaraykset);
+    return !_.isEmpty(this.peruste?.muutosmaaraykset);
   }
 
   get muutosmaaraykset() {
@@ -367,7 +367,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    if (isKoulutustyyppiPdfTuettu(this.peruste.koulutustyyppi)) {
+    if (isKoulutustyyppiPdfTuettu(this.peruste?.koulutustyyppi)) {
       return this.perusteDataStore.dokumentti;
     }
   }

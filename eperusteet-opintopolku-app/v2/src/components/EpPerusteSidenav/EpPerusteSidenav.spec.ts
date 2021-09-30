@@ -129,7 +129,7 @@ describe('EpPerusteSidenav', () => {
     });
 
     test('Hides spinner', () => {
-      perusteDataStore.peruste = perusteData;
+      perusteDataStore.perusteKaikki = perusteData;
       perusteDataStore.navigation = {
         ...navigationData,
         children: [],
@@ -179,7 +179,7 @@ describe('EpPerusteSidenav', () => {
   describe('SidenavNode', () => {
     const perusteDataStore = new PerusteDataStore(42);
 
-    perusteDataStore.peruste = perusteData;
+    perusteDataStore.perusteKaikki = perusteData;
     perusteDataStore.navigation = {
       ...navigationData,
       children: [
@@ -259,7 +259,7 @@ describe('EpPerusteSidenav', () => {
   describe('Navigation to previous and next', () => {
     const perusteDataStore = new PerusteDataStore(42);
 
-    perusteDataStore.peruste = perusteData;
+    perusteDataStore.perusteKaikki = perusteData;
     perusteDataStore.navigation = {
       ...navigationData,
       children: [

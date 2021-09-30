@@ -27,7 +27,7 @@ import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicat
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import OppiaineEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/OppiaineEsitys.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
+// import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 @Component({
@@ -42,9 +42,6 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  @Prop({ required: true })
-  private lops2019OpetussuunnitelmaOppiaineStore!: Lops2019OpetussuunnitelmaOppiaineStore;
-
   get perusteTermit() {
     return this.opetussuunnitelmaDataStore.perusteTermit;
   }
@@ -53,13 +50,17 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
     return this.opetussuunnitelmaDataStore.kuvat;
   }
 
+  get oppiaineId() {
+    return _.toNumber(this.$route.params.oppiaineId);
+  }
+
   get oppiaine() {
-    return this.lops2019OpetussuunnitelmaOppiaineStore.oppiaine;
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.oppiaineId });
   }
 
   get opintojaksot() {
     if (this.oppiaine && this.oppiaine.koodi) {
-      return _.filter(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
+      return _.filter(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('opintojaksot'), oj => {
         const uri = this.oppiaine!.koodi!.uri;
         return _.some(oj.oppiaineet, { koodi: uri });
       });

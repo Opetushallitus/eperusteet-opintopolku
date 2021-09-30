@@ -49,7 +49,6 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { LopsOpetussuunnitelmaOppiaineStore } from '@/stores/LopsOpetussuunnitelmaOppiaineStore';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 
 @Component({
@@ -63,9 +62,6 @@ export default class RouteOpetussuunnitelmaOppiaine2015 extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  @Prop({ required: true })
-  private lopsOpetussuunnitelmaOppiaineStore!: LopsOpetussuunnitelmaOppiaineStore;
-
   get termit() {
     return [
       this.opetussuunnitelmaDataStore.perusteTermit,
@@ -77,8 +73,12 @@ export default class RouteOpetussuunnitelmaOppiaine2015 extends Vue {
     return this.opetussuunnitelmaDataStore.kuvat;
   }
 
+  get oppiaineId() {
+    return _.toNumber(this.$route.params.oppiaineId);
+  }
+
   get oppiaine() {
-    return this.lopsOpetussuunnitelmaOppiaineStore.oppiaine;
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.oppiaineId });
   }
 
   get kurssiId() {

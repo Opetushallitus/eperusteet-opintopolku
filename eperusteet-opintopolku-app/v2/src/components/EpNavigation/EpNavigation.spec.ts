@@ -29,11 +29,11 @@ describe('EpNavigation', () => {
       },
     });
 
-    julkaistutKoulutustyypitStore.state.julkaistutKoulutustyypit = [
-      EperusteetKoulutustyyppiRyhmat.esiopetus[0],
-      EperusteetKoulutustyyppiRyhmat.lukiokoulutus[0],
-      EperusteetKoulutustyyppiRyhmat.varhaiskasvatus[0],
-      EperusteetKoulutustyyppiRyhmat.perusopetus[0],
+    julkaistutKoulutustyypitStore.state.koulutustyyppiLukumaarat = [
+      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.esiopetus[0], lukumaara: 1 },
+      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.lukiokoulutus[0], lukumaara: 1 },
+      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.varhaiskasvatus[0], lukumaara: 1 },
+      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.perusopetus[0], lukumaara: 1 },
     ];
 
     await localVue.nextTick();

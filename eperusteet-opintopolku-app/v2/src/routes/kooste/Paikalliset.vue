@@ -1,5 +1,5 @@
 <template>
-<div class="paikalliset" v-if="perusteet && perusteet.length > 0">
+<div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <div class="search">
     <ep-search v-model="query" />
@@ -7,11 +7,11 @@
   <div class="opetussuunnitelma-container">
     <div class="peruste-nav">
       <div class="d-md-flex">
-        <div class="peruste" v-for="(peruste, idx) in perusteet" :key="idx" :class="{ active: activePeruste === peruste.id}">
+        <div class="peruste" v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx" :class="{ active: activePeruste === julkaisu.perusteId}">
           <div class="peruste-select">
-            <a href="javascript:;" @click="setActivePeruste(peruste)">
+            <a href="javascript:;" @click="setActivePeruste(julkaisu)">
               <div>
-                {{ $kaanna(peruste.nimi) }}
+                {{ $kaanna(julkaisu.nimi) }}
               </div>
             </a>
           </div>
@@ -39,7 +39,8 @@
         </router-link>
 
       </div>
-      <b-pagination v-model="page"
+      <b-pagination class="mt-4"
+                    v-model="page"
                     :total-rows="total"
                     :per-page="perPage"
                     align="center"
@@ -63,10 +64,7 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { koulutustyyppiStateName, koulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
-import { ENV_PREFIX } from '@shared/utils/defaults';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import { uusiJulkinenToteutus } from '@/utils/peruste';
 
 @Component({
   components: {
@@ -88,10 +86,10 @@ export default class Paikalliset extends Vue {
   private page = 1;
   private perPage = 10;
 
-  @Watch('perusteet', { immediate: true })
+  @Watch('julkaistutPerusteet', { immediate: true })
   async perusteetChange() {
-    if (_.size(this.perusteKoosteStore.perusteet) > 0) {
-      await this.setActivePeruste(this.perusteKoosteStore.perusteet![0]);
+    if (_.size(this.perusteKoosteStore.perusteJulkaisut) > 0) {
+      await this.setActivePeruste(this.julkaistutPerusteet![0]);
     }
   }
 
@@ -103,17 +101,17 @@ export default class Paikalliset extends Vue {
     return this.paikallinenStore.perusteId?.value;
   }
 
-  async setActivePeruste(peruste) {
+  async setActivePeruste(perusteJulkaisu) {
     this.query = '';
-    await this.paikallinenStore.fetch!(peruste.id, peruste.diaarinumero);
+    await this.paikallinenStore.fetch!(perusteJulkaisu.perusteId, perusteJulkaisu.diaarinumero);
   }
 
-  get perusteet() {
-    if (this.perusteKoosteStore.perusteet) {
-      return _.chain(this.perusteKoosteStore.perusteet)
-        .map(peruste => ({
-          ...peruste,
-          kaannettyNimi: this.$kaanna(peruste.nimi!),
+  get julkaistutPerusteet() {
+    if (this.perusteKoosteStore.perusteJulkaisut) {
+      return _.chain(this.perusteKoosteStore.perusteJulkaisut)
+        .map(julkaistuPeruste => ({
+          ...julkaistuPeruste,
+          kaannettyNimi: this.$kaanna(julkaistuPeruste.nimi!),
         }))
         .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
         .value();
@@ -157,7 +155,7 @@ export default class Paikalliset extends Vue {
   }
 
   get currentPeruste() {
-    return _.find(this.perusteet, ['id', this.paikallinenStore.perusteId?.value]);
+    return _.find(this.julkaistutPerusteet, ['perusteId', this.paikallinenStore.perusteId?.value]);
   }
 }
 </script>

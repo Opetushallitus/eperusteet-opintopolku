@@ -1,52 +1,37 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { PerusteDto, TiedoteDto, Perusteet } from '@shared/api/eperusteet';
+import { PerusteDto, TiedoteDto, Perusteet, Julkaisut, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { OpetussuunnitelmaJulkinenDto, OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 
 import { Opetussuunnitelmat } from '@shared/api/amosaa';
 
 import { ryhmat } from '@shared/utils/perusteet';
-import { tiedoteQuery, perusteetQuery } from '@/api/eperusteet';
+import { tiedoteQuery, perusteetQuery, julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
+import { Page } from '@shared/tyypit';
 
 @Store
 export class PerusteKoosteStore {
   @State() public koulutustyyppi: string;
-  @State() public perusteId: number;
-  @State() public perusteet: PerusteDto[] | null = null;
+  @State() public perusteJulkaisut: PerusteenJulkaisuData[] | null = null;
   @State() public tiedotteet: TiedoteDto[] | null = null;
   @State() public opetussuunnitelmat: OpetussuunnitelmaJulkinenDto[] | null = null;
 
   constructor(
-    koulutustyyppi: string,
-    perusteId: number) {
+    koulutustyyppi: string) {
     this.koulutustyyppi = koulutustyyppi;
-    this.perusteId = perusteId;
     this.reload();
   }
 
   async reload() {
-    if (this.perusteId) {
-      this.perusteet = [(await Perusteet.getPerusteenTiedot(this.perusteId)).data];
-    }
-    else if (this.koulutustyyppi) {
-      const koulutustyypit = ryhmat(this.koulutustyyppi);
-      this.perusteet = (await perusteetQuery({
-        sivukoko: 100,
-        koulutustyyppi: koulutustyypit,
-        siirtyma: false,
-        poistunut: false,
-        voimassaolo: true,
-        tuleva: true,
-        julkaistu: true,
-      })).data;
-    }
+    const koulutustyypit = ryhmat(this.koulutustyyppi);
+    this.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit })), 'data');
 
     let tiedotteet: TiedoteDto[] = [];
-    for (const peruste of this.perusteet || []) {
+    for (const julkaisu of this.perusteJulkaisut || []) {
       tiedotteet = [...tiedotteet,
         ...(await tiedoteQuery({
           sivukoko: 100,
-          perusteId: peruste.id,
+          perusteId: julkaisu.perusteId,
         })),
       ];
     }
@@ -58,11 +43,11 @@ export class PerusteKoosteStore {
       })),
     ];
 
-    if (_.size(this.perusteet) > 0) {
+    if (_.size(this.perusteJulkaisut) > 0) {
       tiedotteet = [...tiedotteet,
         ...(await tiedoteQuery({
           sivukoko: 100,
-          perusteIds: _.map(this.perusteet, 'id') as number[],
+          perusteIds: _.map(this.perusteJulkaisut, julkaisu => julkaisu.perusteId) as number[],
         })),
       ];
     }
@@ -72,7 +57,4 @@ export class PerusteKoosteStore {
       .filter('otsikko')
       .value();
   }
-
-  @Getter(state => _.find(state.perusteet, _.find(state.perusteet, ['id', state.perusteId])))
-  public readonly activePeruste!: PerusteDto;
 }
