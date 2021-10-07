@@ -17,11 +17,26 @@
     <div class="lower">
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar>
+
         <template slot="bar">
-          <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
+          <div class="sidebar">
+            <div class="search">
+              <ep-search :value="query" @input="setValue" />
+            </div>
+          </div>
+          <div v-if="!query">
+            <ep-peruste-sidenav
+                @search-update="onSearch"
+                :query="query"
+                :peruste-data-store="perusteDataStore" />
+          </div>
+          <div class="tags" v-else>
+            <!-- <span class="tag"></span> -->
+          </div>
         </template>
+
         <template slot="view">
-          <router-view :key="$route.fullPath">
+          <router-view v-if="!query" :key="$route.fullPath">
             <template v-slot:header v-if="peruste.tyyppi ==='opas'">
               {{$t('oppaan-tiedot')}}
             </template>
@@ -34,6 +49,9 @@
               <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
             </template>
           </router-view>
+          <div v-else>
+            <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="query" />
+          </div>
         </template>
       </ep-sidebar>
     </div>
@@ -58,8 +76,11 @@ import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
+import EpPerusteHaku from '@/components/EpPerusteHaku.vue';
+import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
+
 
 @Component({
   components: {
@@ -70,12 +91,22 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
     EpFormContent,
     EpField,
     EpEsikatseluNotifikaatio,
+    EpPerusteHaku,
+    EpSearch,
+  },
+  watch: {
+    $route: {
+      handler: 'routeChanged',
+      immediate: false,
+    },
   },
   inject: [],
 })
 export default class RoutePeruste extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
+
+  private query = '';
 
   get sidenav() {
     return this.perusteDataStore.sidenav;
@@ -114,6 +145,7 @@ export default class RoutePeruste extends Vue {
 
   @Watch('$route', { deep: true, immediate: true })
   onRouteUpdate(route) {
+    this.query = this.$route.query.query || '';
     this.perusteDataStore.updateRoute(route);
   }
 
@@ -138,6 +170,14 @@ export default class RoutePeruste extends Vue {
       },
     } as ILinkkiHandler;
   };
+
+  onSearch(value: string) {
+  }
+
+  private setValue(value) {
+    this.query = value;
+  }
+
 }
 </script>
 
@@ -148,6 +188,16 @@ export default class RoutePeruste extends Vue {
   .diaarinumero {
     font-weight: bold;
     font-size: small;
+  }
+}
+
+.sidebar {
+  .search {
+    padding: $sidenav-padding;
+  }
+
+  .navigation-tree {
+    padding: $sidenav-padding;
   }
 }
 
