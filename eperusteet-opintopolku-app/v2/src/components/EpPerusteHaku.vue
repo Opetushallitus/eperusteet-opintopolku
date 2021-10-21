@@ -27,7 +27,6 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { osaToLocation } from '@shared/utils/NavigationBuilder';
 // import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
 
-
 interface Tulos {
   [key: string]: Tulos | any;
   osanTyyppi?: string;
@@ -35,35 +34,30 @@ interface Tulos {
 
 type Haettava = Tulos[] | Tulos;
 
-
 const MatchFields = [
   'fi',
   'sv',
   'en',
 ];
 
-
 function queryMatch(target, query: string) {
   return _.includes(_.toLower(target), query);
 }
 
-
 const clearEl = document.createElement('div');
-
 
 function applyLocationTag(target: string, query: string) {
   clearEl.innerHTML = target;
   const idx = _.toLower(clearEl.innerText).indexOf(_.toLower(query));
   const contextAmount = 100;
   const start = idx - contextAmount;
-  const size =  _.size(query) + contextAmount * 2;
-  const text = 
-    (start > 0 ? '...' : '')
+  const size = _.size(query) + contextAmount * 2;
+  const text
+    = (start > 0 ? '...' : '')
     + clearEl.innerText.substr(start, size)
     + (size < clearEl.innerText.length - 1 ? '...' : '');
   return _.replace(text, query, `<mark>${query}</mark>`);
 }
-
 
 function deepFind(target: Haettava, path: any[], results: any[], query: string): any[] {
   let result = [] as any[];
@@ -103,7 +97,6 @@ function deepFind(target: Haettava, path: any[], results: any[], query: string):
   return result;
 }
 
-
 @Component({
   components: {
     EpSearch,
@@ -135,7 +128,7 @@ export default class EpPerusteHaku extends Vue {
     this.$router.replace({
       query: {
         query,
-      }
+      },
     });
 
     try {
@@ -153,7 +146,6 @@ export default class EpPerusteHaku extends Vue {
     this.query = '';
     this.isLoading = false;
   }
-
 }
 </script>
 
@@ -181,7 +173,6 @@ export default class EpPerusteHaku extends Vue {
       }
     }
   }
-
 
 }
 
