@@ -2,9 +2,9 @@
   <div class="sidebar">
     <ep-spinner v-if="sidenavLoading" />
     <div v-else>
-      <!-- <div class="search">                             -->
-      <!--   <ep-search :value="query" @input="setValue" /> -->
-      <!-- </div>                                           -->
+      <div class="search">
+        <ep-search :value="query" @input="setValue" />
+      </div>
       <div class="navigation-tree">
         <ep-sidenav-node v-if="treeData"
                           :node="treeData"

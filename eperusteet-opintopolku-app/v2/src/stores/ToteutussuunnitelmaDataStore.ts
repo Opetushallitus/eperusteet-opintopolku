@@ -42,7 +42,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   async init() {
     this.koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
     this.opetussuunnitelma = (await JulkinenApi.getOpetussuunnitelmaJulkaistuSisalto(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
-    this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value, _.toString(this.koulutustoimija.id))).data;
+    this.getDokumenttiTila();
     const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationPublic(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
     this.navigation = {
       ...navigation,
@@ -66,9 +66,13 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   public readonly dokumenttiUrl!: string;
 
   public async getDokumenttiTila() {
-    if (this.opetussuunnitelma) {
-      this.dokumenttiTila = null;
-      this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
+    try {
+      if (this.opetussuunnitelma) {
+        this.dokumenttiTila = null;
+        this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
+      }
+    }
+    catch (err) {
     }
   };
 
