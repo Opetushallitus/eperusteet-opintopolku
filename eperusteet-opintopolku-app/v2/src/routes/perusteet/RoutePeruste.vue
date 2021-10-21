@@ -82,7 +82,6 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 
-
 @Component({
   components: {
     EpSidebar,
@@ -178,7 +177,6 @@ export default class RoutePeruste extends Vue {
   private setValue(value) {
     this.query = value;
   }
-
 }
 </script>
 
