@@ -19,20 +19,21 @@
       <ep-sidebar>
 
         <template slot="bar">
-          <div class="sidebar">
-            <div class="search">
-              <ep-search :value="query" @input="setValue" />
-            </div>
-          </div>
-          <div v-if="!query">
-            <ep-peruste-sidenav
-                @search-update="onSearch"
-                :query="query"
-                :peruste-data-store="perusteDataStore" />
-          </div>
-          <div class="tags" v-else>
-            <!-- <span class="tag"></span> -->
-          </div>
+          <ep-peruste-sidenav :peruste-data-store="perusteDataStore" />
+          <!-- <div class="sidebar">                                       -->
+          <!--   <div class="search">                                      -->
+          <!-- <ep-search :value="query" @input="setValue" /> -->
+          <!--   </div>                                                    -->
+          <!-- </div>                                                      -->
+          <!-- <div v-if="!query">                                         -->
+          <!--   <ep-peruste-sidenav                                       -->
+          <!--       @search-update="onSearch"                             -->
+          <!--       :query="query"                                        -->
+          <!--       :peruste-data-store="perusteDataStore" />             -->
+          <!-- </div>                                                      -->
+          <!-- <div class="tags" v-else>                                   -->
+          <!-- <span class="tag"></span> -->
+          <!-- </div>                                                      -->
         </template>
 
         <template slot="view">
@@ -50,7 +51,7 @@
             </template>
           </router-view>
           <div v-else>
-            <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="query" />
+            <!--<ep-peruste-haku :peruste-data-store="perusteDataStore" :query="query" />-->
           </div>
         </template>
       </ep-sidebar>
@@ -145,7 +146,7 @@ export default class RoutePeruste extends Vue {
 
   @Watch('$route', { deep: true, immediate: true })
   onRouteUpdate(route) {
-    this.query = this.$route.query.query || '';
+    // this.query = this.$route.query.query || '';
     this.perusteDataStore.updateRoute(route);
   }
 
