@@ -84,7 +84,7 @@
             </template>
           </b-table>
         </ep-form-content>
-      </div>§
+      </div>
 
       <div class="col-md-12" v-if="!isAmmatillinen && peruste.kuvaus">
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
