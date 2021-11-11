@@ -237,7 +237,7 @@ export class PerusteDataStore {
     this.kvLiitteet = {
       fi: await this.getKvLiite('fi'),
       sv: await this.getKvLiite('sv'),
-      en: await this.getKvLiite('en')
+      en: await this.getKvLiite('en'),
     };
   }
 
