@@ -72,7 +72,10 @@ export class PerusteDataStore {
     this.fetchNavigation();
 
     if (isKoulutustyyppiAmmatillinen(this.perusteKaikki.koulutustyyppi!)) {
-      await this.getKvLiitteet();
+      try {
+        await this.getKvLiitteet();
+      }
+      catch (err) { }
       this.osaamisalaKuvaukset = (await Perusteet.getOsaamisalat(this.perusteId)).data;
       this.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
     }

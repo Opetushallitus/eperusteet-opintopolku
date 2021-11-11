@@ -34,8 +34,8 @@ export default class EpPerusteSidenav extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
-  @Prop({ required: true })
-  private query = '';
+  @Prop({ default: '' })
+  private query!: string;
 
   private setValue(value) {
     this.query = value;
