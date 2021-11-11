@@ -224,10 +224,21 @@ export class PerusteDataStore {
     }
   };
 
+  private async getLiite(lang: string) {
+    try {
+      return await this.getKvLiite(lang);
+    }
+    catch (err) {
+      return null;
+    }
+  }
+
   public async getKvLiitteet() {
-    this.kvLiitteet['fi'] = await this.getKvLiite('fi');
-    this.kvLiitteet['sv'] = await this.getKvLiite('sv');
-    this.kvLiitteet['en'] = await this.getKvLiite('en');
+    this.kvLiitteet = {
+      fi: await this.getKvLiite('fi'),
+      sv: await this.getKvLiite('sv'),
+      en: await this.getKvLiite('en')
+    };
   }
 
   public async getKvLiite(kieli) {
