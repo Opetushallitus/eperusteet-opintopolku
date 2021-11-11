@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ep-form-content class="col-md-12 mb-5" v-if="tutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
+    <ep-form-content class="col-md-12 mb-5" v-if="!tutkinnonosa.ammattitaitovaatimukset2019 && tutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
       <span v-html="$kaanna(tutkinnonosa.ammattitaitovaatimukset)" />
     </ep-form-content>
 
