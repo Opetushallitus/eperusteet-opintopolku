@@ -59,6 +59,7 @@ export default class EpPerusteSidenav extends Vue {
         || type === 'lukiooppimaarat_2015'
         || type === 'lukiokurssit'
         || type === 'oppimaarat'
+        || type === 'poppiaine'
         || type === 'moduulit'
         || type === 'moduuli'
         || type === 'kurssit';
