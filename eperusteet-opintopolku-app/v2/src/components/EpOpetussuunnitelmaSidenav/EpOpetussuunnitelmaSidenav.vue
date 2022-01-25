@@ -52,8 +52,8 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
     const isCurrentOrParentSelected = (current && (node.key === current.key
         || (parent && parent.key === current.key && current.type !== 'oppiaineet')));
 
-    const isOppiaineenSisalto =
-      node.type === 'opintojaksot'
+    const isOppiaineenSisalto
+      = node.type === 'opintojaksot'
         || node.type === 'moduulit'
         || node.type === 'lukiokurssit';
 

@@ -34,10 +34,8 @@ import {
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { deepFind } from '@shared/utils/helpers';
 
-
-const PaikallisetKielet = new Set(["VK", "EN", "LA", "RA", "SM", "SA", "VE", "IA", "EA", "PO", "KI", "JP", "AR", "KX"]);
+const PaikallisetKielet = new Set(['VK', 'EN', 'LA', 'RA', 'SM', 'SA', 'VE', 'IA', 'EA', 'PO', 'KI', 'JP', 'AR', 'KX']);
 interface NavigationQueryResult { parent: YlopsNavigationNodeDto | null, target: YlopsNavigationNodeDto };
-
 
 @Store
 export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
@@ -180,12 +178,12 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       const paikallisetKielet = _(paikallisetOppiaineet)
         .filter((node: any) => {
           const start = (_.get(node, 'target.meta.koodi') || '').substr(0, 2);
-          return PaikallisetKielet.has(start)
+          return PaikallisetKielet.has(start);
         })
         .value();
-      
+
       let vk = vieraatKielet[0].target; {
-        const op = this.findByTyyppi(vk, 'oppimaarat')
+        const op = this.findByTyyppi(vk, 'oppimaarat');
         if (!_.isEmpty(op)) {
           vk = _.first(op)!.target;
         }
@@ -197,7 +195,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
         paikalliset.push(paikallinen.target);
       }
 
-      vk.children = [...(vk.children || []), ..._.sortBy(paikalliset, 'meta.koodi')]
+      vk.children = [...(vk.children || []), ..._.sortBy(paikalliset, 'meta.koodi')];
     }
   }
 
@@ -215,9 +213,9 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
         Opintojaksot.getTuodutOpintojaksot(this.opetussuunnitelmaId),
       ]
     ))
-    .map('data')
-    .flatMap()
-    .value();
+      .map('data')
+      .flatMap()
+      .value();
   }
 
   @Getter(state => state.opetussuunnitelma.tila)
