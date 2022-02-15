@@ -697,4 +697,4 @@ export function mockRakenne() {
     }],
     'versioId': 642534,
   };
-};
+}
