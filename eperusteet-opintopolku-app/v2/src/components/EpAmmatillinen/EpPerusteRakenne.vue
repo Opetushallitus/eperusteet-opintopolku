@@ -30,13 +30,10 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Kielet } from '@shared/stores/kieli';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import PerusteRakenneOsa from '@/components/EpAmmatillinen/PerusteRakenneOsa.vue';
-import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 
 @Component({
