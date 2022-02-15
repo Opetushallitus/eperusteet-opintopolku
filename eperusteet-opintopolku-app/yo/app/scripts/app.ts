@@ -49,4 +49,10 @@ angular
             $location.hash(loc);
             $anchorScroll();
         };
+    })
+    .config($httpProvider => {
+        $httpProvider.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
+        $httpProvider.defaults.headers.common["Caller-Id"] = "1.2.246.562.10.00000000001.eperusteet-opintopolku";
+        $httpProvider.defaults.xsrfHeaderName = "CSRF";
+        $httpProvider.defaults.xsrfCookieName = "CSRF";
     });
