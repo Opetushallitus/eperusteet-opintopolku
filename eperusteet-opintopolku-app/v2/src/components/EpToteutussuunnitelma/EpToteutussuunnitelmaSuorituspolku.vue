@@ -63,12 +63,11 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
   get rakenne(): any {
-    // TODO selvitä löytyykö aina suorituspolku ja siltä tutkinnon osia?
-    const suorituspolku = this.opetussuunnitelma.suorituspolut!.find(polku => polku.sisaltoviiteId === this.sisaltoviite.id) as SuorituspolkuRakenneDto;
+    const suorituspolku = _.find(this.opetussuunnitelma.suorituspolut, polku => polku.sisaltoviiteId === this.sisaltoviite.id);
 
     return {
       ...suorituspolku,
-      osat: this.lisaaTutkinnonOsat(suorituspolku.osat!, this.tutkinnonosaViitteetById),
+      osat: this.lisaaTutkinnonOsat(suorituspolku?.osat || [], this.tutkinnonosaViitteetById),
     };
   }
 
