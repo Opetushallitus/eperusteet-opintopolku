@@ -116,7 +116,7 @@ export default class PerusteRakenneOsa extends Vue {
 
   get nimi() {
     if (this.rakenneosa.tutkinnonosa) {
-      return this.rakenneosa.tutkinnonosa.nimi;
+      return this.rakenneosa.tutkinnonosa.tutkinnonOsa.nimi;
     }
     return this.rakenneosa.nimi;
   }
