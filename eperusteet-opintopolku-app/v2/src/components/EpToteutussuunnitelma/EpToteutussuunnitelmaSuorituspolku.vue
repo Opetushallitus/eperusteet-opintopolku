@@ -31,14 +31,15 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Matala, OpetussuunnitelmaKaikkiDto } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import * as _ from 'lodash';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import { SuorituspolkuRakenneDto } from '@shared/generated/amosaa';
 
 @Component({
   components: {
@@ -56,16 +57,17 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   private kuvat!: any[];
 
   @Prop({ required: true })
-  private opetussuunnitelma!: OpetussuunnitelmaDto;
+  private opetussuunnitelma!: OpetussuunnitelmaKaikkiDto;
 
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
   get rakenne(): any {
-    const rakenne = _.get(_.find(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('suoritustavat'), suoritustapa => suoritustapa.suoritustapakoodi === this.opetussuunnitelma.suoritustapa!), 'rakenne');
+    const suorituspolku = _.find(this.opetussuunnitelma.suorituspolut, polku => polku.sisaltoviiteId === this.sisaltoviite.id);
+
     return {
-      ...rakenne,
-      osat: this.lisaaTutkinnonOsat(rakenne.osat, this.tutkinnonosaViitteetById),
+      ...suorituspolku,
+      osat: this.lisaaTutkinnonOsat(suorituspolku?.osat || [], this.tutkinnonosaViitteetById),
     };
   }
 
