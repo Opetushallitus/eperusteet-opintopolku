@@ -66,7 +66,7 @@ export default class EpPerusteRakenne extends Vue {
       .filter(osa => {
         let nimi = osa.nimi;
         if (osa.tutkinnonosa) {
-          nimi = osa.tutkinnonosa.tutkinnonOsa.nimi;
+          nimi = osa.tutkinnonosa.tutkinnonOsa?.nimi || osa.tutkinnonosa.nimi;
         }
         return _.size(osa.osat) > 0 || (nimi && Kielet.search(this.query, nimi));
       })
