@@ -90,11 +90,9 @@
           <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
         </div>
 
-        <div class="mb-4" v-if="tavoite.vuosiluokanTavoite ">
+        <div class="mb-4" v-if="tavoite.vuosiluokanTavoite">
           <h4>{{ $t('paikallinen-teksti') }}</h4>
-          <ep-content v-if="tavoite.vuosiluokanTavoite.tavoite"
-                        v-model="tavoite.vuosiluokanTavoite.tavoite"
-                        layout="normal"></ep-content>
+          <div v-html="$kaanna(tavoite.vuosiluokanTavoite.tavoite)"></div>
         </div>
       </div>
 
