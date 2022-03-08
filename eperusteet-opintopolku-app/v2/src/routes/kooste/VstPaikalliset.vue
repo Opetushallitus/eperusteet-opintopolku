@@ -104,7 +104,12 @@ export default class VstPaikalliset extends Vue {
   private page = 1;
   private perPage = 10;
   private query = {
-    koulutustyyppi: Koulutustyyppi.vapaasivistystyo,
+    koulutustyyppi: [
+      Koulutustyyppi.vapaasivistystyo,
+      Koulutustyyppi.vapaasivistystyolukutaito,
+      Koulutustyyppi.tutkintoonvalmentava,
+      Koulutustyyppi.maahanmuuttajienkotoutumiskoulutus,
+    ],
     oppilaitosTyyppiKoodiUri: null,
     nimi: null,
     sivukoko: 100,
