@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <div class="osio">
+    <div class="osio" v-if="opintojakso.tavoitteet && opintojakso.tavoitteet.length > 0">
       <ep-collapse tyyppi="opintojakson-tavoitteet" :first="true">
         <div class="alueotsikko" slot="header"><h3>{{ $t('tavoitteet') }}</h3></div>
         <ep-opintojakson-tavoitteet :value="opintojakso"
@@ -371,9 +371,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get tavoitteet() {
-    if (this.opintojakso) {
-      return this.opintojakso.tavoitteet;
-    }
+    return _.get(this.opintojakso, 'tavoitteet') || [];
   }
 
   get hasTavoitteet() {
@@ -387,9 +385,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get keskeisetSisallot() {
-    if (this.opintojakso) {
-      return this.opintojakso.keskeisetSisallot;
-    }
+    return _.get(this.opintojakso, 'keskeisetSisallot') || [];
   }
 
   get paikallistenOpintojaksojenKeskeisetSisallot() {
@@ -405,9 +401,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get laajaAlainenOsaaminen() {
-    if (this.opintojakso) {
-      return this.opintojakso.laajaAlainenOsaaminen;
-    }
+    return _.get(this.opintojakso, 'laajaAlainenOsaaminen') || null;
   }
 
   get laajaAlainenOsaaminenExtended() {
@@ -457,15 +451,11 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
   }
 
   get hasOpiskeluymparistoTyotavat() {
-    if (this.opintojakso) {
-      return this.opintojakso.opiskeluymparistoTyotavat;
-    }
+    return _.get(this.opintojakso, 'opiskeluymparistoTyotavat') || null;
   }
 
   get hasKuvaus() {
-    if (this.opintojakso) {
-      return this.opintojakso.kuvaus;
-    }
+    return _.get(this.opintojakso, 'kuvaus') || null;
   }
 
   get oppiaineetNavigationByUri() {
