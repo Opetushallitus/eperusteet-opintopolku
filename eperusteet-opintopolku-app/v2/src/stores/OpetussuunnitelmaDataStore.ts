@@ -34,6 +34,9 @@ import {
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { deepFind } from '@shared/utils/helpers';
 
+const PaikallisetKielet = new Set(['VK', 'EN', 'LA', 'RA', 'SM', 'SA', 'VE', 'IA', 'EA', 'PO', 'KI', 'JP', 'AR', 'KX']);
+interface NavigationQueryResult { parent: YlopsNavigationNodeDto | null, target: YlopsNavigationNodeDto };
+
 @Store
 export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelma: OpetussuunnitelmaExportDto | null = null;
@@ -135,9 +138,72 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     return liite.id! + '.' + mime.extension(liite.tyyppi);
   }
 
+  findBy(navi: YlopsNavigationNodeDto, fn: (value: YlopsNavigationNodeDto) => boolean, parent: YlopsNavigationNodeDto | null = null): NavigationQueryResult[] {
+    const kohde = _.get(navi, 'meta.koodi');
+
+    const result: NavigationQueryResult[] = [];
+
+    if (fn(navi)) {
+      result.push({
+        parent,
+        target: navi,
+      });
+    }
+
+    for (const ch of (navi.children || [])) {
+      const nodes = this.findBy(ch, fn, navi);
+      if (nodes) {
+        result.push(...nodes);
+      }
+    }
+
+    return result;
+  }
+
+  findByKoodi(navi: YlopsNavigationNodeDto, koodi: string) {
+    return this.findBy(navi, (node) => {
+      const kohde = _.get(node, 'meta.koodi');
+      return (kohde === koodi || _.get(kohde, 'arvo') === koodi);
+    });
+  }
+
+  findByTyyppi(navi: YlopsNavigationNodeDto, tyyppi: string) {
+    return this.findBy(navi, (node) => node.type === tyyppi);
+  }
+
+  movePaikallisetOppiaineet(navi: YlopsNavigationNodeDto) {
+    const vieraatKielet = this.findByKoodi(navi, 'VK');
+    if (!_.isEmpty(vieraatKielet)) {
+      const paikallisetOppiaineet = this.findByTyyppi(navi, 'poppiaine');
+      const paikallisetKielet = _(paikallisetOppiaineet)
+        .filter((node: any) => {
+          const start = (_.get(node, 'target.meta.koodi') || '').substr(0, 2);
+          return PaikallisetKielet.has(start);
+        })
+        .value();
+
+      let vk = vieraatKielet[0].target; {
+        const op = this.findByTyyppi(vk, 'oppimaarat');
+        if (!_.isEmpty(op)) {
+          vk = _.first(op)!.target;
+        }
+      }
+      const paikalliset: YlopsNavigationNodeDto[] = [];
+
+      for (const paikallinen of paikallisetKielet) {
+        _.remove(paikallinen.parent!.children || [], { id: paikallinen.target.id });
+        paikalliset.push(paikallinen.target);
+      }
+
+      vk.children = [...(vk.children || []), ..._.sortBy(paikalliset, 'meta.koodi')];
+    }
+  }
+
   async fetchNavigation() {
     this.navigation = null;
-    this.navigation = (await Opetussuunnitelmat.getNavigationPublic(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value)).data;
+    const navigation = (await Opetussuunnitelmat.getNavigationPublic(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value)).data;
+    this.movePaikallisetOppiaineet(navigation);
+    this.navigation = navigation;
   }
 
   async fetchOpintojaksot() {
