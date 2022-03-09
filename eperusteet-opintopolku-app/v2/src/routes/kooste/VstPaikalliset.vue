@@ -107,7 +107,6 @@ export default class VstPaikalliset extends Vue {
     koulutustyyppi: [
       Koulutustyyppi.vapaasivistystyo,
       Koulutustyyppi.vapaasivistystyolukutaito,
-      Koulutustyyppi.tutkintoonvalmentava,
       Koulutustyyppi.maahanmuuttajienkotoutumiskoulutus,
     ],
     oppilaitosTyyppiKoodiUri: null,
