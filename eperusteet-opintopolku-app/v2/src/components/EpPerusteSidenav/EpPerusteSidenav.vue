@@ -4,6 +4,7 @@
     <div v-else>
       <div class="search">
         <ep-search :value="query" @input="setValue" />
+        <slot name="after"></slot>
       </div>
       <div class="navigation-tree">
         <ep-sidenav-node v-if="treeData"
@@ -38,7 +39,6 @@ export default class EpPerusteSidenav extends Vue {
   private query!: string;
 
   private setValue(value) {
-    this.query = value;
     this.perusteDataStore.updateFilter({
       isEnabled: !_.isEmpty(value),
       label: value,
