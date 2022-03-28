@@ -19,29 +19,18 @@
       <ep-sidebar>
 
         <template slot="bar">
-          <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
-          <div class="sidebar" v-if="haku">
+          <div class="sidebar">
             <div class="search">
-              <ep-search :value="tekstihaku" @input="updateTekstihaku" />
-              <div>
-                <router-link :to="{ query: { haku: false } }">{{ $t('palaa-rakenteeseen') }}</router-link>
-              </div>
+          <ep-search :value="query" @input="setValue" />
             </div>
           </div>
-          <div v-else>
+          <div v-if="!query">
             <ep-peruste-sidenav
                 @search-update="onSearch"
                 :query="query"
-                :peruste-data-store="perusteDataStore">
-              <template v-slot:after>
-                <div v-if="query">
-                  <!-- TODO lisää jos halutaan käyttöön -->
-                  <!-- <router-link :to="{ query: { haku: true } }">{{ $t('etsi-sisalloista') }}</router-link> -->
-                </div>
-              </template>
-            </ep-peruste-sidenav>
+                :peruste-data-store="perusteDataStore" />
           </div>
-          <div class="tags">
+          <div class="tags" v-else>
             <span class="tag"></span>
           </div>
         </template>
