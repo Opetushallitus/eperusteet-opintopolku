@@ -67,10 +67,9 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
-import { stateToKoulutustyyppi, perusteenSuoritustapa } from '@shared/utils/perusteet';
+import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
@@ -99,6 +98,8 @@ import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
 import { MaarayksetStore } from './stores/MaarayksetStore';
+import RouteKotoLaajaAlainenOsaaminen
+  from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -602,6 +603,25 @@ export const router = new Router({
                   perusteenOsaStore: await PerusteenOsaStore.create(
                     _.parseInt(route.params.kotoOpintoId),
                     getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.kotoOpintoId) }),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'koto/laajaalainenosaaminen/:kotoLaajaalainenOsaaminenId',
+        component: RouteKotoLaajaAlainenOsaaminen,
+        name: 'perusteKotoLaajaalainenOsaaminen',
+        meta: {
+          resolve: {
+            cacheBy: ['kotoLaajaalainenOsaaminenId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.kotoLaajaalainenOsaaminenId),
+                    getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.kotoLaajaalainenOsaaminenId) }),
                   ),
                 },
               };
