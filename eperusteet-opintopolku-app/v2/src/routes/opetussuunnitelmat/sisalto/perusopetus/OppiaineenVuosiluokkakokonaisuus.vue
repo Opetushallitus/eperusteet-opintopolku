@@ -47,29 +47,35 @@
       <div class="mt-4 font-600">{{$t('laajuus')}}</div>
       <div>{{oppiaine.laajuus}} {{$t('vuosiviikkotuntia')}}</div>
 
-      <hr class="mt-5 mb-5" />
-      <h3>{{$t('valinnaisen-tehtava')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
+      <template v-if="oppiaineenVuosiluokkakokonaisuus.tehtava && oppiaineenVuosiluokkakokonaisuus.tehtava.teksti">
+        <hr class="mt-5 mb-5" />
+        <h3>{{$t('valinnaisen-tehtava')}}</h3>
+        <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
+      </template>
 
-      <hr class="mt-5 mb-5" />
+      <template v-if="oppiaineenVuosiluokkakokonaisuus.tyotavat && oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti">
+        <hr class="mt-5 mb-5" />
+        <h3>{{$t('oppiaine-tyotavat')}}</h3>
+        <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti)" :kuvat="kuvat" :termit="termit"/>
+      </template>
 
-      <h3>{{$t('oppiaine-tyotavat')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti)" :kuvat="kuvat" :termit="termit"/>
+      <template v-if="oppiaineenVuosiluokkakokonaisuus.ohjaus && oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti">
+        <hr class="mt-5 mb-5" />
+        <h3>{{$t('oppiaine-ohjaus')}}</h3>
+        <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti)" :kuvat="kuvat" :termit="termit"/>
+      </template>
 
-      <hr class="mt-5 mb-5" />
+      <template v-if="oppiaineenVuosiluokkakokonaisuus.arviointi && oppiaineenVuosiluokkakokonaisuus.arviointi.teksti">
+        <hr class="mt-5 mb-5" />
+        <h3>{{$t('oppiaine-arviointi')}}</h3>
+        <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
+      </template>
 
-      <h3>{{$t('oppiaine-ohjaus')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti)" :kuvat="kuvat" :termit="termit"/>
-
-      <hr class="mt-5 mb-5" />
-
-      <h3>{{$t('oppiaine-arviointi')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
-
-      <hr class="mt-5 mb-5" />
-
-      <h3>{{$t('oppiaine-tavoitteista-johdetut-oppimisen-tavoitteet')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)" :kuvat="kuvat" :termit="termit"/>
+      <template v-if="oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet && oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti">
+        <hr class="mt-5 mb-5" />
+        <h3>{{$t('oppiaine-tavoitteista-johdetut-oppimisen-tavoitteet')}}</h3>
+        <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)" :kuvat="kuvat" :termit="termit"/>
+      </template>
 
     </div>
 
