@@ -5,9 +5,17 @@
 
       <div class="mb-4">
         <ep-content-viewer :value="$kaanna(perusteenOsa.yleiskuvaus)" :termit="termit" :kuvat="kuvat" />
-        <hr/>
       </div>
 
+      <b-row v-if="perusteenOsa.osaamisAlueet.length > 0" class="mt-4">
+        <b-col>
+          <div v-for="(osaamisalue, index) in perusteenOsa.osaamisAlueet"
+               :key="index+'kotoLaajaAlainenOsaaminen'">
+            <h3 class="mt-4">{{ $kaanna(osaamisalue.koodi.nimi) }}</h3>
+            <ep-content-viewer :value="$kaanna(osaamisalue.kuvaus)"></ep-content-viewer>
+          </div>
+        </b-col>
+      </b-row>
     </div>
     <ep-spinner v-else />
   </div>
