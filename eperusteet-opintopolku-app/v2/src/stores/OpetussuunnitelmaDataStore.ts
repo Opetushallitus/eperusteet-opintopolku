@@ -67,7 +67,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   }
 
   async init() {
-    await this.fetchOpetussuunnitelma();
+    await Promise.all([this.fetchOpetussuunnitelma(), this.fetchNavigation()]);
 
     if (this.opetussuunnitelmaPerusteenId) {
       this.fetchPerusteTermit(this.opetussuunnitelmaPerusteenId);
@@ -79,8 +79,6 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     if (this.opetussuunnitelma && (this.opetussuunnitelma.toteutus as any) === 'lops2019') {
       this.fetchOpintojaksot();
     }
-
-    this.fetchNavigation();
 
     if (this.opetussuunnitelma?.peruste?.id) {
       this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id)).data;
