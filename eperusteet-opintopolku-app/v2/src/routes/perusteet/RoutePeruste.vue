@@ -158,7 +158,7 @@ export default class RoutePeruste extends Vue {
 
   onRouteUpdate(route) {
     this.haku = route.query.haku || false;
-    // this.perusteDataStore.updateRoute(route);
+    this.perusteDataStore.updateRoute(route);
   }
 
   @Meta
