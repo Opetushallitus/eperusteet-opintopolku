@@ -25,10 +25,9 @@
           <span>{{$sd(toteutussuunnitelma.paatospaivamaara)}}</span>
         </ep-form-content>
 
-        <ep-form-content name="voimassaolo" headerType="h3" headerClass="h6">
+        <ep-form-content name="voimaantulo" headerType="h3" headerClass="h6">
           <div>
-            <span v-if="toteutussuunnitelma.voimaantulo">{{$sd(toteutussuunnitelma.voimaantulo)}}</span> -
-            <span v-if="toteutussuunnitelma.paatospaivamaara">{{$sd(toteutussuunnitelma.paatospaivamaara)}}</span>
+            <span v-if="toteutussuunnitelma.voimaantulo">{{$sd(toteutussuunnitelma.voimaantulo)}}</span>
           </div>
         </ep-form-content>
 
