@@ -41,13 +41,15 @@
     <ep-search v-else v-model="query" :placeholder="searchPlaceholder" :class="{'disabled-events': !perusteet}"/>
 
     <div class="checkboxes d-flex align-self-center flex-wrap flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
-      <ep-toggle v-for="(toggle, idx) in toggles"
-                 :key="idx"
-                 v-model="filters[toggle]"
-                 @input="onToggleChange()"
-                 :isSWitch="false">
+      <EpColoredToggle
+        v-for="(toggle, idx) in toggles"
+        :key="'toggle' + idx"
+        v-model="filters[toggle]"
+        @input="onToggleChange()"
+        :class="['toggle-' + toggle, !perusteet ? 'disabled-events' : '']"
+        class="peruste-haku-toggle">
         {{ $t('switch-' + toggle) }}
-      </ep-toggle>
+      </EpColoredToggle>
     </div>
   </div>
   <div v-if="!perusteet">
@@ -56,7 +58,7 @@
   <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
 
-      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route">
+      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route" :class="peruste.voimassaoloTieto.tyyppi">
         <div class="nimi">{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
         <div class="nimikkeet" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
           <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
@@ -70,8 +72,13 @@
             {{ $kaanna(osaamisala.nimi) }}
           </span>
         </div>
-        <div class="voimaantulo" v-if="peruste.voimassaoloAlkaa">
-          {{$t('voimaantulo')}} {{ $sd(peruste.voimassaoloAlkaa) }}
+        <div class="alatiedot">
+          <span v-if="peruste.voimassaoloTieto">
+            {{$t(peruste.voimassaoloTieto.teksti)}}: {{ $sd(peruste.voimassaoloTieto.paiva) }}
+          </span>
+          <span>
+            | {{$t('diaarinumero')}}: {{ peruste.diaarinumero }}
+          </span>
         </div>
       </ep-ammatillinen-row>
 
@@ -106,6 +113,21 @@ import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
+import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
+
+export interface VoimassaoloTieto {
+  tyyppi: 'tuleva' | 'voimassa' | 'siirtyma' | 'voimassaoloPaattynyt' | 'siirtymaPaattynyt';
+  teksti: string;
+  paiva: number;
+};
+
+const voimassaoloTietoTekstit = {
+  'tuleva': 'voimaantulo',
+  'voimassa': 'voimaantulo',
+  'siirtyma': 'siirtymaajan-paattymisaika',
+  'siirtymaPaattynyt': 'siirtymaajan-paattymisaika',
+  'voimassaoloPaattynyt': 'voimassaolo-paattynyt',
+};
 
 @Component({
   components: {
@@ -116,6 +138,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpExternalLink,
     EpAmmatillinenRow,
     EpMultiSelect,
+    EpColoredToggle,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -187,8 +210,50 @@ export default class PerusteAmmatillinenHaku extends Vue {
         .map(peruste => ({
           ...peruste,
           route: this.perusteRoute(peruste),
+          voimassaoloTieto: this.perusteenVoimassaoloTieto(peruste),
         }))
         .value();
+    }
+  }
+
+  perusteenVoimassaoloTieto(peruste): VoimassaoloTieto {
+    const maxLoppuminen = peruste.siirtymaPaattyy || peruste.voimassaoloLoppuu || new Date(8640000000000000).getTime();
+
+    if (peruste.voimassaoloAlkaa > new Date().getTime()) {
+      return {
+        tyyppi: 'tuleva',
+        teksti: voimassaoloTietoTekstit['tuleva'],
+        paiva: peruste.voimassaoloAlkaa,
+      };
+    }
+    else if (peruste.siirtymaPaattyy !== null && peruste.voimassaoloLoppuu != null
+              && peruste.siirtymaPaattyy > new Date().getTime() && peruste.voimassaoloLoppuu < new Date().getTime()) {
+      return {
+        tyyppi: 'siirtyma',
+        teksti: voimassaoloTietoTekstit['siirtyma'],
+        paiva: peruste.siirtymaPaattyy,
+      };
+    }
+    else if (peruste.voimassaoloAlkaa < new Date().getTime() && maxLoppuminen > new Date().getTime()) {
+      return {
+        tyyppi: 'voimassa',
+        teksti: voimassaoloTietoTekstit['voimassa'],
+        paiva: peruste.voimassaoloAlkaa,
+      };
+    }
+    else if (maxLoppuminen < new Date().getTime()) {
+      return {
+        tyyppi: peruste.siirtymaPaattyy != null ? 'siirtymaPaattynyt' : 'voimassaoloPaattynyt',
+        teksti: voimassaoloTietoTekstit[peruste.siirtymaPaattyy != null ? 'siirtymaPaattynyt' : 'voimassaoloPaattynyt'],
+        paiva: maxLoppuminen,
+      };
+    }
+    else {
+      return {
+        tyyppi: 'voimassa',
+        teksti: voimassaoloTietoTekstit['voimassa'],
+        paiva: peruste.voimassaoloAlkaa,
+      };
     }
   }
 
@@ -293,7 +358,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
       font-weight: 600;
     }
   }
-  .voimaantulo {
+  .alatiedot {
     font-size: smaller;
     color: #666;
     padding-top: 10px;
@@ -301,6 +366,51 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   .pagination {
     margin-top: 10px;
+  }
+
+  $tuleva-color: $green-lighten-2;
+  $voimassa-color: $green;
+  $siirtyma-color: $yellow-1;
+  $paattynyt-color: $red-1;
+
+  .peruste-haku-toggle {
+
+    ::v-deep .toggle {
+      border: 0px;
+    }
+
+    &.toggle-tuleva ::v-deep .toggle{
+      background-color: $tuleva-color;
+    }
+
+    &.toggle-voimassaolo ::v-deep .toggle{
+      background-color: $green;
+    }
+
+    &.toggle-siirtyma ::v-deep .toggle{
+      background-color: $siirtyma-color;
+    }
+
+    &.toggle-poistunut ::v-deep .toggle{
+      background-color: $paattynyt-color;
+    }
+
+  }
+
+  ::v-deep .ammatillinen-row.tuleva .ammatillinen-data{
+      border-left: 3px solid $tuleva-color;
+  }
+
+  ::v-deep .ammatillinen-row.siirtyma .ammatillinen-data{
+      border-left: 3px solid $siirtyma-color;
+  }
+
+  ::v-deep .ammatillinen-row.voimassaoloPaattynyt .ammatillinen-data, ::v-deep .ammatillinen-row.siirtymaPaattynyt .ammatillinen-data{
+      border-left: 3px solid $paattynyt-color;
+  }
+
+  .peruste-haku-toggle {
+    padding: 0px 5px;
   }
 }
 
