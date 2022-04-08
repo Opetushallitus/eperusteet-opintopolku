@@ -89,12 +89,15 @@ export default class RouteVuosiluokkakokonaisuus extends Vue {
     let vuosiluokkakokonaisuus = this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vlkId }) as any;
     return {
       ...vuosiluokkakokonaisuus,
-      laajaalaisetOsaamiset: _.map(this.laajaalaisetOsaamiset, lao => {
-        return {
-          ...lao,
-          nimi: _.get(this.laajaalaisetOsaamisetById[_.get(lao, 'id')], 'nimi'),
-        };
-      }),
+      laajaalaisetOsaamiset: _.chain(this.laajaalaisetOsaamiset)
+        .map(lao => {
+          return {
+            ...lao,
+            nimi: _.get(this.laajaalaisetOsaamisetById[_.get(lao, 'id')], 'nimi'),
+          };
+        })
+        .sortBy(lao => this.$kaanna(lao.nimi))
+        .value(),
     };
   }
 
