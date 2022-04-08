@@ -370,8 +370,8 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   $tuleva-color: $green-lighten-2;
   $voimassa-color: $green;
-  $siirtyma-color: $yellow-1;
-  $paattynyt-color: $red-1;
+  $siirtyma-color: $yellow;
+  $paattynyt-color: $red;
 
   .peruste-haku-toggle {
 
