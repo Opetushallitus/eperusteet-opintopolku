@@ -1,7 +1,11 @@
 <template>
   <div class="haku">
-    <h2>{{ $t('haku') }}: {{ query }}</h2>
-    <ep-spinner v-if="isLoading" />
+    <h2 v-if="query">{{ $t('haku') }}: {{ query }}</h2>
+    <h2 v-else>{{ $t('haku') }}</h2>
+    <div v-if="!query" class="alert alert-info">
+      {{ $t('ei-hakutuloksia') }}
+    </div>
+    <ep-spinner v-else-if="isLoading" />
     <div v-else class="tulokset">
       <div class="tulos" v-for="tulos in tulokset" :key="JSON.stringify(tulos.location)">
         <div class="osantyyppi">
@@ -124,12 +128,11 @@ export default class EpPerusteHaku extends Vue {
   private tulokset = [] as any[];
 
   async queryImpl(query) {
+    if (!query) {
+      this.isLoading = false;
+      return;
+    }
     this.isLoading = true;
-    this.$router.replace({
-      query: {
-        query,
-      },
-    });
 
     try {
       const julkaisu = await this.perusteDataStore.fetchJulkaisu();
@@ -170,6 +173,7 @@ export default class EpPerusteHaku extends Vue {
       }
 
       .osuma {
+        color: gray;
       }
     }
   }
