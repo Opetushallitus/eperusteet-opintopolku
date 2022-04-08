@@ -24,7 +24,7 @@
             <div class="search">
               <ep-search :value="tekstihaku" @input="updateTekstihaku" />
               <div>
-                <router-link :to="{ query: { haku: false } }">{{ $t('palaa-rakenteeseen') }}</router-link>
+                <router-link :to="{ query: { } }">{{ $t('palaa-rakenteeseen') }}</router-link>
               </div>
             </div>
           </div>
@@ -158,7 +158,9 @@ export default class RoutePeruste extends Vue {
 
   onRouteUpdate(route) {
     this.haku = route.query.haku || false;
-    // this.perusteDataStore.updateRoute(route);
+    if (!this.haku) {
+      this.perusteDataStore.updateRoute(route);
+    }
   }
 
   @Meta
@@ -188,7 +190,7 @@ export default class RoutePeruste extends Vue {
   }
 
   private updateTekstihaku(value) {
-    // this.tekstihaku = value;
+    this.tekstihaku = value;
   }
 
   private setValue(value) {
