@@ -87,6 +87,7 @@ export class OpetussuunnitelmaOppiaineStore {
     return _.chain(perusteenVlk.tavoitteet)
       .filter(tavoite => _.includes(_.map(vuosiluokka.tavoitteet, 'tunniste'), tavoite.tunniste))
       .map(tavoite => {
+        const vuosiluokanTavoite = vuosiluokanTavoitteet[(tavoite.tunniste as string)];
         return {
           ...tavoite,
           sisaltoalueet: _.chain(tavoite.sisaltoalueet)
@@ -122,7 +123,8 @@ export class OpetussuunnitelmaOppiaineStore {
               index: kohdealueGlobalIndex++,
             };
           }),
-          vuosiluokanTavoite: vuosiluokanTavoitteet[(tavoite.tunniste as string)],
+          vuosiluokanTavoite,
+          paikallinenKuvaus: tavoite.tavoite || (tavoite as any).kuvaus || (vuosiluokanTavoite && vuosiluokanTavoite.tavoite),
           hyvanOsaamisenKuvaus: _.find(tavoite.arvioinninkohteet, kohde => kohde.arvosana === 8),
         };
       })
