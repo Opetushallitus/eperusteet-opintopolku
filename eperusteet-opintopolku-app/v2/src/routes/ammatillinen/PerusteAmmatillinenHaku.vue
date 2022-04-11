@@ -72,12 +72,20 @@
             {{ $kaanna(osaamisala.nimi) }}
           </span>
         </div>
-        <div class="alatiedot">
-          <span v-if="peruste.voimassaoloTieto">
+        <div class="alatiedot" v-if="(peruste.voimassaoloTieto && peruste.voimassaoloTieto.paiva) || peruste.diaarinumero || (peruste.koulutukset && peruste.koulutukset.length > 0)">
+          <span v-if="peruste.voimassaoloTieto && peruste.voimassaoloTieto.paiva">
             {{$t(peruste.voimassaoloTieto.teksti)}}: {{ $sd(peruste.voimassaoloTieto.paiva) }}
           </span>
-          <span>
+          <span v-if="peruste.diaarinumero">
             | {{$t('diaarinumero')}}: {{ peruste.diaarinumero }}
+          </span>
+          <span v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
+            <template v-if="peruste.koulutukset.length >  1">
+            | {{$t('koulutuskoodit')}}: {{ peruste.koulutuskoodit }}
+            </template>
+            <template v-else>
+            | {{$t('koulutuskoodi')}}: {{ peruste.koulutuskoodit }}
+            </template>
           </span>
         </div>
       </ep-ammatillinen-row>
@@ -211,6 +219,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
           ...peruste,
           route: this.perusteRoute(peruste),
           voimassaoloTieto: this.perusteenVoimassaoloTieto(peruste),
+          koulutuskoodit: _.join(_.map(peruste.koulutukset, 'koulutuskoodiArvo'), ', '),
         }))
         .value();
     }
