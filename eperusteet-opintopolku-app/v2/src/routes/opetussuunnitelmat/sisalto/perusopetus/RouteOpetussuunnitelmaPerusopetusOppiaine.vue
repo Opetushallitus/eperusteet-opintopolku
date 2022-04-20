@@ -97,7 +97,7 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
       const vuosiluokkakokonaisuus = _.head(_.filter(this.opetussuunnitelmanVuosiluokkakokonaisuudet, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')));
 
       if (this.oppiaine.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
-        const oppiaineenPerusteenVuosiluokkakokonaisuus = _.find(this.perusteenVuosiluokkakokonaisuudet, pvlk => pvlk.tunniste === _.get(vuosiluokkakokonaisuus.vuosiluokkakokonaisuus, '_tunniste'));
+        const oppiaineenPerusteenVuosiluokkakokonaisuus = _.find(this.perusteOppiaineVuosiluokkakokonaisuudet, pvlk => pvlk.tunniste === _.get(vuosiluokkakokonaisuus.vuosiluokkakokonaisuus, '_tunniste'));
 
         return {
           vuosiluokkakokonaisuus: _.get(vuosiluokkakokonaisuus, 'vuosiluokkakokonaisuus'),
