@@ -8,7 +8,7 @@
     <ep-collapse
       ref="tavoitecollapse"
       class="tavoite"
-      v-for="(tavoite, index) in oppiaineenVuosiluokka.tavoitteet"
+      v-for="(tavoite, index) in tavoitteet"
       :key="'tavoite'+index"
       :border-bottom="false"
       :expandedByDefault="false"
@@ -90,9 +90,9 @@
           <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
         </div>
 
-        <div class="mb-4" v-if="tavoite.paikallinenKuvaus">
+        <div class="mb-4" v-if="tavoite.paikallinenTavoite">
           <h4>{{ $t('paikallinen-teksti') }}</h4>
-          <div v-html="$kaanna(tavoite.paikallinenKuvaus)"></div>
+          <div v-html="tavoite.paikallinenTavoite"></div>
         </div>
       </div>
 
@@ -131,6 +131,15 @@ export default class OppiaineenVuosiluokka extends Vue {
 
   @Prop({ required: true })
   private kuvat!: any[];
+
+  get tavoitteet() {
+    return _.map(this.oppiaineenVuosiluokka && this.oppiaineenVuosiluokka.tavoitteet, (tavoite) => {
+      return {
+        ...tavoite,
+        paikallinenTavoite: this.$kaanna((tavoite.vuosiluokanTavoite && tavoite.vuosiluokanTavoite.tavoite) || tavoite.tavoite || (tavoite as any).kuvaus),
+      };
+    });
+  }
 
   toggleTavoite() {
     _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle());
