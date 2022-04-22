@@ -1,11 +1,11 @@
 <template>
   <div class="content">
     <template v-if="perusteenOsa">
-      <h2 class="mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2 class="mb-4">{{ $kaanna(nimi) }}</h2>
       <b-row>
         <b-col lg="6" md="12">
           <ep-form-content name="koulutuksen-osan-nimi" headerType="h4">
-            <span>{{$kaanna(perusteenOsa.nimi)}}</span>
+            <span>{{$kaanna(nimi)}}</span>
           </ep-form-content>
         </b-col>
         <b-col lg="6" md="12">
@@ -84,6 +84,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
+import _ from 'lodash';
 
 @Component({
   components: {
@@ -123,6 +124,10 @@ export default class RouteKoulutuksenOsa extends Vue {
 
   get koulutuksenosaKoodiUri() {
     return (this.perusteenOsa as any)?.nimiKoodi?.uri;
+  }
+
+  get nimi() {
+    return _.get(this.perusteenOsa, 'nimiKoodi') ? _.get(this.perusteenOsa, 'nimiKoodi.nimi') : _.get(this.perusteenOsa, 'nimi');
   }
 }
 </script>
