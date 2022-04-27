@@ -25,6 +25,9 @@
         <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
           <a :href="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</a>
         </div>
+        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
+          <a :href="$kaanna(linkit.vanha_kayttoliittyma)">{{ $t('vanha_kayttoliittyma') }}</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -62,6 +65,10 @@ export default class EpFooter extends Vue {
         fi: 'https://opintopolku.fi/wp/fi',
         sv: 'https://studieinfo.fi/wp/sv',
       },
+      eperusteet_vanha: {
+        fi: 'https://eperusteet.opintopolku.fi',
+        sv: 'https://eperusteet.opintopolku.fi',
+      },
       virkailija: {
         fi: 'http://virkailija.opintopolku.fi',
         sv: 'http://virkailija.opintopolku.fi',
@@ -70,13 +77,17 @@ export default class EpFooter extends Vue {
         fi: 'mailto:eperusteet@opintopolku.fi',
         sv: 'mailto:eperusteet@opintopolku.fi',
       },
+      saavutettavuusseloste: {
+        fi: 'https://opintopolku.fi/wp/saavutettavuusseloste/eperusteet-saavutettavuusseloste/',
+        sv: 'https://studieinfo.fi/wp/tillganglighetsutlatande/tillganglighetsutlatande-for-egrunder/',
+      },
       tietosuojaseloste: {
         fi: 'https://opintopolku.fi/wp/tietosuojaseloste',
         sv: 'https://studieinfo.fi/wp/dataskyddsbeskrivning',
       },
-      saavutettavuusseloste: {
-        fi: 'https://opintopolku.fi/wp/saavutettavuusseloste/eperusteet-saavutettavuusseloste/',
-        sv: 'https://studieinfo.fi/wp/tillganglighetsutlatande/tillganglighetsutlatande-for-egrunder/',
+      vanha_kayttoliittyma: {
+        fi: 'https://eperusteet.opintopolku.fi/vanha-ui',
+        sv: 'https://eperusteet.opintopolku.fi/vanha-ui',
       },
     };
   }
