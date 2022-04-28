@@ -100,6 +100,7 @@ import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypit
 import { MaarayksetStore } from './stores/MaarayksetStore';
 import RouteKotoLaajaAlainenOsaaminen
   from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
+import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -622,6 +623,25 @@ export const router = new Router({
                   perusteenOsaStore: await PerusteenOsaStore.create(
                     _.parseInt(route.params.kotoLaajaalainenOsaaminenId),
                     getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.kotoLaajaalainenOsaaminenId) }),
+                  ),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'linkkisivu/:linkkisivuId',
+        component: RouteLinkkisivu,
+        name: 'linkkisivu',
+        meta: {
+          resolve: {
+            cacheBy: ['linkkisivuId'],
+            async props(route) {
+              return {
+                default: {
+                  perusteenOsaStore: await PerusteenOsaStore.create(
+                    _.parseInt(route.params.linkkisivuId),
+                    getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.linkkisivuId) }),
                   ),
                 },
               };
