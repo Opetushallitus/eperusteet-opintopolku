@@ -42,6 +42,19 @@
         </template>
       </EpMultiSelect>
     </b-form-group>
+
+  </div>
+
+  <div class="d-flex align-self-center flex-wrap flex-lg-row flex-column toggles">
+    <EpColoredToggle v-model="query.tuleva" class="haku-toggle tuleva">
+      {{ $t('switch-tuleva') }}
+    </EpColoredToggle>
+    <EpColoredToggle v-model="query.voimassaolo" class="haku-toggle voimassaolo">
+      {{ $t('switch-voimassaolo') }}
+    </EpColoredToggle>
+    <EpColoredToggle v-model="query.poistunut" class="haku-toggle poistunut">
+      {{ $t('switch-poistunut') }}
+    </EpColoredToggle>
   </div>
 
   <div class="opetussuunnitelma-container">
@@ -86,6 +99,7 @@ import { Koulutustyyppi } from '@shared/tyypit';
 import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaikallisetStore';
 import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
+import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 
 @Component({
   components: {
@@ -94,6 +108,7 @@ import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/Koodist
     EpSpinner,
     OpetussuunnitelmaTile,
     EpMultiSelect,
+    EpColoredToggle,
   },
 })
 export default class VstPaikalliset extends Vue {
@@ -114,6 +129,9 @@ export default class VstPaikalliset extends Vue {
     sivukoko: 100,
     organisaatio: null,
     kieli: this.kieli,
+    tuleva: true,
+    voimassaolo: true,
+    poistunut: true,
   };
 
   private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({
@@ -180,9 +198,27 @@ export default class VstPaikalliset extends Vue {
             koulutustyyppi: 'vapaasivistystyo',
           },
         },
+        voimassaoloTieto: this.voimassaoloTieto(ops),
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
       .value();
+  }
+
+  voimassaoloTieto(ops): string {
+    const maxLoppuminen = ops.voimassaoloLoppuu || new Date(8640000000000000).getTime();
+
+    if (ops.voimaantulo > new Date().getTime()) {
+      return 'tuleva';
+    }
+    else if (ops.voimaantulo < new Date().getTime() && maxLoppuminen > new Date().getTime()) {
+      return 'voimassa';
+    }
+    else if (maxLoppuminen < new Date().getTime()) {
+      return 'voimassaoloPaattynyt';
+    }
+    else {
+      return 'voimassa';
+    }
   }
 
   get opetussuunnitelmatPaginated() {
@@ -307,6 +343,37 @@ export default class VstPaikalliset extends Vue {
 
         }
       }
+    }
+  }
+
+  $tuleva-color: $green-lighten-2;
+  $voimassa-color: $green;
+  $paattynyt-color: $red-1;
+
+  .toggles {
+
+    padding-bottom: 20px;
+    padding-left: 10px;
+
+    .haku-toggle {
+      padding: 0px 5px;
+
+      ::v-deep .toggle {
+        border: 0px;
+      }
+
+      &.tuleva ::v-deep .toggle{
+        background-color: $tuleva-color;
+      }
+
+      &.voimassaolo ::v-deep .toggle{
+        background-color: $green;
+      }
+
+      &.poistunut ::v-deep .toggle{
+        background-color: $paattynyt-color;
+      }
+
     }
   }
 

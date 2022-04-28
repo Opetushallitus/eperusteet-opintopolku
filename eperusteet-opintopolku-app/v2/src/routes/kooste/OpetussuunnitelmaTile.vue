@@ -1,12 +1,12 @@
 <template>
   <div class="opetussuunnitelma shadow-tile">
     <div class="d-flex align-items-center">
-      <div class="opsicon-wrapper">
+      <div v-if="!ops.voimassaoloTieto" class="opsicon-wrapper">
         <slot name="icon">
           <div class="opsicon"></div>
         </slot>
       </div>
-      <div class="nimi flex-fill">
+      <div class="nimi flex-fill" :class="{['voimassaolo__'+ops.voimassaoloTieto] : !!ops.voimassaoloTieto}">
         <div class="ops">
           <span v-html="nimi"></span>
         </div>
@@ -108,6 +108,29 @@ export default class OpetussuunnitelmaTile extends Vue {
   .organisaatiot {
     color: #2B2B2B;
     font-size: smaller;
+  }
+
+  @mixin voimassaolo($tyyppi) {
+    margin-left:10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+    border-left: 3px solid $tyyppi;
+  }
+
+  .voimassaolo {
+    &__tuleva {
+      @include voimassaolo($tyyppi: $tuleva-color)
+    }
+
+    &__voimassaoloPaattynyt {
+      @include voimassaolo($tyyppi: $paattynyt-color)
+    }
+
+    &__voimassa {
+      @include voimassaolo($tyyppi: $voimassa-color)
+    }
+
   }
 
 </style>
