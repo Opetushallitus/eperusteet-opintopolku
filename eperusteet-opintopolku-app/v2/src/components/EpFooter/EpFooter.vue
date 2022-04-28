@@ -37,6 +37,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import { buildVanhaUiUrl } from '@shared/utils/esikatselu';
 import ophLogo from '@assets/img/banners/oph_logo.svg';
 import opintopolkuLogo from '@assets/img/banners/opintopolku_logo.svg';
 
@@ -86,8 +87,8 @@ export default class EpFooter extends Vue {
         sv: 'https://studieinfo.fi/wp/dataskyddsbeskrivning',
       },
       vanha_kayttoliittyma: {
-        fi: 'https://eperusteet.opintopolku.fi/vanha-ui',
-        sv: 'https://eperusteet.opintopolku.fi/vanha-ui',
+        fi: buildVanhaUiUrl('fi'),
+        sv: buildVanhaUiUrl('sv'),
       },
     };
   }
