@@ -349,7 +349,8 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 
   .checkboxes {
-    padding: 10px;
+    padding-bottom: 20px;
+    padding-left: 10px;
     .custom-switch {
       margin: 5px 15px 0 0;
     }
