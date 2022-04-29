@@ -1,7 +1,15 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <div>Tahan tulee linkkisivu</div>
+      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+
+      <div v-for="(alisivu, idx) in alisivut" :key="idx">
+          <router-link :to="alisivu.location">
+            {{ $kaanna(alisivu.label) }}
+          </router-link>
+      </div>
+
+      <slot name="previous-next-navigation" />
     </div>
     <ep-spinner v-else />
   </div>
@@ -26,7 +34,7 @@ export default class RouteLinkkisivu extends Vue {
   private perusteenOsaStore!: PerusteenOsaStore;
 
   @Watch('current', { immediate: true })
-  async fetchAlikappaleet() {
+  async fetchAlisivut() {
     if (!this.current) {
       return;
     }
@@ -37,6 +45,10 @@ export default class RouteLinkkisivu extends Vue {
 
   get perusteenOsa() {
     return this.perusteenOsaStore.perusteenOsa;
+  }
+
+  get alisivut() {
+    return this.current?.children;
   }
 
   get current() {
