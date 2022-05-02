@@ -122,12 +122,7 @@ import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
-
-export interface VoimassaoloTieto {
-  tyyppi: 'tuleva' | 'voimassa' | 'siirtyma' | 'voimassaoloPaattynyt' | 'siirtymaPaattynyt';
-  teksti: string;
-  paiva: number;
-};
+import { voimassaoloTieto } from '@/utils/voimassaolo';
 
 const voimassaoloTietoTekstit = {
   'tuleva': 'voimaantulo',
@@ -218,51 +213,10 @@ export default class PerusteAmmatillinenHaku extends Vue {
         .map(peruste => ({
           ...peruste,
           route: this.perusteRoute(peruste),
-          voimassaoloTieto: this.perusteenVoimassaoloTieto(peruste),
+          voimassaoloTieto: voimassaoloTieto(peruste),
           koulutuskoodit: _.join(_.map(peruste.koulutukset, 'koulutuskoodiArvo'), ', '),
         }))
         .value();
-    }
-  }
-
-  perusteenVoimassaoloTieto(peruste): VoimassaoloTieto {
-    const maxLoppuminen = peruste.siirtymaPaattyy || peruste.voimassaoloLoppuu || new Date(8640000000000000).getTime();
-
-    if (peruste.voimassaoloAlkaa > new Date().getTime()) {
-      return {
-        tyyppi: 'tuleva',
-        teksti: voimassaoloTietoTekstit['tuleva'],
-        paiva: peruste.voimassaoloAlkaa,
-      };
-    }
-    else if (peruste.siirtymaPaattyy !== null && peruste.voimassaoloLoppuu != null
-              && peruste.siirtymaPaattyy > new Date().getTime() && peruste.voimassaoloLoppuu < new Date().getTime()) {
-      return {
-        tyyppi: 'siirtyma',
-        teksti: voimassaoloTietoTekstit['siirtyma'],
-        paiva: peruste.siirtymaPaattyy,
-      };
-    }
-    else if (peruste.voimassaoloAlkaa < new Date().getTime() && maxLoppuminen > new Date().getTime()) {
-      return {
-        tyyppi: 'voimassa',
-        teksti: voimassaoloTietoTekstit['voimassa'],
-        paiva: peruste.voimassaoloAlkaa,
-      };
-    }
-    else if (maxLoppuminen < new Date().getTime()) {
-      return {
-        tyyppi: peruste.siirtymaPaattyy != null ? 'siirtymaPaattynyt' : 'voimassaoloPaattynyt',
-        teksti: voimassaoloTietoTekstit[peruste.siirtymaPaattyy != null ? 'siirtymaPaattynyt' : 'voimassaoloPaattynyt'],
-        paiva: maxLoppuminen,
-      };
-    }
-    else {
-      return {
-        tyyppi: 'voimassa',
-        teksti: voimassaoloTietoTekstit['voimassa'],
-        paiva: peruste.voimassaoloAlkaa,
-      };
     }
   }
 

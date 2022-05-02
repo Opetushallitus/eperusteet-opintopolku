@@ -68,7 +68,7 @@
     <div v-else id="opetussuunnitelmat-lista">
       <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
         <router-link :to="ops.route">
-          <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
+          <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTieto="ops.voimassaoloTieto"/>
         </router-link>
       </div>
       <b-pagination v-model="page"
@@ -100,6 +100,7 @@ import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaika
 import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
+import { voimassaoloTieto } from '@/utils/voimassaolo';
 
 @Component({
   components: {
@@ -198,27 +199,10 @@ export default class VstPaikalliset extends Vue {
             koulutustyyppi: 'vapaasivistystyo',
           },
         },
-        voimassaoloTieto: this.voimassaoloTieto(ops),
+        voimassaoloTieto: voimassaoloTieto(ops),
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
       .value();
-  }
-
-  voimassaoloTieto(ops): string {
-    const maxLoppuminen = ops.voimassaoloLoppuu || new Date(8640000000000000).getTime();
-
-    if (ops.voimaantulo > new Date().getTime()) {
-      return 'tuleva';
-    }
-    else if (ops.voimaantulo < new Date().getTime() && maxLoppuminen > new Date().getTime()) {
-      return 'voimassa';
-    }
-    else if (maxLoppuminen < new Date().getTime()) {
-      return 'voimassaoloPaattynyt';
-    }
-    else {
-      return 'voimassa';
-    }
   }
 
   get opetussuunnitelmatPaginated() {
