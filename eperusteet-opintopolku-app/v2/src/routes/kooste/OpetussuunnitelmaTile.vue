@@ -1,16 +1,20 @@
 <template>
   <div class="opetussuunnitelma shadow-tile">
     <div class="d-flex align-items-center">
-      <div v-if="!ops.voimassaoloTieto" class="opsicon-wrapper">
+      <div v-if="!voimassaoloTieto" class="opsicon-wrapper">
         <slot name="icon">
           <div class="opsicon"></div>
         </slot>
       </div>
-      <div class="nimi flex-fill" :class="{['voimassaolo__'+ops.voimassaoloTieto] : !!ops.voimassaoloTieto}">
+      <div class="nimi flex-fill" :class="voimassaoloClass">
         <div class="ops">
           <span v-html="nimi"></span>
         </div>
-        <div class="organisaatiot">
+        <div class="organisaatiot d-flex">
+          <div class="ops-voimassaolo" v-if="voimassaoloTieto && voimassaoloTieto.paiva">
+            {{$t(voimassaoloTieto.teksti)}}: {{ $sd(voimassaoloTieto.paiva) }}
+            <span class="mr-1"> | </span>
+          </div>
           <div class="ops-toimijat" v-if="ops.toimijat && ops.toimijat.length > 0">
             <span class="otsikko">{{ $t('toimijat') }}</span>
             <span class="mr-1">:</span>
@@ -44,6 +48,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { OpetussuunnitelmaJulkinenDto } from '@shared/api/ylops';
 import { highlight } from '@/utils/kieli';
 import _ from 'lodash';
+import { VoimassaoloTieto } from '@/utils/voimassaolo';
 
 @Component
 export default class OpetussuunnitelmaTile extends Vue {
@@ -52,6 +57,9 @@ export default class OpetussuunnitelmaTile extends Vue {
 
   @Prop({ default: '' })
   private query!: string;
+
+  @Prop({ required: false })
+  private voimassaoloTieto!: VoimassaoloTieto;
 
   get nimi() {
     return highlight(this.$kaanna((this.ops.nimi as Object)), this.query);
@@ -63,6 +71,13 @@ export default class OpetussuunnitelmaTile extends Vue {
 
   get oppilaitokset() {
     return _.map((this.ops as any).oppilaitokset, (oppilaitos) => highlight(this.$kaanna(oppilaitos.nimi), this.query));
+  }
+
+  get voimassaoloClass() {
+    if (this.voimassaoloTieto) {
+      return 'voimassaolo__' + this.voimassaoloTieto.tyyppi;
+    }
+    return '';
   }
 }
 </script>
