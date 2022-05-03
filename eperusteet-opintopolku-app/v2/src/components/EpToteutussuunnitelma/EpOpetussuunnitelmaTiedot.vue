@@ -15,6 +15,14 @@
         <ep-field v-model="opetussuunnitelma.hyvaksyja" />
       </ep-form-content>
 
+      <ep-form-content name="voimaantulo-pvm" headerType="h3" headerClass="h6" v-if="opetussuunnitelma.voimaantulo">
+        <span>{{ $sd(opetussuunnitelma.voimaantulo) }}</span>
+      </ep-form-content>
+
+      <ep-form-content name="voimassaolo-paattymispvm" headerType="h3" headerClass="h6" v-if="opetussuunnitelma.voimassaoloLoppuu">
+        <span>{{ $sd(opetussuunnitelma.voimassaoloLoppuu) }}</span>
+      </ep-form-content>
+
       <ep-form-content name="koulutustyyppi" headerType="h3" headerClass="h6">
         <ep-field v-model="koulutustyyppiName" />
       </ep-form-content>
