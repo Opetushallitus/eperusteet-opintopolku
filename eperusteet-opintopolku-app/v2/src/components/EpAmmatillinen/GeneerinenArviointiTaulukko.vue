@@ -5,7 +5,7 @@
     </slot>
     <div>{{$kaanna(arviointi.kohde)}}</div>
     <b-container fluid="lg" class="osaamistasot mt-3">
-      <b-row v-for="(osaamistasonKriteeri,index) in arviointi.osaamistasonKriteerit" :key="'osaamistasokriteeri'+index">
+      <b-row v-for="(osaamistasonKriteeri,index) in osaamistasonKriteeritSorted" :key="'osaamistasokriteeri'+index">
         <b-col class="pt-3" md="12" lg="4">
           <span>{{$kaanna(osaamistasonKriteeri.osaamistaso.otsikko)}}</span>
         </b-col>
@@ -25,6 +25,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import * as _ from 'lodash';
 
 @Component({
   components: {
@@ -34,6 +35,10 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 export default class GeneerinenArviointiTaulukko extends Vue {
   @Prop({ required: true })
   private arviointi: any;
+
+  get osaamistasonKriteeritSorted() {
+    return _.sortBy(this.arviointi.osaamistasonKriteerit, kriteeri => _.get(kriteeri, 'osaamistaso.koodi.arvo'));
+  }
 
   get osaamistasonKriteeritFields() {
     return [{
