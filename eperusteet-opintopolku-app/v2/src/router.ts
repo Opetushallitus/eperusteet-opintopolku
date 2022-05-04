@@ -799,6 +799,17 @@ export const router = new Router({
 });
 
 let loader = null;
+
+router.beforeEach((to, from, next) => {
+  const { pathname, origin, hash } = window.location;
+  if (pathname === '/beta/') {
+    window.location.assign(origin + '/' + hash);
+  }
+  else {
+    next();
+  }
+});
+
 router.beforeEach((to, from, next) => {
   loader = (Vue as any).$loading.show();
   next();
