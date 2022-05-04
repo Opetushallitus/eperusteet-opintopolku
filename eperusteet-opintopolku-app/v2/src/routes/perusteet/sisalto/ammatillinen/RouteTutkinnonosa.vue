@@ -65,9 +65,9 @@ export default class RouteTutkinnonosa extends Vue {
   }
 
   get tutkinnonosa() {
-    let tutkinnonosa = this.perusteenTutkinnonosa;
+    let tutkinnonosa = _.cloneDeep(this.perusteenTutkinnonosa);
 
-    if (_.get(tutkinnonosa, 'geneerinenArviointiasteikko')) {
+    if (_.get(tutkinnonosa, 'geneerinenArviointiasteikko') && !!_.get(tutkinnonosa.geneerinenArviointiasteikko, '_arviointiAsteikko')) {
       const arviointiAsteikko = _.keyBy(this.arviointiasteikot, 'id')[_.get(tutkinnonosa.geneerinenArviointiasteikko, '_arviointiAsteikko')];
       const osaamistasot = _.keyBy(arviointiAsteikko.osaamistasot, 'id');
       tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit = _.map(tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit, otKriteeri => {
