@@ -101,6 +101,7 @@ import { MaarayksetStore } from './stores/MaarayksetStore';
 import RouteKotoLaajaAlainenOsaaminen
   from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
+import { redirects } from './utils/redirects';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -213,7 +214,7 @@ export const router = new Router({
         },
       },
     }, {
-      path: 'kooste/:koulutustyyppi/:perusteId?',
+      path: 'kooste/:koulutustyyppi([a-z]+)/:perusteId?',
       name: 'kooste',
       component: RouteKooste,
       meta: {
@@ -779,8 +780,11 @@ export const router = new Router({
         component: RouteOpetussuunnitelmaPerusopetusOppiaine,
         name: 'opetussuunnitelmaperusopetusoppiaine',
       }],
-    }],
-  }, {
+    },
+    ...redirects,
+    ],
+  },
+  {
     path: '*',
     redirect: (to) => {
       logger.error('Unknown route', to);
