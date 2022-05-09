@@ -201,7 +201,7 @@ export const router = new Router({
         component: Virhe,
         props: routeProps,
       }, {
-        path: 'kooste/ammmatillinen/:perusteId',
+        path: 'kooste/ammatillinen/:perusteId',
         name: 'ammatillinenkooste',
         component: RouteKoosteAmmatillinen,
         meta: {
