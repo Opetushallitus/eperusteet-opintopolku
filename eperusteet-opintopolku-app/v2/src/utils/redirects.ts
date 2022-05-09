@@ -71,4 +71,16 @@ export const redirects = [
       };
     },
   },
+  {
+    path: 'amops/:toteutussuunnitelmaId/tiedot',
+    redirect: (to) => {
+      return {
+        name: 'toteutussuunnitelmaTiedot',
+        params: {
+          ...to.params,
+          koulutustyyppi: 'ammatillinen',
+        },
+      };
+    },
+  },
 ];
