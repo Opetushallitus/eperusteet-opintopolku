@@ -72,7 +72,7 @@ export const redirects = [
     },
   },
   {
-    path: 'amops/:toteutussuunnitelmaId',
+    path: 'amops/:toteutussuunnitelmaId/*',
     redirect: (to) => {
       return {
         name: 'toteutussuunnitelmaTiedot',
