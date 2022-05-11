@@ -30,7 +30,6 @@ export class KoulutuksenJarjestajaStore {
       sivu: 0,
       sivukoko: 100,
       kieli: Kielet.getUiKieli.value,
-      koulutustyyppi: ammatillisetKoulutustyypit,
     })).data as any).data;
     this.state.toteutussuunnitelmat = ((await getJulkisetOpetussuunnitelmat({
       organisaatio: this.state.koulutustoimija.organisaatio,
