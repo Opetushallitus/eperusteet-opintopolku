@@ -1,15 +1,10 @@
+import RouteReroute from '@/routes/kooste/RouteReroute.vue';
+
 export const redirects = [
   {
     path: 'kooste/:perusteId(\\d+)',
-    redirect: (to) => {
-      console.log('ammatillinenkooste redirect, ', to);
-      return {
-        name: 'ammatillinenkooste',
-        params: {
-          ...to.params,
-        },
-      };
-    },
+    name: 'koosteReroute',
+    component: RouteReroute,
   },
   {
     path: 'esitys/:perusteId(\\d+)/*/tutkinnonosat/:tutkinnonOsaViiteId',

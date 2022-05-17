@@ -89,7 +89,8 @@ export default class Paikalliset extends Vue {
   @Watch('julkaistutPerusteet', { immediate: true })
   async perusteetChange() {
     if (_.size(this.perusteKoosteStore.perusteJulkaisut) > 0) {
-      await this.setActivePeruste(this.julkaistutPerusteet![0]);
+      const peruste = _.find(this.julkaistutPerusteet, peruste => _.get(peruste, 'perusteId') === _.toNumber(_.get(this.$route.params, 'perusteId'))) || this.julkaistutPerusteet![0];
+      await this.setActivePeruste(peruste);
     }
   }
 
