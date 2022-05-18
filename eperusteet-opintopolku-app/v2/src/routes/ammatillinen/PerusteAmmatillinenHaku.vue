@@ -92,15 +92,17 @@
 
     </div>
     <div class="pagination d-flex justify-content-center">
-      <b-pagination v-model="page"
-                    :total-rows="total"
-                    :per-page="perPage"
-                    align="center"
-                    aria-controls="perusteet-lista"
-                    :first-text="$t('alkuun')"
-                    prev-text="«"
-                    next-text="»"
-                    :last-text="$t('loppuun')" />
+      <b-pagination
+        class="mt-4"
+        v-model="page"
+        :total-rows="total"
+        :per-page="perPage"
+        align="center"
+        aria-controls="perusteet-lista"
+        :first-text="$t('alkuun')"
+        prev-text="«"
+        next-text="»"
+        :last-text="$t('loppuun')" />
     </div>
   </div>
 

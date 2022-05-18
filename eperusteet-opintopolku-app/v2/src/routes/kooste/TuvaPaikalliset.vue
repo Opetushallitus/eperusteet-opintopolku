@@ -22,15 +22,17 @@
           <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
         </router-link>
       </div>
-      <b-pagination v-model="page"
-                    :total-rows="total"
-                    :per-page="perPage"
-                    align="center"
-                    aria-controls="opetussuunnitelmat-lista"
-                    :first-text="$t('alkuun')"
-                    prev-text="«"
-                    next-text="»"
-                    :last-text="$t('loppuun')" />
+      <b-pagination
+        class="mt-4"
+        v-model="page"
+        :total-rows="total"
+        :per-page="perPage"
+        align="center"
+        aria-controls="opetussuunnitelmat-lista"
+        :first-text="$t('alkuun')"
+        prev-text="«"
+        next-text="»"
+        :last-text="$t('loppuun')" />
     </div>
   </div>
 </div>
