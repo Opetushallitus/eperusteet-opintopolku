@@ -1,10 +1,16 @@
 import RouteReroute from '@/routes/kooste/RouteReroute.vue';
+import RouteOpintokokonaisuusReroute from '@/routes/toteutussuunnitelmat/RouteOpintokokonaisuusReroute.vue';
 
 export const redirects = [
   {
     path: 'kooste/:perusteId(\\d+)',
     name: 'koosteReroute',
     component: RouteReroute,
+  },
+  {
+    path: 'opintokokonaisuus/:koodiarvo',
+    name: 'opintokokonaisuusReroute',
+    component: RouteOpintokokonaisuusReroute,
   },
   {
     path: 'esitys/:perusteId(\\d+)/*/tutkinnonosat/:tutkinnonOsaViiteId',
