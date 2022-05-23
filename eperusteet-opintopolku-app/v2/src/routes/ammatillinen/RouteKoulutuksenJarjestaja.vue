@@ -51,18 +51,18 @@
         <ep-spinner v-if="!toteutussuunnitelmat" />
         <div v-else>
           <ep-search class="mb-3" v-model="opsQuery" :placeholder="$t('etsi-toteutussuunnitelmaa')"/>
-          <div v-if="toteutussuunnitelmat.length === 0">
+          <div v-if="toteutussuunnitelmat.length === 0 && opsQuery === ''">
             <div class="alert alert-info">
               {{ $t('ei-paikallisia-opetussuunnitelmia') }}
             </div>
           </div>
-          <div v-else-if="toteutussuunnitelmatFiltered.length === 0">
+          <div v-else-if="toteutussuunnitelmat.length === 0 && opsQuery !== ''">
             <div class="alert alert-info">
               {{ $t('ei-hakutuloksia') }}
             </div>
           </div>
-          <div v-else>
-            <div v-for="(ops, idx) in toteutussuunnitelmatPaginated" :key="idx">
+          <div v-else :class="{'disabled-events': fetching}">
+            <div v-for="(ops, idx) in toteutussuunnitelmat" :key="idx">
 
               <router-link :to="ops.route">
                 <opetussuunnitelma-tile :ops="ops" :query="opsQuery"/>
@@ -71,7 +71,7 @@
             </div>
             <b-pagination v-model="opsPage"
                           class="mt-4"
-                          :total-rows="toteutussuunnitelmatFiltered.length"
+                          :total-rows="toteutussuunnitelmaTotal"
                           :per-page="perPage"
                           align="center"
                           aria-controls="toteutussuunnitelmat-lista"
@@ -88,7 +88,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
@@ -120,6 +120,7 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
 
   private opsQuery = '';
   private opsPage = 1;
+  private fetching = false;
 
   private perPage = 5;
 
@@ -145,7 +146,7 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
 
   get toteutussuunnitelmat() {
     if (this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value) {
-      return _.map(this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value, toteutussuunnitelma => {
+      return _.map(this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value.data, toteutussuunnitelma => {
         return {
           ...toteutussuunnitelma,
           route: {
@@ -157,6 +158,10 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
         };
       });
     }
+  }
+
+  get toteutussuunnitelmaTotal() {
+    return this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value?.kokonaismäärä;
   }
 
   get yhteisetOsuudetFiltered() {
@@ -172,17 +177,21 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
       .value();
   }
 
-  get toteutussuunnitelmatFiltered() {
-    return _.chain(this.toteutussuunnitelmat)
-      .filter(ops => Kielet.search(this.opsQuery, ops.nimi))
-      .value();
+  @Watch('opsQuery')
+  async opsQueryChange() {
+    this.opsPage = 1;
+    await this.doFetch();
   }
 
-  get toteutussuunnitelmatPaginated() {
-    return _.chain(this.toteutussuunnitelmatFiltered)
-      .drop(this.perPage * (this.opsPage - 1))
-      .take(this.perPage)
-      .value();
+  @Watch('opsPage')
+  async pageChange() {
+    await this.doFetch();
+  }
+
+  async doFetch() {
+    this.fetching = true;
+    await this.koulutuksenJarjestajaStore.fetchToteutussuunnitelmat(this.opsQuery, this.opsPage - 1);
+    this.fetching = false;
   }
 
   get murupolku() {
