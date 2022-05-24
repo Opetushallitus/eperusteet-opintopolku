@@ -78,7 +78,7 @@ jobs:
 #          ./cc-test-reporter upload-coverage
 #          ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 
-#          mvn clean verify --batch-mode
+          mvn clean verify --batch-mode
 #
 #      - name: Cache eperusteet-opintopolku build results
 #        uses: actions/cache@v3
