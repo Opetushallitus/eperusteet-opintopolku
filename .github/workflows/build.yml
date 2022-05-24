@@ -75,7 +75,7 @@ jobs:
           cd ../..
 
           mvn clean verify --batch-mode
-#
+
 #      - name: Cache eperusteet-opintopolku build results
 #        uses: actions/cache@v3
 #        id: restore-build
