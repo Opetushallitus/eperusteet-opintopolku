@@ -6,7 +6,7 @@
     <ep-spinner v-if="!rakenne" />
 
     <div v-else>
-      <ep-content-viewer :value="$kaanna(rakenne.kuvaus)" :kuvat="kuvat"/>
+      <ep-content-viewer :value="$kaanna(rakenne.kuvaus)" :kuvat="kuvat" v-if="naytaPerusteenTeksti"/>
       <ep-peruste-rakenne :rakenneOsat="filteredRakenneOsat">
         <template v-slot:nimi="{ rakenneosa }">
 
@@ -153,6 +153,10 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
       .filter('piilotettu')
       .map('rakennemoduuli')
       .value();
+  }
+
+  get naytaPerusteenTeksti() {
+    return !this.sisaltoviite?.suorituspolku?.piilotaPerusteenTeksti;
   }
 }
 </script>
