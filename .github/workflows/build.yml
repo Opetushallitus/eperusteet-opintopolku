@@ -19,6 +19,8 @@ jobs:
   build-and-test-eperusteet-opintopolku:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - name: Set up Node 10
         uses: actions/setup-node@v3
         with:
