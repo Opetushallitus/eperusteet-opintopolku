@@ -13,7 +13,6 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   ARTIFACT_NAME: eperusteet-opintopolku
-#  AMOSAA_SERVICE_DIR: ${{ github.workspace }}/eperusteet-amosaa/eperusteet-amosaa-service
 
 jobs:
   build-and-test-eperusteet-opintopolku:
@@ -112,7 +111,7 @@ jobs:
 
       - name: Build image
         run: |
-          git clone https://github.com/Opetushallitus/ci-tools.git
+          git   clone https://github.com/Opetushallitus/ci-tools.git
           source ci-tools/common/setup-tools.sh
 
           mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
