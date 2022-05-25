@@ -90,35 +90,35 @@ jobs:
 
           mvn clean verify --batch-mode
 
-#      - name: Cache eperusteet-opintopolku build results
-#        uses: actions/cache@v3
-#        id: restore-build
-#        with:
-#          path: eperusteet-opintopolku-app/target
-#          key: ${{ github.sha }}
+      - name: Cache eperusteet-opintopolku build results
+        uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: eperusteet-opintopolku-app/target
+          key: ${{ github.sha }}
 
-#  build-image:
-#    needs: build-and-test-eperusteet-opintopolku
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - name: Cache eperusteet-opintopolku build results
-#        uses: actions/cache@v3
-#        id: restore-build
-#        with:
-#          path: eperusteet-opintopolku-app/target
-#          key: ${{ github.sha }}
-#
-#      - name: Build image
-#        run: |
-#          git clone https://github.com/Opetushallitus/ci-tools.git
-#          source ci-tools/common/setup-tools.sh
-#
-#          mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
-#          cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
-#
-#          export BASE_IMAGE="baseimage-war-openjdk8:master"
-#          ./ci-tools/common/pull-image.sh
-#          ./ci-tools/github-build/build-war.sh ${ARTIFACT_NAME}
-#          ./ci-tools/github-build/upload-image.sh ${ARTIFACT_NAME}
+  build-image:
+    needs: build-and-test-eperusteet-opintopolku
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache eperusteet-opintopolku build results
+        uses: actions/cache@v3
+        id: restore-build
+        with:
+          path: eperusteet-opintopolku-app/target
+          key: ${{ github.sha }}
+
+      - name: Build image
+        run: |
+          git clone https://github.com/Opetushallitus/ci-tools.git
+          source ci-tools/common/setup-tools.sh
+
+          mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
+          cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
+
+          export BASE_IMAGE="baseimage-war-openjdk8:master"
+          ./ci-tools/common/pull-image.sh
+          ./ci-tools/github-build/build-war.sh ${ARTIFACT_NAME}
+          ./ci-tools/github-build/upload-image.sh ${ARTIFACT_NAME}
