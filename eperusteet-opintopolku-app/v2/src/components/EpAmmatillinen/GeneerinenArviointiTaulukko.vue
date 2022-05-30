@@ -37,7 +37,7 @@ export default class GeneerinenArviointiTaulukko extends Vue {
   private arviointi: any;
 
   get osaamistasonKriteeritSorted() {
-    return _.reverse(_.sortBy(this.arviointi.osaamistasonKriteerit, kriteeri => _.get(kriteeri, 'osaamistaso.koodi.arvo')));
+    return _.sortBy(this.arviointi.osaamistasonKriteerit, kriteeri => _.get(kriteeri, 'osaamistaso.koodi.arvo'));
   }
 
   get osaamistasonKriteeritFields() {
