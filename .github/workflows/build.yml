@@ -111,7 +111,7 @@ jobs:
 
       - name: Build image
         run: |
-          git   clone https://github.com/Opetushallitus/ci-tools.git
+          git clone https://github.com/Opetushallitus/ci-tools.git
           source ci-tools/common/setup-tools.sh
 
           mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
