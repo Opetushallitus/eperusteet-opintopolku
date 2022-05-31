@@ -1,13 +1,5 @@
 name: Eperusteet-opintopolku build
-#TODO muuta kunhan valmis
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - EP-3162-github-actions
-    # Workflow ajetaan jos jokin muu kuin markdown tiedosto muuttui
-    paths-ignore:
-      - '**.md'
+on: [workflow_dispatch, push]
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -76,10 +68,6 @@ jobs:
           yarn gen:api
           rm -rf node_modules
           cd ../../../..
-          
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
           
           cd eperusteet-opintopolku-app/v2
           yarn run lint
