@@ -44,7 +44,7 @@
 import _ from 'lodash';
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, stateToKoulutustyyppi,
-  ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava } from '@shared/utils/perusteet';
+  ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter, RawLocation } from 'vue-router/types/router';
@@ -148,12 +148,20 @@ export default class EpNavigation extends Vue {
     }));
   }
 
+  get kotoutumiskoulutus() {
+    return _.map(kotoutumiskoulutus(), kt => ({
+      ...kt,
+      ...this.setActiveClass(kt),
+    }));
+  }
+
   get items() {
     return _.filter([
       ...this.yleissivistavat,
       ...this.ammatilliset,
       ...this.vapaasivistystyo,
       ...this.tutkintoonvalmentava,
+      ...this.kotoutumiskoulutus,
     ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi)));
   }
 
@@ -289,6 +297,10 @@ export default class EpNavigation extends Vue {
       &.koulutustyyppi-tutkintoonvalmentava {
         border-bottom-color: $koulutustyyppi-tutkintoonvalmentava-color;
       }
+
+      &.koulutustyyppi-kotoutumiskoulutus {
+        border-bottom-color: $koulutustyyppi-kotoutumiskoulutus-color;
+      }
     }
   }
 
@@ -336,6 +348,12 @@ export default class EpNavigation extends Vue {
     &.koulutustyyppi-tutkintoonvalmentava {
       /deep/ .nav-link {
         border-bottom-color: $koulutustyyppi-tutkintoonvalmentava-color;
+      }
+    }
+
+    &.koulutustyyppi-kotoutumiskoulutus {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-kotoutumiskoulutus-color;
       }
     }
   }

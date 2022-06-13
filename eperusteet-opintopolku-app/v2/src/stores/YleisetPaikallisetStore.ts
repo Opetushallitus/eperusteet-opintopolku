@@ -8,7 +8,7 @@ import { Page, Koulutustyyppi } from '@shared/tyypit';
 
 Vue.use(VueCompositionApi);
 
-export class TuvaPaikallisetStore implements IPaikallinenStore {
+export class YleisetPaikallisetStore implements IPaikallinenStore {
   public state = reactive({
     opetussuunnitelmat: null as Page<OpetussuunnitelmaDto> | null,
     query: {} as OpetussuunnitelmaQuery,
