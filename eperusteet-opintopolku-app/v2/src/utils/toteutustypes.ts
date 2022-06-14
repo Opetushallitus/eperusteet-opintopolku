@@ -8,14 +8,14 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 
 export const koostePaikallinenStore = {
   'tutkintoonvalmentava': (): any => new YleisetPaikallisetStore(),
-  'maahanmuuttajienkotoutumiskoulutus': (): any => new YleisetPaikallisetStore(),
+  'kotoutumiskoulutus': (): any => new YleisetPaikallisetStore(),
   'vapaasivistystyo': (): any => new VapaasivistystyoPaikallisetStore(),
   'default': (): any => new YleissivistavatPaikallisetStore(),
 };
 
 export const koostePaikallinenComponent = {
   'tutkintoonvalmentava': TuvaPaikalliset,
-  'maahanmuuttajienkotoutumiskoulutus': KotoPaikalliset,
+  'kotoutumiskoulutus': KotoPaikalliset,
   'vapaasivistystyo': VstPaikalliset,
   'default': Paikalliset,
 };

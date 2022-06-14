@@ -113,7 +113,7 @@ export default class KotoPaikalliset extends Vue {
           name: 'toteutussuunnitelma',
           params: {
             toteutussuunnitelmaId: _.toString(ops.id),
-            koulutustyyppi: 'maahanmuuttajienkotoutumiskoulutus',
+            koulutustyyppi: 'kotoutumiskoulutus',
           },
         },
       }))
