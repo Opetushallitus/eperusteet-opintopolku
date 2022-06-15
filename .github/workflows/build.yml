@@ -82,7 +82,7 @@ jobs:
         id: restore-build
         with:
           path: eperusteet-opintopolku-app/target
-          key: ${{ github.sha }}
+          key: ${{ github.run_number }}-${{ github.run_attempt }}-app
 
   build-image:
     needs: build-and-test-eperusteet-opintopolku
@@ -95,7 +95,7 @@ jobs:
         id: restore-build
         with:
           path: eperusteet-opintopolku-app/target
-          key: ${{ github.sha }}
+          key: ${{ github.run_number }}-${{ github.run_attempt }}-app
 
       - name: Build image
         run: |
