@@ -18,12 +18,17 @@
 
     <template v-if="hasArviointi">
       <ep-ammatillinen-arvioinnin-kohdealueet
-              v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.arvioinninKohdealueet"
+              v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.arvioinninKohdealueet && tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0"
               :arviointiasteikot="arviointiasteikot"
               :arvioinninKohdealueet="tutkinnonosa.arviointi.arvioinninKohdealueet"/>
 
       <div v-if="tutkinnonosa.geneerinenArviointiasteikko && tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit">
         <GeneerinenArviointiTaulukko :arviointi="tutkinnonosa.geneerinenArviointiasteikko" />
+      </div>
+
+      <div v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot">
+        <h3>{{$t('arviointi')}}</h3>
+        <div v-html="$kaanna(tutkinnonosa.arviointi.lisatiedot)" />
       </div>
 
       <hr class="mt-5 mb-5"/>
@@ -69,6 +74,7 @@ import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpA
 import EpAmmattitaitovaatimukset from '@shared/components/EpAmmattitaitovaatimukset/EpAmmattitaitovaatimukset.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 import EpValmaTelmaSisalto from '@/components/EpAmmatillinen/EpValmaTelmaSisalto.vue';
+import _ from 'lodash';
 
 @Component({
   components: {
@@ -81,13 +87,15 @@ import EpValmaTelmaSisalto from '@/components/EpAmmatillinen/EpValmaTelmaSisalto
 })
 export default class EpTutkinnonosaNormaali extends Vue {
   @Prop({ required: true })
-  private tutkinnonosa: any;
+  tutkinnonosa: any;
 
   @Prop({ required: true })
-  private arviointiasteikot!: any[];
+  arviointiasteikot!: any[];
 
   get hasArviointi() {
-    return (this.tutkinnonosa.arviointi && this.tutkinnonosa.arviointi.arvioinninKohdealueet && this.tutkinnonosa.arviointi?.arvioinninKohdealueet?.length > 0) || this.tutkinnonosa.geneerinenArviointiasteikko;
+    return !_.isNil(this.tutkinnonosa.arviointi?.lisatiedot)
+      || !_.isEmpty(this.tutkinnonosa.arviointi?.arvioinninKohdealueet)
+      || !_.isNil(this.tutkinnonosa.geneerinenArviointiasteikko);
   }
 
   get osaamistasonKriteeritFields() {

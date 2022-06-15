@@ -73,6 +73,18 @@ export const redirects = [
     },
   },
   {
+    path: 'amops/:toteutussuunnitelmaId/osa/:sisaltoviiteId',
+    redirect: (to) => {
+      return {
+        name: 'toteutussuunnitelmaSisalto',
+        params: {
+          ...to.params,
+          koulutustyyppi: 'ammatillinen',
+        },
+      };
+    },
+  },
+  {
     path: 'amops/:toteutussuunnitelmaId',
     alias: 'amops/:toteutussuunnitelmaId/*',
     redirect: (to) => {
