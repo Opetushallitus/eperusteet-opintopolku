@@ -43,7 +43,6 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
   @State() public navigation: YlopsNavigationNodeDto | null = null;
-  @State() public opintojaksot: Lops2019OpintojaksoDto[] | null = null;
   @State() public dokumentit: any = {};
   @State() public currentRoute: Location | null = null;
   @State() public sidenavFilter: NavigationFilter = {
@@ -75,10 +74,6 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
     this.fetchTermit();
     this.fetchKuvat();
-
-    if (this.opetussuunnitelma && (this.opetussuunnitelma.toteutus as any) === 'lops2019') {
-      this.fetchOpintojaksot();
-    }
 
     if (this.opetussuunnitelma?.peruste?.id) {
       this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id)).data;
@@ -202,18 +197,6 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     const navigation = (await Opetussuunnitelmat.getNavigationPublic(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value)).data;
     this.movePaikallisetOppiaineet(navigation);
     this.navigation = navigation;
-  }
-
-  async fetchOpintojaksot() {
-    this.opintojaksot = _.chain(await Promise.all(
-      [
-        Opintojaksot.getAllOpintojaksot(this.opetussuunnitelmaId),
-        Opintojaksot.getTuodutOpintojaksot(this.opetussuunnitelmaId),
-      ]
-    ))
-      .map('data')
-      .flatMap()
-      .value();
   }
 
   @Getter(state => state.opetussuunnitelma.tila)

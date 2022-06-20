@@ -273,8 +273,8 @@ export default class RouteOpetussuunnitelmaPoppiaine extends Vue {
 
   get opintojaksot() {
     if (this.oppiaine && this.oppiaine.koodi) {
-      return _.filter(this.opetussuunnitelmaDataStore.opintojaksot, oj => {
-        const uri = this.oppiaine!.koodi!;
+      return _.filter(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('opintojaksot'), oj => {
+        const uri = this.oppiaine!.koodi!.uri;
         return _.some(oj.oppiaineet, { koodi: uri });
       });
     }
