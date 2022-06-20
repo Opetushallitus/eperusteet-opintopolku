@@ -110,7 +110,7 @@ export default class RouteOpetussuunnitelma extends Vue {
   }
 
   get opetussuunnitelmaEsikatselussa() {
-    return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU);
+    return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(this.$route.query, 'esikatselu');
   }
 
   @ProvideReactive('isAmmatillinen')

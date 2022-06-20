@@ -358,6 +358,7 @@ export const router = new Router({
                 default: {
                   opetussuunnitelmaDataStore: await ToteutussuunnitelmaDataStore.create(
                     _.parseInt(route.params.toteutussuunnitelmaId),
+                    _.has(route.query, 'esikatselu'),
                   ),
                 },
               };
@@ -396,7 +397,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId)),
+                  perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId), _.has(route.query, 'esikatselu')),
                 },
               };
             },
@@ -716,6 +717,7 @@ export const router = new Router({
                 default: {
                   opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
                     _.parseInt(route.params.opetussuunnitelmaId),
+                    _.has(route.query, 'esikatselu'),
                   ),
                 },
               };

@@ -29,21 +29,21 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public perusteKuvat: object[] = [];
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
 
-  constructor(opetussuunnitelmaId: number) {
+  constructor(opetussuunnitelmaId: number, private esikatselu = false) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
   }
 
-  public static async create(opetussuunnitelmaId: number) {
-    const result = new ToteutussuunnitelmaDataStore(opetussuunnitelmaId);
+  public static async create(opetussuunnitelmaId: number, esikatselu = false) {
+    const result = new ToteutussuunnitelmaDataStore(opetussuunnitelmaId, esikatselu);
     await result.init();
     return result;
   }
 
   async init() {
     this.koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
-    this.opetussuunnitelma = (await JulkinenApi.getOpetussuunnitelmaJulkaistuSisalto(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
+    this.opetussuunnitelma = (await JulkinenApi.getOpetussuunnitelmaJulkaistuSisalto(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id), this.esikatselu)).data;
     this.getDokumenttiTila();
-    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationPublic(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id))).data;
+    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationPublic(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id), this.esikatselu)).data;
     this.navigation = {
       ...navigation,
       children: _.filter(navigation.children, child => child.type !== 'tiedot'),
