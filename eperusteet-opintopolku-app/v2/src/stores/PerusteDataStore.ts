@@ -48,19 +48,19 @@ export class PerusteDataStore {
   @State() public perusteJulkaisu: any = null;
   @State() public perusteJulkaisuP: Promise<any> | null = null;
 
-  public static async create(perusteId: number) {
-    const result = new PerusteDataStore(perusteId);
+  public static async create(perusteId: number, esikatselu = false) {
+    const result = new PerusteDataStore(perusteId, esikatselu);
     await result.init();
 
     return result;
   }
 
-  constructor(perusteId: number) {
+  constructor(perusteId: number, private esikatselu = false) {
     this.perusteId = perusteId;
   }
 
   private async init() {
-    this.perusteKaikki = (await Perusteet.getKokoSisalto(this.perusteId)).data;
+    this.perusteKaikki = (await Perusteet.getKokoSisalto(this.perusteId, undefined, this.esikatselu)).data;
     // this.perusteDto = (await Perusteet.getPerusteenTiedot(this.perusteId)).data;
     this.projektitila = (await Perusteet.getPerusteProjektiTila(this.perusteId)).data;
     this.termit = (await Termit.getAllTermit(this.perusteId)).data;
@@ -113,7 +113,7 @@ export class PerusteDataStore {
   }
 
   private async fetchNavigation() {
-    this.navigation = (await Perusteet.getNavigationPublic(this.perusteId, Kielet.getUiKieli.value)).data;
+    this.navigation = (await Perusteet.getNavigationPublic(this.perusteId, Kielet.getUiKieli.value, this.esikatselu)).data;
   }
 
   @Getter(state => {
