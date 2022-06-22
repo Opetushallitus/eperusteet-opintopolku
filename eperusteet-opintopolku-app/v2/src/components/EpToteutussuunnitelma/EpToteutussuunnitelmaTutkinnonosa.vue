@@ -108,13 +108,17 @@
       <h3>{{ $t('perusteen-sisalto') }}</h3>
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
-        <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" :kuvat="kuvat"/>
+        <ep-content-viewer class="ammattitaitovaatimukset" :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" :kuvat="kuvat"/>
       </ep-form-content>
 
       <ep-ammatillinen-arvioinnin-kohdealueet
         v-if="perusteenTutkinnonosa.arviointi && perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"
         :arviointiasteikot="arviointiasteikot"
         :arvioinninKohdealueet="perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"/>
+
+      <div v-if="perusteenTutkinnonosa.geneerinenArviointiasteikko && perusteenTutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit">
+        <GeneerinenArviointiTaulukko :arviointi="perusteenTutkinnonosa.geneerinenArviointiasteikko" />
+      </div>
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
         <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
@@ -140,6 +144,8 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenOsaalueet.vue';
+import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
+
 import * as _ from 'lodash';
 import { Koodistot } from '@shared/api/amosaa';
 
@@ -150,6 +156,7 @@ import { Koodistot } from '@shared/api/amosaa';
     EpCollapse,
     EpAmmatillinenArvioinninKohdealueet,
     EpAmmatillinenOsaalueet,
+    GeneerinenArviointiTaulukko,
   },
 })
 export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
@@ -268,5 +275,12 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
 <style scoped lang="scss">
   .font-600 {
     font-weight: 600;
+  }
+
+  .ammattitaitovaatimukset {
+    ::v-deep dd {
+      margin-left: 2.5rem;
+      margin-bottom: 0;
+    }
   }
 </style>
