@@ -1,5 +1,9 @@
 <template>
   <div>
+    <ep-form-content class="col-md-12 mb-5" v-if="tutkinnonosa.tavoitteet" name="tavoitteet">
+      <span v-html="$kaanna(tutkinnonosa.tavoitteet)" />
+    </ep-form-content>
+
     <ep-form-content class="col-md-12 mb-5" v-if="!tutkinnonosa.ammattitaitovaatimukset2019 && tutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
       <span v-html="$kaanna(tutkinnonosa.ammattitaitovaatimukset)" />
     </ep-form-content>
@@ -26,10 +30,9 @@
         <GeneerinenArviointiTaulukko :arviointi="tutkinnonosa.geneerinenArviointiasteikko" />
       </div>
 
-      <div v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot">
-        <h3>{{$t('arviointi')}}</h3>
-        <div v-html="$kaanna(tutkinnonosa.arviointi.lisatiedot)" />
-      </div>
+      <ep-form-content class="col-md-12" v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot" name="arviointi">
+        <span v-html="$kaanna(tutkinnonosa.arviointi.lisatiedot)" />
+      </ep-form-content>
 
       <hr class="mt-5 mb-5"/>
     </template>
@@ -40,9 +43,10 @@
       <hr class="mt-5 mb-5" v-if="tutkinnonosa.vapaatTekstit && tutkinnonosa.vapaatTekstit.length > 0"/>
     </ep-form-content>
 
-    <div class="col-md-12" v-for="(vapaaTeksti, index) in tutkinnonosa.vapaatTekstit" :key="'vapaateksti'+index">
-      <h3>{{$kaanna(vapaaTeksti.nimi)}}</h3>
-      <span v-html="$kaanna(vapaaTeksti.teksti)" />
+    <div v-for="(vapaaTeksti, index) in tutkinnonosa.vapaatTekstit" :key="'vapaateksti'+index">
+      <ep-form-content class="col-md-12" :name="$kaanna(vapaaTeksti.nimi)">
+        <span v-html="$kaanna(vapaaTeksti.teksti)" />
+      </ep-form-content>
 
       <hr class="mt-5 mb-5"/>
     </div>
