@@ -113,6 +113,11 @@ export default class RouteOpetussuunnitelma extends Vue {
     return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU);
   }
 
+  @ProvideReactive('isAmmatillinen')
+  get isAmmatillinen(): boolean {
+    return true;
+  }
+
   @ProvideReactive('linkkiHandler')
   get linkkiHandler(): ILinkkiHandler {
     return {
@@ -121,6 +126,7 @@ export default class RouteOpetussuunnitelma extends Vue {
       },
     } as ILinkkiHandler;
   };
+
 }
 </script>
 
