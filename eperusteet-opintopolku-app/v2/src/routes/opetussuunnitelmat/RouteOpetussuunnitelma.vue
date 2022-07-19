@@ -126,7 +126,6 @@ export default class RouteOpetussuunnitelma extends Vue {
       },
     } as ILinkkiHandler;
   };
-
 }
 </script>
 
