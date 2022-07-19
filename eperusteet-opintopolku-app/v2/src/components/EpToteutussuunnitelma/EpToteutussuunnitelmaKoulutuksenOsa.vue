@@ -47,7 +47,8 @@
         <b-col>
           <b-form-group>
             <h3 slot="label">{{ $t('laaja-alainen-osaaminen') }}</h3>
-            <ep-content-viewer :value="$kaanna(koulutuksenosa.laajaAlaisenOsaamisenKuvaus)" :kuvat="kuvat"/>
+            <!-- laaaja-alainen sisältää ainoastaan ohjetekstin perusteessa -->
+            <!-- <ep-content-viewer :value="$kaanna(koulutuksenosa.laajaAlaisenOsaamisenKuvaus)" :kuvat="kuvat"/> -->
           </b-form-group>
           <template v-if="koulutuksenosa.paikallinenTarkennus">
             <div v-for="(lao, index) in koulutuksenosa.paikallinenTarkennus.laajaalaisetosaamiset" :key="'lao'+index" class="mb-4">
