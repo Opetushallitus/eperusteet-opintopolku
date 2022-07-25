@@ -3,16 +3,19 @@ import { YleissivistavatPaikallisetStore } from '@/stores/YleissivistavatPaikall
 import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 import VstPaikalliset from '@/routes/kooste/VstPaikalliset.vue';
 import TuvaPaikalliset from '@/routes/kooste/TuvaPaikalliset.vue';
-import { TuvaPaikallisetStore } from '@/stores/TuvaPaikallisetStore';
+import KotoPaikalliset from '@/routes/kooste/KotoPaikalliset.vue';
+import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 
 export const koostePaikallinenStore = {
-  'tutkintoonvalmentava': (): any => new TuvaPaikallisetStore(),
+  'tutkintoonvalmentava': (): any => new YleisetPaikallisetStore(),
+  'kotoutumiskoulutus': (): any => new YleisetPaikallisetStore(),
   'vapaasivistystyo': (): any => new VapaasivistystyoPaikallisetStore(),
   'default': (): any => new YleissivistavatPaikallisetStore(),
 };
 
 export const koostePaikallinenComponent = {
   'tutkintoonvalmentava': TuvaPaikalliset,
+  'kotoutumiskoulutus': KotoPaikalliset,
   'vapaasivistystyo': VstPaikalliset,
   'default': Paikalliset,
 };

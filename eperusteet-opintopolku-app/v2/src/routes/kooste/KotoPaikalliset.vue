@@ -1,6 +1,6 @@
 <template>
 <div class="paikalliset">
-  <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
+  <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
 
   <div class="d-flex flex-lg-row flex-column">
     <b-form-group :label="$t('hae')" class="flex-fill">
@@ -59,16 +59,16 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
     EpMultiSelect,
   },
 })
-export default class TuvaPaikalliset extends Vue {
+export default class KotoPaikalliset extends Vue {
   @Prop({ required: true })
   private paikallinenStore!: YleisetPaikallisetStore;
 
   private page = 1;
   private perPage = 10;
   private query = {
-    koulutustyyppi: Koulutustyyppi.tutkintoonvalmentava,
+    koulutustyyppi: Koulutustyyppi.maahanmuuttajienkotoutumiskoulutus,
     nimi: null,
-    sivukoko: 100,
+    sivukoko: 999,
     kieli: this.kieli,
   };
 
@@ -113,7 +113,7 @@ export default class TuvaPaikalliset extends Vue {
           name: 'toteutussuunnitelma',
           params: {
             toteutussuunnitelmaId: _.toString(ops.id),
-            koulutustyyppi: 'tutkintoonvalmentava',
+            koulutustyyppi: 'kotoutumiskoulutus',
           },
         },
       }))

@@ -394,6 +394,9 @@ export default class RouteHome extends Vue {
       &.koulutustyyppi-tutkintoonvalmentava {
         background-color: $koulutustyyppi-tutkintoonvalmentava-color;
       }
+      &.koulutustyyppi-kotoutumiskoulutus {
+        background-color: $koulutustyyppi-kotoutumiskoulutus-color;
+      }
     }
 
     .luotu {

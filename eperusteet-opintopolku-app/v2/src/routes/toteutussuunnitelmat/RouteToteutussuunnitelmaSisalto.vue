@@ -46,6 +46,32 @@
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
       />
+
+      <ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen
+        v-else-if="sisaltoviite.tyyppi === 'koto_laajaalainenosaaminen'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+        :opetussuunnitelma="opetussuunnitelma"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+      />
+
+      <ep-toteutussuunnitelma-koto-opinto-sisalto
+        v-else-if="sisaltoviite.tyyppi === 'koto_kielitaitotaso'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+        :opetussuunnitelma="opetussuunnitelma"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        sisaltoViiteSisalto="kotoKielitaitotaso"
+      />
+
+      <ep-toteutussuunnitelma-koto-opinto-sisalto
+        v-else-if="sisaltoviite.tyyppi === 'koto_opinto'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+        :opetussuunnitelma="opetussuunnitelma"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        sisaltoViiteSisalto="kotoOpinto"
+      />
     </div>
   </div>
 </template>
@@ -62,6 +88,8 @@ import EpToteutussuunnitelmaOpintokokonaisuus from '@/components/EpToteutussuunn
 import EpToteutussuunnitelmaLaajaalainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaLaajaalainenOsaaminen.vue';
 import EpToteutussuunnitelmaKoulutuksenOsat from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsat.vue';
 import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsa.vue';
+import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoOpintoSisalto.vue';
+import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { deepFind } from '@shared/utils/helpers';
 
@@ -75,6 +103,8 @@ import { deepFind } from '@shared/utils/helpers';
     EpToteutussuunnitelmaLaajaalainenOsaaminen,
     EpToteutussuunnitelmaKoulutuksenOsat,
     EpToteutussuunnitelmaKoulutuksenOsa,
+    EpToteutussuunnitelmaKotoOpintoSisalto,
+    EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen,
   },
 })
 export default class RouteToteutussuunnitelmaSisalto extends Vue {

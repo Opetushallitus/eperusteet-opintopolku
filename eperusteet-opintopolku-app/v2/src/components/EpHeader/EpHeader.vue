@@ -140,6 +140,10 @@ export default class EpHeader extends Vue {
     background-color: $koulutustyyppi-tutkintoonvalmentava-color;
     background-image: url('../../../public/img/banners/aallot_tuva.svg');
   }
+  &.koulutustyyppi-kotoutumiskoulutus {
+    background-color: $koulutustyyppi-kotoutumiskoulutus-color;
+    background-image: url('../../../public/img/banners/aallot_kotoutumiskoulutus.svg');
+  }
 
   // Murupolku
   nav ol.breadcrumb {
