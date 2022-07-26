@@ -53,6 +53,9 @@
                 {{$t('ei-ohjeita')}}
               </div>
             </template>
+            <template v-slot:muokkausaika="{ tieto }">
+              {{$sdt(tieto.julkaistu)}}
+            </template>
           </ep-julki-lista>
         </b-col>
       </b-row>
@@ -180,7 +183,7 @@ export default class RouteKooste extends Vue {
       name: 'peruste',
       params: {
         koulutustyyppi: 'opas',
-        perusteId: ohje.id,
+        perusteId: ohje.perusteId,
       },
     });
   }
