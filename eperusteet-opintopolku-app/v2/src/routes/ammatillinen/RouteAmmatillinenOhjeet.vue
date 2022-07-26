@@ -9,7 +9,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
-import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
+import { AmmatillinenOpasHakuStore } from '@/stores/AmmatillinenOpasHakuStore';
 
 @Component({
   components: {
@@ -17,22 +17,7 @@ import { PerusteHakuStore } from '@/stores/PerusteHakuStore';
   },
 })
 export default class RouteAmmatillinenOhjeet extends Vue {
-  private perusteHakuStoreOhjeet = new PerusteHakuStore({
-    perusteTyyppi: 'opas',
-    koulutustyyppi: [
-      'koulutustyyppi_1',
-      'koulutustyyppi_11',
-      'koulutustyyppi_12',
-      'koulutustyyppi_5',
-      'koulutustyyppi_18',
-    ],
-    koulutusvienti: false,
-    siirtyma: false,
-    poistunut: false,
-    tutkintonimikkeet: false,
-    tutkinnonosat: false,
-    osaamisalat: false,
-  });
+  private perusteHakuStoreOhjeet = new AmmatillinenOpasHakuStore();
 }
 </script>
 
