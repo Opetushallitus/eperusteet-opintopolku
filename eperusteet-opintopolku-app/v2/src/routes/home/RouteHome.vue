@@ -10,34 +10,30 @@
   </div>
   <div class="container">
     <b-container fluid>
-      <b-row>
-        <b-col md="12" class="tile">
-          <section>
-            <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
-            <ep-spinner-slot :is-loading="!tiedotteet">
-            <div class="d-flex flex-wrap">
-              <div class="box w-50" v-for="(tiedote, idx) in tiedotteetMapped" :key="idx">
-                <div class="nimi">
-                  <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                    {{ $kaanna(tiedote.otsikko) }} <span class="uusi" v-if="tiedote.uusi">{{$t('uusi')}}</span>
-                  </router-link>
-                </div>
-                <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
-              </div>
+      <section class="section my-4">
+        <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
+        <ep-spinner-slot :is-loading="!tiedotteet">
+        <b-row>
+          <b-col lg="6" md="12" class="mb-3" v-for="(tiedote, idx) in tiedotteetMapped" :key="idx">
+            <div class="nimi">
+              <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
+                {{ $kaanna(tiedote.otsikko) }} <span class="uusi" v-if="tiedote.uusi">{{$t('uusi')}}</span>
+              </router-link>
             </div>
-            <div class="box">
-              <div class="kaikki-uutiset">
-                <router-link :to="{ name: 'uutiset' }">
-                  {{ $t('nayta-kaikki') }}
-                </router-link>
-              </div>
-            </div>
-            </ep-spinner-slot>
-          </section>
-        </b-col>
-      </b-row>
+            <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
+          </b-col>
+        </b-row>
+        <div class="box">
+          <div class="kaikki-uutiset">
+            <router-link :to="{ name: 'uutiset' }">
+              {{ $t('nayta-kaikki') }}
+            </router-link>
+          </div>
+        </div>
+        </ep-spinner-slot>
+      </section>
 
-      <section class="valtakunnalliset">
+      <section class="section">
         <h2 class="tile-heading">{{ $t('valtakunnalliset-eperusteet') }}</h2>
         <ep-search class="query" v-model="query" :placeholder="$t('etsi-perusteista')"/>
 
@@ -125,6 +121,7 @@ import { Koulutustyyppi } from '@shared/tyypit';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { onkoUusi } from '@shared/utils/tiedote';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 
 @Component({
   components: {
@@ -142,6 +139,8 @@ export default class RouteHome extends Vue {
 
   @Prop({ required: true })
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+
+  private browserStore = new BrowserStore();
 
   private query = '';
 
@@ -259,12 +258,15 @@ export default class RouteHome extends Vue {
   }
 
   get tiedotteetMapped() {
-    return _.map(this.tiedotteet, tiedote => {
-      return {
-        ...tiedote,
-        uusi: onkoUusi((tiedote as any).luotu),
-      };
-    });
+    return _.chain(this.tiedotteet)
+      .map(tiedote => {
+        return {
+          ...tiedote,
+          uusi: onkoUusi((tiedote as any).luotu),
+        };
+      })
+      .take(this.browserStore.window.value.width > 991 ? 10 : 3)
+      .value();
   }
 
   @Meta
@@ -429,7 +431,7 @@ export default class RouteHome extends Vue {
   .row {
     margin: 0;
   }
-  .valtakunnalliset {
+  .section {
     padding-left: 15px;
     padding-right: 15px;
   }
