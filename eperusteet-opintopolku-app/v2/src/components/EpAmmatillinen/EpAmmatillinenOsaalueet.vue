@@ -2,7 +2,6 @@
   <div>
     <ep-collapse class="mb-3" v-for="(osaalue, index) in osaalueet" :key="'osaalue'+index"
       :shadow="true"
-      :togglefull="true"
       :borderBottom="false"
       :expandedByDefault="osaalueet.length === 1">
 
