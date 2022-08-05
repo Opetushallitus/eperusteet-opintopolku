@@ -72,10 +72,11 @@ export default class RouteTutkinnonosat extends Vue {
             tutkinnonOsa: this.perusteenTutkinnonosatById[viite._tutkinnonOsa],
           };
         })
-        .filter(tutkinnonosa => _.includes(
-          _.toLower(_.get(tutkinnonosa, 'nimi.' + Kielet.getSisaltoKieli.value)),
-          _.toLower(this.queryNimi)
-        ))
+        .filter(tutkinnonosa =>
+          _.includes(
+            _.toLower(_.get(tutkinnonosa.tutkinnonOsa, 'nimi.' + Kielet.getSisaltoKieli.value)),
+            _.toLower(this.queryNimi)
+          ))
         .sortBy('jarjestys')
         .value();
     }

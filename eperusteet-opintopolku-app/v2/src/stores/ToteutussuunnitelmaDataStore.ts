@@ -28,6 +28,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public arviointiasteikot: ArviointiasteikkoDto[] | null = null;
   @State() public perusteKuvat: object[] = [];
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
+  @State() public vieraatPerusteet: PerusteKaikkiDto[] | null = null;
 
   constructor(opetussuunnitelmaId: number, private esikatselu = false) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
@@ -55,7 +56,18 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
     if (this.opetussuunnitelma?.peruste?.perusteId) {
       this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.perusteId)).data;
+      this.vieraatPerusteet = await this.getTutkinnonosienVieraatPerusteet();
     }
+  }
+
+  public async getTutkinnonosienVieraatPerusteet() {
+    const tutkinnonOsat = this.getJulkaistuSisalto('tutkinnonOsat');
+    const perusteIds = _.chain(tutkinnonOsat)
+      .filter(tosa => tosa.tosa?.vierastutkinnonosa)
+      .map(tosa => tosa.tosa?.vierastutkinnonosa.perusteId)
+      .uniq()
+      .value();
+    return Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getKokoSisalto(perusteId)).data));
   }
 
   @Getter(state => {
@@ -100,8 +112,9 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     return deepFind(filter, this.opetussuunnitelma);
   }
 
-  public getJulkaistuPerusteSisalto(filter) {
-    return deepFind(filter, this.perusteKaikki);
+  public getJulkaistuPerusteSisalto(filter, perusteId?) {
+    const peruste = _.find(this.vieraatPerusteet, vperuste => vperuste.id === perusteId) || this.perusteKaikki;
+    return deepFind(filter, peruste);
   }
 
   @Getter(state => {
