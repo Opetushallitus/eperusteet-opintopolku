@@ -136,12 +136,24 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
   }
 
   get perusteenTutkinnonosaViite() {
+    if (this.sisaltoviite.tosa?.vierastutkinnonosa) {
+      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto(
+        { '_tutkinnonOsa': _.toString(this.sisaltoviite.tosa.vierastutkinnonosa.tosaId) },
+        this.sisaltoviite.tosa?.vierastutkinnonosa.perusteId);
+    }
+
     if (this.sisaltoviite.tosa) {
       return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(this.sisaltoviite.tosa.perusteentutkinnonosa) });
     }
   }
 
   get perusteenTutkinnonosa() {
+    if (this.sisaltoviite.tosa?.vierastutkinnonosa) {
+      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto(
+        { id: _.toNumber(this.sisaltoviite.tosa.vierastutkinnonosa.tosaId) },
+        this.sisaltoviite.tosa?.vierastutkinnonosa.perusteId);
+    }
+
     if (this.sisaltoviite.tosa) {
       return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: _.toNumber(this.sisaltoviite.tosa.perusteentutkinnonosa) });
     }

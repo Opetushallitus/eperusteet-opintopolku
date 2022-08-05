@@ -106,7 +106,7 @@
     <div v-if="perusteenTutkinnonosa">
       <h3>{{ $t('perusteen-sisalto') }}</h3>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
+      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset && perusteenTutkinnonosa.tyyppi === 'normaali'" name="ammattitaitovaatimukset">
         <ep-content-viewer class="ammattitaitovaatimukset" :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" :kuvat="kuvat"/>
       </ep-form-content>
 
@@ -121,6 +121,10 @@
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
         <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
+      </ep-form-content>
+
+      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.osaAlueet.length > 0" name="osa-alueet">
+        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenTutkinnonosa.osaAlueet" />
       </ep-form-content>
 
       <ep-form-content class="col-md-12 mb-5" v-if="pakollisetOsaAlueet && pakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">
