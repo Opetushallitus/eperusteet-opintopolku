@@ -27,7 +27,6 @@
       <ep-collapse class="mb-3" v-for="toteutus in toteutukset" :key="toteutus.id"
         :shadow="true"
         :borderBottom="false"
-        :togglefull="true"
         :expandedByDefault="sisaltoviite.tosa.toteutukset.length === 1">
         <div class="font-600" slot="header">{{$kaanna(toteutus.otsikko)}}</div>
 
