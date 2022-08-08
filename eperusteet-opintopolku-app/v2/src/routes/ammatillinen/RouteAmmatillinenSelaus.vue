@@ -105,10 +105,11 @@ interface Ylalinkki {
   },
 })
 export default class RouteAmmatillinenSelaus extends Vue {
-  private ammatillinenPerusteHakuStore = new AmmatillinenPerusteHakuStore();
-
   @Prop({ required: true })
   private ammatillistenTiedotteetStore!: AmmatillistenTiedoteStore;
+
+  @Prop({ required: true })
+  private ammatillinenPerusteHakuStore!: AmmatillinenPerusteHakuStore;
 
   async mounted() {
     this.ammatillistenTiedotteetStore.init({ koulutusTyyppi: this.ammatillisetkoulutusryhmat.koulutustyypit });
