@@ -102,6 +102,7 @@ import RouteKotoLaajaAlainenOsaaminen
   from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
 import { redirects } from './utils/redirects';
+import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -117,6 +118,7 @@ const koulutuksenJarjestajatStore = new KoulutuksenJarjestajatStore();
 const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
 const palauteStore = new PalauteStore();
 const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
+const ammatillinenPerusteHakuStore = new AmmatillinenPerusteHakuStore();
 
 const routeProps = (route: any) => {
   return {
@@ -245,6 +247,7 @@ export const router = new Router({
               return {
                 default: {
                   ammatillistenTiedotteetStore,
+                  ammatillinenPerusteHakuStore,
                 },
               };
             },

@@ -156,7 +156,10 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
 
   async mounted() {
-    await this.perusteHakuStore.fetch();
+    if (!this.perusteHakuStore.perusteet) {
+      await this.perusteHakuStore.fetch();
+    }
+
     await this.valmisteillaOlevatStore.fetch(0, 1, ammatillisetKoulutustyypit);
   }
 
