@@ -6,6 +6,7 @@
         :naytaSisaltoTyhjana="false"
         :perusteObject="perusteenVuosiluokkakokonaisuus.tehtava"
         :object="oppiaineenVuosiluokkakokonaisuus.tehtava"
+        :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.tehtava"
         :kuvat="kuvat"
         :termit="termit"
       />
@@ -14,6 +15,7 @@
         :naytaSisaltoTyhjana="false"
         :perusteObject="perusteenVuosiluokkakokonaisuus.tyotavat"
         :object="oppiaineenVuosiluokkakokonaisuus.tyotavat"
+        :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat"
         :kuvat="kuvat"
         :termit="termit"
       />
@@ -22,6 +24,7 @@
         :naytaSisaltoTyhjana="false"
         :perusteObject="perusteenVuosiluokkakokonaisuus.ohjaus"
         :object="oppiaineenVuosiluokkakokonaisuus.ohjaus"
+        :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus"
         :kuvat="kuvat"
         :termit="termit"
       />
@@ -30,6 +33,7 @@
         :naytaSisaltoTyhjana="false"
         :perusteObject="perusteenVuosiluokkakokonaisuus.arviointi"
         :object="oppiaineenVuosiluokkakokonaisuus.arviointi"
+        :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.arviointi"
         :kuvat="kuvat"
         :termit="termit"
       />
@@ -124,6 +128,10 @@ export default class OppiaineenVuosiluokkakokonaisuus extends Vue {
 
   get oppiaineenVuosiluokkakokonaisuus() {
     return this.tietue.oppiaineenVuosiluokkakokonaisuus;
+  }
+
+  get oppiaineenPohjanVuosiluokkakokonaisuus() {
+    return this.tietue.oppiaineenPohjanVuosiluokkakokonaisuus || {};
   }
 
   get vuosiluokkakokonaisuus() {
