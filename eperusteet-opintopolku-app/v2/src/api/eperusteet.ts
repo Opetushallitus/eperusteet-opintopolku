@@ -51,6 +51,7 @@ export interface JulkaistutPerusteetQuery {
   poistunut?: boolean;
   koulutusvienti?: boolean;
   tyyppi?: string;
+  diaarinumero?: string;
 }
 
 export async function tiedoteQuery(query: TiedoteQuery = {
@@ -96,6 +97,7 @@ export async function julkaistutPerusteet(query: JulkaistutPerusteetQuery) {
     query.poistunut,
     query.koulutusvienti,
     query.tyyppi,
+    query.diaarinumero,
     query.sivu,
     query.sivukoko)).data as Page<PerusteenJulkaisuData>;
 }
