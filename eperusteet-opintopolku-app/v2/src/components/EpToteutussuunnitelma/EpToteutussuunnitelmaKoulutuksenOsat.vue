@@ -4,24 +4,34 @@
 
     <EpSpinner v-if="!koulutuksenosat"/>
 
-    <div v-if="yhteisetKoulutuksenosat.length > 0" class="mb-4">
-      <h3>{{$t('yhteiset-opinnot')}}</h3>
+    <template v-else>
+      <div v-if="yhteisetKoulutuksenosat.length > 0" class="mb-4">
+        <h3>{{$t('yhteiset-opinnot')}}</h3>
 
-      <EpKoulutuksenOsaKortti
-        v-for="koulutuksenosaViite in yhteisetKoulutuksenosat"
-        :key="'koulutuksenosa'+koulutuksenosaViite.id"
-        :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-        :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
-    </div>
+        <EpKoulutuksenOsaKortti
+          v-for="koulutuksenosaViite in yhteisetKoulutuksenosat"
+          :key="'koulutuksenosa'+koulutuksenosaViite.id"
+          :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+      </div>
 
-    <template v-if="valinnaisetKoulutuksenosat.length > 0">
-      <h3>{{$t('valinnaiset-opinnot')}}</h3>
+      <template v-if="valinnaisetKoulutuksenosat.length > 0">
+        <h3>{{$t('valinnaiset-opinnot')}}</h3>
 
-      <EpKoulutuksenOsaKortti
-        v-for="koulutuksenosaViite in valinnaisetKoulutuksenosat"
-        :key="'koulutuksenosa'+koulutuksenosaViite.id"
-        :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-        :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+        <EpKoulutuksenOsaKortti
+          v-for="koulutuksenosaViite in valinnaisetKoulutuksenosat"
+          :key="'koulutuksenosa'+koulutuksenosaViite.id"
+          :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+      </template>
+
+      <template v-if="yhteisetKoulutuksenosat.length === 0 && valinnaisetKoulutuksenosat.length === 0 && koulutuksenosat.length > 0">
+        <EpKoulutuksenOsaKortti
+          v-for="koulutuksenosaViite in koulutuksenosat"
+          :key="'koulutuksenosa'+koulutuksenosaViite.id"
+          :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+      </template>
     </template>
 
   </div>
