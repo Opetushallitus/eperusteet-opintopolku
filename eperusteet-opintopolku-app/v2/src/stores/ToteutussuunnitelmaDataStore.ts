@@ -11,7 +11,7 @@ import { DokumenttiDtoTilaEnum,
   PerusteKaikkiDto,
   Perusteet } from '@shared/api/eperusteet';
 import mime from 'mime-types';
-import { deepFind } from '@shared/utils/helpers';
+import { deepFilter, deepFind } from '@shared/utils/helpers';
 
 @Store
 export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
@@ -110,6 +110,10 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   public getJulkaistuSisalto(filter) {
     return deepFind(filter, this.opetussuunnitelma);
+  }
+
+  public getJulkaistuSisaltoList(filter) {
+    return deepFilter(filter, this.opetussuunnitelma);
   }
 
   public getJulkaistuPerusteSisalto(filter, perusteId?) {

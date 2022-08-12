@@ -45,6 +45,7 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen
