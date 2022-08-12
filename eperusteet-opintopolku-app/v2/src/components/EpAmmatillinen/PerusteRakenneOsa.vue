@@ -58,7 +58,7 @@ export default class PerusteRakenneOsa extends Vue {
   @Prop({ required: true })
   private rakenneosa: any;
 
-  private naytaRakenne: boolean = false;
+  private naytaRakenne: boolean = true;
   private naytaKuvaus: boolean = false;
 
   @Prop({ required: false, default: false })

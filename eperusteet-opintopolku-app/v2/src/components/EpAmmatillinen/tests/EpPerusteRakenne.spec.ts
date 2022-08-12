@@ -36,9 +36,9 @@ describe('EpPerusteRakenne', () => {
     expect(wrapper.find('.rakenne').html()).toContain('145');
 
     expect(wrapper.html()).toContain('Yhteiset tutkinnon osat');
-    expect(wrapper.html()).not.toContain('Elektroniikka-asentaja');
-    expect(wrapper.html()).not.toContain('Pakolliset tutkinnon osat');
-    expect(wrapper.html()).not.toContain('Elektroniikan ja ICT:n perustehtävät');
+    expect(wrapper.html()).toContain('Elektroniikka-asentaja');
+    expect(wrapper.html()).toContain('Pakolliset tutkinnon osat');
+    expect(wrapper.html()).toContain('Elektroniikan ja ICT:n perustehtävät');
   });
 
   test('avaa-sulje && kuvaus', async () => {
@@ -49,9 +49,9 @@ describe('EpPerusteRakenne', () => {
 
     expect(wrapper.html()).toContain('Ammatilliset tutkinnon osat');
     expect(wrapper.html()).toContain('Yhteiset tutkinnon osat');
-    expect(wrapper.html()).toContain('Elektroniikka-asentaja');
-    expect(wrapper.html()).toContain('Pakolliset tutkinnon osat');
-    expect(wrapper.html()).toContain('Elektroniikan ja ICT:n perustehtävät');
+    expect(wrapper.html()).not.toContain('Elektroniikka-asentaja');
+    expect(wrapper.html()).not.toContain('Pakolliset tutkinnon osat');
+    expect(wrapper.html()).not.toContain('Elektroniikan ja ICT:n perustehtävät');
 
     expect(wrapper.html()).not.toContain('Viestintä- ja vuorovaikutusosaamisen laajuus on vähintään 11 osaamispistettä');
 
@@ -63,8 +63,8 @@ describe('EpPerusteRakenne', () => {
   test('nimifilter', async () => {
     const wrapper = createWrapper();
 
-    wrapper.find('.rakennetoggle button').trigger('click');
-    await delay();
+    // wrapper.find('.rakennetoggle button').trigger('click');
+    // await delay();
 
     expect(wrapper.html()).toContain('Pakolliset tutkinnon osat');
     expect(wrapper.html()).toContain('Elektroniikan ja ICT:n perustehtävät');

@@ -47,7 +47,7 @@ export default class EpPerusteRakenne extends Vue {
   @Prop({ required: true })
   private rakenneOsat!: any[];
 
-  private naytaRakenteet = false;
+  private naytaRakenteet = true;
   private naytaKuvaukset = false;
   private query = '';
 
