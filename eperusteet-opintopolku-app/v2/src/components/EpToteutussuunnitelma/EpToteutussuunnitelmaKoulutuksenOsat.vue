@@ -61,14 +61,8 @@ export default class EpToteutussuunnitelmaKoulutuksenOsat extends Vue {
   @Prop({ required: true })
   private opetussuunnitelma!: OpetussuunnitelmaDto;
 
-  private koulutuksenOsatStore = new KoulutuksenOsatStore();
-
-  async mounted() {
-    await this.koulutuksenOsatStore.fetch(this.opetussuunnitelma.id, this.opetussuunnitelma.koulutustoimija?.id);
-  }
-
   get koulutuksenosat() {
-    return this.koulutuksenOsatStore.koulutuksenosat.value;
+    return this.sisaltoviite.lapset as any;
   }
 
   get yhteisetKoulutuksenosat() {

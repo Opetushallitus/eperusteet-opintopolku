@@ -101,12 +101,18 @@
           <b-form-group>
             <h3 slot="label">{{ $t('koulutuksen-jarjestajat') }}</h3>
 
-            <EpKoulutuksenJarjestajaSelect
-              :value="koulutuksenosa.paikallinenTarkennus.koulutuksenJarjestajat">
-              <template v-slot:(kuvaus)="{model}">
-                <ep-content-viewer :value="$kaanna(model)" :kuvat="kuvat"/>
-              </template>
-            </EpKoulutuksenJarjestajaSelect>
+            <div v-for="(koulutuksenjarjestaja, i) in koulutuksenosa.paikallinenTarkennus.koulutuksenJarjestajat" :key="'ktj'+i" class="pt-3 pb-2 px-3 mb-3">
+
+              <h3>{{$kaanna(koulutuksenjarjestaja.nimi)}}</h3>
+              <b-form-group v-if="koulutuksenjarjestaja.url" :label="$t('toteutussuunnitelman-tai-koulutuksen-jarjestajan-verkkosivut')" class="mb-3">
+                <EpLinkki :url="koulutuksenjarjestaja.url[kieli]" />
+              </b-form-group>
+
+              <b-form-group v-if="koulutuksenjarjestaja.kuvaus" :label="$t('kaytannon-toteutus')" class="mb-0">
+                <ep-content-viewer :value="$kaanna(koulutuksenjarjestaja.kuvaus)" :kuvat="kuvat"/>
+              </b-form-group>
+
+            </div>
 
           </b-form-group>
         </b-col>
@@ -121,14 +127,16 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Matala, OpetussuunnitelmaDto, Sisaltoviitteet } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
-import EpKoulutuksenJarjestajaSelect from '@shared/components/EpKoulutuksenJarjestajaSelect/EpKoulutuksenJarjestajaSelect.vue';
 import _ from 'lodash';
+import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
     EpContentViewer,
     EpFormContent,
-    EpKoulutuksenJarjestajaSelect,
+    EpLinkki,
   },
 })
 export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
@@ -141,14 +149,8 @@ export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
   @Prop({ required: true })
   private opetussuunnitelma!: OpetussuunnitelmaDto;
 
-  private laajaAlaisetOsaamiset: any[] = [];
-
-  async mounted() {
-    this.laajaAlaisetOsaamiset = (await Sisaltoviitteet.getSisaltoviitteeTyypilla(
-      this.opetussuunnitelma.id!,
-      'laajaalainenosaaminen',
-      _.toString(this.opetussuunnitelma.koulutustoimija!.id))).data;
-  }
+  @Prop({ required: true })
+  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
   get laajaAlaisetKoodilla() {
     return _.keyBy(this.laajaAlaisetOsaamiset, 'tuvaLaajaAlainenOsaaminen.nimiKoodi');
@@ -163,6 +165,14 @@ export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
       ...this.koulutuksenosa?.tavoitteet!,
       ...(this.koulutuksenosa?.paikallinenTarkennus ? this.koulutuksenosa?.paikallinenTarkennus?.tavoitteet! : []),
     ];
+  }
+
+  get laajaAlaisetOsaamiset() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisaltoList({ 'tyyppi': 'laajaalainenosaaminen' });
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
   }
 }
 </script>
