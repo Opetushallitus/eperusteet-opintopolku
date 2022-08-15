@@ -10,6 +10,13 @@
       </b-col>
     </b-row>
 
+    <b-row v-if="koulutuksenosaKoodi" class="mb-4">
+      <b-col>
+        <h4>{{$t('koulutuksenosan-koodi')}}</h4>
+        <div>{{koulutuksenosaKoodi}}</div>
+      </b-col>
+    </b-row>
+
     <b-row>
       <b-col>
         <b-form-group :label="$t('kuvaus')">
@@ -158,6 +165,12 @@ export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
 
   get koulutuksenosa() {
     return this.sisaltoviite.koulutuksenosa;
+  }
+
+  get koulutuksenosaKoodi() {
+    if (this.koulutuksenosa?.nimiKoodi) {
+      return _.split(this.koulutuksenosa.nimiKoodi, '_')[1];
+    }
   }
 
   get tavoitteet() {
