@@ -15,12 +15,12 @@
         </ep-form-content>
       </b-col>
     </b-row>
-     <b-row v-if="opintokokonaisuus.koodiArvo" class="mb-4">
+    <b-row v-if="opintokokonaisuus.koodiArvo" class="mb-4">
       <b-col>
         <h4>{{$t('opintokokonaisuuden-koodi')}}</h4>
         <div>{{opintokokonaisuus.koodiArvo}}</div>
       </b-col>
-      </b-row>
+    </b-row>
     <b-row>
       <b-col>
         <h4 role="presentation">{{ $t('kuvaus') }}</h4>
