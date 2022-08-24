@@ -96,13 +96,13 @@
 
       <div v-if="isAmmatillinen">
 
-          <div class="col-md-12 mt-3" v-if="koulutusvienninOhje">
+          <div class="col-md-12 mt-3" v-if="koulutusvienninOhjeet">
             <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
               <b-table striped
                       fixed
                       responsive
                       :fields="koulutusvienninohjeFields"
-                      :items="[koulutusvienninOhje]">
+                      :items="koulutusvienninOhjeet">
                       <template v-slot:cell(nimi)="{ item }">
                         <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
                       </template>
@@ -277,13 +277,15 @@ export default class RoutePerusteTiedot extends Vue {
     return this.perusteDataStore.termit;
   }
 
-  get koulutusvienninOhje() {
-    const koulutusvienninohje = _.find(this.perusteDataStore.liitteet, liite => liite.tyyppi === 'KOULUTUSVIENNINOHJE');
-    if (koulutusvienninohje) {
-      return {
-        ...koulutusvienninohje,
-        url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, koulutusvienninohje.id!).url,
-      };
+  get koulutusvienninOhjeet() {
+    const koulutusvienninohjeet = _.filter(this.perusteDataStore.liitteet, liite => liite.tyyppi === 'KOULUTUSVIENNINOHJE');
+    if (koulutusvienninohjeet) {
+      return _.map(koulutusvienninohjeet, kvo => (
+        {
+          ...kvo,
+          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, kvo.id!).url,
+        }
+      ));
     }
   }
 
