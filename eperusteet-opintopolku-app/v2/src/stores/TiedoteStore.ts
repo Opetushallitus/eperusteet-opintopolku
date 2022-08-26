@@ -48,8 +48,7 @@ export class TiedoteStore {
 
   async fetchUutiset() {
     const result = (await findTiedotteetBy({
-      sivu: 0,
-      sivukoko: 10,
+      ...this.filter,
       kieli: this.filter.kieli,
       nimi: this.filter.nimi,
       tiedoteJulkaisuPaikka: ['opintopolku_etusivu'],
