@@ -75,6 +75,7 @@ export default class RouteUutiset extends Vue {
 
   public mounted() {
     this.tiedoteStore.updateFilter({
+      nimi: this.query,
       koulutustyypit: this.julkaistutKoulutustyypit,
       kieli: Kielet.getSisaltoKieli.value,
     });
