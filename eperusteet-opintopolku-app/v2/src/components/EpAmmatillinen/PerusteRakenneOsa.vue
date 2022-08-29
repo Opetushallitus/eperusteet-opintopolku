@@ -102,8 +102,8 @@ export default class PerusteRakenneOsa extends Vue {
     if (this.rakenneosa.muodostumisSaanto) {
       const tyyppi = this.rakenneosa.muodostumisSaanto.laajuus || this.rakenneosa.muodostumisSaanto.koko;
 
-      if (tyyppi.minimi && tyyppi.maksimi && tyyppi.minimi !== tyyppi.maksimi) {
-        return tyyppi.minimi + '-' + tyyppi.maksimi;
+      if (!_.isNil(tyyppi.minimi) && !_.isNil(tyyppi.maksimi) && tyyppi.minimi !== tyyppi.maksimi) {
+        return tyyppi.minimi + ' - ' + tyyppi.maksimi;
       }
 
       return tyyppi.minimi || tyyppi.maksimi || '';
