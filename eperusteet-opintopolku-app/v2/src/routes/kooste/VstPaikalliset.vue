@@ -66,7 +66,7 @@
       </div>
     </div>
     <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
+      <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
         <router-link :to="ops.route">
           <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTieto="ops.voimassaoloTieto"/>
         </router-link>
@@ -119,7 +119,6 @@ export default class VstPaikalliset extends Vue {
   private paikallinenStore!: VapaasivistystyoPaikallisetStore;
 
   private oppilaitostyyppi: string | null = null;
-  private page = 1;
   private perPage = 10;
   private query = {
     koulutustyyppi: [
@@ -128,7 +127,8 @@ export default class VstPaikalliset extends Vue {
     ],
     oppilaitosTyyppiKoodiUri: null,
     nimi: null,
-    sivukoko: 100,
+    sivu: 0,
+    sivukoko: 10,
     organisaatio: null,
     kieli: this.kieli,
     tuleva: true,
@@ -159,6 +159,17 @@ export default class VstPaikalliset extends Vue {
     return Kielet.getSisaltoKieli.value;
   }
 
+  get page() {
+    return this.opetussuunnitelmatPaged?.sivu! + 1;
+  }
+
+  set page(page) {
+    this.query = {
+      ...this.query,
+      sivu: page - 1,
+    };
+  }
+
   @Watch('kieli')
   kieliChange(val) {
     this.query = {
@@ -176,13 +187,15 @@ export default class VstPaikalliset extends Vue {
   }
 
   get total() {
-    return _.size(this.opetussuunnitelmatMapped);
+    return this.opetussuunnitelmatPaged?.kokonaismäärä;
   }
 
   get opetussuunnitelmat() {
-    if (this.paikallinenStore) {
-      return this.paikallinenStore.opetussuunnitelmat.value;
-    }
+    return this.paikallinenStore.opetussuunnitelmat.value;
+  }
+
+  get opetussuunnitelmatPaged() {
+    return this.paikallinenStore.opetussuunnitelmatPaged.value;
   }
 
   get opetussuunnitelmatMapped() {
@@ -203,13 +216,6 @@ export default class VstPaikalliset extends Vue {
         voimassaoloTieto: voimassaoloTieto(ops),
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
-      .value();
-  }
-
-  get opetussuunnitelmatPaginated() {
-    return _.chain(this.opetussuunnitelmatMapped)
-      .drop(this.perPage * (this.page - 1))
-      .take(this.perPage)
       .value();
   }
 
