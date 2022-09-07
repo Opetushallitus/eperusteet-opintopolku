@@ -17,7 +17,7 @@
       </div>
     </div>
     <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
+      <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
         <router-link :to="ops.route">
           <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
         </router-link>
@@ -63,12 +63,12 @@ export default class KotoPaikalliset extends Vue {
   @Prop({ required: true })
   private paikallinenStore!: YleisetPaikallisetStore;
 
-  private page = 1;
   private perPage = 10;
   private query = {
     koulutustyyppi: Koulutustyyppi.maahanmuuttajienkotoutumiskoulutus,
     nimi: null,
-    sivukoko: 999,
+    sivu: 0,
+    sivukoko: 10,
     kieli: this.kieli,
   };
 
@@ -80,6 +80,17 @@ export default class KotoPaikalliset extends Vue {
 
   get kieli() {
     return Kielet.getSisaltoKieli.value;
+  }
+
+  get page() {
+    return this.opetussuunnitelmatPaged?.sivu! + 1;
+  }
+
+  set page(page) {
+    this.query = {
+      ...this.query,
+      sivu: page - 1,
+    };
   }
 
   @Watch('kieli')
@@ -96,13 +107,15 @@ export default class KotoPaikalliset extends Vue {
   }
 
   get total() {
-    return _.size(this.opetussuunnitelmatMapped);
+    return this.opetussuunnitelmatPaged?.kokonaismäärä;
   }
 
   get opetussuunnitelmat() {
-    if (this.paikallinenStore) {
-      return this.paikallinenStore.opetussuunnitelmat.value;
-    }
+    return this.paikallinenStore.opetussuunnitelmat.value;
+  }
+
+  get opetussuunnitelmatPaged() {
+    return this.paikallinenStore.opetussuunnitelmatPaged.value;
   }
 
   get opetussuunnitelmatMapped() {
@@ -118,13 +131,6 @@ export default class KotoPaikalliset extends Vue {
         },
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
-      .value();
-  }
-
-  get opetussuunnitelmatPaginated() {
-    return _.chain(this.opetussuunnitelmatMapped)
-      .drop(this.perPage * (this.page - 1))
-      .take(this.perPage)
       .value();
   }
 }
