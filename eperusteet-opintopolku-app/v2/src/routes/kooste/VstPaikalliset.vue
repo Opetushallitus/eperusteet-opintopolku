@@ -178,6 +178,15 @@ export default class VstPaikalliset extends Vue {
     };
   }
 
+  get queryNimi() {
+    return this.query.nimi;
+  }
+
+  @Watch('queryNimi')
+  nimiChange() {
+    this.query.sivu = 0;
+  }
+
   @Watch('query', { deep: true })
   async queryChange() {
     if (this.query.oppilaitosTyyppiKoodiUri === 'kaikki') {
