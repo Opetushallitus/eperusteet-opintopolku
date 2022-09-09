@@ -89,7 +89,7 @@ export default class Paikalliset extends Vue {
   @Watch('julkaistutPerusteet', { immediate: true })
   async perusteetChange() {
     if (_.size(this.perusteKoosteStore.perusteJulkaisut) > 0) {
-      const peruste = _.find(this.julkaistutPerusteet, peruste => _.get(peruste, 'perusteId') === _.toNumber(_.get(this.$route.params, 'perusteId'))) || this.julkaistutPerusteet![0];
+      const peruste = _.find(this.julkaistutPerusteet, peruste => _.get(peruste, 'id') === _.toNumber(_.get(this.$route.params, 'perusteId'))) || this.julkaistutPerusteet![0];
       await this.setActivePeruste(peruste);
     }
   }
@@ -104,7 +104,7 @@ export default class Paikalliset extends Vue {
 
   async setActivePeruste(perusteJulkaisu) {
     this.query = '';
-    await this.paikallinenStore.fetch!(perusteJulkaisu.perusteId, perusteJulkaisu.diaarinumero);
+    await this.paikallinenStore.fetch!(perusteJulkaisu.id, perusteJulkaisu.diaarinumero);
   }
 
   get julkaistutPerusteet() {
@@ -156,7 +156,7 @@ export default class Paikalliset extends Vue {
   }
 
   get currentPeruste() {
-    return _.find(this.julkaistutPerusteet, ['perusteId', this.paikallinenStore.perusteId?.value]);
+    return _.find(this.julkaistutPerusteet, ['id', this.paikallinenStore.perusteId?.value]);
   }
 }
 </script>

@@ -31,7 +31,7 @@ export class PerusteKoosteStore {
       tiedotteet = [...tiedotteet,
         ...(await tiedoteQuery({
           sivukoko: 100,
-          perusteId: julkaisu.perusteId,
+          perusteId: julkaisu.id,
         })),
       ];
     }
@@ -47,7 +47,7 @@ export class PerusteKoosteStore {
       tiedotteet = [...tiedotteet,
         ...(await tiedoteQuery({
           sivukoko: 100,
-          perusteIds: _.map(this.perusteJulkaisut, julkaisu => julkaisu.perusteId) as number[],
+          perusteIds: _.map(this.perusteJulkaisut, julkaisu => julkaisu.id) as number[],
         })),
       ];
     }

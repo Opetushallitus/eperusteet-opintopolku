@@ -174,7 +174,7 @@ export default class RouteHome extends Vue {
             name: 'peruste',
             params: {
               koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi),
-              perusteId: _.toString(peruste.perusteId),
+              perusteId: _.toString(peruste.id),
             },
           },
         };

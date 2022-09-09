@@ -239,7 +239,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
       return {
         name: 'ammatillinenkooste',
         params: {
-          perusteId: _.toString(peruste.perusteId),
+          perusteId: _.toString(peruste.id),
         },
       };
     }

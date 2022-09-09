@@ -46,7 +46,7 @@ describe('RouteHome', () => {
     }];
 
     perusteStore.perusteet = [{
-      perusteId: 2,
+      id: 2,
       koulutustyyppi: 'koulutustyyppi_2',
       nimi: {
         fi: 'peruste2',
@@ -86,7 +86,7 @@ describe('RouteHome', () => {
     expect(consoleSpy).not.toHaveBeenCalled();
 
     perusteStore.perusteet = [{
-      perusteId: 2,
+      id: 2,
       nimi: {
         fi: 'peruste2',
       } as any,
