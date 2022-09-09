@@ -14,7 +14,7 @@
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
               <div v-else v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx">
-                <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.perusteId } }">
+                <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
                   <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
                 </router-link>
               </div>
@@ -154,7 +154,7 @@ export default class RouteKooste extends Vue {
       return _.chain(this.perusteKoosteStore.perusteJulkaisut)
         .map(julkaisu => ({
           ...julkaisu,
-          perusteId: _.toString(julkaisu.perusteId),
+          perusteId: _.toString(julkaisu.id),
           kaannettyNimi: this.$kaanna(julkaisu.nimi!),
         }))
         .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
@@ -183,7 +183,7 @@ export default class RouteKooste extends Vue {
       name: 'peruste',
       params: {
         koulutustyyppi: 'opas',
-        perusteId: ohje.perusteId,
+        perusteId: ohje.id,
       },
     });
   }
