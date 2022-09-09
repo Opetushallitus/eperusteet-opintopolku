@@ -7,7 +7,7 @@
   <div class="opetussuunnitelma-container">
     <div class="peruste-nav">
       <div class="d-md-flex">
-        <div class="peruste" v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx" :class="{ active: activePeruste === julkaisu.perusteId}">
+        <div class="peruste" v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx" :class="{ active: activePeruste === julkaisu.id}">
           <div class="peruste-select">
             <a href="javascript:;" @click="setActivePeruste(julkaisu)">
               <div>
