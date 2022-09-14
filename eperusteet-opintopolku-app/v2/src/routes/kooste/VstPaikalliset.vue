@@ -7,7 +7,9 @@
       <ep-search v-model="query.nimi"/>
     </b-form-group>
     <b-form-group :label="$t('oppilaitoksen-tyyppi')">
+      <EpSpinner v-if="!oppilaitostyypit" />
       <EpMultiSelect
+        v-else
         class="multiselect"
         v-model="query.oppilaitosTyyppiKoodiUri"
         :enable-empty-option="true"
@@ -25,7 +27,9 @@
       </EpMultiSelect>
     </b-form-group>
     <b-form-group :label="$t('oppilaitos')">
+      <EpSpinner v-if="!oppilaitokset" />
       <EpMultiSelect
+        v-else
         class="multiselect"
         v-model="organisaatio"
         :enable-empty-option="true"
@@ -229,10 +233,12 @@ export default class VstPaikalliset extends Vue {
   }
 
   get oppilaitostyypit() {
-    return ['kaikki',
-      ..._.chain(_.get(this.oppilaitostyyppiKoodisto.data.value, 'data'))
-        .map(koodi => koodi.koodiUri)
-        .value()];
+    if (this.oppilaitostyyppiKoodisto.data.value) {
+      return ['kaikki',
+        ..._.chain(_.get(this.oppilaitostyyppiKoodisto.data.value, 'data'))
+          .map(koodi => koodi.koodiUri)
+          .value()];
+    }
   }
 
   get oppilaitostyypitNimi() {
@@ -256,13 +262,15 @@ export default class VstPaikalliset extends Vue {
   }
 
   get oppilaitokset() {
-    return [{
-      organisaatio: 'kaikki',
-      nimi: {
-        [Kielet.getSisaltoKieli.value]: this.$t('kaikki'),
-      } },
-    ...(this.paikallinenStore?.oppilaitokset.value ? this.paikallinenStore?.oppilaitokset.value : []),
-    ];
+    if (this.paikallinenStore?.oppilaitokset.value) {
+      return [{
+        organisaatio: 'kaikki',
+        nimi: {
+          [Kielet.getSisaltoKieli.value]: this.$t('kaikki'),
+        } },
+      ..._.sortBy((this.paikallinenStore?.oppilaitokset.value ? this.paikallinenStore?.oppilaitokset.value : []), oppilaitos => this.$kaanna(oppilaitos.nimi as any)),
+      ];
+    }
   }
 
   get organisaatio() {
