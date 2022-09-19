@@ -1,9 +1,14 @@
 <template>
   <div class="sidebar">
+
     <ep-spinner v-if="sidenavLoading" />
     <div v-else>
       <div class="search">
-        <ep-search :value="query" @input="setValue" />
+        <div class="d-flex justify-content-between align-items-center">
+          <ep-search :value="query" @input="setValue" class="w-100"/>
+          <NavigateNumberToggle v-model="numerointi" />
+        </div>
+
         <slot name="after"></slot>
       </div>
       <div class="navigation-tree">
@@ -18,17 +23,21 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, ProvideReactive, Vue } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
+import EpToggle from '@shared/components/forms/EpToggle.vue';
+import NavigateNumberToggle from '@/components/EpSidenav/NavigateNumberToggle.vue';
 
 @Component({
   components: {
     EpSearch,
     EpSpinner,
     EpSidenavNode,
+    EpToggle,
+    NavigateNumberToggle,
   },
 })
 export default class EpPerusteSidenav extends Vue {
@@ -37,6 +46,9 @@ export default class EpPerusteSidenav extends Vue {
 
   @Prop({ default: '' })
   private query!: string;
+
+  @ProvideReactive()
+  private numerointi: boolean = false;
 
   private setValue(value) {
     this.query = value;

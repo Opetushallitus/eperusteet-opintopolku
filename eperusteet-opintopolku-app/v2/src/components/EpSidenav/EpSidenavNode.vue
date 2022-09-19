@@ -10,6 +10,7 @@
     <div class="label-wrapper">
       <b-link v-if="node.location && !subtype" :to="node.location">
         <span class="label" :class="{ 'label-match': isMatch }">
+          <slot name="index" />
           {{ $kaannaOlioTaiTeksti(node.label) }}
           <span v-if="koodi" class="code-field">({{ koodi }})</span>
         </span>
@@ -17,7 +18,8 @@
       <div v-else
             class="label label-plain"
             :class="{ 'label-match': isMatch, 'subtype': subtype }">
-        {{ $kaannaOlioTaiTeksti(node.label) }}
+            <slot name="index" />
+            {{ $kaannaOlioTaiTeksti(node.label) }}
         <span v-if="koodi" class="code-field">({{ koodi }})</span>
       </div>
     </div>
@@ -25,17 +27,20 @@
   <!-- children -->
   <ul :class="{ 'root-list': isRoot }" v-if="hasChildren">
     <li v-for="(child, idx) in children" :key="idx">
-      <EpSidenavNode :node="child" :current="current" :getChildren="getChildren" />
+      <EpSidenavNode :node="child" :current="current" :getChildren="getChildren">
+        <span slot="index" v-if="child.naytaNumerointi"><slot name="index"/><span v-if="!isRoot">.</span>{{idx + 1}}</span>
+      </EpSidenavNode>
     </li>
   </ul>
 </div>
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import * as _ from 'lodash';
+import { Component, InjectReactive, Prop, Vue } from 'vue-property-decorator';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
+import { EXCLUDED_NODE_TYPES } from './NodeTypeNaviNumberExcludes';
 
 @Component({
   name: 'EpSidenavNode',
@@ -53,8 +58,16 @@ export default class EpSidenavNode extends Vue {
   @Prop({ required: false })
   getChildren!: Function;
 
+  @InjectReactive()
+  private numerointi!: boolean;
+
   get children() {
-    return this.getChildren(this.node);
+    return _.map(this.getChildren(this.node), child => {
+      return {
+        ...child,
+        naytaNumerointi: this.numerointi && !_.includes(EXCLUDED_NODE_TYPES, child.type),
+      };
+    });
   }
 
   get hasChildren() {

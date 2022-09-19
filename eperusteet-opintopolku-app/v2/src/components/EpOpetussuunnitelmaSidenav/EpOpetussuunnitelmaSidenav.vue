@@ -1,33 +1,38 @@
 <template>
-<div class="sidebar">
-  <ep-spinner v-if="sidenavLoading" />
-  <div v-else>
-    <div class="search">
-      <ep-search :value="query" @input="setValue" />
-    </div>
-    <div class="navigation-tree">
-      <ep-sidenav-node v-if="treeData"
-                        :node="treeData"
-                        :current="current"
-                        :getChildren="getChildren" />
+  <div class="sidebar">
+    <ep-spinner v-if="sidenavLoading" />
+    <div v-else>
+      <div class="search d-flex justify-content-between align-items-center">
+        <ep-search :value="query" @input="setValue" class="w-100"/>
+        <NavigateNumberToggle v-model="numerointi" />
+      </div>
+      <div class="navigation-tree">
+        <ep-sidenav-node v-if="treeData"
+                          :node="treeData"
+                          :current="current"
+                          :getChildren="getChildren" />
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, ProvideReactive, Vue } from 'vue-property-decorator';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
+import EpToggle from '@shared/components/forms/EpToggle.vue';
+import NavigateNumberToggle from '@/components/EpSidenav/NavigateNumberToggle.vue';
 
 @Component({
   components: {
     EpSearch,
     EpSpinner,
     EpSidenavNode,
+    EpToggle,
+    NavigateNumberToggle,
   },
 })
 export default class EpOpetussuunnitelmaSidenav extends Vue {
@@ -35,6 +40,9 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
   private query = '';
+
+  @ProvideReactive()
+  private numerointi: boolean = false;
 
   private setValue(value) {
     this.query = value;
