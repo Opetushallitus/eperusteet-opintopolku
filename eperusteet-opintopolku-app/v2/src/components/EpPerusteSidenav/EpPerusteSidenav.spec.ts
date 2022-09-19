@@ -7,6 +7,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
+import _ from 'lodash';
 
 const navigationData = {
   type: 'root' as any,
@@ -214,6 +215,29 @@ describe('EpPerusteSidenav', () => {
       expect(nodes.at(1).text()).toContain('Tiedot');
       expect(nodes.at(2).text()).toContain('Päätaso');
       expect(nodes.at(3).text()).toContain('Oppiaineet');
+    });
+
+    test('Navigation with numbering', async () => {
+      perusteDataStore.currentRoute = {
+        name: 'perusteTekstikappale',
+        params: {
+          perusteId: '42',
+          viiteId: '3',
+        },
+      };
+
+      const nodes = wrapper.findAll(EpSidenavNode);
+      wrapper.find('.numerointi').trigger('click');
+
+      expect(nodes.length).toEqual(6);
+      expect(nodes.at(1).text()).toContain('1');
+      expect(nodes.at(1).text()).toContain('Tiedot');
+      expect(nodes.at(2).text()).toContain('2');
+      expect(nodes.at(2).text()).toContain('Päätaso');
+      expect(nodes.at(4).text()).toContain('2.2');
+      expect(nodes.at(4).text()).toContain('Alitaso 2');
+      expect(nodes.at(5).text()).not.toContain('3');
+      expect(nodes.at(5).text()).toContain('Oppiaineet');
     });
 
     test('Navigation with viite active', async () => {

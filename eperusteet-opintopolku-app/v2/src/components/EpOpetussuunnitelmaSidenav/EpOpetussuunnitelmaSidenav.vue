@@ -34,6 +34,7 @@ import NavigateNumberToggle from '@/components/EpSidenav/NavigateNumberToggle.vu
     EpToggle,
     NavigateNumberToggle,
   },
+  inject: [],
 })
 export default class EpOpetussuunnitelmaSidenav extends Vue {
   @Prop({ required: true })

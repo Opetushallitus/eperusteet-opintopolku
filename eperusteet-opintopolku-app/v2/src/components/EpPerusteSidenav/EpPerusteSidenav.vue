@@ -39,7 +39,8 @@ import NavigateNumberToggle from '@/components/EpSidenav/NavigateNumberToggle.vu
     EpToggle,
     NavigateNumberToggle,
   },
-})
+  inject: [],
+},)
 export default class EpPerusteSidenav extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
