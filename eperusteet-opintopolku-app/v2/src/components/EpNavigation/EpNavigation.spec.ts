@@ -34,7 +34,9 @@ describe('EpNavigation', () => {
       { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.lukiokoulutus[0], lukumaara: 1 },
       { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.varhaiskasvatus[0], lukumaara: 1 },
       { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.perusopetus[0], lukumaara: 1 },
+      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.vapaasivistystyo[0], lukumaara: 1 },
     ];
+    julkaistutKoulutustyypitStore.state.muuLukumaarat = 1;
 
     await localVue.nextTick();
     const links = wrapper.contains;
@@ -43,5 +45,7 @@ describe('EpNavigation', () => {
     expect(findContaining(wrapper, 'a', 'varhaiskasvatus')).toBeTruthy();
     expect(findAllContaining(wrapper, 'a', 'perusopetus').length).toBeGreaterThanOrEqual(1);
     expect(findContaining(wrapper, 'a', 'ammatillinen')).toBeFalsy();
+    expect(findContaining(wrapper, 'a', 'vapaasivistystyo')).toBeTruthy();
+    expect(findContaining(wrapper, 'a', 'muukoulutus')).toBeTruthy();
   });
 });

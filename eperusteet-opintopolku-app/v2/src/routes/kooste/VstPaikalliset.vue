@@ -72,7 +72,7 @@
     <div v-else id="opetussuunnitelmat-lista">
       <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
         <router-link :to="ops.route">
-          <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTieto="ops.voimassaoloTieto"/>
+          <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTieto="ops.voimassaoloTieto" showJotpaInfo/>
         </router-link>
       </div>
       <b-pagination
@@ -138,6 +138,10 @@ export default class VstPaikalliset extends Vue {
     tuleva: true,
     voimassaolo: true,
     poistunut: true,
+    jotpatyyppi: [
+      'NULL',
+      'VST',
+    ],
   };
 
   private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({

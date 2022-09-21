@@ -6,7 +6,7 @@
   </template>
   <div>
     <b-container fluid>
-      <b-row class="mb-5">
+      <b-row class="mb-5" v-if="perusteKoosteStore">
         <b-col cols="12" xl="auto" class="tile">
           <h2 class="otsikko">{{ $t('perusteet') }}</h2>
           <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="julkaistutPerusteet">
@@ -22,7 +22,7 @@
           <ep-spinner v-else />
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="perusteKoosteStore">
         <b-col md class="mb-4">
           <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
           <ep-spinner v-if="!tiedotteet"/>
@@ -100,13 +100,13 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
   },
 })
 export default class RouteKooste extends Vue {
-  @Prop({ required: true })
+  @Prop({ required: false })
   private perusteKoosteStore!: PerusteKoosteStore;
 
   @Prop({ required: true })
   private paikallinenStore!: IPaikallinenStore;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   private opasStore!: OpasStore;
 
   @Prop({ required: true })
@@ -122,11 +122,11 @@ export default class RouteKooste extends Vue {
   }
 
   get koulutustyyppi() {
-    return this.perusteKoosteStore.koulutustyyppi;
+    return this.perusteKoosteStore?.koulutustyyppi || _.get(this.$route.params, 'koulutustyyppi');
   }
 
   get tiedotteet() {
-    if (this.perusteKoosteStore.tiedotteet) {
+    if (this.perusteKoosteStore?.tiedotteet) {
       return _.chain(this.perusteKoosteStore.tiedotteet)
         .sortBy('luotu')
         .reverse()
@@ -135,7 +135,7 @@ export default class RouteKooste extends Vue {
   }
 
   get ohjeet() {
-    if (this.opasStore.oppaat.value) {
+    if (this.opasStore?.oppaat.value) {
       return _.chain(this.opasStore.oppaat.value)
         .map(opas => {
           return {
@@ -150,7 +150,11 @@ export default class RouteKooste extends Vue {
   }
 
   get julkaistutPerusteet() {
-    if (this.perusteKoosteStore.perusteJulkaisut) {
+    if (!this.perusteKoosteStore) {
+      return [];
+    }
+
+    if (this.perusteKoosteStore?.perusteJulkaisut) {
       return _.chain(this.perusteKoosteStore.perusteJulkaisut)
         .map(julkaisu => ({
           ...julkaisu,

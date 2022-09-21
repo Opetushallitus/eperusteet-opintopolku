@@ -7,8 +7,11 @@
         </slot>
       </div>
       <div class="nimi flex-fill" :class="voimassaoloClass">
-        <div class="ops">
-          <span v-html="nimi"></span>
+        <div class="ops d-flex align-items-center">
+          <div v-html="nimi"></div>
+          <div v-if="ops.jotpatyyppi && showJotpaInfo" class="nimi__jotpa ml-2">
+            {{$t('jotpa')}}
+          </div>
         </div>
         <div class="organisaatiot d-flex">
           <div class="ops-voimassaolo" v-if="voimassaoloTieto && voimassaoloTieto.paiva">
@@ -60,6 +63,9 @@ export default class OpetussuunnitelmaTile extends Vue {
 
   @Prop({ required: false })
   private voimassaoloTieto!: VoimassaoloTieto;
+
+  @Prop({ required: false, default: false, type: Boolean })
+  private showJotpaInfo!: Boolean;
 
   get nimi() {
     return highlight(this.$kaanna((this.ops.nimi as Object)), this.query);
@@ -114,6 +120,15 @@ export default class OpetussuunnitelmaTile extends Vue {
     .ops {
       margin-bottom: 8px;
     }
+
+    &__jotpa {
+    padding: 2px 15px;
+    display: inline-block;
+    color: $white;
+    background-color: $koulutustyyppi-muu-color;
+    border-radius: 1rem;
+    font-size: 0.8rem;
+  }
   }
 
   .perusteen-nimi {

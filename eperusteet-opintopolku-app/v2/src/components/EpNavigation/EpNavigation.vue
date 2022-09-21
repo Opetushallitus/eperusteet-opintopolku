@@ -13,7 +13,7 @@
 
     <b-collapse id="nav-collapse" is-nav >
       <b-navbar-nav class="flex-wrap">
-        <EpSpinner v-if="!julkaistutKoulutustyypit" />
+        <EpSpinner v-if="loading" />
         <b-nav-item v-else v-for="(item, idx) in items"
                     :key="idx"
                     active
@@ -44,7 +44,7 @@
 import _ from 'lodash';
 import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, stateToKoulutustyyppi,
-  ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus } from '@shared/utils/perusteet';
+  ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus, muuKoulutus } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter, RawLocation } from 'vue-router/types/router';
@@ -64,8 +64,23 @@ export default class EpNavigation extends Vue {
   @Prop({ required: true })
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
+  get loading() {
+    return !this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value || !this.julkaistutKoulutustyypitStore.muuLukumaarat.value;
+  }
+
   get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
+    return [
+      ...this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value,
+      ...(this.muuLukumaarat > 0 ? ['koulutustyyppi_muu'] : []),
+    ];
+  }
+
+  get muuLukumaarat() {
+    if (this.julkaistutKoulutustyypitStore.muuLukumaarat.value) {
+      return this.julkaistutKoulutustyypitStore.muuLukumaarat.value;
+    };
+
+    return 0;
   }
 
   get valittuKieli() {
@@ -105,7 +120,8 @@ export default class EpNavigation extends Vue {
 
   private isActiveRoute(kt) {
     if (this.$route) {
-      return kt.name === this.$route.params.koulutustyyppi || (this.routeAmmatillinen && kt.name === 'ammatillinen');
+      return kt.name === this.$route.params.koulutustyyppi
+        || (this.routeAmmatillinen && kt.name === 'ammatillinen');
     }
     return false;
   }
@@ -155,6 +171,13 @@ export default class EpNavigation extends Vue {
     }));
   }
 
+  get muuKoulutus() {
+    return _.map(muuKoulutus(), kt => ({
+      ...kt,
+      ...this.setActiveClass(kt),
+    }));
+  }
+
   get items() {
     return _.filter([
       ...this.yleissivistavat,
@@ -162,6 +185,7 @@ export default class EpNavigation extends Vue {
       ...this.vapaasivistystyo,
       ...this.tutkintoonvalmentava,
       ...this.kotoutumiskoulutus,
+      ...this.muuKoulutus,
     ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi)));
   }
 
@@ -301,6 +325,10 @@ export default class EpNavigation extends Vue {
       &.koulutustyyppi-kotoutumiskoulutus {
         border-bottom-color: $koulutustyyppi-kotoutumiskoulutus-color;
       }
+
+      &.koulutustyyppi-muukoulutus {
+        border-bottom-color: $koulutustyyppi-muu-color;
+      }
     }
   }
 
@@ -354,6 +382,12 @@ export default class EpNavigation extends Vue {
     &.koulutustyyppi-kotoutumiskoulutus {
       /deep/ .nav-link {
         border-bottom-color: $koulutustyyppi-kotoutumiskoulutus-color;
+      }
+    }
+
+    &.koulutustyyppi-muukoulutus {
+      /deep/ .nav-link {
+        border-bottom-color: $koulutustyyppi-muu-color;
       }
     }
   }
