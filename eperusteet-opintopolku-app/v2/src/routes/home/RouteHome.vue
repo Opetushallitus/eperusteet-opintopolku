@@ -64,7 +64,7 @@
               </div>
 
               <template v-else>
-                <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.perusteId">
+                <div class="d-flex flex-wrap justify-content-between" v-for="peruste in ryhma.perusteet" :key="'peruste'+peruste.id">
                   <div class="valtakunnallinen">
                     <router-link :to="peruste.route">
                       <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">

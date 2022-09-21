@@ -93,7 +93,7 @@ import { OpasStore } from '@/stores/OpasStore';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
-import { getKoostePaikallinenComponent, getKoostePaikallinenStore } from '@/utils/toteutustypes';
+import { getKoosteOpasStore, getKoostePaikallinenComponent, getKoostePaikallinenStore, getKoostePerusteStore } from '@/utils/toteutustypes';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
@@ -227,8 +227,8 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  perusteKoosteStore: new PerusteKoosteStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
-                  opasStore: new OpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
+                  perusteKoosteStore: getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
+                  opasStore: getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                   paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
                   paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),
                 },

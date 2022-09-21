@@ -10,19 +10,10 @@ import { OpasStore } from '@/stores/OpasStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { computed } from '@vue/composition-api';
 import Paikalliset from '@/routes/kooste/Paikalliset.vue';
+import JotpaPaikalliset from '@/routes/kooste/JotpaPaikalliset.vue';
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
-  // localVue.use(VueI18n);
-  // Kielet.install(localVue, {
-  //   messages: {
-  //     fi: {
-  //       'kooste': 'Kooste',
-  //     },
-  //   },
-  // });
-  // localVue.use(new Kaannos());
-
   const $route = {
     params: { lang: 'fi' },
   };
@@ -117,5 +108,55 @@ describe('RouteKooste', () => {
     expect(wrapper.html()).toContain('Oppilaitoksen nimi');
     expect(wrapper.html()).toContain('Toimijan nimi');
     expect(wrapper.html()).toContain('ohje1');
+  });
+
+  test('Test without perusteet', async () => {
+    const opetussuunnitelmat = [{
+      id: 100,
+      nimi: {
+        fi: 'ops100',
+      } as any,
+      koulutustoimija: {
+        nimi: {
+          fi: 'Toimijan nimi',
+        } as any,
+      },
+    }];
+    const paikallinenStore: IPaikallinenStore = {
+      opetussuunnitelmat: computed(() => opetussuunnitelmat),
+      opetussuunnitelmatPaged: computed(() => ({
+        data: opetussuunnitelmat,
+        sivu: 0,
+        kokonaismäärä: 1,
+      })),
+      fetch: (id) => new Promise<void>(resolve => resolve()),
+      fetchQuery: (query) => new Promise<void>(resolve => resolve()),
+    };
+
+    const wrapper = mount(RouteKooste as any, {
+      localVue,
+      propsData: {
+        paikallinenStore,
+        paikallinenComponent: JotpaPaikalliset,
+      },
+      stubs: {
+        ...stubs,
+      },
+      mocks: {
+        ...mocks,
+        $sd: (x) => 'sd_' + x,
+        $t: x => x,
+        $kaannaOlioTaiTeksti: x => x,
+        $route,
+      },
+    });
+
+    await localVue.nextTick();
+    expect(wrapper.html()).not.toContain(' perusteet ');
+    expect(wrapper.html()).not.toContain('ajankohtaista');
+    expect(wrapper.html()).not.toContain('ohjeet-ja-materiaalit');
+
+    expect(wrapper.html()).toContain('ops100');
+    expect(wrapper.html()).toContain('Toimijan nimi');
   });
 });
