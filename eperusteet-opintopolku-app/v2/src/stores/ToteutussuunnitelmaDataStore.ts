@@ -9,7 +9,9 @@ import { DokumenttiDtoTilaEnum,
   Liitetiedostot as PerusteLiitetiedostot,
   LiitetiedostotParam as PerusteLiitetiedostotParam,
   PerusteKaikkiDto,
-  Perusteet } from '@shared/api/eperusteet';
+  Perusteet,
+  TutkinnonOsaKaikkiDto,
+  TutkinnonOsaViiteSuppeaDto } from '@shared/api/eperusteet';
 import mime from 'mime-types';
 import { deepFilter, deepFind } from '@shared/utils/helpers';
 
@@ -28,7 +30,8 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public arviointiasteikot: ArviointiasteikkoDto[] | null = null;
   @State() public perusteKuvat: object[] = [];
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
-  @State() public vieraatPerusteet: PerusteKaikkiDto[] | null = null;
+  @State() public perusteidenTutkinnonOsat: TutkinnonOsaKaikkiDto[] | null = null;
+  @State() public perusteidenTutkinnonOsienViitteet: TutkinnonOsaViiteSuppeaDto[] | null = null;
 
   constructor(opetussuunnitelmaId: number, private esikatselu = false) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
@@ -56,18 +59,23 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
     if (this.opetussuunnitelma?.peruste?.perusteId) {
       this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.perusteId)).data;
-      this.vieraatPerusteet = await this.getTutkinnonosienVieraatPerusteet();
+      await this.setTutkinnonOsienSisallotPerusteista();
     }
   }
 
-  public async getTutkinnonosienVieraatPerusteet() {
+  public async setTutkinnonOsienSisallotPerusteista() {
     const tutkinnonOsat = this.getJulkaistuSisalto('tutkinnonOsat');
-    const perusteIds = _.chain(tutkinnonOsat)
-      .filter(tosa => tosa.tosa?.vierastutkinnonosa)
-      .map(tosa => tosa.tosa?.vierastutkinnonosa.perusteId)
-      .uniq()
-      .value();
-    return Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getKokoSisalto(perusteId)).data));
+    const perusteIds = _.uniq(
+      [
+        this.opetussuunnitelma!.peruste!.perusteId,
+        ..._.chain(tutkinnonOsat)
+          .filter(tosa => tosa.tosa?.vierastutkinnonosa || tosa.peruste?.perusteId)
+          .map(tosa => tosa.tosa?.vierastutkinnonosa?.perusteId || tosa.peruste?.perusteId)
+          .value(),
+      ]);
+
+    this.perusteidenTutkinnonOsat = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId, this.esikatselu)).data)));
+    this.perusteidenTutkinnonOsienViitteet = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId, this.esikatselu)).data)));
   }
 
   @Getter(state => {
@@ -116,9 +124,8 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     return deepFilter(filter, this.opetussuunnitelma);
   }
 
-  public getJulkaistuPerusteSisalto(filter, perusteId?) {
-    const peruste = _.find(this.vieraatPerusteet, vperuste => vperuste.id === perusteId) || this.perusteKaikki;
-    return deepFind(filter, peruste);
+  public getJulkaistuPerusteSisalto(filter) {
+    return deepFind(filter, this.perusteKaikki);
   }
 
   @Getter(state => {
