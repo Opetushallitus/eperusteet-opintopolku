@@ -136,28 +136,16 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
     return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
   }
 
-  get perusteenTutkinnonosaViite() {
-    if (this.sisaltoviite.tosa?.vierastutkinnonosa) {
-      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto(
-        { '_tutkinnonOsa': _.toString(this.sisaltoviite.tosa.vierastutkinnonosa.tosaId) },
-        this.sisaltoviite.tosa?.vierastutkinnonosa.perusteId);
-    }
+  get perusteenTutkinnonOsanId() {
+    return this.sisaltoviite.tosa.vierastutkinnonosa?.tosaId || this.sisaltoviite.tosa.perusteentutkinnonosa;
+  }
 
-    if (this.sisaltoviite.tosa) {
-      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(this.sisaltoviite.tosa.perusteentutkinnonosa) });
-    }
+  get perusteenTutkinnonosaViite() {
+    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite => _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(this.perusteenTutkinnonOsanId));
   }
 
   get perusteenTutkinnonosa() {
-    if (this.sisaltoviite.tosa?.vierastutkinnonosa) {
-      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto(
-        { id: _.toNumber(this.sisaltoviite.tosa.vierastutkinnonosa.tosaId) },
-        this.sisaltoviite.tosa?.vierastutkinnonosa.perusteId);
-    }
-
-    if (this.sisaltoviite.tosa) {
-      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: _.toNumber(this.sisaltoviite.tosa.perusteentutkinnonosa) });
-    }
+    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, perusteTosaViite => _.get(perusteTosaViite, 'id') === _.toNumber(this.perusteenTutkinnonOsanId));
   }
 
   get opetussuunnitelma() {

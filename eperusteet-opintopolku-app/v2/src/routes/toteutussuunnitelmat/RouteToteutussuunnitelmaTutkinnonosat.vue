@@ -54,7 +54,7 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
         const tutkinnonosa = _.find(this.julkaistutTutkinnonOsat, tutkinnonosa => tutkinnonosa.tosa.id === tutkinnonosaViite.tosa.id);
         return {
           ...tutkinnonosaViite,
-          perusteenTutkinnonosaViite: this.perusteenTutkinnonosaViite(tutkinnonosa.tosa.perusteentutkinnonosa),
+          perusteenTutkinnonosaViite: this.perusteenTutkinnonosaViite(tutkinnonosa),
           tosa: tutkinnonosa.tosa,
         };
       })
@@ -63,8 +63,9 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
       .value();
   }
 
-  perusteenTutkinnonosaViite(perusteenTutkinnonosaId) {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(perusteenTutkinnonosaId) });
+  perusteenTutkinnonosaViite(tutkinnonosa) {
+    const perusteenTutkinnonOsanId = tutkinnonosa.tosa.vierastutkinnonosa?.tosaId || tutkinnonosa.tosa.perusteentutkinnonosa;
+    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite => _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(perusteenTutkinnonOsanId));
   }
 
   get fields() {
