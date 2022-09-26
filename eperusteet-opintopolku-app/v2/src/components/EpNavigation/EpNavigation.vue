@@ -65,7 +65,7 @@ export default class EpNavigation extends Vue {
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
   get loading() {
-    return !this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value || !this.julkaistutKoulutustyypitStore.muuLukumaarat.value;
+    return _.isNil(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value) || _.isNil(this.julkaistutKoulutustyypitStore.muuLukumaarat.value);
   }
 
   get julkaistutKoulutustyypit() {
