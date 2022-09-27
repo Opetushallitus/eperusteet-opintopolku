@@ -60,6 +60,11 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
       })
       .filter(tutkinnonosaViite => Kielet.search(this.queryNimi, tutkinnonosaViite.tekstiKappale.nimi))
       .sortBy('perusteenTutkinnonosaViite.jarjestys')
+      .map((tutkinnonosaViite, index) => ({
+        ...tutkinnonosaViite,
+        jarnro: index + 1,
+      }))
+      .sortBy('jarnro')
       .value();
   }
 
@@ -70,7 +75,7 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
 
   get fields() {
     return [{
-      key: 'perusteenTutkinnonosaViite.jarjestys',
+      key: 'jarnro',
       label: this.$t('nro') as string,
       sortable: true,
     }, {
