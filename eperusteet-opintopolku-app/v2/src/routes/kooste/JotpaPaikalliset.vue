@@ -138,7 +138,7 @@ export default class JotpaPaikalliset extends Vue {
             name: 'toteutussuunnitelma',
             params: {
               toteutussuunnitelmaId: _.toString(ops.id),
-              koulutustyyppi: 'kotoutumiskoulutus',
+              koulutustyyppi: ops.jotpatyyppi === 'MUU' ? 'muukoulutus' : 'vapaasivistystyo',
             },
           },
         }))

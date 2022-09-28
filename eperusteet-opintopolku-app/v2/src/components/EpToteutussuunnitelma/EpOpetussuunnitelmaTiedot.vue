@@ -23,7 +23,7 @@
         <span>{{ $sd(opetussuunnitelma.voimassaoloLoppuu) }}</span>
       </ep-form-content>
 
-      <ep-form-content name="koulutustyyppi" headerType="h3" headerClass="h6">
+      <ep-form-content name="koulutustyyppi" headerType="h3" headerClass="h6" v-if="koulutustyyppiName">
         <ep-field v-model="koulutustyyppiName" />
       </ep-form-content>
 
@@ -99,7 +99,9 @@ export default class EpOpetussuunnitelmaTiedot extends Vue {
   }
 
   get koulutustyyppiName() {
-    return this.$t(this.store!.koulutustyyppi as Koulutustyyppi);
+    if (this.opetussuunnitelma?.jotpatyyppi !== 'MUU') {
+      return this.$t(this.store!.koulutustyyppi as Koulutustyyppi);
+    }
   }
 
   get oppilaitosTyyppiNimi() {
