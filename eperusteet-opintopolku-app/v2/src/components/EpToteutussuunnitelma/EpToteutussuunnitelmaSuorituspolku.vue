@@ -13,12 +13,16 @@
           <div v-if="rakenneosa.tutkinnonosa">
             <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: rakenneosa.tutkinnonosa.id}}">
               <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.tutkinnonosa.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
-              {{$kaanna(rakenneosa.tutkinnonosa.tekstiKappale.nimi)}}
+              <span>{{$kaanna(rakenneosa.tutkinnonosa.nimi)}}</span>
             </router-link>
             <b-popover :target="'tutkinto'+rakenneosa.tutkinnonosa.id" :placement="'bottom'" triggers="hover">
               <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
               <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
             </b-popover>
+          </div>
+          <div v-else-if="rakenneosa.perusteenTutkinnonOsa">
+            <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.perusteenTutkinnonOsa.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
+            <span>{{$kaanna(rakenneosa.perusteenTutkinnonOsa.nimi)}}</span>
           </div>
           <span v-else>
             {{$kaanna(rakenneosa.nimi)}}
@@ -73,9 +77,12 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
 
   private lisaaTutkinnonOsat(osat: any[], tutkinnonosatById) {
     return _.map(osat, osa => {
+      const perusteenTutkinnonOsaViite = this.perusteidenTutkinnonosienViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])];
       return {
         ...osa,
         ...(osa['_tutkinnonOsaViite'] && { tutkinnonosa: tutkinnonosatById[_.toNumber(osa['_tutkinnonOsaViite'])] }),
+        perusteenTutkinnonOsaViite: perusteenTutkinnonOsaViite,
+        perusteenTutkinnonOsa: this.perusteidenTutkinnonOsatById[_.toNumber(_.get(perusteenTutkinnonOsaViite, '_tutkinnonOsa'))],
         osat: this.lisaaTutkinnonOsat(osa.osat, tutkinnonosatById),
       };
     });
@@ -92,7 +99,7 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
       .map(osa => {
         return {
           ...osa,
-          tutkinnonosaViite: this.tutkinnonosaViitteet[_.get(osa, 'tutkinnonosa._tutkinnonOsa')],
+          ...(_.get(osa, 'tutkinnonosa._tutkinnonOsa') && { tutkinnonosaViite: this.tutkinnonosaViitteet[_.get(osa, 'tutkinnonosa._tutkinnonOsa')] }),
           osat: this.setTutkinnonOsaViitteet(osa.osat),
         };
       })
@@ -132,11 +139,11 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
         return {
           ...tutkinnonosaViite,
           perusteenTutkinnonosaViite: this.perusteenTutkinnonosaViite(tutkinnonosa.tosa.perusteentutkinnonosa),
+          perusteenTutkinnonosa: this.perusteenTutkinnonosa(tutkinnonosa.tosa.perusteentutkinnonosa),
           tosa: tutkinnonosa.tosa,
         };
       })
       .sortBy('perusteenTutkinnonosaViite.jarjestys')
-      .keyBy('tosa.perusteentutkinnonosa')
       .value();
   }
 
@@ -145,7 +152,19 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   }
 
   perusteenTutkinnonosaViite(perusteenTutkinnonosaId) {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(perusteenTutkinnonosaId) });
+    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite => _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(perusteenTutkinnonosaId));
+  }
+
+  perusteenTutkinnonosa(perusteenTutkinnonosaId) {
+    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, perusteTosa => perusteTosa.id === perusteenTutkinnonosaId);
+  }
+
+  get perusteidenTutkinnonosienViitteetById() {
+    return _.keyBy(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, 'id');
+  }
+
+  get perusteidenTutkinnonOsatById() {
+    return _.keyBy(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, 'id');
   }
 
   get piilotetutTunnisteet() {
