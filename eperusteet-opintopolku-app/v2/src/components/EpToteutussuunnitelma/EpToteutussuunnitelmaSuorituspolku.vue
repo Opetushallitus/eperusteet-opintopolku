@@ -71,6 +71,10 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
     };
   }
 
+  get plainRakenne() {
+    return _.find(this.opetussuunnitelma.suorituspolut, polku => polku.sisaltoviiteId === this.sisaltoviite.id);
+  }
+
   private lisaaTutkinnonOsat(osat: any[], tutkinnonosatById) {
     return _.map(osat, osa => {
       return {
@@ -145,7 +149,7 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   }
 
   perusteenTutkinnonosaViite(perusteenTutkinnonosaId) {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ '_tutkinnonOsa': _.toString(perusteenTutkinnonosaId) });
+    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite => _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(perusteenTutkinnonosaId));
   }
 
   get piilotetutTunnisteet() {
