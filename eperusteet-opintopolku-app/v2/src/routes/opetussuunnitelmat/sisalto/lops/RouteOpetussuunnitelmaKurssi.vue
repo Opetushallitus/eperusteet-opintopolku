@@ -4,7 +4,7 @@
     <div v-if="kurssi">
       <h2 class="otsikko">{{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{kurssi.koodiArvo}})</span></h2>
 
-      <EpCollapse v-if="kurssi.perusteen.kuvaus" :borderBottom="false" :shadow="true" class="mb-4" >
+      <EpCollapse v-if="kurssi.perusteen && kurssi.perusteen.kuvaus" :borderBottom="false" :shadow="true" class="mb-4" >
         <div slot="header">{{$t('tukiteksti')}}</div>
         <ep-content-viewer
                     :value="$kaanna(kurssi.perusteen.kuvaus)"
@@ -13,10 +13,12 @@
       </EpCollapse>
 
       <div v-for="(sisaltoavain, index) in sisaltoAvaimet" :key="'sisaltoavain'+index" class="mt-4">
-        <div class="mt-4" v-if="(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)  || (kurssi.perusteen[sisaltoavain] && kurssi.perusteen[sisaltoavain].teksti)">
+        <div class="mt-4" v-if="(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)
+        || (kurssi.perusteen && kurssi.perusteen[sisaltoavain] && kurssi.perusteen[sisaltoavain].teksti)">
           <h3>{{$kaanna((kurssi[sisaltoavain] && kurssi[sisaltoavain].otsikko) || kurssi.perusteen[sisaltoavain].otsikko)}}</h3>
 
-          <EpCollapse v-if="kurssi.perusteen[sisaltoavain]" :borderBottom="false" :shadow="true" class="mb-4" :expandedByDefault="!(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)">
+          <EpCollapse v-if="kurssi.perusteen && kurssi.perusteen[sisaltoavain]"
+                      :borderBottom="false" :shadow="true" class="mb-4" :expandedByDefault="!(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)">
             <div slot="header">{{$t('tukiteksti')}}</div>
             <ep-content-viewer
                         :value="$kaanna(kurssi.perusteen[sisaltoavain].teksti)"
@@ -39,9 +41,8 @@
 </template>
 
 <script lang="ts">
-import { LopsOpetussuunnitelmaOppiaineStore } from '@/stores/LopsOpetussuunnitelmaOppiaineStore';
 import * as _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
+import { Prop, Component, Vue } from 'vue-property-decorator';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -55,9 +56,6 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
   },
 })
 export default class RouteOpetussuunnitelmaKurssi extends Vue {
-  @Prop({ required: true })
-  private lopsOpetussuunnitelmaOppiaineStore!: LopsOpetussuunnitelmaOppiaineStore;
-
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
