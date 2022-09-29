@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
-import {getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto} from '@shared/api/amosaa';
+import { getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import { Kielet } from '@shared/stores/kieli';
 
 Vue.use(VueCompositionApi);
@@ -14,10 +14,10 @@ export class TyopajatStore {
 
   public async fetch() {
     this.state.opetussuunnitelmat = ((await getJulkisetOpetussuunnitelmat({
-        sivu: 0,
-        sivukoko: 100,
-        kieli: Kielet.getUiKieli.value,
-        organisaatioRyhma: true,
-      })).data as any).data;
+      sivu: 0,
+      sivukoko: 100,
+      kieli: Kielet.getUiKieli.value,
+      organisaatioRyhma: true,
+    })).data as any).data;
   }
 }
