@@ -129,7 +129,7 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
   }
 
   get organisaatiot() {
-    return this.opetussuunnitelma.organisaatiot;
+    return _.sortBy(this.opetussuunnitelma.organisaatiot, (org: any) => this.getOrganisaatioNimi(org));
   }
 
   get hasOrganisaatiot() {
