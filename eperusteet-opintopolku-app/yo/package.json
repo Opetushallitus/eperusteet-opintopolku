@@ -13,10 +13,12 @@
     "build": "grunt build",
     "test": "grunt test",
     "copy": "pwd && mkdir -p vanha-ui && mv dist/* vanha-ui && cp -R ../v2/dist/* ./dist && mv vanha-ui dist/vanha-ui && ls ./dist",
-    "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\""
+    "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\"",
+    "prepublish": "npm run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "dependencies": {
-    "angular": "1.5.8",
+    "angular": "1.8.0",
     "angular-animate": "1.5.8",
     "angular-cache": "4.6.0",
     "angular-elastic": "2.5.1",
@@ -24,22 +26,23 @@
     "angular-resource": "1.5.8",
     "angular-sanitize": "1.5.8",
     "angular-spinner": "1.0.1",
-    "angular-translate": "2.13.0",
-    "angular-translate-loader-static-files": "2.13.0",
+    "angular-translate": "2.18.2",
+    "angular-translate-loader-static-files": "2.18.0",
     "angular-ui-bootstrap": "2.2.0",
     "angular-ui-router": "0.3.2",
     "angulartics": "1.5.0",
     "angulartics-piwik": "1.0.6",
-    "bootstrap-sass": "3.3.7",
+    "bootstrap-sass": "3.4.0",
     "eperusteet-frontend-utils": "Opetushallitus/eperusteet-frontend-utils",
     "es5-shim": "4.5.9",
     "es6-promise": "4.1.0",
-    "jquery": "3.1.1",
+    "jquery": "3.5.0",
     "json3": "3.3.2",
-    "lodash": "3.10.1",
-    "moment": "2.22.2",
+    "lodash": "4.17.21",
+    "moment": "2.29.4",
     "ngstorage": "0.3.11",
-    "restangular": "1.5.2"
+    "restangular": "1.5.2",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "@types/angular": "1.5.8",
@@ -87,5 +90,6 @@
     "prettier": "1.6.1",
     "typescript": "2.5.2",
     "webdriver-manager": "12.0.6"
-  }
+  },
+  "snyk": true
 }
