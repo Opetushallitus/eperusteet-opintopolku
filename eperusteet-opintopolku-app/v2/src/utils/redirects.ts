@@ -97,4 +97,17 @@ export const redirects = [
       };
     },
   },
+  {
+    path: 'selaus/kooste/ammatillinenkoulutus',
+    redirect: (to) => {
+      return {
+        name: 'ammatillinenSelaus',
+        params: {
+          ...to.params,
+          koulutustyyppi: 'ammatillinen',
+        },
+        query: {},
+      };
+    },
+  },
 ];
