@@ -13,7 +13,6 @@ import { Page } from '@shared/tyypit';
 export class PerusteKoosteStore {
   @State() public koulutustyyppi: string;
   @State() public perusteJulkaisut: PerusteenJulkaisuData[] | null = null;
-  @State() public tiedotteet: TiedoteDto[] | null = null;
   @State() public opetussuunnitelmat: OpetussuunnitelmaJulkinenDto[] | null = null;
 
   constructor(
@@ -25,36 +24,5 @@ export class PerusteKoosteStore {
   async reload() {
     const koulutustyypit = ryhmat(this.koulutustyyppi);
     this.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit })), 'data');
-
-    let tiedotteet: TiedoteDto[] = [];
-    for (const julkaisu of this.perusteJulkaisut || []) {
-      tiedotteet = [...tiedotteet,
-        ...(await tiedoteQuery({
-          sivukoko: 100,
-          perusteId: julkaisu.id,
-        })),
-      ];
-    }
-
-    tiedotteet = [...tiedotteet,
-      ...(await tiedoteQuery({
-        sivukoko: 100,
-        koulutusTyyppi: ryhmat(this.koulutustyyppi),
-      })),
-    ];
-
-    if (_.size(this.perusteJulkaisut) > 0) {
-      tiedotteet = [...tiedotteet,
-        ...(await tiedoteQuery({
-          sivukoko: 100,
-          perusteIds: _.map(this.perusteJulkaisut, julkaisu => julkaisu.id) as number[],
-        })),
-      ];
-    }
-
-    this.tiedotteet = _.chain(tiedotteet)
-      .uniqBy('id')
-      .filter('otsikko')
-      .value();
   }
 }

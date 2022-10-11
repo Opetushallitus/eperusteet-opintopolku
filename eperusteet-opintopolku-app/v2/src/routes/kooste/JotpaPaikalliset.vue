@@ -1,8 +1,5 @@
 <template>
   <div class="paikalliset">
-    <h2 class="otsikko">{{ $t('kuvaus')}}</h2>
-    <div class="mb-5">{{$t('jotpa-paikalliset-kuvaus')}}</div>
-
     <h2 class="otsikko">{{ $t('opetussuunnitelmat') }}</h2>
 
     <div class="d-flex flex-lg-row flex-column">

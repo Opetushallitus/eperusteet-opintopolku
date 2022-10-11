@@ -11,12 +11,28 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { computed } from '@vue/composition-api';
 import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 import JotpaPaikalliset from '@/routes/kooste/JotpaPaikalliset.vue';
+import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
   const $route = {
     params: { lang: 'fi' },
   };
+
+  const koosteTiedotteetStore = mock(KoosteTiedotteetStore);
+  koosteTiedotteetStore.state.tiedotteet = [{
+    luotu: new Date(100),
+    id: 100,
+    otsikko: {
+      fi: 'tiedote101',
+    } as any,
+  }, {
+    luotu: new Date(200),
+    id: 200,
+    otsikko: {
+      fi: 'tiedote102',
+    } as any,
+  }];
 
   test('Renders', async () => {
     const perusteKoosteStore = perusteKoosteStoreMock();
@@ -57,6 +73,7 @@ describe('RouteKooste', () => {
         opasStore,
         paikallinenStore,
         paikallinenComponent: Paikalliset,
+        tiedotteetStore: koosteTiedotteetStore,
       },
       stubs: {
         ...stubs,
@@ -71,21 +88,6 @@ describe('RouteKooste', () => {
     });
 
     perusteKoosteStore.koulutustyyppi = 'koulutustyyppi_2';
-
-    perusteKoosteStore.tiedotteet = [{
-      luotu: new Date(100),
-      id: 100,
-      otsikko: {
-        fi: 'tiedote101',
-      } as any,
-    }, {
-      luotu: new Date(200),
-      id: 200,
-      otsikko: {
-        fi: 'tiedote102',
-      } as any,
-    }];
-
     perusteKoosteStore.perusteJulkaisut = [{
       nimi: {
         fi: 'peruste42',
@@ -138,6 +140,7 @@ describe('RouteKooste', () => {
       propsData: {
         paikallinenStore,
         paikallinenComponent: JotpaPaikalliset,
+        tiedotteetStore: koosteTiedotteetStore,
       },
       stubs: {
         ...stubs,
@@ -153,10 +156,12 @@ describe('RouteKooste', () => {
 
     await localVue.nextTick();
     expect(wrapper.html()).not.toContain(' perusteet ');
-    expect(wrapper.html()).not.toContain('ajankohtaista');
+    expect(wrapper.html()).toContain('ajankohtaista');
     expect(wrapper.html()).not.toContain('ohjeet-ja-materiaalit');
 
     expect(wrapper.html()).toContain('ops100');
     expect(wrapper.html()).toContain('Toimijan nimi');
+    expect(wrapper.html()).toContain('tiedote101');
+    expect(wrapper.html()).toContain('tiedote102');
   });
 });

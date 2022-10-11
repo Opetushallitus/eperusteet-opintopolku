@@ -8,6 +8,7 @@ import JotpaPaikalliset from '@/routes/kooste/JotpaPaikalliset.vue';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpasStore } from '@/stores/OpasStore';
+import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 
 export const koostePerusteStore = {
   'default': (koulutustyyppi): any => new PerusteKoosteStore(koulutustyyppi),
@@ -17,6 +18,10 @@ export const koostePerusteStore = {
 export const koosteOpasStore = {
   'default': (koulutustyyppi): any => new OpasStore(koulutustyyppi),
   'koulutustyyppi_muu': null,
+};
+
+export const koosteTiedotteetStore = {
+  'default': (koulutustyyppi): any => new KoosteTiedotteetStore(koulutustyyppi),
 };
 
 export const koostePaikallinenStore = {
@@ -35,6 +40,11 @@ export const koostePaikallinenComponent = {
   'default': Paikalliset,
 };
 
+export const koosteKuvaus = {
+  'muukoulutus': 'jotpa-paikalliset-kuvaus',
+  'default': null,
+};
+
 export const getKoostePaikallinenStore = (koulutustyyppi) :any => {
   return koostePaikallinenStore[koulutustyyppi] ? koostePaikallinenStore[koulutustyyppi] : koostePaikallinenStore['default'];
 };
@@ -49,4 +59,12 @@ export const getKoostePerusteStore = (koulutustyyppi): any => {
 
 export const getKoosteOpasStore = (koulutustyyppi): any => {
   return koosteOpasStore[koulutustyyppi] !== undefined ? koosteOpasStore[koulutustyyppi] : koosteOpasStore['default'](koulutustyyppi);
+};
+
+export const getKoosteTiedotteetStore = (koulutustyyppi): any => {
+  return koosteTiedotteetStore[koulutustyyppi] !== undefined ? koosteTiedotteetStore[koulutustyyppi] : koosteTiedotteetStore['default'](koulutustyyppi);
+};
+
+export const getKoosteKuvaus = (koulutustyyppi): any => {
+  return koosteKuvaus[koulutustyyppi] !== undefined ? koosteKuvaus[koulutustyyppi] : koosteKuvaus['default'];
 };
