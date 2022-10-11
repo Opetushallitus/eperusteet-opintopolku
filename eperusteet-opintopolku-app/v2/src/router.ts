@@ -93,7 +93,7 @@ import { OpasStore } from '@/stores/OpasStore';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
-import { getKoosteOpasStore, getKoostePaikallinenComponent, getKoostePaikallinenStore, getKoostePerusteStore } from '@/utils/toteutustypes';
+import { getKoosteKuvaus, getKoosteOpasStore, getKoostePaikallinenComponent, getKoostePaikallinenStore, getKoostePerusteStore, getKoosteTiedotteetStore } from '@/utils/toteutustypes';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
@@ -229,8 +229,10 @@ export const router = new Router({
                 default: {
                   perusteKoosteStore: getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                   opasStore: getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
+                  tiedotteetStore: getKoosteTiedotteetStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                   paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
                   paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),
+                  kuvaus: getKoosteKuvaus(route.params.koulutustyyppi),
                 },
               };
             },

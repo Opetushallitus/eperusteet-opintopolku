@@ -6,6 +6,13 @@
   </template>
   <div>
     <b-container fluid>
+      <b-row class="mb-5" v-if="kuvaus">
+        <b-col cols="12" xl="auto" class="tile">
+          <h2 class="otsikko">{{ $t('kuvaus')}}</h2>
+          <div>{{$t(kuvaus)}}</div>
+        </b-col>
+      </b-row>
+
       <b-row class="mb-5" v-if="perusteKoosteStore">
         <b-col cols="12" xl="auto" class="tile">
           <h2 class="otsikko">{{ $t('perusteet') }}</h2>
@@ -22,7 +29,7 @@
           <ep-spinner v-else />
         </b-col>
       </b-row>
-      <b-row v-if="perusteKoosteStore">
+      <b-row >
         <b-col md class="mb-4">
           <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
           <ep-spinner v-if="!tiedotteet"/>
@@ -39,9 +46,9 @@
             </template>
           </ep-julki-lista>
         </b-col>
-        <b-col md class="mb-4">
+        <b-col md class="mb-4" v-if="perusteKoosteStore">
           <h2 class="mb-4">{{$t('ohjeet-ja-materiaalit')}}</h2>
-          <ep-spinner v-if="!tiedotteet"/>
+          <ep-spinner v-if="!ohjeet"/>
           <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas" v-else>
             <template v-slot:lisaaBtnText>
               <div class="mt-2">
@@ -70,7 +77,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Prop, Component } from 'vue-property-decorator';
+import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -87,6 +94,7 @@ import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { OpasStore } from '@/stores/OpasStore';
+import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 
 @Component({
@@ -110,7 +118,18 @@ export default class RouteKooste extends Vue {
   private opasStore!: OpasStore;
 
   @Prop({ required: true })
+  private tiedotteetStore!: KoosteTiedotteetStore;
+
+  @Prop({ required: true })
   private paikallinenComponent!: any;
+
+  @Prop({ required: false })
+  private kuvaus!: string;
+
+  @Watch('koulutustyyppi', { immediate: true })
+  async fetch() {
+    await this.tiedotteetStore?.fetch(this.perusteKoosteStore?.perusteJulkaisut);
+  }
 
   get murupolku(): Array<MurupolkuOsa> {
     return [{
@@ -126,8 +145,8 @@ export default class RouteKooste extends Vue {
   }
 
   get tiedotteet() {
-    if (this.perusteKoosteStore?.tiedotteet) {
-      return _.chain(this.perusteKoosteStore.tiedotteet)
+    if (this.tiedotteetStore?.tiedotteet.value) {
+      return _.chain(this.tiedotteetStore.tiedotteet.value)
         .sortBy('luotu')
         .reverse()
         .value();
