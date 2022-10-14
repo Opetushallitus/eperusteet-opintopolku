@@ -11,7 +11,7 @@
       </b-col>
       <b-col md="6">
         <ep-form-content name="laajuus" headerType="h4">
-          <span>{{ opintokokonaisuus.laajuus }} {{$t('opintopiste')}}</span>
+          <span>{{ opintokokonaisuus.laajuus }} {{ laajuusYksikkoLyhenne }}</span>
         </ep-form-content>
       </b-col>
     </b-row>
@@ -110,6 +110,12 @@ export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
         [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'opintokokonaisuuden-nimi',
         [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'osaamiskokonaisuuden-nimi',
       }[tyyppi];
+    }
+
+    get laajuusYksikkoLyhenne() {
+      return this.opintokokonaisuus?.laajuusYksikko
+        ? this.$t(_.toLower(this.opintokokonaisuus?.laajuusYksikko) + '-lyhenne')
+        : this.$t('opintopiste');
     }
 }
 </script>
