@@ -10,7 +10,7 @@
       <ep-peruste-rakenne :rakenneOsat="filteredRakenneOsat">
         <template v-slot:nimi="{ rakenneosa }">
 
-          <div v-if="rakenneosa.tutkinnonosa">
+          <div v-if="rakenneosa.tutkinnonosa && rakenneosa.tutkinnonosa.nimi">
             <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: rakenneosa.tutkinnonosa.id}}">
               <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.tutkinnonosa.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
               <span>{{$kaanna(rakenneosa.tutkinnonosa.nimi)}}</span>
@@ -20,9 +20,9 @@
               <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
             </b-popover>
           </div>
-          <div v-else-if="rakenneosa.perusteenTutkinnonOsa">
-            <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.perusteenTutkinnonOsa.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
-            <span>{{$kaanna(rakenneosa.perusteenTutkinnonOsa.nimi)}}</span>
+          <div v-else-if="rakenneosa.tutkinnonosa && rakenneosa.tutkinnonosa.perusteenTutkinnonosa">
+            <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.tutkinnonosa.perusteenTutkinnonosa.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
+            <span>{{$kaanna(rakenneosa.tutkinnonosa.perusteenTutkinnonosa.nimi)}}</span>
           </div>
           <span v-else>
             {{$kaanna(rakenneosa.nimi)}}
@@ -71,19 +71,23 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
 
     return {
       ...suorituspolku,
-      osat: this.lisaaTutkinnonOsat(suorituspolku?.osat || [], this.tutkinnonosaViitteetById),
+      osat: this.lisaaTutkinnonOsat(suorituspolku?.osat || []),
     };
   }
 
-  private lisaaTutkinnonOsat(osat: any[], tutkinnonosatById) {
+  private lisaaTutkinnonOsat(osat: any[]) {
     return _.map(osat, osa => {
-      const perusteenTutkinnonOsaViite = this.perusteidenTutkinnonosienViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])];
+      const perusteenTutkinnonosaViite = this.perusteidenTutkinnonosienViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])];
       return {
         ...osa,
-        ...(osa['_tutkinnonOsaViite'] && { tutkinnonosa: tutkinnonosatById[_.toNumber(osa['_tutkinnonOsaViite'])] }),
-        perusteenTutkinnonOsaViite: perusteenTutkinnonOsaViite,
-        perusteenTutkinnonOsa: this.perusteidenTutkinnonOsatById[_.toNumber(_.get(perusteenTutkinnonOsaViite, '_tutkinnonOsa'))],
-        osat: this.lisaaTutkinnonOsat(osa.osat, tutkinnonosatById),
+        ...(osa['_tutkinnonOsaViite'] && { tutkinnonosa: this.tutkinnonosaViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])] }),
+        ...(!!perusteenTutkinnonosaViite && { tutkinnonosa: {
+          ...osa.tutkinnonosa,
+          perusteenTutkinnonosaViite: perusteenTutkinnonosaViite,
+          perusteenTutkinnonosa: this.perusteidenTutkinnonOsatById[_.toNumber(_.get(perusteenTutkinnonosaViite, '_tutkinnonOsa'))],
+        },
+        }),
+        osat: this.lisaaTutkinnonOsat(osa.osat),
       };
     });
   }
@@ -97,13 +101,28 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   private setTutkinnonOsaViitteet(osat: any[]) {
     return _.chain(osat)
       .map(osa => {
+        let paikallisetOsat: any[] = [];
+        if (_.size(osa.paikallinenKuvaus?.koodit) > 0) {
+          paikallisetOsat = this.paikallisetTutkinnonOsatKoodeistaOsiksi(_.map(osa.paikallinenKuvaus?.koodit, koodi => _.split(koodi, '_')[3]));
+        }
+
         return {
           ...osa,
-          ...(_.get(osa, 'tutkinnonosa._tutkinnonOsa') && { tutkinnonosaViite: this.tutkinnonosaViitteet[_.get(osa, 'tutkinnonosa._tutkinnonOsa')] }),
-          osat: this.setTutkinnonOsaViitteet(osa.osat),
+          osat: this.setTutkinnonOsaViitteet([
+            ...(osa.osat ? osa.osat : []),
+            ...paikallisetOsat,
+          ]),
         };
       })
       .value();
+  }
+
+  paikallisetTutkinnonOsatKoodeistaOsiksi(koodit): any[] {
+    return _.map(koodit, koodi => {
+      return {
+        tutkinnonosa: _.find(this.tutkinnonosaViitteet, tosaviite => tosaviite.tosa.omatutkinnonosa?.koodi === koodi),
+      };
+    });
   }
 
   get filteredRakenneOsat() {
