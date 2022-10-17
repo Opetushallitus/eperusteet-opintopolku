@@ -137,7 +137,7 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
   }
 
   get perusteenTutkinnonOsanId() {
-    return this.sisaltoviite.tosa.vierastutkinnonosa?.tosaId || this.sisaltoviite.tosa.perusteentutkinnonosa;
+    return this.sisaltoviite.tosa?.vierastutkinnonosa?.tosaId || this.sisaltoviite.tosa?.perusteentutkinnonosa;
   }
 
   get perusteenTutkinnonosaViite() {
