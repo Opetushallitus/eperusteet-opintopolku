@@ -2,7 +2,7 @@
   <div class="content">
     <ep-spinner v-if="!tutkinnonosa"></ep-spinner>
     <div v-else>
-      <h2 class="otsikko mb-4" slot="header">{{ $kaanna(tutkinnonosa.nimi)}}, {{laajuus}} {{$t('osaamispiste')}}</h2>
+      <h2 class="otsikko mb-4" slot="header">{{ $kaanna(tutkinnonosa.nimi)}}{{laajuusText}}</h2>
 
       <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
       <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
@@ -54,6 +54,13 @@ export default class RouteTutkinnonosa extends Vue {
     }
 
     return this.tutkinnonosaViite.laajuus;
+  }
+
+  get laajuusText() {
+    if (!this.tutkinnonosaViite.laajuus) {
+      return '';
+    }
+    return ', ' + this.laajuus + ' ' + this.$t('osaamispiste');
   }
 
   get arviointiasteikot() {

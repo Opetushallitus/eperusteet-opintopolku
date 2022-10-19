@@ -20,8 +20,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteenTutkinnonosatStore } from '@/stores/PerusteenTutkinnonosatStore';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -83,7 +82,7 @@ export default class RouteTutkinnonosat extends Vue {
   }
 
   get fields() {
-    return [{
+    let baseFields = [{
       key: 'jarjestys',
       label: this.$t('nro') as string,
       sortable: true,
@@ -95,20 +94,24 @@ export default class RouteTutkinnonosat extends Vue {
       formatter: (value: any, key: string, item: any) => {
         return this.$kaanna(value);
       },
-    }, {
-      key: 'laajuus',
-      sortable: true,
-      label: this.$t('laajuus') as string,
-      formatter: (value: any, key: string, item: any) => {
-        if (value) {
-          return value + ' ' + this.$t('osaamispiste');
-        }
-
-        if (_.isNumber(item.laajuus) && _.isNumber(item.laajuusMaksimi)) {
-          return item.laajuus + ' - ' + item.laajuusMaksimi + ' ' + this.$t('osaamispiste');
-        }
-      },
     }];
+    let showLaajuusColumn = _.some(this.tutkinnonOsaViitteet, viite => _.has(viite, 'laajuus'));
+    if (showLaajuusColumn) {
+      return [...baseFields, {
+        key: 'laajuus',
+        sortable: true,
+        label: this.$t('laajuus') as string,
+        formatter: (value: any, key: string, item: any) => {
+          if (value) {
+            return value + ' ' + this.$t('osaamispiste');
+          }
+          if (_.isNumber(item.laajuus) && _.isNumber(item.laajuusMaksimi)) {
+            return item.laajuus + ' - ' + item.laajuusMaksimi + ' ' + this.$t('osaamispiste');
+          }
+        },
+      }];
+    }
+    return baseFields;
   }
 }
 </script>
