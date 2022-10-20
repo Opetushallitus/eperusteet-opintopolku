@@ -124,7 +124,7 @@
       </ep-form-content>
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.osaAlueet.length > 0" name="osa-alueet">
-        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenTutkinnonosa.osaAlueet" />
+        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="osaAlueet" />
       </ep-form-content>
 
       <ep-form-content class="col-md-12 mb-5" v-if="pakollisetOsaAlueet && pakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">
@@ -148,9 +148,11 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenOsaalueet.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
+import { OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum } from '@shared/generated/amosaa';
 
 import * as _ from 'lodash';
 import { Koodistot } from '@shared/api/amosaa';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -177,6 +179,9 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
 
   @Prop({ required: true })
   private arviointiasteikot!: any[];
+
+  @Prop({ required: false })
+  private julkaisukielet?: OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum[];
 
   private tutkintonimikkeetJaOsaamisalatKoodit: any | null = null;
   private toteutukset: any | null = null;
@@ -261,8 +266,20 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
     }
   }
 
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  get osaAlueet() {
+    if (!_.isEmpty(this.julkaisukielet)) {
+      return _.filter(this.perusteenTutkinnonosa.osaAlueet,
+        osaalue => !osaalue.kieli || (_.includes(this.julkaisukielet, osaalue.kieli) && _.includes(this.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value))));
+    }
+    return this.perusteenTutkinnonosa.osaAlueet;
+  }
+
   osaAlueFiltered(osaamistavoiteFilter) {
-    return _.chain(this.perusteenTutkinnonosa.osaAlueet)
+    return _.chain(this.osaAlueet)
       .map(osaAlue => {
         return {
           ...osaAlue,

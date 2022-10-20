@@ -13,6 +13,7 @@
         :perusteenTutkinnonosaViite="perusteenTutkinnonosaViite"
         :kuvat="kuvat"
         :arviointiasteikot="arviointiasteikot"
+        :julkaisukielet="opetussuunnitelma.julkaisukielet"
       />
       <ep-toteutussuunnitelma-suorituspolku
         v-else-if="sisaltoviite.tyyppi === 'suorituspolku' || sisaltoviite.tyyppi === 'osasuorituspolku'"
@@ -79,8 +80,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { SisaltoviiteStore } from '@/stores/SisaltoviiteStore';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpToteutussuunnitelmaTekstikappale from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTekstikappale.vue';
 import EpToteutussuunnitelmaTutkinnonosa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTutkinnonosa.vue';
@@ -92,7 +92,6 @@ import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnite
 import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoOpintoSisalto.vue';
 import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
-import { deepFind } from '@shared/utils/helpers';
 
 @Component({
   components: {

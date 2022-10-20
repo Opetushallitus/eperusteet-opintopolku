@@ -5,7 +5,7 @@
       :borderBottom="false"
       :expandedByDefault="osaalueet.length === 1">
 
-      <h3 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{$kaanna(osaalue.koodi.arvo)}})</span></h3>
+      <h3 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{osaalue.koodi.arvo}})</span></h3>
 
       <div class="mt-2" v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet" :key="'osaamistavoite'+ index + otIndex">
         <div class="osaamistavoiteotsikko">
@@ -65,8 +65,6 @@ import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpA
 import Osaamistavoite from '@shared/components/EpOsaamistavoite/Osaamistavoite.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 import EpValmaTelmaSisalto from '@/components/EpAmmatillinen/EpValmaTelmaSisalto.vue';
-
-import * as _ from 'lodash';
 
 @Component({
   components: {
