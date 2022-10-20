@@ -5,7 +5,7 @@
       :borderBottom="false"
       :expandedByDefault="osaalueet.length === 1">
 
-      <h3 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{$t(osaalue.koodi.arvo)}})</span></h3>
+      <h3 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{osaalue.koodi.arvo}})</span></h3>
 
       <div class="mt-2" v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet" :key="'osaamistavoite'+ index + otIndex">
         <div class="osaamistavoiteotsikko">
