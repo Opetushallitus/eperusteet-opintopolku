@@ -18,7 +18,7 @@
     </ep-form-content>
 
     <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in sisaltoviite.tosa.vapaat" :key="'tosavapaateksti'+index">
-      <label slot="header">{{$t(vapaa.nimi)}}</label>
+      <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
       <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
     </ep-form-content>
 
@@ -28,7 +28,7 @@
         :shadow="true"
         :borderBottom="false"
         :expandedByDefault="sisaltoviite.tosa.toteutukset.length === 1">
-        <div class="font-600" slot="header">{{$t(toteutus.otsikko)}}</div>
+        <div class="font-600" slot="header">{{$kaanna(toteutus.otsikko)}}</div>
 
         <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">
           <div class="font-600 mt-3">{{$t('tutkintonimikkeet-ja-osaamisalat')}}</div>
@@ -53,7 +53,7 @@
 
         <div v-if="toteutus.vapaat && toteutus.vapaat.length > 0">
           <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in toteutus.vapaat" :key="'vapaa'+index">
-            <label slot="header">{{$t(vapaa.nimi)}}</label>
+            <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
             <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
             <hr v-if="index < toteutus.length-1"/>
           </ep-form-content>
@@ -77,10 +77,10 @@
 
           <div v-for="(ammattitaitovaatimus, index) in sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista" :key="'atv'+index">
             <div v-for="(vaatimuskohde, index) in ammattitaitovaatimus.vaatimuksenKohteet" :key="'vkohde'+index">
-              <div class="font-600">{{$t(vaatimuskohde.otsikko)}}</div>
+              <div class="font-600">{{$kaanna(vaatimuskohde.otsikko)}}</div>
               <ul>
                 <li v-for="(vaatimus, index) in vaatimuskohde.vaatimukset" :key="'vaatimus'+index">
-                  {{$t(vaatimus.selite)}}
+                  {{$kaanna(vaatimus.selite)}}
                 </li>
               </ul>
             </div>
@@ -124,7 +124,7 @@
       </ep-form-content>
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.osaAlueet.length > 0" name="osa-alueet">
-        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="filteredOsaAlueet" />
+        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="osaAlueet" />
       </ep-form-content>
 
       <ep-form-content class="col-md-12 mb-5" v-if="pakollisetOsaAlueet && pakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">
@@ -141,7 +141,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Prop, Watch } from 'vue-property-decorator';
+import { Component, Vue, Prop } from 'vue-property-decorator';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
@@ -270,16 +270,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
     return Kielet.getSisaltoKieli.value;
   }
 
-  get filteredOsaAlueet() {
-    return this.filterOsaalueetByKieli();
-  }
-
-  @Watch('kieli')
-  kieliChange() {
-    this.filterOsaalueetByKieli();
-  }
-
-  filterOsaalueetByKieli() {
+  get osaAlueet() {
     if (!_.isEmpty(this.julkaisukielet)) {
       return _.filter(this.perusteenTutkinnonosa.osaAlueet,
         osaalue => !osaalue.kieli || (_.includes(this.julkaisukielet, osaalue.kieli) && _.includes(this.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value))));
@@ -288,7 +279,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   }
 
   osaAlueFiltered(osaamistavoiteFilter) {
-    return _.chain(this.filterOsaalueetByKieli())
+    return _.chain(this.osaAlueet)
       .map(osaAlue => {
         return {
           ...osaAlue,
