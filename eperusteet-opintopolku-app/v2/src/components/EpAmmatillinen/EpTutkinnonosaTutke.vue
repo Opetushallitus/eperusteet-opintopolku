@@ -7,7 +7,6 @@
     <ep-form-content class="col-md-12 mb-5" name="osa-alueet" v-if="tutkinnonosa.osaAlueet && osaAlueet.length > 0">
       <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="osaAlueet" />
     </ep-form-content>
-
   </div>
 </template>
 
@@ -35,8 +34,12 @@ export default class EpTutkinnonosaTutke extends Vue {
   @Prop({ required: true })
   private arviointiasteikot!: any[];
 
+  @Prop({ required: false })
+  private perusteenKielet?: any[];
+
   get osaAlueet() {
-    return _.filter(this.tutkinnonosa.osaAlueet, osaAlue => !osaAlue.kieli || osaAlue.kieli === Kielet.getSisaltoKieli.value);
+    return _.filter(this.tutkinnonosa.osaAlueet,
+      osaAlue => !osaAlue.kieli || (osaAlue.kieli === Kielet.getSisaltoKieli.value && _.includes(this.perusteenKielet, osaAlue.kieli)));
   }
 }
 </script>
