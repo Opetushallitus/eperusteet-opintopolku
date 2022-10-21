@@ -5,7 +5,7 @@
       <h2 class="otsikko mb-4" slot="header">{{ $kaanna(tutkinnonosa.nimi)}}{{laajuusText}}</h2>
 
       <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
-      <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
+      <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" :perusteenKielet="perusteenKielet"/>
 
       <EpOpasKiinnitysLinkki v-if="tutkinnonosaKoodiUri" :koodiUri="tutkinnonosaKoodiUri"/>
 
@@ -15,9 +15,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteenTutkinnonosaStore } from '@/stores/PerusteenTutkinnonosaStore';
-import { Kielet } from '@shared/stores/kieli';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNormaali.vue';
 import EpTutkinnonosaTutke from '@/components/EpAmmatillinen/EpTutkinnonosaTutke.vue';
@@ -69,6 +67,10 @@ export default class RouteTutkinnonosa extends Vue {
 
   get tutkinnonosaKoodiUri() {
     return this.tutkinnonosa?.koodi?.uri;
+  }
+
+  get perusteenKielet() {
+    return this.perusteDataStore.peruste?.kielet;
   }
 
   get tutkinnonosa() {
