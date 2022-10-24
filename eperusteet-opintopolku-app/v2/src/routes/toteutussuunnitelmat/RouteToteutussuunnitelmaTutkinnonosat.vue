@@ -41,11 +41,11 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
   private queryNimi = '';
 
   get julkaistuTutkinnonosaViitteet() {
-    return _.get(this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' }), 'lapset');
+    return _.filter(_.get(this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' }), 'lapset'), viite => viite.tyyppi === 'tutkinnonosa');
   }
 
   get julkaistutTutkinnonOsat() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat');
+    return _.filter(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat'), tosa => tosa.tyyppi === 'tutkinnonosa');
   }
 
   get tutkinnonosat() {
