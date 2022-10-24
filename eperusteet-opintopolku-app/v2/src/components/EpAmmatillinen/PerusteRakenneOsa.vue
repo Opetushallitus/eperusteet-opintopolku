@@ -109,7 +109,7 @@ export default class PerusteRakenneOsa extends Vue {
       return tyyppi.minimi || tyyppi.maksimi || '';
     }
 
-    if (this.rakenneosa.tutkinnonosa.perusteenTutkinnonosaViite?.laajuus) {
+    if (this.rakenneosa.tutkinnonosa?.perusteenTutkinnonosaViite?.laajuus) {
       return this.rakenneosa.tutkinnonosa.perusteenTutkinnonosaViite.laajuus;
     }
 
@@ -117,7 +117,7 @@ export default class PerusteRakenneOsa extends Vue {
       return this.rakenneosa.tutkinnonosa.laajuus;
     }
 
-    if (this.rakenneosa.tutkinnonosa.tosa?.omatutkinnonosa?.laajuus) {
+    if (this.rakenneosa.tutkinnonosa?.tosa?.omatutkinnonosa?.laajuus) {
       return this.rakenneosa.tutkinnonosa.tosa?.omatutkinnonosa?.laajuus;
     }
   }
