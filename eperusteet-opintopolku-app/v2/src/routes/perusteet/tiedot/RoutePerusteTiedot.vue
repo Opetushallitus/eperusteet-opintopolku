@@ -96,71 +96,71 @@
 
       <div v-if="isAmmatillinen">
 
-          <div class="col-md-12 mt-3" v-if="koulutusvienninOhjeet">
-            <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
-              <b-table striped
-                      fixed
-                      responsive
-                      :fields="koulutusvienninohjeFields"
-                      :items="koulutusvienninOhjeet">
-                      <template v-slot:cell(nimi)="{ item }">
-                        <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
-                      </template>
-              </b-table>
-            </ep-form-content>
-          </div>
+        <div class="col-md-12 mt-3" v-if="koulutusvienninOhjeet && koulutusvienninOhjeet.length > 0">
+          <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
+            <b-table striped
+                    fixed
+                    responsive
+                    :fields="koulutusvienninohjeFields"
+                    :items="koulutusvienninOhjeet">
+                    <template v-slot:cell(nimi)="{ item }">
+                      <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
+                    </template>
+            </b-table>
+          </ep-form-content>
+        </div>
 
-          <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
-            <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6">
-              <b-table striped
-                      fixed
-                      responsive
-                      hover
-                      :fields="koulutuskooditFields"
-                      :items="peruste.koulutukset">
-              </b-table>
-            </ep-form-content>
-          </div>
+        <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
+          <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6">
+            <b-table striped
+                    fixed
+                    responsive
+                    hover
+                    :fields="koulutuskooditFields"
+                    :items="peruste.koulutukset">
+            </b-table>
+          </ep-form-content>
+        </div>
 
-          <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-            <ep-form-content name="osaamisalat" headerType="h3" headerClass="h6">
-              <b-table striped
-                      fixed
-                      responsive
-                      hover
-                      :fields="osaamisalatFields"
-                      :items="peruste.osaamisalat">
-              </b-table>
-            </ep-form-content>
-          </div>
+        <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
+          <ep-form-content name="osaamisalat" headerType="h3" headerClass="h6">
+            <b-table striped
+                    fixed
+                    responsive
+                    hover
+                    :fields="osaamisalatFields"
+                    :items="peruste.osaamisalat">
+            </b-table>
+          </ep-form-content>
+        </div>
 
-          <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
-            <ep-form-content name="tutkintonimikkeet" headerType="h3" headerClass="h6">
-              <b-table striped
-                      fixed
-                      responsive
-                      hover
-                      :fields="tutkintonimikkeetFields"
-                      :items="peruste.tutkintonimikkeet">
-              </b-table>
-            </ep-form-content>
-          </div>
+        <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
+          <ep-form-content name="tutkintonimikkeet" headerType="h3" headerClass="h6">
+            <b-table striped
+                    fixed
+                    responsive
+                    hover
+                    :fields="tutkintonimikkeetFields"
+                    :items="peruste.tutkintonimikkeet">
+            </b-table>
+          </ep-form-content>
+        </div>
 
-          <div class="col-md-12 mt-3" v-if="peruste.kvliite && peruste.kvliite.suorittaneenOsaaminen">
-            <ep-form-content name="suorittaneen-osaaminen" headerType="h3" headerClass="h6">
-              <ep-content-viewer :value="$kaanna(peruste.kvliite.suorittaneenOsaaminen)"
-                  :termit="termit"
-                  :kuvat="kuvat" />
-            </ep-form-content>
-          </div>
+        <div class="col-md-12 mt-3" v-if="peruste.suorittaneenOsaaminen">
+          <ep-form-content name="suorittaneen-osaaminen" headerType="h3" headerClass="h6">
+            <ep-content-viewer :value="$kaanna(peruste.suorittaneenOsaaminen)"
+                :termit="termit"
+                :kuvat="kuvat" />
+          </ep-form-content>
+        </div>
 
-          <div class="col-md-12 mt-3" v-if="peruste.kvliite && peruste.kvliite.tyotehtavatJoissaVoiToimia">
-            <ep-form-content name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6">
-              <ep-content-viewer :value="$kaanna(peruste.kvliite.tyotehtavatJoissaVoiToimia)"
-                  :termit="termit"
-                  :kuvat="kuvat" />
-            </ep-form-content>
-          </div>
+        <div class="col-md-12 mt-3" v-if="peruste.tyotehtavatJoissaVoiToimia">
+          <ep-form-content name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6">
+            <ep-content-viewer :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia)"
+                :termit="termit"
+                :kuvat="kuvat" />
+          </ep-form-content>
+        </div>
 
         <div class="col-md-12" v-if="osaamisalaKuvaukset && osaamisalaKuvaukset.length > 0">
           <ep-form-content name="osaamisalojen-kuvaukset" headerType="h3" headerClass="h6">
@@ -197,14 +197,10 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
-
-import { baseURL, LiitetiedostotParam, DokumentitParam } from '@shared/api/eperusteet';
-import { isAmmatillinen, isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettu, perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
+import { baseURL, LiitetiedostotParam } from '@shared/api/eperusteet';
+import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettu } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
-import { ENV_PREFIX } from '@shared/utils/defaults';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { uusiJulkinenToteutus } from '@/utils/peruste';
-
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
