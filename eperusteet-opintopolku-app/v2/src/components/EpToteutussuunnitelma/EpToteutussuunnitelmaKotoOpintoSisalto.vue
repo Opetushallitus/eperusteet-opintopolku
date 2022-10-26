@@ -14,13 +14,14 @@
           </template>
       </EpKotoTaitotasot>
 
-      <hr class="my-4"/>
-      <h2 class="mb-4">{{$t('laaja-alainen-osaaminen')}}</h2>
-
-      <div v-for="(lao, index) in laajaAlaisetOsaamiset" :key="'lao' + index" :class="{'mt-4': index > 0}">
-        <h3>{{$kaanna(perusteenLaotByUri[lao.koodiUri].koodi.nimi)}}</h3>
-        <ep-content-viewer :value="$kaanna(perusteenLaotByUri[lao.koodiUri].kuvaus)" :kuvat="kuvat" />
-        <ep-content-viewer :value="$kaanna(lao.teksti)" :kuvat="kuvat" />
+      <div v-if="laajaAlaisetOsaamiset && laajaAlaisetOsaamiset.length > 0">
+        <hr class="my-4"/>
+        <h2 class="mb-4">{{$t('laaja-alainen-osaaminen')}}</h2>
+        <div v-for="(lao, index) in laajaAlaisetOsaamiset" :key="'lao' + index" :class="{'mt-4': index > 0}">
+          <h3>{{ $kaanna(perusteenLaotByUri[lao.koodiUri].koodi.nimi) }}</h3>
+          <ep-content-viewer :value="$kaanna(perusteenLaotByUri[lao.koodiUri].kuvaus)" :kuvat="kuvat" />
+          <ep-content-viewer :value="$kaanna(lao.teksti)" :kuvat="kuvat" />
+        </div>
       </div>
 
       <slot name="previous-next-navigation" />
@@ -30,7 +31,7 @@
 <script lang="ts">
 import { SisaltoViiteExportDto } from '@shared/api/amosaa';
 import * as _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
+import { Prop, Component, Vue } from 'vue-property-decorator';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpKotoTaitotasot from '@shared/components/EpKotoTaitotasot/EpKotoTaitotasot.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
