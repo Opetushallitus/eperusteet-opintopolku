@@ -78,7 +78,7 @@ export default class RouteToteutussuunnitelmaSuorituspolut extends Vue {
       sortable: true,
       label: this.$t('laajuus') as string,
       formatter: (value: any, key: string, item: any) => {
-        if (item.tyyppi === 'osasuorituspolku') {
+        if (item.tyyppi === 'osasuorituspolku' && item.suorituspolku.osasuorituspolkuLaajuus) {
           return item.suorituspolku.osasuorituspolkuLaajuus + ' ' + this.$t('osaamispiste');
         }
         else if (item.tyyppi === 'suorituspolku' && item.perusteenLaajuus) {
