@@ -78,15 +78,14 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   private lisaaTutkinnonOsat(osat: any[]) {
     return _.map(osat, osa => {
       const perusteenTutkinnonosaViite = this.perusteidenTutkinnonosienViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])];
+      const tutkinnonosa = this.tutkinnonosaViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])];
       return {
         ...osa,
-        ...(osa['_tutkinnonOsaViite'] && { tutkinnonosa: this.tutkinnonosaViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])] }),
-        ...(!!perusteenTutkinnonosaViite && { tutkinnonosa: {
-          ...osa.tutkinnonosa,
-          perusteenTutkinnonosaViite: perusteenTutkinnonosaViite,
-          perusteenTutkinnonosa: this.perusteidenTutkinnonOsatById[_.toNumber(_.get(perusteenTutkinnonosaViite, '_tutkinnonOsa'))],
+        tutkinnonosa: {
+          ...(!!tutkinnonosa && tutkinnonosa),
+          ...(!!perusteenTutkinnonosaViite && { perusteenTutkinnonosaViite: perusteenTutkinnonosaViite }),
+          ...(!!perusteenTutkinnonosaViite && { perusteenTutkinnonosa: this.perusteidenTutkinnonOsatById[_.toNumber(_.get(perusteenTutkinnonosaViite, '_tutkinnonOsa'))] }),
         },
-        }),
         osat: this.lisaaTutkinnonOsat(osa.osat),
       };
     });
