@@ -15,6 +15,7 @@ import { DokumenttiDtoTilaEnum,
 import mime from 'mime-types';
 import { deepFilter, deepFind } from '@shared/utils/helpers';
 import { isAmmatillinenKoulutustyyppi } from '@shared/utils/perusteet';
+import { PerusteTyyppi } from '@/utils/peruste';
 
 @Store
 export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
@@ -78,8 +79,10 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
           .value(),
       ]);
 
-    this.perusteidenTutkinnonOsat = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId, this.esikatselu)).data)));
-    this.perusteidenTutkinnonOsienViitteet = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId, this.esikatselu)).data)));
+    const esikatselu = (this.perusteKaikki?.tyyppi as any) === PerusteTyyppi.AMOSAA_YHTEINEN ? true : this.esikatselu;
+
+    this.perusteidenTutkinnonOsat = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId, esikatselu)).data)));
+    this.perusteidenTutkinnonOsienViitteet = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId, esikatselu)).data)));
   }
 
   @Getter(state => {

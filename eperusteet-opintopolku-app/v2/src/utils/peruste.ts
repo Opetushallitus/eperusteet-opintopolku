@@ -22,3 +22,10 @@ export function uusiJulkinenToteutus(hasToteutus: HasKoulutustyyppiToteutus) {
         || hasToteutus.koulutustyyppi === Koulutustyyppi.tutkintoonvalmentava
         || koulutustyyppiTheme(hasToteutus.koulutustyyppi as string) === 'ammatillinen');
 }
+
+export enum PerusteTyyppi {
+  NORMAALI = 'normaali',
+  OPAS = 'opas',
+  AMOSAA_YHTEINEN = 'amosaayhteinen',
+  POHJA = 'pohja',
+}
