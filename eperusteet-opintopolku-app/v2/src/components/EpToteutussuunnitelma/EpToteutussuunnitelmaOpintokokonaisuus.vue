@@ -11,7 +11,8 @@
       </b-col>
       <b-col md="6">
         <ep-form-content name="laajuus" headerType="h4">
-          <span>{{ opintokokonaisuus.laajuus }} {{ laajuusYksikkoLyhenne }}</span>
+          <span v-if="opintokokonaisuus.laajuus && laajuusYksikkoLyhenne">{{ opintokokonaisuus.laajuus }} {{ laajuusYksikkoLyhenne }}</span>
+          <span v-else>-</span>
         </ep-form-content>
       </b-col>
     </b-row>
