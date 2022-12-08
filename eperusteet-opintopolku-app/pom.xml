@@ -26,78 +26,14 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.6</version>
-                <configuration>
-                    <workingDirectory>yo</workingDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>install node and yarn</id>
-                        <goals>
-                            <goal>install-node-and-yarn</goal>
-                        </goals>
-                        <configuration>
-                            <nodeVersion>v10.15.0</nodeVersion>
-                            <yarnVersion>v1.19.1</yarnVersion>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>yarn install</id>
-                        <goals>
-                            <goal>yarn</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>install</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>grunt build</id>
-                        <goals>
-                            <goal>grunt</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>build --no-color</arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>yarn copy</id>
-                        <goals>
-                            <goal>yarn</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>copy</arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.6</version>
                 <configuration>
                     <webResources>
                         <resource>
-                            <directory>yo/dist</directory>
+                            <directory>v2/dist</directory>
                         </resource>
                     </webResources>
-                </configuration>
-            </plugin>
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.0.0</version>
-                <configuration>
-                    <filesets>
-                        <fileset>
-                            <directory>yo/dist</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>yo/node_modules</directory>
-                        </fileset>
-                        <fileset>
-                            <directory>yo/.tmp</directory>
-                        </fileset>
-                    </filesets>
                 </configuration>
             </plugin>
         </plugins>

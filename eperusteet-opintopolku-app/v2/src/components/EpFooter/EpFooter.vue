@@ -25,9 +25,6 @@
         <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
           <a :href="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</a>
         </div>
-        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
-          <a :href="$kaanna(linkit.vanha_kayttoliittyma)">{{ $t('vanha_kayttoliittyma') }}</a>
-        </div>
       </div>
     </div>
   </footer>
@@ -85,10 +82,6 @@ export default class EpFooter extends Vue {
       tietosuojaseloste: {
         fi: 'https://opintopolku.fi/wp/tietosuojaseloste',
         sv: 'https://studieinfo.fi/wp/dataskyddsbeskrivning',
-      },
-      vanha_kayttoliittyma: {
-        fi: buildVanhaUiUrl('fi'),
-        sv: buildVanhaUiUrl('sv'),
       },
     };
   }
