@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteOpetussuunnitelmaTekstikappale from './RouteOpetussuunnitelmaTekstikappale.vue';
 import { mocks, stubs } from '@shared/utils/jestutils';
-import { opetussuunnitelmaDataStoreMock, opetussuunnitelmaTekstikappaleStoreMock } from '@/storeMocks';
+import { opetussuunnitelmaDataStoreMock } from '@/storeMocks';
 import { Kielet } from '@shared/stores/kieli';
 import { Kieli } from '@shared/tyypit';
 import VueI18n from 'vue-i18n';

@@ -271,10 +271,6 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   }
 
   get osaAlueet() {
-    if (!_.isEmpty(this.julkaisukielet)) {
-      return _.filter(this.perusteenTutkinnonosa.osaAlueet,
-        osaalue => !osaalue.kieli || (_.includes(this.julkaisukielet, osaalue.kieli) && _.includes(this.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value))));
-    }
     return this.perusteenTutkinnonosa.osaAlueet;
   }
 

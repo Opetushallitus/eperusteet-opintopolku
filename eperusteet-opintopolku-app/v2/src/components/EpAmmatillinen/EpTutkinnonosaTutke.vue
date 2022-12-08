@@ -38,8 +38,7 @@ export default class EpTutkinnonosaTutke extends Vue {
   private perusteenKielet?: any[];
 
   get osaAlueet() {
-    return _.filter(this.tutkinnonosa.osaAlueet,
-      osaAlue => !osaAlue.kielikoodi || (_.toLower(osaAlue.kielikoodi.arvo) === Kielet.getSisaltoKieli.value && _.includes(this.perusteenKielet, _.toLower(osaAlue.kielikoodi.arvo))));
+    return this.tutkinnonosa.osaAlueet;
   }
 }
 </script>
