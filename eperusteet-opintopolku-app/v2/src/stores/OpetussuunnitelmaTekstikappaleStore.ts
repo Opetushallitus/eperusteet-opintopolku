@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Store, State } from '@shared/stores/store';
-import { TekstiKappaleDto, Puu, PerusteTekstiKappaleViiteDto, Lops2019Perusteet, OpetussuunnitelmanSisalto, TekstiKappaleViiteDto } from '@shared/api/ylops';
+import { TekstiKappaleDto, Puu, OpetussuunnitelmanSisalto, TekstiKappaleViiteDto } from '@shared/api/ylops';
 import { Matala } from '@shared/api/eperusteet';
 import { createLogger } from '@shared/utils/logger';
 
@@ -16,7 +16,7 @@ export class OpetussuunnitelmaTekstikappaleStore {
   @State() public tekstiKappaleOriginals: TekstiKappaleDto[] | null = null;
   @State() public tekstiKappaleOriginalViitteetObj: object | null = null;
   @State() public tekstiKappale: TekstiKappaleDto | null = null;
-  @State() public perusteTekstikappaleViite: PerusteTekstiKappaleViiteDto | TekstiKappaleViiteDto | null = null;
+  @State() public perusteTekstikappaleViite: TekstiKappaleViiteDto | null = null;
   @State() public tekstiKappaleAllLoaded: boolean = false;
   @State() public opstoteutus: string | null = null;
 
@@ -68,14 +68,7 @@ export class OpetussuunnitelmaTekstikappaleStore {
     this.perusteTekstikappaleViite = null;
     if (this.tekstiKappaleViite && this.tekstiKappaleViite.perusteTekstikappaleId) {
       try {
-        if (this.opstoteutus === 'lukio' || this.opstoteutus === 'lukiokoulutus') {
-          this.perusteTekstikappaleViite = (await Lops2019Perusteet
-            .getAllLops2019PerusteTekstikappale(this.opsId,
-              this.tekstiKappaleViite.perusteTekstikappaleId)).data as PerusteTekstiKappaleViiteDto;
-        }
-        else {
-          this.perusteTekstikappaleViite = (await OpetussuunnitelmanSisalto.getPerusteTekstikappale(this.opsId, this.tekstiKappaleViiteId)).data;
-        }
+        this.perusteTekstikappaleViite = (await OpetussuunnitelmanSisalto.getPerusteTekstikappale(this.opsId, this.tekstiKappaleViiteId)).data;
       }
       catch (err) {
         logger.error(err);
