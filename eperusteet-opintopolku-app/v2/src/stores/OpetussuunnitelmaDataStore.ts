@@ -42,6 +42,8 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelma: OpetussuunnitelmaExportDto | null = null;
   @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
+  @State() public esikatselu: boolean | undefined = undefined;
+  @State() public revision: number | undefined = undefined;
   @State() public navigation: YlopsNavigationNodeDto | null = null;
   @State() public dokumentit: any = {};
   @State() public currentRoute: Location | null = null;
@@ -55,14 +57,16 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public kuvat: object[] | null = null;
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
 
-  public static async create(opetussuunnitelmaId: number, esikatselu = false) {
-    const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId, esikatselu);
+  public static async create(opetussuunnitelmaId: number, revision: number | undefined = undefined) {
+    const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId, revision);
     await result.init();
     return result;
   }
 
-  constructor(opetussuunnitelmaId: number, private esikatselu = false) {
+  constructor(opetussuunnitelmaId: number, revision) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
+    this.esikatselu = revision === '0' ? true : undefined;
+    this.revision = _.toNumber(revision) > 0 ? revision : undefined;
   }
 
   async init() {
@@ -220,8 +224,9 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     else {
       const tiedot = buildTiedot('opetussuunnitelmaTiedot', {
         opetussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
+        revision: state.revision,
       });
-      return buildNavigation(state.navigation, tiedot, true);
+      return buildNavigation(state.navigation, tiedot, true, state.revision);
     }
   })
   public readonly sidenav!: NavigationNode | null;

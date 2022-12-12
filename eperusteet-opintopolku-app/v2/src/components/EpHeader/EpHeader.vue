@@ -34,7 +34,7 @@
       </div>
     </div>
   </div>
-  <div id="main" class="container-lg sisalto">
+  <div id="main" class="container-lg sisalto" v-if="$slots['default']">
     <slot></slot>
   </div>
 </div>

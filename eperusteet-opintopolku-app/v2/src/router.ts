@@ -347,7 +347,7 @@ export const router = new Router({
           },
         },
       }, {
-        path: 'toteutussuunnitelma/:toteutussuunnitelmaId/:koulutustyyppi',
+        path: 'toteutussuunnitelma/:toteutussuunnitelmaId/:revision?/:koulutustyyppi',
         name: 'toteutussuunnitelma',
         component: RouteOpetussuunnitelma,
         redirect(to) {
@@ -363,7 +363,7 @@ export const router = new Router({
                 default: {
                   opetussuunnitelmaDataStore: await ToteutussuunnitelmaDataStore.create(
                     _.parseInt(route.params.toteutussuunnitelmaId),
-                    _.has(route.query, 'esikatselu'),
+                    route.params.revision,
                   ),
                 },
               };
@@ -388,7 +388,100 @@ export const router = new Router({
           name: 'toteutussuunnitelmaSuorituspolut',
         }],
       }, {
-        path: ':koulutustyyppi/:perusteId',
+        path: 'ops/:opetussuunnitelmaId/:revision?/:koulutustyyppi*',
+        name: 'ops',
+        component: RouteOpetussuunnitelma,
+        redirect(to) {
+          return {
+            name: 'opetussuunnitelma',
+          };
+        },
+      }, {
+        path: 'opetussuunnitelma/:opetussuunnitelmaId/:revision?/:koulutustyyppi',
+        name: 'opetussuunnitelma',
+        component: RouteOpetussuunnitelma,
+        redirect(to) {
+          return {
+            name: 'opetussuunnitelmaTiedot',
+          };
+        },
+        meta: {
+          resolve: {
+            cacheBy: ['opetussuunnitelmaId'],
+            async props(route) {
+              return {
+                default: {
+                  opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
+                    _.parseInt(route.params.opetussuunnitelmaId),
+                    route.params.revision,
+                  ),
+                },
+              };
+            },
+          },
+        },
+        children: [{
+          path: 'tiedot',
+          component: RouteOpetussuunnitelmaTiedot,
+          name: 'opetussuunnitelmaTiedot',
+        }, {
+          path: 'tekstikappale/:viiteId',
+          component: RouteOpetussuunnitelmaTekstikappale,
+          name: 'opetussuunnitelmaTekstikappale',
+        }, {
+          path: 'oppiaine',
+          component: RouteOpetussuunnitelmaOppiaineet,
+          name: 'lops2019OpetussuunnitelmaOppiaineet',
+        }, {
+          path: 'oppiaine/:oppiaineId',
+          component: RouteOpetussuunnitelmaOppiaine,
+          name: 'lops2019OpetussuunnitelmaOppiaine',
+        }, {
+          path: 'poppiaine/:oppiaineId',
+          component: RouteOpetussuunnitelmaPoppiaine,
+          name: 'lops2019OpetussuunnitelmaPoppiaine',
+        }, {
+          path: 'oppiaine/:oppiaineId/moduuli/:moduuliId',
+          component: RouteOpetussuunnitelmaModuuli,
+          name: 'lops2019OpetussuunnitelmaModuuli',
+        }, {
+          path: 'opintojakso/:opintojaksoId',
+          component: RouteOpetussuunnitelmaOpintojakso,
+          name: 'lops2019OpetussuunnitelmaOpintojakso',
+        }, {
+          path: 'lukiooppiaine/:oppiaineId',
+          component: RouteOpetussuunnitelmaOppiaine2015,
+          name: 'lopsOpetussuunnitelmaOppiaine',
+          children: [{
+            path: 'kurssi/:kurssiId',
+            component: RouteOpetussuunnitelmaKurssi,
+            name: 'lopsOpetussuunnitelmaKurssi',
+          }],
+        }, {
+          path: 'vuosiluokkakokonaisuus/:vlkId',
+          component: RoutePerusopetusVuosiluokkakokonaisuus,
+          name: 'opetussuunnitelmanvuosiluokkakokonaisuus',
+          children: [{
+            path: 'oppiaine/:oppiaineId',
+            component: RouteOpetussuunnitelmaPerusopetusOppiaine,
+            name: 'opetussuunnitelmaperusopetusvuosiluokanoppiaine',
+          }],
+        }, {
+          path: 'oppiaineet',
+          component: RouteOpetussuunnitelmaPerusopetusOppiaineet,
+          name: 'opetussuunnitelmaperusopetusoppiaineet',
+        }, {
+          path: 'valinnaisetoppiaineet',
+          component: RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet,
+          name: 'opetussuunnitelmaperusopetusvalinnaisetoppiaineet',
+          alias: 'valinnaisetoppiaineet/:vlkId',
+        }, {
+          path: 'oppiaineet/:oppiaineId',
+          component: RouteOpetussuunnitelmaPerusopetusOppiaine,
+          name: 'opetussuunnitelmaperusopetusoppiaine',
+        }],
+      }, {
+        path: ':koulutustyyppi/:perusteId/:revision?',
         name: 'peruste',
         component: RoutePeruste,
         redirect(to) {
@@ -402,7 +495,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId), _.has(route.query, 'esikatselu')),
+                  perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId), route.params.revision),
                 },
               };
             },
@@ -695,99 +788,6 @@ export const router = new Router({
               },
             },
           },
-        }],
-      }, {
-        path: 'ops/:opetussuunnitelmaId/:koulutustyyppi*',
-        name: 'ops',
-        component: RouteOpetussuunnitelma,
-        redirect(to) {
-          return {
-            name: 'opetussuunnitelma',
-          };
-        },
-      }, {
-        path: 'opetussuunnitelma/:opetussuunnitelmaId/:koulutustyyppi',
-        name: 'opetussuunnitelma',
-        component: RouteOpetussuunnitelma,
-        redirect(to) {
-          return {
-            name: 'opetussuunnitelmaTiedot',
-          };
-        },
-        meta: {
-          resolve: {
-            cacheBy: ['opetussuunnitelmaId'],
-            async props(route) {
-              return {
-                default: {
-                  opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
-                    _.has(route.query, 'esikatselu'),
-                  ),
-                },
-              };
-            },
-          },
-        },
-        children: [{
-          path: 'tiedot',
-          component: RouteOpetussuunnitelmaTiedot,
-          name: 'opetussuunnitelmaTiedot',
-        }, {
-          path: 'tekstikappale/:viiteId',
-          component: RouteOpetussuunnitelmaTekstikappale,
-          name: 'opetussuunnitelmaTekstikappale',
-        }, {
-          path: 'oppiaine',
-          component: RouteOpetussuunnitelmaOppiaineet,
-          name: 'lops2019OpetussuunnitelmaOppiaineet',
-        }, {
-          path: 'oppiaine/:oppiaineId',
-          component: RouteOpetussuunnitelmaOppiaine,
-          name: 'lops2019OpetussuunnitelmaOppiaine',
-        }, {
-          path: 'poppiaine/:oppiaineId',
-          component: RouteOpetussuunnitelmaPoppiaine,
-          name: 'lops2019OpetussuunnitelmaPoppiaine',
-        }, {
-          path: 'oppiaine/:oppiaineId/moduuli/:moduuliId',
-          component: RouteOpetussuunnitelmaModuuli,
-          name: 'lops2019OpetussuunnitelmaModuuli',
-        }, {
-          path: 'opintojakso/:opintojaksoId',
-          component: RouteOpetussuunnitelmaOpintojakso,
-          name: 'lops2019OpetussuunnitelmaOpintojakso',
-        }, {
-          path: 'lukiooppiaine/:oppiaineId',
-          component: RouteOpetussuunnitelmaOppiaine2015,
-          name: 'lopsOpetussuunnitelmaOppiaine',
-          children: [{
-            path: 'kurssi/:kurssiId',
-            component: RouteOpetussuunnitelmaKurssi,
-            name: 'lopsOpetussuunnitelmaKurssi',
-          }],
-        }, {
-          path: 'vuosiluokkakokonaisuus/:vlkId',
-          component: RoutePerusopetusVuosiluokkakokonaisuus,
-          name: 'opetussuunnitelmanvuosiluokkakokonaisuus',
-          children: [{
-            path: 'oppiaine/:oppiaineId',
-            component: RouteOpetussuunnitelmaPerusopetusOppiaine,
-            name: 'opetussuunnitelmaperusopetusvuosiluokanoppiaine',
-          }],
-        }, {
-          path: 'oppiaineet',
-          component: RouteOpetussuunnitelmaPerusopetusOppiaineet,
-          name: 'opetussuunnitelmaperusopetusoppiaineet',
-        }, {
-          path: 'valinnaisetoppiaineet',
-          component: RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet,
-          name: 'opetussuunnitelmaperusopetusvalinnaisetoppiaineet',
-          alias: 'valinnaisetoppiaineet/:vlkId',
-        }, {
-          path: 'oppiaineet/:oppiaineId',
-          component: RouteOpetussuunnitelmaPerusopetusOppiaine,
-          name: 'opetussuunnitelmaperusopetusoppiaine',
         }],
       },
     ],

@@ -1,6 +1,6 @@
 <template>
 <div class="peruste">
-  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku">
+  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku" v-sticky sticky-side="top">
     <template slot="header" v-if="peruste.tyyppi ==='opas'">
       {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
     </template>
@@ -13,8 +13,14 @@
       </div>
     </template>
   </ep-header>
-  <div class="container">
+
+  <div id="scroll-anchor">
+    <EpEsikatseluNotifikaatio/>
+  </div>
+
+  <div class="container mt-4">
     <div class="lower">
+
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar>
 
@@ -67,10 +73,6 @@
       </ep-sidebar>
     </div>
   </div>
-
-  <EpEsikatseluNotifikaatio v-if="perusteEsikatselussa">
-    <div>{{$t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu')}}</div>
-  </EpEsikatseluNotifikaatio>
 </div>
 </template>
 
@@ -91,6 +93,7 @@ import EpPerusteHaku from '@/components/EpPerusteHaku.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
+import Sticky from 'vue-sticky-directive';
 
 @Component({
   components: {
@@ -103,6 +106,9 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
     EpEsikatseluNotifikaatio,
     EpPerusteHaku,
     EpSearch,
+  },
+  directives: {
+    Sticky,
   },
   watch: {
     $route: {
