@@ -10,7 +10,12 @@
       </div>
     </template>
   </ep-header>
-  <div class="container">
+
+  <div id="scroll-anchor">
+    <EpEsikatseluNotifikaatio/>
+  </div>
+
+  <div class="container mt-4">
     <div class="lower">
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar>
@@ -27,10 +32,6 @@
       </ep-sidebar>
     </div>
   </div>
-
-  <EpEsikatseluNotifikaatio v-if="opetussuunnitelmaEsikatselussa">
-    <div>{{$t('olet-esikatselutilassa-suunnitelmaa-ei-ole-viela-julkaistu')}}</div>
-  </EpEsikatseluNotifikaatio>
 </div>
 </template>
 

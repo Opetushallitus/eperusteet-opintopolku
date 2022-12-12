@@ -20,6 +20,8 @@ import { PerusteTyyppi } from '@/utils/peruste';
 @Store
 export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelmaId: number;
+  @State() public esikatselu: boolean | undefined = undefined;
+  @State() public revision: number | undefined = undefined;
   @State() public navigation: NavigationNodeDto | null = null;
   @State() public opetussuunnitelma: OpetussuunnitelmaKaikkiDto | null = null;
   @State() public koulutustoimija: KoulutustoimijaJulkinenDto | null = null;
@@ -35,12 +37,14 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public perusteidenTutkinnonOsat: TutkinnonOsaKaikkiDto[] | null = null;
   @State() public perusteidenTutkinnonOsienViitteet: TutkinnonOsaViiteSuppeaDto[] | null = null;
 
-  constructor(opetussuunnitelmaId: number, private esikatselu = false) {
+  constructor(opetussuunnitelmaId: number, revision) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
+    this.esikatselu = revision === '0' ? true : undefined;
+    this.revision = _.toNumber(revision) > 0 ? revision : undefined;
   }
 
-  public static async create(opetussuunnitelmaId: number, esikatselu = false) {
-    const result = new ToteutussuunnitelmaDataStore(opetussuunnitelmaId, esikatselu);
+  public static async create(opetussuunnitelmaId: number, revision: number | undefined = undefined) {
+    const result = new ToteutussuunnitelmaDataStore(opetussuunnitelmaId, revision);
     await result.init();
     return result;
   }
