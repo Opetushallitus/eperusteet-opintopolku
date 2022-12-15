@@ -66,7 +66,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   constructor(opetussuunnitelmaId: number, revision) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
     this.esikatselu = revision === '0' ? true : undefined;
-    this.revision = _.toNumber(revision) > 0 ? revision : undefined;
+    this.revision = revision;
   }
 
   async init() {
