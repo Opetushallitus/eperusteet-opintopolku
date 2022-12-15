@@ -40,7 +40,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   constructor(opetussuunnitelmaId: number, revision) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
     this.esikatselu = revision === '0' ? true : undefined;
-    this.revision = _.toNumber(revision) > 0 ? revision : undefined;
+    this.revision = revision;
   }
 
   public static async create(opetussuunnitelmaId: number, revision: number | undefined = undefined) {
@@ -161,8 +161,9 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     else {
       const tiedot = buildTiedot('toteutussuunnitelmaTiedot', {
         toteutussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
+        revision: state.revision,
       });
-      return buildNavigation(state.navigation, tiedot, true);
+      return buildNavigation(state.navigation, tiedot, true, state.revision);
     }
   })
   public readonly sidenav!: NavigationNode | null;

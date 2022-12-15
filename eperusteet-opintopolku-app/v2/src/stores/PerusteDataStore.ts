@@ -59,7 +59,7 @@ export class PerusteDataStore {
   constructor(perusteId: number, revision?) {
     this.perusteId = perusteId;
     this.esikatselu = revision === '0' ? true : undefined;
-    this.revision = _.toNumber(revision) > 0 ? revision : undefined;
+    this.revision = revision;
   }
 
   private async init() {
@@ -135,7 +135,7 @@ export class PerusteDataStore {
     else {
       const tiedot = buildTiedot('perusteTiedot', {
         perusteId: _.toString(state.perusteId),
-        revision: state.revision,
+        ...(state.revision && { revision: state.revision }),
       });
       return buildNavigation(state.navigation, tiedot, false, state.revision);
     }
