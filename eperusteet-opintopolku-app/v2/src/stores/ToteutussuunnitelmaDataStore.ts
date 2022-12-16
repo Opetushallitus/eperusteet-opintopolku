@@ -161,7 +161,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     else {
       const tiedot = buildTiedot('toteutussuunnitelmaTiedot', {
         toteutussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
-        revision: state.revision,
+        ...(state.revision && { revision: state.revision }),
       });
       return buildNavigation(state.navigation, tiedot, true, state.revision);
     }
