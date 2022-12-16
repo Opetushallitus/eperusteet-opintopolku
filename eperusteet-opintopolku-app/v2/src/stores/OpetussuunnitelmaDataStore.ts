@@ -224,7 +224,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     else {
       const tiedot = buildTiedot('opetussuunnitelmaTiedot', {
         opetussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
-        revision: state.revision,
+        ...(state.revision && { revision: state.revision }),
       });
       return buildNavigation(state.navigation, tiedot, true, state.revision);
     }
