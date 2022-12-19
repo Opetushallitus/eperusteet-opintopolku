@@ -64,7 +64,7 @@ export default class EpPerusteRakenne extends Vue {
         };
       })
       .filter(osa => {
-        let nimi = osa.tutkinnonosa?.tutkinnonOsa?.nimi || osa.tutkinnonosa?.nimi || osa.nimi;
+        let nimi = osa.tutkinnonosa?.tutkinnonOsa?.nimi || osa.tutkinnonosa?.nimi || osa.nimi || osa.tutkinnonosa?.perusteenTutkinnonosa?.nimi;
         return _.size(osa.osat) > 0 || (nimi && Kielet.search(this.query, nimi));
       })
       .map(osa => {
