@@ -32,7 +32,7 @@
     <b-row>
       <b-col><h3 class="mt-3 mb-4">{{ $t('opetuksen-tavoitteet') }}</h3></b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="opintokokonaisuus.tavoitteidenKuvaus">
       <b-col>
         <h4>{{ $t('tavoitteiden-kuvaus') }}</h4>
         <ep-content-viewer :value="$kaanna(opintokokonaisuus.tavoitteidenKuvaus)" :kuvat="kuvat"/>
