@@ -200,6 +200,7 @@ export default class EpNavigation extends Vue {
       await router.replace({
         name: current.name,
         params: {
+          ...current.params,
           lang: kieli || this.$i18n.fallbackLocale,
         },
       } as RawLocation);
