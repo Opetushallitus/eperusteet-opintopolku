@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import Sticky from 'vue-sticky-directive';
 import * as _ from 'lodash';
 
@@ -43,6 +43,11 @@ export default class EpEsikatseluNotifikaatio extends Vue {
     return this.$route.params?.revision;
   }
 
+  @Watch('versio')
+  async revisionChange() {
+    this.$router.go(0);
+  }
+
   get notifikaatio() {
     if (this.isEsikatselu) {
       if (this.$route.params?.perusteId) {
@@ -68,12 +73,6 @@ export default class EpEsikatseluNotifikaatio extends Vue {
     delete route.params.revision;
     await this.$router.push({ name: route.name!, params: route.params });
     this.$router.go(0);
-  }
-
-  get test() {
-    let route = _.assign({}, this.$route);
-    delete route.params.revision;
-    return route;
   }
 }
 </script>

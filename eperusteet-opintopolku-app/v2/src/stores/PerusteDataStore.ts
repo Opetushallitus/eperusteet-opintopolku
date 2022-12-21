@@ -210,7 +210,7 @@ export class PerusteDataStore {
   public readonly current!: NavigationNode | null;
 
   public async getDokumentit() {
-    if (!this.peruste) {
+    if (!this.peruste || this.revision) {
       return;
     }
 
