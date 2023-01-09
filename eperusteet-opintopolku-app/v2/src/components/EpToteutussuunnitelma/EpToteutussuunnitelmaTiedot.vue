@@ -8,7 +8,7 @@
           <span>{{$kaanna(toteutussuunnitelma.nimi)}}</span>
         </ep-form-content>
 
-        <ep-form-content name="tutkinnon-suorittaneen-osaaminen" headerType="h3" headerClass="h6">
+        <ep-form-content :name="kuvausOtsikko" headerType="h3" headerClass="h6">
           <ep-content-viewer :value="$kaanna(toteutussuunnitelma.kuvaus)"
                             :kuvat="kuvat" />
         </ep-form-content>
@@ -115,6 +115,10 @@ export default class EpToteutussuunnitelmaTiedot extends Vue {
 
   get jarjestajaTekstit() {
     return this.koulutuksenjarjestajaTermiTekstit[this.tyopajatoimija ? 'tyopaja' : 'koulutuksenjarjestaja'];
+  }
+
+  get kuvausOtsikko() {
+    return this.store?.isAmmatillinen ? 'tutkinnon-suorittaneen-osaaminen' : 'opetussuunnitelma-tiivistelma';
   }
 
   get koulutuksenjarjestajaTermiTekstit() {
