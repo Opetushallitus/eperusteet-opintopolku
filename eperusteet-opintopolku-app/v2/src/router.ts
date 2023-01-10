@@ -3,9 +3,8 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import VueScrollTo from 'vue-scrollto';
 import VueMeta from 'vue-meta';
-
 import Root from '@/routes/Root.vue';
-import Virhe from '@/routes/Virhe.vue';
+import EpErrorPage from '@shared/components/EpErrorPage/EpErrorPage.vue';
 import Home from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue';
@@ -17,10 +16,8 @@ import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhje
 import RouteAmmatillinenTyopajat from '@/routes/ammatillinen/RouteAmmatillinenTyopajat.vue';
 import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';
 import RouteAmmatillinenMaaraykset from '@/routes/ammatillinen/RouteAmmatillinenMaaraykset.vue';
-
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
-
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
 import RoutePerusteTiedot from '@/routes/perusteet/tiedot/RoutePerusteTiedot.vue';
 import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
@@ -65,15 +62,11 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
-
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
-
 import { createLogger } from '@shared/utils/logger';
 import RouteOpetussuunnitelmaOppiaineet
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaineet.vue';
@@ -89,7 +82,6 @@ import RouteOpetussuunnitelmaOppiaine2015 from '@/routes/opetussuunnitelmat/sisa
 import RouteOpetussuunnitelmaKurssi from '@/routes/opetussuunnitelmat/sisalto/lops/RouteOpetussuunnitelmaKurssi.vue';
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
-import { OpasStore } from '@/stores/OpasStore';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
@@ -200,7 +192,7 @@ export const router = new Router({
       }, {
         path: 'virhe',
         name: 'virhe',
-        component: Virhe,
+        component: EpErrorPage,
         props: routeProps,
       }, {
         path: 'kooste/ammatillinen/:perusteId',
@@ -803,7 +795,7 @@ export const router = new Router({
           ...to.params,
         },
         query: {
-          // virhe: JSON.stringify({}),
+          virhekoodi: '404',
         },
       };
     },
