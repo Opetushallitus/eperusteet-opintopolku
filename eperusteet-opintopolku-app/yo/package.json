@@ -34,7 +34,7 @@
     "eperusteet-frontend-utils": "Opetushallitus/eperusteet-frontend-utils",
     "es5-shim": "4.5.9",
     "es6-promise": "4.1.0",
-    "jquery": "3.1.1",
+    "jquery": "3.6.3",
     "json3": "3.3.2",
     "lodash": "3.10.1",
     "moment": "2.22.2",
