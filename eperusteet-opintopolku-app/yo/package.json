@@ -16,13 +16,13 @@
     "prettier": "./node_modules/prettier/bin/prettier.js --config .prettierrc --write \"app/**/*.{ts,json,scss}\""
   },
   "dependencies": {
-    "angular": "1.5.8",
-    "angular-animate": "1.5.8",
+    "angular": "1.8.2",
+    "angular-animate": "1.8.2",
     "angular-cache": "4.6.0",
     "angular-elastic": "2.5.1",
-    "angular-i18n": "1.5.8",
-    "angular-resource": "1.5.8",
-    "angular-sanitize": "1.5.8",
+    "angular-i18n": "1.8.2",
+    "angular-resource": "1.8.2",
+    "angular-sanitize": "1.8.2",
     "angular-spinner": "1.0.1",
     "angular-translate": "2.13.0",
     "angular-translate-loader-static-files": "2.13.0",
