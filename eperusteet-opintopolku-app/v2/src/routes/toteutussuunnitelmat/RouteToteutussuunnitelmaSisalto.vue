@@ -126,13 +126,15 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
       const tutkinnonosat = this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat');
       const tutkinnonosa = _.find(tutkinnonosat, tutkinnonosa => tutkinnonosa.tosa.id === julkaistuSisalto.tosa.id);
 
-      return {
-        ...julkaistuSisalto,
-        tosa: tutkinnonosa.tosa,
-      };
+      if (tutkinnonosa) {
+        return {
+          ...julkaistuSisalto,
+          tosa: tutkinnonosa.tosa,
+        };
+      }
     }
 
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
+    return julkaistuSisalto;
   }
 
   get perusteenTutkinnonOsanId() {
