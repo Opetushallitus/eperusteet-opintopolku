@@ -54,6 +54,9 @@ export default class EpHeader extends Vue {
   @Prop({ required: false, type: String })
   private koulutustyyppi!: string;
 
+  @Prop({ required: false, type: String })
+  private tyyppi!: string;
+
   get murupolkuFiltered() {
     return _.filter(this.murupolku, (muru) => muru.label);
   }
@@ -62,10 +65,13 @@ export default class EpHeader extends Vue {
     if (this.koulutustyyppi) {
       return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
     }
+    if (this.tyyppi) {
+      return 'tyyppi-' + this.tyyppi;
+    }
   }
 
   get bgColor() {
-    return koulutustyyppiThemeColor(this.koulutustyyppi);
+    return koulutustyyppiThemeColor(this.koulutustyyppi || this.tyyppi);
   }
 
   get textColor() {
@@ -148,6 +154,11 @@ export default class EpHeader extends Vue {
   &.koulutustyyppi-muukoulutus {
     background-color: $koulutustyyppi-muu-color;
     background-image: url('../../../public/img/banners/aallot_muukoulutus.svg');
+  }
+
+  &.tyyppi-digitaalinen_osaaminen {
+    background-color: $digitaalinen-osaaminen-color;
+    background-image: url('../../../public/img/banners/banner_digitaalinen_osaaminen.svg');
   }
 
   // Murupolku

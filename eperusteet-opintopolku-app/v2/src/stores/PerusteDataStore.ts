@@ -20,6 +20,7 @@ import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio } from '@shared/utils/perusteet';
 import { deepFind } from '@shared/utils/helpers';
+import { PerusteKaikkiDtoTyyppiEnum } from '@shared/generated/eperusteet';
 
 @Store
 export class PerusteDataStore {
@@ -133,11 +134,16 @@ export class PerusteDataStore {
       return null;
     }
     else {
-      const tiedot = buildTiedot('perusteTiedot', {
-        perusteId: _.toString(state.perusteId),
-        ...(state.revision && { revision: state.revision }),
-      });
-      return buildNavigation(state.navigation, tiedot, false, state.revision);
+      if (getters.peruste.tyyppi !== _.toLower(PerusteKaikkiDtoTyyppiEnum.DIGITAALINENOSAAMINEN)) {
+        const tiedot = buildTiedot('perusteTiedot', {
+          perusteId: _.toString(state.perusteId),
+          ...(state.revision && { revision: state.revision }),
+        });
+        return buildNavigation(state.navigation, tiedot, false, state.revision);
+      }
+      else {
+        return buildNavigation(state.navigation, null, false, state.revision);
+      }
     }
   })
   public readonly sidenav!: NavigationNode | null;
