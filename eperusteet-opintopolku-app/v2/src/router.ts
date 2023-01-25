@@ -45,6 +45,8 @@ import RouteYleisettavoitteet from '@/routes/perusteet/sisalto/lukio/RouteYleise
 import RouteAihekokonaisuudet from '@/routes/perusteet/sisalto/lukio/RouteAihekokonaisuudet.vue';
 import RouteLukioOppiaine from '@/routes/perusteet/sisalto/lukio/RouteLukioOppiaine.vue';
 import RouteKurssi from '@/routes/perusteet/sisalto/lukio/RouteKurssi.vue';
+import RouteOsaamiskokonaisuus from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuus.vue';
+import RouteOsaamiskokonaisuusPaaAlue from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuusPaaAlue.vue';
 
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -476,11 +478,6 @@ export const router = new Router({
         path: ':koulutustyyppi/:perusteId/:revision?',
         name: 'peruste',
         component: RoutePeruste,
-        redirect(to) {
-          return {
-            name: 'perusteTiedot',
-          };
-        },
         meta: {
           resolve: {
             cacheBy: ['perusteId'],
@@ -590,7 +587,7 @@ export const router = new Router({
             }],
           }],
         }, {
-          path: 'osaamiskokonaisuus/:opintokokonaisuusId',
+          path: 'opintokokonaisuus/:opintokokonaisuusId',
           component: RouteOpintokokonaisuus,
           name: 'perusteOpintokokonaisuus',
           meta: {
@@ -598,12 +595,7 @@ export const router = new Router({
               cacheBy: ['opintokokonaisuusId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.opintokokonaisuusId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.opintokokonaisuusId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.opintokokonaisuusId),
                 };
               },
             },
@@ -617,12 +609,7 @@ export const router = new Router({
               cacheBy: ['tavoitesisaltoalueId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.tavoitesisaltoalueId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.tavoitesisaltoalueId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.tavoitesisaltoalueId),
                 };
               },
             },
@@ -636,12 +623,7 @@ export const router = new Router({
               cacheBy: ['koulutuksenosaId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.koulutuksenosaId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.koulutuksenosaId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.koulutuksenosaId),
                 };
               },
             },
@@ -655,12 +637,7 @@ export const router = new Router({
               cacheBy: ['laajaalainenosaaminenId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.laajaalainenosaaminenId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.laajaalainenosaaminenId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.laajaalainenosaaminenId),
                 };
               },
             },
@@ -674,12 +651,7 @@ export const router = new Router({
               cacheBy: ['kotokielitaitotasoId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.kotokielitaitotasoId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.kotokielitaitotasoId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.kotokielitaitotasoId),
                 };
               },
             },
@@ -694,12 +666,7 @@ export const router = new Router({
               cacheBy: ['kotoOpintoId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.kotoOpintoId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.kotoOpintoId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.kotoOpintoId),
                 };
               },
             },
@@ -713,12 +680,7 @@ export const router = new Router({
               cacheBy: ['kotoLaajaalainenOsaaminenId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.kotoLaajaalainenOsaaminenId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.kotoLaajaalainenOsaaminenId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.kotoLaajaalainenOsaaminenId),
                 };
               },
             },
@@ -732,12 +694,7 @@ export const router = new Router({
               cacheBy: ['linkkisivuId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.linkkisivuId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.linkkisivuId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.linkkisivuId),
                 };
               },
             },
@@ -751,12 +708,7 @@ export const router = new Router({
               cacheBy: ['yleistavoiteId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.yleistavoiteId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.yleistavoiteId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.yleistavoiteId),
                 };
               },
             },
@@ -770,12 +722,35 @@ export const router = new Router({
               cacheBy: ['aihekokonaisuudetId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.aihekokonaisuudetId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.aihekokonaisuudetId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.aihekokonaisuudetId),
+                };
+              },
+            },
+          },
+        }, {
+          path: 'osaamiskokonaisuus/:osaamiskokonaisuusId',
+          component: RouteOsaamiskokonaisuus,
+          name: 'perusteOsaamiskokonaisuus',
+          meta: {
+            resolve: {
+              cacheBy: ['osaamiskokonaisuusId'],
+              async props(route) {
+                return {
+                  default: await createPerusteOsaStore(route, route.params.osaamiskokonaisuusId),
+                };
+              },
+            },
+          },
+        }, {
+          path: 'osaamiskokonaisuuspaaalue/:osaamiskokonaisuusPaaAlueId',
+          component: RouteOsaamiskokonaisuusPaaAlue,
+          name: 'perusteOsaamiskokonaisuusPaaAlue',
+          meta: {
+            resolve: {
+              cacheBy: ['osaamiskokonaisuusPaaAlueId'],
+              async props(route) {
+                return {
+                  default: await createPerusteOsaStore(route, route.params.osaamiskokonaisuusPaaAlueId),
                 };
               },
             },
@@ -812,6 +787,20 @@ router.beforeEach((to, from, next) => {
   else {
     next();
   }
+});
+
+router.beforeEach(async (to, from, next) => {
+  if (from.params.revision && !to.params.revision) {
+    router.replace({
+      ...to,
+      params: {
+        ...to.params,
+        revision: from.params.revision,
+      },
+    } as any);
+  }
+
+  next();
 });
 
 router.beforeEach((to, from, next) => {
@@ -861,4 +850,13 @@ function hideLoading() {
     (loader as any).hide();
     loader = null;
   }
+}
+
+async function createPerusteOsaStore(route, perusteenOsaId) {
+  return {
+    perusteenOsaStore: await PerusteenOsaStore.create(
+      _.parseInt(perusteenOsaId),
+      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(perusteenOsaId) }),
+    ),
+  };
 }

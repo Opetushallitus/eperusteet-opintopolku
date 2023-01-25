@@ -1,6 +1,6 @@
 <template>
 <div class="peruste">
-  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku" v-sticky sticky-side="top">
+  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku" :tyyppi="peruste.tyyppi" v-sticky sticky-side="top">
     <template slot="header" v-if="peruste.tyyppi ==='opas'">
       {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
     </template>
@@ -14,7 +14,7 @@
     </template>
   </ep-header>
 
-  <div id="scroll-anchor">
+  <div :id="scrollAnchor">
     <EpEsikatseluNotifikaatio/>
   </div>
 
@@ -94,6 +94,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
+import { Debounced } from '@shared/utils/delay';
 
 @Component({
   components: {
@@ -201,6 +202,24 @@ export default class RoutePeruste extends Vue {
 
   private setValue(value) {
     this.query = value;
+  }
+
+  get scrollAnchor() {
+    return this.routeName !== 'peruste' ? 'scroll-anchor' : 'disabled-scroll-anchor';
+  }
+
+  get routeName() {
+    return this.$route.name;
+  }
+
+  @Watch('flattenedSidenav')
+  routeNameChange() {
+    if (this.routeName === 'peruste') {
+      const ensimainenNavi = _.find(this.flattenedSidenav, navi => navi.type !== 'root');
+      if (ensimainenNavi) {
+        this.$router.replace(ensimainenNavi?.location!);
+      }
+    }
   }
 }
 </script>
