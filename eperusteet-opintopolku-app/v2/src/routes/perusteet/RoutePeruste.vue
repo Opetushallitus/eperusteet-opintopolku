@@ -212,12 +212,15 @@ export default class RoutePeruste extends Vue {
     return this.$route.name;
   }
 
-  @Watch('flattenedSidenav')
+  get ensimainenNavi() {
+    return _.find(this.flattenedSidenav, navi => navi.type !== 'root');
+  }
+
+  @Watch('flattenedSidenav', { immediate: true })
   routeNameChange() {
     if (this.routeName === 'peruste') {
-      const ensimainenNavi = _.find(this.flattenedSidenav, navi => navi.type !== 'root');
-      if (ensimainenNavi) {
-        this.$router.replace(ensimainenNavi?.location!);
+      if (this.ensimainenNavi) {
+        this.$router.replace(this.ensimainenNavi.location!);
       }
     }
   }
