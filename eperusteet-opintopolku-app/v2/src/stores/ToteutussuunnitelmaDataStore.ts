@@ -14,8 +14,8 @@ import { DokumenttiDtoTilaEnum,
   TutkinnonOsaViiteSuppeaDto } from '@shared/api/eperusteet';
 import mime from 'mime-types';
 import { deepFilter, deepFind } from '@shared/utils/helpers';
-import { isAmmatillinenOpetussuunnitelma } from '@shared/utils/perusteet';
 import { PerusteTyyppi } from '@/utils/peruste';
+import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 
 @Store
 export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
@@ -66,7 +66,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     if (this.opetussuunnitelma?.peruste?.perusteId) {
       this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.perusteId)).data;
 
-      if (isAmmatillinenOpetussuunnitelma(this.opetussuunnitelma)) {
+      if (ToteutussuunnitelmaDataStore.isAmmatillinenOpetussuunnitelma(this.opetussuunnitelma)) {
         await this.setTutkinnonOsienSisallotPerusteista();
       }
     }
@@ -107,7 +107,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
   };
 
-  @Getter(state => isAmmatillinenOpetussuunnitelma(state.opetussuunnitelma))
+  @Getter(state => ToteutussuunnitelmaDataStore.isAmmatillinenOpetussuunnitelma(state.opetussuunnitelma))
   public readonly isAmmatillinen!: boolean;
 
   @Getter(state => state.opetussuunnitelma.peruste ? state.opetussuunnitelma.peruste.koulutustyyppi : state.opetussuunnitelma.koulutustyyppi)
@@ -235,4 +235,10 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     return map(getters.sidenav);
   })
   public readonly collapsedSidenav!: NavigationNode | null;
+
+  public static isAmmatillinenOpetussuunnitelma(opetussuunnitelma: OpetussuunnitelmaKaikkiDto): boolean {
+    return _.includes(AmmatillisetKoulutustyypit, opetussuunnitelma.koulutustyyppi)
+      || _.includes(AmmatillisetKoulutustyypit, opetussuunnitelma.peruste?.koulutustyyppi)
+      || _.includes('yhteinen', opetussuunnitelma.tyyppi);
+  }
 }
