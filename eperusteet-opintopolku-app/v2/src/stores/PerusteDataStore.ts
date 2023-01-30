@@ -60,7 +60,7 @@ export class PerusteDataStore {
   constructor(perusteId: number, revision?) {
     this.perusteId = perusteId;
     this.esikatselu = revision === '0' ? true : undefined;
-    this.revision = revision;
+    this.revision = _.isNull(revision) ? undefined : revision;
   }
 
   private async init() {
