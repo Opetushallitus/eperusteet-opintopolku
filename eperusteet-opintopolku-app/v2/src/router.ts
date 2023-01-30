@@ -790,7 +790,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (from.params.revision && !to.params.revision) {
+  if (from.params.revision && !to.params.revision && _.some(to.matched, match => _.includes(match.path, ':revision'))) {
     router.replace({
       ...to,
       params: {
