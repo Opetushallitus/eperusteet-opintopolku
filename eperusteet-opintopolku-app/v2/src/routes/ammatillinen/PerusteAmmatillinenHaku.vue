@@ -121,7 +121,7 @@ import _ from 'lodash';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
-import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
@@ -160,7 +160,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
       await this.perusteHakuStore.fetch();
     }
 
-    await this.valmisteillaOlevatStore.fetch(0, 1, ammatillisetKoulutustyypit);
+    await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
   }
 
   private tutkintotyyppi = 'kaikki';

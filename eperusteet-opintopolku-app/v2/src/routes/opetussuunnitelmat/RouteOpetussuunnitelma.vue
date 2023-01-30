@@ -1,6 +1,6 @@
 <template>
 <div class="opetussuunnitelma">
-  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku">
+  <ep-header :koulutustyyppi="koulutustyyppi" :tyyppi="tyyppi" :murupolku="murupolku">
     <template slot="header">
       {{ $kaanna(opetussuunnitelma.nimi) }}
     </template>
@@ -77,6 +77,10 @@ export default class RouteOpetussuunnitelma extends Vue {
     return this.opetussuunnitelmaDataStore.koulutustyyppi;
   }
 
+  get tyyppi() {
+    return this.opetussuunnitelmaDataStore.opetussuunnitelma?.tyyppi;
+  }
+
   get current(): NavigationNode | null {
     return this.opetussuunnitelmaDataStore.current;
   }
@@ -116,11 +120,6 @@ export default class RouteOpetussuunnitelma extends Vue {
 
   get opetussuunnitelmaEsikatselussa() {
     return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(this.$route.query, 'esikatselu');
-  }
-
-  @ProvideReactive('isAmmatillinen')
-  get isAmmatillinen(): boolean {
-    return true;
   }
 
   @ProvideReactive('linkkiHandler')

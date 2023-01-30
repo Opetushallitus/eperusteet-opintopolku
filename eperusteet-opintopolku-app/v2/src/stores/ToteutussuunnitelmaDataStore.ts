@@ -14,7 +14,7 @@ import { DokumenttiDtoTilaEnum,
   TutkinnonOsaViiteSuppeaDto } from '@shared/api/eperusteet';
 import mime from 'mime-types';
 import { deepFilter, deepFind } from '@shared/utils/helpers';
-import { isAmmatillinenKoulutustyyppi } from '@shared/utils/perusteet';
+import { isAmmatillinenOpetussuunnitelma } from '@shared/utils/perusteet';
 import { PerusteTyyppi } from '@/utils/peruste';
 
 @Store
@@ -66,7 +66,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     if (this.opetussuunnitelma?.peruste?.perusteId) {
       this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.perusteId)).data;
 
-      if (isAmmatillinenKoulutustyyppi(this.perusteKaikki.koulutustyyppi)) {
+      if (isAmmatillinenOpetussuunnitelma(this.opetussuunnitelma)) {
         await this.setTutkinnonOsienSisallotPerusteista();
       }
     }
@@ -107,7 +107,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
   };
 
-  @Getter(state => isAmmatillinenKoulutustyyppi(state.perusteKaikki.koulutustyyppi))
+  @Getter(state => isAmmatillinenOpetussuunnitelma(state.opetussuunnitelma))
   public readonly isAmmatillinen!: boolean;
 
   @Getter(state => state.opetussuunnitelma.peruste ? state.opetussuunnitelma.peruste.koulutustyyppi : state.opetussuunnitelma.koulutustyyppi)

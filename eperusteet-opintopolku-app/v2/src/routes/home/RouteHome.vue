@@ -102,7 +102,6 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import {
-  ammatillisetKoulutustyypit,
   AmmatillisetKoulutustyypit,
   EperusteetKoulutustyypit,
   EperusteetKoulutustyyppiRyhmaSort,
@@ -159,7 +158,7 @@ export default class RouteHome extends Vue {
 
   get julkaistutAmmatillisetKoulutustyyppit() {
     return _.filter(this.julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat.value, koulutustyyppimaara =>
-      _.includes(ammatillisetKoulutustyypit, koulutustyyppimaara.koulutustyyppi));
+      _.includes(AmmatillisetKoulutustyypit, koulutustyyppimaara.koulutustyyppi));
   }
 
   get perusteet() {
