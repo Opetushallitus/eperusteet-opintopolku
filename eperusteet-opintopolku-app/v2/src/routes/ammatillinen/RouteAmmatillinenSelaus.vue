@@ -215,6 +215,10 @@ export default class RouteAmmatillinenSelaus extends Vue {
 @import '@shared/styles/_mixins.scss';
 @include shadow-tile;
 
+.container-lg {
+  margin-top: 1.5rem;
+}
+
 .container-md {
   padding: 0px 30px;
 }

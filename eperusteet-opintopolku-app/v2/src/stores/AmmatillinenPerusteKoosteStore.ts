@@ -7,7 +7,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { tiedoteQuery } from '@/api/eperusteet';
 import { Page } from '@shared/tyypit';
 import { Debounced } from '@shared/utils/delay';
-import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -37,7 +37,7 @@ export class AmmatillinenPerusteKoosteStore {
       sivu: 0,
       sivukoko: 10,
       kieli: Kielet.getUiKieli.value,
-      koulutustyyppi: ammatillisetKoulutustyypit,
+      koulutustyyppi: AmmatillisetKoulutustyypit,
     };
 
     this.fetchOpetussuunnitelmat(this.state.opsQuery);

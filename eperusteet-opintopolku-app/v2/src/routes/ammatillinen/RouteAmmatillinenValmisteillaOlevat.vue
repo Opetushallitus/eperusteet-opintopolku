@@ -65,7 +65,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
-import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import * as _ from 'lodash';
 
@@ -80,7 +80,7 @@ export default class RouteAmmatillinenValmisteillaOlevat extends Vue {
   private query = {
     sivu: 0,
     sivukoko: 10,
-    koulutustyyppit: ammatillisetKoulutustyypit,
+    koulutustyyppit: AmmatillisetKoulutustyypit,
   }
   private toggled: number[]= [];
 

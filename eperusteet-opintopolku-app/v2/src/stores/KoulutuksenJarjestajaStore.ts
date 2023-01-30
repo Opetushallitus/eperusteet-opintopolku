@@ -3,7 +3,7 @@ import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composit
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi, OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat } from '@shared/api/amosaa';
 import { Kielet } from '@shared/stores/kieli';
-import { ammatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Page } from '@shared/tyypit';
 import { Debounced } from '@shared/utils/delay';
 
@@ -46,7 +46,7 @@ export class KoulutuksenJarjestajaStore {
       sivu,
       sivukoko: 5,
       kieli: Kielet.getUiKieli.value,
-      koulutustyyppi: ammatillisetKoulutustyypit,
+      koulutustyyppi: AmmatillisetKoulutustyypit,
     })).data as any);
   }
 }
