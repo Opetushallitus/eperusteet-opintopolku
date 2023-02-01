@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row>
-      <b-col><h2 class="mb-4">{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</h2></b-col>
+      <b-col><h2 class="mb-4">{{$kaanna(sisaltoviite.nimi)}}</h2></b-col>
     </b-row>
     <b-row>
       <b-col md="6">
