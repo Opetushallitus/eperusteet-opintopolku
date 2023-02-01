@@ -6,7 +6,7 @@
     <b-row>
       <b-col md="6">
         <ep-form-content :name="$t(opintokokonaisuusNimiOtsikko(opintokokonaisuus.tyyppi))" headerType="h4">
-          <span>{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</span>
+          <span>{{$kaanna(sisaltoviite.nimi)}}</span>
         </ep-form-content>
       </b-col>
       <b-col md="6">
