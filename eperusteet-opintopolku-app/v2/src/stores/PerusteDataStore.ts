@@ -136,7 +136,6 @@ export class PerusteDataStore {
     else {
       if (getters.peruste.tyyppi !== _.toLower(PerusteKaikkiDtoTyyppiEnum.DIGITAALINENOSAAMINEN)) {
         const tiedot = buildTiedot('perusteTiedot', {
-          perusteId: _.toString(state.perusteId),
           ...(state.revision && { revision: state.revision }),
         });
         return buildNavigation(state.navigation, tiedot, false, state.revision);
