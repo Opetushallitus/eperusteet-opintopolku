@@ -503,12 +503,7 @@ export const router = new Router({
               cacheBy: ['viiteId'],
               async props(route) {
                 return {
-                  default: {
-                    perusteenOsaStore: await PerusteenOsaStore.create(
-                      _.parseInt(route.params.viiteId),
-                      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(route.params.viiteId) }),
-                    ),
-                  },
+                  default: await createPerusteOsaStore(route, route.params.viiteId),
                 };
               },
             },
