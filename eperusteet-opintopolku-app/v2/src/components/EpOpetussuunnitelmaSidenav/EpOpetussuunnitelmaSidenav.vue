@@ -55,7 +55,8 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
     const isOppiaineenSisalto
       = node.type === 'opintojaksot'
         || node.type === 'moduulit'
-        || node.type === 'lukiokurssit';
+        || node.type === 'lukiokurssit'
+        || node.type === 'tutkinnonosat_paikalliset';
 
     const isErikoistyyppi = type === 'oppiaineet'
         || type === 'oppiaine'
