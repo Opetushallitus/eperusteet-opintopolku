@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi } from '@shared/api/amosaa';
+import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 
 Vue.use(VueCompositionApi);
 
@@ -15,7 +16,10 @@ export class KoulutuksenJarjestajatStore {
   public async fetch() {
     const res = (await JulkinenApi.findKoulutustoimijat(
       0,
-      9999)).data as any;
+      9999,
+      undefined,
+      undefined,
+      AmmatillisetKoulutustyypit)).data as any;
     this.state.koulutustoimijat = res.data;
   }
 }

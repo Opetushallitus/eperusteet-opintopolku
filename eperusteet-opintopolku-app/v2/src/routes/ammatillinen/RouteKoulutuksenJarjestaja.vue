@@ -7,7 +7,7 @@
           {{ $kaanna(this.koulutustoimija.nimi) }}
         </template>
       </ep-header>
-      <div class="container-md">
+      <div class="container-md mt-4">
 
         <div v-if="this.koulutustoimija.kuvaus" class="mb-5">
           <h2>{{$t('kuvaus')}}</h2>
