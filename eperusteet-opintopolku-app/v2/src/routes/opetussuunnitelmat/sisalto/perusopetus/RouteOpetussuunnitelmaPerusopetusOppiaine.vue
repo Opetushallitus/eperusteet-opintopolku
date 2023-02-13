@@ -4,7 +4,7 @@
     <template v-else>
       <h2>{{$kaanna(oppiaine.nimi)}}</h2>
 
-      <ep-peruste-content v-if="perusteOppiaine" :perusteObject="perusteOppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
+      <ep-peruste-content v-if="perusteOppiaine" :perusteObject="perusteOppiaine.tehtava" :object="oppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
 
       <b-tabs class="ml-0 pl-0 mt-4" v-if="!vlkId">
         <b-tab class="mt-4" v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudetSorted" :key="'vlk'+index" :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)">
