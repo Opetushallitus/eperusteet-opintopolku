@@ -46,7 +46,6 @@ export class PerusteDataStore {
   @State() public lukioOppineet: any[] = [];
   @State() public geneerisetArviointiasteikot: any[] = [];
   @State() public arviointiasteikot: any[] = [];
-  @State() public laajaAlaisetOsaamiset: any[] = [];
   @State() public perusteJulkaisu: any = null;
   @State() public perusteJulkaisuP: Promise<any> | null = null;
 
@@ -81,10 +80,6 @@ export class PerusteDataStore {
       catch (err) { }
       this.osaamisalaKuvaukset = (await Perusteet.getOsaamisalat(this.perusteId)).data;
       this.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
-    }
-
-    if (this.perusteKaikki.koulutustyyppi === Koulutustyyppi.aikuistenperusopetus) {
-      this.laajaAlaisetOsaamiset = (await Aipeopetuksensisalto.getAipeOsaamiset(this.perusteId)).data;
     }
 
     if (isPerusteVanhaLukio(this.peruste)) {

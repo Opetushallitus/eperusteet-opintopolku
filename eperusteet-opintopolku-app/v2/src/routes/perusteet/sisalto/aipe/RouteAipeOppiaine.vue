@@ -219,12 +219,7 @@ export default class RouteAipeOppiaine extends Vue {
   };
 
   get laajaAlaisetOsaamisetById() {
-    if (this.perusteDataStore.laajaAlaisetOsaamiset) {
-      return _.keyBy(this.perusteDataStore.laajaAlaisetOsaamiset, 'id');
-    }
-    else {
-      return {};
-    }
+    return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset'), 'id');
   }
 
   get kohdealueetById() {
