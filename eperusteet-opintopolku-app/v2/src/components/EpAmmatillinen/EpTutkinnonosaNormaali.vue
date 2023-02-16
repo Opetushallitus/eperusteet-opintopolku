@@ -21,18 +21,20 @@
     </ep-form-content>
 
     <template v-if="hasArviointi">
-      <ep-ammatillinen-arvioinnin-kohdealueet
-              v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.arvioinninKohdealueet && tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0"
-              :arviointiasteikot="arviointiasteikot"
-              :arvioinninKohdealueet="tutkinnonosa.arviointi.arvioinninKohdealueet"/>
+      <template v-if="!tutkinnonosa.geneerinenArviointiasteikko">
+        <ep-ammatillinen-arvioinnin-kohdealueet
+                v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.arvioinninKohdealueet && tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0"
+                :arviointiasteikot="arviointiasteikot"
+                :arvioinninKohdealueet="tutkinnonosa.arviointi.arvioinninKohdealueet"/>
+
+        <ep-form-content class="col-md-12" v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot" name="arviointi">
+          <span v-html="$kaanna(tutkinnonosa.arviointi.lisatiedot)" />
+        </ep-form-content>
+      </template>
 
       <div v-if="tutkinnonosa.geneerinenArviointiasteikko && tutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit">
         <GeneerinenArviointiTaulukko :arviointi="tutkinnonosa.geneerinenArviointiasteikko" />
       </div>
-
-      <ep-form-content class="col-md-12" v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot" name="arviointi">
-        <span v-html="$kaanna(tutkinnonosa.arviointi.lisatiedot)" />
-      </ep-form-content>
 
       <hr class="mt-5 mb-5"/>
     </template>
