@@ -86,6 +86,14 @@
         </ep-form-content>
       </div>
 
+      <div class="col-md-12" v-if="kaannokset && kaannokset.length > 0">
+        <ep-form-content name="saamen-kielelle-kaannetyt-perusteet" headerType="h3" headerClass="h6">
+          <div v-for="(kaannos, idx) in kaannokset" :key="idx">
+            <a :href="kaannos.url" target="_blank" rel="noopener noreferrer">{{ kaannos.nimi }}</a>
+          </div>
+        </ep-form-content>
+      </div>
+
       <div class="col-md-12" v-if="!isAmmatillinen && peruste.kuvaus">
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
           <ep-content-viewer :value="$kaanna(peruste.kuvaus)"
@@ -197,7 +205,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
-import { baseURL, LiitetiedostotParam } from '@shared/api/eperusteet';
+import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam } from '@shared/api/eperusteet';
 import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettu } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
@@ -273,16 +281,21 @@ export default class RoutePerusteTiedot extends Vue {
     return this.perusteDataStore.termit;
   }
 
+  get liitteet() {
+    return _.map(this.perusteDataStore.liitteet, kvo => (
+      {
+        ...kvo,
+        url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, kvo.id!).url,
+      }
+    ));
+  }
+
   get koulutusvienninOhjeet() {
-    const koulutusvienninohjeet = _.filter(this.perusteDataStore.liitteet, liite => liite.tyyppi === 'KOULUTUSVIENNINOHJE');
-    if (koulutusvienninohjeet) {
-      return _.map(koulutusvienninohjeet, kvo => (
-        {
-          ...kvo,
-          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, kvo.id!).url,
-        }
-      ));
-    }
+    return _.filter(this.liitteet, liite => liite.tyyppi === _.toLower(LiiteDtoTyyppiEnum.KOULUTUSVIENNINOHJE));
+  }
+
+  get kaannokset() {
+    return _.filter(this.liitteet, liite => liite.tyyppi === _.toLower(LiiteDtoTyyppiEnum.KAANNOS));
   }
 
   get osaamisalaKuvaukset() {
