@@ -205,7 +205,7 @@ export default class RoutePeruste extends Vue {
   }
 
   get scrollAnchor() {
-    return this.routeName !== 'peruste' ? 'scroll-anchor' : 'disabled-scroll-anchor';
+    return this.routeName !== 'peruste' && this.routeName !== this.ensimainenNavi?.location?.name ? 'scroll-anchor' : 'disabled-scroll-anchor';
   }
 
   get routeName() {
