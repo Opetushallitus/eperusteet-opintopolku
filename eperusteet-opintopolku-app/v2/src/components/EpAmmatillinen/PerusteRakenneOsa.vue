@@ -139,7 +139,7 @@ export default class PerusteRakenneOsa extends Vue {
   @import '@shared/styles/_variables.scss';
 
   .rakenne {
-    border-radius: 0.3rem 0 0 0;
+    border-radius: 0;
     border: 0;
     border-left: 0.3rem;
     border-style: solid;
