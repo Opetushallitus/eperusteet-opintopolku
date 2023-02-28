@@ -5,8 +5,8 @@
             class="navbar-ep"
             :sticky="true"
             id="navigation-bar">
-    <b-navbar-brand :to="{ name: 'root' }">
-      <img src="../../../public/img/images/eperusteet-logo.svg" :alt="$t('eperusteet')">
+    <b-navbar-brand :to="{ name: 'root' }" :aria-label="$t('etusivu')">
+      <img src="../../../public/img/images/eperusteet-logo.svg" :alt="$t('eperusteet')" aria-hidden="true">
     </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -25,7 +25,7 @@
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto">
+      <b-navbar-nav class="ml-auto" :aria-label="$t('kielivalinta')">
         <b-nav-item-dropdown right>
           <template slot="button-content">
             <fas fixed-width icon="language" class="mr-2"></fas>
@@ -42,14 +42,12 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Watch, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, stateToKoulutustyyppi,
-  ryhmat, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus, muuKoulutus } from '@shared/utils/perusteet';
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import { koulutustyyppiTheme, stateToKoulutustyyppi, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus, muuKoulutus } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter, RawLocation } from 'vue-router/types/router';
 import { createLogger } from '@shared/utils/logger';
-import { Perusteet } from '@shared/api/eperusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 

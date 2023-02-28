@@ -1,13 +1,12 @@
 <template>
 <div>
   <a class="sr-only sr-only-focusable skip-to-content" href="#main">{{ $t('siirry-sisaltoon') }}</a>
-  <EpFeedbackModal :palauteProvider="palauteStore"/>
   <ep-navigation role="banner" :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"></ep-navigation>
   <main class="router-container" role="main" sticky-container>
     <router-view v-if="julkaistutKoulutustyypit"/>
   </main>
   <ep-footer />
-
+  <EpFeedbackModal :palauteProvider="palauteStore"/>
 </div>
 </template>
 

@@ -28,26 +28,27 @@
                       align="center"
                       aria-controls="koulutuksenjarjestajat-lista"
                       :first-text="$t('alkuun')"
+                      :last-text="$t('loppuun')"
                       prev-text="«"
                       next-text="»"
-                      :last-text="$t('loppuun')" />
+                      :label-first-page="$t('alkuun')"
+                      :label-last-page="$t('loppuun')"
+                      :label-page="$t('sivu')"
+                      :label-next-page="$t('seuraava-sivu')"
+                      :label-prev-page="$t('edellinen-sivu')"/>
       </div>
     </div>
-
   </div>
-
 </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
-import { KoulutustoimijaJulkinenDto } from '@shared/api/amosaa';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import * as _ from 'lodash';
-import { ENV_PREFIX } from '@shared/utils/defaults';
 import { Kielet } from '@shared/stores/kieli';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 

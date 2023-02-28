@@ -46,9 +46,14 @@
                     align="center"
                     aria-controls="opetussuunnitelmat-lista"
                     :first-text="$t('alkuun')"
+                    :last-text="$t('loppuun')"
                     prev-text="«"
                     next-text="»"
-                    :last-text="$t('loppuun')" />
+                    :label-first-page="$t('alkuun')"
+                    :label-last-page="$t('loppuun')"
+                    :label-page="$t('sivu')"
+                    :label-next-page="$t('seuraava-sivu')"
+                    :label-prev-page="$t('edellinen-sivu')"/>
     </div>
   </div>
 </div>

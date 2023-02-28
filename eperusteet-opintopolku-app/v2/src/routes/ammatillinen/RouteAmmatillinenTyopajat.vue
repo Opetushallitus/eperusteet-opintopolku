@@ -36,16 +36,21 @@
                   align="center"
                   aria-controls="opetussuunnitelmat-lista"
                   :first-text="$t('alkuun')"
+                  :last-text="$t('loppuun')"
                   prev-text="«"
                   next-text="»"
-                  :last-text="$t('loppuun')" />
+                  :label-first-page="$t('alkuun')"
+                  :label-last-page="$t('loppuun')"
+                  :label-page="$t('sivu')"
+                  :label-next-page="$t('seuraava-sivu')"
+                  :label-prev-page="$t('edellinen-sivu')"/>
   </div>
 
 </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component } from 'vue-property-decorator';
 import { TyopajatStore } from '@/stores/TyopajatStore';
 import OpetussuunnitelmaTile from '../kooste/OpetussuunnitelmaTile.vue';
 import { Kielet } from '@shared/stores/kieli';

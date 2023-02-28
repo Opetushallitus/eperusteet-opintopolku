@@ -30,9 +30,14 @@
           align="center"
           aria-controls="opetussuunnitelmat-lista"
           :first-text="$t('alkuun')"
+          :last-text="$t('loppuun')"
           prev-text="«"
           next-text="»"
-          :last-text="$t('loppuun')" />
+          :label-first-page="$t('alkuun')"
+          :label-last-page="$t('loppuun')"
+          :label-page="$t('sivu')"
+          :label-next-page="$t('seuraava-sivu')"
+          :label-prev-page="$t('edellinen-sivu')"/>
       </div>
     </div>
   </div>
@@ -47,18 +52,17 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
-import { Koulutustyyppi } from '@shared/tyypit';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 
-  @Component({
-    components: {
-      EpHeader,
-      EpSearch,
-      EpSpinner,
-      OpetussuunnitelmaTile,
-      EpMultiSelect,
-    },
-  })
+@Component({
+  components: {
+    EpHeader,
+    EpSearch,
+    EpSpinner,
+    OpetussuunnitelmaTile,
+    EpMultiSelect,
+  },
+})
 export default class JotpaPaikalliset extends Vue {
     @Prop({ required: true })
     private paikallinenStore!: YleisetPaikallisetStore;

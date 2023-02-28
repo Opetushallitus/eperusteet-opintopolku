@@ -83,9 +83,14 @@
         align="center"
         aria-controls="opetussuunnitelmat-lista"
         :first-text="$t('alkuun')"
+        :last-text="$t('loppuun')"
         prev-text="«"
         next-text="»"
-        :last-text="$t('loppuun')" />
+        :label-first-page="$t('alkuun')"
+        :label-last-page="$t('loppuun')"
+        :label-page="$t('sivu')"
+        :label-next-page="$t('seuraava-sivu')"
+        :label-prev-page="$t('edellinen-sivu')"/>
     </div>
   </div>
 </div>
@@ -94,7 +99,6 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -122,7 +126,6 @@ export default class VstPaikalliset extends Vue {
   @Prop({ required: true })
   private paikallinenStore!: VapaasivistystyoPaikallisetStore;
 
-  private oppilaitostyyppi: string | null = null;
   private perPage = 10;
   private query = {
     koulutustyyppi: [

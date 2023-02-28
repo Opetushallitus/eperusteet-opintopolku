@@ -100,9 +100,14 @@
         align="center"
         aria-controls="perusteet-lista"
         :first-text="$t('alkuun')"
+        :last-text="$t('loppuun')"
         prev-text="«"
         next-text="»"
-        :last-text="$t('loppuun')" />
+        :label-first-page="$t('alkuun')"
+        :label-last-page="$t('loppuun')"
+        :label-page="$t('sivu')"
+        :label-next-page="$t('seuraava-sivu')"
+        :label-prev-page="$t('edellinen-sivu')"/>
     </div>
   </div>
 
@@ -329,7 +334,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
   .alatiedot {
     font-size: smaller;
-    color: #666;
+    color: #555;
     padding-top: 10px;
   }
 
@@ -337,9 +342,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
     margin-top: 10px;
   }
 
-  $tuleva-color: $green-lighten-2;
+  $tuleva-color: $green-lighten-5;
   $voimassa-color: $green;
-  $siirtyma-color: $yellow-1;
+  $siirtyma-color: $yellow-2;
   $paattynyt-color: $red-1;
 
   .peruste-haku-toggle {
