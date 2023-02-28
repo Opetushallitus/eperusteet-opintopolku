@@ -102,7 +102,7 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
       .map(osa => {
         let paikallisetOsat: any[] = [];
         if (_.size(osa.paikallinenKuvaus?.koodit) > 0) {
-          paikallisetOsat = this.paikallisetTutkinnonOsatKoodeistaOsiksi(_.map(osa.paikallinenKuvaus?.koodit, koodi => _.size(_.split(koodi, '_')) > 3 ? _.split(koodi, '_')[3] : koodi));
+          paikallisetOsat = this.paikallisetTutkinnonOsatKoodeistaOsiksi(_.map(osa.paikallinenKuvaus?.koodit, koodi => this.trimkoodiarvo(koodi)));
         }
 
         return {
@@ -119,9 +119,13 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   paikallisetTutkinnonOsatKoodeistaOsiksi(koodit): any[] {
     return _.map(koodit, koodi => {
       return {
-        tutkinnonosa: _.find(this.tutkinnonosaViitteet, tosaviite => !!tosaviite.tosa.omatutkinnonosa?.koodi && tosaviite.tosa.omatutkinnonosa?.koodi === koodi),
+        tutkinnonosa: _.find(this.tutkinnonosaViitteet, tosaviite => this.trimkoodiarvo(tosaviite?.tosa?.omatutkinnonosa?.koodi) === koodi || this.trimkoodiarvo(tosaviite?.tosa?.koodi) === koodi),
       };
     });
+  }
+
+  trimkoodiarvo(koodi) {
+    return _.trim(_.split(koodi, '_')[_.size(_.split(koodi, '_')) - 1]);
   }
 
   get filteredRakenneOsat() {
