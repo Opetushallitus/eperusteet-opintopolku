@@ -39,8 +39,7 @@
       <EpBPagination v-model="page"
                      :items-per-page="perPage"
                      :total="opetussuunnitelmatFiltered.length"
-                     aria-controls="opetussuunnitelmat-lista"
-                     @pageChanged="handlePageChange">
+                     aria-controls="opetussuunnitelmat-lista">
       </EpBPagination>
     </div>
   </div>
@@ -94,10 +93,6 @@ export default class Paikalliset extends Vue {
     this.page = 1;
   }
 
-  handlePageChange(value) {
-    this.page = value;
-  }
-
   get total() {
     return _.size(this.opetussuunnitelmatFiltered);
   }
@@ -128,6 +123,7 @@ export default class Paikalliset extends Vue {
   }
 
   get opetussuunnitelmat() {
+    this.page = 1;
     return _.chain(this.paikallinenStore.opetussuunnitelmat.value)
       .map(ops => ({
         ...ops,

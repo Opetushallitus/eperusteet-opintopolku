@@ -72,8 +72,7 @@
             <EpBPagination v-model="opsPage"
                            :items-per-page="perPage"
                            :total="toteutussuunnitelmaTotal"
-                           aria-controls="toteutussuunnitelmat-lista"
-                           @pageChanged="pageChange">
+                           aria-controls="toteutussuunnitelmat-lista">
             </EpBPagination>
             <b-pagination v-model="opsPage"
                           class="mt-4"

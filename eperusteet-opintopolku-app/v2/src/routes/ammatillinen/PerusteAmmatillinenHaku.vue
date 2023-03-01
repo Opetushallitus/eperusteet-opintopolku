@@ -96,8 +96,7 @@
       <EpBPagination v-model="page"
                      :items-per-page="perPage"
                      :total="total"
-                     aria-controls="perusteet-lista"
-                     @pageChanged="handlePageChange">
+                     aria-controls="perusteet-lista">
       </EpBPagination>
     </div>
   </div>
@@ -154,6 +153,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
 
   async mounted() {
+    this.page = 1;
     if (!this.perusteHakuStore.perusteet) {
       await this.perusteHakuStore.fetch();
     }
@@ -200,10 +200,6 @@ export default class PerusteAmmatillinenHaku extends Vue {
   @Watch('query')
   onQueryChanged() {
     this.page = 1;
-  }
-
-  handlePageChange(value) {
-    this.page = value;
   }
 
   get searchPlaceholder() {

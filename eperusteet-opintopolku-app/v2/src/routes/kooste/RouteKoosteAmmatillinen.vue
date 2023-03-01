@@ -59,8 +59,7 @@
               <EpBPagination v-model="page"
                              :items-per-page="perPage"
                              :total="opetussuunnitelmatPage.kokonaismäärä"
-                             aria-controls="opetussuunnitelmat-lista"
-                             @pageChanged="handlePageChange">
+                             aria-controls="opetussuunnitelmat-lista">
               </EpBPagination>
             </div>
           </b-col>
@@ -178,10 +177,6 @@ export default class RouteKoosteAmmatillinen extends Vue {
   @Watch('query')
   queryChange(val) {
     this.fetch(this.query);
-  }
-
-  handlePageChange(value) {
-    this.page = value;
   }
 
   fetch(nimi?, page?) {

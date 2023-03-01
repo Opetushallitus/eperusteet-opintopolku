@@ -32,8 +32,7 @@
     <EpBPagination v-model="page"
                    :items-per-page="perPage"
                    :total="opetussuunnitelmatFiltered.length"
-                   aria-controls="opetussuunnitelmat-lista"
-                   @pageChanged="handlePageChange">
+                   aria-controls="opetussuunnitelmat-lista">
     </EpBPagination>
   </div>
 
@@ -72,10 +71,6 @@ export default class RouteAmmatillinenTyopajat extends Vue {
   @Watch('query')
   onQueryChanged() {
     this.page = 1;
-  }
-
-  handlePageChange(value) {
-    this.page = value;
   }
 
   get opetussuunnitelmat(): any {

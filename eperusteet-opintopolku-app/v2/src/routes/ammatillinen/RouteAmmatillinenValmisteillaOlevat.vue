@@ -49,8 +49,7 @@
       <EpBPagination v-model="page"
                      :items-per-page="perPage"
                      :total="total"
-                     aria-controls="perusteet-lista"
-                     @pageChanged="handlePageChange">
+                     aria-controls="perusteet-lista">
       </EpBPagination>
     </template>
 
@@ -92,10 +91,6 @@ export default class RouteAmmatillinenValmisteillaOlevat extends Vue {
   @Watch('query')
   onQueryChanged() {
     this.page = 1;
-  }
-
-  handlePageChange(value) {
-    this.page = value;
   }
 
   get perusteet() {

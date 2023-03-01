@@ -24,8 +24,7 @@
         <EpBPagination v-model="page"
                        :items-per-page="perPage"
                        :total="total"
-                       aria-controls="koulutuksenjarjestajat-lista"
-                       @pageChanged="handlePageChange">
+                       aria-controls="koulutuksenjarjestajat-lista">
         </EpBPagination>
       </div>
     </div>
@@ -89,10 +88,6 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
   @Watch('query')
   onQueryChanged() {
     this.page = 1;
-  }
-
-  handlePageChange(value) {
-    this.page = value;
   }
 }
 </script>

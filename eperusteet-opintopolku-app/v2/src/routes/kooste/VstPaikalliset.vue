@@ -84,8 +84,7 @@
       <EpBPagination v-model="page"
                      :items-per-page="perPage"
                      :total="total"
-                     aria-controls="opetussuunnitelmat-lista"
-                     @pageChanged="handlePageChange">
+                     aria-controls="opetussuunnitelmat-lista">
       </EpBPagination>
     </div>
   </div>
@@ -202,10 +201,6 @@ export default class VstPaikalliset extends Vue {
       this.query.oppilaitosTyyppiKoodiUri = null;
     }
     await this.paikallinenStore.fetchQuery(this.query);
-  }
-
-  handlePageChange(value) {
-    this.page = value;
   }
 
   get total() {

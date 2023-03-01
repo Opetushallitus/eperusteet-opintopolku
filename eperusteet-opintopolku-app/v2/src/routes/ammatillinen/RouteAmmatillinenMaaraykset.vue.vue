@@ -27,8 +27,7 @@
           <EpBPagination v-model="page"
                          :items-per-page="perPage"
                          :total="total"
-                         aria-controls="maaraykset-lista"
-                         @pageChanged="handlePageChange">
+                         aria-controls="maaraykset-lista">
           </EpBPagination>
         </div>
       </div>
@@ -67,10 +66,6 @@ export default class RouteAmmatillinenMaaraykset extends Vue {
   @Watch('query')
   onQueryChanged() {
     this.page = 1;
-  }
-
-  handlePageChange(value) {
-    this.page = value;
   }
 
   get maaraykset() {
