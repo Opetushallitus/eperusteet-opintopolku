@@ -51,12 +51,18 @@
 
   <div class="d-flex align-self-center flex-wrap flex-lg-row flex-column toggles">
     <EpColoredToggle v-model="query.tuleva" class="haku-toggle tuleva">
+      <span v-if="query.tuleva" class="sr-only">{{ $t('valittu') }}</span>
+      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
       {{ $t('switch-tuleva') }}
     </EpColoredToggle>
     <EpColoredToggle v-model="query.voimassaolo" class="haku-toggle voimassaolo">
+      <span v-if="query.voimassaolo" class="sr-only">{{ $t('valittu') }}</span>
+      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
       {{ $t('switch-voimassaolo') }}
     </EpColoredToggle>
     <EpColoredToggle v-model="query.poistunut" class="haku-toggle poistunut">
+      <span v-if="query.poistunut" class="sr-only">{{ $t('valittu') }}</span>
+      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
       {{ $t('switch-poistunut') }}
     </EpColoredToggle>
   </div>

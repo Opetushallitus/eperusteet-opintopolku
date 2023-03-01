@@ -41,13 +41,14 @@
     <ep-search v-else v-model="query" :placeholder="searchPlaceholder" :class="{'disabled-events': !perusteet}"/>
 
     <div class="checkboxes d-flex align-self-center flex-wrap flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
-      <EpColoredToggle
-        v-for="(toggle, idx) in toggles"
-        :key="'toggle' + idx"
-        v-model="filters[toggle]"
-        @input="onToggleChange()"
-        :class="['toggle-' + toggle, !perusteet ? 'disabled-events' : '']"
-        class="peruste-haku-toggle">
+      <EpColoredToggle v-for="(toggle, idx) in toggles"
+                       :key="'toggle' + idx"
+                       v-model="filters[toggle]"
+                       @input="onToggleChange()"
+                       :class="['toggle-' + toggle, !perusteet ? 'disabled-events' : '']"
+                       class="peruste-haku-toggle">
+        <span v-if="filters[toggle]" class="sr-only">{{ $t('valittu') }}</span>
+        <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
         {{ $t('switch-' + toggle) }}
       </EpColoredToggle>
     </div>
