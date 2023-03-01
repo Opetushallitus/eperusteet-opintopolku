@@ -92,22 +92,12 @@
 
     </div>
     <div class="pagination d-flex justify-content-center">
-      <b-pagination
-        class="mt-4"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        align="center"
-        aria-controls="perusteet-lista"
-        :first-text="$t('alkuun')"
-        :last-text="$t('loppuun')"
-        prev-text="«"
-        next-text="»"
-        :label-first-page="$t('alkuun')"
-        :label-last-page="$t('loppuun')"
-        :label-page="$t('sivu')"
-        :label-next-page="$t('seuraava-sivu')"
-        :label-prev-page="$t('edellinen-sivu')"/>
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="perusteet-lista"
+                     @pageChanged="handlePageChange">
+      </EpBPagination>
     </div>
   </div>
 
@@ -130,6 +120,7 @@ import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 const voimassaoloTietoTekstit = {
   'tuleva': 'voimaantulo',
@@ -149,6 +140,7 @@ const voimassaoloTietoTekstit = {
     EpAmmatillinenRow,
     EpMultiSelect,
     EpColoredToggle,
+    EpBPagination,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -202,6 +194,15 @@ export default class PerusteAmmatillinenHaku extends Vue {
     else {
       this.perusteHakuStore.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
     }
+  }
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
+  }
+
+  handlePageChange(value) {
+    this.page = value;
   }
 
   get searchPlaceholder() {
@@ -334,7 +335,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
   .alatiedot {
     font-size: smaller;
-    color: #555;
+    color: $gray-lighten-12;
     padding-top: 10px;
   }
 

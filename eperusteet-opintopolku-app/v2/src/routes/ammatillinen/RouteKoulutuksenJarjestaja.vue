@@ -69,6 +69,12 @@
               </router-link>
 
             </div>
+            <EpBPagination v-model="opsPage"
+                           :items-per-page="perPage"
+                           :total="toteutussuunnitelmaTotal"
+                           aria-controls="toteutussuunnitelmat-lista"
+                           @pageChanged="pageChange">
+            </EpBPagination>
             <b-pagination v-model="opsPage"
                           class="mt-4"
                           :total-rows="toteutussuunnitelmaTotal"
@@ -104,6 +110,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { Kielet } from '@shared/stores/kieli';
 import * as _ from 'lodash';
 import OpetussuunnitelmaTile from '@/routes/kooste/OpetussuunnitelmaTile.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -113,6 +120,7 @@ import OpetussuunnitelmaTile from '@/routes/kooste/OpetussuunnitelmaTile.vue';
     EpAmmatillinenRow,
     EpSearch,
     OpetussuunnitelmaTile,
+    EpBPagination,
   },
 })
 export default class RouteKoulutuksenJarjestaja extends Vue {

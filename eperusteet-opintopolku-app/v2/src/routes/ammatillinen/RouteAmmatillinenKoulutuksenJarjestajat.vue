@@ -21,21 +21,12 @@
       </ep-ammatillinen-row>
 
       <div class="pagination d-flex justify-content-center">
-        <b-pagination v-model="page"
-                      class="mt-3"
-                      :total-rows="total"
-                      :per-page="perPage"
-                      align="center"
-                      aria-controls="koulutuksenjarjestajat-lista"
-                      :first-text="$t('alkuun')"
-                      :last-text="$t('loppuun')"
-                      prev-text="«"
-                      next-text="»"
-                      :label-first-page="$t('alkuun')"
-                      :label-last-page="$t('loppuun')"
-                      :label-page="$t('sivu')"
-                      :label-next-page="$t('seuraava-sivu')"
-                      :label-prev-page="$t('edellinen-sivu')"/>
+        <EpBPagination v-model="page"
+                       :items-per-page="perPage"
+                       :total="total"
+                       aria-controls="koulutuksenjarjestajat-lista"
+                       @pageChanged="handlePageChange">
+        </EpBPagination>
       </div>
     </div>
   </div>
@@ -43,7 +34,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -51,9 +42,11 @@ import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue
 import * as _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
+    EpBPagination,
     EpSpinner,
     EpSearch,
     EpExternalLink,
@@ -91,6 +84,15 @@ export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
 
   get total() {
     return _.size(this.koulutustoimijat);
+  }
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
+  }
+
+  handlePageChange(value) {
+    this.page = value;
   }
 }
 </script>

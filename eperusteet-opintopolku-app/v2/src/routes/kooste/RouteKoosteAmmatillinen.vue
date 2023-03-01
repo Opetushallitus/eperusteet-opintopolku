@@ -56,16 +56,12 @@
                 </router-link>
 
               </div>
-              <b-pagination v-model="page"
-                            class="mt-4"
-                            :total-rows="opetussuunnitelmatPage.kokonaismäärä"
-                            :perPage="perPage"
-                            align="center"
-                            aria-controls="opetussuunnitelmat-lista"
-                            :first-text="$t('alkuun')"
-                            prev-text="«"
-                            next-text="»"
-                            :last-text="$t('loppuun')" />
+              <EpBPagination v-model="page"
+                             :items-per-page="perPage"
+                             :total="opetussuunnitelmatPage.kokonaismäärä"
+                             aria-controls="opetussuunnitelmat-lista"
+                             @pageChanged="handlePageChange">
+              </EpBPagination>
             </div>
           </b-col>
         </b-row>
@@ -80,7 +76,6 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
-import { perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
 import * as _ from 'lodash';
 import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
@@ -88,9 +83,9 @@ import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import { Kielet } from '@shared/stores/kieli';
 import { Meta } from '@shared/utils/decorators';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -100,6 +95,7 @@ import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
     EpJulkiLista,
     EpSearch,
     OpetussuunnitelmaTile,
+    EpBPagination,
   },
 })
 export default class RouteKoosteAmmatillinen extends Vue {
@@ -182,6 +178,10 @@ export default class RouteKoosteAmmatillinen extends Vue {
   @Watch('query')
   queryChange(val) {
     this.fetch(this.query);
+  }
+
+  handlePageChange(value) {
+    this.page = value;
   }
 
   fetch(nimi?, page?) {

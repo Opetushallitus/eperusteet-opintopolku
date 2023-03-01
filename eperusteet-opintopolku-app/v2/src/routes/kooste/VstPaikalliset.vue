@@ -75,22 +75,12 @@
           <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTieto="ops.voimassaoloTieto" showJotpaInfo/>
         </router-link>
       </div>
-      <b-pagination
-        class="mt-4"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        align="center"
-        aria-controls="opetussuunnitelmat-lista"
-        :first-text="$t('alkuun')"
-        :last-text="$t('loppuun')"
-        prev-text="«"
-        next-text="»"
-        :label-first-page="$t('alkuun')"
-        :label-last-page="$t('loppuun')"
-        :label-page="$t('sivu')"
-        :label-next-page="$t('seuraava-sivu')"
-        :label-prev-page="$t('edellinen-sivu')"/>
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="opetussuunnitelmat-lista"
+                     @pageChanged="handlePageChange">
+      </EpBPagination>
     </div>
   </div>
 </div>
@@ -111,6 +101,7 @@ import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -120,6 +111,7 @@ import { voimassaoloTieto } from '@/utils/voimassaolo';
     OpetussuunnitelmaTile,
     EpMultiSelect,
     EpColoredToggle,
+    EpBPagination,
   },
 })
 export default class VstPaikalliset extends Vue {
@@ -204,6 +196,10 @@ export default class VstPaikalliset extends Vue {
       this.query.oppilaitosTyyppiKoodiUri = null;
     }
     await this.paikallinenStore.fetchQuery(this.query);
+  }
+
+  handlePageChange(value) {
+    this.page = value;
   }
 
   get total() {

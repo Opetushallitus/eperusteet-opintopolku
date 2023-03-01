@@ -29,28 +29,19 @@
       </router-link>
 
     </div>
-    <b-pagination v-model="page"
-                  class="mt-4"
-                  :total-rows="opetussuunnitelmatFiltered.length"
-                  :per-page="perPage"
-                  align="center"
-                  aria-controls="opetussuunnitelmat-lista"
-                  :first-text="$t('alkuun')"
-                  :last-text="$t('loppuun')"
-                  prev-text="«"
-                  next-text="»"
-                  :label-first-page="$t('alkuun')"
-                  :label-last-page="$t('loppuun')"
-                  :label-page="$t('sivu')"
-                  :label-next-page="$t('seuraava-sivu')"
-                  :label-prev-page="$t('edellinen-sivu')"/>
+    <EpBPagination v-model="page"
+                   :items-per-page="perPage"
+                   :total="opetussuunnitelmatFiltered.length"
+                   aria-controls="opetussuunnitelmat-lista"
+                   @pageChanged="handlePageChange">
+    </EpBPagination>
   </div>
 
 </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import { TyopajatStore } from '@/stores/TyopajatStore';
 import OpetussuunnitelmaTile from '../kooste/OpetussuunnitelmaTile.vue';
 import { Kielet } from '@shared/stores/kieli';
@@ -58,12 +49,14 @@ import * as _ from 'lodash';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
     OpetussuunnitelmaTile,
     EpSpinner,
     EpSearch,
+    EpBPagination,
   },
 })
 export default class RouteAmmatillinenTyopajat extends Vue {
@@ -74,6 +67,15 @@ export default class RouteAmmatillinenTyopajat extends Vue {
 
   async mounted() {
     await this.tyopajatStore.fetch();
+  }
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
+  }
+
+  handlePageChange(value) {
+    this.page = value;
   }
 
   get opetussuunnitelmat(): any {

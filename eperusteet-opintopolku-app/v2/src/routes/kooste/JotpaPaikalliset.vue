@@ -22,22 +22,12 @@
             <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
           </router-link>
         </div>
-        <b-pagination
-          class="mt-4"
-          v-model="page"
-          :total-rows="total"
-          :per-page="perPage"
-          align="center"
-          aria-controls="opetussuunnitelmat-lista"
-          :first-text="$t('alkuun')"
-          :last-text="$t('loppuun')"
-          prev-text="«"
-          next-text="»"
-          :label-first-page="$t('alkuun')"
-          :label-last-page="$t('loppuun')"
-          :label-page="$t('sivu')"
-          :label-next-page="$t('seuraava-sivu')"
-          :label-prev-page="$t('edellinen-sivu')"/>
+        <EpBPagination v-model="page"
+                       :items-per-page="perPage"
+                       :total="total"
+                       aria-controls="opetussuunnitelmat-lista"
+                       @pageChanged="handlePageChange">
+        </EpBPagination>
       </div>
     </div>
   </div>
@@ -53,6 +43,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -61,91 +52,96 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
     EpSpinner,
     OpetussuunnitelmaTile,
     EpMultiSelect,
+    EpBPagination,
   },
 })
 export default class JotpaPaikalliset extends Vue {
-    @Prop({ required: true })
-    private paikallinenStore!: YleisetPaikallisetStore;
+  @Prop({ required: true })
+  private paikallinenStore!: YleisetPaikallisetStore;
 
-    private perPage = 10;
-    private query = {
-      nimi: null,
-      sivu: 0,
-      sivukoko: 10,
-      kieli: this.kieli,
-      jotpatyyppi: ['VST', 'MUU'],
-    };
+  private perPage = 10;
+  private query = {
+    nimi: null,
+    sivu: 0,
+    sivukoko: 10,
+    kieli: this.kieli,
+    jotpatyyppi: ['VST', 'MUU'],
+  };
 
-    async mounted() {
-      if (this.paikallinenStore) {
-        await this.paikallinenStore.fetchQuery(this.query);
-      }
-    }
-
-    get kieli() {
-      return Kielet.getSisaltoKieli.value;
-    }
-
-    get page() {
-      return this.opetussuunnitelmatPaged?.sivu! + 1;
-    }
-
-    set page(page) {
-      this.query = {
-        ...this.query,
-        sivu: page - 1,
-      };
-    }
-
-    get queryNimi() {
-      return this.query.nimi;
-    }
-
-    @Watch('queryNimi')
-    nimiChange() {
-      this.query.sivu = 0;
-    }
-
-    @Watch('kieli')
-    kieliChange(val) {
-      this.query = {
-        ...this.query,
-        kieli: val,
-      };
-    }
-
-    @Watch('query', { deep: true })
-    async queryChange() {
+  async mounted() {
+    if (this.paikallinenStore) {
       await this.paikallinenStore.fetchQuery(this.query);
     }
+  }
 
-    get total() {
-      return this.opetussuunnitelmatPaged?.kokonaismäärä;
-    }
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
 
-    get opetussuunnitelmat() {
-      return this.paikallinenStore.opetussuunnitelmat.value;
-    }
+  get page() {
+    return this.opetussuunnitelmatPaged?.sivu! + 1;
+  }
 
-    get opetussuunnitelmatPaged() {
-      return this.paikallinenStore.opetussuunnitelmatPaged.value;
-    }
+  set page(page) {
+    this.query = {
+      ...this.query,
+      sivu: page - 1,
+    };
+  }
 
-    get opetussuunnitelmatMapped() {
-      return _.chain(this.opetussuunnitelmat)
-        .map(ops => ({
-          ...ops,
-          route: {
-            name: 'toteutussuunnitelma',
-            params: {
-              toteutussuunnitelmaId: _.toString(ops.id),
-              koulutustyyppi: ops.jotpatyyppi === 'MUU' ? 'muukoulutus' : 'vapaasivistystyo',
-            },
+  get queryNimi() {
+    return this.query.nimi;
+  }
+
+  @Watch('queryNimi')
+  nimiChange() {
+    this.query.sivu = 0;
+  }
+
+  @Watch('kieli')
+  kieliChange(val) {
+    this.query = {
+      ...this.query,
+      kieli: val,
+    };
+  }
+
+  @Watch('query', { deep: true })
+  async queryChange() {
+    await this.paikallinenStore.fetchQuery(this.query);
+  }
+
+  handlePageChange(value) {
+    this.page = value;
+  }
+
+  get total() {
+    return this.opetussuunnitelmatPaged?.kokonaismäärä;
+  }
+
+  get opetussuunnitelmat() {
+    return this.paikallinenStore.opetussuunnitelmat.value;
+  }
+
+  get opetussuunnitelmatPaged() {
+    return this.paikallinenStore.opetussuunnitelmatPaged.value;
+  }
+
+  get opetussuunnitelmatMapped() {
+    return _.chain(this.opetussuunnitelmat)
+      .map(ops => ({
+        ...ops,
+        route: {
+          name: 'toteutussuunnitelma',
+          params: {
+            toteutussuunnitelmaId: _.toString(ops.id),
+            koulutustyyppi: ops.jotpatyyppi === 'MUU' ? 'muukoulutus' : 'vapaasivistystyo',
           },
-        }))
-        .sortBy(ops => Kielet.sortValue(ops.nimi))
-        .value();
-    }
+        },
+      }))
+      .sortBy(ops => Kielet.sortValue(ops.nimi))
+      .value();
+  }
 }
 </script>
 

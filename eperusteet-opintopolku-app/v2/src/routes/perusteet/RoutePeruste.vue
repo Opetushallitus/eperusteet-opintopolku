@@ -20,10 +20,8 @@
 
   <div class="container mt-4">
     <div class="lower">
-
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar>
-
         <template slot="bar">
           <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
           <div class="sidebar" v-if="haku">
@@ -35,6 +33,7 @@
             </div>
           </div>
           <div v-else>
+            <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
             <ep-peruste-sidenav
                 @search-update="onSearch"
                 :query="query"
@@ -94,7 +93,6 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
-import { Debounced } from '@shared/utils/delay';
 
 @Component({
   components: {
@@ -222,6 +220,17 @@ export default class RoutePeruste extends Vue {
       if (this.ensimainenNavi) {
         this.$router.replace(this.ensimainenNavi.location!);
       }
+    }
+    this.resetFocusForScreenReader();
+  }
+
+  private resetFocusForScreenReader() {
+    // jos painetaan sisäistä linkkiä, jossa sidenavin sisältö muuttuu, siirretään tabin focus piilotettuun linkkiin,
+    // jotta ruudunlukijan focus ei jää sinne, missä linkkiä painettiin
+    const input = document.getElementById('sr-focus');
+    if (input) {
+      input.focus();
+      input.blur();
     }
   }
 }

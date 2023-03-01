@@ -24,21 +24,12 @@
         </EpLinkki>
 
         <div class="pagination d-flex justify-content-center" v-if="maaraykset.length > (perPage - 1)">
-          <b-pagination v-model="page"
-                        class="mt-3"
-                        :total-rows="total"
-                        :per-page="perPage"
-                        align="center"
-                        aria-controls="maaraykset-lista"
-                        :first-text="$t('alkuun')"
-                        :last-text="$t('loppuun')"
-                        prev-text="«"
-                        next-text="»"
-                        :label-first-page="$t('alkuun')"
-                        :label-last-page="$t('loppuun')"
-                        :label-page="$t('sivu')"
-                        :label-next-page="$t('seuraava-sivu')"
-                        :label-prev-page="$t('edellinen-sivu')"/>
+          <EpBPagination v-model="page"
+                         :items-per-page="perPage"
+                         :total="total"
+                         aria-controls="maaraykset-lista"
+                         @pageChanged="handlePageChange">
+          </EpBPagination>
         </div>
       </div>
 
@@ -54,6 +45,7 @@ import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import pdfkuva from '@assets/img/icons/pdfkuva_lataus.svg';
 
 @Component({
@@ -61,6 +53,7 @@ import pdfkuva from '@assets/img/icons/pdfkuva_lataus.svg';
     EpSpinner,
     EpSearch,
     EpLinkki,
+    EpBPagination,
   },
 })
 export default class RouteAmmatillinenMaaraykset extends Vue {
@@ -70,6 +63,15 @@ export default class RouteAmmatillinenMaaraykset extends Vue {
   private query = '';
   private page = 1;
   private perPage = 20;
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
+  }
+
+  handlePageChange(value) {
+    this.page = value;
+  }
 
   get maaraykset() {
     return this.maarayksetStore.maaraykset.value;
