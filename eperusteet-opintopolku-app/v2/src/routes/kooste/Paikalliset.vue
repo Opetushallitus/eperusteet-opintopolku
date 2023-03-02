@@ -2,7 +2,7 @@
 <div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <div class="search">
-    <ep-search v-model="query" />
+    <ep-search v-model="query" :sr-placeholder="$t('etsi-opetussuunnitelmia')"/>
   </div>
   <div class="opetussuunnitelma-container">
     <div class="peruste-nav">
@@ -31,24 +31,16 @@
       </div>
     </div>
     <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmatPaginated"
-           :key="idx">
-
+      <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
         <router-link :to="ops.route">
           <opetussuunnitelma-tile :ops="ops" :query="query"/>
         </router-link>
-
       </div>
-      <b-pagination class="mt-4"
-                    v-model="page"
-                    :total-rows="total"
-                    :per-page="perPage"
-                    align="center"
-                    aria-controls="opetussuunnitelmat-lista"
-                    :first-text="$t('alkuun')"
-                    prev-text="«"
-                    next-text="»"
-                    :last-text="$t('loppuun')" />
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="opetussuunnitelmatFiltered.length"
+                     aria-controls="opetussuunnitelmat-lista">
+      </EpBPagination>
     </div>
   </div>
 </div>
@@ -65,6 +57,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -73,6 +66,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
     EpSpinner,
     EpExternalLink,
     OpetussuunnitelmaTile,
+    EpBPagination,
   },
 })
 export default class Paikalliset extends Vue {
@@ -92,6 +86,11 @@ export default class Paikalliset extends Vue {
       const peruste = _.find(this.julkaistutPerusteet, peruste => _.get(peruste, 'id') === _.toNumber(_.get(this.$route.params, 'perusteId'))) || this.julkaistutPerusteet![0];
       await this.setActivePeruste(peruste);
     }
+  }
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
   }
 
   get total() {
@@ -124,6 +123,7 @@ export default class Paikalliset extends Vue {
   }
 
   get opetussuunnitelmat() {
+    this.page = 1;
     return _.chain(this.paikallinenStore.opetussuunnitelmat.value)
       .map(ops => ({
         ...ops,

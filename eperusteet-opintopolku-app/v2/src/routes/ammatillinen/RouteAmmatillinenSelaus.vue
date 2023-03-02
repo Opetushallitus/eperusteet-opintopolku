@@ -6,7 +6,7 @@
       {{ $t(ylaotsikko) }}
     </template>
   </ep-header>
-  <div class="container-lg">
+  <div id="main" class="container-lg">
 
     <div v-if="$route.name === 'ammatillinenSelaus'">
       <div class="d-flex justify-content-between flex-lg-row flex-column">
@@ -14,7 +14,7 @@
         <router-link v-for="(linkki, index) in linkit" :key="'linkki'+index" :to="{ name: linkki.route }">
           <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
             <fas v-if="linkki.fasicon" :icon="linkki.fasicon" class="icon" />
-            <span v-if="linkki.materialicon" class="material-icons-outlined icon">
+            <span v-if="linkki.materialicon" class="material-icons-outlined icon" aria-hidden="true">
               {{linkki.materialicon}}
             </span>
             <div class="align-self-center">

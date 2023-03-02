@@ -12,7 +12,7 @@
     </div>
     <div v-else class="haku">
       <div class="search">
-        <ep-search v-model="query" />
+        <ep-search v-model="query" :sr-placeholder="$t('etsi-maarayksia')"/>
       </div>
       <div class="content">
 
@@ -24,16 +24,11 @@
         </EpLinkki>
 
         <div class="pagination d-flex justify-content-center" v-if="maaraykset.length > (perPage - 1)">
-          <b-pagination v-model="page"
-                        class="mt-3"
-                        :total-rows="total"
-                        :per-page="perPage"
-                        align="center"
-                        aria-controls="maaraykset-lista"
-                        :first-text="$t('alkuun')"
-                        prev-text="«"
-                        next-text="»"
-                        :last-text="$t('loppuun')" />
+          <EpBPagination v-model="page"
+                         :items-per-page="perPage"
+                         :total="total"
+                         aria-controls="maaraykset-lista">
+          </EpBPagination>
         </div>
       </div>
 
@@ -49,6 +44,7 @@ import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import pdfkuva from '@assets/img/icons/pdfkuva_lataus.svg';
 
 @Component({
@@ -56,6 +52,7 @@ import pdfkuva from '@assets/img/icons/pdfkuva_lataus.svg';
     EpSpinner,
     EpSearch,
     EpLinkki,
+    EpBPagination,
   },
 })
 export default class RouteAmmatillinenMaaraykset extends Vue {
@@ -65,6 +62,11 @@ export default class RouteAmmatillinenMaaraykset extends Vue {
   private query = '';
   private page = 1;
   private perPage = 20;
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
+  }
 
   get maaraykset() {
     return this.maarayksetStore.maaraykset.value;

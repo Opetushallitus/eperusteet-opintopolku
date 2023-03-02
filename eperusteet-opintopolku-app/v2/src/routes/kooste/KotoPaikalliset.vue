@@ -3,8 +3,8 @@
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
 
   <div class="d-flex flex-lg-row flex-column">
-    <b-form-group :label="$t('hae')" class="flex-fill">
-      <ep-search v-model="query.nimi"/>
+    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+      <ep-search v-model="query.nimi" :sr-placeholder="$t('etsi-opetussuunnitelmia')"/>
     </b-form-group>
   </div>
 
@@ -22,17 +22,11 @@
           <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
         </router-link>
       </div>
-      <b-pagination
-        class="mt-4"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        align="center"
-        aria-controls="opetussuunnitelmat-lista"
-        :first-text="$t('alkuun')"
-        prev-text="«"
-        next-text="»"
-        :last-text="$t('loppuun')" />
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="opetussuunnitelmat-lista">
+      </EpBPagination>
     </div>
   </div>
 </div>
@@ -49,6 +43,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { Koulutustyyppi } from '@shared/tyypit';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -57,6 +52,7 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
     EpSpinner,
     OpetussuunnitelmaTile,
     EpMultiSelect,
+    EpBPagination,
   },
 })
 export default class KotoPaikalliset extends Vue {

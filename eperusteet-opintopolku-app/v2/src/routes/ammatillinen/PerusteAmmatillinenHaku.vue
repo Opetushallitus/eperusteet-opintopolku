@@ -14,8 +14,8 @@
       </div>
 
       <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
-        <b-form-group :label="$t('hae')" class="flex-fill">
-          <ep-search v-model="query" />
+        <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+          <ep-search v-model="query"/>
         </b-form-group>
         <b-form-group :label="$t('tutkintotyyppi')">
           <EpMultiSelect
@@ -41,13 +41,14 @@
     <ep-search v-else v-model="query" :placeholder="searchPlaceholder" :class="{'disabled-events': !perusteet}"/>
 
     <div class="checkboxes d-flex align-self-center flex-wrap flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
-      <EpColoredToggle
-        v-for="(toggle, idx) in toggles"
-        :key="'toggle' + idx"
-        v-model="filters[toggle]"
-        @input="onToggleChange()"
-        :class="['toggle-' + toggle, !perusteet ? 'disabled-events' : '']"
-        class="peruste-haku-toggle">
+      <EpColoredToggle v-for="(toggle, idx) in toggles"
+                       :key="'toggle' + idx"
+                       v-model="filters[toggle]"
+                       @input="onToggleChange()"
+                       :class="['toggle-' + toggle, !perusteet ? 'disabled-events' : '']"
+                       class="peruste-haku-toggle">
+        <span v-if="filters[toggle]" class="sr-only">{{ $t('valittu') }}</span>
+        <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
         {{ $t('switch-' + toggle) }}
       </EpColoredToggle>
     </div>
@@ -92,17 +93,11 @@
 
     </div>
     <div class="pagination d-flex justify-content-center">
-      <b-pagination
-        class="mt-4"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        align="center"
-        aria-controls="perusteet-lista"
-        :first-text="$t('alkuun')"
-        prev-text="«"
-        next-text="»"
-        :last-text="$t('loppuun')" />
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="perusteet-lista">
+      </EpBPagination>
     </div>
   </div>
 
@@ -125,6 +120,7 @@ import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 const voimassaoloTietoTekstit = {
   'tuleva': 'voimaantulo',
@@ -144,6 +140,7 @@ const voimassaoloTietoTekstit = {
     EpAmmatillinenRow,
     EpMultiSelect,
     EpColoredToggle,
+    EpBPagination,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -156,6 +153,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
 
   async mounted() {
+    this.page = 1;
     if (!this.perusteHakuStore.perusteet) {
       await this.perusteHakuStore.fetch();
     }
@@ -197,6 +195,11 @@ export default class PerusteAmmatillinenHaku extends Vue {
     else {
       this.perusteHakuStore.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
     }
+  }
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
   }
 
   get searchPlaceholder() {
@@ -329,7 +332,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
   .alatiedot {
     font-size: smaller;
-    color: #666;
+    color: $gray-lighten-12;
     padding-top: 10px;
   }
 
@@ -337,9 +340,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
     margin-top: 10px;
   }
 
-  $tuleva-color: $green-lighten-2;
+  $tuleva-color: $green-lighten-5;
   $voimassa-color: $green;
-  $siirtyma-color: $yellow-1;
+  $siirtyma-color: $yellow-2;
   $paattynyt-color: $red-1;
 
   .peruste-haku-toggle {

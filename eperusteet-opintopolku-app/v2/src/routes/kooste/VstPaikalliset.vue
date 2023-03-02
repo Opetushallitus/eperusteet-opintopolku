@@ -3,8 +3,8 @@
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
 
   <div class="d-flex flex-lg-row flex-column">
-    <b-form-group :label="$t('hae')" class="flex-fill">
-      <ep-search v-model="query.nimi"/>
+    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+      <ep-search v-model="query.nimi" :sr-placeholder="$t('etsi-opetussuunnitelmia')"/>
     </b-form-group>
     <b-form-group :label="$t('oppilaitoksen-tyyppi')">
       <EpSpinner v-if="!oppilaitostyypit" />
@@ -51,12 +51,18 @@
 
   <div class="d-flex align-self-center flex-wrap flex-lg-row flex-column toggles">
     <EpColoredToggle v-model="query.tuleva" class="haku-toggle tuleva">
+      <span v-if="query.tuleva" class="sr-only">{{ $t('valittu') }}</span>
+      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
       {{ $t('switch-tuleva') }}
     </EpColoredToggle>
     <EpColoredToggle v-model="query.voimassaolo" class="haku-toggle voimassaolo">
+      <span v-if="query.voimassaolo" class="sr-only">{{ $t('valittu') }}</span>
+      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
       {{ $t('switch-voimassaolo') }}
     </EpColoredToggle>
     <EpColoredToggle v-model="query.poistunut" class="haku-toggle poistunut">
+      <span v-if="query.poistunut" class="sr-only">{{ $t('valittu') }}</span>
+      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
       {{ $t('switch-poistunut') }}
     </EpColoredToggle>
   </div>
@@ -75,17 +81,11 @@
           <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTieto="ops.voimassaoloTieto" showJotpaInfo/>
         </router-link>
       </div>
-      <b-pagination
-        class="mt-4"
-        v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        align="center"
-        aria-controls="opetussuunnitelmat-lista"
-        :first-text="$t('alkuun')"
-        prev-text="«"
-        next-text="»"
-        :last-text="$t('loppuun')" />
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="opetussuunnitelmat-lista">
+      </EpBPagination>
     </div>
   </div>
 </div>
@@ -94,7 +94,6 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -107,6 +106,7 @@ import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -116,13 +116,13 @@ import { voimassaoloTieto } from '@/utils/voimassaolo';
     OpetussuunnitelmaTile,
     EpMultiSelect,
     EpColoredToggle,
+    EpBPagination,
   },
 })
 export default class VstPaikalliset extends Vue {
   @Prop({ required: true })
   private paikallinenStore!: VapaasivistystyoPaikallisetStore;
 
-  private oppilaitostyyppi: string | null = null;
   private perPage = 10;
   private query = {
     koulutustyyppi: [

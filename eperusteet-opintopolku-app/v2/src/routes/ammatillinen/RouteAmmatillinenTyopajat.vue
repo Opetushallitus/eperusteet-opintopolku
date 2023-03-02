@@ -4,7 +4,7 @@
   <p class="kuvaus">{{ $t('kooste-kuvaus-tyopajat') }}</p>
 
   <div class="search mb-4">
-    <ep-search v-model="query" :placeholder="$t('etsi')"/>
+    <ep-search v-model="query" :placeholder="$t('etsi')" :sr-placeholder="$t('etsi-tyopajoja')"/>
   </div>
   <ep-spinner v-if="!opetussuunnitelmat" />
   <div v-else-if="opetussuunnitelmat.length === 0">
@@ -29,23 +29,18 @@
       </router-link>
 
     </div>
-    <b-pagination v-model="page"
-                  class="mt-4"
-                  :total-rows="opetussuunnitelmatFiltered.length"
-                  :per-page="perPage"
-                  align="center"
-                  aria-controls="opetussuunnitelmat-lista"
-                  :first-text="$t('alkuun')"
-                  prev-text="«"
-                  next-text="»"
-                  :last-text="$t('loppuun')" />
+    <EpBPagination v-model="page"
+                   :items-per-page="perPage"
+                   :total="opetussuunnitelmatFiltered.length"
+                   aria-controls="opetussuunnitelmat-lista">
+    </EpBPagination>
   </div>
 
 </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import { TyopajatStore } from '@/stores/TyopajatStore';
 import OpetussuunnitelmaTile from '../kooste/OpetussuunnitelmaTile.vue';
 import { Kielet } from '@shared/stores/kieli';
@@ -53,12 +48,14 @@ import * as _ from 'lodash';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
     OpetussuunnitelmaTile,
     EpSpinner,
     EpSearch,
+    EpBPagination,
   },
 })
 export default class RouteAmmatillinenTyopajat extends Vue {
@@ -69,6 +66,11 @@ export default class RouteAmmatillinenTyopajat extends Vue {
 
   async mounted() {
     await this.tyopajatStore.fetch();
+  }
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
   }
 
   get opetussuunnitelmat(): any {

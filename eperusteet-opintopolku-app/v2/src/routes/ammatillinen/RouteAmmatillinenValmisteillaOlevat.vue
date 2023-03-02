@@ -46,32 +46,28 @@
           </div>
         </div>
       </div>
-
-      <b-pagination v-model="page"
-        :total-rows="total"
-        :per-page="perPage"
-        align="center"
-        aria-controls="perusteet-lista"
-        :first-text="$t('alkuun')"
-        prev-text="«"
-        next-text="»"
-        :last-text="$t('loppuun')" />
-
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="perusteet-lista">
+      </EpBPagination>
     </template>
 
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import * as _ from 'lodash';
 
 @Component({
   components: {
     EpSpinner,
+    EpBPagination,
   },
 })
 export default class RouteAmmatillinenValmisteillaOlevat extends Vue {
@@ -90,6 +86,11 @@ export default class RouteAmmatillinenValmisteillaOlevat extends Vue {
 
   async fetch() {
     await this.valmisteillaOlevatStore.fetch(this.query.sivu, this.query.sivukoko, this.query.koulutustyyppit);
+  }
+
+  @Watch('query')
+  onQueryChanged() {
+    this.page = 1;
   }
 
   get perusteet() {
