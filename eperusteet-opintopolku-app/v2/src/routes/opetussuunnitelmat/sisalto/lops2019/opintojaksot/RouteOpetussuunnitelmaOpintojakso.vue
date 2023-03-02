@@ -8,7 +8,6 @@
         <h3 class="opintojakso-tieto-otsikko">{{ $t('koodi') }}</h3>
         <p>{{ opintojakso.koodi }}</p>
       </div>
-
       <div v-if="hasOppiaineet" class="mb-4">
         <h3 class="opintojakso-tieto-otsikko">{{ $t('oppiaineet') }}</h3>
         <ul class="oppiaineet-list">
@@ -26,14 +25,13 @@
           </li>
         </ul>
       </div>
-
       <div v-if="opintojakso.laajuus" class="mb-5">
         <h3 class="opintojakso-tieto-otsikko">{{ $t('laajuus') }}</h3>
         <p>{{ opintojakso.laajuus }} {{ $t('opintopiste') }}<template v-if="hasModulesWithLisalaajuus"> {{ laajuusInfo }}</template></p>
       </div>
     </div>
 
-    <div class="osio" v-if="opintojakso.tavoitteet && opintojakso.tavoitteet.length > 0">
+    <div class="osio">
       <ep-collapse tyyppi="opintojakson-tavoitteet" :first="true">
         <div class="alueotsikko" slot="header"><h3>{{ $t('tavoitteet') }}</h3></div>
         <ep-opintojakson-tavoitteet :value="opintojakso"
@@ -140,12 +138,10 @@
 
 <script lang="ts">
 import * as _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { Lops2019OpintojaksoDto, Opetussuunnitelmat } from '@shared/api/ylops';
 import { KoodistoLops2019LaajaAlaiset, koodiSorters } from '@shared/utils/perusteet';
-
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
