@@ -14,8 +14,8 @@
       </div>
 
       <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
-        <b-form-group :label="$t('hae')" class="flex-fill">
-          <ep-search v-model="query" />
+        <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+          <ep-search v-model="query"/>
         </b-form-group>
         <b-form-group :label="$t('tutkintotyyppi')">
           <EpMultiSelect

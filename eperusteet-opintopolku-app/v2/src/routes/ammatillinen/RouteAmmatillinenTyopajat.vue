@@ -4,7 +4,7 @@
   <p class="kuvaus">{{ $t('kooste-kuvaus-tyopajat') }}</p>
 
   <div class="search mb-4">
-    <ep-search v-model="query" :placeholder="$t('etsi')"/>
+    <ep-search v-model="query" :placeholder="$t('etsi')" :sr-placeholder="$t('etsi-tyopajoja')"/>
   </div>
   <ep-spinner v-if="!opetussuunnitelmat" />
   <div v-else-if="opetussuunnitelmat.length === 0">

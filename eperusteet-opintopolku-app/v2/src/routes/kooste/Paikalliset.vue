@@ -2,7 +2,7 @@
 <div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <div class="search">
-    <ep-search v-model="query" />
+    <ep-search v-model="query" :sr-placeholder="$t('etsi-opetussuunnitelmia')"/>
   </div>
   <div class="opetussuunnitelma-container">
     <div class="peruste-nav">

@@ -3,8 +3,8 @@
   <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
 
   <div class="d-flex flex-lg-row flex-column">
-    <b-form-group :label="$t('hae')" class="flex-fill">
-      <ep-search v-model="query.nimi"/>
+    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+      <ep-search v-model="query.nimi" :sr-placeholder="$t('etsi-toteutussuunnitelmia')"/>
     </b-form-group>
   </div>
 

@@ -8,7 +8,7 @@
   </div>
   <div v-else class="haku">
     <div class="search">
-      <ep-search v-model="query" />
+      <ep-search v-model="query" :sr-placeholder="$t('etsi-koulutuksen-jarjestajia')"/>
     </div>
     <div class="content">
 
