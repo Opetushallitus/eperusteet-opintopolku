@@ -74,21 +74,6 @@
                            :total="toteutussuunnitelmaTotal"
                            aria-controls="toteutussuunnitelmat-lista">
             </EpBPagination>
-            <b-pagination v-model="opsPage"
-                          class="mt-4"
-                          :total-rows="toteutussuunnitelmaTotal"
-                          :per-page="perPage"
-                          align="center"
-                          aria-controls="toteutussuunnitelmat-lista"
-                          :first-text="$t('alkuun')"
-                          :last-text="$t('loppuun')"
-                          prev-text="«"
-                          next-text="»"
-                          :label-first-page="$t('alkuun')"
-                          :label-last-page="$t('loppuun')"
-                          :label-page="$t('sivu')"
-                          :label-next-page="$t('seuraava-sivu')"
-                          :label-prev-page="$t('edellinen-sivu')"/>
           </div>
         </div>
       </div>
