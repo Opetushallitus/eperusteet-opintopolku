@@ -6,7 +6,7 @@
       {{ $t(ylaotsikko) }}
     </template>
   </ep-header>
-  <div class="container-lg">
+  <div id="main" class="container-lg">
 
     <div v-if="$route.name === 'ammatillinenSelaus'">
       <div class="d-flex justify-content-between flex-lg-row flex-column">
