@@ -18,6 +18,7 @@
             class="label label-plain"
             :class="{ 'label-match': isMatch, 'subtype': subtype }">
         {{ $kaannaOlioTaiTeksti(node.label) }}
+        <!-- <span v-if="!node.label && node.type">{{$t(node.type.replaceAll('_', '-'))}}</span> -->
         <span v-if="koodi" class="code-field">({{ koodi }})</span>
       </div>
     </div>

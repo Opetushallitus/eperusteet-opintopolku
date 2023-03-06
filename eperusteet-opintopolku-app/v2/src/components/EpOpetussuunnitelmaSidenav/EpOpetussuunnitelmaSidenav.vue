@@ -66,7 +66,10 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
         || type === 'opintojaksot'
         || type === 'opintojakso'
         || type === 'lukiooppiaineet_2015'
-        || type === 'lukiooppimaarat_2015';
+        || type === 'lukiooppimaarat_2015'
+        || type === 'pakolliset_osaalueet'
+        || type === 'valinnaiset_osaalueet'
+        || type === 'paikalliset_osaalueet';
 
     if ((isCurrentOrParentSelected && isErikoistyyppi) || isOppiaineenSisalto) {
       return node.children;
