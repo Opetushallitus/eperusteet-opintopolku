@@ -35,6 +35,7 @@ import RoutePerusopetusOppiaineet from '@/routes/perusteet/sisalto/perusopetus/R
 import RouteAipeKurssi from '@/routes/perusteet/sisalto/aipe/RouteAipeKurssi.vue';
 import RouteAipeOppiaine from '@/routes/perusteet/sisalto/aipe/RouteAipeOppiaine.vue';
 import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
+import RouteAipeLaajaAlaisetOsaamiset from '@/routes/perusteet/sisalto/aipe/RouteAipeLaajaAlaisetOsaamiset.vue';
 import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
 import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
 import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
@@ -567,6 +568,10 @@ export const router = new Router({
           path: 'oppiaineet/:oppiaineId',
           component: RoutePerusopetusOppiaine,
           name: 'perusopetusoppiaine',
+        }, {
+          path: 'aipelaajaalainenosaaminen',
+          component: RouteAipeLaajaAlaisetOsaamiset,
+          name: 'aipeLaajaalainenOsaaminen',
         }, {
           path: 'vaihe/:vaiheId',
           component: RouteAipeVaihe,
