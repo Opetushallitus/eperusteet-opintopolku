@@ -7,7 +7,7 @@
     <div class="indicator-wrapper" v-if="isKurssi && kurssiTyyppiVari[node.meta.tyyppi]">
       <ep-color-indicator :backgroundColor="kurssiTyyppiVari[node.meta.tyyppi]" :tooltip="false"/>
     </div>
-    <div class="label-wrapper">
+    <div class="label-wrapper d-flex align-items-center">
       <b-link v-if="node.location && !subtype" :to="node.location">
         <span class="label" :class="{ 'label-match': isMatch }">
           {{ $kaannaOlioTaiTeksti(node.label) }}
@@ -21,6 +21,7 @@
         <!-- <span v-if="!node.label && node.type">{{$t(node.type.replaceAll('_', '-'))}}</span> -->
         <span v-if="koodi" class="code-field">({{ koodi }})</span>
       </div>
+      <span v-if="node.icon" class="material-icons-outlined icon">{{node.icon}}</span>
     </div>
   </div>
   <!-- children -->
@@ -173,6 +174,13 @@ export default class EpSidenavNode extends Vue {
   //   kirjoittaminen
   .indicator-wrapper + .label-wrapper {
     margin-left: 20px;
+  }
+
+  .label-wrapper {
+    .icon {
+      font-size: 1rem;
+      color: $blue-lighten-5;
+    }
   }
 
   .subtype {
