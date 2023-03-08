@@ -21,7 +21,8 @@
         <!-- <span v-if="!node.label && node.type">{{$t(node.type.replaceAll('_', '-'))}}</span> -->
         <span v-if="koodi" class="code-field">({{ koodi }})</span>
       </div>
-      <span v-if="node.icon" class="material-icons-outlined icon">{{node.icon}}</span>
+
+      <EpNavigationPostFix :node="node" class="ml-1" />
     </div>
   </div>
   <!-- children -->
@@ -38,11 +39,13 @@ import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
+import EpNavigationPostFix from '@shared/components/EpTreeNavibar/EpNavigationPostFix.vue';
 
 @Component({
   name: 'EpSidenavNode',
   components: {
     EpColorIndicator,
+    EpNavigationPostFix,
   },
 })
 export default class EpSidenavNode extends Vue {
