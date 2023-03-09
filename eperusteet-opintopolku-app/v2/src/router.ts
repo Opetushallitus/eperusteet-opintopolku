@@ -55,6 +55,7 @@ import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sis
 import RouteToteutussuunnitelmaTiedot from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTiedot.vue';
 import RouteToteutussuunnitelmaSuorituspolut from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSuorituspolut.vue';
 import RouteToteutussuunnitelmaSisalto from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSisalto.vue';
+import RouteToteutussuunnitelmaOsaAlue from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaOsaAlue.vue';
 import RouteToteutussuunnitelmaTutkinnonosat from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTutkinnonosat.vue';
 import RoutePerusopetusVuosiluokkakokonaisuus from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RoutePerusopetusVuosiluokkakokonaisuus.vue';
 import RouteOpetussuunnitelmaPerusopetusOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaineet.vue';
@@ -381,6 +382,11 @@ export const router = new Router({
           path: 'suorituspolut/:sisaltoviiteId',
           component: RouteToteutussuunnitelmaSuorituspolut,
           name: 'toteutussuunnitelmaSuorituspolut',
+        }, {
+          path: 'sisalto/:sisaltoviiteId/osaalue/:osaalueId',
+          component: RouteToteutussuunnitelmaOsaAlue,
+          name: 'toteutussuunnitelmaOsaAlue',
+          props: routeProps,
         }],
       }, {
         path: 'ops/:opetussuunnitelmaId/:revision?/:koulutustyyppi*',

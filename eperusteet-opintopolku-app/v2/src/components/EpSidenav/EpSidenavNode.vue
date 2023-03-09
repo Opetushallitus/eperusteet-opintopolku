@@ -16,13 +16,13 @@
       </b-link>
       <div v-else
             class="label label-plain"
-            :class="{ 'label-match': isMatch, 'subtype': subtype }">
+            :class="{ 'label-match': isMatch, 'subtype': subtype, 'pl-0': !hasChildren }">
         {{ $kaannaOlioTaiTeksti(node.label) }}
         <!-- <span v-if="!node.label && node.type">{{$t(node.type.replaceAll('_', '-'))}}</span> -->
         <span v-if="koodi" class="code-field">({{ koodi }})</span>
       </div>
 
-      <EpNavigationPostFix :node="node" class="ml-1" />
+      <EpNavigationPostFix :node="node" class="ml-1" v-if="node.meta && node.meta.postfix_label"/>
     </div>
   </div>
   <!-- children -->

@@ -12,9 +12,12 @@
       </ep-form-content>
     </div>
 
-    <ep-form-content class="col-md-12 mt-4" name="kuvaus" v-if="hasKuvaus">
+    <ep-form-content class="col-md-12 mt-4" name="tutkinnon-osan-kuvaus" v-if="perusteenTutkinnonosa && perusteenTutkinnonosa.kuvaus">
+      <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.kuvaus)" :kuvat="kuvat"/>
+    </ep-form-content>
+
+    <ep-form-content class="col-md-12 mt-4" name="koulutuksen-jarjestajan-tarkennus" v-if="sisaltoviite.tekstiKappale.teksti">
       <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
-      <ep-content-viewer v-if="perusteenTutkinnonosa && perusteenTutkinnonosa.kuvaus" :value="$kaanna(perusteenTutkinnonosa.kuvaus)" :kuvat="kuvat"/>
     </ep-form-content>
 
     <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in sisaltoviite.tosa.vapaat" :key="'tosavapaateksti'+index">
@@ -103,7 +106,7 @@
 
     </div>
 
-    <div v-if="perusteenTutkinnonosa">
+    <!-- <div v-if="perusteenTutkinnonosa">
       <h3>{{ $t('perusteen-sisalto') }}</h3>
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset && perusteenTutkinnonosa.tyyppi === 'normaali'" name="ammattitaitovaatimukset">
@@ -119,7 +122,7 @@
         <GeneerinenArviointiTaulukko :arviointi="perusteenTutkinnonosa.geneerinenArviointiasteikko" />
       </div>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
+        <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
         <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
       </ep-form-content>
 
@@ -135,7 +138,19 @@
         <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="valinnaisetOsaAlueet" />
       </ep-form-content>
 
-    </div>
+    </div> -->
+
+    <ep-form-content class="col-md-12 mt-4" name="pakolliset-osa-alueet" v-if="pakollisetOsaAlueet.length > 0">
+      <EpOsaAlueListaus :osaAlueet="pakollisetOsaAlueet" :sisaltoviiteId="sisaltoviite.id" />
+    </ep-form-content>
+
+    <ep-form-content class="col-md-12 mt-4" name="valinnaiset-osa-alueet" v-if="valinnaisetOsaAlueet.length > 0">
+      <EpOsaAlueListaus :osaAlueet="valinnaisetOsaAlueet" :sisaltoviiteId="sisaltoviite.id" />
+    </ep-form-content>
+
+    <ep-form-content class="col-md-12 mt-4" name="paikalliset-osa-alueet" v-if="paikallisetOsaAlueet.length > 0">
+      <EpOsaAlueListaus :osaAlueet="paikallisetOsaAlueet" :sisaltoviiteId="sisaltoviite.id" />
+    </ep-form-content>
 
   </div>
 </template>
@@ -148,10 +163,11 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenOsaalueet.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
-import { OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum } from '@shared/generated/amosaa';
+import EpOsaAlueListaus from '@/components/EpToteutussuunnitelma/EpOsaAlueListaus.vue';
+import { OmaOsaAlueDtoTyyppiEnum, OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum, Koodistot } from '@shared/api/amosaa';
 
 import * as _ from 'lodash';
-import { Koodistot } from '@shared/api/amosaa';
+
 import { Kielet } from '@shared/stores/kieli';
 
 @Component({
@@ -162,6 +178,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpAmmatillinenArvioinninKohdealueet,
     EpAmmatillinenOsaalueet,
     GeneerinenArviointiTaulukko,
+    EpOsaAlueListaus,
   },
 })
 export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
@@ -254,36 +271,20 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
     }] as any[];
   }
 
-  get pakollisetOsaAlueet() {
-    if (this.perusteenTutkinnonosa) {
-      return this.osaAlueFiltered(['pakollinen', true]);
-    }
-  }
-
-  get valinnaisetOsaAlueet() {
-    if (this.perusteenTutkinnonosa) {
-      return this.osaAlueFiltered(['pakollinen', false]);
-    }
-  }
-
   get kieli() {
     return Kielet.getSisaltoKieli.value;
   }
 
-  get osaAlueet() {
-    return this.perusteenTutkinnonosa.osaAlueet;
+  get pakollisetOsaAlueet() {
+    return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAKOLLINEN));
   }
 
-  osaAlueFiltered(osaamistavoiteFilter) {
-    return _.chain(this.osaAlueet)
-      .map(osaAlue => {
-        return {
-          ...osaAlue,
-          osaamistavoitteet: _.filter(osaAlue.osaamistavoitteet, osaamistavoiteFilter),
-        };
-      })
-      .filter(osaAlue => _.size(osaAlue.osaamistavoitteet) > 0)
-      .value();
+  get valinnaisetOsaAlueet() {
+    return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.VALINNAINEN));
+  }
+
+  get paikallisetOsaAlueet() {
+    return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAIKALLINEN));
   }
 }
 </script>
