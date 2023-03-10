@@ -2,16 +2,6 @@
   <div v-if="sisaltoviite">
     <h2 class="otsikko mb-4" slot="header">{{ $kaanna(sisaltoviite.tekstiKappale.nimi)}}, {{laajuus}} {{$t('osaamispiste')}}</h2>
 
-    <div class="d-flex">
-      <ep-form-content name="luotu" class="flex-fill" v-if="luotu">
-        {{$sd(luotu)}}
-      </ep-form-content>
-
-      <ep-form-content name="muokattu" class="flex-fill" v-if="muokattu">
-        {{$sd(muokattu)}}
-      </ep-form-content>
-    </div>
-
     <ep-form-content class="col-md-12 mt-4" name="tutkinnon-osan-kuvaus" v-if="perusteenTutkinnonosa && perusteenTutkinnonosa.kuvaus">
       <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.kuvaus)" :kuvat="kuvat"/>
     </ep-form-content>
@@ -26,44 +16,7 @@
     </ep-form-content>
 
     <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus" v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0">
-
-      <ep-collapse class="mb-3" v-for="toteutus in toteutukset" :key="toteutus.id"
-        :shadow="true"
-        :borderBottom="false"
-        :expandedByDefault="sisaltoviite.tosa.toteutukset.length === 1">
-        <div class="font-600" slot="header">{{$kaanna(toteutus.otsikko)}}</div>
-
-        <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">
-          <div class="font-600 mt-3">{{$t('tutkintonimikkeet-ja-osaamisalat')}}</div>
-          <b-table striped :items="toteutus.tutkintonimikkeetJaOsaamisalat" :fields="koodiFields" />
-        </template>
-
-        <div v-if="toteutus.tavatjaymparisto">
-          <ep-form-content class="col-md-12" name="tavat-ja-ymparisto">
-            <ep-content-viewer :value="$kaanna(toteutus.tavatjaymparisto.teksti)" :kuvat="kuvat"/>
-          </ep-form-content>
-
-          <hr/>
-        </div>
-
-        <div v-if="toteutus.arvioinnista">
-          <ep-form-content class="col-md-12" name="osaamisen-arvioinnista">
-            <ep-content-viewer :value="$kaanna(toteutus.arvioinnista.teksti)" :kuvat="kuvat"/>
-          </ep-form-content>
-
-          <hr/>
-        </div>
-
-        <div v-if="toteutus.vapaat && toteutus.vapaat.length > 0">
-          <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in toteutus.vapaat" :key="'vapaa'+index">
-            <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
-            <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
-            <hr v-if="index < toteutus.length-1"/>
-          </ep-form-content>
-        </div>
-
-      </ep-collapse>
-
+      <EpToteutukset :toteutukset="toteutukset" :kuvat="kuvat"/>
     </ep-form-content>
 
     <div v-if="sisaltoviite.tosa.omatutkinnonosa">
@@ -106,7 +59,7 @@
 
     </div>
 
-    <!-- <div v-if="perusteenTutkinnonosa">
+    <div v-if="naytetaanPerusteenSisalto">
       <h3>{{ $t('perusteen-sisalto') }}</h3>
 
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset && perusteenTutkinnonosa.tyyppi === 'normaali'" name="ammattitaitovaatimukset">
@@ -126,19 +79,21 @@
         <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
       </ep-form-content>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.osaAlueet.length > 0" name="osa-alueet">
-        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="osaAlueet" />
-      </ep-form-content>
+      <template v-if="!osaAlueet || osaAlueet.length ===0">
+        <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.osaAlueet.length > 0" name="osa-alueet">
+          <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenOsaAlueet" />
+        </ep-form-content>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="pakollisetOsaAlueet && pakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">
-        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="pakollisetOsaAlueet" />
-      </ep-form-content>
+        <ep-form-content class="col-md-12 mb-5" v-if="perusteenPakollisetOsaAlueet && perusteenPakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">
+          <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenPakollisetOsaAlueet" />
+        </ep-form-content>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="valinnaisetOsaAlueet && valinnaisetOsaAlueet.length > 0" name="valinnaiset-osa-alueet">
-        <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="valinnaisetOsaAlueet" />
-      </ep-form-content>
+        <ep-form-content class="col-md-12 mb-5" v-if="perusteenValinnaisetOsaAlueet && perusteenValinnaisetOsaAlueet.length > 0" name="valinnaiset-osa-alueet">
+          <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenValinnaisetOsaAlueet" />
+        </ep-form-content>
+      </template>
 
-    </div> -->
+    </div>
 
     <ep-form-content class="col-md-12 mt-4" name="pakolliset-osa-alueet" v-if="pakollisetOsaAlueet.length > 0">
       <EpOsaAlueListaus :osaAlueet="pakollisetOsaAlueet" :sisaltoviiteId="sisaltoviite.id" />
@@ -165,6 +120,7 @@ import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenO
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 import EpOsaAlueListaus from '@/components/EpToteutussuunnitelma/EpOsaAlueListaus.vue';
 import { OmaOsaAlueDtoTyyppiEnum, OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum, Koodistot } from '@shared/api/amosaa';
+import EpToteutukset from '@/components/EpToteutussuunnitelma/EpToteutukset.vue';
 
 import * as _ from 'lodash';
 
@@ -179,6 +135,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpAmmatillinenOsaalueet,
     GeneerinenArviointiTaulukko,
     EpOsaAlueListaus,
+    EpToteutukset,
   },
 })
 export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
@@ -275,6 +232,10 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
     return Kielet.getSisaltoKieli.value;
   }
 
+  get osaAlueet() {
+    return this.sisaltoviite.osaAlueet;
+  }
+
   get pakollisetOsaAlueet() {
     return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAKOLLINEN));
   }
@@ -285,6 +246,37 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
 
   get paikallisetOsaAlueet() {
     return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAIKALLINEN));
+  }
+
+  get perusteenPakollisetOsaAlueet() {
+    if (this.perusteenTutkinnonosa) {
+      return this.osaAlueFiltered(['pakollinen', true]);
+    }
+  }
+  get perusteenValinnaisetOsaAlueet() {
+    if (this.perusteenTutkinnonosa) {
+      return this.osaAlueFiltered(['pakollinen', false]);
+    }
+  }
+
+  osaAlueFiltered(osaamistavoiteFilter) {
+    return _.chain(this.perusteenOsaAlueet)
+      .map(osaAlue => {
+        return {
+          ...osaAlue,
+          osaamistavoitteet: _.filter(osaAlue.osaamistavoitteet, osaamistavoiteFilter),
+        };
+      })
+      .filter(osaAlue => _.size(osaAlue.osaamistavoitteet) > 0)
+      .value();
+  }
+
+  get perusteenOsaAlueet() {
+    return this.perusteenTutkinnonosa.osaAlueet;
+  }
+
+  get naytetaanPerusteenSisalto() {
+    return this.perusteenTutkinnonosa && (this.perusteenTutkinnonosa.tyyppi !== 'reformi_tutke2' || !this.osaAlueet || this.osaAlueet.length === 0);
   }
 }
 </script>

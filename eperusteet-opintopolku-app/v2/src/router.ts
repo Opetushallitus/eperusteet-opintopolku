@@ -386,7 +386,6 @@ export const router = new Router({
           path: 'sisalto/:sisaltoviiteId/osaalue/:osaalueId',
           component: RouteToteutussuunnitelmaOsaAlue,
           name: 'toteutussuunnitelmaOsaAlue',
-          props: routeProps,
         }],
       }, {
         path: 'ops/:opetussuunnitelmaId/:revision?/:koulutustyyppi*',

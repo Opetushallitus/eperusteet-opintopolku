@@ -1,8 +1,38 @@
 <template>
   <div class="content">
-    <ep-spinner v-if="osaalue" />
+    <ep-spinner v-if="!osaalue" />
     <div v-else>
-      <!-- <h2 class="otsikko mb-4" slot="header">{{ $kaanna(osaalue.nimi)}}</h2> -->
+      <h2 class="otsikko mb-4">{{ $kaanna(osaalue.nimi)}} <span v-if="koodi">({{koodi}})</span></h2>
+
+      <ep-form-content v-if="tutkinnonOsa" class="mt-4" name="tutkinnon-osa">
+        <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: {sisaltoviiteId: tutkinnonOsa.id }}">
+          {{ $kaannaOlioTaiTeksti(tutkinnonOsa.nimi) }}
+        </router-link>
+      </ep-form-content>
+
+      <ep-form-content class="mt-4" v-if="osaalue.toteutukset && osaalue.toteutukset.length > 0">
+        <h3 slot="header">{{$t('koulutuksen-jarjestajan-toteutus')}}</h3>
+        <EpToteutukset :toteutukset="osaalue.toteutukset" :kuvat="kuvat"/>
+      </ep-form-content>
+
+      <ep-form-content class="mt-4">
+        <h3 slot="header" v-if="perusteOsaAlue" class="mb-4">{{$t('perusteen-sisalto')}}</h3>
+        <h3 slot="header" v-else class="mb-4">{{$t('sisalto')}}</h3>
+
+        <h4>{{ osaamistavoitteetNimi }}</h4>
+
+        <Osaamistavoite :value="osaamistavoite"
+                        :is-valinnainen="false"
+                        :showLaajuus="false"
+                        :showKoodiArvo="false">
+          <div slot="osaamistavoitteet" />
+        </Osaamistavoite>
+
+        <Arviointi2020Taulukko v-if="arviointi" :arviointi="arviointi" class="mt-4">
+          <h4 slot="header">{{ $t('arviointi')}} </h4>
+        </Arviointi2020Taulukko>
+
+      </ep-form-content>
 
     </div>
 
@@ -13,22 +43,95 @@
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import * as _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpToteutukset from '@/components/EpToteutussuunnitelma/EpToteutukset.vue';
+import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
+import Osaamistavoite from '@shared/components/EpOsaamistavoite/Osaamistavoite.vue';
+import Arviointi2020Taulukko from '@shared/components/EpTutkinnonosa/Arviointi2020Taulukko.vue';
 
 @Component({
   components: {
-
+    EpSpinner,
+    EpFormContent,
+    EpToteutukset,
+    Osaamistavoite,
+    GeneerinenArviointiTaulukko,
+    Arviointi2020Taulukko,
   },
 })
 export default class RouteToteutussuunnitelmaOsaAlue extends Vue {
   @Prop({ required: true })
   opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
 
-  @Prop({ required: true })
-  osaalueId!: string;
+  get osaalueId() {
+    return _.toNumber(this.$route.params.osaalueId);
+  }
+
+  get sisaltoviiteId() {
+    return _.toNumber(this.$route.params.sisaltoviiteId);
+  }
 
   get osaalue() {
-    // return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.osaalueId });
-    return null;
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.osaalueId });
+  }
+
+  get tutkinnonOsa() {
+    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
+  }
+
+  get perusteOsaAlue() {
+    if (this.osaalue.perusteenOsaAlueId) {
+      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: this.osaalue.perusteenOsaAlueId });
+    }
+  }
+
+  get koodi() {
+    return this.osaalue.perusteenOsaAlueKoodi?.split('_')[1].toUpperCase();
+  }
+
+  get kuvat() {
+    return [
+      ...this.opetussuunnitelmaDataStore.kuvat,
+      ...this.opetussuunnitelmaDataStore.perusteKuvat,
+    ];
+  }
+
+  get osaamistavoitteetNimi() {
+    if (!this.perusteOsaAlue) {
+      return this.$t('osaamistavoitteet') + ', ' + this.osaalue.laajuus + ' ' + this.$t('osaamispiste-lyhenne');
+    }
+
+    const nimi = this.osaalue.tyyppi === 'pakollinen'
+      ? this.$t('pakolliset-osaamistavoitteet')
+      : this.$t('valinnaiset-osaamistavoitteet');
+    if (this.osaamistavoite?.laajuus) {
+      const laajuusosa = ', ' + this.osaamistavoite.laajuus + ' ' + this.$t('osaamispiste-lyhenne');
+      return nimi + laajuusosa;
+    }
+    else {
+      return nimi;
+    }
+  }
+
+  get osaamistavoite() {
+    if (!this.perusteOsaAlue) {
+      return { tavoitteet: this.osaalue.osaamistavoitteet };
+    }
+    else {
+      if (this.perusteOsaAlue) {
+        if (this.osaalue.tyyppi === 'pakollinen') {
+          return this.perusteOsaAlue.pakollisetOsaamistavoitteet;
+        }
+        else if (this.osaalue.tyyppi === 'valinnainen') {
+          return this.perusteOsaAlue.valinnaisetOsaamistavoitteet;
+        }
+      }
+    }
+  }
+
+  get arviointi() {
+    return this.perusteOsaAlue?.arviointi || this.osaalue.geneerinenArviointiasteikko;
   }
 }
 </script>
