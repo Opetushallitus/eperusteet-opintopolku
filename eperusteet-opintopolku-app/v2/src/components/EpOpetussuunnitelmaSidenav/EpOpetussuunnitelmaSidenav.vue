@@ -55,7 +55,8 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
     const isOppiaineenSisalto
       = node.type === 'opintojaksot'
         || node.type === 'moduulit'
-        || node.type === 'lukiokurssit';
+        || node.type === 'lukiokurssit'
+        || node.type === 'tutkinnonosat_paikalliset';
 
     const isErikoistyyppi = type === 'oppiaineet'
         || type === 'oppiaine'
@@ -65,7 +66,10 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
         || type === 'opintojaksot'
         || type === 'opintojakso'
         || type === 'lukiooppiaineet_2015'
-        || type === 'lukiooppimaarat_2015';
+        || type === 'lukiooppimaarat_2015'
+        || type === 'pakolliset_osaalueet'
+        || type === 'valinnaiset_osaalueet'
+        || type === 'paikalliset_osaalueet';
 
     if ((isCurrentOrParentSelected && isErikoistyyppi) || isOppiaineenSisalto) {
       return node.children;
