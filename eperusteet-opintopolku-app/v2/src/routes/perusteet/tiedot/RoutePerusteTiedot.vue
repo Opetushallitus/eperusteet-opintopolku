@@ -196,6 +196,12 @@
         </ep-form-content>
       </div>
 
+      <div class="col-md-12" v-if="julkaisut && julkaisut.length > 0">
+        <ep-form-content name="julkaisuhistoria" headerType="h3" headerClass="h6">
+          <EpJulkaisuHistoriaJulkinen :julkaisut="julkaisut"></EpJulkaisuHistoriaJulkinen>
+        </ep-form-content>
+      </div>
+
     </div>
     <slot name="previous-next-navigation" />
   </div>
@@ -215,9 +221,11 @@ import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
+import EpJulkaisuHistoriaJulkinen from '@shared/components/EpJulkaisuHistoriaJulkinen/EpJulkaisuHistoriaJulkinen.vue';
 
 @Component({
   components: {
+    EpJulkaisuHistoriaJulkinen,
     EpFormContent,
     EpField,
     EpDatepicker,
@@ -279,6 +287,10 @@ export default class RoutePerusteTiedot extends Vue {
 
   get termit() {
     return this.perusteDataStore.termit;
+  }
+
+  get julkaisut() {
+    return this.perusteDataStore.julkaisut;
   }
 
   get liitteet() {
