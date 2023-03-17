@@ -1,12 +1,22 @@
 import { Store, Getter, State } from '@shared/stores/store';
 import * as _ from 'lodash';
-import { findDeep } from 'deepdash-es/standalone';
-import { NavigationNodeDto, PerusteDto, Perusteet, TermiDto, baseURL,
-  Dokumentit, DokumentitParam,
+import {
+  NavigationNodeDto,
+  Perusteet,
+  TermiDto,
+  baseURL,
+  Dokumentit,
+  DokumentitParam,
   Termit,
-  Liitetiedostot, LiitetiedostotParam, TekstiKappaleDto, LukioperusteenJulkisetTiedot, PerusteKaikkiDto, GeneerinenArviointiasteikko, Arviointiasteikot, Aipeopetuksensisalto } from '@shared/api/eperusteet';
-import { Koulutustyyppi, KoulutustyyppiToteutus, LiiteDtoWrapper } from '@shared/tyypit';
-
+  Liitetiedostot,
+  LiitetiedostotParam,
+  TekstiKappaleDto,
+  LukioperusteenJulkisetTiedot,
+  PerusteKaikkiDto,
+  Arviointiasteikot,
+  JulkaisuBaseDto, Julkaisut,
+} from '@shared/api/eperusteet';
+import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
   buildNavigation,
   filterNavigation,
@@ -48,6 +58,7 @@ export class PerusteDataStore {
   @State() public arviointiasteikot: any[] = [];
   @State() public perusteJulkaisu: any = null;
   @State() public perusteJulkaisuP: Promise<any> | null = null;
+  @State() public julkaisut: JulkaisuBaseDto[] | null = null;
 
   public static async create(perusteId: number, revision: number | null = null) {
     const result = new PerusteDataStore(perusteId, revision);
@@ -87,6 +98,11 @@ export class PerusteDataStore {
     }
 
     this.liitteet = (await Liitetiedostot.getAllLiitteet(this.perusteId)).data;
+    this.fetchJulkaisut();
+  }
+
+  async fetchJulkaisut() {
+    this.julkaisut = (await Julkaisut.getJulkisetJulkaisut(this.perusteId!)).data;
   }
 
   public getJulkaistuPerusteSisalto(filter) {
