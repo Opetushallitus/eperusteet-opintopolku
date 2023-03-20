@@ -13,6 +13,13 @@
                          :kuvat="perusteKuvat" />
     </ep-collapse>
 
+    <template v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && laajaAlaisetOsaamiset">
+      <EpCollapse v-for="lao in laajaAlaisetOsaamiset" :key="'lao' + lao.id">
+        <h3 slot="header">{{$kaanna(lao.nimi)}}</h3>
+        <div v-html="$kaanna(lao.kuvaus)" />
+      </EpCollapse>
+    </template>
+
     <!-- Pohjan teksti -->
     <ep-collapse tyyppi="pohjateksti"
                  v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPohjanTeksti && hasTekstikappaleOriginalsTeksteja">
@@ -201,6 +208,12 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
 
   get pohjaNimi() {
     return this.opetussuunnitelmaDataStore.opetussuunnitelma?.pohja?.nimi;
+  }
+
+  get laajaAlaisetOsaamiset() {
+    if (this.perusteTekstikappale?.tunniste === 'laajaalainenosaaminen') {
+      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset');
+    }
   }
 }
 
