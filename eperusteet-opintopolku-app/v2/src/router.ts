@@ -257,11 +257,6 @@ export const router = new Router({
             component: RouteAmmatillinenKoulutuksenJarjestajat,
             name: 'ammatillinenKoulutuksenjarjestajat',
             props: { koulutuksenJarjestajatStore },
-          },
-          {
-            path: 'koulutusviennit',
-            component: RouteAmmatillinenKoulutusviennit,
-            name: 'ammatillinenKoulutusviennit',
           }, {
             path: 'ohjeet',
             component: RouteAmmatillinenOhjeet,
