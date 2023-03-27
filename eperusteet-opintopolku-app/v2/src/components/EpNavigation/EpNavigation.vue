@@ -302,8 +302,8 @@ export default class EpNavigation extends Vue {
       &.koulutustyyppi-esiopetus {
         border-bottom-color: $koulutustyyppi-esiopetus-color;
       }
-      &.koulutustyyppi-lukio {
-        border-bottom-color: $koulutustyyppi-lukio-color;
+      &.koulutustyyppi-lukiokoulutus {
+        border-bottom-color: $koulutustyyppi-lukiokoulutus-color;
       }
       &.koulutustyyppi-perusopetus {
         border-bottom-color: $koulutustyyppi-perusopetus-color;
@@ -347,9 +347,9 @@ export default class EpNavigation extends Vue {
         border-bottom-color: $koulutustyyppi-esiopetus-color;
       }
     }
-    &.koulutustyyppi-lukio {
+    &.koulutustyyppi-lukiokoulutus {
       /deep/ .nav-link {
-        border-bottom-color: $koulutustyyppi-lukio-color;
+        border-bottom-color: $koulutustyyppi-lukiokoulutus-color;
       }
     }
     &.koulutustyyppi-perusopetus {
