@@ -122,8 +122,8 @@ export default class EpHeader extends Vue {
     background-color: $koulutustyyppi-esiopetus-color;
     background-image: url('../../../public/img/banners/aallot_esiopetus.svg');
   }
-  &.koulutustyyppi-lukio {
-    background-color: $koulutustyyppi-lukio-color;
+  &.koulutustyyppi-lukiokoulutus {
+    background-color: $koulutustyyppi-lukiokoulutus-color;
     background-image: url('../../../public/img/banners/aallot_lukio.svg');
   }
   &.koulutustyyppi-perusopetus {
