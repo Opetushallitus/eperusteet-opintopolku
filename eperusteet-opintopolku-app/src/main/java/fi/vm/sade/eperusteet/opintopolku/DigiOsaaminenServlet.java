@@ -27,7 +27,7 @@ public class DigiOsaaminenServlet extends HttpServlet {
         }
 
         long digiOsaaminenId = digiOsaamiset.get("data").get(0).get("id").asLong();
-        response.sendRedirect(url + "/#/fi/muu/" + digiOsaaminenId);
+        response.sendRedirect(url + "/#/fi/digiosaaminen/" + digiOsaaminenId);
     }
 
 }
