@@ -78,8 +78,8 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       [
         this.opetussuunnitelma!.peruste!.perusteId,
         ..._.chain(tutkinnonOsat)
-          .filter(tosa => tosa.tosa?.vierastutkinnonosa || tosa.peruste?.perusteId)
-          .map(tosa => tosa.tosa?.vierastutkinnonosa?.perusteId || tosa.peruste?.perusteId)
+          .filter(tosa => tosa.tosa?.vierastutkinnonosa || tosa.peruste?.perusteId || tosa.linkattuPerusteId)
+          .map(tosa => tosa.tosa?.vierastutkinnonosa?.perusteId || tosa.peruste?.perusteId || tosa.linkattuPerusteId)
           .value(),
       ]);
 
