@@ -11,7 +11,6 @@ import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
 import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
 import RouteAmmatillinenValmisteillaOlevat from '@/routes/ammatillinen/RouteAmmatillinenValmisteillaOlevat.vue';
-import RouteAmmatillinenKoulutusviennit from '@/routes/ammatillinen/RouteAmmatillinenKoulutusviennit.vue';
 import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
 import RouteAmmatillinenTyopajat from '@/routes/ammatillinen/RouteAmmatillinenTyopajat.vue';
 import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';

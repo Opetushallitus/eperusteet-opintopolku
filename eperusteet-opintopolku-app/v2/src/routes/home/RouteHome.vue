@@ -246,7 +246,7 @@ export default class RouteHome extends Vue {
       route: {
         name: 'ammatillinenSelaus',
         params: {
-          koulutustyyppi: koulutustyyppiStateName(Koulutustyyppi.ammattitutkinto),
+          koulutustyyppi: 'ammatillinen',
         },
       },
     };
