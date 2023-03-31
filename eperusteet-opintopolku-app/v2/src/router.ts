@@ -67,7 +67,7 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
-import { ryhmatKoulutustyypeilla, stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { routeKoulutustyypit, ryhmatKoulutustyypeilla, stateToKoulutustyyppi } from '@shared/utils/perusteet';
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
 import { createLogger } from '@shared/utils/logger';
@@ -817,7 +817,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.params?.koulutustyyppi && !ryhmatKoulutustyypeilla()[to.params?.koulutustyyppi]) {
+  if (to.params?.koulutustyyppi && !routeKoulutustyypit[to.params?.koulutustyyppi]) {
     hideLoading();
     router.replace({
       name: 'virhe',
