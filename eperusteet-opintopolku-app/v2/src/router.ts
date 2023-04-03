@@ -67,7 +67,7 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
-import { routeKoulutustyypit, ryhmatKoulutustyypeilla, stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
 import { createLogger } from '@shared/utils/logger';
@@ -475,7 +475,7 @@ export const router = new Router({
           name: 'opetussuunnitelmaperusopetusoppiaine',
         }],
       }, {
-        path: ':koulutustyyppi/:perusteId/:revision?',
+        path: ':koulutustyyppi/:perusteId(\\d+)/:revision?',
         name: 'peruste',
         component: RoutePeruste,
         meta: {
@@ -813,23 +813,6 @@ router.afterEach(() => {
 
 router.beforeEach((to, from, next) => {
   changeLang(to, from);
-  next();
-});
-
-router.beforeEach((to, from, next) => {
-  if (to.params?.koulutustyyppi && !routeKoulutustyypit[to.params?.koulutustyyppi]) {
-    hideLoading();
-    router.replace({
-      name: 'virhe',
-      params: {
-        lang: 'fi',
-      },
-      query: {
-        virhekoodi: '404',
-      },
-    } as any);
-  }
-
   next();
 });
 
