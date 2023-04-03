@@ -110,4 +110,16 @@ export const redirects = [
       };
     },
   },
+  {
+    path: 'tpo/:perusteId(\\d+)/*',
+    redirect: (to) => {
+      return {
+        name: 'perusteTiedot',
+        params: {
+          ...to.params,
+          koulutustyyppi: 'taiteenperusopetus',
+        },
+      };
+    },
+  },
 ];
