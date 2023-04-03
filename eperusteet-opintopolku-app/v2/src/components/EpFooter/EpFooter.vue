@@ -58,10 +58,12 @@ export default class EpFooter extends Vue {
       oph: {
         fi: 'https://www.oph.fi/fi',
         sv: 'https://www.oph.fi/sv',
+        en: 'https://www.oph.fi/en',
       },
       opintopolku: {
         fi: 'https://opintopolku.fi/konfo/fi',
         sv: 'https://opintopolku.fi/konfo/sv',
+        en: 'https://opintopolku.fi/konfo/en',
       },
       eperusteet_vanha: {
         fi: 'https://eperusteet.opintopolku.fi',
