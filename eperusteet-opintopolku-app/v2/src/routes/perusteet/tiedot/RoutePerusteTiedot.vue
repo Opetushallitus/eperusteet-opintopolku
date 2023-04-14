@@ -254,11 +254,6 @@ export default class RoutePerusteTiedot extends Vue {
     return Kielet.getSisaltoKieli.value;
   }
 
-  @Watch('kieli')
-  async kieliChanged() {
-    await this.perusteDataStore.getDokumentit();
-  }
-
   get isAmmatillinen() {
     return this.peruste && isKoulutustyyppiAmmatillinen(this.peruste.koulutustyyppi!);
   }
