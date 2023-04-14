@@ -226,10 +226,11 @@ export class PerusteDataStore {
   public readonly current!: NavigationNode | null;
 
   public async getDokumentit() {
-    if (!this.peruste || this.revision) {
+    if (!this.peruste) {
       return;
     }
 
+    this.dokumentti = null;
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
     const suoritustavat = this.peruste.suoritustavat ? this.peruste.suoritustavat : [{ suoritustapakoodi: 'REFORMI' }] as any[];
     if (suoritustavat) {
@@ -237,7 +238,13 @@ export class PerusteDataStore {
         const st = suoritustavat[i];
         const suoritustapakoodi = st.suoritustapakoodi;
         if (suoritustapakoodi) {
-          const dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
+          let dokumenttiId;
+          if (this.esikatselu) {
+            dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
+          }
+          else {
+            dokumenttiId = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
+          }
           if (dokumenttiId) {
             this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
           }
