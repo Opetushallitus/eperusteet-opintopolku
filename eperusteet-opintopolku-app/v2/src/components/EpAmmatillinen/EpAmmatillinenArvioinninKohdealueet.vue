@@ -5,13 +5,12 @@
 
       <div v-for="(arvioinninkohde, index) in arvioinninKohdealue.arvioinninKohteet" :key="'arvioinninkohde'+index" class="mb-5">
 
-        <div class="mb-3 mt-4">
+        <div class="mb-2 mt-4">
           <div class="font-weight-bold mb-3">{{$kaanna(arvioinninkohde.otsikko)}}</div>
-          <div class="mb-1">{{$t('arvioinnin-kohde')}}</div>
           <div>{{$kaanna(arvioinninkohde.selite)}}</div>
         </div>
 
-        <b-table striped :items="arvioinninkohde.osaamistasonKriteerit" :fields="osaamistasonKriteeritFields" responsive>
+        <b-table striped :items="arvioinninkohde.osaamistasonKriteerit" :fields="osaamistasonKriteeritFields" responsive thead-class="d-none">
           <template v-slot:cell(osaamistaso)="{item}">
             <span v-if="item.osaamistaso"> {{$kaanna(item.osaamistaso.otsikko)}}</span>
           </template>
@@ -74,11 +73,9 @@ export default class EpAmmatillinenArvioinninKohdealueet extends Vue {
   get osaamistasonKriteeritFields() {
     return [{
       key: 'osaamistaso',
-      label: this.$t('osaamistaso') as string,
       thStyle: { width: '40%' },
     }, {
       key: 'kriteerit',
-      label: this.$t('kriteerit') as string,
     }] as any[];
   }
 }
