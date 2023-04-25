@@ -345,7 +345,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       return;
     }
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
-    const dokumenttiId = (await Dokumentit.getDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+    const dokumenttiId = (await Dokumentit.getLatestDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
     if (dokumenttiId) {
       this.dokumentit[sisaltoKieli] = baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url;
     }
