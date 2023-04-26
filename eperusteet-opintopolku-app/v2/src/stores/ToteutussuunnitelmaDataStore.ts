@@ -100,7 +100,12 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     try {
       if (this.opetussuunnitelma) {
         this.dokumenttiTila = null;
-        this.dokumenttiTila = (await JulkinenApi.getJulkaistuDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!), this.revision)).data;
+        if (this.esikatselu) {
+          this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
+        }
+        else {
+          this.dokumenttiTila = (await JulkinenApi.getJulkaistuDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!), this.revision)).data;
+        }
       }
     }
     catch (err) {

@@ -2,14 +2,13 @@ import _ from 'lodash';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
-import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto,
+import { YlopsNavigationNodeDto,
   baseURL,
   Dokumentit,
   DokumentitParams,
   Liitetiedostot,
   LiitetiedostotParam,
   Opetussuunnitelmat,
-  Opintojaksot,
   Termisto,
   OpetussuunnitelmatJulkiset,
   OpetussuunnitelmaExportDto,
@@ -345,7 +344,14 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       return;
     }
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
-    const dokumenttiId = (await Dokumentit.getJulkaistuDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+
+    let dokumenttiId;
+    if (this.esikatselu) {
+      dokumenttiId = (await Dokumentit.getLatestDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+    }
+    else {
+      dokumenttiId = (await Dokumentit.getJulkaistuDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+    }
     if (dokumenttiId) {
       this.dokumentit[sisaltoKieli] = baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url;
     }
