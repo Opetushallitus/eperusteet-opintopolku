@@ -138,9 +138,11 @@ export default class RouteOsaamiskokonaisuusPaaAlue extends Vue {
 
 .taso-chk {
 
-  ::v-deep .btn {
+  ::v-deep .btn, ::v-deep .btn-primary:not(:disabled):not(.disabled).active, ::v-deep .btn-primary:not(:disabled):not(.disabled):active {
     font-size: 0.8rem;
     border-radius: 10px;
+    background-color: $digitaalinen-osaaminen-ikaryhma-color;
+    border-color: $digitaalinen-osaaminen-ikaryhma-color;
   }
 
   .material-icons-outlined {
