@@ -91,7 +91,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   @Getter(state => {
     if (state.dokumenttiTila && state.dokumenttiTila.tila === _.lowerCase(DokumenttiDtoTilaEnum.VALMIS)) {
-      return baseURL + JulkinenApiParams.getDokumentti(state.opetussuunnitelma.id, Kielet.getSisaltoKieli.value, state.opetussuunnitelma.koulutustoimija.id).url;
+      return baseURL + JulkinenApiParams.getDokumentti(state.opetussuunnitelma.id, Kielet.getSisaltoKieli.value, state.opetussuunnitelma.koulutustoimija.id, state.dokumenttiTila?.id).url;
     }
   })
   public readonly dokumenttiUrl!: string;
@@ -100,7 +100,12 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     try {
       if (this.opetussuunnitelma) {
         this.dokumenttiTila = null;
-        this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
+        if (this.esikatselu) {
+          this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
+        }
+        else {
+          this.dokumenttiTila = (await JulkinenApi.getJulkaistuDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!), this.revision)).data;
+        }
       }
     }
     catch (err) {
