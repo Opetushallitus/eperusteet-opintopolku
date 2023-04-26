@@ -20,7 +20,7 @@
         </b-tabs>
       </EpCollapse>
 
-      <EpCollapse :borderBottom="false">
+      <EpCollapse :borderBottom="false" v-if="perusteenOsa.keskeinenKasitteisto">
         <h3 slot="header" class="collapse-header">{{$t('keskeinen-kasitteisto')}}</h3>
         <ep-content-viewer :value="$kaanna(perusteenOsa.keskeinenKasitteisto)" :termit="termit" :kuvat="kuvat" />
       </EpCollapse>
