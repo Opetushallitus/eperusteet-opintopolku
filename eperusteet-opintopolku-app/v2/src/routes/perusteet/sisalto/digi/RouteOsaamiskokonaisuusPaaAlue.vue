@@ -148,4 +148,26 @@ export default class RouteOsaamiskokonaisuusPaaAlue extends Vue {
   }
 }
 
+::v-deep .osa-alue {
+  .edelleen-kehittyva-osaaminen {
+    .otsikko {
+      display: none;
+    }
+
+    .sisalto {
+      font-style: italic;
+    }
+  }
+
+  .edelleen-kehittyva-osaaminen + .osaaminen {
+    margin-top: 0 !important;
+  }
+
+  .osaaminen {
+    .otsikko {
+      display: none;
+    }
+  }
+}
+
 </style>
