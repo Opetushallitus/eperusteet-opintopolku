@@ -158,7 +158,6 @@ export default class EpHeader extends Vue {
 
   &.tyyppi-digitaalinen_osaaminen {
     background-color: $digitaalinen-osaaminen-color;
-    background-image: url('../../../public/img/banners/banner_digitaalinen_osaaminen.svg');
   }
 
   &.tyyppi-yhteinen {

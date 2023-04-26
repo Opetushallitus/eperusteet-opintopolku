@@ -118,7 +118,7 @@ export default class RouteOsaamiskokonaisuus extends Vue {
 .paa-alue {
   margin: 20px;
   height: 150px;
-  background-color: $blue-lighten-8;
+  background-color: $digitaalinen-osaaminen-paa-alue-color;
   border-radius: 10px;
   background-position: center bottom;
   background-repeat: no-repeat;
