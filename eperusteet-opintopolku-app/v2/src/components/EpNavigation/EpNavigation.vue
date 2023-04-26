@@ -43,7 +43,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, stateToKoulutustyyppi, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus, muuKoulutus } from '@shared/utils/perusteet';
+import { koulutustyyppiTheme, stateToKoulutustyyppi, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus, muuKoulutus, tyyppiTheme } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter, RawLocation } from 'vue-router/types/router';
@@ -63,14 +63,25 @@ export default class EpNavigation extends Vue {
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
   get loading() {
-    return _.isNil(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value) || _.isNil(this.julkaistutKoulutustyypitStore.muuLukumaarat.value);
+    return _.isNil(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value)
+    || _.isNil(this.julkaistutKoulutustyypitStore.muuLukumaarat.value)
+    || _.isNil(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
   }
 
   get julkaistutKoulutustyypit() {
     return [
       ...this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value,
       ...(this.muuLukumaarat > 0 ? ['koulutustyyppi_muu'] : []),
+      ...(this.digitaalinenOsaaminenLkm > 0 ? ['koulutustyyppi_digi'] : []),
     ];
+  }
+
+  get digitaalinenOsaaminenLkm() {
+    return _.size(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
+  }
+
+  get digitaalinenOsaaminenPeruste() {
+    return _.first(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
   }
 
   get muuLukumaarat() {
@@ -176,6 +187,20 @@ export default class EpNavigation extends Vue {
     }));
   }
 
+  get digitaalinenOsaaminen() {
+    return [{
+      name: 'digitaalinen-osaaminen',
+      route: {
+        name: 'peruste',
+        params: {
+          perusteId: this.digitaalinenOsaaminenPeruste?.id,
+          koulutustyyppi: tyyppiTheme('digitaalinen_osaaminen'),
+        },
+      },
+      alityypit: ['koulutustyyppi_digi'],
+    }];
+  }
+
   get items() {
     return _.filter([
       ...this.yleissivistavat,
@@ -184,6 +209,7 @@ export default class EpNavigation extends Vue {
       ...this.tutkintoonvalmentava,
       ...this.kotoutumiskoulutus,
       ...this.muuKoulutus,
+      ...this.digitaalinenOsaaminen,
     ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi)));
   }
 
@@ -272,10 +298,10 @@ export default class EpNavigation extends Vue {
   }
 }
 
-@media (min-width: 1300px) {
+@media (min-width: 1600px) {
   .navbar-ep {
     .navbar-nav.flex-wrap {
-      margin-left: calc((100% - 1140px) / 2);
+      margin-left: calc((100% - 1270px) / 2);
     }
   }
 }
@@ -327,6 +353,10 @@ export default class EpNavigation extends Vue {
 
       &.koulutustyyppi-muukoulutus {
         border-bottom-color: $koulutustyyppi-muu-color;
+      }
+
+      &.koulutustyyppi-digiosaaminen {
+        border-bottom-color: $digitaalinen-osaaminen-color;
       }
     }
   }

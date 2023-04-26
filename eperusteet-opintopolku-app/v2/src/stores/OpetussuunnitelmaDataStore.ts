@@ -2,13 +2,14 @@ import _ from 'lodash';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
-import { YlopsNavigationNodeDto,
+import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto,
   baseURL,
   Dokumentit,
   DokumentitParams,
   Liitetiedostot,
   LiitetiedostotParam,
   Opetussuunnitelmat,
+  Opintojaksot,
   Termisto,
   OpetussuunnitelmatJulkiset,
   OpetussuunnitelmaExportDto,

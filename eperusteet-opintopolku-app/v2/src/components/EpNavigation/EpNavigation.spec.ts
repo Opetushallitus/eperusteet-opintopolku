@@ -37,6 +37,9 @@ describe('EpNavigation', () => {
       { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.vapaasivistystyo[0], lukumaara: 1 },
     ];
     julkaistutKoulutustyypitStore.state.muuLukumaarat = 1;
+    julkaistutKoulutustyypitStore.state.digitaalinenOsaaminen = [{
+      id: 1,
+    }];
 
     await localVue.nextTick();
     const links = wrapper.contains;
@@ -47,5 +50,6 @@ describe('EpNavigation', () => {
     expect(findContaining(wrapper, 'a', 'ammatillinen')).toBeFalsy();
     expect(findContaining(wrapper, 'a', 'vapaasivistystyo')).toBeTruthy();
     expect(findContaining(wrapper, 'a', 'muukoulutus')).toBeTruthy();
+    expect(findContaining(wrapper, 'a', 'digitaalinen-osaaminen')).toBeTruthy();
   });
 });
