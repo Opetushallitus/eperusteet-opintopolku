@@ -122,7 +122,6 @@ export default class RouteOsaamiskokonaisuus extends Vue {
   border-radius: 10px;
   background-position: center bottom;
   background-repeat: no-repeat;
-  background-image: url('../../../../../public/img/banners/tile_digitaalinen_osaaminen.svg');
 
   .nimi {
     margin-top: 10px;
