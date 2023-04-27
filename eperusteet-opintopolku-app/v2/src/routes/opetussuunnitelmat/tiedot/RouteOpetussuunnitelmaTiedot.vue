@@ -142,7 +142,10 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
 
   get dokumentti() {
     const dokumentit = this.opetussuunnitelmaDataStore.dokumentit;
-    return dokumentit && (this as any).$kaanna(dokumentit);
+    if (_.get(dokumentit, Kielet.getUiKieli.value)) {
+      return (this as any).$kaanna(dokumentit);
+    }
+    return null;
   }
 
   private getOrganisaatioNimi(organisaatio) {
