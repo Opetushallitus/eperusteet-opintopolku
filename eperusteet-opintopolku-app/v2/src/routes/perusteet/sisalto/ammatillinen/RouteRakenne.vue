@@ -18,7 +18,7 @@
                 <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa._tutkinnonOsaViite" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
                 {{$kaanna(rakenneosa.tutkinnonosa.tutkinnonOsa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
               </router-link>
-              <b-popover :target="'tutkinto'+rakenneosa._tutkinnonOsaViite" :placement="'bottom'" triggers="hover">
+              <b-popover :target="'tutkinto'+rakenneosa._tutkinnonOsaViite" :placement="'top'" triggers="hover" variant="primary">
                 <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
                 <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
               </b-popover>
@@ -26,7 +26,6 @@
             <span v-else>
               {{$kaanna(rakenneosa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
             </span>
-
           </div>
         </template>
       </ep-peruste-rakenne>
@@ -36,12 +35,10 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { Kielet } from '@shared/stores/kieli';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import PerusteRakenneOsa from '@/components/EpAmmatillinen/PerusteRakenneOsa.vue';
-import { PerusteRakenneStore } from '@/stores/PerusteRakenneStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
