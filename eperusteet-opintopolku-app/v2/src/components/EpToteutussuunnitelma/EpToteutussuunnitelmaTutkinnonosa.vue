@@ -233,19 +233,24 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   }
 
   get osaAlueet() {
-    return this.sisaltoviite.osaAlueet;
+    return _.map(this.sisaltoviite.osaAlueet, osaAlue => {
+      return {
+        ...osaAlue,
+        perusteenOsaAlue: _.find(this.perusteenOsaAlueet, pOsaAlue => pOsaAlue.id === osaAlue.perusteenOsaAlueId),
+      };
+    });
   }
 
   get pakollisetOsaAlueet() {
-    return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAKOLLINEN));
+    return _.filter(this.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAKOLLINEN));
   }
 
   get valinnaisetOsaAlueet() {
-    return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.VALINNAINEN));
+    return _.filter(this.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.VALINNAINEN));
   }
 
   get paikallisetOsaAlueet() {
-    return _.filter(this.sisaltoviite.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAIKALLINEN));
+    return _.filter(this.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAIKALLINEN));
   }
 
   get perusteenPakollisetOsaAlueet() {

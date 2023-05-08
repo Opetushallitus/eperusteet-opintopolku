@@ -2,7 +2,11 @@
   <div class="content">
     <ep-spinner v-if="!osaalue" />
     <div v-else>
-      <h2 class="otsikko mb-4">{{ $kaanna(osaalue.nimi)}} <span v-if="koodi">({{koodi}})</span></h2>
+      <h2 class="otsikko mb-4">
+        <span v-if="perusteOsaAlue">{{ $kaanna(perusteOsaAlue.nimi)}}</span>
+        <span v-else>{{ $kaanna(osaalue.nimi)}}</span>
+        <span v-if="koodi" class="ml-1">({{koodi}})</span>
+      </h2>
 
       <ep-form-content v-if="tutkinnonOsa" class="mt-4" name="tutkinnon-osa">
         <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: {sisaltoviiteId: tutkinnonOsa.id }}">
