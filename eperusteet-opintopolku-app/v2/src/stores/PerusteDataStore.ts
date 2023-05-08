@@ -238,20 +238,26 @@ export class PerusteDataStore {
         const st = suoritustavat[i];
         const suoritustapakoodi = st.suoritustapakoodi;
         if (suoritustapakoodi) {
-          let dokumenttiId;
           if (this.esikatselu) {
-            dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
+            let dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
+            this.asetaDokumentti(dokumenttiId);
           }
           else {
-            dokumenttiId = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
-          }
-          if (dokumenttiId) {
-            this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
+            let dokumentti = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
+            if (dokumentti) {
+              this.asetaDokumentti(dokumentti.id);
+            }
           }
         }
       }
     }
   };
+
+  private asetaDokumentti(dokumenttiId) {
+    if (dokumenttiId) {
+      this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
+    }
+  }
 
   private async getLiite(lang: string) {
     try {
