@@ -15,7 +15,7 @@
               <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa.tutkinnonosa.id" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
               <span>{{$kaanna(rakenneosa.tutkinnonosa.nimi)}}</span>
             </router-link>
-            <b-popover :target="'tutkinto'+rakenneosa.tutkinnonosa.id" :placement="'bottom'" triggers="hover">
+            <b-popover :target="'tutkinto'+rakenneosa.tutkinnonosa.id" :placement="'top'" triggers="hover" variant="primary">
               <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
               <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
             </b-popover>
@@ -43,7 +43,6 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import * as _ from 'lodash';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
-import { SuorituspolkuRakenneDto } from '@shared/generated/amosaa';
 
 @Component({
   components: {
