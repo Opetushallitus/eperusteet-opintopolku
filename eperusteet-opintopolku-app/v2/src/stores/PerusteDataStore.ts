@@ -239,12 +239,15 @@ export class PerusteDataStore {
         const suoritustapakoodi = st.suoritustapakoodi;
         if (suoritustapakoodi) {
           let dokumenttiId;
-          if (this.esikatselu) {
-            dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
-          }
-          else {
+
+          if (!this.esikatselu) {
             dokumenttiId = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
           }
+
+          if (this.esikatselu || !dokumenttiId) {
+            dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
+          }
+
           if (dokumenttiId) {
             this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
           }
