@@ -112,7 +112,7 @@ export default class RouteTekstikappale extends Vue {
   }
 
   get tekstikappaleenOsa() {
-    return this.$route.params.osa;
+    return this.$route.params.osa || this.$route.params.vapaatekstiId;
   }
 
   get osaamisalaKoodiUri() {

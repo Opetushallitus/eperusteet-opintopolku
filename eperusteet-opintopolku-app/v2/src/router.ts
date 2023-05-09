@@ -512,7 +512,13 @@ export const router = new Router({
             path: 'osa/:osa',
             component: RouteTekstikappaleOsa,
             name: 'tekstikappaleOsa',
-          }],
+          },
+          {
+            path: 'vapaaOsa/:vapaatekstiId',
+            component: RouteTekstikappaleOsa,
+            name: 'tekstikappaleVapaaOsa',
+          },
+          ],
         }, {
           path: 'laajaalaiset',
           component: RouteLaajaAlaiset,

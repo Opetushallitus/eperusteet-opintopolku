@@ -14,6 +14,7 @@ export class PerusteenOsaStore {
 
   constructor(perusteenOsaId: number, private julkaistuPerusteenOsaViite?: Laaja) {
     this.perusteenOsaId = perusteenOsaId;
+    this.perusteenOsaViite = this.julkaistuPerusteenOsaViite as any;
   }
 
   async fetchPerusteenOsa(deep: boolean = false) {
