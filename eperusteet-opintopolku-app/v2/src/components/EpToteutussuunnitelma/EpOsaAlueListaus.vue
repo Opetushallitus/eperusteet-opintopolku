@@ -2,8 +2,9 @@
   <div>
     <div class="osaalue" v-for="(osaalue, index) in osaAlueet" :key="'osaalue' + randomKey + index">
       <router-link :to="{name: 'toteutussuunnitelmaOsaAlue', params: {sisaltoviiteId: sisaltoviiteId, osaalueId: osaalue.id }}">
-        {{ $kaannaOlioTaiTeksti(osaalue.nimi) }}
-        <span v-if="osaalue.perusteenOsaAlueKoodi" class="koodi">({{ osaalue.perusteenOsaAlueKoodi.split('_')[1].toUpperCase() }})</span>
+        <span v-if="osaalue.perusteenOsaAlue">{{ $kaannaOlioTaiTeksti(osaalue.perusteenOsaAlue.nimi) }}</span>
+        <span v-else>{{ $kaannaOlioTaiTeksti(osaalue.nimi) }}</span>
+        <span v-if="osaalue.perusteenOsaAlueKoodi" class="koodi ml-1">({{ osaalue.perusteenOsaAlueKoodi.split('_')[1].toUpperCase() }})</span>
       </router-link>
     </div>
   </div>
