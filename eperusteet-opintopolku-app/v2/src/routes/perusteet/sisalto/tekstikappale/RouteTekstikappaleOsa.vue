@@ -42,7 +42,17 @@ export default class RouteTekstikappaleOsa extends Vue {
   }
 
   get osa() {
-    return _.get(this.perusteenOsaStore.perusteenOsa, this.tekstikappaleenOsa);
+    if (this.tekstikappaleenOsa) {
+      return _.get(this.perusteenOsaStore.perusteenOsaViite?.perusteenOsa, this.tekstikappaleenOsa);
+    }
+
+    if (this.vapaaTekstiId) {
+      return _.find(_.get(this.perusteenOsaStore.perusteenOsaViite?.perusteenOsa, 'vapaatTekstit'), { id: _.toNumber(this.vapaaTekstiId) });
+    }
+  }
+
+  get vapaaTekstiId() {
+    return this.$route.params.vapaatekstiId;
   }
 
   get tekstikappaleenOsa() {
