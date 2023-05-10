@@ -20,7 +20,7 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import ModuuliEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/ModuuliEsitys.vue';
+import ModuuliEsitys from '@shared/components/EpOpintojaksonModuuli/ModuuliEsitys.vue';
 import _ from 'lodash';
 
 @Component({
