@@ -6,7 +6,10 @@
                        :termit="termit"
                        :kuvat="kuvat" />
   </div>
-
+  <div v-if="moduuli.laajuus">
+    <h3>{{ $t('laajuus') }}</h3>
+    <p>{{ moduuli.laajuus }} {{ $t('opintopiste') }}</p>
+  </div>
   <!-- Halutaanko esittää tässä myös?
   <div v-if="koodi">
     <strong>{{ $t('koodi') }}</strong>
@@ -23,7 +26,6 @@
     <p>{{ moduuli.laajuus }}</p>
   </div>
   -->
-
   <div v-if="hasTavoitteet">
     <h3>{{ $t('yleiset-tavoitteet') }}</h3>
     <div v-if="tavoitteet.kohde">{{ $kaanna(tavoitteet.kohde) }}</div>
