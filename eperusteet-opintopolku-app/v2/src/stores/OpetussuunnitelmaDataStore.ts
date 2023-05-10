@@ -2,14 +2,13 @@ import _ from 'lodash';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
-import { Lops2019OpintojaksoDto, YlopsNavigationNodeDto, OpetussuunnitelmaKevytDto,
+import { YlopsNavigationNodeDto,
   baseURL,
   Dokumentit,
   DokumentitParams,
   Liitetiedostot,
   LiitetiedostotParam,
   Opetussuunnitelmat,
-  Opintojaksot,
   Termisto,
   OpetussuunnitelmatJulkiset,
   OpetussuunnitelmaExportDto,
@@ -339,22 +338,27 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   })
   public readonly current!: NavigationNode | null;
 
-  // Fixme: ota huomioon kielen vaihtaminen
   public async getDokumentit() {
     if (!this.opetussuunnitelma) {
       return;
     }
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
 
-    let dokumenttiId;
     if (this.esikatselu) {
-      dokumenttiId = (await Dokumentit.getLatestDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+      let dokumenttiId = (await Dokumentit.getLatestDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+      this.asetaKielenDokumentti(dokumenttiId);
     }
     else {
-      dokumenttiId = (await Dokumentit.getJulkaistuDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+      let julkaistuDokumentti = (await Dokumentit.getJulkaistuDokumentti(this.opetussuunnitelmaId, sisaltoKieli)).data;
+      if (julkaistuDokumentti) {
+        this.asetaKielenDokumentti(julkaistuDokumentti.id);
+      }
     }
+  }
+
+  private asetaKielenDokumentti(dokumenttiId) {
     if (dokumenttiId) {
-      this.dokumentit[sisaltoKieli] = baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url;
+      this.dokumentit[Kielet.getSisaltoKieli.value] = baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url;
     }
   }
 

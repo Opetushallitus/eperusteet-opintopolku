@@ -241,7 +241,10 @@ export class PerusteDataStore {
           let dokumenttiId;
 
           if (!this.esikatselu) {
-            dokumenttiId = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
+            let dokumentti = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
+            if (dokumentti) {
+              dokumenttiId = dokumentti.id;
+            }
           }
 
           if (this.esikatselu || !dokumenttiId) {
