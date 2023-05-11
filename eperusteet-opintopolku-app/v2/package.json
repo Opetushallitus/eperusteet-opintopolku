@@ -68,7 +68,7 @@
     "vue": "^2.6.10",
     "vue-axe": "^1.0.7",
     "vue-class-component": "^7.0.2",
-    "vue-i18n": "^8.15.3",
+    "vue-i18n": "^8.28.2",
     "vue-loading-overlay": "^3.2.0",
     "vue-matomo": "^3.13.0-2",
     "vue-meta": "^2.3.2",
