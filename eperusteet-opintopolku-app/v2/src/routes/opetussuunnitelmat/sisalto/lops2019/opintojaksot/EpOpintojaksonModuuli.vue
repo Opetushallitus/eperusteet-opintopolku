@@ -31,7 +31,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import { Lops2019ModuuliDto } from '@shared/api/eperusteet';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-import ModuuliEsitys from './ModuuliEsitys.vue';
+import ModuuliEsitys from '@shared/components/EpOpintojaksonModuuli/ModuuliEsitys.vue';
 
 @Component({
   components: {
