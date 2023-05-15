@@ -1,11 +1,8 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteKooste from './RouteKooste.vue';
-import { tiedoteStoreMock, perusteKoosteStoreMock } from '@/storeMocks';
-import { Kielet } from '@shared/stores/kieli';
+import { perusteKoosteStoreMock } from '@/storeMocks';
 import { mock, mocks, stubs } from '@shared/utils/jestutils';
 import * as _ from 'lodash';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
 import { OpasStore } from '@/stores/OpasStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { computed } from '@vue/composition-api';
@@ -157,7 +154,7 @@ describe('RouteKooste', () => {
     await localVue.nextTick();
     expect(wrapper.html()).not.toContain(' perusteet ');
     expect(wrapper.html()).toContain('ajankohtaista');
-    expect(wrapper.html()).not.toContain('ohjeet-ja-materiaalit');
+    expect(wrapper.html()).toContain('ohjeet-ja-materiaalit');
 
     expect(wrapper.html()).toContain('ops100');
     expect(wrapper.html()).toContain('Toimijan nimi');
