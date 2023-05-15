@@ -17,7 +17,6 @@ export const koostePerusteStore = {
 
 export const koosteOpasStore = {
   'default': (koulutustyyppi): any => new OpasStore(koulutustyyppi),
-  'koulutustyyppi_muu': null,
 };
 
 export const koosteTiedotteetStore = {

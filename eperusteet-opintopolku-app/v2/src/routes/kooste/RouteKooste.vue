@@ -46,7 +46,7 @@
             </template>
           </ep-julki-lista>
         </b-col>
-        <b-col md class="mb-4" v-if="perusteKoosteStore">
+        <b-col md class="mb-4">
           <h2 class="mb-4">{{$t('ohjeet-ja-materiaalit')}}</h2>
           <ep-spinner v-if="!ohjeet"/>
           <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas" v-else>
@@ -86,10 +86,7 @@ import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { Meta } from '@shared/utils/decorators';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { perusteKoulutustyyppiUrlShortParamName } from '@shared/utils/perusteet';
 import _ from 'lodash';
-import { ENV_PREFIX } from '@shared/utils/defaults';
-import { uusiJulkinenToteutus } from '@/utils/peruste';
 import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
