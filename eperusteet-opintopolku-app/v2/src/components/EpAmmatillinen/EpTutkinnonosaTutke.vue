@@ -37,8 +37,12 @@ export default class EpTutkinnonosaTutke extends Vue {
   @Prop({ required: false })
   private perusteenKielet?: any[];
 
+  get sisaltoKieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
   get osaAlueet() {
-    return this.tutkinnonosa.osaAlueet;
+    return _.filter(this.tutkinnonosa.osaAlueet, osaalue => !!osaalue.nimi[this.sisaltoKieli]);
   }
 }
 </script>
