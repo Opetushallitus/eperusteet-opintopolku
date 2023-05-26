@@ -72,16 +72,6 @@ export default class RouteOpintokokonaisuus extends Vue {
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
 
-  @Watch('current', { immediate: true })
-  async fetchAlikappaleet() {
-    if (!this.current) {
-      return;
-    }
-
-    const isMainHeading = !!this.current && this.current.path.length === 2;
-    await this.perusteenOsaStore.fetchPerusteenOsa(isMainHeading);
-  }
-
   get perusteenOsa() {
     return this.perusteenOsaStore.perusteenOsa;
   }

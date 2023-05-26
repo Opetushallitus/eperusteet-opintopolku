@@ -67,14 +67,6 @@ export default class RouteOsaamiskokonaisuus extends Vue {
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
 
-  @Watch('current', { immediate: true })
-  async fetchPerusteenOsa() {
-    if (!this.current) {
-      return;
-    }
-    await this.perusteenOsaStore.fetchPerusteenOsa();
-  }
-
   get current() {
     return this.perusteDataStore.current || null;
   }

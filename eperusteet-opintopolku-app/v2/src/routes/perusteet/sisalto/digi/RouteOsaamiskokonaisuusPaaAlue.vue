@@ -67,14 +67,6 @@ export default class RouteOsaamiskokonaisuusPaaAlue extends Vue {
 
   private selectedTasot: any[] = ['varhaiskasvatus', 'esiopetus', 'vuosiluokka_12', 'vuosiluokka_3456', 'vuosiluokka_789'];
 
-  @Watch('current', { immediate: true })
-  async fetchPerusteenOsa() {
-    if (!this.current) {
-      return;
-    }
-    await this.perusteenOsaStore.fetchPerusteenOsa();
-  }
-
   get current() {
     return this.perusteDataStore.current || null;
   }
