@@ -81,20 +81,10 @@ export default class RouteTutkinnonosat extends Vue {
         .sortBy('jarjestys')
         .map((tutkinnonosaViite, index) => ({
           ...tutkinnonosaViite,
-          jarjestys: this.handleJarjestysStartingIndex(tutkinnonosaViite, index),
+          jarjestys: index + 1,
         }))
         .value();
     }
-  }
-
-  handleJarjestysStartingIndex(tutkinnonosaViite, index) {
-    // Jatkossa tutkinnon osien järjestysnumerointi lähtee nollasta tietokannassa kun tallennetaan tutkinnon osien järjestyksiä.
-    // Hanskattava vanhat ja uudet tapaukset, jotta käli aloittaa aina ykkösestä.
-    if (this.startsFromZero || (tutkinnonosaViite.jarjestys === 0 && index === 0)) {
-      this.startsFromZero = true;
-      return index + 1;
-    }
-    return tutkinnonosaViite.jarjestys;
   }
 
   get fields() {
