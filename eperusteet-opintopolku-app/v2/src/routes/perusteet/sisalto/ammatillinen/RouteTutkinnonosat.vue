@@ -38,6 +38,7 @@ export default class RouteTutkinnonosat extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   private queryNimi = '';
+  private startsFromZero = false;
 
   get otsikko() {
     if (this.perusteenKoulutustyyppi === Koulutustyyppi.telma || this.perusteenKoulutustyyppi === Koulutustyyppi.valma) {
@@ -64,6 +65,7 @@ export default class RouteTutkinnonosat extends Vue {
 
   get tutkinnonOsaViitteet() {
     if (this.perusteenTutkinnonosaViitteet) {
+      this.startsFromZero = false;
       return _.chain(this.perusteenTutkinnonosaViitteet)
         .map(viite => {
           return {
@@ -77,8 +79,22 @@ export default class RouteTutkinnonosat extends Vue {
             _.toLower(this.queryNimi)
           ))
         .sortBy('jarjestys')
+        .map((tutkinnonosaViite, index) => ({
+          ...tutkinnonosaViite,
+          jarjestys: this.handleJarjestysStartingIndex(tutkinnonosaViite, index),
+        }))
         .value();
     }
+  }
+
+  handleJarjestysStartingIndex(tutkinnonosaViite, index) {
+    // Jatkossa tutkinnon osien järjestysnumerointi lähtee nollasta tietokannassa kun tallennetaan tutkinnon osien järjestyksiä.
+    // Hanskattava vanhat ja uudet tapaukset, jotta käli aloittaa aina ykkösestä.
+    if (this.startsFromZero || (tutkinnonosaViite.jarjestys === 0 && index === 0)) {
+      this.startsFromZero = true;
+      return index + 1;
+    }
+    return tutkinnonosaViite.jarjestys;
   }
 
   get fields() {
