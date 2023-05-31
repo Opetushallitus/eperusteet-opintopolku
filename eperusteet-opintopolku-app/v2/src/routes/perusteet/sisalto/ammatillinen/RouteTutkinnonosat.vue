@@ -38,7 +38,6 @@ export default class RouteTutkinnonosat extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   private queryNimi = '';
-  private startsFromZero = false;
 
   get otsikko() {
     if (this.perusteenKoulutustyyppi === Koulutustyyppi.telma || this.perusteenKoulutustyyppi === Koulutustyyppi.valma) {
@@ -65,7 +64,6 @@ export default class RouteTutkinnonosat extends Vue {
 
   get tutkinnonOsaViitteet() {
     if (this.perusteenTutkinnonosaViitteet) {
-      this.startsFromZero = false;
       return _.chain(this.perusteenTutkinnonosaViitteet)
         .map(viite => {
           return {
