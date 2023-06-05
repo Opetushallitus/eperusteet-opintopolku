@@ -1,14 +1,15 @@
 <template>
-  <div class="notifikaatio text-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="notifikaatio" ref="stickyElement">
-    {{notifikaatio}}
+  <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="notifikaatio" ref="stickyElement">
+    <span class="material-icons-outlined">info</span>
+    <span class="notifikaatio-text korostus">{{ notifikaatio }}</span>
     <span v-if="!isEsikatselu && versio">
-      {{$t('siirry')}} <span class="btn-link clickable" @click="toUusimpaan">{{$t('uusimpaan-versioon')}}.</span>
+      <span class="btn-link clickable korostus" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
     </span>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import Sticky from 'vue-sticky-directive';
 import * as _ from 'lodash';
 
@@ -18,6 +19,9 @@ import * as _ from 'lodash';
   },
 })
 export default class EpEsikatseluNotifikaatio extends Vue {
+  @Prop({ required: false })
+  private julkaisuPvm?: any;
+
   navBarHeight: number = 0;
 
   mounted() {
@@ -60,12 +64,16 @@ export default class EpEsikatseluNotifikaatio extends Vue {
 
     if (this.versio) {
       if (this.$route.params?.perusteId) {
-        return `${this.$t('katselet-perusteen-vanhentunutta-versiota')} (${this.versio}).`;
+        return `${this.$t('katselet-perusteen-aiempaa-julkaisua')}${this.julkaisuPvmText}`;
       }
       else {
         return `${this.$t('katselet-suunnitelman-vanhentunutta-versiota')} (${this.versio}).`;
       }
     }
+  }
+
+  get julkaisuPvmText() {
+    return this.julkaisuPvm ? ' (' + this.$sd(this.julkaisuPvm) + ').' : '.';
   }
 
   async toUusimpaan() {
@@ -82,12 +90,22 @@ export default class EpEsikatseluNotifikaatio extends Vue {
 
   .notifikaatio {
     width: 100% !important;
+    display: flex;
+
     &.esikatselu {
       background-color: $gray-lighten-4;
     }
 
     &.katselu {
       background-color: $blue-lighten-4;
+    }
+
+    .notifikaatio-text {
+      margin: 0 5px 0 5px;
+    }
+
+    .korostus {
+      font-weight: 600;
     }
   }
 
