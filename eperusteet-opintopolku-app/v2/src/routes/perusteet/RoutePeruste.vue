@@ -15,7 +15,7 @@
   </ep-header>
 
   <div :id="scrollAnchor">
-    <EpEsikatseluNotifikaatio/>
+    <EpEsikatseluNotifikaatio :julkaisu-pvm="julkaisuPvm"/>
   </div>
 
   <div class="container mt-4">
@@ -208,6 +208,11 @@ export default class RoutePeruste extends Vue {
 
   get routeName() {
     return this.$route.name;
+  }
+
+  get julkaisuPvm() {
+    let julkaisu = this.perusteDataStore.julkaisut?.find(julkaisu => julkaisu.revision === _.toNumber(this.$route.params?.revision));
+    return julkaisu ? julkaisu.luotu : null;
   }
 
   get ensimainenNavi() {
