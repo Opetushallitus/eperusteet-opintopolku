@@ -77,6 +77,10 @@ export default class RouteTutkinnonosat extends Vue {
             _.toLower(this.queryNimi)
           ))
         .sortBy('jarjestys')
+        .map((tutkinnonosaViite, index) => ({
+          ...tutkinnonosaViite,
+          jarjestys: index + 1,
+        }))
         .value();
     }
   }
