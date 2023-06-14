@@ -12,6 +12,7 @@ import { YlopsNavigationNodeDto,
   Termisto,
   OpetussuunnitelmatJulkiset,
   OpetussuunnitelmaExportDto,
+  DokumenttiDtoTilaEnum,
 } from '@shared/api/ylops';
 
 import { Kielet } from '@shared/stores/kieli';
@@ -350,7 +351,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
     else {
       let julkaistuDokumentti = (await Dokumentit.getJulkaistuDokumentti(this.opetussuunnitelmaId, sisaltoKieli)).data;
-      if (julkaistuDokumentti) {
+      if (julkaistuDokumentti?.tila === _.toLower(DokumenttiDtoTilaEnum.VALMIS)) {
         this.asetaKielenDokumentti(julkaistuDokumentti.id);
       }
     }

@@ -15,6 +15,7 @@ import {
   PerusteKaikkiDto,
   Arviointiasteikot,
   JulkaisuBaseDto, Julkaisut,
+  DokumenttiDtoTilaEnum,
 } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
@@ -242,7 +243,7 @@ export class PerusteDataStore {
 
           if (!this.esikatselu) {
             let dokumentti = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
-            if (dokumentti) {
+            if (dokumentti?.tila === _.toLower(DokumenttiDtoTilaEnum.VALMIS)) {
               dokumenttiId = dokumentti.id;
             }
           }
