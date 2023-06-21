@@ -91,7 +91,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   @Getter(state => {
     if (state.dokumenttiTila && state.dokumenttiTila.tila === _.lowerCase(DokumenttiDtoTilaEnum.VALMIS)) {
-      return baseURL + JulkinenApiParams.getDokumentti(state.opetussuunnitelma.id, Kielet.getSisaltoKieli.value, state.opetussuunnitelma.koulutustoimija.id, state.dokumenttiTila?.id).url;
+      return baseURL + JulkinenApiParams.getDokumentti(state.opetussuunnitelma.id, Kielet.getSisaltoKieli.value, state.dokumenttiTila?.id, state.opetussuunnitelma.koulutustoimija.id).url;
     }
   })
   public readonly dokumenttiUrl!: string;
