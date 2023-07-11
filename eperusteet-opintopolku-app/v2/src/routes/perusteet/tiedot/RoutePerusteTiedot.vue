@@ -106,7 +106,7 @@
 
         <div class="col-md-12 mt-3" v-if="showKoulutusvienninOhje">
           <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
-            <span v-if="isEiTarvitaOhjettaTyyppi">{{$t('voi-kayttaa tutkintoviennissa')}}</span>
+            <span v-if="isEiTarvitaOhjettaTyyppi">{{$t('voi-kayttaa-tutkintoviennissa')}}</span>
             <span v-else-if="isEiVoiPoiketaTyyppi">{{$t('ei-voi-poiketa-tutkinnon-perusteista-tutkintoviennin-yhteydessa')}}</span>
 
             <div v-if="isKoulutusvientiliiteTyyppi && koulutusvienninOhjeet && koulutusvienninOhjeet.length > 0">
