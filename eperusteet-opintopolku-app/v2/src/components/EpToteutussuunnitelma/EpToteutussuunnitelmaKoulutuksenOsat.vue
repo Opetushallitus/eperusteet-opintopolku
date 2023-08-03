@@ -44,6 +44,7 @@ import { KoulutuksenOsatStore } from '@/stores/KoulutuksenOsatStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpKoulutuksenOsaKortti from '@shared/components/EpKoulutuksenosa/EpKoulutuksenOsaKortti.vue';
 import * as _ from 'lodash';
+import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 
 @Component({
   components: {
@@ -61,8 +62,25 @@ export default class EpToteutussuunnitelmaKoulutuksenOsat extends Vue {
   @Prop({ required: true })
   private opetussuunnitelma!: OpetussuunnitelmaDto;
 
+  @Prop({ required: true })
+  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+
   get koulutuksenosat() {
-    return this.sisaltoviite.lapset as any;
+    return _.map(this.sisaltoviite.lapset, (viite: any) => {
+      let perusteenOsa;
+      if (viite.perusteenOsaId) {
+        perusteenOsa = this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: viite.perusteenOsaId });
+      };
+
+      return {
+        ...viite,
+        koulutuksenosa: {
+          ...viite.koulutuksenosa,
+          laajuusMinimi: perusteenOsa?.laajuusMinimi || viite.koulutuksenosa.laajuusMinimi,
+          laajuusMaksimi: perusteenOsa?.laajuusMaksimi || viite.koulutuksenosa.laajuusMaksimi,
+        },
+      };
+    }) as any;
   }
 
   get yhteisetKoulutuksenosat() {
