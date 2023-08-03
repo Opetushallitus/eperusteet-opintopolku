@@ -39,6 +39,7 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koulutuksen-osa

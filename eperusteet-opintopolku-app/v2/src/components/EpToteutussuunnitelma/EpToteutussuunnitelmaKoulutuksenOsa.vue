@@ -5,7 +5,7 @@
     <b-row>
       <b-col>
         <b-form-group :label="$t('laajuus')">
-          {{koulutuksenosa.laajuusMinimi}} - {{koulutuksenosa.laajuusMaksimi}} {{$t('viikkoa')}}
+          {{perusteenOsa.laajuusMinimi}} - {{perusteenOsa.laajuusMaksimi}} {{$t('viikkoa')}}
         </b-form-group>
       </b-col>
     </b-row>
@@ -20,7 +20,7 @@
     <b-row>
       <b-col>
         <b-form-group :label="$t('kuvaus')">
-          <ep-content-viewer :value="$kaanna(koulutuksenosa.kuvaus)" :kuvat="kuvat"/>
+          <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :kuvat="kuvat"/>
         </b-form-group>
       </b-col>
     </b-row>
@@ -48,7 +48,7 @@
       </b-row>
     </template>
 
-    <template v-if="koulutuksenosa.laajaAlaisenOsaamisenKuvaus || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.laajaalaisetosaamiset.length > 0)">
+    <template v-if="perusteenOsa.laajaAlaisenOsaamisenKuvaus || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.laajaalaisetosaamiset.length > 0)">
       <hr/>
       <b-row>
         <b-col>
@@ -68,13 +68,13 @@
       </b-row>
     </template>
 
-    <template v-if="koulutuksenosa.keskeinenSisalto || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.keskeinenSisalto)">
+    <template v-if="perusteenOsa.keskeinenSisalto || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.keskeinenSisalto)">
       <hr/>
       <b-row>
         <b-col>
           <b-form-group>
             <h3 slot="label">{{ $t('keskeinen-sisalto') }}</h3>
-              <ep-content-viewer :value="$kaanna(koulutuksenosa.keskeinenSisalto)" :kuvat="kuvat"/>
+              <ep-content-viewer :value="$kaanna(perusteenOsa.keskeinenSisalto)" :kuvat="kuvat"/>
           </b-form-group>
           <template v-if="koulutuksenosa.paikallinenTarkennus">
             <b-form-group :label="$t('paikallinen-teksti')">
@@ -85,13 +85,13 @@
       </b-row>
     </template>
 
-    <template v-if="koulutuksenosa.arvioinninKuvaus || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus)">
+    <template v-if="perusteenOsa.arvioinninKuvaus || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus)">
       <hr/>
       <b-row>
         <b-col>
           <b-form-group>
             <h3 slot="label">{{ $t('arviointi-teksti') }}</h3>
-              <ep-content-viewer :value="$kaanna(koulutuksenosa.arvioinninKuvaus)" :kuvat="kuvat"/>
+              <ep-content-viewer :value="$kaanna(perusteenOsa.arvioinninKuvaus)" :kuvat="kuvat"/>
           </b-form-group>
           <template v-if="koulutuksenosa.paikallinenTarkennus">
             <b-form-group :label="$t('paikallinen-teksti')">
@@ -175,7 +175,7 @@ export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
 
   get tavoitteet() {
     return [
-      ...this.koulutuksenosa?.tavoitteet!,
+      ...this.perusteenOsa?.tavoitteet!,
       ...(this.koulutuksenosa?.paikallinenTarkennus ? this.koulutuksenosa?.paikallinenTarkennus?.tavoitteet! : []),
     ];
   }
@@ -186,6 +186,15 @@ export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
 
   get kieli() {
     return Kielet.getSisaltoKieli.value;
+  }
+
+  get perusteenOsa() {
+    if (this.sisaltoviite.perusteenOsaId) {
+      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: this.sisaltoviite.perusteenOsaId });
+    }
+    else {
+      return this.koulutuksenosa;
+    }
   }
 }
 </script>
