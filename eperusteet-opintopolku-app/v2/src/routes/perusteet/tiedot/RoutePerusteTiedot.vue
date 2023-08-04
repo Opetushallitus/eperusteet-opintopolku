@@ -104,17 +104,26 @@
 
       <div v-if="isAmmatillinen">
 
-        <div class="col-md-12 mt-3" v-if="koulutusvienninOhjeet && koulutusvienninOhjeet.length > 0">
+        <div class="col-md-12 mt-3" v-if="showKoulutusvienninOhje">
           <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
-            <b-table striped
-                    fixed
-                    responsive
-                    :fields="koulutusvienninohjeFields"
-                    :items="koulutusvienninOhjeet">
-                    <template v-slot:cell(nimi)="{ item }">
-                      <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
-                    </template>
-            </b-table>
+            <span v-if="isEiTarvitaOhjettaTyyppi">{{$t('voi-kayttaa tutkintoviennissa')}}</span>
+            <span v-else-if="isEiVoiPoiketaTyyppi">{{$t('ei-voi-poiketa-tutkinnon-perusteista-tutkintoviennin-yhteydessa')}}</span>
+
+            <div v-if="isKoulutusvientiliiteTyyppi && koulutusvienninOhjeet && koulutusvienninOhjeet.length > 0">
+              <b-table striped
+                       fixed
+                       responsive
+                       :fields="koulutusvienninohjeFields"
+                       :items="koulutusvienninOhjeet">
+                <template v-slot:cell(nimi)="{ item }">
+                  <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
+                </template>
+              </b-table>
+            </div>
+
+            <ep-form-content v-if="peruste.poikkeamismaaraysTarkennus" name="tarkennus" headerClass="h6" class="ml-3 mt-3">
+              <ep-content-viewer :value="$kaanna(peruste.poikkeamismaaraysTarkennus)"/>
+            </ep-form-content>
           </ep-form-content>
         </div>
 
@@ -210,7 +219,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
+import { Prop, Vue, Component } from 'vue-property-decorator';
 import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam } from '@shared/api/eperusteet';
 import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettu } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
@@ -443,6 +452,22 @@ export default class RoutePerusteTiedot extends Vue {
       label: this.$t('koodi'),
       thStyle: 'width: 15%',
     }];
+  }
+
+  get isEiTarvitaOhjettaTyyppi() {
+    return this.peruste?.poikkeamismaaraysTyyppi?.valueOf() === 'ei_tarvita_ohjetta';
+  }
+
+  get isEiVoiPoiketaTyyppi() {
+    return this.peruste?.poikkeamismaaraysTyyppi?.valueOf() === 'ei_voi_poiketa';
+  }
+
+  get isKoulutusvientiliiteTyyppi() {
+    return this.peruste?.poikkeamismaaraysTyyppi?.valueOf() === 'koulutusvientiliite';
+  }
+
+  get showKoulutusvienninOhje() {
+    return this.isEiTarvitaOhjettaTyyppi || this.isEiVoiPoiketaTyyppi || (this.isKoulutusvientiliiteTyyppi && this.koulutusvienninOhjeet && this.koulutusvienninOhjeet.length > 0);
   }
 }
 </script>
