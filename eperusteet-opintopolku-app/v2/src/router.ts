@@ -198,7 +198,7 @@ export const router = new Router({
         component: EpErrorPage,
         props: routeProps,
       }, {
-        path: 'kooste/ammatillinen/:perusteId',
+        path: 'kooste/ammatillinen/:perusteId(\\d+)',
         name: 'ammatillinenkooste',
         component: RouteKoosteAmmatillinen,
         meta: {
@@ -213,7 +213,7 @@ export const router = new Router({
           },
         },
       }, {
-        path: 'kooste/:koulutustyyppi([a-z]+)/:perusteId?',
+        path: 'kooste/:koulutustyyppi([a-z]+)/:perusteId(\\d+)?',
         name: 'kooste',
         component: RouteKooste,
         meta: {
@@ -287,7 +287,7 @@ export const router = new Router({
           },
         ],
       }, {
-        path: 'selaus/koulutuksenjarjestajat/:koulutuksenjarjestajaId',
+        path: 'selaus/koulutuksenjarjestajat/:koulutuksenjarjestajaId(\\d+)',
         name: 'ammatillinenKoulutuksenjarjestaja',
         component: RouteKoulutuksenJarjestaja,
         meta: {
@@ -320,7 +320,7 @@ export const router = new Router({
           },
         },
       }, {
-        path: 'ajankohtaista/:tiedoteId',
+        path: 'ajankohtaista/:tiedoteId(\\d+)',
         name: 'uutinen',
         component: RouteUutinen,
         meta: {
@@ -337,7 +337,7 @@ export const router = new Router({
           },
         },
       }, {
-        path: 'toteutussuunnitelma/:toteutussuunnitelmaId/:revision?/:koulutustyyppi',
+        path: 'toteutussuunnitelma/:toteutussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi',
         name: 'toteutussuunnitelma',
         component: RouteOpetussuunnitelma,
         redirect(to) {
@@ -382,7 +382,7 @@ export const router = new Router({
           name: 'toteutussuunnitelmaOsaAlue',
         }],
       }, {
-        path: 'ops/:opetussuunnitelmaId/:revision?/:koulutustyyppi*',
+        path: 'ops/:opetussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi*',
         name: 'ops',
         component: RouteOpetussuunnitelma,
         redirect(to) {
@@ -391,7 +391,7 @@ export const router = new Router({
           };
         },
       }, {
-        path: 'opetussuunnitelma/:opetussuunnitelmaId/:revision?/:koulutustyyppi',
+        path: 'opetussuunnitelma/:opetussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi',
         name: 'opetussuunnitelma',
         component: RouteOpetussuunnitelma,
         redirect(to) {
@@ -475,7 +475,7 @@ export const router = new Router({
           name: 'opetussuunnitelmaperusopetusoppiaine',
         }],
       }, {
-        path: ':koulutustyyppi/:perusteId(\\d+)/:revision?',
+        path: ':koulutustyyppi/:perusteId(\\d+)/:revision(\\d+)?',
         name: 'peruste',
         component: RoutePeruste,
         meta: {
