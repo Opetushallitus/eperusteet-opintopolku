@@ -53,7 +53,19 @@
         <hr/>
       </div>
 
-      <ep-form-content class="col-md-12" v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat" name="tavoitteet">
+      <ep-form-content class="col-md-12 mb-5" v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
+        <EpAmmattitaitovaatimukset v-model="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset" :is-editing="false">
+          <template v-slot:koodi="{koodi}">
+            <span>{{ $kaanna(koodi.nimi) }}</span>
+          </template>
+        </EpAmmattitaitovaatimukset>
+      </ep-form-content>
+
+      <GeneerinenArviointiTaulukko
+        v-if="sisaltoviite.tosa.omatutkinnonosa.geneerinenArviointiasteikko"
+        :arviointi="sisaltoviite.tosa.omatutkinnonosa.geneerinenArviointiasteikko" />
+
+      <ep-form-content class="col-md-12" v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
         <ep-content-viewer :value="$kaanna(sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
       </ep-form-content>
 
@@ -75,7 +87,7 @@
         <GeneerinenArviointiTaulukko :arviointi="perusteenTutkinnonosa.geneerinenArviointiasteikko" />
       </div>
 
-        <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
+      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
         <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
       </ep-form-content>
 
@@ -121,9 +133,8 @@ import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenA
 import EpOsaAlueListaus from '@/components/EpToteutussuunnitelma/EpOsaAlueListaus.vue';
 import { OmaOsaAlueDtoTyyppiEnum, OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum, Koodistot } from '@shared/api/amosaa';
 import EpToteutukset from '@/components/EpToteutussuunnitelma/EpToteutukset.vue';
-
+import EpAmmattitaitovaatimukset from '@shared/components/EpAmmattitaitovaatimukset/EpAmmattitaitovaatimukset.vue';
 import * as _ from 'lodash';
-
 import { Kielet } from '@shared/stores/kieli';
 
 @Component({
@@ -136,6 +147,7 @@ import { Kielet } from '@shared/stores/kieli';
     GeneerinenArviointiTaulukko,
     EpOsaAlueListaus,
     EpToteutukset,
+    EpAmmattitaitovaatimukset,
   },
 })
 export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
