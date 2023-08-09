@@ -145,8 +145,9 @@ export default class VstPaikalliset extends Vue {
   };
 
   private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({
-    async query(query: string, sivu = 0) {
-      return (await Ulkopuoliset.getKoodisto('vapaasivistystyooppilaitostyyppi', query, {
+    koodisto: 'vapaasivistystyooppilaitostyyppi',
+    async query(query: string, sivu = 0, koodisto) {
+      return (await Ulkopuoliset.getKoodisto(koodisto, query, {
         params: {
           sivu,
           sivukoko: 50,
