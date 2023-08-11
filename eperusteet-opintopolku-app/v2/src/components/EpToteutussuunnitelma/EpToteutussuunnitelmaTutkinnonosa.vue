@@ -289,7 +289,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   }
 
   get perusteenOsaAlueet() {
-    return this.perusteenTutkinnonosa.osaAlueet;
+    return this.perusteenTutkinnonosa?.osaAlueet;
   }
 
   get naytetaanPerusteenSisalto() {

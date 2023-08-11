@@ -45,7 +45,7 @@ export default class EpAmmatillinenArvioinninKohdealueet extends Vue {
   @Prop({ required: true })
   private arvioinninKohdealueet!: any;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   private arviointiasteikot!: any[];
 
   get arvioinninKohdealueetFilled() {
@@ -53,9 +53,7 @@ export default class EpAmmatillinenArvioinninKohdealueet extends Vue {
       return {
         ...arvKohdealue,
         arvioinninKohteet: _.map(arvKohdealue.arvioinninKohteet, arvioinninKohde => {
-          const arviointiasteikkoId = arvioinninKohde._arviointiAsteikko || arvioinninKohde._arviointiasteikko;
-          const arviointiAsteikko = _.keyBy(this.arviointiasteikot, 'id')[arviointiasteikkoId];
-          const osaamistasot = _.keyBy(arviointiAsteikko.osaamistasot, 'id');
+          const osaamistasot = _.keyBy(this.getArviointiasteikko(arvioinninKohde).osaamistasot, 'id');
           return {
             ...arvioinninKohde,
             osaamistasonKriteerit: _.sortBy(_.map(arvioinninKohde.osaamistasonKriteerit, osaamistasonKriteeri => {
@@ -68,6 +66,17 @@ export default class EpAmmatillinenArvioinninKohdealueet extends Vue {
         }),
       };
     });
+  }
+
+  getArviointiasteikko(arvioinninkohde) {
+    if (arvioinninkohde._arviointiAsteikko || arvioinninkohde._arviointiasteikko) {
+      const arviointiasteikkoId = arvioinninkohde._arviointiAsteikko || arvioinninkohde._arviointiasteikko;
+      const arviointiAsteikko = _.keyBy(this.arviointiasteikot, 'id')[arviointiasteikkoId];
+
+      return arviointiAsteikko;
+    }
+
+    return arvioinninkohde.arviointiasteikko;
   }
 
   get osaamistasonKriteeritFields() {
