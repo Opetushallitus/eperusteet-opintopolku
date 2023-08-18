@@ -221,7 +221,7 @@
 import _ from 'lodash';
 import { Prop, Vue, Component } from 'vue-property-decorator';
 import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam } from '@shared/api/eperusteet';
-import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettu } from '@shared/utils/perusteet';
+import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
@@ -394,7 +394,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    if (isKoulutustyyppiPdfTuettu(this.peruste?.koulutustyyppi)) {
+    if (isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi)) {
       return this.perusteDataStore.dokumentti;
     }
   }
