@@ -78,7 +78,7 @@
     <div v-else id="opetussuunnitelmat-lista">
       <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
         <router-link :to="ops.route">
-          <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTieto="ops.voimassaoloTieto" showJotpaInfo/>
+          <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTiedot="ops.voimassaoloTieto" showJotpaInfo/>
         </router-link>
       </div>
       <EpBPagination v-model="page"

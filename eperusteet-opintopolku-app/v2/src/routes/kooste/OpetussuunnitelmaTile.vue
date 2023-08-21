@@ -1,7 +1,7 @@
 <template>
   <div class="opetussuunnitelma shadow-tile">
     <div class="d-flex align-items-center">
-      <div v-if="!voimassaoloTieto" class="opsicon-wrapper">
+      <div v-if="!voimassaoloTiedot" class="opsicon-wrapper">
         <slot name="icon">
           <div class="opsicon"></div>
         </slot>
@@ -14,9 +14,13 @@
           </div>
         </div>
         <div class="organisaatiot d-flex">
-          <div class="ops-voimassaolo" v-if="voimassaoloTieto && voimassaoloTieto.paiva">
-            {{$t(voimassaoloTieto.teksti)}}: {{ $sd(voimassaoloTieto.paiva) }}
-            <span class="mr-1"> | </span>
+          <div class="ops-voimassaolo" v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0">
+            <span v-for="(voimassaolotieto,index) in voimassaoloTiedot" :key="'voimassa' + index">
+              <span v-if="index > 0">|</span>
+              {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
+              <span class="mr-1"> | </span>
+            </span>
+
           </div>
           <div class="ops-toimijat" v-if="ops.toimijat && ops.toimijat.length > 0">
             <span class="otsikko">{{ $t('toimijat') }}</span>
@@ -62,7 +66,7 @@ export default class OpetussuunnitelmaTile extends Vue {
   private query!: string;
 
   @Prop({ required: false })
-  private voimassaoloTieto!: VoimassaoloTieto;
+  private voimassaoloTiedot!: VoimassaoloTieto[];
 
   @Prop({ required: false, default: false, type: Boolean })
   private showJotpaInfo!: Boolean;
@@ -80,8 +84,8 @@ export default class OpetussuunnitelmaTile extends Vue {
   }
 
   get voimassaoloClass() {
-    if (this.voimassaoloTieto) {
-      return 'voimassaolo__' + this.voimassaoloTieto.tyyppi;
+    if (this.voimassaoloTiedot?.length > 0) {
+      return 'voimassaolo__' + this.voimassaoloTiedot[0].tyyppi;
     }
     return '';
   }
