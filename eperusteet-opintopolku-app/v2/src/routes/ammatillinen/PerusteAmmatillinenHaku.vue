@@ -59,7 +59,7 @@
   <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
 
-      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route" :class="peruste.voimassaoloTieto.tyyppi">
+      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route" :class="peruste.voimassaoloTieto[0].tyyppi">
         <div class="nimi">{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
         <div class="nimikkeet" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
           <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
@@ -73,9 +73,10 @@
             {{ $kaanna(osaamisala.nimi) }}
           </span>
         </div>
-        <div class="alatiedot" v-if="(peruste.voimassaoloTieto && peruste.voimassaoloTieto.paiva) || peruste.diaarinumero || (peruste.koulutukset && peruste.koulutukset.length > 0)">
-          <span v-if="peruste.voimassaoloTieto && peruste.voimassaoloTieto.paiva">
-            {{$t(peruste.voimassaoloTieto.teksti)}}: {{ $sd(peruste.voimassaoloTieto.paiva) }}
+        <div class="alatiedot">
+          <span v-for="(voimassaolotieto,index) in peruste.voimassaoloTieto" :key="'voimassa' + index">
+            <span v-if="index > 0">|</span>
+            {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
           </span>
           <span v-if="peruste.diaarinumero">
             | {{$t('diaarinumero')}}: {{ peruste.diaarinumero }}
