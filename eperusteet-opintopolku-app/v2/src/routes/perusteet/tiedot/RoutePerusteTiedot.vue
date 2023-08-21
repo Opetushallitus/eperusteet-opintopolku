@@ -94,14 +94,6 @@
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="!isAmmatillinen && peruste.kuvaus">
-        <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
-          <ep-content-viewer :value="$kaanna(peruste.kuvaus)"
-                           :termit="termit"
-                           :kuvat="kuvat" />
-        </ep-form-content>
-      </div>
-
       <div v-if="isAmmatillinen">
 
         <div class="col-md-12 mt-3" v-if="showKoulutusvienninOhje">
