@@ -13,6 +13,14 @@
         <span v-if="julkaisu.voimassaoloAlkaa">
           {{ $t('voimaantulo') }}: {{ $sd(julkaisu.voimassaoloAlkaa) }}
         </span>
+        <span v-if="eraantynyt" class="ml-3">
+          <EpColorIndicator :size="10" background-color="#FF5000" :tooltip="false" kind=""/>
+          {{ $t('ei-voimassa') }}
+        </span>
+        <span v-else class="ml-3">
+          <EpColorIndicator :size="10" background-color="#57bb1a" :tooltip="false" kind=""/>
+          {{ $t('voimassa') }}
+        </span>
       </div>
     </div>
   </div>
@@ -22,15 +30,18 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
+import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 
 interface PerusteJulkiData {
   nimi:{ [key: string]: string; };
-  voimassaoloAlkaa?: Date,
+  voimassaoloAlkaa?: number,
+  voimassaoloLoppuu?: number,
   laajuus?: number,
 }
 
 @Component({
   components: {
+    EpColorIndicator,
     EpHallitusImg,
   },
 })
@@ -44,6 +55,10 @@ export default class PerusteTile extends Vue {
   get imgStyle() {
     return 'fill: ' + rgb2string(koulutustyyppiThemeColor(this.koulutustyyppi));
   }
+
+  get eraantynyt() {
+    return this.julkaisu.voimassaoloLoppuu && Date.now() > this.julkaisu.voimassaoloLoppuu;
+  }
 }
 </script>
 
@@ -55,10 +70,10 @@ export default class PerusteTile extends Vue {
 
 .peruste {
   cursor: pointer;
-  margin: 5px;
+  margin: 10px 20px 10px 0;
   border-radius: 10px;
   border: 1px solid #E7E7E7;
-  min-height: 230px;
+  min-height: 200px;
   overflow-x: auto;
   width: 330px;
   height: 172px;
@@ -74,7 +89,7 @@ export default class PerusteTile extends Vue {
 .voimaantulo {
   border-top: 1px solid #EBEBEB;
   color: #001A58;
-  font-size: smaller;
+  font-size: 14px;
   padding: 10px;
   text-align: center;
   width: 100%;
@@ -88,7 +103,7 @@ export default class PerusteTile extends Vue {
     text-align: center;
 
     .img {
-      margin: 20px;
+      margin: 15px;
       height: 32px;
       width: 32px;
     }
@@ -98,8 +113,7 @@ export default class PerusteTile extends Vue {
     hyphens: auto;
     overflow: hidden;
     width: 100%;
-    padding: 12px;
-    padding-top: 0;
+    padding: 0;
     text-align: center;
     color: #2B2B2B;
     font-weight: 600;

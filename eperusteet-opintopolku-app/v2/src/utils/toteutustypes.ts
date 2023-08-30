@@ -44,6 +44,11 @@ export const koosteKuvaus = {
   'default': null,
 };
 
+export const koosteSubheader = {
+  'lukiokoulutus': 'lukiokoulutuksen-valtakunnalliset-perusteet',
+  'default': null,
+};
+
 export const getKoostePaikallinenStore = (koulutustyyppi) :any => {
   return koostePaikallinenStore[koulutustyyppi] ? koostePaikallinenStore[koulutustyyppi] : koostePaikallinenStore['default'];
 };
@@ -66,4 +71,8 @@ export const getKoosteTiedotteetStore = (koulutustyyppi): any => {
 
 export const getKoosteKuvaus = (koulutustyyppi): any => {
   return koosteKuvaus[koulutustyyppi] !== undefined ? koosteKuvaus[koulutustyyppi] : koosteKuvaus['default'];
+};
+
+export const getKoosteSubheader = (koulutustyyppi): any => {
+  return koosteSubheader[koulutustyyppi] !== undefined ? koosteSubheader[koulutustyyppi] : koosteSubheader['default'];
 };

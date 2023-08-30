@@ -1,15 +1,19 @@
 <template>
 <div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
+  <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
   <div class="search">
-    <ep-search v-model="query" :sr-placeholder="$t('etsi-opetussuunnitelmia')"/>
+    <span class="hae-label">{{$t('hae')}}</span>
+    <ep-search v-model="query"
+               :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+               :placeholder="$t('hae-opetussuunnitelmaa')"/>
   </div>
   <div class="opetussuunnitelma-container">
     <div class="peruste-nav">
       <div class="d-md-flex">
         <div class="peruste" v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx" :class="{ active: activePeruste === julkaisu.id}">
           <div class="peruste-select">
-            <a href="javascript:;" @click="setActivePeruste(julkaisu)">
+            <a href="javascript:" @click="setActivePeruste(julkaisu)">
               <div>
                 {{ $kaanna(julkaisu.nimi) }}
               </div>
@@ -219,7 +223,12 @@ export default class Paikalliset extends Vue {
       }
     }
   }
+}
 
+.hae-label {
+  margin-top: 10px;
+  padding-bottom: 0 !important;
+  font-weight: 600;
 }
 
 </style>

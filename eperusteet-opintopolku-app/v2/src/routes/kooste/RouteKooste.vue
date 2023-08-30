@@ -4,6 +4,9 @@
   <template slot="header">
     {{ $t(koulutustyyppi) }}
   </template>
+  <template slot="subheader">
+    {{ $t(subheader) }}
+  </template>
   <div>
     <b-container fluid>
       <b-row class="mb-5" v-if="kuvaus">
@@ -15,21 +18,47 @@
 
       <b-row class="mb-5" v-if="perusteKoosteStore">
         <b-col cols="12" xl="auto" class="tile">
-          <h2 class="otsikko">{{ $t('perusteet') }}</h2>
+          <h2 class="otsikko">{{ $t('tile-perusteet') }}</h2>
           <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="julkaistutPerusteet">
             <div v-if="julkaistutPerusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-              <div v-else v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx">
+            <div v-else v-for="(julkaisu, idx) in julkaistutVoimassaolevatPerusteet" :key="idx">
+              <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
+                <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+              </router-link>
+            </div>
+          </div>
+          <ep-spinner v-else />
+        </b-col>
+        <b-col v-if="julkaistutEraantyneetPerusteet.length > 0" cols="12" xl="auto" class="tile">
+          <EpCollapse :borderBottom="false"
+                      :expandedByDefault="false"
+                      :chevronLocation="''"
+                      :use-padding="false"
+                      :content-first="true">
+            <template v-slot:header="{ toggled }">
+              <template v-if="toggled">{{$t('piilota-ei-voimassa-olevat-perusteet')}}</template>
+              <template v-if="!toggled">{{$t('nayta-ei-voimassa-olevat-perusteet')}}</template>
+            </template>
+            <div class="perustebox d-md-flex flex-wrap justify-content-start">
+              <div v-for="(julkaisu, idx) in julkaistutEraantyneetPerusteet" :key="idx">
                 <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
                   <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
                 </router-link>
               </div>
-          </div>
-          <ep-spinner v-else />
+            </div>
+          </EpCollapse>
         </b-col>
       </b-row>
-      <b-row >
+
+      <b-row v-if="paikallinenStore">
+        <b-col>
+          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
+        </b-col>
+      </b-row>
+
+      <b-row>
         <b-col md class="mb-4">
           <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
           <ep-spinner v-if="!tiedotteet"/>
@@ -66,11 +95,6 @@
           </ep-julki-lista>
         </b-col>
       </b-row>
-      <b-row v-if="paikallinenStore">
-        <b-col >
-          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
-        </b-col>
-      </b-row>
     </b-container>
   </div>
 </ep-header>
@@ -90,6 +114,7 @@ import _ from 'lodash';
 import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
@@ -102,6 +127,7 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
     EpExternalLink,
     PerusteTile,
     EpJulkiLista,
+    EpCollapse,
   },
 })
 export default class RouteKooste extends Vue {
@@ -122,6 +148,9 @@ export default class RouteKooste extends Vue {
 
   @Prop({ required: false })
   private kuvaus!: string;
+
+  @Prop({ required: false })
+  private subheader!: string;
 
   @Watch('koulutustyyppi', { immediate: true })
   async fetch() {
@@ -182,6 +211,14 @@ export default class RouteKooste extends Vue {
     }
   }
 
+  get julkaistutVoimassaolevatPerusteet() {
+    return _.filter(this.julkaistutPerusteet, (peruste) => !peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu);
+  }
+
+  get julkaistutEraantyneetPerusteet() {
+    return _.filter(this.julkaistutPerusteet, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
+  }
+
   @Meta
   getMetaInfo() {
     return {
@@ -215,6 +252,10 @@ export default class RouteKooste extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile;
+
+::v-deep .ep-collapse .header {
+  color: #3367E3;
+}
 
 .container {
   .tile {
@@ -262,6 +303,7 @@ export default class RouteKooste extends Vue {
 
 .row {
   margin-bottom: 3rem;
+  display: block;
 }
 
 @media (max-width: 991.98px) {
