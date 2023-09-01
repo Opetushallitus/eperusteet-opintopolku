@@ -83,7 +83,6 @@ export default class PerusteTile extends Vue {
   @media(max-width: 767.98px) {
     width: 100%;
   }
-
 }
 
 .voimaantulo {
@@ -97,6 +96,7 @@ export default class PerusteTile extends Vue {
 
 .upper {
   height: 180px;
+  overflow-y: clip;
 
   .peruste-ikoni {
     color: #0041DC;

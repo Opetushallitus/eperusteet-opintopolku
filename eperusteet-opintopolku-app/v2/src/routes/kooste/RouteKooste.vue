@@ -54,46 +54,51 @@
 
       <b-row v-if="paikallinenStore">
         <b-col>
-          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
+          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore" :koulutustyyppi="koulutustyyppi"/>
         </b-col>
       </b-row>
 
       <b-row>
-        <b-col md class="mb-4">
-          <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
-          <ep-spinner v-if="!tiedotteet"/>
-          <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote" v-else>
-            <template v-slot:lisaaBtnText>
-              <div class="mt-2">
-                {{$t('katso-lisaa-ajankohtaisia')}}
-              </div>
-            </template>
-            <template v-slot:eiTietoja>
-              <div class="mt-2">
-                {{$t('ei-tiedotteita')}}
-              </div>
-            </template>
-          </ep-julki-lista>
-        </b-col>
-        <b-col md class="mb-4">
-          <h2 class="mb-4">{{$t('ohjeet-ja-materiaalit')}}</h2>
-          <ep-spinner v-if="!ohjeet"/>
-          <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas" v-else>
-            <template v-slot:lisaaBtnText>
-              <div class="mt-2">
-                {{$t('katso-lisaa-ohjeita')}}
-              </div>
-            </template>
-            <template v-slot:eiTietoja>
-              <div class="mt-2">
-                {{$t('ei-ohjeita')}}
-              </div>
-            </template>
-            <template v-slot:muokkausaika="{ tieto }">
-              {{$sdt(tieto.julkaistu)}}
-            </template>
-          </ep-julki-lista>
-        </b-col>
+        <section class="section my-4 d-flex">
+          <b-col>
+            <h2>{{ $t('ajankohtaista') }}</h2>
+            <ep-spinner-slot :is-loading="!tiedotteet">
+              <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
+                <template v-slot:lisaaBtnText>
+                  <div class="mt-2">
+                    {{$t('nayta-lisaa')}}
+                  </div>
+                </template>
+                <template v-slot:eiTietoja>
+                  <div class="mt-2">
+                    {{$t('ei-tiedotteita')}}
+                  </div>
+                </template>
+              </ep-julki-lista>
+            </ep-spinner-slot>
+          </b-col>
+
+          <b-col>
+            <h2>{{$t('ohjeet-ja-materiaalit')}}</h2>
+            <ep-spinner-slot :is-loading="!ohjeet">
+              <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas">
+                <template v-slot:lisaaBtnText>
+                  <div class="mt-2">
+                    {{$t('nayta-lisaa')}}
+                  </div>
+                </template>
+                <template v-slot:eiTietoja>
+                  <div class="mt-2">
+                    {{$t('ei-ohjeita')}}
+                  </div>
+                </template>
+                <template v-slot:muokkausaika="{ tieto }">
+                  {{$sd(tieto.julkaistu)}}
+                </template>
+              </ep-julki-lista>
+            </ep-spinner-slot>
+          </b-col>
+        </section>
       </b-row>
     </b-container>
   </div>
@@ -105,6 +110,7 @@ import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import Paikalliset from './Paikalliset.vue';
 import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
@@ -128,6 +134,7 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
     PerusteTile,
     EpJulkiLista,
     EpCollapse,
+    EpSpinnerSlot,
   },
 })
 export default class RouteKooste extends Vue {
@@ -297,7 +304,6 @@ export default class RouteKooste extends Vue {
         }
       }
     }
-
   }
 }
 

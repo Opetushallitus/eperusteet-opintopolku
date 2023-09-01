@@ -13,30 +13,30 @@
             {{$t('jotpa')}}
           </div>
         </div>
-        <div class="organisaatiot d-flex">
+        <div class="organisaatiot">
           <div class="ops-voimassaolo" v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0">
-            <span v-for="(voimassaolotieto,index) in voimassaoloTiedot" :key="'voimassa' + index">
-              <span v-if="index > 0">|</span>
-              {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-              <span class="mr-1"> | </span>
-            </span>
-
+            <div v-for="(voimassaolotieto, index) in voimassaoloTiedot" :key="'voimassa' + index">
+              <div v-if="voimassaolotieto.paiva">
+                <span v-if="index > 0"> | </span>
+                <span class="otsikko">{{$t(voimassaolotieto.teksti)}}: </span>
+                <span>{{ $sd(voimassaolotieto.paiva) }}</span>
+              </div>
+            </div>
           </div>
-          <div class="ops-toimijat" v-if="ops.toimijat && ops.toimijat.length > 0">
+          <div class="ops-toimijat mr-2" v-if="ops.toimijat && ops.toimijat.length > 0">
             <span class="otsikko">{{ $t('toimijat') }}</span>
             <span class="mr-1">:</span>
             <span class="toimijat" v-for="(toimija, tidx) in toimijat" :key="tidx">
               <span v-html="toimija"></span><span v-if="tidx < ops.toimijat.length - 1">, </span>
             </span>
           </div>
-          <div class="ops-oppilaitokset" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
+          <div class="ops-oppilaitokset mr-2" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
             <span class="otsikko">{{ $t('oppilaitokset') }}</span>
             <span class="mr-1">:</span>
             <span class="toimijat" v-for="(oppilaitos, tidx) in oppilaitokset" :key="tidx">
               <span v-html="oppilaitos" /><span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
             </span>
           </div>
-
           <div class="ops-koulutustoimija" v-if="ops.koulutustoimija">
             <span class="otsikko">{{ $t('organisaatiot') }}</span>
             <span class="mr-1">:</span>
@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import { OpetussuunnitelmaJulkinenDto } from '@shared/api/ylops';
 import { highlight } from '@/utils/kieli';
 import _ from 'lodash';
@@ -98,6 +98,10 @@ export default class OpetussuunnitelmaTile extends Vue {
 
 @include shadow-tile-hover;
 
+  .otsikko {
+    font-weight: 600;
+  }
+
   .opetussuunnitelma {
     border: 1px solid #DADADA;
     border-radius: 2px;
@@ -118,21 +122,22 @@ export default class OpetussuunnitelmaTile extends Vue {
   }
 
   .nimi {
-    padding: 13px 0px;
-    color: #3367E3;
+    padding: 13px 0;
+    color: #212529;
 
     .ops {
-      margin-bottom: 8px;
+      font-weight: 600;
+      margin-bottom: 2px;
     }
 
     &__jotpa {
-    padding: 2px 15px;
-    display: inline-block;
-    color: $white;
-    background-color: $koulutustyyppi-muu-color;
-    border-radius: 1rem;
-    font-size: 0.8rem;
-  }
+      padding: 2px 15px;
+      display: inline-block;
+      color: $white;
+      background-color: $koulutustyyppi-muu-color;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+    }
   }
 
   .perusteen-nimi {
@@ -164,7 +169,5 @@ export default class OpetussuunnitelmaTile extends Vue {
     &__voimassa {
       @include voimassaolo($tyyppi: $voimassa-color)
     }
-
   }
-
 </style>

@@ -45,6 +45,10 @@ export const koosteKuvaus = {
 };
 
 export const koosteSubheader = {
+  'varhaiskasvatus': 'varhaiskasvatuksen-valtakunnalliset-perusteet',
+  'esiopetus': 'esiopetuksen-valtakunnalliset-perusteet',
+  'perusopetus': 'perusopetuksen-valtakunnalliset-perusteet',
+  'taiteenperusopetus': 'taiteen-valtakunnalliset-perusteet',
   'lukiokoulutus': 'lukiokoulutuksen-valtakunnalliset-perusteet',
   'default': null,
 };
