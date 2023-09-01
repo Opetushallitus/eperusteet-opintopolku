@@ -76,8 +76,8 @@ export default class EpToteutussuunnitelmaKoulutuksenOsat extends Vue {
         ...viite,
         koulutuksenosa: {
           ...viite.koulutuksenosa,
-          laajuusMinimi: perusteenOsa?.laajuusMinimi || viite.koulutuksenosa.laajuusMinimi,
-          laajuusMaksimi: perusteenOsa?.laajuusMaksimi || viite.koulutuksenosa.laajuusMaksimi,
+          laajuusMinimi: !_.isNil(perusteenOsa?.laajuusMinimi) ? perusteenOsa.laajuusMinimi : viite.koulutuksenosa.laajuusMinimi,
+          laajuusMaksimi: !_.isNil(perusteenOsa?.laajuusMaksimi) ? perusteenOsa?.laajuusMaksimi : viite.koulutuksenosa.laajuusMaksimi,
         },
       };
     }) as any;
