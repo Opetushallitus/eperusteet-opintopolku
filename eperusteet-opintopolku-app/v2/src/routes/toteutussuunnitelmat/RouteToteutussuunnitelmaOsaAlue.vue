@@ -85,9 +85,11 @@ export default class RouteToteutussuunnitelmaOsaAlue extends Vue {
   }
 
   get perusteOsaAlue() {
-    if (this.osaalue.perusteenOsaAlueId) {
-      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: this.osaalue.perusteenOsaAlueId });
-    }
+    return _.chain(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsat)
+      .map(tosa => tosa.osaAlueet as any[])
+      .flatten()
+      .find(perusteenOsaAlue => perusteenOsaAlue.id === this.osaalue.perusteenOsaAlueId)
+      .value();
   }
 
   get koodi() {
