@@ -15,7 +15,7 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat);
   public readonly perusteId = computed(() => this.state.perusteId);
 
-  public async fetch(perusteId?: number, perusteenDiaarinumero?: string, koulutustyypit?: string[]) {
+  public async fetch(perusteId?: number, perusteenDiaarinumero?: string, koulutustyypit?: any[]) {
     this.state.perusteId = perusteId!;
     this.state.opetussuunnitelmat = null;
     this.state.opetussuunnitelmat = _.get((await OpetussuunnitelmatJulkiset.getAllJulkaistutOpetussuunnitelmat(
