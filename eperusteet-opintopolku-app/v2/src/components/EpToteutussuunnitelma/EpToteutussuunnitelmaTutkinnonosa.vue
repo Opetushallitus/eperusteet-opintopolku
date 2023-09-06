@@ -92,7 +92,7 @@
       </ep-form-content>
 
       <template v-if="!osaAlueet || osaAlueet.length ===0">
-        <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.osaAlueet.length > 0" name="osa-alueet">
+        <ep-form-content class="col-md-12 mb-5" v-if="perusteenOsaAlueet.length > 0" name="osa-alueet">
           <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenOsaAlueet" />
         </ep-form-content>
 
@@ -245,12 +245,15 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   }
 
   get osaAlueet() {
-    return _.map(this.sisaltoviite.osaAlueet, osaAlue => {
-      return {
-        ...osaAlue,
-        perusteenOsaAlue: _.find(this.perusteenOsaAlueet, pOsaAlue => pOsaAlue.id === osaAlue.perusteenOsaAlueId),
-      };
-    });
+    return _.chain(this.sisaltoviite.osaAlueet)
+      .map(osaAlue => {
+        return {
+          ...osaAlue,
+          perusteenOsaAlue: _.find(this.perusteenOsaAlueet, pOsaAlue => pOsaAlue.id === osaAlue.perusteenOsaAlueId),
+        };
+      })
+      .filter(osaAlue => !!osaAlue.nimi[this.kieli])
+      .value();
   }
 
   get pakollisetOsaAlueet() {
@@ -267,16 +270,16 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
 
   get perusteenPakollisetOsaAlueet() {
     if (this.perusteenTutkinnonosa) {
-      return this.osaAlueFiltered(['pakollinen', true]);
+      return this.perusteenOsaAlueetFiltered(['pakollinen', true]);
     }
   }
   get perusteenValinnaisetOsaAlueet() {
     if (this.perusteenTutkinnonosa) {
-      return this.osaAlueFiltered(['pakollinen', false]);
+      return this.perusteenOsaAlueetFiltered(['pakollinen', false]);
     }
   }
 
-  osaAlueFiltered(osaamistavoiteFilter) {
+  perusteenOsaAlueetFiltered(osaamistavoiteFilter) {
     return _.chain(this.perusteenOsaAlueet)
       .map(osaAlue => {
         return {
@@ -285,6 +288,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
         };
       })
       .filter(osaAlue => _.size(osaAlue.osaamistavoitteet) > 0)
+      .filter(osaAlue => !!osaAlue.nimi[this.kieli])
       .value();
   }
 
