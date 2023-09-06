@@ -22,6 +22,7 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -75,7 +76,17 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
       return node.children;
     }
     else {
-      return _.filter(node.children, 'isVisible');
+      const filteredChildren = _(node.children)
+        .filter('isVisible')
+        .filter(child => !_.get(child, 'meta.nimi-kieli-filter') || !!child.label[this.sisaltoKieli])
+        .value();
+      return _(filteredChildren)
+        .reject((child, index) => {
+          return _.get(child, 'meta.navigation-subtype')
+          && (index === filteredChildren.length - 1
+          || _.get(_.nth(filteredChildren, index + 1), 'meta.navigation-subtype'));
+        })
+        .value();
     }
   }
 
@@ -89,6 +100,10 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
 
   get current() {
     return this.opetussuunnitelmaDataStore.current;
+  }
+
+  get sisaltoKieli() {
+    return Kielet.getSisaltoKieli.value;
   }
 }
 </script>
