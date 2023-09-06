@@ -1,10 +1,13 @@
 <template>
 <div class="paikalliset">
   <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
-
+  <span>{{ $t('voit-hakea-toteutussuunnitelman') }}</span>
   <div class="d-flex flex-lg-row flex-column">
     <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-      <ep-search v-model="query.nimi" :sr-placeholder="$t('etsi-toteutussuunnitelmia')"/>
+      <ep-search v-model="query.nimi"
+                 :max-width="true"
+                 :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+                 :placeholder="$t('hae-opetussuunnitelmaa')"/>
     </b-form-group>
   </div>
 
@@ -158,7 +161,6 @@ export default class TuvaPaikalliset extends Vue {
   }
 
   .opetussuunnitelma-container {
-    min-height: 700px;
 
     .peruste-nav {
       margin-bottom: 8px;
@@ -201,12 +203,9 @@ export default class TuvaPaikalliset extends Vue {
           a:hover {
             color: #578aff;
           }
-
         }
       }
     }
   }
-
 }
-
 </style>

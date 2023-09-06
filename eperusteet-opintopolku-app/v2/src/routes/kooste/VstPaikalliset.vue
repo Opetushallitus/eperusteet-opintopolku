@@ -1,7 +1,7 @@
 <template>
 <div class="paikalliset">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
-  <span>{{ $t('voit-hakea-opetussuunnitelman-vst') }}</span>
+  <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
   <div class="d-flex flex-lg-row flex-column">
     <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
       <ep-search v-model="query.nimi"

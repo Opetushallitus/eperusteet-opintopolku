@@ -93,6 +93,7 @@ import {
   getKoosteOpasStore,
   getKoostePaikallinenComponent,
   getKoostePaikallinenStore,
+  getKoostePerusteHeader,
   getKoostePerusteStore,
   getKoosteSubheader,
   getKoosteTiedotteetStore,
@@ -237,6 +238,7 @@ export const router = new Router({
                   paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),
                   kuvaus: getKoosteKuvaus(route.params.koulutustyyppi),
                   subheader: getKoosteSubheader(route.params.koulutustyyppi),
+                  perusteetHeader: getKoostePerusteHeader(route.params.koulutustyyppi),
                 },
               };
             },

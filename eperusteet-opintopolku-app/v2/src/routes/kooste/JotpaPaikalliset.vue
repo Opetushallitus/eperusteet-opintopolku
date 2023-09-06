@@ -1,15 +1,17 @@
 <template>
   <div class="paikalliset">
-    <h2 class="otsikko">{{ $t('opetussuunnitelmat') }}</h2>
-
+    <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
+    <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
     <div class="d-flex flex-lg-row flex-column">
       <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-        <ep-search v-model="query.nimi" :sr-placeholder="$t('etsi-opetussuunnitelmia')"/>
+        <ep-search v-model="query.nimi"
+                   :max-width="true"
+                   :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+                   :placeholder="$t('hae-opetussuunnitelmaa')"/>
       </b-form-group>
     </div>
 
     <div class="opetussuunnitelma-container">
-
       <ep-spinner v-if="!opetussuunnitelmat" />
       <div v-else-if="opetussuunnitelmat.length === 0">
         <div class="alert alert-info">
@@ -19,7 +21,7 @@
       <div v-else id="opetussuunnitelmat-lista">
         <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
           <router-link :to="ops.route">
-            <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
+            <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTiedot="ops.voimassaoloTieto"/>
           </router-link>
         </div>
         <EpBPagination v-model="page"
@@ -30,7 +32,7 @@
       </div>
     </div>
   </div>
-  </template>
+</template>
 
 <script lang="ts">
 import _ from 'lodash';
@@ -43,6 +45,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import { voimassaoloTieto } from '@/utils/voimassaolo';
 
 @Component({
   components: {
@@ -133,6 +136,7 @@ export default class JotpaPaikalliset extends Vue {
             koulutustyyppi: ops.jotpatyyppi === 'MUU' ? 'muukoulutus' : 'vapaasivistystyo',
           },
         },
+        voimassaoloTieto: voimassaoloTieto(ops),
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
       .value();
@@ -140,9 +144,9 @@ export default class JotpaPaikalliset extends Vue {
 }
 </script>
 
-  <style scoped lang="scss">
-  @import '@shared/styles/_variables.scss';
-  @import '@shared/styles/_mixins.scss';
+<style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
+@import '@shared/styles/_mixins.scss';
 
   .paikalliset {
 
@@ -157,7 +161,6 @@ export default class JotpaPaikalliset extends Vue {
     }
 
     .opetussuunnitelma-container {
-      min-height: 700px;
 
       .peruste-nav {
         margin-bottom: 8px;
@@ -200,12 +203,9 @@ export default class JotpaPaikalliset extends Vue {
             a:hover {
               color: #578aff;
             }
-
           }
         }
       }
     }
-
   }
-
-  </style>
+</style>
