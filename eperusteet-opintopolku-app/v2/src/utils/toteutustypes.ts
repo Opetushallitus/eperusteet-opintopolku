@@ -44,6 +44,16 @@ export const koosteKuvaus = {
   'default': null,
 };
 
+export const koosteSubheader = {
+  'varhaiskasvatus': 'varhaiskasvatuksen-valtakunnalliset-perusteet',
+  'esiopetus': 'esiopetuksen-valtakunnalliset-perusteet',
+  'perusopetus': 'perusopetuksen-valtakunnalliset-perusteet',
+  'taiteenperusopetus': 'taiteen-valtakunnalliset-perusteet',
+  'lukiokoulutus': 'lukiokoulutuksen-valtakunnalliset-perusteet',
+  'vapaasivistystyo': 'vapaan-sivistystyon-valtakunnalliset-perusteet',
+  'default': null,
+};
+
 export const getKoostePaikallinenStore = (koulutustyyppi) :any => {
   return koostePaikallinenStore[koulutustyyppi] ? koostePaikallinenStore[koulutustyyppi] : koostePaikallinenStore['default'];
 };
@@ -66,4 +76,8 @@ export const getKoosteTiedotteetStore = (koulutustyyppi): any => {
 
 export const getKoosteKuvaus = (koulutustyyppi): any => {
   return koosteKuvaus[koulutustyyppi] !== undefined ? koosteKuvaus[koulutustyyppi] : koosteKuvaus['default'];
+};
+
+export const getKoosteSubheader = (koulutustyyppi): any => {
+  return koosteSubheader[koulutustyyppi] !== undefined ? koosteSubheader[koulutustyyppi] : koosteSubheader['default'];
 };

@@ -1,6 +1,5 @@
 import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
-import { PerusopetuksenPerusteenSisalto, OppiaineDto } from '@shared/api/eperusteet';
+import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
 import _ from 'lodash';
 import { OpetussuunnitelmaJulkinenDto, OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 import { IPaikallinenStore } from './IPaikallinenStore';
@@ -16,10 +15,11 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat);
   public readonly perusteId = computed(() => this.state.perusteId);
 
-  public async fetch(perusteId?: number, perusteenDiaarinumero?: string) {
+  public async fetch(perusteId?: number, perusteenDiaarinumero?: string, koulutustyypit?: string[]) {
     this.state.perusteId = perusteId!;
     this.state.opetussuunnitelmat = null;
     this.state.opetussuunnitelmat = _.get((await OpetussuunnitelmatJulkiset.getAllJulkaistutOpetussuunnitelmat(
+      koulutustyypit,
       undefined,
       undefined,
       perusteenDiaarinumero,

@@ -4,6 +4,9 @@
   <template slot="header">
     {{ $t(koulutustyyppi) }}
   </template>
+  <template slot="subheader">
+    {{ $t(subheader) }}
+  </template>
   <div>
     <b-container fluid>
       <b-row class="mb-5" v-if="kuvaus">
@@ -13,63 +16,76 @@
         </b-col>
       </b-row>
 
-      <b-row class="mb-5" v-if="perusteKoosteStore">
+      <b-row v-if="perusteKoosteStore">
         <b-col cols="12" xl="auto" class="tile">
-          <h2 class="otsikko">{{ $t('perusteet') }}</h2>
+          <h2 class="otsikko">{{ pageHeader }}</h2>
           <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="julkaistutPerusteet">
             <div v-if="julkaistutPerusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-              <div v-else v-for="(julkaisu, idx) in julkaistutPerusteet" :key="idx">
-                <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
-                  <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
-                </router-link>
-              </div>
+            <div v-else v-for="(julkaisu, idx) in visibleJulkaistutPerusteet" :key="idx">
+              <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
+                <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+              </router-link>
+            </div>
           </div>
           <ep-spinner v-else />
         </b-col>
-      </b-row>
-      <b-row >
-        <b-col md class="mb-4">
-          <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
-          <ep-spinner v-if="!tiedotteet"/>
-          <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote" v-else>
-            <template v-slot:lisaaBtnText>
-              <div class="mt-2">
-                {{$t('katso-lisaa-ajankohtaisia')}}
-              </div>
-            </template>
-            <template v-slot:eiTietoja>
-              <div class="mt-2">
-                {{$t('ei-tiedotteita')}}
-              </div>
-            </template>
-          </ep-julki-lista>
-        </b-col>
-        <b-col md class="mb-4">
-          <h2 class="mb-4">{{$t('ohjeet-ja-materiaalit')}}</h2>
-          <ep-spinner v-if="!ohjeet"/>
-          <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas" v-else>
-            <template v-slot:lisaaBtnText>
-              <div class="mt-2">
-                {{$t('katso-lisaa-ohjeita')}}
-              </div>
-            </template>
-            <template v-slot:eiTietoja>
-              <div class="mt-2">
-                {{$t('ei-ohjeita')}}
-              </div>
-            </template>
-            <template v-slot:muokkausaika="{ tieto }">
-              {{$sdt(tieto.julkaistu)}}
-            </template>
-          </ep-julki-lista>
+        <b-col v-if="julkaistutEraantyneetPerusteet && julkaistutEraantyneetPerusteet.length > 0">
+          <b-button @click="toggleEraantyneet()" variant="link">
+            <span v-if="showEraantyneet">{{$t('piilota-ei-voimassa-olevat-perusteet')}}</span>
+            <span v-else>{{$t('nayta-ei-voimassa-olevat-perusteet')}}</span>
+          </b-button>
         </b-col>
       </b-row>
+
       <b-row v-if="paikallinenStore">
-        <b-col >
-          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore"/>
+        <b-col>
+          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore" :koulutustyyppi="koulutustyyppi"/>
         </b-col>
+      </b-row>
+
+      <b-row>
+        <section class="section my-4 d-flex">
+          <b-col>
+            <h2>{{ $t('ajankohtaista') }}</h2>
+            <ep-spinner-slot :is-loading="!tiedotteet">
+              <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
+                <template v-slot:lisaaBtnText>
+                  <div class="mt-2">
+                    {{$t('nayta-lisaa')}}
+                  </div>
+                </template>
+                <template v-slot:eiTietoja>
+                  <div class="mt-2">
+                    {{$t('ei-tiedotteita')}}
+                  </div>
+                </template>
+              </ep-julki-lista>
+            </ep-spinner-slot>
+          </b-col>
+
+          <b-col>
+            <h2>{{$t('ohjeet-ja-materiaalit')}}</h2>
+            <ep-spinner-slot :is-loading="!ohjeet">
+              <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas">
+                <template v-slot:lisaaBtnText>
+                  <div class="mt-2">
+                    {{$t('nayta-lisaa')}}
+                  </div>
+                </template>
+                <template v-slot:eiTietoja>
+                  <div class="mt-2">
+                    {{$t('ei-ohjeita')}}
+                  </div>
+                </template>
+                <template v-slot:muokkausaika="{ tieto }">
+                  {{$sd(tieto.julkaistu)}}
+                </template>
+              </ep-julki-lista>
+            </ep-spinner-slot>
+          </b-col>
+        </section>
       </b-row>
     </b-container>
   </div>
@@ -81,6 +97,7 @@ import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import Paikalliset from './Paikalliset.vue';
 import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
@@ -93,6 +110,7 @@ import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulki
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
+import { isVapaasivistystyoKoulutustyyppi } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -102,6 +120,7 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
     EpExternalLink,
     PerusteTile,
     EpJulkiLista,
+    EpSpinnerSlot,
   },
 })
 export default class RouteKooste extends Vue {
@@ -122,6 +141,11 @@ export default class RouteKooste extends Vue {
 
   @Prop({ required: false })
   private kuvaus!: string;
+
+  @Prop({ required: false })
+  private subheader!: string;
+
+  private showEraantyneet: boolean = false;
 
   @Watch('koulutustyyppi', { immediate: true })
   async fetch() {
@@ -182,6 +206,32 @@ export default class RouteKooste extends Vue {
     }
   }
 
+  get visibleJulkaistutPerusteet() {
+    if (this.showEraantyneet) {
+      return [...this.julkaistutVoimassaolevatPerusteet, ...this.julkaistutEraantyneetPerusteet];
+    }
+    return this.julkaistutVoimassaolevatPerusteet;
+  }
+
+  get julkaistutVoimassaolevatPerusteet() {
+    return _.filter(this.julkaistutPerusteet, (peruste) => !peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu);
+  }
+
+  get julkaistutEraantyneetPerusteet() {
+    return _.filter(this.julkaistutPerusteet, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
+  }
+
+  get pageHeader() {
+    if (isVapaasivistystyoKoulutustyyppi(this.koulutustyyppi)) {
+      return this.$t('valtakunnalliset-perusteet-ja-suositukset');
+    }
+    return this.$t('tile-perusteet');
+  }
+
+  toggleEraantyneet() {
+    this.showEraantyneet = !this.showEraantyneet;
+  }
+
   @Meta
   getMetaInfo() {
     return {
@@ -215,6 +265,10 @@ export default class RouteKooste extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile;
+
+::v-deep .ep-collapse .header {
+  color: #3367E3;
+}
 
 .container {
   .tile {
@@ -256,12 +310,12 @@ export default class RouteKooste extends Vue {
         }
       }
     }
-
   }
 }
 
 .row {
   margin-bottom: 3rem;
+  display: block;
 }
 
 @media (max-width: 991.98px) {
