@@ -2,7 +2,8 @@
   <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column" >
     <div class="upper">
       <div class="peruste-ikoni" :style="imgStyle">
-        <ep-hallitus-img class="img"/>
+        <ep-hallitus-img v-if="isHallitus" class="img"/>
+        <ep-kirja-img v-else class="img"/>
       </div>
       <div class="nimi">
         {{ $kaanna(julkaisu.nimi) }} <span v-if="julkaisu.laajuus">{{julkaisu.laajuus}} {{$t('osaamispiste')}}</span>
@@ -13,14 +14,7 @@
         <span v-if="julkaisu.voimassaoloAlkaa">
           {{ $t('voimaantulo') }}: {{ $sd(julkaisu.voimassaoloAlkaa) }}
         </span>
-        <span v-if="eraantynyt" class="ml-3">
-          <EpColorIndicator :size="10" background-color="#FF5000" :tooltip="false" kind=""/>
-          {{ $t('ei-voimassa') }}
-        </span>
-        <span v-else class="ml-3">
-          <EpColorIndicator :size="10" background-color="#57bb1a" :tooltip="false" kind=""/>
-          {{ $t('voimassa') }}
-        </span>
+        <EpVoimassaolo :voimassaolo="julkaisu"></EpVoimassaolo>
       </div>
     </div>
   </div>
@@ -28,21 +22,24 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
+import { isVstLukutaito, koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
-import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
+import EpKirjaImg from '@shared/components/EpImage/EpKirjaImg.vue';
+import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 
 interface PerusteJulkiData {
   nimi:{ [key: string]: string; };
   voimassaoloAlkaa?: number,
   voimassaoloLoppuu?: number,
   laajuus?: number,
+  koulutustyyppi?: string,
 }
 
 @Component({
   components: {
-    EpColorIndicator,
     EpHallitusImg,
+    EpKirjaImg,
+    EpVoimassaolo,
   },
 })
 export default class PerusteTile extends Vue {
@@ -56,8 +53,8 @@ export default class PerusteTile extends Vue {
     return 'fill: ' + rgb2string(koulutustyyppiThemeColor(this.koulutustyyppi));
   }
 
-  get eraantynyt() {
-    return this.julkaisu.voimassaoloLoppuu && Date.now() > this.julkaisu.voimassaoloLoppuu;
+  get isHallitus() {
+    return !isVstLukutaito(this.julkaisu.koulutustyyppi!);
   }
 }
 </script>

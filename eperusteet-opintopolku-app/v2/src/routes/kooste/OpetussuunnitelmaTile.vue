@@ -1,12 +1,12 @@
 <template>
   <div class="opetussuunnitelma shadow-tile">
     <div class="d-flex align-items-center">
-      <div v-if="!voimassaoloTiedot" class="opsicon-wrapper">
+      <div v-if="showOpsIcon" class="opsicon-wrapper">
         <slot name="icon">
           <div class="opsicon"></div>
         </slot>
       </div>
-      <div class="nimi flex-fill" :class="voimassaoloClass">
+      <div class="nimi flex-fill">
         <div class="ops d-flex align-items-center">
           <div v-html="nimi"></div>
           <div v-if="ops.jotpatyyppi && showJotpaInfo" class="nimi__jotpa ml-2">
@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="organisaatiot">
-          <div class="ops-voimassaolo" v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0">
+          <div class="ops-voimassaolo d-flex" v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0">
             <div v-for="(voimassaolotieto, index) in voimassaoloTiedot" :key="'voimassa' + index">
               <div v-if="voimassaolotieto.paiva">
                 <span v-if="index > 0"> | </span>
@@ -22,6 +22,7 @@
                 <span>{{ $sd(voimassaolotieto.paiva) }}</span>
               </div>
             </div>
+            <EpVoimassaolo :voimassaolo="ops"></EpVoimassaolo>
           </div>
           <div class="ops-toimijat mr-2" v-if="ops.toimijat && ops.toimijat.length > 0">
             <span class="otsikko">{{ $t('toimijat') }}</span>
@@ -44,23 +45,26 @@
           </div>
         </div>
       </div>
-      <div class="perusteen-nimi">
-      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { OpetussuunnitelmaJulkinenDto } from '@shared/api/ylops';
 import { highlight } from '@/utils/kieli';
 import _ from 'lodash';
 import { VoimassaoloTieto } from '@/utils/voimassaolo';
+import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
+import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 
-@Component
+@Component({
+  components: {
+    EpVoimassaolo,
+  },
+})
 export default class OpetussuunnitelmaTile extends Vue {
   @Prop({ required: true })
-  private ops!: OpetussuunnitelmaJulkinenDto;
+  private ops!: OpetussuunnitelmaDto;
 
   @Prop({ default: '' })
   private query!: string;
@@ -70,6 +74,9 @@ export default class OpetussuunnitelmaTile extends Vue {
 
   @Prop({ required: false, default: false, type: Boolean })
   private showJotpaInfo!: Boolean;
+
+  @Prop({ required: false, default: true, type: Boolean })
+  private showOpsIcon?: boolean;
 
   get nimi() {
     return highlight(this.$kaanna((this.ops.nimi as Object)), this.query);
@@ -81,13 +88,6 @@ export default class OpetussuunnitelmaTile extends Vue {
 
   get oppilaitokset() {
     return _.map((this.ops as any).oppilaitokset, (oppilaitos) => highlight(this.$kaanna(oppilaitos.nimi), this.query));
-  }
-
-  get voimassaoloClass() {
-    if (this.voimassaoloTiedot?.length > 0) {
-      return 'voimassaolo__' + this.voimassaoloTiedot[0].tyyppi;
-    }
-    return '';
   }
 }
 </script>
@@ -122,7 +122,7 @@ export default class OpetussuunnitelmaTile extends Vue {
   }
 
   .nimi {
-    padding: 13px 0;
+    padding: 13px 13px;
     color: #212529;
 
     .ops {
@@ -147,27 +147,5 @@ export default class OpetussuunnitelmaTile extends Vue {
   .organisaatiot {
     color: #2B2B2B;
     font-size: smaller;
-  }
-
-  @mixin voimassaolo($tyyppi) {
-    margin-left:10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 8px 10px;
-    border-left: 3px solid $tyyppi;
-  }
-
-  .voimassaolo {
-    &__tuleva {
-      @include voimassaolo($tyyppi: $tuleva-color)
-    }
-
-    &__voimassaoloPaattynyt {
-      @include voimassaolo($tyyppi: $paattynyt-color)
-    }
-
-    &__voimassa {
-      @include voimassaolo($tyyppi: $voimassa-color)
-    }
   }
 </style>

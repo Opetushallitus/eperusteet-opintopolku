@@ -50,6 +50,7 @@ export const koosteSubheader = {
   'perusopetus': 'perusopetuksen-valtakunnalliset-perusteet',
   'taiteenperusopetus': 'taiteen-valtakunnalliset-perusteet',
   'lukiokoulutus': 'lukiokoulutuksen-valtakunnalliset-perusteet',
+  'vapaasivistystyo': 'vapaan-sivistystyon-valtakunnalliset-perusteet',
   'default': null,
 };
 

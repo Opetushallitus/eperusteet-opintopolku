@@ -16,14 +16,14 @@
         </b-col>
       </b-row>
 
-      <b-row class="mb-5" v-if="perusteKoosteStore">
+      <b-row v-if="perusteKoosteStore">
         <b-col cols="12" xl="auto" class="tile">
-          <h2 class="otsikko">{{ $t('tile-perusteet') }}</h2>
+          <h2 class="otsikko">{{ pageHeader }}</h2>
           <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="julkaistutPerusteet">
             <div v-if="julkaistutPerusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-            <div v-else v-for="(julkaisu, idx) in julkaistutVoimassaolevatPerusteet" :key="idx">
+            <div v-else v-for="(julkaisu, idx) in visibleJulkaistutPerusteet" :key="idx">
               <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
                 <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
               </router-link>
@@ -31,24 +31,11 @@
           </div>
           <ep-spinner v-else />
         </b-col>
-        <b-col v-if="julkaistutEraantyneetPerusteet.length > 0" cols="12" xl="auto" class="tile">
-          <EpCollapse :borderBottom="false"
-                      :expandedByDefault="false"
-                      :chevronLocation="''"
-                      :use-padding="false"
-                      :content-first="true">
-            <template v-slot:header="{ toggled }">
-              <template v-if="toggled">{{$t('piilota-ei-voimassa-olevat-perusteet')}}</template>
-              <template v-if="!toggled">{{$t('nayta-ei-voimassa-olevat-perusteet')}}</template>
-            </template>
-            <div class="perustebox d-md-flex flex-wrap justify-content-start">
-              <div v-for="(julkaisu, idx) in julkaistutEraantyneetPerusteet" :key="idx">
-                <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
-                  <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
-                </router-link>
-              </div>
-            </div>
-          </EpCollapse>
+        <b-col v-if="julkaistutEraantyneetPerusteet && julkaistutEraantyneetPerusteet.length > 0">
+          <b-button @click="toggleEraantyneet()" variant="link">
+            <span v-if="showEraantyneet">{{$t('piilota-ei-voimassa-olevat-perusteet')}}</span>
+            <span v-else>{{$t('nayta-ei-voimassa-olevat-perusteet')}}</span>
+          </b-button>
         </b-col>
       </b-row>
 
@@ -120,10 +107,10 @@ import _ from 'lodash';
 import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
+import { isVapaasivistystyoKoulutustyyppi } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -133,7 +120,6 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
     EpExternalLink,
     PerusteTile,
     EpJulkiLista,
-    EpCollapse,
     EpSpinnerSlot,
   },
 })
@@ -158,6 +144,8 @@ export default class RouteKooste extends Vue {
 
   @Prop({ required: false })
   private subheader!: string;
+
+  private showEraantyneet: boolean = false;
 
   @Watch('koulutustyyppi', { immediate: true })
   async fetch() {
@@ -218,12 +206,30 @@ export default class RouteKooste extends Vue {
     }
   }
 
+  get visibleJulkaistutPerusteet() {
+    if (this.showEraantyneet) {
+      return [...this.julkaistutVoimassaolevatPerusteet, ...this.julkaistutEraantyneetPerusteet];
+    }
+    return this.julkaistutVoimassaolevatPerusteet;
+  }
+
   get julkaistutVoimassaolevatPerusteet() {
     return _.filter(this.julkaistutPerusteet, (peruste) => !peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu);
   }
 
   get julkaistutEraantyneetPerusteet() {
     return _.filter(this.julkaistutPerusteet, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
+  }
+
+  get pageHeader() {
+    if (isVapaasivistystyoKoulutustyyppi(this.koulutustyyppi)) {
+      return this.$t('valtakunnalliset-perusteet-ja-suositukset');
+    }
+    return this.$t('tile-perusteet');
+  }
+
+  toggleEraantyneet() {
+    this.showEraantyneet = !this.showEraantyneet;
   }
 
   @Meta

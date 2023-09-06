@@ -1,7 +1,7 @@
 <template>
 <div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
-  <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
+  <span>{{ $t('voit-hakea-opetussuunnitelman-yleissivistava') }}</span>
   <div class="search d-flex flex-lg-row flex-column">
     <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
       <ep-search v-model="query"
@@ -165,10 +165,8 @@ export default class Paikalliset extends Vue {
     return _.chain(this.paikallinenStore.opetussuunnitelmat.value)
       .map(ops => ({
         ...ops,
-        toimijat: _.filter(ops.organisaatiot, org =>
-          _.includes(org.tyypit, 'Koulutustoimija')),
-        oppilaitokset: _.filter(ops.organisaatiot, org =>
-          _.includes(org.tyypit, 'Oppilaitos')),
+        toimijat: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Koulutustoimija')),
+        oppilaitokset: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Oppilaitos')),
         route: {
           name: 'opetussuunnitelma',
           params: {
@@ -213,10 +211,6 @@ export default class Paikalliset extends Vue {
       .drop(this.perPage * (this.page - 1))
       .take(this.perPage)
       .value();
-  }
-
-  get currentPeruste() {
-    return _.find(this.julkaistutPerusteet, ['id', this.paikallinenStore.perusteId?.value]);
   }
 }
 </script>
