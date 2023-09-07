@@ -1,37 +1,39 @@
 <template>
-  <div class="paikalliset">
-    <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
-    <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
-    <div class="d-flex flex-lg-row flex-column">
-      <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-        <ep-search v-model="query.nimi"
-                   :max-width="true"
-                   :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-                   :placeholder="$t('hae-opetussuunnitelmaa')"/>
-      </b-form-group>
-    </div>
+<div class="paikalliset">
+  <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
+  <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
+  <div class="d-flex flex-lg-row flex-column">
+    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+      <ep-search v-model="query.nimi"
+                 :max-width="true"
+                 :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+                 :placeholder="$t('hae-opetussuunnitelmaa')"/>
+    </b-form-group>
+  </div>
 
-    <div class="opetussuunnitelma-container">
-      <ep-spinner v-if="!opetussuunnitelmat" />
-      <div v-else-if="opetussuunnitelmat.length === 0">
-        <div class="alert alert-info">
-          {{ $t('ei-hakutuloksia') }}
-        </div>
+  <EpVoimassaoloFilter :query="query"></EpVoimassaoloFilter>
+
+  <div class="opetussuunnitelma-container">
+    <ep-spinner v-if="!opetussuunnitelmat" />
+    <div v-else-if="opetussuunnitelmat.length === 0">
+      <div class="alert alert-info">
+        {{ $t('ei-hakutuloksia') }}
       </div>
-      <div v-else id="opetussuunnitelmat-lista">
-        <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
-          <router-link :to="ops.route">
-            <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTiedot="ops.voimassaoloTieto"/>
-          </router-link>
-        </div>
-        <EpBPagination v-model="page"
-                       :items-per-page="perPage"
-                       :total="total"
-                       aria-controls="opetussuunnitelmat-lista">
-        </EpBPagination>
+    </div>
+    <div v-else id="opetussuunnitelmat-lista">
+      <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
+        <router-link :to="ops.route">
+          <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTiedot="ops.voimassaoloTieto"/>
+        </router-link>
       </div>
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="opetussuunnitelmat-lista">
+      </EpBPagination>
     </div>
   </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -43,9 +45,11 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
+import EpToggle from '@shared/components/forms/EpToggle.vue';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 
 @Component({
   components: {
@@ -55,6 +59,8 @@ import { voimassaoloTieto } from '@/utils/voimassaolo';
     OpetussuunnitelmaTile,
     EpMultiSelect,
     EpBPagination,
+    EpToggle,
+    EpVoimassaoloFilter,
   },
 })
 export default class JotpaPaikalliset extends Vue {
@@ -68,12 +74,17 @@ export default class JotpaPaikalliset extends Vue {
     sivukoko: 10,
     kieli: this.kieli,
     jotpatyyppi: ['VST', 'MUU'],
+    tuleva: true,
+    voimassaolo: true,
+    poistunut: true,
   };
 
   async mounted() {
     if (this.paikallinenStore) {
       await this.paikallinenStore.fetchQuery(this.query);
     }
+    // kannasta haettu poistuneet, mutta ei näytetä defaultina näitä
+    this.query.poistunut = false;
   }
 
   get kieli() {

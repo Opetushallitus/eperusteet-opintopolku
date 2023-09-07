@@ -51,23 +51,7 @@
     </b-form-group>
   </div>
 
-  <div class="d-flex align-self-center flex-wrap flex-lg-row flex-column toggles">
-    <EpToggle v-model="query.tuleva" class="haku-toggle tuleva" :is-s-witch="false">
-      <span v-if="query.tuleva" class="sr-only">{{ $t('valittu') }}</span>
-      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
-      {{ $t('tulossa-voimaan') }}
-    </EpToggle>
-    <EpToggle v-model="query.voimassaolo" class="haku-toggle voimassaolo" :is-s-witch="false">
-      <span v-if="query.voimassaolo" class="sr-only">{{ $t('valittu') }}</span>
-      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
-      {{ $t('voimassa') }}
-    </EpToggle>
-    <EpToggle v-model="query.poistunut" class="haku-toggle poistunut" :is-s-witch="false">
-      <span v-if="query.poistunut" class="sr-only">{{ $t('valittu') }}</span>
-      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
-      {{ $t('ei-voimassa') }}
-    </EpToggle>
-  </div>
+  <EpVoimassaoloFilter :query="query"></EpVoimassaoloFilter>
 
   <div class="opetussuunnitelma-container">
     <ep-spinner v-if="!opetussuunnitelmat" />
@@ -106,11 +90,11 @@ import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaika
 import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
 import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
-import EpToggle from '@shared/components/forms/EpToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { isVstLukutaito } from '@shared/utils/perusteet';
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 
 @Component({
   components: {
@@ -120,8 +104,8 @@ import { isVstLukutaito } from '@shared/utils/perusteet';
     OpetussuunnitelmaTile,
     EpMultiSelect,
     EpColoredToggle,
-    EpToggle,
     EpBPagination,
+    EpVoimassaoloFilter,
   },
 })
 export default class VstPaikalliset extends Vue {
@@ -390,37 +374,6 @@ export default class VstPaikalliset extends Vue {
           }
 
         }
-      }
-    }
-  }
-
-  $tuleva-color: $green-lighten-2;
-  $voimassa-color: $green;
-  $paattynyt-color: $red-1;
-
-  .toggles {
-    padding-bottom: 20px;
-
-    .haku-toggle {
-      padding: 2px 7px;
-      border: 1px solid $gray-lighten-8;
-      border-radius: 6px;
-      margin-right: 7px;
-
-      ::v-deep .toggle {
-        border: 0;
-      }
-
-      &.tuleva ::v-deep .toggle{
-        background-color: $tuleva-color;
-      }
-
-      &.voimassaolo ::v-deep .toggle{
-        background-color: $green;
-      }
-
-      &.poistunut ::v-deep .toggle{
-        background-color: $paattynyt-color;
       }
     }
   }
