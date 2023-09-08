@@ -50,7 +50,7 @@
     </b-form-group>
   </div>
 
-  <EpVoimassaoloFilter :query="query"></EpVoimassaoloFilter>
+  <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
 
   <div class="opetussuunnitelma-container">
     <ep-spinner v-if="!opetussuunnitelmat" />

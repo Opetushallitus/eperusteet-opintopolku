@@ -45,10 +45,7 @@
                 :class="{'disabled-events': !perusteet}"/>
     </div>
 
-    <EpVoimassaoloFilter v-if="tyyppi === 'peruste'"
-                         :query="voimassaoloQuery"
-                         @voimassaoloFilterChange="voimassaoloFilterChanged">
-    </EpVoimassaoloFilter>
+    <EpVoimassaoloFilter v-if="tyyppi === 'peruste'" v-model="voimassaoloQuery"></EpVoimassaoloFilter>
 
   </div>
   <div v-if="!perusteet">
@@ -201,8 +198,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
     this.page = 1;
   }
 
-  voimassaoloFilterChanged(filters) {
-    this.perusteHakuStore.updateFilters(filters);
+  @Watch('voimassaoloQuery', { deep: true })
+  voimassaoloFilterChanged() {
+    this.perusteHakuStore.updateFilters(this.voimassaoloQuery);
     this.page = 1;
   }
 
