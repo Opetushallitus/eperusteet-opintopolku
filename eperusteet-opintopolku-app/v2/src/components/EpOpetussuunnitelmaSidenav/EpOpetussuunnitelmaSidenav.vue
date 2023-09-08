@@ -83,8 +83,8 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
       return _(filteredChildren)
         .reject((child, index) => {
           return _.get(child, 'meta.navigation-subtype')
-          && (index === filteredChildren.length - 1
-          || _.get(_.nth(filteredChildren, index + 1), 'meta.navigation-subtype'));
+          && (index === filteredChildren.length - 1 || _.get(_.nth(filteredChildren, index + 1), 'meta.navigation-subtype'))
+          && _.size(child.children) === 0;
         })
         .value();
     }
