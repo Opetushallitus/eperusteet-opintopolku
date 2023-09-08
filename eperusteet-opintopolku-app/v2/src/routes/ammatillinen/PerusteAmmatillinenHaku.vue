@@ -15,7 +15,9 @@
 
       <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
         <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-          <ep-search v-model="query"/>
+          <EpSearch v-model="query"
+                    :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+                    :placeholder="$t('hae-opetussuunnitelmaa')"/>
         </b-form-group>
         <b-form-group :label="$t('tutkintotyyppi')">
           <EpMultiSelect
@@ -38,20 +40,16 @@
       </div>
     </div>
 
-    <ep-search v-else v-model="query" :placeholder="searchPlaceholder" :class="{'disabled-events': !perusteet}"/>
-
-    <div class="checkboxes d-flex align-self-center flex-wrap flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
-      <EpColoredToggle v-for="(toggle, idx) in toggles"
-                       :key="'toggle' + idx"
-                       v-model="filters[toggle]"
-                       @input="onToggleChange()"
-                       :class="['toggle-' + toggle, !perusteet ? 'disabled-events' : '']"
-                       class="peruste-haku-toggle">
-        <span v-if="filters[toggle]" class="sr-only">{{ $t('valittu') }}</span>
-        <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
-        {{ $t('switch-' + toggle) }}
-      </EpColoredToggle>
+    <div v-else class="mb-3">
+      <EpSearch v-model="query"
+                :class="{'disabled-events': !perusteet}"/>
     </div>
+
+    <EpVoimassaoloFilter v-if="tyyppi === 'peruste'"
+                         :query="voimassaoloQuery"
+                         @voimassaoloFilterChange="voimassaoloFilterChanged">
+    </EpVoimassaoloFilter>
+
   </div>
   <div v-if="!perusteet">
     <ep-spinner />
@@ -78,6 +76,7 @@
             <span v-if="index > 0">|</span>
             {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
           </span>
+          <EpVoimassaolo :voimassaolo="peruste"></EpVoimassaolo>
           <span v-if="peruste.diaarinumero">
             | {{$t('diaarinumero')}}: {{ peruste.diaarinumero }}
           </span>
@@ -119,17 +118,10 @@ import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
-import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
-
-const voimassaoloTietoTekstit = {
-  'tuleva': 'voimaantulo',
-  'voimassa': 'voimaantulo',
-  'siirtyma': 'siirtymaajan-paattymisaika',
-  'siirtymaPaattynyt': 'siirtymaajan-paattymisaika',
-  'voimassaoloPaattynyt': 'voimassaolo-paattynyt',
-};
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
+import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 
 @Component({
   components: {
@@ -140,8 +132,9 @@ const voimassaoloTietoTekstit = {
     EpExternalLink,
     EpAmmatillinenRow,
     EpMultiSelect,
-    EpColoredToggle,
     EpBPagination,
+    EpVoimassaoloFilter,
+    EpVoimassaolo,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -152,17 +145,22 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private tyyppi!: 'peruste' | 'opas' | 'kooste';
 
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
+  private tutkintotyyppi = 'kaikki';
+
+  private voimassaoloQuery: any = {
+    tuleva: true,
+    voimassaolo: true,
+    siirtyma: false,
+    poistunut: false,
+  };
 
   async mounted() {
     this.page = 1;
     if (!this.perusteHakuStore.perusteet) {
       await this.perusteHakuStore.fetch();
     }
-
     await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
   }
-
-  private tutkintotyyppi = 'kaikki';
 
   get tutkintotyypit() {
     return [
@@ -203,17 +201,18 @@ export default class PerusteAmmatillinenHaku extends Vue {
     this.page = 1;
   }
 
+  voimassaoloFilterChanged(filters) {
+    this.perusteHakuStore.updateFilters(filters);
+    this.page = 1;
+  }
+
   get searchPlaceholder() {
     if (this.tyyppi === 'opas') {
       return this.$t('ohjeen-tai-materiaalin-nimi');
     }
     else {
-      return this.$t('etsi-ammatillinen-tutkinto-peruste-placeholder');
+      return this.$t('voit-hakea-tutkintoa-nimella');
     }
-  }
-
-  get toggles() {
-    return this.perusteHakuStore.toggles;
   }
 
   get perusteet() {
@@ -252,12 +251,15 @@ export default class PerusteAmmatillinenHaku extends Vue {
   get total() {
     return this.perusteHakuStore.total;
   }
+
   get pages() {
     return this.perusteHakuStore.pages;
   }
+
   get perPage() {
     return this.perusteHakuStore.perPage;
   }
+
   get filters() {
     return this.perusteHakuStore.filters;
   }
@@ -265,6 +267,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   get query() {
     return this.filters.nimi;
   }
+
   set query(value) {
     this.perusteHakuStore.updateFilters({ nimi: value });
   }
@@ -272,13 +275,10 @@ export default class PerusteAmmatillinenHaku extends Vue {
   get page() {
     return this.perusteHakuStore.page + 1;
   }
+
   set page(value) {
     this.perusteHakuStore.page = value - 1;
     this.perusteHakuStore.updateFilters({ sivu: this.perusteHakuStore.page });
-  }
-
-  async onToggleChange(toggle) {
-    this.perusteHakuStore.updateFilters(this.filters);
   }
 
   get valmisteillaOlevat() {
@@ -295,7 +295,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
 .placeholderText {
   font-size: small;
-  color: #555;
+  color: $gray-lighten-12;
 }
 
 @media(min-width: 992px){
@@ -311,19 +311,11 @@ export default class PerusteAmmatillinenHaku extends Vue {
     max-width: 100%;
   }
 
-  .checkboxes {
-    padding-bottom: 20px;
-    padding-left: 10px;
-    .custom-switch {
-      margin: 5px 15px 0 0;
-    }
-  }
-
   .nimi {
-    font-size: normal;
-    font-weight: bolder;
+    font-weight: 600;
     margin-bottom: 8px;
   }
+
   .nimikkeet {
     font-size: small;
 
@@ -331,60 +323,14 @@ export default class PerusteAmmatillinenHaku extends Vue {
       font-weight: 600;
     }
   }
+
   .alatiedot {
     font-size: smaller;
-    color: $gray-lighten-12;
     padding-top: 10px;
   }
 
   .pagination {
     margin-top: 10px;
   }
-
-  $tuleva-color: $green-lighten-5;
-  $voimassa-color: $green;
-  $siirtyma-color: $yellow-2;
-  $paattynyt-color: $red-1;
-
-  .peruste-haku-toggle {
-
-    ::v-deep .toggle {
-      border: 0px;
-    }
-
-    &.toggle-tuleva ::v-deep .toggle{
-      background-color: $tuleva-color;
-    }
-
-    &.toggle-voimassaolo ::v-deep .toggle{
-      background-color: $green;
-    }
-
-    &.toggle-siirtyma ::v-deep .toggle{
-      background-color: $siirtyma-color;
-    }
-
-    &.toggle-poistunut ::v-deep .toggle{
-      background-color: $paattynyt-color;
-    }
-
-  }
-
-  ::v-deep .ammatillinen-row.tuleva .ammatillinen-data{
-      border-left: 3px solid $tuleva-color;
-  }
-
-  ::v-deep .ammatillinen-row.siirtyma .ammatillinen-data{
-      border-left: 3px solid $siirtyma-color;
-  }
-
-  ::v-deep .ammatillinen-row.voimassaoloPaattynyt .ammatillinen-data, ::v-deep .ammatillinen-row.siirtymaPaattynyt .ammatillinen-data{
-      border-left: 3px solid $paattynyt-color;
-  }
-
-  .peruste-haku-toggle {
-    padding: 0px 5px;
-  }
 }
-
 </style>

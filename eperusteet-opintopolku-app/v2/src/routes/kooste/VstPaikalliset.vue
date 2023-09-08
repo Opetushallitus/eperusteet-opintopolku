@@ -89,7 +89,6 @@ import { Koulutustyyppi } from '@shared/tyypit';
 import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaikallisetStore';
 import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
-import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
@@ -103,7 +102,6 @@ import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimas
     EpSpinner,
     OpetussuunnitelmaTile,
     EpMultiSelect,
-    EpColoredToggle,
     EpBPagination,
     EpVoimassaoloFilter,
   },

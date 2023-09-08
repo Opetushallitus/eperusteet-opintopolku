@@ -76,15 +76,13 @@ export default class JotpaPaikalliset extends Vue {
     jotpatyyppi: ['VST', 'MUU'],
     tuleva: true,
     voimassaolo: true,
-    poistunut: true,
+    poistunut: false,
   };
 
   async mounted() {
     if (this.paikallinenStore) {
       await this.paikallinenStore.fetchQuery(this.query);
     }
-    // kannasta haettu poistuneet, mutta ei näytetä defaultina näitä
-    this.query.poistunut = false;
   }
 
   get kieli() {

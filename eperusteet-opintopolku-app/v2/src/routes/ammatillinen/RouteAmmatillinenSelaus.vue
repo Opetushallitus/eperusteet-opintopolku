@@ -220,7 +220,7 @@ export default class RouteAmmatillinenSelaus extends Vue {
 }
 
 .container-md {
-  padding: 0px 30px;
+  padding: 0 30px;
 }
 
 .box {
@@ -236,13 +236,13 @@ export default class RouteAmmatillinenSelaus extends Vue {
 }
 
 .kuvaus {
-  font-size: small;
-  color: #555;
+  font-size: smaller;
+  color: $gray-lighten-12;
 }
 
 @media (max-width: 991.98px) {
   .container-md {
-    padding: 0px 15px;
+    padding: 0 15px;
   }
 }
 </style>
