@@ -14,7 +14,8 @@
         <span v-if="julkaisu.voimassaoloAlkaa">
           {{ $t('voimaantulo') }}: {{ $sd(julkaisu.voimassaoloAlkaa) }}
         </span>
-        <EpVoimassaolo :voimassaolo="julkaisu"></EpVoimassaolo>
+<!--        Kommenteissa, kunnes data saadaan kuntoon, ts. päättymispäivät perusteille-->
+<!--        <EpVoimassaolo :voimassaolo="julkaisu"></EpVoimassaolo>-->
       </div>
     </div>
   </div>
