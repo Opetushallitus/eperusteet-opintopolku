@@ -18,10 +18,10 @@
                      @input="setActivePeruste($event)"
                      v-model="valittuPeruste">
         <template slot="singleLabel" slot-scope="{ option }">
-          {{ $kaanna(option.nimi) }}
+          {{ kaannaPerusteNimi(option) }}
         </template>
         <template slot="option" slot-scope="{ option }">
-          {{ $kaanna(option.nimi) }}
+          {{ kaannaPerusteNimi(option) }}
         </template>
       </EpMultiSelect>
     </b-form-group>
@@ -94,7 +94,7 @@ export default class Paikalliset extends Vue {
   private query = '';
   private page = 1;
   private perPage = 10;
-  private valittuPeruste = { nimi: this.$t('kaikki') };
+  private valittuPeruste = {};
 
   @Watch('julkaistutPerusteet', { immediate: true })
   async perusteetChange() {
@@ -148,7 +148,7 @@ export default class Paikalliset extends Vue {
     if (this.julkaistutPerusteet) {
       return [
         {
-          nimi: this.$t('kaikki'),
+          nimi: null,
         },
         ...this.julkaistutPerusteet,
       ];
@@ -211,6 +211,13 @@ export default class Paikalliset extends Vue {
       .drop(this.perPage * (this.page - 1))
       .take(this.perPage)
       .value();
+  }
+
+  kaannaPerusteNimi(option) {
+    if (option.nimi) {
+      return this.$kaanna(option.nimi);
+    }
+    return this.$t('kaikki');
   }
 }
 </script>

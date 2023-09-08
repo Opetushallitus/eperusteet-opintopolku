@@ -12,14 +12,13 @@
 
     <b-form-group :label="$t('oppilaitoksen-tyyppi')">
       <EpSpinner v-if="!oppilaitostyypit" />
-      <EpMultiSelect
-        v-else
-        class="multiselect"
-        v-model="query.oppilaitosTyyppiKoodiUri"
-        :enable-empty-option="true"
-        :placeholder="$t('kaikki')"
-        :is-editing="true"
-        :options="oppilaitostyypit">
+      <EpMultiSelect v-else
+                     :is-editing="true"
+                     :options="oppilaitostyypit"
+                     :placeholder="$t('kaikki')"
+                     class="multiselect"
+                     v-model="query.oppilaitosTyyppiKoodiUri"
+                     :enable-empty-option="true">
 
         <template slot="singleLabel" slot-scope="{ option }">
           {{ kaannaOppilaitosNimi(option) }}
@@ -41,11 +40,11 @@
                      v-model="valittuPeruste">
 
         <template slot="singleLabel" slot-scope="{ option }">
-          {{ $kaanna(option.nimi) }}
+          {{ kaannaPerusteNimi(option) }}
         </template>
 
         <template slot="option" slot-scope="{ option }">
-          {{ $kaanna(option.nimi) }}
+          {{ kaannaPerusteNimi(option) }}
         </template>
       </EpMultiSelect>
     </b-form-group>
@@ -113,7 +112,7 @@ export default class VstPaikalliset extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
-  private valittuPeruste = { nimi: this.$t('kaikki') };
+  private valittuPeruste = {};
   private perPage = 10;
   private query = this.initQuery();
 
@@ -154,7 +153,7 @@ export default class VstPaikalliset extends Vue {
     if (this.julkaistutPerusteet) {
       return [
         {
-          nimi: this.$t('kaikki'),
+          nimi: null,
         },
         ...this.julkaistutPerusteet,
       ];
@@ -282,8 +281,14 @@ export default class VstPaikalliset extends Vue {
     if (this.oppilaitostyypitNimi[koodiUri]) {
       return this.$kaanna(this.oppilaitostyypitNimi[koodiUri].nimi);
     }
-
     return this.$t(koodiUri);
+  }
+
+  kaannaPerusteNimi(option) {
+    if (option.nimi) {
+      return this.$kaanna(option.nimi);
+    }
+    return this.$t('kaikki');
   }
 
   private initQuery() {
