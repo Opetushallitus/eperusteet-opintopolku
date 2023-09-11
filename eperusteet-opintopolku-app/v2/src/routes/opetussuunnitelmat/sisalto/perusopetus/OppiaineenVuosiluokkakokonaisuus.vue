@@ -83,17 +83,17 @@
 
     </div>
 
-    <hr class="mt-5 mb-5"/>
+    <template v-if="vuosiluokat && vuosiluokat.length > 0">
+      <hr class="mt-5 mb-5"/>
 
-    <h3>{{$t('tavoitteet-ja-sisallot-vuosiluokittain')}}</h3>
+      <h3>{{$t('tavoitteet-ja-sisallot-vuosiluokittain')}}</h3>
 
-    <b-tabs>
-      <b-tab v-for="(vuosiluokka,index) in vuosiluokat" :key="'vuosiluokka'+index" :title="$t(vuosiluokka.vuosiluokka)">
-
-        <oppiaineen-vuosiluokka :oppiaineenVuosiluokka="vuosiluokka" :valinnainen="!perusteenVuosiluokkakokonaisuus" :kuvat="kuvat" :termit="termit"/>
-
-      </b-tab>
-    </b-tabs>
+      <b-tabs>
+        <b-tab v-for="(vuosiluokka,index) in vuosiluokat" :key="'vuosiluokka'+index" :title="$t(vuosiluokka.vuosiluokka)">
+          <oppiaineen-vuosiluokka :oppiaineenVuosiluokka="vuosiluokka" :valinnainen="!perusteenVuosiluokkakokonaisuus" :kuvat="kuvat" :termit="termit"/>
+        </b-tab>
+      </b-tabs>
+    </template>
 
   </div>
 </template>
