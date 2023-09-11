@@ -1,7 +1,7 @@
 <template>
 <div class="paikalliset">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
-  <span>{{ $t('voit-hakea-opetussuunnitelman-vst') }}</span>
+  <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
   <div class="d-flex flex-lg-row flex-column">
     <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
       <ep-search v-model="query.nimi"
@@ -12,14 +12,13 @@
 
     <b-form-group :label="$t('oppilaitoksen-tyyppi')">
       <EpSpinner v-if="!oppilaitostyypit" />
-      <EpMultiSelect
-        v-else
-        class="multiselect"
-        v-model="query.oppilaitosTyyppiKoodiUri"
-        :enable-empty-option="true"
-        :placeholder="$t('kaikki')"
-        :is-editing="true"
-        :options="oppilaitostyypit">
+      <EpMultiSelect v-else
+                     :is-editing="true"
+                     :options="oppilaitostyypit"
+                     :placeholder="$t('kaikki')"
+                     class="multiselect"
+                     v-model="query.oppilaitosTyyppiKoodiUri"
+                     :enable-empty-option="true">
 
         <template slot="singleLabel" slot-scope="{ option }">
           {{ kaannaOppilaitosNimi(option) }}
@@ -41,33 +40,17 @@
                      v-model="valittuPeruste">
 
         <template slot="singleLabel" slot-scope="{ option }">
-          {{ $kaanna(option.nimi) }}
+          {{ kaannaPerusteNimi(option) }}
         </template>
 
         <template slot="option" slot-scope="{ option }">
-          {{ $kaanna(option.nimi) }}
+          {{ kaannaPerusteNimi(option) }}
         </template>
       </EpMultiSelect>
     </b-form-group>
   </div>
 
-  <div class="d-flex align-self-center flex-wrap flex-lg-row flex-column toggles">
-    <EpToggle v-model="query.tuleva" class="haku-toggle tuleva" :is-s-witch="false">
-      <span v-if="query.tuleva" class="sr-only">{{ $t('valittu') }}</span>
-      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
-      {{ $t('tulossa-voimaan') }}
-    </EpToggle>
-    <EpToggle v-model="query.voimassaolo" class="haku-toggle voimassaolo" :is-s-witch="false">
-      <span v-if="query.voimassaolo" class="sr-only">{{ $t('valittu') }}</span>
-      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
-      {{ $t('voimassa') }}
-    </EpToggle>
-    <EpToggle v-model="query.poistunut" class="haku-toggle poistunut" :is-s-witch="false">
-      <span v-if="query.poistunut" class="sr-only">{{ $t('valittu') }}</span>
-      <span class="sr-only">{{ $t('voimassaolo-filtteri') }}</span>
-      {{ $t('ei-voimassa') }}
-    </EpToggle>
-  </div>
+  <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
 
   <div class="opetussuunnitelma-container">
     <ep-spinner v-if="!opetussuunnitelmat" />
@@ -105,12 +88,11 @@ import { Koulutustyyppi } from '@shared/tyypit';
 import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaikallisetStore';
 import { Ulkopuoliset } from '@shared/api/eperusteet';
 import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
-import EpColoredToggle from '@shared/components/forms/EpColoredToggle.vue';
-import EpToggle from '@shared/components/forms/EpToggle.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { isVstLukutaito } from '@shared/utils/perusteet';
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 
 @Component({
   components: {
@@ -119,9 +101,8 @@ import { isVstLukutaito } from '@shared/utils/perusteet';
     EpSpinner,
     OpetussuunnitelmaTile,
     EpMultiSelect,
-    EpColoredToggle,
-    EpToggle,
     EpBPagination,
+    EpVoimassaoloFilter,
   },
 })
 export default class VstPaikalliset extends Vue {
@@ -131,7 +112,7 @@ export default class VstPaikalliset extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
-  private valittuPeruste = { nimi: this.$t('kaikki') };
+  private valittuPeruste = {};
   private perPage = 10;
   private query = this.initQuery();
 
@@ -172,7 +153,7 @@ export default class VstPaikalliset extends Vue {
     if (this.julkaistutPerusteet) {
       return [
         {
-          nimi: this.$t('kaikki'),
+          nimi: null,
         },
         ...this.julkaistutPerusteet,
       ];
@@ -300,8 +281,14 @@ export default class VstPaikalliset extends Vue {
     if (this.oppilaitostyypitNimi[koodiUri]) {
       return this.$kaanna(this.oppilaitostyypitNimi[koodiUri].nimi);
     }
-
     return this.$t(koodiUri);
+  }
+
+  kaannaPerusteNimi(option) {
+    if (option.nimi) {
+      return this.$kaanna(option.nimi);
+    }
+    return this.$t('kaikki');
   }
 
   private initQuery() {
@@ -390,37 +377,6 @@ export default class VstPaikalliset extends Vue {
           }
 
         }
-      }
-    }
-  }
-
-  $tuleva-color: $green-lighten-2;
-  $voimassa-color: $green;
-  $paattynyt-color: $red-1;
-
-  .toggles {
-    padding-bottom: 20px;
-
-    .haku-toggle {
-      padding: 2px 7px;
-      border: 1px solid $gray-lighten-8;
-      border-radius: 6px;
-      margin-right: 7px;
-
-      ::v-deep .toggle {
-        border: 0;
-      }
-
-      &.tuleva ::v-deep .toggle{
-        background-color: $tuleva-color;
-      }
-
-      &.voimassaolo ::v-deep .toggle{
-        background-color: $green;
-      }
-
-      &.poistunut ::v-deep .toggle{
-        background-color: $paattynyt-color;
       }
     }
   }

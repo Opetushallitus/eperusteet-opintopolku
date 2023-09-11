@@ -1,36 +1,40 @@
 <template>
-  <div class="paikalliset">
-    <h2 class="otsikko">{{ $t('opetussuunnitelmat') }}</h2>
+<div class="paikalliset">
+  <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
+  <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
+  <div class="d-flex flex-lg-row flex-column">
+    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+      <ep-search v-model="query.nimi"
+                 :max-width="true"
+                 :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+                 :placeholder="$t('hae-opetussuunnitelmaa')"/>
+    </b-form-group>
+  </div>
 
-    <div class="d-flex flex-lg-row flex-column">
-      <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-        <ep-search v-model="query.nimi" :sr-placeholder="$t('etsi-opetussuunnitelmia')"/>
-      </b-form-group>
+  <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
+
+  <div class="opetussuunnitelma-container">
+    <ep-spinner v-if="!opetussuunnitelmat" />
+    <div v-else-if="opetussuunnitelmat.length === 0">
+      <div class="alert alert-info">
+        {{ $t('ei-hakutuloksia') }}
+      </div>
     </div>
-
-    <div class="opetussuunnitelma-container">
-
-      <ep-spinner v-if="!opetussuunnitelmat" />
-      <div v-else-if="opetussuunnitelmat.length === 0">
-        <div class="alert alert-info">
-          {{ $t('ei-hakutuloksia') }}
-        </div>
+    <div v-else id="opetussuunnitelmat-lista">
+      <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
+        <router-link :to="ops.route">
+          <opetussuunnitelma-tile :ops="ops" :query="query.nimi" :voimassaoloTiedot="ops.voimassaoloTieto"/>
+        </router-link>
       </div>
-      <div v-else id="opetussuunnitelmat-lista">
-        <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
-          <router-link :to="ops.route">
-            <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
-          </router-link>
-        </div>
-        <EpBPagination v-model="page"
-                       :items-per-page="perPage"
-                       :total="total"
-                       aria-controls="opetussuunnitelmat-lista">
-        </EpBPagination>
-      </div>
+      <EpBPagination v-model="page"
+                     :items-per-page="perPage"
+                     :total="total"
+                     aria-controls="opetussuunnitelmat-lista">
+      </EpBPagination>
     </div>
   </div>
-  </template>
+</div>
+</template>
 
 <script lang="ts">
 import _ from 'lodash';
@@ -41,8 +45,11 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
+import EpToggle from '@shared/components/forms/EpToggle.vue';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import { voimassaoloTieto } from '@/utils/voimassaolo';
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 
 @Component({
   components: {
@@ -52,6 +59,8 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
     OpetussuunnitelmaTile,
     EpMultiSelect,
     EpBPagination,
+    EpToggle,
+    EpVoimassaoloFilter,
   },
 })
 export default class JotpaPaikalliset extends Vue {
@@ -65,6 +74,9 @@ export default class JotpaPaikalliset extends Vue {
     sivukoko: 10,
     kieli: this.kieli,
     jotpatyyppi: ['VST', 'MUU'],
+    tuleva: true,
+    voimassaolo: true,
+    poistunut: false,
   };
 
   async mounted() {
@@ -133,6 +145,7 @@ export default class JotpaPaikalliset extends Vue {
             koulutustyyppi: ops.jotpatyyppi === 'MUU' ? 'muukoulutus' : 'vapaasivistystyo',
           },
         },
+        voimassaoloTieto: voimassaoloTieto(ops),
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
       .value();
@@ -140,9 +153,9 @@ export default class JotpaPaikalliset extends Vue {
 }
 </script>
 
-  <style scoped lang="scss">
-  @import '@shared/styles/_variables.scss';
-  @import '@shared/styles/_mixins.scss';
+<style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
+@import '@shared/styles/_mixins.scss';
 
   .paikalliset {
 
@@ -157,7 +170,6 @@ export default class JotpaPaikalliset extends Vue {
     }
 
     .opetussuunnitelma-container {
-      min-height: 700px;
 
       .peruste-nav {
         margin-bottom: 8px;
@@ -200,12 +212,9 @@ export default class JotpaPaikalliset extends Vue {
             a:hover {
               color: #578aff;
             }
-
           }
         }
       }
     }
-
   }
-
-  </style>
+</style>

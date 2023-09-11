@@ -18,7 +18,7 @@
 
       <b-row v-if="perusteKoosteStore">
         <b-col cols="12" xl="auto" class="tile">
-          <h2 class="otsikko">{{ pageHeader }}</h2>
+          <h2 class="otsikko">{{ $t(perusteetHeader) }}</h2>
           <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="julkaistutPerusteet">
             <div v-if="julkaistutPerusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
@@ -110,7 +110,6 @@ import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulki
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
-import { isVapaasivistystyoKoulutustyyppi } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -144,6 +143,9 @@ export default class RouteKooste extends Vue {
 
   @Prop({ required: false })
   private subheader!: string;
+
+  @Prop({ required: false })
+  private perusteetHeader!: string;
 
   private showEraantyneet: boolean = false;
 
@@ -219,13 +221,6 @@ export default class RouteKooste extends Vue {
 
   get julkaistutEraantyneetPerusteet() {
     return _.filter(this.julkaistutPerusteet, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
-  }
-
-  get pageHeader() {
-    if (isVapaasivistystyoKoulutustyyppi(this.koulutustyyppi)) {
-      return this.$t('valtakunnalliset-perusteet-ja-suositukset');
-    }
-    return this.$t('tile-perusteet');
   }
 
   toggleEraantyneet() {

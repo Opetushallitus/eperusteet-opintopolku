@@ -25,14 +25,12 @@ export default class EpAmmatillinenRow extends Vue {
 @include shadow-tile-hover;
 
   .ammatillinen-row {
-    border-radius: 0;
-    margin: 5px;
-    border: 1px solid rgb(232, 232, 233);
+    margin-bottom: 10px;
+    border: 1px solid $gray-lighten-9;
+    border-radius: 2px;
 
     .ammatillinen-data {
       padding: 8px 10px;
-
-      border-left: 3px solid $green;
       margin-left: 10px;
       margin-top: 10px;
       margin-bottom: 10px;
