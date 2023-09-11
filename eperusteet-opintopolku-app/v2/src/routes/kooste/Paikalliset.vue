@@ -96,6 +96,11 @@ export default class Paikalliset extends Vue {
   private perPage = 10;
   private valittuPeruste = {};
 
+  @Watch('koulutustyyppi')
+  onKoulutustyyppiChanged() {
+    this.valittuPeruste = {};
+  }
+
   @Watch('julkaistutPerusteet', { immediate: true })
   async perusteetChange() {
     if (_.size(this.perusteKoosteStore.perusteJulkaisut) > 0) {
