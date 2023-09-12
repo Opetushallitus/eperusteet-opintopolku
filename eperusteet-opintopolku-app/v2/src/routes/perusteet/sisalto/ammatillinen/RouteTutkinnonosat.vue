@@ -96,7 +96,7 @@ export default class RouteTutkinnonosat extends Vue {
       sortByFormatted: true,
       label: this.$t('nimi') as string,
       formatter: (value: any, key: string, item: any) => {
-        return this.$kaanna(value);
+        return this.$kaanna(item?.tutkinnonOsa?.nimi);
       },
     }];
     let showLaajuusColumn = _.some(this.tutkinnonOsaViitteet, viite => _.has(viite, 'laajuus'));
