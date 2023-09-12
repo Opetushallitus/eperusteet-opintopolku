@@ -17,7 +17,6 @@ export class TyopajatStore {
       sivu: 0,
       sivukoko: 100,
       kieli: Kielet.getUiKieli.value,
-      organisaatioRyhma: true,
     })).data as any).data;
   }
 }
