@@ -1,6 +1,5 @@
 <template>
   <footer>
-
     <div class="horizontal-line">
       <a :href="$kaanna(linkit.oph)">
         <img :src="ophLogo" :alt="$t('oph')" />
@@ -8,7 +7,7 @@
     </div>
 
     <div class="footer-content">
-      <div class="row justify-content-around">
+      <div class="row justify-content-around footer-row">
         <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
           <a :href="$kaanna(linkit.opintopolku)">
             <img class="opintopolku" :src="opintopolkuLogo" :alt="$t('opintopolku')" />
@@ -34,7 +33,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
-import { buildVanhaUiUrl } from '@shared/utils/esikatselu';
 import ophLogo from '@assets/img/banners/oph_logo.svg';
 import opintopolkuLogo from '@assets/img/banners/opintopolku_logo.svg';
 
@@ -130,7 +128,12 @@ footer {
     max-width: 90%;
     margin: 0 auto;
     padding: 20px 0;
+  }
 
+  @media (max-width: 991.98px) {
+    .footer-row {
+      display: grid;
+    }
   }
 }
 

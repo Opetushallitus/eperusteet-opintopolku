@@ -29,7 +29,7 @@
               <ep-button v-else variant="link" @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki">{{$t('nayta-lisaa')}}</ep-button>
             </div>
 
-            <ep-search class="mt-3" v-model="query" :placeholder="$t('etsi-yhteista-osuutta')"/>
+            <ep-search class="mt-3 mb-3" v-model="query" :placeholder="$t('etsi-yhteista-osuutta')"/>
             <ep-ammatillinen-row v-for="(yhteinenOsuus, idx) in yhteisetOsuudetPaginated" :key="'yhteinenOsuus' + idx" :route="yhteinenOsuus.route">
               <div class="nimi">{{ $kaanna(yhteinenOsuus.nimi) }}</div>
             </ep-ammatillinen-row>
@@ -237,7 +237,6 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
   border-radius: 2px;
   min-height: 80px;
   margin-bottom: 10px;
-
 }
 
 </style>

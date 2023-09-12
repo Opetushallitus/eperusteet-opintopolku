@@ -46,7 +46,7 @@
         </div>
 
         <div class="col-12 col-lg-6">
-          <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
+          <h2 class="mb-2">{{$t('ajankohtaista')}}</h2>
           <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
             <template v-slot:lisaaBtnText>
               <div class="mt-2">
@@ -224,7 +224,7 @@ export default class RouteAmmatillinenSelaus extends Vue {
 }
 
 .box {
-  margin-bottom: 30px;
+  margin-bottom: 20px;
   padding: 20px 30px;
   border-radius: 10px;
   height: 60px;

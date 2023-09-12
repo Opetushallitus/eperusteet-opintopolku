@@ -9,7 +9,7 @@
       <img src="../../../public/img/images/eperusteet-logo.svg" :alt="$t('eperusteet')" aria-hidden="true">
     </b-navbar-brand>
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+    <b-navbar-toggle target="nav-collapse" :aria-label="$t('koulutustyyppi-valikko')"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav >
       <b-navbar-nav class="flex-wrap">
