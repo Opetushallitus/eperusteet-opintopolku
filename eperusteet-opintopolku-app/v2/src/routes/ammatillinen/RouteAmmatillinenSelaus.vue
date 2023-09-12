@@ -141,11 +141,6 @@ export default class RouteAmmatillinenSelaus extends Vue {
         text: 'koulutuksen-jarjestajat',
         fasicon: 'lokaatio',
       },
-      {
-        route: 'ammatillinenTyopajat',
-        text: 'tyopajat',
-        fasicon: 'osaamisen-arviointi',
-      },
     ];
   }
 

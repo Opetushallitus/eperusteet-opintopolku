@@ -41,13 +41,13 @@
           <a :href="dokumenttiUrl" target="_blank" rel="noopener noreferrer">{{ $t('avaa-toteutusuunnitelma-pdf') }}</a>
         </ep-form-content>
 
-        <ep-form-content :name="jarjestajaTekstit['jarjestaja']" headerType="h3" headerClass="h6">
+        <ep-form-content name="koulutuksen-jarjestaja" headerType="h3" headerClass="h6">
           <router-link :to="{name:'ammatillinenKoulutuksenjarjestaja', params: {koulutuksenjarjestajaId: toteutussuunnitelma.koulutustoimija.id}}">
             <span>{{$kaanna(toteutussuunnitelma.koulutustoimija.nimi)}}</span>
           </router-link>
         </ep-form-content>
 
-        <ep-form-content :name="jarjestajaTekstit['kuvaus']" headerType="h3" headerClass="h6" v-if="koulutustoimija.kuvaus">
+        <ep-form-content name="koulutuksen-jarjestajan-kuvaus" headerType="h3" headerClass="h6" v-if="koulutustoimija.kuvaus">
           <ep-content-viewer :value="$kaanna(koulutustoimija.kuvaus)"/>
         </ep-form-content>
 
@@ -109,29 +109,8 @@ export default class EpToteutussuunnitelmaTiedot extends Vue {
     return this.store?.koulutustoimija;
   }
 
-  get tyopajatoimija() {
-    return this.koulutustoimija?.organisaatioRyhma;
-  }
-
-  get jarjestajaTekstit() {
-    return this.koulutuksenjarjestajaTermiTekstit[this.tyopajatoimija ? 'tyopaja' : 'koulutuksenjarjestaja'];
-  }
-
   get kuvausOtsikko() {
     return this.store?.isAmmatillinen ? 'tutkinnon-suorittaneen-osaaminen' : 'opetussuunnitelma-tiivistelma';
-  }
-
-  get koulutuksenjarjestajaTermiTekstit() {
-    return {
-      tyopaja: {
-        jarjestaja: 'tyopajatoimija',
-        kuvaus: 'tyopajatoimijan-kuvaus',
-      },
-      koulutuksenjarjestaja: {
-        jarjestaja: 'koulutuksen-jarjestaja',
-        kuvaus: 'koulutuksen-jarjestajan-kuvaus',
-      },
-    };
   }
 }
 </script>
