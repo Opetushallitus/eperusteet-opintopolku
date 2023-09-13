@@ -46,8 +46,8 @@
       </b-row>
 
       <b-row>
-        <section class="section my-4 d-flex">
-          <b-col>
+        <div class="list-section">
+          <div class="list">
             <h2>{{ $t('ajankohtaista') }}</h2>
             <ep-spinner-slot :is-loading="!tiedotteet">
               <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
@@ -63,9 +63,9 @@
                 </template>
               </ep-julki-lista>
             </ep-spinner-slot>
-          </b-col>
+          </div>
 
-          <b-col>
+          <div class="list">
             <h2>{{$t('ohjeet-ja-materiaalit')}}</h2>
             <ep-spinner-slot :is-loading="!ohjeet">
               <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas">
@@ -84,8 +84,8 @@
                 </template>
               </ep-julki-lista>
             </ep-spinner-slot>
-          </b-col>
-        </section>
+          </div>
+        </div>
       </b-row>
     </b-container>
   </div>
@@ -309,13 +309,30 @@ export default class RouteKooste extends Vue {
 }
 
 .row {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   display: block;
+}
+
+.list {
+  padding-left: 15px;
+  padding-right: 15px;
+  width: 50%;
+}
+
+@media (min-width: 991.98px) {
+  .list-section {
+    display: flex;
+  }
 }
 
 @media (max-width: 991.98px) {
   .row {
-    margin: 0;
+    margin: 25px 0 0 0;
+  }
+
+  .list {
+    padding-top: 20px;
+    width: 100%;
   }
 }
 </style>

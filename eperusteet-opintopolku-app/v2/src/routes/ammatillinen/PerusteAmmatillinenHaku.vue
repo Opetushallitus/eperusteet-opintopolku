@@ -3,7 +3,7 @@
   <div class="search">
 
     <div v-if="tyyppi === 'peruste'">
-      <div class="placeholderText d-flex">
+      <div class="placeholderText">
         <span class="pr-1">{{searchPlaceholder}}</span>
         <ep-spinner v-if="!valmisteillaOlevat" small/>
         <span v-else-if="valmisteillaOlevat.data.length > 0">{{$t('katso-myos')}}
@@ -293,7 +293,6 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
 .placeholderText {
   font-size: small;
-  color: $gray-lighten-12;
 }
 
 @media(min-width: 992px){
@@ -311,11 +310,12 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   .nimi {
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
   }
 
   .nimikkeet {
     font-size: small;
+    padding-bottom: 5px;
 
     .kohde {
       font-weight: 600;
@@ -324,7 +324,6 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   .alatiedot {
     font-size: smaller;
-    padding-top: 10px;
   }
 
   .pagination {

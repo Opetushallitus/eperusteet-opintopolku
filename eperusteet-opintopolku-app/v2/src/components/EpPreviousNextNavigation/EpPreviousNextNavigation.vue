@@ -1,15 +1,15 @@
 <template>
-<div class="d-flex flex-column flex-lg-row justify-content-between mt-5" v-if="previous || next">
-  <b-link v-if="previous && previous.location" :to="previous.location">
+<div class="d-flex flex-lg-row justify-content-between mt-5" v-if="previous || next">
+  <b-link v-if="previous && previous.location" :to="previous.location" class="pb-3">
     <div class="d-flex align-items-center">
       <fas fixed-width icon="arrow-left"></fas>
       <span class="mx-2">{{ $kaannaOlioTaiTeksti(previous.label) }}</span>
     </div>
   </b-link>
 
-  <b-link v-if="next && next.location" :to="next.location" class="ml-auto">
+  <b-link v-if="next && next.location" :to="next.location" class="ml-auto pb-3">
     <div class="d-flex align-items-center">
-      <span class="mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
+      <span class="next mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
       <fas fixed-width icon="arrow-right"></fas>
     </div>
   </b-link>
@@ -75,4 +75,8 @@ export default class EpPreviousNextNavigation extends Vue {
 </script>
 
 <style scoped lang="scss">
+
+.next {
+  text-align: end;
+}
 </style>

@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="organisaatiot">
-          <div class="ops-voimassaolo d-flex" v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0">
+          <div class="meta d-flex" v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0">
             <div v-for="(voimassaolotieto, index) in voimassaoloTiedot" :key="'voimassa' + index">
               <div v-if="voimassaolotieto.paiva">
                 <span v-if="index > 0"> | </span>
@@ -24,21 +24,21 @@
             </div>
             <EpVoimassaolo :voimassaolo="ops"></EpVoimassaolo>
           </div>
-          <div class="ops-toimijat mr-2" v-if="ops.toimijat && ops.toimijat.length > 0">
+          <div class="meta mr-2" v-if="ops.toimijat && ops.toimijat.length > 0">
             <span class="otsikko">{{ $t('toimijat') }}</span>
             <span class="mr-1">:</span>
             <span class="toimijat" v-for="(toimija, tidx) in toimijat" :key="tidx">
               <span v-html="toimija"></span><span v-if="tidx < ops.toimijat.length - 1">, </span>
             </span>
           </div>
-          <div class="ops-oppilaitokset mr-2" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
+          <div class="meta mr-2" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
             <span class="otsikko">{{ $t('oppilaitokset') }}</span>
             <span class="mr-1">:</span>
             <span class="toimijat" v-for="(oppilaitos, tidx) in oppilaitokset" :key="tidx">
               <span v-html="oppilaitos" /><span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
             </span>
           </div>
-          <div class="ops-koulutustoimija" v-if="ops.koulutustoimija">
+          <div class="meta" v-if="ops.koulutustoimija">
             <span class="otsikko">{{ $t('organisaatiot') }}</span>
             <span class="mr-1">:</span>
             <span class="toimijat">{{$kaanna(ops.koulutustoimija.nimi)}}</span>
@@ -127,7 +127,7 @@ export default class OpetussuunnitelmaTile extends Vue {
 
     .ops {
       font-weight: 600;
-      margin-bottom: 2px;
+      margin-bottom: 5px;
     }
 
     &__jotpa {
@@ -147,5 +147,9 @@ export default class OpetussuunnitelmaTile extends Vue {
   .organisaatiot {
     color: #2B2B2B;
     font-size: smaller;
+  }
+
+  .meta {
+    margin-bottom: 4px;
   }
 </style>

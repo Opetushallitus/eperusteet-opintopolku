@@ -253,7 +253,7 @@ export default class RouteKoosteAmmatillinen extends Vue {
 }
 
 .row {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .search {

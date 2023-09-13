@@ -2,7 +2,7 @@
 <div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <span>{{ $t('voit-hakea-opetussuunnitelman-yleissivistava') }}</span>
-  <div class="search d-flex flex-lg-row flex-column">
+  <div class="d-flex flex-lg-row flex-column">
     <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
       <ep-search v-model="query"
                  :max-width="true"
@@ -231,10 +231,21 @@ export default class Paikalliset extends Vue {
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
+.haku {
+  width: 100%;
+}
+
+.hae-label {
+  margin-top: 10px;
+  padding-bottom: 0 !important;
+  font-weight: 600;
+}
+
+.multiselect {
+  width: 500px;
+}
+
 .paikalliset {
-  .search {
-    margin: 10px 0;
-  }
 
   .opetussuunnitelma-container {
 
@@ -283,20 +294,12 @@ export default class Paikalliset extends Vue {
       }
     }
   }
-}
 
-.haku {
-  width: 100%;
-}
-
-.hae-label {
-  margin-top: 10px;
-  padding-bottom: 0 !important;
-  font-weight: 600;
-}
-
-.multiselect {
-  width: 500px;
+  @media (max-width: 767.98px) {
+    .multiselect {
+      width: 100%;
+    }
+  }
 }
 
 </style>

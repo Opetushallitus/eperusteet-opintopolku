@@ -151,6 +151,16 @@ export default class EpSidenavNode extends Vue {
     }
   }
 
+  @media (max-width: 991.98px) {
+    ul.root-list, ol.root-list {
+      font-size: 20px;
+    }
+
+    ul, ol {
+      font-size: 17px;
+    }
+  }
+
   .router-link-active {
     font-weight: 600;
   }
