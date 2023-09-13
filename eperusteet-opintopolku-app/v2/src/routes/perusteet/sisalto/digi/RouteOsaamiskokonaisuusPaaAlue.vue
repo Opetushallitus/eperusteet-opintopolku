@@ -15,7 +15,7 @@
             button
             size="sm"
             button-variant="primary"
-            class="mr-2 taso-chk">
+            class="mr-2 mb-2 taso-chk">
             <div class="d-flex align-items-center">
               <div class="material-icons-outlined mr-2" v-if="selectedTaso(taso)">done</div>
               <div>{{$t(taso)}}</div>

@@ -4,7 +4,7 @@ exports[`EpFooter Renders 1`] = `
 <footer>
   <div class="horizontal-line"><a href="https://www.oph.fi/fi"><img src="" alt="oph"></a></div>
   <div class="footer-content">
-    <div class="row justify-content-around">
+    <div class="row justify-content-around footer-row">
       <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><a href="https://opintopolku.fi/konfo/fi"><img src="" alt="opintopolku" class="opintopolku"></a></div>
       <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><span class="font-weight-bold">eperusteet-virkailija-linkki</span>
         <div class="linkki"><a href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ulkoinen-linkki" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="mr-1 svg-inline--fa fa-ulkoinen-linkki fa-w-16 fa-fw">
