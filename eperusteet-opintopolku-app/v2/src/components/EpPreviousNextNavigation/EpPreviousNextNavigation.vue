@@ -1,5 +1,5 @@
 <template>
-<div class="d-flex flex-column flex-lg-row justify-content-between mt-5" v-if="previous || next">
+<div class="d-flex flex-lg-row justify-content-between mt-5" v-if="previous || next">
   <b-link v-if="previous && previous.location" :to="previous.location" class="pb-3">
     <div class="d-flex align-items-center">
       <fas fixed-width icon="arrow-left"></fas>
