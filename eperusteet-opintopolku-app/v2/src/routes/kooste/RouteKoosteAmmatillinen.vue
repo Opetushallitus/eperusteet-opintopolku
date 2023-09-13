@@ -122,10 +122,12 @@ export default class RouteKoosteAmmatillinen extends Vue {
   }
 
   get tiedotteet() {
-    return _.chain(this.ammatillinenPerusteKoosteStore.tiedotteet.value)
-      .sortBy('luotu')
-      .reverse()
-      .value();
+    if (this.ammatillinenPerusteKoosteStore.tiedotteet.value) {
+      return _.chain(this.ammatillinenPerusteKoosteStore.tiedotteet.value)
+        .sortBy('luotu')
+        .reverse()
+        .value();
+    }
   }
 
   get peruste() {
