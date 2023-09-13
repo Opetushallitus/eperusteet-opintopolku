@@ -1,7 +1,7 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { Julkaisut, PerusteDto, PerusteenJulkaisuData } from '@shared/api/eperusteet';
+import { PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
-import { PerusteQuery, perusteetQuery, julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
+import { julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteHakuStore } from './IPerusteHakuStore';
 
@@ -25,7 +25,7 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
     ],
     koulutusvienti: false,
     tuleva: true,
-    siirtyma: true,
+    siirtyma: false,
     voimassaolo: true,
     poistunut: false,
   };

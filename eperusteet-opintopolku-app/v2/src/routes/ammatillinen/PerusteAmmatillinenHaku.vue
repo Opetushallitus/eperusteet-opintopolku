@@ -154,7 +154,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   async mounted() {
     this.page = 1;
     if (!this.perusteHakuStore.perusteet) {
-      await this.perusteHakuStore.updateFilters(this.voimassaoloQuery);
+      await this.perusteHakuStore.fetch();
     }
     await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
   }
