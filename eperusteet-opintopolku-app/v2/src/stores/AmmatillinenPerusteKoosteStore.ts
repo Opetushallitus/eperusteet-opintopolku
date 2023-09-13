@@ -40,11 +40,12 @@ export class AmmatillinenPerusteKoosteStore {
       koulutustyyppi: AmmatillisetKoulutustyypit,
     };
 
-    this.fetchOpetussuunnitelmat(this.state.opsQuery);
+    await this.fetchOpetussuunnitelmat(this.state.opsQuery);
 
     const vanhat = (await tiedoteQuery({
       sivukoko: 100,
       perusteId: this.perusteId,
+      julkinen: true,
     }));
 
     const uudet = (await tiedoteQuery({
@@ -56,6 +57,7 @@ export class AmmatillinenPerusteKoosteStore {
       ...vanhat,
       ...uudet,
     ])
+      .filter(tiedote => !!tiedote.otsikko)
       .uniqBy('id')
       .sortBy('luotu')
       .reverse()
