@@ -16,7 +16,8 @@
                      :placeholder="$t('kaikki')"
                      class="multiselect"
                      @input="setActivePeruste($event)"
-                     v-model="valittuPeruste">
+                     v-model="valittuPeruste"
+                     :searchable="false">
         <template slot="singleLabel" slot-scope="{ option }">
           {{ kaannaPerusteNimi(option) }}
         </template>

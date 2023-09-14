@@ -26,7 +26,8 @@
             :enable-empty-option="true"
             :placeholder="$t('kaikki')"
             :is-editing="true"
-            :options="tutkintotyypit">
+            :options="tutkintotyypit"
+            :searchable="false">
 
             <template slot="singleLabel" slot-scope="{ option }">
               {{ $t(option) }}
@@ -41,12 +42,10 @@
     </div>
 
     <div v-else class="mb-3">
-      <EpSearch v-model="query"
-                :class="{'disabled-events': !perusteet}"/>
+      <EpSearch v-model="query" :class="{'disabled-events': !perusteet}"/>
     </div>
 
     <EpVoimassaoloFilter v-if="tyyppi === 'peruste'" v-model="voimassaoloQuery"></EpVoimassaoloFilter>
-
   </div>
   <div v-if="!perusteet">
     <ep-spinner />
