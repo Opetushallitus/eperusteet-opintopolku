@@ -18,7 +18,8 @@
                      :placeholder="$t('kaikki')"
                      class="multiselect"
                      v-model="query.oppilaitosTyyppiKoodiUri"
-                     :enable-empty-option="true">
+                     :enable-empty-option="true"
+                     :searchable="false">
 
         <template slot="singleLabel" slot-scope="{ option }">
           {{ kaannaOppilaitosNimi(option) }}
@@ -37,7 +38,8 @@
                      :placeholder="$t('kaikki')"
                      class="multiselect"
                      @input="setActivePeruste($event)"
-                     v-model="valittuPeruste">
+                     v-model="valittuPeruste"
+                     :searchable="false">
 
         <template slot="singleLabel" slot-scope="{ option }">
           {{ kaannaPerusteNimi(option) }}
