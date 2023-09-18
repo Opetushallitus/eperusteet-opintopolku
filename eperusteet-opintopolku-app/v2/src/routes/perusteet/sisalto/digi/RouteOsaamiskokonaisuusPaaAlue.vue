@@ -17,7 +17,7 @@
             button-variant="primary"
             class="mr-2 mb-2 taso-chk">
             <div class="d-flex align-items-center">
-              <div class="material-icons-outlined mr-2" v-if="selectedTaso(taso)">done</div>
+              <EpMaterialIcon v-if="selectedTaso(taso)" class="mr-2" icon-shape="outlined" size="1rem">done</EpMaterialIcon>
               <div>{{$t(taso)}}</div>
             </div>
         </b-form-checkbox>
@@ -44,11 +44,12 @@
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import * as _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpOsaAlue from '@shared/components/EpOsaamiskokonaisuus/EpOsaAlue.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 @Component({
   components: {
@@ -56,6 +57,7 @@ import EpOsaAlue from '@shared/components/EpOsaamiskokonaisuus/EpOsaAlue.vue';
     EpContentViewer,
     EpCollapse,
     EpOsaAlue,
+    EpMaterialIcon,
   },
 })
 export default class RouteOsaamiskokonaisuusPaaAlue extends Vue {
@@ -135,10 +137,6 @@ export default class RouteOsaamiskokonaisuusPaaAlue extends Vue {
     border-radius: 10px;
     background-color: $digitaalinen-osaaminen-ikaryhma-color;
     border-color: $digitaalinen-osaaminen-ikaryhma-color;
-  }
-
-  .material-icons-outlined {
-    font-size: 1rem;
   }
 }
 

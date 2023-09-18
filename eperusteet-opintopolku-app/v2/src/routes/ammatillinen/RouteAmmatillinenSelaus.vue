@@ -14,9 +14,7 @@
         <router-link v-for="(linkki, index) in linkit" :key="'linkki'+index" :to="{ name: linkki.route }">
           <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
             <fas v-if="linkki.fasicon" :icon="linkki.fasicon" class="icon" />
-            <span v-if="linkki.materialicon" class="material-icons-outlined icon" aria-hidden="true">
-              {{linkki.materialicon}}
-            </span>
+            <EpMaterialIcon v-if="linkki.materialicon" icon-shape="outlined">{{linkki.materialicon}}</EpMaterialIcon>
             <div class="align-self-center">
               {{$t(linkki.text)}}
             </div>
@@ -80,6 +78,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { AmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
 import { Meta } from '@shared/utils/decorators';
@@ -102,6 +101,7 @@ interface Ylalinkki {
     EpHeader,
     PerusteAmmatillinenHaku,
     EpJulkiLista,
+    EpMaterialIcon,
   },
 })
 export default class RouteAmmatillinenSelaus extends Vue {

@@ -18,7 +18,7 @@
 
         <EpLinkki v-for="(maarays, index) in maarayksetPaged" :key="'maarays' + index" class="maarays" :url="$kaanna(maarays.url)">
           <div class="d-flex sisalto">
-            <span class="material-icons-outlined ikoni">picture_as_pdf</span>
+            <EpMaterialIcon icon-shape="outlined" :color="'#5BCA13'" size="2rem">picture_as_pdf</EpMaterialIcon>
             <div class="nimi align-self-center" >{{$kaanna(maarays.nimi)}}</div>
           </div>
         </EpLinkki>
@@ -45,6 +45,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import pdfkuva from '@assets/img/icons/pdfkuva_lataus.svg';
 
 @Component({
@@ -53,6 +54,7 @@ import pdfkuva from '@assets/img/icons/pdfkuva_lataus.svg';
     EpSearch,
     EpLinkki,
     EpBPagination,
+    EpMaterialIcon,
   },
 })
 export default class RouteAmmatillinenMaaraykset extends Vue {
@@ -111,11 +113,6 @@ export default class RouteAmmatillinenMaaraykset extends Vue {
         font-weight: 600;
         margin-left: 20px;
         color: $black;
-      }
-
-      .ikoni {
-        color: $green-lighten-2;
-        font-size: 2rem;
       }
     }
   }
