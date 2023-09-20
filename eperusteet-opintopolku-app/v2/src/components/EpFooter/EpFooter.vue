@@ -15,11 +15,11 @@
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
           <span class="font-weight-bold">{{ $t('eperusteet-virkailija-linkki') }}</span>
-          <ep-linkki :url="$kaanna(linkit.virkailija)" icon="ulkoinen-linkki"></ep-linkki>
+          <ep-linkki :url="$kaanna(linkit.virkailija)" icon="launch"></ep-linkki>
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
           <span class="font-weight-bold">{{ $t('anna-palautetta') }}</span>
-          <ep-linkki :url="$kaanna(linkit.palaute)" icon="envelope"></ep-linkki>
+          <ep-linkki :url="$kaanna(linkit.palaute)" icon="email"></ep-linkki>
         </div>
         <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
           <a :href="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</a>
