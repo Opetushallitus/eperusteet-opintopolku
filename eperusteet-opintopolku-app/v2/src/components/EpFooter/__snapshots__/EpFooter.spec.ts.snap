@@ -7,14 +7,10 @@ exports[`EpFooter Renders 1`] = `
     <div class="row justify-content-around footer-row">
       <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><a href="https://opintopolku.fi/konfo/fi"><img src="" alt="opintopolku" class="opintopolku"></a></div>
       <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><span class="font-weight-bold">eperusteet-virkailija-linkki</span>
-        <div class="linkki"><a href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ulkoinen-linkki" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="mr-1 svg-inline--fa fa-ulkoinen-linkki fa-w-16 fa-fw">
-              <path fill="currentColor" d="M9.333 0v2.667H2.667v14.666h14.666v-6.666H20v6.963A2.377 2.377 0 0117.63 20H2.37A2.37 2.37 0 010 17.63V2.37A2.37 2.37 0 012.37 0h6.963zM20 0v8h-2.667V4.552l-7.77 7.772-1.887-1.886 7.771-7.772H12V0h8z" class=""></path>
-            </svg> <span>virkailija.opintopolku.fi</span></a></div>
+        <div class="linkki"><a href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="icon mr-1 material-icons" style="font-size: 18px;">launch</span> <span>virkailija.opintopolku.fi</span></a></div>
       </div>
       <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><span class="font-weight-bold">anna-palautetta</span>
-        <div class="linkki"><a href="mailto:eperusteet@opintopolku.fi" rel="noopener noreferrer" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="envelope" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="mr-1 svg-inline--fa fa-envelope fa-w-16 fa-fw">
-              <path fill="currentColor" d="M502.3 190.8c3.9-3.1 9.7-.2 9.7 4.7V400c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V195.6c0-5 5.7-7.8 9.7-4.7 22.4 17.4 52.1 39.5 154.1 113.6 21.1 15.4 56.7 47.8 92.2 47.6 35.7.3 72-32.8 92.3-47.6 102-74.1 131.6-96.3 154-113.7zM256 320c23.2.4 56.6-29.2 73.4-41.4 132.7-96.3 142.8-104.7 173.4-128.7 5.8-4.5 9.2-11.5 9.2-18.9v-19c0-26.5-21.5-48-48-48H48C21.5 64 0 85.5 0 112v19c0 7.4 3.4 14.3 9.2 18.9 30.6 23.9 40.7 32.4 173.4 128.7 16.8 12.2 50.2 41.8 73.4 41.4z" class=""></path>
-            </svg> <span>eperusteet@opintopolku.fi</span></a></div>
+        <div class="linkki"><a href="mailto:eperusteet@opintopolku.fi" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="icon mr-1 material-icons" style="font-size: 18px;">email</span> <span>eperusteet@opintopolku.fi</span></a></div>
       </div>
       <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><a href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste">saavutettavuusseloste</a></div>
     </div>

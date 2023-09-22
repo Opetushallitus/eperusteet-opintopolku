@@ -2,7 +2,7 @@
 <div class="d-flex flex-lg-row justify-content-between mt-5" v-if="previous || next">
   <b-link v-if="previous && previous.location" :to="previous.location" class="pb-3">
     <div class="d-flex align-items-center">
-      <fas fixed-width icon="arrow-left"></fas>
+      <EpMaterialIcon>arrow_back</EpMaterialIcon>
       <span class="mx-2">{{ $kaannaOlioTaiTeksti(previous.label) }}</span>
     </div>
   </b-link>
@@ -10,7 +10,7 @@
   <b-link v-if="next && next.location" :to="next.location" class="ml-auto pb-3">
     <div class="d-flex align-items-center">
       <span class="next mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
-      <fas fixed-width icon="arrow-right"></fas>
+      <EpMaterialIcon>arrow_forward</EpMaterialIcon>
     </div>
   </b-link>
 </div>
@@ -20,8 +20,13 @@
 import _ from 'lodash';
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 
-@Component
+@Component({
+  components: {
+    EpMaterialIcon,
+  },
+})
 export default class EpPreviousNextNavigation extends Vue {
   @Prop({ required: true })
   private activeNode!: NavigationNode;

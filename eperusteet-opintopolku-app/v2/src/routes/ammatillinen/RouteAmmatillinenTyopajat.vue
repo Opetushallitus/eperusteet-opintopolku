@@ -23,7 +23,7 @@
       <router-link :to="ops.route">
         <opetussuunnitelma-tile :ops="ops" :query="query">
           <div slot="icon">
-            <fas icon="osaamisen-arviointi" class="icon"/>
+            <EpMaterialIcon class="icon">decription</EpMaterialIcon>
           </div>
         </opetussuunnitelma-tile>
       </router-link>
@@ -49,6 +49,7 @@ import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 @Component({
   components: {
@@ -56,6 +57,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
     EpSpinner,
     EpSearch,
     EpBPagination,
+    EpMaterialIcon,
   },
 })
 export default class RouteAmmatillinenTyopajat extends Vue {
