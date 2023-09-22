@@ -96,7 +96,6 @@ describe('RouteAmmatillinenValmisteillaOlevat component', () => {
         $sdm: x => x,
       },
       stubs: {
-        fas: '<div />',
         'router-link': RouterLinkStub,
       },
     });
