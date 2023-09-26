@@ -16,8 +16,8 @@
       <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
         <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
           <EpSearch v-model="query"
-                    :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-                    :placeholder="$t('hae-opetussuunnitelmaa')"/>
+                    :sr-placeholder="$t('hae-perustetta')"
+                    :placeholder="$t('hae-perustetta')"/>
         </b-form-group>
         <b-form-group :label="$t('tutkintotyyppi')">
           <EpMultiSelect
