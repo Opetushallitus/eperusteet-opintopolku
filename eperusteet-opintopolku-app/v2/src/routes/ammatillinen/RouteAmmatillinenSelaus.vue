@@ -13,10 +13,7 @@
 
         <router-link v-for="(linkki, index) in linkit" :key="'linkki'+index" :to="{ name: linkki.route }">
           <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
-            <fas v-if="linkki.fasicon" :icon="linkki.fasicon" class="icon" />
-            <span v-if="linkki.materialicon" class="material-icons-outlined icon" aria-hidden="true">
-              {{linkki.materialicon}}
-            </span>
+            <EpMaterialIcon v-if="linkki.icon" icon-shape="outlined">{{linkki.icon}}</EpMaterialIcon>
             <div class="align-self-center">
               {{$t(linkki.text)}}
             </div>
@@ -65,7 +62,8 @@
     <router-view v-else>
       <div class="mb-4">
         <router-link :to="{ name: 'ammatillinenSelaus' }">
-          <fas icon="arrow-left" /> {{$t('palaa-ammatillinen-koulutus-sivulle')}}
+          <EpMaterialIcon>arrow_back</EpMaterialIcon>
+          {{$t('palaa-ammatillinen-koulutus-sivulle')}}
         </router-link>
       </div>
     </router-view>
@@ -80,6 +78,7 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { AmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
 import { Meta } from '@shared/utils/decorators';
@@ -92,8 +91,7 @@ import { Kielet } from '@shared/stores/kieli';
 interface Ylalinkki {
   route: string;
   text: string;
-  fasicon?: string;
-  materialicon?:string;
+  icon?: string;
 }
 
 @Component({
@@ -102,6 +100,7 @@ interface Ylalinkki {
     EpHeader,
     PerusteAmmatillinenHaku,
     EpJulkiLista,
+    EpMaterialIcon,
   },
 })
 export default class RouteAmmatillinenSelaus extends Vue {
@@ -129,17 +128,17 @@ export default class RouteAmmatillinenSelaus extends Vue {
       {
         route: 'ammatillinenMaaraykset',
         text: 'maaraykset',
-        materialicon: 'picture_as_pdf',
+        icon: 'picture_as_pdf',
       },
       {
         route: 'ammatillinenOhjeet',
         text: 'ohjeet-ja-materiaalit',
-        fasicon: 'ohjeet',
+        icon: 'menu_book',
       },
       {
         route: 'ammatillinenKoulutuksenjarjestajat',
         text: 'koulutuksen-jarjestajat',
-        fasicon: 'lokaatio',
+        icon: 'location_on',
       },
     ];
   }

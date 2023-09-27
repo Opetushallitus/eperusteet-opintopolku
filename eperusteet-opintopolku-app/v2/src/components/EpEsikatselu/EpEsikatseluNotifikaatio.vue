@@ -1,6 +1,6 @@
 <template>
   <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="notifikaatio" ref="stickyElement">
-    <span class="material-icons-outlined">info</span>
+    <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
     <span class="notifikaatio-text korostus">{{ notifikaatio }}</span>
     <span v-if="!isEsikatselu && versio">
       <span class="btn-link clickable korostus" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
@@ -12,8 +12,12 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import Sticky from 'vue-sticky-directive';
 import * as _ from 'lodash';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 @Component({
+  components: {
+    EpMaterialIcon,
+  },
   directives: {
     Sticky,
   },

@@ -2,12 +2,11 @@ import { mount, createLocalVue, RouterLinkStub } from '@vue/test-utils';
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import { Kielet } from '@shared/stores/kieli';
-import { delay } from '@shared/utils/delay';
 import { Kaannos } from '@shared/plugins/kaannos';
 import VueI18n from 'vue-i18n';
 import RouteAmmatillinenValmisteillaOlevat from './RouteAmmatillinenValmisteillaOlevat.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
-import { mock, mocks, stubs } from '@shared/utils/jestutils';
+import { mock } from '@shared/utils/jestutils';
 
 Vue.use(BootstrapVue);
 
@@ -41,7 +40,6 @@ describe('RouteAmmatillinenValmisteillaOlevat component', () => {
         $sdm: x => x,
       },
       stubs: {
-        fas: '<div />',
         'router-link': RouterLinkStub,
       },
     });
@@ -98,7 +96,6 @@ describe('RouteAmmatillinenValmisteillaOlevat component', () => {
         $sdm: x => x,
       },
       stubs: {
-        fas: '<div />',
         'router-link': RouterLinkStub,
       },
     });

@@ -21,8 +21,8 @@
             </div>
           </div>
           <div class="ml-auto align-self-start">
-            <fas fixed-width icon="chevron-up" v-if="peruste.toggled"></fas>
-            <fas fixed-width icon="chevron-down" v-else></fas>
+            <EpMaterialIcon v-if="peruste.toggled">expand_less</EpMaterialIcon>
+            <EpMaterialIcon v-else>expand_more</EpMaterialIcon>
           </div>
         </div>
 
@@ -62,12 +62,14 @@ import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import * as _ from 'lodash';
 
 @Component({
   components: {
     EpSpinner,
     EpBPagination,
+    EpMaterialIcon,
   },
 })
 export default class RouteAmmatillinenValmisteillaOlevat extends Vue {

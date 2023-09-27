@@ -70,7 +70,6 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Meta } from '@shared/utils/decorators';
 import { koulutustyyppiStateName } from '@shared/utils/perusteet';
-import EpButton from '@shared/components/EpButton/EpButton.vue';
 import UutisenKoodit from './UutisenKoodit.vue';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 
@@ -80,7 +79,6 @@ import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypit
     EpHeader,
     EpSearch,
     EpContentViewer,
-    EpButton,
     UutisenKoodit,
   },
 })

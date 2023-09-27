@@ -7,8 +7,8 @@
         <div class="rakenne" :style="rakenneStyle">
           <div class="d-flex w-100 justify-content-between" :class="{'kuvaukseton': !rakenneosa.kuvaus}" @click="toggleRakenne()">
             <div v-if="rakenneosa.osat && rakenneosa.osat.length > 0">
-              <fas icon="chevron-down" v-if="!naytaRakenne"></fas>
-              <fas icon="chevron-up" v-else></fas>
+              <EpMaterialIcon v-if="!naytaRakenne">expand_more</EpMaterialIcon>
+              <EpMaterialIcon v-else>expand_less</EpMaterialIcon>
             </div>
             <div class="w-75" :class="{'ml-3' : rakenneosa.osat && rakenneosa.osat.length > 0}">
               <slot name="nimi" v-bind:rakenneosa="rakenneosa">
@@ -18,8 +18,8 @@
             <div class="w-25 text-right">{{laajuus}}</div>
           </div>
 
-          <div class="text-center" v-if="rakenneosa.kuvaus">
-            <fas icon="ellipsis-h" @click="toggleKuvaus()" />
+          <div class="text-center" v-if="rakenneosa.kuvaus" @click="toggleKuvaus()">
+            <EpMaterialIcon>more_horiz</EpMaterialIcon>
           </div>
           <div class="kuvaus" v-if="naytaKuvaus && rakenneosa.kuvaus" v-html="$kaanna(rakenneosa.kuvaus)" @click="toggleKuvaus()"></div>
         </div>
@@ -39,7 +39,6 @@
 
         <template v-slot:nimi="{ rakenneosa }">
           <slot name="nimi" v-bind:rakenneosa="rakenneosa"></slot>
-
         </template>
       </peruste-rakenne-osa>
     </div>
@@ -50,8 +49,12 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import _ from 'lodash';
 import { rakenneNodecolor } from '@shared/utils/perusterakenne';
+import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 
 @Component({
+  components: {
+    EpMaterialIcon,
+  },
   name: 'PerusteRakenneOsa',
 })
 export default class PerusteRakenneOsa extends Vue {

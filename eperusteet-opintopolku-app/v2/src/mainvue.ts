@@ -8,21 +8,12 @@ import PortalVue from 'portal-vue';
 import Aikaleima from '@shared/plugins/aikaleima';
 import Kaannos from '@shared/plugins/kaannos';
 import { Vahvistus } from '@shared/plugins/vahvistus';
-
 import '@/config/bootstrap';
-import '@shared/config/fontawesome';
 import 'material-icons/iconfont/material-icons.css';
-
 import { router } from '@/router';
 import { Kielet } from '@shared/stores/kieli';
-
-import { createLogger } from '@shared/utils/logger';
-import _ from 'lodash';
-
 import App from '@/App.vue';
-
-import VueI18n, { IVueI18n } from 'vue-i18n';
-const logger = createLogger('main');
+import VueI18n from 'vue-i18n';
 
 Vue.config.devtools = true;
 Vue.use(Notifications);

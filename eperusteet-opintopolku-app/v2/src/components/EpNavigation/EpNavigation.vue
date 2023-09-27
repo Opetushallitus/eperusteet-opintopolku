@@ -28,7 +28,7 @@
       <b-navbar-nav class="ml-auto" :aria-label="$t('kielivalinta')">
         <b-nav-item-dropdown right>
           <template slot="button-content">
-            <fas fixed-width icon="language" class="mr-2"></fas>
+            <EpMaterialIcon class="mr-2">language</EpMaterialIcon>
             <span>{{ $t(sisaltoKieli) }}</span>
           </template>
           <b-dropdown-item v-for="(kieli, idx) in kielet"
@@ -50,12 +50,14 @@ import { VueRouter, RawLocation } from 'vue-router/types/router';
 import { createLogger } from '@shared/utils/logger';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 
 const logger = createLogger('EpNavigation');
 
 @Component({
   components: {
     EpSpinner,
+    EpMaterialIcon,
   },
 })
 export default class EpNavigation extends Vue {
