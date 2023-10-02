@@ -10,16 +10,13 @@
     <div class="label-wrapper d-flex align-items-center">
       <b-link v-if="node.location && !subtype" :to="node.location">
         <span class="label" :class="{ 'label-match': isMatch }">
-          {{ $kaannaOlioTaiTeksti(node.label) }}
-          <span v-if="koodi" class="code-field">({{ koodi }})</span>
+          <EpSidenavNodeLabel :node="node"/>
         </span>
       </b-link>
       <div v-else
             class="label label-plain"
             :class="{ 'label-match': isMatch, 'subtype': subtype, 'pl-0': !hasChildren }">
-        {{ $kaannaOlioTaiTeksti(node.label) }}
-        <!-- <span v-if="!node.label && node.type">{{$t(node.type.replaceAll('_', '-'))}}</span> -->
-        <span v-if="koodi" class="code-field">({{ koodi }})</span>
+          <EpSidenavNodeLabel :node="node"/>
       </div>
 
       <EpNavigationPostFix :node="node" class="ml-1" v-if="node.meta && node.meta.postfix_label"/>
@@ -40,12 +37,14 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import EpNavigationPostFix from '@shared/components/EpTreeNavibar/EpNavigationPostFix.vue';
+import EpSidenavNodeLabel from '@/components/EpSidenav/EpSidenavNodeLabel.vue';
 
 @Component({
   name: 'EpSidenavNode',
   components: {
     EpColorIndicator,
     EpNavigationPostFix,
+    EpSidenavNodeLabel,
   },
 })
 export default class EpSidenavNode extends Vue {
