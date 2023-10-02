@@ -46,7 +46,6 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
-import pdfkuva from '@assets/img/icons/pdfkuva_lataus.svg';
 
 @Component({
   components: {
@@ -86,10 +85,6 @@ export default class RouteAmmatillinenMaaraykset extends Vue {
 
   get total() {
     return _.size(this.maaraykset);
-  }
-
-  get pdfKuva() {
-    return pdfkuva;
   }
 }
 </script>
