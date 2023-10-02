@@ -299,7 +299,7 @@ export default class RouteHome extends Vue {
   }
 
   background-color: $etusivu-header-background;
-  background-image: url('../../../public/img/banners/opiskelijat.png');
+  background-image: url('~@assets/img/banners/opintopolku/opiskelijat.png');
   background-size: cover;
   background-position: 50% 33%;
 
