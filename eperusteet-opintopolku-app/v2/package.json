@@ -36,7 +36,7 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "bootstrap-vue": "2.21.2",
-    "core-js": "^3.4.4",
+    "core-js": "^3.32.2",
     "deepdash-es": "^5.3.9",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
