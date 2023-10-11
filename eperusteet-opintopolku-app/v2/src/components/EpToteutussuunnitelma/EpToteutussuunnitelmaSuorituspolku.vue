@@ -43,6 +43,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import * as _ from 'lodash';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import { flattenTree } from '@shared/utils/helpers';
 
 @Component({
   components: {
@@ -146,7 +147,8 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
   }
 
   get julkaistuTutkinnonosaViitteet() {
-    return _.filter(_.get(this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' }), 'lapset'), viite => viite.tyyppi === 'tutkinnonosa');
+    const tutkinnonosatViite = this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' });
+    return _.filter(flattenTree(tutkinnonosatViite, 'lapset'), viite => viite.tyyppi === 'tutkinnonosa');
   }
 
   get julkaistutTutkinnonOsat() {
