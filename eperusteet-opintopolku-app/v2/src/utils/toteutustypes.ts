@@ -9,6 +9,7 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 
 export const koostePerusteStore = {
   'default': (koulutustyyppi): any => new PerusteKoosteStore(koulutustyyppi),
@@ -29,6 +30,11 @@ export const koostePaikallinenStore = {
   'vapaasivistystyo': (): any => new VapaasivistystyoPaikallisetStore(),
   'muukoulutus': (): any => new YleisetPaikallisetStore(),
   'default': (): any => new YleissivistavatPaikallisetStore(),
+};
+
+export const koosteOsaamismerkitStore = {
+  'vapaasivistystyo': (): any => new OsaamismerkitStore(),
+  'default': null,
 };
 
 export const koostePaikallinenComponent = {
@@ -79,6 +85,10 @@ export const getKoosteOpasStore = (koulutustyyppi): any => {
 
 export const getKoosteTiedotteetStore = (koulutustyyppi): any => {
   return koosteTiedotteetStore[koulutustyyppi] !== undefined ? koosteTiedotteetStore[koulutustyyppi] : koosteTiedotteetStore['default'](koulutustyyppi);
+};
+
+export const getOsaamismerkitStore = (koulutustyyppi) :any => {
+  return koosteOsaamismerkitStore[koulutustyyppi] ? koosteOsaamismerkitStore[koulutustyyppi] : koosteOsaamismerkitStore['default'];
 };
 
 export const getKoosteKuvaus = (koulutustyyppi): any => {

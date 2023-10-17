@@ -46,7 +46,7 @@ import RouteLukioOppiaine from '@/routes/perusteet/sisalto/lukio/RouteLukioOppia
 import RouteKurssi from '@/routes/perusteet/sisalto/lukio/RouteKurssi.vue';
 import RouteOsaamiskokonaisuus from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuus.vue';
 import RouteOsaamiskokonaisuusPaaAlue from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuusPaaAlue.vue';
-
+import RouteOsaamismerkit from '@/routes/kooste/RouteOsaamismerkit.vue';
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
 import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sisalto/tekstikappale/RouteOpetussuunnitelmaTekstikappale.vue';
@@ -96,6 +96,7 @@ import {
   getKoostePerusteStore,
   getKoosteSubheader,
   getKoosteTiedotteetStore,
+  getOsaamismerkitStore,
 } from '@/utils/toteutustypes';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
@@ -106,6 +107,7 @@ import RouteKotoLaajaAlainenOsaaminen
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
 import { redirects } from './utils/redirects';
 import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuStore';
+import { OsaamismerkitStore } from './stores/OsaamismerkitStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -122,6 +124,7 @@ const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
 const palauteStore = new PalauteStore();
 const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
 const ammatillinenPerusteHakuStore = new AmmatillinenPerusteHakuStore();
+const osaamismerkitStore = new OsaamismerkitStore();
 
 const routeProps = (route: any) => {
   return {
@@ -234,10 +237,27 @@ export const router = new Router({
                   opasStore: getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                   tiedotteetStore: getKoosteTiedotteetStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                   paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
+                  osaamismerkitStore: getOsaamismerkitStore(route.params.koulutustyyppi),
                   paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),
                   kuvaus: getKoosteKuvaus(route.params.koulutustyyppi),
                   subheader: getKoosteSubheader(route.params.koulutustyyppi),
                   perusteetHeader: getKoostePerusteHeader(route.params.koulutustyyppi),
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'osaamismerkit/:osaamismerkkiId(\\d+)?',
+        name: 'osaamismerkit',
+        component: RouteOsaamismerkit,
+        meta: {
+          resolve: {
+            cacheBy: ['koulutustyyppi'],
+            async props() {
+              return {
+                default: {
+                  osaamismerkitStore: osaamismerkitStore,
                 },
               };
             },

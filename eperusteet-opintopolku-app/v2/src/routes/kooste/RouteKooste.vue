@@ -28,6 +28,11 @@
                 <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
               </router-link>
             </div>
+            <div v-if="osaamismerkitStore">
+              <router-link :to="{ name: 'osaamismerkit' }">
+                <OsaamismerkkiTile :koulutustyyppi="koulutustyyppi"></OsaamismerkkiTile>
+              </router-link>
+            </div>
           </div>
           <ep-spinner v-else />
         </b-col>
@@ -100,6 +105,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import Paikalliset from './Paikalliset.vue';
 import PerusteTile from './PerusteTile.vue';
+import OsaamismerkkiTile from './OsaamismerkkiTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { Meta } from '@shared/utils/decorators';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
@@ -109,6 +115,7 @@ import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 
 @Component({
@@ -118,6 +125,7 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
     Paikalliset,
     EpExternalLink,
     PerusteTile,
+    OsaamismerkkiTile,
     EpJulkiLista,
     EpSpinnerSlot,
   },
@@ -134,6 +142,9 @@ export default class RouteKooste extends Vue {
 
   @Prop({ required: true })
   private tiedotteetStore!: KoosteTiedotteetStore;
+
+  @Prop({ required: false })
+  private osaamismerkitStore!: OsaamismerkitStore;
 
   @Prop({ required: true })
   private paikallinenComponent!: any;
