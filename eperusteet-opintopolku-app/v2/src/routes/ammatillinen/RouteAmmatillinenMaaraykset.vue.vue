@@ -39,7 +39,7 @@
 <script lang="ts">
 import * as _ from 'lodash';
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
-import { MaarayksetStore } from '@/stores/MaarayksetStore';
+import { AmmatillisetMaarayksetStore } from '@/stores/AmmatillisetMaarayksetStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -58,7 +58,7 @@ import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue
 })
 export default class RouteAmmatillinenMaaraykset extends Vue {
   @Prop({ required: true })
-  private maarayksetStore!: MaarayksetStore;
+  private maarayksetStore!: AmmatillisetMaarayksetStore;
 
   private query = '';
   private page = 1;

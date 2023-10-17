@@ -8,6 +8,8 @@ import EpErrorPage from '@shared/components/EpErrorPage/EpErrorPage.vue';
 import Home from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue';
+import RouteMaarayskokoelma from '@/routes/maarays/RouteMaarayskokoelma.vue';
+import RouteMaarays from '@/routes/maarays/RouteMaarays.vue';
 import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
 import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
 import RouteAmmatillinenValmisteillaOlevat from '@/routes/ammatillinen/RouteAmmatillinenValmisteillaOlevat.vue';
@@ -101,7 +103,7 @@ import {
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
-import { MaarayksetStore } from './stores/MaarayksetStore';
+import { AmmatillisetMaarayksetStore } from './stores/AmmatillisetMaarayksetStore';
 import RouteKotoLaajaAlainenOsaaminen
   from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
@@ -209,6 +211,16 @@ export const router = new Router({
         path: 'virhe',
         name: 'virhe',
         component: EpErrorPage,
+        props: routeProps,
+      }, {
+        path: 'maaraykset',
+        name: 'maaraykset',
+        component: RouteMaarayskokoelma,
+        props: routeProps,
+      }, {
+        path: 'maaraykset/:maaraysId(\\d+)',
+        name: 'maarays',
+        component: RouteMaarays,
         props: routeProps,
       }, {
         path: 'kooste/ammatillinen/:perusteId(\\d+)',
@@ -321,7 +333,7 @@ export const router = new Router({
                 async props(route) {
                   return {
                     default: {
-                      maarayksetStore: new MaarayksetStore(),
+                      maarayksetStore: new AmmatillisetMaarayksetStore(),
                     },
                   };
                 },
