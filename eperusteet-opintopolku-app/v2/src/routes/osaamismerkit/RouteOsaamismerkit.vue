@@ -36,13 +36,13 @@
           </div>
         </div>
         <div v-else>
-          <div v-for="(group, index) in osaamismerkit" :key="index" class="mb-5">
+          <div v-for="(group, index) in osaamismerkit" :key="index" class="mb-4">
             <div class="mb-2">
               <h2>{{$kaanna(group[0].kategoria.nimi)}}</h2>
             </div>
-            <div class="d-flex justify-content-start">
-              <div v-for="(osaamismerkki, idx) in group" :key="idx">
-                <router-link :to="{ name: 'osaamismerkki', params: { osaamismerkkiId: osaamismerkki.id } }">
+            <div class="d-flex flex-lg-row flex-column justify-content-start">
+              <div v-for="(osaamismerkki, idx) in group" :key="idx" class="mb-2">
+                <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
                   <div class="tile tile-background-shadow-selected shadow-tile d-flex">
                     <div>
                       <img :src="osaamismerkki.image" width="40" height="40">
@@ -67,10 +67,8 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
+import OpetussuunnitelmaTile from '../kooste/OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
-import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
-import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { MurupolkuOsa } from '@/tyypit';
 import { RawLocation } from 'vue-router';
@@ -84,8 +82,6 @@ import { OsaamismerkitQuery } from '@shared/api/eperusteet';
     EpSpinner,
     OpetussuunnitelmaTile,
     EpMultiSelect,
-    EpBPagination,
-    EpVoimassaoloFilter,
   },
 })
 export default class RouteOsaamismerkit extends Vue {

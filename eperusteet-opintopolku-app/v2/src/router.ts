@@ -46,7 +46,7 @@ import RouteLukioOppiaine from '@/routes/perusteet/sisalto/lukio/RouteLukioOppia
 import RouteKurssi from '@/routes/perusteet/sisalto/lukio/RouteKurssi.vue';
 import RouteOsaamiskokonaisuus from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuus.vue';
 import RouteOsaamiskokonaisuusPaaAlue from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuusPaaAlue.vue';
-import RouteOsaamismerkit from '@/routes/kooste/RouteOsaamismerkit.vue';
+import RouteOsaamismerkit from '@/routes/osaamismerkit/RouteOsaamismerkit.vue';
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
 import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sisalto/tekstikappale/RouteOpetussuunnitelmaTekstikappale.vue';
@@ -59,6 +59,7 @@ import RoutePerusopetusVuosiluokkakokonaisuus from '@/routes/opetussuunnitelmat/
 import RouteOpetussuunnitelmaPerusopetusOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaineet.vue';
 import RouteOpetussuunnitelmaPerusopetusOppiaine from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaine.vue';
 import RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet.vue';
+import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiTiedot.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -107,7 +108,8 @@ import RouteKotoLaajaAlainenOsaaminen
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
 import { redirects } from './utils/redirects';
 import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuStore';
-import { OsaamismerkitStore } from './stores/OsaamismerkitStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -248,16 +250,31 @@ export const router = new Router({
           },
         },
       }, {
-        path: 'osaamismerkit/:osaamismerkkiId(\\d+)?',
+        path: 'osaamismerkit',
         name: 'osaamismerkit',
         component: RouteOsaamismerkit,
         meta: {
           resolve: {
-            cacheBy: ['koulutustyyppi'],
             async props() {
               return {
                 default: {
                   osaamismerkitStore: osaamismerkitStore,
+                },
+              };
+            },
+          },
+        },
+      }, {
+        path: 'osaamismerkki/tiedot/:osaamismerkkiId(\\d+)?',
+        name: 'osaamismerkkiTiedot',
+        component: RouteOsaamismerkkiTiedot,
+        meta: {
+          resolve: {
+            cacheBy: ['osaamismerkkiId'],
+            async props(route) {
+              return {
+                default: {
+                  osaamismerkkiStore: await OsaamismerkkiStore.create(route.params.osaamismerkkiId),
                 },
               };
             },

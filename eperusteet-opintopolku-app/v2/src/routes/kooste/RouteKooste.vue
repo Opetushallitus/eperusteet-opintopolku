@@ -105,7 +105,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import Paikalliset from './Paikalliset.vue';
 import PerusteTile from './PerusteTile.vue';
-import OsaamismerkkiTile from './OsaamismerkkiTile.vue';
+import OsaamismerkkiTile from '../osaamismerkit/OsaamismerkkiTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { Meta } from '@shared/utils/decorators';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
