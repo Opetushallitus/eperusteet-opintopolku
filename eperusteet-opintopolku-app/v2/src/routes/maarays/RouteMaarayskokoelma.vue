@@ -15,7 +15,8 @@
                 :enable-empty-option="true"
                 placeholder="kaikki"
                 :is-editing="true"
-                :options="tyyppiVaihtoehdot">
+                :options="tyyppiVaihtoehdot"
+                :search-identity="searchIdentity">
           <template slot="singleLabel" slot-scope="{ option }">
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
@@ -26,15 +27,24 @@
       </b-form-group>
 
       <b-form-group :label="$t('koulutus-tai-tutkinto')" class="col-lg-3 col-md-6 mb-1">
-        <koulutustyyppi-select v-model="query.koulutustyyppi"
-                              :koulutustyypit="koulutustyyppiVaihtoehdot"
-                              :isEditing="true"></koulutustyyppi-select>
+        <EpMultiSelect
+            :multiple="true"
+            :is-editing="true"
+            :options="koulutustyyppiVaihtoehdot"
+            v-model="query.koulutustyypit"
+            :placeholder="$t('kaikki')"
+            :search-identity="searchIdentity">
+          <template slot="option" slot-scope="{ option }">
+            {{ $t(option) }}
+          </template>
+          <template slot="tag" slot-scope="{ option }">
+            <div>{{ $t(option) }}</div>
+          </template>
+        </EpMultiSelect>
       </b-form-group>
     </div>
 
-    <div class="d-flex mb-3">
-      <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
-    </div>
+    <EpVoimassaoloFilter v-model="query" class="mb-0"></EpVoimassaoloFilter>
 
     <ep-spinner v-if="!maaraykset" />
 
@@ -43,6 +53,13 @@
     </div>
 
     <div class="maaraykset" v-else>
+      <div class="jarjestys d-flex justify-content-end align-items-center mb-2" >
+        <a @click="vaihdaJarjestys()" class="clickable">
+          <span v-if="query.jarjestys === 'DESC'">{{$t('uusimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_down</EpMaterialIcon></span>
+          <span v-if="query.jarjestys === 'ASC'">{{$t('vanhimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_up</EpMaterialIcon></span>
+        </a>
+      </div>
+
       <router-link class="maarays d-flex shadow-tile" v-for="maarays in maaraykset" :key="maarays.id" :to="{name: 'maarays', params: {maaraysId: maarays.id}}">
         <img :src="kuva" :alt="$t('maarays')" class="kuva"/>
         <div class="tiedot">
@@ -54,8 +71,7 @@
             <div v-if="maarays.asiasanat[kieli].asiasana.length > 0">
               {{ $t('asiasana')}}:
               <span v-for="(asiasana, index) in maarays.asiasanat[kieli].asiasana" :key="'asiasana' + index">
-                <span v-if="index === maarays.asiasanat[kieli].asiasana.length -1">, </span>
-                {{ asiasana }}
+                {{ asiasana }}<span v-if="index < maarays.asiasanat[kieli].asiasana.length -1">, </span>
               </span>
             </div>
           </div>
@@ -73,11 +89,9 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
-import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
 import EpPagination from '@shared/components/EpPagination/EpPagination.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
-import { EperusteetKoulutustyypit } from '@shared/utils/perusteet';
 import { Meta } from '@shared/utils/decorators';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { MaarayksetStore } from '@shared/stores/MaarayksetStore';
@@ -85,6 +99,8 @@ import { Debounced } from '@shared/utils/delay';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { Kielet } from '@shared/stores/kieli';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
+import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 
 @Component({
   components: {
@@ -92,11 +108,12 @@ import { Kielet } from '@shared/stores/kieli';
     EpToggle,
     EpSearch,
     EpMultiSelect,
-    KoulutustyyppiSelect,
     EpPagination,
     EpSpinner,
     EpVoimassaoloFilter,
     EpVoimassaolo,
+    EpButton,
+    EpMaterialIcon,
   },
 })
 export default class RouteMaarayskokoelma extends Vue {
@@ -109,9 +126,13 @@ export default class RouteMaarayskokoelma extends Vue {
     sivukoko: 10,
     julkaistu: true,
     laadinta: false,
+    jarjestysTapa: 'voimassaoloAlkaa',
+    jarjestys: 'DESC',
+    koulutustyypit: [],
   }
 
   async mounted() {
+    await this.maarayksetStore.init();
     await this.fetch();
   }
 
@@ -128,7 +149,12 @@ export default class RouteMaarayskokoelma extends Vue {
 
   @Debounced(300)
   async fetch() {
-    await this.maarayksetStore.fetch({ ...this.query, sivu: this.sivu - 1 });
+    await this.maarayksetStore.fetch(
+      {
+        ...this.query,
+        kieli: this.kieli,
+        sivu: this.sivu - 1,
+      });
   }
 
   get maaraykset() {
@@ -164,7 +190,7 @@ export default class RouteMaarayskokoelma extends Vue {
   }
 
   get koulutustyyppiVaihtoehdot() {
-    return EperusteetKoulutustyypit;
+    return this.maarayksetStore.koulutustyypit.value;
   }
 
   get kuva() {
@@ -182,6 +208,14 @@ export default class RouteMaarayskokoelma extends Vue {
         location: { name: 'maaraykset' },
       },
     ];
+  }
+
+  vaihdaJarjestys() {
+    this.query.jarjestys = this.query.jarjestys === 'DESC' ? 'ASC' : 'DESC';
+  }
+
+  searchIdentity(kt: string) {
+    return _.toLower(this.$t(kt) as any);
   }
 }
 </script>
@@ -212,6 +246,11 @@ export default class RouteMaarayskokoelma extends Vue {
       }
     }
   }
+}
+
+::v-deep .toggles {
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 </style>

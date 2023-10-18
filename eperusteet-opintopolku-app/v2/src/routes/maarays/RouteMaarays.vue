@@ -18,7 +18,7 @@
 
     <EpSpinner v-if="!maarays"/>
 
-    <div v-else class="maarays d-flex flex-column flex-md-row">
+    <div v-else class="maarays d-flex flex-column-reverse flex-md-row">
       <div class="pdf mr-4 mb-4 mr-5">
 
         <img :src="kuva" :alt="$t('maarays')" class="kuva"/>
@@ -26,6 +26,10 @@
           <div>{{$kaanna(maarays.nimi)}}</div>
         </div>
 
+        <a class="url d-inline-flex" v-if="maaraysPdfUrl" :href="maaraysPdfUrl" target="_blank" rel="noopener noreferrer">
+          <div>{{$t('avaa-maarays-pdf')}}</div>
+          <EpMaterialIcon class="ml-3">arrow_forward</EpMaterialIcon>
+        </a>
       </div>
 
       <div class="tiedot">
@@ -42,23 +46,27 @@
         </ep-form-content>
 
         <ep-form-content name="koulutustyyppi" headerType="h3" headerClass="h6">
-          {{$t(maarays.koulutustyyppi)}}
+          <KoulutustyyppiSelect v-for="koulutustyyppi in maarays.koulutustyypit" :key="koulutustyyppi" :value="koulutustyyppi" nocolor/>
         </ep-form-content>
 
-        <ep-form-content name="muuttaa-maaraysta" v-if="maarays.muutettavaMaaraykset.length > 0" headerType="h3" headerClass="h6">
-          <router-link v-for="maarays in maarays.muutettavaMaaraykset" :key="'muuttaa'+maarays.id" :to="{name: 'maarays', params: {maaraysId: maarays.id}}" class="d-block">
-            {{ $kaanna(maarays.nimi) }} ({{maarays.diaarinumero}})
+        <ep-form-content v-if="liittyykoToiseenMaaraykseenOtsikko" :name="liittyykoToiseenMaaraykseenOtsikko" headerType="h3" headerClass="h6">
+          <router-link v-for="muuttuva in maarays.muutettavatMaaraykset" :key="'muuttaa'+muuttuva.id" :to="{name: 'maarays', params: {maaraysId: muuttuva.id}}" class="d-block">
+            {{ $kaanna(muuttuva.nimi) }} ({{muuttuva.diaarinumero}})
           </router-link>
-        </ep-form-content>
 
-        <ep-form-content name="korvaa-maarayksen" v-if="maarays.korvattavatMaaraykset.length > 0" headerType="h3" headerClass="h6">
-          <router-link v-for="maarays in maarays.korvattavatMaaraykset" :key="'korvaa'+maarays.id" :to="{name: 'maarays', params: {maaraysId: maarays.id}}" class="d-block">
-            {{ $kaanna(maarays.nimi) }} ({{maarays.diaarinumero}})
+          <router-link v-for="korvattava in maarays.korvattavatMaaraykset" :key="'korvaa'+korvattava.id" :to="{name: 'maarays', params: {maaraysId: korvattava.id}}" class="d-block">
+            {{ $kaanna(korvattava.nimi) }} ({{korvattava.diaarinumero}})
           </router-link>
         </ep-form-content>
 
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
           <ep-content-viewer :value="$kaanna(maarays.kuvaus)"  />
+        </ep-form-content>
+
+        <ep-form-content name="liitteet" headerType="h3" headerClass="h6" v-if="liitteet.length > 0">
+          <div v-for="liite in liitteet" :key="'liite'+liite.id">
+            <a :href="liite.url" target="_blank" rel="noopener noreferrer">{{$kaanna(liite.nimi)}}</a> <span>(pdf)</span>
+          </div>
         </ep-form-content>
 
       </div>
@@ -68,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import { Maaraykset, MaaraysDto } from '@shared/api/eperusteet';
+import { Maaraykset, MaarayksetParams, MaaraysDto, MaaraysLiiteDtoTyyppiEnum, baseURL, MaaraysDtoLiittyyTyyppiEnum, Perusteet, PerusteDto } from '@shared/api/eperusteet';
 import * as _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -79,6 +87,8 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Meta } from '@shared/utils/decorators';
+import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
+import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
 
 @Component({
   components: {
@@ -87,15 +97,21 @@ import { Meta } from '@shared/utils/decorators';
     EpFormContent,
     EpVoimassaolo,
     EpContentViewer,
+    EpMaterialIcon,
+    KoulutustyyppiSelect,
   },
 })
 export default class RouteMaarays extends Vue {
   private maarays: MaaraysDto | null = null;
+  private peruste: PerusteDto | null = null;
 
   @Watch('maaraysId', { immediate: true })
   async maaraysChange() {
     this.maarays = null;
     this.maarays = (await Maaraykset.getMaarays(this.maaraysId)).data;
+    if (this.maarays.peruste) {
+      this.peruste = (await Perusteet.getPerusteenTiedot(this.maarays.peruste.id!)).data;
+    }
   }
 
   @Meta
@@ -136,6 +152,55 @@ export default class RouteMaarays extends Vue {
       },
     ];
   }
+
+  get liitteet() {
+    return _.chain(this.kaikkiLiitteet)
+      .filter(liite => liite.tyyppi !== MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI)
+      .map(liite => {
+        return {
+          ...liite,
+          url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(liite.id)).url,
+        };
+      })
+      .value();
+  }
+
+  get kaikkiLiitteet() {
+    if (this.maarays?.liitteet) {
+      return this.maarays?.liitteet[this.kieli].liitteet;
+    }
+  }
+
+  get maaraysPdfUrl() {
+    const maaraysLiite = _.find(this.kaikkiLiitteet, liite => liite.tyyppi === MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI);
+    if (maaraysLiite) {
+      return baseURL + MaarayksetParams.getMaaraysLiite(_.toString(maaraysLiite.id)).url;
+    }
+
+    if (this.peruste && this.maarayskirje) {
+      return `${baseURL}/perusteet/${this.peruste.id!}/liitteet/${this.maarayskirje.id}`;
+    }
+  }
+
+  get maarayskirje() {
+    if (this.peruste?.maarayskirje?.liitteet) {
+      return this.peruste?.maarayskirje?.liitteet[this.kieli] || null;
+    }
+  }
+
+  get liittyykoToiseenMaaraykseenOtsikko() {
+    if (this.maarays?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.EILIITY) {
+      return null;
+    }
+
+    if (this.maarays?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.MUUTTAA) {
+      return 'muuttaa-maaraysta';
+    }
+
+    if (this.maarays?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.KORVAA) {
+      return 'korvaa-maarayksen';
+    }
+  }
 }
 </script>
 
@@ -156,6 +221,10 @@ export default class RouteMaarays extends Vue {
     .pdf {
       .kuva {
         height: 350px;
+
+        @media (max-width: 767.98px) {
+          display:none;
+        }
       }
       .nimi {
         height: 350px;
@@ -163,6 +232,18 @@ export default class RouteMaarays extends Vue {
         margin-top: -360px;
         margin-left: 15px;
         margin-right: 15px;
+        margin-bottom: 30px;
+
+        @media (max-width: 767.98px) {
+          display:none !important;
+        }
+      }
+      .url {
+        color: $white;
+        background-color: $blue-lighten-5;
+        padding: 10px 20px;
+        display: inline-block;
+        border-radius: 2rem;
       }
     }
   }
