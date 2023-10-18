@@ -46,6 +46,7 @@ import { MurupolkuOsa } from '@/tyypit';
 import { RawLocation } from 'vue-router';
 import _ from 'lodash';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
+import { Meta } from '@shared/utils/decorators';
 
 @Component({
   components: {
@@ -86,6 +87,13 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
     }, {
       label: this.$kaanna(this.osaamismerkki?.nimi),
     }];
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t('osaamismerkki'),
+    };
   }
 }
 </script>

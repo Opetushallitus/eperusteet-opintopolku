@@ -74,6 +74,7 @@ import { MurupolkuOsa } from '@/tyypit';
 import { RawLocation } from 'vue-router';
 import _ from 'lodash';
 import { OsaamismerkitQuery } from '@shared/api/eperusteet';
+import { Meta } from '@shared/utils/decorators';
 
 @Component({
   components: {
@@ -185,6 +186,13 @@ export default class RouteOsaamismerkit extends Vue {
         name: 'osaamismerkit',
       },
     }];
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t('osaamismerkit'),
+    };
   }
 }
 </script>
