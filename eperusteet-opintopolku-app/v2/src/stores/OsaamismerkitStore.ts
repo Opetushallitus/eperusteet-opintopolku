@@ -31,15 +31,9 @@ export class OsaamismerkitStore {
   }
 
   private async fetchOsaamismerkitImpl(q: OsaamismerkitQuery) {
-    const res = (await Osaamismerkit.findOsaamismerkitBy(
-      0,
-      9999,
+    const res = (await Osaamismerkit.findJulkisetOsaamismerkitBy(
       q.nimi,
-      ['JULKAISTU'],
-      q.kategoria,
-      true,
-      false,
-      false,
+      q.kategoria
     )).data as any;
     return res;
   }
