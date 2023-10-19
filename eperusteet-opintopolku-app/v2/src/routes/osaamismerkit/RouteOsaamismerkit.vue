@@ -95,11 +95,6 @@ export default class RouteOsaamismerkit extends Vue {
 
   async mounted() {
     await this.osaamismerkitStore.fetchKategoriat();
-    await this.fetch();
-  }
-
-  async fetch() {
-    await this.osaamismerkitStore.updateOsaamismerkkiQuery(this.query);
   }
 
   private initQuery() {
