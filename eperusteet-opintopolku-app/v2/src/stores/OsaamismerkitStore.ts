@@ -40,6 +40,6 @@ export class OsaamismerkitStore {
 
   public async fetchKategoriat() {
     this.state.kategoriat = null;
-    this.state.kategoriat = (await Osaamismerkit.getKategoriat()).data;
+    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat()).data;
   }
 }
