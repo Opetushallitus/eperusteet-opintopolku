@@ -1,65 +1,68 @@
 <template>
-  <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
-    <template slot="header">
-      {{ $t('kansalliset-osaamismerkit') }}
-    </template>
-    <template slot="subheader">
-      {{ $t('osaamismerkit-kuvaus') }}
-    </template>
-    <div class="osaamismerkit">
-      <div class="d-flex flex-lg-row flex-column mb-4">
-        <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-          <ep-search v-model="query.nimi"
-                     :max-width="true"
-                     :sr-placeholder="$t('hae-osaamismerkkeja')"
-                     :placeholder="$t('hae-osaamismerkkeja')"/>
-        </b-form-group>
+  <div v-if="$route.name === 'osaamismerkit'">
+    <EpHeader :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
+      <template slot="header">
+        {{ $t('kansalliset-osaamismerkit') }}
+      </template>
+      <template slot="subheader">
+        {{ $t('osaamismerkit-kuvaus') }}
+      </template>
 
-        <b-form-group :label="$t('kategoria')">
-          <EpMultiSelect :is-editing="false"
-                         :options="osaamismerkkiKategoriaOptions"
-                         :placeholder="$t('kaikki')"
-                         class="multiselect"
-                         v-model="kategoria"
-                         :searchable="false"
-                         track-by="value"
-                         label="text">
-          </EpMultiSelect>
-        </b-form-group>
-      </div>
+      <div class="osaamismerkit">
+        <div class="d-flex flex-lg-row flex-column mb-4">
+          <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
+            <ep-search v-model="query.nimi"
+                       :max-width="true"
+                       :sr-placeholder="$t('hae-osaamismerkkeja')"
+                       :placeholder="$t('hae-osaamismerkkeja')"/>
+          </b-form-group>
 
-      <div class="osaamismerkki-container">
-        <ep-spinner v-if="!osaamismerkit" />
-        <div v-else-if="kokonaismaara === 0">
-          <div class="alert alert-info">
-            {{ $t('ei-hakutuloksia') }}
-          </div>
+          <b-form-group :label="$t('kategoria')">
+            <EpMultiSelect :is-editing="false"
+                           :options="osaamismerkkiKategoriaOptions"
+                           :placeholder="$t('kaikki')"
+                           class="multiselect"
+                           v-model="kategoria"
+                           :searchable="false"
+                           track-by="value"
+                           label="text">
+            </EpMultiSelect>
+          </b-form-group>
         </div>
-        <div v-else>
-          <div v-for="(group, index) in osaamismerkit" :key="index" class="mb-4">
-            <div class="mb-2">
-              <h2>{{$kaanna(group[0].kategoria.nimi)}}</h2>
+
+        <div class="osaamismerkki-container">
+          <EpSpinner v-if="!osaamismerkit" />
+          <div v-else-if="kokonaismaara === 0">
+            <div class="alert alert-info">
+              {{ $t('ei-hakutuloksia') }}
             </div>
-            <div class="d-flex flex-lg-row flex-column justify-content-start">
-              <div v-for="(osaamismerkki, idx) in group" :key="idx" class="mb-2">
-                <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
-                  <div class="tile tile-background-shadow-selected shadow-tile d-flex">
-                    <div>
-                      <img :src="osaamismerkki.image" width="40" height="40">
+          </div>
+          <div v-else>
+            <div v-for="(group, index) in osaamismerkit" :key="index" class="mb-4">
+              <div class="mb-2">
+                <h2>{{$kaanna(group[0].kategoria.nimi)}}</h2>
+              </div>
+              <div class="d-flex flex-lg-row flex-column justify-content-start">
+                <div v-for="(osaamismerkki, idx) in group" :key="idx" class="mb-2">
+                  <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
+                    <div class="tile tile-background-shadow-selected shadow-tile d-flex">
+                      <div>
+                        <img :src="osaamismerkki.image" width="40" height="40">
+                      </div>
+                      <div>
+                        <span class="nimi">{{ $kaanna(osaamismerkki.nimi) }}</span>
+                      </div>
                     </div>
-                    <div>
-                      <span class="nimi">{{ $kaanna(osaamismerkki.nimi) }}</span>
-                    </div>
-                  </div>
-                </router-link>
+                  </router-link>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
-    </div>
-  </ep-header>
+    </EpHeader>
+  </div>
+  <router-view v-else/>
 </template>
 
 <script lang="ts">

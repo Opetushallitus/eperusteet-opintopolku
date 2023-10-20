@@ -264,22 +264,23 @@ export const router = new Router({
             },
           },
         },
-      }, {
-        path: 'osaamismerkki/tiedot/:osaamismerkkiId(\\d+)?',
-        name: 'osaamismerkkiTiedot',
-        component: RouteOsaamismerkkiTiedot,
-        meta: {
-          resolve: {
-            cacheBy: ['osaamismerkkiId'],
-            async props(route) {
-              return {
-                default: {
-                  osaamismerkkiStore: await OsaamismerkkiStore.create(route.params.osaamismerkkiId),
-                },
-              };
+        children: [{
+          path: 'osaamismerkki/:osaamismerkkiId(\\d+)?',
+          name: 'osaamismerkkiTiedot',
+          component: RouteOsaamismerkkiTiedot,
+          meta: {
+            resolve: {
+              cacheBy: ['osaamismerkkiId'],
+              async props(route) {
+                return {
+                  default: {
+                    osaamismerkkiStore: await OsaamismerkkiStore.create(route.params.osaamismerkkiId),
+                  },
+                };
+              },
             },
           },
-        },
+        }],
       }, {
         path: 'selaus/:koulutustyyppi',
         name: 'ammatillinenSelaus',

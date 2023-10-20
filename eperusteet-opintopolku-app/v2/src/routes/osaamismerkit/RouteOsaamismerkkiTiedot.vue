@@ -1,10 +1,12 @@
 <template>
-  <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
+  <EpHeader :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
     <template slot="header">
       {{ $kaanna(osaamismerkki.nimi) }}
     </template>
     <template slot="subheader">
-      {{ $kaanna(osaamismerkki.kategoria.nimi) }}
+      <div class="mt-3">
+        <span class="kategoria-nimi">{{ $kaanna(osaamismerkki.kategoria.nimi) }}</span>
+      </div>
     </template>
     <div class="d-flex flex-lg-row flex-column mt-5">
       <div class="m-3">
@@ -36,7 +38,7 @@
         </div>
       </div>
     </div>
-  </ep-header>
+  </EpHeader>
 </template>
 
 <script lang="ts">
@@ -103,6 +105,14 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile;
+
+.kategoria-nimi {
+  padding: 7px 15px;
+  background: $gray-lighten-6;
+  color: $black;
+  border-radius: 20px;
+  font-size: 15px;
+}
 
 .tile {
   color: #212529;
