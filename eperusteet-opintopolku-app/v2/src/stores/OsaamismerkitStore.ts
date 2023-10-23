@@ -1,12 +1,12 @@
-import { Osaamismerkit, OsaamismerkitQuery, OsaamismerkkiDto } from '@shared/api/eperusteet';
+import { Osaamismerkit, OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Debounced } from '@shared/utils/delay';
 import { computed, reactive } from '@vue/composition-api';
-import { OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
+import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
 import { Page } from '@shared/tyypit';
 
 export class OsaamismerkitStore {
   public state = reactive({
-    osaamismerkkiPage: null as Page<OsaamismerkkiDto> | null,
+    osaamismerkkiPage: null as Page<OsaamismerkkiBaseDto> | null,
     query: {} as OsaamismerkitQuery,
     isLoading: false,
     kokonaismaara: 0,

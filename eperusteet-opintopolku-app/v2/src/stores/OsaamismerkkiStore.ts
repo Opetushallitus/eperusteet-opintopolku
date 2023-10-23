@@ -1,9 +1,10 @@
-import { Osaamismerkit, OsaamismerkkiDto } from '@shared/api/eperusteet';
+import { Osaamismerkit } from '@shared/api/eperusteet';
 import { computed, reactive } from '@vue/composition-api';
+import { OsaamismerkkiBaseDto } from '@shared/generated/eperusteet';
 
 export class OsaamismerkkiStore {
   public state = reactive({
-    osaamismerkki: null as OsaamismerkkiDto | null,
+    osaamismerkki: null as OsaamismerkkiBaseDto | null,
   })
 
   public static async create(osaamismerkkiId: number) {
