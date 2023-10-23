@@ -2,32 +2,29 @@ import { Osaamismerkit, OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Debounced } from '@shared/utils/delay';
 import { computed, reactive } from '@vue/composition-api';
 import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
-import { Page } from '@shared/tyypit';
 
 export class OsaamismerkitStore {
   public state = reactive({
-    osaamismerkkiPage: null as Page<OsaamismerkkiBaseDto> | null,
+    osaamismerkit: null as OsaamismerkkiBaseDto[] | null,
     query: {} as OsaamismerkitQuery,
     isLoading: false,
-    kokonaismaara: 0,
     kategoriat: [] as OsaamismerkkiKategoriaDto[] | null,
   })
 
-  public readonly osaamismerkit = computed(() => this.state.osaamismerkkiPage?.data || null);
+  public readonly osaamismerkit = computed(() => this.state.osaamismerkit || null);
   public readonly options = computed(() => this.state.query);
   public readonly kategoriat = computed(() => this.state.kategoriat);
-  public readonly kokonaismaara = computed(() => this.state.osaamismerkkiPage?.kokonaismäärä);
 
   async init(query: OsaamismerkitQuery) {
     this.state.query = query;
-    this.state.osaamismerkkiPage = null;
+    this.state.osaamismerkit = null;
     await this.fetchKategoriat();
   }
 
   @Debounced(300)
   public async updateOsaamismerkkiQuery(query: OsaamismerkitQuery) {
-    this.state.osaamismerkkiPage = null;
-    this.state.osaamismerkkiPage = await this.fetchOsaamismerkitImpl(query);
+    this.state.osaamismerkit = null;
+    this.state.osaamismerkit = await this.fetchOsaamismerkitImpl(query);
   }
 
   private async fetchOsaamismerkitImpl(q: OsaamismerkitQuery) {

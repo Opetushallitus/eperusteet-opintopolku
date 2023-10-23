@@ -32,7 +32,7 @@
 
         <div class="osaamismerkki-container">
           <EpSpinner v-if="!osaamismerkit" />
-          <div v-else-if="kokonaismaara === 0">
+          <div v-else-if="osaamismerkitCount === 0">
             <div class="alert alert-info">
               {{ $t('ei-hakutuloksia') }}
             </div>
@@ -131,10 +131,6 @@ export default class RouteOsaamismerkit extends Vue {
     return liite ? 'data:' + liite.mime + ';base64,' + liite.binarydata : null;
   }
 
-  get kokonaismaara() {
-    return this.osaamismerkitStore.kokonaismaara.value;
-  }
-
   get osaamismerkit() {
     return _.chain(this.osaamismerkitStore.osaamismerkit.value)
       .map(osaamismerkki => ({
@@ -143,6 +139,10 @@ export default class RouteOsaamismerkit extends Vue {
       }))
       .groupBy('kategoria.id')
       .value();
+  }
+
+  get osaamismerkitCount() {
+    return this.osaamismerkitStore.osaamismerkit?.value?.length;
   }
 
   get koulutustyyppi() {
