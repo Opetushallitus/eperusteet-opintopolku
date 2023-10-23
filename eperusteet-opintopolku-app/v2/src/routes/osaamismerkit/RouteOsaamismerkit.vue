@@ -11,7 +11,7 @@
       <div class="osaamismerkit">
         <div class="d-flex flex-lg-row flex-column mb-4">
           <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-            <ep-search v-model="query.nimi"
+            <EpSearch v-model="query.nimi"
                        :max-width="true"
                        :sr-placeholder="$t('hae-osaamismerkkeja')"
                        :placeholder="$t('hae-osaamismerkkeja')"/>
@@ -42,7 +42,7 @@
               <div class="mb-2">
                 <h2>{{$kaanna(group[0].kategoria.nimi)}}</h2>
               </div>
-              <div class="d-flex flex-lg-row flex-column justify-content-start">
+              <div class="d-md-flex flex-wrap justify-content-start">
                 <div v-for="(osaamismerkki, idx) in group" :key="idx" class="mb-2">
                   <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
                     <div class="tile tile-background-shadow-selected shadow-tile d-flex">
