@@ -7,19 +7,12 @@ export class OsaamismerkitStore {
   public state = reactive({
     osaamismerkit: null as OsaamismerkkiBaseDto[] | null,
     query: {} as OsaamismerkitQuery,
-    isLoading: false,
     kategoriat: [] as OsaamismerkkiKategoriaDto[] | null,
   })
 
   public readonly osaamismerkit = computed(() => this.state.osaamismerkit || null);
   public readonly options = computed(() => this.state.query);
   public readonly kategoriat = computed(() => this.state.kategoriat);
-
-  async init(query: OsaamismerkitQuery) {
-    this.state.query = query;
-    this.state.osaamismerkit = null;
-    await this.fetchKategoriat();
-  }
 
   @Debounced(300)
   public async updateOsaamismerkkiQuery(query: OsaamismerkitQuery) {

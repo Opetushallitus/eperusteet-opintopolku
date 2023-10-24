@@ -28,7 +28,7 @@
                 <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
               </router-link>
             </div>
-            <div v-if="osaamismerkitStore">
+            <div v-if="showOsaamismerkkiTile">
               <router-link :to="{ name: 'osaamismerkit' }">
                 <OsaamismerkkiTile :koulutustyyppi="koulutustyyppi"></OsaamismerkkiTile>
               </router-link>
@@ -160,18 +160,23 @@ export default class RouteKooste extends Vue {
 
   private showEraantyneet: boolean = false;
 
+  async mounted() {
+    if (this.osaamismerkitStore) {
+      await this.osaamismerkitStore.updateOsaamismerkkiQuery({});
+    }
+  }
+
   @Watch('koulutustyyppi', { immediate: true })
   async fetch() {
     await this.tiedotteetStore?.fetch(this.perusteKoosteStore?.perusteJulkaisut);
   }
 
-  get murupolku(): Array<MurupolkuOsa> {
-    return [{
-      label: this.koulutustyyppi,
-      location: {
-        ...this.$route,
-      } as RawLocation,
-    }];
+  get osaamismerkkiCount() {
+    return this.osaamismerkitStore?.osaamismerkit?.value?.length || 0;
+  }
+
+  get showOsaamismerkkiTile() {
+    return this.osaamismerkkiCount > 0 && _.get(this.$route.params, 'koulutustyyppi') === 'vapaasivistystyo';
   }
 
   get koulutustyyppi() {
@@ -238,13 +243,6 @@ export default class RouteKooste extends Vue {
     this.showEraantyneet = !this.showEraantyneet;
   }
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t(this.koulutustyyppi),
-    };
-  }
-
   avaaTiedote(tiedote: TiedoteDto) {
     this.$router.push({
       name: 'uutinen',
@@ -262,6 +260,22 @@ export default class RouteKooste extends Vue {
         perusteId: ohje.id,
       },
     });
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t(this.koulutustyyppi),
+    };
+  }
+
+  get murupolku(): Array<MurupolkuOsa> {
+    return [{
+      label: this.koulutustyyppi,
+      location: {
+        ...this.$route,
+      } as RawLocation,
+    }];
   }
 }
 </script>

@@ -12,13 +12,11 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
-import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 @Component({
   components: {
     EpMaterialIcon,
-    EpVoimassaolo,
   },
 })
 export default class OsaamismerkkiTile extends Vue {
