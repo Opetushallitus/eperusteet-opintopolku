@@ -140,7 +140,7 @@ export default class Paikalliset extends Vue {
 
   get julkaistutPerusteet() {
     if (this.perusteKoosteStore.perusteJulkaisut) {
-      return _.chain(this.perusteKoosteStore.perusteJulkaisut)
+      return _.chain(this.perusteKoosteStore.perusteJulkaisut.value)
         .map(julkaistuPeruste => ({
           ...julkaistuPeruste,
           kaannettyNimi: this.$kaanna(julkaistuPeruste.nimi!),

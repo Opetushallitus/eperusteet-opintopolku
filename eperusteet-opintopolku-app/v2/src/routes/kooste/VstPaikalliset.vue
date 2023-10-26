@@ -176,7 +176,7 @@ export default class VstPaikalliset extends Vue {
 
   get julkaistutPerusteet() {
     if (this.perusteKoosteStore.perusteJulkaisut) {
-      return _.chain(this.perusteKoosteStore.perusteJulkaisut)
+      return _.chain(this.perusteKoosteStore.perusteJulkaisut.value)
         .filter(julkaistuPeruste => !isVstLukutaito(julkaistuPeruste.koulutustyyppi))
         .map(julkaistuPeruste => ({
           ...julkaistuPeruste,

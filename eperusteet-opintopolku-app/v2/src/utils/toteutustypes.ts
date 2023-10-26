@@ -9,10 +9,12 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
+import { VstPerusteKoosteStore } from '@/stores/VstPerusteKoosteStore';
 
 export const koostePerusteStore = {
+  'koulutustyyppi_10': (koulutustyyppi): any => new VstPerusteKoosteStore(koulutustyyppi),
   'default': (koulutustyyppi): any => new PerusteKoosteStore(koulutustyyppi),
-  'koulutustyyppi_muu': null,
+  'koulutustyyppi_muu': (koulutustyyppi): any => null,
 };
 
 export const koosteOpasStore = {
@@ -70,7 +72,7 @@ export const getKoostePaikallinenComponent = (koulutustyyppi) :any => {
 };
 
 export const getKoostePerusteStore = (koulutustyyppi): any => {
-  return koostePerusteStore[koulutustyyppi] !== undefined ? koostePerusteStore[koulutustyyppi] : koostePerusteStore['default'](koulutustyyppi);
+  return koostePerusteStore[koulutustyyppi] !== undefined ? koostePerusteStore[koulutustyyppi](koulutustyyppi) : koostePerusteStore['default'](koulutustyyppi);
 };
 
 export const getKoosteOpasStore = (koulutustyyppi): any => {

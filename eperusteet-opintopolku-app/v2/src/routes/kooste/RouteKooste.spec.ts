@@ -84,8 +84,8 @@ describe('RouteKooste', () => {
       },
     });
 
-    perusteKoosteStore.koulutustyyppi = 'koulutustyyppi_2';
-    perusteKoosteStore.perusteJulkaisut = [{
+    perusteKoosteStore.state.koulutustyyppi = 'koulutustyyppi_2';
+    perusteKoosteStore.state.perusteJulkaisut = [{
       nimi: {
         fi: 'peruste42',
       } as any,

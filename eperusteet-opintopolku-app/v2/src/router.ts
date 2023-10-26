@@ -238,7 +238,6 @@ export const router = new Router({
                   opasStore: getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                   tiedotteetStore: getKoosteTiedotteetStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
                   paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
-                  osaamismerkitStore: osaamismerkitStore,
                   paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),
                   kuvaus: getKoosteKuvaus(route.params.koulutustyyppi),
                   subheader: getKoosteSubheader(route.params.koulutustyyppi),
