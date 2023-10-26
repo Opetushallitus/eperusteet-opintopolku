@@ -1,9 +1,16 @@
 <template>
   <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column" >
     <div class="upper">
-      <div class="peruste-ikoni" :style="imgStyle">
-        <ep-hallitus-img v-if="isHallitus" class="img"/>
-        <ep-kirja-img v-else class="img"/>
+      <div class="peruste-ikoni">
+        <EpMaterialIcon v-if="isHallitus"
+                        icon-shape="outlined"
+                        :color="rgbColor"
+                        size="38px"
+                        class="img">account_balance</EpMaterialIcon>
+        <EpMaterialIcon v-else
+                        :color="rgbColor"
+                        size="38px"
+                        class="img">menu_book</EpMaterialIcon>
       </div>
       <div class="nimi">
         {{ $kaanna(julkaisu.nimi) }} <span v-if="julkaisu.laajuus">{{julkaisu.laajuus}} {{$t('osaamispiste')}}</span>
@@ -24,9 +31,8 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { isVstLukutaito, koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
-import EpHallitusImg from '@shared/components/EpImage/EpHallitusImg.vue';
-import EpKirjaImg from '@shared/components/EpImage/EpKirjaImg.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 interface PerusteJulkiData {
   nimi:{ [key: string]: string; };
@@ -38,8 +44,7 @@ interface PerusteJulkiData {
 
 @Component({
   components: {
-    EpHallitusImg,
-    EpKirjaImg,
+    EpMaterialIcon,
     EpVoimassaolo,
   },
 })
@@ -50,8 +55,8 @@ export default class PerusteTile extends Vue {
   @Prop({ required: false, type: String })
   private koulutustyyppi!: string;
 
-  get imgStyle() {
-    return 'fill: ' + rgb2string(koulutustyyppiThemeColor(this.koulutustyyppi));
+  get rgbColor() {
+    return rgb2string(koulutustyyppiThemeColor(this.koulutustyyppi));
   }
 
   get isHallitus() {
@@ -101,9 +106,9 @@ export default class PerusteTile extends Vue {
     text-align: center;
 
     .img {
-      margin: 15px;
-      height: 32px;
-      width: 32px;
+      margin: 12px;
+      height: 38px;
+      width: 38px;
     }
   }
 
