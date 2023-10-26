@@ -1,6 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteKooste from './RouteKooste.vue';
-import { perusteKoosteStoreMock } from '@/storeMocks';
 import { mock, mocks, stubs } from '@shared/utils/jestutils';
 import * as _ from 'lodash';
 import { OpasStore } from '@/stores/OpasStore';
@@ -9,6 +8,7 @@ import { computed } from '@vue/composition-api';
 import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 import JotpaPaikalliset from '@/routes/kooste/JotpaPaikalliset.vue';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
+import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
@@ -32,7 +32,19 @@ describe('RouteKooste', () => {
   }];
 
   test('Renders', async () => {
-    const perusteKoosteStore = perusteKoosteStoreMock();
+    const perusteKoosteStore: IPerusteKoosteStore = {
+      koulutustyyppi: computed(() => 'koulutustyyppi_2'),
+      perusteJulkaisut: computed(() => [{
+        nimi: {
+          fi: 'peruste42',
+        } as any,
+        peruste: {
+          diaarinumero: '1234-1234',
+          id: 42,
+        },
+        voimassaoloAlkaa: 123456,
+      }]),
+    };
 
     const opasStore = mock(OpasStore);
     opasStore.state.oppaat = [{
@@ -83,18 +95,6 @@ describe('RouteKooste', () => {
         $route,
       },
     });
-
-    perusteKoosteStore.koulutustyyppi = 'koulutustyyppi_2';
-    perusteKoosteStore.perusteJulkaisut = [{
-      nimi: {
-        fi: 'peruste42',
-      } as any,
-      peruste: {
-        diaarinumero: '1234-1234',
-        id: 42,
-      },
-      voimassaoloAlkaa: 123456,
-    }] as any;
 
     await localVue.nextTick();
     expect(_.map((wrapper.vm as any).tiedotteet, 'id')).toEqual([200, 100]);

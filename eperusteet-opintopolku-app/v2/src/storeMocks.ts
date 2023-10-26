@@ -21,7 +21,7 @@ export const perusteKoosteStoreMock = (config: Partial<PerusteKoosteStore> = {})
     perusteId: null,
     async reload() {},
     constructor(koulutustyyppi: string) {
-      this.koulutustyyppi = koulutustyyppi;
+      this.state.koulutustyyppi = koulutustyyppi;
     },
     ...config,
   } as PerusteKoosteStore);

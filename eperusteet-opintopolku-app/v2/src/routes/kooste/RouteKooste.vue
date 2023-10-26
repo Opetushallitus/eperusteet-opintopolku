@@ -28,6 +28,11 @@
                 <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
               </router-link>
             </div>
+            <div v-for="(route, idx) in muutTilet" :key="'muut' + idx">
+              <router-link :to="route.route">
+                <component :is="route.komponentti" :koulutustyyppi="koulutustyyppi"/>
+              </router-link>
+            </div>
           </div>
           <ep-spinner v-else />
         </b-col>
@@ -94,12 +99,12 @@
 
 <script lang="ts">
 import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
-import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import Paikalliset from './Paikalliset.vue';
 import PerusteTile from './PerusteTile.vue';
+import OsaamismerkkiTile from '../osaamismerkit/OsaamismerkkiTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import { Meta } from '@shared/utils/decorators';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
@@ -110,6 +115,7 @@ import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulki
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
+import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
 
 @Component({
   components: {
@@ -118,13 +124,14 @@ import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
     Paikalliset,
     EpExternalLink,
     PerusteTile,
+    OsaamismerkkiTile,
     EpJulkiLista,
     EpSpinnerSlot,
   },
 })
 export default class RouteKooste extends Vue {
   @Prop({ required: false })
-  private perusteKoosteStore!: PerusteKoosteStore;
+  private perusteKoosteStore!: IPerusteKoosteStore;
 
   @Prop({ required: true })
   private paikallinenStore!: IPaikallinenStore;
@@ -154,17 +161,8 @@ export default class RouteKooste extends Vue {
     await this.tiedotteetStore?.fetch(this.perusteKoosteStore?.perusteJulkaisut);
   }
 
-  get murupolku(): Array<MurupolkuOsa> {
-    return [{
-      label: this.koulutustyyppi,
-      location: {
-        ...this.$route,
-      } as RawLocation,
-    }];
-  }
-
   get koulutustyyppi() {
-    return this.perusteKoosteStore?.koulutustyyppi || _.get(this.$route.params, 'koulutustyyppi');
+    return this.perusteKoosteStore?.koulutustyyppi?.value || _.get(this.$route.params, 'koulutustyyppi');
   }
 
   get tiedotteet() {
@@ -197,7 +195,7 @@ export default class RouteKooste extends Vue {
     }
 
     if (this.perusteKoosteStore?.perusteJulkaisut) {
-      return _.chain(this.perusteKoosteStore.perusteJulkaisut)
+      return _.chain(this.perusteKoosteStore.perusteJulkaisut.value)
         .map(julkaisu => ({
           ...julkaisu,
           perusteId: _.toString(julkaisu.id),
@@ -223,15 +221,12 @@ export default class RouteKooste extends Vue {
     return _.filter(this.julkaistutPerusteet, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
   }
 
-  toggleEraantyneet() {
-    this.showEraantyneet = !this.showEraantyneet;
+  get muutTilet() {
+    return this.perusteKoosteStore.muutTilet?.value;
   }
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t(this.koulutustyyppi),
-    };
+  toggleEraantyneet() {
+    this.showEraantyneet = !this.showEraantyneet;
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -251,6 +246,22 @@ export default class RouteKooste extends Vue {
         perusteId: ohje.id,
       },
     });
+  }
+
+  @Meta
+  getMetaInfo() {
+    return {
+      title: this.$t(this.koulutustyyppi),
+    };
+  }
+
+  get murupolku(): Array<MurupolkuOsa> {
+    return [{
+      label: this.koulutustyyppi,
+      location: {
+        ...this.$route,
+      } as RawLocation,
+    }];
   }
 }
 </script>
