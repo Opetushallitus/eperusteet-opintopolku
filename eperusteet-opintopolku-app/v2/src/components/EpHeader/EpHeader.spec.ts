@@ -36,13 +36,13 @@ describe('EpHeader', () => {
       },
     });
 
-    expect(wrapper.html()).toContain('eperusteet');
+    expect(wrapper.html()).toContain('home');
 
     propsData.murupolku = [{
       label: 'parent-jolla-todella-pitka-teksti',
       location: { name: 'root' },
     }];
-    expect(wrapper.html()).toContain('eperusteet');
+    expect(wrapper.html()).toContain('home');
     expect(wrapper.html()).toContain('Parent jolla todella pitkä teksti');
 
     propsData.murupolku = [
@@ -53,7 +53,7 @@ describe('EpHeader', () => {
       },
     ];
 
-    expect(wrapper.html()).toContain('eperusteet');
+    expect(wrapper.html()).toContain('home');
     expect(wrapper.html()).toContain('Parent jolla todella pitkä teksti');
     expect(wrapper.html()).toContain('Uusi alikappale');
   });

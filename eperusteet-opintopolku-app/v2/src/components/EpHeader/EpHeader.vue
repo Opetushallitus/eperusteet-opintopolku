@@ -79,7 +79,7 @@ export default class EpHeader extends Vue {
   }
 
   get routeKoulutustyyppi() {
-    return this.$route.params?.koulutustyyppi;
+    return this.$route?.params?.koulutustyyppi;
   }
 
   get bgColor() {
