@@ -72,12 +72,10 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
-import { MurupolkuOsa } from '@/tyypit';
-import { RawLocation } from 'vue-router';
 import _ from 'lodash';
 import { OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
-import {murupolkuOsaamismerkkiRoot} from "@/utils/murupolku";
+import { murupolkuOsaamismerkkiRoot } from '@/utils/murupolku';
 
 @Component({
   components: {

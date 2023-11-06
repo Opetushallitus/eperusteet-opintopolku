@@ -44,12 +44,10 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
-import { MurupolkuOsa } from '@/tyypit';
-import { RawLocation } from 'vue-router';
 import _ from 'lodash';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
 import { Meta } from '@shared/utils/decorators';
-import {murupolkuOsaamismerkkiTiedot} from "@/utils/murupolku";
+import { murupolkuOsaamismerkkiTiedot } from '@/utils/murupolku';
 
 @Component({
   components: {
@@ -76,7 +74,7 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
     return this.kategoria ? 'data:' + this.kategoria.liite?.mime + ';base64,' + this.kategoria.liite?.binarydata : null;
   }
 
-  get murupolku(): Array<MurupolkuOsa> {
+  get murupolku() {
     return murupolkuOsaamismerkkiTiedot(this.koulutustyyppi, this.osaamismerkki);
   }
 
