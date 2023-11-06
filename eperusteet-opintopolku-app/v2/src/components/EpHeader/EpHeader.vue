@@ -8,7 +8,7 @@
              <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
                <li class="breadcrumb-item">
                  <router-link class="breadcrumb-home" :to="{ name: 'root' }">
-                   {{ $t('eperusteet') }}
+                   <EpMaterialIcon size="20px">home</EpMaterialIcon>
                  </router-link>
                </li>
                <li class="breadcrumb-item"
@@ -42,11 +42,21 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@shared/utils/perusteet';
+import {
+  koulutustyyppiTheme,
+  koulutustyyppiThemeColor,
+  calculateVisibleColor,
+  kouluturtyyppiRyhmat,
+} from '@shared/utils/perusteet';
 import { MurupolkuOsa } from '@/tyypit';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import _ from 'lodash';
 
-@Component
+@Component({
+  components: {
+    EpMaterialIcon,
+  },
+})
 export default class EpHeader extends Vue {
   @Prop({ required: true })
   private murupolku!: MurupolkuOsa[];
@@ -58,20 +68,27 @@ export default class EpHeader extends Vue {
   private tyyppi!: string;
 
   get murupolkuFiltered() {
-    return _.filter(this.murupolku, (muru) => muru.label);
+    return _.filter(this.murupolku, (muru) => muru.label && muru.type !== 'root');
   }
 
   get theme() {
     if (this.koulutustyyppi) {
       return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
     }
+    else if (this.routeKoulutustyyppi && _.includes(kouluturtyyppiRyhmat, this.routeKoulutustyyppi)) {
+      return 'koulutustyyppi-' + this.routeKoulutustyyppi;
+    }
     if (this.tyyppi) {
       return 'tyyppi-' + this.tyyppi;
     }
   }
 
+  get routeKoulutustyyppi() {
+    return this.$route?.params?.koulutustyyppi;
+  }
+
   get bgColor() {
-    return koulutustyyppiThemeColor(this.koulutustyyppi || this.tyyppi);
+    return koulutustyyppiThemeColor(this.koulutustyyppi || this.tyyppi || this.routeKoulutustyyppi);
   }
 
   get textColor() {
@@ -167,6 +184,7 @@ export default class EpHeader extends Vue {
 
   // Murupolku
   nav ol.breadcrumb {
+    font-size: 14px;
     background: none;
     padding-left: 0;
     padding-right: 0;
@@ -174,10 +192,12 @@ export default class EpHeader extends Vue {
 
     li {
       font-weight: 600;
+      align-self: end
     }
 
     li:last-child {
       font-weight: 400;
+      align-self: end
     }
 
     &.black /deep/ li, &.black /deep/ li::before, &.black /deep/ li a {
@@ -189,6 +209,20 @@ export default class EpHeader extends Vue {
     }
     .router-link-exact-active.router-link-active {
       cursor: auto;
+    }
+
+    @media (max-width: 991.98px) {
+      font-size: 16px;
+      display: block;
+
+      .breadcrumb-item {
+        padding-left: 0;
+        content: '';
+        margin-bottom: 10px;
+        &::before {
+          content: '';
+        }
+      }
     }
   }
 

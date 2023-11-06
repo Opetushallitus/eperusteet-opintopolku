@@ -4,4 +4,5 @@ import { RawLocation } from 'vue-router';
 export interface MurupolkuOsa {
   label: string | object;
   location?: RawLocation;
+  type?: string;
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="tile tile-background-shadow-selected shadow-tile d-flex flex-column">
     <div class="ikoni">
-      <EpMaterialIcon class="img" :color="rgbColor" size="46px">emoji_events</EpMaterialIcon>
+      <EpMaterialIcon class="img" :color="rgbColor" size="46px">star</EpMaterialIcon>
     </div>
     <div class="nimi">
       {{ $t('kansalliset-osaamismerkit')}}
