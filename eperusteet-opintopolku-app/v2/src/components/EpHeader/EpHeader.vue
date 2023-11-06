@@ -8,7 +8,7 @@
              <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
                <li class="breadcrumb-item">
                  <router-link class="breadcrumb-home" :to="{ name: 'root' }">
-                   <EpMaterialIcon>home</EpMaterialIcon>
+                   <EpMaterialIcon size="20px">home</EpMaterialIcon>
                  </router-link>
                </li>
                <li class="breadcrumb-item"
@@ -179,6 +179,7 @@ export default class EpHeader extends Vue {
 
   // Murupolku
   nav ol.breadcrumb {
+    font-size: 14px;
     background: none;
     padding-left: 0;
     padding-right: 0;
@@ -203,6 +204,20 @@ export default class EpHeader extends Vue {
     }
     .router-link-exact-active.router-link-active {
       cursor: auto;
+    }
+
+    @media (max-width: 991.98px) {
+      font-size: 16px;
+      display: block;
+
+      .breadcrumb-item {
+        padding-left: 0;
+        content: '';
+        margin-bottom: 10px;
+        &::before {
+          content: '';
+        }
+      }
     }
   }
 
