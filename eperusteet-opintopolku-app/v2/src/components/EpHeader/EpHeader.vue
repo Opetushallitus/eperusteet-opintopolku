@@ -8,7 +8,7 @@
              <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
                <li class="breadcrumb-item">
                  <router-link class="breadcrumb-home" :to="{ name: 'root' }">
-                   {{ $t('eperusteet') }}
+                   <EpMaterialIcon>home</EpMaterialIcon>
                  </router-link>
                </li>
                <li class="breadcrumb-item"
@@ -44,9 +44,14 @@
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@shared/utils/perusteet';
 import { MurupolkuOsa } from '@/tyypit';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import _ from 'lodash';
 
-@Component
+@Component({
+  components: {
+    EpMaterialIcon,
+  },
+})
 export default class EpHeader extends Vue {
   @Prop({ required: true })
   private murupolku!: MurupolkuOsa[];
@@ -58,7 +63,7 @@ export default class EpHeader extends Vue {
   private tyyppi!: string;
 
   get murupolkuFiltered() {
-    return _.filter(this.murupolku, (muru) => muru.label);
+    return _.filter(this.murupolku, (muru) => muru.label && muru.type !== 'root');
   }
 
   get theme() {
@@ -68,10 +73,17 @@ export default class EpHeader extends Vue {
     if (this.tyyppi) {
       return 'tyyppi-' + this.tyyppi;
     }
+    if (this.routeKoulutustyyppi) {
+      return 'koulutustyyppi-' + this.routeKoulutustyyppi;
+    }
+  }
+
+  get routeKoulutustyyppi() {
+    return this.$route.params?.koulutustyyppi;
   }
 
   get bgColor() {
-    return koulutustyyppiThemeColor(this.koulutustyyppi || this.tyyppi);
+    return koulutustyyppiThemeColor(this.koulutustyyppi || this.tyyppi || this.routeKoulutustyyppi);
   }
 
   get textColor() {
@@ -174,10 +186,12 @@ export default class EpHeader extends Vue {
 
     li {
       font-weight: 600;
+      align-self: end
     }
 
     li:last-child {
       font-weight: 400;
+      align-self: end
     }
 
     &.black /deep/ li, &.black /deep/ li::before, &.black /deep/ li a {

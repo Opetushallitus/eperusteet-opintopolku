@@ -150,6 +150,7 @@ export default class RouteAmmatillinenSelaus extends Vue {
     case 'ammatillinenKoulutusviennit': return 'koulutusviennit';
     case 'ammatillinenTyopajat': return 'selaa-tyopajoja';
     case 'ammatillinenValmisteillaOlevat': return 'valmisteilla-olevat-perusteet';
+    case 'ammatillinenMaaraykset': return 'maaraykset';
     default: return 'ammatillinen-koulutus';
     }
   }

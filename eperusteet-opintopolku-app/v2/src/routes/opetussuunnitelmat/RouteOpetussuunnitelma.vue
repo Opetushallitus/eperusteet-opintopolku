@@ -38,9 +38,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, Watch, ProvideReactive } from 'vue-property-decorator';
 import { Meta } from '@shared/utils/decorators';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { NavigationNode, traverseNavigation } from '@shared/utils/NavigationBuilder';
-
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
@@ -50,6 +48,7 @@ import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNoti
 import { OpetussuunnitelmaKevytDtoTilaEnum } from '@shared/api/ylops';
 import * as _ from 'lodash';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
+import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 
 @Component({
   components: {
@@ -71,9 +70,8 @@ export default class RouteOpetussuunnitelma extends Vue {
 
   get koulutustyyppi() {
     if (this.opetussuunnitelmaDataStore?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
-      return 'muukoulutus';
+      return 'koulutustyyppi_muu';
     }
-
     return this.opetussuunnitelmaDataStore.koulutustyyppi;
   }
 
@@ -91,10 +89,9 @@ export default class RouteOpetussuunnitelma extends Vue {
 
   get murupolku() {
     if (this.opetussuunnitelma && this.current) {
-      return [{
-        label: this.koulutustyyppi,
-      },
-      ...this.current.path,
+      return [
+        ...createOpetussuunnitelmaMurupolku(this.opetussuunnitelma, this.koulutustyyppi),
+        ...this.current.path,
       ];
     }
     return [];

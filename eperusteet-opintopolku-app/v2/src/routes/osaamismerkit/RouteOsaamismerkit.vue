@@ -77,6 +77,7 @@ import { RawLocation } from 'vue-router';
 import _ from 'lodash';
 import { OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
+import {murupolkuOsaamismerkkiRoot} from "@/utils/murupolku";
 
 @Component({
   components: {
@@ -170,18 +171,8 @@ export default class RouteOsaamismerkit extends Vue {
     ];
   }
 
-  get murupolku(): Array<MurupolkuOsa> {
-    return [{
-      label: this.koulutustyyppi,
-      location: {
-        ...this.$route,
-      } as RawLocation,
-    }, {
-      label: 'kansalliset-osaamismerkit',
-      location: {
-        name: 'osaamismerkit',
-      },
-    }];
+  get murupolku() {
+    return murupolkuOsaamismerkkiRoot(this.koulutustyyppi);
   }
 
   @Meta

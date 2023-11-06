@@ -93,6 +93,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
+import { createPerusteMurupolku } from '@/utils/murupolku';
 
 @Component({
   components: {
@@ -145,10 +146,15 @@ export default class RoutePeruste extends Vue {
   get murupolku() {
     if (this.peruste && this.current) {
       return [
+        ...createPerusteMurupolku(this.peruste, this.koulutustyyppi, this.routeKoulutustyyppi),
         ...this.current.path,
       ];
     }
     return [];
+  }
+
+  get routeKoulutustyyppi() {
+    return this.$route.params?.koulutustyyppi;
   }
 
   get koulutustyyppi() {

@@ -2,7 +2,7 @@
   <div>
     <ep-spinner v-if="!koulutustoimija" />
     <div v-else>
-      <ep-header :murupolku="murupolku" :koulutustyyppi="'ammatillinen'">
+      <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
         <template slot="header">
           {{ $kaanna(this.koulutustoimija.nimi) }}
         </template>
@@ -95,6 +95,7 @@ import { Kielet } from '@shared/stores/kieli';
 import * as _ from 'lodash';
 import OpetussuunnitelmaTile from '@/routes/kooste/OpetussuunnitelmaTile.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import { murupolkuKoulutuksenJarjestaja } from '@/utils/murupolku';
 
 @Component({
   components: {
@@ -121,6 +122,10 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
 
   private perPage = 5;
 
+  get koulutustyyppi() {
+    return 'ammatillinen';
+  }
+
   get koulutustoimija() {
     return this.koulutuksenJarjestajaStore.koulutustoimija.value;
   }
@@ -133,7 +138,7 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
           route: { name: 'toteutussuunnitelma',
             params: {
               toteutussuunnitelmaId: _.toString(yhteinenOsuus.id),
-              koulutustyyppi: 'ammatillinen',
+              koulutustyyppi: this.koulutustyyppi,
             },
           },
         };
@@ -149,7 +154,7 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
           route: {
             name: 'toteutussuunnitelma',
             params: { toteutussuunnitelmaId: _.toString(toteutussuunnitelma.id),
-              koulutustyyppi: 'ammatillinen',
+              koulutustyyppi: this.koulutustyyppi,
             },
           },
         };
@@ -192,22 +197,7 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
   }
 
   get murupolku() {
-    return [{
-      label: 'ammatillinen-koulutus',
-      location: {
-        name: 'ammatillinenSelaus',
-      },
-    },
-    {
-      label: !this.koulutustoimija?.organisaatioRyhma ? 'koulutuksen-jarjestajat' : 'tyopajatoimija',
-      location: {
-        name: 'ammatillinenKoulutuksenjarjestajat',
-      },
-    },
-    {
-      label: this.koulutustoimija!.nimi,
-    },
-    ];
+    return murupolkuKoulutuksenJarjestaja(this.koulutustyyppi, this.koulutustoimija);
   }
 
   @Meta

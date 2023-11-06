@@ -242,7 +242,6 @@ export default class RouteKooste extends Vue {
     this.$router.push({
       name: 'peruste',
       params: {
-        koulutustyyppi: 'opas',
         perusteId: ohje.id,
       },
     });

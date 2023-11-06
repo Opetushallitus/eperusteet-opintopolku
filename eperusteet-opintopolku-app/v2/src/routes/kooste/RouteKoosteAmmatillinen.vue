@@ -76,7 +76,6 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import PerusteTile from './PerusteTile.vue';
-import { MurupolkuOsa } from '@/tyypit';
 import * as _ from 'lodash';
 import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
@@ -87,6 +86,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import { Meta } from '@shared/utils/decorators';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import { murupolkuAmmatillinenRoot } from '@/utils/murupolku';
 
 @Component({
   components: {
@@ -109,18 +109,16 @@ export default class RouteKoosteAmmatillinen extends Vue {
     return 'ammatillinen';
   }
 
-  get murupolku(): Array<MurupolkuOsa> {
-    return [{
-      label: 'ammatillinen',
-      location: {
-        ...this.$route,
-      } as RawLocation,
-    }, {
-      label: this.peruste!.nimi!,
-      location: {
-        ...this.$route,
-      } as RawLocation,
-    }];
+  get murupolku() {
+    return [
+      murupolkuAmmatillinenRoot(this.koulutustyyppi),
+      {
+        label: this.peruste!.nimi!,
+        location: {
+          ...this.$route,
+        } as RawLocation,
+      },
+    ];
   }
 
   get tiedotteet() {
