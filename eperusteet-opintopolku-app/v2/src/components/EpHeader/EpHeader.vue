@@ -42,7 +42,12 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, koulutustyyppiThemeColor, calculateVisibleColor } from '@shared/utils/perusteet';
+import {
+  koulutustyyppiTheme,
+  koulutustyyppiThemeColor,
+  calculateVisibleColor,
+  kouluturtyyppiRyhmat,
+} from '@shared/utils/perusteet';
 import { MurupolkuOsa } from '@/tyypit';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import _ from 'lodash';
@@ -70,11 +75,11 @@ export default class EpHeader extends Vue {
     if (this.koulutustyyppi) {
       return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
     }
+    else if (this.routeKoulutustyyppi && _.includes(kouluturtyyppiRyhmat, this.routeKoulutustyyppi)) {
+      return 'koulutustyyppi-' + this.routeKoulutustyyppi;
+    }
     if (this.tyyppi) {
       return 'tyyppi-' + this.tyyppi;
-    }
-    if (this.routeKoulutustyyppi) {
-      return 'koulutustyyppi-' + this.routeKoulutustyyppi;
     }
   }
 

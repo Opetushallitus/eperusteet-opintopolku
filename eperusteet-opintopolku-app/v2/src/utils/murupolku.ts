@@ -27,7 +27,7 @@ export function createPerusteMurupolku(peruste, koulutustyyppi, routeKoulutustyy
   }
   let polut: any = [];
   polut.push(murupolkuPerusteRoot(koulutustyyppi, routeKoulutustyyppi));
-  polut.push(murupolkuPerusteTiedot(peruste, koulutustyyppi ? koulutustyypinRyhma(koulutustyyppi) : routeKoulutustyyppi));
+  polut.push(murupolkuPerusteTiedot(peruste, routeKoulutustyyppi));
   return polut;
 }
 
