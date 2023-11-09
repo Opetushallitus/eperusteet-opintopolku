@@ -1,12 +1,12 @@
 <template>
   <ep-header tyyppi="maarayskokoelma" :murupolku="murupolku">
     <template slot="header">
-      {{ $t('route-maarayskokoelma') }}
+      {{ $t('opetushallituksen-maaraykset') }}
     </template>
 
     <div class="row ml-0 mt-4 mb-0">
 
-      <b-form-group :label="$t('hae')" class="col-lg-6 col-md-6 mb-1">
+      <b-form-group :label="$t('hae')" class="col-lg-5 col-md-6 mb-1">
         <ep-search v-model="query.nimi" :placeholder="$t('hae-maarayksia')"/>
       </b-form-group>
 
@@ -26,21 +26,8 @@
         </EpMultiSelect>
       </b-form-group>
 
-      <b-form-group :label="$t('koulutus-tai-tutkinto')" class="col-lg-3 col-md-6 mb-1">
-        <EpMultiSelect
-            :multiple="true"
-            :is-editing="true"
-            :options="koulutustyyppiVaihtoehdot"
-            v-model="query.koulutustyypit"
-            :placeholder="$t('kaikki')"
-            :search-identity="searchIdentity">
-          <template slot="option" slot-scope="{ option }">
-            {{ $t(option) }}
-          </template>
-          <template slot="tag" slot-scope="{ option }">
-            <div>{{ $t(option) }}</div>
-          </template>
-        </EpMultiSelect>
+      <b-form-group :label="$t('koulutus-tai-tutkinto')" class="col-lg-4 col-md-6 mb-1">
+        <KoulutustyyppiSelect v-if="koulutustyyppiVaihtoehdot" :isEditing="true" v-model="query.koulutustyypit" :koulutustyypit="koulutustyyppiVaihtoehdot" />
       </b-form-group>
     </div>
 
@@ -48,7 +35,7 @@
 
     <ep-spinner v-if="!maaraykset" />
 
-    <div v-else-if="maaraykset.length === 0">
+    <div class="mt-4" v-else-if="maaraykset.length === 0">
       {{$t('ei-maarayksia')}}
     </div>
 
@@ -101,6 +88,7 @@ import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
+import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
 
 @Component({
   components: {
@@ -114,10 +102,11 @@ import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vu
     EpVoimassaolo,
     EpButton,
     EpMaterialIcon,
+    KoulutustyyppiSelect,
   },
 })
 export default class RouteMaarayskokoelma extends Vue {
-  private maarayksetStore: MaarayksetStore = new MaarayksetStore();
+  private maarayksetStore: MaarayksetStore | null = null;
 
   private perPage = 10;
   private sivu = 1;
@@ -129,9 +118,15 @@ export default class RouteMaarayskokoelma extends Vue {
     jarjestysTapa: 'voimassaoloAlkaa',
     jarjestys: 'DESC',
     koulutustyypit: [],
-  }
+    tyyppi: null,
+  } as any;
 
   async mounted() {
+    if (this.$route.query.tyyppi) {
+      this.query.tyyppi = this.$route.query.tyyppi;
+    }
+
+    this.maarayksetStore = new MaarayksetStore();
     await this.maarayksetStore.init();
     await this.fetch();
   }
@@ -143,13 +138,15 @@ export default class RouteMaarayskokoelma extends Vue {
 
   @Watch('query', { deep: true })
   async queryChange() {
-    this.sivu = 1;
-    await this.fetch();
+    if (this.maarayksetStore) {
+      this.sivu = 1;
+      await this.fetch();
+    }
   }
 
   @Debounced(300)
   async fetch() {
-    await this.maarayksetStore.fetch(
+    await this.maarayksetStore?.fetch(
       {
         ...this.query,
         kieli: this.kieli,
@@ -158,11 +155,11 @@ export default class RouteMaarayskokoelma extends Vue {
   }
 
   get maaraykset() {
-    return this.maarayksetStore.maaraykset.value?.data;
+    return this.maarayksetStore?.maaraykset.value?.data;
   }
 
   get maarayksetCount() {
-    return this.maarayksetStore.maaraykset.value?.kokonaismäärä;
+    return this.maarayksetStore?.maaraykset.value?.kokonaismäärä;
   }
 
   @Meta
@@ -190,7 +187,7 @@ export default class RouteMaarayskokoelma extends Vue {
   }
 
   get koulutustyyppiVaihtoehdot() {
-    return this.maarayksetStore.koulutustyypit.value;
+    return this.maarayksetStore?.koulutustyypit.value;
   }
 
   get kuva() {

@@ -15,7 +15,6 @@ import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/Route
 import RouteAmmatillinenValmisteillaOlevat from '@/routes/ammatillinen/RouteAmmatillinenValmisteillaOlevat.vue';
 import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
 import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';
-import RouteAmmatillinenMaaraykset from '@/routes/ammatillinen/RouteAmmatillinenMaaraykset.vue';
 import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
 import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
@@ -103,7 +102,6 @@ import {
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
-import { AmmatillisetMaarayksetStore } from './stores/AmmatillisetMaarayksetStore';
 import RouteKotoLaajaAlainenOsaaminen
   from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
@@ -324,21 +322,6 @@ export const router = new Router({
             component: RouteAmmatillinenValmisteillaOlevat,
             name: 'ammatillinenValmisteillaOlevat',
             props: { valmisteillaOlevatStore },
-          }, {
-            path: 'maaraykset',
-            component: RouteAmmatillinenMaaraykset,
-            name: 'ammatillinenMaaraykset',
-            meta: {
-              resolve: {
-                async props(route) {
-                  return {
-                    default: {
-                      maarayksetStore: new AmmatillisetMaarayksetStore(),
-                    },
-                  };
-                },
-              },
-            },
           },
         ],
       }, {

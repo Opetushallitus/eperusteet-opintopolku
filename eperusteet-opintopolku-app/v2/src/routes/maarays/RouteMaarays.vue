@@ -37,7 +37,7 @@
           {{$sd(maarays.voimassaoloAlkaa)}} <EpVoimassaolo :voimassaolo="maarays"/>
         </ep-form-content>
 
-        <ep-form-content name="maarays-annettu" headerType="h3" headerClass="h6">
+        <ep-form-content name="maarayksen-paatospaivamaara" headerType="h3" headerClass="h6">
           {{$sd(maarays.maarayspvm)}}
         </ep-form-content>
 
@@ -45,7 +45,13 @@
           {{ maarays.diaarinumero }}
         </ep-form-content>
 
-        <ep-form-content name="koulutustyyppi" headerType="h3" headerClass="h6">
+        <ep-form-content v-if="peruste" name="peruste" headerType="h3" headerClass="h6">
+          <router-link :to="perusteRoute">
+            {{$kaanna(peruste.nimi)}}
+          </router-link>
+        </ep-form-content>
+
+        <ep-form-content name="koulutus-tai-tutkinto" headerType="h3" headerClass="h6">
           <KoulutustyyppiSelect v-for="koulutustyyppi in maarays.koulutustyypit" :key="koulutustyyppi" :value="koulutustyyppi" nocolor/>
         </ep-form-content>
 
@@ -57,6 +63,8 @@
           <router-link v-for="korvattava in maarays.korvattavatMaaraykset" :key="'korvaa'+korvattava.id" :to="{name: 'maarays', params: {maaraysId: korvattava.id}}" class="d-block">
             {{ $kaanna(korvattava.nimi) }} ({{korvattava.diaarinumero}})
           </router-link>
+
+          <div v-if="maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset.length === 0">{{$t('maaraysta-ei-loydy-maarayskokoelmasta')}}</div>
         </ep-form-content>
 
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
@@ -89,6 +97,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import { Meta } from '@shared/utils/decorators';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
+import { koulutustyyppiTheme } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -199,6 +208,18 @@ export default class RouteMaarays extends Vue {
 
     if (this.maarays?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.KORVAA) {
       return 'korvaa-maarayksen';
+    }
+  }
+
+  get perusteRoute() {
+    if (this.peruste) {
+      return {
+        name: 'peruste',
+        params: {
+          koulutustyyppi: koulutustyyppiTheme(this.peruste.koulutustyyppi!),
+          perusteId: _.toString(this.peruste.id),
+        },
+      };
     }
   }
 }
