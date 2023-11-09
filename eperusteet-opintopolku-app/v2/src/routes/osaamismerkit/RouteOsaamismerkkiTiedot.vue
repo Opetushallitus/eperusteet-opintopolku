@@ -20,7 +20,13 @@
         </div>
       </div>
       <div class="m-3">
-        <div>
+        <div class="mb-2">
+          <strong>{{$t('kuvaus')}}</strong>
+          <div class="mt-1">
+            <span>{{ $kaanna(osaamismerkki.kuvaus) }}</span>
+          </div>
+        </div>
+        <div class="mb-2">
           <strong>{{$t('osaamistavoitteet')}}</strong>
           <ul class="mt-1">
             <li v-for="(tavoite, index) in osaamismerkki.osaamistavoitteet" :key="'tavoite'+index">

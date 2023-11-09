@@ -39,8 +39,11 @@
           </div>
           <div v-else>
             <div v-for="(group, index) in osaamismerkit" :key="index" class="mb-4">
-              <div class="mb-2">
+              <div class="mb-4">
                 <h2>{{$kaanna(group[0].kategoria.nimi)}}</h2>
+              </div>
+              <div class="mb-4">
+                {{$kaanna(group[0].kategoria.kuvaus)}}
               </div>
               <div class="d-md-flex flex-wrap justify-content-start">
                 <div v-for="(osaamismerkki, idx) in group" :key="idx" class="mb-2">
@@ -49,7 +52,7 @@
                       <div>
                         <img :src="osaamismerkki.image" width="40" height="40">
                       </div>
-                      <div>
+                      <div class="ml-3">
                         <span class="nimi">{{ $kaanna(osaamismerkki.nimi) }}</span>
                       </div>
                     </div>
@@ -215,7 +218,6 @@ export default class RouteOsaamismerkit extends Vue {
   .nimi {
     font-size: 18px;
     font-weight: 600;
-    margin-left: 15px;
   }
 
   ::v-deep .filter {
