@@ -20,7 +20,13 @@
         </div>
       </div>
       <div class="m-3">
-        <div>
+        <div class="mb-2">
+          <strong>{{$t('kuvaus')}}</strong>
+          <div class="mt-1">
+            <span>{{ $kaanna(osaamismerkki.kuvaus) }}</span>
+          </div>
+        </div>
+        <div class="mb-2">
           <strong>{{$t('osaamistavoitteet')}}</strong>
           <ul class="mt-1">
             <li v-for="(tavoite, index) in osaamismerkki.osaamistavoitteet" :key="'tavoite'+index">
@@ -107,10 +113,9 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
   border-radius: 10px;
   border: 1px solid #E7E7E7;
   width: 320px;
-  height: 320px;
+  height: 350px;
   padding: 20px;
   align-items: center;
-  margin-right: 15px;
 
   @media(max-width: 767.98px) {
     width: 100%;
