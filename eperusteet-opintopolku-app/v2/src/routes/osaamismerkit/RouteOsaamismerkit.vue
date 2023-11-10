@@ -38,15 +38,15 @@
             </div>
           </div>
           <div v-else>
-            <div v-for="(group, index) in osaamismerkit" :key="index" class="mb-4">
+            <div v-for="(group, index) in kategoriaGroup" :key="index" class="mb-4">
               <div class="mb-4">
-                <h2>{{$kaanna(group[0].kategoria.nimi)}}</h2>
+                <h2>{{$kaanna(group.data.nimi)}}</h2>
               </div>
               <div class="mb-4">
-                {{$kaanna(group[0].kategoria.kuvaus)}}
+                {{$kaanna(group.data.kuvaus)}}
               </div>
               <div class="d-md-flex flex-wrap justify-content-start">
-                <div v-for="(osaamismerkki, idx) in group" :key="idx" class="mb-2">
+                <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="idx" class="mb-2">
                   <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
                     <div class="tile tile-background-shadow-selected shadow-tile d-flex">
                       <div>
@@ -79,6 +79,7 @@ import _ from 'lodash';
 import { OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
 import { murupolkuOsaamismerkkiRoot } from '@/utils/murupolku';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -137,12 +138,22 @@ export default class RouteOsaamismerkit extends Vue {
         ...osaamismerkki,
         image: this.generateImageUrl(osaamismerkki.kategoria?.liite),
       }))
-      .groupBy('kategoria.id')
+      .sortBy(om => Kielet.sortValue(om.nimi))
       .value();
   }
 
   get osaamismerkitCount() {
     return this.osaamismerkitStore.osaamismerkit?.value?.length;
+  }
+
+  get kategoriaGroup() {
+    return _.chain(this.osaamismerkkiKategoriat)
+      .map(kategoria => ({
+        ...kategoria,
+        osaamismerkit: _.filter(this.osaamismerkit, osaamismerkki => osaamismerkki.kategoria?.id === kategoria.value),
+      }))
+      .filter(kategoria => kategoria.osaamismerkit.length > 0)
+      .value();
   }
 
   get koulutustyyppi() {
@@ -155,9 +166,11 @@ export default class RouteOsaamismerkit extends Vue {
         return {
           text: this.$kaanna(kategoria.nimi),
           value: kategoria.id,
+          data: kategoria,
         };
       })
       .uniqWith(_.isEqual)
+      .sortBy('text')
       .filter('text')
       .value();
   }
