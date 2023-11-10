@@ -113,10 +113,9 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
   border-radius: 10px;
   border: 1px solid #E7E7E7;
   width: 320px;
-  height: 320px;
+  height: 350px;
   padding: 20px;
   align-items: center;
-  margin-right: 15px;
 
   @media(max-width: 767.98px) {
     width: 100%;
