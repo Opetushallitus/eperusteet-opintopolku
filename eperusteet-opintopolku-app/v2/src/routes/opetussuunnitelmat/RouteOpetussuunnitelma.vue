@@ -72,7 +72,10 @@ export default class RouteOpetussuunnitelma extends Vue {
     if (this.opetussuunnitelmaDataStore?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
       return 'koulutustyyppi_muu';
     }
-    return this.opetussuunnitelmaDataStore.koulutustyyppi;
+    else if (this.opetussuunnitelmaDataStore.koulutustyyppi) {
+      return this.opetussuunnitelmaDataStore.koulutustyyppi;
+    }
+    return this.$route.params.koulutustyyppi;
   }
 
   get tyyppi() {
