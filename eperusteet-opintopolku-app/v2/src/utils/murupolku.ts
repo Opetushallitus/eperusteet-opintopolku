@@ -12,7 +12,7 @@ export function createOpetussuunnitelmaMurupolku(ops, koulutustyyppi) {
     polut.push(murupolkuOpetussuunnitelmaRoot(koulutustyyppi));
 
     if (isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi) && ops.peruste) {
-      polut.push(murupolkuAmmatillinenKooste(ops.peruste, koulutustyyppi));
+      polut.push(murupolkuAmmatillinenKooste(ops.peruste));
     }
 
     polut.push(murupolkuTiedot(ops, koulutustyyppi));
@@ -44,13 +44,13 @@ export function murupolkuPerusteTiedot(peruste, koulutustyyppi) {
   };
 }
 
-export function murupolkuAmmatillinenKooste(peruste, koulutustyyppi) {
+export function murupolkuAmmatillinenKooste(peruste) {
   return {
     label: peruste?.nimi,
     location: {
       name: 'ammatillinenkooste',
       params: {
-        koulutustyyppi: isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi) ? 'ammatillinen' : koulutustyypinRyhma(koulutustyyppi),
+        koulutustyyppi: 'ammatillinen',
         perusteId: peruste?.perusteId,
       },
     },
