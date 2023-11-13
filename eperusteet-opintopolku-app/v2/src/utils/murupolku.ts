@@ -12,7 +12,7 @@ export function createOpetussuunnitelmaMurupolku(ops, koulutustyyppi) {
     polut.push(murupolkuOpetussuunnitelmaRoot(koulutustyyppi));
 
     if (isAmmatillinenKoulutustyyppi(koulutustyyppi)) {
-      polut.push(murupolkuAmmatillinenKooste(ops.peruste, koulutustyyppi));
+      polut.push(murupolkuAmmatillinenKooste(ops?.peruste, koulutustyyppi));
     }
 
     polut.push(murupolkuTiedot(ops, koulutustyyppi));
@@ -33,12 +33,12 @@ export function createPerusteMurupolku(peruste, koulutustyyppi, routeKoulutustyy
 
 export function murupolkuPerusteTiedot(peruste, koulutustyyppi) {
   return {
-    label: peruste.nimi,
+    label: peruste?.nimi,
     location: {
       name: 'perusteTiedot',
       params: {
         koulutustyyppi: koulutustyyppi,
-        perusteId: peruste.id,
+        perusteId: peruste?.id,
       },
     },
   };
@@ -46,12 +46,12 @@ export function murupolkuPerusteTiedot(peruste, koulutustyyppi) {
 
 export function murupolkuAmmatillinenKooste(peruste, koulutustyyppi) {
   return {
-    label: peruste.nimi,
+    label: peruste?.nimi,
     location: {
       name: 'ammatillinenkooste',
       params: {
         koulutustyyppi: koulutustyypinRyhma(koulutustyyppi),
-        perusteId: peruste.perusteId,
+        perusteId: peruste?.perusteId,
       },
     },
   };
@@ -69,12 +69,12 @@ export function murupolkuTiedot(ops, koulutustyyppi) {
 
 export function murupolkuOpetussuunnitelma(ops, koulutustyyppi) {
   return {
-    label: ops.nimi,
+    label: ops?.nimi,
     location: {
       name: 'opetussuunnitelmaTiedot',
       params: {
         koulutustyyppi: koulutustyypinRyhma(koulutustyyppi),
-        opetussuunnitelmaId: _.toString(ops.id),
+        opetussuunnitelmaId: _.toString(ops?.id),
       },
     },
   };
@@ -82,12 +82,12 @@ export function murupolkuOpetussuunnitelma(ops, koulutustyyppi) {
 
 export function murupolkuToteutussuunnitelma(totsu, koulutustyyppi) {
   return {
-    label: totsu.nimi,
+    label: totsu?.nimi,
     location: {
       name: 'toteutussuunnitelmaTiedot',
       params: {
         koulutustyyppi: koulutustyypinRyhma(koulutustyyppi),
-        toteutussuunnitelmaId: _.toString(totsu.id),
+        toteutussuunnitelmaId: _.toString(totsu?.id),
       },
     },
   };
@@ -116,7 +116,7 @@ export function murupolkuOpetussuunnitelmaRoot(koulutustyyppi) {
 
 export function murupolkuKoulutuksenJarjestajat(ops) {
   return {
-    label: ops.nimi,
+    label: ops?.nimi,
     location: {
       name: 'ammatillinenKoulutuksenjarjestaja',
       params: {
@@ -185,7 +185,7 @@ export function murupolkuKoulutuksenJarjestaja(koulutustyyppi, koulutustoimija) 
       },
     },
     {
-      label: koulutustoimija.nimi,
+      label: koulutustoimija?.nimi,
     },
   ];
 }
