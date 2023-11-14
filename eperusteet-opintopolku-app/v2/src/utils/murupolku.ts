@@ -1,4 +1,5 @@
 import {
+  isAmmatillinenKoulutustyyppi,
   isAmmatillinenKoulutustyyppiOrRyhma,
   koulutustyypinRyhma,
   yleissivistavatKoulutustyypit,
@@ -11,7 +12,7 @@ export function createOpetussuunnitelmaMurupolku(ops, koulutustyyppi) {
   if (koulutustyyppi) {
     polut.push(murupolkuOpetussuunnitelmaRoot(koulutustyyppi));
 
-    if (isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi) && ops.peruste) {
+    if (isAmmatillinenKoulutustyyppi(koulutustyyppi) && ops.peruste) {
       polut.push(murupolkuAmmatillinenKooste(ops.peruste));
     }
 
