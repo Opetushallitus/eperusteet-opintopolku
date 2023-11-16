@@ -80,8 +80,7 @@ export default class RouteOpetussuunnitelmaOppiaine extends Vue {
     if (this.opetussuunnitelmaDataStore.current) {
       const result: NavigationNode[] = [];
       traverseTree(this.opetussuunnitelmaDataStore.current, result);
-      _.filter(result, node => node.type === 'oppiaine');
-      return _.filter(result, node => node.type === 'oppiaine');
+      return _.filter(result, node => node.type === 'oppiaine' || node.type === 'poppiaine');
     }
     else {
       return [];
