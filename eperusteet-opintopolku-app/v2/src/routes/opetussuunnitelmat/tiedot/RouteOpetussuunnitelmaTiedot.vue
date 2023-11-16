@@ -52,9 +52,14 @@
           <ep-datepicker v-model="opetussuunnitelma.luotu"></ep-datepicker>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="opetussuunnitelma.muokattu">
+      <div class="col-md-12" v-if="!opetussuunnitelma.viimeisinJulkaisuAika && opetussuunnitelma.muokattu">
         <ep-form-content name="muokattu" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="opetussuunnitelma.muokattu"></ep-datepicker>
+        </ep-form-content>
+      </div>
+      <div class="col-md-12" v-if="opetussuunnitelma.viimeisinJulkaisuAika">
+        <ep-form-content name="julkaistu" headerType="h3" headerClass="h6">
+          <ep-datepicker v-model="opetussuunnitelma.viimeisinJulkaisuAika"></ep-datepicker>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="opetussuunnitelma.paatospaivamaara">
