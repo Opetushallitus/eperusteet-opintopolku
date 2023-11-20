@@ -14,7 +14,7 @@
     </template>
   </ep-header>
 
-  <div :id="scrollAnchor">
+  <div>
     <EpEsikatseluNotifikaatio :julkaisu-pvm="julkaisuPvm"/>
   </div>
 
@@ -206,10 +206,6 @@ export default class RoutePeruste extends Vue {
 
   private setValue(value) {
     this.query = value;
-  }
-
-  get scrollAnchor() {
-    return this.routeName !== 'peruste' && this.routeName !== this.ensimainenNavi?.location?.name ? 'scroll-anchor' : 'disabled-scroll-anchor';
   }
 
   get routeName() {

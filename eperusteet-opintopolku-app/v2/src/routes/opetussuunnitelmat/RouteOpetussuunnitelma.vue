@@ -11,7 +11,7 @@
     </template>
   </ep-header>
 
-  <div id="scroll-anchor">
+  <div>
     <EpEsikatseluNotifikaatio/>
   </div>
 

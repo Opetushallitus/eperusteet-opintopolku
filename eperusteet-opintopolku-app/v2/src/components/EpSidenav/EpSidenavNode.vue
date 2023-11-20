@@ -152,7 +152,7 @@ export default class EpSidenavNode extends Vue {
 
   @media (max-width: 991.98px) {
     ul.root-list, ol.root-list {
-      font-size: 20px;
+      font-size: 18px;
     }
 
     ul, ol {
