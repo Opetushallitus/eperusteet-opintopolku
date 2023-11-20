@@ -139,7 +139,7 @@ export function murupolkuOsaamismerkkiRoot(koulutustyyppi) {
       },
     },
   }, {
-    label: 'kansalliset-osaamismerkit',
+    label: 'kansalliset-perustaitojen-osaamismerkit',
     location: {
       name: 'osaamismerkit',
     },
