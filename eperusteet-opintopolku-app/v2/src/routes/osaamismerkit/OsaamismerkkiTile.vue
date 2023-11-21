@@ -4,7 +4,7 @@
       <EpMaterialIcon class="img" :color="rgbColor" size="46px">star</EpMaterialIcon>
     </div>
     <div class="nimi">
-      {{ $t('kansalliset-osaamismerkit')}}
+      {{ $t('kansalliset-perustaitojen-osaamismerkit')}}
     </div>
   </div>
 </template>
