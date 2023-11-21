@@ -2,7 +2,7 @@
   <div v-if="$route.name === 'osaamismerkit'">
     <EpHeader :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
       <template slot="header">
-        {{ $t('kansalliset-osaamismerkit') }}
+        {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
       </template>
       <template slot="subheader">
         {{ $t('osaamismerkit-kuvaus') }}
