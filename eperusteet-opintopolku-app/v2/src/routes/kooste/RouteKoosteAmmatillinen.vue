@@ -1,5 +1,5 @@
 <template>
-  <div id="scroll-anchor">
+  <div>
     <ep-spinner v-if="!peruste" />
     <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
       <template slot="header">

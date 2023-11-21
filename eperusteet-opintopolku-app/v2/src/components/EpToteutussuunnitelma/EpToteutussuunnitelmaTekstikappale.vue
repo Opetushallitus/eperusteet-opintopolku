@@ -10,7 +10,6 @@
     <ep-collapse tyyppi="pohjateksti" v-if="sisaltoviite.naytaPohjanTeksti && sisaltoviite.pohjanTekstikappale && sisaltoviite.pohjanTekstikappale.teksti">
       <div class="collapse-header" slot="header">
         {{ $t('pohjan-teksti') }}
-        <span v-if="pohjaNimi">({{$kaanna(pohjaNimi)}})</span>
       </div>
       <ep-content-viewer :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)" :kuvat="kuvat" />
     </ep-collapse>
