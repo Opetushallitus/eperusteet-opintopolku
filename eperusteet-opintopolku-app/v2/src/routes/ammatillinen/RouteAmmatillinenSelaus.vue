@@ -11,7 +11,7 @@
     <div v-if="$route.name === 'ammatillinenSelaus'">
       <div class="d-flex justify-content-between flex-lg-row flex-column">
 
-        <router-link v-for="(linkki, index) in linkit" :key="'linkki'+index" :to="{ name: linkki.route }">
+        <router-link v-for="(linkki, index) in linkit" :key="'linkki'+index" :to="linkki.route">
           <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
             <EpMaterialIcon v-if="linkki.icon" icon-shape="outlined">{{linkki.icon}}</EpMaterialIcon>
             <div class="align-self-center">
@@ -85,11 +85,11 @@ import { Meta } from '@shared/utils/decorators';
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { koulutustyyppiRyhmat, KoulutustyyppiRyhma } from '@shared/utils/perusteet';
 import * as _ from 'lodash';
-import { TiedoteDto } from '@shared/api/eperusteet';
+import { MaaraysDtoTyyppiEnum, TiedoteDto } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 
 interface Ylalinkki {
-  route: string;
+  route: { name: string, query?: any, };
   text: string;
   icon?: string;
 }
@@ -126,17 +126,22 @@ export default class RouteAmmatillinenSelaus extends Vue {
   get linkit(): Ylalinkki[] {
     return [
       {
-        route: 'ammatillinenMaaraykset',
+        route: {
+          name: 'maaraykset',
+          query: {
+            tyyppi: MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
+          },
+        },
         text: 'maaraykset',
         icon: 'picture_as_pdf',
       },
       {
-        route: 'ammatillinenOhjeet',
+        route: { name: 'ammatillinenOhjeet' },
         text: 'ohjeet-ja-materiaalit',
         icon: 'menu_book',
       },
       {
-        route: 'ammatillinenKoulutuksenjarjestajat',
+        route: { name: 'ammatillinenKoulutuksenjarjestajat' },
         text: 'koulutuksen-jarjestajat',
         icon: 'location_on',
       },

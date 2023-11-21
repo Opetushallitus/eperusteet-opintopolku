@@ -182,6 +182,23 @@ export default class EpHeader extends Vue {
     background-image: url('~@assets/img/banners/opintopolku/aallot_ammatillinen.svg');
   }
 
+  &.tyyppi-maarayskokoelma {
+    background-color: $white;
+    background-image: url('~@assets/img/banners/opintopolku/aallot_maarayskokoelma.svg'), url('~@assets/img/banners/opintopolku/aallot_maarayskokoelma_tausta.svg');
+    background-repeat: no-repeat, repeat;
+    background-position: right top, left top;
+    background-size: auto auto, auto 100%;
+    margin-top: -2px;
+
+    @media (max-width: 991.98px) {
+      background-size: auto 160px, auto 100%;
+    }
+    // Todo: käytä muuttujia
+    @media (max-width: 767.98px) {
+      background-size: auto 80px, auto 100%;
+    }
+  }
+
   // Murupolku
   nav ol.breadcrumb {
     font-size: 14px;
