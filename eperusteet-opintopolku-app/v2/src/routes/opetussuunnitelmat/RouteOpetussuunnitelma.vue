@@ -18,7 +18,7 @@
   <div class="container mt-4">
     <div class="lower">
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-      <ep-sidebar>
+      <ep-sidebar :scroll-enabled="true">
         <template slot="bar">
           <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
         </template>

@@ -21,7 +21,7 @@
   <div class="container mt-4">
     <div class="lower">
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-      <ep-sidebar>
+      <ep-sidebar :scroll-enabled="true">
         <template slot="bar">
           <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
           <div class="sidebar" v-if="haku">
