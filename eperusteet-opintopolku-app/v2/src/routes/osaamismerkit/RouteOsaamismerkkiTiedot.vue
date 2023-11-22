@@ -21,13 +21,13 @@
       </div>
       <div class="m-3">
         <div class="mb-3">
-          <strong>{{$t('kuvaus')}}</strong>
+          <h2 class="header">{{$t('kuvaus')}}</h2>
           <div class="mt-1">
             <span>{{ $kaanna(osaamismerkki.kuvaus) }}</span>
           </div>
         </div>
         <div>
-          <strong>{{$t('osaamistavoitteet')}}</strong>
+          <h2 class="header">{{$t('osaamistavoitteet')}}</h2>
           <ul class="mt-1">
             <li v-for="(tavoite, index) in osaamismerkki.osaamistavoitteet" :key="'tavoite'+index">
               {{$kaanna(tavoite.osaamistavoite)}}
@@ -35,7 +35,7 @@
           </ul>
         </div>
         <div>
-          <strong>{{$t('arviointikriteerit')}}</strong>
+          <h2 class="header">{{$t('arviointikriteerit')}}</h2>
           <ul class="mt-1">
             <li v-for="(kriteeri, index) in osaamismerkki.arviointikriteerit" :key="'kriteeri'+index">
               {{$kaanna(kriteeri.arviointikriteeri)}}
@@ -133,5 +133,10 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
+}
+
+.header {
+  font-size: 1rem;
+  font-weight: 600;
 }
 </style>
