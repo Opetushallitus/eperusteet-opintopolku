@@ -64,7 +64,7 @@
             {{ $kaanna(korvattava.nimi) }} ({{korvattava.diaarinumero}})
           </router-link>
 
-          <div v-if="maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset.length === 0">{{$t('maaraysta-ei-loydy-maarayskokoelmasta')}}</div>
+          <div class="font-italic" v-if="maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset.length === 0">{{$t('maaraysta-ei-loydy-maarayskokoelmasta')}}</div>
         </ep-form-content>
 
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
