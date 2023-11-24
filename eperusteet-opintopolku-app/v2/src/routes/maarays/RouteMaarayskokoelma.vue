@@ -27,7 +27,7 @@
       </b-form-group>
 
       <b-form-group :label="$t('koulutus-tai-tutkinto')" class="col-lg-4 col-md-6 mb-1">
-        <KoulutustyyppiSelect v-if="koulutustyyppiVaihtoehdot" :isEditing="true" v-model="query.koulutustyypit" :koulutustyypit="koulutustyyppiVaihtoehdot" />
+        <EpMaarayskokoelmaKoulutustyyppiSelect v-if="koulutustyyppiVaihtoehdot" :isEditing="true" v-model="query.koulutustyypit" :koulutustyypit="koulutustyyppiVaihtoehdot" />
       </b-form-group>
     </div>
 
@@ -88,7 +88,7 @@ import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
-import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
+import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 
 @Component({
   components: {
@@ -102,7 +102,7 @@ import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelec
     EpVoimassaolo,
     EpButton,
     EpMaterialIcon,
-    KoulutustyyppiSelect,
+    EpMaarayskokoelmaKoulutustyyppiSelect,
   },
 })
 export default class RouteMaarayskokoelma extends Vue {
