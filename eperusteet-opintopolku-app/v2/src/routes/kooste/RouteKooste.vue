@@ -156,9 +156,11 @@ export default class RouteKooste extends Vue {
 
   private showEraantyneet: boolean = false;
 
-  @Watch('koulutustyyppi', { immediate: true })
+  @Watch('julkaistutPerusteet')
   async fetch() {
-    await this.tiedotteetStore?.fetch(this.perusteKoosteStore?.perusteJulkaisut);
+    if (this.perusteKoosteStore?.perusteJulkaisut.value) {
+      await this.tiedotteetStore?.fetch(this.perusteKoosteStore?.perusteJulkaisut.value);
+    }
   }
 
   get koulutustyyppi() {
