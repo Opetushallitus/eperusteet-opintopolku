@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <h2 class="mb-2">{{$t('ammatillisten-tutkintojen-perusteet')}}</h2>
+      <h2 class="mb-2">{{$t('tutkinnon-perusteet-ja-tutkinnon-osat')}}</h2>
       <peruste-ammatillinen-haku :peruste-haku-store="ammatillinenPerusteHakuStore" tyyppi="peruste"/>
     </div>
 

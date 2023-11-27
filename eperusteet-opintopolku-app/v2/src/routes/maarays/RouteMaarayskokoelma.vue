@@ -31,7 +31,7 @@
       </b-form-group>
     </div>
 
-    <EpVoimassaoloFilter v-model="query" class="mb-0"></EpVoimassaoloFilter>
+    <EpToggleFilter v-model="query" class="mb-0"></EpToggleFilter>
 
     <ep-spinner v-if="!maaraykset" />
 
@@ -80,7 +80,7 @@ import EpPagination from '@shared/components/EpPagination/EpPagination.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
-import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
+import EpToggleFilter from '@shared/components/EpToggleFilter/EpToggleFilter.vue';
 import { MaarayksetStore } from '@shared/stores/MaarayksetStore';
 import { Debounced } from '@shared/utils/delay';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
@@ -98,7 +98,7 @@ import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelec
     EpMultiSelect,
     EpPagination,
     EpSpinner,
-    EpVoimassaoloFilter,
+    EpToggleFilter,
     EpVoimassaolo,
     EpButton,
     EpMaterialIcon,
