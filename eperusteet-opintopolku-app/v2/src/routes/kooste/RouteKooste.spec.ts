@@ -44,6 +44,7 @@ describe('RouteKooste', () => {
         },
         voimassaoloAlkaa: 123456,
       }]),
+      fetch: () => new Promise<void>(resolve => resolve()),
     };
 
     const opasStore = mock(OpasStore);

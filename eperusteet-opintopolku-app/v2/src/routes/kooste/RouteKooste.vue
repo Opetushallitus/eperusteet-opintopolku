@@ -23,11 +23,13 @@
             <div v-if="julkaistutPerusteet.length === 0">
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
-            <div v-else v-for="(julkaisu, idx) in visibleJulkaistutPerusteet" :key="idx">
-              <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
-                <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
-              </router-link>
-            </div>
+            <template v-else>
+              <div v-for="(julkaisu, idx) in visibleJulkaistutPerusteet" :key="idx">
+                <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
+                  <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+                </router-link>
+              </div>
+            </template>
             <div v-for="(route, idx) in muutTilet" :key="'muut' + idx">
               <router-link :to="route.route">
                 <component :is="route.komponentti" :koulutustyyppi="koulutustyyppi"/>
@@ -156,10 +158,14 @@ export default class RouteKooste extends Vue {
 
   private showEraantyneet: boolean = false;
 
-  @Watch('julkaistutPerusteet')
-  async fetch() {
-    if (this.perusteKoosteStore?.perusteJulkaisut.value) {
-      await this.tiedotteetStore?.fetch(this.perusteKoosteStore?.perusteJulkaisut.value);
+  @Watch('koulutustyyppi', { immediate: true })
+  async koulutustyyppiChange() {
+    if (this.perusteKoosteStore) {
+      await this.perusteKoosteStore.fetch();
+      await this.tiedotteetStore.fetch(this.perusteKoosteStore?.perusteJulkaisut.value);
+    }
+    else {
+      await this.tiedotteetStore.fetch();
     }
   }
 
@@ -196,7 +202,7 @@ export default class RouteKooste extends Vue {
       return [];
     }
 
-    if (this.perusteKoosteStore?.perusteJulkaisut) {
+    if (this.perusteKoosteStore?.perusteJulkaisut.value) {
       return _.chain(this.perusteKoosteStore.perusteJulkaisut.value)
         .map(julkaisu => ({
           ...julkaisu,
