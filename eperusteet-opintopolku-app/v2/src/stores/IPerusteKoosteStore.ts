@@ -5,4 +5,5 @@ export interface IPerusteKoosteStore {
   koulutustyyppi?: Computed<string>;
   perusteJulkaisut: Computed<PerusteenJulkaisuData[]>;
   muutTilet?: Computed<any[]>;
+  fetch: () => Promise<void>;
 }

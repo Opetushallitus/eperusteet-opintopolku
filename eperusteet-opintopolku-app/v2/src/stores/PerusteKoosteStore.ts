@@ -19,11 +19,11 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
 
   constructor(koulutustyyppi: string) {
     this.state.koulutustyyppi = koulutustyyppi;
-    this.reload();
   }
 
-  async reload() {
+  async fetch() {
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
+    this.state.perusteJulkaisut = null;
     this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, poistunut: true })), 'data');
   }
 }
