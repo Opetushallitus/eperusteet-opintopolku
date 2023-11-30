@@ -45,7 +45,7 @@
     <div v-else class="mb-3">
       <EpSearch v-model="query" :class="{'disabled-events': !perusteet}"/>
     </div>
-    <EpToggleFilter v-if="tyyppi === 'peruste'" v-model="voimassaoloQuery"></EpToggleFilter>
+    <EpToggleFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpToggleFilter>
   </div>
 
   <div v-if="!perusteet">
@@ -59,14 +59,14 @@
           <div class="nimi w-60">
             {{ $kaanna(peruste.nimi) }}
             <div class="d-inline-flex"><span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
-            <span v-if="tutkinnonNayttoTyyppi === 'tutkinnon_osa'" class="koodi">(123456)</span>
+            <span v-if="peruste.sisaltotyyppi === 'tutkinnonosa'" class="koodi">({{ peruste.tutkinnonosa.koodiArvo }})</span>
           </div>
           <div>
-            <span class="tutkinto w-40" :class="tutkinnonNayttoTyyppi">{{ tutkinnonNayttoTyyppiText }}</span>
+            <span class="tutkinto w-40" :class="peruste.sisaltotyyppi">{{ peruste.sisaltotyyppi === 'peruste' ? $t('tutkinnon-peruste') : $t('tutkinnon-osa') }}</span>
           </div>
         </div>
 
-        <div v-if="tutkinnonNayttoTyyppi === 'tutkinnon_osa'" class="d-flex" @click.prevent>
+        <div v-if="peruste.sisaltotyyppi === 'tutkinnonosa'" class="d-flex" @click.prevent>
           <EpCollapse :borderBottom="false"
                       :expandedByDefault="false"
                       :chevronLocation="'right'"
@@ -75,7 +75,7 @@
               <span class="ato-text">{{ $t('ammatillinen-tutkinnon-osa') }} | </span>
               <span class="peruste-count">49 tutkinnon perustetta</span>
             </template>
-            <div v-for="(to, oidx) in perusteet" :key="oidx" class="nimikkeet">
+            <div v-for="(to, oidx) in peruste.tutkinnonosa.perusteet" :key="oidx" class="nimikkeet">
               <router-link :to="{name: 'peruste', params: { perusteId: peruste.id}}">
                 {{ $kaanna(to.nimi) }}
               </router-link>
@@ -181,7 +181,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
   private tutkintotyyppi = 'kaikki';
 
-  private voimassaoloQuery: any = {
+  private toggleQuery: any = {
     tuleva: false,
     voimassaolo: true,
     siirtyma: false,
@@ -237,9 +237,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
     this.page = 1;
   }
 
-  @Watch('voimassaoloQuery', { deep: true })
+  @Watch('toggleQuery', { deep: true })
   voimassaoloFilterChanged() {
-    this.perusteHakuStore.updateFilters(this.voimassaoloQuery);
+    this.perusteHakuStore.updateFilters(this.toggleQuery);
     this.page = 1;
   }
 
@@ -266,12 +266,12 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 
   perusteRoute(peruste) {
-    // TODO: temp
-    if (this.tutkinnonNayttoTyyppi === 'tutkinnon_osa') {
+    if (peruste.sisaltotyyppi === 'tutkinnonosa') {
       return {
         name: 'tutkinnonosa',
         params: {
-          tutkinnonOsaViiteId: '4804745',
+          perusteId: _.toString(peruste.id || peruste.perusteId),
+          tutkinnonOsaViiteId: peruste.tutkinnonosa.id,
         },
       };
     }
@@ -330,16 +330,6 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   get valmisteillaOlevat() {
     return this.valmisteillaOlevatStore.perusteet.value;
-  }
-
-  get tutkinnonNayttoTyyppi() {
-    // TODO: poista kovakoodaus
-    return 'tutkinnon_osa';
-    // return 'tutkinnon_peruste';
-  }
-
-  get tutkinnonNayttoTyyppiText() {
-    return this.tutkinnonNayttoTyyppi === 'tutkinnon_peruste' ? this.$t('tutkinnon-peruste') : this.$t('tutkinnon-osa');
   }
 }
 </script>
@@ -411,10 +401,10 @@ export default class PerusteAmmatillinenHaku extends Vue {
   border-radius: 12px;
   font-size: 12px;
 
-  &.tutkinnon_peruste {
+  &.peruste {
     background: $blue-darken-1;
   }
-  &.tutkinnon_osa {
+  &.tutkinnonosa {
     background: $green;
   }
 }

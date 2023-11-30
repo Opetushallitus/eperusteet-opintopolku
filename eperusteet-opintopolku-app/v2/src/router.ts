@@ -513,10 +513,6 @@ export const router = new Router({
           name: 'opetussuunnitelmaperusopetusoppiaine',
         }],
       }, {
-        path: 'tutkinnonosat/:tutkinnonOsaViiteId',
-        component: RouteTutkinnonosa,
-        name: 'tutkinnonosa',
-      }, {
         path: ':koulutustyyppi/:perusteId(\\d+)/:revision(\\d+)?',
         name: 'peruste',
         component: RoutePeruste,
