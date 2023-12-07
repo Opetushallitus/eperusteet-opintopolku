@@ -14,14 +14,16 @@
     <b-collapse id="nav-collapse" is-nav >
       <b-navbar-nav class="flex-wrap">
         <EpSpinner v-if="loading" />
-        <b-nav-item v-else v-for="(item, idx) in items"
-                    :key="idx"
-                    active
-                    :active-class="activeClass"
-                    :class="item.activeClass"
-                    :to="item.route">
-          {{ $t('navi-'+item.name) }}
-        </b-nav-item>
+        <template v-else>
+          <b-nav-item v-for="(item, idx) in items"
+                      :key="idx"
+                      active
+                      :active-class="activeClass"
+                      :class="item.activeClass"
+                      :to="item.route">
+            {{ $t('navi-'+item.name) }}
+          </b-nav-item>
+        </template>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -86,9 +88,9 @@ export default class EpNavigation extends Vue {
     return _.first(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
   }
 
-  get muuLukumaarat() {
+  get muuLukumaarat(): number {
     if (this.julkaistutKoulutustyypitStore.muuLukumaarat.value) {
-      return this.julkaistutKoulutustyypitStore.muuLukumaarat.value;
+      return this.julkaistutKoulutustyypitStore.muuLukumaarat.value as number;
     };
 
     return 0;
@@ -117,6 +119,9 @@ export default class EpNavigation extends Vue {
     else if (this.$route && this.$route.params.koulutustyyppi) {
       const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi) || this.$route.params.koulutustyyppi;
       return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
+    }
+    else if (this.$route?.name === 'maaraykset') {
+      return 'router-link-active oph-maaraykset';
     }
     else {
       return 'router-link-active';
@@ -203,16 +208,28 @@ export default class EpNavigation extends Vue {
     }];
   }
 
+  get maarayskokoelma() {
+    return {
+      name: 'opetushallituksen-maaraykset',
+      route: {
+        name: 'maaraykset',
+      },
+    };
+  }
+
   get items() {
-    return _.filter([
-      ...this.yleissivistavat,
-      ...this.ammatilliset,
-      ...this.vapaasivistystyo,
-      ...this.tutkintoonvalmentava,
-      ...this.kotoutumiskoulutus,
-      ...this.muuKoulutus,
-      ...this.digitaalinenOsaaminen,
-    ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi)));
+    return [
+      ..._.filter([
+        ...this.yleissivistavat,
+        ...this.ammatilliset,
+        ...this.vapaasivistystyo,
+        ...this.tutkintoonvalmentava,
+        ...this.kotoutumiskoulutus,
+        ...this.muuKoulutus,
+        ...this.digitaalinenOsaaminen,
+      ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi))),
+      this.maarayskokoelma,
+    ];
   }
 
   async valitseKieli(kieli) {
@@ -360,7 +377,12 @@ export default class EpNavigation extends Vue {
       &.koulutustyyppi-digiosaaminen {
         border-bottom-color: $digitaalinen-osaaminen-color;
       }
+
+      &.oph-maaraykset {
+        border-bottom-color: $oph-maaraykset-color;
+      }
     }
+
   }
 
   // Tätä ei tarvittaisi, jos nav-itemin alielementin router-link tilan voisi asettaa proppina

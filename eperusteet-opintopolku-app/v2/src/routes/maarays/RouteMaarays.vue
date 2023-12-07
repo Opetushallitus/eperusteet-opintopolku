@@ -46,7 +46,7 @@
         </ep-form-content>
 
         <ep-form-content v-if="peruste" name="peruste" headerType="h3" headerClass="h6">
-          <router-link :to="perusteRoute">
+          <router-link :to="perusteRoute" target="_blank">
             {{$kaanna(peruste.nimi)}}
           </router-link>
         </ep-form-content>
