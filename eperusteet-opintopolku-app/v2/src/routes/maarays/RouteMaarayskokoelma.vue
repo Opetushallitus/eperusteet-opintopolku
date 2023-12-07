@@ -3,6 +3,9 @@
     <template slot="header">
       {{ $t('opetushallituksen-maaraykset') }}
     </template>
+    <template slot="subheader">
+      {{ $t('opetushallituksen-maaraykset-alaotsikko') }}
+    </template>
 
     <div class="row ml-0 mt-4 mb-0">
 
@@ -64,6 +67,14 @@
           </div>
         </div>
       </router-link>
+
+      <EpBPagination
+        v-if="maarayksetCount > perPage"
+        v-model="sivu"
+        :items-per-page="perPage"
+        :total="maarayksetCount"
+        aria-controls="maarayskokoelma-lista">
+      </EpBPagination>
     </div>
 
   </ep-header>
@@ -76,7 +87,6 @@ import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
-import EpPagination from '@shared/components/EpPagination/EpPagination.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
@@ -89,6 +99,7 @@ import { Kielet } from '@shared/stores/kieli';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -96,7 +107,7 @@ import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaaraysk
     EpToggle,
     EpSearch,
     EpMultiSelect,
-    EpPagination,
+    EpBPagination,
     EpSpinner,
     EpVoimassaoloFilter,
     EpVoimassaolo,
@@ -119,6 +130,8 @@ export default class RouteMaarayskokoelma extends Vue {
     jarjestys: 'DESC',
     koulutustyypit: [],
     tyyppi: null,
+    tuleva: true,
+    voimassaolo: true,
   } as any;
 
   async mounted() {
