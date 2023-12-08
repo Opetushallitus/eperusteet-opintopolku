@@ -14,6 +14,15 @@
         </router-link>
       </ep-form-content>
 
+      <ep-form-content v-if="osaalue.paikallinenTarkennus" class="col-md-12 mt-4" name="koulutuksen-jarjestajan-tarkennus">
+        <ep-content-viewer :value="$kaanna(osaalue.paikallinenTarkennus)" :kuvat="kuvat"/>
+      </ep-form-content>
+
+      <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in osaalue.vapaat" :key="'osaaluevapaa'+index">
+        <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
+        <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
+      </ep-form-content>
+
       <ep-form-content class="mt-4" v-if="osaalue.toteutukset && osaalue.toteutukset.length > 0">
         <h3 slot="header">{{$t('koulutuksen-jarjestajan-toteutus')}}</h3>
         <EpToteutukset :toteutukset="osaalue.toteutukset" :kuvat="kuvat"/>
@@ -53,9 +62,11 @@ import EpToteutukset from '@/components/EpToteutussuunnitelma/EpToteutukset.vue'
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 import Osaamistavoite from '@shared/components/EpOsaamistavoite/Osaamistavoite.vue';
 import Arviointi2020Taulukko from '@shared/components/EpTutkinnonosa/Arviointi2020Taulukko.vue';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
+    EpContentViewer,
     EpSpinner,
     EpFormContent,
     EpToteutukset,
@@ -146,7 +157,6 @@ export default class RouteToteutussuunnitelmaOsaAlue extends Vue {
 @import '@shared/styles/_variables.scss';
 
 .content {
-    padding: 0 $content-padding;
-
-  }
+  padding: 0 $content-padding;
+}
 </style>
