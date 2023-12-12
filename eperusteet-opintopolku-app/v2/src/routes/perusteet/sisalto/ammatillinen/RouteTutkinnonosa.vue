@@ -34,20 +34,18 @@ export default class RouteTutkinnonosa extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
-  private reroute: boolean = false;
-
   mounted() {
-    if (this.reroute) {
+    if (this.$route.query?.redirect) {
+      const viite = _.find(this.perusteenTutkinnonosaViitteet, viite => _.toNumber(viite._tutkinnonOsa) === _.toNumber(this.$route.params.tutkinnonOsaViiteId));
       this.$router.push(
         {
           name: 'tutkinnonosa',
           params: {
             perusteId: _.toString(this.perusteDataStore.peruste?.id),
-            tutkinnonOsaViiteId: this.tutkinnonosaViite,
+            tutkinnonOsaViiteId: viite.id,
           },
         });
     }
-    this.reroute = false;
   }
 
   get tutkinnonosaViiteId() {
@@ -55,18 +53,7 @@ export default class RouteTutkinnonosa extends Vue {
   }
 
   get tutkinnonosaViite() {
-    const viite = this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.tutkinnonosaViiteId }) as any;
-    if (!viite) {
-      this.reroute = true;
-      // koska viitettä ei löytynyt, kyseessä onkin tutkinnon osan id joten pitää hakea erilailla
-      // TODO: kaunista
-      let test = _.find(this.perusteenTutkinnonosaViitteet, viite => {
-        return _.toNumber(viite._tutkinnonosa) === _.toNumber(this.$route.params.tutkinnonOsaViiteId);
-      });
-      return test;
-    }
-
-    return viite;
+    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.tutkinnonosaViiteId }) as any;
   }
 
   get perusteenTutkinnonosaViitteet() {

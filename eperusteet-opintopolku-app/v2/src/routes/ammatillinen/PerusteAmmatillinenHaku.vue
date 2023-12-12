@@ -76,7 +76,7 @@
               <span class="peruste-count">49 tutkinnon perustetta</span>
             </template>
             <div v-for="(peruste, oidx) in sisalto.perusteet" :key="oidx" class="nimikkeet">
-              <router-link :to="{ name: 'tutkinnonosa', params: { perusteId: peruste.id, tutkinnonOsaViiteId: sisalto.id }}">
+              <router-link :to="{ name: 'tutkinnonosa', params: { perusteId: peruste.id, tutkinnonOsaViiteId: sisalto.id }, query: { redirect: 'true' }}">
                 {{ $kaanna(peruste.nimi) }}
               </router-link>
               <div class="d-flex">
