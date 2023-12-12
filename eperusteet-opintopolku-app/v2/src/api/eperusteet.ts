@@ -53,7 +53,8 @@ export interface JulkaistutPerusteetQuery {
   tyyppi?: string;
   diaarinumero?: string;
   koodi?: string;
-  sisaltotyyppi?: string;
+  perusteet?: boolean;
+  tutkinnonosat?: boolean;
 }
 
 export async function tiedoteQuery(query: TiedoteQuery = {
@@ -101,7 +102,8 @@ export async function julkaistutPerusteet(query: JulkaistutPerusteetQuery) {
     query.tyyppi,
     query.diaarinumero,
     query.koodi,
-    query.sisaltotyyppi,
+    query.perusteet,
+    query.tutkinnonosat,
     query.sivu,
     query.sivukoko)).data as Page<PerusteenJulkaisuData>;
 }

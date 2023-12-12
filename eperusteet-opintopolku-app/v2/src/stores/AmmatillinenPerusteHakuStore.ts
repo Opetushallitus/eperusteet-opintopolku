@@ -28,7 +28,8 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
     siirtyma: false,
     voimassaolo: true,
     poistunut: false,
-    sisaltotyyppi: 'kaikki',
+    perusteet: true,
+    tutkinnonosat: false,
   };
 
   constructor(data: JulkaistutPerusteetQuery = { }) {
