@@ -37,7 +37,7 @@ export default class RouteTutkinnonosa extends Vue {
   mounted() {
     if (this.$route.query?.redirect) {
       const viite = _.find(this.perusteenTutkinnonosaViitteet, viite => _.toNumber(viite._tutkinnonOsa) === _.toNumber(this.$route.params.tutkinnonOsaViiteId));
-      this.$router.push(
+      this.$router.replace(
         {
           name: 'tutkinnonosa',
           params: {
