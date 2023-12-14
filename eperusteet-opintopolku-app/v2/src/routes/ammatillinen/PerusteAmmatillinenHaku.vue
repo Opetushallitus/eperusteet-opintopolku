@@ -196,8 +196,8 @@ export default class PerusteAmmatillinenHaku extends Vue {
     voimassaolo: true,
     siirtyma: false,
     poistunut: false,
-    perusteet: false,
-    tutkinnonosat: true,
+    perusteet: true,
+    tutkinnonosat: false,
   };
 
   async mounted() {
