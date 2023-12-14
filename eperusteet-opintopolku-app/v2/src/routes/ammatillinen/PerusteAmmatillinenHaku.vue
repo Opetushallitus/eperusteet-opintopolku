@@ -45,7 +45,7 @@
     <div v-else class="mb-3">
       <EpSearch v-model="query" :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
     </div>
-    <EpToggleFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpToggleFilter>
+    <EpSisaltotyyppiFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpSisaltotyyppiFilter>
   </div>
 
   <div v-if="!perusteetJaTutkinnonosat">
@@ -162,7 +162,7 @@ import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
-import EpToggleFilter from '@shared/components/EpToggleFilter/EpToggleFilter.vue';
+import EpSisaltotyyppiFilter from '@shared/components/EpSisaltotyyppiFilter/EpSisaltotyyppiFilter.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 
@@ -177,7 +177,7 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
     EpAmmatillinenRow,
     EpMultiSelect,
     EpBPagination,
-    EpToggleFilter,
+    EpSisaltotyyppiFilter,
     EpVoimassaolo,
   },
 })

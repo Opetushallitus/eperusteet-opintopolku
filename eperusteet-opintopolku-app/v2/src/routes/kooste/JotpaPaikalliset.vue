@@ -11,7 +11,7 @@
     </b-form-group>
   </div>
 
-  <EpToggleFilter v-model="query"></EpToggleFilter>
+  <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
 
   <div class="opetussuunnitelma-container">
     <ep-spinner v-if="!opetussuunnitelmat" />
@@ -49,7 +49,7 @@ import EpToggle from '@shared/components/forms/EpToggle.vue';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
-import EpToggleFilter from '@shared/components/EpToggleFilter/EpToggleFilter.vue';
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 
 @Component({
   components: {
@@ -60,7 +60,7 @@ import EpToggleFilter from '@shared/components/EpToggleFilter/EpToggleFilter.vue
     EpMultiSelect,
     EpBPagination,
     EpToggle,
-    EpToggleFilter,
+    EpVoimassaoloFilter,
   },
 })
 export default class JotpaPaikalliset extends Vue {

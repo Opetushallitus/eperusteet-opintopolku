@@ -52,7 +52,7 @@
     </b-form-group>
   </div>
 
-  <EpToggleFilter v-model="query"></EpToggleFilter>
+  <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
 
   <div class="opetussuunnitelma-container">
     <ep-spinner v-if="!opetussuunnitelmat" />
@@ -94,7 +94,7 @@ import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { isVstLukutaito } from '@shared/utils/perusteet';
-import EpToggleFilter from '@shared/components/EpToggleFilter/EpToggleFilter.vue';
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 
 @Component({
   components: {
@@ -104,7 +104,7 @@ import EpToggleFilter from '@shared/components/EpToggleFilter/EpToggleFilter.vue
     OpetussuunnitelmaTile,
     EpMultiSelect,
     EpBPagination,
-    EpToggleFilter,
+    EpVoimassaoloFilter,
   },
 })
 export default class VstPaikalliset extends Vue {

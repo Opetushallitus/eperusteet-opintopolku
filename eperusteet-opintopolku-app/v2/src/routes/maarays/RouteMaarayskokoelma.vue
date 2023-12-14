@@ -34,7 +34,7 @@
       </b-form-group>
     </div>
 
-    <EpToggleFilter v-model="query" class="mb-0"></EpToggleFilter>
+    <EpVoimassaoloFilter v-model="query" class="mb-0"></EpVoimassaoloFilter>
 
     <ep-spinner v-if="!maaraykset" />
 
@@ -82,7 +82,7 @@
 
 <script lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -90,7 +90,7 @@ import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
-import EpToggleFilter from '@shared/components/EpToggleFilter/EpToggleFilter.vue';
+import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { MaarayksetStore } from '@shared/stores/MaarayksetStore';
 import { Debounced } from '@shared/utils/delay';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
@@ -109,7 +109,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
     EpMultiSelect,
     EpBPagination,
     EpSpinner,
-    EpToggleFilter,
+    EpVoimassaoloFilter,
     EpVoimassaolo,
     EpButton,
     EpMaterialIcon,
