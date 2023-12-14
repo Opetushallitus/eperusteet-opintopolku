@@ -212,7 +212,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Prop, Vue, Component } from 'vue-property-decorator';
-import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam } from '@shared/api/eperusteet';
+import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, MaarayksetParams, MaaraysLiiteDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
@@ -241,11 +241,9 @@ export default class RoutePerusteTiedot extends Vue {
 
   private isLoading = true;
   private maarayskirjeObj;
-  private muutosmaarayksetObj = {};
 
   async mounted() {
     this.handleMaarayskirje();
-    this.handleMuutosmaaraykset();
     this.perusteDataStore.getKorvaavatPerusteet();
     this.perusteDataStore.getDokumentit();
     this.isLoading = false;
@@ -319,18 +317,6 @@ export default class RoutePerusteTiedot extends Vue {
     this.maarayskirjeObj = this.handleMaarays(this.peruste!.maarayskirje);
   }
 
-  handleMuutosmaaraykset() {
-    _.each(this.peruste!.muutosmaaraykset, muutosmaarays => {
-      const maaraysObj = this.handleMaarays(muutosmaarays);
-      _.each(maaraysObj, (maarays, kieli) => {
-        if (!this.muutosmaarayksetObj[kieli]) {
-          this.muutosmaarayksetObj[kieli] = [];
-        }
-        this.muutosmaarayksetObj[kieli].push(maarays);
-      });
-    });
-  }
-
   handleMaarays(maaraysObj) {
     const result = {};
     if (maaraysObj) {
@@ -364,11 +350,43 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get hasMuutosmaaraykset() {
-    return !_.isEmpty(this.peruste?.muutosmaaraykset);
+    return !_.isEmpty(this.muutosmaaraykset);
   }
 
   get muutosmaaraykset() {
-    return this.muutosmaarayksetObj[Kielet.sisaltoKieli.value];
+    return [
+      ...this.perusteenMuutosmaaraykset,
+      ...this.maarayskokoelmanMuutosmaaraykset,
+    ];
+  }
+
+  get perusteenMuutosmaaraykset() {
+    return _.chain(this.peruste?.muutosmaaraykset)
+      .map(muutosmaarays => muutosmaarays.liitteet)
+      .filter(muutosmaarays => _.has(muutosmaarays, this.kieli))
+      .map(liite => liite![this.kieli])
+      .map(muutosmaarays => {
+        return {
+          ...muutosmaarays,
+          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, muutosmaarays.id!).url,
+        };
+      })
+      .value();
+  }
+
+  get maarayskokoelmanMuutosmaaraykset() {
+    return _.chain(this.julkaisut)
+      .filter('muutosmaarays')
+      .map(julkaisu => ((julkaisu.muutosmaarays?.liitteet as any)[this.kieli].liitteet))
+      .flatMap()
+      .filter({ tyyppi: MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI })
+      .map(muutosmaarays => {
+        return {
+          nimi: this.$kaanna(muutosmaarays.nimi),
+          url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaarays.id)).url,
+        };
+      })
+      .value();
   }
 
   get hasKorvattavatDiaarinumerot() {

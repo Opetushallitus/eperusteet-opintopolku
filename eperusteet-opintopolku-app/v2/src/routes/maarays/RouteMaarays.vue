@@ -46,13 +46,13 @@
         </ep-form-content>
 
         <ep-form-content v-if="peruste" name="peruste" headerType="h3" headerClass="h6">
-          <router-link :to="perusteRoute">
+          <router-link :to="perusteRoute" target="_blank">
             {{$kaanna(peruste.nimi)}}
           </router-link>
         </ep-form-content>
 
         <ep-form-content name="koulutus-tai-tutkinto" headerType="h3" headerClass="h6">
-          <KoulutustyyppiSelect v-for="koulutustyyppi in maarays.koulutustyypit" :key="koulutustyyppi" :value="koulutustyyppi" nocolor/>
+          <EpMaarayskokoelmaKoulutustyyppiSelect v-for="koulutustyyppi in maarays.koulutustyypit" :key="koulutustyyppi" :value="koulutustyyppi"/>
         </ep-form-content>
 
         <ep-form-content v-if="liittyykoToiseenMaaraykseenOtsikko" :name="liittyykoToiseenMaaraykseenOtsikko" headerType="h3" headerClass="h6">
@@ -64,7 +64,7 @@
             {{ $kaanna(korvattava.nimi) }} ({{korvattava.diaarinumero}})
           </router-link>
 
-          <div v-if="maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset.length === 0">{{$t('maaraysta-ei-loydy-maarayskokoelmasta')}}</div>
+          <div class="font-italic" v-if="maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset.length === 0">{{$t('maaraysta-ei-loydy-maarayskokoelmasta')}}</div>
         </ep-form-content>
 
         <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
@@ -96,7 +96,7 @@ import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Meta } from '@shared/utils/decorators';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
-import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
+import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 import { koulutustyyppiTheme } from '@shared/utils/perusteet';
 
 @Component({
@@ -107,7 +107,7 @@ import { koulutustyyppiTheme } from '@shared/utils/perusteet';
     EpVoimassaolo,
     EpContentViewer,
     EpMaterialIcon,
-    KoulutustyyppiSelect,
+    EpMaarayskokoelmaKoulutustyyppiSelect,
   },
 })
 export default class RouteMaarays extends Vue {
