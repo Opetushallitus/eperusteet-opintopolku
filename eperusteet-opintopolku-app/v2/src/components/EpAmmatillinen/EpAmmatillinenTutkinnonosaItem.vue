@@ -99,4 +99,17 @@ export default class EpAmmatillinenTutkinnonosaItem extends Vue {
   }
 }
 
+::v-deep .ep-collapse {
+  margin-top: 0;
+
+  .ml-auto {
+    margin-left: 0 !important;
+
+    .material-icons {
+      font-size: 20px !important;
+      vertical-align: middle;
+    }
+  }
+}
+
 </style>

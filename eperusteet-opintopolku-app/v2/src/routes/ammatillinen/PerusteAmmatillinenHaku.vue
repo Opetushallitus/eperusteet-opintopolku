@@ -358,21 +358,4 @@ export default class PerusteAmmatillinenHaku extends Vue {
   color: $gray;
 }
 
-.w-80 {
-  width: 80%;
-}
-
-::v-deep .ep-collapse {
-  margin-top: 0;
-
-  .ml-auto {
-    margin-left: 0 !important;
-
-    .material-icons {
-      font-size: 20px !important;
-      vertical-align: middle;
-    }
-  }
-}
-
 </style>
