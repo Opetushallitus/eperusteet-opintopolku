@@ -56,7 +56,7 @@
     <div class="perusteet" id="perusteet-lista">
       <EpAmmatillinenRow v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
                            :key="idx"
-                           :route="sisalto.sisaltotyyppi === 'peruste' || sisalto.tutkinnonosa.tyyppi === 'reformi_tutke2' || sisalto.perusteet.length === 1 ? sisalto.route : null"
+                           :route="sisalto.route"
                            :class="sisalto.voimassaoloTieto[0].tyyppi">
         <div class="list-item-header">
           <div class="nimi">
@@ -216,6 +216,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 
   perusteTutkinnonosaRoute(perusteTaiTutkinnonosa) {
+    if (perusteTaiTutkinnonosa.sisaltotyyppi === 'tutkinnonosa' && perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'normaali' && perusteTaiTutkinnonosa.perusteet?.length > 1) {
+      return null;
+    }
     if (perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'reformi_tutke2') {
       return {
         name: 'yhteinentutkinnonosa',
