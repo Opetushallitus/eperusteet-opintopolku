@@ -6,7 +6,7 @@
       <div class="placeholderText">
         <span class="pr-1">{{searchPlaceholder}}</span>
         <span class="pr-1">{{$t('voit-hakea-tutkinnon-osia')}}</span>
-        <ep-spinner v-if="!valmisteillaOlevat" small/>
+        <EpSpinner v-if="!valmisteillaOlevat" small/>
         <span v-else-if="valmisteillaOlevat.data.length > 0">{{$t('katso-myos')}}
           <router-link class="w-100" :to="{name: 'ammatillinenValmisteillaOlevat'}">
             {{$t('valmisteilla-olevien-perusteiden-julkaisuaikataulu')}}
@@ -49,12 +49,12 @@
   </div>
 
   <div v-if="!perusteetJaTutkinnonosat">
-    <ep-spinner />
+    <EpSpinner />
   </div>
 
   <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
-      <ep-ammatillinen-row v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
+      <EpAmmatillinenRow v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
                            :key="idx"
                            :route="sisalto.sisaltotyyppi === 'peruste' || sisalto.tutkinnonosa.tyyppi === 'reformi_tutke2' || sisalto.perusteet.length === 1 ? sisalto.route : null"
                            :class="sisalto.voimassaoloTieto[0].tyyppi">
@@ -70,80 +70,9 @@
             <span class="tutkinto w-40" :class="sisalto.sisaltotyyppi">{{ sisalto.sisaltotyyppi === 'peruste' ? $t('tutkinnon-peruste') : $t('tutkinnon-osa') }}</span>
           </div>
         </div>
-
-        <div v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" class="d-flex" @click.prevent>
-          <div v-if="sisalto.tutkinnonosa.tyyppi === 'normaali'">
-            <div v-if="sisalto.perusteet.length === 1" class="nimikkeet">
-              <span>{{ $kaanna(sisalto.perusteet[0].nimi) }},</span>
-              <span v-for="(voimassaolotieto, index) in sisalto.perusteet[0].voimassaoloTieto" :key="'voimassa' + index">
-                  <span v-if="index > 0">|</span>
-                    {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-                  </span>
-              <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
-            </div>
-
-            <EpCollapse v-else
-                        :borderBottom="false"
-                        :expandedByDefault="false"
-                        :chevronLocation="'right'"
-                        :use-padding="false">
-              <template v-slot:header>
-                <span class="ato-text">{{ $t('ammatillinen-tutkinnon-osa') }} | </span>
-                <span class="peruste-count">{{ sisalto.perusteet.length }} {{sisalto.perusteet.length > 1 ? $t('tutkinnon-perustetta') : $t('tutkinnon-peruste') }}</span>
-              </template>
-
-              <div v-for="(peruste, oidx) in sisalto.perusteet" :key="oidx" class="nimikkeet">
-                <router-link :to="{ name: 'tutkinnonosa', params: { perusteId: peruste.id, tutkinnonOsaViiteId: sisalto.id }, query: { redirect: 'true' }}">
-                  {{ $kaanna(peruste.nimi) }},
-                </router-link>
-                <div class="peruste-rivi">
-                  <span v-for="(voimassaolotieto, index) in peruste.voimassaoloTieto" :key="'voimassa' + index">
-                  <span v-if="index > 0">|</span>
-                    {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-                  </span>
-                  <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
-                </div>
-              </div>
-            </EpCollapse>
-          </div>
-
-          <div v-else class="ato-text">
-            <span>{{ $t('yhteinen-tutkinnon-osa') }} | </span>
-            <span>{{ sisalto.perusteet.length }} {{sisalto.perusteet.length > 1 ? $t('tutkinnon-perustetta') : $t('tutkinnon-peruste') }}</span>
-          </div>
-        </div>
-
-        <div v-else>
-          <div class="nimikkeet w-80" v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0">
-            <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-            <span v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet" :key="tidx">
-              {{ $kaanna(tutkintonimike.nimi) }}
-            </span>
-          </div>
-          <div class="nimikkeet w-80" v-if="sisalto.osaamisalat && sisalto.osaamisalat.length > 0">
-            <span class="kohde">{{ $t('osaamisalat') }}:</span>
-            <span v-for="(osaamisala, oidx) in sisalto.osaamisalat" :key="oidx">
-              {{ $kaanna(osaamisala.nimi) }}
-            </span>
-          </div>
-          <div class="alatiedot">
-            <span v-for="(voimassaolotieto, index) in sisalto.voimassaoloTieto" :key="'voimassa' + index">
-              <span v-if="index > 0">|</span>
-              {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-            </span>
-            <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
-            <span v-if="sisalto.diaarinumero">| {{$t('diaarinumero')}}: {{ sisalto.diaarinumero }}</span>
-            <span v-if="sisalto.koulutukset && sisalto.koulutukset.length > 0">
-              <template v-if="sisalto.koulutukset.length > 1">
-                | {{$t('koulutuskoodit')}}: {{ sisalto.koulutuskoodit }}
-              </template>
-              <template v-else>
-                | {{$t('koulutuskoodi')}}: {{ sisalto.koulutuskoodit }}
-              </template>
-            </span>
-          </div>
-        </div>
-      </ep-ammatillinen-row>
+        <EpAmmatillinenTutkinnonosaItem v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" :sisalto="sisalto"></EpAmmatillinenTutkinnonosaItem>
+        <EpAmmatillinenPerusteItem v-else :sisalto="sisalto"></EpAmmatillinenPerusteItem>
+      </EpAmmatillinenRow>
 
     </div>
     <div class="pagination d-flex justify-content-center">
@@ -160,13 +89,10 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import EpHeader from '@/components/EpHeader/EpHeader.vue';
+import _ from 'lodash';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { IPerusteHakuStore } from '@/stores/IPerusteHakuStore';
-import EpToggle from '@shared/components/forms/EpToggle.vue';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import _ from 'lodash';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
@@ -175,22 +101,19 @@ import { Kielet } from '@shared/stores/kieli';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpSisaltotyyppiFilter from '@shared/components/EpSisaltotyyppiFilter/EpSisaltotyyppiFilter.vue';
-import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
-import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import EpAmmatillinenPerusteItem from '@/components/EpAmmatillinen/EpAmmatillinenPerusteItem.vue';
+import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmatillinenTutkinnonosaItem.vue';
 
 @Component({
   components: {
-    EpCollapse,
-    EpToggle,
-    EpHeader,
     EpSearch,
     EpSpinner,
-    EpExternalLink,
     EpAmmatillinenRow,
     EpMultiSelect,
     EpBPagination,
     EpSisaltotyyppiFilter,
-    EpVoimassaolo,
+    EpAmmatillinenPerusteItem,
+    EpAmmatillinenTutkinnonosaItem,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -410,44 +333,8 @@ export default class PerusteAmmatillinenHaku extends Vue {
     }
   }
 
-  .nimikkeet {
-    font-size: small;
-    padding-bottom: 5px;
-
-    @media(max-width: 992px){
-      width: 100% !important;
-      padding-bottom: 10px;
-    }
-
-    .kohde {
-      font-weight: 600;
-    }
-  }
-
-  .alatiedot {
-    font-size: smaller;
-  }
-
   .pagination {
     margin-top: 10px;
-  }
-}
-
-.ato-text {
-  color: #000;
-  font-size: small;
-}
-
-.peruste-count {
-  color: #3367E3;
-  font-size: small;
-}
-
-.peruste-rivi {
-  display: flex;
-
-  @media(min-width: 992px){
-    display: inline;
   }
 }
 
