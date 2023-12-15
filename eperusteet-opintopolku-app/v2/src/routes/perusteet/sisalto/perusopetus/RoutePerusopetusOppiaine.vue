@@ -12,6 +12,13 @@
         <ep-content-viewer :value="$kaanna(oppiaine.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
       </div>
 
+      <template v-if="oppiaine.vapaatTekstit">
+        <div v-for="(vapaaTeksti, index) in oppiaine.vapaatTekstit" :key="'vapaateksti'+index" class="mt-4">
+          <h3>{{$kaanna(vapaaTeksti.nimi)}}</h3>
+          <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+        </div>
+      </template>
+
       <b-tabs class="ml-0 pl-0 mt-4" v-model="tabIndex">
         <b-tab class="mt-4" v-for="(vlk, index) in oppiaine.vuosiluokkakokonaisuudet" :key="'vlk'+index" :title="$kaanna(vlk.nimi)">
 
@@ -36,6 +43,13 @@
             <h3>{{$kaanna(vlk.arviointi.otsikko)}}</h3>
             <ep-content-viewer :value="$kaanna(vlk.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
           </div>
+
+          <template v-if="vlk.vapaatTekstit">
+            <div v-for="(vapaaTeksti, index) in vlk.vapaatTekstit" :key="'vlk-vapaateksti'+index" class="mt-4">
+              <h3>{{$kaanna(vapaaTeksti.nimi)}}</h3>
+              <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+            </div>
+          </template>
 
           <div class="mt-4" v-if="vlk.tavoitteet.length > 0">
             <h3>{{$t('oppiaineen-tavoitteet')}}</h3>
