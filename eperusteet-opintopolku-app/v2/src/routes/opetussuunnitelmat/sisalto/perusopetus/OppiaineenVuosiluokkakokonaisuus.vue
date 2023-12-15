@@ -37,6 +37,13 @@
         :kuvat="kuvat"
         :termit="termit"
       />
+
+      <template v-if="perusteenVuosiluokkakokonaisuus.vapaatTekstit">
+        <div v-for="(vapaaTeksti, index) in perusteenVuosiluokkakokonaisuus.vapaatTekstit" :key="'vapaateksti'+index" class="mt-4">
+          <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
+          <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+        </div>
+      </template>
     </div>
 
     <div v-else>

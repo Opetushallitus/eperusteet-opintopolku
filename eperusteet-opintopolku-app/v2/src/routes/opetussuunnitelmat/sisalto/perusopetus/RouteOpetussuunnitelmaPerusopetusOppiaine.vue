@@ -4,7 +4,16 @@
     <template v-else>
       <h2>{{$kaanna(oppiaine.nimi)}}</h2>
 
-      <ep-peruste-content v-if="perusteOppiaine" :perusteObject="perusteOppiaine.tehtava" :object="oppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
+      <template v-if="perusteOppiaine">
+        <ep-peruste-content :perusteObject="perusteOppiaine.tehtava" :object="oppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
+
+        <template v-if="perusteOppiaine.vapaatTekstit">
+          <div v-for="(vapaaTeksti, index) in perusteOppiaine.vapaatTekstit" :key="'vapaateksti'+index" class="mt-4">
+            <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
+            <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+          </div>
+        </template>
+      </template>
 
       <b-tabs class="ml-0 pl-0 mt-4" v-if="!vlkId">
         <b-tab class="mt-4" v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudetSorted" :key="'vlk'+index" :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)">
@@ -25,11 +34,13 @@ import OppiaineenVuosiluokkakokonaisuus from './OppiaineenVuosiluokkakokonaisuus
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { UnwrappedOpsOppiaineDtoTyyppiEnum } from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
     EpPerusteContent,
     OppiaineenVuosiluokkakokonaisuus,
+    EpContentViewer,
   },
 } as any)
 export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
