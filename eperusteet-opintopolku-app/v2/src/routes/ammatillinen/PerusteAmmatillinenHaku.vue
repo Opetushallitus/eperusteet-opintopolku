@@ -56,10 +56,10 @@
     <div class="perusteet" id="perusteet-lista">
       <ep-ammatillinen-row v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
                            :key="idx"
-                           :route="sisalto.sisaltotyyppi === 'peruste' || sisalto.tutkinnonosa.tyyppi === 'reformi_tutke2' ? sisalto.route : null"
+                           :route="sisalto.sisaltotyyppi === 'peruste' || sisalto.tutkinnonosa.tyyppi === 'reformi_tutke2' || sisalto.perusteet.length === 1 ? sisalto.route : null"
                            :class="sisalto.voimassaoloTieto[0].tyyppi">
-        <div class="d-flex justify-content-between">
-          <div class="nimi w-60">
+        <div class="list-item-header">
+          <div class="nimi">
             {{ $kaanna(sisalto.nimi) }}
             <div class="d-inline-flex">
               <span v-if="sisalto.laajuus">{{sisalto.laajuus}} {{$t('osaamispiste')}}</span>
@@ -72,35 +72,47 @@
         </div>
 
         <div v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" class="d-flex" @click.prevent>
-          <EpCollapse v-if="sisalto.tutkinnonosa.tyyppi === 'normaali'"
-                      :borderBottom="false"
-                      :expandedByDefault="false"
-                      :chevronLocation="'right'"
-                      :use-padding="false">
-            <template v-slot:header>
-              <span class="ato-text">{{ $t('ammatillinen-tutkinnon-osa') }} | </span>
-              <span class="peruste-count">{{ sisalto.perusteet.length }} {{sisalto.perusteet.length > 1 ? $t('tutkinnon-perustetta') : $t('tutkinnon-peruste') }}</span>
-            </template>
-
-            <div v-for="(peruste, oidx) in sisalto.perusteet" :key="oidx" class="nimikkeet">
-              <router-link :to="{ name: 'tutkinnonosa', params: { perusteId: peruste.id, tutkinnonOsaViiteId: sisalto.id }, query: { redirect: 'true' }}">
-                {{ $kaanna(peruste.nimi) }}
-              </router-link>
-              <div class="d-flex">
-                <span v-for="(voimassaolotieto, index) in peruste.voimassaoloTieto" :key="'voimassa' + index">
-                <span v-if="index > 0">|</span>
-                  {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-                </span>
-                <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
-              </div>
+          <div v-if="sisalto.tutkinnonosa.tyyppi === 'normaali'">
+            <div v-if="sisalto.perusteet.length === 1" class="nimikkeet">
+              <span>{{ $kaanna(sisalto.perusteet[0].nimi) }},</span>
+              <span v-for="(voimassaolotieto, index) in sisalto.perusteet[0].voimassaoloTieto" :key="'voimassa' + index">
+                  <span v-if="index > 0">|</span>
+                    {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
+                  </span>
+              <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
             </div>
-          </EpCollapse>
+
+            <EpCollapse v-else
+                        :borderBottom="false"
+                        :expandedByDefault="false"
+                        :chevronLocation="'right'"
+                        :use-padding="false">
+              <template v-slot:header>
+                <span class="ato-text">{{ $t('ammatillinen-tutkinnon-osa') }} | </span>
+                <span class="peruste-count">{{ sisalto.perusteet.length }} {{sisalto.perusteet.length > 1 ? $t('tutkinnon-perustetta') : $t('tutkinnon-peruste') }}</span>
+              </template>
+
+              <div v-for="(peruste, oidx) in sisalto.perusteet" :key="oidx" class="nimikkeet">
+                <router-link :to="{ name: 'tutkinnonosa', params: { perusteId: peruste.id, tutkinnonOsaViiteId: sisalto.id }, query: { redirect: 'true' }}">
+                  {{ $kaanna(peruste.nimi) }},
+                </router-link>
+                <div class="peruste-rivi">
+                  <span v-for="(voimassaolotieto, index) in peruste.voimassaoloTieto" :key="'voimassa' + index">
+                  <span v-if="index > 0">|</span>
+                    {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
+                  </span>
+                  <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
+                </div>
+              </div>
+            </EpCollapse>
+          </div>
 
           <div v-else class="ato-text">
             <span>{{ $t('yhteinen-tutkinnon-osa') }} | </span>
             <span>{{ sisalto.perusteet.length }} {{sisalto.perusteet.length > 1 ? $t('tutkinnon-perustetta') : $t('tutkinnon-peruste') }}</span>
           </div>
         </div>
+
         <div v-else>
           <div class="nimikkeet w-80" v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0">
             <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
@@ -289,6 +301,16 @@ export default class PerusteAmmatillinenHaku extends Vue {
         },
       };
     }
+    if (perusteTaiTutkinnonosa.perusteet?.length === 1) {
+      return {
+        name: 'tutkinnonosa',
+        params: {
+          perusteId: perusteTaiTutkinnonosa.perusteet[0].id,
+          tutkinnonOsaViiteId: perusteTaiTutkinnonosa.id,
+        },
+        query: { redirect: 'true' },
+      };
+    }
     if (this.tyyppi === 'opas' || this.tyyppi === 'kooste') {
       return {
         name: 'peruste',
@@ -363,6 +385,14 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 }
 
+.list-item-header {
+  display: flex;
+
+  @media(max-width: 992px){
+    justify-content: space-between;
+  }
+}
+
 .haku {
   width: 100%;
 
@@ -373,6 +403,11 @@ export default class PerusteAmmatillinenHaku extends Vue {
   .nimi {
     font-weight: 600;
     margin-bottom: 5px;
+    margin-right: 10px;
+
+    @media(max-width: 992px){
+      width: 60%;
+    }
   }
 
   .nimikkeet {
@@ -406,6 +441,14 @@ export default class PerusteAmmatillinenHaku extends Vue {
 .peruste-count {
   color: #3367E3;
   font-size: small;
+}
+
+.peruste-rivi {
+  display: flex;
+
+  @media(min-width: 992px){
+    display: inline;
+  }
 }
 
 .tutkinto {
