@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</h2>
+    <h2>{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}<span v-if="laajuus">, {{ laajuus }} {{$t('osaamispiste-lyhenne')}}</span></h2>
     <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
 
     <ep-spinner v-if="!rakenne" />
@@ -195,6 +195,10 @@ export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
       .filter('piilotettu')
       .map('rakennemoduuli')
       .value();
+  }
+
+  get laajuus() {
+    return this.sisaltoviite?.suorituspolku?.osasuorituspolkuLaajuus;
   }
 }
 </script>

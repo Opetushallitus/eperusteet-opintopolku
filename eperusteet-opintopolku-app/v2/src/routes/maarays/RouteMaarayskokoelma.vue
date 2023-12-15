@@ -16,7 +16,7 @@
       <b-form-group :label="$t('tyyppi')" class="col-lg-3 col-md-6 mb-1">
         <EpMultiSelect v-model="query.tyyppi"
                 :enable-empty-option="true"
-                placeholder="kaikki"
+                :placeholder="$t('kaikki')"
                 :is-editing="true"
                 :options="tyyppiVaihtoehdot"
                 :search-identity="searchIdentity">
@@ -162,6 +162,7 @@ export default class RouteMaarayskokoelma extends Vue {
     await this.maarayksetStore?.fetch(
       {
         ...this.query,
+        tyyppi: this.query.tyyppi === 'kaikki' ? null : this.query.tyyppi,
         kieli: this.kieli,
         sivu: this.sivu - 1,
       });
@@ -184,6 +185,7 @@ export default class RouteMaarayskokoelma extends Vue {
 
   get tyyppiVaihtoehdot() {
     return [
+      'kaikki',
       MaaraysDtoTyyppiEnum.OPETUSHALLITUKSENMUU,
       MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
       MaaraysDtoTyyppiEnum.PERUSTE,
