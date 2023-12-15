@@ -3,11 +3,13 @@
     <div v-if="sisalto.tutkinnonosa.tyyppi === 'normaali'">
       <div v-if="sisalto.perusteet.length === 1" class="nimikkeet">
         <span>{{ $kaanna(sisalto.perusteet[0].nimi) }},</span>
-        <span v-for="(voimassaolotieto, index) in sisalto.perusteet[0].voimassaoloTieto" :key="'voimassa' + index">
-                <span v-if="index > 0">|</span>
-                {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-              </span>
-        <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
+        <div class="peruste-rivi">
+          <span v-for="(voimassaolotieto, index) in sisalto.perusteet[0].voimassaoloTieto" :key="'voimassa' + index">
+            <span v-if="index > 0">|</span>
+            {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
+          </span>
+          <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
+        </div>
       </div>
 
       <EpCollapse v-else
@@ -25,10 +27,10 @@
             {{ $kaanna(peruste.nimi) }},
           </router-link>
           <div class="peruste-rivi">
-                  <span v-for="(voimassaolotieto, index) in peruste.voimassaoloTieto" :key="'voimassa' + index">
-                    <span v-if="index > 0">|</span>
-                    {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-                  </span>
+            <span v-for="(voimassaolotieto, index) in peruste.voimassaoloTieto" :key="'voimassa' + index">
+              <span v-if="index > 0">|</span>
+              {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
+            </span>
             <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
           </div>
         </div>
@@ -87,6 +89,14 @@ export default class EpAmmatillinenTutkinnonosaItem extends Vue {
 
 .alatiedot {
   font-size: smaller;
+}
+
+.peruste-rivi {
+  display: flex;
+
+  @media(min-width: 992px){
+    display: inline;
+  }
 }
 
 </style>
