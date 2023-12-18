@@ -1,5 +1,5 @@
 import { Store, Getter, State } from '@shared/stores/store';
-import { PerusteenJulkaisuData } from '@shared/api/eperusteet';
+import { Arviointiasteikot, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
@@ -12,6 +12,7 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
   @State() public pages = 0;
   @State() public total = 0;
   @State() public perPage = 10;
+  @State() public arviointiasteikot: any[] = [];
 
   @State()
   public filterdata: JulkaistutPerusteetQuery = {
@@ -28,6 +29,8 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
     siirtyma: false,
     voimassaolo: true,
     poistunut: false,
+    perusteet: true,
+    tutkinnonosat: false,
   };
 
   constructor(data: JulkaistutPerusteetQuery = { }) {
@@ -72,5 +75,9 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
       ...filters,
     };
     await this.fetch();
+  }
+
+  async fetchArviointiasteikot() {
+    this.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
   }
 }

@@ -82,7 +82,7 @@
 
 <script lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';

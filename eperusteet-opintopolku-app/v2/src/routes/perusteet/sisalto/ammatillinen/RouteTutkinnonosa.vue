@@ -34,12 +34,33 @@ export default class RouteTutkinnonosa extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
+  mounted() {
+    if (this.$route.query?.redirect) {
+      const viite = _.find(this.perusteenTutkinnonosaViitteet, viite => _.toNumber(viite._tutkinnonOsa) === _.toNumber(this.$route.params.tutkinnonOsaViiteId));
+      this.$router.replace(
+        {
+          name: 'tutkinnonosa',
+          params: {
+            perusteId: _.toString(this.perusteDataStore.peruste?.id),
+            tutkinnonOsaViiteId: viite.id,
+          },
+        });
+    }
+  }
+
   get tutkinnonosaViiteId() {
     return _.toNumber(this.$route.params.tutkinnonOsaViiteId);
   }
 
   get tutkinnonosaViite() {
     return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.tutkinnonosaViiteId }) as any;
+  }
+
+  get perusteenTutkinnonosaViitteet() {
+    return _.chain(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat'))
+      .map(st => st.tutkinnonOsaViitteet)
+      .flatMap()
+      .value();
   }
 
   get perusteenTutkinnonosa() {

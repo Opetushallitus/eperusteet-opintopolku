@@ -5,7 +5,8 @@
     <div v-if="tyyppi === 'peruste'">
       <div class="placeholderText">
         <span class="pr-1">{{searchPlaceholder}}</span>
-        <ep-spinner v-if="!valmisteillaOlevat" small/>
+        <span class="pr-1">{{$t('voit-hakea-tutkinnon-osia')}}</span>
+        <EpSpinner v-if="!valmisteillaOlevat" small/>
         <span v-else-if="valmisteillaOlevat.data.length > 0">{{$t('katso-myos')}}
           <router-link class="w-100" :to="{name: 'ammatillinenValmisteillaOlevat'}">
             {{$t('valmisteilla-olevien-perusteiden-julkaisuaikataulu')}}
@@ -13,11 +14,11 @@
         </span>
       </div>
 
-      <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteet}">
+      <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteetJaTutkinnonosat}">
         <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
           <EpSearch v-model="query"
-                    :sr-placeholder="$t('hae-perustetta')"
-                    :placeholder="$t('hae-perustetta')"/>
+                    :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
+                    :placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"/>
         </b-form-group>
         <b-form-group :label="$t('tutkintotyyppi')">
           <EpMultiSelect
@@ -42,50 +43,36 @@
     </div>
 
     <div v-else class="mb-3">
-      <EpSearch v-model="query" :class="{'disabled-events': !perusteet}"/>
+      <EpSearch v-model="query" :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
     </div>
+    <EpSisaltotyyppiFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpSisaltotyyppiFilter>
+  </div>
 
-    <EpVoimassaoloFilter v-if="tyyppi === 'peruste'" v-model="voimassaoloQuery"></EpVoimassaoloFilter>
+  <div v-if="!perusteetJaTutkinnonosat">
+    <EpSpinner />
   </div>
-  <div v-if="!perusteet">
-    <ep-spinner />
-  </div>
+
   <div v-else class="content">
     <div class="perusteet" id="perusteet-lista">
-
-      <ep-ammatillinen-row v-for="(peruste, idx) in perusteet" :key="idx" :route="peruste.route" :class="peruste.voimassaoloTieto[0].tyyppi">
-        <div class="nimi">{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
-        <div class="nimikkeet" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
-          <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-          <span v-for="(tutkintonimike, tidx) in peruste.tutkintonimikkeet" :key="tidx">
-            {{ $kaanna(tutkintonimike.nimi) }}
-          </span>
+      <EpAmmatillinenRow v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
+                           :key="idx"
+                           :route="sisalto.route"
+                           :class="sisalto.voimassaoloTieto[0].tyyppi">
+        <div class="list-item-header">
+          <div class="nimi">
+            {{ $kaanna(sisalto.nimi) }}
+            <div class="d-inline-flex">
+              <span v-if="sisalto.laajuus">{{sisalto.laajuus}} {{$t('osaamispiste')}}</span>
+            </div>
+            <span v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" class="koodi">({{ sisalto.tutkinnonosa.koodiArvo }})</span>
+          </div>
+          <div>
+            <span class="tutkinto w-40" :class="sisalto.sisaltotyyppi">{{ sisalto.sisaltotyyppi === 'peruste' ? $t('tutkinnon-peruste') : $t('tutkinnon-osa') }}</span>
+          </div>
         </div>
-        <div class="nimikkeet" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-          <span class="kohde">{{ $t('osaamisalat') }}:</span>
-          <span v-for="(osaamisala, oidx) in peruste.osaamisalat" :key="oidx">
-            {{ $kaanna(osaamisala.nimi) }}
-          </span>
-        </div>
-        <div class="alatiedot">
-          <span v-for="(voimassaolotieto,index) in peruste.voimassaoloTieto" :key="'voimassa' + index">
-            <span v-if="index > 0">|</span>
-            {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
-          </span>
-          <EpVoimassaolo :voimassaolo="peruste"></EpVoimassaolo>
-          <span v-if="peruste.diaarinumero">
-            | {{$t('diaarinumero')}}: {{ peruste.diaarinumero }}
-          </span>
-          <span v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
-            <template v-if="peruste.koulutukset.length >  1">
-            | {{$t('koulutuskoodit')}}: {{ peruste.koulutuskoodit }}
-            </template>
-            <template v-else>
-            | {{$t('koulutuskoodi')}}: {{ peruste.koulutuskoodit }}
-            </template>
-          </span>
-        </div>
-      </ep-ammatillinen-row>
+        <EpAmmatillinenTutkinnonosaItem v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" :sisalto="sisalto"></EpAmmatillinenTutkinnonosaItem>
+        <EpAmmatillinenPerusteItem v-else :sisalto="sisalto"></EpAmmatillinenPerusteItem>
+      </EpAmmatillinenRow>
 
     </div>
     <div class="pagination d-flex justify-content-center">
@@ -102,13 +89,10 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import EpHeader from '@/components/EpHeader/EpHeader.vue';
+import _ from 'lodash';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { IPerusteHakuStore } from '@/stores/IPerusteHakuStore';
-import EpToggle from '@shared/components/forms/EpToggle.vue';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import _ from 'lodash';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
@@ -116,21 +100,20 @@ import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
-import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
-import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
+import EpSisaltotyyppiFilter from '@shared/components/EpSisaltotyyppiFilter/EpSisaltotyyppiFilter.vue';
+import EpAmmatillinenPerusteItem from '@/components/EpAmmatillinen/EpAmmatillinenPerusteItem.vue';
+import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmatillinenTutkinnonosaItem.vue';
 
 @Component({
   components: {
-    EpToggle,
-    EpHeader,
     EpSearch,
     EpSpinner,
-    EpExternalLink,
     EpAmmatillinenRow,
     EpMultiSelect,
     EpBPagination,
-    EpVoimassaoloFilter,
-    EpVoimassaolo,
+    EpSisaltotyyppiFilter,
+    EpAmmatillinenPerusteItem,
+    EpAmmatillinenTutkinnonosaItem,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -143,11 +126,13 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
   private tutkintotyyppi = 'kaikki';
 
-  private voimassaoloQuery: any = {
-    tuleva: true,
+  private toggleQuery: any = {
+    tuleva: false,
     voimassaolo: true,
     siirtyma: false,
     poistunut: false,
+    perusteet: true,
+    tutkinnonosat: false,
   };
 
   async mounted() {
@@ -197,9 +182,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
     this.page = 1;
   }
 
-  @Watch('voimassaoloQuery', { deep: true })
+  @Watch('toggleQuery', { deep: true })
   voimassaoloFilterChanged() {
-    this.perusteHakuStore.updateFilters(this.voimassaoloQuery);
+    this.perusteHakuStore.updateFilters(this.toggleQuery);
     this.page = 1;
   }
 
@@ -212,26 +197,52 @@ export default class PerusteAmmatillinenHaku extends Vue {
     }
   }
 
-  get perusteet() {
+  get perusteetJaTutkinnonosat() {
     if (this.perusteHakuStore.perusteet) {
-      return _.chain(this.perusteHakuStore.perusteet)
-        .map(peruste => ({
-          ...peruste,
-          route: this.perusteRoute(peruste),
-          voimassaoloTieto: voimassaoloTieto(peruste),
-          koulutuskoodit: _.join(_.map(peruste.koulutukset, 'koulutuskoodiArvo'), ', '),
-        }))
-        .value();
+      return this.mapPerusteet(this.perusteHakuStore.perusteet);
     }
   }
 
-  perusteRoute(peruste) {
+  mapPerusteet(perusteet) {
+    return _.chain(perusteet)
+      .map(sisalto => ({
+        ...sisalto,
+        route: this.perusteTutkinnonosaRoute(sisalto),
+        voimassaoloTieto: voimassaoloTieto(sisalto),
+        koulutuskoodit: _.join(_.map(sisalto.koulutukset, 'koulutuskoodiArvo'), ', '),
+        perusteet: sisalto.perusteet ? this.mapPerusteet(sisalto.perusteet) : null,
+      }))
+      .value();
+  }
+
+  perusteTutkinnonosaRoute(perusteTaiTutkinnonosa) {
+    if (perusteTaiTutkinnonosa.sisaltotyyppi === 'tutkinnonosa' && perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'normaali' && perusteTaiTutkinnonosa.perusteet?.length > 1) {
+      return null;
+    }
+    if (perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'reformi_tutke2') {
+      return {
+        name: 'yhteinentutkinnonosa',
+        params: {
+          koodi: perusteTaiTutkinnonosa.tutkinnonosa.koodiUri,
+        },
+      };
+    }
+    if (perusteTaiTutkinnonosa.perusteet?.length === 1) {
+      return {
+        name: 'tutkinnonosa',
+        params: {
+          perusteId: perusteTaiTutkinnonosa.perusteet[0].id,
+          tutkinnonOsaViiteId: perusteTaiTutkinnonosa.id,
+        },
+        query: { redirect: 'true' },
+      };
+    }
     if (this.tyyppi === 'opas' || this.tyyppi === 'kooste') {
       return {
         name: 'peruste',
         params: {
           koulutustyyppi: 'ammatillinen',
-          perusteId: _.toString(peruste.id || peruste.perusteId),
+          perusteId: _.toString(perusteTaiTutkinnonosa.id || perusteTaiTutkinnonosa.perusteId),
         },
       };
     }
@@ -239,7 +250,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
       return {
         name: 'ammatillinenkooste',
         params: {
-          perusteId: _.toString(peruste.id),
+          perusteId: _.toString(perusteTaiTutkinnonosa.id),
         },
       };
     }
@@ -300,6 +311,14 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 }
 
+.list-item-header {
+  display: flex;
+
+  @media(max-width: 992px){
+    justify-content: space-between;
+  }
+}
+
 .haku {
   width: 100%;
 
@@ -310,23 +329,36 @@ export default class PerusteAmmatillinenHaku extends Vue {
   .nimi {
     font-weight: 600;
     margin-bottom: 5px;
-  }
+    margin-right: 10px;
 
-  .nimikkeet {
-    font-size: small;
-    padding-bottom: 5px;
-
-    .kohde {
-      font-weight: 600;
+    @media(max-width: 992px){
+      width: 60%;
     }
-  }
-
-  .alatiedot {
-    font-size: smaller;
   }
 
   .pagination {
     margin-top: 10px;
   }
 }
+
+.tutkinto {
+  padding: 3px 12px;
+  color: $white;
+  border-radius: 12px;
+  font-size: 12px;
+
+  &.peruste {
+    background: $blue-darken-1;
+  }
+  &.tutkinnonosa {
+    background: $green;
+  }
+}
+
+.koodi {
+  margin-left: 5px;
+  font-weight: 300;
+  color: $gray;
+}
+
 </style>

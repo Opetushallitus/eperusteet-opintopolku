@@ -61,6 +61,7 @@ import RouteOpetussuunnitelmaPerusopetusOppiaineet from '@/routes/opetussuunnite
 import RouteOpetussuunnitelmaPerusopetusOppiaine from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaine.vue';
 import RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet.vue';
 import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiTiedot.vue';
+import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
 import RouteAmmatillinenMaaraykset from '@/routes/ammatillinen/RouteAmmatillinenMaaraykset.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
@@ -103,8 +104,7 @@ import {
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
-import RouteKotoLaajaAlainenOsaaminen
-  from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
+import RouteKotoLaajaAlainenOsaaminen from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
 import { redirects } from './utils/redirects';
 import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuStore';
@@ -436,6 +436,21 @@ export const router = new Router({
           component: RouteToteutussuunnitelmaOsaAlue,
           name: 'toteutussuunnitelmaOsaAlue',
         }],
+      }, {
+        path: 'yhteinentutkinnonosa/:koodi',
+        component: RouteTutkinnonosaTutke,
+        name: 'yhteinentutkinnonosa',
+        meta: {
+          resolve: {
+            async props() {
+              return {
+                default: {
+                  ammatillinenPerusteHakuStore,
+                },
+              };
+            },
+          },
+        },
       }, {
         path: 'ops/:opetussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi*',
         name: 'ops',
