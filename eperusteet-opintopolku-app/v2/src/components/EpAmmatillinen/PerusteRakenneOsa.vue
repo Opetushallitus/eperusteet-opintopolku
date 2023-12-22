@@ -21,7 +21,13 @@
           <div class="text-center" v-if="rakenneosa.kuvaus" @click="toggleKuvaus()">
             <EpMaterialIcon>more_horiz</EpMaterialIcon>
           </div>
-          <div class="kuvaus" v-if="naytaKuvaus && rakenneosa.kuvaus" v-html="$kaanna(rakenneosa.kuvaus)" @click="toggleKuvaus()"></div>
+          <div v-if="naytaKuvaus" class="kuvaus">
+            <div v-html="$kaanna(rakenneosa.kuvaus)"></div>
+            <div v-if="rakenneosa.paikallinenKuvaus && rakenneosa.paikallinenKuvaus.kuvaus" class="mt-3">
+              <span class="paikallinen-kuvaus">{{ $t('koulutuksen-jarjestajan-tarkennus') }}</span>
+              <div v-html="$kaanna(rakenneosa.paikallinenKuvaus.kuvaus)"></div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -143,10 +149,8 @@ export default class PerusteRakenneOsa extends Vue {
 
   .rakenne {
     border-radius: 0;
-    border: 0;
-    border-left: 0.3rem;
-    border-style: solid;
-    border-color: $gray;
+    border: 0 solid $gray;
+    border-left-width: 0.3rem;
     padding:20px 20px 0px 20px;
     margin-top: 20px;
     background-color: $white;
@@ -158,6 +162,10 @@ export default class PerusteRakenneOsa extends Vue {
 
     .kuvaukseton {
       padding-bottom: 20px;
+    }
+
+    .paikallinen-kuvaus {
+      font-weight: 500;
     }
   }
 
