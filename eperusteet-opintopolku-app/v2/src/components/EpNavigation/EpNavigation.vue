@@ -27,7 +27,7 @@
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto" :aria-label="$t('kielivalinta')">
+      <b-navbar-nav class="ml-auto align-self-start" :aria-label="$t('kielivalinta')">
         <b-nav-item-dropdown right>
           <template slot="button-content">
             <EpMaterialIcon class="mr-2">language</EpMaterialIcon>
@@ -53,6 +53,7 @@ import { createLogger } from '@shared/utils/logger';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
+import { Kieli } from '@shared/tyypit';
 
 const logger = createLogger('EpNavigation');
 
@@ -209,12 +210,16 @@ export default class EpNavigation extends Vue {
   }
 
   get maarayskokoelma() {
-    return {
+    if (this.sisaltoKieli === Kieli.en) {
+      return [];
+    }
+
+    return [{
       name: 'opetushallituksen-maaraykset',
       route: {
         name: 'maaraykset',
       },
-    };
+    }];
   }
 
   get items() {
@@ -228,7 +233,7 @@ export default class EpNavigation extends Vue {
         ...this.muuKoulutus,
         ...this.digitaalinenOsaaminen,
       ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi))),
-      this.maarayskokoelma,
+      ...this.maarayskokoelma,
     ];
   }
 
