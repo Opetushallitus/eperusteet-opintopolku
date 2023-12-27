@@ -24,6 +24,9 @@ export class JulkaistutKoulutustyypitStore {
 
   public async fetch(kieli) {
     this.state.koulutustyyppiLukumaarat = null;
+    this.state.muuLukumaarat = null;
+    this.state.digitaalinenOsaaminen = null;
+
     try {
       this.state.koulutustyyppiLukumaarat = (await Perusteet.getJulkaistutKoulutustyyppiLukumaarat(kieli)).data;
       this.state.muuLukumaarat = (((await getJulkisetOpetussuunnitelmat({ jotpatyyppi: ['MUU', 'VST'], sivukoko: 1 })).data) as Page<OpetussuunnitelmaDto>).kokonaismäärä;
