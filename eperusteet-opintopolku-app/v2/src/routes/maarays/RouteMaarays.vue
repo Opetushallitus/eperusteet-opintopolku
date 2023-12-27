@@ -32,7 +32,7 @@
         </a>
       </div>
 
-      <div class="tiedot">
+      <div class="tiedot flex-grow-1">
         <ep-form-content name="voimaantulo" headerType="h3" headerClass="h6">
           {{$sd(maarays.voimassaoloAlkaa)}} <EpVoimassaolo :voimassaolo="maarays"/>
         </ep-form-content>
@@ -77,6 +77,19 @@
           </div>
         </ep-form-content>
 
+        <ep-form-content name="maarays-on-kumottu-uudemmalla-maarayksella" headerType="h3" headerClass="h6" v-if="korvaavatMuuttavatMaaraykset && korvaavatMuuttavatMaaraykset.length > 0">
+          <b-table
+            :items="korvaavatMuuttavatMaaraykset"
+            :fields="korvaavatMuuttavatFields"
+            striped>
+            <template v-slot:cell(nimi)="{ item }">
+              <router-link :to="{name: 'maarays', params: {maaraysId: item.id}}" class="d-block">
+                {{ $kaanna(item.nimi) }} ({{item.diaarinumero}})
+              </router-link>
+            </template>
+          </b-table>
+        </ep-form-content>
+
       </div>
     </div>
 
@@ -84,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { Maaraykset, MaarayksetParams, MaaraysDto, MaaraysLiiteDtoTyyppiEnum, baseURL, MaaraysDtoLiittyyTyyppiEnum, Perusteet, PerusteDto } from '@shared/api/eperusteet';
+import { Maaraykset, MaarayksetParams, MaaraysDto, MaaraysLiiteDtoTyyppiEnum, baseURL, MaaraysDtoLiittyyTyyppiEnum, Perusteet, PerusteDto, MaaraysDtoTilaEnum } from '@shared/api/eperusteet';
 import * as _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -98,6 +111,7 @@ import { Meta } from '@shared/utils/decorators';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 import { koulutustyyppiTheme } from '@shared/utils/perusteet';
+import { MaaraysKevytDtoTilaEnum } from '@shared/generated/eperusteet';
 
 @Component({
   components: {
@@ -221,6 +235,35 @@ export default class RouteMaarays extends Vue {
         },
       };
     }
+  }
+
+  get korvaavatMuuttavatMaaraykset() {
+    if (this.maarays) {
+      return _.filter([
+        ...(this.maarays.korvaavatMaaraykset || []),
+        ...(this.maarays.muuttavatMaaraykset || []),
+      ], { tila: MaaraysKevytDtoTilaEnum.JULKAISTU });
+    }
+  }
+
+  get korvaavatMuuttavatFields() {
+    return [{
+      key: 'nimi',
+      label: this.$t('nimi'),
+      thStyle: { width: '60%' },
+      thClass: 'border-bottom-1',
+      tdClass: 'align-middle',
+      sortable: false,
+    }, {
+      key: 'voimassaoloAlkaa',
+      label: this.$t('voimassaolo-alkaa'),
+      thClass: 'border-bottom-1',
+      tdClass: 'align-middle',
+      sortable: false,
+      formatter: (value: any, key: any, item: any) => {
+        return (this as any).$sd(value);
+      },
+    }];
   }
 }
 </script>
