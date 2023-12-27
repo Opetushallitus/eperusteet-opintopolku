@@ -43,21 +43,21 @@
       </div>
       <div class="col-md-12" v-if="hasMaarayskirje">
         <ep-form-content name="maarayskirje" headerType="h3" headerClass="h6">
-          <a :href="maarayskirje.url" target="_blank" rel="noopener noreferrer">{{ maarayskirje.nimi }}</a>
+          <EpPdfLink :url="maarayskirje.url">{{ $kaanna(maarayskirje.nimi) }}</EpPdfLink>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasMuutosmaaraykset">
         <ep-form-content name="muutosmaaraykset" headerType="h3" headerClass="h6">
-          <ul v-if="muutosmaaraykset && muutosmaaraykset.length > 1">
-            <li v-for="(muutosmaarays, idx) in muutosmaaraykset" :key="idx">
-              <a :href="muutosmaarays.url" target="_blank" rel="noopener noreferrer">{{ muutosmaarays.nimi }}</a>
-            </li>
-          </ul>
-          <div v-else>
-            <div v-for="(muutosmaarays, idx) in muutosmaaraykset" :key="idx">
-              <a :href="muutosmaarays.url" target="_blank" rel="noopener noreferrer">{{ muutosmaarays.nimi }}</a>
-            </div>
-          </div>
+          <b-table
+            :items="muutosmaaraykset"
+            :fields="muutosmaarayksetFields"
+            striped>
+
+            <template v-slot:cell(nimi)="{ item }">
+              <EpPdfLink :url="item.url">{{ $kaanna(item.nimi) }}</EpPdfLink>
+            </template>
+          </b-table>
+
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasKorvattavatDiaarinumerot">
@@ -184,8 +184,8 @@
       </div>
 
       <div class="col-md-12" v-if="dokumentti">
-        <ep-form-content name="dokumentti-osoite" headerType="h3" headerClass="h6">
-          <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-pdf-dokumentti') }}</a>
+        <ep-form-content name="peruste-pdfna" headerType="h3" headerClass="h6">
+          <EpPdfLink :url="dokumentti">{{ $t('avaa-peruste-pdfna') }}</EpPdfLink>
         </ep-form-content>
       </div>
 
@@ -377,15 +377,17 @@ export default class RoutePerusteTiedot extends Vue {
   get maarayskokoelmanMuutosmaaraykset() {
     return _.chain(this.julkaisut)
       .filter('muutosmaarays')
-      .map(julkaisu => ((julkaisu.muutosmaarays?.liitteet as any)[this.kieli].liitteet))
-      .flatMap()
-      .filter({ tyyppi: MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI })
+      .map('muutosmaarays')
       .map(muutosmaarays => {
+        const muutosmaaraysLiite = _.find(muutosmaarays!.liitteet![this.kieli].liitteet, { tyyppi: MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI });
         return {
-          nimi: this.$kaanna(muutosmaarays.nimi),
-          url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaarays.id)).url,
+          voimassaoloAlkaa: muutosmaarays!.voimassaoloAlkaa,
+          nimi: this.$kaanna(muutosmaaraysLiite!.nimi),
+          url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaaraysLiite!.id)).url,
         };
       })
+      .sortBy('voimassaoloAlkaa')
+      .reverse()
       .value();
   }
 
@@ -461,6 +463,26 @@ export default class RoutePerusteTiedot extends Vue {
       key: 'tutkintonimikeArvo',
       label: this.$t('koodi'),
       thStyle: 'width: 15%',
+    }];
+  }
+
+  get muutosmaarayksetFields() {
+    return [{
+      key: 'nimi',
+      label: this.$t('nimi'),
+      thStyle: { width: '75%' },
+      thClass: 'border-bottom-1',
+      tdClass: 'align-middle',
+      sortable: false,
+    }, {
+      key: 'voimassaoloAlkaa',
+      label: this.$t('voimassaolo-alkaa'),
+      thClass: 'border-bottom-1',
+      tdClass: 'align-middle',
+      sortable: false,
+      formatter: (value: any, key: any, item: any) => {
+        return (this as any).$sd(value);
+      },
     }];
   }
 
