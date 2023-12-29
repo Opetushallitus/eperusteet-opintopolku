@@ -7,10 +7,16 @@
       <template v-if="perusteOppiaine">
         <ep-peruste-content :perusteObject="perusteOppiaine.tehtava" :object="oppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
 
-        <template v-if="perusteOppiaine.vapaatTekstit">
-          <div v-for="(vapaaTeksti, index) in perusteOppiaine.vapaatTekstit" :key="'vapaateksti'+index" class="mt-4">
+        <template v-if="perusteOppiaineVapaatTekstit">
+          <div v-for="(vapaaTeksti, index) in perusteOppiaineVapaatTekstit" :key="'vapaateksti'+index" class="mt-5">
             <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
             <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+
+            <h4>{{ $t('paikallinen-teksti') }}</h4>
+            <div v-if="vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus">
+              <ep-content-viewer :value="$kaanna(vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus)" :kuvat="kuvat" :termit="termit"/>
+            </div>
+            <ep-alert v-else :text="$t('paikallista-sisaltoa-ei-maaritetty')" />
           </div>
         </template>
       </template>
@@ -28,19 +34,21 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import OppiaineenVuosiluokkakokonaisuus from './OppiaineenVuosiluokkakokonaisuus.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { UnwrappedOpsOppiaineDtoTyyppiEnum } from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpAlert from '@shared/components/EpAlert/EpAlert.vue';
 
 @Component({
   components: {
     EpPerusteContent,
     OppiaineenVuosiluokkakokonaisuus,
     EpContentViewer,
+    EpAlert,
   },
 } as any)
 export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
@@ -92,6 +100,15 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
       return {
         ...ovlk,
         tunniste: _.get(_.find(this.perusteenVuosiluokkakokonaisuudet, pvlk => _.toString(pvlk.id) === _.get(ovlk, '_vuosiluokkaKokonaisuus')), 'tunniste'),
+      };
+    });
+  }
+
+  get perusteOppiaineVapaatTekstit() {
+    return _.map(this.perusteOppiaine.vapaatTekstit, povt => {
+      return {
+        ...povt,
+        oppiaineVapaaTeksti: _.find(this.oppiaine.vapaatTekstit, ovt => _.toString(povt.id) === _.toString(ovt.perusteenVapaaTekstiId)) || {},
       };
     });
   }
