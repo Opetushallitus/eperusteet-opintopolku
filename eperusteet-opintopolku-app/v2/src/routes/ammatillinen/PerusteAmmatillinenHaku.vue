@@ -126,21 +126,26 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
   private tutkintotyyppi = 'kaikki';
 
-  private toggleQuery: any = {
-    tuleva: false,
-    voimassaolo: true,
-    siirtyma: false,
-    poistunut: false,
-    perusteet: true,
-    tutkinnonosat: false,
-  };
+  private toggleQuery: any = {};
 
   async mounted() {
+    this.initToggleQuery();
     this.page = 1;
     if (!this.perusteHakuStore.perusteet) {
       await this.perusteHakuStore.fetch();
     }
     await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+  }
+
+  initToggleQuery() {
+    this.toggleQuery = {
+      tuleva: this.filters.tuleva,
+      voimassaolo: this.filters.voimassaolo,
+      siirtyma: this.filters.siirtyma,
+      poistunut: this.filters.poistunut,
+      perusteet: this.filters.perusteet,
+      tutkinnonosat: this.filters.tutkinnonosat,
+    };
   }
 
   get tutkintotyypit() {
