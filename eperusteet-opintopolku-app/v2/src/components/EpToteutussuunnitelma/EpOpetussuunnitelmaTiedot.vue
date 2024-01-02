@@ -47,9 +47,9 @@
         <span>{{ $t('koulutus-on-jotpa-rahoitteinen')}}</span>
       </ep-form-content>
 
-      <ep-form-content name="dokumentti" headerType="h3" headerClass="h6" v-if="dokumenttiUrl">
-          <a :href="dokumenttiUrl" target="_blank" rel="noopener noreferrer">{{ $t('avaa-opetussuunnitelma-pdf') }}</a>
-        </ep-form-content>
+      <ep-form-content name="opetussuunnitelma-pdfna" headerType="h3" headerClass="h6" v-if="dokumenttiUrl">
+        <EpPdfLink :url="dokumenttiUrl">{{ $t('avaa-opetussuunnitelma-pdf') }}</EpPdfLink>
+      </ep-form-content>
     </template>
   </div>
 </template>

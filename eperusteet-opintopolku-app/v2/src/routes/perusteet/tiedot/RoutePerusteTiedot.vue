@@ -191,9 +191,9 @@
 
       <div class="col-md-12" v-if="kvliitteita">
         <ep-form-content name="kv-liitteet" headerType="h3" headerClass="h6">
-          <div><a v-if="kvliitteet['fi']" :href="kvliitteet['fi']" target="_blank" rel="noopener noreferrer">{{ $t('lataa-kvliite-fi') }}</a></div>
-          <div><a v-if="kvliitteet['sv']" :href="kvliitteet['sv']" target="_blank" rel="noopener noreferrer">{{ $t('lataa-kvliite-sv') }}</a></div>
-          <div><a v-if="kvliitteet['en']" :href="kvliitteet['en']" target="_blank" rel="noopener noreferrer">{{ $t('lataa-kvliite-en') }}</a></div>
+          <EpPdfLink v-if="kvliitteet['fi']" :url="kvliitteet['fi']">{{ $t('lataa-kvliite-fi') }}</EpPdfLink>
+          <EpPdfLink v-if="kvliitteet['sv']" :url="kvliitteet['sv']">{{ $t('lataa-kvliite-sv') }}</EpPdfLink>
+          <EpPdfLink v-if="kvliitteet['en']" :url="kvliitteet['en']">{{ $t('lataa-kvliite-en') }}</EpPdfLink>
         </ep-form-content>
       </div>
 
