@@ -37,8 +37,8 @@
           </router-link>
         </ep-form-content>
 
-        <ep-form-content name="dokumentti" headerType="h3" headerClass="h6" v-if="dokumenttiUrl">
-          <a :href="dokumenttiUrl" target="_blank" rel="noopener noreferrer">{{ $t('avaa-toteutusuunnitelma-pdf') }}</a>
+        <ep-form-content name="toteutussuunnitelma-pdfna" headerType="h3" headerClass="h6" v-if="dokumenttiUrl">
+          <EpPdfLink :url="dokumenttiUrl">{{ $t('avaa-toteutusuunnitelma-pdf') }}</EpPdfLink>
         </ep-form-content>
 
         <ep-form-content name="koulutuksen-jarjestaja" headerType="h3" headerClass="h6">

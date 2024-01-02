@@ -73,8 +73,8 @@
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="dokumentti">
-        <ep-form-content name="dokumentti-osoite" headerType="h3" headerClass="h6">
-          <a :href="dokumentti" target="_blank" rel="noopener noreferrer">{{ $t('lataa-pdf-dokumentti') }}</a>
+        <ep-form-content name="opetussuunnitelma-pdfna" headerType="h3" headerClass="h6">
+          <EpPdfLink :url="dokumentti">{{ $t('avaa-opetussuunnitelma-pdf') }}</EpPdfLink>
         </ep-form-content>
       </div>
 
