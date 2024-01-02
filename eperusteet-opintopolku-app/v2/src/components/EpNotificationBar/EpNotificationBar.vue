@@ -1,10 +1,15 @@
 <template>
-  <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="notifikaatio" ref="stickyElement">
+  <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="versioNotifikaatio || !hasSisaltoKielelle" ref="stickyElement">
     <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
-    <span class="notifikaatio-text korostus">{{ notifikaatio }}</span>
-    <span v-if="!isEsikatselu && versio">
+    <div v-if="!hasSisaltoKielelle">
+      <span class="notifikaatio-text">{{ sisaltoNotifikaatio }}</span>
+    </div>
+    <div v-else>
+      <span class="notifikaatio-text korostus">{{ versioNotifikaatio }}</span>
+      <span v-if="!isEsikatselu && versio">
       <span class="btn-link clickable korostus" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
     </span>
+    </div>
   </div>
 </template>
 
@@ -22,14 +27,17 @@ import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue
     Sticky,
   },
 })
-export default class EpEsikatseluNotifikaatio extends Vue {
+export default class EpNotificationBar extends Vue {
   @Prop({ required: false })
   private julkaisuPvm?: any;
+
+  @Prop({ required: false, default: true })
+  private hasSisaltoKielelle?: boolean;
 
   navBarHeight: number = 0;
 
   mounted() {
-    if (this.notifikaatio) {
+    if (this.versioNotifikaatio || !this.hasSisaltoKielelle) {
       const navbar = document.getElementById('navigation-bar');
       (this.$refs['stickyElement'] as any)['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
     }
@@ -56,7 +64,7 @@ export default class EpEsikatseluNotifikaatio extends Vue {
     this.$router.go(0);
   }
 
-  get notifikaatio() {
+  get versioNotifikaatio() {
     if (this.isEsikatselu) {
       if (this.$route.params?.perusteId) {
         return this.$t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu');
@@ -73,6 +81,12 @@ export default class EpEsikatseluNotifikaatio extends Vue {
       else {
         return `${this.$t('katselet-suunnitelman-vanhentunutta-versiota')} (${this.versio}).`;
       }
+    }
+  }
+
+  get sisaltoNotifikaatio() {
+    if (!this.hasSisaltoKielelle) {
+      return this.$t('sisaltoa-ei-saatavilla');
     }
   }
 
