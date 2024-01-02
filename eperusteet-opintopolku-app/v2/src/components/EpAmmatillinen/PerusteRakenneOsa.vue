@@ -18,7 +18,7 @@
             <div class="w-25 text-right">{{laajuus}}</div>
           </div>
 
-          <div class="text-center" v-if="rakenneosa.kuvaus" @click="toggleKuvaus()">
+          <div class="text-center" v-if="rakenneosa.kuvaus || rakenneosa.paikallinenKuvaus && rakenneosa.paikallinenKuvaus.kuvaus" @click="toggleKuvaus()">
             <EpMaterialIcon>more_horiz</EpMaterialIcon>
           </div>
           <div v-if="naytaKuvaus" class="kuvaus">
@@ -157,7 +157,7 @@ export default class PerusteRakenneOsa extends Vue {
     cursor: pointer;
 
     .kuvaus {
-      padding: 20px;
+      padding: 10px 20px;
     }
 
     .kuvaukseton {
