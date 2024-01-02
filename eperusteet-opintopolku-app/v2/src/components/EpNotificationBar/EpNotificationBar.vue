@@ -1,14 +1,9 @@
 <template>
-  <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="versioNotifikaatio || !hasSisaltoKielelle" ref="stickyElement">
+  <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="notifikaatio" ref="stickyElement">
     <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
-    <div v-if="!hasSisaltoKielelle">
-      <span class="notifikaatio-text">{{ sisaltoNotifikaatio }}</span>
-    </div>
-    <div v-else>
-      <span class="notifikaatio-text korostus">{{ versioNotifikaatio }}</span>
-      <span v-if="!isEsikatselu && versio">
+    <span class="notifikaatio-text korostus">{{ notifikaatio }}</span>
+    <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">
       <span class="btn-link clickable korostus" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
-    </span>
     </div>
   </div>
 </template>
@@ -37,7 +32,7 @@ export default class EpNotificationBar extends Vue {
   navBarHeight: number = 0;
 
   mounted() {
-    if (this.versioNotifikaatio || !this.hasSisaltoKielelle) {
+    if (this.notifikaatio) {
       const navbar = document.getElementById('navigation-bar');
       (this.$refs['stickyElement'] as any)['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
     }
@@ -64,7 +59,11 @@ export default class EpNotificationBar extends Vue {
     this.$router.go(0);
   }
 
-  get versioNotifikaatio() {
+  get notifikaatio() {
+    if (!this.hasSisaltoKielelle) {
+      return this.$t('sisaltoa-ei-saatavilla');
+    }
+
     if (this.isEsikatselu) {
       if (this.$route.params?.perusteId) {
         return this.$t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu');
@@ -81,12 +80,6 @@ export default class EpNotificationBar extends Vue {
       else {
         return `${this.$t('katselet-suunnitelman-vanhentunutta-versiota')} (${this.versio}).`;
       }
-    }
-  }
-
-  get sisaltoNotifikaatio() {
-    if (!this.hasSisaltoKielelle) {
-      return this.$t('sisaltoa-ei-saatavilla');
     }
   }
 
