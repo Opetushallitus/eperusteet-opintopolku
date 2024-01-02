@@ -12,7 +12,7 @@
   </ep-header>
 
   <div>
-    <EpEsikatseluNotifikaatio/>
+    <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle"/>
   </div>
 
   <div class="container mt-4">
@@ -44,11 +44,12 @@ import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenav.vue';
 import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
-import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
+import EpNotificationBar from '@/components/EpNotificationBar/EpNotificationBar.vue';
 import { OpetussuunnitelmaKevytDtoTilaEnum } from '@shared/api/ylops';
 import * as _ from 'lodash';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -56,7 +57,7 @@ import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
     EpHeader,
     EpSidebar,
     EpPreviousNextNavigation,
-    EpEsikatseluNotifikaatio,
+    EpNotificationBar,
   },
   inject: [],
 })
@@ -117,6 +118,10 @@ export default class RouteOpetussuunnitelma extends Vue {
 
   get opetussuunnitelmaEsikatselussa() {
     return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(this.$route.query, 'esikatselu');
+  }
+
+  get hasSisaltoKielelle() {
+    return _.includes(this.opetussuunnitelma?.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value));
   }
 
   @ProvideReactive('linkkiHandler')

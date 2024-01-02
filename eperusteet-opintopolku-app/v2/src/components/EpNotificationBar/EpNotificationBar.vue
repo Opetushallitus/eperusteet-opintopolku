@@ -2,9 +2,9 @@
   <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="notifikaatio" ref="stickyElement">
     <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
     <span class="notifikaatio-text korostus">{{ notifikaatio }}</span>
-    <span v-if="!isEsikatselu && versio">
+    <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">
       <span class="btn-link clickable korostus" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
-    </span>
+    </div>
   </div>
 </template>
 
@@ -22,9 +22,12 @@ import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue
     Sticky,
   },
 })
-export default class EpEsikatseluNotifikaatio extends Vue {
+export default class EpNotificationBar extends Vue {
   @Prop({ required: false })
   private julkaisuPvm?: any;
+
+  @Prop({ required: false, default: true })
+  private hasSisaltoKielelle?: boolean;
 
   navBarHeight: number = 0;
 
@@ -57,6 +60,10 @@ export default class EpEsikatseluNotifikaatio extends Vue {
   }
 
   get notifikaatio() {
+    if (!this.hasSisaltoKielelle) {
+      return this.$t('sisaltoa-ei-saatavilla');
+    }
+
     if (this.isEsikatselu) {
       if (this.$route.params?.perusteId) {
         return this.$t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu');

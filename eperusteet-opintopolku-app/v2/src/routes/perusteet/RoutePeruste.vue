@@ -15,7 +15,7 @@
   </ep-header>
 
   <div>
-    <EpEsikatseluNotifikaatio :julkaisu-pvm="julkaisuPvm"/>
+    <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle"/>
   </div>
 
   <div class="container mt-4">
@@ -87,13 +87,14 @@ import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import EpEsikatseluNotifikaatio from '@/components/EpEsikatselu/EpEsikatseluNotifikaatio.vue';
+import EpNotificationBar from '@/components/EpNotificationBar/EpNotificationBar.vue';
 import EpPerusteHaku from '@/components/EpPerusteHaku.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -103,7 +104,7 @@ import { createPerusteMurupolku } from '@/utils/murupolku';
     EpPreviousNextNavigation,
     EpFormContent,
     EpField,
-    EpEsikatseluNotifikaatio,
+    EpNotificationBar,
     EpPerusteHaku,
     EpSearch,
   },
@@ -159,6 +160,10 @@ export default class RoutePeruste extends Vue {
 
   get koulutustyyppi() {
     return this.peruste?.koulutustyyppi || this.oppaanKoulutustyyppi;
+  }
+
+  get hasSisaltoKielelle() {
+    return _.includes(this.peruste?.kielet, _.toString(Kielet.getSisaltoKieli.value));
   }
 
   get oppaanKoulutustyyppi() {
