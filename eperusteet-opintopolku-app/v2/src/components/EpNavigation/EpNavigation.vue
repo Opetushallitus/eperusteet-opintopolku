@@ -121,7 +121,7 @@ export default class EpNavigation extends Vue {
       const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi) || this.$route.params.koulutustyyppi;
       return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
     }
-    else if (this.$route?.name === 'maaraykset') {
+    else if (this.$route?.name === 'maaraykset' || this.$route?.name === 'maarays') {
       return 'router-link-active oph-maaraykset';
     }
     else {
