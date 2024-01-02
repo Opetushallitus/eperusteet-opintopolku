@@ -31,7 +31,7 @@
               <span v-if="index > 0">|</span>
               {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
             </span>
-            <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
+            <EpVoimassaolo :voimassaolo="peruste"></EpVoimassaolo>
           </div>
         </div>
       </EpCollapse>
