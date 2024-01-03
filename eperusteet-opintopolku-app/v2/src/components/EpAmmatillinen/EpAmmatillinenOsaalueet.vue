@@ -1,11 +1,15 @@
 <template>
   <div>
-    <ep-collapse class="mb-3" v-for="(osaalue, index) in osaalueet" :key="'osaalue'+index"
-      :shadow="true"
-      :borderBottom="false"
-      :expandedByDefault="osaalueet.length === 1">
+    <ep-collapse class="mb-3"
+                 v-for="(osaalue, index) in osaalueet"
+                 :key="'osaalue'+index"
+                 :shadow="false"
+                 :borderBottom="false"
+                 :use-blue-theme="true"
+                 :use-padding="false"
+                 :expandedByDefault="osaalueet.length === 1">
 
-      <h3 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{osaalue.koodi.arvo}})</span></h3>
+      <h4 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{osaalue.koodi.arvo}})</span></h4>
 
       <div class="mt-2" v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet" :key="'osaamistavoite'+ index + otIndex">
         <div class="osaamistavoiteotsikko">
