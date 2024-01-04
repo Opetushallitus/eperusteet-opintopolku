@@ -1,5 +1,9 @@
 <template>
   <div>
+    <ep-form-content class="col-md-12" v-if="tutkinnonosa.koodiArvo" name="koodi">
+      <span v-html="tutkinnonosa.koodiArvo" />
+    </ep-form-content>
+
     <ep-form-content class="col-md-12 mb-5" :showHeader="false" v-if="tutkinnonosa.kuvaus">
       <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
     </ep-form-content>
