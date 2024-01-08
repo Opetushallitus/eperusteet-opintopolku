@@ -10,7 +10,7 @@ export class AipeOppiaineStore {
     oppiaine: null as AIPEOppiaineDto | null,
     oppimaarat: null as AIPEOppiaineSuppeaDto[] | null,
     laajaAlaisetOsaamiset: null as LaajaalainenOsaaminenDto[] | null,
-  })
+  });
 
   public static async create(perusteId: number, vaiheId: number, oppiaineId: number) {
     const result = new AipeOppiaineStore(perusteId, vaiheId, oppiaineId);

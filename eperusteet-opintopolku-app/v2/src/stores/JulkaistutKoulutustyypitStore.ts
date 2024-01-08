@@ -15,7 +15,7 @@ export class JulkaistutKoulutustyypitStore {
     koulutustyyppiLukumaarat: null as KoulutustyyppiLukumaara[] | null,
     muuLukumaarat: null as Number | null,
     digitaalinenOsaaminen: null as PerusteenJulkaisuData[] | null,
-  })
+  });
 
   public readonly koulutustyyppiLukumaarat = computed(() => this.state.koulutustyyppiLukumaarat);
   public readonly julkaistutKoulutustyypit = computed(() => _.map(this.state.koulutustyyppiLukumaarat, 'koulutustyyppi'));

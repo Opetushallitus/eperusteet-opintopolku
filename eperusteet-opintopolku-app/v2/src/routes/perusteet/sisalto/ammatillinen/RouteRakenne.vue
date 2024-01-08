@@ -66,12 +66,12 @@ export default class RouteRakenne extends Vue {
     return this.perusteDataStore.peruste;
   }
 
-  get rakenne() {
+  get rakenne(): any {
     return _.get(_.first(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat')), 'rakenne');
   }
 
   get rakenneOsat() {
-    return this.setRakenneOsaKoodi(this.rakenne.osat);
+    return this.setRakenneOsaKoodi(this.rakenne?.osat);
   }
 
   get perusteenTutkinnonosaViitteetById() {

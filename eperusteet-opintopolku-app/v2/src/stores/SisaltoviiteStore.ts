@@ -13,7 +13,7 @@ export class SisaltoviiteStore {
     perusteenTutkinnonosaViite: null as any | null,
     kuvat: null as any[] | null,
     fetching: true as boolean,
-  })
+  });
 
   constructor(private opetussuunnitelma: OpetussuunnitelmaDto, private sisaltoviiteId: number) {
     this.fetch();
@@ -34,7 +34,7 @@ export class SisaltoviiteStore {
           .flatten()
           .uniq()
           .map(koodi => Koodistot.getKoodistoKoodiByUri(koodi))
-          .value())
+          .value()),
       ).map('data')
         .map(koodi => {
           return {

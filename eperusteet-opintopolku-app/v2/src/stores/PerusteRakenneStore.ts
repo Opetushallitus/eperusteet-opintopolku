@@ -9,7 +9,7 @@ Vue.use(VueCompositionApi);
 export class PerusteRakenneStore {
   private state = reactive({
     rakenne: null as RakenneModuuliDto[] | null,
-  })
+  });
 
   constructor(private perusteId: number, private suoritustapa: string) {
     this.fetch();

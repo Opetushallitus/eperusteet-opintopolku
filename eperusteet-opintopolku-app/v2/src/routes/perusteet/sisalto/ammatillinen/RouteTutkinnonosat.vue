@@ -74,7 +74,7 @@ export default class RouteTutkinnonosat extends Vue {
         .filter(tutkinnonosa =>
           _.includes(
             _.toLower(_.get(tutkinnonosa.tutkinnonOsa, 'nimi.' + Kielet.getSisaltoKieli.value)),
-            _.toLower(this.queryNimi)
+            _.toLower(this.queryNimi),
           ))
         .sortBy('jarjestys')
         .map((tutkinnonosaViite, index) => ({

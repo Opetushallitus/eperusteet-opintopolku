@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 // Murupolku opetussuunnitelmille ja toteutussuunnitelmille
 export function createOpetussuunnitelmaMurupolku(ops, koulutustyyppi) {
-  let polut: any = [];
+  const polut: any = [];
   if (koulutustyyppi) {
     polut.push(murupolkuOpetussuunnitelmaRoot(koulutustyyppi));
 
@@ -26,7 +26,7 @@ export function createPerusteMurupolku(peruste, koulutustyyppi, routeKoulutustyy
   if (routeKoulutustyyppi === 'digiosaaminen') {
     return [];
   }
-  let polut: any = [];
+  const polut: any = [];
   polut.push(murupolkuPerusteRoot(koulutustyyppi, routeKoulutustyyppi));
   polut.push(murupolkuPerusteTiedot(peruste, routeKoulutustyyppi));
   return polut;
@@ -116,7 +116,7 @@ export function murupolkuOpetussuunnitelmaRoot(koulutustyyppi) {
 }
 
 export function murupolkuPerusteRoot(koulutustyyppi, routeKoulutustyyppi) {
-  let kt = koulutustyyppi ? koulutustyypinRyhma(koulutustyyppi) : routeKoulutustyyppi;
+  const kt = koulutustyyppi ? koulutustyypinRyhma(koulutustyyppi) : routeKoulutustyyppi;
   return {
     label: kt,
     location: {

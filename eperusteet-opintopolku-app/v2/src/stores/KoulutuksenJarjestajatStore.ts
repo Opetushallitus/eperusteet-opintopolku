@@ -9,7 +9,7 @@ Vue.use(VueCompositionApi);
 export class KoulutuksenJarjestajatStore {
   private state = reactive({
     koulutustoimijat: null as KoulutustoimijaJulkinenDto[] | null,
-  })
+  });
 
   public readonly koulutustoimijat = computed(() => this.state.koulutustoimijat);
 

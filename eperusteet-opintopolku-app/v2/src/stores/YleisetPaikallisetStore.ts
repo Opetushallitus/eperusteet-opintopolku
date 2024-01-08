@@ -12,7 +12,7 @@ export class YleisetPaikallisetStore implements IPaikallinenStore {
   public state = reactive({
     opetussuunnitelmat: null as Page<OpetussuunnitelmaDto> | null,
     query: {} as OpetussuunnitelmaQuery,
-  })
+  });
 
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat?.data as any[]);
   public readonly opetussuunnitelmatPaged = computed(() => this.state.opetussuunnitelmat);

@@ -9,7 +9,7 @@ Vue.use(VueCompositionApi);
 export class TutkinnonosatStore {
   private state = reactive({
     tutkinnonosat: null as any[] | null,
-  })
+  });
 
   constructor(private opetussuunnitelma: OpetussuunnitelmaDto) {
     this.fetch();

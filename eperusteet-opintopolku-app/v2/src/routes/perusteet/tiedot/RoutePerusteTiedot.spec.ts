@@ -39,6 +39,7 @@ describe('RoutePerusteTiedot', () => {
           },
         }],
       },
+      perusteId: 42,
     });
 
     perusteDataStore.kvLiitteet = { fi: 'kvliiteurl-fi' };
@@ -56,11 +57,6 @@ describe('RoutePerusteTiedot', () => {
       },
     });
 
-    await localVue.nextTick();
-    await localVue.nextTick();
-    await localVue.nextTick();
-    await localVue.nextTick();
-    await localVue.nextTick();
     await localVue.nextTick();
 
     expect(perusteDataStore.getKorvaavatPerusteet).toHaveBeenCalledTimes(1);

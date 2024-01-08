@@ -12,7 +12,7 @@ export class OpasStore {
   public state = reactive({
     oppaat: null as PerusteHakuDto[] | null,
     query: {} as JulkaistutPerusteetQuery,
-  })
+  });
 
   constructor(koulutustyyppi: string) {
     this.state.query = {

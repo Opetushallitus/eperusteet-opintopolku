@@ -330,7 +330,7 @@ export default class RouteHome extends Vue {
 
   .nimi {
     color: #2B2B2B;
-    /deep/ a, div.linkki a {
+    ::v-deep a, div.linkki a {
       color: #2B2B2B;
     }
 

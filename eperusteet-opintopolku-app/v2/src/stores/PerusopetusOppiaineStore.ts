@@ -9,7 +9,7 @@ Vue.use(VueCompositionApi);
 export class PerusopetusOppiaineStore {
   public state = reactive({
     oppiaine: null as OppiaineDto | null,
-  })
+  });
 
   public static async create(perusteId: number, oppiaineId: number) {
     const result = new PerusopetusOppiaineStore(perusteId, oppiaineId);

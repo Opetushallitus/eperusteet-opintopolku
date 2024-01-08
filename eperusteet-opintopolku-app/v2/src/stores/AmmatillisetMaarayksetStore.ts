@@ -8,7 +8,7 @@ Vue.use(VueCompositionApi);
 export class AmmatillisetMaarayksetStore {
   public state = reactive({
     maaraykset: null as MaaraysDto[] | null,
-  })
+  });
 
   constructor() {
     this.fetch();

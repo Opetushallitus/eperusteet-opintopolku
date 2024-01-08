@@ -190,7 +190,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
         .flatten()
         .uniq()
         .map(koodi => Koodistot.getKoodistoKoodiByUri(koodi))
-        .value())
+        .value()),
     ).map('data')
       .map(koodi => {
         return {

@@ -598,7 +598,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     color: #010013;
     margin-bottom: 24px;
   }
-  /deep/ .moduuliotsikko {
+  ::v-deep .moduuliotsikko {
     color: #2B2B2B;
     margin-bottom: 8px;
 
@@ -606,7 +606,7 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
       font-size: 1rem;
     }
   }
-  /deep/ .perustesisalto {
+  ::v-deep .perustesisalto {
     color: #2B2B2B;
     margin-bottom: 10px;
     padding-bottom: 5px;

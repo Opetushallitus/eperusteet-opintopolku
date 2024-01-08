@@ -8,7 +8,7 @@ Vue.use(VueCompositionApi);
 export class PerusteVuosiluokkakokonaisuusStore {
   public state = reactive({
     vuosiluokkakokonaisuus: null as VuosiluokkaKokonaisuusDto | null,
-  })
+  });
 
   public static async create(perusteId: number, vlkId: number) {
     const result = new PerusteVuosiluokkakokonaisuusStore(perusteId, vlkId);

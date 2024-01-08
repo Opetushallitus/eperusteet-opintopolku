@@ -10,7 +10,7 @@ export class OpetussuunnitelmaVuosiluokkakokonaisuusStore {
     vuosiluokkakokonaisuus: null as UnwrappedOpsVuosiluokkakokonaisuusDto | null,
     perusteenVuosiluokkakokonaisuus: null as PerusteVuosiluokkakokonaisuusDto | null,
     perusteenLaajaalaisetOsaamiset: null as PerusteLaajaalainenosaaminenDto[] | null,
-  })
+  });
 
   public static async create(opsId: number, vlkId: number) {
     const result = new OpetussuunnitelmaVuosiluokkakokonaisuusStore(opsId, vlkId);

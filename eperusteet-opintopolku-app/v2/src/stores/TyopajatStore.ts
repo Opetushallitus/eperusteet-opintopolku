@@ -8,7 +8,7 @@ Vue.use(VueCompositionApi);
 export class TyopajatStore {
   public state = reactive({
     opetussuunnitelmat: null as OpetussuunnitelmaDto | null,
-  })
+  });
 
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat);
 
