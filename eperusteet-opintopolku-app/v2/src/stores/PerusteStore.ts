@@ -28,7 +28,7 @@ export class PerusteStore {
         koulutustyyppi: _.filter(EperusteetKoulutustyypit, kt => !_.includes(AmmatillisetKoulutustyypit, kt)),
         kieli: query?.kieli,
         ...(query || {}),
-      }
+      },
     )).data as any);
   }
 }

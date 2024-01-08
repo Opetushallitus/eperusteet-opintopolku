@@ -8,7 +8,7 @@
       <EpSearch class="mt-3 mb-3" v-model="queryNimi" :placeholder="$t('etsi')"/>
 
       <b-table striped hover responsive :items="tutkinnonosat" :fields="fields">
-        <template v-slot:cell(tekstiKappale.nimi)="data">
+        <template v-slot:cell(nimi)="data">
           <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: data.item.id}}">
             {{ $kaanna(data.item.tekstiKappale.nimi) }}
           </router-link>
@@ -79,7 +79,7 @@ export default class RouteToteutussuunnitelmaTutkinnonosat extends Vue {
       label: this.$t('nro') as string,
       sortable: true,
     }, {
-      key: 'tekstiKappale.nimi',
+      key: 'nimi',
       sortable: true,
       sortByFormatted: true,
       label: this.$t('nimi') as string,

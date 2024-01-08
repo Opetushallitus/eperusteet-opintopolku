@@ -253,7 +253,7 @@ export default class EpNavigation extends Vue {
         },
       } as RawLocation);
     }
-    catch (e) {
+    catch (e: any) {
       if (e.name === 'NavigationDuplicated') {
         logger.warn('Uusi kieli on sama kuin nykyinen');
       }
@@ -283,7 +283,7 @@ export default class EpNavigation extends Vue {
   }
 
   .navbar-nav.ml-auto .nav-item.dropdown {
-    /deep/ .nav-link.dropdown-toggle {
+    ::v-deep .nav-link.dropdown-toggle {
       color: #001A58;
     }
   }
@@ -307,12 +307,12 @@ export default class EpNavigation extends Vue {
     .navbar-toggler {
       padding: 15px;
     }
-    /deep/ .nav-link {
+    ::v-deep .nav-link {
       padding: 0.5rem 0rem 0.5rem 0rem !important;
       margin-left: 1rem;
       margin-right: 1rem;
     }
-    /deep/ .dropdown-menu {
+    ::v-deep .dropdown-menu {
       border-radius: 0;
       border: 0;
       .dropdown-item {
@@ -384,59 +384,59 @@ export default class EpNavigation extends Vue {
 
   // Tätä ei tarvittaisi, jos nav-itemin alielementin router-link tilan voisi asettaa proppina
   .navbar-nav .nav-item.router-link-active {
-    /deep/ .nav-link {
+    ::v-deep .nav-link {
       padding-bottom: 0.25rem;
       border-bottom: #001A58 0.25rem solid;
     }
     &.koulutustyyppi-ammatillinen {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-ammatillinen-color;
       }
     }
     &.koulutustyyppi-esiopetus {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-esiopetus-color;
       }
     }
     &.koulutustyyppi-lukiokoulutus {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-lukiokoulutus-color;
       }
     }
     &.koulutustyyppi-perusopetus {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-perusopetus-color;
       }
     }
     &.koulutustyyppi-varhaiskasvatus {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
       }
     }
     &.koulutustyyppi-taiteenperusopetus {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
       }
     }
     &.koulutustyyppi-vapaasivistystyo {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-vapaasivistystyo-color;
       }
     }
     &.koulutustyyppi-tutkintoonvalmentava {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-tutkintoonvalmentava-color;
       }
     }
 
     &.koulutustyyppi-kotoutumiskoulutus {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-kotoutumiskoulutus-color;
       }
     }
 
     &.koulutustyyppi-muukoulutus {
-      /deep/ .nav-link {
+      ::v-deep .nav-link {
         border-bottom-color: $koulutustyyppi-muu-color;
       }
     }

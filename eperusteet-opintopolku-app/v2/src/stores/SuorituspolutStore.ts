@@ -11,7 +11,7 @@ export class SuorituspolutStore {
     suorituspolut: null as any[] | null,
     suorituspolutRakenteella: null as SuorituspolkuRakenneDto[] | null,
     perusteenRakenteet: null as any[] | null,
-  })
+  });
 
   constructor(private opetussuunnitelma: OpetussuunnitelmaDto) {
     this.fetch();

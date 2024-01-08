@@ -10,7 +10,7 @@ Vue.use(VueCompositionApi);
 export class KoosteTiedotteetStore {
   public state = reactive({
     tiedotteet: null as TiedoteDto[] | null,
-  })
+  });
 
   constructor(private koulutustyyppi: string) {
   }

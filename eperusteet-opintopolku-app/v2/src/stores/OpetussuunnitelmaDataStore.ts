@@ -159,7 +159,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   findByKoodi(navi: YlopsNavigationNodeDto, koodi: string) {
     return this.findBy(navi, (node) => {
-      const kohde = _.get(node, 'meta.koodi');
+      const kohde = _.toString(_.get(node, 'meta.koodi'));
       return (kohde === koodi || _.get(kohde, 'arvo') === koodi);
     });
   }
@@ -346,11 +346,11 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
 
     if (this.esikatselu) {
-      let dokumenttiId = (await Dokumentit.getLatestDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
+      const dokumenttiId = (await Dokumentit.getLatestDokumenttiId(this.opetussuunnitelmaId, sisaltoKieli)).data;
       this.asetaKielenDokumentti(dokumenttiId);
     }
     else {
-      let julkaistuDokumentti = (await Dokumentit.getJulkaistuDokumentti(this.opetussuunnitelmaId, sisaltoKieli)).data;
+      const julkaistuDokumentti = (await Dokumentit.getJulkaistuDokumentti(this.opetussuunnitelmaId, sisaltoKieli)).data;
       if (julkaistuDokumentti?.tila === _.toLower(DokumenttiDtoTilaEnum.VALMIS)) {
         this.asetaKielenDokumentti(julkaistuDokumentti.id);
       }

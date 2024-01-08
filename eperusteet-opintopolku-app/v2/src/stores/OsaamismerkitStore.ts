@@ -8,7 +8,7 @@ export class OsaamismerkitStore {
     osaamismerkit: null as OsaamismerkkiBaseDto[] | null,
     query: {} as OsaamismerkitQuery,
     kategoriat: [] as OsaamismerkkiKategoriaDto[] | null,
-  })
+  });
 
   public readonly osaamismerkit = computed(() => this.state.osaamismerkit || null);
   public readonly options = computed(() => this.state.query);
@@ -23,7 +23,7 @@ export class OsaamismerkitStore {
   private async fetchOsaamismerkitImpl(q: OsaamismerkitQuery) {
     const res = (await Osaamismerkit.findJulkisetOsaamismerkitBy(
       q.nimi,
-      q.kategoria
+      q.kategoria,
     )).data as any;
     return res;
   }

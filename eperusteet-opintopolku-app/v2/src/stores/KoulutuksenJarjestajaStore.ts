@@ -14,7 +14,7 @@ export class KoulutuksenJarjestajaStore {
     koulutustoimija: null as KoulutustoimijaJulkinenDto | null,
     yhteisetOsuudet: null as OpetussuunnitelmaDto[] | null,
     toteutussuunnitelmat: null as Page<OpetussuunnitelmaDto> | null,
-  })
+  });
 
   constructor(private koulutustoimijaId: number) {
     this.fetch();

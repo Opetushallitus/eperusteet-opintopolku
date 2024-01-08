@@ -5,7 +5,7 @@ import { OsaamismerkkiBaseDto } from '@shared/generated/eperusteet';
 export class OsaamismerkkiStore {
   public state = reactive({
     osaamismerkki: null as OsaamismerkkiBaseDto | null,
-  })
+  });
 
   public static async create(osaamismerkkiId, koodi) {
     const result = new OsaamismerkkiStore(osaamismerkkiId, koodi);

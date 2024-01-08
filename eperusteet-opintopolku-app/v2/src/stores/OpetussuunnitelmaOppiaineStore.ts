@@ -13,7 +13,7 @@ export class OpetussuunnitelmaOppiaineStore {
     oppiaine: null as UnwrappedOpsOppiaineDto | null,
     perusteOppiaine: null as PerusteOppiaineDto | null,
     oppiaineenVuosiluokkakokonaisuudet: null as any[] | null,
-  })
+  });
 
   public static async create(opetussuunnitelma: OpetussuunnitelmaKevytDto, opsId: number, oppiaineId: number, vlkId?: number) {
     const result = new OpetussuunnitelmaOppiaineStore(opetussuunnitelma, oppiaineId, vlkId);

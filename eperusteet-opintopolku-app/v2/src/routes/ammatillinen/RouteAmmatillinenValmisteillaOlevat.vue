@@ -79,8 +79,8 @@ export default class RouteAmmatillinenValmisteillaOlevat extends Vue {
     sivu: 0,
     sivukoko: 10,
     koulutustyyppit: AmmatillisetKoulutustyypit,
-  }
-  private toggled: number[]= [];
+  };
+  private toggled: number[] = [];
 
   async mounted() {
     await this.fetch();

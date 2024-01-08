@@ -228,7 +228,7 @@ export default class OppiaineEsitys extends Vue {
       .map(opintojakso => opintojakso.moduulit)
       .flatMap()
       .map(moduuli => moduuli.koodiUri)
-      .value();
+      .value() as any[];
   }
 
   get pakollisetModuulit() {

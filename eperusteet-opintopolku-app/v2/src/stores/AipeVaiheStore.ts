@@ -8,7 +8,7 @@ Vue.use(VueCompositionApi);
 export class AipeVaiheStore {
   private state = reactive({
     vaihe: null as AIPEVaiheDto | null,
-  })
+  });
 
   public static async create(perusteId: number, vaiheId: number) {
     const result = new AipeVaiheStore(perusteId, vaiheId);

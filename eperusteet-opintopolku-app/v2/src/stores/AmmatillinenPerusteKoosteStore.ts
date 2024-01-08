@@ -17,7 +17,7 @@ export class AmmatillinenPerusteKoosteStore {
     opetussuunnitelmat: null as Page<OpetussuunnitelmaDto> | null,
     tiedotteet: null as TiedoteDto | null,
     opsQuery: null as OpetussuunnitelmaQuery | null,
-  })
+  });
 
   constructor(private perusteId: number) {
     this.fetch();

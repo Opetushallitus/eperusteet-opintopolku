@@ -102,7 +102,7 @@ export default class RouteVuosiluokkakokonaisuus extends Vue {
   }
 
   hasContent(obj) {
-    return _.isObject(obj) && _.get(obj, 'teksti') && _.get(obj, 'teksti')[Kielet.getSisaltoKieli.value];
+    return obj?.teksti && _.get(obj, 'teksti')[Kielet.getSisaltoKieli.value];
   }
 
   get kuvat() {

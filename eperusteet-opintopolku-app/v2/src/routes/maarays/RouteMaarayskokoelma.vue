@@ -144,7 +144,7 @@ export default class RouteMaarayskokoelma extends Vue {
     await this.fetch();
   }
 
-  @Watch('sivu',)
+  @Watch('sivu')
   async sivuChange() {
     await this.fetch();
   }

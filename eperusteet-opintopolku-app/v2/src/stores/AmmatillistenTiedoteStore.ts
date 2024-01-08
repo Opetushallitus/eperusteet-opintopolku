@@ -14,14 +14,13 @@ export class AmmatillistenTiedoteStore implements ITiedotteetProvider {
     options: null as TiedoteQuery | null,
     isLoading: true,
     kokonaismaara: null as number | null,
-  })
+  });
 
   public readonly options = computed(() => this.state.tiedotteet);
   public readonly tiedotteet = computed(() => this.state.tiedotteet);
   public readonly isLoading = computed(() => this.state.isLoading);
   public readonly kokonaismaara = computed(() => this.state.kokonaismaara);
   public readonly perusteenTiedotteet = computed(() => []);
-  public readonly perusteId = computed(() => {});
   public readonly query = computed(() => this.state.query);
 
   async init(options: TiedoteQuery) {

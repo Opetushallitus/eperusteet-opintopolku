@@ -9,7 +9,7 @@ Vue.use(VueCompositionApi);
 export class ValmisteillaOlevatStore {
   public state = reactive({
     perusteet: null as Page<PerusteBaseDto> | null,
-  })
+  });
 
   public readonly perusteet = computed(() => this.state.perusteet);
 

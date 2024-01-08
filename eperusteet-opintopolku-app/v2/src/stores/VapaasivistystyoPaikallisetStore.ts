@@ -13,7 +13,7 @@ export class VapaasivistystyoPaikallisetStore implements IPaikallinenStore {
     opetussuunnitelmat: null as Page<OpetussuunnitelmaDto> | null,
     query: {} as OpetussuunnitelmaQuery,
     oppilaitokset: null as KoulutustoimijaJulkinenDto[] | null,
-  })
+  });
 
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat?.data as any[]);
   public readonly opetussuunnitelmatPaged = computed(() => this.state.opetussuunnitelmat);

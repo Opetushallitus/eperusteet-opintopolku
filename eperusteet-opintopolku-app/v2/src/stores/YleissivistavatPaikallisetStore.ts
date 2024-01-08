@@ -10,7 +10,7 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
   public state = reactive({
     opetussuunnitelmat: null as OpetussuunnitelmaJulkinenDto[] | null,
     perusteId: null as number | null,
-  })
+  });
 
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat);
   public readonly perusteId = computed(() => this.state.perusteId);
@@ -25,6 +25,6 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
       perusteenDiaarinumero,
       0,
       999,
-    )).data, 'data');
+    )).data, 'data') as any;
   }
 }

@@ -11,7 +11,7 @@ export class PerusteenTutkinnonosaStore {
     tutkinnonosa: null as any | null,
     tutkinnonosaViite: null as TutkinnonOsaViiteDto | null | undefined,
     arviointiasteikot: null as ArviointiAsteikkoDto[] | null,
-  })
+  });
 
   constructor(private peruste: PerusteDto, private tutkinnonOsaViiteId: number) {
     this.fetch();

@@ -217,11 +217,11 @@ export default class EpHeader extends Vue {
       align-self: end
     }
 
-    &.black /deep/ li, &.black /deep/ li::before, &.black /deep/ li a {
+    &.black ::v-deep li, &.black ::v-deep li::before, &.black ::v-deep li a {
       color: #001A58;
     }
 
-    &.white /deep/ li, &.white /deep/ li::before, &.white /deep/ li a {
+    &.white ::v-deep li, &.white ::v-deep li::before, &.white ::v-deep li a {
       color: white;
     }
     .router-link-exact-active.router-link-active {
