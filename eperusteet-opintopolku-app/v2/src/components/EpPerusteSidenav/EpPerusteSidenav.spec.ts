@@ -138,7 +138,7 @@ describe('EpPerusteSidenav', () => {
 
     test('Works with simple root node', () => {
       const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.at(1).text()).toEqual('Tiedot');
+      expect(nodes.at(1).text()).toEqual('Opetussuunnitelman tiedot');
     });
 
     test('Works with complex data', () => {
@@ -148,7 +148,7 @@ describe('EpPerusteSidenav', () => {
       };
 
       const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.at(1).text()).toEqual('Tiedot');
+      expect(nodes.at(1).text()).toEqual('Opetussuunnitelman tiedot');
       expect(nodes.length).toEqual(7);
     });
 
@@ -162,7 +162,7 @@ describe('EpPerusteSidenav', () => {
       };
 
       const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.at(1).text()).toEqual('Tiedot');
+      expect(nodes.at(1).text()).toEqual('Opetussuunnitelman tiedot');
       expect(nodes.at(5).text()).toContain('Oppiaineet');
       expect(nodes.at(6).text()).toContain('OA1');
       expect(nodes.at(7).text()).toContain('Oppimäärät');
@@ -209,7 +209,7 @@ describe('EpPerusteSidenav', () => {
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(4);
-      expect(nodes.at(1).text()).toContain('Tiedot');
+      expect(nodes.at(1).text()).toContain('Opetussuunnitelman tiedot');
       expect(nodes.at(2).text()).toContain('Päätaso');
       expect(nodes.at(3).text()).toContain('Oppiaineet');
     });
@@ -225,7 +225,7 @@ describe('EpPerusteSidenav', () => {
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(6);
-      expect(nodes.at(1).text()).toContain('Tiedot');
+      expect(nodes.at(1).text()).toContain('Opetussuunnitelman tiedot');
       expect(nodes.at(2).text()).toContain('Päätaso');
       expect(nodes.at(3).text()).toContain('Alitaso 1');
       expect(nodes.at(4).text()).toContain('Alitaso 2');
@@ -299,7 +299,7 @@ describe('EpPerusteSidenav', () => {
       };
       wrapper.setProps({ activeNode: perusteDataStore.current });
 
-      expect(wrapper.html()).toContain('Tiedot');
+      expect(wrapper.html()).toContain('Opetussuunnitelman tiedot');
       expect(wrapper.html()).toContain('Oppiaineet');
 
       perusteDataStore.currentRoute = {
