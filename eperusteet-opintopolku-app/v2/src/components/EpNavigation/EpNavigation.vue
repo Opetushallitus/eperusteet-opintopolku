@@ -12,9 +12,9 @@
     <b-navbar-toggle target="nav-collapse" :aria-label="$t('koulutustyyppi-valikko')"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav >
-      <b-navbar-nav class="flex-wrap">
+      <b-navbar-nav class="d-flex justify-content-center w-100">
         <EpSpinner v-if="loading" />
-        <template v-else>
+        <div v-else class="d-flex flex-wrap">
           <b-nav-item v-for="(item, idx) in items"
                       :key="idx"
                       active
@@ -23,7 +23,7 @@
                       :to="item.route">
             {{ $t('navi-'+item.name) }}
           </b-nav-item>
-        </template>
+        </div>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
@@ -318,14 +318,6 @@ export default class EpNavigation extends Vue {
       .dropdown-item {
         padding: 0.5rem 1rem !important;
       }
-    }
-  }
-}
-
-@media (min-width: 1600px) {
-  .navbar-ep {
-    .navbar-nav.flex-wrap {
-      margin-left: calc((100% - 1270px) / 2);
     }
   }
 }

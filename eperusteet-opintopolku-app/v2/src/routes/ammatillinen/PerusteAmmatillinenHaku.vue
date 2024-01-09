@@ -282,7 +282,11 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 
   set query(value) {
-    this.perusteHakuStore.updateFilters({ nimi: value });
+    this.perusteHakuStore.updateFilters({ nimi: value, koodi: this.queryToKoodisto(value) });
+  }
+
+  queryToKoodisto(value) {
+    return 'tutkinnonosat_' + value;
   }
 
   get page() {
