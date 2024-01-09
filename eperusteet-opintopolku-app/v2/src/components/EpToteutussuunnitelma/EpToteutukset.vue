@@ -5,9 +5,9 @@
                  :key="toteutus.id"
                  :shadow="false"
                  :borderBottom="false"
-                 :use-blue-theme="true"
                  :use-padding="false"
-                 :expandedByDefault="toteutukset.length === 1">
+                 :expandedByDefault="toteutukset.length === 1"
+                 blue>
       <h4 slot="header">{{$kaanna(toteutus.otsikko)}}</h4>
 
       <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat && toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">

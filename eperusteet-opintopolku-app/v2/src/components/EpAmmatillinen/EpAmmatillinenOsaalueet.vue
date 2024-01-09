@@ -5,9 +5,9 @@
                  :key="'osaalue'+index"
                  :shadow="false"
                  :borderBottom="false"
-                 :use-blue-theme="true"
                  :use-padding="false"
-                 :expandedByDefault="osaalueet.length === 1">
+                 :expandedByDefault="osaalueet.length === 1"
+                 blue>
 
       <h4 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{osaalue.koodi.arvo}})</span></h4>
 
