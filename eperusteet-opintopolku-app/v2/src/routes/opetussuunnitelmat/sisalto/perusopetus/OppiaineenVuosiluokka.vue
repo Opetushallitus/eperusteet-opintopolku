@@ -90,9 +90,9 @@
           <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
         </div>
 
-        <div class="mb-4" v-if="tavoite.paikallinenTavoite">
+        <div class="mb-4" v-if="tavoite.vuosiluokanTavoite && tavoite.vuosiluokanTavoite.tavoite">
           <h4>{{ $t('paikallinen-teksti') }}</h4>
-          <div v-html="tavoite.paikallinenTavoite"></div>
+          <div v-html="$kaanna(tavoite.vuosiluokanTavoite.tavoite)"></div>
         </div>
       </div>
 
@@ -133,12 +133,7 @@ export default class OppiaineenVuosiluokka extends Vue {
   private kuvat!: any[];
 
   get tavoitteet() {
-    return _.map(this.oppiaineenVuosiluokka && this.oppiaineenVuosiluokka.tavoitteet, (tavoite) => {
-      return {
-        ...tavoite,
-        paikallinenTavoite: this.$kaanna((tavoite.vuosiluokanTavoite && tavoite.vuosiluokanTavoite.tavoite) || tavoite.tavoite || (tavoite as any).kuvaus),
-      };
-    });
+    return this.oppiaineenVuosiluokka?.tavoitteet;
   }
 
   toggleTavoite() {
