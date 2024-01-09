@@ -1,10 +1,14 @@
 <template>
   <div>
-    <ep-collapse class="mb-3" v-for="toteutus in toteutukset" :key="toteutus.id"
-      :shadow="true"
-      :borderBottom="false"
-      :expandedByDefault="toteutukset.length === 1">
-      <label class="font-600 mb-0" slot="header">{{$kaanna(toteutus.otsikko)}}</label>
+    <ep-collapse class="mb-3"
+                 v-for="toteutus in toteutukset"
+                 :key="toteutus.id"
+                 :shadow="false"
+                 :borderBottom="false"
+                 :use-padding="false"
+                 :expandedByDefault="toteutukset.length === 1"
+                 blue>
+      <h4 slot="header">{{$kaanna(toteutus.otsikko)}}</h4>
 
       <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat && toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">
         <div class="font-600 mt-3">{{$t('tutkintonimikkeet-ja-osaamisalat')}}</div>
@@ -37,7 +41,6 @@
 </template>
 
 <script lang="ts">
-import * as _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';

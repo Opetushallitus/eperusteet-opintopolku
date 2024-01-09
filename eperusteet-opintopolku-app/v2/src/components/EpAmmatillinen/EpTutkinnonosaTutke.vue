@@ -4,7 +4,7 @@
       <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" name="osa-alueet" v-if="tutkinnonosa.osaAlueet && osaAlueet.length > 0">
+    <ep-form-content class="col-md-12 mb-5" name="osa-alueet" v-if="tutkinnonosa.osaAlueet && osaAlueet.length > 0" header-type="h3">
       <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="osaAlueet" />
     </ep-form-content>
   </div>

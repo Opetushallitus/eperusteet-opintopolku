@@ -15,7 +15,10 @@
       <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4 mb-5" name="koulutuksen-jarjestajan-toteutus" v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0 && (!osaAlueet || osaAlueet.length === 0)">
+    <ep-form-content class="col-md-12 mt-4 mb-5"
+                     name="koulutuksen-jarjestajan-toteutus"
+                     v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0 && (!osaAlueet || osaAlueet.length === 0)"
+                     header-type="h3">
       <EpToteutukset :toteutukset="toteutukset" :kuvat="kuvat"/>
     </ep-form-content>
 
