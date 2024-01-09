@@ -77,6 +77,10 @@
     <div v-if="naytetaanPerusteenSisalto">
       <h3>{{ $t('perusteen-sisalto') }}</h3>
 
+      <ep-form-content class="col-md-12" v-if="perusteenTutkinnonosa.koodiArvo" name="koodi">
+        <span v-html="perusteenTutkinnonosa.koodiArvo" />
+      </ep-form-content>
+
       <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset && perusteenTutkinnonosa.tyyppi === 'normaali'" name="ammattitaitovaatimukset">
         <ep-content-viewer class="ammattitaitovaatimukset" :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" :kuvat="kuvat"/>
       </ep-form-content>
