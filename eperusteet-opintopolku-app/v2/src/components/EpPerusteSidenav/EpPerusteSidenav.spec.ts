@@ -98,11 +98,9 @@ describe('EpPerusteSidenav', () => {
     messages: {
       fi: {
         ...require('@shared/translations/locale-fi.json'),
-        ...require('@/translations/locale-fi.json'),
       },
       sv: {
         ...require('@shared/translations/locale-sv.json'),
-        ...require('@/translations/locale-sv.json'),
       },
     },
   });
