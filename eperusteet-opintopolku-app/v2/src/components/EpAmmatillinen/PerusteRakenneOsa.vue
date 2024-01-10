@@ -75,9 +75,6 @@ export default class PerusteRakenneOsa extends Vue {
   @Prop({ required: false, default: false })
   private viimeinen!: boolean;
 
-  @Prop({ default: false, type: Boolean })
-  private parentMandatory!: boolean;
-
   pakollinen() {
     return (this.rakenneosa.rooli === 'määritelty' && this.$kaanna(this.rakenneosa.nimi) === this.$t('rakenne-moduuli-pakollinen')) || this.rakenneosa.pakollinen;
   }
@@ -149,7 +146,7 @@ export default class PerusteRakenneOsa extends Vue {
   }
 
   get rakenneStyle() {
-    return 'border-color: ' + rakenneNodecolor(this.rakenneosa, this.parentMandatory, this);
+    return 'border-color: ' + rakenneNodecolor(this.rakenneosa, null, this);
   }
 }
 </script>
