@@ -77,7 +77,7 @@
           </div>
         </ep-form-content>
 
-        <ep-form-content name="maarays-on-kumottu-uudemmalla-maarayksella" headerType="h3" headerClass="h6" v-if="korvaavatMuuttavatMaaraykset && korvaavatMuuttavatMaaraykset.length > 0">
+        <ep-form-content name="maaraykseen-liittyvat-uudemmat-maaraykset" headerType="h3" headerClass="h6" v-if="korvaavatMuuttavatMaaraykset && korvaavatMuuttavatMaaraykset.length > 0">
           <b-table
             :items="korvaavatMuuttavatMaaraykset"
             :fields="korvaavatMuuttavatFields"
