@@ -35,13 +35,12 @@
 
     <div class="rakenneosat" :class="{'viimeinen': viimeinen}" v-if="naytaRakenne">
       <peruste-rakenne-osa
-        v-for="(osa, index) in rakenneosa.osat"
+        v-for="(osa, index) in osat"
         :key="'osa'+index"
         ref="rakenneosa"
         :rakenneosa="osa"
         :class="{'rakennemargin': !eiVanhempaa}"
-        :viimeinen="index + 1 === rakenneosa.osat.length"
-        :parentMandatory="pakollinen(rakenneosa)">
+        :viimeinen="index + 1 === rakenneosa.osat.length">
 
         <template v-slot:nimi="{ rakenneosa }">
           <slot name="nimi" v-bind:rakenneosa="rakenneosa"></slot>
@@ -79,8 +78,8 @@ export default class PerusteRakenneOsa extends Vue {
   @Prop({ default: false, type: Boolean })
   private parentMandatory!: boolean;
 
-  pakollinen(node) {
-    return (node.rooli === 'määritelty' && this.$kaanna(node.nimi) === this.$t('rakenne-moduuli-pakollinen')) || node.pakollinen;
+  pakollinen() {
+    return (this.rakenneosa.rooli === 'määritelty' && this.$kaanna(this.rakenneosa.nimi) === this.$t('rakenne-moduuli-pakollinen')) || this.rakenneosa.pakollinen;
   }
 
   toggleKuvaus(naytaKuvaus) {
@@ -105,6 +104,17 @@ export default class PerusteRakenneOsa extends Vue {
     else {
       this.naytaRakenne = !this.naytaRakenne;
     }
+  }
+
+  get osat() {
+    return _.chain(this.rakenneosa.osat)
+      .map((osa: any) => {
+        return {
+          ...osa,
+          pakollinen: this.pakollinen(),
+        };
+      })
+      .value();
   }
 
   get laajuus() {
