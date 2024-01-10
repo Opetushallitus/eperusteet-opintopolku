@@ -5,7 +5,7 @@
       <h2>{{$kaanna(oppiaine.nimi)}}</h2>
 
       <template v-if="perusteOppiaine">
-        <ep-peruste-content :perusteObject="perusteOppiaine.tehtava" :object="oppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
+        <ep-peruste-content :naytaSisaltoTyhjana="false" :perusteObject="perusteOppiaine.tehtava" :object="oppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
 
         <template v-if="perusteOppiaineVapaatTekstit">
           <div v-for="(vapaaTeksti, index) in perusteOppiaineVapaatTekstit" :key="'vapaateksti'+index" class="mt-5">
