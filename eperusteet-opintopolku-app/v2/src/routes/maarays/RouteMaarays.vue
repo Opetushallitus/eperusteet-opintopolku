@@ -239,10 +239,14 @@ export default class RouteMaarays extends Vue {
 
   get korvaavatMuuttavatMaaraykset() {
     if (this.maarays) {
-      return _.filter([
+      return _.chain([
         ...(this.maarays.korvaavatMaaraykset || []),
         ...(this.maarays.muuttavatMaaraykset || []),
-      ], { tila: MaaraysKevytDtoTilaEnum.JULKAISTU });
+      ])
+        .filter({ tila: MaaraysKevytDtoTilaEnum.JULKAISTU })
+        .sortBy('voimassaoloAlkaa')
+        .reverse()
+        .value();
     }
   }
 
