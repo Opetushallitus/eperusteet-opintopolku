@@ -1,0 +1,10 @@
+.modal-header
+  h3(kaanna="otsikko")
+.modal-body(ng-show="teksti.length > 0 || lisaTeksti.length > 0 || htmlSisalto.length > 0")
+  p(kaanna="teksti" ng-if="teksti.length > 0")
+  p(kaanna="lisaTeksti" ng-if="lisaTeksti.length > 0")
+  p(ng-bind-html="htmlSisalto" ng-if="htmlSisalto.length > 0")
+.modal-footer
+  input(ng-model="comment.text" ng-if="comment.enabled" placeholder="{{ comment.placeholder | kaanna }}")
+  button.btn.btn-default(ng-click="peruuta()" kaanna="opts.secondaryBtn")
+  button.btn.btn-danger(class="{{opts.primaryBtnClass}}" ng-click="ok()" kaanna="opts.primaryBtn")

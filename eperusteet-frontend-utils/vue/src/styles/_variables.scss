@@ -1,0 +1,140 @@
+$black:            #2a2a2a;
+$white:            #fff;
+$gray:             #666;
+$gray-lighten-1:   #999;
+$gray-lighten-2:   #aeaeae;
+$gray-lighten-3:   #ccc;
+$gray-lighten-4:   #f6f4f0;
+$gray-lighten-5:   #f5f5f5;
+$gray-lighten-6:   #F2F2F2;
+$gray-lighten-7:   #f7f8fc;
+$gray-lighten-8:   #D8D8D8;
+$gray-lighten-9:   #DADADA;
+$gray-lighten-10:  #e2e9f866;
+$gray-lighten-11:  #878787;
+$gray-lighten-12:  #575757;
+$gray-lighten-13:  #f9f9f9;
+$red:              #e44e4e;
+$red-1:            #FF5000;
+$red-lighten-1:    #e09191;
+$red-lighten-2:    #ffe9e9;
+$blue:             #0a789c;
+$blue-lighten-1:   #159ecb;
+$blue-lighten-2:   #00b5f0;
+$blue-lighten-3:   #a6dcee;
+$blue-lighten-4:   #def2ff;
+$blue-lighten-5:   #0041DC;
+$blue-lighten-6:   #99B3F1;
+$blue-lighten-7:   #004dff0a;
+$blue-lighten-8:   #f1faff;
+$blue-lighten-9:   #c8f1ff;
+$blue-lighten-10:  #cad9e5;
+$blue-darken-1:    #00526c;
+$green:            #4c7f00;
+$green-1:          #62a600;
+$green-lighten-1:  #e6ffc1;
+$green-lighten-2:  #5BCA13;
+$green-lighten-3:  #7CD443;
+$green-lighten-4:  #e5f4d1;
+$green-lighten-5:  #57bb1a;
+$yellow:           #ffd024;
+$yellow-1:         #F5B800;
+$yellow-2:         #dfa910;
+$yellow-lighten-1: #fff7bc;
+$pink:             #cc75dc;
+
+$disabled:         #B2B2B2;
+
+// Paletti
+$paletti-blue-dark: #001A58;
+$paletti-blue: #3367e3;
+$paletti-background-light: #f7fbff;
+$paletti-background-light-2: #edf8ff;
+
+// Etusivu
+$etusivu-background: #F7F7F7;
+$etusivu-tile-background: #FFF;
+$etusivu-header-background: #2F5FD1;
+
+$color-links:      #051E5B;
+
+$ops-header-height: 173px;
+$color-ops-header: $paletti-blue-dark;
+$color-ops-header-text: $white;
+$color-ops-header-black-text: $black;
+$color-light-background: #E6F6FF;
+
+$sidebar-width: 340px;
+
+$dark-blue: #28344F;
+$light-blue: #2E5FD1;
+
+$main-view-offset: 100px;
+
+$valid: #a3bbf2;
+$invalid: #dc3545;
+
+// Content
+$content-padding: 15px;
+$content-table-padding: 5px;
+$content-header-separator-color: #e7e7e7;
+
+$table-even-row-bg-color: rgba(0, 0, 0, 0.00);
+$table-odd-row-bg-color: rgba(0, 0, 0, 0.04);
+$table-hover-row-bg-color: rgba(0, 0, 0, 0.15);
+
+$table-header-color: #CDEEFF;
+$table-even-row-blue: rgba(205, 238, 255, 0.00);
+$table-odd-row-blue: rgba(205, 238, 255, 0.7);
+
+// Sidenav
+$sidenav-padding: 10px;
+$sidenav-depth-padding: 10px;
+$sidenav-color: #2b2b2b;
+$sidenav-active-color: #0041dc;
+$sidenav-navigation-subtype-color: #595959;
+
+// Header sisalto container
+$sisalto-container-margin: 40px;
+
+// Uutiset
+$uutiset-header-background: #2F5FD1;
+
+// Koulutustyyppi colors
+$koulutustyyppi-ammatillinen-color: #008800;
+$koulutustyyppi-esiopetus-color: #84d2ff;
+$koulutustyyppi-lukiokoulutus-color: #0143da;
+$koulutustyyppi-perusopetus-color: #67cccc;
+$koulutustyyppi-varhaiskasvatus-color: #ffcc33;
+$koulutustyyppi-taiteenperusopetus-color: #faccea;
+$koulutustyyppi-vapaasivistystyo-color: #660066;
+$koulutustyyppi-tutkintoonvalmentava-color: #FF5000;
+$koulutustyyppi-kotoutumiskoulutus-color: #7aae7a;
+$koulutustyyppi-muu-color: #e60895;
+
+// Muut / Jotpa
+$jotpa-color: #e60895;
+$digitaalinen-osaaminen-color: #D9C1F2;
+$digitaalinen-osaaminen-paa-alue-color: #F2E9FC;
+$digitaalinen-osaaminen-ikaryhma-color: #65009A;
+$oph-maaraykset-color: $blue-lighten-2;
+
+// Tile colors
+$home-tile-top-background-color: #4797B7;
+$home-tile-bottom-background-color: #3C839F;
+
+// Spinner
+$spinner-background-color: $light-blue;
+
+$popup-top-background: #2146a3;
+
+$handle-color: #668DEA;
+
+// ammatillisten voimassaolovärit
+$tuleva-color: $green-lighten-2;
+$voimassa-color: $green;
+$siirtyma-color: $yellow-1;
+$paattynyt-color: $red-1;
+
+// Ylikirjoitetaan muuttujien arvot palvelukohtaisilla jos määritelty
+@import "~@/styles/_variables.scss";

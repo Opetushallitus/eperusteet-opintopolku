@@ -1,0 +1,7 @@
+.row
+  .col-md-12
+    .version-info(ng-if='active')
+      span(ng-show='!data') build version not found
+      span(ng-show='data')
+        | build {{data.buildNumber}} ({{data.buildTtime}})
+        | {{data.branchName}} {{data.vcsRevision}}

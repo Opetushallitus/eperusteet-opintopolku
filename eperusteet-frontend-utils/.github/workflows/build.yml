@@ -1,0 +1,81 @@
+name: Eperusteet-frontend-utils build
+on: [workflow_dispatch, push]
+
+jobs:
+  build-and-test-eperusteet-frontend-utils:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node 10
+        uses: actions/setup-node@v3
+        with:
+          node-version: '10'
+
+      - name: Print yarn cache directory path
+        id: yarn-cache-dir-path
+        run: |
+          yarn cache dir
+          echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Cache yarn
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Print npm cache directory
+        id: npm-cache-dir
+        run: |
+          npm config get cache
+          echo "::set-output name=dir::$(npm config get cache)"
+
+      - name: Cache npm
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+        
+      - name: Get backend eperusteet branch file http status
+        id: spec_file_http_status_eperusteet
+        run: |
+          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet/${{ github.ref_name }}/generated/eperusteet.spec.json)" == "200" ] 
+          then
+            echo spec file found
+            echo "EPERUSTEET_SPECFILE=https://raw.githubusercontent.com/Opetushallitus/eperusteet/${{ github.ref_name }}/generated/eperusteet.spec.json" >> $GITHUB_ENV
+          else
+            echo spec file not found
+          fi
+        
+      - name: Get backend eperusteet-amosaa branch file http status
+        id: spec_file_http_status_amosaa
+        run: |
+          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet-amosaa/${{ github.ref_name }}/generated/amosaa.spec.json)" == "200" ] 
+          then
+            echo spec file found
+            echo "EPERUSTEET_AMOSAA_SPECFILE=https://raw.githubusercontent.com/Opetushallitus/eperusteet-amosaa/${{ github.ref_name }}/generated/amosaa.spec.json" >> $GITHUB_ENV
+          else
+            echo spec file not found
+          fi
+          
+      - name: Get backend eperusteet-ylops branch file http status
+        id: spec_file_http_status_ylops
+        run: |
+          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet-ylops/${{ github.ref_name }}/generated/ylops.spec.json)" == "200" ] 
+          then
+            echo spec file found
+            echo "EPERUSTEET_YLOPS_SPECFILE=https://raw.githubusercontent.com/Opetushallitus/eperusteet-ylops/${{ github.ref_name }}/generated/ylops.spec.json" >> $GITHUB_ENV
+          else
+            echo spec file not found
+          fi
+
+
+      - name: Build eperusteet-frontend-utils
+        run: |
+          cd vue
+          yarn install --silent
+          yarn run gen:api
+          yarn run lint
+          yarn run test:unit

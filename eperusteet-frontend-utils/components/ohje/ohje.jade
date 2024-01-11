@@ -1,0 +1,10 @@
+span.ohje
+  span.popover-element.badge(
+    popover-title="{{otsikko || 'ohje' | kaanna}}"
+    uib-popover="{{teksti | kaanna}}"
+    popover-placement="{{suunta || 'top'}}"
+    popover-trigger="mouseenter"
+    popover-animation="true"
+    ng-class="{open: isOpen, badge: ohje !== 'false'}"
+    ng-click="{isOpen:!isOpen}")
+    span ?

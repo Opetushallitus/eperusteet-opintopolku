@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EpToggle component Renders toggle and change changes value 1`] = `"rgb(0, 0, 0)"`;
+
+exports[`EpToggle component Renders toggle and change changes value 2`] = `"rgb(132, 210, 255)"`;

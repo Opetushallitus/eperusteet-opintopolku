@@ -1,0 +1,89 @@
+$edit-control-header-width: 200px;
+$edit-control-buttons-width: 180px;
+$edit-control-height: 60px;
+$valinta-vari: #99ccff;
+$fluid-container-width: 960px;;
+
+/* changed in code */
+.editointi-wrapper {
+  margin-top: 20px;
+  margin-bottom: 50px;
+}
+
+.edit-controls {
+  background: transparentize($valinta-vari, 0.12);
+  height: $edit-control-height;
+  position: relative;
+  float: left;
+  z-index: 1040;
+
+  &.floating {
+    position: fixed;
+    bottom: 0;
+    &.ng-hide-add {
+      transition: bottom 0.2s;
+    }
+    &.ng-hide-remove {
+      transition: bottom 0.2s;
+    }
+    &.ng-hide-add.ng-hide-add-active, &.ng-hide-remove {
+      bottom: -$edit-control-height;
+    }
+    &.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
+      bottom: 0;
+    }
+  }
+  &.static {
+    &.ng-hide-add {
+      transition: none;
+    }
+    &.ng-hide-remove {
+      transition: opacity 0.2s;
+    }
+    &.ng-hide-add.ng-hide-add-active, &.ng-hide-remove {
+      opacity: 0;
+    }
+    &.ng-hide-add, &.ng-hide-remove.ng-hide-remove-active {
+      opacity: 1;
+    }
+  }
+
+  .edit-control-content {
+    height: 100%;
+    margin-top: 4px;
+    margin-left: 6px;
+    margin-right: -11px;
+    padding: 10px 0 10px 0;
+    .edit-control-header {
+      left: -30px;
+      float: left;
+      padding-left: 10px;
+      font-size: 20px;
+
+      .glyphicon {
+        top: 3px;
+        margin: 3px 7px 3px 3px;
+      }
+    }
+    .edit-control-buttons {
+      float: right;
+      padding-right: 10px;
+      // text-align: right;
+      width: $edit-control-buttons-width;
+    }
+    .edit-control-comment {
+      float: right;
+      width: 300px;
+      margin-right: 5px;
+      // border-radius: none !important; ei validi sääntö
+    }
+  }
+  @media (max-width: 850px) {
+    .edit-control-comment {
+      float: none;
+      margin-left: $edit-control-header-width;
+      margin-right: $edit-control-buttons-width;
+      width: auto;
+    }
+  }
+}

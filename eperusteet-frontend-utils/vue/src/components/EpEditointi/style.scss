@@ -1,0 +1,86 @@
+@import '../../styles/variables';
+
+.floating-editing-buttons {
+  // background: rgba(30, 73, 207, 0.8);
+  // bottom: 0px;
+  // left: 0px;
+  // padding: 10px;
+  // position: fixed;
+  // width: 100%;
+  // z-index: 1000;
+}
+
+.editointikontrolli {
+  margin-top: 4px;
+
+  .ylapaneeli {
+    background: #fff;
+    border-bottom: 1px solid #eee;
+    padding: 5px 15px 5px 15px;
+
+    .headerline {
+      padding-right: 50px;
+    }
+
+    .upper-buttons {
+      min-width: 240px;
+    }
+
+    .muokattu, .muokkaaja {
+      color: #555;
+      margin-right: 20px;
+    }
+  }
+
+  .sisalto {
+    margin-bottom: 5px;
+    padding: 15px;
+  }
+
+  .alapaneeli {
+
+    .lower-buttons {
+    }
+  }
+
+  .threads {
+    min-height: 100%;
+    display: flex;
+
+    .rightbar {
+      position: relative;
+      border-left: 1px solid #eee;
+      min-width: 460px;
+      max-width: 460px;
+      min-height: calc(100%);
+
+      .rbheader {
+        padding: 20px;
+      }
+
+      .rbcontent {
+        font-size: 80%;
+        min-height: calc(100% - 64px);
+      }
+    }
+
+    .rb-ohje {
+      .rbheader { background: #fcddf9; }
+      .rbcontent { background: #fbf1fa; }
+    }
+
+    .rb-keskustelu {
+      .rbheader { background: #ccd9f8; }
+      .rbcontent { background: #f2f5fd; }
+    }
+
+    .rb-peruste {
+      .rbheader { background: #d4ebdc; }
+      .rbcontent { background: #f4faf6; }
+    }
+
+    .actual-content {
+      width: 100%;
+    }
+  }
+}

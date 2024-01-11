@@ -1,0 +1,6 @@
+*.iml
+.idea/
+npm-debug.log
+*.js.map
+coverage
+.DS_Store

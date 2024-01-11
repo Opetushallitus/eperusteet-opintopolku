@@ -1,0 +1,13 @@
+div
+  div(ng-form="innerForm")
+    input.form-control(ng-if="type !== 'float' && type !== 'integer'"
+        class="{{luokka}}" ng-model="$parent.model" type="number" min="{{min}}" max="{{max}}"
+           name="tmpName" step="{{step}}")
+    input.form-control(ng-if="type === 'float'" class="{{luokka}}" ng-model="$parent.model" type="text" name="tmpName" validate-float min="{{min}}" max="{{max}}")
+    input.form-control(ng-if="type === 'integer'" class="{{luokka}}" ng-model="$parent.model" type="number" min="{{min}}" max="{{max}}"
+           name="tmpName" validate-integer step="{{step}}")
+    p(class="alert alert-error" ng-show="innerForm.tmpName.$error.min || innerForm.tmpName.$error.max" ng-bind="'arvo-rajojen-ulkopuolella' | kaanna")
+    p(class="alert alert-error" ng-show="innerForm.tmpName.$error.number" kaanna="'arvo-ei-numero'")
+    p(class="alert alert-error" ng-show="!innerForm.tmpName.$error.number && innerForm.tmpName.$error.integer" kaanna="'arvo-ei-kokonaisluku'")
+    p(class="alert alert-error" ng-show="innerForm.tmpName.$error.float" kaanna="'arvo-ei-desimaaliluku'")
+    p(class="alert alert-error" ng-show="innerForm.tmpName.$error.step" kaanna="'arvo-askelvirhe'")

@@ -1,0 +1,7 @@
+div.notification-container
+  div.notification-wrapper
+    div.notifications(ng-model="viestit")
+      div(ng-if="viestit" ng-click="poistaNotifikaatio(viesti)", ng-model="viestit" ng-repeat="viesti in viestit"
+        ng-class="{ 'notification-normal': viesti.tyyppi === 0, 'notification-success': viesti.tyyppi === 1, 'notification-warning': viesti.tyyppi === 2, 'notification-danger': viesti.tyyppi === 3 }")
+        div.notification-body
+          span.notification-message(ng-bind="viesti.viesti | kaanna")

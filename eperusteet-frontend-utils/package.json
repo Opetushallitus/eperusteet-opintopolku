@@ -1,0 +1,10 @@
+{
+  "name": "eperusteet-frontend-utils",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com:Opetushallitus/eperusteet-frontend-utils"
+  },
+  "author": "Opetushallitus",
+  "license": "EUPL-1.1"
+}

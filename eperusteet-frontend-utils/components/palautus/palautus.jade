@@ -1,0 +1,10 @@
+div.modal-header
+  h2(ng-bind="'vanha-osa-loytyi' | kaanna")
+
+div.modal-body
+  p(ng-bind="'vanha-osa-loytyi-ohje' | kaanna")
+
+
+div.modal-footer
+  a(href="" style="margin-right: 10px" ng-click="ok(EDITOI_VANHAA)" ng-bind="'editoi-vanhaa' | kaanna")
+  button.btn.btn-primary(ng-click="ok(POISTA_JA_EDITOI)" ng-bind="'editoi-uutta' | kaanna")

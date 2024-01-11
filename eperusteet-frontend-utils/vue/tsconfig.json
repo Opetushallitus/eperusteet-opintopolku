@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "jsx": "preserve",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "sourceMap": true,
+    "strict": true,
+    "strictPropertyInitialization": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es6",
+    "types": [
+      "webpack-env",
+      "jest"
+    ],
+    "paths": {
+      "@shared/*": ["src/*"],
+      "@assets/*": ["public/*"],
+      "@/*": ["src/*"],
+      "&/*": ["tests/*"]
+    },
+    "lib": [
+      "esnext",
+      "es2015.promise",
+      "dom",
+      "dom.iterable",
+      "scripthost"
+    ]
+  },
+  "include": [
+    "src/**/*.ts.d",
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "tests/integration/**/*.ts",
+    "tests/integration/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "generated",
+    "src/generated"
+  ]
+}

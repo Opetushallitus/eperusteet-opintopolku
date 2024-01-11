@@ -1,0 +1,286 @@
+// https://bootstrap-vue.js.org/docs/reference/theming/
+// https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss
+
+$primary: #3367E3;
+
+$input-border: #E0E0E1;
+$input-border-radius: .625rem; // 10px
+
+$input-btn-padding-y: .4375rem;
+$input-btn-padding-x: .625rem;
+$btn-border-radius: 1.25rem; // 20px
+
+$border-radius: .625rem; // 5px
+$tabcolor: #0041dc;
+
+// Include Bootstrap and BootstrapVue SCSS files
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+@import './_variables.scss';
+
+.modal-content {
+
+  .modal-header {
+    border-bottom: 0;
+    font-size: 1.125rem;
+    font-weight: 400;
+    font-family: Poppins, sans-serif;
+
+    h5 {
+      font-size: 1.125rem;
+      font-weight: 400;
+      font-family: Poppins, sans-serif;
+    }
+  }
+  .modal-footer {
+    border-top: 0;
+
+    .btn-secondary {
+      background-color: #fff;
+      color: $primary;
+      border-color: #fff;
+    }
+  }
+}
+
+
+.nav.nav-tabs {
+  border-bottom: 2px solid transparent;
+
+  .nav-link {
+    color: $tabcolor;
+    padding: 4px 16px 4px 16px;
+    border: none;
+    border-bottom: 2px solid transparent;
+
+    &:hover, &:focus {
+      border: none;
+      padding: 4px 16px 4px 16px;
+      border-bottom: 2px solid transparent;
+    }
+
+    &.router-link-active {
+      font-weight: 600;
+      border-bottom: 2px solid $tabcolor;
+    }
+  }
+
+}
+
+
+.tabs {
+
+  .nav-tabs {
+    border: 0;
+
+    .nav-item:first-child .nav-link {
+      margin: 8px 10px 8px 0px;
+    }
+
+    .nav-item {
+
+      .nav-link {
+        border-radius: 0;
+        padding: 0 10px;
+        margin: 8px 10px;
+        border-color: #fff;
+      }
+
+      .nav-link:hover:not(.active), .nav-link:focus:not(.active) {
+        background-color: $gray-lighten-5;
+      }
+
+      .active {
+        border-bottom: 3px;
+        border-bottom-color: $primary;
+        border-bottom-style: solid;
+        color: $primary;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.b-popover {
+  max-width: 386px;
+
+  .popover-header {
+    background-color: $white;
+    font-size: 1rem;
+    border-bottom: 0;
+  }
+}
+
+.form-control {
+  border: 2px solid $input-border;
+}
+
+.b-table {
+  thead {
+    border: none !important;
+
+    tbody {
+      border-top: none;
+      outline: none !important;
+    }
+
+    th:active, th:focus, th:focus-within {
+      outline: none;
+      border-bottom: 2px solid $black !important;
+    }
+
+    tr {
+      border: none !important;
+      outline: none;
+    }
+
+    th {
+      border: none;
+      outline: none;
+      border-bottom-width: 2px;
+      border-bottom-color: $white;
+      border-bottom-style: solid;
+    }
+
+    th[aria-sort="descending"], th[aria-sort="ascending"] {
+      border-bottom-width: 2px !important;
+      border-bottom-color: $black !important;
+    }
+
+  }
+
+  &.table-borderless {
+
+    thead {
+      th {
+        border-bottom-width: 2px;
+        border-bottom-color: $gray-lighten-3;
+        border-bottom-style: solid;
+      }
+
+      th[aria-sort="descending"], th[aria-sort="ascending"]{
+        border-bottom-width: 2px;
+        border-bottom-color: $black;
+      }
+    }
+  }
+}
+
+fieldset {
+  margin-top: 10px;
+  padding: 10px;
+
+  legend {
+    margin-top: 10px;
+    padding-bottom: 0px !important;
+    font-weight: 600;
+  }
+}
+
+.b-pagination {
+  border: none;
+  user-select: none;
+
+  li.page-item {
+    border: none;
+    margin: 0 0.2em 0 0.2em;
+
+    a {
+      color: #585858;
+      font-weight: 600;
+
+    }
+
+    .page-link {
+      border: none;
+
+      &:hover {
+        border-radius: 100%;
+      }
+    }
+
+    &.active {
+      .page-link {
+        background: #3367e3;
+        border-radius: 100%;
+      }
+    }
+  }
+}
+
+.table.b-table > thead > tr {
+  border: none;
+}
+
+.table.b-table > thead > tr > [aria-sort]:not(.b-table-sort-icon-left) {
+  border: none;
+  background-position: right calc(0.75rem / 2) bottom calc(1rem);
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: $table-even-row-bg-color;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: $table-odd-row-bg-color;
+}
+
+.table-striped.table-hover tbody tr:hover {
+  background-color: $table-hover-row-bg-color;
+  cursor: pointer;
+}
+
+.popover {
+  font-family: "Open Sans", "Helvetica", sans-serif;
+}
+
+.noselect {
+  user-select: none;
+}
+
+.b-dropdown-text {
+  padding: 0 0 0 0.75rem !important;
+}
+
+fieldset.form-group {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.custom-checkbox label.custom-control-label::before {
+  border-radius: 0.2rem;
+}
+
+.switch label.custom-control-label::before {
+  border-radius: 10px;
+  border: 2px solid #E0E0E1;
+}
+
+button.navbar-toggler {
+  color: rgba(255, 255, 255, 1) !important;
+  border-color: white !important;
+  border: none;
+  padding: 0;
+
+  .navbar-toggler-icon {
+    color: white !important;
+  }
+}
+
+.btn.btn-link {
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+@media (min-width: 993px) {
+  .container, .container-lg, .container-md, .container-sm, .container-xl{
+    max-width: 1240px;
+  }
+}
+
+@media (min-width: 1541px) {
+  .table-responsive {
+    overflow-x: visible;
+  }
+}

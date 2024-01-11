@@ -1,0 +1,20 @@
+<svg width="100" height="96" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <ellipse id="a" cx="36" cy="35.55" rx="36" ry="35.55"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path d="M98.7 76.32L81.37 58.99l.45-.68A37 37 0 1013.91 38c0 6.83 1.9 13.41 5.42 19.2l.41.66L1.3 76.32a1 1 0 00.63 1.7l12.34.95a3 3 0 012.76 2.76l.95 12.34a1 1 0 001.7.64l21.14-21.14.56.14A36.9 36.9 0 0050.9 75c2.7 0 5.4-.31 8.12-.92l.54-.12.39.39L80.32 94.7a1 1 0 001.7-.63l.95-12.34a3 3 0 012.76-2.76l12.34-.95a1 1 0 00.63-1.7z" stroke="#5BCA13" stroke-width="2" fill="#7CD443"/>
+        <circle stroke="#5BCA13" stroke-width="2" fill="#FFF" fill-rule="nonzero" cx="51" cy="38" r="37"/>
+        <g transform="translate(15 3)">
+            <g mask="url(#b)">
+                <g transform="translate(11 11.84)">
+                    <path d="M6.23 88.52l-1 .03 1 1v-1.03zm0-31.7h-1v1h1v-1zm28.3-54.8l.86.11.14-.99h-1v.88z" stroke="#5BCA13" stroke-width="2"/>
+                    <path d="M44.9 15.71H34.48v10.47c5.51-.5 9.9-4.92 10.4-10.47zM0 60.93a18.88 18.88 0 0018.28-18.92v-9.74c0-5.08-4.1-9.2-9.14-9.2A9.17 9.17 0 000 32.28v28.66z" stroke="#5BCA13" stroke-width="2" fill="#BDEAA1" fill-rule="nonzero"/>
+                    <ellipse fill="#5BCA13" fill-rule="nonzero" cx="27.69" cy="11.68" rx="2.09" ry="2.1"/>
+                    <path d="M7.32 2.22c0 2.9 2.34 5.25 5.22 5.25" stroke="#5BCA13" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M34.58 2.07v15.35h8.04c1.97 0 4.63.26 8 .8A17.17 17.17 0 0034.58 2.06z" stroke="#5BCA13" stroke-width="2" fill="#BDEAA1" fill-rule="nonzero"/>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

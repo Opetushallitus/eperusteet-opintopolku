@@ -1,0 +1,199 @@
+@import './_variables';
+@import './editorstyle';
+@import './tutorial';
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:100,200,300,400,500,600,700,800|Poppins:100,200,300,400,500,600,700,800&display=swap');
+@import 'vue-select/src/scss/vue-select.scss';
+
+img.content-image {
+  max-width: 100%;
+}
+
+.content {
+  margin: 0;
+
+  @media only screen and (min-width: 768px) {
+    margin: 0;
+  }
+}
+
+.form-content {
+  padding: 0 !important;
+}
+
+// html element
+:root {
+  margin: 0;
+  padding: 0;
+
+  div.form {
+    padding: 20px;
+
+    label {
+      font-size: 120%;
+    }
+  }
+
+  a {
+    &:hover {
+      text-decoration: none;
+    }
+  }
+
+  body {
+    font-family: "Open Sans", "Helvetica", sans-serif;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  li p {
+    margin-bottom: 0;
+  }
+
+  .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: 100% !important;
+  }
+
+  @media (max-width: 767.98px) {
+
+    .container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      max-width: 100% !important;
+    }
+  }
+
+  h1, h2, h3 {
+    font-family: Poppins, sans-serif;
+  }
+
+  h4, h5, h6 {
+    font-size: 1rem;
+    font-family: "Open Sans", sans-serif;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 500;
+  }
+  h2 {
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 400;
+  }
+  h4 {
+    font-weight: 600;
+  }
+  h5 {
+    font-weight: 500;
+  }
+  h6 {
+    font-weight: 400;
+  }
+
+  div.mx-datepicker-popup {
+    z-index: 5000;
+  }
+
+  mark {
+    padding: 0;
+  }
+
+  .w-40 {
+    width: 40% !important;
+  }
+
+  .w-60 {
+    width: 60% !important;
+  }
+
+  .w-80 {
+    width: 80% !important;
+  }
+
+  .w-90 {
+    width: 90% !important;
+  }
+
+  .font-size-08 {
+    font-size: 0.8rem;
+    line-height: 1.5rem;
+  }
+
+  .font-weight-600 {
+    font-weight: 600;
+  }
+}
+
+.disabled-text {
+  font-style: italic;
+  color: $disabled
+}
+
+.default-icon, .link-style {
+  color: $paletti-blue;
+
+  &.clickable {
+    cursor: pointer;
+  }
+}
+
+.order-handle {
+  color: $gray-lighten-2;
+  cursor: grab;
+}
+
+.btn-link, .clickable {
+  cursor: pointer;
+}
+
+.vue-notification-wrapper {
+  .vue-notification {
+    &.error {
+      background-image: url('~@assets/img/icons/info-white.svg');
+      padding-left: 35px;
+      background-repeat:no-repeat;
+      background-position: 5px 10px;
+
+      .notification-title {
+        font-weight: 600;
+      }
+
+    }
+  }
+}
+
+.disabled-events {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+.border-bottom-1, border-bottom {
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+.border-bottom-2 {
+  border-bottom: 2px solid #dee2e6 !important;
+}
+
+.border-bottom-3 {
+  border-bottom: 3px solid #dee2e6 !important;
+}
+
+.taulukko-rivi-varitys:nth-of-type(even) {
+  background-color: $table-even-row-bg-color;
+}
+.taulukko-rivi-varitys:nth-of-type(odd) {
+  background-color: $table-odd-row-bg-color;
+}
+

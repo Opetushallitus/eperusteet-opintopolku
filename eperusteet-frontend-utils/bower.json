@@ -1,0 +1,9 @@
+{
+  "name": "eperusteet-frontend-utils",
+  "version": "0.0.1",
+  "ignore": [],
+  "main": "eperusteet-frontend-utils.js",
+  "dependencies": {
+    "MathJax": "2.5.3"
+  }
+}

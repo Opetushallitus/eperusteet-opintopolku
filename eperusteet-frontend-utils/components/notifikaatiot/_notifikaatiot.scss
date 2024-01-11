@@ -1,0 +1,133 @@
+$error-vari: #fcc;
+
+.notification-wrapper {
+  margin: 0;
+  margin-top: 28px;
+  margin-right: 28px;
+  padding: 0;
+  padding-top: 6px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+}
+
+.notifications {
+  margin: 0;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  top: 0;
+  right: 0;
+  float: right;
+}
+
+@mixin notification() {
+  cursor: pointer;
+  padding: 0 5px 0 2px;
+  min-height: 42px;
+  width: 300px;
+  margin: 0;
+  margin-top: 5px;
+  font-weight: bold;
+  border: none;
+  border-radius: 3px;
+  vertical-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.49);
+  background-repeat: no-repeat;
+  background-position: 7px 6px;
+  -webkit-box-shadow:0 1px 3px rgba(0, 0, 0, 0.49);
+}
+
+.notification-body {
+  padding: 6px;
+  overflow-y: auto;
+}
+
+.notification-picture {
+  margin-right: 4px;
+  float: left;
+  width: 28px;
+  height: 29px;
+  display: inline-block;
+}
+
+.notification-message {
+  margin: 0 0 0 37px;
+  width: 300px - 32px - 37px;
+  float: left;
+  font-weight: normal;
+}
+
+.notification-normal {
+  @include notification();
+  background-color: #e4f4f9;
+  background-image: url("images/notify-info.png");
+  color: #4987b3;
+}
+
+.notification-success {
+  @include notification();
+  background-color: #e3f4e5;
+  background-image: url("images/notify-success.png");
+  color: #4b8947;
+}
+
+.notification-warning {
+  @include notification();
+  background-color: #fcf3d3;
+  background-image: url("images/notify-alert.png");
+  color: #a07c3a;
+}
+
+.notification-danger {
+  @include notification();
+  background: $error-vari;
+  color: #fff;
+}
+
+.jarjestelmavirhe {
+  min-height: 60px;
+  background: beige;
+  border-radius: 5px;
+}
+
+.jarjestelmavirhe-kuva {
+  padding-top: 26px;
+  padding-left: 22px;
+  margin-top: 1%;
+  margin-left: 3%;
+  margin-right: 32px;
+  position: relative;
+  width: 65px;
+  height: 64px;
+  display: inline-block;
+  float: left;
+}
+
+.jarjestelmavirhe-viesti {
+  margin-left: 128px;
+  min-height: 60px;
+}
+
+.jarjestelmavirhe-ok {
+  margin-top: 12px;
+  margin-left: 50%;
+  button {
+    width: 60px;
+  }
+}
+
+.alert-error {
+  background-repeat: no-repeat;
+  background-position: 8px 10px;
+  background-image: url("images/notify-alert.png");
+  padding-left: 46px;
+}
+
+.inline-alert {
+  font-size: 12px;
+  font-weight: normal;
+  color: red;
+}

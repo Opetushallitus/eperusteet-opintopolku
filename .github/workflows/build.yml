@@ -93,22 +93,25 @@ jobs:
 
       - name: Build eperusteet-opintopolku-ui
         run: |
+          pwd
           git submodule update --recursive --init
-          cd eperusteet-opintopolku-app/v2
+          pwd
           yarn install
                     
           cd eperusteet-frontend-utils/vue
+          pwd
           yarn install --silent
+          pwd
           yarn gen:api
-          rm -rf node_modules
-          cd ../../../..
           
-          cd eperusteet-opintopolku-app/v2
+          rm -rf node_modules
+          cd ../..
+          
           yarn run lint
           yarn run build
           yarn run test:unit
-          cd ../..
 
+          cd eperusteet-opintopolku-app
           mvn clean verify --batch-mode
 
       - name: Cache eperusteet-opintopolku build results
@@ -137,7 +140,7 @@ jobs:
           source ci-tools/common/setup-tools.sh
 
           mv ${ARTIFACT_NAME}-app/target/${ARTIFACT_NAME}-app.war $DOCKER_BUILD_DIR/artifact/${ARTIFACT_NAME}-app.war
-          cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
+          #cp -vr src/main/resources/oph-configuration $DOCKER_BUILD_DIR/config/
 
           export BASE_IMAGE="baseimage-war-openjdk11:master"
           ./ci-tools/common/pull-image.sh

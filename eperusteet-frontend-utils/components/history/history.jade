@@ -1,0 +1,45 @@
+floating-window(ng-if="$$show")
+  .window-header
+    h2
+      span(kaanna="'osan-historia'")
+      .pull-right
+        +gicon("move")
+
+  .window-body
+    div(ng-if="!data")
+      .alert.alert-info()
+        h3(kaanna="'aktiivista-tekstia-ei-ole'")
+
+    div(ng-if="data")
+      rzslider(rz-slider-model="historySlider.value" rz-slider-options="historySlider.options")
+
+      h4(ng-if="currentHistoryMeta")
+        span(ng-bind="currentHistoryMeta.kommentti")
+
+      div(ng-if="currentHistoryMeta")
+        span(ng-bind="currentHistoryMeta.date | aikaleima")
+
+      button.btn.btn-primary.btn-sm(type="button" ng-model="naytaDiffi" uib-btn-checkbox btn-checkbox-true="1" btn-checkbox-false="0")
+        span(ng-show="naytaDiffi" ng-bind="'nayta-muutokset' | kaanna")
+        span(ng-hide="naytaDiffi" ng-bind="'nayta-kokonaan' | kaanna")
+
+      .pull-right
+        button.btn.btn-primary.btn-sm(ng-click="nextLang()")
+          +gicon("flag")
+          span(href="" ng-bind="selectedLang | kaanna")
+
+      div(style="margin-top: 5px")
+
+      .alert.alert-warning(ng-if="eiVanhaaVersiota")
+        h3(kaanna="'vanhaa-versiota-ei-loytynyt'")
+        p(kaanna="'vanhaa-versiota-ei-loytynyt-selite'")
+
+      div(ng-if="!eiVanhaaVersiota")
+        div(ng-show="naytaDiffi")
+          p.diff-text
+            span(ng-repeat="change in diff"
+              ng-bind-html="change.value"
+              ng-class="{ 'added': change.added, 'removed': change.removed }")
+
+        div(ng-hide="naytaDiffi")
+          p(ng-bind="vanhaTeksti")

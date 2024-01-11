@@ -1,0 +1,23 @@
+<svg id="valmiusaste-indikaattori_valmis" data-name="valmiusaste-indikaattori/valmis" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="62" height="62" viewBox="0 0 62 62">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="kiekko" d="M31,62A31.008,31.008,0,0,1,18.933,2.436,31.008,31.008,0,0,1,43.067,59.564,30.808,30.808,0,0,1,31,62ZM31,5.59A25.41,25.41,0,1,0,56.41,31,25.438,25.438,0,0,0,31,5.59Z" fill="#5aca14"/>
+    </clipPath>
+    <clipPath id="clip-path-2">
+      <path id="Mask" d="M7.575,14.252,1.706,8.28,0,9.957l7.545,7.678L23.754,1.706,22.077,0Z" transform="translate(0 0)"/>
+    </clipPath>
+  </defs>
+  <g id="Group_93" data-name="Group 93">
+    <path id="kiekko-2" data-name="kiekko" d="M31,62A31.008,31.008,0,0,1,18.933,2.436,31.008,31.008,0,0,1,43.067,59.564,30.808,30.808,0,0,1,31,62ZM31,5.59A25.41,25.41,0,1,0,56.41,31,25.438,25.438,0,0,0,31,5.59Z" fill="#5aca14"/>
+  </g>
+  <g id="Ikonit_Checkmark" data-name="Ikonit/Checkmark" transform="translate(19 19)">
+    <g id="Group_37" data-name="Group 37" transform="translate(0 3.588)">
+      <path id="Mask-2" data-name="Mask" d="M7.575,14.252,1.706,8.28,0,9.957l7.545,7.678L23.754,1.706,22.077,0Z" transform="translate(0 0)"/>
+      <g id="Mask_Group_37" data-name="Mask Group 37" clip-path="url(#clip-path-2)">
+        <g id="Värit_Tumma_harmaa" data-name="Värit/Tumma harmaa" transform="translate(0 -3.588)">
+          <rect id="Rectangle" width="23.922" height="23.922" fill="#fff"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

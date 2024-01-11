@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EpHomeTile component Renders state 1`] = `
+<div class="tile"><a style="outline: none;">
+    <div class="innertile">
+      <div class="tile-header">
+        <h3 class="oph-h3 tileheader"></h3>
+      </div>
+      <div class="iconline">
+        <div class="icon"><span aria-hidden="true" class="icon inner material-icons-outlined" style="color: red; font-size: 40px; background: white;">add</span></div>
+        <!---->
+      </div>
+      <div class="tile-content px-3"></div>
+    </div>
+  </a></div>
+`;
+
+exports[`EpHomeTile component Router link 1`] = `
+<div class="tile"><a href="https://eperusteet.opintopolku.fi" rel="noopener noreferrer" target="_blank" style="outline: none;">
+    <div class="innertile">
+      <div class="tile-header">
+        <h3 class="oph-h3 tileheader"></h3>
+      </div>
+      <div class="iconline">
+        <div class="icon"><span aria-hidden="true" class="icon inner material-icons-outlined" style="color: red; font-size: 40px; background: white;">add</span></div>
+        <div class="count">1</div>
+      </div>
+      <div class="tile-content px-3"></div>
+    </div>
+  </a></div>
+`;

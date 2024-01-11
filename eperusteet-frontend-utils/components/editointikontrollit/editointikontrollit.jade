@@ -1,0 +1,16 @@
+div.edit-controls(ng-cloak ng-hide="hideControls || !editStarted")
+  div.edit-control-content
+    div.edit-control-header
+      span.glyphicon.glyphicon-pencil
+    .pull-left
+      button.btn.btn-primary.muokkaa(style="margin-left: 40px" ng-click="toggleHistoryModal()")
+        span
+          i(class="fa fa-history")
+          span(style="margin-left: 8px" kaanna="'nayta-historia'")
+    div.edit-control-buttons
+      span=" "
+      button.btn.btn-default(ng-disabled="disableButtons" ng-click="cancel()" kaanna="'peruuta'")
+      span=" "
+      button.btn.btn-primary(ng-disabled="disableButtons || $$disableSave" ng-click="save()" kaanna="'tallenna'")
+    div.edit-control-comment
+      input.form-control(type="text" ng-model="kommentti" placeholder="{{ 'kirjoita-kommentti' | kaanna }}")

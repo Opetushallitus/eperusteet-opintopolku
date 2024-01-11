@@ -1,0 +1,20 @@
+<svg data-name="Component 1017 – 1" xmlns="http://www.w3.org/2000/svg" width="2503" height="300">
+  <defs>
+    <linearGradient id="a" x1=".5" x2=".5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#009700"/>
+      <stop offset="1" stop-color="#007500"/>
+    </linearGradient>
+  </defs>
+  <g fill="url(#a)">
+    <path data-name="Rectangle" d="M0 0h2503v300H0z"/>
+    <path data-name="Rectangle" d="M0 0h2503v300H0z"/>
+  </g>
+  <g data-name="aallot/siniset" opacity=".4">
+    <path data-name="Path" d="M1435 0s272.44 13.305 507.588 92.233S2246.188 291 2503 300V0z" fill="none"/>
+    <path data-name="Path" d="M1435 0s272.44 13.305 507.588 92.233S2246.188 291 2503 300V0z" fill="rgba(0,0,0,0.3)"/>
+    <g data-name="Path Copy">
+      <path data-name="Path Copy" d="M1926 0s147.189 12.862 274.231 89.159S2364.254 281.3 2503 290V0z" fill="none"/>
+      <path data-name="Path Copy" d="M1926 0s147.189 12.862 274.231 89.159S2364.254 281.3 2503 290V0z" fill="rgba(0,0,0,0.35)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="2503" height="300" viewBox="0 0 2503 300">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#8dd9d9"/>
+      <stop offset="1" stop-color="#67cccc"/>
+    </linearGradient>
+  </defs>
+  <g id="Group_462" data-name="Group 462" transform="translate(-11435 -6860)">
+    <g id="Rectangle" transform="translate(11435 6860)">
+      <rect id="Rectangle-2" data-name="Rectangle" width="2503" height="300" fill="url(#linear-gradient)"/>
+    </g>
+    <g id="Group_459" data-name="Group 459" transform="translate(12498 6797)">
+      <g id="Path_Copy_12" data-name="Path Copy 12" transform="translate(-8666 -4773.5)">
+        <path id="Path_Copy_12-2" data-name="Path Copy 12" d="M0,0S272.44,13.305,507.588,92.233,811.188,291,1068,300V0Z" transform="translate(9038 4836.5)" fill="none"/>
+        <path id="Path_Copy_12-3" data-name="Path Copy 12" d="M0,0S272.44,13.305,507.588,92.233,811.188,291,1068,300V0Z" transform="translate(9038 4836.5)" fill="rgba(255,255,255,0.15)"/>
+      </g>
+      <g id="Path_Copy_13" data-name="Path Copy 13" transform="translate(-8666 -4773.5)">
+        <path id="Path_Copy_13-2" data-name="Path Copy 13" d="M0,0S147.189,12.862,274.231,89.159,438.254,281.3,577,290V0Z" transform="translate(9529 4836.5)" fill="none"/>
+        <path id="Path_Copy_13-3" data-name="Path Copy 13" d="M0,0S147.189,12.862,274.231,89.159,438.254,281.3,577,290V0Z" transform="translate(9529 4836.5)" fill="rgba(255,255,255,0.15)"/>
+      </g>
+    </g>
+  </g>
+</svg>

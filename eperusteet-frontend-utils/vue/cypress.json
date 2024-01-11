@@ -1,0 +1,8 @@
+{
+  "video": false,
+  "reporter": "junit",
+  "reporterOptions": {
+    "toConsole": false
+  },
+  "pluginsFile": "tests/e2e/plugins/index.js"
+}

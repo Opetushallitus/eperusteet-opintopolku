@@ -1,0 +1,21 @@
+<svg width="190" height="223" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="b">
+            <stop stop-color="#FFF" stop-opacity=".21" offset="0%"/>
+            <stop stop-color="#DBDFE8" stop-opacity=".32" offset="0%"/>
+            <stop stop-color="#243A70" stop-opacity=".58" offset="63.33%"/>
+            <stop stop-color="#001A58" stop-opacity=".83" offset="100%"/>
+        </linearGradient>
+        <rect id="a" x="0" y="0" width="190" height="223" rx="10"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <g>
+            <use fill="#0041DC" xlink:href="#a"/>
+            <use fill-opacity=".5" fill="url(#b)" xlink:href="#a"/>
+        </g>
+        <g opacity=".2" fill="#001A58">
+            <path d="M.5 53.15C58.63 73.32 101.24 92.98 190 95V10a10 10 0 00-10-10H5.36C2.72.33.93 1.62 0 3.88c0 0 .32 49.27.5 49.27z" fill-opacity=".3"/>
+            <path d="M.14 13.64a420.59 420.59 0 0142.22 13.1C104.31 49.65 122.34 84.4 190 87V10a10 10 0 00-10-10H7.72C4.9 0 2.85.56 1.61 1.69-.67 3.74.14 13.64.14 13.64z" fill-opacity=".65"/>
+        </g>
+    </g>
+</svg>
