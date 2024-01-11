@@ -101,8 +101,7 @@ jobs:
           cd eperusteet-frontend-utils/vue
           pwd
           yarn install --silent
-          pwd
-          yarn gen:api
+          ./scripts/buildapi.sh
           
           rm -rf node_modules
           cd ../..
