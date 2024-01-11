@@ -8,8 +8,9 @@
         :object="oppiaineenVuosiluokkakokonaisuus.tehtava"
         :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.tehtava"
         :kuvat="kuvat"
-        :termit="termit"
-      />
+        :termit="termit">
+        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.tehtava" class="mb-3">{{$t('tehtava')}}</h3>
+      </ep-peruste-content>
 
       <ep-peruste-content
         :naytaSisaltoTyhjana="false"
@@ -17,8 +18,9 @@
         :object="oppiaineenVuosiluokkakokonaisuus.tyotavat"
         :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat"
         :kuvat="kuvat"
-        :termit="termit"
-      />
+        :termit="termit">
+        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.tyotavat" class="mb-3">{{$t('tyotavat')}}</h3>
+      </ep-peruste-content>
 
       <ep-peruste-content
         :naytaSisaltoTyhjana="false"
@@ -26,8 +28,9 @@
         :object="oppiaineenVuosiluokkakokonaisuus.ohjaus"
         :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus"
         :kuvat="kuvat"
-        :termit="termit"
-      />
+        :termit="termit">
+        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.ohjaus" class="mb-3">{{$t('ohjaus')}}</h3>
+      </ep-peruste-content>
 
       <ep-peruste-content
         :naytaSisaltoTyhjana="false"
@@ -35,8 +38,9 @@
         :object="oppiaineenVuosiluokkakokonaisuus.arviointi"
         :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.arviointi"
         :kuvat="kuvat"
-        :termit="termit"
-      />
+        :termit="termit">
+        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.arviointi" class="mb-3">{{$t('arviointi')}}</h3>
+      </ep-peruste-content>
 
       <template v-if="perusteenVuosiluokkakokonaisuus.vapaatTekstit">
         <div v-for="(vapaaTeksti, index) in perusteenVuosiluokkakokonaisuus.vapaatTekstit" :key="'vapaateksti'+index" class="mt-4">
