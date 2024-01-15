@@ -16,7 +16,7 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
 
   @State()
   public filterdata: JulkaistutPerusteetQuery = {
-    nimi: '',
+    nimiTaiKoodi: '',
     koulutustyyppi: [
       'koulutustyyppi_1',
       'koulutustyyppi_11',
