@@ -44,6 +44,7 @@ export interface JulkaistutPerusteetQuery {
   sivukoko?: number;
   kieli?: string;
   nimi?: string;
+  nimiTaiKoodi?: string;
   koulutustyyppi?: Array<string>;
   tuleva?: boolean;
   siirtyma?: boolean;
@@ -93,6 +94,7 @@ export async function julkaistutPerusteet(query: JulkaistutPerusteetQuery) {
   return (await Julkaisut.getKoulutustyyppienJulkaisut(
     query.koulutustyyppi || [],
     query.nimi,
+    query.nimiTaiKoodi,
     query.kieli,
     query.tuleva,
     query.voimassaolo,
