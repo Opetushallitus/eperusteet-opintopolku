@@ -261,6 +261,21 @@ export const router = new Router({
           },
         },
       }, {
+        path: 'osaamismerkki/:koodi',
+        name: 'osaamismerkki',
+        component: RouteOsaamismerkkiTiedot,
+        meta: {
+          resolve: {
+            async props(route) {
+              return {
+                default: {
+                  osaamismerkkiStore: await OsaamismerkkiStore.create(null, route.params.koodi),
+                },
+              };
+            },
+          },
+        },
+      }, {
         path: 'osaamismerkit',
         name: 'osaamismerkit',
         component: RouteOsaamismerkit,
@@ -285,7 +300,7 @@ export const router = new Router({
               async props(route) {
                 return {
                   default: {
-                    osaamismerkkiStore: await OsaamismerkkiStore.create(route.params.osaamismerkkiId),
+                    osaamismerkkiStore: await OsaamismerkkiStore.create(route.params.osaamismerkkiId, null),
                   },
                 };
               },
