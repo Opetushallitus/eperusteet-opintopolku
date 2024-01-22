@@ -1,7 +1,7 @@
 <template>
   <div class="tile tile-background-shadow-selected shadow-tile d-flex flex-column">
     <div class="ikoni">
-      <EpMaterialIcon class="img" :color="rgbColor" size="46px">star</EpMaterialIcon>
+      <img :src="osaamimerkkiLogo" :alt="$t('osaamismerkit')" class="img"/>
     </div>
     <div class="nimi">
       {{ $t('kansalliset-perustaitojen-osaamismerkit')}}
@@ -11,8 +11,10 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
+import osaamismerkkiLogoFI from '@assets/img/images/osaamismerkki_main_FI.svg';
+import osaamismerkkiLogoSV from '@assets/img/images/osaamismerkki_main_SV.svg';
+import { Kielet } from '@shared/stores/kieli';
 
 @Component({
   components: {
@@ -20,11 +22,17 @@ import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue
   },
 })
 export default class OsaamismerkkiTile extends Vue {
-  @Prop({ required: true, type: String })
-  private koulutustyyppi!: string;
+  get sisaltokieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
 
-  get rgbColor() {
-    return rgb2string(koulutustyyppiThemeColor(this.koulutustyyppi));
+  get osaamimerkkiLogo() {
+    if (this.sisaltokieli === 'sv') {
+      return osaamismerkkiLogoSV;
+    }
+    else {
+      return osaamismerkkiLogoFI;
+    }
   }
 }
 </script>
@@ -44,7 +52,7 @@ export default class OsaamismerkkiTile extends Vue {
   overflow-x: auto;
   width: 330px;
   height: 172px;
-  padding-top: 30px;
+  padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
 
@@ -58,6 +66,7 @@ export default class OsaamismerkkiTile extends Vue {
 }
 
 .nimi {
+  margin-top: 10px;
   hyphens: auto;
   overflow: hidden;
   width: 100%;
@@ -68,8 +77,7 @@ export default class OsaamismerkkiTile extends Vue {
 }
 
 .img {
-  margin: 15px;
-  height: 46px;
-  width: 46px;
+  height: 100px;
+  width: 100px;
 }
 </style>
