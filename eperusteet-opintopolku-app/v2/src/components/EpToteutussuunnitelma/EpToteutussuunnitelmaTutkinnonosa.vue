@@ -15,7 +15,7 @@
       <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4 mb-5"
+    <ep-form-content class="col-md-12 mt-4 mb-4"
                      name="koulutuksen-jarjestajan-toteutus"
                      v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0 && (!osaAlueet || osaAlueet.length === 0)"
                      header-type="h3">
@@ -23,6 +23,10 @@
     </ep-form-content>
 
     <div v-if="sisaltoviite.tosa.omatutkinnonosa">
+
+      <ep-form-content class="col-md-12" v-if="sisaltoviite.tosa.omatutkinnonosa.koodi" name="koodi">
+        <span v-html="sisaltoviite.tosa.omatutkinnonosa.koodi" />
+      </ep-form-content>
 
       <div v-if="sisaltoviite.tosa.omatutkinnonosa.tavoitteet" class="mb-4">
         <ep-form-content class="col-md-12" name="tavoitteet">
@@ -74,7 +78,7 @@
 
     </div>
 
-    <div v-if="naytetaanPerusteenSisalto">
+    <div v-if="perusteenTutkinnonosa">
       <h3>{{ $t('perusteen-sisalto') }}</h3>
 
       <ep-form-content class="col-md-12" v-if="perusteenTutkinnonosa.koodiArvo" name="koodi">
@@ -301,10 +305,6 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
 
   get perusteenOsaAlueet() {
     return this.perusteenTutkinnonosa?.osaAlueet;
-  }
-
-  get naytetaanPerusteenSisalto() {
-    return this.perusteenTutkinnonosa && (this.perusteenTutkinnonosa.tyyppi !== 'reformi_tutke2' || !this.osaAlueet || this.osaAlueet.length === 0);
   }
 }
 </script>
