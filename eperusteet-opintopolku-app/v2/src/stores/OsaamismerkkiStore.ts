@@ -20,6 +20,6 @@ export class OsaamismerkkiStore {
 
   public async fetch(id: number) {
     this.state.osaamismerkki = null;
-    this.state.osaamismerkki = (await Osaamismerkit.getJulkinenOsaamismerkki(id)).data;
+    this.state.osaamismerkki = (await Osaamismerkit.getJulkinenOsaamismerkkiById(id)).data;
   }
 }

@@ -20,7 +20,7 @@
         </div>
       </div>
       <div class="m-3">
-        <div class="mb-3">
+        <div class="mb-3" v-if="osaamismerkki.kuvaus">
           <h2 class="header">{{$t('kuvaus')}}</h2>
           <div class="mt-1">
             <span>{{ $kaanna(osaamismerkki.kuvaus) }}</span>
@@ -28,6 +28,7 @@
         </div>
         <div>
           <h2 class="header">{{$t('osaamistavoitteet')}}</h2>
+          <span>{{$t('osaamismerkin-suorittaja')}}</span>
           <ul class="mt-1">
             <li v-for="(tavoite, index) in osaamismerkki.osaamistavoitteet" :key="'tavoite'+index">
               {{$kaanna(tavoite.osaamistavoite)}}
@@ -36,11 +37,16 @@
         </div>
         <div>
           <h2 class="header">{{$t('arviointikriteerit')}}</h2>
+          <span>{{$t('osaamismerkin-suorittaja')}}</span>
           <ul class="mt-1">
             <li v-for="(kriteeri, index) in osaamismerkki.arviointikriteerit" :key="'kriteeri'+index">
               {{$kaanna(kriteeri.arviointikriteeri)}}
             </li>
           </ul>
+        </div>
+        <div>
+          <h2 class="header">{{$t('osaamisen-arviointi')}}</h2>
+          <span>{{$t('osaamismerkin-osaamisen-arviointi')}}</span>
         </div>
       </div>
     </div>
