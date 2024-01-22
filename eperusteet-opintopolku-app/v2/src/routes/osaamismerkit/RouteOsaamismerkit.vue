@@ -42,7 +42,7 @@
               <div class="mb-4">
                 <h2>{{$kaanna(group.data.nimi)}}</h2>
               </div>
-              <div class="mb-4">
+              <div class="mb-4" v-if="group.data.kuvaus">
                 {{$kaanna(group.data.kuvaus)}}
               </div>
               <div class="d-md-flex flex-wrap justify-content-start">
