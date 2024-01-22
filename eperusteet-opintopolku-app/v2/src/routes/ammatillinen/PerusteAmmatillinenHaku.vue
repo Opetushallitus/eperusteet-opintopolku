@@ -139,12 +139,12 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   initToggleQuery() {
     this.toggleQuery = {
-      tuleva: this.filters.tuleva,
-      voimassaolo: this.filters.voimassaolo,
-      siirtyma: this.filters.siirtyma,
-      poistunut: this.filters.poistunut,
-      perusteet: this.filters.perusteet,
-      tutkinnonosat: this.filters.tutkinnonosat,
+      tuleva: true,
+      voimassaolo: true,
+      siirtyma: false,
+      poistunut: false,
+      perusteet: true,
+      tutkinnonosat: false,
     };
   }
 
