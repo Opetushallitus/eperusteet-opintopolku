@@ -17,7 +17,7 @@
                        :placeholder="$t('hae-osaamismerkkeja')"/>
           </b-form-group>
 
-          <b-form-group :label="$t('kategoria')">
+          <b-form-group :label="$t('teema')">
             <EpMultiSelect :is-editing="false"
                            :options="osaamismerkkiKategoriaOptions"
                            :placeholder="$t('kaikki')"
