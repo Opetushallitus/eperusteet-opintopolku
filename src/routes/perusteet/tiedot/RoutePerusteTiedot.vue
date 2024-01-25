@@ -375,14 +375,11 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get maarayskokoelmanMuutosmaaraykset() {
-    return _.chain(this.julkaisut)
-      .filter('muutosmaarays')
-      .map('muutosmaarays')
+    return _.chain(this.perusteDataStore.muutosmaaraykset)
       .map(muutosmaarays => {
         const muutosmaaraysLiite = _.find(muutosmaarays!.liitteet![this.kieli].liitteet, { tyyppi: MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI });
         return {
-          voimassaoloAlkaa: muutosmaarays!.voimassaoloAlkaa,
-          nimi: this.$kaanna(muutosmaaraysLiite!.nimi),
+          ...muutosmaarays,
           url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaaraysLiite!.id)).url,
         };
       })
