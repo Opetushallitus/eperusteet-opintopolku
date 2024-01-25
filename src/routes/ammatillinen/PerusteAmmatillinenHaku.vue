@@ -129,7 +129,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private toggleQuery: any = {};
 
   async mounted() {
-    this.initToggleQuery();
+    this.initQuery();
     this.page = 1;
     if (!this.perusteHakuStore.perusteet) {
       await this.perusteHakuStore.fetch();
@@ -137,7 +137,8 @@ export default class PerusteAmmatillinenHaku extends Vue {
     await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
   }
 
-  initToggleQuery() {
+  initQuery() {
+    this.filters.nimiTaiKoodi = undefined;
     this.toggleQuery = {
       tuleva: true,
       voimassaolo: true,
