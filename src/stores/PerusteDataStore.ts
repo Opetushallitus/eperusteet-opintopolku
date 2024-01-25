@@ -16,6 +16,8 @@ import {
   Arviointiasteikot,
   JulkaisuBaseDto, Julkaisut,
   DokumenttiDtoTilaEnum,
+  Maaraykset,
+  MaaraysDto,
 } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
@@ -60,6 +62,7 @@ export class PerusteDataStore {
   @State() public perusteJulkaisu: any = null;
   @State() public perusteJulkaisuP: Promise<any> | null = null;
   @State() public julkaisut: JulkaisuBaseDto[] | null = null;
+  @State() public muutosmaaraykset: MaaraysDto[] | null = null;
 
   public static async create(perusteId: number, revision: number | null = null) {
     const result = new PerusteDataStore(perusteId, revision);
@@ -100,6 +103,7 @@ export class PerusteDataStore {
 
     this.liitteet = (await Liitetiedostot.getAllLiitteet(this.perusteId)).data;
     this.fetchJulkaisut();
+    this.muutosmaaraykset = (await Maaraykset.getPerusteenJulkaistutMuutosmaaraykset(this.perusteId)).data;
   }
 
   async fetchJulkaisut() {
