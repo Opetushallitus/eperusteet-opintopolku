@@ -3,11 +3,6 @@
     <template slot="header">
       {{ $kaanna(osaamismerkki.nimi) }}
     </template>
-    <template slot="subheader">
-      <div class="mt-3">
-        <span class="kategoria-nimi">{{ $kaanna(osaamismerkki.kategoria.nimi) }}</span>
-      </div>
-    </template>
     <div class="d-flex flex-lg-row flex-column mt-5">
       <div class="m-3">
         <div class="tile tile-background-shadow-selected shadow-tile">
@@ -20,6 +15,12 @@
         </div>
       </div>
       <div class="m-3">
+        <div class="mb-3">
+          <h2 class="header">{{$t('teema')}}</h2>
+          <div class="mt-1">
+            <span>{{ $kaanna(osaamismerkki.kategoria.nimi) }}</span>
+          </div>
+        </div>
         <div class="mb-3" v-if="osaamismerkki.kuvaus">
           <h2 class="header">{{$t('kuvaus')}}</h2>
           <div class="mt-1">
@@ -104,14 +105,6 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile;
-
-.kategoria-nimi {
-  padding: 7px 15px;
-  background: $gray-lighten-6;
-  color: $black;
-  border-radius: 20px;
-  font-size: 15px;
-}
 
 .tile {
   color: #212529;
