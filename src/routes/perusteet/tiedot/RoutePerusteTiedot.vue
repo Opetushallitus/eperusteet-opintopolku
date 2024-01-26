@@ -362,13 +362,12 @@ export default class RoutePerusteTiedot extends Vue {
 
   get perusteenMuutosmaaraykset() {
     return _.chain(this.peruste?.muutosmaaraykset)
-      .map(muutosmaarays => muutosmaarays.liitteet)
-      .filter(muutosmaarays => _.has(muutosmaarays, this.kieli))
-      .map(liite => liite![this.kieli])
+      .filter(muutosmaarays => _.has(muutosmaarays.liitteet, this.kieli))
       .map(muutosmaarays => {
         return {
           ...muutosmaarays,
-          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, muutosmaarays.id!).url,
+          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, muutosmaarays.liitteet![this.kieli].id!).url,
+          nimi: !!muutosmaarays.nimi && muutosmaarays.nimi[this.kieli] ? muutosmaarays.nimi[this.kieli] : muutosmaarays.liitteet![this.kieli].nimi,
         };
       })
       .value();
