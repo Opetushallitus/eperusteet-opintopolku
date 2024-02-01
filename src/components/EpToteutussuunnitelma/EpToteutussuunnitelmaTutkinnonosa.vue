@@ -35,7 +35,7 @@
         <hr/>
       </div>
 
-      <div v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista && sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista.length > 0" class="mb-4">
+      <div v-if="hasAmmattitaitovaatimuksetLista" class="mb-4">
         <ep-form-content class="col-md-12" name="ammattitaitovaatimukset">
 
           <div v-for="(ammattitaitovaatimus, index) in sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista" :key="'atv'+index">
@@ -60,7 +60,7 @@
         <hr/>
       </div>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
+      <ep-form-content class="col-md-12 mb-5" v-if="hasAmmattitaitovaatimukset" name="ammattitaitovaatimukset">
         <EpAmmattitaitovaatimukset v-model="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset" :is-editing="false">
           <template v-slot:koodi="{koodi}">
             <span>{{ $kaanna(koodi.nimi) }}</span>
@@ -305,6 +305,18 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
 
   get perusteenOsaAlueet() {
     return this.perusteenTutkinnonosa?.osaAlueet;
+  }
+
+  get hasAmmattitaitovaatimukset() {
+    return !_.isEmpty(this.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset?.kohdealueet) || !_.isEmpty(this.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset?.vaatimukset);
+  }
+
+  get hasAmmattitaitovaatimuksetLista() {
+    return !_.chain(this.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista)
+      .map('vaatimuksenKohteet')
+      .flatMap()
+      .isEmpty()
+      .value();
   }
 }
 </script>
