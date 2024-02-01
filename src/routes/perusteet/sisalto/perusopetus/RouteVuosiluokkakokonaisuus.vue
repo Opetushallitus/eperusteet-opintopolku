@@ -29,6 +29,13 @@
           <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.teksti)" :kuvat="kuvat" />
         </div>
 
+        <template v-if="vuosiluokkakokonaisuus.vapaatTekstit && vuosiluokkakokonaisuus.vapaatTekstit.length > 0">
+          <div v-for="(vapaaTeksti, index) in vuosiluokkakokonaisuus.vapaatTekstit" :key="'vapaateksti'+index" class="mt-4">
+            <h3>{{$kaanna(vapaaTeksti.nimi)}}</h3>
+            <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat"/>
+          </div>
+        </template>
+
         <div class="mt-4" v-if="vuosiluokkakokonaisuus.laajaalaisetOsaamiset && vuosiluokkakokonaisuus.laajaalaisetOsaamiset.length > 0">
           <h3 class="mt-4">{{$t('laaja-alaisen-osaamisen-alueet')}}</h3>
 
