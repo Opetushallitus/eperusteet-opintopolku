@@ -10,6 +10,19 @@
         :object="vuosiluokkakokonaisuus.tehtava"
       />
 
+      <template v-if="perusteVlkVapaatTekstit">
+        <div v-for="(vapaaTeksti, index) in perusteVlkVapaatTekstit" :key="'vapaateksti'+index" class="mt-5">
+          <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
+          <EpContentViewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+
+          <h4>{{ $t('paikallinen-teksti') }}</h4>
+          <div v-if="vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus">
+            <EpContentViewer :value="$kaanna(vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus)" :kuvat="kuvat" :termit="termit"/>
+          </div>
+          <EpAlert v-else :text="$t('paikallista-sisaltoa-ei-maaritetty')" />
+        </div>
+      </template>
+
       <h2 class="mt-5" v-if="siirtymia">{{$t('siirtymavaiheet')}}</h2>
 
       <ep-peruste-content
@@ -47,14 +60,16 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { OpetussuunnitelmaVuosiluokkakokonaisuusStore } from '@/stores/OpetussuunnitelmaVuosiluokkakokonaisuusStore';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpAlert from '@shared/components/EpAlert/EpAlert.vue';
 
 @Component({
   components: {
+    EpAlert,
+    EpContentViewer,
     EpPerusteContent,
   },
 })
@@ -102,6 +117,23 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
 
   get vuosiluokanLaot() {
     return _.keyBy(this.vuosiluokkakokonaisuus.laajaalaisetosaamiset, '_laajaalainenosaaminen');
+  }
+
+  get kuvat() {
+    return this.opetussuunnitelmaDataStore.kuvat;
+  }
+
+  get termit() {
+    return this.opetussuunnitelmaDataStore.kaikkiTermit;
+  }
+
+  get perusteVlkVapaatTekstit() {
+    return _.map(this.perusteenVuosiluokkakokonaisuus.vapaatTekstit, pVlkVt => {
+      return {
+        ...pVlkVt,
+        vlkVapaaTeksti: _.find(this.vuosiluokkakokonaisuus.vapaatTekstit, vlkVt => _.toString(pVlkVt.id) === _.toString(vlkVt.perusteenVapaaTekstiId)) || {},
+      };
+    });
   }
 }
 
