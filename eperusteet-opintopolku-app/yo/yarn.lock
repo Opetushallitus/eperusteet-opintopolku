@@ -170,26 +170,19 @@ angular-timeline@^1.7.0:
   dependencies:
     angular "^1.3.15"
 
-angular-translate-loader-static-files@2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/angular-translate-loader-static-files/-/angular-translate-loader-static-files-2.13.0.tgz#e76b56be4647be3594b3a4aaaabdc3ef0ada11f7"
-  integrity sha1-52tWvkZHvjWUs6Sqqr3D7wraEfc=
+angular-translate-loader-static-files@2.19.1:
+  version "2.19.1"
+  resolved "https://registry.yarnpkg.com/angular-translate-loader-static-files/-/angular-translate-loader-static-files-2.19.1.tgz#c64eda70ee0c4259acfa422727923c79d096ecb2"
+  integrity sha512-gw4rps7lMaddrouhRUZh4GcWMKL52zzYbW/5YATfpoSrk8B+jxP8Q0BpmCBmXg79gvPsSQvt2DI/ygN91x7z0g==
   dependencies:
-    angular-translate "~2.13.0"
+    angular-translate "~2.19.1"
 
-angular-translate@2.13.0:
-  version "2.13.0"
-  resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.13.0.tgz#f070410b018d72061d2f782516401eb8ccb4fc62"
-  integrity sha1-8HBBCwGNcgYdL3glFkAeuMy0/GI=
+angular-translate@2.19.1, angular-translate@~2.19.1:
+  version "2.19.1"
+  resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.19.1.tgz#8636236f6a24d9dfbf11b88ad958c2246f72a3ce"
+  integrity sha512-SrU40ndnL422vXiVoqVveCmSnCzMcIXxQgnl7Cv9krOKUg6B8KZK3ddYzidHR/rxVuySezYHNDgRvzQNKwAdNQ==
   dependencies:
-    angular ">=1.2.26 <=1.6"
-
-angular-translate@~2.13.0:
-  version "2.13.1"
-  resolved "https://registry.yarnpkg.com/angular-translate/-/angular-translate-2.13.1.tgz#05673eb371986fc11edc151f590299d7e0c46228"
-  integrity sha1-BWc+s3GYb8Ee3BUfWQKZ1+DEYig=
-  dependencies:
-    angular ">=1.2.26 <=1.6"
+    angular "^1.8.0"
 
 angular-ui-bootstrap@2.2.0:
   version "2.2.0"
@@ -203,20 +196,15 @@ angular-ui-router@0.3.2:
   dependencies:
     angular "^1.0.8"
 
-angular@1.5.8:
-  version "1.5.8"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.5.8.tgz#925a5392b8c212d09572dc446db7e01264e094cb"
-  integrity sha1-klpTkrjCEtCVctxEbbfgEmTglMs=
+angular@1.8.3, angular@^1.8.0:
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.8.3.tgz#851ad75d5163c105a7e329555ef70c90aa706894"
+  integrity sha512-5qjkWIQQVsHj4Sb5TcEs4WZWpFeVFHXwxEBHUhrny41D8UrBAd6T/6nPPAsLngJCReIOqi95W3mxdveveutpZw==
 
 angular@>=1.0.6, angular@^1.0.8, angular@^1.3.15:
   version "1.7.8"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.8.tgz#b77ede272ce1b261e3be30c1451a0b346905a3c9"
   integrity sha512-wtef/y4COxM7ZVhddd7JtAAhyYObq9YXKar9tsW7558BImeVYteJiTxCKeJOL45lJ/+7B4wrAC49j8gTFYEthg==
-
-"angular@>=1.2.26 <=1.6":
-  version "1.6.10"
-  resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.10.tgz#eed3080a34d29d0f681ff119b18ce294e3f74826"
-  integrity sha512-PCZ5/hVdvPQiYyH0VwsPjrErPHRcITnaXxhksceOXgtJeesKHLA7KDu4X/yvcAi+1zdGgGF+9pDxkJvghXI9Wg==
 
 angulartics-piwik@1.0.6:
   version "1.0.6"
