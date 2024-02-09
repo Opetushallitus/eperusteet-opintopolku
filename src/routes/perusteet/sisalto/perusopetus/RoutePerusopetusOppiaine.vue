@@ -231,9 +231,8 @@ export default class RoutePerusopetusOppiaine extends Vue {
                   .sortBy((ltavoite: any) => ltavoite.nimi[Kielet.getSisaltoKieli.value])
                   .value() as any,
                 sisaltoalueet: _.chain(tavoite.sisaltoalueet)
-                  .map((sisaltoalue: string) => {
-                    return vlkSisaltoalueetById[sisaltoalue];
-                  })
+                  .map((sisaltoalue: string) => vlkSisaltoalueetById[sisaltoalue])
+                  .reject(_.isNil)
                   .sortBy((sisaltoalue: any) => sisaltoalue.nimi[Kielet.getSisaltoKieli.value])
                   .value() as any,
               };
