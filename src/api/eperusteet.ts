@@ -1,5 +1,12 @@
-import { Api, Julkaisut, PerusteenJulkaisuData, Perusteet, Tiedotteet } from '@shared/api/eperusteet';
+import {
+  Api,
+  Julkaisut,
+  Julkinen,
+  PerusteenJulkaisuData,
+  Tiedotteet,
+} from '@shared/api/eperusteet';
 import { Page } from '@shared/tyypit';
+import { JulkiEtusivuDto } from '@shared/generated/eperusteet';
 
 export interface PerusteQuery {
   sivu?: number;
@@ -58,6 +65,13 @@ export interface JulkaistutPerusteetQuery {
   tutkinnonosat?: boolean;
 }
 
+export interface JulkiEtusivuQuery {
+  sivu?: number;
+  sivukoko?: number;
+  kieli?: string;
+  nimi?: string;
+}
+
 export async function tiedoteQuery(query: TiedoteQuery = {
   julkinen: true,
   kieli: ['fi'],
@@ -108,4 +122,12 @@ export async function julkaistutPerusteet(query: JulkaistutPerusteetQuery) {
     query.tutkinnonosat,
     query.sivu,
     query.sivukoko)).data as Page<PerusteenJulkaisuData>;
+}
+
+export async function julkaistutOpsitJaPerusteet(query: JulkiEtusivuQuery) {
+  return (await Julkinen.getOpetussuunnitelmatJaPerusteet(
+    query.nimi,
+    query.kieli,
+    query.sivu,
+    query.sivukoko)).data as Page<JulkiEtusivuDto>;
 }
