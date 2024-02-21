@@ -23,6 +23,7 @@ import {
   Perusteet,
   PerusteKaikkiDto,
   Termit,
+  Julkaisut,
 } from '@shared/api/eperusteet';
 import {
   buildNavigation,
@@ -79,8 +80,16 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     this.fetchTermit();
     this.fetchKuvat();
 
-    if (this.opetussuunnitelma?.peruste?.id) {
-      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id)).data;
+    if (this.opetussuunnitelma?.peruste) {
+      const perusteenJulkaisut = (await Julkaisut.getKaikkiJulkaisut(this.opetussuunnitelma.peruste.id!)).data;
+      const rev = _.chain(perusteenJulkaisut)
+        .filter(julkaisu => julkaisu.luotu! >= this.opetussuunnitelma!.peruste!.globalVersion?.aikaleima!)
+        .sortBy('luotu')
+        .first()
+        .get('revision')
+        .value();
+
+      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id!, rev)).data;
     }
   }
 
