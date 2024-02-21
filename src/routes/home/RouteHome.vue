@@ -222,7 +222,6 @@ export default class RouteHome extends Vue {
   .section {
     padding-left: 15px;
     padding-right: 15px;
-    background: $blue-lighten-10;
   }
 
   ::v-deep .filter.query {

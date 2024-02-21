@@ -22,9 +22,9 @@
                   <div v-if="item.organisaatiot && item.organisaatiot.length > 0" class="meta mr-2">
                     <span class="mr-1">{{ $t('oppilaitokset') }}:</span>
                     <span v-for="(oppilaitos, tidx) in item.organisaatiot" :key="tidx">
-                    <span>{{ $kaanna(oppilaitos.nimi) }}</span>
-                    <span v-if="tidx < item.organisaatiot.length - 1">, </span>
-                  </span>
+                      <span>{{ $kaanna(oppilaitos.nimi) }}</span>
+                      <span v-if="tidx < item.organisaatiot.length - 1">, </span>
+                    </span>
                   </div>
                   <div v-if="item.koulutustoimija" class="meta">
                     <span class="mr-1">{{ $t('organisaatiot') }}:</span>
