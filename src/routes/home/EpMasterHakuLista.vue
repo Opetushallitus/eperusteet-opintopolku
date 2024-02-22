@@ -41,7 +41,7 @@
     <div class="mt-4">
       <b-pagination :value="sivu"
                     @change="updatePage"
-                    :total-rows="perusteStore.opsitJaPerusteetCount"
+                    :total-rows="kokonaismaara"
                     :per-page="sivukoko"
                     align="center"
                     aria-controls="opetussuunnitelmat-ja-perusteet-lista"
@@ -81,13 +81,10 @@ export default class EpMasterHakuLista extends Vue {
   @Watch('queryNimi')
   private async queryChange() {
     if (_.size(this.queryNimi) > 2) {
-      this.isLoading = true;
       await this.fetchOpsitJaPerusteet();
-      this.isLoading = false;
     }
     else {
       this.perusteStore.opsitJaPerusteet = null;
-      this.perusteStore.opsitJaPerusteetCount = 0;
     }
   }
 
@@ -97,30 +94,24 @@ export default class EpMasterHakuLista extends Vue {
   }
 
   async fetchOpsitJaPerusteet() {
+    this.isLoading = true;
     await this.perusteStore.getOpsitJaPerusteet({
       nimi: this.queryNimi,
       kieli: this.sisaltoKieli,
       sivu: this.sivu - 1,
       sivukoko: this.sivukoko,
     });
+    this.isLoading = false;
   }
 
   get opsitJaPerusteet() {
-    if (this.perusteStore.opsitJaPerusteet) {
-      return _.map(this.perusteStore.opsitJaPerusteet, resultItem => {
-        if (!resultItem.koulutustyyppi) {
-          throw new Error('koulutustyyppi-ei-maaritelty');
-        }
-        return {
-          ...resultItem,
-          theme: 'koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi),
-          route: this.generateRoute(resultItem),
-        };
-      });
-    }
-    else {
-      return null;
-    }
+    return _.map(this.perusteStore.opsitJaPerusteet?.data, resultItem => {
+      return {
+        ...resultItem,
+        theme: 'koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!),
+        route: this.generateRoute(resultItem),
+      };
+    });
   }
 
   generateRoute(resultItem) {
@@ -154,7 +145,7 @@ export default class EpMasterHakuLista extends Vue {
   }
 
   get kokonaismaara() {
-    return this.perusteStore.opsitJaPerusteetCount;
+    return this.perusteStore.opsitJaPerusteet?.kokonaismäärä || 0;
   }
 
   get page() {

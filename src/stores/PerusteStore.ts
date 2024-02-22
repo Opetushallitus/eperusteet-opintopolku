@@ -10,14 +10,14 @@ import {
   JulkiEtusivuQuery,
 } from '@/api/eperusteet';
 import { JulkiEtusivuDto } from '@shared/generated/eperusteet';
+import { Page } from '@shared/tyypit';
 
 @Store
 export class PerusteStore {
   @State() public perusteet: PerusteenJulkaisuData[] | null = null;
   @State() public query: JulkaistutPerusteetQuery | undefined = undefined;
-  @State() public opsitJaPerusteet: JulkiEtusivuDto[] | null = null;
+  @State() public opsitJaPerusteet: Page<JulkiEtusivuDto> | null = null;
   @State() public julkiQuery: JulkiEtusivuQuery | undefined = undefined;
-  @State() public opsitJaPerusteetCount = 0;
 
   @Debounced(300)
   async getYleisetPerusteet(query?: JulkaistutPerusteetQuery) {
@@ -42,8 +42,6 @@ export class PerusteStore {
   async getOpsitJaPerusteet(query: JulkiEtusivuQuery) {
     this.julkiQuery = query;
     this.opsitJaPerusteet = null;
-    const result = (await julkaistutOpsitJaPerusteet(this.julkiQuery));
-    this.opsitJaPerusteetCount = result['kokonaismäärä'];
-    this.opsitJaPerusteet = result.data;
+    this.opsitJaPerusteet = (await julkaistutOpsitJaPerusteet(this.julkiQuery));
   }
 }
