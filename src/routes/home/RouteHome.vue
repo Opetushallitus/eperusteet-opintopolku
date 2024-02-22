@@ -35,7 +35,7 @@
 
       <section class="section">
         <h2 class="tile-heading">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</h2>
-        <EpMasterHakuLista :peruste-store="perusteStore"></EpMasterHakuLista>
+        <EtusivuHaku :peruste-store="perusteStore"></EtusivuHaku>
       </section>
     </b-container>
   </div>
@@ -54,11 +54,11 @@ import { Kielet } from '@shared/stores/kieli';
 import { onkoUusi } from '@shared/utils/tiedote';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
-import EpMasterHakuLista from '@/routes/home/EpMasterHakuLista.vue';
+import EtusivuHaku from '@/routes/home/EtusivuHaku.vue';
 
 @Component({
   components: {
-    EpMasterHakuLista,
+    EtusivuHaku,
     EpSpinnerSlot,
     EpExternalLink,
   },

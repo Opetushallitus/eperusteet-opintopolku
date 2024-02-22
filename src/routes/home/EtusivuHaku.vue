@@ -69,7 +69,7 @@ import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
     EpSearch,
   },
 })
-export default class EpMasterHakuLista extends Vue {
+export default class EtusivuHaku extends Vue {
   @Prop({ required: true })
   private perusteStore!: PerusteStore;
 
