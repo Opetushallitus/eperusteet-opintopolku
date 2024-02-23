@@ -1,8 +1,8 @@
 <template>
   <div>
     <EpSearch class="mb-4" v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')"/>
-    <EpSpinnerSlot :is-loading="isLoading">
-      <div v-if="kokonaismaara > 0" class="mb-1">
+    <EpSpinnerSlot v-if="kokonaismaara > 0" :is-loading="isLoading">
+      <div class="mb-1">
         <span class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
         <span>{{ $t('hakutulosta') }}</span>
       </div>
@@ -36,20 +36,19 @@
           </router-link>
         </div>
       </div>
+      <div class="mt-4">
+        <b-pagination :value="sivu"
+                      @change="updatePage"
+                      :total-rows="kokonaismaara"
+                      :per-page="sivukoko"
+                      align="center"
+                      aria-controls="opetussuunnitelmat-ja-perusteet-lista"
+                      :first-text="$t('alkuun')"
+                      prev-text="«"
+                      next-text="»"
+                      :last-text="$t('loppuun')" />
+      </div>
     </EpSpinnerSlot>
-
-    <div class="mt-4">
-      <b-pagination :value="sivu"
-                    @change="updatePage"
-                    :total-rows="kokonaismaara"
-                    :per-page="sivukoko"
-                    align="center"
-                    aria-controls="opetussuunnitelmat-ja-perusteet-lista"
-                    :first-text="$t('alkuun')"
-                    prev-text="«"
-                    next-text="»"
-                    :last-text="$t('loppuun')" />
-    </div>
   </div>
 </template>
 
