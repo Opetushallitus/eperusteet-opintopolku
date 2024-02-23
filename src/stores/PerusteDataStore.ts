@@ -32,7 +32,7 @@ import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio } from '@shared/utils/perusteet';
-import { deepFind } from '@shared/utils/helpers';
+import { deepFind, findObjectDeepReturnParentToRoot } from '@shared/utils/helpers';
 import { PerusteKaikkiDtoTyyppiEnum } from '@shared/generated/eperusteet';
 
 @Store
@@ -112,6 +112,10 @@ export class PerusteDataStore {
 
   public getJulkaistuPerusteSisalto(filter) {
     return deepFind(filter, this.perusteKaikki);
+  }
+
+  public etsiSisallosta(filter, kieli) {
+    return findObjectDeepReturnParentToRoot(filter, this.perusteKaikki, kieli);
   }
 
   public async fetchJulkaisu() {

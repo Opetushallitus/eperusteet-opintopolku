@@ -202,6 +202,8 @@ export default class RoutePeruste extends Vue {
   };
 
   onSearch(value: string) {
+    console.log('onSearch');
+    console.log(this.perusteDataStore.etsiSisallosta(value, this.$slang.value));
     this.query = value;
   }
 
