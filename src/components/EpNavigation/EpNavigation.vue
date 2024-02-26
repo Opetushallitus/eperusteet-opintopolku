@@ -45,7 +45,17 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { koulutustyyppiTheme, stateToKoulutustyyppi, yleissivistavat, ammatilliset, vapaasivistystyo, tutkintoonvalmentava, kotoutumiskoulutus, muuKoulutus, tyyppiTheme } from '@shared/utils/perusteet';
+import {
+  koulutustyyppiTheme,
+  stateToKoulutustyyppi,
+  yleissivistavat,
+  ammatilliset,
+  vapaasivistystyo,
+  tutkintoonvalmentava,
+  kotoutumiskoulutus,
+  muuKoulutus,
+  digitaalinenOsaaminen,
+} from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
 import { VueRouter, RawLocation } from 'vue-router/types/router';
@@ -196,17 +206,7 @@ export default class EpNavigation extends Vue {
   }
 
   get digitaalinenOsaaminen() {
-    return [{
-      name: 'digitaalinen-osaaminen',
-      route: {
-        name: 'peruste',
-        params: {
-          perusteId: this.digitaalinenOsaaminenPeruste?.id,
-          koulutustyyppi: tyyppiTheme('digitaalinen_osaaminen'),
-        },
-      },
-      alityypit: ['koulutustyyppi_digi'],
-    }];
+    return digitaalinenOsaaminen(this.digitaalinenOsaaminenPeruste?.id);
   }
 
   get maarayskokoelma() {

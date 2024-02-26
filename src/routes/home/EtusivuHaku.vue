@@ -1,11 +1,11 @@
 <template>
   <div>
     <EpSearch class="mb-4" v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')"/>
+    <div v-if="hasResults" class="mb-1">
+      <span class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
+      <span>{{ $t('hakutulosta') }}</span>
+    </div>
     <EpSpinnerSlot v-if="kokonaismaara > 0" :is-loading="isLoading">
-      <div class="mb-1">
-        <span class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
-        <span>{{ $t('hakutulosta') }}</span>
-      </div>
       <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
         <div class="list-item">
           <router-link :to="item.route">
@@ -46,7 +46,8 @@
                       :first-text="$t('alkuun')"
                       prev-text="«"
                       next-text="»"
-                      :last-text="$t('loppuun')" />
+                      :last-text="$t('loppuun')"
+                      :pills="true"/>
       </div>
     </EpSpinnerSlot>
   </div>
@@ -144,7 +145,11 @@ export default class EtusivuHaku extends Vue {
   }
 
   get kokonaismaara() {
-    return this.perusteStore.opsitJaPerusteet?.kokonaismäärä || 0;
+    return this.perusteStore.opsitJaPerusteet?.kokonaismäärä;
+  }
+
+  get hasResults() {
+    return _.isNumber(this.kokonaismaara);
   }
 
   get page() {
@@ -193,6 +198,7 @@ export default class EtusivuHaku extends Vue {
   border: 1px solid #DADADA;
   margin-bottom: 10px;
   border-radius: 2px;
+  background: $white;
 
   .nimi {
     font-weight: 600;
