@@ -55,6 +55,15 @@
 
             <template v-slot:cell(nimi)="{ item }">
               <EpPdfLink :url="item.url">{{ $kaanna(item.nimi) }}</EpPdfLink>
+
+              <div v-if="item.liitteet.length > 0" class="d-flex mt-3">
+                <div class="mr-3">{{ $t('liitteet')}}:</div>
+                <div class="flex-row">
+                  <div v-for="(liite, idx) in item.liitteet" :key="'maaraysliite' + idx" class="mb-1">
+                    <EpPdfLink :url="liite.url">{{ $kaanna(liite.nimi) }}</EpPdfLink>
+                  </div>
+                </div>
+              </div>
             </template>
           </b-table>
 
@@ -377,9 +386,16 @@ export default class RoutePerusteTiedot extends Vue {
     return _.chain(this.perusteDataStore.muutosmaaraykset)
       .map(muutosmaarays => {
         const muutosmaaraysLiite = _.find(muutosmaarays!.liitteet![this.kieli].liitteet, { tyyppi: MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI });
+        const liitteet = _.filter(muutosmaarays!.liitteet![this.kieli].liitteet, { tyyppi: MaaraysLiiteDtoTyyppiEnum.LIITE });
         return {
           ...muutosmaarays,
           url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaaraysLiite!.id)).url,
+          liitteet: _.sortBy(_.map(liitteet, liite => {
+            return {
+              ...liite,
+              url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(liite.id)).url,
+            };
+          }), liite => this.$kaanna(liite.nimi)),
         };
       })
       .sortBy('voimassaoloAlkaa')
@@ -468,13 +484,11 @@ export default class RoutePerusteTiedot extends Vue {
       label: this.$t('nimi'),
       thStyle: { width: '75%' },
       thClass: 'border-bottom-1',
-      tdClass: 'align-middle',
       sortable: false,
     }, {
       key: 'voimassaoloAlkaa',
       label: this.$t('voimassaolo-alkaa'),
       thClass: 'border-bottom-1',
-      tdClass: 'align-middle',
       sortable: false,
       formatter: (value: any, key: any, item: any) => {
         return (this as any).$sd(value);
