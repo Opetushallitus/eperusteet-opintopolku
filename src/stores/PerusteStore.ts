@@ -1,17 +1,23 @@
-import { Store, Getter, State } from '@shared/stores/store';
-import { PerusteDto, TiedoteDto, Perusteet, Tiedotteet, getAllPerusteet, PerusteQuery, PerusteenJulkaisuData } from '@shared/api/eperusteet';
-import { Koulutustyyppi } from '@shared/tyypit';
-
+import { Store, State } from '@shared/stores/store';
+import { PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { AmmatillisetKoulutustyypit, EperusteetKoulutustyypit } from '@shared/utils/perusteet';
 import { Debounced } from '@shared/utils/delay';
-import { julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
-import { Kielet } from '@shared/stores/kieli';
+import {
+  julkaistutOpsitJaPerusteet,
+  julkaistutPerusteet,
+  JulkaistutPerusteetQuery,
+  JulkiEtusivuQuery,
+} from '@/api/eperusteet';
+import { JulkiEtusivuDto } from '@shared/generated/eperusteet';
+import { Page } from '@shared/tyypit';
 
 @Store
 export class PerusteStore {
   @State() public perusteet: PerusteenJulkaisuData[] | null = null;
   @State() public query: JulkaistutPerusteetQuery | undefined = undefined;
+  @State() public opsitJaPerusteet: Page<JulkiEtusivuDto> | null = null;
+  @State() public julkiQuery: JulkiEtusivuQuery | undefined = undefined;
 
   @Debounced(300)
   async getYleisetPerusteet(query?: JulkaistutPerusteetQuery) {
@@ -30,5 +36,12 @@ export class PerusteStore {
         ...(query || {}),
       },
     )).data as any);
+  }
+
+  @Debounced(300)
+  async getOpsitJaPerusteet(query: JulkiEtusivuQuery) {
+    this.julkiQuery = query;
+    this.opsitJaPerusteet = null;
+    this.opsitJaPerusteet = (await julkaistutOpsitJaPerusteet(this.julkiQuery));
   }
 }
