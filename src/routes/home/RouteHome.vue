@@ -4,7 +4,8 @@
     <div class="container">
       <div class="laatikko">
         <h1 class="otsikko">{{ $t('eperusteet') }}</h1>
-        <p class="kuvaus">{{ $t('eperusteet-kuvaus') }}</p>
+        <p>{{ $t('eperusteet-kuvaus') }}</p>
+        <p>{{ $t('palvelusta-loydat-myos-ajantasaiset') }}</p>
       </div>
     </div>
   </div>
@@ -213,34 +214,37 @@ export default class RouteHome extends Vue {
 
     @media (min-width: 768px) {
       min-height: 335px;
-      padding: 25px;
+      padding-top: 60px;
     }
   }
 
-  background-color: $etusivu-header-background;
   background-image: url('~@assets/img/banners/opintopolku/opiskelijat.png');
   background-size: cover;
   background-position: 50% 33%;
 
   .laatikko {
+    margin-left: 15px;
     padding: 15px;
     color: #000;
     background: #fff;
     opacity: 0.80;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px 1px rgb(0 0 0 / 50%);
 
     @media (min-width: 768px) {
-      max-width: 400px;
+      max-width: 600px;
       padding: 20px;
     }
 
-    h1.otsikko {
-      font-size: 1.5rem;
-      font-weight: bolder;
-      margin-bottom: 20px;
+    @media (max-width: 767.98px) {
+      border-radius: 0;
+      box-shadow: unset;
     }
 
-    .kuvaus {
-      margin-bottom: 0;
+    h1.otsikko {
+      font-size: 1.8rem;
+      font-weight: 500;
+      margin-bottom: 15px;
     }
   }
 }

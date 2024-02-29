@@ -59,7 +59,7 @@ export default class InfoTile extends Vue {
   background-color: $white;
   position: relative;
 
-  @media(max-width: 767.98px) {
+  @media(max-width: 1220px) {
     width: 100%;
     margin-bottom: 20px;
   }

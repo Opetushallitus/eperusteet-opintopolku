@@ -3,8 +3,9 @@
     <div>
       <b-button v-b-toggle.sidebar-no-header variant="transparent">
         <div class="menu">
-          <EpMaterialIcon v-if="isActive" icon-shape="outlined" size="30px">close</EpMaterialIcon>
-          <EpMaterialIcon v-else icon-shape="outlined" size="30px">menu</EpMaterialIcon>
+          <div class="icon">
+            <EpMaterialIcon icon-shape="outlined" size="30px">{{ icon }}</EpMaterialIcon>
+          </div>
           <span class="text">{{ $t('valikko')}}</span>
         </div>
       </b-button>
@@ -28,7 +29,7 @@
           </b-tabs>
           <nav class="mb-4">
             <b-nav vertical>
-              <b-nav-item active :to="{ name: 'root'}" link-classes="navi navi-home">
+              <b-nav-item :to="{ name: 'root'}" link-classes="navi navi-home nav-btn">
                 <EpMaterialIcon icon-shape="outlined" size="22px">home</EpMaterialIcon>
                 {{ $t('etusivu') }}
               </b-nav-item>
@@ -39,7 +40,12 @@
           </div>
           <nav class="mb-5">
             <b-nav vertical v-for="(item, idx1) in koulutustyyppiItems" :key="idx1">
-              <b-nav-item :to="item.route" link-classes="navi">{{ $t(item.name) }}</b-nav-item>
+              <b-nav-item :to="item.route"
+                          link-classes="navi nav-btn"
+                          active
+                          active-class="active-item">
+                {{ $t(item.name) }}
+              </b-nav-item>
             </b-nav>
           </nav>
           <div class="mb-2 navi-valiotsikko">
@@ -47,7 +53,12 @@
           </div>
           <nav class="mb-5">
             <b-nav vertical v-for="(item, idx2) in otherItems" :key="idx2">
-              <b-nav-item :to="item.route" link-classes="navi">{{ $t(item.name) }}</b-nav-item>
+              <b-nav-item :to="item.route"
+                          link-classes="navi nav-btn"
+                          active
+                          active-class="active-item">
+                {{ $t(item.name) }}
+              </b-nav-item>
             </b-nav>
           </nav>
           <div class="mb-2 navi-valiotsikko">
@@ -55,7 +66,12 @@
           </div>
           <nav>
             <b-nav vertical v-for="(item, idx2) in muutLinkit" :key="idx2">
-              <b-nav-item :href="$kaanna(item.link)"  link-classes="navi">{{ $t(item.name) }}</b-nav-item>
+              <b-nav-item :href="$kaanna(item.link)"
+                          link-classes="navi nav-btn"
+                          active
+                          active-class="active-item">
+                {{ $t(item.name) }}
+              </b-nav-item>
             </b-nav>
           </nav>
         </div>
@@ -65,8 +81,8 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
 import _ from 'lodash';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import Sticky from 'vue-sticky-directive';
@@ -117,29 +133,10 @@ export default class EpJulkinenSidenav extends Vue {
     this.$emit('setVisibility', value);
   }
 
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get kielet() {
-    return [
-      'fi',
-      'sv',
-      'en',
-    ];
-  }
-
-  get navImage() {
-    return logo;
-  }
-
   async valitseKieli(kieli) {
-    // Vaihdetaan kieli päivittämällä route
     const router: VueRouter = this.$router;
     const current: Route = router.currentRoute;
 
-    // Replacella ei muodostu historiatietoa
-    // Muut parametrit ja tiedot näyttäisi säilyvän replacella
     try {
       await router.replace({
         name: current.name,
@@ -157,6 +154,26 @@ export default class EpJulkinenSidenav extends Vue {
         throw e;
       }
     }
+  }
+
+  get sisaltoKieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  get kielet() {
+    return [
+      'fi',
+      'sv',
+      'en',
+    ];
+  }
+
+  get navImage() {
+    return logo;
+  }
+
+  get icon() {
+    return this.isActive ? 'close' : 'menu';
   }
 }
 </script>
@@ -177,7 +194,7 @@ export default class EpJulkinenSidenav extends Vue {
 ::v-deep .tabs .nav-tabs .nav-item .active {
   color: $black;
   font-weight: unset;
-  border-image: linear-gradient(to right, #70ff00, #0033ff, #ff0000) 1;
+  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a) 1;
   border-width: 0 0 3px 0;
   border-style: solid;
 }
@@ -220,6 +237,48 @@ export default class EpJulkinenSidenav extends Vue {
 
   .text {
     font-size: small;
+  }
+}
+
+.active-item {
+  padding-bottom: 12px;
+  border-width: 0 0 4px 0;
+  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a) 1;
+}
+
+.nav-btn {
+  overflow: hidden;
+  position: relative;
+
+  &:after {
+    background: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a 100%);;
+    content: "";
+    height: 3px;
+    right: -250px;
+
+    @media (max-width: 900px) {
+      background: unset;
+    }
+  }
+}
+
+.nav-btn:hover {
+  &:after {
+    position: absolute;
+    top: 50px;
+    width: 350px;
+    right: 0;
+    transition: all 1000ms cubic-bezier(0.19, 1, 0.22, 1);
+  }
+}
+
+.icon {
+  color: black;
+
+  &:hover {
+    background: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a 100%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 }
 </style>
