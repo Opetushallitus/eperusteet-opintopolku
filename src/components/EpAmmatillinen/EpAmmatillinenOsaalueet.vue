@@ -32,7 +32,8 @@
         <Osaamistavoite v-model="osaalue.pakollisetOsaamistavoitteet"
                         v-if="osaalue.pakollisetOsaamistavoitteet"
                         :is-valinnainen="false"
-                        :showLaajuus="false">
+                        :showLaajuus="false"
+                        :showKoodiArvo="false">
           <div slot="osaamistavoitteet" />
         </Osaamistavoite>
       </template>
@@ -42,7 +43,8 @@
         <h4>{{ $t('valinnaiset-osaamistavoitteet') }}, {{osaalue.valinnaisetOsaamistavoitteet.laajuus}} {{$t('osp')}}</h4>
         <Osaamistavoite v-model="osaalue.valinnaisetOsaamistavoitteet"
                         :is-valinnainen="true"
-                        :showLaajuus="false">
+                        :showLaajuus="false"
+                        :showKoodiArvo="false">
           <div slot="osaamistavoitteet" />
         </Osaamistavoite>
       </template>
