@@ -41,7 +41,6 @@ export class PerusteStore {
   @Debounced(300)
   async getOpsitJaPerusteet(query: JulkiEtusivuQuery) {
     this.julkiQuery = query;
-    this.opsitJaPerusteet = null;
     this.opsitJaPerusteet = (await julkaistutOpsitJaPerusteet(this.julkiQuery));
   }
 }
