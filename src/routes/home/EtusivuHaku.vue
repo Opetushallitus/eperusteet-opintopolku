@@ -5,51 +5,51 @@
       <span class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
       <span>{{ $t('hakutulosta') }}</span>
     </div>
-    <EpSpinnerSlot v-if="kokonaismaara > 0" :is-loading="isLoading">
-      <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
-        <div class="list-item">
-          <router-link :to="item.route">
-            <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
-              <div class="raita mx-3 my-3" :class="item.theme"></div>
-              <div class="d-flex flex-fill align-items-center">
-                <div class="my-3 mr-3">
-                  <div class="nimi">
-                    {{ $kaanna(item.nimi) }}
-                  </div>
-                  <div v-if="item.voimassaoloAlkaa" class="meta">
-                    {{ $t('voimaantulo-pvm')}}: {{ $sd(item.voimassaoloAlkaa) }}
-                  </div>
-                  <div v-if="item.organisaatiot && item.organisaatiot.length > 0" class="meta mr-2">
-                    <span class="mr-1">{{ $t('oppilaitokset') }}:</span>
-                    <span v-for="(oppilaitos, tidx) in item.organisaatiot" :key="tidx">
-                      <span>{{ $kaanna(oppilaitos.nimi) }}</span>
-                      <span v-if="tidx < item.organisaatiot.length - 1">, </span>
-                    </span>
-                  </div>
-                  <div v-if="item.koulutustoimija" class="meta">
-                    <span class="mr-1">{{ $t('organisaatiot') }}:</span>
-                    <span>{{ $kaanna(item.koulutustoimija.nimi) }}</span>
-                  </div>
+    <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
+      <div class="list-item">
+        <router-link :to="item.route">
+          <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
+            <div class="raita mx-3 my-3" :class="item.theme"></div>
+            <div class="d-flex flex-fill align-items-center">
+              <div class="my-3 mr-3">
+                <div class="nimi">
+                  {{ $kaanna(item.nimi) }}
+                </div>
+                <div v-if="item.voimassaoloAlkaa" class="meta">
+                  {{ $t('voimaantulo-pvm')}}: {{ $sd(item.voimassaoloAlkaa) }}
+                </div>
+                <div v-if="item.organisaatiot && item.organisaatiot.length > 0" class="meta mr-2">
+                  <span class="mr-1">{{ $t('oppilaitokset') }}:</span>
+                  <span v-for="(oppilaitos, tidx) in item.organisaatiot" :key="tidx">
+                    <span>{{ $kaanna(oppilaitos.nimi) }}</span>
+                    <span v-if="tidx < item.organisaatiot.length - 1">, </span>
+                  </span>
+                </div>
+                <div v-if="item.koulutustoimija" class="meta">
+                  <span class="mr-1">{{ $t('organisaatiot') }}:</span>
+                  <span>{{ $kaanna(item.koulutustoimija.nimi) }}</span>
                 </div>
               </div>
             </div>
-          </router-link>
-        </div>
+          </div>
+        </router-link>
       </div>
-      <div class="mt-4">
-        <b-pagination :value="sivu"
-                      @change="updatePage"
-                      :total-rows="kokonaismaara"
-                      :per-page="sivukoko"
-                      align="center"
-                      aria-controls="opetussuunnitelmat-ja-perusteet-lista"
-                      :first-text="$t('alkuun')"
-                      prev-text="«"
-                      next-text="»"
-                      :last-text="$t('loppuun')"
-                      :pills="true"/>
-      </div>
-    </EpSpinnerSlot>
+    </div>
+    <div v-if="kokonaismaara > 0" class="mt-4">
+      <b-pagination :value="sivu"
+                    @change="updatePage"
+                    :total-rows="kokonaismaara"
+                    :per-page="sivukoko"
+                    align="center"
+                    aria-controls="opetussuunnitelmat-ja-perusteet-lista"
+                    :first-text="$t('alkuun')"
+                    prev-text="«"
+                    next-text="»"
+                    :last-text="$t('loppuun')"
+                    :pills="true"
+                    :disabled="isLoading"/>
+    </div>
+    <EpSpinner v-if="isLoading"></EpSpinner>
   </div>
 </template>
 
@@ -62,9 +62,11 @@ import { PerusteStore } from '@/stores/PerusteStore';
 import { JulkiEtusivuDtoTyyppiEnum } from '@shared/generated/eperusteet';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
 @Component({
   components: {
+    EpSpinner,
     EpSpinnerSlot,
     EpSearch,
   },
@@ -192,6 +194,14 @@ export default class EtusivuHaku extends Vue {
   text-align: center;
   pointer-events: none;
   color: $gray;
+}
+
+::v-deep .page-item.disabled .page-link {
+  color: #999;
+}
+
+::v-deep .b-pagination li.page-item .page-link {
+  background-color: unset;
 }
 
 .list-item {
