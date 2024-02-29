@@ -200,6 +200,10 @@ export default class EtusivuHaku extends Vue {
   color: #999;
 }
 
+::v-deep .b-pagination li.page-item .page-link {
+  background-color: unset;
+}
+
 .list-item {
   border: 1px solid #DADADA;
   margin-bottom: 10px;
