@@ -42,7 +42,7 @@
       </b-container>
     </div>
   </div>
-  <div class="container">
+  <div class="container mb-5">
     <b-container fluid>
       <section class="section mt-4">
         <h2 class="tile-heading">{{ $t('etusivu-opetussuunnitelmat-ja-perusteet') }}</h2>
@@ -63,6 +63,26 @@
       </section>
     </b-container>
   </div>
+  <div class="info">
+    <div class="container">
+      <b-container fluid>
+        <section class="section d-md-flex flex-wrap justify-content-between">
+          <InfoTile header="tietoa-palvelusta"
+                    text="palvelu-info"
+                    link-text="tutustu-palveluun"
+                    :link="infoLinkit.palvelu">
+            <img :src="palveluImage" :alt="$t('tietoa-palvelusta')">
+          </InfoTile>
+          <InfoTile header="rajapinnat"
+                    text="rajapinnat-info"
+                    link-text="tutustu-rajapintoihin"
+                    :link="infoLinkit.rajapinnat">
+            <img :src="rajapintaImage" :alt="$t('rajapinnat')">
+          </InfoTile>
+        </section>
+      </b-container>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -80,17 +100,16 @@ import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypit
 import { BrowserStore } from '@shared/stores/BrowserStore';
 import EtusivuHaku from '@/routes/home/EtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
-import {
-  ammatilliset,
-  digitaalinenOsaaminen,
-  kotoutumiskoulutus, muuKoulutus,
-  tutkintoonvalmentava,
-  vapaasivistystyo,
-  yleissivistavat,
-} from '@shared/utils/perusteet';
+import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import InfoTile from '@/routes/home/InfoTile.vue';
+import kukka from '@assets/img/images/kukka.png';
+import rajapinnat from '@assets/img/images/rajapinnat.png';
+import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 
 @Component({
   components: {
+    InfoTile,
+    EpLinkki,
     KoulutustyyppiTile,
     EtusivuHaku,
     EpSpinnerSlot,
@@ -151,39 +170,23 @@ export default class RouteHome extends Vue {
   }
 
   get koulutustyyppiItems() {
-    return _.chain([
-      yleissivistavat(),
-      ammatilliset(),
-      vapaasivistystyo(),
-      tutkintoonvalmentava(),
-      kotoutumiskoulutus(),
-      [
-        {
-          ..._.first(muuKoulutus()),
-          name: 'jotpan-rahoittamat-koulutukset',
-        },
-      ],
-    ]).flatMap()
-      .value();
+    return koulutustyyppiLinks();
   }
 
   get otherItems() {
-    return _.chain([
-      digitaalinenOsaaminen(this.digitaalinenOsaaminenPeruste?.id),
-      {
-        name: 'etusivu-osaamismerkit',
-        route: {
-          name: 'osaamismerkit',
-        },
-      },
-      {
-        name: 'opetushallituksen-maaraykset',
-        route: {
-          name: 'maaraykset',
-        },
-      },
-    ]).flatMap()
-      .value();
+    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id);
+  }
+
+  get infoLinkit() {
+    return otherLinks();
+  }
+
+  get palveluImage() {
+    return kukka;
+  }
+
+  get rajapintaImage() {
+    return rajapinnat;
   }
 
   @Meta
@@ -199,8 +202,6 @@ export default class RouteHome extends Vue {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
-
-@include shadow-tile;
 
 .ylaosa {
   .container {
@@ -277,21 +278,13 @@ export default class RouteHome extends Vue {
   background-color: $paletti-background-light-2;
 }
 
-.tile-heading {
-  margin-bottom: 25px;
+.info {
+  padding: 40px 0;
+  background-color: $gray-lighten-6;
 }
 
-.tile {
-  margin: 25px 0 25px 0;
-
-  .box {
-    margin-bottom: 1rem;
-
-    .luotu {
-      color: #595959;
-      font-size: 80%;
-    }
-  }
+.tile-heading {
+  margin-bottom: 25px;
 }
 
 @media (max-width: 991.98px) {
