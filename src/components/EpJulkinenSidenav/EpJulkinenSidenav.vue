@@ -275,7 +275,7 @@ export default class EpJulkinenSidenav extends Vue {
   color: black;
 
   &:hover {
-    background: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a 100%);
+    background: linear-gradient(to right, $green-lighten-3 10%, $blue-lighten-5, #ff2a2a 90%);
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
