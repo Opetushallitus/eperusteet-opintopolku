@@ -71,7 +71,7 @@ import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
     EpSearch,
   },
 })
-export default class EtusivuHaku extends Vue {
+export default class EpEtusivuHaku extends Vue {
   @Prop({ required: true })
   private perusteStore!: PerusteStore;
 

@@ -5,14 +5,14 @@
       <div class="laatikko">
         <h1 class="otsikko">{{ $t('eperusteet') }}</h1>
         <p>{{ $t('eperusteet-kuvaus') }}</p>
-        <p>{{ $t('palvelusta-loydat-myos-ajantasaiset') }}</p>
+        <p>{{ $t('palvelusta-loydat-myos-ajantasaiset-maaraykset') }}</p>
       </div>
     </div>
   </div>
   <div class="container">
     <section class="section my-4">
       <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
-      <ep-spinner-slot :is-loading="!tiedotteet">
+      <EpSpinnerSlot :is-loading="!tiedotteet">
         <b-row>
           <b-col lg="6" md="12" class="mb-3" v-for="(tiedote, idx) in tiedotteetMapped" :key="idx">
             <div class="nimi">
@@ -30,7 +30,7 @@
             </router-link>
           </div>
         </div>
-      </ep-spinner-slot>
+      </EpSpinnerSlot>
     </section>
   </div>
   <div class="search">
@@ -38,7 +38,7 @@
       <b-container fluid>
         <section class="section">
           <h2 class="tile-heading">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</h2>
-          <EtusivuHaku :peruste-store="perusteStore"></EtusivuHaku>
+          <EpEtusivuHaku :peruste-store="perusteStore"></EpEtusivuHaku>
         </section>
       </b-container>
     </div>
@@ -89,19 +89,17 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
-import { TiedoteStore } from '@/stores/TiedoteStore';
 import { Meta } from '@shared/utils/decorators';
 import { Kielet } from '@shared/stores/kieli';
 import { onkoUusi } from '@shared/utils/tiedote';
+import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import { PerusteStore } from '@/stores/PerusteStore';
+import { TiedoteStore } from '@/stores/TiedoteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
-import EtusivuHaku from '@/routes/home/EtusivuHaku.vue';
+import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
-import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
 import kukka from '@assets/img/images/kukka.png';
 import rajapinnat from '@assets/img/images/rajapinnat.png';
@@ -110,11 +108,9 @@ import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/u
 @Component({
   components: {
     InfoTile,
-    EpLinkki,
     KoulutustyyppiTile,
-    EtusivuHaku,
+    EpEtusivuHaku,
     EpSpinnerSlot,
-    EpExternalLink,
   },
 })
 export default class RouteHome extends Vue {
@@ -224,21 +220,18 @@ export default class RouteHome extends Vue {
 
   .laatikko {
     margin-left: 15px;
-    padding: 15px;
+    padding: 20px;
     color: #000;
     background: #fff;
     opacity: 0.80;
     border-radius: 10px;
     box-shadow: 0 5px 10px 1px rgb(0 0 0 / 50%);
-
-    @media (min-width: 768px) {
-      max-width: 600px;
-      padding: 20px;
-    }
+    max-width: 600px;
 
     @media (max-width: 767.98px) {
       border-radius: 0;
       box-shadow: unset;
+      margin: 0;
     }
 
     h1.otsikko {

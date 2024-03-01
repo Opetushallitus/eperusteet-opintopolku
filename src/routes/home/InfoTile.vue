@@ -52,7 +52,7 @@ export default class InfoTile extends Vue {
   color: #212529;
   border-radius: 10px;
   border: 1px solid #E7E7E7;
-  width: 590px;
+  width: 49%;
   height: 400px;
   padding: 0 20px 20px 20px;
   align-items: center;

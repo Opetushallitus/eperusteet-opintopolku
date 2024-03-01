@@ -1,7 +1,7 @@
 <template>
 <div>
   <EpJulkinenSidenav :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore" @setVisibility="setVisibility"></EpJulkinenSidenav>
-  <main role="main" :class="sidebarVisible ? { padding: '0' } : { paddingLeft: '400px' }">
+  <main role="main" :class="paddingClass">
     <router-view v-if="julkaistutKoulutustyypit"/>
   </main>
   <ep-footer />
@@ -103,6 +103,10 @@ export default class Root extends Vue {
       ],
     };
   }
+
+  get paddingClass() {
+    return this.sidebarVisible ? 'padding-active' : 'padding-off';
+  }
 }
 </script>
 
@@ -121,6 +125,18 @@ export default class Root extends Vue {
   background-color: white;
   padding: 0.6875rem !important;
   border: 1px solid gray !important;
+}
+
+@media (min-width: 900px) {
+  .padding-off {
+    padding-left: 0;
+    transition: padding-left 0.4s;
+  }
+
+  .padding-active {
+    padding-left: 400px;
+    transition: padding-left 0.5s;
+  }
 }
 
 </style>

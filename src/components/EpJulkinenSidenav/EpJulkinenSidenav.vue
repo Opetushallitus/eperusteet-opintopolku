@@ -15,7 +15,6 @@
                v-model="isActive"
                aria-labelledby="sidebar-no-header-title"
                no-header
-               no-slide
                bg-variant="white"
                no-close-on-route-change>
       <template>
