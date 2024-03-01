@@ -57,7 +57,7 @@
 
         <!-- Pohjan teksti -->
         <ep-collapse tyyppi="pohjateksti"
-                     v-if="alikappaleViite.naytaPohjanTeksti && alikappaleViite.original && alikappaleViite.tekstiKappale && alikappaleViite.tekstiKappale.teksti">
+                     v-if="alikappaleViite.naytaPohjanTeksti && alikappaleViite.original && alikappaleViite.original.tekstiKappale && alikappaleViite.original.tekstiKappale.teksti">
           <div class="collapse-header" slot="header">{{ $t('pohjan-teksti') }}</div>
           <ep-content-viewer :value="$kaanna(alikappaleViite.original.tekstiKappale.teksti)"
                              :termit="termit"
@@ -81,7 +81,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
