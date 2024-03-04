@@ -211,7 +211,18 @@ export default class EpJulkinenSidenav extends Vue {
   border-style: solid;
 }
 
+::v-deep .tabs .nav-tabs .nav-item .nav-link:hover:not(.active) {
+  background: unset;
+  border-color: $black;
+  border-width: 0 0 2px 0;
+  border-style: solid;
+}
+
 ::v-deep .nav.nav-tabs .nav-link {
+  color: $black;
+}
+
+::v-deep .nav-link {
   color: $black;
 }
 
@@ -296,10 +307,5 @@ export default class EpJulkinenSidenav extends Vue {
 
 .dropdown-text {
   vertical-align: text-bottom;
-}
-
-::v-deep .nav-link {
-  font-weight: 600;
-  color: $black;
 }
 </style>
