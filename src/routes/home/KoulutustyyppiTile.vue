@@ -5,9 +5,9 @@
         <div class="ikoni">
           <EpMaterialIcon v-if="icon"
                           icon-shape="outlined"
-                          :color="rgbColor"
                           size="38px"
-                          class="img">{{icon}}</EpMaterialIcon>
+                          class="img"
+                          :style="iconGradient">{{icon}}</EpMaterialIcon>
           <img v-else :src="osaamimerkkiLogo" :alt="$t('osaamismerkit')" class="img"/>
         </div>
         <div class="nimi">
@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
+import { koulutustyyppiThemeColor, rgbCode } from '@shared/utils/perusteet';
 import osaamismerkkiLogoFI from '@assets/img/images/osaamismerkki_main_FI.svg';
 
 @Component({
@@ -31,7 +31,11 @@ export default class KoulutustyyppiTile extends Vue {
   private tyyppi!: any;
 
   get rgbColor() {
-    return rgb2string(koulutustyyppiThemeColor(this.tyyppi.route.params?.koulutustyyppi));
+    return rgbCode(koulutustyyppiThemeColor(this.tyyppi.route.params?.koulutustyyppi));
+  }
+
+  get iconGradient() {
+    return `background-image: linear-gradient(120deg, rgba(${this.rgbColor},1), rgba(${this.rgbColor},0.4))`;
   }
 
   get name() {
@@ -55,6 +59,7 @@ export default class KoulutustyyppiTile extends Vue {
 </script>
 
 <style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile;
@@ -63,7 +68,7 @@ export default class KoulutustyyppiTile extends Vue {
   color: #212529;
   cursor: pointer;
   border-radius: 10px;
-  border: 1px solid #E7E7E7;
+  border: 1px solid $content-header-separator-color;
   width: 380px;
   height: 120px;
   padding-left: 20px;
@@ -76,10 +81,12 @@ export default class KoulutustyyppiTile extends Vue {
 }
 
 .ikoni {
-  color: #EDA0DF;
+  color: $purple-lighten-1;
   text-align: center;
 
   .img {
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     margin: 12px;
     height: 38px;
     width: 38px;
@@ -92,7 +99,7 @@ export default class KoulutustyyppiTile extends Vue {
   width: 100%;
   padding: 0;
   text-align: center;
-  color: #2B2B2B;
+  color: $black;
   font-weight: 600;
 }
 

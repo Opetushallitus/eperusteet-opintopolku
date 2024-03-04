@@ -11,6 +11,19 @@
       </b-button>
       <img :src="navImage" :alt="$t('eperusteet')" class="ml-3" />
     </div>
+    <div v-if="!isActive" class="d-inline-flex ml-auto">
+      <b-navbar-nav :aria-label="$t('kielivalinta')">
+        <b-nav-item-dropdown right>
+          <template slot="button-content">
+            <EpMaterialIcon>language</EpMaterialIcon>
+            <span class="ml-2 dropdown-text">{{ $t(sisaltoKieli) }}</span>
+          </template>
+          <b-dropdown-item v-for="(kieli, idx) in kielet"
+                           :key=idx
+                           @click="valitseKieli(kieli)">{{ $t(kieli) }}</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </div>
     <b-sidebar id="sidebar-no-header"
                v-model="isActive"
                aria-labelledby="sidebar-no-header-title"
@@ -89,7 +102,7 @@ import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/u
 import { RawLocation, VueRouter } from 'vue-router/types/router';
 import { Route } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
-import logo from '@assets/img/images/logo.png';
+import logo from '@assets/img/banners/opintopolku/logo.svg';
 import { createLogger } from '@shared/utils/logger';
 const logger = createLogger('EpJulkinenSidenav');
 
@@ -193,7 +206,7 @@ export default class EpJulkinenSidenav extends Vue {
 ::v-deep .tabs .nav-tabs .nav-item .active {
   color: $black;
   font-weight: unset;
-  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a) 1;
+  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, $purple-lighten-1) 1;
   border-width: 0 0 3px 0;
   border-style: solid;
 }
@@ -242,7 +255,7 @@ export default class EpJulkinenSidenav extends Vue {
 .active-item {
   padding-bottom: 12px;
   border-width: 0 0 4px 0;
-  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a) 1;
+  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, $purple-lighten-1) 1;
 }
 
 .nav-btn {
@@ -250,7 +263,7 @@ export default class EpJulkinenSidenav extends Vue {
   position: relative;
 
   &:after {
-    background: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, #ff2a2a 100%);;
+    background: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, $purple-lighten-1 100%);;
     content: "";
     height: 3px;
     right: -250px;
@@ -275,9 +288,18 @@ export default class EpJulkinenSidenav extends Vue {
   color: black;
 
   &:hover {
-    background: linear-gradient(to right, $green-lighten-3 10%, $blue-lighten-5, #ff2a2a 90%);
+    background: linear-gradient(to right, $green-lighten-3 10%, $blue-lighten-5, $purple-lighten-1 90%);
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+}
+
+.dropdown-text {
+  vertical-align: text-bottom;
+}
+
+::v-deep .nav-link {
+  font-weight: 600;
+  color: $black;
 }
 </style>

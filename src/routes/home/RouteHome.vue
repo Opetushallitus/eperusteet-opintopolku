@@ -101,8 +101,8 @@ import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
-import kukka from '@assets/img/images/kukka.png';
-import rajapinnat from '@assets/img/images/rajapinnat.png';
+import tietoapalvelusta from '@assets/img/banners/opintopolku/tietoapalvelusta.svg';
+import rajapinnat from '@assets/img/banners/opintopolku/rajapinnat.svg';
 import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 
 @Component({
@@ -179,7 +179,7 @@ export default class RouteHome extends Vue {
   }
 
   get palveluImage() {
-    return kukka;
+    return tietoapalvelusta;
   }
 
   get rajapintaImage() {
@@ -201,6 +201,10 @@ export default class RouteHome extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 .ylaosa {
+  background-image: url('~@assets/img/banners/opintopolku/header.svg');
+  background-size: cover;
+  background-position: left top;
+
   .container {
     padding: 0;
 
@@ -213,10 +217,6 @@ export default class RouteHome extends Vue {
       padding-top: 60px;
     }
   }
-
-  background-image: url('~@assets/img/banners/opintopolku/opiskelijat.png');
-  background-size: cover;
-  background-position: 50% 33%;
 
   .laatikko {
     margin-left: 15px;
