@@ -47,6 +47,22 @@
       <ep-form-content name="koulutuksen-jarjestajan-kuvaus" headerType="h3" headerClass="h6" v-if="koulutustoimija.kuvaus">
         <ep-content-viewer :value="$kaanna(koulutustoimija.kuvaus)"/>
       </ep-form-content>
+
+      <ep-form-content name="osaamisen-arvioinnin-toteutussuunnitelma" headerType="h3" headerClass="h6"
+        v-if="toteutussuunnitelma.osaamisenArvioinninToteutussuunnitelmat && toteutussuunnitelma.osaamisenArvioinninToteutussuunnitelmat.length > 0">
+        <div v-for="(oat, index) in toteutussuunnitelma.osaamisenArvioinninToteutussuunnitelmat" :key="'oat' + index" class="mb-2">
+          <div class="d-flex">
+            <router-link
+              v-if="oat.oatOpetussuunnitelma"
+              :to="{ name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: oat.oatOpetussuunnitelma.id } }">
+              {{ $kaanna(oat.oatOpetussuunnitelma.nimi) }}
+            </router-link>
+            <ep-external-link v-else :url="$kaanna(oat.url)">
+              {{ $kaanna(oat.nimi) }}
+            </ep-external-link>
+          </div>
+        </div>
+      </ep-form-content>
     </template>
   </div>
 </template>
