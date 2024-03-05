@@ -101,6 +101,11 @@
           <h4>{{ $t('paikallinen-teksti') }}</h4>
           <div v-html="$kaanna(tavoite.vuosiluokanTavoite.tavoite)"></div>
         </div>
+
+        <div class="mb-4" v-if="tavoite.vapaaTeksti">
+          <h4>{{ $t('lisatietoa') }}</h4>
+          <div v-html="$kaanna(tavoite.vapaaTeksti)"></div>
+        </div>
       </div>
 
     </ep-collapse>
@@ -109,7 +114,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import EpContent from '@shared/components/EpContent/EpContent.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
