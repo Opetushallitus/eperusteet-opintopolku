@@ -30,7 +30,7 @@
     </b-row>
     <hr>
     <b-row>
-      <b-col><h3 class="mt-3 mb-4">{{ $t('opetuksen-tavoitteet') }}</h3></b-col>
+      <b-col><h3 class="mt-3 mb-4">{{ $t(opintokokonaisuusTavoiteOtsikko(opintokokonaisuus.tyyppi)) }}</h3></b-col>
     </b-row>
     <b-row v-if="opintokokonaisuus.tavoitteidenKuvaus">
       <b-col>
@@ -96,28 +96,35 @@ import * as _ from 'lodash';
   },
 })
 export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
-    @Prop({ required: true })
-    private sisaltoviite!: Matala;
+  @Prop({ required: true })
+  private sisaltoviite!: Matala;
 
-    @Prop({ required: true })
-    private kuvat!: any[];
+  @Prop({ required: true })
+  private kuvat!: any[];
 
-    get opintokokonaisuus() {
-      return this.sisaltoviite.opintokokonaisuus;
-    }
+  get opintokokonaisuus() {
+    return this.sisaltoviite.opintokokonaisuus;
+  }
 
-    opintokokonaisuusNimiOtsikko(tyyppi: OpintokokonaisuusDtoTyyppiEnum): string {
-      return {
-        [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'opintokokonaisuuden-nimi',
-        [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'osaamiskokonaisuuden-nimi',
-      }[tyyppi];
-    }
+  opintokokonaisuusNimiOtsikko(tyyppi: OpintokokonaisuusDtoTyyppiEnum): string {
+    return {
+      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'opintokokonaisuuden-nimi',
+      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'osaamiskokonaisuuden-nimi',
+    }[tyyppi];
+  }
 
-    get laajuusYksikkoLyhenne() {
-      return this.opintokokonaisuus?.laajuusYksikko
-        ? this.$t(_.toLower(this.opintokokonaisuus?.laajuusYksikko) + '-lyhenne')
-        : this.$t('opintopiste');
-    }
+  opintokokonaisuusTavoiteOtsikko(tyyppi: OpintokokonaisuusDtoTyyppiEnum): string {
+    return {
+      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'osaamistavoitteet',
+      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'opetuksen-tavoitteet',
+    }[tyyppi];
+  }
+
+  get laajuusYksikkoLyhenne() {
+    return this.opintokokonaisuus?.laajuusYksikko
+      ? this.$t(_.toLower(this.opintokokonaisuus?.laajuusYksikko) + '-lyhenne')
+      : this.$t('opintopiste');
+  }
 }
 </script>
 
