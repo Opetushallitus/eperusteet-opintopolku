@@ -29,7 +29,7 @@ export class JulkaistutKoulutustyypitStore {
 
     try {
       this.state.koulutustyyppiLukumaarat = (await Perusteet.getJulkaistutKoulutustyyppiLukumaarat(kieli)).data;
-      this.state.muuLukumaarat = (((await getJulkisetOpetussuunnitelmat({ jotpatyyppi: ['MUU', 'VST'], sivukoko: 1 })).data) as Page<OpetussuunnitelmaDto>).kokonaismäärä;
+      this.state.muuLukumaarat = (((await getJulkisetOpetussuunnitelmat({ jotpatyyppi: ['MUU', 'VST'], kieli, sivukoko: 1 })).data) as Page<OpetussuunnitelmaDto>).kokonaismäärä;
       this.state.digitaalinenOsaaminen = ((((await findAllJulkaisut({ tyyppi: 'digitaalinen_osaaminen' })).data) as Page<PerusteenJulkaisuData>).data);
     }
     catch (e) {
