@@ -216,7 +216,7 @@ export default class RouteHome extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 .ylaosa {
-  background-image: url('~@assets/img/banners/opintopolku/aalto_etusivu.svg'), url('~@assets/img/banners/opintopolku/header_bg_repeat_etusivu.svg');
+  background-image: url('~@assets/img/banners/opintopolku/aallot_etusivu.svg'), url('~@assets/img/banners/opintopolku/aallot_etusivu_bg.svg');
   background-position: right top, right top;
   background-repeat: no-repeat, repeat;
 
