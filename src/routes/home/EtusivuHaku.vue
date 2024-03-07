@@ -83,6 +83,7 @@ export default class EtusivuHaku extends Vue {
   @Watch('queryNimi')
   private async queryChange() {
     if (_.size(this.queryNimi) > 2) {
+      this.page = 1;
       await this.fetchOpsitJaPerusteet();
     }
     else {
