@@ -65,6 +65,7 @@ export default class KoulutustyyppiTile extends Vue {
 @include shadow-tile;
 
 .tyyppi-tile {
+  background: $white;
   color: #212529;
   cursor: pointer;
   border-radius: 10px;

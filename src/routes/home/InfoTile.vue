@@ -1,8 +1,5 @@
 <template>
   <div class="tile">
-    <div class="image">
-      <slot></slot>
-    </div>
     <div class="text">
       <h2 class="mb-2">{{ $t(header) }}</h2>
       <span>{{ $t(text) }}</span>
@@ -52,8 +49,8 @@ export default class InfoTile extends Vue {
   border: 1px solid #E7E7E7;
   //width: 395px;
   width: 49%;
-  height: 450px;
-  padding: 0 20px 20px 20px;
+  height: 180px;
+  padding: 20px;
   align-items: center;
   background-color: $white;
   position: relative;

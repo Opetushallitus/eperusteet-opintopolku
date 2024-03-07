@@ -9,8 +9,18 @@
       </div>
     </div>
   </div>
+  <div class="search">
+    <div class="container">
+      <b-container fluid>
+        <section class="section">
+          <h2 class="tile-heading">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</h2>
+          <EpEtusivuHaku :peruste-store="perusteStore"></EpEtusivuHaku>
+        </section>
+      </b-container>
+    </div>
+  </div>
   <div class="container">
-    <section class="section my-4">
+    <section class="section my-5">
       <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
       <EpSpinnerSlot :is-loading="!tiedotteet">
         <EpJulkiLista :tiedot="tiedotteetMapped" @avaaTieto="avaaTiedote" tieto-maara="5" listaus-tyyppi="none">
@@ -25,62 +35,49 @@
       </EpSpinnerSlot>
     </section>
   </div>
-  <div class="search">
+  <div class="info">
     <div class="container">
       <b-container fluid>
-        <section class="section">
-          <h2 class="tile-heading">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</h2>
-          <EpEtusivuHaku :peruste-store="perusteStore"></EpEtusivuHaku>
+        <section class="section mt-4">
+          <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
+          <div class="d-md-flex flex-wrap justify-content-between">
+            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx">
+              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
+            </div>
+          </div>
+        </section>
+
+        <section class="section mt-4">
+          <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
+          <div class="d-md-flex flex-wrap justify-content-between">
+            <div v-for="(item, idx) in otherItems" :key="idx">
+              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
+            </div>
+          </div>
         </section>
       </b-container>
     </div>
   </div>
-  <div class="container mb-5">
+  <div class="container">
     <b-container fluid>
-      <section class="section mt-4">
-        <h2 class="tile-heading">{{ $t('etusivu-opetussuunnitelmat-ja-perusteet') }}</h2>
-        <div class="d-md-flex flex-wrap justify-content-between">
-          <div v-for="(item, idx) in koulutustyyppiItems" :key="idx">
-            <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-          </div>
-        </div>
-      </section>
-
-      <section class="section mt-4">
-        <h2 class="tile-heading">{{ $t('etusivu-osaaminen-ja-maaraykset') }}</h2>
-        <div class="d-md-flex flex-wrap justify-content-between">
-          <div v-for="(item, idx) in otherItems" :key="idx">
-            <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-          </div>
-        </div>
-      </section>
-    </b-container>
-  </div>
-  <div class="info">
-    <div class="container">
-      <b-container fluid>
-        <section class="section d-md-flex flex-wrap justify-content-between">
+      <section class="section d-md-flex flex-wrap justify-content-between mt-5">
 <!--          <InfoTile header="tietoa-palvelusta"-->
 <!--                    text="palvelu-info"-->
 <!--                    link-text="tutustu-palveluun"-->
 <!--                    :link="infoLinkit.palvelu.link">-->
-<!--            <img :src="palveluImage" :alt="$t('tietoa-palvelusta')">-->
 <!--          </InfoTile>-->
-          <InfoTile header="rajapinnat"
-                    text="rajapinnat-info"
-                    link-text="tutustu-rajapintoihin"
-                    :link="infoLinkit.rajapinnat.link">
-            <img :src="rajapintaImage" :alt="$t('rajapinnat')">
-          </InfoTile>
-          <InfoTile header="koulutuksiin-haku"
-                    text="koulutuksiin-haku-info"
-                    link-text="siirry-opintopolkuun"
-                    :link="infoLinkit.koulutus.link">
-            <img :src="koulutuksiinHakuImage" :alt="$t('koulutuksiin-haku')" class="mt-5 mb-5">
-          </InfoTile>
-        </section>
-      </b-container>
-    </div>
+        <InfoTile header="rajapinnat"
+                  text="rajapinnat-info"
+                  link-text="tutustu-rajapintoihin"
+                  :link="infoLinkit.rajapinnat.link">
+        </InfoTile>
+        <InfoTile header="koulutuksiin-haku"
+                  text="koulutuksiin-haku-info"
+                  link-text="siirry-opintopolkuun"
+                  :link="infoLinkit.koulutus.link">
+        </InfoTile>
+      </section>
+    </b-container>
   </div>
 </div>
 </template>
@@ -219,6 +216,7 @@ export default class RouteHome extends Vue {
   background-image: url('~@assets/img/banners/opintopolku/aallot_etusivu.svg'), url('~@assets/img/banners/opintopolku/aallot_etusivu_bg.svg');
   background-position: right top, right top;
   background-repeat: no-repeat, repeat;
+  margin-top: -1px;
 
   @media (max-width: 767.98px) {
     background-blend-mode: color-burn;
@@ -238,7 +236,7 @@ export default class RouteHome extends Vue {
   }
 
   .laatikko {
-    margin-left: 15px;
+    padding: 15px;
     color: $black;
     max-width: 600px;
 
@@ -259,13 +257,13 @@ export default class RouteHome extends Vue {
 }
 
 .search {
-  padding: 20px 0;
+  padding: 40px 0;
   background-color: $paletti-background-light-2;
 }
 
 .info {
   padding: 40px 0;
-  background-color: $gray-lighten-6;
+  background-color: $table-odd-row-bg-color;
 }
 
 .tile-heading {
