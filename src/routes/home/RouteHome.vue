@@ -13,22 +13,14 @@
     <section class="section my-4">
       <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
       <EpSpinnerSlot :is-loading="!tiedotteet">
-        <b-row>
-          <b-col lg="6" md="12" class="mb-3" v-for="(tiedote, idx) in tiedotteetMapped" :key="idx">
-            <div class="nimi">
-              <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                {{ $kaanna(tiedote.otsikko) }} <span class="uusi" v-if="tiedote.uusi">{{$t('uusi')}}</span>
-              </router-link>
-            </div>
-            <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
-          </b-col>
-        </b-row>
-        <div class="box">
-          <div class="kaikki-uutiset">
-            <router-link :to="{ name: 'uutiset' }">
-              {{ $t('nayta-kaikki') }}
-            </router-link>
-          </div>
+        <EpJulkiLista :tiedot="tiedotteetMapped" @avaaTieto="avaaTiedote" tieto-maara="5" listaus-tyyppi="none">
+          <div slot="eiTietoja">{{$t('ei-tiedotteita')}}</div>
+        </EpJulkiLista>
+        <div class="nayta-kaikki">
+          <EpMaterialIcon size="18px">chevron_right</EpMaterialIcon>
+          <router-link :to="{ name: 'uutiset' }">
+            {{ $t('nayta-kaikki') }}
+          </router-link>
         </div>
       </EpSpinnerSlot>
     </section>
@@ -71,14 +63,20 @@
           <InfoTile header="tietoa-palvelusta"
                     text="palvelu-info"
                     link-text="tutustu-palveluun"
-                    :link="infoLinkit.palvelu">
+                    :link="infoLinkit.palvelu.link">
             <img :src="palveluImage" :alt="$t('tietoa-palvelusta')">
           </InfoTile>
           <InfoTile header="rajapinnat"
                     text="rajapinnat-info"
                     link-text="tutustu-rajapintoihin"
-                    :link="infoLinkit.rajapinnat">
+                    :link="infoLinkit.rajapinnat.link">
             <img :src="rajapintaImage" :alt="$t('rajapinnat')">
+          </InfoTile>
+          <InfoTile header="koulutuksiin-haku"
+                    text="koulutuksiin-haku-info"
+                    link-text="siirry-opintopolkuun"
+                    :link="infoLinkit.koulutus.link">
+            <img :src="koulutuksiinHakuImage" :alt="$t('koulutuksiin-haku')" class="mt-5 mb-5">
           </InfoTile>
         </section>
       </b-container>
@@ -103,10 +101,14 @@ import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
 import tietoapalvelusta from '@assets/img/banners/opintopolku/tietoapalvelusta.svg';
 import rajapinnat from '@assets/img/banners/opintopolku/rajapinnat.svg';
+import koulutuksiinHaku from '@assets/img/banners/opintopolku/opintopolku.svg';
 import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
+import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import { TiedoteDto } from '@shared/api/eperusteet';
 
 @Component({
   components: {
+    EpJulkiLista,
     InfoTile,
     KoulutustyyppiTile,
     EpEtusivuHaku,
@@ -131,6 +133,15 @@ export default class RouteHome extends Vue {
 
   async fetchAll() {
     this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
+  }
+
+  avaaTiedote(tiedote: TiedoteDto) {
+    this.$router.push({
+      name: 'uutinen',
+      params: {
+        tiedoteId: '' + tiedote.id,
+      },
+    });
   }
 
   get julkaistutKoulutustyypit() {
@@ -186,6 +197,10 @@ export default class RouteHome extends Vue {
     return rajapinnat;
   }
 
+  get koulutuksiinHakuImage() {
+    return koulutuksiinHaku;
+  }
+
   @Meta
   getMetaInfo() {
     return {
@@ -220,19 +235,8 @@ export default class RouteHome extends Vue {
 
   .laatikko {
     margin-left: 15px;
-    padding: 20px;
-    color: #000;
-    background: #fff;
-    opacity: 0.80;
-    border-radius: 10px;
-    box-shadow: 0 5px 10px 1px rgb(0 0 0 / 50%);
+    color: $black;
     max-width: 600px;
-
-    @media (max-width: 767.98px) {
-      border-radius: 0;
-      box-shadow: unset;
-      margin: 0;
-    }
 
     h1.otsikko {
       font-size: 1.8rem;
@@ -243,30 +247,10 @@ export default class RouteHome extends Vue {
 }
 
 .container {
-
-  .nimi {
-    color: #2B2B2B;
-
-    ::v-deep a, div.linkki a {
-      color: #2B2B2B;
-    }
-
-    .uusi {
-      background-color: $blue-lighten-3;
-      border-radius: 5px;
-      padding: 2px 4px;
-      font-size: 0.7rem;
-      margin-left: 5px;
-    }
-  }
-
-  .kaikki-uutiset {
+  .nayta-kaikki {
+    color: #3367E3;
+    margin-top: 10px;
     font-weight: 600;
-  }
-
-  .luotu {
-    color: #2b2b2b;
-    font-size: 80%;
   }
 }
 
@@ -297,5 +281,4 @@ export default class RouteHome extends Vue {
     max-width: 100%;
   }
 }
-
 </style>

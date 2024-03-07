@@ -8,6 +8,7 @@
     <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
       <div class="list-item">
         <router-link :to="item.route">
+<<<<<<< HEAD
           <div class="d-flex tile-background-shadow-selected shadow-tile align-items-center">
             <div class="mx-3 my-3">
               <div :class="item.theme"/>
@@ -29,6 +30,32 @@
               <div v-if="item.koulutustoimija" class="meta">
                 <span class="mr-1">{{ $t('organisaatiot') }}:</span>
                 <span>{{ $kaanna(item.koulutustoimija.nimi) }}</span>
+=======
+          <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
+            <div v-if="item.isPeruste" class="raita mx-3 my-3" :class="item.theme"></div>
+            <div v-else class="opsicon-wrapper">
+              <div class="opsicon"></div>
+            </div>
+            <div class="d-flex flex-fill align-items-center">
+              <div class="my-3 mr-3">
+                <div class="nimi">
+                  {{ $kaanna(item.nimi) }}
+                </div>
+                <div v-if="item.voimassaoloAlkaa" class="meta">
+                  {{ $t('voimaantulo-pvm')}}: {{ $sd(item.voimassaoloAlkaa) }}
+                </div>
+                <div v-if="item.organisaatiot && item.organisaatiot.length > 0" class="meta mr-2">
+                  <span class="mr-1">{{ $t('oppilaitokset') }}:</span>
+                  <span v-for="(oppilaitos, tidx) in item.organisaatiot" :key="tidx">
+                    <span>{{ $kaanna(oppilaitos.nimi) }}</span>
+                    <span v-if="tidx < item.organisaatiot.length - 1">, </span>
+                  </span>
+                </div>
+                <div v-if="item.koulutustoimija" class="meta">
+                  <span class="mr-1">{{ $t('organisaatiot') }}:</span>
+                  <span>{{ $kaanna(item.koulutustoimija.nimi) }}</span>
+                </div>
+>>>>>>> 969bec61 (EP-3599)
               </div>
             </div>
           </div>
@@ -55,8 +82,13 @@
 
 <script lang="ts">
 import _ from 'lodash';
+<<<<<<< HEAD
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { koulutustyyppiStateName, koulutustyyppiTheme, yleissivistavatKoulutustyypit } from '@shared/utils/perusteet';
+=======
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { koulutustyyppiStateName, koulutustyyppiTheme } from '@shared/utils/perusteet';
+>>>>>>> 969bec61 (EP-3599)
 import { Kielet } from '@shared/stores/kieli';
 import { PerusteStore } from '@/stores/PerusteStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -132,6 +164,7 @@ export default class EpEtusivuHaku extends Vue {
   }
 
   get opsitJaPerusteet() {
+<<<<<<< HEAD
     return _.chain(this.perusteStore.opsitJaPerusteet?.data)
       .map(resultItem => {
         return {
@@ -153,6 +186,16 @@ export default class EpEtusivuHaku extends Vue {
         };
       })
       .value();
+=======
+    return _.map(this.perusteStore.opsitJaPerusteet?.data, resultItem => {
+      return {
+        ...resultItem,
+        theme: 'koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!),
+        route: this.generateRoute(resultItem),
+        isPeruste: resultItem.tyyppi === JulkiEtusivuDtoTyyppiEnum.PERUSTE,
+      };
+    });
+>>>>>>> 969bec61 (EP-3599)
   }
 
   generateRoute(resultItem) {
@@ -329,6 +372,17 @@ export default class EpEtusivuHaku extends Vue {
   .meta {
     color: $black;
     font-size: 80%;
+  }
+}
+
+.opsicon-wrapper {
+  padding: 25px;
+
+  .opsicon {
+    height: 40px;
+    width: 40px;
+    background: url('../../../public/img/images/opskortti.svg') no-repeat;
+    background-size: 40px 40px;
   }
 }
 </style>

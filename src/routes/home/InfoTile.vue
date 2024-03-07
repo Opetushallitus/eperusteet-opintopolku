@@ -3,12 +3,14 @@
     <div class="image">
       <slot></slot>
     </div>
-    <h2 class="mb-2">{{ $t(header) }}</h2>
-    <span>{{ $t(text) }}</span>
-    <div class="d-flex mt-4 link">
-      <EpLinkki :url="infoLink" icon="chevron_right">
-        <span class="link-text">{{ $t(linkText) }}</span>
-      </EpLinkki>
+    <div class="text">
+      <h2 class="mb-2">{{ $t(header) }}</h2>
+      <span>{{ $t(text) }}</span>
+      <div class="d-flex mt-4 link">
+        <EpLinkki :url="infoLink" icon="chevron_right">
+          <span class="link-text">{{ $t(linkText) }}</span>
+        </EpLinkki>
+      </div>
     </div>
   </div>
 </template>
@@ -44,16 +46,12 @@ export default class InfoTile extends Vue {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-.image {
-  text-align: center;
-}
-
 .tile {
   color: #212529;
   border-radius: 10px;
   border: 1px solid #E7E7E7;
-  width: 49%;
-  height: 400px;
+  width: 395px;
+  height: 450px;
   padding: 0 20px 20px 20px;
   align-items: center;
   background-color: $white;
@@ -63,16 +61,23 @@ export default class InfoTile extends Vue {
     width: 100%;
     margin-bottom: 20px;
   }
-}
 
-.link {
-  position: absolute;
-  bottom: 30px;
-}
+  .image {
+    height: 60%;
+    text-align: center;
+  }
 
-.link-text {
-  font-size: medium;
-  font-weight: 500;
-}
+  .text {
+    height: 40%;
+    .link {
+      position: absolute;
+      bottom: 30px;
+    }
 
+    .link-text {
+      font-size: medium;
+      font-weight: 500;
+    }
+  }
+}
 </style>

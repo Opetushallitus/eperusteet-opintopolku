@@ -43,7 +43,7 @@ export default class KoulutustyyppiTile extends Vue {
   }
 
   get icon() {
-    if (this.tyyppi.name === 'osaamismerkit') {
+    if (this.tyyppi.name === 'kansalliset-perustaitojen-osaamismerkit') {
       return null;
     }
     else if (this.tyyppi.name === 'opetushallituksen-maaraykset') {
@@ -69,7 +69,7 @@ export default class KoulutustyyppiTile extends Vue {
   cursor: pointer;
   border-radius: 10px;
   border: 1px solid $content-header-separator-color;
-  width: 380px;
+  width: 395px;
   height: 120px;
   padding-left: 20px;
   padding-right: 20px;

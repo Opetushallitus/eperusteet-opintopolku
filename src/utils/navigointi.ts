@@ -28,7 +28,7 @@ export function osaaminenJaMaarayksetLinks(id) {
   return _.chain([
     digitaalinenOsaaminen(id),
     {
-      name: 'osaamismerkit',
+      name: 'kansalliset-perustaitojen-osaamismerkit',
       route: {
         name: 'osaamismerkit',
       },
@@ -47,10 +47,8 @@ export function otherLinks() {
   return {
     ajankohtaista: {
       name: 'ajankohtaista',
-      link: {
-        fi: 'https://www.oph.fi/fi',
-        sv: 'https://www.oph.fi/sv',
-        en: 'https://www.oph.fi/en',
+      route: {
+        name: 'uutiset',
       },
     },
     palvelu: {
@@ -64,9 +62,17 @@ export function otherLinks() {
     rajapinnat: {
       name: 'rajapinnat',
       link: {
-        fi: 'https://www.oph.fi/fi',
-        sv: 'https://www.oph.fi/sv',
-        en: 'https://www.oph.fi/en',
+        fi: 'https://opetushallitus.github.io/eperusteet/',
+        sv: 'https://opetushallitus.github.io/eperusteet/',
+        en: 'https://opetushallitus.github.io/eperusteet/',
+      },
+    },
+    koulutus: {
+      name: 'koulutuksiin-haku',
+      link: {
+        fi: 'https://opintopolku.fi/konfo/fi/',
+        sv: 'https://opintopolku.fi/konfo/sv/',
+        en: 'https://opintopolku.fi/konfo/en/',
       },
     },
   };

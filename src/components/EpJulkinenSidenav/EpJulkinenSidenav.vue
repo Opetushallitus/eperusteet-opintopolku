@@ -77,8 +77,14 @@
             <span>{{ $t('tietoa-palvelusta') }}</span>
           </div>
           <nav>
-            <b-nav vertical v-for="(item, idx2) in muutLinkit" :key="idx2">
-              <b-nav-item :href="$kaanna(item.link)"
+            <b-nav vertical v-for="(item, idx3) in muutLinkit" :key="idx3">
+              <b-nav-item v-if="item.link" :href="$kaanna(item.link)"
+                          link-classes="navi nav-btn"
+                          active
+                          active-class="active-item">
+                {{ $t(item.name) }}
+              </b-nav-item>
+              <b-nav-item v-else :to="item.route"
                           link-classes="navi nav-btn"
                           active
                           active-class="active-item">
@@ -195,6 +201,7 @@ export default class EpJulkinenSidenav extends Vue {
 
 ::v-deep .b-sidebar {
   margin-top: 70px;
+  padding-bottom: 70px;
   width: 400px;
   box-shadow: 0 1rem 0.5rem rgba(0, 0, 0, 0.5) !important;
 
