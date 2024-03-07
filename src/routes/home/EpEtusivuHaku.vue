@@ -277,6 +277,7 @@ export default class EpEtusivuHaku extends Vue {
     background-color: #368715;
     border-radius: 3px;
     width: 6px;
+
     &.koulutustyyppi-ammatillinen {
       background-color: $koulutustyyppi-ammatillinen-color;
     }

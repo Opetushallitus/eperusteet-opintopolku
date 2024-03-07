@@ -51,14 +51,14 @@ export function otherLinks() {
         name: 'uutiset',
       },
     },
-    palvelu: {
-      name: 'tietoa-palvelusta',
-      link: {
-        fi: 'https://www.oph.fi/fi',
-        sv: 'https://www.oph.fi/sv',
-        en: 'https://www.oph.fi/en',
-      },
-    },
+    // palvelu: {
+    //   name: 'tietoa-palvelusta',
+    //   link: {
+    //     fi: 'https://www.oph.fi/fi',
+    //     sv: 'https://www.oph.fi/sv',
+    //     en: 'https://www.oph.fi/en',
+    //   },
+    // },
     rajapinnat: {
       name: 'rajapinnat',
       link: {

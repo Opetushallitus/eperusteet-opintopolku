@@ -60,12 +60,12 @@
     <div class="container">
       <b-container fluid>
         <section class="section d-md-flex flex-wrap justify-content-between">
-          <InfoTile header="tietoa-palvelusta"
-                    text="palvelu-info"
-                    link-text="tutustu-palveluun"
-                    :link="infoLinkit.palvelu.link">
-            <img :src="palveluImage" :alt="$t('tietoa-palvelusta')">
-          </InfoTile>
+<!--          <InfoTile header="tietoa-palvelusta"-->
+<!--                    text="palvelu-info"-->
+<!--                    link-text="tutustu-palveluun"-->
+<!--                    :link="infoLinkit.palvelu.link">-->
+<!--            <img :src="palveluImage" :alt="$t('tietoa-palvelusta')">-->
+<!--          </InfoTile>-->
           <InfoTile header="rajapinnat"
                     text="rajapinnat-info"
                     link-text="tutustu-rajapintoihin"
@@ -216,9 +216,13 @@ export default class RouteHome extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 .ylaosa {
-  background-image: url('~@assets/img/banners/opintopolku/header.svg');
-  background-size: cover;
-  background-position: left top;
+  background-image: url('~@assets/img/banners/opintopolku/aalto_etusivu.svg'), url('~@assets/img/banners/opintopolku/header_bg_repeat_etusivu.svg');
+  background-position: right top, right top;
+  background-repeat: no-repeat, repeat;
+
+  @media (max-width: 767.98px) {
+    background-blend-mode: color-burn;
+  }
 
   .container {
     padding: 0;
@@ -228,7 +232,7 @@ export default class RouteHome extends Vue {
     }
 
     @media (min-width: 768px) {
-      min-height: 335px;
+      min-height: 315px;
       padding-top: 60px;
     }
   }

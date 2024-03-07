@@ -48,7 +48,7 @@
             </b-nav>
           </nav>
           <div class="mb-2 navi-valiotsikko">
-            <span>{{ $t('opetussuunnitelmat-ja-perusteet') }}</span>
+            <span>{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</span>
           </div>
           <nav class="mb-5">
             <b-nav vertical v-for="(item, idx1) in koulutustyyppiItems" :key="idx1">
