@@ -8,27 +8,27 @@
     <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
       <div class="list-item">
         <router-link :to="item.route">
-          <div class="sisalto d-flex justify-content-between align-content-stretch tile-background-shadow-selected shadow-tile">
-            <div class="raita mx-3 my-3" :class="item.theme"></div>
-            <div class="d-flex flex-fill align-items-center">
-              <div class="my-3 mr-3">
-                <div class="nimi">
-                  {{ $kaanna(item.nimi) }}
-                </div>
-                <div v-if="item.voimassaoloAlkaa" class="meta">
-                  {{ $t('voimaantulo-pvm')}}: {{ $sd(item.voimassaoloAlkaa) }}
-                </div>
-                <div v-if="item.organisaatiot && item.organisaatiot.length > 0" class="meta mr-2">
-                  <span class="mr-1">{{ $t('oppilaitokset') }}:</span>
-                  <span v-for="(oppilaitos, tidx) in item.organisaatiot" :key="tidx">
-                    <span>{{ $kaanna(oppilaitos.nimi) }}</span>
-                    <span v-if="tidx < item.organisaatiot.length - 1">, </span>
-                  </span>
-                </div>
-                <div v-if="item.koulutustoimija" class="meta">
-                  <span class="mr-1">{{ $t('organisaatiot') }}:</span>
-                  <span>{{ $kaanna(item.koulutustoimija.nimi) }}</span>
-                </div>
+          <div class="d-flex tile-background-shadow-selected shadow-tile align-items-center">
+            <div class="mx-3 my-3">
+              <div :class="item.theme"/>
+            </div>
+            <div class="my-3 mr-3">
+              <div class="nimi">
+                {{ $kaanna(item.nimi) }}
+              </div>
+              <div v-if="item.voimassaoloAlkaa" class="meta">
+                {{ $t('voimaantulo-pvm')}}: {{ $sd(item.voimassaoloAlkaa) }}
+              </div>
+              <div v-if="item.organisaatiot && item.organisaatiot.length > 0" class="meta mr-2">
+                <span class="mr-1">{{ $t('oppilaitokset') }}:</span>
+                <span v-for="(oppilaitos, tidx) in item.organisaatiot" :key="tidx">
+                  <span>{{ $kaanna(oppilaitos.nimi) }}</span>
+                  <span v-if="tidx < item.organisaatiot.length - 1">, </span>
+                </span>
+              </div>
+              <div v-if="item.koulutustoimija" class="meta">
+                <span class="mr-1">{{ $t('organisaatiot') }}:</span>
+                <span>{{ $kaanna(item.koulutustoimija.nimi) }}</span>
               </div>
             </div>
           </div>
@@ -110,7 +110,11 @@ export default class EtusivuHaku extends Vue {
     return _.map(this.perusteStore.opsitJaPerusteet?.data, resultItem => {
       return {
         ...resultItem,
-        theme: 'koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!),
+        theme: {
+          ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
+          'raita': resultItem.tyyppi !== JulkiEtusivuDtoTyyppiEnum.OPETUSSUUNNITELMA,
+          'opsicon': resultItem.tyyppi === JulkiEtusivuDtoTyyppiEnum.OPETUSSUUNNITELMA,
+        },
         route: this.generateRoute(resultItem),
       };
     });
@@ -221,10 +225,10 @@ export default class EtusivuHaku extends Vue {
   }
 
   .raita {
-    flex: 0 0 6px;
     min-height: 60px;
     background-color: #368715;
     border-radius: 3px;
+    width: 6px;
     &.koulutustyyppi-ammatillinen {
       background-color: $koulutustyyppi-ammatillinen-color;
     }
@@ -252,6 +256,15 @@ export default class EtusivuHaku extends Vue {
     &.koulutustyyppi-kotoutumiskoulutus {
       background-color: $koulutustyyppi-kotoutumiskoulutus-color;
     }
+
+  }
+
+  .opsicon {
+    height: 40px;
+    width: 40px;
+    background: url('../../../public/img/images/opskortti.svg');
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
   }
 
   .meta {
