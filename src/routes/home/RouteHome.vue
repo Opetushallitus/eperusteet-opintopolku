@@ -164,6 +164,7 @@ export default class RouteHome extends Vue {
         return {
           ...tiedote,
           uusi: onkoUusi((tiedote as any).luotu),
+          perusteNimi: tiedote.perusteet && tiedote.perusteet.length === 1 ? this.$kaanna(tiedote.perusteet[0].nimi) : null,
         };
       })
       .take(this.browserStore.window.value.width > 991 ? 10 : 3)
