@@ -96,9 +96,6 @@ import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
-import tietoapalvelusta from '@assets/img/banners/opintopolku/tietoapalvelusta.svg';
-import rajapinnat from '@assets/img/banners/opintopolku/rajapinnat.svg';
-import koulutuksiinHaku from '@assets/img/banners/opintopolku/opintopolku.svg';
 import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
@@ -185,18 +182,6 @@ export default class RouteHome extends Vue {
 
   get infoLinkit() {
     return otherLinks();
-  }
-
-  get palveluImage() {
-    return tietoapalvelusta;
-  }
-
-  get rajapintaImage() {
-    return rajapinnat;
-  }
-
-  get koulutuksiinHakuImage() {
-    return koulutuksiinHaku;
   }
 
   @Meta
