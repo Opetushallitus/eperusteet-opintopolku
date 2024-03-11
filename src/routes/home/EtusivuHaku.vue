@@ -59,10 +59,10 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { koulutustyyppiStateName, koulutustyyppiTheme } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { PerusteStore } from '@/stores/PerusteStore';
-import { JulkiEtusivuDtoTyyppiEnum } from '@shared/generated/eperusteet';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
 
 @Component({
   components: {
@@ -113,8 +113,9 @@ export default class EtusivuHaku extends Vue {
         ...resultItem,
         theme: {
           ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
-          'raita': resultItem.tyyppi !== JulkiEtusivuDtoTyyppiEnum.OPETUSSUUNNITELMA,
-          'opsicon': resultItem.tyyppi === JulkiEtusivuDtoTyyppiEnum.OPETUSSUUNNITELMA,
+          'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE,
+          'opsicon': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA,
+          'totsuicon': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA,
         },
         route: this.generateRoute(resultItem),
       };
@@ -122,7 +123,16 @@ export default class EtusivuHaku extends Vue {
   }
 
   generateRoute(resultItem) {
-    if (resultItem.tyyppi === JulkiEtusivuDtoTyyppiEnum.PERUSTE) {
+    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS) {
+      return {
+        name: 'peruste',
+        params: {
+          koulutustyyppi: 'opas',
+          perusteId: _.toString(resultItem.id),
+        },
+      };
+    }
+    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE) {
       return {
         name: 'peruste',
         params: {
@@ -131,7 +141,7 @@ export default class EtusivuHaku extends Vue {
         },
       };
     }
-    else if (resultItem.tyyppi === JulkiEtusivuDtoTyyppiEnum.OPETUSSUUNNITELMA) {
+    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA) {
       return {
         name: 'opetussuunnitelma',
         params: {
@@ -140,7 +150,7 @@ export default class EtusivuHaku extends Vue {
         },
       };
     }
-    else {
+    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA) {
       return {
         name: 'toteutussuunnitelma',
         params: {
@@ -149,6 +159,8 @@ export default class EtusivuHaku extends Vue {
         },
       };
     }
+
+    return {};
   }
 
   get kokonaismaara() {
@@ -264,6 +276,14 @@ export default class EtusivuHaku extends Vue {
     height: 40px;
     width: 40px;
     background: url('../../../public/img/images/opskortti.svg');
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+  }
+
+  .totsuicon {
+    height: 40px;
+    width: 40px;
+    background: url('../../../public/img/images/totsukortti.svg');
     background-size: 40px 40px;
     background-repeat: no-repeat;
   }

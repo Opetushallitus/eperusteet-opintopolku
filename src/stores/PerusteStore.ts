@@ -1,5 +1,5 @@
 import { Store, State } from '@shared/stores/store';
-import { PerusteenJulkaisuData } from '@shared/api/eperusteet';
+import { JulkiEtusivuDto, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { AmmatillisetKoulutustyypit, EperusteetKoulutustyypit } from '@shared/utils/perusteet';
 import { Debounced } from '@shared/utils/delay';
@@ -9,7 +9,6 @@ import {
   JulkaistutPerusteetQuery,
   JulkiEtusivuQuery,
 } from '@/api/eperusteet';
-import { JulkiEtusivuDto } from '@shared/generated/eperusteet';
 import { Page } from '@shared/tyypit';
 
 @Store
