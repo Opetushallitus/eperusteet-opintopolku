@@ -4,9 +4,9 @@ import {
   Julkinen,
   PerusteenJulkaisuData,
   Tiedotteet,
+  JulkiEtusivuDto,
 } from '@shared/api/eperusteet';
 import { Page } from '@shared/tyypit';
-import { JulkiEtusivuDto } from '@shared/generated/eperusteet';
 
 export interface PerusteQuery {
   sivu?: number;
