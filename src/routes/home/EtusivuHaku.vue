@@ -80,6 +80,10 @@ export default class EtusivuHaku extends Vue {
   private sivukoko = 10;
   private isLoading: boolean = false;
 
+  mounted() {
+    this.clear();
+  }
+
   @Watch('queryNimi')
   private async queryChange() {
     if (_.size(this.queryNimi) > 2) {
@@ -89,6 +93,20 @@ export default class EtusivuHaku extends Vue {
     else {
       this.perusteStore.opsitJaPerusteet = null;
     }
+  }
+
+  get kieli() {
+    return Kielet.getUiKieli.value;
+  }
+
+  @Watch('kieli')
+  private async kieliChange() {
+    this.clear();
+  }
+
+  private clear() {
+    this.queryNimi = '';
+    this.perusteStore.opsitJaPerusteet = null;
   }
 
   async updatePage(value) {
