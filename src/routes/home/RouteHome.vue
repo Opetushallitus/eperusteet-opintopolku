@@ -45,7 +45,7 @@
   <div class="container">
     <b-container fluid>
       <section class="section mt-4">
-        <h2 class="tile-heading">{{ $t('opetussuunnitelmat-ja-perusteet') }}</h2>
+        <h2 class="tile-heading">{{ $t('etusivu-opetussuunnitelmat-ja-perusteet') }}</h2>
         <div class="d-md-flex flex-wrap justify-content-between">
           <div v-for="(item, idx) in koulutustyyppiItems" :key="idx">
             <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
@@ -54,7 +54,7 @@
       </section>
 
       <section class="section mt-4">
-        <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
+        <h2 class="tile-heading">{{ $t('etusivu-osaaminen-ja-maaraykset') }}</h2>
         <div class="d-md-flex flex-wrap justify-content-between">
           <div v-for="(item, idx) in otherItems" :key="idx">
             <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
@@ -157,7 +157,12 @@ export default class RouteHome extends Vue {
       vapaasivistystyo(),
       tutkintoonvalmentava(),
       kotoutumiskoulutus(),
-      muuKoulutus(),
+      [
+        {
+          ..._.first(muuKoulutus()),
+          name: 'jotpan-rahoittamat-koulutukset',
+        },
+      ],
     ]).flatMap()
       .value();
   }
@@ -166,7 +171,7 @@ export default class RouteHome extends Vue {
     return _.chain([
       digitaalinenOsaaminen(this.digitaalinenOsaaminenPeruste?.id),
       {
-        name: 'osaamismerkit',
+        name: 'etusivu-osaamismerkit',
         route: {
           name: 'osaamismerkit',
         },
