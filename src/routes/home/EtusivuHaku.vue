@@ -79,6 +79,7 @@ export default class EtusivuHaku extends Vue {
   private sivu = 1;
   private sivukoko = 10;
   private isLoading: boolean = false;
+  OpasType = JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS;
 
   mounted() {
     this.clear();
@@ -132,8 +133,9 @@ export default class EtusivuHaku extends Vue {
         theme: {
           ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
           'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE,
-          'opsicon': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA,
-          'totsuicon': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA,
+          'icon ops': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA,
+          'icon totsu': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA,
+          'icon opas': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS,
         },
         route: this.generateRoute(resultItem),
       };
@@ -290,20 +292,23 @@ export default class EtusivuHaku extends Vue {
 
   }
 
-  .opsicon {
+  .icon {
     height: 40px;
     width: 40px;
-    background: url('../../../public/img/images/opskortti.svg');
     background-size: 40px 40px;
     background-repeat: no-repeat;
-  }
 
-  .totsuicon {
-    height: 40px;
-    width: 40px;
-    background: url('../../../public/img/images/totsukortti.svg');
-    background-size: 40px 40px;
-    background-repeat: no-repeat;
+    &.ops {
+      background-image: url('../../../public/img/images/opskortti.svg');
+    }
+
+    &.totsu {
+      background-image: url('../../../public/img/images/totsukortti.svg');
+    }
+
+    &.opas {
+      background-image: url('../../../public/img/images/opas_ikoni.svg');
+    }
   }
 
   .meta {

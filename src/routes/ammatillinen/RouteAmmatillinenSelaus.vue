@@ -126,12 +126,6 @@ export default class RouteAmmatillinenSelaus extends Vue {
   get linkit(): Ylalinkki[] {
     return [
       {
-        // route: {
-        //   name: 'maaraykset',
-        //   query: {
-        //     tyyppi: MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
-        //   },
-        // },
         route: { name: 'ammatillinenMaaraykset' },
         text: 'maaraykset',
         icon: 'picture_as_pdf',

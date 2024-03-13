@@ -35,15 +35,6 @@ export default class KoulutustyyppiTile extends Vue {
   }
 
   get name() {
-    if (this.tyyppi.name === 'tutkintoonvalmentava') {
-      return this.$t('koulutustyyppi-' + this.tyyppi.name);
-    }
-    else if (this.tyyppi.name === 'kotoutumiskoulutus') {
-      return this.$t('koulutustyyppi-' + this.tyyppi.name);
-    }
-    else if (this.tyyppi.name === 'muukoulutus') {
-      return this.$t('jotpa-rahoitteinen-koulutus');
-    }
     return this.$t(this.tyyppi.name);
   }
 
