@@ -79,6 +79,27 @@
         </ul>
       </b-col>
     </b-row>
+    <template v-if="opintokokonaisuus.osaamismerkkiKappale">
+      <hr>
+      <b-row>
+        <b-col>
+          <h3 class="mb-4">{{ $t('kansalliset-perustaitojen-osaamismerkit') }}</h3>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <h4 class="mb-4">{{ $t('osaamismerkkien-suorittaminen') }}</h4>
+          <ep-content-viewer :value="$kaanna(opintokokonaisuus.osaamismerkkiKappale.kuvaus)" :kuvat="kuvat" class="mb-5"/>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <Osaamismerkit :osaamismerkit-store="osaamismerkitStore"
+                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+                         hide-kuvaus></Osaamismerkit>
+        </b-col>
+      </b-row>
+    </template>
   </div>
 </template>
 
@@ -88,9 +109,12 @@ import { Matala, OpintokokonaisuusDtoTyyppiEnum } from '@shared/api/amosaa';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import * as _ from 'lodash';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import Osaamismerkit from '@/routes/osaamismerkit/Osaamismerkit.vue';
 
 @Component({
   components: {
+    Osaamismerkit,
     EpFormContent,
     EpContentViewer,
   },
@@ -101,6 +125,31 @@ export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
 
   @Prop({ required: true })
   private kuvat!: any[];
+
+  private osaamismerkitStore = new OsaamismerkitStore();
+
+  async mounted() {
+    let koodit = _.map(this.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => {
+      return _.toNumber(koodi.koodi);
+    });
+    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: koodit });
+    await this.osaamismerkitStore.fetchKategoriat();
+  }
+
+  get osaamismerkkiKategoriat() {
+    return _.chain(this.osaamismerkitStore.kategoriat.value)
+      .map(kategoria => {
+        return {
+          text: this.$kaanna(kategoria.nimi),
+          value: kategoria.id,
+          data: kategoria,
+        };
+      })
+      .uniqWith(_.isEqual)
+      .sortBy('text')
+      .filter('text')
+      .value();
+  }
 
   get opintokokonaisuus() {
     return this.sisaltoviite.opintokokonaisuus;
