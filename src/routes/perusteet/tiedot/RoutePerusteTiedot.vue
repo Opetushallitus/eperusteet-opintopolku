@@ -389,7 +389,7 @@ export default class RoutePerusteTiedot extends Vue {
         const liitteet = _.filter(muutosmaarays!.liitteet![this.kieli].liitteet, { tyyppi: MaaraysLiiteDtoTyyppiEnum.LIITE });
         return {
           ...muutosmaarays,
-          url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaaraysLiite!.id)).url,
+          ...(!!muutosmaaraysLiite && { url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaaraysLiite!.id)).url }),
           liitteet: _.sortBy(_.map(liitteet, liite => {
             return {
               ...liite,
@@ -398,6 +398,7 @@ export default class RoutePerusteTiedot extends Vue {
           }), liite => this.$kaanna(liite.nimi)),
         };
       })
+      .filter('url')
       .sortBy('voimassaoloAlkaa')
       .reverse()
       .value();
