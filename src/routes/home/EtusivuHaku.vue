@@ -56,7 +56,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { koulutustyyppiStateName, koulutustyyppiTheme } from '@shared/utils/perusteet';
+import { koulutustyyppiStateName, koulutustyyppiTheme, yleissivistavatKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { PerusteStore } from '@/stores/PerusteStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -117,29 +117,42 @@ export default class EtusivuHaku extends Vue {
 
   async fetchOpsitJaPerusteet() {
     this.isLoading = true;
-    await this.perusteStore.getOpsitJaPerusteet({
-      nimi: this.queryNimi,
-      kieli: this.sisaltoKieli,
-      sivu: this.sivu - 1,
-      sivukoko: this.sivukoko,
-    });
+    try {
+      await this.perusteStore.getOpsitJaPerusteet({
+        nimi: this.queryNimi,
+        kieli: this.sisaltoKieli,
+        sivu: this.sivu - 1,
+        sivukoko: this.sivukoko,
+      });
+    }
+    catch (e) {
+      console.error(e);
+    }
     this.isLoading = false;
   }
 
   get opsitJaPerusteet() {
-    return _.map(this.perusteStore.opsitJaPerusteet?.data, resultItem => {
-      return {
-        ...resultItem,
-        theme: {
-          ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
-          'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE,
-          'icon ops': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA,
-          'icon totsu': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA,
-          'icon opas': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS,
-        },
-        route: this.generateRoute(resultItem),
-      };
-    });
+    return _.chain(this.perusteStore.opsitJaPerusteet?.data)
+      .map(resultItem => {
+        return {
+          ...resultItem,
+          theme: {
+            ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
+            'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE,
+            'icon ops': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA,
+            'icon totsu': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA,
+            'icon opas': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS,
+          },
+          koulutustyyppi: resultItem.jotpatyyppi === 'MUU' ? 'koulutustyyppi_muu' : resultItem.koulutustyyppi,
+        };
+      })
+      .map(resultItem => {
+        return {
+          ...resultItem,
+          route: this.generateRoute(resultItem),
+        };
+      })
+      .value();
   }
 
   generateRoute(resultItem) {
@@ -161,7 +174,8 @@ export default class EtusivuHaku extends Vue {
         },
       };
     }
-    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA) {
+
+    if (_.includes(yleissivistavatKoulutustyypit, resultItem.koulutustyyppi)) {
       return {
         name: 'opetussuunnitelma',
         params: {
@@ -170,7 +184,8 @@ export default class EtusivuHaku extends Vue {
         },
       };
     }
-    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA) {
+
+    if (!_.includes(yleissivistavatKoulutustyypit, resultItem.koulutustyyppi)) {
       return {
         name: 'toteutussuunnitelma',
         params: {
