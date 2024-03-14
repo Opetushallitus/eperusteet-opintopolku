@@ -148,6 +148,11 @@ export default class RouteOsaamismerkit extends Vue {
   max-width: 100%;
 }
 
+::v-deep h4 {
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+}
+
 @media(min-width: 992px){
   .multiselect {
     width: 300px;
