@@ -94,9 +94,9 @@
       </b-row>
       <b-row>
         <b-col>
-          <Osaamismerkit :osaamismerkit-store="osaamismerkitStore"
-                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
-                         hide-kuvaus></Osaamismerkit>
+          <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
+                           :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+                           hide-kuvaus></EpOsaamismerkit>
         </b-col>
       </b-row>
     </template>
@@ -110,11 +110,11 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import * as _ from 'lodash';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
-import Osaamismerkit from '@/routes/osaamismerkit/Osaamismerkit.vue';
+import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
 
 @Component({
   components: {
-    Osaamismerkit,
+    EpOsaamismerkit,
     EpFormContent,
     EpContentViewer,
   },

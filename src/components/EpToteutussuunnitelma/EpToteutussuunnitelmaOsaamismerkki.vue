@@ -13,9 +13,9 @@
     </b-row>
     <b-row>
       <b-col>
-        <Osaamismerkit :osaamismerkit-store="osaamismerkitStore"
-                       :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
-                       hide-kuvaus></Osaamismerkit>
+        <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
+                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+                         hide-kuvaus></EpOsaamismerkit>
       </b-col>
     </b-row>
   </div>
@@ -25,14 +25,14 @@
 import * as _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { SisaltoViiteExportDto } from '@shared/api/amosaa';
-import Osaamismerkit from '@/routes/osaamismerkit/Osaamismerkit.vue';
+import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 
 @Component({
   components: {
     EpContentViewer,
-    Osaamismerkit,
+    EpOsaamismerkit,
   },
 })
 export default class EpToteutussuunnitelmaOsaamismerkki extends Vue {
@@ -45,10 +45,8 @@ export default class EpToteutussuunnitelmaOsaamismerkki extends Vue {
   private osaamismerkitStore = new OsaamismerkitStore();
 
   async mounted() {
-    let koodit = _.map(this.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => {
-      return _.toNumber(koodi.koodi);
-    });
-    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: koodit });
+    let koodit = _.map(this.sisaltoviite.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
+    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit });
     await this.osaamismerkitStore.fetchKategoriat();
   }
 

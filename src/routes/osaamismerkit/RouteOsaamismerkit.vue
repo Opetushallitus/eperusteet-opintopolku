@@ -29,8 +29,8 @@
             </EpMultiSelect>
           </b-form-group>
         </div>
-        <Osaamismerkit :osaamismerkit-store="osaamismerkitStore"
-                       :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></Osaamismerkit>
+        <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
+                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></EpOsaamismerkit>
       </div>
     </EpHeader>
   </div>
@@ -48,11 +48,11 @@ import _ from 'lodash';
 import { OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
 import { murupolkuOsaamismerkkiRoot } from '@/utils/murupolku';
-import Osaamismerkit from '@/routes/osaamismerkit/Osaamismerkit.vue';
+import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
 
 @Component({
   components: {
-    Osaamismerkit,
+    EpOsaamismerkit,
     EpHeader,
     EpSearch,
     EpSpinner,
