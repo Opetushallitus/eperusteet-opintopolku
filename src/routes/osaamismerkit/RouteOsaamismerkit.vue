@@ -29,39 +29,8 @@
             </EpMultiSelect>
           </b-form-group>
         </div>
-
-        <div class="osaamismerkki-container">
-          <EpSpinner v-if="!osaamismerkit" />
-          <div v-else-if="osaamismerkitCount === 0">
-            <div class="alert alert-info">
-              {{ $t('ei-hakutuloksia') }}
-            </div>
-          </div>
-          <div v-else>
-            <div v-for="(group, index) in kategoriaGroup" :key="index" class="mb-4">
-              <div class="mb-4">
-                <h2>{{$kaanna(group.data.nimi)}}</h2>
-              </div>
-              <div class="mb-4" v-if="group.data.kuvaus">
-                {{$kaanna(group.data.kuvaus)}}
-              </div>
-              <div class="d-md-flex flex-wrap justify-content-start">
-                <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="idx" class="mb-2">
-                  <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
-                    <div class="tile tile-background-shadow-selected shadow-tile d-flex">
-                      <div>
-                        <img :src="osaamismerkki.image" width="40" height="40">
-                      </div>
-                      <div class="ml-3">
-                        <span class="nimi">{{ $kaanna(osaamismerkki.nimi) }}</span>
-                      </div>
-                    </div>
-                  </router-link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
+                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></EpOsaamismerkit>
       </div>
     </EpHeader>
   </div>
@@ -79,10 +48,11 @@ import _ from 'lodash';
 import { OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
 import { murupolkuOsaamismerkkiRoot } from '@/utils/murupolku';
-import { Kielet } from '@shared/stores/kieli';
+import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
 
 @Component({
   components: {
+    EpOsaamismerkit,
     EpHeader,
     EpSearch,
     EpSpinner,
@@ -126,34 +96,6 @@ export default class RouteOsaamismerkit extends Vue {
   @Watch('kategoria')
   onKategoriaChange(kategoria) {
     this.query.kategoria = kategoria ? kategoria.value : null;
-  }
-
-  generateImageUrl(liite) {
-    return liite ? 'data:' + liite.mime + ';base64,' + liite.binarydata : null;
-  }
-
-  get osaamismerkit() {
-    return _.chain(this.osaamismerkitStore.osaamismerkit.value)
-      .map(osaamismerkki => ({
-        ...osaamismerkki,
-        image: this.generateImageUrl(osaamismerkki.kategoria?.liite),
-      }))
-      .sortBy(om => Kielet.sortValue(om.nimi))
-      .value();
-  }
-
-  get osaamismerkitCount() {
-    return this.osaamismerkitStore.osaamismerkit?.value?.length;
-  }
-
-  get kategoriaGroup() {
-    return _.chain(this.osaamismerkkiKategoriat)
-      .map(kategoria => ({
-        ...kategoria,
-        osaamismerkit: _.filter(this.osaamismerkit, osaamismerkki => osaamismerkki.kategoria?.id === kategoria.value),
-      }))
-      .filter(kategoria => kategoria.osaamismerkit.length > 0)
-      .value();
   }
 
   get koulutustyyppi() {
@@ -202,45 +144,18 @@ export default class RouteOsaamismerkit extends Vue {
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
-@include shadow-tile;
-
-.test {
-  justify-content: center;
+::v-deep .filter {
+  max-width: 100%;
 }
 
-.osaamismerkit {
+::v-deep h4 {
+  font-size: 1.25rem !important;
+  font-weight: 500 !important;
+}
 
-  .tile {
-    color: #212529;
-    cursor: pointer;
-    border-radius: 10px;
-    border: 1px solid #E7E7E7;
-    overflow-x: auto;
-    width: 380px;
-    height: 75px;
-    padding-left: 20px;
-    padding-right: 20px;
-    align-items: center;
-    margin-right: 15px;
-
-    @media(max-width: 767.98px) {
-      width: 100%;
-    }
-  }
-
-  .nimi {
-    font-size: 18px;
-    font-weight: 600;
-  }
-
-  ::v-deep .filter {
-    max-width: 100%;
-  }
-
-  @media(min-width: 992px){
-    .multiselect {
-      width: 300px;
-    }
+@media(min-width: 992px){
+  .multiselect {
+    width: 300px;
   }
 }
 </style>

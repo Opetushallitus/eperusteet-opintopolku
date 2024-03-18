@@ -75,6 +75,11 @@
         :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
         sisaltoViiteSisalto="kotoOpinto"
       />
+
+      <EpToteutussuunnitelmaOsaamismerkki v-else-if="sisaltoviite.tyyppi === 'osaamismerkki'"
+                                          :sisaltoviite="sisaltoviite"
+                                          :kuvat="kuvat">
+      </EpToteutussuunnitelmaOsaamismerkki>
     </div>
   </div>
 </template>
@@ -93,9 +98,11 @@ import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnite
 import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoOpintoSisalto.vue';
 import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import EpToteutussuunnitelmaOsaamismerkki from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOsaamismerkki.vue';
 
 @Component({
   components: {
+    EpToteutussuunnitelmaOsaamismerkki,
     EpSpinner,
     EpToteutussuunnitelmaTekstikappale,
     EpToteutussuunnitelmaTutkinnonosa,

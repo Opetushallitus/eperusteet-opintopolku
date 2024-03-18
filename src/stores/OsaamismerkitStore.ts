@@ -20,10 +20,11 @@ export class OsaamismerkitStore {
     this.state.osaamismerkit = await this.fetchOsaamismerkitImpl(query);
   }
 
-  private async fetchOsaamismerkitImpl(q: OsaamismerkitQuery) {
+  public async fetchOsaamismerkitImpl(q: OsaamismerkitQuery) {
     const res = (await Osaamismerkit.findJulkisetOsaamismerkitBy(
       q.nimi,
       q.kategoria,
+      q.koodit,
     )).data as any;
     return res;
   }
