@@ -15,7 +15,7 @@
           {{$kaanna(group.data.kuvaus)}}
         </div>
         <div class="d-md-flex flex-wrap justify-content-start">
-          <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="idx" class="mb-2">
+          <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="'merkki-'+idx" class="mb-2">
             <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
               <div class="tile tile-background-shadow-selected shadow-tile d-flex">
                 <div>

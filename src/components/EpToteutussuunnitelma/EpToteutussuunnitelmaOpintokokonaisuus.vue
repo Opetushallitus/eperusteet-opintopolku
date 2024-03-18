@@ -129,10 +129,8 @@ export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
   private osaamismerkitStore = new OsaamismerkitStore();
 
   async mounted() {
-    let koodit = _.map(this.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => {
-      return _.toNumber(koodi.koodi);
-    });
-    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: koodit });
+    let koodit = _.map(this.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
+    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit });
     await this.osaamismerkitStore.fetchKategoriat();
   }
 
