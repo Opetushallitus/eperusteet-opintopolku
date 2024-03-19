@@ -5,7 +5,7 @@
         <h3 class="mb-4">{{ $t('kansalliset-perustaitojen-osaamismerkit') }}</h3>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row v-if="sisaltoviite.osaamismerkkiKappale.kuvaus">
       <b-col>
         <h4 class="mb-4">{{ $t('osaamismerkkien-suorittaminen') }}</h4>
         <ep-content-viewer :value="$kaanna(sisaltoviite.osaamismerkkiKappale.kuvaus)" :kuvat="kuvat" class="mb-5"/>
