@@ -66,8 +66,8 @@
             </div>
             <span v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" class="koodi">({{ sisalto.tutkinnonosa.koodiArvo }})</span>
           </div>
-          <div>
-            <span class="tutkinto w-40" :class="sisalto.sisaltotyyppi">{{ sisalto.sisaltotyyppi === 'peruste' ? $t('tutkinnon-peruste') : $t('tutkinnon-osa') }}</span>
+          <div v-if="sisalto.tutkintotag">
+            <span class="tutkinto w-40" :class="sisalto.sisaltotyyppi">{{ $t(sisalto.tutkintotag)}}</span>
           </div>
         </div>
         <EpAmmatillinenTutkinnonosaItem v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" :sisalto="sisalto"></EpAmmatillinenTutkinnonosaItem>
@@ -217,6 +217,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
         voimassaoloTieto: voimassaoloTieto(sisalto),
         koulutuskoodit: _.join(_.map(sisalto.koulutukset, 'koulutuskoodiArvo'), ', '),
         perusteet: sisalto.perusteet ? this.mapPerusteet(sisalto.perusteet) : null,
+        ...(sisalto.sisaltotyyppi === 'peruste' && sisalto.tyyppi !== 'opas' && { tutkintotag: 'tutkinnon-peruste' }),
+        ...(sisalto.sisaltotyyppi === 'tutkinnonosa' && { tutkintotag: 'tutkinnon-osa' }),
+
       }))
       .value();
   }
