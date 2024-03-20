@@ -198,6 +198,14 @@
         </ep-form-content>
       </div>
 
+      <div class="col-md-12">
+        <ep-form-content name="englanninkieliset-sisallot" headerType="h3" headerClass="h6">
+          <router-link :to="{name: 'perusteContent'}">
+            <span>{{ $t('katso-tutkinnon-englanninkieliset-sisallot') }}</span>
+          </router-link>
+        </ep-form-content>
+      </div>
+
       <div class="col-md-12" v-if="kvliitteita">
         <ep-form-content name="kv-liitteet" headerType="h3" headerClass="h6">
           <EpPdfLink v-if="kvliitteet['fi']" :url="kvliitteet['fi']">{{ $t('lataa-kvliite-fi') }}</EpPdfLink>

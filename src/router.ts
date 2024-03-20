@@ -111,6 +111,7 @@ import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuSt
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
 import { AmmatillisetMaarayksetStore } from '@/stores/AmmatillisetMaarayksetStore';
+import RoutePerusteContent from '@/routes/perusteet/tiedot/RoutePerusteContent.vue';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -579,6 +580,10 @@ export const router = new Router({
           path: 'tiedot',
           component: RoutePerusteTiedot,
           name: 'perusteTiedot',
+        }, {
+          path: 'content',
+          component: RoutePerusteContent,
+          name: 'perusteContent',
         }, {
           path: 'tekstikappale/:viiteId',
           component: RouteTekstikappale,
