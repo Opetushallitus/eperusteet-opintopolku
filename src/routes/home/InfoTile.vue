@@ -4,9 +4,13 @@
       <h2 class="mb-2">{{ $t(header) }}</h2>
       <span>{{ $t(text) }}</span>
       <div class="d-flex mt-4 link">
-        <EpLinkki :url="infoLink" icon="chevron_right">
+        <EpLinkki v-if="infoLink" :url="infoLink" icon="chevron_right">
           <span class="link-text">{{ $t(linkText) }}</span>
         </EpLinkki>
+        <router-link v-if="route" :to="route">
+          <EpMaterialIcon class="mr-1" size="18px">chevron_right</EpMaterialIcon>
+          <span class="link-text">{{ $t(linkText) }}</span>
+        </router-link>
       </div>
     </div>
   </div>
@@ -28,8 +32,11 @@ export default class InfoTile extends Vue {
   @Prop({ required: true })
   private text!: any;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   private link!: any;
+
+  @Prop({ required: false })
+  private route!: any;
 
   @Prop({ required: true })
   private linkText!: any;
@@ -47,9 +54,8 @@ export default class InfoTile extends Vue {
   color: #212529;
   border-radius: 10px;
   border: 1px solid #E7E7E7;
-  //width: 395px;
-  width: 49%;
-  height: 180px;
+  width: 33%;
+  height: 220px;
   padding: 20px;
   align-items: center;
   background-color: $white;

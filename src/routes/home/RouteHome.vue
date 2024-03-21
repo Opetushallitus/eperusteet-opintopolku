@@ -61,11 +61,12 @@
   <div class="container">
     <b-container fluid>
       <section class="section d-md-flex flex-wrap justify-content-between mt-5">
-<!--          <InfoTile header="tietoa-palvelusta"-->
-<!--                    text="palvelu-info"-->
-<!--                    link-text="tutustu-palveluun"-->
-<!--                    :link="infoLinkit.palvelu.link">-->
-<!--          </InfoTile>-->
+        <InfoTile v-if="infoLinkit.palvelu"
+                  header="tietoa-palvelusta"
+                  text="palvelu-info"
+                  link-text="tutustu-palveluun"
+                  :route="infoLinkit.palvelu.route">
+        </InfoTile>
         <InfoTile header="rajapinnat"
                   text="rajapinnat-info"
                   link-text="tutustu-rajapintoihin"
@@ -98,7 +99,7 @@ import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
 import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import { TiedoteDto } from '@shared/api/eperusteet';
+import { Julkinen, TiedoteDto, TietoaPalvelustaDto } from '@shared/api/eperusteet';
 
 @Component({
   components: {
@@ -120,13 +121,15 @@ export default class RouteHome extends Vue {
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
   private browserStore = new BrowserStore();
+  private tietoaPalvelusta: TietoaPalvelustaDto | null = null;
 
   async mounted() {
     await this.fetchAll();
   }
 
   async fetchAll() {
-    this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
+    await this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
+    this.tietoaPalvelusta = (await Julkinen.getTietoaPalvelusta()).data;
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -181,7 +184,21 @@ export default class RouteHome extends Vue {
   }
 
   get infoLinkit() {
-    return otherLinks();
+    return {
+      ...otherLinks(),
+      ...(this.tietoaPalvelusta && {
+        palvelu: {
+          name: 'tietoa-palvelusta',
+          route: {
+            name: 'peruste',
+            params: {
+              koulutustyyppi: 'opas',
+              perusteId: _.toString(this.tietoaPalvelusta.id),
+            },
+          },
+        },
+      }),
+    };
   }
 
   @Meta
