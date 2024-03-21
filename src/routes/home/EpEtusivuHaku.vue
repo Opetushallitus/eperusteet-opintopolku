@@ -71,7 +71,7 @@ import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
     EpSearch,
   },
 })
-export default class EtusivuHaku extends Vue {
+export default class EpEtusivuHaku extends Vue {
   @Prop({ required: true })
   private perusteStore!: PerusteStore;
 
@@ -277,6 +277,7 @@ export default class EtusivuHaku extends Vue {
     background-color: #368715;
     border-radius: 3px;
     width: 6px;
+
     &.koulutustyyppi-ammatillinen {
       background-color: $koulutustyyppi-ammatillinen-color;
     }
@@ -329,6 +330,17 @@ export default class EtusivuHaku extends Vue {
   .meta {
     color: $black;
     font-size: 80%;
+  }
+}
+
+.opsicon-wrapper {
+  padding: 25px;
+
+  .opsicon {
+    height: 40px;
+    width: 40px;
+    background: url('../../../public/img/images/opskortti.svg') no-repeat;
+    background-size: 40px 40px;
   }
 }
 </style>

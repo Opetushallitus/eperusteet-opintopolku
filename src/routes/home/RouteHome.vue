@@ -4,62 +4,73 @@
     <div class="container">
       <div class="laatikko">
         <h1 class="otsikko">{{ $t('eperusteet') }}</h1>
-        <p class="kuvaus">{{ $t('eperusteet-kuvaus') }}</p>
+        <p>{{ $t('eperusteet-kuvaus') }}</p>
+        <p>{{ $t('palvelusta-loydat-myos-ajantasaiset-maaraykset') }}</p>
       </div>
     </div>
-  </div>
-  <div class="container">
-    <section class="section my-4">
-      <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
-      <ep-spinner-slot :is-loading="!tiedotteet">
-        <b-row>
-          <b-col lg="6" md="12" class="mb-3" v-for="(tiedote, idx) in tiedotteetMapped" :key="idx">
-            <div class="nimi">
-              <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                {{ $kaanna(tiedote.otsikko) }} <span class="uusi" v-if="tiedote.uusi">{{$t('uusi')}}</span>
-              </router-link>
-            </div>
-            <div class="luotu">{{ $sd(tiedote.luotu) }}</div>
-          </b-col>
-        </b-row>
-        <div class="box">
-          <div class="kaikki-uutiset">
-            <router-link :to="{ name: 'uutiset' }">
-              {{ $t('nayta-kaikki') }}
-            </router-link>
-          </div>
-        </div>
-      </ep-spinner-slot>
-    </section>
   </div>
   <div class="search">
     <div class="container">
       <b-container fluid>
         <section class="section">
           <h2 class="tile-heading">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</h2>
-          <EtusivuHaku :peruste-store="perusteStore"></EtusivuHaku>
+          <EpEtusivuHaku :peruste-store="perusteStore"></EpEtusivuHaku>
+        </section>
+      </b-container>
+    </div>
+  </div>
+  <div class="container">
+    <section class="section my-5">
+      <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
+      <EpSpinnerSlot :is-loading="!tiedotteet">
+        <EpJulkiLista :tiedot="tiedotteetMapped" @avaaTieto="avaaTiedote" tieto-maara="5" listaus-tyyppi="none">
+          <div slot="eiTietoja">{{$t('ei-tiedotteita')}}</div>
+        </EpJulkiLista>
+        <div class="nayta-kaikki">
+          <EpMaterialIcon size="18px">chevron_right</EpMaterialIcon>
+          <router-link :to="{ name: 'uutiset' }">
+            {{ $t('nayta-kaikki') }}
+          </router-link>
+        </div>
+      </EpSpinnerSlot>
+    </section>
+  </div>
+  <div class="info">
+    <div class="container">
+      <b-container fluid>
+        <section class="section mt-4">
+          <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
+          <div class="d-md-flex flex-wrap justify-content-start">
+            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-2 mb-2">
+              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
+            </div>
+          </div>
+        </section>
+
+        <section class="section mt-4">
+          <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
+          <div class="d-md-flex flex-wrap justify-content-start">
+            <div v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2">
+              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
+            </div>
+          </div>
         </section>
       </b-container>
     </div>
   </div>
   <div class="container">
     <b-container fluid>
-      <section class="section mt-4">
-        <h2 class="tile-heading">{{ $t('etusivu-opetussuunnitelmat-ja-perusteet') }}</h2>
-        <div class="d-md-flex flex-wrap justify-content-between">
-          <div v-for="(item, idx) in koulutustyyppiItems" :key="idx">
-            <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-          </div>
-        </div>
-      </section>
-
-      <section class="section mt-4">
-        <h2 class="tile-heading">{{ $t('etusivu-osaaminen-ja-maaraykset') }}</h2>
-        <div class="d-md-flex flex-wrap justify-content-between">
-          <div v-for="(item, idx) in otherItems" :key="idx">
-            <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-          </div>
-        </div>
+      <section class="section d-md-flex flex-wrap justify-content-start mt-5">
+        <InfoTile
+          v-for="(infoLink, idx) in infoLinkit"
+          :key="'info-' + idx"
+          class="mr-2 mb-2"
+          :header="infoLink.name"
+          :text="infoLink.text"
+          :link="infoLink.link"
+          :route="infoLink.route"
+          :link-text="infoLink.linkText">
+        </InfoTile>
       </section>
     </b-container>
   </div>
@@ -68,33 +79,29 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import { PerusteStore } from '@/stores/PerusteStore';
 import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
-import { TiedoteStore } from '@/stores/TiedoteStore';
 import { Meta } from '@shared/utils/decorators';
 import { Kielet } from '@shared/stores/kieli';
 import { onkoUusi } from '@shared/utils/tiedote';
+import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import { PerusteStore } from '@/stores/PerusteStore';
+import { TiedoteStore } from '@/stores/TiedoteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
-import EtusivuHaku from '@/routes/home/EtusivuHaku.vue';
+import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
-import {
-  ammatilliset,
-  digitaalinenOsaaminen,
-  kotoutumiskoulutus, muuKoulutus,
-  tutkintoonvalmentava,
-  vapaasivistystyo,
-  yleissivistavat,
-} from '@shared/utils/perusteet';
+import InfoTile from '@/routes/home/InfoTile.vue';
+import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
+import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import { Julkinen, TiedoteDto, TietoaPalvelustaDto } from '@shared/api/eperusteet';
 
 @Component({
   components: {
+    EpJulkiLista,
+    InfoTile,
     KoulutustyyppiTile,
-    EtusivuHaku,
+    EpEtusivuHaku,
     EpSpinnerSlot,
-    EpExternalLink,
   },
 })
 export default class RouteHome extends Vue {
@@ -108,13 +115,24 @@ export default class RouteHome extends Vue {
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
   private browserStore = new BrowserStore();
+  private tietoaPalvelusta: TietoaPalvelustaDto | null = null;
 
   async mounted() {
     await this.fetchAll();
   }
 
   async fetchAll() {
-    this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
+    await this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
+    this.tietoaPalvelusta = (await Julkinen.getTietoaPalvelusta()).data;
+  }
+
+  avaaTiedote(tiedote: TiedoteDto) {
+    this.$router.push({
+      name: 'uutinen',
+      params: {
+        tiedoteId: '' + tiedote.id,
+      },
+    });
   }
 
   get julkaistutKoulutustyypit() {
@@ -140,6 +158,7 @@ export default class RouteHome extends Vue {
         return {
           ...tiedote,
           uusi: onkoUusi((tiedote as any).luotu),
+          perusteNimi: tiedote.perusteet && tiedote.perusteet.length === 1 ? this.$kaanna(tiedote.perusteet[0].nimi) : null,
         };
       })
       .take(this.browserStore.window.value.width > 991 ? 10 : 3)
@@ -151,39 +170,36 @@ export default class RouteHome extends Vue {
   }
 
   get koulutustyyppiItems() {
-    return _.chain([
-      yleissivistavat(),
-      ammatilliset(),
-      vapaasivistystyo(),
-      tutkintoonvalmentava(),
-      kotoutumiskoulutus(),
-      [
-        {
-          ..._.first(muuKoulutus()),
-          name: 'jotpan-rahoittamat-koulutukset',
-        },
-      ],
-    ]).flatMap()
-      .value();
+    return koulutustyyppiLinks();
   }
 
   get otherItems() {
-    return _.chain([
-      digitaalinenOsaaminen(this.digitaalinenOsaaminenPeruste?.id),
-      {
-        name: 'etusivu-osaamismerkit',
-        route: {
-          name: 'osaamismerkit',
+    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id);
+  }
+
+  get infoLinkit() {
+    return [
+      ...(this.tietoaPalvelusta ? [
+        {
+          name: 'tietoa-palvelusta',
+          linkText: 'tutustu-palveluun',
+          text: this.$kaanna(this.tietoaPalvelusta.tietoapalvelustaKuvaus),
+          route: {
+            name: 'peruste',
+            params: {
+              koulutustyyppi: 'opas',
+              perusteId: _.toString(this.tietoaPalvelusta.id),
+            },
+          },
         },
-      },
-      {
-        name: 'opetushallituksen-maaraykset',
-        route: {
-          name: 'maaraykset',
-        },
-      },
-    ]).flatMap()
-      .value();
+      ] : []),
+      ..._.map(otherLinks(), link => {
+        return {
+          ...link,
+          text: this.$t(link.text),
+        };
+      }),
+    ];
   }
 
   @Meta
@@ -200,9 +216,16 @@ export default class RouteHome extends Vue {
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
-@include shadow-tile;
-
 .ylaosa {
+  background-image: url('~@assets/img/banners/opintopolku/aallot_etusivu.svg'), url('~@assets/img/banners/opintopolku/aallot_etusivu_bg.svg');
+  background-position: right top, right top;
+  background-repeat: no-repeat, repeat;
+  margin-top: -1px;
+
+  @media (max-width: 767.98px) {
+    background-blend-mode: color-burn;
+  }
+
   .container {
     padding: 0;
 
@@ -211,87 +234,44 @@ export default class RouteHome extends Vue {
     }
 
     @media (min-width: 768px) {
-      min-height: 335px;
-      padding: 25px;
+      min-height: 315px;
+      padding-top: 60px;
     }
   }
 
-  background-color: $etusivu-header-background;
-  background-image: url('~@assets/img/banners/opintopolku/opiskelijat.png');
-  background-size: cover;
-  background-position: 50% 33%;
-
   .laatikko {
     padding: 15px;
-    color: #000;
-    background: #fff;
-    opacity: 0.80;
-
-    @media (min-width: 768px) {
-      max-width: 400px;
-      padding: 20px;
-    }
+    color: $black;
+    max-width: 600px;
 
     h1.otsikko {
-      font-size: 1.5rem;
-      font-weight: bolder;
-      margin-bottom: 20px;
-    }
-
-    .kuvaus {
-      margin-bottom: 0;
+      font-size: 1.8rem;
+      font-weight: 500;
+      margin-bottom: 15px;
     }
   }
 }
 
 .container {
-
-  .nimi {
-    color: #2B2B2B;
-
-    ::v-deep a, div.linkki a {
-      color: #2B2B2B;
-    }
-
-    .uusi {
-      background-color: $blue-lighten-3;
-      border-radius: 5px;
-      padding: 2px 4px;
-      font-size: 0.7rem;
-      margin-left: 5px;
-    }
-  }
-
-  .kaikki-uutiset {
+  .nayta-kaikki {
+    color: #3367E3;
+    margin-top: 10px;
     font-weight: 600;
-  }
-
-  .luotu {
-    color: #2b2b2b;
-    font-size: 80%;
   }
 }
 
 .search {
-  padding: 20px 0;
+  padding: 40px 0;
   background-color: $paletti-background-light-2;
+}
+
+.info {
+  padding: 40px 0;
+  background-color: $table-odd-row-bg-color;
 }
 
 .tile-heading {
   margin-bottom: 25px;
-}
-
-.tile {
-  margin: 25px 0 25px 0;
-
-  .box {
-    margin-bottom: 1rem;
-
-    .luotu {
-      color: #595959;
-      font-size: 80%;
-    }
-  }
 }
 
 @media (max-width: 991.98px) {
@@ -307,5 +287,4 @@ export default class RouteHome extends Vue {
     max-width: 100%;
   }
 }
-
 </style>

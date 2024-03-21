@@ -1,8 +1,7 @@
 <template>
 <div>
-  <a class="sr-only sr-only-focusable skip-to-content" href="#main">{{ $t('siirry-sisaltoon') }}</a>
-  <ep-navigation role="banner" :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"></ep-navigation>
-  <main class="router-container" role="main" sticky-container>
+  <EpJulkinenSidenav :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore" @setVisibility="setVisibility"></EpJulkinenSidenav>
+  <main role="main" :class="paddingClass">
     <router-view v-if="julkaistutKoulutustyypit"/>
   </main>
   <ep-footer />
@@ -14,17 +13,17 @@
 import _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
-import EpNavigation from '@/components/EpNavigation/EpNavigation.vue';
 import EpFeedbackModal from '@shared/components/EpFeedback/EpFeedbackModal.vue';
 import { Meta } from '@shared/utils/decorators';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { Kielet } from '@shared/stores/kieli';
+import EpJulkinenSidenav from '@/components/EpJulkinenSidenav/EpJulkinenSidenav.vue';
 
 @Component({
   components: {
+    EpJulkinenSidenav,
     EpFooter,
-    EpNavigation,
     EpFeedbackModal,
   },
 })
@@ -34,6 +33,8 @@ export default class Root extends Vue {
 
   @Prop({ required: true })
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+
+  private sidebarVisible: boolean = false;
 
   async mounted() {
     await this.sisaltoKieliChange();
@@ -54,6 +55,10 @@ export default class Root extends Vue {
 
   get titleTemplate() {
     return '%s - ' + this.$t('eperusteet');
+  }
+
+  setVisibility(value) {
+    this.sidebarVisible = value;
   }
 
   @Meta
@@ -98,19 +103,18 @@ export default class Root extends Vue {
       ],
     };
   }
+
+  get paddingClass() {
+    return this.sidebarVisible ? 'padding-active' : 'padding-off';
+  }
 }
 </script>
 
 <style lang="scss">
 @import '@shared/styles/_variables.scss';
 
-header {
-  background-color: white;
-}
-
-main.router-container {
-  min-height: calc(100vh - 400px);
-  margin-bottom: 40px;
+.padding {
+  padding-left: 400px;
 }
 
 .skip-to-content {
@@ -121,6 +125,18 @@ main.router-container {
   background-color: white;
   padding: 0.6875rem !important;
   border: 1px solid gray !important;
+}
+
+@media (min-width: 900px) {
+  .padding-off {
+    padding-left: 0;
+    transition: padding-left 0.4s;
+  }
+
+  .padding-active {
+    padding-left: 400px;
+    transition: padding-left 0.5s;
+  }
 }
 
 </style>
