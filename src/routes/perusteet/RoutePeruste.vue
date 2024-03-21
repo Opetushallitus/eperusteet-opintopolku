@@ -1,7 +1,7 @@
 <template>
 <div class="peruste">
   <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku" :tyyppi="peruste.tyyppi" v-sticky sticky-side="top">
-    <template slot="header" v-if="peruste.tyyppi ==='opas'">
+    <template slot="header" v-if="peruste.tyyppi ==='opas' && peruste.opasTyyppi !== 'tietoapalvelusta'">
       {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
     </template>
     <template slot="header" v-else>
