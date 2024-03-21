@@ -1,5 +1,5 @@
 <template>
-  <div class="tyyppi-tile tile-background-shadow-selected shadow-tile mb-3">
+  <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
     <router-link :to="tyyppi.route">
       <div class="p-2">
         <div class="ikoni">

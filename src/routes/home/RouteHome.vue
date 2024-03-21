@@ -40,8 +40,8 @@
       <b-container fluid>
         <section class="section mt-4">
           <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
-          <div class="d-md-flex flex-wrap justify-content-between">
-            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx">
+          <div class="d-md-flex flex-wrap justify-content-start">
+            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-2 mb-2">
               <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
             </div>
           </div>
@@ -49,8 +49,8 @@
 
         <section class="section mt-4">
           <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
-          <div class="d-md-flex flex-wrap justify-content-between">
-            <div v-for="(item, idx) in otherItems" :key="idx">
+          <div class="d-md-flex flex-wrap justify-content-start">
+            <div v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2">
               <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
             </div>
           </div>
@@ -60,22 +60,16 @@
   </div>
   <div class="container">
     <b-container fluid>
-      <section class="section d-md-flex flex-wrap justify-content-between mt-5">
-        <InfoTile v-if="infoLinkit.palvelu"
-                  header="tietoa-palvelusta"
-                  text="palvelu-info"
-                  link-text="tutustu-palveluun"
-                  :route="infoLinkit.palvelu.route">
-        </InfoTile>
-        <InfoTile header="rajapinnat"
-                  text="rajapinnat-info"
-                  link-text="tutustu-rajapintoihin"
-                  :link="infoLinkit.rajapinnat.link">
-        </InfoTile>
-        <InfoTile header="koulutuksiin-haku"
-                  text="koulutuksiin-haku-info"
-                  link-text="siirry-opintopolkuun"
-                  :link="infoLinkit.koulutus.link">
+      <section class="section d-md-flex flex-wrap justify-content-start mt-5">
+        <InfoTile
+          v-for="(infoLink, idx) in infoLinkit"
+          :key="'info-' + idx"
+          class="mr-2 mb-2"
+          :header="infoLink.name"
+          :text="infoLink.text"
+          :link="infoLink.link"
+          :route="infoLink.route"
+          :link-text="infoLink.linkText">
         </InfoTile>
       </section>
     </b-container>
@@ -184,11 +178,12 @@ export default class RouteHome extends Vue {
   }
 
   get infoLinkit() {
-    return {
-      ...otherLinks(),
-      ...(this.tietoaPalvelusta && {
-        palvelu: {
+    return [
+      ...(this.tietoaPalvelusta ? [
+        {
           name: 'tietoa-palvelusta',
+          linkText: 'tutustu-palveluun',
+          text: this.$kaanna(this.tietoaPalvelusta.tietoapalvelustaKuvaus),
           route: {
             name: 'peruste',
             params: {
@@ -197,8 +192,14 @@ export default class RouteHome extends Vue {
             },
           },
         },
+      ] : []),
+      ..._.map(otherLinks(), link => {
+        return {
+          ...link,
+          text: this.$t(link.text),
+        };
       }),
-    };
+    ];
   }
 
   @Meta

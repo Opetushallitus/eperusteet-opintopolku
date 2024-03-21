@@ -2,7 +2,7 @@
   <div class="tile">
     <div class="text">
       <h2 class="mb-2">{{ $t(header) }}</h2>
-      <span>{{ $t(text) }}</span>
+      <span v-html="text"></span>
       <div class="d-flex mt-4 link">
         <EpLinkki v-if="infoLink" :url="infoLink" icon="chevron_right">
           <span class="link-text">{{ $t(linkText) }}</span>
@@ -54,7 +54,7 @@ export default class InfoTile extends Vue {
   color: #212529;
   border-radius: 10px;
   border: 1px solid #E7E7E7;
-  width: 33%;
+  width: 395px;
   height: 220px;
   padding: 20px;
   align-items: center;

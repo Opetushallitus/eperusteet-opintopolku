@@ -44,28 +44,26 @@ export function osaaminenJaMaarayksetLinks(id) {
 }
 
 export function otherLinks() {
-  return {
-    ajankohtaista: {
-      name: 'ajankohtaista',
-      route: {
-        name: 'uutiset',
-      },
-    },
-    rajapinnat: {
+  return [
+    {
       name: 'rajapinnat',
+      text: 'rajapinnat-info',
       link: {
         fi: 'https://opetushallitus.github.io/eperusteet/',
         sv: 'https://opetushallitus.github.io/eperusteet/',
         en: 'https://opetushallitus.github.io/eperusteet/',
       },
+      linkText: 'tutustu-rajapintoihin',
     },
-    koulutus: {
+    {
       name: 'koulutuksiin-haku',
+      text: 'koulutuksiin-haku-info',
       link: {
         fi: 'https://opintopolku.fi/konfo/fi/',
         sv: 'https://opintopolku.fi/konfo/sv/',
         en: 'https://opintopolku.fi/konfo/en/',
       },
+      linkText: 'siirry-opintopolkuun',
     },
-  };
+  ];
 }
