@@ -61,6 +61,12 @@
           </b-table>
         </EpFormContent>
       </div>
+
+<!--      <div class="col-md-12 mt-3" v-if="geneerisetArvioinnit">-->
+<!--        <div v-for="(arviointi, idx) in geneerisetArvioinnit" :key="'arv-'+idx">-->
+<!--          <GeneerinenArviointiTaulukko :arviointi="arviointi" />-->
+<!--        </div>-->
+<!--      </div>-->
     </div>
 
   </div>
@@ -73,9 +79,13 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNormaali.vue';
 import EpTutkinnonosaTutke from '@/components/EpAmmatillinen/EpTutkinnonosaTutke.vue';
+import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
+import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 
 @Component({
   components: {
+    GeneerinenArviointiTaulukko,
+    EpAmmatillinenArvioinninKohdealueet,
     EpTutkinnonosaTutke,
     EpTutkinnonosaNormaali,
     EpContentViewer,
@@ -128,6 +138,16 @@ export default class RoutePerusteContent extends Vue {
         }))
         .value();
     }
+  }
+
+  get geneerisetArvioinnit() {
+    return _.chain(this.tutkinnonOsaViitteet)
+      .map(viite => {
+        return viite.tutkinnonOsa.geneerinenArviointiasteikko;
+      })
+      .filter(viite => !_.isEmpty(viite))
+      .unionBy('id')
+      .value();
   }
 
   get tutkinnonOsaFields() {
