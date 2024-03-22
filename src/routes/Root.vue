@@ -1,6 +1,10 @@
 <template>
 <div>
-  <EpJulkinenSidenav :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore" @setVisibility="setVisibility"></EpJulkinenSidenav>
+  <EpJulkinenSidenav
+    :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"
+    @setVisibility="setVisibility"
+    :tietoapalvelustaStore="tietoapalvelustaStore"
+    />
   <main role="main" :class="paddingClass">
     <router-view v-if="julkaistutKoulutustyypit"/>
   </main>
@@ -19,6 +23,7 @@ import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpJulkinenSidenav from '@/components/EpJulkinenSidenav/EpJulkinenSidenav.vue';
+import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 
 @Component({
   components: {
@@ -34,10 +39,14 @@ export default class Root extends Vue {
   @Prop({ required: true })
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
+  @Prop({ required: true })
+  private tietoapalvelustaStore!: TietoapalvelustaStore;
+
   private sidebarVisible: boolean = false;
 
   async mounted() {
     await this.sisaltoKieliChange();
+    await this.tietoapalvelustaStore.fetch();
   }
 
   @Watch('sisaltoKieli')

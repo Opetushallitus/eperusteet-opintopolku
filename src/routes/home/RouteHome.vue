@@ -67,6 +67,7 @@
           class="mr-2 mb-2"
           :header="infoLink.name"
           :text="infoLink.text"
+          :translatedText="infoLink.translatedText"
           :link="infoLink.link"
           :route="infoLink.route"
           :link-text="infoLink.linkText">
@@ -86,6 +87,7 @@ import { onkoUusi } from '@shared/utils/tiedote';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
+import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
@@ -114,8 +116,10 @@ export default class RouteHome extends Vue {
   @Prop({ required: true })
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
+  @Prop({ required: true })
+  private tietoapalvelustaStore!: TietoapalvelustaStore;
+
   private browserStore = new BrowserStore();
-  private tietoaPalvelusta: TietoaPalvelustaDto | null = null;
 
   async mounted() {
     await this.fetchAll();
@@ -123,7 +127,6 @@ export default class RouteHome extends Vue {
 
   async fetchAll() {
     await this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
-    this.tietoaPalvelusta = (await Julkinen.getTietoaPalvelusta()).data;
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -177,28 +180,14 @@ export default class RouteHome extends Vue {
     return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id);
   }
 
+  get tietoapalvelusta() {
+    return this.tietoapalvelustaStore.tietoapalvelusta.value;
+  }
+
   get infoLinkit() {
     return [
-      ...(this.tietoaPalvelusta ? [
-        {
-          name: 'tietoa-palvelusta',
-          linkText: 'tutustu-palveluun',
-          text: this.$kaanna(this.tietoaPalvelusta.tietoapalvelustaKuvaus),
-          route: {
-            name: 'peruste',
-            params: {
-              koulutustyyppi: 'opas',
-              perusteId: _.toString(this.tietoaPalvelusta.id),
-            },
-          },
-        },
-      ] : []),
-      ..._.map(otherLinks(), link => {
-        return {
-          ...link,
-          text: this.$t(link.text),
-        };
-      }),
+      ...(this.tietoapalvelusta ? [this.tietoapalvelusta] : []),
+      ...otherLinks(),
     ];
   }
 

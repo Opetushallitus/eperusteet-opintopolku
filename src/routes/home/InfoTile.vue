@@ -2,7 +2,8 @@
   <div class="tile">
     <div class="text">
       <h2 class="mb-2">{{ $t(header) }}</h2>
-      <span v-html="text"></span>
+      <span v-if="translatedText" v-html="$kaanna(translatedText)"></span>
+      <span v-if="text">{{$t(text)}}</span>
       <div class="d-flex mt-4 link">
         <EpLinkki v-if="infoLink" :url="infoLink" icon="chevron_right">
           <span class="link-text">{{ $t(linkText) }}</span>
@@ -29,8 +30,11 @@ export default class InfoTile extends Vue {
   @Prop({ required: true })
   private header!: any;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   private text!: any;
+
+  @Prop({ required: false })
+  private translatedText!: any;
 
   @Prop({ required: false })
   private link!: any;

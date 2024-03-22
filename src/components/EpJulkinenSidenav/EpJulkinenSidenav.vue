@@ -103,6 +103,7 @@ import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import Sticky from 'vue-sticky-directive';
 import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 import { RawLocation, VueRouter } from 'vue-router/types/router';
@@ -124,6 +125,9 @@ export default class EpJulkinenSidenav extends Vue {
   @Prop({ required: true })
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
+  @Prop({ required: true })
+  private tietoapalvelustaStore!: TietoapalvelustaStore;
+
   private active: boolean = false;
 
   get koulutustyyppiItems() {
@@ -135,7 +139,14 @@ export default class EpJulkinenSidenav extends Vue {
   }
 
   get muutLinkit() {
-    return otherLinks();
+    return [
+      ...(this.tietoapalvelusta ? [this.tietoapalvelusta] : []),
+      ...otherLinks(),
+    ];
+  }
+
+  get tietoapalvelusta() {
+    return this.tietoapalvelustaStore.tietoapalvelusta.value;
   }
 
   get digitaalinenOsaaminenPeruste() {
