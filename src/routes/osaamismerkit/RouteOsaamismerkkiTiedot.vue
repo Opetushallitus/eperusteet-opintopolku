@@ -12,6 +12,9 @@
           <div class="nimi">
             <span>{{ $kaanna(osaamismerkki.nimi) }}</span>
           </div>
+          <div v-if="isVanhentunut" class="vanhentunut">
+            <span>{{ $t('vanhentunut') + ' ' + $sd(osaamismerkki.voimassaoloLoppuu) }}</span>
+          </div>
         </div>
       </div>
       <div class="m-3">
@@ -91,6 +94,12 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
     return murupolkuOsaamismerkkiTiedot(this.koulutustyyppi, this.osaamismerkki);
   }
 
+  get isVanhentunut() {
+    let currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    return this.osaamismerkki?.voimassaoloLoppuu && _.toNumber(this.osaamismerkki.voimassaoloLoppuu) < currentDate.getTime();
+  }
+
   @Meta
   getMetaInfo() {
     return {
@@ -126,6 +135,13 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
   text-align: center;
   font-size: 20px;
   font-weight: 500;
+}
+
+.vanhentunut {
+  margin-top: 5px;
+  text-align: center;
+  font-size: 15px;
+  color: $invalid
 }
 
 .img {
