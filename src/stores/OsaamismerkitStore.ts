@@ -25,6 +25,7 @@ export class OsaamismerkitStore {
       q.nimi,
       q.kategoria,
       q.koodit,
+      q.poistunut,
     )).data as any;
     return res;
   }

@@ -46,7 +46,7 @@ export default class EpToteutussuunnitelmaOsaamismerkki extends Vue {
 
   async mounted() {
     let koodit = _.map(this.sisaltoviite.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
-    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit });
+    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: koodit, poistunut: true });
     await this.osaamismerkitStore.fetchKategoriat();
   }
 
