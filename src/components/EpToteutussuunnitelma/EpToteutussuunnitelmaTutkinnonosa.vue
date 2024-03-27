@@ -320,7 +320,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   }
 
   get hasTutkinnonosakohtainenArviointi() {
-    return !_.isEmpty(this.perusteenTutkinnonosa.arviointi.arvioinninKohdealueet);
+    return !_.isEmpty(this.perusteenTutkinnonosa?.arviointi?.arvioinninKohdealueet);
   }
 }
 </script>
