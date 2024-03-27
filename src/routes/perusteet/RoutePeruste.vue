@@ -145,10 +145,11 @@ export default class RoutePeruste extends Vue {
   }
 
   get murupolku() {
-    if (this.peruste && this.current) {
+    if (this.peruste) {
+      let currentPath = this.current ? this.current.path : [];
       return [
         ...createPerusteMurupolku(this.peruste, this.koulutustyyppi, this.routeKoulutustyyppi),
-        ...this.current.path,
+        ...currentPath,
       ];
     }
     return [];
