@@ -3,7 +3,7 @@
     <div>
       <h2 class="otsikko mb-4" slot="header">
         <slot name="header">
-          {{ $t('englanninkieliset-sisallot') }}
+          {{ $t('englanninkieliset-sisallot', 'en') }}
         </slot>
       </h2>
     </div>
@@ -11,7 +11,7 @@
     <EpSpinner v-if="!peruste"></EpSpinner>
     <div v-else class="row">
       <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-        <EpFormContent name="osaamisalat" headerType="h3" headerClass="h6">
+        <EpFormContent name="osaamisalat" headerType="h3" headerClass="h6" forced-lang="en">
           <b-table striped
                    fixed
                    responsive
@@ -23,7 +23,7 @@
       </div>
 
       <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
-        <EpFormContent name="tutkintonimikkeet" headerType="h3" headerClass="h6">
+        <EpFormContent name="tutkintonimikkeet" headerType="h3" headerClass="h6" forced-lang="en">
           <b-table striped
                    fixed
                    responsive
@@ -35,27 +35,27 @@
       </div>
 
       <div class="col-md-12 mt-3" v-if="peruste.suorittaneenOsaaminen">
-        <EpFormContent name="suorittaneen-osaaminen" headerType="h3" headerClass="h6">
-          <EpContentViewer :value="$kaanna(peruste.suorittaneenOsaaminen)"
+        <EpFormContent name="suorittaneen-osaaminen" headerType="h3" headerClass="h6" forced-lang="en">
+          <EpContentViewer :value="$kaanna(peruste.suorittaneenOsaaminen, false, true, 'en')"
                            :termit="termit"
                            :kuvat="kuvat" />
         </EpFormContent>
       </div>
 
       <div class="col-md-12 mt-3" v-if="peruste.tyotehtavatJoissaVoiToimia">
-        <EpFormContent name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6">
-          <EpContentViewer :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia)"
+        <EpFormContent name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6" forced-lang="en">
+          <EpContentViewer :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia, false, true, 'en')"
                            :termit="termit"
                            :kuvat="kuvat" />
         </EpFormContent>
       </div>
 
       <div class="col-md-12 mt-3" v-if="tutkinnonOsaViitteet">
-        <EpFormContent name="tutkinnon-osat" headerType="h3" headerClass="h6">
+        <EpFormContent name="tutkinnon-osat" headerType="h3" headerClass="h6" forced-lang="en">
           <b-table striped hover responsive :items="tutkinnonOsaViitteet" :fields="tutkinnonOsaFields">
             <template v-slot:cell(nimi)="data">
               <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: data.item.id}}">
-                {{ $kaanna(data.item.tutkinnonOsa.nimi) }}
+                {{ $kaanna(data.item.tutkinnonOsa.nimi, false, true, 'en') }}
               </router-link>
             </template>
           </b-table>
@@ -153,15 +153,15 @@ export default class RoutePerusteContent extends Vue {
   get tutkinnonOsaFields() {
     let baseFields = [{
       key: 'jarjestys',
-      label: this.$t('nro') as string,
+      label: this.$t('nro', 'en') as string,
       sortable: true,
     }, {
       key: 'nimi',
       sortable: true,
       sortByFormatted: true,
-      label: this.$t('nimi') as string,
+      label: this.$t('nimi', 'en') as string,
       formatter: (item: any) => {
-        return this.$kaanna(item?.tutkinnonOsa?.nimi);
+        return this.$kaanna(item?.tutkinnonOsa?.nimi, false, true, 'en');
       },
     }];
     let showLaajuusColumn = _.some(this.tutkinnonOsaViitteet, viite => _.has(viite, 'laajuus'));
@@ -169,13 +169,13 @@ export default class RoutePerusteContent extends Vue {
       return [...baseFields, {
         key: 'laajuus',
         sortable: true,
-        label: this.$t('laajuus') as string,
+        label: this.$t('laajuus', 'en') as string,
         formatter: (value: any, key: string, item: any) => {
           if (value) {
-            return value + ' ' + this.$t('osaamispiste');
+            return value + ' ' + this.$t('osaamispiste', 'en');
           }
           if (_.isNumber(item.laajuus) && _.isNumber(item.laajuusMaksimi)) {
-            return item.laajuus + ' - ' + item.laajuusMaksimi + ' ' + this.$t('osaamispiste');
+            return item.laajuus + ' - ' + item.laajuusMaksimi + ' ' + this.$t('osaamispiste', 'en');
           }
         },
       }];
@@ -186,14 +186,14 @@ export default class RoutePerusteContent extends Vue {
   get osaamisalatFields() {
     return [{
       key: 'nimi',
-      label: this.$t('nimi'),
+      label: this.$t('nimi', 'en'),
       thStyle: 'width: 75%',
       formatter: (value: any) => {
-        return this.$kaanna(value);
+        return this.$kaanna(value, false, true, 'en');
       },
     }, {
       key: 'arvo',
-      label: this.$t('koodi'),
+      label: this.$t('koodi', 'en'),
       thStyle: 'width: 15%',
     }];
   }
@@ -201,14 +201,14 @@ export default class RoutePerusteContent extends Vue {
   get tutkintonimikkeetFields() {
     return [{
       key: 'nimi',
-      label: this.$t('nimi'),
+      label: this.$t('nimi', 'en'),
       thStyle: 'width: 75%',
       formatter: (value: any) => {
-        return this.$kaanna(value);
+        return this.$kaanna(value, false, true, 'en');
       },
     }, {
       key: 'tutkintonimikeArvo',
-      label: this.$t('koodi'),
+      label: this.$t('koodi', 'en'),
       thStyle: 'width: 15%',
     }];
   }
