@@ -3,7 +3,7 @@
     <div>
       <h2 class="otsikko mb-4" slot="header">
         <slot name="header">
-          {{ $t('englanninkieliset-sisallot', 'en') }}
+          {{ $t('englanninkieliset-sisallot') }}
         </slot>
       </h2>
     </div>
@@ -91,7 +91,7 @@ import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenA
     EpContentViewer,
   },
 })
-export default class RoutePerusteContent extends Vue {
+export default class RoutePerusteKoosteEng extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 

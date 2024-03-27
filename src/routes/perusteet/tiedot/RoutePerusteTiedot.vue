@@ -200,7 +200,7 @@
 
       <div class="col-md-12">
         <ep-form-content name="englanninkieliset-sisallot" headerType="h3" headerClass="h6">
-          <router-link :to="{name: 'perusteContent'}">
+          <router-link :to="{name: 'perusteKoosteEng'}">
             <span>{{ $t('katso-tutkinnon-englanninkieliset-sisallot') }}</span>
           </router-link>
         </ep-form-content>
