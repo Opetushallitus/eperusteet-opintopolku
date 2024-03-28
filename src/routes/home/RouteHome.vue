@@ -95,7 +95,7 @@ import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
 import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import { Julkinen, TiedoteDto, TietoaPalvelustaDto } from '@shared/api/eperusteet';
+import { TiedoteDto } from '@shared/api/eperusteet';
 
 @Component({
   components: {
@@ -243,15 +243,20 @@ export default class RouteHome extends Vue {
 
 .container {
   .nayta-kaikki {
-    color: #3367E3;
+    color: $oph-green;
     margin-top: 10px;
     font-weight: 600;
+
+    a {
+      color: $oph-green;
+    }
   }
 }
 
 .search {
   padding: 40px 0;
-  background-color: $paletti-background-light-2;
+  background-color: $oph-green;
+  color: $white;
 }
 
 .info {

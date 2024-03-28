@@ -249,11 +249,17 @@ export default class EpEtusivuHaku extends Vue {
 }
 
 ::v-deep .page-item.disabled .page-link {
-  color: #999;
+  color: $gray-lighten-3;
 }
 
 ::v-deep .b-pagination li.page-item .page-link {
   background-color: unset;
+  color: $white;
+}
+
+::v-deep .b-pagination li.page-item.active .page-link {
+  background: $white;
+  color: $oph-green;
 }
 
 .list-item {
@@ -342,5 +348,9 @@ export default class EpEtusivuHaku extends Vue {
     background: url('../../../public/img/images/opskortti.svg') no-repeat;
     background-size: 40px 40px;
   }
+}
+
+::v-deep .spinner .oph-bounce {
+  background-color: $white !important;
 }
 </style>

@@ -9,7 +9,7 @@
           <span class="link-text">{{ $t(linkText) }}</span>
         </EpLinkki>
         <router-link v-if="route" :to="route">
-          <EpMaterialIcon class="mr-1" size="18px">chevron_right</EpMaterialIcon>
+          <EpMaterialIcon class="mr-1" size="18px" :color="'#fff'">chevron_right</EpMaterialIcon>
           <span class="link-text">{{ $t(linkText) }}</span>
         </router-link>
       </div>
@@ -55,14 +55,14 @@ export default class InfoTile extends Vue {
 @import '@shared/styles/_variables.scss';
 
 .tile {
-  color: #212529;
+  color: $white;
   border-radius: 10px;
   border: 1px solid #E7E7E7;
   width: 395px;
   height: 220px;
   padding: 20px;
   align-items: center;
-  background-color: $white;
+  background-color: $oph-green;
   position: relative;
 
   @media(max-width: 1220px) {
@@ -85,7 +85,12 @@ export default class InfoTile extends Vue {
     .link-text {
       font-size: medium;
       font-weight: 500;
+      color: $white;
     }
   }
+}
+
+::v-deep .icon {
+  color: white;
 }
 </style>

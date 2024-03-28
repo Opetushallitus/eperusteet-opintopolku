@@ -231,7 +231,7 @@ export default class EpJulkinenSidenav extends Vue {
 
 ::v-deep .tabs .nav-tabs .nav-item .nav-link:hover:not(.active) {
   background: unset;
-  border-color: $black;
+  border-color: $oph-green;
   border-width: 0 0 2px 0;
   border-style: solid;
 }
@@ -263,7 +263,7 @@ export default class EpJulkinenSidenav extends Vue {
 }
 
 .navi-valiotsikko {
-  color: $green;
+  color: $oph-green;
   font-size: 15px;
   font-weight: 600;
   text-transform: uppercase;

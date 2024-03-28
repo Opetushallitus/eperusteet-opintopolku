@@ -88,7 +88,7 @@ export default class KoulutustyyppiTile extends Vue {
   .img {
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 12px;
+    margin: 12px 12px 0 12px;
     height: 38px;
     width: 38px;
   }
