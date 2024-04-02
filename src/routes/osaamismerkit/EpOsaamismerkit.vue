@@ -92,8 +92,7 @@ export default class EpOsaamismerkit extends Vue {
   }
 
   private isVanhentunut(osaamismerkki) {
-    let currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
+    let currentDate = new Date(new Date().setHours(0, 0, 0, 0));
     return osaamismerkki.voimassaoloLoppuu && _.toNumber(osaamismerkki.voimassaoloLoppuu) < currentDate.getTime();
   }
 }
