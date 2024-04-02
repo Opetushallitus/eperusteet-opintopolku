@@ -12,12 +12,17 @@
           <div class="nimi">
             <span>{{ $kaanna(osaamismerkki.nimi) }}</span>
           </div>
-          <div v-if="isVanhentunut" class="vanhentunut">
-            <span>{{ $t('vanhentunut') + ' ' + $sd(osaamismerkki.voimassaoloLoppuu) }}</span>
-          </div>
         </div>
       </div>
       <div class="m-3">
+        <div class="mb-3" v-if="isVanhentunut">
+          <h2 class="header">{{$t('voimassaolo')}}</h2>
+          <div class="mt-1 d-flex">
+            <span class="mr-1">{{ $t('voimassaolo-paattynyt') }}</span>
+            <span class="mr-2">{{ $sd(osaamismerkki.voimassaoloLoppuu) }}</span>
+            <EpVoimassaolo :voimassaolo="osaamismerkki"></EpVoimassaolo>
+          </div>
+        </div>
         <div class="mb-3">
           <h2 class="header">{{$t('teema')}}</h2>
           <div class="mt-1">
@@ -64,9 +69,11 @@ import _ from 'lodash';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
 import { Meta } from '@shared/utils/decorators';
 import { murupolkuOsaamismerkkiTiedot } from '@/utils/murupolku';
+import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 
 @Component({
   components: {
+    EpVoimassaolo,
     EpHeader,
   },
 })
@@ -135,13 +142,6 @@ export default class RouteOsaamismerkkiTiedot extends Vue {
   text-align: center;
   font-size: 20px;
   font-weight: 500;
-}
-
-.vanhentunut {
-  margin-top: 5px;
-  text-align: center;
-  font-size: 15px;
-  color: $invalid
 }
 
 .img {

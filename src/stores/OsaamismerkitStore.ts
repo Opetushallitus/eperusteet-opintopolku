@@ -30,8 +30,8 @@ export class OsaamismerkitStore {
     return res;
   }
 
-  public async fetchKategoriat() {
+  public async fetchKategoriat(q: OsaamismerkitQuery) {
     this.state.kategoriat = null;
-    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat()).data;
+    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat(q.poistunut)).data;
   }
 }
