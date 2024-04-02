@@ -25,12 +25,13 @@ export class OsaamismerkitStore {
       q.nimi,
       q.kategoria,
       q.koodit,
+      q.poistunut,
     )).data as any;
     return res;
   }
 
-  public async fetchKategoriat() {
+  public async fetchKategoriat(q: OsaamismerkitQuery) {
     this.state.kategoriat = null;
-    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat()).data;
+    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat(q.poistunut)).data;
   }
 }
