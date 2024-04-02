@@ -11,7 +11,7 @@
     <EpSpinner v-if="!peruste"></EpSpinner>
     <div v-else class="row">
       <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-        <EpFormContent name="osaamisalat" headerType="h3" headerClass="h6" forced-lang="en">
+        <EpFormContent name="osaamisalat" headerType="h3" headerClass="h6" kieli="en">
           <b-table striped
                    fixed
                    responsive
@@ -23,7 +23,7 @@
       </div>
 
       <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
-        <EpFormContent name="tutkintonimikkeet" headerType="h3" headerClass="h6" forced-lang="en">
+        <EpFormContent name="tutkintonimikkeet" headerType="h3" headerClass="h6" kieli="en">
           <b-table striped
                    fixed
                    responsive
@@ -35,7 +35,7 @@
       </div>
 
       <div class="col-md-12 mt-3" v-if="peruste.suorittaneenOsaaminen">
-        <EpFormContent name="suorittaneen-osaaminen" headerType="h3" headerClass="h6" forced-lang="en">
+        <EpFormContent name="suorittaneen-osaaminen" headerType="h3" headerClass="h6" kieli="en">
           <EpContentViewer :value="$kaanna(peruste.suorittaneenOsaaminen, false, true, 'en')"
                            :termit="termit"
                            :kuvat="kuvat" />
@@ -43,7 +43,7 @@
       </div>
 
       <div class="col-md-12 mt-3" v-if="peruste.tyotehtavatJoissaVoiToimia">
-        <EpFormContent name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6" forced-lang="en">
+        <EpFormContent name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6" kieli="en">
           <EpContentViewer :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia, false, true, 'en')"
                            :termit="termit"
                            :kuvat="kuvat" />
