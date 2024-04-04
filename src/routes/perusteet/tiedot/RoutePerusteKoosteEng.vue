@@ -51,7 +51,7 @@
       </div>
 
       <div class="col-md-12 mt-3" v-if="tutkinnonOsaViitteet">
-        <EpFormContent name="tutkinnon-osat" headerType="h3" headerClass="h6" forced-lang="en">
+        <EpFormContent name="tutkinnon-osat" headerType="h3" headerClass="h6" kieli="en">
           <b-table striped hover responsive :items="tutkinnonOsaViitteet" :fields="tutkinnonOsaFields">
             <template v-slot:cell(nimi)="data">
               <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: data.item.id}}">
