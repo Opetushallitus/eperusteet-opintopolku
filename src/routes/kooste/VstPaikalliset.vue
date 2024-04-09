@@ -121,12 +121,21 @@ export default class VstPaikalliset extends Vue {
   private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({
     koodisto: 'vapaasivistystyooppilaitostyyppi',
     async query(query: string, sivu = 0, koodisto) {
-      return (await Ulkopuoliset.getKoodisto(koodisto, query, {
+      const oppilaitoskoodisto = (await Ulkopuoliset.getKoodisto(koodisto, query, {
         params: {
           sivu,
           sivukoko: 50,
         },
       })).data as any;
+      return {
+        ...oppilaitoskoodisto,
+        data: _.map(_.get(oppilaitoskoodisto, 'data'), oppilaitoskoodi => {
+          return {
+            ...oppilaitoskoodi,
+            koodiUri: 'oppilaitostyyppi_' + oppilaitoskoodi.koodiUri.split('_')[1],
+          };
+        }),
+      };
     },
   });
 
