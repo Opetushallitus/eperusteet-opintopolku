@@ -198,7 +198,7 @@
         </ep-form-content>
       </div>
 
-      <div v-if="isAmmatillinen" class="col-md-12">
+      <div v-if="isAmmatillinen && !isOpas" class="col-md-12">
         <ep-form-content name="englanninkieliset-sisallot" headerType="h3" headerClass="h6">
           <router-link :to="{name: 'perusteKoosteEng'}">
             <span>{{ $t('katso-tutkinnon-englanninkieliset-sisallot') }}</span>
@@ -229,7 +229,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Prop, Vue, Component } from 'vue-property-decorator';
-import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, MaarayksetParams, MaaraysLiiteDtoTyyppiEnum } from '@shared/api/eperusteet';
+import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, MaarayksetParams, MaaraysLiiteDtoTyyppiEnum, PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
@@ -272,6 +272,10 @@ export default class RoutePerusteTiedot extends Vue {
 
   get isAmmatillinen() {
     return this.peruste && isKoulutustyyppiAmmatillinen(this.peruste.koulutustyyppi!);
+  }
+
+  get isOpas() {
+    return this.peruste?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.OPAS);
   }
 
   get korvaavatPerusteet() {
