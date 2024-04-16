@@ -10,6 +10,19 @@
 
     <EpSpinner v-if="!peruste"></EpSpinner>
     <div v-else class="row">
+
+      <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
+        <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6" kieli="en">
+          <b-table striped
+                   fixed
+                   responsive
+                   hover
+                   :fields="koulutuskooditFields"
+                   :items="peruste.koulutukset">
+          </b-table>
+        </ep-form-content>
+      </div>
+
       <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
         <EpFormContent name="osaamisalat" headerType="h3" headerClass="h6" kieli="en">
           <b-table striped
@@ -210,6 +223,20 @@ export default class RoutePerusteKoosteEng extends Vue {
       key: 'tutkintonimikeArvo',
       label: this.$t('koodi', 'en'),
       thStyle: 'width: 15%',
+    }];
+  }
+
+  get koulutuskooditFields() {
+    return [{
+      key: 'koulutuskoodiArvo',
+      label: this.$t('koodi', 'en'),
+      thStyle: 'width: 15%',
+    }, {
+      key: 'nimi',
+      label: this.$t('koulutuksen-nimi', 'en'),
+      formatter: (value: any, key: string, item: any) => {
+        return this.$kaanna(value, false, true, 'en');
+      },
     }];
   }
 }
