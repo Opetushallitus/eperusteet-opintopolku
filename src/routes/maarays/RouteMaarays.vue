@@ -201,7 +201,7 @@ export default class RouteMaarays extends Vue {
     }
 
     if (this.peruste && this.maarayskirje) {
-      return `${baseURL}/perusteet/${this.peruste.id!}/liitteet/${this.maarayskirje.id}`;
+      return `${baseURL}/api/perusteet/${this.peruste.id!}/liitteet/${this.maarayskirje.id}`;
     }
   }
 

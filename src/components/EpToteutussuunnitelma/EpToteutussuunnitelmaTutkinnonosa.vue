@@ -90,7 +90,7 @@
       </ep-form-content>
 
       <ep-ammatillinen-arvioinnin-kohdealueet
-        v-if="perusteenTutkinnonosa.arviointi && perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"
+        v-if="hasTutkinnonosakohtainenArviointi"
         :arviointiasteikot="arviointiasteikot"
         :arvioinninKohdealueet="perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"/>
 
@@ -317,6 +317,10 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
       .flatMap()
       .isEmpty()
       .value();
+  }
+
+  get hasTutkinnonosakohtainenArviointi() {
+    return !_.isEmpty(this.perusteenTutkinnonosa?.arviointi?.arvioinninKohdealueet);
   }
 }
 </script>
