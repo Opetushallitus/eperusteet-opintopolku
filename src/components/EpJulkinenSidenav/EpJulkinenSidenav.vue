@@ -3,20 +3,20 @@
     <div>
       <b-button v-b-toggle.sidebar-no-header variant="transparent">
         <div class="menu">
-          <div class="icon">
-            <EpMaterialIcon icon-shape="outlined" size="30px">{{ icon }}</EpMaterialIcon>
-          </div>
+          <EpMaterialIcon icon-shape="outlined" size="30px">{{ icon }}</EpMaterialIcon>
           <span class="text">{{ $t('valikko')}}</span>
         </div>
       </b-button>
-      <img :src="navImage" :alt="$t('eperusteet')" class="ml-3" />
+      <router-link :to="{ name: 'root'}">
+        <img :src="navImage" :alt="$t('eperusteet')" class="ml-3" />
+      </router-link>
     </div>
-    <div v-if="!isActive" class="d-inline-flex ml-auto">
+    <div class="d-inline-flex ml-auto">
       <b-navbar-nav :aria-label="$t('kielivalinta')">
         <b-nav-item-dropdown right>
           <template slot="button-content">
             <EpMaterialIcon>language</EpMaterialIcon>
-            <span class="ml-2 dropdown-text">{{ $t(sisaltoKieli) }}</span>
+            <span class="ml-2 dropdown-text mr-2">{{ $t(sisaltoKieli) }}</span>
           </template>
           <b-dropdown-item v-for="(kieli, idx) in kielet"
                            :key=idx
@@ -31,32 +31,26 @@
                bg-variant="white"
                no-close-on-route-change>
       <template>
-        <div class="p-4">
-          <b-tabs content-class="mt-3" fill>
-            <b-tab v-for="(item, idx) in kielet"
-                   :key="idx"
-                   :title="$t(item)"
-                   :active="sisaltoKieli === item"
-                   @click="valitseKieli(item)"></b-tab>
-          </b-tabs>
-          <nav class="mb-4">
-            <b-nav vertical>
-              <b-nav-item :to="{ name: 'root'}" link-classes="navi navi-home nav-btn">
+        <div class="pl-3 pr-3 pb-3">
+          <div class="mt-3 mb-4">
+            <router-link :to="{ name: 'root'}" @click.native="closeSidebar()">
+              <span class="navi-home">
                 <EpMaterialIcon icon-shape="outlined" size="22px">home</EpMaterialIcon>
                 {{ $t('etusivu') }}
-              </b-nav-item>
-            </b-nav>
-          </nav>
+              </span>
+            </router-link>
+          </div>
           <div class="mb-2 navi-valiotsikko">
             <span>{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</span>
           </div>
           <nav class="mb-5">
             <b-nav vertical v-for="(item, idx1) in koulutustyyppiItems" :key="idx1">
               <b-nav-item :to="item.route"
+                          @click="closeSidebar()"
                           link-classes="navi nav-btn"
                           active
                           active-class="active-item">
-                {{ $t(item.name) }}
+                <span class="ml-3">{{ $t(item.name) }}</span>
               </b-nav-item>
             </b-nav>
           </nav>
@@ -66,10 +60,11 @@
           <nav class="mb-5">
             <b-nav vertical v-for="(item, idx2) in otherItems" :key="idx2">
               <b-nav-item :to="item.route"
+                          @click="closeSidebar()"
                           link-classes="navi nav-btn"
                           active
                           active-class="active-item">
-                {{ $t(item.name) }}
+                <span class="ml-3">{{ $t(item.name) }}</span>
               </b-nav-item>
             </b-nav>
           </nav>
@@ -82,13 +77,13 @@
                           link-classes="navi nav-btn"
                           active
                           active-class="active-item">
-                {{ $t(item.name) }}
+                <span class="ml-3">{{ $t(item.name) }}</span>
               </b-nav-item>
               <b-nav-item v-else :to="item.route"
                           link-classes="navi nav-btn"
                           active
                           active-class="active-item">
-                {{ $t(item.name) }}
+                <span class="ml-3">{{ $t(item.name) }}</span>
               </b-nav-item>
             </b-nav>
           </nav>
@@ -159,7 +154,6 @@ export default class EpJulkinenSidenav extends Vue {
 
   set isActive(value) {
     this.active = value;
-    this.$emit('setVisibility', value);
   }
 
   async valitseKieli(kieli) {
@@ -204,6 +198,10 @@ export default class EpJulkinenSidenav extends Vue {
   get icon() {
     return this.isActive ? 'close' : 'menu';
   }
+
+  closeSidebar() {
+    this.active = false;
+  }
 }
 </script>
 
@@ -219,14 +217,6 @@ export default class EpJulkinenSidenav extends Vue {
   @media (max-width: 900px) {
     width: 100%;
   }
-}
-
-::v-deep .tabs .nav-tabs .nav-item .active {
-  color: $black;
-  font-weight: unset;
-  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, $purple-lighten-1) 1;
-  border-width: 0 0 3px 0;
-  border-style: solid;
 }
 
 ::v-deep .tabs .nav-tabs .nav-item .nav-link:hover:not(.active) {
@@ -259,12 +249,13 @@ export default class EpJulkinenSidenav extends Vue {
 }
 
 .navi-home {
+  color: $oph-green;
   border-bottom: 0
 }
 
 .navi-valiotsikko {
   color: $oph-green;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -282,48 +273,11 @@ export default class EpJulkinenSidenav extends Vue {
 }
 
 .active-item {
-  padding-bottom: 12px;
-  border-width: 0 0 4px 0;
-  border-image: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, $purple-lighten-1) 1;
-}
-
-.nav-btn {
-  overflow: hidden;
-  position: relative;
-
-  &:after {
-    background: linear-gradient(to right, $green-lighten-3, $blue-lighten-5, $purple-lighten-1 100%);;
-    content: "";
-    height: 3px;
-    right: -250px;
-
-    @media (max-width: 900px) {
-      background: unset;
-    }
-  }
+  font-weight: 600;
+  background-color: $gray-lighten-5;
 }
 
 .nav-btn:hover {
-  &:after {
-    position: absolute;
-    top: 50px;
-    width: 350px;
-    right: 0;
-    transition: all 1000ms cubic-bezier(0.19, 1, 0.22, 1);
-  }
-}
-
-.icon {
-  color: black;
-
-  &:hover {
-    background: linear-gradient(to right, $green-lighten-3 10%, $blue-lighten-5, $purple-lighten-1 90%);
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-}
-
-.dropdown-text {
-  vertical-align: text-bottom;
+  background-color: $gray-lighten-5;
 }
 </style>

@@ -5,9 +5,9 @@
         <div class="ikoni">
           <EpMaterialIcon v-if="icon"
                           icon-shape="outlined"
+                          :color="rgbColor"
                           size="38px"
-                          class="img"
-                          :style="iconGradient">{{icon}}</EpMaterialIcon>
+                          class="img">{{icon}}</EpMaterialIcon>
           <img v-else :src="osaamimerkkiLogo" :alt="$t('osaamismerkit')" class="img"/>
         </div>
         <div class="nimi">
@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import { koulutustyyppiThemeColor, rgbCode } from '@shared/utils/perusteet';
+import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import osaamismerkkiLogoFI from '@assets/img/images/osaamismerkki_main_FI.svg';
 
 @Component({
@@ -31,11 +31,7 @@ export default class KoulutustyyppiTile extends Vue {
   private tyyppi!: any;
 
   get rgbColor() {
-    return rgbCode(koulutustyyppiThemeColor(this.tyyppi.route.params?.koulutustyyppi));
-  }
-
-  get iconGradient() {
-    return `background-image: linear-gradient(120deg, rgba(${this.rgbColor},1), rgba(${this.rgbColor},0.4))`;
+    return rgb2string(koulutustyyppiThemeColor(this.tyyppi.route.params?.koulutustyyppi));
   }
 
   get name() {
@@ -70,7 +66,7 @@ export default class KoulutustyyppiTile extends Vue {
   cursor: pointer;
   border-radius: 10px;
   border: 1px solid $content-header-separator-color;
-  width: 395px;
+  width: 385px;
   height: 120px;
   padding-left: 20px;
   padding-right: 20px;
@@ -86,8 +82,6 @@ export default class KoulutustyyppiTile extends Vue {
   text-align: center;
 
   .img {
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
     margin: 12px 12px 0 12px;
     height: 38px;
     width: 38px;

@@ -86,6 +86,7 @@ export default class InfoTile extends Vue {
       font-size: medium;
       font-weight: 500;
       color: $white;
+      text-decoration: underline;
     }
   }
 }

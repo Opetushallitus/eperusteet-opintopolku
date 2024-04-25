@@ -41,7 +41,7 @@
         <section class="section mt-4">
           <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
           <div class="d-md-flex flex-wrap justify-content-start">
-            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-2 mb-2">
+            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3">
               <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
             </div>
           </div>
@@ -60,7 +60,7 @@
   </div>
   <div class="container">
     <b-container fluid>
-      <section class="section d-md-flex flex-wrap justify-content-start mt-5">
+      <section class="section d-md-flex flex-wrap justify-content-start mt-4">
         <InfoTile
           v-for="(infoLink, idx) in infoLinkit"
           :key="'info-' + idx"
@@ -260,7 +260,7 @@ export default class RouteHome extends Vue {
 }
 
 .info {
-  padding: 40px 0;
+  padding: 10px 0 70px 0;
   background-color: $table-odd-row-bg-color;
 }
 
@@ -279,6 +279,17 @@ export default class RouteHome extends Vue {
 
   ::v-deep .filter.query {
     max-width: 100%;
+  }
+}
+
+::v-deep .content {
+  .tieto {
+    background-color: unset !important;
+    padding-left: 0 !important;
+    .otsikko {
+      color: $oph-green;
+      font-weight: 600;
+    }
   }
 }
 </style>

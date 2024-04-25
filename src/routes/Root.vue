@@ -2,10 +2,9 @@
 <div>
   <EpJulkinenSidenav
     :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"
-    @setVisibility="setVisibility"
     :tietoapalvelustaStore="tietoapalvelustaStore"
     />
-  <main role="main" :class="paddingClass">
+  <main role="main">
     <router-view v-if="julkaistutKoulutustyypit"/>
   </main>
   <ep-footer />
@@ -42,8 +41,6 @@ export default class Root extends Vue {
   @Prop({ required: true })
   private tietoapalvelustaStore!: TietoapalvelustaStore;
 
-  private sidebarVisible: boolean = false;
-
   async mounted() {
     await this.sisaltoKieliChange();
     await this.tietoapalvelustaStore.fetch();
@@ -64,10 +61,6 @@ export default class Root extends Vue {
 
   get titleTemplate() {
     return '%s - ' + this.$t('eperusteet');
-  }
-
-  setVisibility(value) {
-    this.sidebarVisible = value;
   }
 
   @Meta
@@ -112,19 +105,11 @@ export default class Root extends Vue {
       ],
     };
   }
-
-  get paddingClass() {
-    return this.sidebarVisible ? 'padding-active' : 'padding-off';
-  }
 }
 </script>
 
 <style lang="scss">
 @import '@shared/styles/_variables.scss';
-
-.padding {
-  padding-left: 400px;
-}
 
 .skip-to-content {
   position: absolute !important;
@@ -135,17 +120,4 @@ export default class Root extends Vue {
   padding: 0.6875rem !important;
   border: 1px solid gray !important;
 }
-
-@media (min-width: 900px) {
-  .padding-off {
-    padding-left: 0;
-    transition: padding-left 0.4s;
-  }
-
-  .padding-active {
-    padding-left: 400px;
-    transition: padding-left 0.5s;
-  }
-}
-
 </style>
