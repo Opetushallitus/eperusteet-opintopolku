@@ -1,40 +1,51 @@
 <template>
-  <footer>
-    <div class="horizontal-line">
-      <a :href="$kaanna(linkit.oph)">
-        <img :src="ophLogo" :alt="$t('oph')" />
-      </a>
-    </div>
-
-    <div class="footer-content">
-      <div class="row justify-content-around footer-row">
-        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
-          <a :href="$kaanna(linkit.opintopolku)">
-            <img class="opintopolku" :src="opintopolkuLogo" :alt="$t('opintopolku')" />
-          </a>
+  <div class="container">
+    <footer>
+      <div class="horizontal-line">
+        <router-link :to="{ name: 'root'}">
+          <img :src="ophLogo" :alt="$t('eperusteet')"/>
+        </router-link>
+      </div>
+      <div class="footer-row">
+        <div class="footer-content">
+          {{ $t('footer-eperusteet-palvelu') }}
         </div>
-        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
-          <span class="font-weight-bold">{{ $t('eperusteet-virkailija-linkki') }}</span>
-          <ep-linkki :url="$kaanna(linkit.virkailija)" icon="launch"></ep-linkki>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
-          <span class="font-weight-bold">{{ $t('anna-palautetta') }}</span>
-          <ep-linkki :url="$kaanna(linkit.palaute)" icon="email"></ep-linkki>
-        </div>
-        <div class="col-lg-2 col-md-6 col-sm-12 mb-5">
-          <a :href="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</a>
+        <div class="footer-links">
+          <div class="d-flex">
+            <EpMaterialIcon>chevron_right</EpMaterialIcon>
+            <span>{{ $t('palaute') }}:</span>
+            <EpLinkki class="ml-1" :url="$kaanna(linkit.palaute)"></EpLinkki>
+          </div>
+          <div class="d-flex">
+            <EpMaterialIcon>chevron_right</EpMaterialIcon>
+            <ep-linkki :url="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</ep-linkki>
+          </div>
+          <div class="d-flex">
+            <EpMaterialIcon>chevron_right</EpMaterialIcon>
+            <EpLinkki :url="$kaanna(linkit.virkailija)">{{ $t('siirry-virkailijanakymaan') }}</EpLinkki>
+            <EpMaterialIcon class="ml-1" size="20px">launch</EpMaterialIcon>
+          </div>
         </div>
       </div>
-    </div>
-  </footer>
+      <div class="horizontal-line">
+        <a :href="$kaanna(linkit.oph)">
+          <img class="logo" :src="opintopolkuLogo" :alt="$t('oph')" />
+        </a>
+      </div>
+      <div class="footer-row">
+        <div class="footer-oph">
+          {{ $t('footer-oph') }}
+        </div>
+      </div>
+    </footer>
+  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
-import ophLogo from '@assets/img/banners/oph_logo.svg';
-import opintopolkuLogo from '@assets/img/banners/opintopolku_logo.svg';
+import ophLogo from '@assets/img/banners/opintopolku/logo.svg';
+import opintopolkuLogo from '@assets/img/banners/opintopolku/oph_logo2.png';
 
 @Component({
   name: 'EpFooter',
@@ -58,15 +69,6 @@ export default class EpFooter extends Vue {
         sv: 'https://www.oph.fi/sv',
         en: 'https://www.oph.fi/en',
       },
-      opintopolku: {
-        fi: 'https://opintopolku.fi/konfo/fi',
-        sv: 'https://opintopolku.fi/konfo/sv',
-        en: 'https://opintopolku.fi/konfo/en',
-      },
-      eperusteet_vanha: {
-        fi: 'https://eperusteet.opintopolku.fi',
-        sv: 'https://eperusteet.opintopolku.fi',
-      },
       virkailija: {
         fi: 'http://virkailija.opintopolku.fi',
         sv: 'http://virkailija.opintopolku.fi',
@@ -79,10 +81,6 @@ export default class EpFooter extends Vue {
         fi: 'https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste',
         sv: 'https://opintopolku.fi/konfo/sv/sivu/tillganglighetsutlatande-for-egrunder',
       },
-      tietosuojaseloste: {
-        fi: 'https://opintopolku.fi/wp/tietosuojaseloste',
-        sv: 'https://studieinfo.fi/wp/dataskyddsbeskrivning',
-      },
     };
   }
 }
@@ -92,11 +90,12 @@ export default class EpFooter extends Vue {
 @import '@shared/styles/_variables.scss';
 
 footer {
-  padding: 0;
+  padding-bottom: 50px;
   hyphens: none;
   margin-top: 100px;
 
   .horizontal-line {
+    margin-top: 70px;
     width: 100%;
     border: none;
     padding: 0;
@@ -112,28 +111,62 @@ footer {
       padding: 0 50px;
       position: relative;
       background-color: #FFF;
-
-    }
-  }
-
-  img {
-    width: 300px;
-
-    &.opintopolku {
-      width: 200px;
     }
   }
 
   .footer-content {
-    max-width: 90%;
+    width: 65%;
+    display: flex;
     margin: 0 auto;
-    padding: 20px 0;
+
+    @media (max-width: 991.98px) {
+      padding: 0 20px;
+      width: 100%;
+    }
   }
 
-  @media (max-width: 991.98px) {
-    .footer-row {
+  .footer-links {
+    width: 35%;
+    padding-left: 20px;
+    color: $oph-green;
+
+    @media (max-width: 991.98px) {
+      padding: 20px;
+      width: 100%;
+    }
+  }
+
+  .footer-oph {
+    justify-content: unset;
+    font-size: 0.875rem;
+    margin: 0 auto;
+    width: 60%;
+
+    @media (max-width: 991.98px) {
+      padding: 0 20px;
+      width: 100%;
+    }
+  }
+
+  .footer-row {
+    display: flex;
+
+    @media (max-width: 991.98px) {
       display: grid;
     }
+  }
+}
+
+.logo {
+  width: 200px;
+}
+
+::v-deep .linkki {
+  font-size: 1rem;
+  padding-bottom: 3px;
+
+  a {
+    color: $oph-green;
   }
 }
 
