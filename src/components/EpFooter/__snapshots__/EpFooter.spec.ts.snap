@@ -1,19 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EpFooter Renders 1`] = `
-<footer>
-  <div class="horizontal-line"><a href="https://www.oph.fi/fi"><img src="" alt="oph"></a></div>
-  <div class="footer-content">
-    <div class="row justify-content-around footer-row">
-      <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><a href="https://opintopolku.fi/konfo/fi"><img src="" alt="opintopolku" class="opintopolku"></a></div>
-      <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><span class="font-weight-bold">eperusteet-virkailija-linkki</span>
-        <div class="linkki"><a href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="icon mr-1 material-icons" style="font-size: 18px;">launch</span> <span>virkailija.opintopolku.fi</span></a></div>
+<div class="container">
+  <footer>
+    <div class="horizontal-line"><routerlink-stub to="[object Object]"><img src="" alt="eperusteet"></routerlink-stub></div>
+    <div class="footer-row">
+      <div class="footer-content">
+        footer-eperusteet-palvelu
       </div>
-      <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><span class="font-weight-bold">anna-palautetta</span>
-        <div class="linkki"><a href="mailto:eperusteet@opintopolku.fi" rel="noopener noreferrer" target="_blank"><span aria-hidden="true" class="icon mr-1 material-icons" style="font-size: 18px;">email</span> <span>eperusteet@opintopolku.fi</span></a></div>
+      <div class="footer-links">
+        <div class="d-flex">
+          <epmaterialicon>chevron_right</epmaterialicon> <span>palaute:</span>
+          <div class="linkki ml-1"><a href="mailto:eperusteet@opintopolku.fi" rel="noopener noreferrer" target="_blank"><!----> <span>eperusteet@opintopolku.fi</span></a></div>
+        </div>
+        <div class="d-flex">
+          <epmaterialicon>chevron_right</epmaterialicon>
+          <div class="linkki"><a href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste" rel="noopener noreferrer" target="_blank"><!----> saavutettavuusseloste</a></div>
+        </div>
+        <div class="d-flex">
+          <epmaterialicon>chevron_right</epmaterialicon>
+          <div class="linkki"><a href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank"><!----> siirry-virkailijanakymaan</a></div>
+          <epmaterialicon size="20px" class="ml-1">launch</epmaterialicon>
+        </div>
       </div>
-      <div class="col-lg-2 col-md-6 col-sm-12 mb-5"><a href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste">saavutettavuusseloste</a></div>
     </div>
-  </div>
-</footer>
+    <div class="horizontal-line"><a href="https://www.oph.fi/fi"><img src="" alt="oph" class="logo"></a></div>
+    <div class="footer-row">
+      <div class="footer-oph">
+        footer-oph
+      </div>
+    </div>
+  </footer>
+</div>
 `;
