@@ -32,6 +32,10 @@
         <span>{{$kaanna(koulutustoimija.nimi)}}</span>
       </ep-form-content>
 
+      <ep-form-content name="oppilaitoksen-tyyppi" headerType="h3" headerClass="h6" v-if="opetussuunnitelma.koulutustoimija.oppilaitostyyppi">
+        {{$kaanna(opetussuunnitelma.koulutustoimija.oppilaitostyyppi)}}
+      </ep-form-content>
+
       <ep-form-content v-if="oppilaitosTyyppiNimi" name="oppilaitoksen-tyyppi" headerType="h3" headerClass="h6">
         <ep-field v-model="oppilaitosTyyppiNimi" />
       </ep-form-content>
