@@ -95,6 +95,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { isVstLukutaito } from '@shared/utils/perusteet';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
+import { JulkinenApi } from '@shared/api/amosaa';
 
 @Component({
   components: {
@@ -118,29 +119,10 @@ export default class VstPaikalliset extends Vue {
   private perPage = 10;
   private query = this.initQuery();
 
-  private readonly oppilaitostyyppiKoodisto = new KoodistoSelectStore({
-    koodisto: 'vapaasivistystyooppilaitostyyppi',
-    async query(query: string, sivu = 0, koodisto) {
-      const oppilaitoskoodisto = (await Ulkopuoliset.getKoodisto(koodisto, query, {
-        params: {
-          sivu,
-          sivukoko: 50,
-        },
-      })).data as any;
-      return {
-        ...oppilaitoskoodisto,
-        data: _.map(_.get(oppilaitoskoodisto, 'data'), oppilaitoskoodi => {
-          return {
-            ...oppilaitoskoodi,
-            koodiUri: 'oppilaitostyyppi_' + oppilaitoskoodi.koodiUri.split('_')[1],
-          };
-        }),
-      };
-    },
-  });
+  private oppilaitostyyppiKoodisto: any[] = [];
 
   async mounted() {
-    await this.oppilaitostyyppiKoodisto.query();
+    this.oppilaitostyyppiKoodisto = (await JulkinenApi.getVstYksilollisetOppilaitostyypit()).data;
   }
 
   async fetch() {
@@ -268,16 +250,16 @@ export default class VstPaikalliset extends Vue {
   }
 
   get oppilaitostyypit() {
-    if (this.oppilaitostyyppiKoodisto.data.value) {
+    if (this.oppilaitostyyppiKoodisto) {
       return ['kaikki',
-        ..._.chain(_.get(this.oppilaitostyyppiKoodisto.data.value, 'data'))
+        ..._.chain(this.oppilaitostyyppiKoodisto)
           .map(koodi => koodi.koodiUri)
           .value()];
     }
   }
 
   get oppilaitostyypitNimi() {
-    return _.chain(_.get(this.oppilaitostyyppiKoodisto.data.value, 'data'))
+    return _.chain(this.oppilaitostyyppiKoodisto)
       .map(koodi => {
         return {
           koodiUri: koodi.koodiUri,
