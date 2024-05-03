@@ -10,27 +10,6 @@
                  :placeholder="$t('hae-opetussuunnitelmaa')"/>
     </b-form-group>
 
-    <b-form-group :label="$t('oppilaitoksen-tyyppi')">
-      <EpSpinner v-if="!oppilaitostyypit" />
-      <EpMultiSelect v-else
-                     :is-editing="true"
-                     :options="oppilaitostyypit"
-                     :placeholder="$t('kaikki')"
-                     class="multiselect"
-                     v-model="query.oppilaitosTyyppiKoodiUri"
-                     :enable-empty-option="true"
-                     :searchable="false">
-
-        <template slot="singleLabel" slot-scope="{ option }">
-          {{ kaannaOppilaitosNimi(option) }}
-        </template>
-
-        <template slot="option" slot-scope="{ option }">
-          {{ kaannaOppilaitosNimi(option) }}
-        </template>
-      </EpMultiSelect>
-    </b-form-group>
-
     <b-form-group :label="$t('peruste')">
       <EpMultiSelect v-if="julkaistutPerusteet"
                      :is-editing="false"
@@ -118,12 +97,6 @@ export default class VstPaikalliset extends Vue {
   private valittuPeruste = {};
   private perPage = 10;
   private query = this.initQuery();
-
-  private oppilaitostyyppiKoodisto: any[] = [];
-
-  async mounted() {
-    this.oppilaitostyyppiKoodisto = (await JulkinenApi.getVstYksilollisetOppilaitostyypit()).data;
-  }
 
   async fetch() {
     await this.paikallinenStore.fetchQuery(this.query);
@@ -247,34 +220,6 @@ export default class VstPaikalliset extends Vue {
       }))
       .sortBy(ops => Kielet.sortValue(ops.nimi))
       .value();
-  }
-
-  get oppilaitostyypit() {
-    if (this.oppilaitostyyppiKoodisto) {
-      return ['kaikki',
-        ..._.chain(this.oppilaitostyyppiKoodisto)
-          .map(koodi => koodi.koodiUri)
-          .value()];
-    }
-  }
-
-  get oppilaitostyypitNimi() {
-    return _.chain(this.oppilaitostyyppiKoodisto)
-      .map(koodi => {
-        return {
-          koodiUri: koodi.koodiUri,
-          nimi: _.mapValues(_.keyBy(koodi.metadata, v => _.toLower(v.kieli)), v => v.nimi),
-        };
-      })
-      .keyBy('koodiUri')
-      .value();
-  }
-
-  kaannaOppilaitosNimi(koodiUri) {
-    if (this.oppilaitostyypitNimi[koodiUri]) {
-      return this.$kaanna(this.oppilaitostyypitNimi[koodiUri].nimi);
-    }
-    return this.$t(koodiUri);
   }
 
   kaannaPerusteNimi(option) {
