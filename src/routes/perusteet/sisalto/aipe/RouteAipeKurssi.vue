@@ -58,7 +58,8 @@ export default class RouteAipeKurssi extends Vue {
 
   get tavoitteet() {
     if (this.kurssi) {
-      return _.map(this.kurssi.tavoitteet, tavoite => (this.tavoitteetById![tavoite as any]));
+      return _.sortBy(_.map(this.kurssi.tavoitteet, tavoite => (this.tavoitteetById![tavoite as any])), tavoite => this.$kaanna(tavoite))
+        .reverse();
     }
   }
 
