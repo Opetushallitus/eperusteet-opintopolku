@@ -193,8 +193,8 @@
       </div>
 
       <div class="col-md-12" v-if="dokumentti">
-        <ep-form-content name="peruste-pdfna" headerType="h3" headerClass="h6">
-          <EpPdfLink :url="dokumentti">{{ $t('avaa-peruste-pdfna') }}</EpPdfLink>
+        <ep-form-content :name="dokumenttiKielistykset.otsikko" headerType="h3" headerClass="h6">
+          <EpPdfLink :url="dokumentti">{{ $t(dokumenttiKielistykset.linkki) }}</EpPdfLink>
         </ep-form-content>
       </div>
 
@@ -431,9 +431,22 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    if (isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi)) {
+    if (this.isOpas || isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi)) {
       return this.perusteDataStore.dokumentti;
     }
+  }
+
+  get dokumenttiKielistykset() {
+    return {
+      'opas': {
+        'otsikko': 'opas-pdfna',
+        'linkki': 'avaa-opas-pdfna',
+      },
+      'normaali': {
+        'otsikko': 'peruste-pdfna',
+        'linkki': 'avaa-peruste-pdfna',
+      },
+    }[this.peruste?.tyyppi || 'normaali'];
   }
 
   get koulutuskooditFields() {
