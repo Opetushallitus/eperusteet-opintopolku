@@ -235,7 +235,7 @@ export default class EpJulkinenSidenav extends Vue {
 }
 
 .navbar {
-  height: 70px;
+  height: 75px;
   background-color: $white;
   padding: 0.25rem 1rem
 }
@@ -279,5 +279,10 @@ export default class EpJulkinenSidenav extends Vue {
 
 .nav-btn:hover {
   background-color: $gray-lighten-5;
+}
+
+.btn:focus {
+  color: white;
+  background-color: $oph-green;;
 }
 </style>

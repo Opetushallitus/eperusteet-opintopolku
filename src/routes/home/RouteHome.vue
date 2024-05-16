@@ -3,7 +3,7 @@
   <div class="ylaosa">
     <div class="container">
       <div class="laatikko">
-        <h1 class="otsikko">{{ $t('eperusteet') }}</h1>
+        <h1 class="otsikko">{{ $t('tervetuloa-palveluun') }}</h1>
         <p>{{ $t('eperusteet-kuvaus') }}</p>
         <p>{{ $t('palvelusta-loydat-myos-ajantasaiset-maaraykset') }}</p>
       </div>
@@ -28,9 +28,7 @@
         </EpJulkiLista>
         <div class="nayta-kaikki">
           <EpMaterialIcon size="18px">chevron_right</EpMaterialIcon>
-          <router-link :to="{ name: 'uutiset' }">
-            {{ $t('nayta-kaikki') }}
-          </router-link>
+          <a :href="ajankohtaistaUrl()" target="_blank">{{ $t('siirry-ajankohtaista-sivulle') }}</a>
         </div>
       </EpSpinnerSlot>
     </section>
@@ -162,6 +160,7 @@ export default class RouteHome extends Vue {
           ...tiedote,
           uusi: onkoUusi((tiedote as any).luotu),
           perusteNimi: tiedote.perusteet && tiedote.perusteet.length === 1 ? this.$kaanna(tiedote.perusteet[0].nimi) : null,
+          koulutustyyppi: tiedote.koulutustyypit && tiedote.koulutustyypit.length === 1 ? this.$t(tiedote.koulutustyypit[0]) : null,
         };
       })
       .take(this.browserStore.window.value.width > 991 ? 10 : 3)
@@ -189,6 +188,10 @@ export default class RouteHome extends Vue {
       ...(this.tietoapalvelusta ? [this.tietoapalvelusta] : []),
       ...otherLinks(),
     ];
+  }
+
+  ajankohtaistaUrl() {
+    return `${window.location.origin}/#/${this.sisaltoKieli}/ajankohtaista`;
   }
 
   @Meta
@@ -244,7 +247,7 @@ export default class RouteHome extends Vue {
 .container {
   .nayta-kaikki {
     color: $oph-green;
-    margin-top: 10px;
+    margin-top: 20px;
     font-weight: 600;
 
     a {
