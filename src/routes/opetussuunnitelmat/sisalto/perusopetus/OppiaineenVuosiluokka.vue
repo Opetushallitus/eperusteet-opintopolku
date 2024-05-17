@@ -122,6 +122,7 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpOrderColorBall from '@shared/components/EpColorIndicator/EpOrderColorBall.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -129,6 +130,7 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
 
 @Component({
   components: {
+    EpButton,
     EpArvioinninkohteetTable,
     EpContentViewer,
     EpOrderColorBall,
