@@ -49,7 +49,7 @@
                        tyyppi="perusopetus-vuosiluokka-sisaltoalue"
                        :use-padding="false">
             <template v-slot:header>
-              <h5 class="sisaltoalue-nimi" v-html="$kaanna(sisaltoalue.nimi)"></h5>
+              <h5 class="nimi" v-html="$kaanna(sisaltoalue.nimi)"></h5>
             </template>
 
             <div class="pl-4 mb-4 sisaltoaluekuvaus" v-if="sisaltoalue.vuosiluokanSisaltoalue">
@@ -77,7 +77,7 @@
                        :use-padding="false">
 
             <template v-slot:header>
-              <h5 v-html="$kaanna(lao.nimi)"></h5>
+              <h5 class="nimi" v-html="$kaanna(lao.nimi)"></h5>
             </template>
 
             <ep-content-viewer :value="$kaanna(lao.kuvaus)" :kuvat="kuvat" />
@@ -164,8 +164,8 @@ export default class OppiaineenVuosiluokka extends Vue {
   padding-left: 0;
 }
 
-.sisaltoalue-nimi {
-  line-height: 1.5;
+.nimi {
+  line-height: 1.7;
 }
 
 </style>
