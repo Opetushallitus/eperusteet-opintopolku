@@ -18,6 +18,7 @@ import {
   DokumenttiDtoTilaEnum,
   Maaraykset,
   MaaraysDto,
+  PerusteBaseDtoOpasTyyppiEnum,
 } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
@@ -26,6 +27,7 @@ import {
   buildTiedot,
   NavigationFilter,
   NavigationNode,
+  naytaPerusteTiedotNaviMenussa,
 } from '@shared/utils/NavigationBuilder';
 
 import { perusteetQuery } from '@/api/eperusteet';
@@ -150,7 +152,7 @@ export class PerusteDataStore {
       return null;
     }
     else {
-      if (getters.peruste.tyyppi !== _.toLower(PerusteKaikkiDtoTyyppiEnum.DIGITAALINENOSAAMINEN)) {
+      if (naytaPerusteTiedotNaviMenussa(getters.peruste)) {
         const tiedot = buildTiedot('perusteTiedot', {
           ...(state.revision && { revision: state.revision }),
         });

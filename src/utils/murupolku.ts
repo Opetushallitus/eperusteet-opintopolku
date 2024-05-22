@@ -1,3 +1,4 @@
+import { PerusteBaseDtoOpasTyyppiEnum } from '@shared/api/eperusteet';
 import {
   isAmmatillinenKoulutustyyppi,
   isAmmatillinenKoulutustyyppiOrRyhma,
@@ -26,10 +27,21 @@ export function createPerusteMurupolku(peruste, koulutustyyppi, routeKoulutustyy
   if (routeKoulutustyyppi === 'digiosaaminen') {
     return [];
   }
-  const polut: any = [];
-  polut.push(murupolkuPerusteRoot(koulutustyyppi, routeKoulutustyyppi));
-  polut.push(murupolkuPerusteTiedot(peruste, routeKoulutustyyppi));
-  return polut;
+
+  if (peruste.opasTyyppi === _.toLower(PerusteBaseDtoOpasTyyppiEnum.TIETOAPALVELUSTA)) {
+    return tietoapalvelustaMurupolut(peruste);
+  }
+
+  return [
+    murupolkuPerusteRoot(koulutustyyppi, routeKoulutustyyppi),
+    murupolkuPerusteTiedot(peruste, routeKoulutustyyppi),
+  ];
+}
+
+function tietoapalvelustaMurupolut(peruste) {
+  return [{
+    label: peruste?.nimi,
+  }];
 }
 
 export function murupolkuPerusteTiedot(peruste, koulutustyyppi) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="tyyppi-tile tile-background-shadow-selected shadow-tile mb-3">
+  <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
     <router-link :to="tyyppi.route">
       <div class="p-2">
         <div class="ikoni">
@@ -39,7 +39,7 @@ export default class KoulutustyyppiTile extends Vue {
   }
 
   get icon() {
-    if (this.tyyppi.name === 'osaamismerkit') {
+    if (this.tyyppi.name === 'kansalliset-perustaitojen-osaamismerkit') {
       return null;
     }
     else if (this.tyyppi.name === 'opetushallituksen-maaraykset') {
@@ -55,16 +55,18 @@ export default class KoulutustyyppiTile extends Vue {
 </script>
 
 <style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile;
 
 .tyyppi-tile {
+  background: $white;
   color: #212529;
   cursor: pointer;
   border-radius: 10px;
-  border: 1px solid #E7E7E7;
-  width: 380px;
+  border: 1px solid $content-header-separator-color;
+  width: 385px;
   height: 120px;
   padding-left: 20px;
   padding-right: 20px;
@@ -76,11 +78,11 @@ export default class KoulutustyyppiTile extends Vue {
 }
 
 .ikoni {
-  color: #EDA0DF;
+  color: $purple-lighten-1;
   text-align: center;
 
   .img {
-    margin: 12px;
+    margin: 12px 12px 0 12px;
     height: 38px;
     width: 38px;
   }
@@ -92,7 +94,7 @@ export default class KoulutustyyppiTile extends Vue {
   width: 100%;
   padding: 0;
   text-align: center;
-  color: #2B2B2B;
+  color: $black;
   font-weight: 600;
 }
 

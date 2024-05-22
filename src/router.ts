@@ -111,6 +111,7 @@ import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuSt
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
 import { AmmatillisetMaarayksetStore } from '@/stores/AmmatillisetMaarayksetStore';
+import { TietoapalvelustaStore } from './stores/TietoapalvelustaStore';
 import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
 
 Vue.use(Router);
@@ -129,6 +130,7 @@ const palauteStore = new PalauteStore();
 const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
 const ammatillinenPerusteHakuStore = new AmmatillinenPerusteHakuStore();
 const osaamismerkitStore = new OsaamismerkitStore();
+const tietoapalvelustaStore = new TietoapalvelustaStore();
 
 const routeProps = (route: any) => {
   return {
@@ -188,6 +190,7 @@ export const router = new Router({
     props: {
       palauteStore,
       julkaistutKoulutustyypitStore,
+      tietoapalvelustaStore,
     },
     children: [
       ...redirects,
@@ -203,6 +206,7 @@ export const router = new Router({
                   perusteStore,
                   tiedoteStore,
                   julkaistutKoulutustyypitStore,
+                  tietoapalvelustaStore,
                 },
               };
             },

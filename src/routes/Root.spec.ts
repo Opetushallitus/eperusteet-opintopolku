@@ -6,6 +6,7 @@ import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 
 describe('Root', () => {
   const localVue = createLocalVue();
@@ -14,6 +15,8 @@ describe('Root', () => {
   localVue.use(new Kaannos());
   const palauteStore = mock(PalauteStore);
   const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
+  const tietoapalvelustaStore = mock(TietoapalvelustaStore);
+  tietoapalvelustaStore.state.tietoapalvelusta = null;
 
   test('Renders', async () => {
     const wrapper = mount(Root as any, {
@@ -21,6 +24,7 @@ describe('Root', () => {
       propsData: {
         palauteStore,
         julkaistutKoulutustyypitStore,
+        tietoapalvelustaStore,
       },
       stubs: {
         ...stubs,

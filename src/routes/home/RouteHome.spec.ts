@@ -3,6 +3,7 @@ import RouteHome from './RouteHome.vue';
 import { mock, mocks, stubs } from '@shared/utils/jestutils';
 import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 
 describe('RouteHome', () => {
   const localVue = createLocalVue();
@@ -17,6 +18,8 @@ describe('RouteHome', () => {
   test('Renders spinners and data', async () => {
     const perusteStore = perusteStoreMock();
     const tiedoteStore = tiedoteStoreMock();
+    const tietoapalvelustaStore = mock(TietoapalvelustaStore);
+    tietoapalvelustaStore.state.tietoapalvelusta = null;
 
     const wrapper = mount(RouteHome as any, {
       localVue,
@@ -24,6 +27,7 @@ describe('RouteHome', () => {
         perusteStore,
         tiedoteStore,
         julkaistutKoulutustyypitStore,
+        tietoapalvelustaStore,
       },
       stubs: {
         ...stubs,
