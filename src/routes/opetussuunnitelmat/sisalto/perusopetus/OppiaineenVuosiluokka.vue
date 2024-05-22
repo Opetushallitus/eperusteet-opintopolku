@@ -39,10 +39,17 @@
 
         <div class="inner-collapse mb-4" v-if="tavoite.sisaltoalueet.length > 0">
           <h4>{{$t('sisaltoalueet')}}</h4>
-          <ep-collapse ref="sisaltoaluecollapse" class="sisaltoalue" v-for="(sisaltoalue, index) in tavoite.sisaltoalueet" :key="'sisaltoalue'+index"
-            :borderBottom="false" :expanded-by-default="false" chevronLocation="left" tyyppi="perusopetus-vuosiluokka-sisaltoalue">
+          <ep-collapse v-for="(sisaltoalue, index) in tavoite.sisaltoalueet"
+                       :key="'sisaltoalue'+index"
+                       ref="sisaltoaluecollapse"
+                       class="sisaltoalue"
+                       :borderBottom="false"
+                       :expanded-by-default="false"
+                       chevronLocation="left"
+                       tyyppi="perusopetus-vuosiluokka-sisaltoalue"
+                       :use-padding="false">
             <template v-slot:header>
-              <h5 v-html="$kaanna(sisaltoalue.nimi)"></h5>
+              <h5 class="nimi" v-html="$kaanna(sisaltoalue.nimi)"></h5>
             </template>
 
             <div class="pl-4 mb-4 sisaltoaluekuvaus" v-if="sisaltoalue.vuosiluokanSisaltoalue">
@@ -62,14 +69,15 @@
             <h4>{{$t('laaja-alaisen-osaamisen-alueet')}}</h4>
 
           <ep-collapse v-for="(lao, index) in tavoite.laajaalaisetosaamiset"
-            :key="'lao'+index"
-            :borderBottom="false"
-            :expanded-by-default="false"
-            chevronLocation="left"
-            class="mt-0 pt-0">
+                       :key="'lao'+index"
+                       :borderBottom="false"
+                       :expanded-by-default="false"
+                       chevronLocation="left"
+                       class="mt-0 pt-0"
+                       :use-padding="false">
 
             <template v-slot:header>
-              <h5 v-html="$kaanna(lao.nimi)"></h5>
+              <h5 class="nimi" v-html="$kaanna(lao.nimi)"></h5>
             </template>
 
             <ep-content-viewer :value="$kaanna(lao.kuvaus)" :kuvat="kuvat" />
@@ -86,10 +94,9 @@
           </b-col>
         </b-row>
 
-        <div class="mb-4" v-if="tavoite.hyvanOsaamisenKuvaus || tavoite.arvioinninKuvaus">
+        <div class="mb-4" v-if="tavoite.arvioinninKuvaus">
           <h4>{{ $t('arvioinnin-kohde') }}</h4>
-          <span v-if="tavoite.hyvanOsaamisenKuvaus" v-html="$kaanna(tavoite.hyvanOsaamisenKuvaus.arvioinninKohde)"></span>
-          <span v-else-if="tavoite.arvioinninKuvaus" v-html="$kaanna(tavoite.arvioinninKuvaus)"></span>
+          <span v-html="$kaanna(tavoite.arvioinninKuvaus)"></span>
         </div>
 
         <div class="mb-4" v-if="tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0">
@@ -115,25 +122,21 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Vue, Component, Prop } from 'vue-property-decorator';
-import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
-import EpContent from '@shared/components/EpContent/EpContent.vue';
-import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import EpOrderColorBall from '@shared/components/EpColorIndicator/EpOrderColorBall.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
-import EpOrderColorBall from '@shared/components/EpColorIndicator/EpOrderColorBall.vue';
 
 @Component({
   components: {
-    EpPerusteContent,
-    EpContent,
-    EpCollapse,
     EpButton,
-    EpContentViewer,
     EpArvioinninkohteetTable,
+    EpContentViewer,
     EpOrderColorBall,
+    EpCollapse,
   },
-} as any)
+})
 export default class OppiaineenVuosiluokka extends Vue {
   @Prop({ required: true })
   private oppiaineenVuosiluokka!: any;
@@ -157,8 +160,12 @@ export default class OppiaineenVuosiluokka extends Vue {
 
 <style scoped lang="scss">
 
-  ::v-deep .ep-button .btn-link {
-    padding-left: 0px;
-  }
+::v-deep .ep-button .btn-link {
+  padding-left: 0;
+}
+
+.nimi {
+  line-height: 1.7;
+}
 
 </style>
