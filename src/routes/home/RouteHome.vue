@@ -5,7 +5,6 @@
       <div class="laatikko">
         <h1 class="otsikko">{{ $t('tervetuloa-palveluun') }}</h1>
         <p>{{ $t('eperusteet-kuvaus') }}</p>
-        <p>{{ $t('palvelusta-loydat-myos-ajantasaiset-maaraykset') }}</p>
       </div>
     </div>
   </div>

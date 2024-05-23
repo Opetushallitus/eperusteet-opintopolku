@@ -50,7 +50,7 @@
                           link-classes="navi nav-btn"
                           active
                           active-class="active-item">
-                <span class="ml-3">{{ $t(item.name) }}</span>
+                <div class="ml-3">{{ $t(item.name) }}</div>
               </b-nav-item>
             </b-nav>
           </nav>
@@ -64,7 +64,7 @@
                           link-classes="navi nav-btn"
                           active
                           active-class="active-item">
-                <span class="ml-3">{{ $t(item.name) }}</span>
+                <div class="ml-3">{{ $t(item.name) }}</div>
               </b-nav-item>
             </b-nav>
           </nav>
@@ -76,14 +76,16 @@
               <b-nav-item v-if="item.link" :href="$kaanna(item.link)"
                           link-classes="navi nav-btn"
                           active
-                          active-class="active-item">
-                <span class="ml-3">{{ $t(item.name) }}</span>
+                          active-class="active-item"
+                          target="_blank">
+                <div class="ml-3">{{ $t(item.name) }}</div>
               </b-nav-item>
               <b-nav-item v-else :to="item.route"
                           link-classes="navi nav-btn"
                           active
-                          active-class="active-item">
-                <span class="ml-3">{{ $t(item.name) }}</span>
+                          active-class="active-item"
+                          @click="closeSidebar()">
+                <div class="ml-3">{{ $t(item.name) }}</div>
               </b-nav-item>
             </b-nav>
           </nav>

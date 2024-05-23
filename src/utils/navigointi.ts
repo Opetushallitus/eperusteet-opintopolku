@@ -1,18 +1,18 @@
 import _ from 'lodash';
 import {
-  ammatilliset, digitaalinenOsaaminen,
-  kotoutumiskoulutus, muuKoulutus,
+  ammatilliset, digitaalinenOsaaminen, esiJaPerusaste,
+  kotoutumiskoulutus, lukioJaTaide, muuKoulutus,
   tutkintoonvalmentava,
   vapaasivistystyo,
-  yleissivistavat,
 } from '@shared/utils/perusteet';
 
 export function koulutustyyppiLinks() {
   return _.chain([
-    yleissivistavat(),
-    ammatilliset(),
-    vapaasivistystyo(),
+    esiJaPerusaste(),
     tutkintoonvalmentava(),
+    ammatilliset(),
+    lukioJaTaide(),
+    vapaasivistystyo(),
     kotoutumiskoulutus(),
     [
       {
@@ -26,19 +26,19 @@ export function koulutustyyppiLinks() {
 
 export function osaaminenJaMaarayksetLinks(id) {
   return _.chain([
-    digitaalinenOsaaminen(id),
-    {
-      name: 'kansalliset-perustaitojen-osaamismerkit',
-      route: {
-        name: 'osaamismerkit',
-      },
-    },
     {
       name: 'opetushallituksen-maaraykset',
       route: {
         name: 'maaraykset',
       },
     },
+    {
+      name: 'kansalliset-perustaitojen-osaamismerkit',
+      route: {
+        name: 'osaamismerkit',
+      },
+    },
+    digitaalinenOsaaminen(id),
   ]).flatMap()
     .value();
 }
