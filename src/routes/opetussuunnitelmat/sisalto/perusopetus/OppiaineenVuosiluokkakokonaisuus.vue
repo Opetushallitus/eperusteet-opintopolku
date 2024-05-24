@@ -70,6 +70,14 @@
       <template v-if="oppiaineenVuosiluokkakokonaisuus.tehtava && oppiaineenVuosiluokkakokonaisuus.tehtava.teksti">
         <hr class="mt-5 mb-5" />
         <h3>{{$t('valinnaisen-tehtava')}}</h3>
+
+        <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
+          v-if="oppiaineenPohjanVuosiluokkakokonaisuus && oppiaineenPohjanVuosiluokkakokonaisuus.tehtava && oppiaineenPohjanVuosiluokkakokonaisuus.tehtava.teksti">
+          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tehtava.teksti)"></span>
+        </ep-collapse>
+
+        <h4>{{ $t('paikallinen-teksti') }}</h4>
         <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
       </template>
 
@@ -82,24 +90,56 @@
       <template v-if="oppiaineenVuosiluokkakokonaisuus.tyotavat && oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti">
         <hr class="mt-5 mb-5" />
         <h3>{{$t('oppiaine-tyotavat')}}</h3>
+
+        <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
+          v-if="oppiaineenPohjanVuosiluokkakokonaisuus && oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat && oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat.teksti">
+          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat.teksti)"></span>
+        </ep-collapse>
+
+        <h4>{{ $t('paikallinen-teksti') }}</h4>
         <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti)" :kuvat="kuvat" :termit="termit"/>
       </template>
 
       <template v-if="oppiaineenVuosiluokkakokonaisuus.ohjaus && oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti">
         <hr class="mt-5 mb-5" />
         <h3>{{$t('oppiaine-ohjaus')}}</h3>
+
+        <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
+          v-if="oppiaineenPohjanVuosiluokkakokonaisuus && oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus && oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus.teksti">
+          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus.teksti)"></span>
+        </ep-collapse>
+
+        <h4>{{ $t('paikallinen-teksti') }}</h4>
         <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti)" :kuvat="kuvat" :termit="termit"/>
       </template>
 
       <template v-if="oppiaineenVuosiluokkakokonaisuus.arviointi && oppiaineenVuosiluokkakokonaisuus.arviointi.teksti">
         <hr class="mt-5 mb-5" />
         <h3>{{$t('oppiaine-arviointi')}}</h3>
+
+        <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
+          v-if="oppiaineenPohjanVuosiluokkakokonaisuus && oppiaineenPohjanVuosiluokkakokonaisuus.arviointi && oppiaineenPohjanVuosiluokkakokonaisuus.arviointi.teksti">
+          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.arviointi.teksti)"></span>
+        </ep-collapse>
+
+        <h4>{{ $t('paikallinen-teksti') }}</h4>
         <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
       </template>
 
       <template v-if="oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet && oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti">
         <hr class="mt-5 mb-5" />
         <h3>{{$t('oppiaine-tavoitteista-johdetut-oppimisen-tavoitteet')}}</h3>
+
+        <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
+          v-if="oppiaineenPohjanVuosiluokkakokonaisuus && oppiaineenPohjanVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet && oppiaineenPohjanVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti">
+          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)"></span>
+        </ep-collapse>
+
+        <h4>{{ $t('paikallinen-teksti') }}</h4>
         <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)" :kuvat="kuvat" :termit="termit"/>
       </template>
 

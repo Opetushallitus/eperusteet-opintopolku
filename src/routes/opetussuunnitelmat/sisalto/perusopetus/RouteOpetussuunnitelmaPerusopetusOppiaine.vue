@@ -5,7 +5,13 @@
       <h2>{{$kaanna(oppiaine.nimi)}}</h2>
 
       <template v-if="perusteOppiaine">
-        <ep-peruste-content :naytaSisaltoTyhjana="false" :perusteObject="perusteOppiaine.tehtava" :object="oppiaine.tehtava" :kuvat="kuvat" :termit="termit"/>
+        <ep-peruste-content
+        :naytaSisaltoTyhjana="false"
+          :perusteObject="perusteOppiaine.tehtava"
+          :pohjaObject="pohjanOppiaine.tehtava"
+          :object="oppiaine.tehtava"
+          :kuvat="kuvat"
+          :termit="termit"/>
 
         <template v-if="perusteOppiaineVapaatTekstit">
           <div v-for="(vapaaTeksti, index) in perusteOppiaineVapaatTekstit" :key="'vapaateksti'+index" class="mt-5">
@@ -76,16 +82,36 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
     return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.oppiaineId });
   }
 
+  get pohjanOppiaine() {
+    return this.oppiaine.pohjanOppiaine ?? {};
+  }
+
   get perusteOppiaine() {
     return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: this.oppiaine.tunniste });
   }
 
   get oppiaineenVuosiluokkakokonaisuudetSorted() {
-    return _.sortBy(this.oppiaineenVuosiluokkakokonaisuudet, ovlk => this.$kaanna(ovlk.vuosiluokkakokonaisuus.nimi));
+    return _.chain(this.oppiaineenVuosiluokkakokonaisuudet)
+      .map(ovlk => {
+        return {
+          ...ovlk,
+          oppiaineenPohjanVuosiluokkakokonaisuus: _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, opvlk => opvlk._vuosiluokkakokonaisuus === ovlk.vuosiluokkakokonaisuus._tunniste),
+        };
+      })
+      .sortBy(ovlk => this.$kaanna(ovlk.vuosiluokkakokonaisuus.nimi))
+      .value();
   }
 
   get oppiaineenVuosiluokkakokonaisuus() {
-    return _.find(this.oppiaineenVuosiluokkakokonaisuudet, ovlk => _.toNumber(ovlk.vuosiluokkakokonaisuus.id) === _.toNumber(this.vlkId));
+    return _.chain(this.oppiaineenVuosiluokkakokonaisuudet)
+      .map(ovlk => {
+        return {
+          ...ovlk,
+          oppiaineenPohjanVuosiluokkakokonaisuus: _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, opvlk => opvlk._vuosiluokkakokonaisuus === ovlk.vuosiluokkakokonaisuus._tunniste),
+        };
+      })
+      .find(ovlk => _.toNumber(ovlk.vuosiluokkakokonaisuus.id) === _.toNumber(this.vlkId))
+      .value();
   }
 
   get opetussuunnitelmanVuosiluokkakokonaisuudet() {
