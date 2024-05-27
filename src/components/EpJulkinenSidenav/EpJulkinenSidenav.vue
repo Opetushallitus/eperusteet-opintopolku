@@ -13,7 +13,7 @@
     </div>
     <div class="d-inline-flex ml-auto">
       <b-navbar-nav :aria-label="$t('kielivalinta')">
-        <b-nav-item-dropdown right>
+        <b-nav-item-dropdown class="kielivalikko" right>
           <template slot="button-content">
             <EpMaterialIcon>language</EpMaterialIcon>
             <span class="ml-2 dropdown-text mr-2">{{ $t(sisaltoKieli) }}</span>
@@ -292,5 +292,9 @@ export default class EpJulkinenSidenav extends Vue {
   @media (max-width: 400px) {
     display: none;
   }
+}
+
+.kielivalikko {
+  z-index: 2000;
 }
 </style>
