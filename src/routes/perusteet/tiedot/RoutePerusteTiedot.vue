@@ -43,7 +43,7 @@
       </div>
       <div class="col-md-12" v-if="hasMaarayskirje">
         <ep-form-content name="maarayskirje" headerType="h3" headerClass="h6">
-          <EpPdfLink :url="maarayskirje.url">{{ $kaanna(maarayskirje.nimi) }}</EpPdfLink>
+          <EpPdfLink :url="maarayskirje.url">{{ $kaanna(peruste.nimi) }}</EpPdfLink>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasMuutosmaaraykset">

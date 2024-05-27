@@ -287,4 +287,10 @@ export default class EpJulkinenSidenav extends Vue {
   color: white;
   background-color: $oph-green;;
 }
+
+.dropdown-text {
+  @media (max-width: 400px) {
+    display: none;
+  }
+}
 </style>
