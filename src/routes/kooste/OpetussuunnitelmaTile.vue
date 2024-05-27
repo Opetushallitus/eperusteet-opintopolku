@@ -122,7 +122,7 @@ export default class OpetussuunnitelmaTile extends Vue {
   }
 
   .nimi {
-    padding: 13px 13px;
+    padding: 13px 13px 13px 0;
     color: #212529;
 
     .ops {
