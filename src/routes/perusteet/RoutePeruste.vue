@@ -14,9 +14,7 @@
     </template>
   </ep-header>
 
-  <div>
-    <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle"/>
-  </div>
+  <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle" :julkaisut="julkaisut"/>
 
   <div class="container mt-4">
     <div class="lower">
@@ -90,7 +88,6 @@ import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPr
 import EpNotificationBar from '@/components/EpNotificationBar/EpNotificationBar.vue';
 import EpPerusteHaku from '@/components/EpPerusteHaku.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
@@ -189,10 +186,6 @@ export default class RoutePeruste extends Vue {
     }
   }
 
-  get perusteEsikatselussa() {
-    return this.perusteDataStore.projektitila !== _.toLower(PerusteprojektiDtoTilaEnum.JULKAISTU) || _.has(this.$route.query, 'esikatselu');
-  }
-
   @ProvideReactive('linkkiHandler')
   get linkkiHandler(): ILinkkiHandler {
     return {
@@ -218,9 +211,8 @@ export default class RoutePeruste extends Vue {
     return this.$route.name;
   }
 
-  get julkaisuPvm() {
-    let julkaisu = this.perusteDataStore.julkaisut?.find(julkaisu => julkaisu.revision === _.toNumber(this.$route.params?.revision));
-    return julkaisu ? julkaisu.luotu : null;
+  get julkaisut() {
+    return this.perusteDataStore.julkaisut;
   }
 
   get ensimainenNavi() {
