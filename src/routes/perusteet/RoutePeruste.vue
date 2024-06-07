@@ -21,6 +21,15 @@
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar :scroll-enabled="true">
         <template slot="bar">
+
+          <EpOpsAiChat
+            v-if="dokumentti"
+            class="opsai mt-2"
+            :topic="$kaanna(peruste.nimi)"
+            :sourceId="perusteId"
+            sourceType="peruste"
+            :revision="revision"/>
+
           <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
           <div class="sidebar" v-if="haku">
             <div class="search">
@@ -93,6 +102,7 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import EpOpsAiChat from '@/components/EpOpsAiChat/EpOpsAiChat.vue';
 
 @Component({
   components: {
@@ -105,6 +115,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpNotificationBar,
     EpPerusteHaku,
     EpSearch,
+    EpOpsAiChat,
   },
   directives: {
     Sticky,
@@ -125,6 +136,10 @@ export default class RoutePeruste extends Vue {
   private query = '';
   private tekstihaku = '';
   private haku = false;
+
+  async mounted() {
+    await this.perusteDataStore.getDokumentit();
+  }
 
   get sidenav() {
     return this.perusteDataStore.sidenav;
@@ -243,6 +258,22 @@ export default class RoutePeruste extends Vue {
       input.focus();
       input.blur();
     }
+  }
+
+  get perusteId() {
+    return this.$route.params.perusteId;
+  }
+
+  get dokumentti() {
+    return this.perusteDataStore.dokumentti;
+  }
+
+  get revision() {
+    if (this.$route.params.revision) {
+      return _.toNumber(this.$route.params.revision);
+    }
+
+    return _.maxBy(this.perusteDataStore.julkaisut, 'revision')?.revision;
   }
 }
 </script>

@@ -262,7 +262,6 @@ export default class RoutePerusteTiedot extends Vue {
   async mounted() {
     this.handleMaarayskirje();
     this.perusteDataStore.getKorvaavatPerusteet();
-    this.perusteDataStore.getDokumentit();
     this.isLoading = false;
   }
 
@@ -431,9 +430,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    if (this.isOpas || isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi)) {
-      return this.perusteDataStore.dokumentti;
-    }
+    return this.perusteDataStore.dokumentti;
   }
 
   get dokumenttiKielistykset() {
