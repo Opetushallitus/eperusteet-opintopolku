@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { toRaw } from 'vue';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime';
@@ -13,6 +14,8 @@ import { YlopsNavigationNodeDto,
   OpetussuunnitelmatJulkiset,
   OpetussuunnitelmaExportDto,
   DokumenttiDtoTilaEnum,
+  Julkaisut,
+  OpetussuunnitelmanJulkaisuDto,
 } from '@shared/api/ylops';
 
 import { Kielet } from '@shared/stores/kieli';
@@ -23,7 +26,7 @@ import {
   Perusteet,
   PerusteKaikkiDto,
   Termit,
-  Julkaisut,
+  Julkaisut as PerusteJulkaisut,
 } from '@shared/api/eperusteet';
 import {
   buildNavigation,
@@ -57,6 +60,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public termit: object[] | null = null;
   @State() public kuvat: object[] | null = null;
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
+  @State() public julkaisut: any[] = [];
 
   public static async create(opetussuunnitelmaId: number, revision: number | undefined = undefined) {
     const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId, revision);
@@ -87,7 +91,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
 
     if (this.opetussuunnitelma?.peruste) {
-      const perusteenJulkaisut = (await Julkaisut.getKaikkiJulkaisut(this.opetussuunnitelma.peruste.id!)).data;
+      const perusteenJulkaisut = (await PerusteJulkaisut.getKaikkiJulkaisut(this.opetussuunnitelma.peruste.id!)).data;
       const maxRev = _.max(_.map(perusteenJulkaisut, 'revision'));
       const rev = _.chain(perusteenJulkaisut)
         .filter(julkaisu => julkaisu.luotu! >= this.opetussuunnitelma!.peruste!.globalVersion?.aikaleima!)
@@ -145,6 +149,10 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       kuva,
       src: baseURL + LiitetiedostotParam.getLiitetiedosto(this.opetussuunnitelmaId, this.getLiiteFilename(kuva)).url,
     }));
+  }
+
+  async fetchJulkaisut() {
+    this.julkaisut = (await Julkaisut.getJulkaisutKaikki(this.opetussuunnitelmaId!)).data;
   }
 
   private getLiiteFilename(liite) {
@@ -352,7 +360,9 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   public readonly current!: NavigationNode | null;
 
   public async getDokumentti() {
-    this.dokumentti = null;
+    if (!this.opetussuunnitelma) {
+      return;
+    }
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
 
     if (this.esikatselu) {

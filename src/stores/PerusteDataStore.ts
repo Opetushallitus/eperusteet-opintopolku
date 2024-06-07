@@ -18,6 +18,7 @@ import {
   DokumenttiDtoTilaEnum,
   Maaraykset,
   MaaraysDto,
+  PerusteKaikkiDtoTyyppiEnum,
 } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
@@ -30,9 +31,8 @@ import {
 
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
-import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio, isYleissivistavaKoulutustyyppi } from '@shared/utils/perusteet';
+import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku, isPerusteVanhaLukio, isYleissivistavaKoulutustyyppi } from '@shared/utils/perusteet';
 import { deepFind } from '@shared/utils/helpers';
-import { isAmmatillinenKoulutustyyppi } from '../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 @Store
 export class PerusteDataStore {
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
@@ -246,7 +246,7 @@ export class PerusteDataStore {
             dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
           }
 
-          if (dokumenttiId) {
+          if (dokumenttiId && this.isDokumenttiSallittu()) {
             this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
           }
         }
@@ -257,6 +257,10 @@ export class PerusteDataStore {
       this.dokumentti = '';
     }
   };
+
+  private isDokumenttiSallittu() {
+    return this.peruste?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.OPAS) || isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi);
+  }
 
   private async getLiite(lang: string) {
     try {
