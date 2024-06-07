@@ -88,15 +88,6 @@ export default class EpToteutussuunnitelmaTiedot extends Vue {
   @Prop({ required: true })
   private store!: ToteutussuunnitelmaDataStore | null;
 
-  async mounted() {
-    this.kieliChanged();
-  }
-
-  @Watch('kieli')
-  async kieliChanged() {
-    await this.store!.getDokumenttiTila();
-  }
-
   get toteutussuunnitelma() {
     return this.store!.opetussuunnitelma;
   }
