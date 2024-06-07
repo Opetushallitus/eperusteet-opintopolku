@@ -431,9 +431,7 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get dokumentti() {
-    if (this.isOpas || isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi)) {
-      return this.perusteDataStore.dokumentti;
-    }
+    return this.perusteDataStore.dokumentti;
   }
 
   get dokumenttiKielistykset() {

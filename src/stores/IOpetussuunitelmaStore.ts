@@ -12,4 +12,5 @@ export interface IOpetussuunnitelmaStore {
   sidenavLoading: boolean;
   updateRoute: (options) => any;
   updateFilter: ((filter: NavigationFilter) => void) & Cancelable;
+  dokumentit: { [key: string]: string; };
 };

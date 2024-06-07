@@ -96,6 +96,15 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   })
   public readonly dokumenttiUrl!: string;
 
+  @Getter((state, getters) => {
+    if (getters.dokumenttiUrl) {
+      return {
+        [Kielet.getSisaltoKieli.value]: getters.dokumenttiUrl,
+      };
+    }
+  })
+  public readonly dokumentit!: { [key: string]: string; };
+
   public async getDokumenttiTila() {
     try {
       if (this.opetussuunnitelma) {

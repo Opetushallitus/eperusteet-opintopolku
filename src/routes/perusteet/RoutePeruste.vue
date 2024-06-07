@@ -23,6 +23,14 @@
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar :scroll-enabled="true">
         <template slot="bar">
+
+          <EpOpsAiChat
+            v-if="hasDokumentti"
+            class="opsai mt-2"
+            :topic="$kaanna(peruste.nimi)"
+            :sourceId="perusteId"
+            sourceType="peruste"/>
+
           <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
           <div class="sidebar" v-if="haku">
             <div class="search">
@@ -95,6 +103,7 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import EpOpsAiChat from '@/components/EpOpsAiChat/EpOpsAiChat.vue';
 
 @Component({
   components: {
@@ -107,6 +116,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpNotificationBar,
     EpPerusteHaku,
     EpSearch,
+    EpOpsAiChat,
   },
   directives: {
     Sticky,
@@ -246,6 +256,14 @@ export default class RoutePeruste extends Vue {
       input.blur();
     }
   }
+
+  get perusteId() {
+    return this.$route.params.perusteId;
+  }
+
+  get hasDokumentti() {
+    return !!this.perusteDataStore.dokumentti;
+  }
 }
 </script>
 
@@ -257,6 +275,15 @@ export default class RoutePeruste extends Vue {
     font-weight: bold;
     font-size: small;
   }
+}
+
+.opsai {
+  padding: $sidenav-padding;
+  margin: $sidenav-padding;
+  background-color: #0033cc;
+  color: $white;
+  border-radius: 0.5rem;
+  text-align: center;
 }
 
 .sidebar {

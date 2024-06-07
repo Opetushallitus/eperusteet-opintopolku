@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { toRaw } from 'vue';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
 import mime from 'mime-types';
@@ -46,7 +47,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public esikatselu: boolean | undefined = undefined;
   @State() public revision: number | undefined = undefined;
   @State() public navigation: YlopsNavigationNodeDto | null = null;
-  @State() public dokumentit: any = {};
+  @State() public dokumentit: any | null = null;
   @State() public currentRoute: Location | null = null;
   @State() public sidenavFilter: NavigationFilter = {
     label: '',
@@ -348,6 +349,11 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   })
   public readonly current!: NavigationNode | null;
 
+  @Getter((state, getters) => {
+    return state.dokumentit;
+  })
+  public readonly dokumentti!: boolean;
+
   public async getDokumentit() {
     if (!this.opetussuunnitelma) {
       return;
@@ -368,7 +374,9 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   private asetaKielenDokumentti(dokumenttiId) {
     if (dokumenttiId) {
-      this.dokumentit[Kielet.getSisaltoKieli.value] = baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url;
+      this.dokumentit = {
+        [Kielet.getSisaltoKieli.value]: baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url,
+      };
     }
   }
 

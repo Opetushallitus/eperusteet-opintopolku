@@ -8,6 +8,13 @@
       <div class="diaarinumero">
         {{ diaariNumero }}
       </div>
+
+      <EpOpsAiChat
+        v-if="hasDokumentti"
+        class="mt-2"
+        :topic="$kaanna(opetussuunnitelma.nimi)"
+        :sourceId="opsAiSourceId"
+        :sourceType="opsAiSourceType"/>
     </template>
   </ep-header>
 
@@ -50,6 +57,7 @@ import * as _ from 'lodash';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import EpOpsAiChat from '@/components/EpOpsAiChat/EpOpsAiChat.vue';
 
 @Component({
   components: {
@@ -58,6 +66,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpSidebar,
     EpPreviousNextNavigation,
     EpNotificationBar,
+    EpOpsAiChat,
   },
   inject: [],
 })
@@ -132,6 +141,20 @@ export default class RouteOpetussuunnitelma extends Vue {
       },
     } as ILinkkiHandler;
   };
+
+  get opsAiSourceType() {
+    return this.$route.params.toteutussuunnitelmaId ? 'amosaa' : 'ylops';
+  }
+
+  get opsAiSourceId() {
+    return this.$route.params.toteutussuunnitelmaId || this.$route.params.opetussuunnitelmaId;
+  }
+
+  get hasDokumentti() {
+    if (this.opetussuunnitelmaDataStore.dokumentit) {
+      return !!this.opetussuunnitelmaDataStore.dokumentit[Kielet.getSisaltoKieli.value];
+    }
+  }
 }
 </script>
 
