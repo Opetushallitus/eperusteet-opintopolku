@@ -12855,10 +12855,10 @@ vue-loading-overlay@^3.2.0:
   resolved "https://registry.yarnpkg.com/vue-loading-overlay/-/vue-loading-overlay-3.4.3.tgz#ea14a0cb0d94ac5c91e45f90c21da6233b3cf1b5"
   integrity sha512-Q4+RNnI6+szylJ98Abnp9CUDagKphZMt7okznGu1m7tidZX5b9u+a+De6uktWa5WULu/as+IsrWVR8lpmbDDOA==
 
-vue-matomo@^3.13.0-2:
-  version "3.13.0-4"
-  resolved "https://registry.yarnpkg.com/vue-matomo/-/vue-matomo-3.13.0-4.tgz#413928de681407a9b3dcab97a6c1eaa6f142b6c3"
-  integrity sha512-RInrx3Slyy7/5PbMVMVZGFIzVE99f7tYJG+jEbVtw7XJLmi5Aj4rFVVPUWgYL/fBrPxqLDlhV7O4S4+2NGNnPg==
+vue-matomo@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/vue-matomo/-/vue-matomo-4.2.0.tgz#d65e369e4ead1d95ef790bef3627512cac3d25e9"
+  integrity sha512-m5hCw7LH3wPDcERaF4sp/ojR9sEx7Rl8TpOyH/4jjQxMF2DuY/q5pO+i9o5Dx+BXLSa9+IQ0qhAbWYRyESQXmA==
 
 vue-meta@^2.3.2:
   version "2.4.0"

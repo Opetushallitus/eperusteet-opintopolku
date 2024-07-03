@@ -54,16 +54,15 @@ Vue.use(VueScrollTo, {
   duration: 1000,
 });
 
-if (isProduction()) {
-  const siteDomain = document.domain;
-  let siteId = 2;
-  if (siteDomain === 'eperusteet.opintopolku.fi') {
-    siteId = 11;
-  }
+const matomoSiteIds = {
+  'eperusteet.opintopolku.fi': 11,
+  'eperusteet.testiopintopolku.fi': 1,
+};
 
+if (isProduction() && matomoSiteIds[window.location.hostname]) {
   Vue.use(VueMatomo, {
-    host: 'https://analytiikka.opintopolku.fi/piwik',
-    siteId: siteId,
+    host: 'https://analytiikka.opintopolku.fi/matomo',
+    siteId: matomoSiteIds[window.location.hostname],
     router: router,
   });
 }
