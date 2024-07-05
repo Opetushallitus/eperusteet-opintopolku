@@ -93,7 +93,7 @@ export async function tiedoteQuery(query: TiedoteQuery = {
 
 export async function perusteetQuery(query: PerusteQuery = {
 }, options?: any) {
-  const response = await Api.get('/perusteet', {
+  const response = await Api.get('/api/perusteet', {
     params: query,
   });
   return response.data;
