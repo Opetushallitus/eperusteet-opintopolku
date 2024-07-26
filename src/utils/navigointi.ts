@@ -5,15 +5,11 @@ import {
   tutkintoonvalmentava,
   vapaasivistystyo,
 } from '@shared/utils/perusteet';
+import { Kieli } from '@shared/tyypit';
 
-export function koulutustyyppiLinks() {
+export function allKoulutustyyppiLinks(kieli) {
   return _.chain([
-    esiJaPerusaste(),
-    tutkintoonvalmentava(),
-    ammatilliset(),
-    lukioJaTaide(),
-    vapaasivistystyo(),
-    kotoutumiskoulutus(),
+    Kieli.en === kieli ? [] : koulutustyyppiLinks(),
     [
       {
         ..._.first(muuKoulutus()),
@@ -24,8 +20,28 @@ export function koulutustyyppiLinks() {
     .value();
 }
 
-export function osaaminenJaMaarayksetLinks(id) {
+export function koulutustyyppiLinks() {
   return _.chain([
+    esiJaPerusaste(),
+    tutkintoonvalmentava(),
+    ammatilliset(),
+    lukioJaTaide(),
+    vapaasivistystyo(),
+    kotoutumiskoulutus(),
+  ]).flatMap()
+    .value();
+}
+
+export function osaaminenJaMaarayksetLinks(id, kieli) {
+  return _.chain([
+    Kieli.en === kieli ? [] : maarayksetJaMerkitLinks(),
+    digitaalinenOsaaminen(id),
+  ]).flatMap()
+    .value();
+}
+
+export function maarayksetJaMerkitLinks() {
+  return [
     {
       name: 'opetushallituksen-maaraykset',
       route: {
@@ -38,9 +54,7 @@ export function osaaminenJaMaarayksetLinks(id) {
         name: 'osaamismerkit',
       },
     },
-    digitaalinenOsaaminen(id),
-  ]).flatMap()
-    .value();
+  ];
 }
 
 export function otherLinks() {

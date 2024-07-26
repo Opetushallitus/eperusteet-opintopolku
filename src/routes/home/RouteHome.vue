@@ -90,7 +90,7 @@ import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
-import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
+import { allKoulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
 
@@ -171,11 +171,11 @@ export default class RouteHome extends Vue {
   }
 
   get koulutustyyppiItems() {
-    return koulutustyyppiLinks();
+    return allKoulutustyyppiLinks(this.sisaltoKieli);
   }
 
   get otherItems() {
-    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id);
+    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id, this.sisaltoKieli);
   }
 
   get tietoapalvelusta() {

@@ -102,7 +102,7 @@ import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import Sticky from 'vue-sticky-directive';
-import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
+import { allKoulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
 import { RawLocation, VueRouter } from 'vue-router/types/router';
 import { Route } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
@@ -128,11 +128,11 @@ export default class EpJulkinenSidenav extends Vue {
   private active: boolean = false;
 
   get koulutustyyppiItems() {
-    return koulutustyyppiLinks();
+    return allKoulutustyyppiLinks(this.sisaltoKieli);
   }
 
   get otherItems() {
-    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id);
+    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id, this.sisaltoKieli);
   }
 
   get muutLinkit() {
