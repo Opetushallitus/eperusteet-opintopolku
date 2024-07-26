@@ -74,7 +74,7 @@
             <div class="d-flex" v-else>
               <template v-if="message.role ==='user'">
                 <EpMaterialIcon outlined class="mr-1">person</EpMaterialIcon>
-                <strong>{{$t('sinä')}}</strong>
+                <strong>{{$t('sina')}}</strong>
               </template>
               <template v-else>
                 <EpMaterialIcon outlined class="mr-1">smart_toy</EpMaterialIcon>
