@@ -1,4 +1,4 @@
-import { ChatApi, Message, Thread, Run, FileApi, Assistant, AssistantApi, Api, ModelApi } from '@shared/api/ai';
+import { ChatApi, Message, Thread, Run, FileApi, Assistant, AssistantApi, Api, ModelApi, HistoryApi } from '@shared/api/ai';
 import { computed, reactive } from '@vue/composition-api';
 import { Kielet } from '@shared/stores/kieli';
 import * as _ from 'lodash';
@@ -104,6 +104,10 @@ export class OpsAiStore {
       }
 
       await this.getMessages();
+
+      if (this.state.currentRun?.status === 'completed') {
+        await HistoryApi.addHistory(this.state.messages);
+      }
     }
     catch (e) {
       this.markRunErrorronous();
