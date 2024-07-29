@@ -114,7 +114,7 @@ export default class RouteUutinen extends Vue {
   }
 
   get perusteet() {
-    return _.filter(this.tiedoteStore.tiedote?.perusteet, peruste => _.includes(this.julkaistutKoulutustyypit, peruste.koulutustyyppi));
+    return _.filter(this.tiedoteStore.tiedote?.perusteet, peruste => _.includes(this.julkaistutKoulutustyypit, peruste.koulutustyyppi as any));
   }
 
   get osaamisalojenPerusteet() {

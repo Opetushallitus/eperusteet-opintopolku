@@ -44,6 +44,7 @@
             <span>{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</span>
           </div>
           <nav class="mb-5">
+            <EpSpinner v-if="!koulutustyyppiItems" />
             <b-nav vertical v-for="(item, idx1) in koulutustyyppiItems" :key="idx1">
               <b-nav-item :to="item.route"
                           @click="closeSidebar()"
@@ -128,7 +129,9 @@ export default class EpJulkinenSidenav extends Vue {
   private active: boolean = false;
 
   get koulutustyyppiItems() {
-    return koulutustyyppiLinks();
+    if (this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value) {
+      return _.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value, alityyppi)));
+    }
   }
 
   get otherItems() {
