@@ -3,6 +3,7 @@
   <EpJulkinenSidenav
     :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"
     :tietoapalvelustaStore="tietoapalvelustaStore"
+    :osaamismerkitStore="osaamismerkitStore"
     />
   <main role="main">
     <router-view/>
@@ -23,6 +24,7 @@ import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypit
 import { Kielet } from '@shared/stores/kieli';
 import EpJulkinenSidenav from '@/components/EpJulkinenSidenav/EpJulkinenSidenav.vue';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 
 @Component({
   components: {
@@ -40,6 +42,9 @@ export default class Root extends Vue {
 
   @Prop({ required: true })
   private tietoapalvelustaStore!: TietoapalvelustaStore;
+
+  @Prop({ required: true })
+  private osaamismerkitStore!: OsaamismerkitStore;
 
   async mounted() {
     await this.sisaltoKieliChange();

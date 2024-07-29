@@ -4,10 +4,12 @@ import { mock, mocks, stubs } from '@shared/utils/jestutils';
 import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 
 describe('RouteHome', () => {
   const localVue = createLocalVue();
   const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
+  const osaamismerkitStore = mock(OsaamismerkitStore);
 
   const $route = {
     params: {
@@ -28,6 +30,7 @@ describe('RouteHome', () => {
         tiedoteStore,
         julkaistutKoulutustyypitStore,
         tietoapalvelustaStore,
+        osaamismerkitStore,
       },
       stubs: {
         ...stubs,
