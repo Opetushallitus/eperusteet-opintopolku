@@ -37,6 +37,7 @@
       <b-container fluid>
         <section class="section mt-4">
           <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
+          <EpSpinner v-if="!julkaistutKoulutustyypit" />
           <div class="d-md-flex flex-wrap justify-content-start">
             <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3">
               <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
@@ -171,7 +172,9 @@ export default class RouteHome extends Vue {
   }
 
   get koulutustyyppiItems() {
-    return koulutustyyppiLinks();
+    if (this.julkaistutKoulutustyypit) {
+      return _.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi)));
+    }
   }
 
   get otherItems() {

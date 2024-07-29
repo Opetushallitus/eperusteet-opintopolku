@@ -5,7 +5,7 @@
     :tietoapalvelustaStore="tietoapalvelustaStore"
     />
   <main role="main">
-    <router-view v-if="julkaistutKoulutustyypit"/>
+    <router-view/>
   </main>
   <ep-footer />
   <EpFeedbackModal :palauteProvider="palauteStore"/>
