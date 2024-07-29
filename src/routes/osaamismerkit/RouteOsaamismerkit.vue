@@ -12,23 +12,25 @@
         <div class="d-flex flex-lg-row flex-column mb-4">
           <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
             <EpSearch v-model="query.nimi"
-                       :max-width="true"
-                       :sr-placeholder="$t('hae-osaamismerkkeja')"
-                       :placeholder="$t('hae-osaamismerkkeja')"/>
+            :max-width="true"
+            :sr-placeholder="$t('hae-osaamismerkkeja')"
+            :placeholder="$t('hae-osaamismerkkeja')"/>
           </b-form-group>
 
           <b-form-group :label="$t('teema')">
             <EpMultiSelect :is-editing="false"
-                           :options="osaamismerkkiKategoriaOptions"
-                           :placeholder="$t('kaikki')"
-                           class="multiselect"
-                           v-model="kategoria"
-                           :searchable="false"
-                           track-by="value"
-                           label="text">
+            :options="osaamismerkkiKategoriaOptions"
+            :placeholder="$t('kaikki')"
+            class="multiselect"
+            v-model="kategoria"
+            :searchable="false"
+            track-by="value"
+            label="text">
             </EpMultiSelect>
           </b-form-group>
         </div>
+
+        <EpSpinner v-if="!osaamismerkkiKategoriat" />
         <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
                          :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></EpOsaamismerkit>
       </div>
@@ -64,7 +66,6 @@ export default class RouteOsaamismerkit extends Vue {
   private osaamismerkitStore!: OsaamismerkitStore;
 
   private query = this.initQuery();
-  private isLoading = false;
   private kategoria: any | null = null;
 
   async mounted() {
@@ -86,11 +87,9 @@ export default class RouteOsaamismerkit extends Vue {
 
   @Watch('query', { deep: true, immediate: true })
   async onQueryChange(query: OsaamismerkitQuery) {
-    this.isLoading = true;
     await this.osaamismerkitStore.updateOsaamismerkkiQuery({
       ...query,
     });
-    this.isLoading = false;
   }
 
   @Watch('kategoria')
@@ -103,6 +102,10 @@ export default class RouteOsaamismerkit extends Vue {
   }
 
   get osaamismerkkiKategoriat() {
+    if (!this.osaamismerkitStore.kategoriat.value) {
+      return null;
+    }
+
     return _.chain(this.osaamismerkitStore.kategoriat.value)
       .map(kategoria => {
         return {
@@ -123,7 +126,7 @@ export default class RouteOsaamismerkit extends Vue {
         text: this.$t('kaikki'),
         value: null,
       },
-      ...this.osaamismerkkiKategoriat,
+      ...(this.osaamismerkkiKategoriat ? this.osaamismerkkiKategoriat : []),
     ];
   }
 

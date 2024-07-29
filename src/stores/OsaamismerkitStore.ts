@@ -2,6 +2,7 @@ import { Osaamismerkit, OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Debounced } from '@shared/utils/delay';
 import { computed, reactive } from '@vue/composition-api';
 import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
+import { Kielet } from '@shared/stores/kieli';
 
 export class OsaamismerkitStore {
   public state = reactive({
@@ -26,12 +27,13 @@ export class OsaamismerkitStore {
       q.kategoria,
       q.koodit,
       q.poistunut,
+      Kielet.getSisaltoKieli.value,
     )).data as any;
     return res;
   }
 
   public async fetchKategoriat(q: OsaamismerkitQuery) {
     this.state.kategoriat = null;
-    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat(q.poistunut)).data;
+    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat(q.poistunut, Kielet.getSisaltoKieli.value)).data;
   }
 }

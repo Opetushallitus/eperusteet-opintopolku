@@ -7,6 +7,7 @@ import { Kaannos } from '@shared/plugins/kaannos';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 
 describe('Root', () => {
   const localVue = createLocalVue();
@@ -17,6 +18,7 @@ describe('Root', () => {
   const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
   const tietoapalvelustaStore = mock(TietoapalvelustaStore);
   tietoapalvelustaStore.state.tietoapalvelusta = null;
+  const osaamismerkitStore = mock(OsaamismerkitStore);
 
   test('Renders', async () => {
     const wrapper = mount(Root as any, {
@@ -25,6 +27,7 @@ describe('Root', () => {
         palauteStore,
         julkaistutKoulutustyypitStore,
         tietoapalvelustaStore,
+        osaamismerkitStore,
       },
       stubs: {
         ...stubs,

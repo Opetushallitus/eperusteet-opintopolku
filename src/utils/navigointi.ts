@@ -24,24 +24,19 @@ export function koulutustyyppiLinks() {
     .value();
 }
 
-export function osaaminenJaMaarayksetLinks(id) {
-  return _.chain([
-    {
-      name: 'opetushallituksen-maaraykset',
-      route: {
-        name: 'maaraykset',
-      },
-    },
-    {
-      name: 'kansalliset-perustaitojen-osaamismerkit',
-      route: {
-        name: 'osaamismerkit',
-      },
-    },
-    digitaalinenOsaaminen(id),
-  ]).flatMap()
-    .value();
-}
+export const ophMaarayksetRoute = {
+  name: 'opetushallituksen-maaraykset',
+  route: {
+    name: 'maaraykset',
+  },
+};
+
+export const kansallisetOsaamismerkitRoute = {
+  name: 'kansalliset-perustaitojen-osaamismerkit',
+  route: {
+    name: 'osaamismerkit',
+  },
+};
 
 export function otherLinks() {
   return [

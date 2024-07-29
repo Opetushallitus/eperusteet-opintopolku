@@ -191,6 +191,7 @@ export const router = new Router({
       palauteStore,
       julkaistutKoulutustyypitStore,
       tietoapalvelustaStore,
+      osaamismerkitStore,
     },
     children: [
       ...redirects,
@@ -207,6 +208,7 @@ export const router = new Router({
                   tiedoteStore,
                   julkaistutKoulutustyypitStore,
                   tietoapalvelustaStore,
+                  osaamismerkitStore,
                 },
               };
             },
