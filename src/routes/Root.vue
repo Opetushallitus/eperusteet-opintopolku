@@ -6,7 +6,7 @@
     :osaamismerkitStore="osaamismerkitStore"
     />
   <main role="main">
-    <router-view/>
+    <router-view />
   </main>
   <ep-footer />
   <EpFeedbackModal :palauteProvider="palauteStore"/>
@@ -47,8 +47,7 @@ export default class Root extends Vue {
   private osaamismerkitStore!: OsaamismerkitStore;
 
   async mounted() {
-    await this.sisaltoKieliChange();
-    await this.tietoapalvelustaStore.fetch();
+    await Promise.all([this.sisaltoKieliChange(), this.tietoapalvelustaStore.fetch()]);
   }
 
   @Watch('sisaltoKieli')
