@@ -62,3 +62,21 @@ export function otherLinks() {
     },
   ];
 }
+
+export function navigoitavatKoulutustyyppiRyhmat(julkaistutKoulutustyypit: string[] | null) {
+  if (julkaistutKoulutustyypit) {
+    return _.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(julkaistutKoulutustyypit, alityyppi)));
+  }
+}
+
+export function navigoitavatMuutRyhmat(kategoriat, digitaalinenOsaaminenPeruste) {
+  if (!kategoriat || !digitaalinenOsaaminenPeruste) {
+    return null;
+  }
+
+  return [
+    ophMaarayksetRoute,
+    ...(_.size(kategoriat) > 0 ? [kansallisetOsaamismerkitRoute] : [] as any),
+    ...digitaalinenOsaaminen(digitaalinenOsaaminenPeruste?.id),
+  ];
+}
