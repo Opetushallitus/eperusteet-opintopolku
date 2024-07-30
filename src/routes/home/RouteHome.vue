@@ -126,14 +126,12 @@ export default class RouteHome extends Vue {
   private browserStore = new BrowserStore();
 
   async mounted() {
-    await this.fetchAll();
+    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
   }
 
-  async fetchAll() {
-    await Promise.all([
-      this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit),
-      this.osaamismerkitStore.fetchKategoriat({ poistunut: false }),
-    ]);
+  @Watch('julkaistutKoulutustyypit')
+  async julkaistutKoulutustyypitChange() {
+    await this.tiedoteStore.getUusimmat(this.sisaltoKieli, _.map(this.julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat.value, 'koulutustyyppi'));
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -151,7 +149,7 @@ export default class RouteHome extends Vue {
 
   @Watch('sisaltoKieli')
   async sisaltoKieliChange() {
-    await this.fetchAll();
+    await this.mounted();
   }
 
   get sisaltoKieli() {
@@ -185,7 +183,7 @@ export default class RouteHome extends Vue {
   }
 
   get otherItems() {
-    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste?.id);
+    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste);
   }
 
   get tietoapalvelusta() {

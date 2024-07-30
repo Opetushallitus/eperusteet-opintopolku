@@ -77,6 +77,6 @@ export function navigoitavatMuutRyhmat(kategoriat, digitaalinenOsaaminenPeruste)
   return [
     ophMaarayksetRoute,
     ...(_.size(kategoriat) > 0 ? [kansallisetOsaamismerkitRoute] : [] as any),
-    ...digitaalinenOsaaminen(digitaalinenOsaaminenPeruste?.id),
+    ...digitaalinenOsaaminen(digitaalinenOsaaminenPeruste.id),
   ];
 }

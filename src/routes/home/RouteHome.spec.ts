@@ -41,6 +41,14 @@ describe('RouteHome', () => {
       },
     });
 
+    await localVue.nextTick();
+
+    julkaistutKoulutustyypitStore.state.koulutustyyppiLukumaarat = [{ koulutustyyppi: 'koulutust', lukumaara: 1 }];
+    julkaistutKoulutustyypitStore.state.muuLukumaarat = 0;
+    julkaistutKoulutustyypitStore.state.digitaalinenOsaaminen = [];
+
+    await localVue.nextTick();
+
     expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
     expect(wrapper.findAll('.oph-spinner').length).toEqual(1);
 
