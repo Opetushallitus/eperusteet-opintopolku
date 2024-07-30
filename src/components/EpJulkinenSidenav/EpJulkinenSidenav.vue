@@ -59,6 +59,7 @@
             <span>{{ $t('osaaminen-ja-maaraykset') }}</span>
           </div>
           <nav class="mb-5">
+            <EpSpinner v-if="!otherItems" />
             <b-nav vertical v-for="(item, idx2) in otherItems" :key="idx2">
               <b-nav-item :to="item.route"
                           @click="closeSidebar()"
@@ -103,7 +104,7 @@ import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import Sticky from 'vue-sticky-directive';
-import { kansallisetOsaamismerkitRoute, koulutustyyppiLinks, ophMaarayksetRoute, otherLinks } from '@/utils/navigointi';
+import { kansallisetOsaamismerkitRoute, koulutustyyppiLinks, navigoitavatKoulutustyyppiRyhmat, navigoitavatMuutRyhmat, ophMaarayksetRoute, otherLinks } from '@/utils/navigointi';
 import { RawLocation, VueRouter } from 'vue-router/types/router';
 import { Route } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
@@ -134,17 +135,11 @@ export default class EpJulkinenSidenav extends Vue {
   private active: boolean = false;
 
   get koulutustyyppiItems() {
-    if (this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value) {
-      return _.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value, alityyppi)));
-    }
+    return navigoitavatKoulutustyyppiRyhmat(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value as any);
   }
 
   get otherItems() {
-    return [
-      ophMaarayksetRoute,
-      ...(_.size(this.osaamismerkitStore.kategoriat.value) > 0 ? [kansallisetOsaamismerkitRoute] : [] as any),
-      ...digitaalinenOsaaminen(this.digitaalinenOsaaminenPeruste?.id),
-    ];
+    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste?.id);
   }
 
   get muutLinkit() {

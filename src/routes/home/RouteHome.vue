@@ -47,6 +47,7 @@
 
         <section class="section mt-4">
           <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
+          <EpSpinner v-if="!otherItems" />
           <div class="d-md-flex flex-wrap justify-content-start">
             <div v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2">
               <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
@@ -91,7 +92,7 @@ import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
-import { kansallisetOsaamismerkitRoute, koulutustyyppiLinks, ophMaarayksetRoute, otherLinks } from '@/utils/navigointi';
+import { kansallisetOsaamismerkitRoute, navigoitavatKoulutustyyppiRyhmat, ophMaarayksetRoute, otherLinks, navigoitavatMuutRyhmat } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
@@ -129,8 +130,10 @@ export default class RouteHome extends Vue {
   }
 
   async fetchAll() {
-    await this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
-    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
+    await Promise.all([
+      this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit),
+      this.osaamismerkitStore.fetchKategoriat({ poistunut: false }),
+    ]);
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -178,17 +181,11 @@ export default class RouteHome extends Vue {
   }
 
   get koulutustyyppiItems() {
-    if (this.julkaistutKoulutustyypit) {
-      return _.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi)));
-    }
+    return navigoitavatKoulutustyyppiRyhmat(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value as any);
   }
 
   get otherItems() {
-    return [
-      ophMaarayksetRoute,
-      ...(_.size(this.osaamismerkitStore.kategoriat.value) > 0 ? [kansallisetOsaamismerkitRoute] : [] as any),
-      ...digitaalinenOsaaminen(this.digitaalinenOsaaminenPeruste?.id),
-    ];
+    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste?.id);
   }
 
   get tietoapalvelusta() {
