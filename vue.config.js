@@ -4,6 +4,7 @@ const path = require('path');
 const eperusteetService = process.env.EPERUSTEET_SERVICE || 'http://localhost:8080';
 const eperusteetYlopsService = process.env.EPERUSTEET_YLOPS_SERVICE || 'http://localhost:8081';
 const eperusteetAmosaaService = process.env.EPERUSTEET_AMOSAA_SERVICE || 'http://localhost:8082';
+const eperusteetAIService = process.env.EPERUSTEET_AI_SERVICE || 'http://localhost:8084';
 
 if (process.env.EPERUSTEET_SERVICE) {
   console.log('Using eperusteet-service proxy:', process.env.EPERUSTEET_SERVICE);
@@ -26,6 +27,13 @@ else {
   console.log('EPERUSTEET_AMOSAA_SERVICE not defined. Using local eperusteet-amosaa-service.');
 }
 
+if (process.env.EPERUSTEET_AI_SERVICE) {
+  console.log('Using eperusteet-ai-service proxy:', process.env.EPERUSTEET_AI_SERVICE);
+}
+else {
+  console.log('EPERUSTEET_AI_SERVICE not defined. Using local eperusteet-ai-service.');
+}
+
 const proxy = {
   '/eperusteet-service': {
     target: eperusteetService,
@@ -46,6 +54,13 @@ const proxy = {
     secure: !!eperusteetAmosaaService,
     onProxyReq: function(proxyReq, req, res) {
       proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-amosaa');
+    },
+  },
+  '/eperusteet-ai-service': {
+    target: eperusteetAIService,
+    secure: !!eperusteetAIService,
+    onProxyReq: function(proxyReq, req, res) {
+      proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-ai');
     },
   },
 };
