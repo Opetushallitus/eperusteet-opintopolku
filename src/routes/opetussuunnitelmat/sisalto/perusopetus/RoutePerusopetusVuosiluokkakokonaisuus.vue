@@ -44,17 +44,20 @@
 
       <h2 class="mt-5">{{$t('laaja-alaisen-osaamisen-alueet')}}</h2>
 
-      <ep-peruste-content
-        v-for="(lao, index) in laajaalaisetOsaamiset" :key="'lao'+index"
-        otsikko="nimi"
-        teksti="kuvaus"
-        :perusteObject="lao"
-        :object="lao.opetussuunnitelmanLao"
-        :naytaSisaltoTyhjana="false"
-      />
+      <div v-for="(laajaalainen, index) in laajaalaisetOsaamiset" :key="index" class="mb-5">
+        <h3>{{ $kaanna(laajaalainen.nimi) }}</h3>
 
+        <ep-collapse tyyppi="perusteteksti" :border-bottom="false" :border-top="false" :use-padding="false" class="my-3">
+          <template v-slot:header><h4>{{$t('perusteen-teksti')}}</h4></template>
+          <ep-content-viewer :value="$kaanna(laajaalainen.kuvaus)" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao" />
+          <ep-content-viewer :value="$kaanna(perusteenVlkByLaoId[laajaalainen.id].kuvaus)" v-if="perusteenVlkByLaoId[laajaalainen.id] && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao" />
+        </ep-collapse>
+
+        <h4 v-if="laajaalainen.opetussuunnitelmanLao.kuvaus">{{ $t('paikallinen-teksti') }}</h4>
+        <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)"/>
+
+      </div>
     </div>
-
   </div>
 </template>
 
@@ -134,6 +137,15 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
         vlkVapaaTeksti: _.find(this.vuosiluokkakokonaisuus.vapaatTekstit, vlkVt => _.toString(pVlkVt.id) === _.toString(vlkVt.perusteenVapaaTekstiId)) || {},
       };
     });
+  }
+
+  get perusteenVlkByLaoId() {
+    return _.keyBy(_.map(this.perusteenVuosiluokkakokonaisuus.laajaalaisetOsaamiset, lao => {
+      return {
+        ...lao,
+        _laajaalainenOsaaminen: Number(lao._laajaalainenOsaaminen),
+      };
+    }), '_laajaalainenOsaaminen');
   }
 }
 
