@@ -45,11 +45,13 @@
       <h2 class="mt-5">{{$t('laaja-alaisen-osaamisen-alueet')}}</h2>
 
       <div v-for="(laajaalainen, index) in laajaalaisetOsaamiset" :key="index" class="mb-5">
-        <h3>{{ $kaanna(laajaalainen.nimi) }}</h3>
+        <h3 class="mb-3">{{ $kaanna(laajaalainen.nimi) }}</h3>
 
-        <ep-collapse tyyppi="perusteteksti" :border-bottom="false" :border-top="false" :use-padding="false" class="my-3">
+        <ep-collapse tyyppi="perusteteksti" :border-bottom="false" :border-top="false" :use-padding="false" class="mb-4" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao || laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">
           <template v-slot:header><h4>{{$t('perusteen-teksti')}}</h4></template>
           <ep-content-viewer :value="$kaanna(laajaalainen.kuvaus)" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao" />
+
+          <h5 v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">{{$t('laaja-alaisen-osaamisen-alueen-vuosiluokkakokonaisuuden-kuvaus')}}</h5>
           <ep-content-viewer :value="$kaanna(perusteenVlkByLaoId[laajaalainen.id].kuvaus)" v-if="perusteenVlkByLaoId[laajaalainen.id] && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao" />
         </ep-collapse>
 
