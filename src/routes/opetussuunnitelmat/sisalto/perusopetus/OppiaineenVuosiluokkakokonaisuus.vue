@@ -12,6 +12,11 @@
         <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.tehtava" class="mb-3">{{$t('tehtava')}}</h3>
       </ep-peruste-content>
 
+      <template v-if="oppiaineenVuosiluokkakokonaisuus.yleistavoitteet && oppiaineenVuosiluokkakokonaisuus.yleistavoitteet.teksti">
+        <h3 class="mt-5">{{$t('tavoitteet-ja-sisallot')}}</h3>
+        <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.yleistavoitteet.teksti)" :kuvat="kuvat" :termit="termit"/>
+      </template>
+
       <ep-peruste-content
         :naytaSisaltoTyhjana="false"
         :perusteObject="perusteenVuosiluokkakokonaisuus.tyotavat"
@@ -66,6 +71,12 @@
         <hr class="mt-5 mb-5" />
         <h3>{{$t('valinnaisen-tehtava')}}</h3>
         <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
+      </template>
+
+      <template v-if="oppiaineenVuosiluokkakokonaisuus.yleistavoitteet && oppiaineenVuosiluokkakokonaisuus.yleistavoitteet.teksti">
+        <hr class="mt-5 mb-5" />
+        <h3>{{$t('tavoitteet-ja-sisallot')}}</h3>
+        <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.yleistavoitteet.teksti)" :kuvat="kuvat" :termit="termit"/>
       </template>
 
       <template v-if="oppiaineenVuosiluokkakokonaisuus.tyotavat && oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti">
