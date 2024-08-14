@@ -116,7 +116,7 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
         return {
           ...lao,
           opetussuunnitelmanLao: this.vuosiluokanLaot[lao.tunniste!],
-          pohjanLao: this.pohjanVuosilujokanLaot[lao.tunniste!],
+          pohjanLao: this.pohjanVuosiluokanLaot[lao.tunniste!],
         };
       })
       .sortBy(lao => this.$kaanna(lao.nimi))
@@ -137,7 +137,7 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
     return _.keyBy(this.vuosiluokkakokonaisuus.laajaalaisetosaamiset, '_laajaalainenosaaminen');
   }
 
-  get pohjanVuosilujokanLaot() {
+  get pohjanVuosiluokanLaot() {
     return _.keyBy(this.pohjanVuosiluokkakokonaisuus.laajaalaisetosaamiset, '_laajaalainenosaaminen');
   }
 

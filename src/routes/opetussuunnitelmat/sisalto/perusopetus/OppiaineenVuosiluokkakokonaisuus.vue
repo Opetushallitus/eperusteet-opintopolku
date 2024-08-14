@@ -162,7 +162,12 @@
 
       <b-tabs>
         <b-tab v-for="(vuosiluokka,index) in vuosiluokat" :key="'vuosiluokka'+index" :title="$t(vuosiluokka.vuosiluokka)">
-          <oppiaineen-vuosiluokka :oppiaineenVuosiluokka="vuosiluokka" :valinnainen="!perusteenVuosiluokkakokonaisuus" :kuvat="kuvat" :termit="termit"/>
+          <oppiaineen-vuosiluokka
+            :oppiaineenVuosiluokka="vuosiluokka"
+            :valinnainen="!perusteenVuosiluokkakokonaisuus"
+            :pohjaOppiaineenVuosiluokka="pohjanVuosiluokat[vuosiluokka.vuosiluokka]"
+            :kuvat="kuvat"
+            :termit="termit"/>
         </b-tab>
       </b-tabs>
     </template>
@@ -204,6 +209,10 @@ export default class OppiaineenVuosiluokkakokonaisuus extends Vue {
 
   get oppiaineenPohjanVuosiluokkakokonaisuus() {
     return this.tietue.oppiaineenPohjanVuosiluokkakokonaisuus || {};
+  }
+
+  get pohjanVuosiluokat() {
+    return _.keyBy(this.oppiaineenPohjanVuosiluokkakokonaisuus.vuosiluokat, 'vuosiluokka');
   }
 
   get vuosiluokkakokonaisuus() {
