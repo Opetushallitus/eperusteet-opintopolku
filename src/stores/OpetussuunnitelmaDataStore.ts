@@ -66,7 +66,6 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   constructor(opetussuunnitelmaId: number, revision) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
-    this.esikatselu = revision === '0' ? true : undefined;
     this.revision = revision;
   }
 
@@ -96,7 +95,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   async fetchOpetussuunnitelma() {
     this.opetussuunnitelma = null;
     this.opetussuunnitelmaPerusteenId = null;
-    this.opetussuunnitelma = (await OpetussuunnitelmatJulkiset.getOpetussuunnitelmaJulkaistu(this.opetussuunnitelmaId, this.esikatselu)).data;
+    this.opetussuunnitelma = (await OpetussuunnitelmatJulkiset.getOpetussuunnitelmaJulkaistu(this.opetussuunnitelmaId, this.revision)).data;
     this.opetussuunnitelmaPerusteenId = this.opetussuunnitelma.perusteenId ? this.opetussuunnitelma.perusteenId : null;
   }
 
@@ -207,7 +206,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
   async fetchNavigation() {
     this.navigation = null;
-    const navigation = (await Opetussuunnitelmat.getNavigationPublic(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value, this.esikatselu)).data;
+    const navigation = (await Opetussuunnitelmat.getNavigationPublic(this.opetussuunnitelmaId, Kielet.getSisaltoKieli.value, this.revision)).data;
     this.movePaikallisetOppiaineet(navigation);
     this.navigation = navigation;
   }
