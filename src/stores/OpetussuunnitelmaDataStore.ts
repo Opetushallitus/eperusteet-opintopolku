@@ -230,11 +230,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       return null;
     }
     else {
-      const tiedot = buildTiedot('opetussuunnitelmaTiedot', {
-        opetussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
-        ...(state.revision && { revision: state.revision }),
-      });
-      return buildNavigation(state.navigation, tiedot, true, state.revision);
+      return buildNavigation(state.navigation, null, true, state.revision);
     }
   })
   public readonly sidenav!: NavigationNode | null;

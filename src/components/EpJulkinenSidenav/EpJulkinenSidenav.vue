@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar" v-sticky sticky-z-index="600">
+  <div id="navigation-bar" class="navbar" v-sticky sticky-z-index="600">
     <div>
       <b-button v-b-toggle.sidebar-no-header variant="transparent">
         <div class="menu">

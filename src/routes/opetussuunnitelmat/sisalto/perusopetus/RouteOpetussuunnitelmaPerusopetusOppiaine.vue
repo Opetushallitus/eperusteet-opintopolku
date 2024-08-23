@@ -42,6 +42,7 @@ import { UnwrappedOpsOppiaineDtoTyyppiEnum } from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpAlert from '@shared/components/EpAlert/EpAlert.vue';
+import { oppiaineenVuosiluokkakokonaisuudenRakennin } from './vuosiluokka';
 
 @Component({
   components: {
@@ -126,97 +127,32 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
       _.includes(_.map(this.opetussuunnitelmanVuosiluokkakokonaisuudet, 'vuosiluokkakokonaisuus._tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')));
 
     return _.map(oppiaineenVlk, (oppiaineenVuosiluokkakokonaisuus) => {
-      const vuosiluokkakokonaisuus = _.head(_.filter(this.opetussuunnitelmanVuosiluokkakokonaisuudet, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')));
+      const opetussuunnitelmanVuosiluokkakokonaisuus = _.get(_.find(this.opetussuunnitelmanVuosiluokkakokonaisuudet, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')), 'vuosiluokkakokonaisuus');
 
       if (this.oppiaine.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
-        const oppiaineenPerusteenVuosiluokkakokonaisuus = _.find(this.perusteOppiaineVuosiluokkakokonaisuudet, pvlk => pvlk.tunniste === _.get(vuosiluokkakokonaisuus.vuosiluokkakokonaisuus, '_tunniste'));
-        const oppiaineenPohjanVuosiluokkakokonaisuus = _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, ovlk => _.get(ovlk, '_vuosiluokkakokonaisuus') === _.get(vuosiluokkakokonaisuus.vuosiluokkakokonaisuus, '_tunniste'));
+        const perusteenVlk = _.find(this.perusteOppiaineVuosiluokkakokonaisuudet, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
+        const oppiaineenPohjanVuosiluokkakokonaisuus = _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, ovlk => _.get(ovlk, '_vuosiluokkakokonaisuus') === _.get(opetussuunnitelmanVuosiluokkakokonaisuus, '_tunniste'));
 
-        return {
-          vuosiluokkakokonaisuus: _.get(vuosiluokkakokonaisuus, 'vuosiluokkakokonaisuus'),
-          oppiaineenPerusteenVuosiluokkakokonaisuus,
-          oppiaineenVuosiluokkakokonaisuus: {
-            ...oppiaineenVuosiluokkakokonaisuus,
-            vuosiluokat: _.map(oppiaineenVuosiluokkakokonaisuus.vuosiluokat, vuosiluokka => {
-              return {
-                ...vuosiluokka,
-                tavoitteet: this.setVuosiluokanTavoitteet(
-                  this.perusteOppiaine,
-                  this.laajaalaisetOsaamiset,
-                  vuosiluokka,
-                  _.get(vuosiluokkakokonaisuus, 'vuosiluokkakokonaisuus')),
-              };
-            }),
-          },
+        return oppiaineenVuosiluokkakokonaisuudenRakennin(
+          this.oppiaine,
+          this.perusteOppiaine,
+          this.laajaalaisetOsaamiset,
+          oppiaineenVuosiluokkakokonaisuus,
+          opetussuunnitelmanVuosiluokkakokonaisuus,
+          perusteenVlk,
           oppiaineenPohjanVuosiluokkakokonaisuus,
-        };
+        );
       }
       else {
         return {
-          vuosiluokkakokonaisuus: _.get(vuosiluokkakokonaisuus, 'vuosiluokkakokonaisuus'),
+          vuosiluokkakokonaisuus: opetussuunnitelmanVuosiluokkakokonaisuus,
           oppiaineenVuosiluokkakokonaisuus,
           oppiaine: this.oppiaine,
         };
       }
     });
   }
-
-  private setVuosiluokanTavoitteet(perusteenOppiaine: any, laajaalaisetOsaamiset: any, vuosiluokka:any, vuosiluokkakokonaisuus: any) {
-    const perusteenVlk = _.find(this.perusteOppiaineVuosiluokkakokonaisuudet, vlk =>
-      vlk.tunniste === (vuosiluokkakokonaisuus as any)._tunniste);
-    const sisaltoalueetMap = _.keyBy(perusteenVlk.sisaltoalueet, 'id');
-    const laajaalaisetOsaamisetMap = _.keyBy(laajaalaisetOsaamiset, 'id');
-    const vuosiluokanTavoitteet = _.keyBy(vuosiluokka.tavoitteet, 'tunniste');
-    const vuosiluokanSisaltoalueet = _.keyBy(vuosiluokka.sisaltoalueet, 'tunniste');
-    const kohdealueetById = _.keyBy(perusteenOppiaine.kohdealueet, 'id');
-    let kohdealueGlobalIndex = 0;
-
-    return _.chain(perusteenVlk.tavoitteet)
-      .filter(tavoite => _.includes(_.map(vuosiluokka.tavoitteet, 'tunniste'), tavoite.tunniste))
-      .map(tavoite => {
-        return {
-          ...tavoite,
-          sisaltoalueet: _.chain(tavoite.sisaltoalueet)
-            .map((sisaltoalue: string) => sisaltoalueetMap[sisaltoalue])
-            .filter((sisaltoalue:any) => vuosiluokanSisaltoalueet[sisaltoalue.tunniste] && !vuosiluokanSisaltoalueet[sisaltoalue.tunniste].piilotettu)
-            .map((sisaltoalue: any) => {
-              return {
-                ...sisaltoalue,
-                vuosiluokanSisaltoalue: _.chain(_.get(vuosiluokanTavoitteet[(tavoite.tunniste as string)], 'sisaltoalueet'))
-                  .filter(vlSisaltoalue => vlSisaltoalue.sisaltoalueet.tunniste === sisaltoalue.tunniste)
-                  .map(vlSisaltoalue => {
-                    return {
-                      ...vlSisaltoalue,
-                      kaytaOmaaKuvausta: vlSisaltoalue.omaKuvaus !== null,
-                    } as any;
-                  })
-                  .sortBy('id')
-                  .head()
-                  .value(),
-              };
-            })
-            .sortBy([(sisaltoalue: any) => sisaltoalue.nimi[Kielet.getSisaltoKieli.value]])
-            .value(),
-          laajaalaisetosaamiset: _.chain(tavoite.laajattavoitteet)
-            .map((lao: string) => laajaalaisetOsaamisetMap[lao])
-            .sortBy([(lao: any) => {
-              return lao.nimi[Kielet.getSisaltoKieli.value];
-            }])
-            .value(),
-          kohdealueet: _.map(tavoite.kohdealueet, kohdealue => {
-            return {
-              ...kohdealueetById[kohdealue as string],
-              index: kohdealueGlobalIndex++,
-            };
-          }),
-          vuosiluokanTavoite: vuosiluokanTavoitteet[(tavoite.tunniste as string)],
-          hyvanOsaamisenKuvaus: _.find(tavoite.arvioinninkohteet, kohde => kohde.arvosana === 8),
-        };
-      })
-      .value();
-  }
 }
-
 </script>
 
 <style scoped lang="scss">
