@@ -112,12 +112,16 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
 @import '@shared/styles/_variables.scss';
 
 .sidebar {
+
   .search {
-    padding: $sidenav-padding;
+    margin-bottom: 1rem;
   }
 
   .navigation-tree {
     padding: $sidenav-padding;
+    background-color: $ylops-paikallinen-color;
+    border-radius: 0.7rem;
+    padding: 0.8rem;
   }
 }
 

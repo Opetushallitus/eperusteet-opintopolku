@@ -11,11 +11,11 @@
     </template>
   </ep-header>
 
-  <div>
-    <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle"/>
-  </div>
+  <!-- <div> -->
+  <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle"/>
+  <!-- </div> -->
 
-  <div class="container mt-4">
+  <div class="container pt-4">
     <div class="lower">
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar :scroll-enabled="true">
@@ -141,4 +141,9 @@ export default class RouteOpetussuunnitelma extends Vue {
     font-size: small;
   }
 }
+
+::v-deep .sidenav .view{
+  border:0;
+}
+
 </style>

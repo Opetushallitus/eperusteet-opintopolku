@@ -178,7 +178,7 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
 @import '@shared/styles/_variables.scss';
 
 .content {
-  padding: $content-padding;
+  padding: 0 $content-padding;
 
   a {
     word-wrap: break-word;
