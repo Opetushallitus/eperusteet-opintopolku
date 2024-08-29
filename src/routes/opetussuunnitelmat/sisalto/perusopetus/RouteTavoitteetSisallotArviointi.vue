@@ -223,16 +223,19 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
           const perusteOppiaine = this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: oppiaine?.tunniste });
           const oppiaineenVlk = _.find(oppiaine.vuosiluokkakokonaisuudet, vlk => _.find(vlk.vuosiluokat, { vuosiluokka: this.vuosiluokka }));
           const opsVlk = this.findOpetussuunnitelmanVuosiluokkakokonaisuus(oppiaineenVlk);
-          const perusteenVlk = this.findPerusteenVuosiluokkakokonaisuus(this.findPerusteOppiaineenVuosiluokkakokonaisuudet(perusteOppiaine), opsVlk);
+          console.log(perusteOppiaine, opsVlk);
+          const perusteenOppiaineenVlk = this.findPerusteenOppiaineenVuosiluokkakokonaisuus(perusteOppiaine, opsVlk);
           const vlk = _.find(oppiaine.vuosiluokkakokonaisuudet, vlk => _.find(vlk.vuosiluokat, { vuosiluokka: this.vuosiluokka }));
+          const perusteenVuosiluokkakokonaisuus = _.find(this.perusteenVuosiluokkakokonaisuudet, perusteVlk => _.get(perusteVlk, 'tunniste') === _.get(vlk, 'tunniste'));
           const oppiaineenVuosiluokkakokonaisuusDatat = oppiaineenVuosiluokkakokonaisuudenRakennin(
             oppiaine,
             perusteOppiaine,
             this.laajaalaisetOsaamiset,
             vlk,
             opsVlk,
-            perusteenVlk,
+            perusteenOppiaineenVlk,
             null,
+            perusteenVuosiluokkakokonaisuus,
           );
           const vuosiluokat = _.keyBy(_.get(oppiaineenVuosiluokkakokonaisuusDatat, 'oppiaineenVuosiluokkakokonaisuus.vuosiluokat'), 'vuosiluokka');
           return {
@@ -253,8 +256,9 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
         this.laajaalaisetOsaamiset,
         this.oppiaineenVuosiluokkakokonaisuus,
         this.opetussuunnitelmanVuosiluokkakokonaisuus,
-        this.perusteenVuosiluokkakokonaisuus,
+        this.perusteenOppiaineenVuosiluokkakokonaisuus,
         this.oppiaineenPohjanVuosiluokkakokonaisuudet,
+        this.perusteenVuosiluokkakokonaisuus,
       );
       return _.keyBy(_.get(oppiaineenVuosiluokkakokonaisuusPerusteDatoilla, 'oppiaineenVuosiluokkakokonaisuus.vuosiluokat'), 'vuosiluokka');
     }
@@ -304,11 +308,15 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
   }
 
   get perusteenVuosiluokkakokonaisuus() {
-    return this.findPerusteenVuosiluokkakokonaisuus(this.perusteOppiaineVuosiluokkakokonaisuudet, this.opetussuunnitelmanVuosiluokkakokonaisuus);
+    return _.find(this.perusteenVuosiluokkakokonaisuudet, vlk => _.get(vlk, 'tunniste') === _.get(this.oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus'));
   }
 
-  findPerusteenVuosiluokkakokonaisuus(perusteOppiaineVuosiluokkakokonaisuudet, vuosiluokkakokonaisuus) {
-    return _.find(perusteOppiaineVuosiluokkakokonaisuudet, vlk => vlk?.tunniste === (vuosiluokkakokonaisuus as any)?._tunniste);
+  get perusteenOppiaineenVuosiluokkakokonaisuus() {
+    return this.findPerusteenOppiaineenVuosiluokkakokonaisuus(this.perusteOppiaine, this.opetussuunnitelmanVuosiluokkakokonaisuus);
+  }
+
+  findPerusteenOppiaineenVuosiluokkakokonaisuus(perusteOppiaine, vuosiluokkakokonaisuus) {
+    return _.find(this.findPerusteOppiaineenVuosiluokkakokonaisuudet(perusteOppiaine), vlk => vlk?.tunniste === (vuosiluokkakokonaisuus as any)?._tunniste);
   }
 
   get oppiaineenPohjanVuosiluokkakokonaisuus() {

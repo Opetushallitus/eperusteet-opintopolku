@@ -7,13 +7,14 @@ export function oppiaineenVuosiluokkakokonaisuudenRakennin(
   perusteOppiaine,
   laajaalaisetOsaamiset,
   oppiaineenVuosiluokkakokonaisuus,
-  vuosiluokkakokonaisuus,
-  oppiaineenPerusteenVuosiluokkakokonaisuus,
-  oppiaineenPohjanVuosiluokkakokonaisuus) {
+  opetussuunnitelmanVuosiluokkakokonaisuus,
+  perusteenOppiaineenVlk,
+  oppiaineenPohjanVuosiluokkakokonaisuus,
+  perusteenVuosiluokkakokonaisuus) {
   if (oppiaine.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
     return {
-      vuosiluokkakokonaisuus,
-      oppiaineenPerusteenVuosiluokkakokonaisuus,
+      vuosiluokkakokonaisuus: opetussuunnitelmanVuosiluokkakokonaisuus,
+      perusteenOppiaineenVlk,
       oppiaineenVuosiluokkakokonaisuus: {
         ...oppiaineenVuosiluokkakokonaisuus,
         vuosiluokat: _.map(oppiaineenVuosiluokkakokonaisuus?.vuosiluokat, vuosiluokka => {
@@ -23,8 +24,10 @@ export function oppiaineenVuosiluokkakokonaisuudenRakennin(
               perusteOppiaine,
               laajaalaisetOsaamiset,
               vuosiluokka,
-              vuosiluokkakokonaisuus,
-              oppiaineenPerusteenVuosiluokkakokonaisuus),
+              perusteenOppiaineenVlk,
+              perusteenVuosiluokkakokonaisuus,
+              opetussuunnitelmanVuosiluokkakokonaisuus,
+            ),
           };
         }),
       },
@@ -33,22 +36,24 @@ export function oppiaineenVuosiluokkakokonaisuudenRakennin(
   }
   else {
     return {
-      vuosiluokkakokonaisuus,
+      vuosiluokkakokonaisuus: opetussuunnitelmanVuosiluokkakokonaisuus,
       oppiaineenVuosiluokkakokonaisuus,
       oppiaine,
     };
   }
 }
 
-function setVuosiluokanTavoitteet(perusteenOppiaine: any, laajaalaisetOsaamiset: any, vuosiluokka:any, vuosiluokkakokonaisuus: any, perusteOppiaineVuosiluokkakokonaisuus: any) {
-  const sisaltoalueetMap = _.keyBy(perusteOppiaineVuosiluokkakokonaisuus.sisaltoalueet, 'id');
-  const laajaalaisetOsaamisetMap = _.keyBy(laajaalaisetOsaamiset, 'id');
+function setVuosiluokanTavoitteet(perusteenOppiaine: any, laajaalaisetOsaamiset: any, vuosiluokka:any, perusteenOppiaineenVlk: any, perusteenVuosiluokkakokonaisuus: any, opetussuunnitelmanVuosiluokkakokonaisuus: any) {
+  const sisaltoalueetMap = _.keyBy(perusteenOppiaineenVlk.sisaltoalueet, 'id');
+  const laajaalaisetOsaamisetMapById = _.keyBy(laajaalaisetOsaamiset, 'id');
+  const perusteenVlkLaajaalaisetOsaamisetMap = _.keyBy(perusteenVuosiluokkakokonaisuus?.laajaalaisetOsaamiset, '_laajaalainenOsaaminen');
+  const paikallisetLaajaalaisetOsaamisetMap = _.keyBy(opetussuunnitelmanVuosiluokkakokonaisuus?.laajaalaisetosaamiset, '_laajaalainenosaaminen');
   const vuosiluokanTavoitteet = _.keyBy(vuosiluokka.tavoitteet, 'tunniste');
   const vuosiluokanSisaltoalueet = _.keyBy(vuosiluokka.sisaltoalueet, 'tunniste');
   const kohdealueetById = _.keyBy(perusteenOppiaine.kohdealueet, 'id');
   let kohdealueGlobalIndex = 0;
 
-  return _.chain(perusteOppiaineVuosiluokkakokonaisuus.tavoitteet)
+  return _.chain(perusteenOppiaineenVlk.tavoitteet)
     .filter(tavoite => _.includes(_.map(vuosiluokka.tavoitteet, 'tunniste'), tavoite.tunniste))
     .map(tavoite => {
       return {
@@ -75,9 +80,16 @@ function setVuosiluokanTavoitteet(perusteenOppiaine: any, laajaalaisetOsaamiset:
           .sortBy([(sisaltoalue: any) => sisaltoalue.nimi[Kielet.getSisaltoKieli.value]])
           .value(),
         laajaalaisetosaamiset: _.chain(tavoite.laajattavoitteet)
-          .map((lao: string) => laajaalaisetOsaamisetMap[lao])
+          .map((lao: string) => {
+            const perusteenLao = laajaalaisetOsaamisetMapById[lao];
+            return {
+              perusteenLao,
+              perusteenVlkLao: perusteenVlkLaajaalaisetOsaamisetMap[lao],
+              paikallinenLao: paikallisetLaajaalaisetOsaamisetMap[perusteenLao.tunniste],
+            };
+          })
           .sortBy([(lao: any) => {
-            return lao.nimi[Kielet.getSisaltoKieli.value];
+            return lao.perusteenLao.nimi[Kielet.getSisaltoKieli.value];
           }])
           .value(),
         kohdealueet: _.map(tavoite.kohdealueet, kohdealue => {

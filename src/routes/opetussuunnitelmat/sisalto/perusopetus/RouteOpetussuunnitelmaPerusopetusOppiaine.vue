@@ -85,7 +85,7 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
   }
 
   get oppiaineenVuosiluokkakokonaisuus() {
-    return _.head(_.filter(this.oppiaineenVuosiluokkakokonaisuudet, ovlk => _.toNumber(ovlk.vuosiluokkakokonaisuus.id) === _.toNumber(this.vlkId)));
+    return _.find(this.oppiaineenVuosiluokkakokonaisuudet, ovlk => _.toNumber(ovlk.vuosiluokkakokonaisuus.id) === _.toNumber(this.vlkId));
   }
 
   get opetussuunnitelmanVuosiluokkakokonaisuudet() {
@@ -128,9 +128,10 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
 
     return _.map(oppiaineenVlk, (oppiaineenVuosiluokkakokonaisuus) => {
       const opetussuunnitelmanVuosiluokkakokonaisuus = _.get(_.find(this.opetussuunnitelmanVuosiluokkakokonaisuudet, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')), 'vuosiluokkakokonaisuus');
+      const perusteenVuosiluokkakokonaisuus = _.find(this.perusteenVuosiluokkakokonaisuudet, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
 
       if (this.oppiaine.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
-        const perusteenVlk = _.find(this.perusteOppiaineVuosiluokkakokonaisuudet, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
+        const perusteenOppiaineenVlk = _.find(this.perusteOppiaineVuosiluokkakokonaisuudet, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
         const oppiaineenPohjanVuosiluokkakokonaisuus = _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, ovlk => _.get(ovlk, '_vuosiluokkakokonaisuus') === _.get(opetussuunnitelmanVuosiluokkakokonaisuus, '_tunniste'));
 
         return oppiaineenVuosiluokkakokonaisuudenRakennin(
@@ -139,8 +140,9 @@ export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
           this.laajaalaisetOsaamiset,
           oppiaineenVuosiluokkakokonaisuus,
           opetussuunnitelmanVuosiluokkakokonaisuus,
-          perusteenVlk,
+          perusteenOppiaineenVlk,
           oppiaineenPohjanVuosiluokkakokonaisuus,
+          perusteenVuosiluokkakokonaisuus,
         );
       }
       else {

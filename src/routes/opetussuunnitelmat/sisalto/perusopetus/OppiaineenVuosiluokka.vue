@@ -62,9 +62,16 @@
                               :use-padding="false">
 
                     <template v-slot:header>
-                      <h5 class="nimi" v-html="$kaanna(lao.nimi)"></h5>
+                      <h5 class="nimi" v-html="$kaanna(lao.perusteenLao.nimi)"></h5>
                     </template>
-                    <ep-content-viewer :value="$kaanna(lao.kuvaus)" :kuvat="kuvat" />
+                    <ep-content-viewer v-if="lao.paikallinenLao.naytaPerusteenPaatasonLao" :value="$kaanna(lao.perusteenLao.kuvaus)" :kuvat="kuvat" />
+                    <ep-content-viewer v-if="lao.paikallinenLao.naytaPerusteenVlkTarkennettuLao" :value="$kaanna(lao.perusteenVlkLao.kuvaus)" :kuvat="kuvat" />
+
+                    <template v-if="lao.paikallinenLao && lao.paikallinenLao.kuvaus">
+                      <h6 class="font-weight-600">{{ $t('paikallinen-teksti') }}</h6>
+                      <ep-content-viewer v-if="lao.paikallinenLao && lao.paikallinenLao.kuvaus" :value="$kaanna(lao.paikallinenLao.kuvaus)" :kuvat="kuvat" />
+                    </template>
+
                   </ep-collapse>
               </div>
 
