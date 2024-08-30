@@ -193,21 +193,13 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
 
   get oppiaineenVuosiluokkakokonaisuus() {
     if (this.oppiaine && this.vuosiluokka) {
-      return _.chain(this.oppiaineetJaOppimaarat)
-        .filter(oppiaine => this.oppiaine!.tunniste! === oppiaine.tunniste)
-        .map('vuosiluokkakokonaisuudet')
-        .flatMap()
-        .find(vlk => _.find(vlk.vuosiluokat, { vuosiluokka: this.vuosiluokka }))
-        .value();
+      return _.find(this.oppiaine.vuosiluokkakokonaisuudet, vlk => _.find(vlk.vuosiluokat, { vuosiluokka: this.vuosiluokka }));
     }
   }
 
   get oppiaineenVuosiluokka() {
     if (this.oppiaine && this.vuosiluokka) {
-      return _.chain(this.oppiaineetJaOppimaarat)
-        .filter(oppiaine => this.oppiaine!.tunniste! === oppiaine.tunniste)
-        .map('vuosiluokkakokonaisuudet')
-        .flatMap()
+      return _.chain(this.oppiaine.vuosiluokkakokonaisuudet)
         .map('vuosiluokat')
         .flatMap()
         .find(vlk => vlk.vuosiluokka === this.vuosiluokka)
@@ -223,10 +215,10 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
           const perusteOppiaine = this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: oppiaine?.tunniste });
           const oppiaineenVlk = _.find(oppiaine.vuosiluokkakokonaisuudet, vlk => _.find(vlk.vuosiluokat, { vuosiluokka: this.vuosiluokka }));
           const opsVlk = this.findOpetussuunnitelmanVuosiluokkakokonaisuus(oppiaineenVlk);
-          console.log(perusteOppiaine, opsVlk);
           const perusteenOppiaineenVlk = this.findPerusteenOppiaineenVuosiluokkakokonaisuus(perusteOppiaine, opsVlk);
           const vlk = _.find(oppiaine.vuosiluokkakokonaisuudet, vlk => _.find(vlk.vuosiluokat, { vuosiluokka: this.vuosiluokka }));
           const perusteenVuosiluokkakokonaisuus = _.find(this.perusteenVuosiluokkakokonaisuudet, perusteVlk => _.get(perusteVlk, 'tunniste') === _.get(vlk, 'tunniste'));
+          const oppiaineenPohjanVuosiluokkakokonaisuus = _.find(oppiaine?.pohjanOppiaine?.vuosiluokkakokonaisuudet, ovlk => _.get(ovlk, '_vuosiluokkakokonaisuus') === _.get(opsVlk, '_tunniste'));
           const oppiaineenVuosiluokkakokonaisuusDatat = oppiaineenVuosiluokkakokonaisuudenRakennin(
             oppiaine,
             perusteOppiaine,
@@ -234,7 +226,7 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
             vlk,
             opsVlk,
             perusteenOppiaineenVlk,
-            null,
+            oppiaineenPohjanVuosiluokkakokonaisuus,
             perusteenVuosiluokkakokonaisuus,
           );
           const vuosiluokat = _.keyBy(_.get(oppiaineenVuosiluokkakokonaisuusDatat, 'oppiaineenVuosiluokkakokonaisuus.vuosiluokat'), 'vuosiluokka');
@@ -257,7 +249,7 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
         this.oppiaineenVuosiluokkakokonaisuus,
         this.opetussuunnitelmanVuosiluokkakokonaisuus,
         this.perusteenOppiaineenVuosiluokkakokonaisuus,
-        this.oppiaineenPohjanVuosiluokkakokonaisuudet,
+        this.oppiaineenPohjanVuosiluokkakokonaisuus,
         this.perusteenVuosiluokkakokonaisuus,
       );
       return _.keyBy(_.get(oppiaineenVuosiluokkakokonaisuusPerusteDatoilla, 'oppiaineenVuosiluokkakokonaisuus.vuosiluokat'), 'vuosiluokka');
