@@ -40,7 +40,7 @@
         </ep-form-content>
       </div>
 
-      <ep-form-content name="tavoitteen-osiot" class="mt-4" v-if="oppiaine">
+      <ep-form-content name="nayta-vain-seuraavat-tavoitteen-osiot" class="mt-4" v-if="oppiaine">
         <b-form-checkbox-group v-model="osiot">
           <b-form-checkbox v-for="osio in osioValinnat" :key="'osio-' + osio" :value="osio">{{$t(osio)}}</b-form-checkbox>
         </b-form-checkbox-group>
@@ -97,7 +97,7 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  osiot: string[] = [];
+  osiot: string[] = ['sisaltoalueet', 'arviointikriteerit', 'laaja-alaisen-osaamisen-alueet'];
 
   get vuosiluokka() {
     return this.$route.params.vuosiluokka;
@@ -124,15 +124,15 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
   }
 
   get naytaSisaltoalueet() {
-    return this.osiot.length === 0 || this.osiot.includes('sisaltoalueet');
+    return this.osiot.includes('sisaltoalueet');
   }
 
   get naytaArviointikriteerit() {
-    return this.osiot.length === 0 || this.osiot.includes('arviointikriteerit');
+    return this.osiot.includes('arviointikriteerit');
   }
 
   get naytaLaajaAlaisetOsaamiset() {
-    return this.osiot.length === 0 || this.osiot.includes('laaja-alaisen-osaamisen-alueet');
+    return this.osiot.includes('laaja-alaisen-osaamisen-alueet');
   }
 
   get opetussuunnitelmanOppiaineet() {

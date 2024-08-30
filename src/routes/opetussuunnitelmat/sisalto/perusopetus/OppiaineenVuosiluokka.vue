@@ -138,6 +138,8 @@ export default class OppiaineenVuosiluokka extends Vue {
   @Prop({ default: true })
   private naytaLaajaAlaisetOsaamiset!: boolean;
 
+  tavoitteetSuljettu = true;
+
   get tavoitteet() {
     return _.map(this.oppiaineenVuosiluokka?.tavoitteet, tavoite => {
       return {
@@ -166,7 +168,8 @@ export default class OppiaineenVuosiluokka extends Vue {
   }
 
   toggleTavoite() {
-    _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle());
+    this.tavoitteetSuljettu = !this.tavoitteetSuljettu;
+    _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle(this.tavoitteetSuljettu));
   }
 
   get tavoitealueet() {
