@@ -145,7 +145,7 @@ export default class OppiaineenVuosiluokkakokonaisuus extends Vue {
   private termit!: any[];
 
   get perusteenVuosiluokkakokonaisuus() {
-    return this.tietue.oppiaineenPerusteenVuosiluokkakokonaisuus;
+    return this.tietue.perusteenOppiaineenVlk;
   }
 
   get oppiaineenVuosiluokkakokonaisuus() {

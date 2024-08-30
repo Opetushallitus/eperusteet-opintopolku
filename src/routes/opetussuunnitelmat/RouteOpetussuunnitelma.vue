@@ -11,9 +11,7 @@
     </template>
   </ep-header>
 
-  <!-- <div> -->
   <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle"/>
-  <!-- </div> -->
 
   <div class="container pt-4">
     <div class="lower">
