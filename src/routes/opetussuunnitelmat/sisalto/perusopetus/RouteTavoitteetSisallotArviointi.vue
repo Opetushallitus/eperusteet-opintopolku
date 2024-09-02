@@ -1,6 +1,9 @@
 <template>
   <div class="content">
     <EpSpinner v-if="!vuosiluokat" />
+    <div v-else-if="vuosiluokat.length === 0">
+      <span class="font-italic">{{ $t('opetussuunnitelman-oppiaineille-ei-ole-lisatty-tavoitteita') }}</span>
+    </div>
     <template v-else>
 
       <h2>{{$t('tavoitteet-sisallot-ja-arviointi')}}</h2>
@@ -139,6 +142,19 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
     return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('oppiaineet');
   }
 
+  get perusteenOppiaineetByTunniste() {
+    return _.chain(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.oppiaineet'))
+      .map(oppiaine => {
+        return [
+          oppiaine,
+          ...(oppiaine.oppimaarat ? oppiaine.oppimaarat : []),
+        ];
+      })
+      .flatten()
+      .keyBy('tunniste')
+      .value();
+  }
+
   get oppiaineetJaOppimaarat() {
     if (this.vuosiluokka) {
       const oppiaineet = [..._.sortBy(_.sortBy(this.opetussuunnitelmanOppiaineet, opsoppiaine => this.$kaanna(opsoppiaine.oppiaine.nimi)), 'jnro')];
@@ -182,6 +198,7 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
     return _.chain(_.map(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('oppiaineet'), 'oppiaine'))
       .map('vuosiluokkakokonaisuudet')
       .flatMap()
+      .filter(vlk => _.includes(_.map(this.opetussuunnitelmanVuosiluokkakokonaisuudet, 'vuosiluokkakokonaisuus._tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')))
       .map('vuosiluokat')
       .flatMap()
       .map('vuosiluokka')
@@ -212,7 +229,7 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
     if (this.vuosiluokka) {
       return _.chain(this.oppiaineetJaOppimaarat)
         .map(oppiaine => {
-          const perusteOppiaine = this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: oppiaine?.tunniste });
+          const perusteOppiaine = this.perusteenOppiaineetByTunniste[oppiaine.tunniste];
           const oppiaineenVlk = _.find(oppiaine.vuosiluokkakokonaisuudet, vlk => _.find(vlk.vuosiluokat, { vuosiluokka: this.vuosiluokka }));
           const opsVlk = this.findOpetussuunnitelmanVuosiluokkakokonaisuus(oppiaineenVlk);
           const perusteenOppiaineenVlk = this.findPerusteenOppiaineenVuosiluokkakokonaisuus(perusteOppiaine, opsVlk);
@@ -259,7 +276,9 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
   }
 
   get perusteOppiaine() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: this.oppiaine?.tunniste });
+    if (this.oppiaine) {
+      return this.perusteenOppiaineetByTunniste[this.oppiaine.tunniste];
+    }
   }
 
   get laajaalaisetOsaamiset() {
