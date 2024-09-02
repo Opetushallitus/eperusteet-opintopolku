@@ -137,9 +137,13 @@ export default class EpOpsAiChat extends Vue {
   }
 
   async open() {
+    this.$bvModal.show('ai-modal');
+    if (this.messages.length > 0) {
+      return;
+    }
+
     this.currentSourceNotAvailable = false;
     this.message = '';
-    this.$bvModal.show('ai-modal');
     try {
       await this.opsAiStore?.fetch(this.sourceId, this.sourceType, this.revision);
       this.opsAiStore?.setWelcomeMessage('assistant', this.$t('opsai-keskustelun-avaus'));
