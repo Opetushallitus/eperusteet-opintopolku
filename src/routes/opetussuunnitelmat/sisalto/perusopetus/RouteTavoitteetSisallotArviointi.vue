@@ -2,7 +2,7 @@
   <div class="content">
     <EpSpinner v-if="!vuosiluokat" />
     <div v-else-if="vuosiluokat.length === 0">
-      <span class="font-italic">{{ $t('opetussuunnitelman-oppiaineille-ei-ole-lisatty-tavoitteita') }}</span>
+      <span class="font-italic">{{ $t('tavoitteet-sisallot-ja-arviointi-ei-vuosiluokkia') }}</span>
     </div>
     <template v-else>
 
