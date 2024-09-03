@@ -1,14 +1,13 @@
 <template>
   <div class="content">
     <EpSpinner v-if="!vuosiluokat" />
-    <div v-else-if="vuosiluokat.length === 0">
-      <span class="font-italic">{{ $t('tavoitteet-sisallot-ja-arviointi-ei-vuosiluokkia') }}</span>
-    </div>
     <template v-else>
 
       <h2>{{$t('tavoitteet-sisallot-ja-arviointi')}}</h2>
 
-      <div class="row mt-4">
+      <div v-if="vuosiluokat.length > 0" v-html="$t('tavoitteet-sisallot-ja-arviointi-ohje')"></div>
+
+      <div class="row mt-4" :class="{'disabled-events': vuosiluokat.length === 0}">
         <ep-form-content name="vuosiluokka" class="col-12 col-lg-3 mr-3">
           <EpMultiSelect v-model="vuosiluokka"
                   :enable-empty-option="true"
@@ -43,7 +42,11 @@
         </ep-form-content>
       </div>
 
-      <ep-form-content name="nayta-vain-seuraavat-tavoitteen-osiot" class="mt-4" v-if="oppiaine">
+    <div v-if="vuosiluokat.length === 0" class="mt-4">
+      <span class="font-italic">{{ $t('tavoitteet-sisallot-ja-arviointi-ei-vuosiluokkia') }}</span>
+    </div>
+
+      <ep-form-content name="tavoitteen-osiot" class="mt-4" v-if="oppiaine">
         <b-form-checkbox-group v-model="osiot">
           <b-form-checkbox v-for="osio in osioValinnat" :key="'osio-' + osio" :value="osio">{{$t(osio)}}</b-form-checkbox>
         </b-form-checkbox-group>
@@ -55,18 +58,22 @@
         <h3 class="mt-4 mb-3">{{$t(vuosiluokka + '-luokka')}}</h3>
 
         <OppiaineenVuosiluokkaTiivistetty
-          v-for="oppiaineJaTavoitteet in oppiaineidenVuosiluokkienTavoitteet"
           class="mb-4"
+          v-for="oppiaineJaTavoitteet in oppiaineidenVuosiluokkienTavoitteet"
           :key="oppiaineJaTavoitteet.oppiaine.id"
           :oppiaineJaTavoitteet="oppiaineJaTavoitteet"
           @selectOppiaine="selectOppiaine"/>
       </template>
 
       <template v-if="oppiaine && vuosiluokka">
-        <h3 class="mt-4">
-          <span class="link-style clickable" @click="oppiaine = null">{{$t(vuosiluokka + '-luokka')}}</span>
-          / {{ $kaanna(oppiaine.nimi) }}
-        </h3>
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">
+            <span class="link-style clickable" @click="oppiaine = null">{{$t(vuosiluokka + '-luokka')}}</span>
+            / {{ $kaanna(oppiaine.nimi) }}
+          </h3>
+
+          <portal-target name="sulje-kaikki-tavoitteet-portal"></portal-target>
+        </div>
 
         <oppiaineen-vuosiluokka
           :oppiaineenVuosiluokka="oppiaineenVuosiluokka"
@@ -75,7 +82,8 @@
           :termit="termit"
           :naytaSisaltoalueet="naytaSisaltoalueet"
           :naytaArviointikriteerit="naytaArviointikriteerit"
-          :naytaLaajaAlaisetOsaamiset="naytaLaajaAlaisetOsaamiset"/>
+          :naytaLaajaAlaisetOsaamiset="naytaLaajaAlaisetOsaamiset"
+          avaaSuljeSiirrettavissa/>
       </template>
     </template>
   </div>
@@ -88,7 +96,6 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 import OppiaineenVuosiluokka from './OppiaineenVuosiluokka.vue';
 import OppiaineenVuosiluokkaTiivistetty from './OppiaineenVuosiluokkaTiivistetty.vue';
 import { oppiaineenVuosiluokkakokonaisuudenRakennin } from './vuosiluokka';
-import { UnwrappedOpsOppiaineDtoTyyppiEnum } from '@shared/api/ylops';
 
 @Component({
   components: {
@@ -100,7 +107,7 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
 
-  osiot: string[] = ['sisaltoalueet', 'arviointikriteerit', 'laaja-alaisen-osaamisen-alueet'];
+  osiot: string[] = [];
 
   get vuosiluokka() {
     return this.$route.params.vuosiluokka;
@@ -127,15 +134,15 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
   }
 
   get naytaSisaltoalueet() {
-    return this.osiot.includes('sisaltoalueet');
+    return this.osiot.length === 0 || this.osiot.includes('sisaltoalueet');
   }
 
   get naytaArviointikriteerit() {
-    return this.osiot.includes('arviointikriteerit');
+    return this.osiot.length === 0 || this.osiot.includes('arviointikriteerit');
   }
 
   get naytaLaajaAlaisetOsaamiset() {
-    return this.osiot.includes('laaja-alaisen-osaamisen-alueet');
+    return this.osiot.length === 0 || this.osiot.includes('laaja-alaisen-osaamisen-alueet');
   }
 
   get opetussuunnitelmanOppiaineet() {
@@ -361,6 +368,10 @@ export default class RouteTavoitteetSisallotArviointi extends Vue {
 
 ::v-deep .form-content {
   margin-bottom: 0px;
+}
+
+::v-deep .ep-button .btn{
+  padding: 0;
 }
 
 </style>
