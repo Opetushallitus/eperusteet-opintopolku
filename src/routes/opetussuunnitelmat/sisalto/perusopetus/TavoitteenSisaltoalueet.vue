@@ -1,6 +1,6 @@
 <template>
   <div class="inner-collapse mb-4" v-if="sisaltoalueet.length > 0 && naytaSisaltoalueet">
-    <h4>{{$t('sisaltoalueet')}}</h4>
+    <h5>{{$t('sisaltoalueet')}}</h5>
     <ep-collapse v-for="(sisaltoalue, index) in sisaltoalueet"
                 :key="sisaltoalue.id + 'sisaltoalue'+index"
                 ref="sisaltoaluecollapse"
@@ -10,7 +10,7 @@
                 chevronLocation="left"
                 :use-padding="false">
       <template v-slot:header>
-        <h5 class="nimi" v-html="$kaanna(sisaltoalue.nimi)"></h5>
+        <h6 class="nimi" v-html="$kaanna(sisaltoalue.nimi)"></h6>
       </template>
 
       <div class="pl-4 mb-4 sisaltoaluekuvaus" v-if="sisaltoalue.vuosiluokanSisaltoalue">
