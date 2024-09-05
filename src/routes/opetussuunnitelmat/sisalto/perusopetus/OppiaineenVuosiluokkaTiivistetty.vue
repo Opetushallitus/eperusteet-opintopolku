@@ -5,7 +5,7 @@
     <h5 class="mt-3">{{$t('tavoitteet')}}</h5>
 
     <div v-for="(alue, alueindex) in tavoitteetAlueilla" :key="'alue'+alueindex" class="mt-4">
-      <h6 class="font-weight-600" v-if="alue.nimi">{{$kaanna(alue.nimi)}}</h6>
+      <h6 v-if="alue.nimi">{{$kaanna(alue.nimi)}}</h6>
 
       <div class="striped p-2" v-for="(tavoite, tavoiteindex) in alue.tavoitteet" :key="tavoiteindex + '' + alueindex">
         <div v-html="$kaanna(tavoite.tavoite)"></div>
