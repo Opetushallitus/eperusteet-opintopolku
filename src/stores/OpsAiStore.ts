@@ -1,4 +1,4 @@
-import { ChatApi, Message, Thread, Run, FileApi, Assistant, AssistantApi, Api, ModelApi, HistoryApi } from '@shared/api/ai';
+import { ChatApi, Message, Thread, Run, FileApi, Assistant, AssistantApi, Api, ModelApi, HistoryApi, Model } from '@shared/api/ai';
 import { computed, reactive } from '@vue/composition-api';
 import { Kielet } from '@shared/stores/kieli';
 import * as _ from 'lodash';
@@ -6,9 +6,10 @@ import * as _ from 'lodash';
 export class OpsAiStore {
   public state = reactive({
     available: false,
+    sourceAvailable: true,
     thread: null as Thread | null,
     assistant: null as Assistant | null,
-    models: null as string[] | null,
+    models: null as Model[] | null,
     fileId: null as string | null,
     messages: [] as Message[],
     currentRun: null as Run | null,
@@ -24,6 +25,7 @@ export class OpsAiStore {
   public readonly prosessingMessage = computed(() => this.state.currentRun
     && (this.state.currentRun.status === 'queued' || this.state.currentRun.status === 'in_progress'));
   public readonly models = computed(() => this.state.models);
+  public readonly sourceAvailable = computed(() => this.state.sourceAvailable);
 
   public async init() {
     this.state.available = (await Api.get('/api/available')).data;
@@ -32,14 +34,16 @@ export class OpsAiStore {
   public async fetch(sourceId, sourceType, revision) {
     try {
       this.state.messages = [];
-      this.state.fileId = (await FileApi.upload(sourceType, sourceId, Kielet.getSisaltoKieli.value, revision)).data.id!;
-      this.state.thread = (await ChatApi.createThread()).data;
-      this.state.assistant = (await AssistantApi.getAssistants()).data[0];
-      this.state.models = (await ModelApi.getModels()).data;
+      [this.state.fileId, this.state.thread, this.state.models, this.state.assistant] = await Promise.all([
+        FileApi.upload(sourceType, sourceId, Kielet.getSisaltoKieli.value, revision).then(res => res.data.id!),
+        ChatApi.createThread().then(res => res.data),
+        ModelApi.getModels().then(res => res.data),
+        AssistantApi.getAssistants().then(res => res.data[0]),
+      ]);
     }
     catch (e) {
       console.log(e);
-      this.state.available = false;
+      this.state.sourceAvailable = false;
     }
   }
 
@@ -76,7 +80,7 @@ export class OpsAiStore {
       this.addMessage('assistant');
 
       await ChatApi.addMessage(this.state.thread.id!, this.state.fileId!, message);
-      this.state.currentRun = (await ChatApi.runThread(this.state.thread.id!, 'gpt-4o', assistant.instructions, assistant.temperature, assistant.top_p)).data;
+      this.state.currentRun = (await ChatApi.runThread(this.state.thread.id!, assistant.model, assistant.instructions, assistant.temperature, assistant.top_p)).data;
       await this.waitRunStatus();
     }
   }
