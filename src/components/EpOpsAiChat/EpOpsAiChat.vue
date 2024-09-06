@@ -15,7 +15,7 @@
         <div class="d-flex flex-column w-100">
           <div class="d-flex w-100 align-items-center">
             <h5 class="mr-auto header-text">{{'OpsAI, ' + topic}}</h5>
-            <EpButton variant="link" icon="settings" v-b-toggle.opsai-settings>Muokkaa OpsAI:n parametreja</EpButton>
+            <EpButton variant="link" icon="settings" v-b-toggle.opsai-settings v-if="sourceAvailable">Muokkaa OpsAI:n parametreja</EpButton>
             <div @click="close" class="clickable mt-1">
               <EpMaterialIcon>close</EpMaterialIcon>
             </div>
@@ -60,8 +60,10 @@
         </div>
       </template>
       <div class="content">
-        <div v-if="currentSourceNotAvailable">
-          <p>{{$t('valittu-lahde-ei-tue-opsai')}}</p>
+        <div class="messages" v-if="!sourceAvailable">
+          <div class="message error">
+            {{$t('valittu-lahde-ei-tue-opsai')}}
+          </div>
         </div>
         <EpSpinner class="pt-5" v-else-if="!thread" />
         <div v-else class="messages h-100 d-flex flex-column" ref="messages">
@@ -90,7 +92,7 @@
         </div>
       </div>
       <template v-slot:modal-footer>
-        <div class="new-message d-flex w-100 align-items-center">
+        <div class="new-message d-flex w-100 align-items-center" :class="{'disabled-events': !sourceAvailable}">
           <EpInput :placeholder="$t('kirjoita-viestisi-tahan')"
             type="string"
             v-model="message"
@@ -128,7 +130,6 @@ export default class EpOpsAiChat extends Vue {
 
   opsAiStore: OpsAiStore | null = null;
   message: string = '';
-  currentSourceNotAvailable: boolean = false;
   assistantSettings: Assistant | null = null;
 
   async mounted() {
@@ -142,19 +143,17 @@ export default class EpOpsAiChat extends Vue {
       return;
     }
 
-    this.currentSourceNotAvailable = false;
     this.message = '';
-    try {
-      await this.opsAiStore?.fetch(this.sourceId, this.sourceType, this.revision);
-      this.opsAiStore?.setWelcomeMessage('assistant', this.$t('opsai-keskustelun-avaus'));
-      this.assistantSettings = {
-        ...this.opsAiStore?.assistant.value,
-      };
-    }
-    catch (e) {
-      console.log(e);
-      this.currentSourceNotAvailable = true;
-    }
+    await this.opsAiStore?.fetch(this.sourceId, this.sourceType, this.revision);
+    this.opsAiStore?.setWelcomeMessage('assistant', this.$t('opsai-keskustelun-avaus'));
+    this.assistantSettings = {
+      ...this.opsAiStore?.assistant.value,
+      ...(!!_.find(this.opsAiStore?.models?.value, { defaultModel: true }) && { model: _.find((this.opsAiStore?.models?.value as any), { defaultModel: true }).id }),
+    };
+  }
+
+  get sourceAvailable() {
+    return this.opsAiStore?.sourceAvailable.value;
   }
 
   get isAvailable() {
@@ -163,7 +162,6 @@ export default class EpOpsAiChat extends Vue {
 
   close() {
     this.$bvModal.hide('ai-modal');
-    this.assistantSettings = null;
   }
 
   get thread() {
@@ -231,7 +229,7 @@ export default class EpOpsAiChat extends Vue {
   }
 
   get models() {
-    return this.opsAiStore?.models.value;
+    return _.map(this.opsAiStore?.models.value, 'id');
   }
 }
 </script>
@@ -295,6 +293,14 @@ export default class EpOpsAiChat extends Vue {
         margin-right: auto !important;
         background-color: $white;
         border-top-left-radius: 0;
+      }
+
+      &.error {
+        background-color: $red;
+        color: $white;
+        border-top-left-radius: 0;
+        max-width: 700px;
+        display: inline-block;
       }
 
       .message-sent {
