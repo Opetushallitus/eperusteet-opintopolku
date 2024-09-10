@@ -11,9 +11,10 @@
           {{ $t('footer-eperusteet-palvelu') }}
         </div>
         <div class="footer-links">
+          <EpPalauteLinkki yllapito-avain="eperusteet-opintopolku-palaute-url" />
           <div class="d-flex">
             <EpMaterialIcon>chevron_right</EpMaterialIcon>
-            <span>{{ $t('palaute') }}:</span>
+            <span>{{ $t('yhteystiedot') }}:</span>
             <EpLinkki class="ml-1" :url="$kaanna(linkit.palaute)"></EpLinkki>
           </div>
           <div class="d-flex">
@@ -46,11 +47,13 @@ import { Component, Vue } from 'vue-property-decorator';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import ophLogo from '@assets/img/banners/opintopolku/logo.svg';
 import opintopolkuLogo from '@assets/img/banners/opintopolku/oph_logo2.png';
+import EpPalauteLinkki from '@shared/components/EpPalauteLinkki/EpPalauteLinkki.vue';
 
 @Component({
   name: 'EpFooter',
   components: {
     EpLinkki,
+    EpPalauteLinkki,
   },
 })
 export default class EpFooter extends Vue {

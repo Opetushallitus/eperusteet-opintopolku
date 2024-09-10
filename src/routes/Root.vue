@@ -9,7 +9,6 @@
     <router-view />
   </main>
   <ep-footer />
-  <EpFeedbackModal :palauteProvider="palauteStore"/>
 </div>
 </template>
 
@@ -17,7 +16,6 @@
 import _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
-import EpFeedbackModal from '@shared/components/EpFeedback/EpFeedbackModal.vue';
 import { Meta } from '@shared/utils/decorators';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
@@ -30,7 +28,6 @@ import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
   components: {
     EpJulkinenSidenav,
     EpFooter,
-    EpFeedbackModal,
   },
 })
 export default class Root extends Vue {
