@@ -114,6 +114,7 @@ import { AmmatillisetMaarayksetStore } from '@/stores/AmmatillisetMaarayksetStor
 import { TietoapalvelustaStore } from './stores/TietoapalvelustaStore';
 import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
 import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -915,6 +916,7 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   hideLoading();
+  BrowserStore.changeLocation(location.href);
 });
 
 router.beforeEach((to, from, next) => {
