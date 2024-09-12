@@ -1,9 +1,18 @@
-import { ChatApi, Message, Thread, Run, FileApi, Assistant, AssistantApi, Api, ModelApi, HistoryApi, Model } from '@shared/api/ai';
+import { ChatApi, OpenaiMessage, Thread, Run, FileApi, Assistant, AssistantApi, Api, ModelApi, MessageApi, Model, MessageDto } from '@shared/api/ai';
 import { computed, reactive } from '@vue/composition-api';
 import { Kielet } from '@shared/stores/kieli';
 import * as _ from 'lodash';
+import { FeedbackDto } from '../../eperusteet-frontend-utils/vue/src/api/ai';
 
 export class OpsAiStore {
+  public constructor(
+    private sourceId: number,
+    private sourceType: string,
+    private sourceRevision: number,
+    private sourceName: { [key: string]: string; },
+    private educationLevel: string) {
+  }
+
   public state = reactive({
     available: false,
     sourceAvailable: true,
@@ -11,9 +20,9 @@ export class OpsAiStore {
     assistant: null as Assistant | null,
     models: null as Model[] | null,
     fileId: null as string | null,
-    messages: [] as Message[],
+    messages: [] as OpenaiMessage[],
     currentRun: null as Run | null,
-    welcomeMessage: null as Message | null,
+    welcomeMessage: null as OpenaiMessage | null,
   });
 
   public readonly isAvailable = computed(() => this.state.available);
@@ -31,11 +40,11 @@ export class OpsAiStore {
     this.state.available = (await Api.get('/api/available')).data;
   }
 
-  public async fetch(sourceId, sourceType, revision) {
+  public async fetch() {
     try {
       this.state.messages = [];
       [this.state.fileId, this.state.thread, this.state.models, this.state.assistant] = await Promise.all([
-        FileApi.upload(sourceType, sourceId, Kielet.getSisaltoKieli.value, revision).then(res => res.data.id!),
+        FileApi.upload(this.sourceType, this.sourceId, Kielet.getSisaltoKieli.value, this.sourceRevision).then(res => res.data.id!),
         ChatApi.createThread().then(res => res.data),
         ModelApi.getModels().then(res => res.data),
         AssistantApi.getAssistants().then(res => res.data[0]),
@@ -66,7 +75,7 @@ export class OpsAiStore {
           },
         },
       ],
-      ...(message && { created_at: new Date().getTime() / 1000 + '' }),
+      ...(message && { created_at: new Date().getTime() }),
     } as any;
   }
 
@@ -79,7 +88,7 @@ export class OpsAiStore {
       this.addMessage('user', message);
       this.addMessage('assistant');
 
-      await ChatApi.addMessage(this.state.thread.id!, this.state.fileId!, message);
+      await ChatApi.addMessageToThread(this.state.thread.id!, this.state.fileId!, message);
       this.state.currentRun = (await ChatApi.runThread(this.state.thread.id!, assistant.model, assistant.instructions, assistant.temperature, assistant.top_p)).data;
       await this.waitRunStatus();
     }
@@ -89,7 +98,12 @@ export class OpsAiStore {
     if (this.state.thread) {
       this.state.messages = [
         this.state.welcomeMessage,
-        ...(await ChatApi.getMessages(this.state.thread.id!)).data,
+        ..._.map((await ChatApi.getThreadMessages(this.state.thread?.id!)).data, message => {
+          return {
+            ...message,
+            created_at: _.toNumber(message.created_at) * 1000,
+          };
+        }),
       ] as any;
     }
   }
@@ -110,7 +124,8 @@ export class OpsAiStore {
       await this.getMessages();
 
       if (this.state.currentRun?.status === 'completed') {
-        await HistoryApi.addHistory(this.state.messages);
+        await MessageApi.addMessage(_.map(_.filter(this.state.messages, message => !!message.thread_id), openaiMessage => this.openAiMessageToMessageDto(openaiMessage)));
+        await this.fillThreadMessageFeedback();
       }
     }
     catch (e) {
@@ -120,5 +135,47 @@ export class OpsAiStore {
     if (this.state.currentRun?.status !== 'completed') {
       this.markRunErrorronous();
     }
+  }
+
+  public async sendFeedback(messageId, feedback) {
+    const feedbackDto = (await MessageApi.addFeedback(messageId, feedback)).data;
+    this.state.messages = _.map(this.state.messages, (message: any) => {
+      if (message.id === messageId) {
+        message = {
+          ...message,
+          feedback: feedbackDto,
+        };
+      }
+
+      return message;
+    });
+  }
+
+  public async fillThreadMessageFeedback() {
+    const threadMessagesByMessageId = _.keyBy((await MessageApi.getMessagesByThreadId(this.state.thread?.id!)).data, 'messageId');
+    this.state.messages = _.map(this.state.messages, (message: any) => {
+      return {
+        ...message,
+        feedback: threadMessagesByMessageId[message.id]?.feedback,
+      };
+    });
+  }
+
+  private openAiMessageToMessageDto(message: OpenaiMessage): MessageDto {
+    return {
+      threadId: message.thread_id,
+      messageId: message.id,
+      role: message.role,
+      content: message?.content?.map(c => c.text?.value).join(' '),
+      createdAt: message.created_at,
+      meta: {
+        sourceType: this.sourceType,
+        sourceId: this.sourceId,
+        sourceLanguage: Kielet.getSisaltoKieli.value,
+        sourceRevision: this.sourceRevision,
+        sourceName: this.sourceName,
+        educationLevel: this.educationLevel,
+      },
+    } as MessageDto;
   }
 }

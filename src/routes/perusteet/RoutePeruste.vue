@@ -25,10 +25,11 @@
           <EpOpsAiChat
             v-if="dokumentti"
             class="opsai mt-2"
-            :topic="$kaanna(peruste.nimi)"
+            :sourceName="peruste.nimi"
             :sourceId="perusteId"
             sourceType="peruste"
-            :revision="revision"/>
+            :revision="revision"
+            :educationLevel="koulutustyyppi"/>
 
           <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
           <div class="sidebar" v-if="haku">

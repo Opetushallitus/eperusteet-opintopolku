@@ -21,10 +21,11 @@
           <EpOpsAiChat
             v-if="hasDokumentti"
             class="mt-2"
-            :topic="$kaanna(opetussuunnitelma.nimi)"
+            :sourceName="opetussuunnitelma.nimi"
             :sourceId="opsAiSourceId"
             :sourceType="opsAiSourceType"
-            :revision="revision"/>
+            :revision="revision"
+            :educationLevel="koulutustyyppi"/>
 
           <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
         </template>
