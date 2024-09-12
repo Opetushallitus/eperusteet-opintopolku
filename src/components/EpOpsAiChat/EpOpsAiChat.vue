@@ -14,7 +14,7 @@
       <template v-slot:modal-header>
         <div class="d-flex flex-column w-100">
           <div class="d-flex w-100 align-items-center">
-            <h5 class="mr-auto header-text">{{'OpsAI, ' + topic}}</h5>
+            <h5 class="mr-auto header-text">{{'OpsAI, ' + $kaanna(sourceName)}}</h5>
             <EpButton variant="link" icon="settings" v-b-toggle.opsai-settings v-if="sourceAvailable">Muokkaa OpsAI:n parametreja</EpButton>
             <div @click="close" class="clickable mt-1">
               <EpMaterialIcon>close</EpMaterialIcon>
@@ -86,7 +86,44 @@
             <div v-for="(content, index) in message.content" :key="message.id + '-' + index">
               <div v-if="content.text" v-html="content.text.value"/>
             </div>
-            <div class="message-sent" v-if="message.created_at">{{$t('lahetetty')}}: {{$sdt(message.created_at)}}</div>
+            <div class="mt-1 d-flex align-items-center" v-if="message.created_at">
+              <span class="message-sent">{{$t('lahetetty')}}: {{$sdt(message.created_at)}}</span>
+              <template v-if="message.thread_id && message.role !== 'user'">
+                <span class="ml-2">|</span>
+                <span class="ml-2">{{$t('kerro-mita-pidit-vastauksesta')}}:</span>
+                <div class="d-inline-block ml-2 link-style clickable" @click="feedbackResult(message, positiveFeedback)">
+                  <EpMaterialIcon class="thumb" :outlined="message.feedback?.result !== positiveFeedback">thumb_up</EpMaterialIcon>
+                </div>
+                <div class="d-inline-block ml-2 link-style clickable" @click="feedbackResult(message, negativeFeedback)">
+                  <EpMaterialIcon class="thumb" :outlined="message.feedback?.result !== negativeFeedback">thumb_down</EpMaterialIcon>
+                </div>
+              </template>
+              <EpButton
+                v-if="message.feedback?.result && !openFeedbackMessages[message.id] && !message.feedback?.comment"
+                class="ml-3 vapaa-palaute-link"
+                variant="link"
+                size="sm"
+                @click="openFeedback(message)"
+                :paddingx="false">
+                {{ $t('anna-vapaamuotoinen-palaute') }}
+              </EpButton>
+            </div>
+            <div class="mt-2" v-if="message.feedback?.result">
+              <div class="font-weight-600">
+                {{ message.feedback.commentClosed }}
+                <template v-if="openFeedbackMessages[message.id]">
+                  {{ $t('opsai-tekstipalaute') }}:
+                  <div class="d-flex w-100 mt-1">
+                    <b-form-input class="mr-auto" v-model="message.feedback.comment" :placeholder="$t('kirjoita-palaute-tahan')"></b-form-input>
+                    <EpButton class="ml-2" @click="feedback(message)" variant="primary">{{$t('laheta')}}</EpButton>
+                    <EpButton variant="link" @click="closeFeedback(message)" :paddingx="false">{{$t('sulje')}}</EpButton>
+                  </div>
+                </template>
+                <template v-else>
+                  {{ $t('opsai-palaute-kiitos') }}
+                </template>
+              </div>
+            </div>
           </div>
           <div ref="messagesEnd"/>
         </div>
@@ -112,12 +149,12 @@
 import { OpsAiStore } from '@/stores/OpsAiStore';
 import * as _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Assistant } from '@shared/api/ai';
+import { Assistant, FeedbackDtoResultEnum } from '@shared/api/ai';
 
 @Component
 export default class EpOpsAiChat extends Vue {
   @Prop({ required: true })
-  private topic!: string;
+  private sourceName!: { [key: string]: string; };
 
   @Prop({ required: true })
   private sourceId!: number;
@@ -128,23 +165,37 @@ export default class EpOpsAiChat extends Vue {
   @Prop({ required: true })
   private revision!: number;
 
+  @Prop({ required: true })
+  private educationLevel!: string;
+
+  positiveFeedback = FeedbackDtoResultEnum.POSITIVE;
+  negativeFeedback = FeedbackDtoResultEnum.NEGATIVE;
+
   opsAiStore: OpsAiStore | null = null;
   message: string = '';
   assistantSettings: Assistant | null = null;
+  openFeedbackMessages = {};
 
   async mounted() {
-    this.opsAiStore = new OpsAiStore();
+    this.opsAiStore = new OpsAiStore(
+      this.sourceId,
+      this.sourceType,
+      this.revision,
+      this.sourceName,
+      this.educationLevel,
+    );
     await this.opsAiStore.init();
   }
 
   async open() {
     this.$bvModal.show('ai-modal');
+    await this.scrollToBottom();
     if (this.messages.length > 0) {
       return;
     }
 
     this.message = '';
-    await this.opsAiStore?.fetch(this.sourceId, this.sourceType, this.revision);
+    await this.opsAiStore?.fetch();
     this.opsAiStore?.setWelcomeMessage('assistant', this.$t('opsai-keskustelun-avaus'));
     this.assistantSettings = {
       ...this.opsAiStore?.assistant.value,
@@ -181,8 +232,10 @@ export default class EpOpsAiChat extends Vue {
             },
           };
         }),
-        ...(message.created_at && { created_at: new Date(message.created_at * 1000) }),
         lastMessage: message === _.last(this.opsAiStore?.messages.value),
+        feedback: {
+          ...(message.feedback && message.feedback),
+        },
       };
     });
   }
@@ -210,6 +263,37 @@ export default class EpOpsAiChat extends Vue {
     if (event.which === 13) {
       await this.send();
     }
+  }
+
+  async feedback(message) {
+    this.closeFeedback(message);
+    await this.opsAiStore?.sendFeedback(message.id, message.feedback);
+  }
+
+  async feedbackResult(message, result) {
+    message = {
+      ...message,
+      feedback: {
+        ...(!!message.feedback && message.feedback),
+        result,
+      },
+    };
+    this.openFeedback(message);
+    await this.opsAiStore?.sendFeedback(message.id, message.feedback);
+  }
+
+  closeFeedback(message) {
+    this.openFeedbackMessages = {
+      ...this.openFeedbackMessages,
+      [message.id]: false,
+    };
+  }
+
+  openFeedback(message) {
+    this.openFeedbackMessages = {
+      ...this.openFeedbackMessages,
+      [message.id]: true,
+    };
   }
 
   get run() {
@@ -289,7 +373,7 @@ export default class EpOpsAiChat extends Vue {
 
       &.role-assistant {
         display: inline-block;
-        max-width: 700px;
+        max-width: 800px;
         margin-right: auto !important;
         background-color: $white;
         border-top-left-radius: 0;
@@ -304,10 +388,8 @@ export default class EpOpsAiChat extends Vue {
       }
 
       .message-sent {
-        margin-top: 0.5rem;
         font-size: 0.8rem;
         color: #999;
-        font-style: italic;
       }
     }
   }
@@ -322,6 +404,18 @@ export default class EpOpsAiChat extends Vue {
   color: $white;
   border-radius: 2rem;
   padding: 0.5rem;
+}
+
+.thumb {
+  font-size: 1.2rem;
+  color: $blue-lighten-5;
+}
+::v-deep .ep-button {
+  &.vapaa-palaute-link .btn-sm {
+    padding: 0;
+    margin: 0;
+    border:0;
+  }
 }
 
 </style>

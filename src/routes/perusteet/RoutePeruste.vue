@@ -41,7 +41,7 @@
 
             <EpOpsAiChat
               v-if="dokumentti"
-              class="mt-2"
+              class="opsai mt-2"
               :sourceName="peruste.nimi"
               :sourceId="perusteId"
               sourceType="peruste"
@@ -141,8 +141,9 @@ export default class RoutePeruste extends Vue {
   private oldLocation: Route | null = null;
   private queryImplDebounce = _.debounce(this.onQueryChange, 300);
 
-  mounted() {
+  async mounted() {
     this.query = this.routeQuery;
+    await this.perusteDataStore.getDokumentti();
   }
 
   get routeQuery() {
@@ -169,10 +170,6 @@ export default class RoutePeruste extends Vue {
     const h2 = this.$el.querySelector('h2');
     h2?.setAttribute('tabindex', '-1');
     h2?.focus();
-  }
-
-  async mounted() {
-    await this.perusteDataStore.getDokumentit();
   }
 
   get sidenav() {
