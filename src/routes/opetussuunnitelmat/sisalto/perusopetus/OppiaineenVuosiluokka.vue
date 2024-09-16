@@ -28,6 +28,11 @@
 
           <div class="mt-3">
             <div v-if="valinnainen">
+              <template v-if="pohjanTavoitteet[tavoite.tunniste]">
+                <h4>{{$t('pohjan-teksti')}}</h4>
+                <ep-content-viewer :value="$kaanna(pohjanTavoitteet[tavoite.tunniste].sisaltoalueet[0].sisaltoalueet.kuvaus)" :kuvat="kuvat" />
+              </template>
+
               <div v-for="(sisaltoalue, index) in tavoite.sisaltoalueet" :key="'sisaltoalue'+index">
                 <ep-content-viewer :value="$kaanna(sisaltoalue.sisaltoalueet.kuvaus)" :kuvat="kuvat" />
               </div>
@@ -123,6 +128,9 @@ export default class OppiaineenVuosiluokka extends Vue {
   private oppiaineenVuosiluokka!: any;
 
   @Prop({ required: false })
+  private pohjaOppiaineenVuosiluokka!: any;
+
+  @Prop({ required: false })
   private valinnainen!: boolean;
 
   @Prop({ required: true })
@@ -167,6 +175,10 @@ export default class OppiaineenVuosiluokka extends Vue {
     else {
       return [{ nimi: '', tavoitteet: this.tavoitteet }];
     }
+  }
+
+  get pohjanTavoitteet() {
+    return _.keyBy(this.pohjaOppiaineenVuosiluokka?.tavoitteet, 'tunniste');
   }
 
   toggleTavoite() {
