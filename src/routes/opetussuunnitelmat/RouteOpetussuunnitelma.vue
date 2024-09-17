@@ -176,6 +176,8 @@ export default class RouteOpetussuunnitelma extends Vue {
 </script>
 
 <style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
+
 .opetussuunnitelma {
   .diaarinumero {
     font-size: small;

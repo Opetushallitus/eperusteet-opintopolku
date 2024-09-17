@@ -2,7 +2,6 @@ import { ChatApi, OpenaiMessage, Thread, Run, FileApi, Assistant, AssistantApi, 
 import { computed, reactive } from '@vue/composition-api';
 import { Kielet } from '@shared/stores/kieli';
 import * as _ from 'lodash';
-import { FeedbackDto } from '../../eperusteet-frontend-utils/vue/src/api/ai';
 
 export class OpsAiStore {
   public constructor(
@@ -20,9 +19,9 @@ export class OpsAiStore {
     assistant: null as Assistant | null,
     models: null as Model[] | null,
     fileId: null as string | null,
-    messages: [] as OpenaiMessage[],
+    messages: [] as MessageDto[],
     currentRun: null as Run | null,
-    welcomeMessage: null as OpenaiMessage | null,
+    welcomeMessage: null as MessageDto | null,
   });
 
   public readonly isAvailable = computed(() => this.state.available);
@@ -68,14 +67,8 @@ export class OpsAiStore {
   private createMessage(role, message?) {
     return {
       role,
-      content: [
-        {
-          text: {
-            value: message,
-          },
-        },
-      ],
-      ...(message && { created_at: new Date().getTime() }),
+      content: message,
+      ...(message && { createdAt: new Date().getTime() }),
     } as any;
   }
 
@@ -98,12 +91,15 @@ export class OpsAiStore {
     if (this.state.thread) {
       this.state.messages = [
         this.state.welcomeMessage,
-        ..._.map((await ChatApi.getThreadMessages(this.state.thread?.id!)).data, message => {
-          return {
-            ...message,
-            created_at: _.toNumber(message.created_at) * 1000,
-          };
-        }),
+        ..._.chain((await ChatApi.getThreadMessages(this.state.thread?.id!)).data)
+          .map(message => {
+            return {
+              ...message,
+              created_at: _.toString(_.toNumber(message.created_at) * 1000),
+            };
+          })
+          .map(openaiMessage => this.openAiMessageToMessageDto(openaiMessage))
+          .value(),
       ] as any;
     }
   }
@@ -124,7 +120,7 @@ export class OpsAiStore {
       await this.getMessages();
 
       if (this.state.currentRun?.status === 'completed') {
-        await MessageApi.addMessage(_.map(_.filter(this.state.messages, message => !!message.thread_id), openaiMessage => this.openAiMessageToMessageDto(openaiMessage)));
+        await MessageApi.addMessage(_.filter(this.state.messages, message => !!message.threadId));
         await this.fillThreadMessageFeedback();
       }
     }
@@ -137,10 +133,10 @@ export class OpsAiStore {
     }
   }
 
-  public async sendFeedback(messageId, feedback) {
-    const feedbackDto = (await MessageApi.addFeedback(messageId, feedback)).data;
+  public async sendFeedback(messageWithFeedback) {
+    const feedbackDto = (await MessageApi.addFeedback(messageWithFeedback.messageId, messageWithFeedback.feedback)).data;
     this.state.messages = _.map(this.state.messages, (message: any) => {
-      if (message.id === messageId) {
+      if (message.messageId === messageWithFeedback.messageId) {
         message = {
           ...message,
           feedback: feedbackDto,
@@ -156,7 +152,7 @@ export class OpsAiStore {
     this.state.messages = _.map(this.state.messages, (message: any) => {
       return {
         ...message,
-        feedback: threadMessagesByMessageId[message.id]?.feedback,
+        feedback: threadMessagesByMessageId[message.messageId]?.feedback,
       };
     });
   }
@@ -166,8 +162,8 @@ export class OpsAiStore {
       threadId: message.thread_id,
       messageId: message.id,
       role: message.role,
-      content: message?.content?.map(c => c.text?.value).join(' '),
-      createdAt: message.created_at,
+      content: message.content?.map(c => c.text?.value).join(' '),
+      createdAt: new Date(_.toNumber(message.created_at)),
       meta: {
         sourceType: this.sourceType,
         sourceId: this.sourceId,
