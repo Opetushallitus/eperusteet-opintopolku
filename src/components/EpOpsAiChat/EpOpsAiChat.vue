@@ -1,6 +1,6 @@
 <template>
   <div v-if="isAvailable">
-    <div class="opsai clickable" @click="open">
+    <div class="opsai-chat clickable" @click="open">
       <div class="header d-flex justify-content-center align-items-center mb-2">
         <EpMaterialIcon>chat</EpMaterialIcon>
         <div class="ml-2 pb-1">Ops.AI</div>
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <b-modal id="ai-modal"  size="xl" centered>
+    <b-modal id="ai-modal" size="xl" centered modal-class="opsai-modal">
       <template v-slot:modal-header>
         <div class="d-flex flex-column w-100">
           <div class="d-flex w-100 align-items-center">
@@ -67,64 +67,12 @@
         </div>
         <EpSpinner class="pt-5" v-else-if="!thread" />
         <div v-else class="messages h-100 d-flex flex-column" ref="messages">
-          <div v-for="message in messages"
-              :key="message.id"
-              class="message"
-              :class="'role-'+message.role"
-              :ref="message.lastMessage ? 'lastMessage' : message.id">
-            <EpSpinner v-if="prosessingMessage && message.lastMessage" class="mr-auto"/>
-            <div class="d-flex" v-else>
-              <template v-if="message.role ==='user'">
-                <EpMaterialIcon outlined class="mr-1">person</EpMaterialIcon>
-                <strong>{{$t('sina')}}</strong>
-              </template>
-              <template v-else>
-                <EpMaterialIcon outlined class="mr-1">smart_toy</EpMaterialIcon>
-                <strong>OpsAI</strong>
-              </template>
-            </div>
-            <div v-for="(content, index) in message.content" :key="message.id + '-' + index">
-              <div v-if="content.text" v-html="content.text.value"/>
-            </div>
-            <div class="mt-1 d-flex align-items-center" v-if="message.created_at">
-              <span class="message-sent">{{$t('lahetetty')}}: {{$sdt(message.created_at)}}</span>
-              <template v-if="message.thread_id && message.role !== 'user'">
-                <span class="ml-2">|</span>
-                <span class="ml-2">{{$t('kerro-mita-pidit-vastauksesta')}}:</span>
-                <div class="d-inline-block ml-2 link-style clickable" @click="feedbackResult(message, positiveFeedback)">
-                  <EpMaterialIcon class="thumb" :outlined="message.feedback?.result !== positiveFeedback">thumb_up</EpMaterialIcon>
-                </div>
-                <div class="d-inline-block ml-2 link-style clickable" @click="feedbackResult(message, negativeFeedback)">
-                  <EpMaterialIcon class="thumb" :outlined="message.feedback?.result !== negativeFeedback">thumb_down</EpMaterialIcon>
-                </div>
-              </template>
-              <EpButton
-                v-if="message.feedback?.result && !openFeedbackMessages[message.id] && !message.feedback?.comment"
-                class="ml-3 vapaa-palaute-link"
-                variant="link"
-                size="sm"
-                @click="openFeedback(message)"
-                :paddingx="false">
-                {{ $t('anna-vapaamuotoinen-palaute') }}
-              </EpButton>
-            </div>
-            <div class="mt-2" v-if="message.feedback?.result">
-              <div class="font-weight-600">
-                {{ message.feedback.commentClosed }}
-                <template v-if="openFeedbackMessages[message.id]">
-                  {{ $t('opsai-tekstipalaute') }}:
-                  <div class="d-flex w-100 mt-1">
-                    <b-form-input class="mr-auto" v-model="message.feedback.comment" :placeholder="$t('kirjoita-palaute-tahan')"></b-form-input>
-                    <EpButton class="ml-2" @click="feedback(message)" variant="primary">{{$t('laheta')}}</EpButton>
-                    <EpButton variant="link" @click="closeFeedback(message)" :paddingx="false">{{$t('sulje')}}</EpButton>
-                  </div>
-                </template>
-                <template v-else>
-                  {{ $t('opsai-palaute-kiitos') }}
-                </template>
-              </div>
-            </div>
-          </div>
+          <EpOpsAiMessage v-for="(message, index) in messages"
+            :key="message.messageId"
+            v-model="messages[index]"
+            :prosessingMessage="prosessingMessage"
+            @sendFeedback="sendFeedback"
+            isEditing/>
           <div ref="messagesEnd"/>
         </div>
       </div>
@@ -149,9 +97,14 @@
 import { OpsAiStore } from '@/stores/OpsAiStore';
 import * as _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { Assistant, FeedbackDtoResultEnum } from '@shared/api/ai';
+import { Assistant } from '@shared/api/ai';
+import EpOpsAiMessage from '@shared/components/EpOpsAi/EpOpsAiMessage.vue';
 
-@Component
+@Component({
+  components: {
+    EpOpsAiMessage,
+  },
+})
 export default class EpOpsAiChat extends Vue {
   @Prop({ required: true })
   private sourceName!: { [key: string]: string; };
@@ -168,13 +121,9 @@ export default class EpOpsAiChat extends Vue {
   @Prop({ required: true })
   private educationLevel!: string;
 
-  positiveFeedback = FeedbackDtoResultEnum.POSITIVE;
-  negativeFeedback = FeedbackDtoResultEnum.NEGATIVE;
-
   opsAiStore: OpsAiStore | null = null;
   message: string = '';
   assistantSettings: Assistant | null = null;
-  openFeedbackMessages = {};
 
   async mounted() {
     this.opsAiStore = new OpsAiStore(
@@ -223,18 +172,10 @@ export default class EpOpsAiChat extends Vue {
     return _.map(this.opsAiStore?.messages.value, (message: any) => {
       return {
         ...message,
-        content: _.map(message.content, content => {
-          return {
-            ...content,
-            text: {
-              ...content.text,
-              value: content.text?.value?.replace(/\n/g, '<br>'),
-            },
-          };
-        }),
+        ...(message.content && { content: message.content.replace(/\n/g, '<br>') }),
         lastMessage: message === _.last(this.opsAiStore?.messages.value),
         feedback: {
-          ...(message.feedback && message.feedback),
+          ...(message.feedback ? message.feedback : {}),
         },
       };
     });
@@ -265,35 +206,8 @@ export default class EpOpsAiChat extends Vue {
     }
   }
 
-  async feedback(message) {
-    this.closeFeedback(message);
-    await this.opsAiStore?.sendFeedback(message.id, message.feedback);
-  }
-
-  async feedbackResult(message, result) {
-    message = {
-      ...message,
-      feedback: {
-        ...(!!message.feedback && message.feedback),
-        result,
-      },
-    };
-    this.openFeedback(message);
-    await this.opsAiStore?.sendFeedback(message.id, message.feedback);
-  }
-
-  closeFeedback(message) {
-    this.openFeedbackMessages = {
-      ...this.openFeedbackMessages,
-      [message.id]: false,
-    };
-  }
-
-  openFeedback(message) {
-    this.openFeedbackMessages = {
-      ...this.openFeedbackMessages,
-      [message.id]: true,
-    };
+  async sendFeedback(message) {
+    await this.opsAiStore?.sendFeedback(message);
   }
 
   get run() {
@@ -321,9 +235,9 @@ export default class EpOpsAiChat extends Vue {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-.opsai {
+.opsai-chat {
   padding: $sidenav-padding;
-  margin: $sidenav-padding;
+  margin-bottom: $sidenav-padding;
   background-color: #0033cc;
   color: $white;
   border-radius: 0.5rem;
@@ -350,46 +264,33 @@ export default class EpOpsAiChat extends Vue {
   margin: 0;
 }
 
-.content {
-  height: calc(90vh - 200px);
-  border-bottom: 1px solid #C8C8C8;
+.opsai-modal {
 
-  .messages {
-    overflow-y: auto;
-    padding: 1rem;
+  .content {
+    height: calc(90vh - 200px);
+    border-bottom: 1px solid #C8C8C8;
 
-    .message {
+    .messages {
+      overflow-y: auto;
       padding: 1rem;
-      margin-bottom: 1rem;
-      border-radius: 1rem;
-      border: 1px solid #DADADA;
 
-      &.role-user {
-        display: inline-block;
-        background-color: #C1EAFF;
-        margin-left: auto !important;
-        border-bottom-right-radius: 0;
-      }
+      .message {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 1rem;
+        border: 1px solid #DADADA;
 
-      &.role-assistant {
-        display: inline-block;
-        max-width: 800px;
-        margin-right: auto !important;
-        background-color: $white;
-        border-top-left-radius: 0;
-      }
+        @media (max-width: 767.98px) {
+          max-width: 100%;
+        }
 
-      &.error {
-        background-color: $red;
-        color: $white;
-        border-top-left-radius: 0;
-        max-width: 700px;
-        display: inline-block;
-      }
-
-      .message-sent {
-        font-size: 0.8rem;
-        color: #999;
+        &.error {
+          background-color: $red;
+          color: $white;
+          border-top-left-radius: 0;
+          max-width: 700px;
+          display: inline-block;
+        }
       }
     }
   }

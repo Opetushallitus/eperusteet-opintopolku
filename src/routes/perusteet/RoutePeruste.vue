@@ -41,7 +41,7 @@
 
             <EpOpsAiChat
               v-if="dokumentti"
-              class="opsai mt-2"
+              class="mt-2"
               :sourceName="peruste.nimi"
               :sourceId="perusteId"
               sourceType="peruste"
@@ -330,12 +330,18 @@ export default class RoutePeruste extends Vue {
 
 .sidebar {
   .search {
-    padding: $sidenav-padding;
+    padding-left: $sidenav-padding;
+    padding-right: $sidenav-padding;
   }
 
   .navigation-tree {
     padding: $sidenav-padding;
   }
+}
+
+::v-deep .opsai-chat {
+  margin-left: $sidenav-padding;
+  margin-right: $sidenav-padding;
 }
 
 </style>

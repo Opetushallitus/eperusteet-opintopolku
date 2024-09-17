@@ -76,7 +76,8 @@ export default class EpPerusteSidenav extends Vue {
 
 .sidebar {
   .search {
-    padding: $sidenav-padding;
+    padding-left: $sidenav-padding;
+    padding-right: $sidenav-padding;
   }
 
   .navigation-tree {
