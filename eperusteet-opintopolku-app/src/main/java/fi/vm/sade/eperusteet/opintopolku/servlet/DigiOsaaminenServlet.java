@@ -1,4 +1,4 @@
-package fi.vm.sade.eperusteet.opintopolku;
+package fi.vm.sade.eperusteet.opintopolku.servlet;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = {"/digiosaaminen"}, loadOnStartup = 1)
+//@WebServlet(urlPatterns = {"/digiosaaminen"}, loadOnStartup = 1)
 public class DigiOsaaminenServlet extends HttpServlet {
 
     @Override
