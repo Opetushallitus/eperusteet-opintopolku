@@ -53,7 +53,7 @@
                 <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
 
                   <router-link :to="ops.route">
-                    <opetussuunnitelma-tile :ops="ops" :query="query" :show-ops-icon="false"/>
+                    <opetussuunnitelma-tile :ops="ops" :query="query"/>
                   </router-link>
 
                 </div>
