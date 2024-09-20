@@ -3,12 +3,12 @@
   <EpJulkinenSidenav
     :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"
     :tietoapalvelustaStore="tietoapalvelustaStore"
+    :osaamismerkitStore="osaamismerkitStore"
     />
   <main role="main">
-    <router-view v-if="julkaistutKoulutustyypit"/>
+    <router-view />
   </main>
   <ep-footer />
-  <EpFeedbackModal :palauteProvider="palauteStore"/>
 </div>
 </template>
 
@@ -16,19 +16,18 @@
 import _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
-import EpFeedbackModal from '@shared/components/EpFeedback/EpFeedbackModal.vue';
 import { Meta } from '@shared/utils/decorators';
 import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpJulkinenSidenav from '@/components/EpJulkinenSidenav/EpJulkinenSidenav.vue';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 
 @Component({
   components: {
     EpJulkinenSidenav,
     EpFooter,
-    EpFeedbackModal,
   },
 })
 export default class Root extends Vue {
@@ -41,9 +40,11 @@ export default class Root extends Vue {
   @Prop({ required: true })
   private tietoapalvelustaStore!: TietoapalvelustaStore;
 
+  @Prop({ required: true })
+  private osaamismerkitStore!: OsaamismerkitStore;
+
   async mounted() {
-    await this.sisaltoKieliChange();
-    await this.tietoapalvelustaStore.fetch();
+    await Promise.all([this.sisaltoKieliChange(), this.tietoapalvelustaStore.fetch()]);
   }
 
   @Watch('sisaltoKieli')

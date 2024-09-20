@@ -1,5 +1,12 @@
 <template>
-  <div class="notifikaatio justify-content-center py-3" :class="notifikaatioClass" v-sticky sticky-z-index="5000" v-if="notifikaatio" ref="stickyElement">
+  <div
+      id="notification-bar"
+      class="notifikaatio justify-content-center py-3"
+      :class="notifikaatioClass"
+      v-sticky
+      sticky-z-index="5000"
+      v-if="notifikaatio"
+      ref="stickyElement">
     <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
     <span class="notifikaatio-text korostus">{{ notifikaatio }}</span>
     <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">

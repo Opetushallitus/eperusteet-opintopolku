@@ -4,10 +4,12 @@ import { mock, mocks, stubs } from '@shared/utils/jestutils';
 import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 
 describe('RouteHome', () => {
   const localVue = createLocalVue();
   const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
+  const osaamismerkitStore = mock(OsaamismerkitStore);
 
   const $route = {
     params: {
@@ -28,6 +30,7 @@ describe('RouteHome', () => {
         tiedoteStore,
         julkaistutKoulutustyypitStore,
         tietoapalvelustaStore,
+        osaamismerkitStore,
       },
       stubs: {
         ...stubs,
@@ -38,8 +41,18 @@ describe('RouteHome', () => {
       },
     });
 
+    await localVue.nextTick();
+
+    julkaistutKoulutustyypitStore.state.koulutustyyppiLukumaarat = [{ koulutustyyppi: 'koulutust', lukumaara: 1 }];
+    julkaistutKoulutustyypitStore.state.muuLukumaarat = 1;
+    julkaistutKoulutustyypitStore.state.digitaalinenOsaaminen = [];
+    osaamismerkitStore.state.kategoriat = [];
+
+    await localVue.nextTick();
+
     expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
-    expect(wrapper.findAll('.oph-spinner').length).toEqual(1);
+    console.log(wrapper.html());
+    expect(wrapper.findAll('.oph-spinner').length).toEqual(2);
 
     tiedoteStore.uusimmatTiedotteet = [{
       luotu: 'aikaleima_1234' as any,
@@ -50,6 +63,6 @@ describe('RouteHome', () => {
 
     await localVue.nextTick();
 
-    expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
+    expect(wrapper.findAll('.oph-spinner').length).toEqual(1);
   });
 });

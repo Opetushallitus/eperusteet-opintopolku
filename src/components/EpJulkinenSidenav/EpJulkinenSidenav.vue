@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar" v-sticky sticky-z-index="600">
+  <div id="navigation-bar" class="navbar" v-sticky sticky-z-index="600">
     <div>
       <b-button v-b-toggle.sidebar-no-header variant="transparent">
         <div class="menu">
@@ -44,6 +44,7 @@
             <span>{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</span>
           </div>
           <nav class="mb-5">
+            <EpSpinner v-if="!koulutustyyppiItems" />
             <b-nav vertical v-for="(item, idx1) in koulutustyyppiItems" :key="idx1">
               <b-nav-item :to="item.route"
                           @click="closeSidebar()"
@@ -58,6 +59,7 @@
             <span>{{ $t('osaaminen-ja-maaraykset') }}</span>
           </div>
           <nav class="mb-5">
+            <EpSpinner v-if="!otherItems" />
             <b-nav vertical v-for="(item, idx2) in otherItems" :key="idx2">
               <b-nav-item :to="item.route"
                           @click="closeSidebar()"
@@ -102,12 +104,14 @@ import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import Sticky from 'vue-sticky-directive';
-import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
+import { kansallisetOsaamismerkitRoute, koulutustyyppiLinks, navigoitavatKoulutustyyppiRyhmat, navigoitavatMuutRyhmat, ophMaarayksetRoute, otherLinks } from '@/utils/navigointi';
 import { RawLocation, VueRouter } from 'vue-router/types/router';
 import { Route } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import logo from '@assets/img/banners/opintopolku/logo.svg';
 import { createLogger } from '@shared/utils/logger';
+import { digitaalinenOsaaminen } from '@shared/utils/perusteet';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 const logger = createLogger('EpJulkinenSidenav');
 
 @Component({
@@ -125,14 +129,17 @@ export default class EpJulkinenSidenav extends Vue {
   @Prop({ required: true })
   private tietoapalvelustaStore!: TietoapalvelustaStore;
 
+  @Prop({ required: true })
+  private osaamismerkitStore!: OsaamismerkitStore;
+
   private active: boolean = false;
 
   get koulutustyyppiItems() {
-    return koulutustyyppiLinks();
+    return navigoitavatKoulutustyyppiRyhmat(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value as any);
   }
 
   get otherItems() {
-    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id);
+    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste);
   }
 
   get muutLinkit() {

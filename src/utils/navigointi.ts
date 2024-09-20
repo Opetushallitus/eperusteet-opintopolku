@@ -24,24 +24,19 @@ export function koulutustyyppiLinks() {
     .value();
 }
 
-export function osaaminenJaMaarayksetLinks(id) {
-  return _.chain([
-    {
-      name: 'opetushallituksen-maaraykset',
-      route: {
-        name: 'maaraykset',
-      },
-    },
-    {
-      name: 'kansalliset-perustaitojen-osaamismerkit',
-      route: {
-        name: 'osaamismerkit',
-      },
-    },
-    digitaalinenOsaaminen(id),
-  ]).flatMap()
-    .value();
-}
+export const ophMaarayksetRoute = {
+  name: 'opetushallituksen-maaraykset',
+  route: {
+    name: 'maaraykset',
+  },
+};
+
+export const kansallisetOsaamismerkitRoute = {
+  name: 'kansalliset-perustaitojen-osaamismerkit',
+  route: {
+    name: 'osaamismerkit',
+  },
+};
 
 export function otherLinks() {
   return [
@@ -65,5 +60,23 @@ export function otherLinks() {
       },
       linkText: 'siirry-opintopolkuun',
     },
+  ];
+}
+
+export function navigoitavatKoulutustyyppiRyhmat(julkaistutKoulutustyypit: string[] | null) {
+  if (julkaistutKoulutustyypit) {
+    return _.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(julkaistutKoulutustyypit, alityyppi)));
+  }
+}
+
+export function navigoitavatMuutRyhmat(kategoriat, digitaalinenOsaaminenPeruste) {
+  if (!kategoriat || !digitaalinenOsaaminenPeruste) {
+    return null;
+  }
+
+  return [
+    ophMaarayksetRoute,
+    ...(_.size(kategoriat) > 0 ? [kansallisetOsaamismerkitRoute] : [] as any),
+    ...digitaalinenOsaaminen(digitaalinenOsaaminenPeruste.id),
   ];
 }

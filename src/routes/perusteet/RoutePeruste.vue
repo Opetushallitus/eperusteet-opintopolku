@@ -14,9 +14,7 @@
     </template>
   </ep-header>
 
-  <div>
-    <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle"/>
-  </div>
+  <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle"/>
 
   <div class="container mt-4">
     <div class="lower">

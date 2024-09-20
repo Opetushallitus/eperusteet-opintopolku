@@ -37,6 +37,7 @@
       <b-container fluid>
         <section class="section mt-4">
           <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
+          <EpSpinner v-if="!julkaistutKoulutustyypit" />
           <div class="d-md-flex flex-wrap justify-content-start">
             <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3">
               <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
@@ -46,6 +47,7 @@
 
         <section class="section mt-4">
           <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
+          <EpSpinner v-if="!otherItems" />
           <div class="d-md-flex flex-wrap justify-content-start">
             <div v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2">
               <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
@@ -90,9 +92,11 @@ import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
-import { koulutustyyppiLinks, osaaminenJaMaarayksetLinks, otherLinks } from '@/utils/navigointi';
+import { kansallisetOsaamismerkitRoute, navigoitavatKoulutustyyppiRyhmat, ophMaarayksetRoute, otherLinks, navigoitavatMuutRyhmat } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
+import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { digitaalinenOsaaminen } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -116,14 +120,18 @@ export default class RouteHome extends Vue {
   @Prop({ required: true })
   private tietoapalvelustaStore!: TietoapalvelustaStore;
 
+  @Prop({ required: true })
+  private osaamismerkitStore!: OsaamismerkitStore;
+
   private browserStore = new BrowserStore();
 
   async mounted() {
-    await this.fetchAll();
+    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
   }
 
-  async fetchAll() {
-    await this.tiedoteStore.getUusimmat(this.sisaltoKieli, this.julkaistutKoulutustyypit);
+  @Watch('julkaistutKoulutustyypit')
+  async julkaistutKoulutustyypitChange() {
+    await this.tiedoteStore.getUusimmat(this.sisaltoKieli, _.map(this.julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat.value, 'koulutustyyppi'));
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -141,7 +149,7 @@ export default class RouteHome extends Vue {
 
   @Watch('sisaltoKieli')
   async sisaltoKieliChange() {
-    await this.fetchAll();
+    await this.mounted();
   }
 
   get sisaltoKieli() {
@@ -171,11 +179,11 @@ export default class RouteHome extends Vue {
   }
 
   get koulutustyyppiItems() {
-    return koulutustyyppiLinks();
+    return navigoitavatKoulutustyyppiRyhmat(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value as any);
   }
 
   get otherItems() {
-    return osaaminenJaMaarayksetLinks(this.digitaalinenOsaaminenPeruste?.id);
+    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste);
   }
 
   get tietoapalvelusta() {

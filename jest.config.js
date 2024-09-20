@@ -7,6 +7,9 @@ module.exports = {
       },
     },
   },
+  setupFiles: [
+    '<rootDir>/eperusteet-frontend-utils/vue/src/config/defaultcomponents.ts',
+  ],
   coverageReporters: [
     'text-summary',
     'json',

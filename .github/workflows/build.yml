@@ -10,79 +10,56 @@ jobs:
   build-and-test-eperusteet-opintopolku:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'corretto'
 
-      - name: Set up Node 16
-        uses: actions/setup-node@v3
+      - name: Set up Node 21
+        uses: actions/setup-node@v4
         with:
-          node-version: '16'
+          node-version: '21.7.3'
+
+      - name: Enable corepack for nodejs
+        run: corepack enable
 
       - name: Cache Maven repository
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-cache-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
 
-      - name: Print yarn cache directory path
-        id: yarn-cache-dir-path
-        run: |
-          yarn cache dir
-          echo "::set-output name=dir::$(yarn cache dir)"
-
-      - name: Cache yarn
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Print npm cache directory
-        id: npm-cache-dir
-        run: |
-          npm config get cache
-          echo "::set-output name=dir::$(npm config get cache)"
-
-      - name: Cache npm
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Get backend eperusteet branch file http status
         id: spec_file_http_status_eperusteet
         run: |
-          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet/${{ github.ref_name }}/generated/eperusteet.spec.json)" == "200" ] 
+          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet/${{ github.ref_name }}/generated/eperusteet.spec.json)" == "200" ]
           then
             echo spec file found
             echo "EPERUSTEET_SPECFILE=https://raw.githubusercontent.com/Opetushallitus/eperusteet/${{ github.ref_name }}/generated/eperusteet.spec.json" >> $GITHUB_ENV
           else
             echo spec file not found
           fi
-        
+
       - name: Get backend eperusteet-amosaa branch file http status
         id: spec_file_http_status_amosaa
         run: |
-          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet-amosaa/${{ github.ref_name }}/generated/amosaa.spec.json)" == "200" ] 
+          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet-amosaa/${{ github.ref_name }}/generated/amosaa.spec.json)" == "200" ]
           then
             echo spec file found
             echo "EPERUSTEET_AMOSAA_SPECFILE=https://raw.githubusercontent.com/Opetushallitus/eperusteet-amosaa/${{ github.ref_name }}/generated/amosaa.spec.json" >> $GITHUB_ENV
           else
             echo spec file not found
           fi
-          
+
       - name: Get backend eperusteet-ylops branch file http status
         id: spec_file_http_status_ylops
         run: |
-          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet-ylops/${{ github.ref_name }}/generated/ylops.spec.json)" == "200" ] 
+          if [ "$(curl -s -o /dev/null -I -w '%{http_code}' https://raw.githubusercontent.com/Opetushallitus/eperusteet-ylops/${{ github.ref_name }}/generated/ylops.spec.json)" == "200" ]
           then
             echo spec file found
             echo "EPERUSTEET_YLOPS_SPECFILE=https://raw.githubusercontent.com/Opetushallitus/eperusteet-ylops/${{ github.ref_name }}/generated/ylops.spec.json" >> $GITHUB_ENV
@@ -96,24 +73,24 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git submodule update --recursive --init
-          yarn install
-                    
+
           cd eperusteet-frontend-utils/vue
           yarn install --silent
           ./scripts/buildapi.sh
-          
+
           rm -rf node_modules
           cd ../..
-          
-          yarn run lint
-          yarn run build
-          yarn run test:unit
+
+          yarn install --silent
+          yarn lint
+          yarn test:unit
+          yarn build
 
           cd eperusteet-opintopolku-app
           mvn clean verify --batch-mode
 
       - name: Cache eperusteet-opintopolku build results
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: restore-build
         with:
           path: eperusteet-opintopolku-app/target
@@ -123,10 +100,10 @@ jobs:
     needs: build-and-test-eperusteet-opintopolku
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache eperusteet-opintopolku build results
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         id: restore-build
         with:
           path: eperusteet-opintopolku-app/target

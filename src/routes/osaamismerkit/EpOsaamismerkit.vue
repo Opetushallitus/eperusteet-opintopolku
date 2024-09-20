@@ -68,6 +68,7 @@ export default class EpOsaamismerkit extends Vue {
 
   get osaamismerkit() {
     return _.chain(this.osaamismerkitStore.osaamismerkit.value)
+      .filter(osaamismerkki => !!osaamismerkki?.nimi && !!osaamismerkki.nimi[Kielet.getSisaltoKieli.value])
       .map(osaamismerkki => ({
         ...osaamismerkki,
         image: this.generateImageUrl(osaamismerkki.kategoria?.liite),
@@ -78,7 +79,7 @@ export default class EpOsaamismerkit extends Vue {
   }
 
   get osaamismerkitCount() {
-    return this.osaamismerkitStore.osaamismerkit?.value?.length;
+    return this.osaamismerkit.length;
   }
 
   get kategoriaGroup() {

@@ -113,6 +113,8 @@ import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
 import { AmmatillisetMaarayksetStore } from '@/stores/AmmatillisetMaarayksetStore';
 import { TietoapalvelustaStore } from './stores/TietoapalvelustaStore';
 import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
+import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -164,10 +166,9 @@ export const router = new Router({
 
     const anchorElement = document.getElementById('scroll-anchor');
     if (anchorElement) {
-      const navbar = document.getElementById('navigation-bar');
-      const navbarHeight = navbar ? (-1 * navbar.getBoundingClientRect().height) : 0;
+      const offsetHeight = (getElementHeighById('navigation-bar') + getElementHeighById('notification-bar') + 20) * -1;
       VueScrollTo.scrollTo('#scroll-anchor', {
-        offset: navbarHeight,
+        offset: offsetHeight,
         x: false,
         y: true,
       });
@@ -175,7 +176,7 @@ export const router = new Router({
         selector: '#scroll-anchor',
         offset: {
           x: 0,
-          y: navbarHeight,
+          y: offsetHeight,
         },
       };
     }
@@ -191,6 +192,7 @@ export const router = new Router({
       palauteStore,
       julkaistutKoulutustyypitStore,
       tietoapalvelustaStore,
+      osaamismerkitStore,
     },
     children: [
       ...redirects,
@@ -207,6 +209,7 @@ export const router = new Router({
                   tiedoteStore,
                   julkaistutKoulutustyypitStore,
                   tietoapalvelustaStore,
+                  osaamismerkitStore,
                 },
               };
             },
@@ -563,6 +566,10 @@ export const router = new Router({
           path: 'oppiaineet/:oppiaineId',
           component: RouteOpetussuunnitelmaPerusopetusOppiaine,
           name: 'opetussuunnitelmaperusopetusoppiaine',
+        }, {
+          path: 'tavoitesisaltoarvioinnit/:vuosiluokka?/:oppiaineId?',
+          component: RouteTavoitteetSisallotArviointi,
+          name: 'tavoitteetSisallotArviointi',
         }],
       }, {
         path: ':koulutustyyppi/:perusteId(\\d+)/:revision(\\d+)?',
@@ -909,6 +916,7 @@ router.beforeEach((to, from, next) => {
 
 router.afterEach(() => {
   hideLoading();
+  BrowserStore.changeLocation(location.href);
 });
 
 router.beforeEach((to, from, next) => {
@@ -958,4 +966,9 @@ async function createPerusteOsaStore(route, perusteenOsaId) {
       getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(perusteenOsaId) }),
     ),
   };
+}
+
+function getElementHeighById(id: string) {
+  const element = document.getElementById(id);
+  return element ? element.getBoundingClientRect().height : 0;
 }

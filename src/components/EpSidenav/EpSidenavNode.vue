@@ -1,5 +1,5 @@
 <template>
-<div class="node" :class="{ 'node-root': isRoot }">
+<div class="node" :class="{ 'node-root': isRoot, 'separator': hasSeparator }">
   <div v-if="!isRoot">
     <div class="indicator-wrapper" v-if="isModuuli">
       <ep-color-indicator :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
@@ -21,13 +21,16 @@
 
       <EpNavigationPostFix :node="node" class="ml-1" v-if="node.meta && node.meta.postfix_label"/>
     </div>
+
   </div>
   <!-- children -->
-  <ul :class="{ 'root-list': isRoot }" v-if="hasChildren">
+  <ul class="children" :class="{ 'root-list': isRoot }" v-if="hasChildren">
     <li v-for="(child, idx) in children" :key="idx">
       <EpSidenavNode :node="child" :current="current" :getChildren="getChildren" />
     </li>
   </ul>
+
+  <hr v-if="hasSeparator" />
 </div>
 </template>
 
@@ -86,6 +89,10 @@ export default class EpSidenavNode extends Vue {
     return this.node.type === 'root';
   }
 
+  get hasSeparator() {
+    return this.node.meta && this.node.meta.post_separator;
+  }
+
   get isMatch() {
     return this.node.isMatch;
   }
@@ -107,8 +114,8 @@ export default class EpSidenavNode extends Vue {
   color: $sidenav-color;
   hyphens: auto;
 
-  &:not(.node-root) {
-    padding-top: $sidenav-padding;
+  &:not(.node-root, .separator) {
+    padding-bottom: $sidenav-padding;
   }
 
   &.root {
@@ -142,9 +149,15 @@ export default class EpSidenavNode extends Vue {
   }
 
   // First element shouldn't has top padding
+
+  ul.children {
+    padding-top: $sidenav-padding;
+  }
+
   ul.root-list, ol.root-list {
     font-size: 16px;
     padding-left: 0;
+
     & > li:first-child > .node {
       padding-top: 0;
     }
