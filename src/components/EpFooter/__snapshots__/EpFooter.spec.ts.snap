@@ -9,9 +9,6 @@ exports[`EpFooter Renders 1`] = `
         footer-eperusteet-palvelu
       </div>
       <div class="footer-links"><!---->
-        <div class="d-flex"><span aria-hidden="true" class="icon material-icons">chevron_right</span> <span>yhteystiedot:</span>
-          <div class="linkki ml-1"><a href="mailto:eperusteet@opintopolku.fi" rel="noopener noreferrer" target="_blank"><!----> <span>eperusteet@opintopolku.fi</span> <!----></a></div>
-        </div>
         <div class="d-flex"><span aria-hidden="true" class="icon material-icons">chevron_right</span>
           <div class="linkki"><a href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste" rel="noopener noreferrer" target="_blank"><!----> saavutettavuusseloste <!----></a></div>
         </div>
