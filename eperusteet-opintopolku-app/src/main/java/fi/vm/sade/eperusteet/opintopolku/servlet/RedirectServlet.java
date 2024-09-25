@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//@WebServlet(urlPatterns = {"/beta/*", "/vanha-ui/*"}, loadOnStartup = 1)
+@WebServlet(urlPatterns = {"/beta/*", "/vanha-ui/*"}, loadOnStartup = 1)
 public class RedirectServlet extends HttpServlet {
 
     private static final List<String> redirects = Arrays.asList("/beta", "/vanha-ui");
