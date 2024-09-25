@@ -14,11 +14,6 @@
           <EpPalauteLinkki yllapito-avain="eperusteet-opintopolku-palaute-url" />
           <div class="d-flex">
             <EpMaterialIcon>chevron_right</EpMaterialIcon>
-            <span>{{ $t('yhteystiedot') }}:</span>
-            <EpLinkki class="ml-1" :url="$kaanna(linkit.palaute)"></EpLinkki>
-          </div>
-          <div class="d-flex">
-            <EpMaterialIcon>chevron_right</EpMaterialIcon>
             <ep-linkki :url="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</ep-linkki>
           </div>
           <div class="d-flex">
