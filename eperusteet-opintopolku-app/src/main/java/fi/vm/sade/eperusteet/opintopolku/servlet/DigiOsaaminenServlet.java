@@ -1,9 +1,9 @@
 package fi.vm.sade.eperusteet.opintopolku.servlet;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,13 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-//@WebServlet(urlPatterns = {"/digiosaaminen"}, loadOnStartup = 1)
+@Slf4j
+@WebServlet(urlPatterns = {"/digiosaaminen"}, loadOnStartup = 1)
 public class DigiOsaaminenServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String url = request.getRequestURL().toString().replace(request.getRequestURI(),"");
+        String url = "https://" + request.getServerName();
         JsonNode digiOsaamiset = new RestTemplate().getForObject(url + "/eperusteet-service/api/perusteet/julkaisut?tyyppi=digitaalinen_osaaminen", JsonNode.class);
 
         if (digiOsaamiset.get("data").size() != 1) {
