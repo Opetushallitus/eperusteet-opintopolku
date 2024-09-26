@@ -15,6 +15,7 @@ import { router } from '@/router';
 import { Kielet } from '@shared/stores/kieli';
 import App from '@/App.vue';
 import VueI18n from 'vue-i18n';
+import Cookies from 'js-cookie';
 
 Vue.config.devtools = true;
 Vue.use(Notifications);
@@ -59,7 +60,7 @@ const matomoSiteIds = {
   'eperusteet.testiopintopolku.fi': 1,
 };
 
-if (isProduction() && matomoSiteIds[window.location.hostname]) {
+if (isProduction() && matomoSiteIds[window.location.hostname] && Cookies.get('oph-statistic-cookies-no-sdg-accepted') === 'true') {
   Vue.use(VueMatomo, {
     host: 'https://analytiikka.opintopolku.fi/matomo',
     siteId: matomoSiteIds[window.location.hostname],
