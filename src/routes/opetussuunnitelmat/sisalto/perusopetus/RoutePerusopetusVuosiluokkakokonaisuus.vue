@@ -16,11 +16,10 @@
           <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
           <EpContentViewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
 
-          <h4>{{ $t('paikallinen-teksti') }}</h4>
-          <div v-if="vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus">
+          <EpPaikallinenTarkennus headerh4 v-if="vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus">
             <EpContentViewer :value="$kaanna(vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus)" :kuvat="kuvat" :termit="termit"/>
-          </div>
-          <EpAlert v-else :text="$t('paikallista-sisaltoa-ei-maaritetty')" />
+          </EpPaikallinenTarkennus>
+
         </div>
       </template>
 
@@ -51,7 +50,8 @@
       <div v-for="(laajaalainen, index) in laajaalaisetOsaamiset" :key="index" class="mb-5">
         <h3 class="mb-3">{{ $kaanna(laajaalainen.nimi) }}</h3>
 
-        <ep-collapse tyyppi="perusteteksti" :border-bottom="false" :border-top="false" :use-padding="false" class="mb-4" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao || laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">
+        <ep-collapse tyyppi="perusteteksti" :border-bottom="false" :border-top="false" :use-padding="false" class="mb-4"
+          v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao || laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">
           <template v-slot:header><h4>{{$t('perusteen-teksti')}}</h4></template>
           <ep-content-viewer :value="$kaanna(laajaalainen.kuvaus)" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao" />
 
@@ -62,10 +62,11 @@
         </ep-collapse>
 
         <h4 v-if="laajaalainen.pohjanLao && laajaalainen.pohjanLao.kuvaus">{{ $t('pohjan-teksti') }}</h4>
-        <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)"/>
+        <ep-content-viewer :value="$kaanna(laajaalainen.pohjanLao.kuvaus)"/>
 
-        <h4 v-if="laajaalainen.opetussuunnitelmanLao.kuvaus">{{ $t('paikallinen-teksti') }}</h4>
-        <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)"/>
+        <EpPaikallinenTarkennus headerh4 v-if="laajaalainen.opetussuunnitelmanLao.kuvaus">
+          <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)"/>
+        </EpPaikallinenTarkennus>
 
       </div>
     </div>
@@ -104,7 +105,7 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
   }
 
   get pohjanVuosiluokkakokonaisuus() {
-    const opsVlk = _.find(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet'), opsVlk => opsVlk.pohjanVuosiluokkakokonaisuus?._tunniste === this.vuosiluokkakokonaisuus._tunniste);
+    const opsVlk = _.find(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet'), opsVlk => opsVlk?.pohjanVuosiluokkakokonaisuus?._tunniste === this.vuosiluokkakokonaisuus._tunniste);
     return (opsVlk && opsVlk.pohjanVuosiluokkakokonaisuus) ?? {};
   }
 

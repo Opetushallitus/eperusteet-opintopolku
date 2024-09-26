@@ -30,6 +30,11 @@ export class TietoapalvelustaStore {
   });
 
   public async fetch() {
-    this.state.tietoapalvelusta = (await Julkinen.getTietoaPalvelusta()).data;
+    try {
+      this.state.tietoapalvelusta = (await Julkinen.getTietoaPalvelusta()).data;
+    }
+    catch (e) {
+      this.state.tietoapalvelusta = null;
+    }
   }
 }

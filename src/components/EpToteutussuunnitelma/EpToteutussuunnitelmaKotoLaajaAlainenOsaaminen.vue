@@ -16,8 +16,11 @@
         </b-col>
       </b-row>
 
-      <h3 class="mt-4">{{$t('laaja-alaisen-osaamisen-paikallinen-tarkennus')}}</h3>
-      <ep-content-viewer :value="$kaanna(sisaltoviite.kotoLaajaAlainenOsaaminen.teksti)" :kuvat="kuvat" />
+      <EpPaikallinenTarkennus class="mt-3">
+        <h3 slot="header">{{$t('laaja-alaisen-osaamisen-paikallinen-tarkennus')}}</h3>
+        <ep-content-viewer :value="$kaanna(sisaltoviite.kotoLaajaAlainenOsaaminen.teksti)" :kuvat="kuvat" />
+      </EpPaikallinenTarkennus>
+
   </div>
 </template>
 

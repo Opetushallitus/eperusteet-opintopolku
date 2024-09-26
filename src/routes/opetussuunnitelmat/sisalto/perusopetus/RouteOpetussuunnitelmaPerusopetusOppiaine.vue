@@ -6,7 +6,7 @@
 
       <template v-if="perusteOppiaine">
         <ep-peruste-content
-        :naytaSisaltoTyhjana="false"
+          :naytaSisaltoTyhjana="false"
           :perusteObject="perusteOppiaine.tehtava"
           :pohjaObject="pohjanOppiaine.tehtava"
           :object="oppiaine.tehtava"
@@ -18,11 +18,9 @@
             <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
             <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
 
-            <h4>{{ $t('paikallinen-teksti') }}</h4>
-            <div v-if="vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus">
+            <EpPaikallinenTarkennus headerh4 v-if="vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus">
               <ep-content-viewer :value="$kaanna(vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus)" :kuvat="kuvat" :termit="termit"/>
-            </div>
-            <ep-alert v-else :text="$t('paikallista-sisaltoa-ei-maaritetty')" />
+            </EpPaikallinenTarkennus>
           </div>
         </template>
       </template>

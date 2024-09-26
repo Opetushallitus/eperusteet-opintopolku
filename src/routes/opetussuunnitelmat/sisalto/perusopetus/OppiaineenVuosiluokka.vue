@@ -51,7 +51,7 @@
                 <ep-content-viewer :value="$kaanna(tavoite.tavoitteistaJohdetutOppimisenTavoitteet)" :kuvat="kuvat" />
               </div>
 
-              <EpPaikallinenTarkennus class="mb-4" v-if="tavoite.vuosiluokanTavoite && tavoite.vuosiluokanTavoite.tavoite">
+              <EpPaikallinenTarkennus class="mb-4" v-if="tavoite.vuosiluokanTavoite && tavoite.vuosiluokanTavoite.tavoite" :avattava="false">
                 <div v-html="$kaanna(tavoite.vuosiluokanTavoite.tavoite)"></div>
               </EpPaikallinenTarkennus>
 
@@ -71,9 +71,9 @@
                     <h6 class="nimi" v-html="$kaanna(lao.perusteenLao.nimi)"></h6>
                   </template>
                   <ep-content-viewer v-if="lao.paikallinenLao.naytaPerusteenPaatasonLao" :value="$kaanna(lao.perusteenLao.kuvaus)" :kuvat="kuvat" />
-                  <ep-content-viewer v-if="lao.paikallinenLao.naytaPerusteenVlkTarkennettuLao" :value="$kaanna(lao.perusteenVlkLao.kuvaus)" :kuvat="kuvat" />
+                  <ep-content-viewer v-if="lao.paikallinenLao.naytaPerusteenVlkTarkennettuLao && lao.perusteenVlkLao" :value="$kaanna(lao.perusteenVlkLao.kuvaus)" :kuvat="kuvat" />
 
-                  <EpPaikallinenTarkennus v-if="lao.paikallinenLao && lao.paikallinenLao.kuvaus" class="mb-2">
+                  <EpPaikallinenTarkennus v-if="lao.paikallinenLao && lao.paikallinenLao.kuvaus" class="mb-2" :avattava="false">
                     <ep-content-viewer v-if="lao.paikallinenLao && lao.paikallinenLao.kuvaus" :value="$kaanna(lao.paikallinenLao.kuvaus)" :kuvat="kuvat" />
                   </EpPaikallinenTarkennus>
                 </ep-collapse>

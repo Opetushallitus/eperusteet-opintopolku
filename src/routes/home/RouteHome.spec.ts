@@ -52,7 +52,7 @@ describe('RouteHome', () => {
 
     expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
     console.log(wrapper.html());
-    expect(wrapper.findAll('.oph-spinner').length).toEqual(2);
+    expect(wrapper.findAll('.oph-spinner').length).toEqual(1);
 
     tiedoteStore.uusimmatTiedotteet = [{
       luotu: 'aikaleima_1234' as any,
@@ -63,6 +63,6 @@ describe('RouteHome', () => {
 
     await localVue.nextTick();
 
-    expect(wrapper.findAll('.oph-spinner').length).toEqual(1);
+    expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
   });
 });

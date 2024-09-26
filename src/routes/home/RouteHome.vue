@@ -183,7 +183,7 @@ export default class RouteHome extends Vue {
   }
 
   get otherItems() {
-    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste);
+    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste ?? {});
   }
 
   get tietoapalvelusta() {

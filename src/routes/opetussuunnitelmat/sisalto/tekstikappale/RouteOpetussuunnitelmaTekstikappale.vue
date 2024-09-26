@@ -31,11 +31,9 @@
     </ep-collapse>
 
     <!-- Opetussuunnitelman teksti -->
-    <ep-collapse tyyppi="paikallinen-teksti"
-                 v-if="tekstiKappale && tekstiKappale.teksti">
-      <div class="collapse-header" slot="header">{{ $t('paikallinen-teksti') }}</div>
+    <EpPaikallinenTarkennus v-if="tekstiKappale && tekstiKappale.teksti" :noheader="!perusteTekstikappale">
       <ep-content-viewer :value="$kaanna(tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
-    </ep-collapse>
+    </EpPaikallinenTarkennus>
 
     <!-- Alikappaleet -->
     <div v-if="alikappaleet">
@@ -65,11 +63,10 @@
         </ep-collapse>
 
         <!-- Opetussuunnitelman teksti -->
-        <ep-collapse tyyppi="paikallinen-teksti"
-                 v-if="alikappaleViite.tekstiKappale.teksti">
-          <div class="collapse-header" slot="header">{{ $t('paikallinen-teksti') }}</div>
+
+        <EpPaikallinenTarkennus v-if="alikappaleViite.tekstiKappale.teksti" :noheader="!perusteAlikappaleetObj || !perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]">
           <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
-        </ep-collapse>
+        </EpPaikallinenTarkennus>
       </div>
     </div>
 
