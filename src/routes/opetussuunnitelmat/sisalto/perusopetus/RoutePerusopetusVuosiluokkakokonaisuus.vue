@@ -55,11 +55,13 @@
           <template v-slot:header><h4>{{$t('perusteen-teksti')}}</h4></template>
           <ep-content-viewer :value="$kaanna(laajaalainen.kuvaus)" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao" />
 
-          <h5 v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">{{$t('laaja-alaisen-osaamisen-alueen-vuosiluokkakokonaisuuden-kuvaus')}}</h5>
-          <ep-content-viewer :value="$kaanna(perusteenVlkByLaoId[laajaalainen.id].kuvaus)" v-if="perusteenVlkByLaoId[laajaalainen.id] && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao" />
+          <template v-if="perusteenVlkByLaoId[laajaalainen.id] && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">
+            <h5>{{$t('laaja-alaisen-osaamisen-alueen-vuosiluokkakokonaisuuden-kuvaus')}}</h5>
+            <ep-content-viewer :value="$kaanna(perusteenVlkByLaoId[laajaalainen.id].kuvaus)" />
+          </template>
         </ep-collapse>
 
-        <h4 v-if="laajaalainen.pohjanLao.kuvaus">{{ $t('pohjan-teksti') }}</h4>
+        <h4 v-if="laajaalainen.pohjanLao && laajaalainen.pohjanLao.kuvaus">{{ $t('pohjan-teksti') }}</h4>
         <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)"/>
 
         <h4 v-if="laajaalainen.opetussuunnitelmanLao.kuvaus">{{ $t('paikallinen-teksti') }}</h4>
@@ -102,7 +104,7 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
   }
 
   get pohjanVuosiluokkakokonaisuus() {
-    const opsVlk = _.find(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet'), opsVlk => opsVlk.pohjanVuosiluokkakokonaisuus._tunniste === this.vuosiluokkakokonaisuus._tunniste);
+    const opsVlk = _.find(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet'), opsVlk => opsVlk.pohjanVuosiluokkakokonaisuus?._tunniste === this.vuosiluokkakokonaisuus._tunniste);
     return (opsVlk && opsVlk.pohjanVuosiluokkakokonaisuus) ?? {};
   }
 
