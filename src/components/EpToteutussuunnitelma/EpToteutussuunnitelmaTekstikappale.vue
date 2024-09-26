@@ -14,10 +14,9 @@
       <ep-content-viewer :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)" :kuvat="kuvat" />
     </ep-collapse>
 
-    <ep-collapse tyyppi="paikallinen-teksti" :borderBottom="false" v-if="sisaltoviite.tekstiKappale.teksti">
-      <div class="collapse-header" slot="header">{{ $t('paikallinen-teksti') }}</div>
+    <EpPaikallinenTarkennus v-if="sisaltoviite.tekstiKappale.teksti">
       <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
-    </ep-collapse>
+    </EpPaikallinenTarkennus>
 
   </div>
 </template>

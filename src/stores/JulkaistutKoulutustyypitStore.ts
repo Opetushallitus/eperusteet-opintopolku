@@ -19,7 +19,7 @@ export class JulkaistutKoulutustyypitStore {
 
   public readonly koulutustyyppiLukumaarat = computed(() => this.state.koulutustyyppiLukumaarat);
   public readonly julkaistutKoulutustyypit = computed(() => {
-    if (!this.state.koulutustyyppiLukumaarat || !this.state.muuLukumaarat || !this.state.digitaalinenOsaaminen) {
+    if (!this.state.koulutustyyppiLukumaarat || _.isNil(this.state.muuLukumaarat) || !this.state.digitaalinenOsaaminen) {
       return null;
     }
 

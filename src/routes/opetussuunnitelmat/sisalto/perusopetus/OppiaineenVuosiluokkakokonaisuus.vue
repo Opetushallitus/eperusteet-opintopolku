@@ -24,7 +24,7 @@
         :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat"
         :kuvat="kuvat"
         :termit="termit">
-        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.tyotavat" class="mb-3">{{$t('tyotavat')}}</h3>
+        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.tyotavat" class="mb-3">{{$t('opiskeluymparisto-ja-tyotavat')}}</h3>
       </ep-peruste-content>
 
       <ep-peruste-content
@@ -34,7 +34,7 @@
         :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus"
         :kuvat="kuvat"
         :termit="termit">
-        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.ohjaus" class="mb-3">{{$t('ohjaus')}}</h3>
+        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.ohjaus" class="mb-3">{{$t('oppiaine-osio-ohjaus')}}</h3>
       </ep-peruste-content>
 
       <ep-peruste-content
@@ -44,7 +44,7 @@
         :pohjaObject="oppiaineenPohjanVuosiluokkakokonaisuus.arviointi"
         :kuvat="kuvat"
         :termit="termit">
-        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.arviointi" class="mb-3">{{$t('arviointi')}}</h3>
+        <h3 slot="otsikko" v-if="!perusteenVuosiluokkakokonaisuus.arviointi" class="mb-3">{{$t('osaamisen-arviointi')}}</h3>
       </ep-peruste-content>
 
       <template v-if="perusteenVuosiluokkakokonaisuus.vapaatTekstit">
@@ -77,10 +77,9 @@
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tehtava.teksti)"></span>
         </ep-collapse>
 
-        <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tehtava')">
-          <h4>{{ $t('paikallinen-teksti') }}</h4>
+        <EpPaikallinenTarkennus headerh4 v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tehtava')">
           <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" :termit="termit"/>
-        </template>
+        </EpPaikallinenTarkennus>
       </template>
 
       <template v-if="oppiaineenVuosiluokkakokonaisuus.yleistavoitteet && oppiaineenVuosiluokkakokonaisuus.yleistavoitteet.teksti">
@@ -99,10 +98,9 @@
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat.teksti)"></span>
         </ep-collapse>
 
-        <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tyotavat')">
-          <h4>{{ $t('paikallinen-teksti') }}</h4>
+        <EpPaikallinenTarkennus headerh4 v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tyotavat')">
           <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tyotavat.teksti)" :kuvat="kuvat" :termit="termit"/>
-        </template>
+        </EpPaikallinenTarkennus>
       </template>
 
       <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'ohjaus') || hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'ohjaus')">
@@ -115,10 +113,9 @@
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus.teksti)"></span>
         </ep-collapse>
 
-        <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'ohjaus')">
-          <h4>{{ $t('paikallinen-teksti') }}</h4>
+        <EpPaikallinenTarkennus headerh4 v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'ohjaus')">
           <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.ohjaus.teksti)" :kuvat="kuvat" :termit="termit"/>
-        </template>
+        </EpPaikallinenTarkennus>
       </template>
 
       <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'arviointi') || hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'arviointi')">
@@ -131,10 +128,9 @@
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.arviointi.teksti)"></span>
         </ep-collapse>
 
-        <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'arviointi')">
-          <h4>{{ $t('paikallinen-teksti') }}</h4>
+        <EpPaikallinenTarkennus headerh4 v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'arviointi')">
           <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.arviointi.teksti)" :kuvat="kuvat" :termit="termit"/>
-        </template>
+        </EpPaikallinenTarkennus>
       </template>
 
       <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tavoitteistaJohdetutOppimisenTavoitteet') || hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'tavoitteistaJohdetutOppimisenTavoitteet')">
@@ -147,10 +143,9 @@
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)"></span>
         </ep-collapse>
 
-        <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tavoitteistaJohdetutOppimisenTavoitteet')">
-          <h4>{{ $t('paikallinen-teksti') }}</h4>
+        <EpPaikallinenTarkennus headerh4 v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tavoitteistaJohdetutOppimisenTavoitteet')">
           <ep-content-viewer :value="$kaanna(oppiaineenVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)" :kuvat="kuvat" :termit="termit"/>
-        </template>
+        </EpPaikallinenTarkennus>
       </template>
 
     </div>

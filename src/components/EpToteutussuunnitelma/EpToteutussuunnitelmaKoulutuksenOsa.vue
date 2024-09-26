@@ -39,11 +39,9 @@
               </ul>
             </template>
           </b-form-group>
-          <template v-if="koulutuksenosa.paikallinenTarkennus">
-            <b-form-group :label="$t('paikallinen-teksti')">
-              <ep-content-viewer :value="$kaanna(koulutuksenosa.paikallinenTarkennus.tavoitteetKuvaus)" :kuvat="kuvat"/>
-            </b-form-group>
-          </template>
+          <EpPaikallinenTarkennus v-if="koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.tavoitteetKuvaus">
+            <ep-content-viewer :value="$kaanna(koulutuksenosa.paikallinenTarkennus.tavoitteetKuvaus)" :kuvat="kuvat"/>
+          </EpPaikallinenTarkennus>
         </b-col>
       </b-row>
     </template>
@@ -76,11 +74,9 @@
             <h3 slot="label">{{ $t('keskeinen-sisalto') }}</h3>
               <ep-content-viewer :value="$kaanna(perusteenOsa.keskeinenSisalto)" :kuvat="kuvat"/>
           </b-form-group>
-          <template v-if="koulutuksenosa.paikallinenTarkennus">
-            <b-form-group :label="$t('paikallinen-teksti')">
-              <ep-content-viewer :value="$kaanna(koulutuksenosa.paikallinenTarkennus.keskeinenSisalto)" :kuvat="kuvat"/>
-            </b-form-group>
-          </template>
+          <EpPaikallinenTarkennus v-if="koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.keskeinenSisalto">
+            <ep-content-viewer :value="$kaanna(koulutuksenosa.paikallinenTarkennus.keskeinenSisalto)" :kuvat="kuvat"/>
+          </EpPaikallinenTarkennus>
         </b-col>
       </b-row>
     </template>
@@ -93,11 +89,9 @@
             <h3 slot="label">{{ $t('arviointi-teksti') }}</h3>
               <ep-content-viewer :value="$kaanna(perusteenOsa.arvioinninKuvaus)" :kuvat="kuvat"/>
           </b-form-group>
-          <template v-if="koulutuksenosa.paikallinenTarkennus">
-            <b-form-group :label="$t('paikallinen-teksti')">
-              <ep-content-viewer :value="$kaanna(koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus)" :kuvat="kuvat"/>
-            </b-form-group>
-          </template>
+          <EpPaikallinenTarkennus v-if="koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus">
+            <ep-content-viewer :value="$kaanna(koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus)" :kuvat="kuvat"/>
+          </EpPaikallinenTarkennus>
         </b-col>
       </b-row>
     </template>
