@@ -62,7 +62,6 @@ import RouteOpetussuunnitelmaPerusopetusOppiaine from '@/routes/opetussuunnitelm
 import RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet.vue';
 import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiTiedot.vue';
 import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
-import RouteAmmatillinenMaaraykset from '@/routes/ammatillinen/RouteAmmatillinenMaaraykset.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -110,7 +109,6 @@ import { redirects } from './utils/redirects';
 import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuStore';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
-import { AmmatillisetMaarayksetStore } from '@/stores/AmmatillisetMaarayksetStore';
 import { TietoapalvelustaStore } from './stores/TietoapalvelustaStore';
 import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
 import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
@@ -347,21 +345,6 @@ export const router = new Router({
             component: RouteAmmatillinenValmisteillaOlevat,
             name: 'ammatillinenValmisteillaOlevat',
             props: { valmisteillaOlevatStore },
-          }, {
-            path: 'maaraykset',
-            component: RouteAmmatillinenMaaraykset,
-            name: 'ammatillinenMaaraykset',
-            meta: {
-              resolve: {
-                async props(route) {
-                  return {
-                    default: {
-                      maarayksetStore: new AmmatillisetMaarayksetStore(),
-                    },
-                  };
-                },
-              },
-            },
           },
         ],
       }, {
