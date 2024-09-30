@@ -340,7 +340,6 @@ export default class RoutePeruste extends Vue {
 }
 
 ::v-deep .opsai-chat {
-  margin-left: $sidenav-padding;
   margin-right: $sidenav-padding;
 }
 

@@ -70,7 +70,6 @@
           <EpOpsAiMessage v-for="(message, index) in messages"
             :key="message.messageId"
             v-model="messages[index]"
-            :prosessingMessage="prosessingMessage"
             @sendFeedback="sendFeedback"
             isEditing/>
           <div ref="messagesEnd"/>
@@ -212,10 +211,6 @@ export default class EpOpsAiChat extends Vue {
 
   get run() {
     return this.opsAiStore?.currentRun.value;
-  }
-
-  get prosessingMessage() {
-    return this.opsAiStore?.prosessingMessage.value;
   }
 
   get subheader() {
