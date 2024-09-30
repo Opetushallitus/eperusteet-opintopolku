@@ -78,6 +78,11 @@ export class OpsAiStore {
         status: 'queued',
       };
 
+      this.state.assistant = {
+        ...this.state.assistant,
+        ...assistant,
+      };
+
       this.addMessage('user', message);
       this.addMessage('assistant');
 
@@ -171,6 +176,10 @@ export class OpsAiStore {
         sourceRevision: this.sourceRevision,
         sourceName: this.sourceName,
         educationLevel: this.educationLevel,
+        instructions: this.state.assistant?.instructions,
+        temperature: this.state.assistant?.temperature,
+        top_p: this.state.assistant?.top_p,
+        model: this.state.assistant?.model,
       },
     } as MessageDto;
   }
