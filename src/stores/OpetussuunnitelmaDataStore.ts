@@ -49,7 +49,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public esikatselu: boolean | undefined = undefined;
   @State() public revision: number | undefined = undefined;
   @State() public navigation: YlopsNavigationNodeDto | null = null;
-  @State() public dokumentti: string | null = null;
+  @State() public dokumentit: any | null = null;
   @State() public currentRoute: Location | null = null;
   @State() public sidenavFilter: NavigationFilter = {
     label: '',
@@ -79,9 +79,10 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
       this.fetchNavigation(),
       this.fetchTermit(),
       this.fetchKuvat(),
+      this.fetchJulkaisut(),
     ]);
 
-    await this.getDokumentti();
+    await this.getDokumentit();
 
     if (this.opetussuunnitelmaPerusteenId) {
       await Promise.all([
@@ -359,7 +360,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   })
   public readonly current!: NavigationNode | null;
 
-  public async getDokumentti() {
+  public async getDokumentit() {
     if (!this.opetussuunnitelma) {
       return;
     }
@@ -375,15 +376,13 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
         this.asetaKielenDokumentti(julkaistuDokumentti.id);
       }
     }
-
-    if (this.dokumentti === null) {
-      this.dokumentti = '';
-    }
   }
 
   private asetaKielenDokumentti(dokumenttiId) {
     if (dokumenttiId) {
-      this.dokumentti = baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url;
+      this.dokumentit = {
+        [Kielet.getSisaltoKieli.value]: baseURL + DokumentitParams.get(_.toString(dokumenttiId)).url,
+      };
     }
   }
 
