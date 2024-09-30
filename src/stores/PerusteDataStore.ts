@@ -33,7 +33,7 @@ import {
 import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
-import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio } from '@shared/utils/perusteet';
+import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku, isPerusteVanhaLukio } from '@shared/utils/perusteet';
 import { deepFind } from '@shared/utils/helpers';
 import { PerusteKaikkiDtoTyyppiEnum } from '@shared/generated/eperusteet';
 
@@ -258,13 +258,17 @@ export class PerusteDataStore {
             dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
           }
 
-          if (dokumenttiId) {
+          if (dokumenttiId && this.isDokumenttiSallittu()) {
             this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
           }
         }
       }
     }
   };
+
+  private isDokumenttiSallittu() {
+    return this.peruste?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.OPAS) || isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi);
+  }
 
   private async getLiite(lang: string) {
     try {

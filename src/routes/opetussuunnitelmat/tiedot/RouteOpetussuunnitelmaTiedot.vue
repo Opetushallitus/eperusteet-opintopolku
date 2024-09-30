@@ -1,7 +1,7 @@
 <template>
 <div class="content">
   <h2 class="otsikko" slot="header">{{ $t('opetussuunnitelman-tiedot') }}</h2>
-  <ep-spinner v-if="isLoading"></ep-spinner>
+  <ep-spinner v-if="!opetussuunnitelma"></ep-spinner>
   <div v-else>
     <div class="row">
       <div class="col-md-12" v-if="opetussuunnitelma.nimi">
@@ -109,13 +109,6 @@ import { Kielet } from '@shared/stores/kieli';
 export default class RouteOpetussuunnitelmaTiedot extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
-
-  private isLoading = true;
-
-  async mounted() {
-    await this.opetussuunnitelmaDataStore.getDokumentit();
-    this.isLoading = false;
-  }
 
   get opetussuunnitelma() {
     return this.opetussuunnitelmaDataStore.opetussuunnitelma!;

@@ -21,6 +21,16 @@
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar :scroll-enabled="true">
         <template slot="bar">
+
+          <EpOpsAiChat
+            v-if="dokumentti"
+            class="mt-2"
+            :sourceName="peruste.nimi"
+            :sourceId="perusteId"
+            sourceType="peruste"
+            :revision="revision"
+            :educationLevel="koulutustyyppi"/>
+
           <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
           <div class="sidebar" v-if="haku">
             <div class="search">
@@ -93,6 +103,7 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import EpOpsAiChat from '@/components/EpOpsAiChat/EpOpsAiChat.vue';
 
 @Component({
   components: {
@@ -105,6 +116,7 @@ import { Kielet } from '@shared/stores/kieli';
     EpNotificationBar,
     EpPerusteHaku,
     EpSearch,
+    EpOpsAiChat,
   },
   directives: {
     Sticky,
@@ -125,6 +137,10 @@ export default class RoutePeruste extends Vue {
   private query = '';
   private tekstihaku = '';
   private haku = false;
+
+  async mounted() {
+    await this.perusteDataStore.getDokumentit();
+  }
 
   get sidenav() {
     return this.perusteDataStore.sidenav;
@@ -244,6 +260,22 @@ export default class RoutePeruste extends Vue {
       input.blur();
     }
   }
+
+  get perusteId() {
+    return this.$route.params.perusteId;
+  }
+
+  get dokumentti() {
+    return this.perusteDataStore.dokumentti;
+  }
+
+  get revision() {
+    if (this.$route.params.revision) {
+      return _.toNumber(this.$route.params.revision);
+    }
+
+    return _.maxBy(this.perusteDataStore.julkaisut, 'revision')?.revision;
+  }
 }
 </script>
 
@@ -259,12 +291,18 @@ export default class RoutePeruste extends Vue {
 
 .sidebar {
   .search {
-    padding: $sidenav-padding;
+    padding-left: $sidenav-padding;
+    padding-right: $sidenav-padding;
   }
 
   .navigation-tree {
     padding: $sidenav-padding;
   }
+}
+
+::v-deep .opsai-chat {
+  margin-left: $sidenav-padding;
+  margin-right: $sidenav-padding;
 }
 
 </style>
