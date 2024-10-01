@@ -17,7 +17,6 @@ import _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import { Meta } from '@shared/utils/decorators';
-import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpJulkinenSidenav from '@/components/EpJulkinenSidenav/EpJulkinenSidenav.vue';
@@ -31,9 +30,6 @@ import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
   },
 })
 export default class Root extends Vue {
-  @Prop({ required: true })
-  private palauteStore!: PalauteStore;
-
   @Prop({ required: true })
   private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
 
