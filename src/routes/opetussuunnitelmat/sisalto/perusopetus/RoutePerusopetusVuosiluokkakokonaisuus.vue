@@ -61,8 +61,10 @@
           </template>
         </ep-collapse>
 
-        <h4 v-if="laajaalainen.pohjanLao && laajaalainen.pohjanLao.kuvaus">{{ $t('pohjan-teksti') }}</h4>
-        <ep-content-viewer :value="$kaanna(laajaalainen.pohjanLao.kuvaus)"/>
+        <template v-if="laajaalainen.pohjanLao && laajaalainen.pohjanLao.kuvaus">
+          <h4>{{ $t('pohjan-teksti') }}</h4>
+          <ep-content-viewer :value="$kaanna(laajaalainen.pohjanLao.kuvaus)"/>
+        </template>
 
         <EpPaikallinenTarkennus headerh4 v-if="laajaalainen.opetussuunnitelmanLao.kuvaus">
           <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)"/>
