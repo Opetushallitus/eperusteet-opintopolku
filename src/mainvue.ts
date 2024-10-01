@@ -57,14 +57,15 @@ Vue.use(VueScrollTo, {
 
 const matomoSiteIds = {
   'eperusteet.opintopolku.fi': 11,
-  'eperusteet.testiopintopolku.fi': 1,
+  'eperusteet.testiopintopolku.fi': 34,
 };
 
-if (isProduction() && matomoSiteIds[window.location.hostname] && Cookies.get('oph-statistic-cookies-no-sdg-accepted') === 'true') {
+if (matomoSiteIds[window.location.hostname]) {
   Vue.use(VueMatomo, {
     host: 'https://analytiikka.opintopolku.fi/matomo',
     siteId: matomoSiteIds[window.location.hostname],
     router: router,
+    disableCookies: Cookies.get('oph-statistic-cookies-no-sdg-accepted') !== 'true',
   });
 }
 
