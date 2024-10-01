@@ -101,7 +101,6 @@ import {
   getKoosteTiedotteetStore,
 } from '@/utils/toteutustypes';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
-import { PalauteStore } from '@/stores/PalauteStore';
 import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
 import RouteKotoLaajaAlainenOsaaminen from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
@@ -126,7 +125,6 @@ const tiedoteStore = new TiedoteStore();
 const ammatillistenTiedotteetStore = new AmmatillistenTiedoteStore();
 const koulutuksenJarjestajatStore = new KoulutuksenJarjestajatStore();
 const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
-const palauteStore = new PalauteStore();
 const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
 const ammatillinenPerusteHakuStore = new AmmatillinenPerusteHakuStore();
 const osaamismerkitStore = new OsaamismerkitStore();
@@ -187,7 +185,6 @@ export const router = new Router({
     path: '/:lang',
     component: Root,
     props: {
-      palauteStore,
       julkaistutKoulutustyypitStore,
       tietoapalvelustaStore,
       osaamismerkitStore,
