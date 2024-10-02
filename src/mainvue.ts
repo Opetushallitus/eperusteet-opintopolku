@@ -65,7 +65,7 @@ if (matomoSiteIds[window.location.hostname]) {
     host: 'https://analytiikka.opintopolku.fi/matomo',
     siteId: matomoSiteIds[window.location.hostname],
     router: router,
-    disableCookies: Cookies.get('oph-statistic-cookies-no-sdg-accepted') !== 'true',
+    disableCookies: true,
   });
 }
 
