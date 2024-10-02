@@ -16,7 +16,7 @@
         </b-col>
       </b-row>
 
-      <EpPaikallinenTarkennus class="mt-3">
+      <EpPaikallinenTarkennus class="mt-3" v-if="sisaltoviite.kotoLaajaAlainenOsaaminen.teksti">
         <h3 slot="header">{{$t('laaja-alaisen-osaamisen-paikallinen-tarkennus')}}</h3>
         <ep-content-viewer :value="$kaanna(sisaltoviite.kotoLaajaAlainenOsaaminen.teksti)" :kuvat="kuvat" />
       </EpPaikallinenTarkennus>
