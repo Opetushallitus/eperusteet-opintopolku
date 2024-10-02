@@ -58,6 +58,7 @@ Vue.use(VueScrollTo, {
 const matomoSiteIds = {
   'eperusteet.opintopolku.fi': 11,
   'eperusteet.testiopintopolku.fi': 34,
+  'localhost': 34,
 };
 
 if (matomoSiteIds[window.location.hostname]) {

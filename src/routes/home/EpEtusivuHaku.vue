@@ -83,10 +83,20 @@ export default class EpEtusivuHaku extends Vue {
 
   mounted() {
     this.clear();
+    this.queryChange();
   }
 
-  @Watch('queryNimi')
+  get query() {
+    return this.$route?.query?.query;
+  }
+
+  @Watch('query', { immediate: true })
   private async queryChange() {
+    this.queryNimi = this.$route?.query?.query as string || '';
+  }
+
+  @Watch('queryNimi', { immediate: true })
+  private async queryNimiChange() {
     if (_.size(this.queryNimi) > 2) {
       this.page = 1;
       await this.fetchOpsitJaPerusteet();
@@ -124,6 +134,10 @@ export default class EpEtusivuHaku extends Vue {
         sivu: this.sivu - 1,
         sivukoko: this.sivukoko,
       });
+
+      this.$router.replace({ query: {
+        query: this.queryNimi,
+      } }).catch(() => {});
     }
     catch (e) {
       console.error(e);

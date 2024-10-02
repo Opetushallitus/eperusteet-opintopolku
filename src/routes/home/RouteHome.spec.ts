@@ -51,7 +51,6 @@ describe('RouteHome', () => {
     await localVue.nextTick();
 
     expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
-    console.log(wrapper.html());
     expect(wrapper.findAll('.oph-spinner').length).toEqual(1);
 
     tiedoteStore.uusimmatTiedotteet = [{
