@@ -56,7 +56,7 @@
           <ep-content-viewer :value="$kaanna(laajaalainen.kuvaus)" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao" />
 
           <template v-if="perusteenVlkByLaoId[laajaalainen.id] && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">
-            <h5>{{$t('laaja-alaisen-osaamisen-alueen-vuosiluokkakokonaisuuden-kuvaus')}}</h5>
+            <h5 v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao">{{$t('laaja-alaisen-osaamisen-alueen-vuosiluokkakokonaisuuden-kuvaus')}}</h5>
             <ep-content-viewer :value="$kaanna(perusteenVlkByLaoId[laajaalainen.id].kuvaus)" />
           </template>
         </ep-collapse>
