@@ -61,7 +61,9 @@
           </template>
         </ep-collapse>
 
-        <template v-if="laajaalainen.pohjanLao && laajaalainen.pohjanLao.kuvaus">
+        <template v-if="laajaalainen.pohjanLao
+          && laajaalainen.pohjanLao.kuvaus
+          && (!laajaalainen.opetussuunnitelmanLao.kuvaus || $kaanna(laajaalainen.pohjanLao.kuvaus) !== $kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus))">
           <h4>{{ $t('pohjan-teksti') }}</h4>
           <ep-content-viewer :value="$kaanna(laajaalainen.pohjanLao.kuvaus)"/>
         </template>
