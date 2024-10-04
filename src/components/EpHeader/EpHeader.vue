@@ -2,35 +2,33 @@
 <div>
   <div class="vari-header" :class="theme">
     <div class="container header">
-      <div class="col">
-        <div class="murupolku">
-           <nav aria-label="breadcrumb">
-             <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
-               <li class="breadcrumb-item">
-                 <router-link class="breadcrumb-home" :to="{ name: 'root' }">
-                   <EpMaterialIcon size="20px">home</EpMaterialIcon>
-                 </router-link>
-               </li>
-               <li class="breadcrumb-item"
-                   v-for="(item, idx) in murupolkuFiltered"
-                   :key="idx">
-                 <router-link class="breadcrumb-normal" :to="item.location" v-if="item.location">
-                   {{ $kaannaOlioTaiTeksti(item.label) }}
-                 </router-link>
-                 <span v-else class="breadcrumb-normal">
-                   {{ $kaannaOlioTaiTeksti(item.label) }}
-                 </span>
-               </li>
-             </ol>
-          </nav>
-          <slot name="murupolku"></slot>
-        </div>
-        <h1 class="nimi" :style="style">
-          <slot name="header"></slot>
-        </h1>
-        <div :style="style">
-          <slot name="subheader" />
-        </div>
+      <div class="murupolku">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
+              <li class="breadcrumb-item">
+                <router-link class="breadcrumb-home" :to="{ name: 'root' }">
+                  <EpMaterialIcon size="20px">home</EpMaterialIcon>
+                </router-link>
+              </li>
+              <li class="breadcrumb-item"
+                  v-for="(item, idx) in murupolkuFiltered"
+                  :key="idx">
+                <router-link class="breadcrumb-normal" :to="item.location" v-if="item.location">
+                  {{ $kaannaOlioTaiTeksti(item.label) }}
+                </router-link>
+                <span v-else class="breadcrumb-normal">
+                  {{ $kaannaOlioTaiTeksti(item.label) }}
+                </span>
+              </li>
+            </ol>
+        </nav>
+        <slot name="murupolku"></slot>
+      </div>
+      <h1 class="nimi" :style="style">
+        <slot name="header"></slot>
+      </h1>
+      <div :style="style">
+        <slot name="subheader" />
       </div>
     </div>
   </div>
@@ -112,7 +110,11 @@ export default class EpHeader extends Vue {
 
 .vari-header {
   min-height: 238px;
-  padding: 80px 0;
+  padding: 50px 0;
+
+  // .header {
+    // padding-left: 10px;
+  // }
 
   // Todo: käytä muuttujia
   @media (max-width: 991.98px) {
@@ -124,6 +126,10 @@ export default class EpHeader extends Vue {
   // Todo: käytä muuttujia
   @media (max-width: 767.98px) {
     background-size: auto 80px;
+
+    .header {
+      padding: 0 10px !important;
+    }
   }
 
   // Taustat
