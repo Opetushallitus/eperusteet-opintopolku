@@ -7,10 +7,11 @@
     <template slot="header" v-else>
       {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
     </template>
-    <template slot="subheader" v-if="peruste.tyyppi !=='opas'">
-      <div class="diaarinumero">
+    <template slot="subheader">
+      <div class="diaarinumero" v-if="peruste.tyyppi !=='opas'">
         {{ peruste.diaarinumero }}
       </div>
+      <ep-search class="query mt-3" v-model="query" :maxlength="100"/>
     </template>
   </ep-header>
 
@@ -18,56 +19,48 @@
 
   <div class="container mt-4">
     <div class="lower">
-      <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-      <ep-sidebar :scroll-enabled="true">
-        <template slot="bar">
-          <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
-          <div class="sidebar" v-if="haku">
-            <div class="search">
-              <ep-search :value="tekstihaku" @input="updateTekstihaku" />
-              <div>
-                <router-link :to="{ query: { } }">{{ $t('palaa-rakenteeseen') }}</router-link>
-              </div>
+      <div v-if="sisaltohaku">
+        <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="query" @clear="suljeSisaltohaku">
+          <template v-slot:nimi="{ tulos }">
+            <router-link :to="tulos.location" @click.native="sisaltohakuValinta(tulos.location)">
+              {{ tulos.nimi}}
+            </router-link>
+          </template>
+        </ep-peruste-haku>
+      </div>
+      <template v-else>
+        <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
+        <ep-sidebar :scroll-enabled="true">
+          <template slot="bar">
+            <div>
+              <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
+              <ep-peruste-sidenav
+                  v-model="query"
+                  :peruste-data-store="perusteDataStore">
+              </ep-peruste-sidenav>
             </div>
-          </div>
-          <div v-else>
-            <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
-            <ep-peruste-sidenav
-                @search-update="onSearch"
-                :query="query"
-                :peruste-data-store="perusteDataStore">
-              <template v-slot:after>
-                <div v-if="query">
-                  <!-- TODO lisää jos halutaan käyttöön -->
-                  <!-- <router-link :to="{ query: { haku: true } }">{{ $t('etsi-sisalloista') }}</router-link> -->
-                </div>
-              </template>
-            </ep-peruste-sidenav>
-          </div>
-          <div class="tags">
-            <span class="tag"></span>
-          </div>
-        </template>
+            <div class="tags">
+              <span class="tag"></span>
+            </div>
+          </template>
 
-        <template slot="view">
-          <div v-if="haku">
-            <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="tekstihaku" />
-          </div>
-          <router-view v-else :key="$route.fullPath">
-            <template v-slot:header v-if="peruste.tyyppi ==='opas'">
-              {{$t('oppaan-tiedot')}}
-            </template>
-            <template v-slot:nimi v-if="peruste.tyyppi ==='opas'">
-              <ep-form-content name="oppaan-nimi" headerType="h3" headerClass="h6">
-                <ep-field v-model="peruste.nimi"></ep-field>
-              </ep-form-content>
-            </template>
-            <template slot="previous-next-navigation">
-              <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
-            </template>
-          </router-view>
-        </template>
-      </ep-sidebar>
+          <template slot="view">
+            <router-view :key="$route.fullPath">
+              <template v-slot:header v-if="peruste.tyyppi ==='opas'">
+                {{$t('oppaan-tiedot')}}
+              </template>
+              <template v-slot:nimi v-if="peruste.tyyppi ==='opas'">
+                <ep-form-content name="oppaan-nimi" headerType="h3" headerClass="h6">
+                  <ep-field v-model="peruste.nimi"></ep-field>
+                </ep-form-content>
+              </template>
+              <template slot="previous-next-navigation">
+                <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
+              </template>
+            </router-view>
+          </template>
+        </ep-sidebar>
+      </template>
     </div>
   </div>
 </div>
@@ -93,6 +86,8 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import { Route } from 'vue-router';
+import { Debounced } from '@shared/utils/delay';
 
 @Component({
   components: {
@@ -110,10 +105,9 @@ import { Kielet } from '@shared/stores/kieli';
     Sticky,
   },
   watch: {
-    $route: {
-      handler: 'onRouteUpdate',
+    query: {
+      handler: 'queryImplDebounce',
       immediate: true,
-      deep: true,
     },
   },
   inject: [],
@@ -123,8 +117,31 @@ export default class RoutePeruste extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   private query = '';
-  private tekstihaku = '';
-  private haku = false;
+  private sisaltohaku = false;
+  private oldLocation: Route | null = null;
+  private queryImplDebounce = _.debounce(this.onQueryChange, 300);
+
+  mounted() {
+    this.query = this.routeQuery;
+  }
+
+  get routeQuery() {
+    return this.$route.query.query as string || '';
+  }
+
+  onQueryChange(value) {
+    if (this.query.length > 2) {
+      this.sisaltohaku = true;
+      this.$router.replace({ query: {
+        ...(value && { query: value }),
+      } }).catch(() => {});
+    }
+  }
+
+  @Watch('routeQuery', { immediate: true })
+  private async routeQueryChange() {
+    this.query = this.routeQuery;
+  }
 
   get sidenav() {
     return this.perusteDataStore.sidenav;
@@ -171,13 +188,6 @@ export default class RoutePeruste extends Vue {
     }
   }
 
-  onRouteUpdate(route) {
-    this.haku = route.query.haku || false;
-    if (!this.haku) {
-      this.perusteDataStore.updateRoute(route);
-    }
-  }
-
   @Meta
   getMetaInfo() {
     if (this.peruste) {
@@ -199,18 +209,6 @@ export default class RoutePeruste extends Vue {
       },
     } as ILinkkiHandler;
   };
-
-  onSearch(value: string) {
-    this.query = value;
-  }
-
-  private updateTekstihaku(value) {
-    this.tekstihaku = value;
-  }
-
-  private setValue(value) {
-    this.query = value;
-  }
 
   get routeName() {
     return this.$route.name;
@@ -244,6 +242,26 @@ export default class RoutePeruste extends Vue {
       input.blur();
     }
   }
+
+  suljeSisaltohaku() {
+    this.query = '';
+    this.sisaltohaku = false;
+  }
+
+  sisaltohakuValinta(location) {
+    this.$router.push(location).catch(() => { });
+    this.onRouteUpdate(this.$route);
+  }
+
+  onRouteUpdate(route) {
+    this.sisaltohaku = false;
+    this.query = '';
+    this.perusteDataStore.updateFilter({
+      isEnabled: false,
+      label: '',
+    });
+    this.perusteDataStore.updateRoute(route);
+  }
 }
 </script>
 
@@ -254,6 +272,16 @@ export default class RoutePeruste extends Vue {
   .diaarinumero {
     font-weight: bold;
     font-size: small;
+  }
+
+  .query {
+    max-width: 340px;
+  }
+
+  @media (max-width: 991.98px) {
+    .query {
+      max-width: 100%;
+    }
   }
 }
 

@@ -1,24 +1,44 @@
 <template>
   <div class="haku">
-    <h2 v-if="query">{{ $t('haku') }}: {{ query }}</h2>
-    <h2 v-else>{{ $t('haku') }}</h2>
-    <div v-if="!query" class="alert alert-info">
+    <EpButton link @click="$emit('clear')" class="mb-2" noPadding>
+      <span class="font-weight-bold">&#60;</span> {{$t('takaisin-edelliseen-nakymaan')}}
+    </EpButton>
+
+    <ep-spinner v-if="!tulokset" />
+    <div v-else-if="tulokset.length === 0" class="alert alert-info">
       {{ $t('ei-hakutuloksia') }}
     </div>
-    <ep-spinner v-else-if="isLoading" />
-    <div v-else class="tulokset">
-      <div class="tulos" v-for="tulos in tulokset" :key="JSON.stringify(tulos.location)">
-        <div class="osantyyppi">
-          {{ $t(tulos.target.perusteenOsa.osanTyyppi) }}
-        </div>
-        <div class="nimi">
-          <router-link :to="tulos.location" @click="clear">
-            {{ $kaanna(tulos.target.perusteenOsa.nimi) }}
-          </router-link>
-        </div>
-        <div class="osuma" v-html="tulos.result[0]"></div>
+
+    <template v-else>
+      <div class="tulos font-weight-600 mt-2">
+        {{tulokset.length}} {{ $t('hakutulosta') }}
       </div>
-    </div>
+      <div class="tulokset mt-4">
+        <div class="tulos" v-for="(tulos,index) in tuloksetSorted" :key="'tulos' + index">
+          <div class="osantyyppi">
+            {{ $t(tulos.target.perusteenOsa.osanTyyppi) }}
+          </div>
+          <div class="nimi">
+            <div v-if="!tulos.location || !tulos.location.name">
+              {{ $kaanna(tulos.target.perusteenOsa.nimi) }}
+            </div>
+            <slot v-else name="nimi" :tulos="tulos">
+              <router-link :to="tulos.location" @click.native="clear">
+                {{ tulos.nimi }}
+              </router-link>
+            </slot>
+          </div>
+          <div class="osuma" v-if="tulos.type === 'sisalto'" v-html="tulos.result[0]"></div>
+        </div>
+
+        <EpBPagination
+          v-model="sivu"
+          :items-per-page="sivukoko"
+          :total="tulokset.length"
+          aria-controls="sisaltohakutulos-lista">
+      </EpBPagination>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -28,89 +48,19 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { osaToLocation } from '@shared/utils/NavigationBuilder';
-// import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
-
-interface Tulos {
-  [key: string]: Tulos | any;
-  osanTyyppi?: string;
-};
-
-type Haettava = Tulos[] | Tulos;
-
-const MatchFields = [
-  'fi',
-  'sv',
-  'en',
-];
-
-function queryMatch(target, query: string) {
-  return _.includes(_.toLower(target), query);
-}
-
-const clearEl = document.createElement('div');
-
-function applyLocationTag(target: string, query: string) {
-  clearEl.innerHTML = target;
-  const idx = _.toLower(clearEl.innerText).indexOf(_.toLower(query));
-  const contextAmount = 100;
-  const start = idx - contextAmount;
-  const size = _.size(query) + contextAmount * 2;
-  const text
-    = (start > 0 ? '...' : '')
-    + clearEl.innerText.substr(start, size)
-    + (size < clearEl.innerText.length - 1 ? '...' : '');
-  return _.replace(text, query, `<mark>${query}</mark>`);
-}
-
-function deepFind(target: Haettava, path: any[], results: any[], query: string): any[] {
-  let result = [] as any[];
-  if (_.isArray(target)) {
-    for (const next of target) {
-      result = [...result, ...deepFind(next, path, results, query)];
-    }
-  }
-  else if (_.isObject(target)) {
-    for (const key of _.keys(target)) {
-      const next = target[key];
-      if (_.isString(next) && _.includes(MatchFields, key) && queryMatch(next, query)) {
-        result = [...result, applyLocationTag(next, query)];
-      }
-      else {
-        const nested = deepFind(
-          target[key],
-          [...path, target],
-          results,
-          query);
-        result = [...result, ...nested];
-      }
-    }
-
-    const osanTyyppi = _.get(target, 'perusteenOsa.osanTyyppi');
-    if (osanTyyppi && !_.isEmpty(result)) {
-      results.push({
-        path,
-        osanTyyppi,
-        target,
-        result,
-        location: osaToLocation(target as any),
-      });
-      return [];
-    }
-  }
-  return result;
-}
+import { deepFind, typeSort } from '@/utils/sisaltohaku';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
     EpSearch,
     EpSpinner,
-    // EpSidenavNode,
+    EpBPagination,
   },
   watch: {
     query: {
       handler: 'queryImplDebounce',
-      immediate: false,
+      immediate: true,
     },
   },
 })
@@ -121,33 +71,41 @@ export default class EpPerusteHaku extends Vue {
   @Prop({ required: true })
   private query!: string;
 
-  private isLoading = true;
-
   private queryImplDebounce = _.debounce(this.queryImpl, 300);
-
-  private tulokset = [] as any[];
+  private tulokset: any[] | null = null;
+  private sivu = 1;
+  private sivukoko = 10;
 
   async queryImpl(query) {
-    if (!query) {
-      this.isLoading = false;
-      return;
-    }
-    this.isLoading = true;
-
-    try {
-      const julkaisu = await this.perusteDataStore.fetchJulkaisu();
+    if (query.length > 2) {
+      this.tulokset = null;
+      const julkaisu = await this.perusteDataStore.peruste;
       const result: any[] = [];
       deepFind(julkaisu, [], result, _.toLower(query));
       this.tulokset = result;
-    }
-    finally {
-      this.isLoading = false;
     }
   }
 
   clear() {
     this.query = '';
-    this.isLoading = false;
+  }
+
+  get tuloksetSorted() {
+    return _.chain(this.tulokset)
+      .map(tulos => {
+        var numerointi = _.find(this.perusteDataStore.flattenedSidenav, { location: tulos.location })?.meta?.numerointi;
+        return {
+          ...tulos,
+          numerointi,
+          nimi: (numerointi || '') + ' '
+                + (this.$kaanna(tulos.target.perusteenOsa.nimi) || this.$t(tulos.osanTyyppi))
+                + (tulos.target.perusteenOsa?.meta?.nimi ? ', ' + this.$t(tulos.target.perusteenOsa.meta?.nimi) : ''),
+        };
+      })
+      .sortBy(tulos => tulos.target.perusteenOsa?.meta?.nimi || 99)
+      .sortBy(tulos => typeSort[tulos.type])
+      .slice((this.sivu - 1) * this.sivukoko, this.sivu * this.sivukoko)
+      .value();
   }
 }
 </script>
@@ -167,14 +125,9 @@ export default class EpPerusteHaku extends Vue {
       }
 
       .nimi {
-        a {
-          font-weight: bolder;
-        }
+        font-weight: bolder;
       }
 
-      .osuma {
-        color: gray;
-      }
     }
   }
 

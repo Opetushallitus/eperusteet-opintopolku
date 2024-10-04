@@ -112,6 +112,7 @@ import { TietoapalvelustaStore } from './stores/TietoapalvelustaStore';
 import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
 import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
 import { BrowserStore } from '@shared/stores/BrowserStore';
+import RouteSisaltohaku from './routes/perusteet/sisalto/RouteSisaltohaku.vue';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
