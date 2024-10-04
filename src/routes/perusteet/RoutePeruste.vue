@@ -21,25 +21,22 @@
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar :scroll-enabled="true">
         <template slot="bar">
-          <!-- <ep-peruste-sidenav :peruste-data-store="perusteDataStore" /> -->
-          <div class="sidebar" v-if="haku">
+          <div class="sidebar" v-if="sisaltohaku">
             <div class="search">
-              <ep-search :value="tekstihaku" @input="updateTekstihaku" />
-              <div>
-                <router-link :to="{ query: { } }">{{ $t('palaa-rakenteeseen') }}</router-link>
+              <ep-search v-model="query" />
+              <div class="mt-2">
+                <div class="link-style clickable" @click="sisaltohaku = false">{{ $t('palaa-rakenteeseen') }}</div>
               </div>
             </div>
           </div>
           <div v-else>
             <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
             <ep-peruste-sidenav
-                @search-update="onSearch"
-                :query="query"
+                v-model="query"
                 :peruste-data-store="perusteDataStore">
               <template v-slot:after>
-                <div v-if="query">
-                  <!-- TODO lisää jos halutaan käyttöön -->
-                  <!-- <router-link :to="{ query: { haku: true } }">{{ $t('etsi-sisalloista') }}</router-link> -->
+                <div v-if="query" class="mt-2">
+                  <div class="link-style clickable" @click="sisaltohaku = true">{{ $t('etsi-sisalloista') }}</div>
                 </div>
               </template>
             </ep-peruste-sidenav>
@@ -50,8 +47,15 @@
         </template>
 
         <template slot="view">
-          <div v-if="haku">
-            <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="tekstihaku" />
+          <div v-if="sisaltohaku">
+            <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="query">
+              <template v-slot:nimi="{ tulos }">
+                <router-link :to="tulos.location" @click.native="sisaltohakuValinta(tulos.location)">
+                  <span v-if="tulos.target.perusteenOsa.nimi">{{ $kaanna(tulos.target.perusteenOsa.nimi) }}</span>
+                  <span v-else>{{$t(tulos.osanTyyppi)}}</span>
+                </router-link>
+              </template>
+            </ep-peruste-haku>
           </div>
           <router-view v-else :key="$route.fullPath">
             <template v-slot:header v-if="peruste.tyyppi ==='opas'">
@@ -123,8 +127,7 @@ export default class RoutePeruste extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   private query = '';
-  private tekstihaku = '';
-  private haku = false;
+  private sisaltohaku = false;
 
   get sidenav() {
     return this.perusteDataStore.sidenav;
@@ -172,10 +175,13 @@ export default class RoutePeruste extends Vue {
   }
 
   onRouteUpdate(route) {
-    this.haku = route.query.haku || false;
-    if (!this.haku) {
-      this.perusteDataStore.updateRoute(route);
-    }
+    this.sisaltohaku = false;
+    this.query = '';
+    this.perusteDataStore.updateFilter({
+      isEnabled: false,
+      label: '',
+    });
+    this.perusteDataStore.updateRoute(route);
   }
 
   @Meta
@@ -199,18 +205,6 @@ export default class RoutePeruste extends Vue {
       },
     } as ILinkkiHandler;
   };
-
-  onSearch(value: string) {
-    this.query = value;
-  }
-
-  private updateTekstihaku(value) {
-    this.tekstihaku = value;
-  }
-
-  private setValue(value) {
-    this.query = value;
-  }
 
   get routeName() {
     return this.$route.name;
@@ -243,6 +237,16 @@ export default class RoutePeruste extends Vue {
       input.focus();
       input.blur();
     }
+  }
+
+  suljeSisaltohaku() {
+    this.sisaltohaku = false;
+    this.query = '';
+  }
+
+  sisaltohakuValinta(location) {
+    this.$router.push(location).catch(() => { });
+    this.onRouteUpdate(this.$route);
   }
 }
 </script>

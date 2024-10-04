@@ -2,19 +2,24 @@
   <div class="haku">
     <h2 v-if="query">{{ $t('haku') }}: {{ query }}</h2>
     <h2 v-else>{{ $t('haku') }}</h2>
-    <div v-if="!query" class="alert alert-info">
+    <div v-if="!isLoading && tulokset.length === 0" class="alert alert-info">
       {{ $t('ei-hakutuloksia') }}
     </div>
     <ep-spinner v-else-if="isLoading" />
     <div v-else class="tulokset">
-      <div class="tulos" v-for="tulos in tulokset" :key="JSON.stringify(tulos.location)">
+      <div class="tulos" v-for="(tulos,index) in tulokset" :key="'tulos' + index">
         <div class="osantyyppi">
           {{ $t(tulos.target.perusteenOsa.osanTyyppi) }}
         </div>
         <div class="nimi">
-          <router-link :to="tulos.location" @click="clear">
+          <div v-if="!tulos.location || !tulos.location.name">
             {{ $kaanna(tulos.target.perusteenOsa.nimi) }}
-          </router-link>
+          </div>
+          <slot v-else name="nimi" :tulos="tulos">
+            <router-link :to="tulos.location" @click.native="clear">
+              {{ $kaanna(tulos.target.perusteenOsa.nimi) }}
+            </router-link>
+          </slot>
         </div>
         <div class="osuma" v-html="tulos.result[0]"></div>
       </div>
@@ -29,7 +34,7 @@ import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { osaToLocation } from '@shared/utils/NavigationBuilder';
-// import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
+import { Kielet } from '@shared/stores/kieli';
 
 interface Tulos {
   [key: string]: Tulos | any;
@@ -65,6 +70,11 @@ function applyLocationTag(target: string, query: string) {
 
 function deepFind(target: Haettava, path: any[], results: any[], query: string): any[] {
   let result = [] as any[];
+
+  if (_.get(target, 'perusteenOsa.osanTyyppi')) {
+    console.log('target type', _.get(target, 'perusteenOsa.osanTyyppi'));
+  }
+
   if (_.isArray(target)) {
     for (const next of target) {
       result = [...result, ...deepFind(next, path, results, query)];
@@ -87,6 +97,12 @@ function deepFind(target: Haettava, path: any[], results: any[], query: string):
     }
 
     const osanTyyppi = _.get(target, 'perusteenOsa.osanTyyppi');
+
+    console.log('result löyty ', result);
+    console.log('osanTyyppi ', osanTyyppi);
+    console.log('target ', target);
+    console.log('----');
+
     if (osanTyyppi && !_.isEmpty(result)) {
       results.push({
         path,
@@ -105,12 +121,11 @@ function deepFind(target: Haettava, path: any[], results: any[], query: string):
   components: {
     EpSearch,
     EpSpinner,
-    // EpSidenavNode,
   },
   watch: {
     query: {
       handler: 'queryImplDebounce',
-      immediate: false,
+      immediate: true,
     },
   },
 })
@@ -122,9 +137,7 @@ export default class EpPerusteHaku extends Vue {
   private query!: string;
 
   private isLoading = true;
-
   private queryImplDebounce = _.debounce(this.queryImpl, 300);
-
   private tulokset = [] as any[];
 
   async queryImpl(query) {
@@ -167,9 +180,7 @@ export default class EpPerusteHaku extends Vue {
       }
 
       .nimi {
-        a {
-          font-weight: bolder;
-        }
+        font-weight: bolder;
       }
 
       .osuma {

@@ -3,7 +3,7 @@
     <ep-spinner v-if="sidenavLoading" />
     <div v-else>
       <div class="search">
-        <ep-search :value="query" @input="setValue" />
+        <ep-search v-model="query" />
         <slot name="after"></slot>
       </div>
       <div class="navigation-tree">
@@ -18,7 +18,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -36,15 +36,22 @@ export default class EpPerusteSidenav extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   @Prop({ default: '' })
-  private query!: string;
+  private value!: string;
 
-  private setValue(value) {
-    this.query = value;
+  get query() {
+    return this.value;
+  }
+
+  set query(value) {
+    this.$emit('input', value);
+  }
+
+  @Watch('query')
+  onQueryChange(value) {
     this.perusteDataStore.updateFilter({
       isEnabled: !_.isEmpty(value),
       label: value,
     });
-    this.$emit('search-update', value);
   }
 
   getChildren(node) {
