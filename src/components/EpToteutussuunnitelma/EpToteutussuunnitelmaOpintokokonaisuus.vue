@@ -1,8 +1,7 @@
 <template>
   <div>
-    <b-row>
-      <b-col><h2 class="mb-4">{{$kaanna(sisaltoviite.nimi)}}</h2></b-col>
-    </b-row>
+    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
+
     <b-row>
       <b-col md="6">
         <ep-form-content :name="$t(opintokokonaisuusNimiOtsikko(opintokokonaisuus.tyyppi))" headerType="h4">
