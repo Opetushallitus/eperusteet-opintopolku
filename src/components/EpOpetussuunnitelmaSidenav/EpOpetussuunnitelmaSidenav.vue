@@ -18,11 +18,11 @@
 <script lang="ts">
 import _ from 'lodash';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
 import { Kielet } from '@shared/stores/kieli';
+import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
 
 @Component({
   components: {
@@ -33,7 +33,7 @@ import { Kielet } from '@shared/stores/kieli';
 })
 export default class EpOpetussuunnitelmaSidenav extends Vue {
   @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+  private opetussuunnitelmaDataStore!: IOpetussuunnitelmaStore;
 
   private query = '';
 

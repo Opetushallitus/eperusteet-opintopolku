@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mb-4">{{$kaanna(sisaltoviite.tekstiKappale.nimi)}}</h2>
+    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
 
     <EpSpinner v-if="!koulutuksenosat"/>
 
@@ -76,8 +76,8 @@ export default class EpToteutussuunnitelmaKoulutuksenOsat extends Vue {
         ...viite,
         koulutuksenosa: {
           ...viite.koulutuksenosa,
-          laajuusMinimi: !_.isNil(perusteenOsa?.laajuusMinimi) ? perusteenOsa.laajuusMinimi : viite.koulutuksenosa.laajuusMinimi,
-          laajuusMaksimi: !_.isNil(perusteenOsa?.laajuusMaksimi) ? perusteenOsa?.laajuusMaksimi : viite.koulutuksenosa.laajuusMaksimi,
+          laajuusMinimi: !_.isNil(perusteenOsa?.laajuusMinimi) ? perusteenOsa.laajuusMinimi : viite?.koulutuksenosa?.laajuusMinimi,
+          laajuusMaksimi: !_.isNil(perusteenOsa?.laajuusMaksimi) ? perusteenOsa?.laajuusMaksimi : viite?.koulutuksenosa?.laajuusMaksimi,
         },
       };
     }) as any;

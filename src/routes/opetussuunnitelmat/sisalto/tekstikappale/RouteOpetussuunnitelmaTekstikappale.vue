@@ -1,7 +1,10 @@
 <template>
 <div class="content">
   <div v-if="istekstiKappaleAllLoaded">
-    <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(tekstiKappale.nimi) }}</h2>
+    <h2 id="tekstikappale-otsikko" class="otsikko">
+      <span v-if="numerointi">{{numerointi}}</span>
+      {{ $kaanna(tekstiKappale.nimi) }}
+    </h2>
 
     <!-- Perusteen teksti -->
     <ep-collapse tyyppi="perusteteksti"
@@ -38,8 +41,8 @@
     <!-- Alikappaleet -->
     <div v-if="alikappaleet">
       <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
-        <ep-heading class="aliotsikko"
-                    :level="alikappaleViite.level + 2">
+        <ep-heading class="aliotsikko" :level="alikappaleViite.level + 2">
+          <span v-if="alikappaleNumeroinnitById[alikappaleViite.id]">{{alikappaleNumeroinnitById[alikappaleViite.id]}}</span>
           {{ $kaanna(alikappaleViite.tekstiKappale.nimi) }}
         </ep-heading>
 
@@ -211,6 +214,21 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
     if (this.perusteTekstikappale?.tunniste === 'laajaalainenosaaminen') {
       return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset');
     }
+  }
+
+  get numerointi() {
+    return this.current?.meta?.numerointi;
+  }
+
+  get alikappaleNumeroinnitById() {
+    if (this.current?.children) {
+      return this.current?.children?.reduce((acc: any, child: any) => {
+        acc[child.id] = child?.meta?.numerointi;
+        return acc;
+      }, {});
+    }
+
+    return {};
   }
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>{{$kaanna(koulutuksenosa.nimi)}}</h2>
+    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
 
     <b-row>
       <b-col>

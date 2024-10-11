@@ -2,11 +2,21 @@
   <div class="content">
     <ep-spinner v-if="fetching" />
 
-    <div v-else-if="sisaltoviite">
+    <div v-else-if="sisaltoviite" class="content">
+
+      <portal to="toteutussuunnitelma-sisalto-header" >
+        <h2 v-if="sisaltoviite.nimi">
+          <span v-if="numerointi">{{numerointi}}</span>
+          {{$kaanna(sisaltoviite.nimi)}}
+        </h2>
+      </portal>
+
       <ep-toteutussuunnitelma-tekstikappale v-if="sisaltoviite.tyyppi === 'tekstikappale'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
       />
+
       <ep-toteutussuunnitelma-tutkinnonosa v-else-if="sisaltoviite.tyyppi === 'tutkinnonosa'"
         :sisaltoviite="sisaltoviite"
         :perusteenTutkinnonosa="perusteenTutkinnonosa"
@@ -99,6 +109,7 @@ import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunn
 import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import EpToteutussuunnitelmaOsaamismerkki from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOsaamismerkki.vue';
+import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
 @Component({
   components: {
@@ -170,6 +181,25 @@ export default class RouteToteutussuunnitelmaSisalto extends Vue {
 
   get arviointiasteikot() {
     return this.opetussuunnitelmaDataStore.arviointiasteikot;
+  }
+
+  get current(): NavigationNode | null {
+    return this.opetussuunnitelmaDataStore.current;
+  }
+
+  get numerointi() {
+    return this.current?.meta?.numerointi;
+  }
+
+  get alikappaleNumeroinnitById() {
+    if (this.current?.children) {
+      return this.current?.children?.reduce((acc: any, child: any) => {
+        acc[child.id] = child?.meta?.numerointi;
+        return acc;
+      }, {});
+    }
+
+    return {};
   }
 }
 </script>

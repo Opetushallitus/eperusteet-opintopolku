@@ -7,13 +7,17 @@
 
 <div v-else class="content">
   <div v-if="perusteenOsa">
-    <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+    <h2 id="tekstikappale-otsikko" class="otsikko">
+      <span v-if="numerointi">{{numerointi}}</span>
+      {{ $kaanna(perusteenOsa.nimi) }}
+    </h2>
     <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
 
     <!-- Alikappaleet -->
     <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
       <ep-heading class="otsikko"
                   :level="alikappaleViite.level + 2">
+        <span v-if="alikappaleNumeroinnitById[alikappaleViite.id]">{{alikappaleNumeroinnitById[alikappaleViite.id]}}</span>
         {{ $kaanna(alikappaleViite.perusteenOsa.nimi) }}
       </ep-heading>
       <ep-content-viewer :value="$kaanna(alikappaleViite.perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
@@ -107,6 +111,21 @@ export default class RouteTekstikappale extends Vue {
 
   get osaamisalaKoodiUri() {
     return (this.perusteenOsa as any)?.osaamisala?.uri;
+  }
+
+  get numerointi() {
+    return this.current?.meta?.numerointi;
+  }
+
+  get alikappaleNumeroinnitById() {
+    if (this.current?.children) {
+      return this.current?.children?.reduce((acc: any, child: any) => {
+        acc[child.id] = child?.meta?.numerointi;
+        return acc;
+      }, {});
+    }
+
+    return {};
   }
 }
 
