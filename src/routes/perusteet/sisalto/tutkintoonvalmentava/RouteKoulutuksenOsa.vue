@@ -1,7 +1,10 @@
 <template>
   <div class="content">
     <template v-if="perusteenOsa">
-      <h2 class="mb-4">{{ $kaanna(nimi) }}</h2>
+      <h2 class="mb-4">
+        <span v-if="numerointi">{{numerointi}}</span>
+        {{ $kaanna(nimi) }}
+      </h2>
       <b-row>
         <b-col lg="6" md="12">
           <ep-form-content name="koulutuksen-osan-nimi" headerType="h4">
@@ -119,6 +122,10 @@ export default class RouteKoulutuksenOsa extends Vue {
 
   get nimi() {
     return _.get(this.perusteenOsa, 'nimiKoodi') ? _.get(this.perusteenOsa, 'nimiKoodi.nimi') : _.get(this.perusteenOsa, 'nimi');
+  }
+
+  get numerointi() {
+    return this.current?.meta?.numerointi;
   }
 }
 </script>

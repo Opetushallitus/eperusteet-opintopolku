@@ -1,7 +1,10 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">
+        <span v-if="numerointi">{{numerointi}}</span>
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
 
       <div class="row">
         <div class="col-lg-6 col-md-12 mb-4">
@@ -94,6 +97,10 @@ export default class RouteOpintokokonaisuus extends Vue {
 
   get osaamiskokonaisuusKoodiUri() {
     return (this.perusteenOsa as any)?.nimiKoodi.uri;
+  }
+
+  get numerointi() {
+    return this.current?.meta?.numerointi;
   }
 }
 

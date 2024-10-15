@@ -1,7 +1,10 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">
+        <span v-if="numerointi">{{numerointi}}</span>
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
 
       <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
 
@@ -55,6 +58,10 @@ export default class RouteLinkkisivu extends Vue {
 
   get kuvat() {
     return this.perusteDataStore.kuvat;
+  }
+
+  get numerointi() {
+    return this.current?.meta?.numerointi;
   }
 }
 
