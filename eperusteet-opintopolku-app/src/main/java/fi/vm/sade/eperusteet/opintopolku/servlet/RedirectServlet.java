@@ -1,4 +1,4 @@
-package fi.vm.sade.eperusteet.opintopolku;
+package fi.vm.sade.eperusteet.opintopolku.servlet;
 
 import java.io.IOException;
 import java.util.Arrays;
