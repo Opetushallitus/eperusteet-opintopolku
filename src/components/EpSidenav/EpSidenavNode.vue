@@ -150,7 +150,7 @@ export default class EpSidenavNode extends Vue {
 
   // First element shouldn't has top padding
 
-  ul.children {
+  ul.children:not(:first-child) {
     padding-top: $sidenav-padding;
   }
 
@@ -179,10 +179,6 @@ export default class EpSidenavNode extends Vue {
 
   .router-link-exact-active.router-link-active {
     color: $sidenav-active-color;
-  }
-
-  .label-plain {
-    cursor: not-allowed;
   }
 
   .label-match {

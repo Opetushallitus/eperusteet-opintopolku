@@ -58,6 +58,21 @@ export default class RouteTekstikappale extends Vue {
   @Prop({ required: true })
   private perusteenOsaStore!: PerusteenOsaStore;
 
+  mounted() {
+    if (_.some(_.map(this.perusteenOsaViite?.lapset, 'perusteenOsa.osanTyyppi'), osanTyyppi => _.includes(this.redirectToLinkkiSivuLapsiTyypit, osanTyyppi))) {
+      this.$router.push({
+        name: 'linkkisivu',
+        params: {
+          linkkisivuId: this.$route.params.viiteId,
+        },
+      });
+    }
+  }
+
+  get redirectToLinkkiSivuLapsiTyypit() {
+    return ['koulutuksenosa', 'koto_opinto', 'koto_kielitaitotaso', 'koto_laajaalainenosaaminen', 'opintokokonaisuus'];
+  }
+
   get perusteenOsa() {
     return this.perusteenOsaStore.perusteenOsa;
   }
@@ -136,6 +151,6 @@ export default class RouteTekstikappale extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 .content {
-  padding: 0 $content-padding;
+  padding: $content-padding;
 }
 </style>

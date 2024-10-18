@@ -61,8 +61,6 @@ export class PerusteDataStore {
   @State() public lukioOppineet: any[] = [];
   @State() public geneerisetArviointiasteikot: any[] = [];
   @State() public arviointiasteikot: any[] = [];
-  @State() public perusteJulkaisu: any = null;
-  @State() public perusteJulkaisuP: Promise<any> | null = null;
   @State() public julkaisut: JulkaisuBaseDto[] | null = null;
   @State() public muutosmaaraykset: MaaraysDto[] | null = null;
 
@@ -114,23 +112,6 @@ export class PerusteDataStore {
 
   public getJulkaistuPerusteSisalto(filter) {
     return deepFind(filter, this.perusteKaikki);
-  }
-
-  public async fetchJulkaisu() {
-    if (this.perusteJulkaisu) {
-      return this.perusteJulkaisu;
-    }
-
-    if (this.perusteJulkaisuP) {
-      const { data } = await this.perusteJulkaisuP;
-      return data;
-    }
-
-    this.perusteJulkaisuP = Perusteet.getKokoSisalto(this.perusteId);
-    const { data } = await this.perusteJulkaisuP;
-    this.perusteJulkaisu = data;
-    this.perusteJulkaisuP = null;
-    return data;
   }
 
   private async fetchNavigation() {

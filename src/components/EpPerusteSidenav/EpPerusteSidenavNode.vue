@@ -123,10 +123,6 @@ export default class EpPerusteSidenavNode extends Vue {
     color: $sidenav-active-color;
   }
 
-  .label-plain {
-    cursor: not-allowed;
-  }
-
   .label-match {
     font-weight: bold;
   }
