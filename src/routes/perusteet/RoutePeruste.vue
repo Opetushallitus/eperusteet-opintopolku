@@ -197,10 +197,6 @@ export default class RoutePeruste extends Vue {
     }
   }
 
-  get perusteEsikatselussa() {
-    return this.perusteDataStore.projektitila !== _.toLower(PerusteprojektiDtoTilaEnum.JULKAISTU) || _.has(this.$route.query, 'esikatselu');
-  }
-
   @ProvideReactive('linkkiHandler')
   get linkkiHandler(): ILinkkiHandler {
     return {
