@@ -22,20 +22,12 @@ export class KoosteTiedotteetStore {
     let tiedotteet: TiedoteDto[] = [];
 
     if (perusteJulkaisut) {
-      for (const julkaisu of perusteJulkaisut || []) {
-        tiedotteet = [...tiedotteet,
-          ...(await tiedoteQuery({
-            sivukoko: 100,
-            perusteId: julkaisu.id,
-          })),
-        ];
-        tiedotteet = [...tiedotteet,
-          ...(await tiedoteQuery({
-            sivukoko: 100,
-            perusteIds: _.map(perusteJulkaisut, julkaisu => julkaisu.id) as number[],
-          })),
-        ];
-      }
+      tiedotteet = [...tiedotteet,
+        ...(await tiedoteQuery({
+          sivukoko: 100,
+          perusteIds: _.map(perusteJulkaisut, julkaisu => julkaisu.id) as number[],
+        })),
+      ];
     }
 
     tiedotteet = [...tiedotteet,

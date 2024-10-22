@@ -70,17 +70,25 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   }
 
   async init() {
-    await Promise.all([this.fetchOpetussuunnitelma(), this.fetchNavigation()]);
+    await Promise.all([
+      this.fetchOpetussuunnitelma(),
+      this.fetchNavigation(),
+      this.fetchTermit(),
+      this.fetchKuvat(),
+    ]);
+
+    this.getDokumentit();
 
     if (this.opetussuunnitelmaPerusteenId) {
-      this.fetchPerusteTermit(this.opetussuunnitelmaPerusteenId);
-      this.fetchPerusteKuvat(this.opetussuunnitelmaPerusteenId);
+      await Promise.all([
+        this.fetchPerusteTermit(this.opetussuunnitelmaPerusteenId),
+        this.fetchPerusteKuvat(this.opetussuunnitelmaPerusteenId),
+      ]);
     }
-    this.fetchTermit();
-    this.fetchKuvat();
 
     if (this.opetussuunnitelma?.peruste) {
       const perusteenJulkaisut = (await Julkaisut.getKaikkiJulkaisut(this.opetussuunnitelma.peruste.id!)).data;
+      const maxRev = _.max(_.map(perusteenJulkaisut, 'revision'));
       const rev = _.chain(perusteenJulkaisut)
         .filter(julkaisu => julkaisu.luotu! >= this.opetussuunnitelma!.peruste!.globalVersion?.aikaleima!)
         .sortBy('luotu')
@@ -88,7 +96,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
         .get('revision')
         .value();
 
-      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id!, rev)).data;
+      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id!, rev !== maxRev ? rev : undefined)).data;
     }
   }
 

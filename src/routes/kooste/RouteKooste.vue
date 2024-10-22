@@ -160,7 +160,7 @@ export default class RouteKooste extends Vue {
   async koulutustyyppiChange() {
     if (this.perusteKoosteStore) {
       await this.perusteKoosteStore.fetch();
-      await this.tiedotteetStore.fetch(this.perusteKoosteStore?.perusteJulkaisut.value);
+      await this.tiedotteetStore.fetch(this.perusteKoosteStore?.perusteJulkaisut?.value);
     }
     else {
       await this.tiedotteetStore.fetch();
@@ -172,8 +172,8 @@ export default class RouteKooste extends Vue {
   }
 
   get tiedotteet() {
-    if (this.tiedotteetStore?.tiedotteet.value) {
-      return _.chain(this.tiedotteetStore.tiedotteet.value)
+    if (this.tiedotteetStore?.tiedotteet?.value) {
+      return _.chain(this.tiedotteetStore.tiedotteet?.value)
         .sortBy('luotu')
         .reverse()
         .value();
@@ -181,8 +181,8 @@ export default class RouteKooste extends Vue {
   }
 
   get ohjeet() {
-    if (this.opasStore?.oppaat.value) {
-      return _.chain(this.opasStore.oppaat.value)
+    if (this.opasStore?.oppaat?.value) {
+      return _.chain(this.opasStore.oppaat?.value)
         .map(opas => {
           return {
             ...opas,
@@ -200,8 +200,8 @@ export default class RouteKooste extends Vue {
       return [];
     }
 
-    if (this.perusteKoosteStore?.perusteJulkaisut.value) {
-      return _.chain(this.perusteKoosteStore.perusteJulkaisut.value)
+    if (this.perusteKoosteStore?.perusteJulkaisut?.value) {
+      return _.chain(this.perusteKoosteStore.perusteJulkaisut?.value)
         .map(julkaisu => ({
           ...julkaisu,
           perusteId: _.toString(julkaisu.id),

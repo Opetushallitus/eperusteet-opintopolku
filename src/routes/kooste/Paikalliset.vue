@@ -15,7 +15,6 @@
                      :options="perusteetOptions"
                      :placeholder="$t('kaikki')"
                      class="multiselect"
-                     @input="setActivePeruste($event)"
                      v-model="valittuPeruste"
                      :searchable="false">
         <template slot="singleLabel" slot-scope="{ option }">
@@ -32,23 +31,21 @@
     <ep-spinner v-if="isLoading" />
     <div v-else-if="opetussuunnitelmat.length === 0">
       <div class="alert alert-info">
-        {{ $t('perusteen-pohjalta-ei-toteutettu-opetussuunnitelmia') }}
-      </div>
-    </div>
-    <div v-else-if="opetussuunnitelmatFiltered.length === 0">
-      <div class="alert alert-info">
         {{ $t('ei-hakutuloksia') }}
       </div>
     </div>
     <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
+      <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
         <router-link :to="ops.route">
-          <opetussuunnitelma-tile :ops="ops" :query="query"/>
+          <opetussuunnitelma-tile
+            :ops="ops"
+            :query="query"
+            @mouseover="mouseOver(ops)"/>
         </router-link>
       </div>
       <EpBPagination v-model="page"
                      :items-per-page="perPage"
-                     :total="opetussuunnitelmatFiltered.length"
+                     :total="opetussuunnitelmatKokonaismaara"
                      aria-controls="opetussuunnitelmat-lista">
       </EpBPagination>
     </div>
@@ -70,6 +67,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ryhmanKoulutustyypit } from '@shared/utils/perusteet';
+import { Page } from '@shared/tyypit';
 
 @Component({
   components: {
@@ -95,47 +93,40 @@ export default class Paikalliset extends Vue {
   private query = '';
   private page = 1;
   private perPage = 10;
-  private valittuPeruste = {};
+  private valittuPeruste: any | null = null;
+
+  async mounted() {
+    this.fetch();
+  }
 
   @Watch('koulutustyyppi')
   onKoulutustyyppiChanged() {
-    this.valittuPeruste = {};
-  }
-
-  @Watch('julkaistutPerusteet', { immediate: true })
-  async perusteetChange() {
-    if (_.size(this.perusteKoosteStore.perusteJulkaisut) > 0) {
-      if (_.get(this.valittuPeruste, 'id')) {
-        const peruste = _.find(this.julkaistutPerusteet, peruste => _.get(peruste, 'id') === _.toNumber(_.get(this.$route.params, 'perusteId'))) || this.julkaistutPerusteet![0];
-        await this.setActivePeruste(peruste);
-      }
-      else {
-        await this.setActivePeruste(null);
-      }
-    }
+    this.valittuPeruste = null;
   }
 
   @Watch('query')
-  onQueryChanged() {
+  async onQueryChanged() {
     this.page = 1;
+    await this.fetch();
   }
 
-  get total() {
-    return _.size(this.opetussuunnitelmatFiltered);
+  @Watch('page')
+  async onPageChanged() {
+    await this.fetch();
   }
 
-  get activePeruste() {
-    return this.paikallinenStore.perusteId?.value;
+  @Watch('valittuPeruste')
+  async onPerusteChange() {
+    await this.fetch();
   }
 
-  async setActivePeruste(perusteJulkaisu) {
-    this.query = '';
-    if (perusteJulkaisu?.id) {
-      await this.paikallinenStore.fetch!(perusteJulkaisu.id, perusteJulkaisu.diaarinumero);
-    }
-    else {
-      await this.paikallinenStore.fetch!(undefined, undefined, ryhmanKoulutustyypit(this.koulutustyyppi));
-    }
+  async fetch() {
+    await this.paikallinenStore.fetchQuery!({
+      query: this.query,
+      peruste: this.valittuPeruste,
+      ...(!this.valittuPeruste && { koulutustyypit: ryhmanKoulutustyypit(this.koulutustyyppi) }),
+      page: this.page - 1,
+    });
   }
 
   get julkaistutPerusteet() {
@@ -163,12 +154,18 @@ export default class Paikalliset extends Vue {
   }
 
   get isLoading() {
-    return !this.paikallinenStore.opetussuunnitelmat.value;
+    return !this.paikallinenStore.opetussuunnitelmatPaged!.value;
+  }
+
+  get opetussuunnitelmatKokonaismaara() {
+    if (this.paikallinenStore.opetussuunnitelmatPaged?.value) {
+      return this.paikallinenStore.opetussuunnitelmatPaged!.value['kokonaismäärä'];
+    }
+    return 0;
   }
 
   get opetussuunnitelmat() {
-    this.page = 1;
-    return _.chain(this.paikallinenStore.opetussuunnitelmat.value)
+    return _.chain(this.paikallinenStore.opetussuunnitelmatPaged?.value?.data)
       .map(ops => ({
         ...ops,
         toimijat: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Koulutustoimija')),
@@ -184,46 +181,15 @@ export default class Paikalliset extends Vue {
       .value();
   }
 
-  get opetussuunnitelmatFiltered() {
-    return _.chain(this.opetussuunnitelmat)
-      .filter(ops => this.filterByQuery(ops))
-      .value();
-  }
-
-  filterByQuery(ops) {
-    if (Kielet.search(this.query, ops.nimi)) {
-      return true;
-    }
-    for (const oppilaitos of ops.oppilaitokset || []) {
-      if (Kielet.search(this.query, oppilaitos.nimi)) {
-        return true;
-      }
-    }
-    for (const organisaatio of ops.organisaatiot || []) {
-      if (Kielet.search(this.query, organisaatio.nimi)) {
-        return true;
-      }
-    }
-    for (const kunta of ops.kunnat || []) {
-      if (Kielet.search(this.query, kunta.nimi)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  get opetussuunnitelmatPaginated() {
-    return _.chain(this.opetussuunnitelmatFiltered)
-      .drop(this.perPage * (this.page - 1))
-      .take(this.perPage)
-      .value();
-  }
-
   kaannaPerusteNimi(option) {
     if (option.nimi) {
       return this.$kaanna(option.nimi);
     }
     return this.$t('kaikki');
+  }
+
+  async mouseOver(opetussuunnitelma) {
+    await this.paikallinenStore.addToCache!(opetussuunnitelma.id);
   }
 }
 </script>
