@@ -261,8 +261,6 @@ export default class RoutePerusteTiedot extends Vue {
 
   async mounted() {
     this.handleMaarayskirje();
-    this.perusteDataStore.getKorvaavatPerusteet();
-    this.perusteDataStore.getDokumentit();
     this.isLoading = false;
   }
 
@@ -279,7 +277,11 @@ export default class RoutePerusteTiedot extends Vue {
   }
 
   get korvaavatPerusteet() {
-    return this.perusteDataStore.korvaavatPerusteet;
+    const perusteetByDiaarinumero = _.groupBy(this.perusteDataStore.korvaavatPerusteet, 'diaarinumero');
+    return _.map(this.peruste?.korvattavatDiaarinumerot, diaarinumero => ({
+      diaarinumero,
+      perusteet: perusteetByDiaarinumero[diaarinumero] || [],
+    }));
   }
 
   get peruste() {

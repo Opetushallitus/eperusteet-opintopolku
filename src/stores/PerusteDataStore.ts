@@ -40,7 +40,6 @@ import { PerusteKaikkiDtoTyyppiEnum } from '@shared/generated/eperusteet';
 @Store
 export class PerusteDataStore {
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
-  @State() public projektitila: string | null = null;
   @State() public perusteId: number;
   @State() public esikatselu: boolean | undefined = undefined;
   @State() public revision: number | undefined = undefined;
@@ -78,32 +77,50 @@ export class PerusteDataStore {
   }
 
   private async init() {
-    this.perusteKaikki = (await Perusteet.getKokoSisalto(this.perusteId, this.revision, this.esikatselu)).data;
-    this.projektitila = (await Perusteet.getPerusteProjektiTila(this.perusteId)).data;
-    this.termit = (await Termit.getAllTermit(this.perusteId)).data;
+    [
+      this.perusteKaikki,
+      this.termit,
+      this.liitteet,
+      this.muutosmaaraykset,
+      this.korvaavatPerusteet,
+    ] = _.map(await Promise.all([
+      Perusteet.getKokoSisalto(this.perusteId, this.revision, this.esikatselu) as any,
+      Termit.getAllTermit(this.perusteId),
+      Liitetiedostot.getAllLiitteet(this.perusteId),
+      Maaraykset.getPerusteenJulkaistutMuutosmaaraykset(this.perusteId),
+      Perusteet.getKorvattavatPerusteet(this.perusteId),
+    ]), 'data');
+
     this.kuvat = _.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
       id: kuva.id!,
       kuva,
       src: baseURL + LiitetiedostotParam.getKuva(this.perusteId, kuva.id!).url,
     }));
-    this.fetchNavigation();
 
-    if (isKoulutustyyppiAmmatillinen(this.perusteKaikki.koulutustyyppi!)) {
+    await Promise.all([
+      this.fetchNavigation(),
+      this.getDokumentit(),
+      this.fetchJulkaisut(),
+    ]);
+
+    if (isKoulutustyyppiAmmatillinen(this.perusteKaikki?.koulutustyyppi!)) {
       try {
         await this.getKvLiitteet();
       }
       catch (err) { }
-      this.osaamisalaKuvaukset = (await Perusteet.getOsaamisalat(this.perusteId)).data;
-      this.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
+
+      [
+        this.osaamisalaKuvaukset,
+        this.arviointiasteikot,
+      ] = _.map(await Promise.all([
+        Perusteet.getOsaamisalat(this.perusteId) as any,
+        Arviointiasteikot.getAll(),
+      ]), 'data');
     }
 
     if (isPerusteVanhaLukio(this.peruste)) {
       this.lukioOppineet = _.get((await LukioperusteenJulkisetTiedot.getOppiainePuuRakenne(this.perusteId)).data, 'oppiaineet')!;
     }
-
-    this.liitteet = (await Liitetiedostot.getAllLiitteet(this.perusteId)).data;
-    this.fetchJulkaisut();
-    this.muutosmaaraykset = (await Maaraykset.getPerusteenJulkaistutMuutosmaaraykset(this.perusteId)).data;
   }
 
   async fetchJulkaisut() {
@@ -261,17 +278,6 @@ export class PerusteDataStore {
         return baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
       }
     }
-  }
-
-  async getKorvaavatPerusteet() {
-    if (!this.peruste) {
-      return;
-    }
-
-    this.korvaavatPerusteet = await Promise.all(_.map(this.peruste.korvattavatDiaarinumerot, async diaarinumero => ({
-      diaarinumero,
-      perusteet: (await perusteetQuery({ diaarinumero })).data,
-    })));
   }
 
   public updateRoute(route) {

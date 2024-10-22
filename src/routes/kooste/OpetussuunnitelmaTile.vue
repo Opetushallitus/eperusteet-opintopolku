@@ -1,5 +1,5 @@
 <template>
-  <div class="opetussuunnitelma shadow-tile">
+  <div class="opetussuunnitelma shadow-tile" @mouseover="$emit('mouseover', $event)">
     <div class="d-flex align-items-center">
       <div v-if="showOpsIcon" class="opsicon-wrapper">
         <slot name="icon">

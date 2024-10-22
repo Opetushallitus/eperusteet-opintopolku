@@ -15,7 +15,6 @@ describe('RoutePerusteTiedot', () => {
 
   test('Renders', async () => {
     const perusteDataStore = perusteDataStoreMock({
-      async getKorvaavatPerusteet() {},
       peruste: {
         id: 42,
         nimi: {
@@ -59,9 +58,7 @@ describe('RoutePerusteTiedot', () => {
 
     await localVue.nextTick();
 
-    expect(perusteDataStore.getKorvaavatPerusteet).toHaveBeenCalledTimes(1);
     expect(wrapper.html()).toContain('perusteen nimi');
-
     expect(wrapper.html()).toContain('kvliiteurl-fi');
     expect(wrapper.html()).toContain('lataa-kvliite-fi');
   });

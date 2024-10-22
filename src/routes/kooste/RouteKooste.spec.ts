@@ -55,25 +55,30 @@ describe('RouteKooste', () => {
     }] as any;
 
     const paikallinenStore: IPaikallinenStore = {
-      opetussuunnitelmat: computed(() => [{
-        id: 100,
-        nimi: {
-          fi: 'ops100',
-        } as any,
-        organisaatiot: [{
-          tyypit: ['Oppilaitos'],
+      opetussuunnitelmatPaged: computed(() => ({
+        data: [{
+          id: 100,
           nimi: {
-            fi: 'Oppilaitoksen nimi',
+            fi: 'ops100',
           } as any,
-        }, {
-          tyypit: ['Koulutustoimija'],
-          nimi: {
-            fi: 'Toimijan nimi',
-          } as any,
+          organisaatiot: [{
+            tyypit: ['Oppilaitos'],
+            nimi: {
+              fi: 'Oppilaitoksen nimi',
+            } as any,
+          }, {
+            tyypit: ['Koulutustoimija'],
+            nimi: {
+              fi: 'Toimijan nimi',
+            } as any,
+          }],
         }],
-      }]),
+        sivu: 0,
+        kokonaismäärä: 1,
+      })),
       perusteId: computed(() => 0),
-      fetch: (id) => new Promise<void>(resolve => resolve()),
+      fetchQuery: () => new Promise<void>(resolve => resolve()),
+      addToCache: () => new Promise<void>(resolve => resolve()),
     };
 
     const wrapper = mount(RouteKooste as any, {
