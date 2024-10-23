@@ -40,7 +40,7 @@ function applyLocationTag(target: string, query: string) {
       .trimEnd()
     + (end < clearEl.innerText.length - 1 ? '...' : '');
 
-  return _.replace(text, new RegExp(query, 'gi'), (match) => `<span class="font-weight-bold">${match}</span>`);
+  return _.replace(text, new RegExp(query, 'gi'), (match) => `<mark>${match}</mark>`);
 }
 
 export function deepFind(target: any, path: any[], results: any[], query: string): any[] {
