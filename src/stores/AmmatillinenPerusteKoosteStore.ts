@@ -8,6 +8,7 @@ import { tiedoteQuery } from '@/api/eperusteet';
 import { Page } from '@shared/tyypit';
 import { Debounced } from '@shared/utils/delay';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 
 Vue.use(VueCompositionApi);
 
@@ -26,9 +27,11 @@ export class AmmatillinenPerusteKoosteStore {
   public readonly peruste = computed(() => this.state.peruste);
   public readonly tiedotteet = computed(() => this.state.tiedotteet);
   public readonly opetussuunnitelmat = computed(() => this.state.opetussuunnitelmat);
+  public readonly perusteCacheStore = usePerusteCacheStore();
 
   public async fetch() {
     this.state.peruste = null;
+    this.perusteCacheStore.addPerusteStore(this.perusteId);
     this.state.peruste = (await Perusteet.getKokoSisalto(this.perusteId)).data;
 
     this.state.opsQuery = {

@@ -6,6 +6,7 @@ import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
 import VueCompositionApi, { computed, reactive } from '@vue/composition-api';
 import OsaamismerkkiTile from '@/routes/osaamismerkit/OsaamismerkkiTile.vue';
 import Vue from 'vue';
+import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 
 Vue.use(VueCompositionApi);
 
@@ -19,6 +20,7 @@ export class VstPerusteKoosteStore implements IPerusteKoosteStore {
   public readonly koulutustyyppi = computed(() => this.state.koulutustyyppi);
   public readonly perusteJulkaisut = computed(() => this.state.perusteJulkaisut);
   public readonly muutTilet = computed(() => this.state.muutTilet);
+  public readonly perusteCacheStore = usePerusteCacheStore();
 
   constructor(koulutustyyppi: string) {
     this.state.koulutustyyppi = koulutustyyppi;
@@ -28,6 +30,10 @@ export class VstPerusteKoosteStore implements IPerusteKoosteStore {
   async fetch() {
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
     this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, poistunut: true })), 'data');
+
+    this.state.perusteJulkaisut.forEach(async (peruste) => {
+      this.perusteCacheStore.addPerusteStore(peruste.id);
+    });
   }
 
   async fetchOsaamismerkit() {

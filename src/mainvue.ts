@@ -11,11 +11,11 @@ import { Vahvistus } from '@shared/plugins/vahvistus';
 import '@shared/config/bootstrap';
 import '@shared/config/defaultcomponents';
 import 'material-icons/iconfont/material-icons.css';
-import { router } from '@/router';
 import { Kielet } from '@shared/stores/kieli';
 import App from '@/App.vue';
 import VueI18n from 'vue-i18n';
-import Cookies from 'js-cookie';
+import { pinia } from '@/pinia';
+import { router } from '@/router';
 
 Vue.config.devtools = true;
 Vue.use(Notifications);
@@ -86,6 +86,7 @@ Vue.use(Kielet, {
 
 export const rootConfig: any = {
   i18n: Kielet.i18n,
+  pinia,
   router,
   render: (h: any) => h(App),
 };

@@ -65,7 +65,6 @@ import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/Rout
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
@@ -112,7 +111,9 @@ import { TietoapalvelustaStore } from './stores/TietoapalvelustaStore';
 import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
 import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
 import { BrowserStore } from '@shared/stores/BrowserStore';
-import RouteSisaltohaku from './routes/perusteet/sisalto/RouteSisaltohaku.vue';
+import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
+import { pinia } from '@/pinia';
+import { useOpetussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -130,6 +131,8 @@ const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
 const ammatillinenPerusteHakuStore = new AmmatillinenPerusteHakuStore();
 const osaamismerkitStore = new OsaamismerkitStore();
 const tietoapalvelustaStore = new TietoapalvelustaStore();
+const perusteCacheStore = usePerusteCacheStore(pinia);
+const opetussuunnitelmaCacheStore = useOpetussuunnitelmaCacheStore(pinia);
 
 const routeProps = (route: any) => {
   return {
@@ -479,8 +482,8 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  opetussuunnitelmaDataStore: await OpetussuunnitelmaDataStore.create(
-                    _.parseInt(route.params.opetussuunnitelmaId),
+                  opetussuunnitelmaDataStore: await opetussuunnitelmaCacheStore.getOpetussuunnitelmaStore(
+                    route.params.opetussuunnitelmaId,
                     route.params.revision,
                   ),
                 },
@@ -562,7 +565,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  perusteDataStore: await PerusteDataStore.create(_.parseInt(route.params.perusteId), route.params.revision),
+                  perusteDataStore: await perusteCacheStore.getPerusteStore(route.params.perusteId, route.params.revision),
                 },
               };
             },

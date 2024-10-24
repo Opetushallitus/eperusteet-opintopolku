@@ -5,6 +5,7 @@ import _ from 'lodash';
 import VueCompositionApi, { computed, reactive } from '@vue/composition-api';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
 import Vue from 'vue';
+import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 
 Vue.use(VueCompositionApi);
 
@@ -13,6 +14,8 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
     koulutustyyppi: '' as string | '',
     perusteJulkaisut: null as PerusteenJulkaisuData[] | null,
   });
+
+  public readonly perusteCacheStore = usePerusteCacheStore();
 
   public readonly koulutustyyppi = computed(() => this.state.koulutustyyppi);
   public readonly perusteJulkaisut = computed(() => this.state.perusteJulkaisut);
@@ -25,5 +28,9 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
     this.state.perusteJulkaisut = null;
     this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, poistunut: true })), 'data');
+
+    this.state.perusteJulkaisut.forEach(async (peruste) => {
+      this.perusteCacheStore.addPerusteStore(peruste.id);
+    });
   }
 }
