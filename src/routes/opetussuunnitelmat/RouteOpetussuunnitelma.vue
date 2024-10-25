@@ -130,6 +130,11 @@ export default class RouteOpetussuunnitelma extends Vue {
       },
     } as ILinkkiHandler;
   };
+
+  @ProvideReactive('opetussuunnitelma')
+  get provideOpetussuunnitelma() {
+    return this.opetussuunnitelma;
+  }
 }
 </script>
 

@@ -73,7 +73,7 @@
 
         <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
           v-if="hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'tehtava')">
-          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <template v-slot:header><h4>{{ $kaanna(pohjaNimi) }}</h4></template>
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tehtava.teksti)"></span>
         </ep-collapse>
 
@@ -94,7 +94,7 @@
 
         <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
           v-if="hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'tyotavat')">
-          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <template v-slot:header><h4>{{ $kaanna(pohjaNimi) }}</h4></template>
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tyotavat.teksti)"></span>
         </ep-collapse>
 
@@ -109,7 +109,7 @@
 
         <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
           v-if="hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'ohjaus')">
-          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <template v-slot:header><h4>{{ $kaanna(pohjaNimi) }}</h4></template>
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.ohjaus.teksti)"></span>
         </ep-collapse>
 
@@ -124,7 +124,7 @@
 
         <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
           v-if="hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'arviointi')">
-          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <template v-slot:header><h4>{{ $kaanna(pohjaNimi) }}</h4></template>
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.arviointi.teksti)"></span>
         </ep-collapse>
 
@@ -139,7 +139,7 @@
 
         <ep-collapse class="mb-4 mt-3" :use-padding="false" tyyppi="pohjateksti" :border-bottom="false" :border-top="false"
           v-if="hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'tavoitteistaJohdetutOppimisenTavoitteet')">
-          <template v-slot:header><h4>{{$t('pohjan-teksti')}}</h4></template>
+          <template v-slot:header><h4>{{ $kaanna(pohjaNimi) }}</h4></template>
           <span v-html="$kaanna(oppiaineenPohjanVuosiluokkakokonaisuus.tavoitteistaJohdetutOppimisenTavoitteet.teksti)"></span>
         </ep-collapse>
 
@@ -172,7 +172,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { Vue, Component, Prop, Watch, InjectReactive } from 'vue-property-decorator';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import OppiaineenVuosiluokka from './OppiaineenVuosiluokka.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -193,6 +193,9 @@ export default class OppiaineenVuosiluokkakokonaisuus extends Vue {
 
   @Prop({ required: true })
   private termit!: any[];
+
+  @InjectReactive('opetussuunnitelma')
+  private opetussuunnitelma!: any;
 
   get perusteenVuosiluokkakokonaisuus() {
     return this.tietue.perusteenOppiaineenVlk;
@@ -224,6 +227,10 @@ export default class OppiaineenVuosiluokkakokonaisuus extends Vue {
 
   hasTekstiContent(object, key) {
     return object != null && object[key] != null && object[key].teksti != null;
+  }
+
+  get pohjaNimi() {
+    return this.opetussuunnitelma?.pohja?.nimi;
   }
 }
 
