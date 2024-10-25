@@ -162,15 +162,11 @@ describe('EpPerusteSidenav', () => {
       };
 
       const nodes = wrapper.findAll(EpSidenavNode);
+
+      expect(nodes.length).toEqual(4);
       expect(nodes.at(1).text()).toEqual('Opetussuunnitelman tiedot');
-      expect(nodes.at(5).text()).toContain('Oppiaineet');
-      expect(nodes.at(6).text()).toContain('OA1');
-      expect(nodes.at(7).text()).toContain('Oppimäärät');
-      expect(nodes.at(8).text()).toContain('OM1');
-      expect(nodes.at(9).text()).toContain('Moduulit');
-      expect((nodes.at(10).vm as any).node.location).not.toBeFalsy();
-      expect(nodes.at(10).text()).toContain('M1');
-      expect(nodes.length).toEqual(11);
+      expect(nodes.at(2).text()).toContain('Päätaso');
+      expect(nodes.at(3).text()).toContain('Oppiaineet');
     });
   });
 
