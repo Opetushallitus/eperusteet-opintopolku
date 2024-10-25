@@ -64,7 +64,7 @@
         <template v-if="laajaalainen.pohjanLao
           && laajaalainen.pohjanLao.kuvaus
           && (!laajaalainen.opetussuunnitelmanLao.kuvaus || $kaanna(laajaalainen.pohjanLao.kuvaus) !== $kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus))">
-          <h4>{{ $t('pohjan-teksti') }}</h4>
+          <h4>{{ $kaanna(pohjaNimi) }}</h4>
           <ep-content-viewer :value="$kaanna(laajaalainen.pohjanLao.kuvaus)"/>
         </template>
 
@@ -79,7 +79,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, InjectReactive } from 'vue-property-decorator';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -95,6 +95,9 @@ import EpAlert from '@shared/components/EpAlert/EpAlert.vue';
 export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+
+  @InjectReactive('opetussuunnitelma')
+  private opetussuunnitelma!: any;
 
   get vlkId() {
     return _.toNumber(this.$route.params.vlkId);
@@ -172,6 +175,10 @@ export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
         _laajaalainenOsaaminen: Number(lao._laajaalainenOsaaminen),
       };
     }), '_laajaalainenOsaaminen');
+  }
+
+  get pohjaNimi() {
+    return this.opetussuunnitelma?.pohja?.nimi;
   }
 }
 

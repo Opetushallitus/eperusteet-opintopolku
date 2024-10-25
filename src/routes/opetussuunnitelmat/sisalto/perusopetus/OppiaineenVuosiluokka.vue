@@ -29,7 +29,7 @@
           <div class="mt-3">
             <div v-if="valinnainen">
               <template v-if="pohjanTavoitteet[tavoite.tunniste]">
-                <h4>{{$t('pohjan-teksti')}}</h4>
+                <h4>{{ $kaanna(pohjaNimi) }}</h4>
                 <ep-content-viewer :value="$kaanna(pohjanTavoitteet[tavoite.tunniste].sisaltoalueet[0].sisaltoalueet.kuvaus)" :kuvat="kuvat" />
               </template>
 
@@ -105,7 +105,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { Vue, Component, Prop, InjectReactive } from 'vue-property-decorator';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpOrderColorBall from '@shared/components/EpColorIndicator/EpOrderColorBall.vue';
@@ -150,6 +150,9 @@ export default class OppiaineenVuosiluokka extends Vue {
 
   tavoitteetAvattu = false;
 
+  @InjectReactive('opetussuunnitelma')
+  private opetussuunnitelma!: any;
+
   get tavoitteet() {
     return _.map(this.oppiaineenVuosiluokka?.tavoitteet, tavoite => {
       return {
@@ -192,6 +195,10 @@ export default class OppiaineenVuosiluokka extends Vue {
       .flatten()
       .uniqBy('nimi')
       .value();
+  }
+
+  get pohjaNimi() {
+    return this.opetussuunnitelma?.pohja?.nimi;
   }
 }
 
