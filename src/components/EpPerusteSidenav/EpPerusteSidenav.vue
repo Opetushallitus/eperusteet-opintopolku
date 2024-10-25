@@ -2,10 +2,6 @@
   <div class="sidebar">
     <ep-spinner v-if="sidenavLoading" />
     <div v-else>
-      <!-- <div class="search">
-        <ep-search v-model="query" />
-        <slot name="after"></slot>
-      </div> -->
       <div class="navigation-tree">
         <ep-sidenav-node v-if="treeData"
                           :node="treeData"
@@ -34,25 +30,6 @@ import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
 export default class EpPerusteSidenav extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
-
-  @Prop({ default: '' })
-  private query!: string;
-
-  // get query() {
-  //   return this.value;
-  // }
-
-  // set query(value) {
-  //   this.$emit('input', value);
-  // }
-
-  @Watch('query')
-  onQueryChange(value) {
-    this.perusteDataStore.updateFilter({
-      isEnabled: !_.isEmpty(value),
-      label: value,
-    });
-  }
 
   getChildren(node) {
     const type = node.type;
@@ -85,7 +62,7 @@ export default class EpPerusteSidenav extends Vue {
   }
 
   get treeData() {
-    return this.perusteDataStore.filteredSidenav;
+    return this.perusteDataStore.collapsedSidenav;
   }
 
   get current() {

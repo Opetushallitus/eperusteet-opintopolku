@@ -171,16 +171,6 @@ export class PerusteDataStore {
   public readonly collapsedSidenav!: NavigationNode | null;
 
   @Getter((state, getters) => {
-    if (state.sidenavFilter.isEnabled) {
-      return filterNavigation(getters.sidenav, state.sidenavFilter);
-    }
-    else {
-      return getters.collapsedSidenav;
-    }
-  })
-  public readonly filteredSidenav!: NavigationNode | null;
-
-  @Getter((state, getters) => {
     const root = getters.sidenav;
     const result: Array<NavigationNode> = [];
 
@@ -287,8 +277,4 @@ export class PerusteDataStore {
   public updateRoute(route) {
     this.currentRoute = route;
   }
-
-  public readonly updateFilter = _.debounce((filter: NavigationFilter) => {
-    this.sidenavFilter = filter;
-  }, 300);
 }
