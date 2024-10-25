@@ -161,7 +161,7 @@ export class PerusteDataStore {
     const map = (value, depth = 0) => {
       return {
         ...value,
-        isVisible: !getters.current || depth === 1 || onPath(value),
+        isVisible: depth === 1 || onPath(value),
         children: _.map(value.children, child => map(child, depth + 1)),
       };
     };
