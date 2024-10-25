@@ -35,7 +35,6 @@
             <div>
               <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
               <ep-peruste-sidenav
-                  v-model="query"
                   :peruste-data-store="perusteDataStore">
               </ep-peruste-sidenav>
             </div>
@@ -108,6 +107,11 @@ import { Debounced } from '@shared/utils/delay';
     query: {
       handler: 'queryImplDebounce',
       immediate: true,
+    },
+    $route: {
+      handler: 'onRouteUpdate',
+      immediate: true,
+      deep: true,
     },
   },
   inject: [],
@@ -250,16 +254,12 @@ export default class RoutePeruste extends Vue {
 
   sisaltohakuValinta(location) {
     this.$router.push(location).catch(() => { });
+    this.sisaltohaku = false;
+    this.query = '';
     this.onRouteUpdate(this.$route);
   }
 
   onRouteUpdate(route) {
-    this.sisaltohaku = false;
-    this.query = '';
-    this.perusteDataStore.updateFilter({
-      isEnabled: false,
-      label: '',
-    });
     this.perusteDataStore.updateRoute(route);
   }
 }

@@ -231,27 +231,6 @@ describe('EpPerusteSidenav', () => {
       expect(nodes.at(4).text()).toContain('Alitaso 2');
       expect(nodes.at(5).text()).toContain('Oppiaineet');
     });
-
-    test('Navigation with tiedot and filter', async () => {
-      perusteDataStore.currentRoute = {
-        name: 'perusteTiedot',
-        params: {
-          perusteId: '42',
-        },
-      };
-
-      perusteDataStore.sidenavFilter = {
-        label: 'OM1',
-        isEnabled: true,
-      };
-
-      const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.length).toEqual(5);
-      expect(nodes.at(1).text()).toContain('Oppiaineet');
-      expect(nodes.at(2).text()).toContain('OA1');
-      expect(nodes.at(3).text()).toContain('Oppimäärät');
-      expect(nodes.at(4).text()).toContain('OM1');
-    });
   });
 
   describe('Navigation to previous and next', () => {
