@@ -12,7 +12,12 @@
       </div>
     </div>
 
-    <TavoitteenSisaltoalueet :sisaltoalueet="sisaltoalueet" :naytaOmaKuvaus="false" class="mt-4"/>
+    <TavoitteenSisaltoalueet
+      :sisaltoalueet="sisaltoalueet"
+      :naytaOmaKuvaus="false"
+      class="mt-4"
+      />
+
   </div>
 </template>
 
@@ -49,6 +54,7 @@ export default class OppiaineenVuosiluokkaTiivistetty extends Vue {
     return _.chain(this.tavoitteet)
       .map('sisaltoalueet')
       .flatten()
+      .filter('nimi')
       .uniqBy('nimi')
       .value();
   }
