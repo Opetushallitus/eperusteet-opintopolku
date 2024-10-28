@@ -30,6 +30,7 @@ import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
 import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { getTavoiteNumero } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -58,8 +59,10 @@ export default class RouteAipeKurssi extends Vue {
 
   get tavoitteet() {
     if (this.kurssi) {
-      return _.sortBy(_.map(this.kurssi.tavoitteet, tavoite => (this.tavoitteetById![tavoite as any])), tavoite => this.$kaanna(tavoite))
-        .reverse();
+      return _.chain(this.kurssi.tavoitteet)
+        .map(tavoite => this.tavoitteetById![tavoite as any])
+        .sortBy(tavoite => getTavoiteNumero(tavoite.tavoite))
+        .value();
     }
   }
 
