@@ -51,6 +51,11 @@
             </div>
           </template>
 
+          <div class="mt-4" v-if="hasContent(vlk.sisaltoalueinfo)">
+            <h3>{{$kaanna(vlk.sisaltoalueinfo.otsikko)}}</h3>
+            <ep-content-viewer :value="$kaanna(vlk.sisaltoalueinfo.teksti)" :kuvat="kuvat" :termit="termit"/>
+          </div>
+
           <div class="mt-4" v-if="vlk.tavoitteet.length > 0">
             <h3>{{$t('oppiaineen-tavoitteet')}}</h3>
             <ep-button variant="link" @click="toggleTavoitteet()">
