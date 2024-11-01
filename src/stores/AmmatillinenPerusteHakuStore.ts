@@ -24,7 +24,6 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
       'koulutustyyppi_5',
       'koulutustyyppi_18',
     ],
-    koulutusvienti: true,
     tuleva: true,
     siirtyma: false,
     voimassaolo: true,
