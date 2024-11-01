@@ -57,7 +57,6 @@ export interface JulkaistutPerusteetQuery {
   siirtyma?: boolean;
   voimassaolo?: boolean;
   poistunut?: boolean;
-  koulutusvienti?: boolean;
   tyyppi?: string;
   diaarinumero?: string;
   koodi?: string;
@@ -114,7 +113,6 @@ export async function julkaistutPerusteet(query: JulkaistutPerusteetQuery) {
     query.voimassaolo,
     query.siirtyma,
     query.poistunut,
-    query.koulutusvienti,
     query.tyyppi,
     query.diaarinumero,
     query.koodi,
