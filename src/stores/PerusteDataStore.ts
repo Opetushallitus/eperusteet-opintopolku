@@ -18,25 +18,20 @@ import {
   DokumenttiDtoTilaEnum,
   Maaraykset,
   MaaraysDto,
-  PerusteBaseDtoOpasTyyppiEnum,
 } from '@shared/api/eperusteet';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
   buildNavigation,
-  filterNavigation,
   buildTiedot,
   NavigationFilter,
   NavigationNode,
   naytaPerusteTiedotNaviMenussa,
 } from '@shared/utils/NavigationBuilder';
 
-import { perusteetQuery } from '@/api/eperusteet';
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio } from '@shared/utils/perusteet';
 import { deepFind } from '@shared/utils/helpers';
-import { PerusteKaikkiDtoTyyppiEnum } from '@shared/generated/eperusteet';
-
 @Store
 export class PerusteDataStore {
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
