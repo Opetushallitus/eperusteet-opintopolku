@@ -15,7 +15,7 @@
     </template>
   </ep-header>
 
-  <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle"/>
+  <EpPerusteNotificationBar :julkaisut="julkaisut" :peruste="peruste" />
 
   <div class="container mt-4">
     <div class="lower">
@@ -77,16 +77,13 @@ import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPerusteSidenav from '@/components/EpPerusteSidenav/EpPerusteSidenav.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import EpNotificationBar from '@/components/EpNotificationBar/EpNotificationBar.vue';
+import EpPerusteNotificationBar from '@/components/EpNotificationBar/EpPerusteNotificationBar.vue';
 import EpPerusteHaku from '@/components/EpPerusteHaku.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import { PerusteprojektiDtoTilaEnum } from '@shared/api/eperusteet';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
-import { Kielet } from '@shared/stores/kieli';
 import { Route } from 'vue-router';
-import { Debounced } from '@shared/utils/delay';
 
 @Component({
   components: {
@@ -96,7 +93,7 @@ import { Debounced } from '@shared/utils/delay';
     EpPreviousNextNavigation,
     EpFormContent,
     EpField,
-    EpNotificationBar,
+    EpPerusteNotificationBar,
     EpPerusteHaku,
     EpSearch,
   },
@@ -182,10 +179,6 @@ export default class RoutePeruste extends Vue {
     return this.peruste?.koulutustyyppi || this.oppaanKoulutustyyppi;
   }
 
-  get hasSisaltoKielelle() {
-    return _.includes(this.peruste?.kielet, _.toString(Kielet.getSisaltoKieli.value));
-  }
-
   get oppaanKoulutustyyppi() {
     if (_.size(this.peruste?.oppaanKoulutustyypit) === 1) {
       return _.take((this.peruste?.oppaanKoulutustyypit as any[])).toString();
@@ -212,11 +205,6 @@ export default class RoutePeruste extends Vue {
 
   get routeName() {
     return this.$route.name;
-  }
-
-  get julkaisuPvm() {
-    let julkaisu = this.perusteDataStore.julkaisut?.find(julkaisu => julkaisu.revision === _.toNumber(this.$route.params?.revision));
-    return julkaisu ? julkaisu.luotu : null;
   }
 
   get ensimainenNavi() {
@@ -257,6 +245,10 @@ export default class RoutePeruste extends Vue {
 
   onRouteUpdate(route) {
     this.perusteDataStore.updateRoute(route);
+  }
+
+  get julkaisut() {
+    return this.perusteDataStore.julkaisut;
   }
 }
 </script>

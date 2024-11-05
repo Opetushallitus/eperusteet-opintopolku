@@ -1,17 +1,19 @@
 <template>
   <div
       id="notification-bar"
-      class="notifikaatio justify-content-center py-3"
+      class="notifikaatio justify-content-center py-3 korostus"
       :class="notifikaatioClass"
       v-sticky
       sticky-z-index="5000"
-      v-if="notifikaatio"
+      v-if="hasNotification"
       ref="stickyElement">
     <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
-    <span class="notifikaatio-text korostus">{{ notifikaatio }}</span>
-    <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">
-      <span class="btn-link clickable korostus" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
-    </div>
+    <slot>
+      <span class="notifikaatio-text">{{ notifikaatio }}</span>
+      <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">
+        <span class="btn-link clickable" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
+      </div>
+    </slot>
   </div>
 </template>
 
@@ -39,10 +41,14 @@ export default class EpNotificationBar extends Vue {
   navBarHeight: number = 0;
 
   mounted() {
-    if (this.notifikaatio) {
+    if (this.hasNotification) {
       const navbar = document.getElementById('navigation-bar');
       (this.$refs['stickyElement'] as any)['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
     }
+  }
+
+  get hasNotification() {
+    return this.notifikaatio || this.hasDefaultSlotContent;
   }
 
   get offset() {
@@ -66,13 +72,13 @@ export default class EpNotificationBar extends Vue {
     this.$router.go(0);
   }
 
-  get notifikaatio() {
-    if (!this.hasSisaltoKielelle) {
-      return this.$t('sisaltoa-ei-saatavilla');
-    }
+  get tyyppi(): 'peruste' | 'suunnitelma' {
+    return this.$route.params?.perusteId ? 'peruste' : 'suunnitelma';
+  }
 
+  get notifikaatio() {
     if (this.isEsikatselu) {
-      if (this.$route.params?.perusteId) {
+      if (this.tyyppi === 'peruste') {
         return this.$t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu');
       }
       else {
@@ -80,8 +86,12 @@ export default class EpNotificationBar extends Vue {
       }
     }
 
+    if (!this.hasSisaltoKielelle) {
+      return this.$t('sisaltoa-ei-saatavilla');
+    }
+
     if (this.versio) {
-      if (this.$route.params?.perusteId) {
+      if (this.tyyppi === 'peruste') {
         return `${this.$t('katselet-perusteen-aiempaa-julkaisua')}${this.julkaisuPvmText}`;
       }
       else {
@@ -99,6 +109,10 @@ export default class EpNotificationBar extends Vue {
     delete route.params.revision;
     await this.$router.push({ name: route.name!, params: route.params });
     this.$router.go(0);
+  }
+
+  get hasDefaultSlotContent() {
+    return !!this.$slots.default;
   }
 }
 </script>
@@ -122,8 +136,8 @@ export default class EpNotificationBar extends Vue {
       margin: 0 5px 0 5px;
     }
 
-    .korostus {
-      font-weight: 600;
+    &.korostus, .korostus {
+      font-weight: 600 !important;
     }
   }
 
