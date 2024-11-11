@@ -22,6 +22,7 @@ import {
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
   buildNavigation,
+  buildNavigationNode,
   buildTiedot,
   NavigationFilter,
   NavigationNode,
@@ -146,9 +147,15 @@ export class PerusteDataStore {
     }
     else {
       if (naytaPerusteTiedotNaviMenussa(getters.peruste)) {
-        const tiedot = buildTiedot('perusteTiedot', {
-          ...(state.revision && { revision: state.revision }),
-        });
+        const tiedot = {
+          ...buildTiedot('perusteTiedot', {
+            ...(state.revision && { revision: state.revision }),
+          }),
+          children: [
+            buildNavigationNode('muutoshistoria', 'muutoshistoria', 'perusteMuutoshistoria'),
+          ],
+        };
+
         return buildNavigation(state.navigation, tiedot, false, state.revision);
       }
       else {
