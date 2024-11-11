@@ -214,12 +214,6 @@
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="julkaisut && julkaisut.length > 0">
-        <ep-form-content name="muutoshistoria" headerType="h3" headerClass="h6">
-          <EpJulkaisuHistoriaJulkinen :julkaisut="julkaisut"></EpJulkaisuHistoriaJulkinen>
-        </ep-form-content>
-      </div>
-
     </div>
     <slot name="previous-next-navigation" />
   </div>

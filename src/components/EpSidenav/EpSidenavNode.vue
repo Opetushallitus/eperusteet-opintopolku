@@ -110,11 +110,15 @@ export default class EpSidenavNode extends Vue {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
+.node:has(> ul.children) {
+  padding-bottom: 0px;
+}
+
 .node {
   color: $sidenav-color;
   hyphens: auto;
 
-  &:not(.node-root, .separator) {
+  &:not(.node-root, .separator){
     padding-bottom: $sidenav-padding;
   }
 
@@ -153,6 +157,12 @@ export default class EpSidenavNode extends Vue {
   ul.children:not(:first-child) {
     padding-top: $sidenav-padding;
   }
+
+  // ul.children {
+  //   .node {
+  //     padding-bottom: 0;
+  //   }
+  // }
 
   ul.root-list, ol.root-list {
     font-size: 16px;
