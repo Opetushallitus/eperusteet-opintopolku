@@ -20,25 +20,14 @@ describe('RoutePerusteTiedot', () => {
         nimi: {
           fi: 'perusteen nimi',
         } as any,
-        muutosmaaraykset: [{
-          id: 1234,
-          nimi: {
-            fi: 'muutosmaarays',
-          } as any,
-          url: {
-            fi: 'maarayksenosoite',
-          } as any,
-          liitteet: {
-            liite: {
-              id: '123',
-              nimi: {
-                fi: 'liite',
-              } as any,
-            },
-          },
-        }],
       },
       perusteId: 42,
+      maarays: {
+        id: 1,
+        nimi: {
+          fi: 'maarays X',
+        } as any,
+      },
     });
 
     perusteDataStore.kvLiitteet = { fi: 'kvliiteurl-fi' };
@@ -59,6 +48,7 @@ describe('RoutePerusteTiedot', () => {
     await localVue.nextTick();
 
     expect(wrapper.html()).toContain('perusteen nimi');
+    expect(wrapper.html()).toContain('maarays X');
     expect(wrapper.html()).toContain('kvliiteurl-fi');
     expect(wrapper.html()).toContain('lataa-kvliite-fi');
   });

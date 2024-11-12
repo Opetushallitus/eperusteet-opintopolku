@@ -30,7 +30,7 @@
       </div>
       <template v-else>
         <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-        <ep-sidebar :scroll-enabled="true">
+        <ep-sidebar :scroll-enabled="scroll">
           <template slot="bar">
             <div>
               <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
@@ -249,6 +249,10 @@ export default class RoutePeruste extends Vue {
 
   get julkaisut() {
     return this.perusteDataStore.julkaisut;
+  }
+
+  get scroll() {
+    return !_.has(this.$route.query, 'noscroll');
   }
 }
 </script>

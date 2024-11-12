@@ -58,6 +58,7 @@ export class PerusteDataStore {
   @State() public arviointiasteikot: any[] = [];
   @State() public julkaisut: JulkaisuBaseDto[] | null = null;
   @State() public muutosmaaraykset: MaaraysDto[] | null = null;
+  @State() public maarays: MaaraysDto | null = null;
 
   public static async create(perusteId: number, revision: number | null = null) {
     const result = new PerusteDataStore(perusteId, revision);
@@ -79,12 +80,14 @@ export class PerusteDataStore {
       this.liitteet,
       this.muutosmaaraykset,
       this.korvaavatPerusteet,
+      this.maarays,
     ] = _.map(await Promise.all([
       Perusteet.getKokoSisalto(this.perusteId, this.revision, this.esikatselu) as any,
       Termit.getAllTermit(this.perusteId),
       Liitetiedostot.getAllLiitteet(this.perusteId),
       Maaraykset.getPerusteenJulkaistutMuutosmaaraykset(this.perusteId),
       Perusteet.getKorvattavatPerusteet(this.perusteId),
+      Maaraykset.getMaaraysPerusteella(this.perusteId),
     ]), 'data');
 
     this.kuvat = _.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
@@ -148,7 +151,7 @@ export class PerusteDataStore {
     else {
       if (naytaPerusteTiedotNaviMenussa(getters.peruste)) {
         const tiedot = {
-          ...buildTiedot('perusteTiedot', {
+          ...buildNavigationNode('tiedot', 'perusteen-tiedot', 'perusteTiedot', {
             ...(state.revision && { revision: state.revision }),
           }),
           children: [
