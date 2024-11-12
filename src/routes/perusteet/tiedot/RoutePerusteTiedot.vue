@@ -1,7 +1,6 @@
 <template>
 <div class="content">
-  <ep-spinner v-if="isLoading"></ep-spinner>
-  <div v-else>
+  <div>
     <h2 class="otsikko mb-4" slot="header">
       <slot name="header">
         {{ $t('perusteen-tiedot') }}
@@ -14,16 +13,6 @@
             <div>{{$kaanna(peruste.nimi)}} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
           </ep-form-content>
         </slot>
-      </div>
-      <div class="col-md-12" v-if="peruste.diaarinumero">
-        <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
-          <ep-field v-model="peruste.diaarinumero"></ep-field>
-        </ep-form-content>
-      </div>
-      <div class="col-md-12" v-if="peruste.paatospvm">
-        <ep-form-content name="maarayksen-paatospaivamaara" headerType="h3" headerClass="h6">
-          <ep-datepicker v-model="peruste.paatospvm"></ep-datepicker>
-        </ep-form-content>
       </div>
       <div class="col-md-12" v-if="peruste.voimassaoloAlkaa" >
         <ep-form-content name="voimaantulo-pvm" headerType="h3" headerClass="h6">
@@ -41,32 +30,24 @@
           <p class="help">{{ $t('siirtyman-kuvaus') }}</p>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="hasMaarayskirje">
-        <ep-form-content name="maarayskirje" headerType="h3" headerClass="h6">
-          <EpPdfLink :url="maarayskirje.url">{{ $kaanna(peruste.nimi) }}</EpPdfLink>
+      <div class="col-md-12" v-if="dokumentti">
+        <ep-form-content :name="dokumenttiKielistykset.otsikko" headerType="h3" headerClass="h6">
+          <div class="pl-2">
+            <EpPdfLink :url="dokumentti">{{ $t(dokumenttiKielistykset.linkki) }}</EpPdfLink>
+          </div>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="hasMuutosmaaraykset">
-        <ep-form-content name="muutosmaaraykset" headerType="h3" headerClass="h6">
-          <b-table
-            :items="muutosmaaraykset"
-            :fields="muutosmaarayksetFields"
-            striped>
+      <div class="col-md-12" v-if="hasMaaraykset">
+        <ep-form-content name="maaraykset" headerType="h3" headerClass="h6">
 
-            <template v-slot:cell(nimi)="{ item }">
-              <EpPdfLink :url="item.url">{{ $kaanna(item.nimi) }}</EpPdfLink>
-
-              <div v-if="item.liitteet.length > 0" class="d-flex mt-3">
-                <div class="mr-3">{{ $t('liitteet')}}:</div>
-                <div class="flex-row">
-                  <div v-for="(liite, idx) in item.liitteet" :key="'maaraysliite' + idx" class="mb-1">
-                    <EpPdfLink :url="liite.url">{{ $kaanna(liite.nimi) }}</EpPdfLink>
-                  </div>
-                </div>
-              </div>
-            </template>
-          </b-table>
-
+          <div v-for="maarays in maaraykset" :key="'maarays'+maarays.url" class="taulukko-rivi-varitys px-2 py-3">
+            <router-link :to="{ name: 'maarays', params: { maaraysId: maarays.id } }">{{ $kaanna(maarays.nimi) }}</router-link>
+            <div class="mt-2">
+              <span>{{ $t('voimaantulo')}}: {{ $sd(maarays.voimassaoloAlkaa)}}</span>
+              <span class="px-2">|</span>
+              <span>{{ $t('diaarinumero')}}: {{ maarays.diaarinumero }}</span>
+            </div>
+          </div>
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasKorvattavatDiaarinumerot">
@@ -85,10 +66,8 @@
                   </router-link>
                 </div>
               </div>
-              <div v-else>
-                <i>
-                  {{ $t('perusteita-ei-saatavilla-koska-perustetta-ei-loydy-eperusteet-palvelusta') }}
-                </i>
+              <div v-else class="font-italic">
+                {{ $t('peruste-saatavilla-opetushallituksen-arkistosta') }}
               </div>
             </template>
           </b-table>
@@ -192,12 +171,6 @@
         </div>
       </div>
 
-      <div class="col-md-12" v-if="dokumentti">
-        <ep-form-content :name="dokumenttiKielistykset.otsikko" headerType="h3" headerClass="h6">
-          <EpPdfLink :url="dokumentti">{{ $t(dokumenttiKielistykset.linkki) }}</EpPdfLink>
-        </ep-form-content>
-      </div>
-
       <div v-if="isAmmatillinen && !isOpas" class="col-md-12">
         <ep-form-content name="englanninkieliset-sisallot" headerType="h3" headerClass="h6">
           <router-link :to="{name: 'perusteKoosteEng'}">
@@ -233,11 +206,9 @@ import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import EpJulkaisuHistoriaJulkinen from '@shared/components/EpJulkaisuHistoriaJulkinen/EpJulkaisuHistoriaJulkinen.vue';
 
 @Component({
   components: {
-    EpJulkaisuHistoriaJulkinen,
     EpFormContent,
     EpField,
     EpDatepicker,
@@ -251,12 +222,6 @@ export default class RoutePerusteTiedot extends Vue {
   private perusteDataStore!: PerusteDataStore;
 
   private isLoading = true;
-  private maarayskirjeObj;
-
-  async mounted() {
-    this.handleMaarayskirje();
-    this.isLoading = false;
-  }
 
   get kieli() {
     return Kielet.getSisaltoKieli.value;
@@ -330,10 +295,6 @@ export default class RoutePerusteTiedot extends Vue {
       .value();
   }
 
-  handleMaarayskirje() {
-    this.maarayskirjeObj = this.handleMaarays(this.peruste!.maarayskirje);
-  }
-
   handleMaarays(maaraysObj) {
     const result = {};
     if (maaraysObj) {
@@ -358,36 +319,15 @@ export default class RoutePerusteTiedot extends Vue {
     return result;
   }
 
-  get maarayskirje() {
-    return this.maarayskirjeObj[Kielet.sisaltoKieli.value];
+  get hasMaaraykset() {
+    return !_.isEmpty(this.maaraykset);
   }
 
-  get hasMaarayskirje() {
-    return this.peruste?.maarayskirje && this.maarayskirjeObj[Kielet.sisaltoKieli.value];
-  }
-
-  get hasMuutosmaaraykset() {
-    return !_.isEmpty(this.muutosmaaraykset);
-  }
-
-  get muutosmaaraykset() {
+  get maaraykset() {
     return [
-      ...this.perusteenMuutosmaaraykset,
       ...this.maarayskokoelmanMuutosmaaraykset,
+      this.perusteDataStore?.maarays,
     ];
-  }
-
-  get perusteenMuutosmaaraykset() {
-    return _.chain(this.peruste?.muutosmaaraykset)
-      .filter(muutosmaarays => _.has(muutosmaarays.liitteet, this.kieli))
-      .map(muutosmaarays => {
-        return {
-          ...muutosmaarays,
-          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, muutosmaarays.liitteet![this.kieli].id!).url,
-          nimi: !!muutosmaarays.nimi && muutosmaarays.nimi[this.kieli] ? muutosmaarays.nimi[this.kieli] : muutosmaarays.liitteet![this.kieli].nimi,
-        };
-      })
-      .value();
   }
 
   get maarayskokoelmanMuutosmaaraykset() {
@@ -419,6 +359,7 @@ export default class RoutePerusteTiedot extends Vue {
   get korvattavatDiaarinumerotFields() {
     return [{
       key: 'diaarinumero',
+      thStyle: 'width: 30%',
       label: this.$t('diaarinumero'),
     }, {
       key: 'perusteet',
@@ -497,24 +438,6 @@ export default class RoutePerusteTiedot extends Vue {
       key: 'tutkintonimikeArvo',
       label: this.$t('koodi'),
       thStyle: 'width: 15%',
-    }];
-  }
-
-  get muutosmaarayksetFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi'),
-      thStyle: { width: '75%' },
-      thClass: 'border-bottom-1',
-      sortable: false,
-    }, {
-      key: 'voimassaoloAlkaa',
-      label: this.$t('voimassaolo-alkaa'),
-      thClass: 'border-bottom-1',
-      sortable: false,
-      formatter: (value: any, key: any, item: any) => {
-        return (this as any).$sd(value);
-      },
     }];
   }
 

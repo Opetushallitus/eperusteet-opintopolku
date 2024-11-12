@@ -138,7 +138,7 @@ describe('EpPerusteSidenav', () => {
 
     test('Works with simple root node', () => {
       const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.at(1).text()).toEqual('Opetussuunnitelman tiedot');
+      expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
     });
 
     test('Works with complex data', () => {
@@ -148,7 +148,7 @@ describe('EpPerusteSidenav', () => {
       };
 
       const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.at(1).text()).toEqual('Opetussuunnitelman tiedot');
+      expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
       expect(nodes.length).toEqual(7);
     });
 
@@ -164,7 +164,7 @@ describe('EpPerusteSidenav', () => {
       const nodes = wrapper.findAll(EpSidenavNode);
 
       expect(nodes.length).toEqual(4);
-      expect(nodes.at(1).text()).toEqual('Opetussuunnitelman tiedot');
+      expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
       expect(nodes.at(2).text()).toContain('Päätaso');
       expect(nodes.at(3).text()).toContain('Oppiaineet');
     });
@@ -204,10 +204,11 @@ describe('EpPerusteSidenav', () => {
       };
 
       const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.length).toEqual(4);
-      expect(nodes.at(1).text()).toContain('Opetussuunnitelman tiedot');
-      expect(nodes.at(2).text()).toContain('Päätaso');
-      expect(nodes.at(3).text()).toContain('Oppiaineet');
+      expect(nodes.length).toEqual(5);
+      expect(nodes.at(1).text()).toContain('Perusteen tiedot');
+      expect(nodes.at(2).text()).toContain('Muutoshistoria');
+      expect(nodes.at(3).text()).toContain('Päätaso');
+      expect(nodes.at(4).text()).toContain('Oppiaineet');
     });
 
     test('Navigation with viite active', async () => {
@@ -221,7 +222,7 @@ describe('EpPerusteSidenav', () => {
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(6);
-      expect(nodes.at(1).text()).toContain('Opetussuunnitelman tiedot');
+      expect(nodes.at(1).text()).toContain('Perusteen tiedot');
       expect(nodes.at(2).text()).toContain('Päätaso');
       expect(nodes.at(3).text()).toContain('Alitaso 1');
       expect(nodes.at(4).text()).toContain('Alitaso 2');
@@ -263,7 +264,7 @@ describe('EpPerusteSidenav', () => {
     });
 
     test('Navigation next and previous', async () => {
-      expect(wrapper.html()).toContain('Päätaso');
+      expect(wrapper.html()).toContain('Muutoshistoria');
 
       perusteDataStore.currentRoute = {
         name: 'perusteTekstikappale',
@@ -274,7 +275,7 @@ describe('EpPerusteSidenav', () => {
       };
       wrapper.setProps({ activeNode: perusteDataStore.current });
 
-      expect(wrapper.html()).toContain('Opetussuunnitelman tiedot');
+      expect(wrapper.html()).toContain('Perusteen tiedot');
       expect(wrapper.html()).toContain('Oppiaineet');
 
       perusteDataStore.currentRoute = {
