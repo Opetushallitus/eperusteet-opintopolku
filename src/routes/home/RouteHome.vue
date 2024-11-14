@@ -129,9 +129,11 @@ export default class RouteHome extends Vue {
     await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
   }
 
-  @Watch('julkaistutKoulutustyypit')
+  @Watch('julkaistutKoulutustyypit', { immediate: true })
   async julkaistutKoulutustyypitChange() {
-    await this.tiedoteStore.getUusimmat(this.sisaltoKieli, _.map(this.julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat.value, 'koulutustyyppi'));
+    if (this.julkaistutKoulutustyypit) {
+      await this.tiedoteStore.getUusimmat(this.sisaltoKieli, _.map(this.julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat.value, 'koulutustyyppi'));
+    }
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
