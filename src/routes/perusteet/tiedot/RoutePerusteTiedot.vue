@@ -326,7 +326,7 @@ export default class RoutePerusteTiedot extends Vue {
   get maaraykset() {
     return [
       ...this.maarayskokoelmanMuutosmaaraykset,
-      this.perusteDataStore?.maarays,
+      ...(this.perusteDataStore?.maarays ? [this.perusteDataStore.maarays] : []),
     ];
   }
 
