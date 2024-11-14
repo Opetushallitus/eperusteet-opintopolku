@@ -66,7 +66,6 @@ import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/Rout
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 import { Virheet } from '@shared/stores/virheet';
