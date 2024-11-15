@@ -152,10 +152,12 @@ export default class EpEtusivuHaku extends Vue {
           ...resultItem,
           theme: {
             ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
-            'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE,
-            'icon ops': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA,
-            'icon totsu': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA,
-            'icon opas': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS,
+            ['tyyppi-' + resultItem.etusivuTyyppi?.toLocaleLowerCase()]: true,
+            'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE
+            || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.DIGITAALINENOSAAMINEN,
+            'icon': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA
+            || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA
+            || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS,
           },
           koulutustyyppi: resultItem.jotpatyyppi === 'MUU' ? 'koulutustyyppi_muu' : resultItem.koulutustyyppi,
         };
@@ -184,6 +186,16 @@ export default class EpEtusivuHaku extends Vue {
         name: 'peruste',
         params: {
           koulutustyyppi: koulutustyyppiStateName(resultItem.koulutustyyppi),
+          perusteId: _.toString(resultItem.id),
+        },
+      };
+    }
+
+    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.DIGITAALINENOSAAMINEN) {
+      return {
+        name: 'peruste',
+        params: {
+          koulutustyyppi: 'digiosaaminen',
           perusteId: _.toString(resultItem.id),
         },
       };
@@ -326,6 +338,10 @@ export default class EpEtusivuHaku extends Vue {
       background-color: $koulutustyyppi-kotoutumiskoulutus-color;
     }
 
+    &.tyyppi-digiosaaminen {
+      background-color: $digitaalinen-osaaminen-color;
+    }
+
   }
 
   .icon {
@@ -334,15 +350,15 @@ export default class EpEtusivuHaku extends Vue {
     background-size: 40px 40px;
     background-repeat: no-repeat;
 
-    &.ops {
+    &.tyyppi-opetussuunnitelma {
       background-image: url('../../../public/img/images/opskortti.svg');
     }
 
-    &.totsu {
+    &.tyyppi-toteutussuunnitelma {
       background-image: url('../../../public/img/images/totsukortti.svg');
     }
 
-    &.opas {
+    &.tyyppi-opas {
       background-image: url('../../../public/img/images/opas_ikoni.svg');
     }
   }
