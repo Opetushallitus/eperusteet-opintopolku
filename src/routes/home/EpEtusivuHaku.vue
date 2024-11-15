@@ -338,7 +338,7 @@ export default class EpEtusivuHaku extends Vue {
       background-color: $koulutustyyppi-kotoutumiskoulutus-color;
     }
 
-    &.tyyppi-digiosaaminen {
+    &.tyyppi-digitaalinen_osaaminen {
       background-color: $digitaalinen-osaaminen-color;
     }
 
