@@ -1,6 +1,5 @@
 <template>
-<div class="content">
-  <div>
+  <div class="content">
     <h2 class="otsikko mb-4" slot="header">
       <slot name="header">
         {{ $t('perusteen-tiedot') }}
@@ -190,7 +189,6 @@
     </div>
     <slot name="previous-next-navigation" />
   </div>
-</div>
 </template>
 
 <script lang="ts">
