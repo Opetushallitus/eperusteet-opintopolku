@@ -7,10 +7,15 @@
           {{ $t('muutoshistoria') }}
         </slot>
       </h2>
-      <div class="row">
-        <div class="col-md-12" v-if="julkaisut && julkaisut.length > 0">
-            <EpJulkaisuHistoriaJulkinen :julkaisut="julkaisut" naytaKaikki></EpJulkaisuHistoriaJulkinen>
-        </div>
+
+      <div>
+        {{$t('peruste-muutoshistoria-kuvaus')}}
+      </div>
+
+      <div class="mt-2" v-if="julkaisut && julkaisut.length > 0">
+        <EpJulkaisuHistoriaJulkinen
+          :julkaisut="julkaisut"
+          naytaKaikki />
       </div>
       <slot name="previous-next-navigation" />
     </div>
