@@ -1,9 +1,0 @@
-p(ng-show='showEmptyPlaceholder()', kaanna="'ei-asetettu'")
-ul.tagcloud
-  li(ng-repeat='tag in model | filter:notHidden | orderBy:orderFn')
-    span(ng-if="openable === 'true'", ohje='false', ohje-click-anywhere='false', teksti='tag.teksti', otsikko='tag.nimi', suunta='bottom', extra='tag.extra')
-      span.tc-tag
-        span.clickable {{tag.nimi | kaanna}}
-    span.tc-tag(ng-if="openable !== 'true'")
-      a.action-link.closer(ng-if='editMode', icon-role='remove', title="{{'poista' | kaanna}}", ng-click='remove(tag)')
-      |       {{tag.nimi | kaanna}}

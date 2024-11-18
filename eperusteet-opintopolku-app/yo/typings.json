@@ -1,9 +1,0 @@
-{
-  "name": "yo",
-  "globalDependencies": {
-    "angular": "registry:dt/angular#1.5.0+20160602160139",
-    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
-    "lodash": "registry:dt/lodash#3.10.0+20160330154726",
-    "moment-node": "registry:dt/moment-node#2.11.1+20160511043338"
-  }
-}

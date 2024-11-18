@@ -1,7 +1,0 @@
-{
-  "name": "eperusteet-opintopolku-e2e",
-  "version": "0.0.0",
-  "devDependencies": {
-    "protractor": "4.0.11"
-  }
-}
