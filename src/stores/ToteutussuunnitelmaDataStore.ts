@@ -83,10 +83,8 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
           .value(),
       ]);
 
-    const esikatselu = (this.perusteKaikki?.tyyppi as any) === PerusteTyyppi.AMOSAA_YHTEINEN ? true : this.esikatselu;
-
-    this.perusteidenTutkinnonOsat = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId, esikatselu)).data)));
-    this.perusteidenTutkinnonOsienViitteet = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId, esikatselu)).data)));
+    this.perusteidenTutkinnonOsat = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId)).data)));
+    this.perusteidenTutkinnonOsienViitteet = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId)).data)));
   }
 
   @Getter(state => {
