@@ -120,6 +120,15 @@ export default class Paikalliset extends Vue {
     await this.fetch();
   }
 
+  @Watch('kieli')
+  async onKieliChange() {
+    await this.fetch();
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
   async fetch() {
     await this.paikallinenStore.fetchQuery!({
       query: this.query,

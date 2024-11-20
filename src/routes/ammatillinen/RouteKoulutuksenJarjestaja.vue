@@ -190,6 +190,15 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
     await this.doFetch();
   }
 
+  @Watch('kieli')
+  async onKieliChange() {
+    await this.doFetch();
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
   async doFetch() {
     this.fetching = true;
     await this.koulutuksenJarjestajaStore.fetchToteutussuunnitelmat(this.opsQuery, this.opsPage - 1);
