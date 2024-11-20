@@ -1,8 +1,0 @@
-.row(ng-show='isOppiaineState()')
-  .panel.op-legend.col-md-11.col-offset-md-1
-    .panel-body
-      span(ng-repeat='tyyppi in tyypit')
-        span.spacer
-        span.lukio-colorbox(ng-class="'{{tyyppi}}'")
-        span=" "
-        span.ops-legend-label(ng-bind='tyyppi | kaanna')
