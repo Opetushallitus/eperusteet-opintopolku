@@ -38,6 +38,9 @@ export default class EpNotificationBar extends Vue {
   @Prop({ required: false, default: true })
   private hasSisaltoKielelle?: boolean;
 
+  @Prop({ required: false })
+  private maxRevision?: number;
+
   navBarHeight: number = 0;
 
   mounted() {
@@ -90,11 +93,12 @@ export default class EpNotificationBar extends Vue {
       return this.$t('sisaltoa-ei-saatavilla');
     }
 
-    if (this.versio) {
-      if (this.tyyppi === 'peruste') {
+    if (this.versio && (!this.maxRevision || _.toNumber(this.versio) < this.maxRevision)) {
+      if (this.tyyppi === 'peruste' && this.julkaisuPvm) {
         return `${this.$t('katselet-perusteen-aiempaa-julkaisua')}${this.julkaisuPvmText}`;
       }
-      else {
+
+      if (this.tyyppi === 'suunnitelma') {
         return `${this.$t('katselet-suunnitelman-vanhentunutta-versiota')} (${this.versio}).`;
       }
     }

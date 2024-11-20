@@ -23,7 +23,6 @@ import { LiiteDtoWrapper } from '@shared/tyypit';
 import {
   buildNavigation,
   buildNavigationNode,
-  buildTiedot,
   NavigationFilter,
   NavigationNode,
   naytaPerusteTiedotNaviMenussa,
@@ -155,7 +154,9 @@ export class PerusteDataStore {
             ...(state.revision && { revision: state.revision }),
           }),
           children: [
-            buildNavigationNode('muutoshistoria', 'muutoshistoria', 'perusteMuutoshistoria'),
+            buildNavigationNode('muutoshistoria', 'muutoshistoria', 'perusteMuutoshistoria', {
+              ...(state.revision && { revision: state.revision }),
+            }),
           ],
         };
 
