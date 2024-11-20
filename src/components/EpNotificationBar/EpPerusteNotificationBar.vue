@@ -1,5 +1,5 @@
 <template>
-  <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle">
+  <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle" :maxRevision="maxRevision">
     <template v-if="voimassaolo">
       <div class="notifikaatio-text" v-if="voimassaolo === 'tuleva'">
         <span>{{ $t('katselet-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
@@ -67,6 +67,10 @@ export default class EpPerusteNotificationBar extends Vue {
 
   get currentRevision() {
     return _.toNumber(this.$route?.params?.revision || _.max(_.map(this.julkaisut, 'revision')));
+  }
+
+  get maxRevision() {
+    return _.max(_.map(this.julkaisut, 'revision'));
   }
 
   get uusinJulkaisu() {

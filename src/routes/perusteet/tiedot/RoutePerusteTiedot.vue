@@ -219,8 +219,6 @@ export default class RoutePerusteTiedot extends Vue {
   @Prop({ required: true })
   private perusteDataStore!: PerusteDataStore;
 
-  private isLoading = true;
-
   get kieli() {
     return Kielet.getSisaltoKieli.value;
   }

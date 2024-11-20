@@ -1,24 +1,21 @@
 <template>
   <div class="content">
-    <ep-spinner v-if="isLoading"></ep-spinner>
-    <div v-else>
-      <h2 class="otsikko mb-2" slot="header">
-        <slot name="header">
-          {{ $t('muutoshistoria') }}
-        </slot>
-      </h2>
+    <h2 class="otsikko mb-2" slot="header">
+      <slot name="header">
+        {{ $t('muutoshistoria') }}
+      </slot>
+    </h2>
 
-      <div>
-        {{$t('peruste-muutoshistoria-kuvaus')}}
-      </div>
-
-      <div class="mt-2" v-if="julkaisut && julkaisut.length > 0">
-        <EpJulkaisuHistoriaJulkinen
-          :julkaisut="julkaisut"
-          naytaKaikki />
-      </div>
-      <slot name="previous-next-navigation" />
+    <div>
+      {{$t('peruste-muutoshistoria-kuvaus')}}
     </div>
+
+    <div class="mt-2" v-if="julkaisut && julkaisut.length > 0">
+      <EpJulkaisuHistoriaJulkinen
+        :julkaisut="julkaisut"
+        naytaKaikki />
+    </div>
+    <slot name="previous-next-navigation" />
   </div>
 </template>
 
