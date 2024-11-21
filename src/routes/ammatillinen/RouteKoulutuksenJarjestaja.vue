@@ -61,7 +61,7 @@
               {{ $t('ei-hakutuloksia') }}
             </div>
           </div>
-          <div v-else :class="{'disabled-events': fetching}">
+          <div v-else :class="{'disabled-events': !toteutussuunnitelmat}">
             <div v-for="(ops, idx) in toteutussuunnitelmat" :key="idx">
 
               <router-link :to="ops.route">
@@ -118,8 +118,6 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
 
   private opsQuery = '';
   private opsPage = 1;
-  private fetching = false;
-
   private perPage = 5;
 
   get koulutustyyppi() {
@@ -190,9 +188,9 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
     await this.doFetch();
   }
 
-  @Watch('kieli')
+  @Watch('kieli', { immediate: true })
   async onKieliChange() {
-    await this.doFetch();
+    await Promise.all([this.doFetch(), this.koulutuksenJarjestajaStore.fetch()]);
   }
 
   get kieli() {
@@ -200,9 +198,7 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
   }
 
   async doFetch() {
-    this.fetching = true;
     await this.koulutuksenJarjestajaStore.fetchToteutussuunnitelmat(this.opsQuery, this.opsPage - 1);
-    this.fetching = false;
   }
 
   get murupolku() {
