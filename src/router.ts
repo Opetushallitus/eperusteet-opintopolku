@@ -358,7 +358,7 @@ export const router = new Router({
             async props(route) {
               return {
                 default: {
-                  koulutuksenJarjestajaStore: new KoulutuksenJarjestajaStore(route.params.koulutuksenjarjestajaId),
+                  koulutuksenJarjestajaStore: await KoulutuksenJarjestajaStore.create(route.params.koulutuksenjarjestajaId),
                 },
               };
             },
