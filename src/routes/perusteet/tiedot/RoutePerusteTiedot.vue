@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" v-if="!naytaMuutoshistoria">
     <h2 class="otsikko mb-4" slot="header">
       <slot name="header">
         {{ $t('perusteen-tiedot') }}
@@ -39,12 +39,13 @@
       <div class="col-md-12" v-if="hasMaaraykset">
         <ep-form-content name="maaraykset" headerType="h3" headerClass="h6">
 
-          <div v-for="maarays in maaraykset" :key="'maarays'+maarays.url" class="taulukko-rivi-varitys px-2 py-3">
-            <router-link :to="{ name: 'maarays', params: { maaraysId: maarays.id } }">{{ $kaanna(maarays.nimi) }}</router-link>
+          <div v-for="maarays in maaraykset" :key="'maarays'+maarays.id" class="taulukko-rivi-varitys px-2 py-3">
+            <EpPdfLink v-if="maarays.url" :url="maarays.url">{{ $kaanna(maarays.nimi) }}</EpPdfLink>
+            <router-link v-else :to="{ name: 'maarays', params: { maaraysId: maarays.id } }">{{ $kaanna(maarays.nimi) }}</router-link>
             <div class="mt-2">
-              <span>{{ $t('voimaantulo')}}: {{ $sd(maarays.voimassaoloAlkaa)}}</span>
-              <span class="px-2">|</span>
-              <span>{{ $t('diaarinumero')}}: {{ maarays.diaarinumero }}</span>
+              <span v-if="maarays.voimassaoloAlkaa">{{ $t('voimaantulo')}}: {{ $sd(maarays.voimassaoloAlkaa)}}</span>
+              <span v-if="maarays.voimassaoloAlkaa && maarays.diaarinumero" class="px-2">|</span>
+              <span v-if="maarays.diaarinumero">{{ $t('diaarinumero')}}: {{ maarays.diaarinumero }}</span>
             </div>
           </div>
         </ep-form-content>
@@ -186,15 +187,23 @@
         </ep-form-content>
       </div>
 
+      <div class="col-md-12" v-if="!isOpas">
+        <ep-form-content name="muutoshistoria" headerType="h3" headerClass="h6">
+          <div class="clickable link-style " @click="muutoshistoria = true">{{ $t('katsele-perusteen-muutoshistoriaa') }}</div>
+        </ep-form-content>
+      </div>
     </div>
     <slot name="previous-next-navigation" />
+  </div>
+  <div v-else>
+    <EpPerusteMuutoshistoria :perusteDataStore="perusteDataStore" v-model="muutoshistoria"/>
   </div>
 </template>
 
 <script lang="ts">
 import _ from 'lodash';
 import { Prop, Vue, Component } from 'vue-property-decorator';
-import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, MaarayksetParams, MaaraysLiiteDtoTyyppiEnum, PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
+import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
@@ -204,6 +213,7 @@ import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
+import EpPerusteMuutoshistoria from './EpPerusteMuutoshistoria.vue';
 
 @Component({
   components: {
@@ -213,6 +223,7 @@ import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue
     EpSpinner,
     EpContentViewer,
     EpExternalLink,
+    EpPerusteMuutoshistoria,
   },
 })
 export default class RoutePerusteTiedot extends Vue {
@@ -291,60 +302,60 @@ export default class RoutePerusteTiedot extends Vue {
       .value();
   }
 
-  handleMaarays(maaraysObj) {
-    const result = {};
-    if (maaraysObj) {
-      // Käytetään ensisijaisesti liitteitä
-      if (!_.isEmpty(maaraysObj.liitteet)) {
-        _.each(maaraysObj.liitteet, (liite, kieli) => {
-          result[kieli] = {
-            ...liite,
-            url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, liite.id!).url,
-          };
-        });
-      }
-      else if (!_.isEmpty(maaraysObj.url)) {
-        _.each(maaraysObj.url, (url, kieli) => {
-          result[kieli] = {
-            nimi: url,
-            url,
-          };
-        });
-      }
-    }
-    return result;
-  }
-
   get hasMaaraykset() {
     return !_.isEmpty(this.maaraykset);
   }
 
   get maaraykset() {
-    return [
+    return _.sortBy([
       ...this.maarayskokoelmanMuutosmaaraykset,
-      ...(this.perusteDataStore?.maarays ? [this.perusteDataStore.maarays] : []),
-    ];
+      ...this.perusteenMuutosmaaraykset,
+      ...(this.perusteDataStore?.maarays ? [this.perusteenMaarays] : []),
+      ...(this.julkaisujenMuutosMaaraykset),
+    ], (maarays: any) => maarays.voimassaoloAlkaa || 0).reverse();
+  }
+
+  get perusteenMaarays() {
+    return {
+      ...this.perusteDataStore.maarays,
+      voimassaoloAlkaa: _.size(this.perusteDataStore?.maarays?.korvattavatMaaraykset) > 0 || _.size(this.perusteDataStore.maarays?.muutettavatMaaraykset) > 0 ? this.perusteDataStore.maarays?.voimassaoloAlkaa : null,
+    };
   }
 
   get maarayskokoelmanMuutosmaaraykset() {
     return _.chain(this.perusteDataStore.muutosmaaraykset)
-      .map(muutosmaarays => {
-        const muutosmaaraysLiite = _.find(muutosmaarays!.liitteet![this.kieli].liitteet, { tyyppi: MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI });
-        const liitteet = _.filter(muutosmaarays!.liitteet![this.kieli].liitteet, { tyyppi: MaaraysLiiteDtoTyyppiEnum.LIITE });
-        return {
-          ...muutosmaarays,
-          ...(!!muutosmaaraysLiite && { url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(muutosmaaraysLiite!.id)).url }),
-          liitteet: _.sortBy(_.map(liitteet, liite => {
-            return {
-              ...liite,
-              url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(liite.id)).url,
-            };
-          }), liite => this.$kaanna(liite.nimi)),
-        };
-      })
-      .filter('url')
       .sortBy('voimassaoloAlkaa')
       .reverse()
+      .value();
+  }
+
+  get perusteenMuutosmaaraykset() {
+    return _.chain(this.peruste?.muutosmaaraykset)
+      .filter(muutosmaarays => _.has(muutosmaarays.liitteet, this.kieli))
+      .map(muutosmaarays => {
+        return {
+          ...muutosmaarays,
+          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, muutosmaarays.liitteet![this.kieli].id!).url,
+          nimi: !!muutosmaarays.nimi && muutosmaarays.nimi[this.kieli] ? muutosmaarays.nimi[this.kieli] : muutosmaarays.liitteet![this.kieli].nimi,
+        };
+      })
+      .value();
+  }
+
+  get julkaisujenMuutosMaaraykset() {
+    return _.chain(this.julkaisut)
+      .filter(julkaisu => (julkaisu.liitteet || []).length > 0)
+      .map(julkaisu => {
+        return _.map(julkaisu.liitteet, liite => {
+          return {
+            voimassaoloAlkaa: julkaisu.muutosmaaraysVoimaan,
+            ...liite,
+            url: baseURL + LiitetiedostotParam.getJulkaisuLiite(this.peruste!.id!, liite.liite!.id!).url,
+          };
+        });
+      })
+      .flatMap()
+      .filter(liite => liite.kieli === this.kieli)
       .value();
   }
 
@@ -451,6 +462,18 @@ export default class RoutePerusteTiedot extends Vue {
 
   get showKoulutusvienninOhje() {
     return this.isEiTarvitaOhjettaTyyppi || this.isEiVoiPoiketaTyyppi || (this.isKoulutusvientiliiteTyyppi && this.koulutusvienninOhjeet && this.koulutusvienninOhjeet.length > 0);
+  }
+
+  get naytaMuutoshistoria() {
+    return _.has(this.$route.query, 'muutoshistoria');
+  }
+
+  set muutoshistoria(val) {
+    this.$router.replace({ query: { muutoshistoria: null } }).catch(() => {});
+  }
+
+  get muutoshistoria() {
+    return this.naytaMuutoshistoria;
   }
 }
 </script>

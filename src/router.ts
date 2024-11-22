@@ -113,7 +113,6 @@ import { BrowserStore } from '@shared/stores/BrowserStore';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 import { pinia } from '@/pinia';
 import { useOpetussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
-import RoutePerusteMuutoshistoria from './routes/perusteet/tiedot/RoutePerusteMuutoshistoria.vue';
 
 Vue.use(Router);
 Vue.use(VueMeta, {
@@ -575,10 +574,6 @@ export const router = new Router({
           path: 'tiedot',
           component: RoutePerusteTiedot,
           name: 'perusteTiedot',
-        }, {
-          path: 'muutoshistoria',
-          component: RoutePerusteMuutoshistoria,
-          name: 'perusteMuutoshistoria',
         }, {
           path: 'kooste',
           component: RoutePerusteKoosteEng,

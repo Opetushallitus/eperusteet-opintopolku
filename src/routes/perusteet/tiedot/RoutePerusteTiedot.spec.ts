@@ -42,6 +42,11 @@ describe('RoutePerusteTiedot', () => {
       },
       mocks: {
         ...mocks,
+        $route: {
+          params: {
+            perusteId: 42,
+          },
+        },
       },
     });
 
