@@ -32,6 +32,7 @@ import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio } from '@shared/utils/perusteet';
 import { deepFind } from '@shared/utils/helpers';
+import { isAmmatillinenKoulutustyyppi } from '../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 @Store
 export class PerusteDataStore {
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
@@ -149,15 +150,11 @@ export class PerusteDataStore {
     }
     else {
       if (naytaPerusteTiedotNaviMenussa(getters.peruste)) {
+        const nimi = getters.peruste?.tyyppi === 'normaali' ? 'perusteen-tiedot' : 'oppaan-tiedot';
         const tiedot = {
-          ...buildNavigationNode('tiedot', 'perusteen-tiedot', 'perusteTiedot', {
+          ...buildNavigationNode('tiedot', nimi, 'perusteTiedot', {
             ...(state.revision && { revision: state.revision }),
           }),
-          children: [
-            buildNavigationNode('muutoshistoria', 'muutoshistoria', 'perusteMuutoshistoria', {
-              ...(state.revision && { revision: state.revision }),
-            }),
-          ],
         };
 
         return buildNavigation(state.navigation, tiedot, false, state.revision);

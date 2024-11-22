@@ -89,6 +89,7 @@ const perusteData = {
   diaarinumero: '1234-1234',
   toteutus: 'yksinkertainen',
   voimassaoloAlkaa: 123456,
+  tyyppi: 'normaali',
 } as any;
 
 describe('EpPerusteSidenav', () => {
@@ -204,11 +205,10 @@ describe('EpPerusteSidenav', () => {
       };
 
       const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.length).toEqual(5);
+      expect(nodes.length).toEqual(4);
       expect(nodes.at(1).text()).toContain('Perusteen tiedot');
-      expect(nodes.at(2).text()).toContain('Muutoshistoria');
-      expect(nodes.at(3).text()).toContain('Päätaso');
-      expect(nodes.at(4).text()).toContain('Oppiaineet');
+      expect(nodes.at(2).text()).toContain('Päätaso');
+      expect(nodes.at(3).text()).toContain('Oppiaineet');
     });
 
     test('Navigation with viite active', async () => {
@@ -264,7 +264,7 @@ describe('EpPerusteSidenav', () => {
     });
 
     test('Navigation next and previous', async () => {
-      expect(wrapper.html()).toContain('Muutoshistoria');
+      expect(wrapper.html()).toContain('Päätaso');
 
       perusteDataStore.currentRoute = {
         name: 'perusteTekstikappale',
