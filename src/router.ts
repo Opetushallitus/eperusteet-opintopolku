@@ -62,6 +62,7 @@ import RouteOpetussuunnitelmaPerusopetusOppiaine from '@/routes/opetussuunnitelm
 import RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet.vue';
 import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiTiedot.vue';
 import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
+import RoutePerusteMuutoshistoria from '@/routes/perusteet/tiedot/RoutePerusteMuutoshistoria.vue';
 
 import { PerusteStore } from '@/stores/PerusteStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
@@ -574,6 +575,10 @@ export const router = new Router({
           path: 'tiedot',
           component: RoutePerusteTiedot,
           name: 'perusteTiedot',
+        }, {
+          path: 'muutoshistoria',
+          component: RoutePerusteMuutoshistoria,
+          name: 'perusteMuutoshistoria',
         }, {
           path: 'kooste',
           component: RoutePerusteKoosteEng,

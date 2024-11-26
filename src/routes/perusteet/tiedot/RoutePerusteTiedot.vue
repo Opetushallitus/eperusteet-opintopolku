@@ -1,5 +1,5 @@
 <template>
-  <div class="content" v-if="!naytaMuutoshistoria">
+  <div class="content">
     <h2 class="otsikko mb-4" slot="header">
       <slot name="header">
         {{ $t('perusteen-tiedot') }}
@@ -189,14 +189,13 @@
 
       <div class="col-md-12" v-if="!isOpas">
         <ep-form-content name="muutoshistoria" headerType="h3" headerClass="h6">
-          <div class="clickable link-style " @click="muutoshistoria = true">{{ $t('katsele-perusteen-muutoshistoriaa') }}</div>
+          <router-link :to="{ name: 'perusteMuutoshistoria' }">
+            <span>{{ $t('katsele-perusteen-muutoshistoriaa') }}</span>
+          </router-link>
         </ep-form-content>
       </div>
     </div>
     <slot name="previous-next-navigation" />
-  </div>
-  <div v-else>
-    <EpPerusteMuutoshistoria :perusteDataStore="perusteDataStore" v-model="muutoshistoria"/>
   </div>
 </template>
 
@@ -213,7 +212,6 @@ import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
-import EpPerusteMuutoshistoria from './EpPerusteMuutoshistoria.vue';
 
 @Component({
   components: {
@@ -223,7 +221,6 @@ import EpPerusteMuutoshistoria from './EpPerusteMuutoshistoria.vue';
     EpSpinner,
     EpContentViewer,
     EpExternalLink,
-    EpPerusteMuutoshistoria,
   },
 })
 export default class RoutePerusteTiedot extends Vue {
@@ -462,18 +459,6 @@ export default class RoutePerusteTiedot extends Vue {
 
   get showKoulutusvienninOhje() {
     return this.isEiTarvitaOhjettaTyyppi || this.isEiVoiPoiketaTyyppi || (this.isKoulutusvientiliiteTyyppi && this.koulutusvienninOhjeet && this.koulutusvienninOhjeet.length > 0);
-  }
-
-  get naytaMuutoshistoria() {
-    return _.has(this.$route.query, 'muutoshistoria');
-  }
-
-  set muutoshistoria(val) {
-    this.$router.replace({ query: { muutoshistoria: null } }).catch(() => {});
-  }
-
-  get muutoshistoria() {
-    return this.naytaMuutoshistoria;
   }
 }
 </script>
