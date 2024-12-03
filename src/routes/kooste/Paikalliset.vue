@@ -133,7 +133,7 @@ export default class Paikalliset extends Vue {
     await this.paikallinenStore.fetchQuery!({
       query: this.query,
       peruste: this.valittuPeruste,
-      ...(!this.valittuPeruste && { koulutustyypit: ryhmanKoulutustyypit(this.koulutustyyppi) }),
+      ...(!this.valittuPeruste?.nimi && { koulutustyypit: ryhmanKoulutustyypit(this.koulutustyyppi) }),
       page: this.page - 1,
     });
   }
@@ -153,9 +153,7 @@ export default class Paikalliset extends Vue {
   get perusteetOptions() {
     if (this.julkaistutPerusteet) {
       return [
-        {
-          nimi: null,
-        },
+        {},
         ...this.julkaistutPerusteet,
       ];
     }
@@ -191,7 +189,7 @@ export default class Paikalliset extends Vue {
   }
 
   kaannaPerusteNimi(option) {
-    if (option.nimi) {
+    if (option?.nimi) {
       return this.$kaanna(option.nimi);
     }
     return this.$t('kaikki');
