@@ -25,7 +25,7 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
       query.query,
       Kielet.getSisaltoKieli.value,
       query.peruste?.diaarinumero,
-      query.sivu,
+      query.page,
       10,
     )).data as any;
   }
