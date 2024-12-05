@@ -29,9 +29,10 @@
           <p class="help">{{ $t('siirtyman-kuvaus') }}</p>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="dokumentti">
-        <ep-form-content :name="dokumenttiKielistykset.otsikko" headerType="h3" headerClass="h6">
-          <div class="pl-2">
+      <div class="col-md-12" v-if="dokumentti !== ''">
+        <ep-form-content :name="dokumenttiKielistykset.otsikko" headerType="h3" headerClass="h6" class="text-left">
+          <EpSpinner class="d-inline-block" v-if="!dokumentti"/>
+          <div class="pl-2" v-else>
             <EpPdfLink :url="dokumentti">{{ $t(dokumenttiKielistykset.linkki) }}</EpPdfLink>
           </div>
         </ep-form-content>
@@ -201,7 +202,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Prop, Vue, Component } from 'vue-property-decorator';
+import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
 import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
@@ -229,6 +230,11 @@ export default class RoutePerusteTiedot extends Vue {
 
   get kieli() {
     return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('kieli')
+  async onKieliChange() {
+    await this.perusteDataStore.getDokumentti();
   }
 
   get isAmmatillinen() {

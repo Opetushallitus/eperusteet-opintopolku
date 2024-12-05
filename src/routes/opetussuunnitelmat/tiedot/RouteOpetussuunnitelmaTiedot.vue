@@ -71,9 +71,10 @@
           <ep-content-viewer :value="$kaanna(opetussuunnitelma.kuvaus)" :termit="termit" :kuvat="kuvat"/>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="dokumentti">
+      <div class="col-md-12" v-if="dokumentti !== ''">
         <ep-form-content name="opetussuunnitelma-pdfna" headerType="h3" headerClass="h6">
-          <EpPdfLink :url="dokumentti">{{ $t('avaa-opetussuunnitelma-pdf') }}</EpPdfLink>
+          <EpSpinner class="d-inline-block" v-if="!dokumentti"/>
+          <EpPdfLink :url="dokumentti" v-else>{{ $t('avaa-opetussuunnitelma-pdf') }}</EpPdfLink>
         </ep-form-content>
       </div>
 
@@ -138,11 +139,7 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
   }
 
   get dokumentti() {
-    const dokumentit = this.opetussuunnitelmaDataStore.dokumentit;
-    if (_.get(dokumentit, Kielet.getUiKieli.value)) {
-      return (this as any).$kaanna(dokumentit);
-    }
-    return null;
+    return this.opetussuunnitelmaDataStore.dokumentti;
   }
 
   private getOrganisaatioNimi(organisaatio) {
@@ -162,6 +159,15 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
 
   get kuvat() {
     return this.opetussuunnitelmaDataStore.kuvat;
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
+
+  @Watch('kieli')
+  async onKieliChange() {
+    await this.opetussuunnitelmaDataStore.getDokumentti();
   }
 }
 </script>
