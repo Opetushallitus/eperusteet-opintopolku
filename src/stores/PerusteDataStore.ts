@@ -98,7 +98,7 @@ export class PerusteDataStore {
 
     await Promise.all([
       this.fetchNavigation(),
-      this.getDokumentit(),
+      this.getDokumentti(),
       this.fetchJulkaisut(),
     ]);
 
@@ -223,14 +223,10 @@ export class PerusteDataStore {
   })
   public readonly current!: NavigationNode | null;
 
-  public async getDokumentit() {
-    if (!this.peruste) {
-      return;
-    }
-
+  public async getDokumentti() {
     this.dokumentti = null;
     const sisaltoKieli = Kielet.getSisaltoKieli.value;
-    const suoritustavat = this.peruste.suoritustavat ? this.peruste.suoritustavat : [{ suoritustapakoodi: 'REFORMI' }] as any[];
+    const suoritustavat = this.peruste!.suoritustavat ? this.peruste!.suoritustavat : [{ suoritustapakoodi: 'REFORMI' }] as any[];
     if (suoritustavat) {
       for (let i = 0; i < suoritustavat.length; i++) {
         const st = suoritustavat[i];
@@ -254,6 +250,10 @@ export class PerusteDataStore {
           }
         }
       }
+    }
+
+    if (this.dokumentti === null) {
+      this.dokumentti = '';
     }
   };
 
