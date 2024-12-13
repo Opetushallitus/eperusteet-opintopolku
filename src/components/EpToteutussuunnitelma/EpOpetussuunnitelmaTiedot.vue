@@ -100,7 +100,7 @@ export default class EpOpetussuunnitelmaTiedot extends Vue {
   }
 
   get koulutustoimija() {
-    return this.store!.koulutustoimija;
+    return this.opetussuunnitelma?.koulutustoimija;
   }
 
   get koulutustyyppiName() {
