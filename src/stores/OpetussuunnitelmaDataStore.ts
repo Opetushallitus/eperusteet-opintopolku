@@ -41,7 +41,6 @@ interface NavigationQueryResult { parent: YlopsNavigationNodeDto | null, target:
 @Store
 export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public opetussuunnitelma: OpetussuunnitelmaExportDto | null = null;
-  @State() public opetussuunnitelmaPerusteenId: number | null = null;
   @State() public opetussuunnitelmaId: number;
   @State() public esikatselu: boolean | undefined = undefined;
   @State() public revision: number | undefined = undefined;
@@ -79,32 +78,30 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
 
     await this.getDokumentti();
 
-    if (this.opetussuunnitelmaPerusteenId) {
+    if (this.opetussuunnitelma?.peruste?.id) {
       await Promise.all([
-        this.fetchPerusteTermit(this.opetussuunnitelmaPerusteenId),
-        this.fetchPerusteKuvat(this.opetussuunnitelmaPerusteenId),
+        this.fetchPerusteTermit(this.opetussuunnitelma?.peruste?.id),
+        this.fetchPerusteKuvat(this.opetussuunnitelma?.peruste?.id),
       ]);
-    }
 
-    if (this.opetussuunnitelma?.peruste) {
-      const perusteenJulkaisut = (await Julkaisut.getKaikkiJulkaisut(this.opetussuunnitelma.peruste.id!)).data;
-      const maxRev = _.max(_.map(perusteenJulkaisut, 'revision'));
-      const rev = _.chain(perusteenJulkaisut)
-        .filter(julkaisu => julkaisu.luotu! >= this.opetussuunnitelma!.peruste!.globalVersion?.aikaleima!)
-        .sortBy('luotu')
-        .first()
-        .get('revision')
-        .value();
+      if (!this.opetussuunnitelma?.sisaltaaPerusteenTekstit) {
+        const perusteenJulkaisut = (await Julkaisut.getKaikkiJulkaisut(this.opetussuunnitelma.peruste.id!)).data;
+        const maxRev = _.max(_.map(perusteenJulkaisut, 'revision'));
+        const rev = _.chain(perusteenJulkaisut)
+          .filter(julkaisu => julkaisu.luotu! >= this.opetussuunnitelma!.peruste!.globalVersion?.aikaleima!)
+          .sortBy('luotu')
+          .first()
+          .get('revision')
+          .value();
 
-      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id!, rev !== maxRev ? rev : undefined)).data;
+        this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.id!, rev !== maxRev ? rev : undefined)).data;
+      }
     }
   }
 
   async fetchOpetussuunnitelma() {
     this.opetussuunnitelma = null;
-    this.opetussuunnitelmaPerusteenId = null;
     this.opetussuunnitelma = (await OpetussuunnitelmatJulkiset.getOpetussuunnitelmaJulkaistu(this.opetussuunnitelmaId, this.revision)).data;
-    this.opetussuunnitelmaPerusteenId = this.opetussuunnitelma.perusteenId ? this.opetussuunnitelma.perusteenId : null;
   }
 
   public getJulkaistuSisalto(filter) {
