@@ -2,8 +2,11 @@
   <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle" :maxRevision="maxRevision">
     <template v-if="voimassaolo">
       <div class="notifikaatio-text" v-if="voimassaolo === 'tuleva'">
-        <span>{{ $t('katselet-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
-        <span class="btn-link clickable korostus" @click="toVoimassaolevaanJulkaisuun">{{$t('voimassaolevaan-perusteeseen')}}.</span>
+        <span>{{ $t('katselet-tulevaisuudessa-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
+        <template v-if="uusinVoimassaolevaJulkaisu">
+          <span>{{ $t('siirry-talla-hetkella') }} </span>
+          <span class="btn-link clickable korostus" @click="toVoimassaolevaanJulkaisuun">{{$t('voimassaolevaan-perusteeseen')}}.</span>
+        </template>
       </div>
       <div class="notifikaatio-text" v-if="voimassaolo === 'voimassa'">
         <span>{{ $t('katselet-talla-hetkella-voimassaolevaa-perustetta') }}. </span>

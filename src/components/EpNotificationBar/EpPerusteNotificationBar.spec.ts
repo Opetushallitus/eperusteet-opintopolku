@@ -40,7 +40,7 @@ describe('EpPerusteNotificationBar', () => {
   };
 
   const emptyResultTrue = (wrapper: any) => {
-    expect(wrapper.html()).not.toContain('katselet-voimaantulevaa-perustetta');
+    expect(wrapper.html()).not.toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
     expect(wrapper.html()).not.toContain('katselet-talla-hetkella-voimassaolevaa-perustetta');
   };
 
@@ -176,7 +176,7 @@ describe('EpPerusteNotificationBar', () => {
       await wrapper.vm.$router.push({ params: { revision: '2' } });
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.html()).toContain('katselet-voimaantulevaa-perustetta');
+      expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
       await wrapper.vm.$router.push({ params: { revision: '1' } });
       await wrapper.vm.$nextTick();
@@ -228,7 +228,7 @@ describe('EpPerusteNotificationBar', () => {
     test('ensimmainen julkaisu', async () => {
       await wrapper.vm.$router.push({ params: { revision: '3' } });
       await wrapper.vm.$nextTick();
-      expect(wrapper.html()).toContain('katselet-voimaantulevaa-perustetta');
+      expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
       await wrapper.vm.$router.push({ params: { revision: '2' } });
       await wrapper.vm.$nextTick();
@@ -297,11 +297,11 @@ describe('EpPerusteNotificationBar', () => {
     test('muutosmaarays 6 julkaisua', async () => {
       await wrapper.vm.$router.push({ params: { revision: '6' } });
       await wrapper.vm.$nextTick();
-      expect(wrapper.html()).toContain('katselet-voimaantulevaa-perustetta');
+      expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
       await wrapper.vm.$router.push({ params: { revision: '5' } });
       await wrapper.vm.$nextTick();
-      expect(wrapper.html()).toContain('katselet-voimaantulevaa-perustetta');
+      expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
       await wrapper.vm.$router.push({ params: { revision: '4' } });
       await wrapper.vm.$nextTick();
