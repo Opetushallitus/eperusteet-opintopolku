@@ -313,16 +313,28 @@ export default class RoutePerusteTiedot extends Vue {
     return _.sortBy([
       ...this.maarayskokoelmanMuutosmaaraykset,
       ...this.perusteenMuutosmaaraykset,
-      ...(this.perusteDataStore?.maarays ? [this.perusteenMaarays] : []),
+      ...this.perusteenMaarays,
       ...(this.julkaisujenMuutosMaaraykset),
     ], (maarays: any) => maarays.voimassaoloAlkaa || 0).reverse();
   }
 
   get perusteenMaarays() {
-    return {
-      ...this.perusteDataStore.maarays,
-      voimassaoloAlkaa: _.size(this.perusteDataStore?.maarays?.korvattavatMaaraykset) > 0 || _.size(this.perusteDataStore.maarays?.muutettavatMaaraykset) > 0 ? this.perusteDataStore.maarays?.voimassaoloAlkaa : null,
-    };
+    if (this.perusteDataStore?.maarays) {
+      return [{
+        ...this.perusteDataStore.maarays,
+        voimassaoloAlkaa: _.size(this.perusteDataStore?.maarays?.korvattavatMaaraykset) > 0 || _.size(this.perusteDataStore.maarays?.muutettavatMaaraykset) > 0 ? this.perusteDataStore.maarays?.voimassaoloAlkaa : null,
+      }];
+    }
+
+    if (_.has(this.peruste?.maarayskirje?.liitteet, this.kieli)) {
+      const maaryskirje = this.peruste?.maarayskirje?.liitteet![this.kieli];
+      return [{
+        ...maaryskirje,
+        url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, maaryskirje!.id!).url,
+      }];
+    }
+
+    return [];
   }
 
   get maarayskokoelmanMuutosmaaraykset() {
