@@ -15,7 +15,7 @@
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.fileEncoding>UTF-8</project.build.fileEncoding>
-		<org.apache.tomcat.version>9.0.90</org.apache.tomcat.version>
+		<org.apache.tomcat.version>9.0.98</org.apache.tomcat.version>
 		<lombok.version>1.18.34</lombok.version>
 	</properties>
 	<licenses>
