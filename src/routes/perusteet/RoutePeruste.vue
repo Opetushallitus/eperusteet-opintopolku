@@ -189,7 +189,17 @@ export default class RoutePeruste extends Vue {
   getMetaInfo() {
     if (this.peruste) {
       return {
-        title: (this as any).$kaanna(this.peruste.nimi),
+        title: this.$kaanna(this.peruste.nimi),
+        meta: [
+          {
+            vmid: 'description',
+            name: 'description',
+            content: [
+              this.$kaanna(this.peruste.nimi),
+              ...(this.peruste.koulutustyyppi ? [this.$t(this.peruste.koulutustyyppi)] : []),
+            ],
+          },
+        ],
       };
     }
   }
