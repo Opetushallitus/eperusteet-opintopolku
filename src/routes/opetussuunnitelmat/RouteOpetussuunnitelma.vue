@@ -109,7 +109,17 @@ export default class RouteOpetussuunnitelma extends Vue {
   getMetaInfo() {
     if (this.opetussuunnitelma) {
       return {
-        title: (this as any).$kaanna(this.opetussuunnitelma.nimi),
+        title: this.$kaanna(this.opetussuunnitelma.nimi),
+        meta: [
+          {
+            vmid: 'description',
+            name: 'description',
+            content: [
+              this.$kaanna(this.opetussuunnitelma.nimi),
+              this.$t(this.opetussuunnitelma.koulutustyyppi),
+            ],
+          },
+        ],
       };
     }
   }
