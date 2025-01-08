@@ -11,7 +11,8 @@
     "test:e2e": "vue-cli-service test:e2e",
     "test:unit": "vue-cli-service test:unit --ci --coverage --no-cache",
     "test:unit:dev": "vue-cli-service test:unit --watch --no-cache",
-    "test:unit:report": "$BROWSER coverage/lcov-report/index.html"
+    "test:unit:report": "$BROWSER coverage/lcov-report/index.html",
+    "genspec": "cd eperusteet-frontend-utils/vue && ./scripts/buildapi.sh -g -s ${0} && cd .. && cd .. && yarn run serve"
   },
   "dependencies": {
     "@openapitools/openapi-generator-cli": "1.0.10-4.2.3",
