@@ -13,6 +13,11 @@
           </ep-form-content>
         </slot>
       </div>
+      <div class="col-md-12" v-if="peruste.diaarinumero && isAmmatillinen">
+        <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
+          <ep-field v-model="peruste.diaarinumero"></ep-field>
+        </ep-form-content>
+      </div>
       <div class="col-md-12" v-if="peruste.voimassaoloAlkaa" >
         <ep-form-content name="voimaantulo-pvm" headerType="h3" headerClass="h6">
           <ep-datepicker v-model="peruste.voimassaoloAlkaa"></ep-datepicker>
