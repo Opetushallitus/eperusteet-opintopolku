@@ -259,9 +259,9 @@ export default class RouteHome extends Vue {
     margin-top: 20px;
     font-weight: 600;
 
-    a {
-      color: $oph-green;
-    }
+    // a {
+    //   color: $oph-green;
+    // }
   }
 }
 
