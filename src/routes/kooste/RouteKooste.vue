@@ -24,17 +24,13 @@
               {{ $t('perusteita-ei-saatavilla') }}
             </div>
             <template v-else>
-              <div v-for="(julkaisu, idx) in visibleJulkaistutPerusteet" :key="idx">
-                <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }">
-                  <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
-                </router-link>
-              </div>
-            </template>
-            <div v-for="(route, idx) in muutTilet" :key="'muut' + idx">
-              <router-link :to="route.route">
-                <component :is="route.komponentti" :koulutustyyppi="koulutustyyppi"/>
+              <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }" v-for="(julkaisu, idx) in visibleJulkaistutPerusteet" :key="idx" class="my-2 mr-2">
+                <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
               </router-link>
-            </div>
+            </template>
+            <router-link :to="route.route" v-for="(route, idx) in muutTilet" :key="'muut' + idx">
+              <component :is="route.komponentti" :koulutustyyppi="koulutustyyppi"/>
+            </router-link>
           </div>
           <ep-spinner v-else />
         </b-col>
@@ -59,14 +55,10 @@
             <ep-spinner-slot :is-loading="!tiedotteet">
               <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
                 <template v-slot:lisaaBtnText>
-                  <div class="mt-2">
-                    {{$t('nayta-lisaa')}}
-                  </div>
+                  {{$t('nayta-lisaa')}}
                 </template>
                 <template v-slot:eiTietoja>
-                  <div class="mt-2">
-                    {{$t('ei-tiedotteita')}}
-                  </div>
+                  {{$t('ei-tiedotteita')}}
                 </template>
               </ep-julki-lista>
             </ep-spinner-slot>
@@ -294,7 +286,6 @@ export default class RouteKooste extends Vue {
     .perustebox {
       margin-top: 30px;
       margin-bottom: 30px;
-
     }
 
     .tiedotebox {

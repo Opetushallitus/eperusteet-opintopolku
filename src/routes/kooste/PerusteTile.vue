@@ -21,8 +21,6 @@
         <span v-if="julkaisu.voimassaoloAlkaa">
           {{ $t('voimaantulo') }}: {{ $sd(julkaisu.voimassaoloAlkaa) }}
         </span>
-<!--        Kommenteissa, kunnes data saadaan kuntoon, ts. päättymispäivät perusteille-->
-<!--        <EpVoimassaolo :voimassaolo="julkaisu"></EpVoimassaolo>-->
       </div>
     </div>
   </div>
@@ -73,7 +71,6 @@ export default class PerusteTile extends Vue {
 
 .peruste {
   cursor: pointer;
-  margin: 10px 20px 10px 0;
   border-radius: 10px;
   border: 1px solid #E7E7E7;
   min-height: 200px;

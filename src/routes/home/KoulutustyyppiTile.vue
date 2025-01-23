@@ -1,6 +1,6 @@
 <template>
-  <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
-    <router-link :to="tyyppi.route">
+  <router-link :to="tyyppi.route">
+      <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
       <div class="p-2">
         <div class="ikoni">
           <EpMaterialIcon v-if="icon"
@@ -14,8 +14,8 @@
           <span>{{ name }}</span>
         </div>
       </div>
-    </router-link>
-  </div>
+    </div>
+  </router-link>
 </template>
 
 <script lang="ts">

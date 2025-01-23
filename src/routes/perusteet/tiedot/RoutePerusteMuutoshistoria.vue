@@ -6,7 +6,9 @@
 
     <div>
       {{$t('peruste-muutoshistoria-kuvaus')}}
-      <span class="clickable link-style" @click="palaaTietoihin">{{$t('palaa-perusteen-tietoihin')}}</span>
+      <router-link :to="{ name: 'perusteTiedot' }">
+        {{$t('palaa-perusteen-tietoihin')}}
+      </router-link>
     </div>
 
     <div class="mt-2" v-if="julkaisut && julkaisut.length > 0">

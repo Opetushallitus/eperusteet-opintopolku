@@ -39,9 +39,7 @@
           <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
           <EpSpinner v-if="!julkaistutKoulutustyypit" />
           <div class="d-md-flex flex-wrap justify-content-start">
-            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3">
-              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-            </div>
+            <KoulutustyyppiTile :tyyppi="item" v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3"></KoulutustyyppiTile>
           </div>
         </section>
 
@@ -49,9 +47,7 @@
           <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
           <EpSpinner v-if="!otherItems" />
           <div class="d-md-flex flex-wrap justify-content-start">
-            <div v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2">
-              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-            </div>
+            <KoulutustyyppiTile :tyyppi="item" v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2"></KoulutustyyppiTile>
           </div>
         </section>
       </b-container>
@@ -259,9 +255,9 @@ export default class RouteHome extends Vue {
     margin-top: 20px;
     font-weight: 600;
 
-    a {
-      color: $oph-green;
-    }
+    // a {
+    //   color: $oph-green;
+    // }
   }
 }
 

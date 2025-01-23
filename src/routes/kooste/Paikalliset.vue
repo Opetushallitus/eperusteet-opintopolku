@@ -35,14 +35,12 @@
       </div>
     </div>
     <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
-        <router-link :to="ops.route">
-          <opetussuunnitelma-tile
-            :ops="ops"
-            :query="query"
-            @mouseover="mouseOver(ops)"/>
-        </router-link>
-      </div>
+      <router-link :to="ops.route" v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
+        <opetussuunnitelma-tile
+          :ops="ops"
+          :query="query"
+          @mouseover="mouseOver(ops)"/>
+      </router-link>
       <EpBPagination v-model="page"
                      :items-per-page="perPage"
                      :total="opetussuunnitelmatKokonaismaara"
