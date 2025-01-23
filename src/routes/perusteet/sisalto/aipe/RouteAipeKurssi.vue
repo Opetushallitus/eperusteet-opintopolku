@@ -14,11 +14,9 @@
 
     <div class="mt-5" v-if="tavoitteet && tavoitteet.length > 0">
       <h3>{{$t('liitetyt-tavoitteet')}}</h3>
-      <b-table striped :items="tavoitteet" :fields="fields">
-        <template v-slot:cell(tavoite)="data">
-          {{$kaanna(data.item.tavoite)}}
-        </template>
-      </b-table>
+      <div v-for="tavoite in tavoitteet" :key="'tavoite'+tavoite.id" class="taulukko-rivi-varitys px-2 py-3">
+        {{$kaanna(tavoite.tavoite)}}
+      </div>
     </div>
 
   </div>

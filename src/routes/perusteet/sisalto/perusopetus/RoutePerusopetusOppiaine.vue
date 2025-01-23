@@ -143,15 +143,11 @@
 
         <h3>{{$t('oppimaarat')}}</h3>
 
-        <b-table striped :items="oppimaarat" :fields="oppimaaratFields">
-          <template v-slot:cell(nimi)="data">
-            <router-link :to="data.item.route">
-              {{$kaanna(data.item.nimi)}}
-            </router-link>
-          </template>
-
-        </b-table>
-
+        <div v-for="oppimaara in oppimaarat" :key="'oppimaara'+oppimaara.id" class="taulukko-rivi-varitys px-2 py-3">
+          <router-link :to="oppimaara.route">
+            {{$kaanna(oppimaara.nimi)}}
+          </router-link>
+        </div>
       </div>
 
       <slot name="previous-next-navigation" />

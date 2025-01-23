@@ -28,24 +28,18 @@
 
     <div class="mt-5" v-if="oppiaineet && oppiaineet.length > 0">
       <h3>{{$t('oppiaineet')}}</h3>
-      <b-table striped :items="oppiaineet" :fields="fields">
-        <template v-slot:cell(nimi)="data">
-          <router-link :to="data.item.route">
-            {{$kaanna(data.item.nimi)}}
-          </router-link>
-        </template>
-
-      </b-table>
+      <div v-for="oppiaine in oppiaineet" :key="'oppiaine'+oppiaine.id" class="taulukko-rivi-varitys px-2 py-3">
+        <router-link :to="oppiaine.route">
+          {{$kaanna(oppiaine.nimi)}}
+        </router-link>
+      </div>
     </div>
 
     <div class="mt-5" v-if="tavoitealueet && tavoitealueet.length > 0">
       <h3>{{$t('opetuksen-tavoitealueet')}}</h3>
-      <b-table striped :items="tavoitealueet" :fields="fields">
-          <template v-slot:cell(nimi)="data">
-            {{$kaanna(data.item.nimi)}}
-          </template>
-
-        </b-table>
+      <div v-for="tavoitealue in tavoitealueet" :key="'tavoitealue'+tavoitealue.id" class="taulukko-rivi-varitys px-2 py-3">
+        {{$kaanna(tavoitealue.nimi)}}
+      </div>
     </div>
 
   </div>
