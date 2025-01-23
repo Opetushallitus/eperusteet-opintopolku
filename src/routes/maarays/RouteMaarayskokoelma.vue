@@ -44,7 +44,7 @@
 
     <div class="maaraykset" v-else>
       <div class="jarjestys d-flex justify-content-end align-items-center mb-2" >
-        <a @click="vaihdaJarjestys()" class="clickable">
+        <a @click="vaihdaJarjestys()" class="clickable" href="javascript:void(0)">
           <span v-if="query.jarjestys === 'DESC'">{{$t('uusimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_down</EpMaterialIcon></span>
           <span v-if="query.jarjestys === 'ASC'">{{$t('vanhimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_up</EpMaterialIcon></span>
         </a>

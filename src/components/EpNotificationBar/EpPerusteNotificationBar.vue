@@ -5,13 +5,13 @@
         <span>{{ $t('katselet-tulevaisuudessa-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
         <template v-if="uusinVoimassaolevaJulkaisu">
           <span>{{ $t('siirry-talla-hetkella') }} </span>
-          <span class="btn-link clickable korostus" @click="toVoimassaolevaanJulkaisuun">{{$t('voimassaolevaan-perusteeseen')}}.</span>
+          <a href="javascript:void(0)" @click="toVoimassaolevaanJulkaisuun">{{$t('voimassaolevaan-perusteeseen')}}.</a>
         </template>
       </div>
       <div class="notifikaatio-text" v-if="voimassaolo === 'voimassa'">
         <span>{{ $t('katselet-talla-hetkella-voimassaolevaa-perustetta') }}. </span>
         <span>{{ $t('siirry') }} </span>
-        <span class="btn-link clickable korostus" @click="toUusimpaanJulkaisuun">{{$t('uusimpaan-perusteeseen')}}, </span>
+        <a href="javascript:void(0)" @click="toUusimpaanJulkaisuun">{{$t('uusimpaan-perusteeseen')}}, </a>
         <span>{{ $t('joka-on-tulossa-voimaan', {voimaantulo: $sd(uusinJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }}.</span>
       </div>
     </template>
