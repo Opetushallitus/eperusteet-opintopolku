@@ -118,7 +118,7 @@ export class PerusteDataStore {
     }
 
     if (isPerusteVanhaLukio(this.peruste)) {
-      this.lukioOppineet = _.get((await LukioperusteenJulkisetTiedot.getOppiainePuuRakenne(this.perusteId)).data, 'oppiaineet')!;
+      this.lukioOppineet = _.get(this.perusteKaikki, 'lukiokoulutus.rakenne.oppiaineet')!;
     }
   }
 
