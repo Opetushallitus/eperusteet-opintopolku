@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Getter, State, Store } from '@shared/stores/store';
 import { Location } from 'vue-router';
-import mime from 'mime-types';
+import mime from 'mime';
 import { YlopsNavigationNodeDto,
   baseURL,
   Dokumentit,
@@ -130,7 +130,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   }
 
   private getKuvaFilename(liite) {
-    return liite.id! + '.' + mime.extension(liite.mime);
+    return liite.id! + '.' + mime.getExtension(liite.mime);
   }
 
   async fetchTermit() {
@@ -148,7 +148,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   }
 
   private getLiiteFilename(liite) {
-    return liite.id! + '.' + mime.extension(liite.tyyppi);
+    return liite.id! + '.' + mime.getExtension(liite.tyyppi);
   }
 
   findBy(navi: YlopsNavigationNodeDto, fn: (value: YlopsNavigationNodeDto) => boolean, parent: YlopsNavigationNodeDto | null = null): NavigationQueryResult[] {

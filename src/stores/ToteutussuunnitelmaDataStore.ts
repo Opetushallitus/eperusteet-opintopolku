@@ -12,7 +12,7 @@ import { DokumenttiDtoTilaEnum,
   Perusteet,
   TutkinnonOsaKaikkiDto,
   TutkinnonOsaViiteSuppeaDto } from '@shared/api/eperusteet';
-import mime from 'mime-types';
+import mime from 'mime';
 import { deepFilter, deepFind } from '@shared/utils/helpers';
 import { PerusteTyyppi } from '@/utils/peruste';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
@@ -129,7 +129,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     this.perusteKuvat = _.map((await PerusteLiitetiedostot.getAllKuvat(perusteenId)).data, kuva => ({
       id: kuva.id!,
       kuva,
-      src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, kuva.id! + '.' + mime.extension(kuva.mime)).url,
+      src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, kuva.id! + '.' + mime.getExtension(kuva.mime!)).url,
     }));
   }
 

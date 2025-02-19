@@ -85,7 +85,7 @@ export default class EpNavigation extends Vue {
 
   get julkaistutKoulutustyypit() {
     return [
-      ...this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value,
+      ...(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value || []),
       ...(this.muuLukumaarat > 0 ? ['koulutustyyppi_muu'] : []),
       ...(this.digitaalinenOsaaminenLkm > 0 ? ['koulutustyyppi_digi'] : []),
     ];

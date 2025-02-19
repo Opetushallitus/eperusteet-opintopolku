@@ -56,8 +56,8 @@ export class SisaltoviiteStore {
     if (this.state.sisaltoviite.tosa?.perusteentutkinnonosa) {
       const perusteId = _.get(this.state.sisaltoviite, 'peruste.id') || _.get(this.opetussuunnitelma, 'peruste.id');
 
-      this.state.perusteenTutkinnonosa = (await Perusteet.getPerusteTutkinnonOsa(perusteId, this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
-      this.state.perusteenTutkinnonosaViite = (await Perusteet.getTutkinnonOsaViite(perusteId, this.opetussuunnitelma.suoritustapa!, this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
+      this.state.perusteenTutkinnonosa = (await Perusteet.getPerusteTutkinnonOsa(perusteId!, this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
+      this.state.perusteenTutkinnonosaViite = (await Perusteet.getTutkinnonOsaViite(perusteId!, this.opetussuunnitelma.suoritustapa!, this.state.sisaltoviite.tosa?.perusteentutkinnonosa)).data;
     }
 
     this.state.fetching = false;

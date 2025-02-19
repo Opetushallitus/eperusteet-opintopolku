@@ -34,8 +34,8 @@ export class PerusopetusOppiaineStore {
           const vlkSisaltoalueetById = _.keyBy(vlk.sisaltoalueet, 'id');
           return {
             ...vlk,
-            nimi: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'nimi'),
-            vuosiluokat: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'vuosiluokat'),
+            nimi: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')!], 'nimi'),
+            vuosiluokat: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')!], 'vuosiluokat') as any,
             tavoitteet: _.map(vlk.tavoitteet, tavoite => {
               return {
                 ...tavoite,

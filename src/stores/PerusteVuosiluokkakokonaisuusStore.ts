@@ -30,7 +30,7 @@ export class PerusteVuosiluokkakokonaisuusStore {
       laajaalaisetOsaamiset: _.map(this.state.vuosiluokkakokonaisuus.laajaalaisetOsaamiset, lao => {
         return {
           ...lao,
-          nimi: _.get(laajaAlaisetOsaamisetById[_.get(lao, '_laajaalainenOsaaminen')], 'nimi'),
+          nimi: _.get(laajaAlaisetOsaamisetById[_.get(lao, '_laajaalainenOsaaminen')!], 'nimi'),
         };
       }),
     };
