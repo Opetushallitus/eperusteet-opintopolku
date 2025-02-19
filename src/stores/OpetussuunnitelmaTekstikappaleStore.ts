@@ -100,7 +100,7 @@ export class OpetussuunnitelmaTekstikappaleStore {
     }
   }
 
-  async fetchOriginalAlikappale(viite: number) {
+  async fetchOriginalAlikappale(viite: number): Promise<any> {
     return (await OpetussuunnitelmanSisalto
       .getTekstiKappaleViiteOriginal(this.opsId, viite)).data;
   }

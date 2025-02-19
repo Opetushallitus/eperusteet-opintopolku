@@ -1,5 +1,4 @@
 import { NavigationNode, NavigationFilter } from '@shared/utils/NavigationBuilder';
-import { Cancelable } from 'lodash';
 
 export interface IOpetussuunnitelmaStore {
   opetussuunnitelma: any;
@@ -11,5 +10,5 @@ export interface IOpetussuunnitelmaStore {
   flattenedSidenav: NavigationNode[];
   sidenavLoading: boolean;
   updateRoute: (options) => any;
-  updateFilter: ((filter: NavigationFilter) => void) & Cancelable;
+  updateFilter: (filter: NavigationFilter) => void;
 };
