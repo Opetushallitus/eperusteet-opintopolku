@@ -11,7 +11,13 @@
       <div class="diaarinumero" v-if="peruste.tyyppi !=='opas'">
         {{ peruste.diaarinumero }}
       </div>
-      <ep-search class="query mt-3" v-model="query" :maxlength="100"/>
+      <ep-search
+        class="query mt-3"
+        v-model="query"
+        :maxlength="100"
+        :placeholder="$t('hae')"
+        :srOnlyLabelText="sisaltoHakuSrLabel"
+        />
     </template>
   </ep-header>
 
@@ -84,6 +90,7 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Route } from 'vue-router';
+import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 
 @Component({
   components: {
@@ -263,6 +270,14 @@ export default class RoutePeruste extends Vue {
 
   get scroll() {
     return !_.has(this.$route.query, 'noscroll');
+  }
+
+  get sisaltoHakuSrLabel() {
+    if (this.peruste?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.DIGITAALINENOSAAMINEN)) {
+      return this.$t('hae-digitaalisten-osaamisten-kuvauksista');
+    }
+
+    return this.$t('hae-perusteen-sisallosta');
   }
 }
 </script>

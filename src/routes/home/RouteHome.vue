@@ -12,7 +12,6 @@
     <div class="container">
       <b-container fluid>
         <section class="section">
-          <h2 class="tile-heading">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</h2>
           <EpEtusivuHaku :peruste-store="perusteStore"></EpEtusivuHaku>
         </section>
       </b-container>
