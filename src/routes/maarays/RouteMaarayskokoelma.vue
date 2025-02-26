@@ -7,19 +7,26 @@
       {{ $t('opetushallituksen-maaraykset-alaotsikko') }}
     </template>
 
-    <div class="row ml-0 mt-4 mb-0">
+    <div class="d-flex flex-column flex-lg-row">
+      <div class="w-100 mr-2 mb-3">
+        <EpSearch v-model="query.nimi" :placeholder="$t('')">
+          <template #label>
+            <span class="font-weight-600">{{$t('hae-maarayksia')}}</span>
+          </template>
+        </EpSearch>
+      </div>
 
-      <b-form-group :label="$t('hae')" class="col-lg-5 col-md-6 mb-1">
-        <ep-search v-model="query.nimi" :placeholder="$t('hae-maarayksia')"/>
-      </b-form-group>
-
-      <b-form-group :label="$t('tyyppi')" class="col-lg-3 col-md-6 mb-1">
+      <div class="w-100 mr-2 mb-3">
         <EpMultiSelect v-model="query.tyyppi"
                 :enable-empty-option="true"
                 :placeholder="$t('kaikki')"
                 :is-editing="true"
                 :options="tyyppiVaihtoehdot"
                 :search-identity="searchIdentity">
+        <template #label>
+          <span class="font-weight-600">{{$t('tyyppi')}}</span>
+        </template>
+
           <template slot="singleLabel" slot-scope="{ option }">
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
@@ -27,11 +34,12 @@
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
         </EpMultiSelect>
-      </b-form-group>
+      </div>
 
-      <b-form-group :label="$t('koulutus-tai-tutkinto')" class="col-lg-4 col-md-6 mb-1">
+      <div class="w-100 mb-3">
+        <label class="font-weight-600">{{$t('koulutus-tai-tutkinto')}}</label>
         <EpMaarayskokoelmaKoulutustyyppiSelect v-if="koulutustyyppiVaihtoehdot" :isEditing="true" v-model="query.koulutustyypit" :koulutustyypit="koulutustyyppiVaihtoehdot" />
-      </b-form-group>
+      </div>
     </div>
 
     <EpVoimassaoloFilter v-model="query" class="mb-0"></EpVoimassaoloFilter>

@@ -2,29 +2,35 @@
 <div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <span>{{ $t('voit-hakea-opetussuunnitelman-yleissivistava') }}</span>
-  <div class="d-flex flex-lg-row flex-column">
-    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-      <ep-search v-model="query"
-                 :max-width="true"
-                 :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-                 :placeholder="$t('hae-opetussuunnitelmaa')"/>
-    </b-form-group>
-    <b-form-group :label="$t('peruste')">
-      <EpMultiSelect v-if="julkaistutPerusteet"
-                     :is-editing="false"
-                     :options="perusteetOptions"
-                     :placeholder="$t('kaikki')"
-                     class="multiselect"
-                     v-model="valittuPeruste"
-                     :searchable="false">
-        <template slot="singleLabel" slot-scope="{ option }">
-          {{ kaannaPerusteNimi(option) }}
-        </template>
-        <template slot="option" slot-scope="{ option }">
-          {{ kaannaPerusteNimi(option) }}
-        </template>
-      </EpMultiSelect>
-    </b-form-group>
+  <div class="d-flex flex-lg-row flex-column w-100">
+    <ep-search
+      class="flex-fill ml-0 mt-3 mb-3 mr-3"
+      v-model="query"
+      :max-width="true"
+      :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+      :placeholder="$t('')">
+      <template #label>
+        <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa')}}</span>
+      </template>
+    </ep-search>
+    <EpMultiSelect
+      v-if="julkaistutPerusteet"
+      :is-editing="false"
+      :options="perusteetOptions"
+      :placeholder="$t('kaikki')"
+      class="multiselect ml-0 mt-3 mb-3"
+      v-model="valittuPeruste"
+      :searchable="false">
+      <template #label>
+        <span class="font-weight-600">{{ $t('peruste')}}</span>
+      </template>
+      <template slot="singleLabel" slot-scope="{ option }">
+        {{ kaannaPerusteNimi(option) }}
+      </template>
+      <template slot="option" slot-scope="{ option }">
+        {{ kaannaPerusteNimi(option) }}
+      </template>
+    </EpMultiSelect>
   </div>
 
   <div class="opetussuunnitelma-container">

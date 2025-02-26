@@ -3,7 +3,11 @@
   <ep-spinner v-if="sidenavLoading" />
   <div v-else>
     <div class="search">
-      <ep-search :value="query" @input="setValue" />
+      <ep-search
+        :value="query"
+        @input="setValue"
+        :placeholder="$t('hae-sisallysluettelosta')"
+        :srOnlyLabelText="$t('hae-suunnitelman-sisallysluettelosta')"/>
     </div>
     <div class="navigation-tree">
       <ep-sidenav-node v-if="treeData"

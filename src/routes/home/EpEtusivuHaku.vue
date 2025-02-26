@@ -1,7 +1,11 @@
 <template>
   <div>
-    <EpSearch class="mb-4" v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')"/>
-    <div v-if="hasResults" class="mb-1">
+    <EpSearch v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')">
+      <template #label>
+        <span class="header">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</span>
+      </template>
+    </EpSearch>
+    <div v-if="hasResults" class="mb-1 mt-4">
       <span class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
       <span>{{ $t('hakutulosta') }}</span>
     </div>
@@ -49,7 +53,7 @@
                     :pills="true"
                     :disabled="isLoading"/>
     </div>
-    <EpSpinner v-if="isLoading"></EpSpinner>
+    <EpSpinner v-if="isLoading" class="mt-4"></EpSpinner>
   </div>
 </template>
 
@@ -382,5 +386,12 @@ export default class EpEtusivuHaku extends Vue {
 
 ::v-deep .spinner .oph-bounce {
   background-color: $white !important;
+}
+
+.header {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 </style>

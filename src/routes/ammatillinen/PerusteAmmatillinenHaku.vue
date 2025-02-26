@@ -15,35 +15,43 @@
       </div>
 
       <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteetJaTutkinnonosat}">
-        <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-          <EpSearch v-model="query"
-                    :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
-                    :placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"/>
-        </b-form-group>
-        <b-form-group :label="$t('tutkintotyyppi')">
-          <EpMultiSelect
-            class="multiselect"
-            v-model="tutkintotyyppi"
-            :enable-empty-option="true"
-            :placeholder="$t('kaikki')"
-            :is-editing="true"
-            :options="tutkintotyypit"
-            :searchable="false">
+        <EpSearch
+          class="flex-fill ml-0 mt-3 mb-3 mr-3"
+          v-model="query"
+          :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
+          :placeholder="$t('')">
+          <template #label>
+            <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa')}}</span>
+          </template>
+        </EpSearch>
+        <EpMultiSelect
+          class="multiselect ml-0 mt-3 mb-3"
+          v-model="tutkintotyyppi"
+          :enable-empty-option="true"
+          :placeholder="$t('kaikki')"
+          :is-editing="true"
+          :options="tutkintotyypit"
+          :searchable="false">
 
-            <template slot="singleLabel" slot-scope="{ option }">
-              {{ $t(option) }}
-            </template>
+          <template #label>
+            <span class="font-weight-600">{{ $t('tutkintotyyppi')}}</span>
+          </template>
 
-            <template slot="option" slot-scope="{ option }">
-              {{ $t(option) }}
-            </template>
-          </EpMultiSelect>
-        </b-form-group>
+          <template slot="singleLabel" slot-scope="{ option }">
+            {{ $t(option) }}
+          </template>
+
+          <template slot="option" slot-scope="{ option }">
+            {{ $t(option) }}
+          </template>
+        </EpMultiSelect>
       </div>
     </div>
 
     <div v-else class="mb-3">
-      <EpSearch v-model="query" :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
+      <EpSearch
+        v-model="query"
+        :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
     </div>
     <EpSisaltotyyppiFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpSisaltotyyppiFilter>
   </div>
@@ -121,7 +129,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private perusteHakuStore!: IPerusteHakuStore;
 
   @Prop({ type: String })
-  private tyyppi!: 'peruste' | 'opas' | 'kooste';
+  private tyyppi!: 'peruste' | 'opas';
 
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
   private tutkintotyyppi = 'kaikki';
@@ -246,7 +254,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
         query: { redirect: 'true' },
       };
     }
-    if (this.tyyppi === 'opas' || this.tyyppi === 'kooste') {
+    if (this.tyyppi === 'opas') {
       return {
         name: 'peruste',
         params: {
