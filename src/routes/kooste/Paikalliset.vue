@@ -28,12 +28,15 @@
   </div>
 
   <div class="opetussuunnitelma-container">
+    <EpHakutulosmaara :kokonaismaara="opetussuunnitelmatLength" piilotaNakyvaTulosmaara/>
+
     <ep-spinner v-if="isLoading" />
     <div v-else-if="opetussuunnitelmat.length === 0">
       <div class="alert alert-info">
         {{ $t('ei-hakutuloksia') }}
       </div>
     </div>
+
     <div v-else id="opetussuunnitelmat-lista">
       <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
         <router-link :to="ops.route">
@@ -67,7 +70,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ryhmanKoulutustyypit } from '@shared/utils/perusteet';
-import { Page } from '@shared/tyypit';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -78,6 +81,7 @@ import { Page } from '@shared/tyypit';
     OpetussuunnitelmaTile,
     EpBPagination,
     EpMultiSelect,
+    EpHakutulosmaara,
   },
 })
 export default class Paikalliset extends Vue {
@@ -162,6 +166,10 @@ export default class Paikalliset extends Vue {
 
   get isLoading() {
     return !this.paikallinenStore.opetussuunnitelmatPaged!.value;
+  }
+
+  get opetussuunnitelmatLength() {
+    return this.paikallinenStore.opetussuunnitelmatPaged?.value?.kokonaismäärä;
   }
 
   get opetussuunnitelmatKokonaismaara() {

@@ -12,6 +12,7 @@
   </div>
 
   <div class="opetussuunnitelma-container">
+    <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>
 
     <ep-spinner v-if="!opetussuunnitelmat" />
     <div v-else-if="opetussuunnitelmat.length === 0">
@@ -47,6 +48,7 @@ import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { Koulutustyyppi } from '@shared/tyypit';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -56,6 +58,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
     OpetussuunnitelmaTile,
     EpMultiSelect,
     EpBPagination,
+    EpHakutulosmaara,
   },
 })
 export default class TuvaPaikalliset extends Vue {

@@ -48,6 +48,8 @@
     <EpSisaltotyyppiFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpSisaltotyyppiFilter>
   </div>
 
+  <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>
+
   <div v-if="!perusteetJaTutkinnonosat">
     <EpSpinner />
   </div>
@@ -103,6 +105,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpSisaltotyyppiFilter from '@shared/components/EpSisaltotyyppiFilter/EpSisaltotyyppiFilter.vue';
 import EpAmmatillinenPerusteItem from '@/components/EpAmmatillinen/EpAmmatillinenPerusteItem.vue';
 import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmatillinenTutkinnonosaItem.vue';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -114,6 +117,7 @@ import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmati
     EpSisaltotyyppiFilter,
     EpAmmatillinenPerusteItem,
     EpAmmatillinenTutkinnonosaItem,
+    EpHakutulosmaara,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {

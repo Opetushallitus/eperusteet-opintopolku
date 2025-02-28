@@ -1,10 +1,7 @@
 <template>
   <div>
     <EpSearch class="mb-4" v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')"/>
-    <div v-if="hasResults" class="mb-1">
-      <span class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
-      <span>{{ $t('hakutulosta') }}</span>
-    </div>
+    <EpHakutulosmaara :kokonaismaara="kokonaismaara" class="mb-1"/>
     <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
       <div class="list-item">
         <router-link :to="item.route">
@@ -63,12 +60,14 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpSpinnerSlot,
     EpSearch,
+    EpHakutulosmaara,
   },
 })
 export default class EpEtusivuHaku extends Vue {
