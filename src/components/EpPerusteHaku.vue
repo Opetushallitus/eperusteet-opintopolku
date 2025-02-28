@@ -4,15 +4,14 @@
       <span class="font-weight-bold">&#60;</span> {{$t('takaisin-edelliseen-nakymaan')}}
     </EpButton>
 
+    <EpHakutulosmaara class="tulos font-weight-600 mt-2" :kokonaismaara="kokonaismaara"/>
+
     <ep-spinner v-if="!tulokset" />
     <div v-else-if="tulokset.length === 0" class="alert alert-info">
       {{ $t('ei-hakutuloksia') }}
     </div>
 
     <template v-else>
-      <div class="tulos font-weight-600 mt-2">
-        {{tulokset.length}} {{ $t('hakutulosta') }}
-      </div>
       <div class="tulokset mt-4">
         <div class="tulos" v-for="(tulos,index) in tuloksetSorted" :key="'tulos' + index">
           <div class="osantyyppi">
@@ -50,12 +49,14 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { deepFind, typeSort } from '@/utils/sisaltohaku';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
     EpSearch,
     EpSpinner,
     EpBPagination,
+    EpHakutulosmaara,
   },
   watch: {
     query: {
@@ -106,6 +107,10 @@ export default class EpPerusteHaku extends Vue {
       .sortBy(tulos => typeSort[tulos.type])
       .slice((this.sivu - 1) * this.sivukoko, this.sivu * this.sivukoko)
       .value();
+  }
+
+  get kokonaismaara() {
+    return this.tulokset?.length;
   }
 }
 </script>

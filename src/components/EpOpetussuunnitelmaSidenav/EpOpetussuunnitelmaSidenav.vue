@@ -10,6 +10,11 @@
         :srOnlyLabelText="$t('hae-suunnitelman-sisallysluettelosta')"/>
     </div>
     <div class="navigation-tree">
+      <EpHakutulosmaara :kokonaismaara="hakutuloksetKokonaismaara" piilotaNakyvaTulosmaara>
+        <span v-if="!!hakutuloksetKokonaismaara && hakutuloksetKokonaismaara === 1" class="sr-only">
+          <span class="sr-only">{{ $t('hakuasi-vastaava-tulos') }}: {{ $kaanna(hakutulokset[0].label)}}</span>
+        </span>
+      </EpHakutulosmaara>
       <ep-sidenav-node v-if="treeData"
                         :node="treeData"
                         :current="current"
@@ -27,12 +32,14 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
     EpSearch,
     EpSpinner,
     EpSidenavNode,
+    EpHakutulosmaara,
   },
 })
 export default class EpOpetussuunnitelmaSidenav extends Vue {
@@ -108,6 +115,25 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
 
   get sisaltoKieli() {
     return Kielet.getSisaltoKieli.value;
+  }
+
+  get hakutulokset() {
+    if (this.treeData) {
+      return _.filter(this.flattenTree(this.treeData.children), node => node.isMatch && node.type !== 'root');
+    }
+  }
+
+  flattenTree(tree) {
+    return _.flatMap(tree, node => {
+      if (node.children) {
+        return [node, ...this.flattenTree(node.children)];
+      }
+      return node;
+    });
+  }
+
+  get hakutuloksetKokonaismaara() {
+    return this.hakutulokset?.length;
   }
 }
 </script>

@@ -44,6 +44,8 @@
 
     <EpVoimassaoloFilter v-model="query" class="mb-0"></EpVoimassaoloFilter>
 
+    <EpHakutulosmaara :kokonaismaara="maarayksetCount" piilotaNakyvaTulosmaara/>
+
     <ep-spinner v-if="!maaraykset" />
 
     <div class="mt-4" v-else-if="maaraykset.length === 0">
@@ -108,6 +110,7 @@ import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -122,6 +125,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
     EpButton,
     EpMaterialIcon,
     EpMaarayskokoelmaKoulutustyyppiSelect,
+    EpHakutulosmaara,
   },
 })
 export default class RouteMaarayskokoelma extends Vue {

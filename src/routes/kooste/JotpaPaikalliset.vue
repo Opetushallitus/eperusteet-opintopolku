@@ -14,6 +14,8 @@
   <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
 
   <div class="opetussuunnitelma-container">
+    <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara />
+
     <ep-spinner v-if="!opetussuunnitelmat" />
     <div v-else-if="opetussuunnitelmat.length === 0">
       <div class="alert alert-info">
@@ -50,6 +52,7 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -61,6 +64,7 @@ import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimas
     EpBPagination,
     EpToggle,
     EpVoimassaoloFilter,
+    EpHakutulosmaara,
   },
 })
 export default class JotpaPaikalliset extends Vue {
