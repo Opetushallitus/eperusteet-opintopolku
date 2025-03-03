@@ -24,7 +24,7 @@
         </nav>
         <slot name="murupolku"></slot>
       </div>
-      <h1 class="nimi" :style="style">
+      <h1 class="nimi" :style="style" tabindex="0">
         <slot name="header"></slot>
       </h1>
       <div :style="style">

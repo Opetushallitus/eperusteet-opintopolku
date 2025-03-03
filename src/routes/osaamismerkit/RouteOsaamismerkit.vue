@@ -9,16 +9,20 @@
       </template>
 
       <div class="osaamismerkit">
-        <div class="d-flex flex-lg-row flex-column mb-4">
-          <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-            <EpSearch v-model="query.nimi"
+        <div class="d-flex flex-lg-row flex-column mb-5">
+          <EpSearch
+            v-model="query.nimi"
             :max-width="true"
             :sr-placeholder="$t('hae-osaamismerkkeja')"
-            :placeholder="$t('hae-osaamismerkkeja')"/>
-          </b-form-group>
+            :placeholder="''"
+            class="w-100 mr-3">
+            <template #label>
+              <span class="font-weight-600">{{ $t('hae')}}</span>
+            </template>
+          </EpSearch>
 
-          <b-form-group :label="$t('teema')">
-            <EpMultiSelect :is-editing="false"
+          <EpMultiSelect
+            :is-editing="false"
             :options="osaamismerkkiKategoriaOptions"
             :placeholder="$t('kaikki')"
             class="multiselect"
@@ -26,8 +30,10 @@
             :searchable="false"
             track-by="value"
             label="text">
-            </EpMultiSelect>
-          </b-form-group>
+          <template #label>
+            <span class="font-weight-600">{{ $t('teema')}}</span>
+          </template>
+          </EpMultiSelect>
         </div>
 
         <EpSpinner v-if="!osaamismerkkiKategoriat" />

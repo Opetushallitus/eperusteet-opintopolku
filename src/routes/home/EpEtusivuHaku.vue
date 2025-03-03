@@ -5,10 +5,10 @@
         <span class="header">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</span>
       </template>
     </EpSearch>
-    <EpHakutulosmaara :kokonaismaara="kokonaismaara" class="mb-1"/>
+    <EpHakutulosmaara :kokonaismaara="kokonaismaara" class="my-3"/>
     <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
       <div class="list-item">
-        <router-link :to="item.route">
+        <router-link :to="item.route" class="peruste-ops-linkki">
           <div class="d-flex tile-background-shadow-selected shadow-tile align-items-center">
             <div class="mx-3 my-3">
               <div :class="item.theme"/>
@@ -37,18 +37,11 @@
       </div>
     </div>
     <div v-if="kokonaismaara > 0" class="mt-4">
-      <b-pagination :value="sivu"
-                    @change="updatePage"
-                    :total-rows="kokonaismaara"
-                    :per-page="sivukoko"
-                    align="center"
-                    aria-controls="opetussuunnitelmat-ja-perusteet-lista"
-                    :first-text="$t('alkuun')"
-                    prev-text="«"
-                    next-text="»"
-                    :last-text="$t('loppuun')"
-                    :pills="true"
-                    :disabled="isLoading"/>
+      <EpBPagination
+        v-model="sivu"
+        :total="kokonaismaara"
+        :itemsPerPage="sivukoko"
+        aria-controls="opetussuunnitelmat-ja-perusteet-lista"/>
     </div>
     <EpSpinner v-if="isLoading" class="mt-4"></EpSpinner>
   </div>
@@ -65,6 +58,7 @@ import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
@@ -72,6 +66,7 @@ import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
     EpSpinnerSlot,
     EpSearch,
     EpHakutulosmaara,
+    EpBPagination,
   },
 })
 export default class EpEtusivuHaku extends Vue {
@@ -123,6 +118,7 @@ export default class EpEtusivuHaku extends Vue {
     this.perusteStore.opsitJaPerusteet = null;
   }
 
+  @Watch('sivu')
   async updatePage(value) {
     this.page = value;
     await this.fetchOpsitJaPerusteet();
@@ -146,6 +142,7 @@ export default class EpEtusivuHaku extends Vue {
       console.error(e);
     }
     this.isLoading = false;
+    (this.$el.querySelector('.peruste-ops-linkki') as any)?.focus();
   }
 
   get opsitJaPerusteet() {

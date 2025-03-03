@@ -53,7 +53,7 @@
                   {{ $t('ei-hakutuloksia') }}
                 </div>
               </div>
-              <div v-else id="opetussuunnitelmat-lista">
+              <div v-else id="opetussuunnitelmat-lista" class="opetussuunnitelma-container">
                 <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
 
                   <router-link :to="ops.route">
@@ -181,12 +181,13 @@ export default class RouteKoosteAmmatillinen extends Vue {
   }
 
   @Watch('query')
-  queryChange(val) {
-    this.fetch(this.query);
+  async queryChange(val) {
+    await this.fetch(this.query);
   }
 
-  fetch(nimi?, page?) {
-    this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: nimi, sivu: page });
+  async fetch(nimi?, page?) {
+    await this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: nimi, sivu: page });
+    (this.$el.querySelector('.opetussuunnitelma-container a') as any).focus();
   }
 
   avaaTiedote(tiedote: TiedoteDto) {

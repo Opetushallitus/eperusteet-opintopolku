@@ -148,6 +148,13 @@ export default class RouteKooste extends Vue {
 
   private showEraantyneet: boolean = false;
 
+  async mounted() {
+    await Vue.nextTick();
+    const h1 = this.$el.querySelector('h1');
+    h1?.setAttribute('tabindex', '-1');
+    h1?.focus();
+  }
+
   @Watch('koulutustyyppi', { immediate: true })
   async koulutustyyppiChange() {
     if (this.perusteKoosteStore) {

@@ -121,7 +121,9 @@ export default class RouteHome extends Vue {
   private browserStore = new BrowserStore();
 
   async mounted() {
-    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
+    const h1 = this.$el.querySelector('h1');
+    h1?.setAttribute('tabindex', '-1');
+    h1?.focus();
   }
 
   @Watch('julkaistutKoulutustyypit', { immediate: true })

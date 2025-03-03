@@ -184,6 +184,7 @@ export default class RouteMaarayskokoelma extends Vue {
         kieli: this.kieli,
         sivu: this.sivu - 1,
       });
+    (this.$el.querySelector('.maarays') as any)?.focus();
   }
 
   get maaraykset() {

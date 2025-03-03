@@ -1,5 +1,5 @@
 <template>
-  <div aria-live="polite">
+  <div aria-live="polite" tabindex='-1'>
     <slot>
       <div v-if="kokonaismaara">
         <template v-if="!piilotaNakyvaTulosmaara">

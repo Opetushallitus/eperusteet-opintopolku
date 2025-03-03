@@ -388,8 +388,8 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
     await localVue.nextTick();
 
     // Testataan haetuilla termien datalla
-    expect(wrapper.html()).toContain('<button class="termi" data-viite="b68ae2c2-dbbf-478a-a5be-3cc767a36faa" title="Opsin termin otsikko" aria-label="Opsin termin otsikko">viite1</button>');
-    expect(wrapper.html()).toContain('<button class="termi" data-viite="d5e6620f-acc9-4234-b138-9b830cd8e12a" title="Opsin termin 2 otsikko" aria-label="Opsin termin 2 otsikko">viite2</button>');
+    expect(wrapper.html()).toContain('<a class="termi" href="javascript:void(0)" data-viite="b68ae2c2-dbbf-478a-a5be-3cc767a36faa" title="Opsin termin otsikko" aria-label="Opsin termin otsikko">viite1</a>');
+    expect(wrapper.html()).toContain('<a class="termi" href="javascript:void(0)" data-viite="d5e6620f-acc9-4234-b138-9b830cd8e12a" title="Opsin termin 2 otsikko" aria-label="Opsin termin 2 otsikko">viite2</a>');
   });
 
   test('Renders perusteen termit', async () => {
@@ -410,7 +410,7 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
     await localVue.nextTick();
 
     // Testataan haetuilla termien datalla
-    expect(wrapper.html()).toContain('<button class="termi" data-viite="Perusteenterminotsikko1572852406893" title="Perusteen termin otsikko" aria-label="Perusteen termin otsikko">perustetermi1</button>');
-    expect(wrapper.html()).toContain('<button class="termi" data-viite="Perusteentermi2notsikko1572852406893" title="Perusteen termin 2 otsikko" aria-label="Perusteen termin 2 otsikko">perustetermi2</button>');
+    expect(wrapper.html()).toContain('<a class="termi" href="javascript:void(0)" data-viite="Perusteenterminotsikko1572852406893" title="Perusteen termin otsikko" aria-label="Perusteen termin otsikko">perustetermi1</a>');
+    expect(wrapper.html()).toContain('<a class="termi" href="javascript:void(0)" data-viite="Perusteentermi2notsikko1572852406893" title="Perusteen termin 2 otsikko" aria-label="Perusteen termin 2 otsikko">perustetermi2</a>');
   });
 });

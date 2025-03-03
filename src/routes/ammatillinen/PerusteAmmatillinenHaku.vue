@@ -137,16 +137,23 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
   private tutkintotyyppi = 'kaikki';
+  private query = '';
 
   private toggleQuery: any = {};
 
   async mounted() {
     this.initQuery();
     this.page = 1;
+    await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+
     if (!this.perusteHakuStore.perusteet) {
       await this.perusteHakuStore.fetch();
     }
-    await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+  }
+
+  async updateFilters(filters) {
+    await this.perusteHakuStore.updateFilters(filters);
+    (this.$el.querySelector('.ammatillinen-row a') as any)?.focus();
   }
 
   initQuery() {
@@ -176,13 +183,13 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   @Watch('kieli')
   async kieliChange() {
-    this.perusteHakuStore.updateFilters({ kieli: this.kieli });
+    await this.updateFilters({ kieli: this.kieli });
   }
 
   @Watch('tutkintotyyppi')
-  tutkintotyyppiChange() {
+  async tutkintotyyppiChange() {
     if (this.tutkintotyyppi === 'kaikki') {
-      this.perusteHakuStore.updateFilters({ koulutustyyppi: [
+      await this.updateFilters({ koulutustyyppi: [
         'koulutustyyppi_1',
         'koulutustyyppi_11',
         'koulutustyyppi_12',
@@ -191,18 +198,24 @@ export default class PerusteAmmatillinenHaku extends Vue {
       ] });
     }
     else {
-      this.perusteHakuStore.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
+      await this.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
     }
   }
 
   @Watch('query')
-  onQueryChanged() {
+  async onQueryChanged() {
     this.page = 1;
+    await this.updateFilters({ nimiTaiKoodi: this.query });
+  }
+
+  @Watch('page')
+  async onPageChanged() {
+    await this.updateFilters({ sivu: this.perusteHakuStore.page });
   }
 
   @Watch('toggleQuery', { deep: true })
-  voimassaoloFilterChanged() {
-    this.perusteHakuStore.updateFilters(this.toggleQuery);
+  async voimassaoloFilterChanged() {
+    await this.updateFilters(this.toggleQuery);
     this.page = 1;
   }
 
@@ -293,21 +306,12 @@ export default class PerusteAmmatillinenHaku extends Vue {
     return this.perusteHakuStore.filters;
   }
 
-  get query() {
-    return this.filters.nimiTaiKoodi;
-  }
-
-  set query(value) {
-    this.perusteHakuStore.updateFilters({ nimiTaiKoodi: value });
-  }
-
   get page() {
     return this.perusteHakuStore.page + 1;
   }
 
   set page(value) {
     this.perusteHakuStore.page = value - 1;
-    this.perusteHakuStore.updateFilters({ sivu: this.perusteHakuStore.page });
   }
 
   get valmisteillaOlevat() {

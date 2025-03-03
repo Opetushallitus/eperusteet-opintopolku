@@ -98,21 +98,12 @@ export default class VstPaikalliset extends Vue {
   private perPage = 10;
   private query = this.initQuery();
 
-  async fetch() {
-    await this.paikallinenStore.fetchQuery(this.query);
+  async mounted() {
+    this.fetch();
   }
 
-  @Watch('julkaistutPerusteet', { immediate: true })
-  async perusteetChange() {
-    if (_.size(this.perusteKoosteStore.perusteJulkaisut) > 0) {
-      if (_.get(this.valittuPeruste, 'id')) {
-        const peruste = _.find(this.julkaistutPerusteet, peruste => _.get(peruste, 'id') === _.toNumber(_.get(this.$route.params, 'perusteId'))) || this.julkaistutPerusteet![0];
-        await this.setActivePeruste(peruste);
-      }
-      else {
-        await this.setActivePeruste(null);
-      }
-    }
+  async fetch() {
+    await this.paikallinenStore.fetchQuery(this.query);
   }
 
   get perusteetOptions() {
@@ -131,6 +122,7 @@ export default class VstPaikalliset extends Vue {
     if (perusteJulkaisu?.id) {
       this.query.perusteId = _.toNumber(perusteJulkaisu.id);
       this.query.perusteenDiaarinumero = perusteJulkaisu.diaarinumero;
+      this.query.sivu = 0;
     }
     else {
       this.query = this.initQuery();
@@ -189,6 +181,7 @@ export default class VstPaikalliset extends Vue {
       this.query.oppilaitosTyyppiKoodiUri = null;
     }
     await this.fetch();
+    (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
   }
 
   get total() {

@@ -39,7 +39,7 @@
         <ep-sidebar :scroll-enabled="scroll">
           <template slot="bar">
             <div>
-              <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
+              <!-- <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/> -->
               <ep-peruste-sidenav
                   :peruste-data-store="perusteDataStore">
               </ep-peruste-sidenav>
@@ -151,6 +151,14 @@ export default class RoutePeruste extends Vue {
     this.query = this.routeQuery;
   }
 
+  @Watch('$route', { deep: true, immediate: true })
+  async routeChange() {
+    await Vue.nextTick();
+    const h2 = this.$el.querySelector('h2');
+    h2?.setAttribute('tabindex', '-1');
+    h2?.focus();
+  }
+
   get sidenav() {
     return this.perusteDataStore.sidenav;
   }
@@ -229,13 +237,13 @@ export default class RoutePeruste extends Vue {
   }
 
   @Watch('flattenedSidenav', { immediate: true })
-  routeNameChange() {
+  flattenedSidenavChange() {
     if (this.routeName === 'peruste') {
       if (this.ensimainenNavi) {
         this.$router.replace(this.ensimainenNavi.location!);
       }
     }
-    this.resetFocusForScreenReader();
+    // this.resetFocusForScreenReader();
   }
 
   private resetFocusForScreenReader() {

@@ -121,6 +121,7 @@ export default class Paikalliset extends Vue {
   @Watch('page')
   async onPageChanged() {
     await this.fetch();
+    (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
   }
 
   @Watch('valittuPeruste')
