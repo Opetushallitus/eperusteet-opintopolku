@@ -22,7 +22,8 @@
                 :placeholder="$t('kaikki')"
                 :is-editing="true"
                 :options="tyyppiVaihtoehdot"
-                :search-identity="searchIdentity">
+                :search-identity="searchIdentity"
+                :closeOnSelect="false">
         <template #label>
           <span class="font-weight-600">{{$t('tyyppi')}}</span>
         </template>
@@ -38,7 +39,12 @@
 
       <div class="w-100 mb-3">
         <label class="font-weight-600">{{$t('koulutus-tai-tutkinto')}}</label>
-        <EpMaarayskokoelmaKoulutustyyppiSelect v-if="koulutustyyppiVaihtoehdot" :isEditing="true" v-model="query.koulutustyypit" :koulutustyypit="koulutustyyppiVaihtoehdot" />
+        <EpMaarayskokoelmaKoulutustyyppiSelect
+          class="maarayskokoelma-koulutustyyppi-select"
+          v-if="koulutustyyppiVaihtoehdot"
+          :isEditing="true"
+          v-model="query.koulutustyypit"
+          :koulutustyypit="koulutustyyppiVaihtoehdot" />
       </div>
     </div>
 
@@ -275,6 +281,11 @@ export default class RouteMaarayskokoelma extends Vue {
 ::v-deep .toggles {
   margin-bottom: 0;
   padding-bottom: 0;
+}
+
+.maarayskokoelma-koulutustyyppi-select {
+  max-width: 400px;
+  width: 400px;
 }
 
 </style>
