@@ -39,7 +39,6 @@
         <ep-sidebar :scroll-enabled="scroll">
           <template slot="bar">
             <div>
-              <!-- <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/> -->
               <ep-peruste-sidenav
                   :peruste-data-store="perusteDataStore">
               </ep-peruste-sidenav>
@@ -242,17 +241,6 @@ export default class RoutePeruste extends Vue {
       if (this.ensimainenNavi) {
         this.$router.replace(this.ensimainenNavi.location!);
       }
-    }
-    // this.resetFocusForScreenReader();
-  }
-
-  private resetFocusForScreenReader() {
-    // jos painetaan sisäistä linkkiä, jossa sidenavin sisältö muuttuu, siirretään tabin focus piilotettuun linkkiin,
-    // jotta ruudunlukijan focus ei jää sinne, missä linkkiä painettiin
-    const input = document.getElementById('sr-focus');
-    if (input) {
-      input.focus();
-      input.blur();
     }
   }
 

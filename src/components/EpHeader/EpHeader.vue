@@ -3,10 +3,10 @@
   <div class="vari-header" :class="theme">
     <div class="container header">
       <div class="murupolku">
-          <nav aria-label="breadcrumb">
+          <nav :aria-label="$t('sijaintisi-sivustolla')">
             <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
               <li class="breadcrumb-item">
-                <router-link class="breadcrumb-home" :to="{ name: 'root' }">
+                <router-link class="breadcrumb-home" :to="{ name: 'root' }" :aria-label="$t('etusivu')">
                   <EpMaterialIcon size="20px">home</EpMaterialIcon>
                 </router-link>
               </li>
