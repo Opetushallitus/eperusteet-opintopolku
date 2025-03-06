@@ -15,38 +15,48 @@
       </div>
 
       <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteetJaTutkinnonosat}">
-        <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-          <EpSearch v-model="query"
-                    :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
-                    :placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"/>
-        </b-form-group>
-        <b-form-group :label="$t('tutkintotyyppi')">
-          <EpMultiSelect
-            class="multiselect"
-            v-model="tutkintotyyppi"
-            :enable-empty-option="true"
-            :placeholder="$t('kaikki')"
-            :is-editing="true"
-            :options="tutkintotyypit"
-            :searchable="false">
+        <EpSearch
+          class="flex-fill ml-0 mt-3 mb-3 mr-3"
+          v-model="query"
+          :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
+          :placeholder="$t('')">
+          <template #label>
+            <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa')}}</span>
+          </template>
+        </EpSearch>
+        <EpMultiSelect
+          class="multiselect ml-0 mt-3 mb-3"
+          v-model="tutkintotyyppi"
+          :enable-empty-option="true"
+          :placeholder="$t('kaikki')"
+          :is-editing="true"
+          :options="tutkintotyypit"
+          :searchable="false">
 
-            <template slot="singleLabel" slot-scope="{ option }">
-              {{ $t(option) }}
-            </template>
+          <template #label>
+            <span class="font-weight-600">{{ $t('tutkintotyyppi')}}</span>
+          </template>
 
-            <template slot="option" slot-scope="{ option }">
-              {{ $t(option) }}
-            </template>
-          </EpMultiSelect>
-        </b-form-group>
+          <template slot="singleLabel" slot-scope="{ option }">
+            {{ $t(option) }}
+          </template>
+
+          <template slot="option" slot-scope="{ option }">
+            {{ $t(option) }}
+          </template>
+        </EpMultiSelect>
       </div>
     </div>
 
     <div v-else class="mb-3">
-      <EpSearch v-model="query" :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
+      <EpSearch
+        v-model="query"
+        :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
     </div>
     <EpSisaltotyyppiFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpSisaltotyyppiFilter>
   </div>
+
+  <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>
 
   <div v-if="!perusteetJaTutkinnonosat">
     <EpSpinner />
@@ -103,6 +113,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpSisaltotyyppiFilter from '@shared/components/EpSisaltotyyppiFilter/EpSisaltotyyppiFilter.vue';
 import EpAmmatillinenPerusteItem from '@/components/EpAmmatillinen/EpAmmatillinenPerusteItem.vue';
 import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmatillinenTutkinnonosaItem.vue';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -114,6 +125,7 @@ import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmati
     EpSisaltotyyppiFilter,
     EpAmmatillinenPerusteItem,
     EpAmmatillinenTutkinnonosaItem,
+    EpHakutulosmaara,
   },
 })
 export default class PerusteAmmatillinenHaku extends Vue {
@@ -121,20 +133,27 @@ export default class PerusteAmmatillinenHaku extends Vue {
   private perusteHakuStore!: IPerusteHakuStore;
 
   @Prop({ type: String })
-  private tyyppi!: 'peruste' | 'opas' | 'kooste';
+  private tyyppi!: 'peruste' | 'opas';
 
   private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
   private tutkintotyyppi = 'kaikki';
+  private query = '';
 
   private toggleQuery: any = {};
 
   async mounted() {
     this.initQuery();
     this.page = 1;
+    await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+
     if (!this.perusteHakuStore.perusteet) {
       await this.perusteHakuStore.fetch();
     }
-    await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+  }
+
+  async updateFilters(filters) {
+    await this.perusteHakuStore.updateFilters(filters);
+    (this.$el.querySelector('.ammatillinen-row a') as any)?.focus();
   }
 
   initQuery() {
@@ -164,13 +183,13 @@ export default class PerusteAmmatillinenHaku extends Vue {
 
   @Watch('kieli')
   async kieliChange() {
-    this.perusteHakuStore.updateFilters({ kieli: this.kieli });
+    await this.updateFilters({ kieli: this.kieli });
   }
 
   @Watch('tutkintotyyppi')
-  tutkintotyyppiChange() {
+  async tutkintotyyppiChange() {
     if (this.tutkintotyyppi === 'kaikki') {
-      this.perusteHakuStore.updateFilters({ koulutustyyppi: [
+      await this.updateFilters({ koulutustyyppi: [
         'koulutustyyppi_1',
         'koulutustyyppi_11',
         'koulutustyyppi_12',
@@ -179,18 +198,24 @@ export default class PerusteAmmatillinenHaku extends Vue {
       ] });
     }
     else {
-      this.perusteHakuStore.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
+      await this.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
     }
   }
 
   @Watch('query')
-  onQueryChanged() {
+  async onQueryChanged() {
     this.page = 1;
+    await this.updateFilters({ nimiTaiKoodi: this.query });
+  }
+
+  @Watch('page')
+  async onPageChanged() {
+    await this.updateFilters({ sivu: this.perusteHakuStore.page });
   }
 
   @Watch('toggleQuery', { deep: true })
-  voimassaoloFilterChanged() {
-    this.perusteHakuStore.updateFilters(this.toggleQuery);
+  async voimassaoloFilterChanged() {
+    await this.updateFilters(this.toggleQuery);
     this.page = 1;
   }
 
@@ -246,7 +271,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
         query: { redirect: 'true' },
       };
     }
-    if (this.tyyppi === 'opas' || this.tyyppi === 'kooste') {
+    if (this.tyyppi === 'opas') {
       return {
         name: 'peruste',
         params: {
@@ -281,21 +306,12 @@ export default class PerusteAmmatillinenHaku extends Vue {
     return this.perusteHakuStore.filters;
   }
 
-  get query() {
-    return this.filters.nimiTaiKoodi;
-  }
-
-  set query(value) {
-    this.perusteHakuStore.updateFilters({ nimiTaiKoodi: value });
-  }
-
   get page() {
     return this.perusteHakuStore.page + 1;
   }
 
   set page(value) {
     this.perusteHakuStore.page = value - 1;
-    this.perusteHakuStore.updateFilters({ sivu: this.perusteHakuStore.page });
   }
 
   get valmisteillaOlevat() {

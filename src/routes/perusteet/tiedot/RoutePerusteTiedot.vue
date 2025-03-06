@@ -1,17 +1,13 @@
 <template>
   <div class="content">
-    <h2 class="otsikko mb-4" slot="header">
-      <slot name="header">
-        {{ $t('perusteen-tiedot') }}
-      </slot>
+    <h2 class="otsikko mb-4" tabindex="-1">
+      {{ $t('perusteen-tiedot') }}
     </h2>
     <div class="row">
       <div class="col-md-12" v-if="peruste.nimi">
-        <slot name="nimi">
-          <ep-form-content name="peruste-nimi" headerType="h3" headerClass="h6">
-            <div>{{$kaanna(peruste.nimi)}} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
-          </ep-form-content>
-        </slot>
+        <ep-form-content name="peruste-nimi" headerType="h3" headerClass="h6">
+          <div>{{$kaanna(peruste.nimi)}} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
+        </ep-form-content>
       </div>
       <template v-if="isAmmatillinen">
         <div class="col-md-12" v-if="peruste.diaarinumero">

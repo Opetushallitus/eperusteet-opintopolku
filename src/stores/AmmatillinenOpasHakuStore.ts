@@ -4,6 +4,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteHakuStore } from './IPerusteHakuStore';
+import { Debounced } from '@shared/utils/delay';
 
 @Store
 export class AmmatillinenOpasHakuStore implements IPerusteHakuStore {
@@ -53,16 +54,16 @@ export class AmmatillinenOpasHakuStore implements IPerusteHakuStore {
   }))
   public readonly filters!: JulkaistutPerusteetQuery;
 
-  public readonly fetch = _.debounce(async () => {
+  @Debounced(500)
+  async fetch() {
     this.perusteet = null;
     const result = await julkaistutPerusteet(this.filters);
-
     this.total = result['kokonaismäärä'];
     this.page = result.sivu;
     this.perPage = result.sivukoko;
     this.pages = result.sivuja;
     this.perusteet = result.data;
-  }, 500);
+  }
 
   async updateFilters(filters: JulkaistutPerusteetQuery) {
     this.filterdata = {

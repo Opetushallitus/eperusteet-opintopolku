@@ -15,7 +15,7 @@
           {{$kaanna(group.data.kuvaus)}}
         </div>
         <div class="d-md-flex flex-wrap justify-content-start">
-          <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="'merkki-'+idx" class="mb-2">
+          <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="'merkki-'+idx" class="mb-2 mr-2">
             <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
               <div class="tile tile-background-shadow-selected shadow-tile" :class="{ 'expand-voimassaolo': osaamismerkki.isVanhentunut }">
                 <div class="tile-main d-flex">
@@ -111,9 +111,8 @@ export default class EpOsaamismerkit extends Vue {
   border-radius: 10px;
   border: 1px solid #E7E7E7;
   overflow: hidden;
-  width: 380px;
+  width: 390px;
   align-items: center;
-  margin-right: 15px;
 
   @media(max-width: 767.98px) {
     width: 100%;

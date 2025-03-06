@@ -1,7 +1,7 @@
 import { DebouncedFunc } from 'lodash';
 
 export interface IPerusteHakuStore {
-  fetch: DebouncedFunc<() => Promise<void>>
+  fetch: () => Promise<void>;
   toggles: string[];
   perusteet: any
   total: number;
@@ -9,5 +9,5 @@ export interface IPerusteHakuStore {
   page: number;
   perPage: number;
   filters: any;
-  updateFilters: (filter: any) => void;
+  updateFilters: (filter: any) => Promise<void>;
 };

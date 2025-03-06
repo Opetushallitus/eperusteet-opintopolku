@@ -1,13 +1,14 @@
 <template>
   <div>
-    <EpSearch class="mb-4" v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')"/>
-    <div v-if="hasResults" class="mb-1">
-      <span class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
-      <span>{{ $t('hakutulosta') }}</span>
-    </div>
+    <EpSearch v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')">
+      <template #label>
+        <span class="header">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</span>
+      </template>
+    </EpSearch>
+    <EpHakutulosmaara :kokonaismaara="kokonaismaara" class="my-3"/>
     <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
       <div class="list-item">
-        <router-link :to="item.route">
+        <router-link :to="item.route" class="peruste-ops-linkki">
           <div class="d-flex tile-background-shadow-selected shadow-tile align-items-center">
             <div class="mx-3 my-3">
               <div :class="item.theme"/>
@@ -36,20 +37,13 @@
       </div>
     </div>
     <div v-if="kokonaismaara > 0" class="mt-4">
-      <b-pagination :value="sivu"
-                    @change="updatePage"
-                    :total-rows="kokonaismaara"
-                    :per-page="sivukoko"
-                    align="center"
-                    aria-controls="opetussuunnitelmat-ja-perusteet-lista"
-                    :first-text="$t('alkuun')"
-                    prev-text="«"
-                    next-text="»"
-                    :last-text="$t('loppuun')"
-                    :pills="true"
-                    :disabled="isLoading"/>
+      <EpBPagination
+        v-model="sivu"
+        :total="kokonaismaara"
+        :itemsPerPage="sivukoko"
+        aria-controls="opetussuunnitelmat-ja-perusteet-lista"/>
     </div>
-    <EpSpinner v-if="isLoading"></EpSpinner>
+    <EpSpinner v-if="isLoading" class="mt-4"></EpSpinner>
   </div>
 </template>
 
@@ -63,12 +57,16 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 
 @Component({
   components: {
     EpSpinner,
     EpSpinnerSlot,
     EpSearch,
+    EpHakutulosmaara,
+    EpBPagination,
   },
 })
 export default class EpEtusivuHaku extends Vue {
@@ -120,6 +118,7 @@ export default class EpEtusivuHaku extends Vue {
     this.perusteStore.opsitJaPerusteet = null;
   }
 
+  @Watch('sivu')
   async updatePage(value) {
     this.page = value;
     await this.fetchOpsitJaPerusteet();
@@ -143,6 +142,7 @@ export default class EpEtusivuHaku extends Vue {
       console.error(e);
     }
     this.isLoading = false;
+    (this.$el.querySelector('.peruste-ops-linkki') as any)?.focus();
   }
 
   get opsitJaPerusteet() {
@@ -382,5 +382,12 @@ export default class EpEtusivuHaku extends Vue {
 
 ::v-deep .spinner .oph-bounce {
   background-color: $white !important;
+}
+
+.header {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
 }
 </style>

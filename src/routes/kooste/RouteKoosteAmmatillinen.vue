@@ -33,10 +33,14 @@
           </b-row>
           <b-row>
             <b-col>
-              <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
-              <div class="search">
-                <div class="placeholder mb-2">{{$t('etsi-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla')}}</div>
-                <ep-search v-model="query" :placeholder="$t('etsi')"/>
+              <h2 class="otsikko mb-2">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
+              <div class="search mb-2">
+                <div class="mb-2">{{$t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla')}}</div>
+                <ep-search v-model="query" :placeholder="$t('hae-toteutussuunnitelmaa')">
+                  <template #label>
+                    <span class="font-weight-600">{{$t('hae-toteutussuunnitelmaa')}}</span>
+                  </template>
+                </ep-search>
               </div>
               <ep-spinner v-if="!opetussuunnitelmatPage" />
               <div v-else-if="opetussuunnitelmat.length === 0 && !query">
@@ -49,7 +53,7 @@
                   {{ $t('ei-hakutuloksia') }}
                 </div>
               </div>
-              <div v-else id="opetussuunnitelmat-lista">
+              <div v-else id="opetussuunnitelmat-lista" class="opetussuunnitelma-container">
                 <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
 
                   <router-link :to="ops.route">
@@ -177,12 +181,13 @@ export default class RouteKoosteAmmatillinen extends Vue {
   }
 
   @Watch('query')
-  queryChange(val) {
-    this.fetch(this.query);
+  async queryChange(val) {
+    await this.fetch(this.query);
   }
 
-  fetch(nimi?, page?) {
-    this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: nimi, sivu: page });
+  async fetch(nimi?, page?) {
+    await this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: nimi, sivu: page });
+    (this.$el.querySelector('.opetussuunnitelma-container a') as any).focus();
   }
 
   avaaTiedote(tiedote: TiedoteDto) {
@@ -257,8 +262,6 @@ export default class RouteKoosteAmmatillinen extends Vue {
 }
 
 .search {
-  margin: 20px 0;
-
   .placeholder {
     font-size: small;
     color: $gray;

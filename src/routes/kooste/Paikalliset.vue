@@ -2,47 +2,54 @@
 <div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <span>{{ $t('voit-hakea-opetussuunnitelman-yleissivistava') }}</span>
-  <div class="d-flex flex-lg-row flex-column">
-    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-      <ep-search v-model="query"
-                 :max-width="true"
-                 :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-                 :placeholder="$t('hae-opetussuunnitelmaa')"/>
-    </b-form-group>
-    <b-form-group :label="$t('peruste')">
-      <EpMultiSelect v-if="julkaistutPerusteet"
-                     :is-editing="false"
-                     :options="perusteetOptions"
-                     :placeholder="$t('kaikki')"
-                     class="multiselect"
-                     v-model="valittuPeruste"
-                     :searchable="false">
-        <template slot="singleLabel" slot-scope="{ option }">
-          {{ kaannaPerusteNimi(option) }}
-        </template>
-        <template slot="option" slot-scope="{ option }">
-          {{ kaannaPerusteNimi(option) }}
-        </template>
-      </EpMultiSelect>
-    </b-form-group>
+  <div class="d-flex flex-lg-row flex-column w-100">
+    <ep-search
+      class="flex-fill ml-0 mt-3 mb-3 mr-3"
+      v-model="query"
+      :max-width="true"
+      :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+      :placeholder="$t('')">
+      <template #label>
+        <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa')}}</span>
+      </template>
+    </ep-search>
+    <EpMultiSelect
+      v-if="julkaistutPerusteet"
+      :is-editing="false"
+      :options="perusteetOptions"
+      :placeholder="$t('kaikki')"
+      class="multiselect ml-0 mt-3 mb-3"
+      v-model="valittuPeruste"
+      :searchable="false">
+      <template #label>
+        <span class="font-weight-600">{{ $t('peruste')}}</span>
+      </template>
+      <template slot="singleLabel" slot-scope="{ option }">
+        {{ kaannaPerusteNimi(option) }}
+      </template>
+      <template slot="option" slot-scope="{ option }">
+        {{ kaannaPerusteNimi(option) }}
+      </template>
+    </EpMultiSelect>
   </div>
 
   <div class="opetussuunnitelma-container">
+    <EpHakutulosmaara :kokonaismaara="opetussuunnitelmatLength" piilotaNakyvaTulosmaara/>
+
     <ep-spinner v-if="isLoading" />
     <div v-else-if="opetussuunnitelmat.length === 0">
       <div class="alert alert-info">
         {{ $t('ei-hakutuloksia') }}
       </div>
     </div>
+
     <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
-        <router-link :to="ops.route">
-          <opetussuunnitelma-tile
-            :ops="ops"
-            :query="query"
-            @mouseover="mouseOver(ops)"/>
-        </router-link>
-      </div>
+      <router-link :to="ops.route" v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
+        <opetussuunnitelma-tile
+          :ops="ops"
+          :query="query"
+          @mouseover="mouseOver(ops)"/>
+      </router-link>
       <EpBPagination v-model="page"
                      :items-per-page="perPage"
                      :total="opetussuunnitelmatKokonaismaara"
@@ -67,7 +74,7 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ryhmanKoulutustyypit } from '@shared/utils/perusteet';
-import { Page } from '@shared/tyypit';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -78,6 +85,7 @@ import { Page } from '@shared/tyypit';
     OpetussuunnitelmaTile,
     EpBPagination,
     EpMultiSelect,
+    EpHakutulosmaara,
   },
 })
 export default class Paikalliset extends Vue {
@@ -113,6 +121,7 @@ export default class Paikalliset extends Vue {
   @Watch('page')
   async onPageChanged() {
     await this.fetch();
+    (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
   }
 
   @Watch('valittuPeruste')
@@ -162,6 +171,10 @@ export default class Paikalliset extends Vue {
 
   get isLoading() {
     return !this.paikallinenStore.opetussuunnitelmatPaged!.value;
+  }
+
+  get opetussuunnitelmatLength() {
+    return this.paikallinenStore.opetussuunnitelmatPaged?.value?.kokonaismäärä;
   }
 
   get opetussuunnitelmatKokonaismaara() {

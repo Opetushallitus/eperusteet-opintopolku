@@ -4,6 +4,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { PerusteQuery, perusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteHakuStore } from './IPerusteHakuStore';
+import { Debounced } from '@shared/utils/delay';
 
 @Store
 export class PerusteHakuStore implements IPerusteHakuStore {
@@ -65,7 +66,8 @@ export class PerusteHakuStore implements IPerusteHakuStore {
   }))
   public readonly filters!: PerusteQuery;
 
-  public readonly fetch = _.debounce(async () => {
+  @Debounced(1000)
+  async fetch() {
     this.perusteet = null;
     const result = await perusteetQuery(this.filters);
     this.total = result['kokonaismäärä'];
@@ -73,7 +75,7 @@ export class PerusteHakuStore implements IPerusteHakuStore {
     this.perPage = result.sivukoko;
     this.pages = result.sivuja;
     this.perusteet = result.data;
-  }, 1000);
+  }
 
   async updateFilters(filters: PerusteQuery) {
     this.filterdata = {

@@ -12,7 +12,6 @@
     <div class="container">
       <b-container fluid>
         <section class="section">
-          <h2 class="tile-heading">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</h2>
           <EpEtusivuHaku :peruste-store="perusteStore"></EpEtusivuHaku>
         </section>
       </b-container>
@@ -39,9 +38,7 @@
           <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
           <EpSpinner v-if="!julkaistutKoulutustyypit" />
           <div class="d-md-flex flex-wrap justify-content-start">
-            <div v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3">
-              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-            </div>
+            <KoulutustyyppiTile :tyyppi="item" v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3"></KoulutustyyppiTile>
           </div>
         </section>
 
@@ -49,9 +46,7 @@
           <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
           <EpSpinner v-if="!otherItems" />
           <div class="d-md-flex flex-wrap justify-content-start">
-            <div v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2">
-              <KoulutustyyppiTile :tyyppi="item"></KoulutustyyppiTile>
-            </div>
+            <KoulutustyyppiTile :tyyppi="item" v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2"></KoulutustyyppiTile>
           </div>
         </section>
       </b-container>
@@ -126,7 +121,9 @@ export default class RouteHome extends Vue {
   private browserStore = new BrowserStore();
 
   async mounted() {
-    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
+    const h1 = this.$el.querySelector('h1');
+    h1?.setAttribute('tabindex', '-1');
+    h1?.focus();
   }
 
   @Watch('julkaistutKoulutustyypit', { immediate: true })
@@ -262,6 +259,10 @@ export default class RouteHome extends Vue {
     a {
       color: $oph-green;
     }
+  }
+
+  ::v-deep a {
+    color: $oph-green;
   }
 }
 

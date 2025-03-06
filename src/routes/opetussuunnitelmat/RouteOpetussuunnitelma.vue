@@ -101,8 +101,13 @@ export default class RouteOpetussuunnitelma extends Vue {
   }
 
   @Watch('$route', { deep: true, immediate: true })
-  onRouteUpdate(route) {
+  async onRouteUpdate(route) {
     this.opetussuunnitelmaDataStore.updateRoute(route);
+
+    await Vue.nextTick();
+    const h2 = this.$el.querySelector('h2');
+    h2?.setAttribute('tabindex', '-1');
+    h2?.focus();
   }
 
   @Meta

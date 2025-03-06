@@ -11,7 +11,13 @@
       <div class="diaarinumero" v-if="peruste.tyyppi !=='opas'">
         {{ peruste.diaarinumero }}
       </div>
-      <ep-search class="query mt-3" v-model="query" :maxlength="100"/>
+      <ep-search
+        class="query mt-3"
+        v-model="query"
+        :maxlength="100"
+        :placeholder="$t('hae')"
+        :srOnlyLabelText="sisaltoHakuSrLabel"
+        />
     </template>
   </ep-header>
 
@@ -33,7 +39,6 @@
         <ep-sidebar :scroll-enabled="scroll">
           <template slot="bar">
             <div>
-              <a id="sr-focus" class="sr-only" href="" aria-hidden="true" tabindex="-1"/>
               <ep-peruste-sidenav
                   :peruste-data-store="perusteDataStore">
               </ep-peruste-sidenav>
@@ -84,6 +89,7 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Route } from 'vue-router';
+import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 
 @Component({
   components: {
@@ -142,6 +148,14 @@ export default class RoutePeruste extends Vue {
   @Watch('routeQuery', { immediate: true })
   private async routeQueryChange() {
     this.query = this.routeQuery;
+  }
+
+  @Watch('$route', { deep: true, immediate: true })
+  async routeChange() {
+    await Vue.nextTick();
+    const h2 = this.$el.querySelector('h2');
+    h2?.setAttribute('tabindex', '-1');
+    h2?.focus();
   }
 
   get sidenav() {
@@ -222,22 +236,11 @@ export default class RoutePeruste extends Vue {
   }
 
   @Watch('flattenedSidenav', { immediate: true })
-  routeNameChange() {
+  flattenedSidenavChange() {
     if (this.routeName === 'peruste') {
       if (this.ensimainenNavi) {
         this.$router.replace(this.ensimainenNavi.location!);
       }
-    }
-    this.resetFocusForScreenReader();
-  }
-
-  private resetFocusForScreenReader() {
-    // jos painetaan sisäistä linkkiä, jossa sidenavin sisältö muuttuu, siirretään tabin focus piilotettuun linkkiin,
-    // jotta ruudunlukijan focus ei jää sinne, missä linkkiä painettiin
-    const input = document.getElementById('sr-focus');
-    if (input) {
-      input.focus();
-      input.blur();
     }
   }
 
@@ -263,6 +266,14 @@ export default class RoutePeruste extends Vue {
 
   get scroll() {
     return !_.has(this.$route.query, 'noscroll');
+  }
+
+  get sisaltoHakuSrLabel() {
+    if (this.peruste?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.DIGITAALINENOSAAMINEN)) {
+      return this.$t('hae-digitaalisten-osaamisten-kuvauksista');
+    }
+
+    return this.$t('hae-perusteen-sisallosta');
   }
 }
 </script>

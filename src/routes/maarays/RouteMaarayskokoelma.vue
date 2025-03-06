@@ -7,19 +7,27 @@
       {{ $t('opetushallituksen-maaraykset-alaotsikko') }}
     </template>
 
-    <div class="row ml-0 mt-4 mb-0">
+    <div class="d-flex flex-column flex-lg-row">
+      <div class="w-100 mr-2 mb-3">
+        <EpSearch v-model="query.nimi" :placeholder="$t('')">
+          <template #label>
+            <span class="font-weight-600">{{$t('hae-maarayksia')}}</span>
+          </template>
+        </EpSearch>
+      </div>
 
-      <b-form-group :label="$t('hae')" class="col-lg-5 col-md-6 mb-1">
-        <ep-search v-model="query.nimi" :placeholder="$t('hae-maarayksia')"/>
-      </b-form-group>
-
-      <b-form-group :label="$t('tyyppi')" class="col-lg-3 col-md-6 mb-1">
+      <div class="w-100 mr-2 mb-3">
         <EpMultiSelect v-model="query.tyyppi"
                 :enable-empty-option="true"
                 :placeholder="$t('kaikki')"
                 :is-editing="true"
                 :options="tyyppiVaihtoehdot"
-                :search-identity="searchIdentity">
+                :search-identity="searchIdentity"
+                :closeOnSelect="false">
+        <template #label>
+          <span class="font-weight-600">{{$t('tyyppi')}}</span>
+        </template>
+
           <template slot="singleLabel" slot-scope="{ option }">
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
@@ -27,14 +35,22 @@
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
         </EpMultiSelect>
-      </b-form-group>
+      </div>
 
-      <b-form-group :label="$t('koulutus-tai-tutkinto')" class="col-lg-4 col-md-6 mb-1">
-        <EpMaarayskokoelmaKoulutustyyppiSelect v-if="koulutustyyppiVaihtoehdot" :isEditing="true" v-model="query.koulutustyypit" :koulutustyypit="koulutustyyppiVaihtoehdot" />
-      </b-form-group>
+      <div class="w-100 mb-3">
+        <label class="font-weight-600">{{$t('koulutus-tai-tutkinto')}}</label>
+        <EpMaarayskokoelmaKoulutustyyppiSelect
+          class="maarayskokoelma-koulutustyyppi-select"
+          v-if="koulutustyyppiVaihtoehdot"
+          :isEditing="true"
+          v-model="query.koulutustyypit"
+          :koulutustyypit="koulutustyyppiVaihtoehdot" />
+      </div>
     </div>
 
     <EpVoimassaoloFilter v-model="query" class="mb-0"></EpVoimassaoloFilter>
+
+    <EpHakutulosmaara :kokonaismaara="maarayksetCount" piilotaNakyvaTulosmaara/>
 
     <ep-spinner v-if="!maaraykset" />
 
@@ -44,7 +60,7 @@
 
     <div class="maaraykset" v-else>
       <div class="jarjestys d-flex justify-content-end align-items-center mb-2" >
-        <a @click="vaihdaJarjestys()" class="clickable">
+        <a @click="vaihdaJarjestys()" class="clickable" href="javascript:void(0)">
           <span v-if="query.jarjestys === 'DESC'">{{$t('uusimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_down</EpMaterialIcon></span>
           <span v-if="query.jarjestys === 'ASC'">{{$t('vanhimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_up</EpMaterialIcon></span>
         </a>
@@ -100,6 +116,7 @@ import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -114,6 +131,7 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
     EpButton,
     EpMaterialIcon,
     EpMaarayskokoelmaKoulutustyyppiSelect,
+    EpHakutulosmaara,
   },
 })
 export default class RouteMaarayskokoelma extends Vue {
@@ -166,6 +184,7 @@ export default class RouteMaarayskokoelma extends Vue {
         kieli: this.kieli,
         sivu: this.sivu - 1,
       });
+    (this.$el.querySelector('.maarays') as any)?.focus();
   }
 
   get maaraykset() {
@@ -263,6 +282,11 @@ export default class RouteMaarayskokoelma extends Vue {
 ::v-deep .toggles {
   margin-bottom: 0;
   padding-bottom: 0;
+}
+
+.maarayskokoelma-koulutustyyppi-select {
+  max-width: 400px;
+  width: 400px;
 }
 
 </style>
