@@ -18,8 +18,7 @@
           </div>
           <div class="d-flex">
             <EpMaterialIcon>chevron_right</EpMaterialIcon>
-            <EpLinkki :url="$kaanna(linkit.virkailija)">{{ $t('siirry-virkailijanakymaan') }}</EpLinkki>
-            <EpMaterialIcon class="ml-1" size="20px">launch</EpMaterialIcon>
+            <EpLinkki :url="$kaanna(linkit.virkailija)" icon="launch" iconRight>{{ $t('siirry-virkailijanakymaan') }}</EpLinkki>
           </div>
         </div>
       </div>

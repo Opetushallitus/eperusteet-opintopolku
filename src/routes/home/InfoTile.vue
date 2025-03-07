@@ -5,11 +5,11 @@
       <span v-if="translatedText" v-html="$kaanna(translatedText)"></span>
       <span v-if="text">{{$t(text)}}</span>
       <div class="d-flex mt-4 link">
-        <EpLinkki v-if="infoLink" :url="infoLink" icon="chevron_right">
+        <EpMaterialIcon>chevron_right</EpMaterialIcon>
+        <EpLinkki v-if="infoLink" :url="infoLink" icon="launch" iconRight>
           <span class="link-text">{{ $t(linkText) }}</span>
         </EpLinkki>
         <router-link v-if="route" :to="route">
-          <EpMaterialIcon class="mr-1" size="18px" :color="'#fff'">chevron_right</EpMaterialIcon>
           <span class="link-text">{{ $t(linkText) }}</span>
         </router-link>
       </div>

@@ -32,12 +32,7 @@
           <h2 class="mb-2 mt-4">{{$t('osallistu-kehitystyohon')}}</h2>
           <p class="kuvaus">
             {{ $t('ammatillinen-kehitystyo-kuvaus') }}
-            <a target="_blank" :href="furtherFeedbackUrl">
-            <span>
-              {{ $t('kerro-ehdotuksesi') }}
-              <span class="sr-only"> ({{ $t('linkki-aukeaa-uuteen-ikkunaan') }})</span>
-            </span>
-          </a>
+            <EpLinkki :url="furtherFeedbackUrl" icon="launch" iconRight>{{ $t('kerro-ehdotuksesi') }}</EpLinkki>
           </p>
 
         </div>
