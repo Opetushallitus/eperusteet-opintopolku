@@ -254,9 +254,6 @@ export default class EpEtusivuHaku extends Vue {
 
 ::v-deep .filter .form-control {
   padding: 20px 20px 20px 45px;
-  border-radius: 0;
-  border-color: #BBB;
-  background: $white;
   height: 60px;
 }
 
