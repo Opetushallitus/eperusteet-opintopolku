@@ -36,7 +36,6 @@
           </EpMultiSelect>
         </div>
 
-        <EpSpinner v-if="!osaamismerkkiKategoriat" />
         <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
                          :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></EpOsaamismerkit>
       </div>

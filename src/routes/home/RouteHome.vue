@@ -87,11 +87,10 @@ import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
-import { kansallisetOsaamismerkitRoute, navigoitavatKoulutustyyppiRyhmat, ophMaarayksetRoute, otherLinks, navigoitavatMuutRyhmat } from '@/utils/navigointi';
+import { navigoitavatKoulutustyyppiRyhmat, otherLinks, navigoitavatMuutRyhmat } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
-import { digitaalinenOsaaminen } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -121,6 +120,7 @@ export default class RouteHome extends Vue {
   private browserStore = new BrowserStore();
 
   async mounted() {
+    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
     const h1 = this.$el.querySelector('h1');
     h1?.setAttribute('tabindex', '-1');
     h1?.focus();

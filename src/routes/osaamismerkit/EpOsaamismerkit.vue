@@ -1,7 +1,7 @@
 <template>
   <div>
-    <EpSpinner v-if="!osaamismerkit" />
-    <div v-else-if="osaamismerkitCount === 0">
+    <EpSpinner v-if="!osaamismerkit || !osaamismerkkiKategoriat" />
+    <div v-else-if="osaamismerkit.length === 0">
       <div class="alert alert-info">
         {{ $t('ei-hakutuloksia') }}
       </div>
@@ -67,19 +67,17 @@ export default class EpOsaamismerkit extends Vue {
   }
 
   get osaamismerkit() {
-    return _.chain(this.osaamismerkitStore.osaamismerkit.value)
-      .filter(osaamismerkki => !!osaamismerkki?.nimi && !!osaamismerkki.nimi[Kielet.getSisaltoKieli.value])
-      .map(osaamismerkki => ({
-        ...osaamismerkki,
-        image: this.generateImageUrl(osaamismerkki.kategoria?.liite),
-        isVanhentunut: this.isVanhentunut(osaamismerkki),
-      }))
-      .sortBy(om => Kielet.sortValue(om.nimi))
-      .value();
-  }
-
-  get osaamismerkitCount() {
-    return this.osaamismerkit.length;
+    if (this.osaamismerkitStore.osaamismerkit.value) {
+      return _.chain(this.osaamismerkitStore.osaamismerkit.value)
+        .filter(osaamismerkki => !!osaamismerkki?.nimi && !!osaamismerkki.nimi[Kielet.getSisaltoKieli.value])
+        .map(osaamismerkki => ({
+          ...osaamismerkki,
+          image: this.generateImageUrl(osaamismerkki.kategoria?.liite),
+          isVanhentunut: this.isVanhentunut(osaamismerkki),
+        }))
+        .sortBy(om => Kielet.sortValue(om.nimi))
+        .value();
+    }
   }
 
   get kategoriaGroup() {
