@@ -4252,15 +4252,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/axios@npm:^0.14.4":
-  version: 0.14.4
-  resolution: "@types/axios@npm:0.14.4"
-  dependencies:
-    axios: "npm:*"
-  checksum: 10c0/945ef9d9d493b7292d33cf55679af90ffb60fe85475ce79327494480d517e8263f3f0c2f262396a1ada3ef4d66f3b05ea16b1f3c40680aa2b8399c36f6a92dfa
-  languageName: node
-  linkType: hard
-
 "@types/babel__core@npm:^7.0.0, @types/babel__core@npm:^7.1.14":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
@@ -6870,17 +6861,6 @@ __metadata:
   version: 3.5.3
   resolution: "axe-core@npm:3.5.3"
   checksum: 10c0/b311a2ea97f690816247122053b1f6868f20f8c6b775418f0e2957eb4ca58a8180c2c5207b1a3b5bdf5c9c9fc91e149a42aa30d01f42b1bc61ce6c8470122a4f
-  languageName: node
-  linkType: hard
-
-"axios@npm:*":
-  version: 1.6.5
-  resolution: "axios@npm:1.6.5"
-  dependencies:
-    follow-redirects: "npm:^1.15.4"
-    form-data: "npm:^4.0.0"
-    proxy-from-env: "npm:^1.1.0"
-  checksum: 10c0/aeb9acf87590d8aa67946072ced38e01ca71f5dfe043782c0ccea667e5dd5c45830c08afac9be3d7c894f09684b8ab2a458f497d197b73621233bcf202d9d468
   languageName: node
   linkType: hard
 
@@ -9564,7 +9544,6 @@ __metadata:
   resolution: "eperusteet-opintopolku-ui@workspace:."
   dependencies:
     "@babel/core": "npm:^7.12.16"
-    "@types/axios": "npm:^0.14.4"
     "@types/jest": "npm:^27.5.2"
     "@types/lodash": "npm:4.14.202"
     "@types/qs": "npm:^6.9.1"
@@ -11012,7 +10991,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.15.4":
+"follow-redirects@npm:^1.0.0":
   version: 1.15.4
   resolution: "follow-redirects@npm:1.15.4"
   peerDependenciesMeta:

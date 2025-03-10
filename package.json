@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.12.16",
-    "@types/axios": "^0.14.4",
     "@types/jest": "^27.5.2",
     "@types/lodash": "4.14.202",
     "@types/qs": "^6.9.1",
