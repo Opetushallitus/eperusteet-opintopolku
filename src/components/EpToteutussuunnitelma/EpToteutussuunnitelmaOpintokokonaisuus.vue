@@ -78,7 +78,7 @@
         </ul>
       </b-col>
     </b-row>
-    <template v-if="opintokokonaisuus.osaamismerkkiKappale">
+    <template v-if="opintokokonaisuus.osaamismerkkiKappale && (opintokokonaisuus.osaamismerkkiKappale.kuvaus || osaamisMerkkiKoodit.length > 0)">
       <hr>
       <b-row>
         <b-col>
@@ -91,9 +91,9 @@
           <ep-content-viewer :value="$kaanna(opintokokonaisuus.osaamismerkkiKappale.kuvaus)" :kuvat="kuvat" class="mb-5"/>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row v-if="osaamisMerkkiKoodit.length > 0">
         <b-col>
-          <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
+          <EpOsaamismerkit :osaamismerkit="osaamismerkit"
                            :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
                            hide-kuvaus></EpOsaamismerkit>
         </b-col>
@@ -128,23 +128,25 @@ export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
   private osaamismerkitStore = new OsaamismerkitStore();
 
   async mounted() {
-    let koodit = _.map(this.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
-    await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: koodit, poistunut: true });
-    await this.osaamismerkitStore.fetchKategoriat({ poistunut: true });
+    if (this.osaamisMerkkiKoodit.length > 0) {
+      await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: this.osaamisMerkkiKoodit, poistunut: true });
+      await this.osaamismerkitStore.fetchKategoriat({ poistunut: true });
+    }
+  }
+
+  get osaamisMerkkiKoodit() {
+    return _.map(this.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
+  }
+
+  get osaamismerkit() {
+    return this.osaamismerkitStore.osaamismerkit.value;
   }
 
   get osaamismerkkiKategoriat() {
     return _.chain(this.osaamismerkitStore.kategoriat.value)
-      .map(kategoria => {
-        return {
-          text: this.$kaanna(kategoria.nimi),
-          value: kategoria.id,
-          data: kategoria,
-        };
-      })
       .uniqWith(_.isEqual)
-      .sortBy('text')
-      .filter('text')
+      .sortBy(kategoria => this.$kaanna(kategoria.nimi))
+      .filter(kategoria => !!this.$kaanna(kategoria.nimi))
       .value();
   }
 
