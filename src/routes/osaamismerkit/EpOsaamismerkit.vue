@@ -9,10 +9,10 @@
     <div v-else>
       <div v-for="(group, index) in kategoriaGroup" :key="index" class="mb-4">
         <div class="mb-4">
-          <h4>{{$kaanna(group.data.nimi)}}</h4>
+          <h4>{{$kaanna(group.nimi)}}</h4>
         </div>
-        <div class="mb-4" v-if="group.data.kuvaus && !hideKuvaus">
-          {{$kaanna(group.data.kuvaus)}}
+        <div class="mb-4" v-if="group.kuvaus && !hideKuvaus">
+          {{$kaanna(group.kuvaus)}}
         </div>
         <div class="d-md-flex flex-wrap justify-content-start">
           <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="'merkki-'+idx" class="mb-2 mr-2">
@@ -44,8 +44,8 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
+import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
 
 @Component({
   components: {
@@ -54,10 +54,10 @@ import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 })
 export default class EpOsaamismerkit extends Vue {
   @Prop({ required: true })
-  private osaamismerkitStore!: OsaamismerkitStore;
+  private osaamismerkit!: OsaamismerkkiBaseDto[];
 
   @Prop({ required: true })
-  private osaamismerkkiKategoriat!: any[];
+  private osaamismerkkiKategoriat!: OsaamismerkkiKategoriaDto[];
 
   @Prop({ required: false, default: false, type: Boolean })
   private hideKuvaus?: Boolean;
@@ -66,9 +66,9 @@ export default class EpOsaamismerkit extends Vue {
     return liite ? 'data:' + liite.mime + ';base64,' + liite.binarydata : null;
   }
 
-  get osaamismerkit() {
-    if (this.osaamismerkitStore.osaamismerkit.value) {
-      return _.chain(this.osaamismerkitStore.osaamismerkit.value)
+  get osaamismerkitMapped() {
+    if (this.osaamismerkit) {
+      return _.chain(this.osaamismerkit)
         .filter(osaamismerkki => !!osaamismerkki?.nimi && !!osaamismerkki.nimi[Kielet.getSisaltoKieli.value])
         .map(osaamismerkki => ({
           ...osaamismerkki,
@@ -82,9 +82,10 @@ export default class EpOsaamismerkit extends Vue {
 
   get kategoriaGroup() {
     return _.chain(this.osaamismerkkiKategoriat)
+      .sortBy(kategoria => this.$kaanna(kategoria.nimi))
       .map(kategoria => ({
         ...kategoria,
-        osaamismerkit: _.filter(this.osaamismerkit, osaamismerkki => osaamismerkki.kategoria?.id === kategoria.value),
+        osaamismerkit: _.filter(this.osaamismerkitMapped, osaamismerkki => osaamismerkki.kategoria?.id === kategoria.id),
       }))
       .filter(kategoria => kategoria.osaamismerkit.length > 0)
       .value();

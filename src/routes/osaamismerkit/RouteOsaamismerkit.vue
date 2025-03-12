@@ -36,7 +36,7 @@
           </EpMultiSelect>
         </div>
 
-        <EpOsaamismerkit :osaamismerkit-store="osaamismerkitStore"
+        <EpOsaamismerkit :osaamismerkit="osaamismerkit"
                          :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></EpOsaamismerkit>
       </div>
     </EpHeader>
@@ -90,6 +90,14 @@ export default class RouteOsaamismerkit extends Vue {
     };
   }
 
+  get osaamismerkit() {
+    return this.osaamismerkitStore.osaamismerkit.value;
+  }
+
+  get osaamismerkkiKategoriat() {
+    return this.osaamismerkitStore.kategoriat.value;
+  }
+
   @Watch('query', { deep: true, immediate: true })
   async onQueryChange(query: OsaamismerkitQuery) {
     await this.osaamismerkitStore.updateOsaamismerkkiQuery({
@@ -106,7 +114,7 @@ export default class RouteOsaamismerkit extends Vue {
     return _.get(this.$route.params, 'koulutustyyppi') || 'vapaasivistystyo';
   }
 
-  get osaamismerkkiKategoriat() {
+  get osaamismerkkiKategoriaOptionsMapped() {
     if (!this.osaamismerkitStore.kategoriat.value) {
       return null;
     }
@@ -131,7 +139,7 @@ export default class RouteOsaamismerkit extends Vue {
         text: this.$t('kaikki'),
         value: null,
       },
-      ...(this.osaamismerkkiKategoriat ? this.osaamismerkkiKategoriat : []),
+      ...(this.osaamismerkkiKategoriaOptionsMapped ? this.osaamismerkkiKategoriaOptionsMapped : []),
     ];
   }
 
