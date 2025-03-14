@@ -1,6 +1,6 @@
 <template>
   <div>
-    <EpSearch v-model="queryNimi" :placeholder="$t('hae-suunnitelmia-tai-perusteita')">
+    <EpSearch v-model="queryNimi" :placeholder="$t('')">
       <template #label>
         <span class="header">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</span>
       </template>

@@ -17,7 +17,7 @@
             :placeholder="''"
             class="w-100 mr-3">
             <template #label>
-              <span class="font-weight-600">{{ $t('hae')}}</span>
+              <span class="font-weight-600">{{ $t('hae-osaamismerkkeja')}}</span>
             </template>
           </EpSearch>
 

@@ -2,33 +2,39 @@
 <div class="paikalliset">
   <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
   <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
-  <div class="d-flex flex-lg-row flex-column">
-    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-      <ep-search v-model="query.nimi"
-                 :max-width="true"
-                 :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-                 :placeholder="$t('hae-opetussuunnitelmaa')"/>
-    </b-form-group>
+  <div class="d-flex flex-lg-row flex-column w-100">
+    <ep-search
+      class="flex-fill ml-0 mt-3 mb-3 mr-3"
+      v-model="query.nimi"
+      max-width="true"
+      :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+      :placeholder="$t('')">
+      <template #label>
+        <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa')}}</span>
+      </template>
+    </ep-search>
 
-    <b-form-group :label="$t('peruste')">
-      <EpMultiSelect v-if="julkaistutPerusteet"
-                     :is-editing="false"
-                     :options="perusteetOptions"
-                     :placeholder="$t('kaikki')"
-                     class="multiselect"
-                     @input="setActivePeruste($event)"
-                     v-model="valittuPeruste"
-                     :searchable="false">
+    <EpMultiSelect
+      v-if="julkaistutPerusteet"
+      :is-editing="false"
+      :options="perusteetOptions"
+      :placeholder="$t('kaikki')"
+      class="multiselect ml-0 mt-3 mb-3"
+      @input="setActivePeruste($event)"
+      v-model="valittuPeruste"
+      :searchable="false">
+      <template #label>
+        <span class="font-weight-600">{{ $t('peruste')}}</span>
+      </template>
 
-        <template slot="singleLabel" slot-scope="{ option }">
-          {{ kaannaPerusteNimi(option) }}
-        </template>
+      <template slot="singleLabel" slot-scope="{ option }">
+        {{ kaannaPerusteNimi(option) }}
+      </template>
 
-        <template slot="option" slot-scope="{ option }">
-          {{ kaannaPerusteNimi(option) }}
-        </template>
-      </EpMultiSelect>
-    </b-form-group>
+      <template slot="option" slot-scope="{ option }">
+        {{ kaannaPerusteNimi(option) }}
+      </template>
+    </EpMultiSelect>
   </div>
 
   <EpVoimassaoloFilter v-model="query"></EpVoimassaoloFilter>
@@ -67,14 +73,11 @@ import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { Koulutustyyppi } from '@shared/tyypit';
 import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaikallisetStore';
-import { Ulkopuoliset } from '@shared/api/eperusteet';
-import { KoodistoSelectStore } from '@shared/components/EpKoodistoSelect/KoodistoSelectStore';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { isVstLukutaito } from '@shared/utils/perusteet';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
-import { JulkinenApi } from '@shared/api/amosaa';
 
 @Component({
   components: {
@@ -94,7 +97,7 @@ export default class VstPaikalliset extends Vue {
   @Prop({ required: true })
   private perusteKoosteStore!: PerusteKoosteStore;
 
-  private valittuPeruste = {};
+  private valittuPeruste = null;
   private perPage = 10;
   private query = this.initQuery();
 
@@ -109,9 +112,7 @@ export default class VstPaikalliset extends Vue {
   get perusteetOptions() {
     if (this.julkaistutPerusteet) {
       return [
-        {
-          nimi: null,
-        },
+        {},
         ...this.julkaistutPerusteet,
       ];
     }
@@ -259,7 +260,7 @@ export default class VstPaikalliset extends Vue {
 
   @media(min-width: 992px){
     .multiselect {
-      width: 300px;
+      width: 500px;
     }
   }
 

@@ -2,14 +2,16 @@
 <div class="paikalliset">
   <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
   <span>{{ $t('voit-hakea-toteutussuunnitelman') }}</span>
-  <div class="d-flex flex-lg-row flex-column">
-    <b-form-group :label="$t('hae')" class="flex-fill" :aria-label="$t('hakuosio')">
-      <ep-search v-model="query.nimi"
-                 :max-width="true"
-                 :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-                 :placeholder="$t('hae-opetussuunnitelmaa')"/>
-    </b-form-group>
-  </div>
+  <ep-search
+    class="my-3"
+    v-model="query.nimi"
+    max-width="true"
+    :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+    :placeholder="$t('')">
+    <template #label>
+      <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa')}}</span>
+    </template>
+  </ep-search>
 
   <div class="opetussuunnitelma-container">
     <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>

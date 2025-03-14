@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center">
       <div v-if="showOpsIcon" class="opsicon-wrapper">
         <slot name="icon">
-          <div class="opsicon"></div>
+          <img :src="opskorttiImage" class="opsicon"/>
         </slot>
       </div>
       <div class="nimi flex-fill">
@@ -56,6 +56,7 @@ import _ from 'lodash';
 import { VoimassaoloTieto } from '@/utils/voimassaolo';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
+import opskorttiImage from '@assets/img/images/opskortti.svg';
 
 @Component({
   components: {
@@ -89,6 +90,10 @@ export default class OpetussuunnitelmaTile extends Vue {
   get oppilaitokset() {
     return _.map((this.ops as any).oppilaitokset, (oppilaitos) => highlight(this.$kaanna(oppilaitos.nimi), this.query));
   }
+
+  get opskorttiImage() {
+    return opskorttiImage;
+  }
 }
 </script>
 
@@ -116,7 +121,6 @@ export default class OpetussuunnitelmaTile extends Vue {
     .opsicon {
       height: 40px;
       width: 40px;
-      background: url('../../../public/img/images/opskortti.svg');
       background-size: 40px 40px;
     }
   }
