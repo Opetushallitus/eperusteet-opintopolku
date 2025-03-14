@@ -36,7 +36,7 @@
               <h2 class="otsikko mb-2">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
               <div class="search mb-2">
                 <div class="mb-2">{{$t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla')}}</div>
-                <ep-search v-model="query" :placeholder="$t('hae-toteutussuunnitelmaa')">
+                <ep-search v-model="query" :placeholder="$t('')" class="my-3">
                   <template #label>
                     <span class="font-weight-600">{{$t('hae-toteutussuunnitelmaa')}}</span>
                   </template>
