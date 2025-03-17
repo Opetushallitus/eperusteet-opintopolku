@@ -105,13 +105,12 @@
         <div class="alueotsikko" slot="header"><h3>{{ $t('opintojakson-moduulit') }}</h3></div>
         <div class="oppiaineet">
           <div class="moduulit">
-            <div class="moduuli" v-for="(moduuli, idx) in opintojakso.moduulit" :key="idx">
+            <div v-for="(moduuli, idx) in opintojakso.moduulit" :key="idx" class="mb-2">
               <div v-if="moduulitMap[moduuli.koodiUri]">
-                <router-link v-if="moduulitMap[moduuli.koodiUri].location"
-                           :to="moduulitMap[moduuli.koodiUri].location">
-                  <ep-opintojakson-moduuli :moduuli="moduulitMap[moduuli.koodiUri]"></ep-opintojakson-moduuli>
+                <router-link v-if="moduulitMap[moduuli.koodiUri].location" :to="moduulitMap[moduuli.koodiUri].location">
+                  <ep-opintojakson-moduuli :moduuli="moduulitMap[moduuli.koodiUri]"/>
                 </router-link>
-                  <ep-opintojakson-moduuli v-else :moduuli="moduulitMap[moduuli.koodiUri]"></ep-opintojakson-moduuli>
+                <ep-opintojakson-moduuli v-else :moduuli="moduulitMap[moduuli.koodiUri]"/>
               </div>
             </div>
           </div>
@@ -615,14 +614,6 @@ export default class RouteOpetussuunnitelmaOpintojakso extends Vue {
     margin-left: 5px;
     font-size: 80%;
     text-transform: uppercase;
-  }
-  .moduulit {
-    display: flex;
-    flex-wrap: wrap;
-
-    .moduuli {
-      margin: 0 10px 10px 0;
-    }
   }
 }
 </style>

@@ -78,13 +78,9 @@
                          :termit="termit"
                          :kuvat="kuvat" />
 
-      <div class="d-flex flex-wrap">
-        <div v-for="(moduuli, idx) in pakollisetModuulitExtended" :key="idx">
-          <router-link :to="moduuli.location">
-            <ep-opintojakson-moduuli class="m-1" :moduuli="moduuli"/>
-          </router-link>
-        </div>
-      </div>
+      <router-link v-for="(moduuli, idx) in pakollisetModuulitExtended" :key="idx" :to="moduuli.location">
+        <ep-opintojakson-moduuli class="mb-2" :moduuli="moduuli"/>
+      </router-link>
     </div>
 
     <div v-if="hasValinnaisetModuulit" class="mb-4">
@@ -94,13 +90,9 @@
                          :termit="termit"
                          :kuvat="kuvat" />
 
-      <div class="d-flex flex-wrap">
-        <div v-for="(moduuli, idx) in valinnaisetModuulitExtended" :key="idx">
-          <router-link :to="moduuli.location">
-            <ep-opintojakson-moduuli class="m-1" :moduuli="moduuli"/>
-          </router-link>
-        </div>
-      </div>
+      <router-link v-for="(moduuli, idx) in valinnaisetModuulitExtended" :key="idx" :to="moduuli.location">
+        <ep-opintojakson-moduuli class="mb-2" :moduuli="moduuli"/>
+      </router-link>
     </div>
   </div>
 
