@@ -1,11 +1,11 @@
 <template>
   <div class="content">
     <h2 class="otsikko mb-4" tabindex="-1">
-      {{ $t('perusteen-tiedot') }}
+      {{ $t(koulutustyyppiKohtaisetKaannokset.perusteentiedot) }}
     </h2>
     <div class="row">
       <div class="col-md-12" v-if="peruste.nimi">
-        <ep-form-content name="peruste-nimi" headerType="h3" headerClass="h6">
+        <ep-form-content :name="koulutustyyppiKohtaisetKaannokset.perusteennimi" headerType="h3" headerClass="h6">
           <div>{{$kaanna(peruste.nimi)}} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
         </ep-form-content>
       </div>
@@ -60,7 +60,7 @@
         </ep-form-content>
       </div>
       <div class="col-md-12" v-if="hasKorvattavatDiaarinumerot">
-        <ep-form-content name="korvattavat-perusteet" headerType="h3" headerClass="h6">
+        <ep-form-content :name="koulutustyyppiKohtaisetKaannokset.korvattavatperusteet" headerType="h3" headerClass="h6">
           <b-table striped
                    fixed
                    responsive
@@ -212,7 +212,7 @@
 import _ from 'lodash';
 import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
 import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
-import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku } from '@shared/utils/perusteet';
+import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku, isYleissivistavaKoulutustyyppi } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
@@ -487,6 +487,20 @@ export default class RoutePerusteTiedot extends Vue {
 
   get showKoulutusvienninOhje() {
     return this.isEiTarvitaOhjettaTyyppi || this.isEiVoiPoiketaTyyppi || (this.isKoulutusvientiliiteTyyppi && this.koulutusvienninOhjeet && this.koulutusvienninOhjeet.length > 0);
+  }
+
+  protected get koulutustyyppiKohtaisetKaannokset() {
+    return {
+      perusteentiedot: isYleissivistavaKoulutustyyppi(this.peruste?.koulutustyyppi)
+        ? 'perusteen-tiedot-yleissivistava'
+        : 'perusteen-tiedot',
+      perusteennimi: isYleissivistavaKoulutustyyppi(this.peruste?.koulutustyyppi)
+        ? 'perusteen-nimi-yleissivistava'
+        : 'perusteen-nimi',
+      korvattavatperusteet: isYleissivistavaKoulutustyyppi(this.peruste?.koulutustyyppi)
+        ? 'korvattavat-perusteet-yleissivistava'
+        : 'korvattavat-perusteet',
+    };
   }
 }
 </script>
