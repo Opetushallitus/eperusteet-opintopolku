@@ -30,7 +30,7 @@ import {
 
 import { Location } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
-import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio } from '@shared/utils/perusteet';
+import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio, isYleissivistavaKoulutustyyppi } from '@shared/utils/perusteet';
 import { deepFind } from '@shared/utils/helpers';
 import { isAmmatillinenKoulutustyyppi } from '../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 @Store
@@ -150,7 +150,8 @@ export class PerusteDataStore {
     }
     else {
       if (naytaPerusteTiedotNaviMenussa(getters.peruste)) {
-        const nimi = getters.peruste?.tyyppi === 'normaali' ? 'perusteen-tiedot' : 'oppaan-tiedot';
+        const perusteenTiedotNimi = isYleissivistavaKoulutustyyppi(getters.peruste?.koulutustyyppi) ? 'perusteen-tiedot-yleissivistava' : 'perusteen-tiedot';
+        const nimi = getters.peruste?.tyyppi === 'normaali' ? perusteenTiedotNimi : 'oppaan-tiedot';
         const tiedot = {
           ...buildNavigationNode('tiedot', nimi, 'perusteTiedot', {
             ...(state.revision && { revision: state.revision }),
