@@ -139,7 +139,7 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
   }
 
   get dokumentti() {
-    return this.opetussuunnitelmaDataStore.dokumentti;
+    return this.opetussuunnitelmaDataStore.dokumentit;
   }
 
   private getOrganisaatioNimi(organisaatio) {
@@ -163,11 +163,6 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
 
   get kieli() {
     return Kielet.getSisaltoKieli.value;
-  }
-
-  @Watch('kieli')
-  async onKieliChange() {
-    await this.opetussuunnitelmaDataStore.getDokumentti();
   }
 }
 </script>

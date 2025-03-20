@@ -1,5 +1,5 @@
 import { Store, State, Getter } from '@shared/stores/store';
-import { OpetussuunnitelmaKaikkiDto, NavigationNodeDto, Opetussuunnitelmat, JulkinenApi, DokumenttiDto, baseURL, JulkinenApiParams, KoulutustoimijaJulkinenDto, Arviointiasteikot, ArviointiasteikkoDto, LiitetiedostotParam } from '@shared/api/amosaa';
+import { OpetussuunnitelmaKaikkiDto, NavigationNodeDto, Opetussuunnitelmat, JulkinenApi, DokumenttiDto, baseURL, JulkinenApiParams, KoulutustoimijaJulkinenDto, Arviointiasteikot, ArviointiasteikkoDto, LiitetiedostotParam, Julkaisut } from '@shared/api/amosaa';
 import * as _ from 'lodash';
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { NavigationNode, buildTiedot, buildNavigation, filterNavigation, NavigationFilter } from '@shared/utils/NavigationBuilder';
@@ -36,6 +36,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
   @State() public perusteidenTutkinnonOsat: TutkinnonOsaKaikkiDto[] | null = null;
   @State() public perusteidenTutkinnonOsienViitteet: TutkinnonOsaViiteSuppeaDto[] | null = null;
+  @State() public julkaisut: any[] = [];
 
   constructor(opetussuunnitelmaId: number, revision) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
@@ -52,7 +53,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   async init() {
     this.koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
     this.opetussuunnitelma = (await JulkinenApi.getOpetussuunnitelmaJulkaistuSisalto(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id), this.esikatselu)).data;
-    this.getDokumenttiTila();
+    this.getDokumentit();
     const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationPublic(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id), this.esikatselu)).data;
     this.navigation = {
       ...navigation,
@@ -70,6 +71,8 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
         await this.setTutkinnonOsienSisallotPerusteista();
       }
     }
+
+    this.julkaisut = (await Julkaisut.getJulkaisutKaikki(this.opetussuunnitelmaId!, _.toString(this.koulutustoimija.id))).data;
   }
 
   public async setTutkinnonOsienSisallotPerusteista() {
@@ -94,7 +97,16 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   })
   public readonly dokumenttiUrl!: string;
 
-  public async getDokumenttiTila() {
+  @Getter((state, getters) => {
+    if (getters.dokumenttiUrl) {
+      return {
+        [Kielet.getSisaltoKieli.value]: getters.dokumenttiUrl,
+      };
+    }
+  })
+  public readonly dokumentit!: { [key: string]: string; };
+
+  public async getDokumentit() {
     try {
       if (this.opetussuunnitelma) {
         this.dokumenttiTila = null;

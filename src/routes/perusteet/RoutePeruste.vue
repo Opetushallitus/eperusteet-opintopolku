@@ -38,6 +38,16 @@
         <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
         <ep-sidebar :scroll-enabled="scroll">
           <template slot="bar">
+
+            <EpOpsAiChat
+              v-if="dokumentti"
+              class="mt-2"
+              :sourceName="peruste.nimi"
+              :sourceId="perusteId"
+              sourceType="peruste"
+              :revision="revision"
+              :educationLevel="koulutustyyppi"/>
+
             <div>
               <ep-peruste-sidenav
                   :peruste-data-store="perusteDataStore">
@@ -90,6 +100,8 @@ import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Route } from 'vue-router';
 import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
+import { Kielet } from '@shared/stores/kieli';
+import EpOpsAiChat from '@/components/EpOpsAiChat/EpOpsAiChat.vue';
 
 @Component({
   components: {
@@ -102,6 +114,7 @@ import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
     EpPerusteNotificationBar,
     EpPerusteHaku,
     EpSearch,
+    EpOpsAiChat,
   },
   directives: {
     Sticky,
@@ -128,8 +141,9 @@ export default class RoutePeruste extends Vue {
   private oldLocation: Route | null = null;
   private queryImplDebounce = _.debounce(this.onQueryChange, 300);
 
-  mounted() {
+  async mounted() {
     this.query = this.routeQuery;
+    await this.perusteDataStore.getDokumentti();
   }
 
   get routeQuery() {
@@ -275,6 +289,22 @@ export default class RoutePeruste extends Vue {
 
     return this.$t('hae-perusteen-sisallosta');
   }
+
+  get perusteId() {
+    return this.$route.params.perusteId;
+  }
+
+  get dokumentti() {
+    return this.perusteDataStore.dokumentti;
+  }
+
+  get revision() {
+    if (this.$route.params.revision) {
+      return _.toNumber(this.$route.params.revision);
+    }
+
+    return _.maxBy(this.perusteDataStore.julkaisut, 'revision')?.revision;
+  }
 }
 </script>
 
@@ -300,12 +330,17 @@ export default class RoutePeruste extends Vue {
 
 .sidebar {
   .search {
-    padding: $sidenav-padding;
+    padding-left: $sidenav-padding;
+    padding-right: $sidenav-padding;
   }
 
   .navigation-tree {
     padding: $sidenav-padding;
   }
+}
+
+::v-deep .opsai-chat {
+  margin-right: $sidenav-padding;
 }
 
 </style>

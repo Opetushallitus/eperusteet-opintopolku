@@ -11,4 +11,7 @@ export interface IOpetussuunnitelmaStore {
   sidenavLoading: boolean;
   updateRoute: (options) => any;
   updateFilter: (filter: NavigationFilter) => void;
+  dokumentit: { [key: string]: string; };
+  getDokumentit: () => Promise<void>;
+  julkaisut: any[];
 };

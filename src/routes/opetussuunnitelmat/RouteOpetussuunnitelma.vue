@@ -18,6 +18,15 @@
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
       <ep-sidebar :scroll-enabled="true">
         <template slot="bar">
+          <EpOpsAiChat
+            v-if="hasDokumentti"
+            class="mt-2"
+            :sourceName="opetussuunnitelma.nimi"
+            :sourceId="opsAiSourceId"
+            :sourceType="opsAiSourceType"
+            :revision="revision"
+            :educationLevel="koulutustyyppi"/>
+
           <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
         </template>
         <template slot="view">
@@ -48,6 +57,7 @@ import * as _ from 'lodash';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import EpOpsAiChat from '@/components/EpOpsAiChat/EpOpsAiChat.vue';
 
 @Component({
   components: {
@@ -56,12 +66,22 @@ import { Kielet } from '@shared/stores/kieli';
     EpSidebar,
     EpPreviousNextNavigation,
     EpNotificationBar,
+    EpOpsAiChat,
   },
   inject: [],
 })
 export default class RouteOpetussuunnitelma extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: IOpetussuunnitelmaStore;
+
+  @Watch('kieli', { immediate: true })
+  async kieliChanged() {
+    await this.opetussuunnitelmaDataStore!.getDokumentit();
+  }
+
+  get kieli() {
+    return Kielet.getSisaltoKieli.value;
+  }
 
   get opetussuunnitelma() {
     return this.opetussuunnitelmaDataStore.opetussuunnitelma;
@@ -150,10 +170,34 @@ export default class RouteOpetussuunnitelma extends Vue {
   get provideOpetussuunnitelma() {
     return this.opetussuunnitelma;
   }
+
+  get opsAiSourceType() {
+    return this.$route.params.toteutussuunnitelmaId ? 'amosaa' : 'ylops';
+  }
+
+  get opsAiSourceId() {
+    return this.$route.params.toteutussuunnitelmaId || this.$route.params.opetussuunnitelmaId;
+  }
+
+  get hasDokumentti() {
+    if (this.opetussuunnitelmaDataStore.dokumentit) {
+      return !!this.opetussuunnitelmaDataStore.dokumentit[Kielet.getSisaltoKieli.value];
+    }
+  }
+
+  get revision() {
+    if (this.$route.params.revision) {
+      return _.toNumber(this.$route.params.revision);
+    }
+
+    return _.maxBy(this.opetussuunnitelmaDataStore.julkaisut, 'revision')?.revision;
+  }
 }
 </script>
 
 <style scoped lang="scss">
+@import '@shared/styles/_variables.scss';
+
 .opetussuunnitelma {
   .diaarinumero {
     font-size: small;
