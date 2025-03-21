@@ -242,7 +242,7 @@ export class PerusteDataStore {
             }
           }
 
-          if (this.esikatselu || !dokumenttiId) {
+          if (this.esikatselu) {
             dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
           }
 
