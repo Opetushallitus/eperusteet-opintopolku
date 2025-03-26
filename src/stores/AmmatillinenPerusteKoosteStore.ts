@@ -6,7 +6,7 @@ import { TiedoteDto, Perusteet, PerusteKaikkiDto } from '@shared/api/eperusteet'
 import { Kielet } from '@shared/stores/kieli';
 import { tiedoteQuery } from '@/api/eperusteet';
 import { Page } from '@shared/tyypit';
-import { Debounced } from '@shared/utils/delay';
+import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 
@@ -67,7 +67,7 @@ export class AmmatillinenPerusteKoosteStore {
       .value() as any;
   }
 
-  @Debounced(300)
+  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
   public async fetchOpetussuunnitelmat(query) {
     this.state.opetussuunnitelmat = null;
     this.state.opetussuunnitelmat = ((await getJulkisetOpetussuunnitelmat({ ...this.state.opsQuery, ...query })).data as any);

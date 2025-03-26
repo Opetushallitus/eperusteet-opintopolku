@@ -2,7 +2,7 @@ import { Store, State } from '@shared/stores/store';
 import { JulkiEtusivuDto, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { AmmatillisetKoulutustyypit, EperusteetKoulutustyypit } from '@shared/utils/perusteet';
-import { Debounced } from '@shared/utils/delay';
+import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import {
   julkaistutOpsitJaPerusteet,
   julkaistutPerusteet,
@@ -18,7 +18,7 @@ export class PerusteStore {
   @State() public opsitJaPerusteet: Page<JulkiEtusivuDto> | null = null;
   @State() public julkiQuery: JulkiEtusivuQuery | undefined = undefined;
 
-  @Debounced(300)
+  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
   async getYleisetPerusteet(query?: JulkaistutPerusteetQuery) {
     this.query = query;
     this.perusteet = null;
@@ -37,7 +37,7 @@ export class PerusteStore {
     )).data as any);
   }
 
-  @Debounced(300)
+  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
   async getOpsitJaPerusteet(query: JulkiEtusivuQuery) {
     this.julkiQuery = query;
     this.opsitJaPerusteet = (await julkaistutOpsitJaPerusteet(this.julkiQuery));

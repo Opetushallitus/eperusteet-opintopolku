@@ -5,7 +5,7 @@ import { OpetussuunnitelmaJulkinenDto, OpetussuunnitelmatJulkiset } from '@share
 import { IPaikallinenStore } from './IPaikallinenStore';
 import { useOpetussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { Page } from '@shared/tyypit';
-import { Debounced } from '@shared/utils/delay';
+import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { Kielet } from '@shared/stores/kieli';
 
 Vue.use(VueCompositionApi);
@@ -17,7 +17,7 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
 
   public readonly opetussuunnitelmatPaged = computed(() => this.state.opetussuunnitelmat);
 
-  @Debounced()
+  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
   public async fetchQuery(query) {
     this.state.opetussuunnitelmat = null;
     this.state.opetussuunnitelmat = (await OpetussuunnitelmatJulkiset.getAllJulkaistutOpetussuunnitelmat(

@@ -7,13 +7,13 @@
     </EpSearch>
     <EpHakutulosmaara :kokonaismaara="kokonaismaara" class="my-3"/>
     <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
-      <div class="list-item">
-        <router-link :to="item.route" class="peruste-ops-linkki">
-          <div class="d-flex tile-background-shadow-selected shadow-tile align-items-center">
-            <div class="mx-3 my-3">
+      <div class="list-item p-1 tile-background-shadow-selected shadow-tile">
+        <router-link :to="item.route" class="peruste-ops-linkki d-block">
+          <div class="d-flex align-items-center">
+            <div class="mx-2 my-2">
               <div :class="item.theme"/>
             </div>
-            <div class="my-3 mr-3">
+            <div class="my-2 mr-3">
               <div class="nimi">
                 {{ $kaanna(item.nimi) }}
               </div>
@@ -122,6 +122,7 @@ export default class EpEtusivuHaku extends Vue {
   async updatePage(value) {
     this.page = value;
     await this.fetchOpsitJaPerusteet();
+    (this.$el.querySelector('.peruste-ops-linkki') as any)?.focus();
   }
 
   async fetchOpsitJaPerusteet() {
@@ -142,7 +143,6 @@ export default class EpEtusivuHaku extends Vue {
       console.error(e);
     }
     this.isLoading = false;
-    (this.$el.querySelector('.peruste-ops-linkki') as any)?.focus();
   }
 
   get opsitJaPerusteet() {

@@ -152,8 +152,9 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 
   async updateFilters(filters) {
-    await this.perusteHakuStore.updateFilters(filters);
-    (this.$el.querySelector('.ammatillinen-row a') as any)?.focus();
+    if (_.size(filters.nimiTaiKoodi) === 0 || _.size(filters.nimiTaiKoodi) > 2) {
+      await this.perusteHakuStore.updateFilters(filters);
+    }
   }
 
   initQuery() {
@@ -211,6 +212,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   @Watch('page')
   async onPageChanged() {
     await this.updateFilters({ sivu: this.perusteHakuStore.page });
+    (this.$el.querySelector('.ammatillinen-row a') as any)?.focus();
   }
 
   @Watch('toggleQuery', { deep: true })

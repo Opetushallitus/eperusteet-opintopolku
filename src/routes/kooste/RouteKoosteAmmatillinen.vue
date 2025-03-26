@@ -36,7 +36,7 @@
               <h2 class="otsikko mb-2">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
               <div class="search mb-2">
                 <div class="mb-2">{{$t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla')}}</div>
-                <ep-search v-model="query" :placeholder="$t('')" class="my-3">
+                <ep-search v-model="query.haku" :placeholder="$t('')" class="my-3">
                   <template #label>
                     <span class="font-weight-600">{{$t('hae-toteutussuunnitelmaa')}}</span>
                   </template>
@@ -56,7 +56,7 @@
               <div v-else id="opetussuunnitelmat-lista" class="opetussuunnitelma-container">
                 <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
 
-                  <router-link :to="ops.route">
+                  <router-link :to="ops.route" class="d-block">
                     <opetussuunnitelma-tile :ops="ops" :query="query"/>
                   </router-link>
 
@@ -107,7 +107,10 @@ export default class RouteKoosteAmmatillinen extends Vue {
   @Prop({ required: true })
   private ammatillinenPerusteKoosteStore!: AmmatillinenPerusteKoosteStore;
 
-  private query = '';
+  private query = {
+    haku: '',
+    sivu: 1,
+  };
 
   get koulutustyyppi() {
     return 'ammatillinen';
@@ -173,21 +176,33 @@ export default class RouteKoosteAmmatillinen extends Vue {
   }
 
   set page(page) {
-    this.fetch(this.query, page - 1);
+    this.query = {
+      ...this.query,
+      sivu: page - 1,
+    };
   }
 
   get perPage() {
     return this.opetussuunnitelmatPage!.sivukoko;
   }
 
-  @Watch('query')
-  async queryChange(val) {
+  @Watch('query', { deep: true })
+  async queryChange(oldVal, newVal) {
+    if (oldVal.haku !== newVal.haku) {
+      this.query.sivu = 0;
+    }
+
     await this.fetch(this.query);
+
+    if (oldVal.sivu !== newVal.sivu) {
+      (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
+    }
   }
 
-  async fetch(nimi?, page?) {
-    await this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: nimi, sivu: page });
-    (this.$el.querySelector('.opetussuunnitelma-container a') as any).focus();
+  async fetch(query) {
+    if (_.size(query.haku) === 0 || _.size(query.haku) > 2) {
+      await this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.haku, sivu: query.sivu });
+    }
   }
 
   avaaTiedote(tiedote: TiedoteDto) {

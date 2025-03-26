@@ -1,5 +1,5 @@
 import { Osaamismerkit, OsaamismerkitQuery } from '@shared/api/eperusteet';
-import { Debounced } from '@shared/utils/delay';
+import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { computed, reactive } from '@vue/composition-api';
 import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
@@ -15,7 +15,7 @@ export class OsaamismerkitStore {
   public readonly options = computed(() => this.state.query);
   public readonly kategoriat = computed(() => this.state.kategoriat);
 
-  @Debounced(300)
+  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
   public async updateOsaamismerkkiQuery(query: OsaamismerkitQuery) {
     this.state.osaamismerkit = null;
     this.state.osaamismerkit = await this.fetchOsaamismerkitImpl(query);

@@ -100,9 +100,11 @@ export default class RouteOsaamismerkit extends Vue {
 
   @Watch('query', { deep: true, immediate: true })
   async onQueryChange(query: OsaamismerkitQuery) {
-    await this.osaamismerkitStore.updateOsaamismerkkiQuery({
-      ...query,
-    });
+    if (_.size(this.query.nimi) === 0 || _.size(this.query.nimi) > 2) {
+      await this.osaamismerkitStore.updateOsaamismerkkiQuery({
+        ...query,
+      });
+    }
   }
 
   @Watch('kategoria')
