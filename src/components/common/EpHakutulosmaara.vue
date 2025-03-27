@@ -6,7 +6,7 @@
           <span aria-hidden="true" class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
           <span aria-hidden="true">{{ $t('hakutulosta') }}</span>
         </template>
-        <span class="sr-only" v-if="kokonaismaaraDebounced">{{ kokonaismaaraDebounced }} {{ $t('hakutulosta') }}</span>
+        <span class="sr-only" v-if="naytaRuudunlukijaLkm">{{ kokonaismaara }} {{ $t('hakutulosta') }}</span>
       </div>
     </slot>
   </div>
@@ -25,12 +25,17 @@ export default class EpHakutulosmaara extends Vue {
   @Prop({ default: false, type: Boolean })
   private piilotaNakyvaTulosmaara!: boolean;
 
-  private kokonaismaaraDebounced: number | null = 0;
+  private naytaRuudunlukijaLkm = false;
 
   @Watch('kokonaismaara', { immediate: true })
+  async kokonaismaaraUpdate() {
+    this.naytaRuudunlukijaLkm = false;
+    await this.naytaRuudunlukijaLkmDebounced();
+  }
+
   @Debounced(500)
-  async updateDebouncedMaara() {
-    this.kokonaismaaraDebounced = this.kokonaismaara;
+  async naytaRuudunlukijaLkmDebounced() {
+    this.naytaRuudunlukijaLkm = true;
   }
 }
 </script>
