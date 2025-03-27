@@ -108,7 +108,6 @@ import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { Meta } from '@shared/utils/decorators';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { MaarayksetStore } from '@shared/stores/MaarayksetStore';
-import { Debounced } from '@shared/utils/delay';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { Kielet } from '@shared/stores/kieli';
@@ -165,6 +164,7 @@ export default class RouteMaarayskokoelma extends Vue {
   @Watch('sivu')
   async sivuChange() {
     await this.fetch();
+    (this.$el.querySelector('.maarays') as any)?.focus();
   }
 
   @Watch('query', { deep: true })
@@ -175,16 +175,16 @@ export default class RouteMaarayskokoelma extends Vue {
     }
   }
 
-  @Debounced(300)
   async fetch() {
-    await this.maarayksetStore?.fetch(
-      {
-        ...this.query,
-        tyyppi: this.query.tyyppi === 'kaikki' ? null : this.query.tyyppi,
-        kieli: this.kieli,
-        sivu: this.sivu - 1,
-      });
-    (this.$el.querySelector('.maarays') as any)?.focus();
+    if (_.size(this.query.nimi) === 0 || _.size(this.query.nimi) > 2) {
+      await this.maarayksetStore?.fetch(
+        {
+          ...this.query,
+          tyyppi: this.query.tyyppi === 'kaikki' ? null : this.query.tyyppi,
+          kieli: this.kieli,
+          sivu: this.sivu - 1,
+        });
+    }
   }
 
   get maaraykset() {

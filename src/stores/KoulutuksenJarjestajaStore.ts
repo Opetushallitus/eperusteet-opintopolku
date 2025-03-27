@@ -5,7 +5,7 @@ import { KoulutustoimijaJulkinenDto, JulkinenApi, OpetussuunnitelmaDto, getJulki
 import { Kielet } from '@shared/stores/kieli';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Page } from '@shared/tyypit';
-import { Debounced } from '@shared/utils/delay';
+import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 
 Vue.use(VueCompositionApi);
 
@@ -45,7 +45,7 @@ export class KoulutuksenJarjestajaStore {
     })).data as any).data;
   }
 
-  @Debounced()
+  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
   public async fetchToteutussuunnitelmat(nimi, sivu) {
     this.state.toteutussuunnitelmat = null;
     this.state.toteutussuunnitelmat = ((await getJulkisetOpetussuunnitelmat({

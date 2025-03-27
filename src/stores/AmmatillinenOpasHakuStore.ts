@@ -4,7 +4,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteHakuStore } from './IPerusteHakuStore';
-import { Debounced } from '@shared/utils/delay';
+import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 
 @Store
 export class AmmatillinenOpasHakuStore implements IPerusteHakuStore {
@@ -54,7 +54,7 @@ export class AmmatillinenOpasHakuStore implements IPerusteHakuStore {
   }))
   public readonly filters!: JulkaistutPerusteetQuery;
 
-  @Debounced(500)
+  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
   async fetch() {
     this.perusteet = null;
     const result = await julkaistutPerusteet(this.filters);

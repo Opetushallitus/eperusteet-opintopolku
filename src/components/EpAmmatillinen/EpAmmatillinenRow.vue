@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex ammatillinen-row tile-background-shadow-selected shadow-tile" >
-    <router-link v-if="route" class="w-100" :to="route">
+    <router-link v-if="route" class="d-block w-100" :to="route">
       <div class="ammatillinen-data">
         <slot/>
       </div>

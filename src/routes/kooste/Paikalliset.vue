@@ -44,7 +44,7 @@
     </div>
 
     <div v-else id="opetussuunnitelmat-lista">
-      <router-link :to="ops.route" v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
+      <router-link :to="ops.route" v-for="(ops, idx) in opetussuunnitelmat" :key="idx" class="d-block">
         <opetussuunnitelma-tile
           :ops="ops"
           :query="query"
@@ -139,12 +139,14 @@ export default class Paikalliset extends Vue {
   }
 
   async fetch() {
-    await this.paikallinenStore.fetchQuery!({
-      query: this.query,
-      peruste: this.valittuPeruste,
-      ...(!this.valittuPeruste?.nimi && { koulutustyypit: ryhmanKoulutustyypit(this.koulutustyyppi) }),
-      page: this.page - 1,
-    });
+    if (_.size(this.query) === 0 || _.size(this.query) > 2) {
+      await this.paikallinenStore.fetchQuery!({
+        query: this.query,
+        peruste: this.valittuPeruste,
+        ...(!this.valittuPeruste?.nimi && { koulutustyypit: ryhmanKoulutustyypit(this.koulutustyyppi) }),
+        page: this.page - 1,
+      });
+    }
   }
 
   get julkaistutPerusteet() {

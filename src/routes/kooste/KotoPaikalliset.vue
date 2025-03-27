@@ -24,7 +24,7 @@
     </div>
     <div v-else id="opetussuunnitelmat-lista">
       <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
-        <router-link :to="ops.route">
+        <router-link :to="ops.route" class="d-block">
           <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
         </router-link>
       </div>
@@ -78,6 +78,12 @@ export default class KotoPaikalliset extends Vue {
 
   async mounted() {
     if (this.paikallinenStore) {
+      await this.fetch();
+    }
+  }
+
+  async fetch() {
+    if (_.size(this.queryNimi) === 0 || _.size(this.queryNimi) > 2) {
       await this.paikallinenStore.fetchQuery(this.query);
     }
   }
@@ -115,9 +121,11 @@ export default class KotoPaikalliset extends Vue {
   }
 
   @Watch('query', { deep: true })
-  async queryChange() {
-    await this.paikallinenStore.fetchQuery(this.query);
-    (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
+  async queryChange(oldVal, newVal) {
+    await this.fetch();
+    if (oldVal.sivu !== newVal.sivu) {
+      (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
+    }
   }
 
   get total() {
