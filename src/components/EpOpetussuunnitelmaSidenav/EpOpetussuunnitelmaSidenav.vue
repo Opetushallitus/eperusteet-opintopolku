@@ -50,10 +50,12 @@ export default class EpOpetussuunnitelmaSidenav extends Vue {
 
   private setValue(value) {
     this.query = value;
-    this.opetussuunnitelmaDataStore.updateFilter({
-      isEnabled: !_.isEmpty(value),
-      label: value,
-    });
+    if (value.length === 0 || value.length > 2) {
+      this.opetussuunnitelmaDataStore.updateFilter({
+        isEnabled: !_.isEmpty(value),
+        label: value,
+      });
+    }
   }
 
   getChildren(node) {
