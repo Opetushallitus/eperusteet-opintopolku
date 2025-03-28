@@ -54,6 +54,9 @@
                 </div>
               </div>
               <div v-else id="opetussuunnitelmat-lista" class="opetussuunnitelma-container">
+
+                <EpHakutulosmaara :kokonaismaara="opetussuunnitelmatPage.kokonaismäärä" piilotaNakyvaTulosmaara/>
+
                 <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
 
                   <router-link :to="ops.route" class="d-block">
@@ -91,6 +94,7 @@ import { Meta } from '@shared/utils/decorators';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { murupolkuAmmatillinenRoot } from '@/utils/murupolku';
+import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 @Component({
   components: {
@@ -101,6 +105,7 @@ import { murupolkuAmmatillinenRoot } from '@/utils/murupolku';
     EpSearch,
     OpetussuunnitelmaTile,
     EpBPagination,
+    EpHakutulosmaara,
   },
 })
 export default class RouteKoosteAmmatillinen extends Vue {
