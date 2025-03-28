@@ -108,8 +108,8 @@ export default class RouteKoosteAmmatillinen extends Vue {
   private ammatillinenPerusteKoosteStore!: AmmatillinenPerusteKoosteStore;
 
   private query = {
-    haku: '',
-    sivu: 1,
+    haku: null,
+    sivu: 0,
   };
 
   get koulutustyyppi() {
@@ -186,12 +186,17 @@ export default class RouteKoosteAmmatillinen extends Vue {
     return this.opetussuunnitelmatPage!.sivukoko;
   }
 
+  get queryNimi() {
+    return this.query.haku;
+  }
+
+  @Watch('queryNimi')
+  nimiChange() {
+    this.query.sivu = 0;
+  }
+
   @Watch('query', { deep: true })
   async queryChange(oldVal, newVal) {
-    if (oldVal.haku !== newVal.haku) {
-      this.query.sivu = 0;
-    }
-
     await this.fetch(this.query);
 
     if (oldVal.sivu !== newVal.sivu) {
