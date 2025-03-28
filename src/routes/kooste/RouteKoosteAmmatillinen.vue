@@ -43,12 +43,12 @@
                 </ep-search>
               </div>
               <ep-spinner v-if="!opetussuunnitelmatPage" />
-              <div v-else-if="opetussuunnitelmat.length === 0 && !query">
+              <div v-else-if="opetussuunnitelmat.length === 0 && !query.haku">
                 <div class="alert alert-info">
                   {{ $t('perusteen-pohjalta-ei-toteutettu-toteutussuunnitelmia') }}
                 </div>
               </div>
-              <div v-else-if="opetussuunnitelmat.length === 0 && query">
+              <div v-else-if="opetussuunnitelmat.length === 0 && query.haku">
                 <div class="alert alert-info">
                   {{ $t('ei-hakutuloksia') }}
                 </div>
@@ -57,7 +57,7 @@
                 <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
 
                   <router-link :to="ops.route" class="d-block">
-                    <opetussuunnitelma-tile :ops="ops" :query="query"/>
+                    <opetussuunnitelma-tile :ops="ops" :query="query.haku"/>
                   </router-link>
 
                 </div>
