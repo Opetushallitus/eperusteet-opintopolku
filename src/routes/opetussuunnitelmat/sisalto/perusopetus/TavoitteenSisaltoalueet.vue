@@ -42,6 +42,10 @@ export default class TavoitteenSisaltoalueet extends Vue {
 
   @Prop({ default: true })
   private naytaOmaKuvaus!: boolean;
+
+  toggle(toggle: boolean | null = null) {
+    _.forEach(this.$refs.sisaltoaluecollapse, (collapsable: any) => collapsable.toggle(toggle));
+  }
 }
 </script>
 
