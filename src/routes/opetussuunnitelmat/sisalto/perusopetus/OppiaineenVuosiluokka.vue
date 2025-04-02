@@ -55,17 +55,21 @@
                 <div v-html="$kaanna(tavoite.vuosiluokanTavoite.tavoite)"></div>
               </EpPaikallinenTarkennus>
 
-              <TavoitteenSisaltoalueet :sisaltoalueet="tavoite.sisaltoalueet" :naytaSisaltoalueet="naytaSisaltoalueet" />
+              <TavoitteenSisaltoalueet
+                ref="tavoitteenSisaltoalueet"
+                :sisaltoalueet="tavoite.sisaltoalueet"
+                :naytaSisaltoalueet="naytaSisaltoalueet" />
 
               <div class="mb-2" v-if="tavoite.laajaalaisetosaamiset && naytaLaajaAlaisetOsaamiset && tavoite.laajaalaisetosaamiset.length > 0">
                 <h5>{{$t('laaja-alaisen-osaamisen-alueet')}}</h5>
                 <ep-collapse v-for="(lao, index) in tavoite.laajaalaisetosaamiset"
-                            :key="alueindex + 'lao'+index"
-                            :borderBottom="false"
-                            :expanded-by-default="false"
-                            chevronLocation="left"
-                            class="mt-0 pt-0"
-                            :use-padding="false">
+                    ref="tavoitteenLaajaAlaisetOsaamiset"
+                    :key="alueindex + 'lao'+index"
+                    :borderBottom="false"
+                    :expanded-by-default="false"
+                    chevronLocation="left"
+                    class="mt-0 pt-0"
+                    :use-padding="false">
 
                   <template v-slot:header>
                     <h6 class="nimi" v-html="$kaanna(lao.perusteenLao.nimi)"></h6>
@@ -184,9 +188,12 @@ export default class OppiaineenVuosiluokka extends Vue {
     return _.keyBy(this.pohjaOppiaineenVuosiluokka?.tavoitteet, 'tunniste');
   }
 
-  toggleTavoite() {
+  async toggleTavoite() {
     this.tavoitteetAvattu = !this.tavoitteetAvattu;
-    _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle(this.tavoitteetAvattu));
+    _.forEach(this.$refs.tavoitecollapse, (collapsable: any) => collapsable.toggle(this.tavoitteetAvattu));
+    await this.$nextTick();
+    _.forEach(this.$refs.tavoitteenSisaltoalueet, (collapsable: any) => collapsable.toggle(this.tavoitteetAvattu));
+    _.forEach(this.$refs.tavoitteenLaajaAlaisetOsaamiset, (collapsable: any) => collapsable.toggle(this.tavoitteetAvattu));
   }
 
   get tavoitealueet() {
