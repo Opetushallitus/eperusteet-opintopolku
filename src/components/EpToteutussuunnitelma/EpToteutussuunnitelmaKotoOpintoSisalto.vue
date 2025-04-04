@@ -11,6 +11,7 @@
       :kuvat="kuvat">
         <template #paikallinentarkennus="{ nimi }">
           <ep-content-viewer :value="$kaanna(kotoTaitotasotByUri[nimi.uri].tavoiteTarkennus)" :kuvat="kuvat" />
+          <ep-content-viewer :value="$kaanna(kotoTaitotasotByUri[nimi.uri].sisaltoTarkennus)" :kuvat="kuvat" />
         </template>
     </EpKotoTaitotasot>
 
