@@ -42,6 +42,7 @@
         v-else-if="sisaltoviite.tyyppi === 'laajaalainenosaaminen'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
+        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koulutuksen-osat
