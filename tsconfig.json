@@ -13,10 +13,6 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      "jest"
-    ],
     "paths": {
       "@shared/*": ["eperusteet-frontend-utils/vue/src/*"],
       "@assets/*": ["eperusteet-frontend-utils/vue/public/*"],

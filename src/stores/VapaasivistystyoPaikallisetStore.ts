@@ -1,12 +1,9 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { IPaikallinenStore } from './IPaikallinenStore';
 import { OpetussuunnitelmaQuery, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto, JulkinenApi, KoulutustoimijaJulkinenDto } from '@shared/api/amosaa';
 import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { Page, Koulutustyyppi } from '@shared/tyypit';
-
-Vue.use(VueCompositionApi);
 
 export class VapaasivistystyoPaikallisetStore implements IPaikallinenStore {
   public state = reactive({

@@ -3,12 +3,9 @@ import { ryhmat } from '@shared/utils/perusteet';
 import { julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
-import VueCompositionApi, { computed, reactive } from '@vue/composition-api';
 import OsaamismerkkiTile from '@/routes/osaamismerkit/OsaamismerkkiTile.vue';
-import Vue from 'vue';
+import Vue, { computed, reactive } from 'vue';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
-
-Vue.use(VueCompositionApi);
 
 export class VstPerusteKoosteStore implements IPerusteKoosteStore {
   public state = reactive({

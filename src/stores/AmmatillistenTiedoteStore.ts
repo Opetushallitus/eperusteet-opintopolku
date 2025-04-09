@@ -1,11 +1,8 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import { TiedoteDto, Tiedotteet, PageTiedoteDto } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { ITiedotteetProvider } from '@shared/stores/types';
 import { TiedoteQuery } from '@shared/api/types';
-
-Vue.use(VueCompositionApi);
 
 export class AmmatillistenTiedoteStore implements ITiedotteetProvider {
   private state = reactive({

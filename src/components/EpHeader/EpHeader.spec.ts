@@ -42,16 +42,26 @@ describe('EpHeader', () => {
       label: 'parent-jolla-todella-pitka-teksti',
       location: { name: 'root' },
     }];
+
+    wrapper.setProps({ murupolku: [{
+      label: 'parent-jolla-todella-pitka-teksti',
+      location: { name: 'root' },
+    }] });
+
+    await Vue.nextTick();
+
     expect(wrapper.html()).toContain('home');
     expect(wrapper.html()).toContain('Parent jolla todella pitkä teksti');
 
-    propsData.murupolku = [
+    wrapper.setProps({ murupolku: [
       ...propsData.murupolku,
       {
         label: 'uusi-alikappale',
         location: { name: 'root' },
       },
-    ];
+    ]});
+
+    await Vue.nextTick();
 
     expect(wrapper.html()).toContain('home');
     expect(wrapper.html()).toContain('Parent jolla todella pitkä teksti');

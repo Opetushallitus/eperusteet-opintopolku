@@ -7,15 +7,24 @@ import { Kaannos } from '@shared/plugins/kaannos';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { vi } from 'vitest';
 
 describe('Root', () => {
   const localVue = createLocalVue();
   localVue.use(VueI18n);
   Kielet.install(localVue);
   localVue.use(new Kaannos());
-  const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
-  const tietoapalvelustaStore = mock(TietoapalvelustaStore);
-  tietoapalvelustaStore.state.tietoapalvelusta = null;
+  const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore, {
+    fetch: async () => {},
+    koulutustyyppiLukumaarat: vi.fn() as any,
+    julkaistutKoulutustyypit: vi.fn() as any,
+    muuLukumaarat: vi.fn() as any,
+    digitaalinenOsaaminen: vi.fn() as any,
+  });
+  const tietoapalvelustaStore = mock(TietoapalvelustaStore, {
+    tietoapalvelusta: vi.fn() as any,
+    fetch: async () => {},
+  });
   const osaamismerkitStore = mock(OsaamismerkitStore);
 
   test('Renders', async () => {

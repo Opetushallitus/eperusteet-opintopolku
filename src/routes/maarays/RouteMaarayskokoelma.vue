@@ -188,11 +188,11 @@ export default class RouteMaarayskokoelma extends Vue {
   }
 
   get maaraykset() {
-    return this.maarayksetStore?.maaraykset.value?.data;
+    return this.maarayksetStore?.maaraykset?.data;
   }
 
   get maarayksetCount() {
-    return this.maarayksetStore?.maaraykset.value?.kokonaismäärä;
+    return this.maarayksetStore?.maaraykset?.kokonaismäärä;
   }
 
   @Meta
@@ -221,7 +221,7 @@ export default class RouteMaarayskokoelma extends Vue {
   }
 
   get koulutustyyppiVaihtoehdot() {
-    return this.maarayksetStore?.koulutustyypit.value;
+    return this.maarayksetStore?.koulutustyypit;
   }
 
   get kuva() {

@@ -141,7 +141,7 @@ export default class EpJulkinenSidenav extends Vue {
   get otherItems() {
     return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste);
   }
-
+  
   get muutLinkit() {
     return [
       ...(this.tietoapalvelusta ? [this.tietoapalvelusta] : []),

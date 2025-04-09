@@ -1,6 +1,6 @@
-import { ref } from '@vue/composition-api';
 import { defineStore } from 'pinia';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { ref } from 'vue';
 
 export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
   const perusteet = ref({});
@@ -17,8 +17,7 @@ export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
     if (!perusteet.value[key]) {
       addPerusteStore(perusteId, revision);
     }
-    else {
-    }
+
     return perusteet.value[key];
   };
 

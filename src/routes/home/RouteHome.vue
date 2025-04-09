@@ -169,7 +169,7 @@ export default class RouteHome extends Vue {
           koulutustyyppi: tiedote.koulutustyypit && tiedote.koulutustyypit.length === 1 ? this.$t(tiedote.koulutustyypit[0]) : null,
         };
       })
-      .take(this.browserStore.window.value.width > 991 ? 10 : 3)
+      .take(this.browserStore.window.width > 991 ? 10 : 3)
       .value();
   }
 
@@ -215,7 +215,7 @@ export default class RouteHome extends Vue {
 @import '@shared/styles/_mixins.scss';
 
 .ylaosa {
-  background-image: url('~@assets/img/banners/opintopolku/aallot_etusivu.svg'), url('~@assets/img/banners/opintopolku/aallot_etusivu_bg.svg');
+  background-image: url('@assets/img/banners/opintopolku/aallot_etusivu.svg'), url('@assets/img/banners/opintopolku/aallot_etusivu_bg.svg');
   background-position: right top, right top;
   background-repeat: no-repeat, repeat;
   margin-top: -1px;

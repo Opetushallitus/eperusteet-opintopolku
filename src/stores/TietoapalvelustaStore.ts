@@ -1,9 +1,6 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import { Julkinen, TietoaPalvelustaDto } from '@shared/api/eperusteet';
 import _ from 'lodash';
-
-Vue.use(VueCompositionApi);
 
 export class TietoapalvelustaStore {
   public state = reactive({

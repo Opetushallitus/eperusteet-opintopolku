@@ -139,44 +139,44 @@ export default class EpHeader extends Vue {
 
   &.koulutustyyppi-ammatillinen {
     background-color: $koulutustyyppi-ammatillinen-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_ammatillinen.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_ammatillinen.svg');
   }
   &.koulutustyyppi-esiopetus {
     background-color: $koulutustyyppi-esiopetus-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_esiopetus.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_esiopetus.svg');
   }
   &.koulutustyyppi-lukiokoulutus {
     background-color: $koulutustyyppi-lukiokoulutus-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_lukio.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_lukio.svg');
   }
   &.koulutustyyppi-perusopetus {
     background-color: $koulutustyyppi-perusopetus-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_perusopetus.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_perusopetus.svg');
   }
   &.koulutustyyppi-varhaiskasvatus {
     background-color: $koulutustyyppi-varhaiskasvatus-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_varhaiskasvatus.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_varhaiskasvatus.svg');
   }
   &.koulutustyyppi-taiteenperusopetus {
     background-color: $koulutustyyppi-taiteenperusopetus-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_taiteenperusopetus.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_taiteenperusopetus.svg');
   }
   &.koulutustyyppi-vapaasivistystyo {
     background-color: $koulutustyyppi-vapaasivistystyo-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_vapaasivistystyo.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_vapaasivistystyo.svg');
   }
   &.koulutustyyppi-tutkintoonvalmentava {
     background-color: $koulutustyyppi-tutkintoonvalmentava-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_tuva.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_tuva.svg');
   }
   &.koulutustyyppi-kotoutumiskoulutus {
     background-color: $koulutustyyppi-kotoutumiskoulutus-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_kotoutumiskoulutus.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_kotoutumiskoulutus.svg');
   }
 
   &.koulutustyyppi-muukoulutus {
     background-color: $koulutustyyppi-muu-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_muukoulutus.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_muukoulutus.svg');
   }
 
   &.tyyppi-digitaalinen_osaaminen {
@@ -185,12 +185,12 @@ export default class EpHeader extends Vue {
 
   &.tyyppi-yhteinen {
     background-color: $koulutustyyppi-ammatillinen-color;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_ammatillinen.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_ammatillinen.svg');
   }
 
   &.tyyppi-maarayskokoelma {
     background-color: $white;
-    background-image: url('~@assets/img/banners/opintopolku/aallot_maarayskokoelma.svg'), url('~@assets/img/banners/opintopolku/aallot_maarayskokoelma_tausta.svg');
+    background-image: url('@assets/img/banners/opintopolku/aallot_maarayskokoelma.svg'), url('@assets/img/banners/opintopolku/aallot_maarayskokoelma_tausta.svg');
     background-repeat: no-repeat, repeat;
     background-position: right top, left top;
     background-size: auto auto, auto 100%;

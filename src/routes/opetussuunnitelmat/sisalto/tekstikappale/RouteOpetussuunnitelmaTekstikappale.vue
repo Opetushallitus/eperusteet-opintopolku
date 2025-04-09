@@ -109,7 +109,7 @@ export default class RouteOpetussuunnitelmaTekstikappale extends Vue {
   }
 
   get tekstiKappale() {
-    return this.tekstiKappaleViite.tekstiKappale;
+    return this.tekstiKappaleViite?.tekstiKappale || {};
   }
 
   get perusteTekstikappaleViite() {
