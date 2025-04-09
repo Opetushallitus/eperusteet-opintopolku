@@ -1,26 +1,26 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const eperusteetService = process.env.EPERUSTEET_SERVICE || 'http://localhost:8080';
-const eperusteetYlopsService = process.env.EPERUSTEET_YLOPS_SERVICE || 'http://localhost:8081';
-const eperusteetAmosaaService = process.env.EPERUSTEET_AMOSAA_SERVICE || 'http://localhost:8082';
+const eperusteetService = import.meta.env.EPERUSTEET_SERVICE || 'http://localhost:8080';
+const eperusteetYlopsService = import.meta.env.EPERUSTEET_YLOPS_SERVICE || 'http://localhost:8081';
+const eperusteetAmosaaService = import.meta.env.EPERUSTEET_AMOSAA_SERVICE || 'http://localhost:8082';
 
-if (process.env.EPERUSTEET_SERVICE) {
-  console.log('Using eperusteet-service proxy:', process.env.EPERUSTEET_SERVICE);
+if (import.meta.env.EPERUSTEET_SERVICE) {
+  console.log('Using eperusteet-service proxy:', import.meta.env.EPERUSTEET_SERVICE);
 }
 else {
   console.log('EPERUSTEET_SERVICE not defined. Using local eperusteet-service.');
 }
 
-if (process.env.EPERUSTEET_YLOPS_SERVICE) {
-  console.log('Using eperusteet-ylops-service proxy:', process.env.EPERUSTEET_YLOPS_SERVICE);
+if (import.meta.env.EPERUSTEET_YLOPS_SERVICE) {
+  console.log('Using eperusteet-ylops-service proxy:', import.meta.env.EPERUSTEET_YLOPS_SERVICE);
 }
 else {
   console.log('EPERUSTEET_YLOPS_SERVICE not defined. Using local eperusteet-ylops-service.');
 }
 
-if (process.env.EPERUSTEET_AMOSAA_SERVICE) {
-  console.log('Using eperusteet-amosaa-service proxy:', process.env.EPERUSTEET_AMOSAA_SERVICE);
+if (import.meta.env.EPERUSTEET_AMOSAA_SERVICE) {
+  console.log('Using eperusteet-amosaa-service proxy:', import.meta.env.EPERUSTEET_AMOSAA_SERVICE);
 }
 else {
   console.log('EPERUSTEET_AMOSAA_SERVICE not defined. Using local eperusteet-amosaa-service.');
@@ -71,7 +71,7 @@ module.exports = {
   chainWebpack: config => {
     // enabloidaan sourcemap ja nimetään "oikeat" vuen scirpti-tiedostot uudelleen, jotta löytyy selaimen devtoolsissa helpommin
     // esim. RouteRoot.vue?bf9d -> RouteRoot.vue?script
-    if (process.env.USE_SOURCEMAP) {
+    if (import.meta.env.USE_SOURCEMAP) {
       config.devtool('source-map');
       config.output.devtoolModuleFilenameTemplate(info => {
         if (info.resourcePath.endsWith('.vue')) {

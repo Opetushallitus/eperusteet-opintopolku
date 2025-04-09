@@ -1,10 +1,6 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { PerusteenOsatApi, Laaja, TutkinnonRakenne, TutkinnonOsaViiteDto, Arviointiasteikot, GeneerinenArviointiasteikko, ArviointiAsteikkoDto, PerusteDto } from '@shared/api/eperusteet';
-import { perusteenSuoritustapa } from '@shared/utils/perusteet';
-
-Vue.use(VueCompositionApi);
 
 export class PerusteenTutkinnonosaStore {
   private state = reactive({

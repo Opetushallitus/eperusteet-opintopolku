@@ -6,7 +6,7 @@ import { Kaannos } from '@shared/plugins/kaannos';
 import VueI18n from 'vue-i18n';
 import RouteAmmatillinenValmisteillaOlevat from './RouteAmmatillinenValmisteillaOlevat.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
-import { mock } from '@shared/utils/jestutils';
+import { createMockedStore, mock } from '@shared/utils/jestutils';
 
 Vue.use(BootstrapVue);
 
@@ -17,15 +17,17 @@ describe('RouteAmmatillinenValmisteillaOlevat component', () => {
   localVue.use(new Kaannos());
 
   const valmisteillaOlevatStore = (perusteet) => {
-    const storemock = mock(ValmisteillaOlevatStore);
-    storemock.state.perusteet = {
-      sivu: 0,
-      sivuja: 1,
-      sivukoko: 10,
-      kokonaismäärä: 1,
-      data: perusteet,
-    } as any;
-    return storemock;
+    return createMockedStore(ValmisteillaOlevatStore, {
+      perusteet:{
+        value: {
+          sivu: 0,
+          sivuja: 1,
+          sivukoko: 10,
+          kokonaismäärä: 1,
+          data: perusteet,
+        },
+      } as any,
+    });
   };
 
   test('Renders', async () => {
@@ -99,6 +101,8 @@ describe('RouteAmmatillinenValmisteillaOlevat component', () => {
         'router-link': RouterLinkStub,
       },
     });
+
+    await Vue.nextTick();
 
     expect(wrapper.findAll('.valmisteilla-row')).toHaveLength(1);
     const valmisteilla = wrapper.findAll('.valmisteilla-row').at(0);

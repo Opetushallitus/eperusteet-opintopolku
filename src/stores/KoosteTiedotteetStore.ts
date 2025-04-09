@@ -1,11 +1,8 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { ryhmat } from '@shared/utils/perusteet';
 import { tiedoteQuery } from '@/api/eperusteet';
-
-Vue.use(VueCompositionApi);
 
 export class KoosteTiedotteetStore {
   public state = reactive({

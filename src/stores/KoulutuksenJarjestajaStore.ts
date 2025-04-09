@@ -1,13 +1,10 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi, OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat } from '@shared/api/amosaa';
 import { Kielet } from '@shared/stores/kieli';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Page } from '@shared/tyypit';
 import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
-
-Vue.use(VueCompositionApi);
 
 export class KoulutuksenJarjestajaStore {
   private state = reactive({

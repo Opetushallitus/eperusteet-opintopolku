@@ -1,10 +1,7 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import { PerusopetuksenPerusteenSisalto, OppiaineDto, LaajaalainenOsaaminenDto } from '@shared/api/eperusteet';
 import * as _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
-
-Vue.use(VueCompositionApi);
 
 export class PerusopetusOppiaineStore {
   public state = reactive({

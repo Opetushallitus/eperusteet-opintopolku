@@ -2,12 +2,9 @@ import { PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { ryhmat } from '@shared/utils/perusteet';
 import { julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
-import VueCompositionApi, { computed, reactive } from '@vue/composition-api';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
-import Vue from 'vue';
+import Vue, { computed, reactive } from 'vue';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
-
-Vue.use(VueCompositionApi);
 
 export class PerusteKoosteStore implements IPerusteKoosteStore {
   public state = reactive({

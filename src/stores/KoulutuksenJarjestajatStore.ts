@@ -1,10 +1,7 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi } from '@shared/api/amosaa';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
-
-Vue.use(VueCompositionApi);
 
 export class KoulutuksenJarjestajatStore {
   private state = reactive({

@@ -1,8 +1,8 @@
 import { Osaamismerkit, OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
-import { computed, reactive } from '@vue/composition-api';
 import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
+import { computed, reactive } from 'vue';
 
 export class OsaamismerkitStore {
   public state = reactive({

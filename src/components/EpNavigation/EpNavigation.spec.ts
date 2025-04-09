@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import EpNavigation from './EpNavigation.vue';
 import { Kielet } from '@shared/stores/kieli';
-import { findAllContaining, findContaining, mock, mocks, stubs } from '@shared/utils/jestutils';
+import { createMockedStore, findAllContaining, findContaining, mock, mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
@@ -14,7 +14,27 @@ describe('EpNavigation', () => {
   localVue.use(new Kaannos());
 
   test('Renders spinners and data', async () => {
-    const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
+    const julkaistutKoulutustyypitStore = createMockedStore(JulkaistutKoulutustyypitStore, {
+      julkaistutKoulutustyypit: {
+        value: [
+          EperusteetKoulutustyyppiRyhmat.esiopetus[0],
+          EperusteetKoulutustyyppiRyhmat.lukiokoulutus[0],
+          EperusteetKoulutustyyppiRyhmat.varhaiskasvatus[0],
+          EperusteetKoulutustyyppiRyhmat.perusopetus[0],
+          EperusteetKoulutustyyppiRyhmat.vapaasivistystyo[0],
+        ],
+      },
+      muuLukumaarat: {
+        value: 1,
+      },
+      digitaalinenOsaaminen: {
+        value: [
+          {
+            id: 1,
+          },
+        ],
+      },
+    });
 
     const wrapper = mount(EpNavigation as any, {
       localVue,
@@ -29,19 +49,8 @@ describe('EpNavigation', () => {
       },
     });
 
-    julkaistutKoulutustyypitStore.state.koulutustyyppiLukumaarat = [
-      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.esiopetus[0], lukumaara: 1 },
-      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.lukiokoulutus[0], lukumaara: 1 },
-      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.varhaiskasvatus[0], lukumaara: 1 },
-      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.perusopetus[0], lukumaara: 1 },
-      { koulutustyyppi: EperusteetKoulutustyyppiRyhmat.vapaasivistystyo[0], lukumaara: 1 },
-    ];
-    julkaistutKoulutustyypitStore.state.muuLukumaarat = 1;
-    julkaistutKoulutustyypitStore.state.digitaalinenOsaaminen = [{
-      id: 1,
-    }];
-
     await localVue.nextTick();
+
     const links = wrapper.contains;
     expect(findContaining(wrapper, 'a', 'esiopetus')).toBeTruthy();
     expect(findContaining(wrapper, 'a', 'lukiokoulutus')).toBeTruthy();

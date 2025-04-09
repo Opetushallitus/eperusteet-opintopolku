@@ -13,7 +13,7 @@ import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore'
 import { OpetussuunnitelmaTekstikappaleStore } from '@/stores/OpetussuunnitelmaTekstikappaleStore';
 
 export const perusteKoosteStoreMock = (config: Partial<PerusteKoosteStore> = {}) => {
-  return wrap(PerusteKoosteStore.prototype, {
+  return wrap(PerusteKoosteStore, {
     julkaistutPerusteet: null,
     opetussuunnitelmat: null,
     tiedotteet: null,
@@ -28,7 +28,7 @@ export const perusteKoosteStoreMock = (config: Partial<PerusteKoosteStore> = {})
 };
 
 export const perusteStoreMock = (config: Partial<PerusteStore> = {}) => {
-  return wrap(PerusteStore.prototype, {
+  return wrap(PerusteStore, {
     uusimmat: null,
     perusteet: null,
     async getUusimmat() {},
@@ -38,7 +38,7 @@ export const perusteStoreMock = (config: Partial<PerusteStore> = {}) => {
 };
 
 export const tiedoteStoreMock = (config: Partial<TiedoteStore> = {}) => {
-  return wrap(TiedoteStore.prototype, {
+  return wrap(TiedoteStore, {
     uusimmatTiedotteet: null,
     async getUusimmat() {},
     ...config,
@@ -46,49 +46,47 @@ export const tiedoteStoreMock = (config: Partial<TiedoteStore> = {}) => {
 };
 
 export const perusteDataStoreMock = (config: Partial<PerusteDataStore> = {}) => {
-  return wrap(PerusteDataStore.prototype, {
+  return wrap(PerusteDataStore, {
     ...config,
   } as PerusteDataStore);
 };
 
 export const perusteenOsaStoreMock = (config: Partial<PerusteenOsaStore> = {}) => {
-  return wrap(PerusteenOsaStore.prototype, {
+  return wrap(PerusteenOsaStore, {
     ...config,
   } as PerusteenOsaStore);
 };
 
 export const lops2019LaajaAlaisetStoreMock = (config: Partial<Lops2019LaajaAlaisetStore> = {}) => {
-  return wrap(Lops2019LaajaAlaisetStore.prototype, {
+  return wrap(Lops2019LaajaAlaisetStore, {
     ...config,
   } as Lops2019LaajaAlaisetStore);
 };
 
 export const lops2019OppiaineetStoreMock = (config: Partial<Lops2019OppiaineetStore> = {}) => {
-  return wrap(Lops2019OppiaineetStore.prototype, {
+  return wrap(Lops2019OppiaineetStore, {
     ...config,
   } as Lops2019OppiaineetStore);
 };
 
 export const lops2019OppiaineStoreMock = (config: Partial<Lops2019OppiaineStore> = {}) => {
-  return wrap(Lops2019OppiaineStore.prototype, {
+  return wrap(Lops2019OppiaineStore, {
     ...config,
   } as Lops2019OppiaineStore);
 };
 
 export const lops2019ModuuliStoreMock = (config: Partial<Lops2019ModuuliStore> = {}) => {
-  return wrap(Lops2019ModuuliStore.prototype, {
+  return wrap(Lops2019ModuuliStore, {
     ...config,
   } as Lops2019ModuuliStore);
 };
 
 export const opetussuunnitelmaDataStoreMock = (config: Partial<OpetussuunnitelmaDataStore> = {}) => {
-  return wrap(OpetussuunnitelmaDataStore.prototype, {
-    ...config,
-  } as OpetussuunnitelmaDataStore);
+  return wrap(OpetussuunnitelmaDataStore, config);
 };
 
 export const opetussuunnitelmaTekstikappaleStoreMock = (config: Partial<OpetussuunnitelmaTekstikappaleStore> = {}) => {
-  return wrap(OpetussuunnitelmaTekstikappaleStore.prototype, {
+  return wrap(OpetussuunnitelmaTekstikappaleStore, {
     ...config,
   } as OpetussuunnitelmaTekstikappaleStore);
 };

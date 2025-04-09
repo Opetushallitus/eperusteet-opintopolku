@@ -219,13 +219,13 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     this.navigation = navigation;
   }
 
-  @Getter(state => state.opetussuunnitelma.tila)
+  @Getter(state => state.opetussuunnitelma?.tila)
   public readonly tila!: string;
 
   @Getter(state => [...(state.termit || []), ...(state.perusteTermit || [])])
   public readonly kaikkiTermit!: any[];
 
-  @Getter(state => state.opetussuunnitelma.koulutustyyppi)
+  @Getter(state => state.opetussuunnitelma?.koulutustyyppi)
   public readonly koulutustyyppi!: string;
 
   @Getter(state => {

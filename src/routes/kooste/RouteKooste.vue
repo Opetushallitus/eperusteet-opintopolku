@@ -167,7 +167,7 @@ export default class RouteKooste extends Vue {
   }
 
   get koulutustyyppi() {
-    return this.perusteKoosteStore?.koulutustyyppi?.value || _.get(this.$route.params, 'koulutustyyppi');
+    return this.perusteKoosteStore?.koulutustyyppi.value || _.get(this.$route.params, 'koulutustyyppi');
   }
 
   get tiedotteet() {

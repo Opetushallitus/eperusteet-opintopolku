@@ -7,6 +7,7 @@ import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TiedoteStore } from '@/stores/TiedoteStore';
+import { vi } from 'vitest';
 
 describe('RouteUutinen', () => {
   const localVue = createLocalVue();
@@ -15,8 +16,15 @@ describe('RouteUutinen', () => {
   localVue.use(new Kaannos());
 
   test('Renders spinners and data', async () => {
-    const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
-    const tiedoteStore = mock(TiedoteStore);
+    const JulkaistutKoulutustyypitStore = vi.fn();
+    JulkaistutKoulutustyypitStore.prototype.koulutustyyppiLukumaarat = vi.fn();
+    JulkaistutKoulutustyypitStore.prototype.julkaistutKoulutustyypit = vi.fn();
+    JulkaistutKoulutustyypitStore.prototype.muuLukumaarat = vi.fn();
+    const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
+
+    const TiedoteStore = vi.fn();
+    TiedoteStore.prototype.updateFilter = vi.fn();
+    const tiedoteStore = new TiedoteStore();
 
     const wrapper = mount(RouteUutiset as any, {
       localVue,

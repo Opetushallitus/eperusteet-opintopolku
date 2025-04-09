@@ -1,5 +1,4 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { OpetussuunnitelmaJulkinenDto, OpetussuunnitelmatJulkiset } from '@shared/api/ylops';
 import { IPaikallinenStore } from './IPaikallinenStore';
@@ -7,8 +6,6 @@ import { useOpetussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheS
 import { Page } from '@shared/tyypit';
 import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { Kielet } from '@shared/stores/kieli';
-
-Vue.use(VueCompositionApi);
 
 export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
   public state = reactive({

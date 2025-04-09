@@ -5,6 +5,8 @@ import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 import { Kieli } from '@shared/tyypit';
+import fiLocale from '@shared/translations/locale-fi.json';
+import svLocale from '@shared/translations/locale-sv.json';
 
 describe('EpPerusteNotificationBar', () => {
   const localVue = createLocalVue();
@@ -12,10 +14,10 @@ describe('EpPerusteNotificationBar', () => {
   localVue.use(Kielet, {
     messages: {
       fi: {
-        ...require('@shared/translations/locale-fi.json'),
+        ...fiLocale,
       },
       sv: {
-        ...require('@shared/translations/locale-sv.json'),
+        ...svLocale,
       },
     },
   });

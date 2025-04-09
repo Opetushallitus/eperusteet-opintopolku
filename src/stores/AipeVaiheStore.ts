@@ -1,9 +1,6 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { Aipeopetuksensisalto, AIPEVaiheDto } from '@shared/api/eperusteet';
-
-Vue.use(VueCompositionApi);
 
 export class AipeVaiheStore {
   private state = reactive({

@@ -1,12 +1,9 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { Perusteet, KoulutustyyppiLukumaara, findAllJulkaisut, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { createLogger } from '@shared/utils/logger';
 import { getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import { Page } from '@shared/tyypit';
-
-Vue.use(VueCompositionApi);
 
 const logger = createLogger('Main');
 

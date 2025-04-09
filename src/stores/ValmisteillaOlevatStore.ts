@@ -1,10 +1,7 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import Vue, { computed, reactive } from 'vue';
 import _ from 'lodash';
 import { PerusteBaseDto, Perusteet } from '@shared/api/eperusteet';
 import { Page } from '@shared/tyypit';
-
-Vue.use(VueCompositionApi);
 
 export class ValmisteillaOlevatStore {
   public state = reactive({

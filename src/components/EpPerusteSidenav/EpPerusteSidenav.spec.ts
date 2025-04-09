@@ -7,6 +7,9 @@ import { Kielet } from '@shared/stores/kieli';
 import { mocks, stubs } from '@shared/utils/jestutils';
 import VueI18n from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
+import fiLocale from '@shared/translations/locale-fi.json';
+import svLocale from '@shared/translations/locale-sv.json';
+import Vue from 'vue';
 
 const navigationData = {
   type: 'root' as any,
@@ -93,15 +96,16 @@ const perusteData = {
 } as any;
 
 describe('EpPerusteSidenav', () => {
+
   const localVue = createLocalVue();
   localVue.use(VueI18n);
   localVue.use(Kielet, {
     messages: {
       fi: {
-        ...require('@shared/translations/locale-fi.json'),
+        ...fiLocale,
       },
       sv: {
-        ...require('@shared/translations/locale-sv.json'),
+        ...svLocale,
       },
     },
   });
@@ -127,12 +131,14 @@ describe('EpPerusteSidenav', () => {
       expect(wrapper.html()).toContain('oph-spinner');
     });
 
-    test('Hides spinner', () => {
+    test('Hides spinner', async () => {
       perusteDataStore.perusteKaikki = perusteData;
       perusteDataStore.navigation = {
         ...navigationData,
         children: [],
       };
+
+      await Vue.nextTick();
 
       expect(wrapper.html()).not.toContain('oph-spinner');
     });
@@ -142,18 +148,20 @@ describe('EpPerusteSidenav', () => {
       expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
     });
 
-    test('Works with complex data', () => {
+    test('Works with complex data', async () => {
       perusteDataStore.navigation = {
         ...navigationData,
         children: navigationDataViitteet as any,
       };
+
+      await Vue.nextTick();
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
       expect(nodes.length).toEqual(7);
     });
 
-    test('Works with oppiaineet', () => {
+    test('Works with oppiaineet', async () => {
       perusteDataStore.navigation = {
         ...navigationData,
         children: [
@@ -161,6 +169,8 @@ describe('EpPerusteSidenav', () => {
           ...navigationDataLoput as any,
         ],
       };
+
+      await Vue.nextTick();
 
       const nodes = wrapper.findAll(EpSidenavNode);
 
@@ -171,7 +181,7 @@ describe('EpPerusteSidenav', () => {
     });
   });
 
-  describe('SidenavNode', () => {
+  describe('SidenavNode', async () => {
     const perusteDataStore = new PerusteDataStore(42);
 
     perusteDataStore.perusteKaikki = perusteData;
@@ -196,6 +206,8 @@ describe('EpPerusteSidenav', () => {
       },
     });
 
+    await Vue.nextTick();
+
     test('Navigation with tiedot active', async () => {
       perusteDataStore.currentRoute = {
         name: 'perusteTiedot',
@@ -203,6 +215,8 @@ describe('EpPerusteSidenav', () => {
           perusteId: '42',
         },
       };
+
+      await Vue.nextTick();
 
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(4);
@@ -220,6 +234,8 @@ describe('EpPerusteSidenav', () => {
         },
       };
 
+      await Vue.nextTick();
+
       const nodes = wrapper.findAll(EpSidenavNode);
       expect(nodes.length).toEqual(6);
       expect(nodes.at(1).text()).toContain('Perusteen tiedot');
@@ -230,7 +246,7 @@ describe('EpPerusteSidenav', () => {
     });
   });
 
-  describe('Navigation to previous and next', () => {
+  describe('Navigation to previous and next', async () => {
     const perusteDataStore = new PerusteDataStore(42);
 
     perusteDataStore.perusteKaikki = perusteData;
@@ -263,6 +279,8 @@ describe('EpPerusteSidenav', () => {
       },
     });
 
+    await Vue.nextTick();
+
     test('Navigation next and previous', async () => {
       expect(wrapper.html()).toContain('Päätaso');
 
@@ -275,6 +293,8 @@ describe('EpPerusteSidenav', () => {
       };
       wrapper.setProps({ activeNode: perusteDataStore.current });
 
+      await Vue.nextTick();
+
       expect(wrapper.html()).toContain('Perusteen tiedot');
       expect(wrapper.html()).toContain('Oppiaineet');
 
@@ -286,6 +306,8 @@ describe('EpPerusteSidenav', () => {
         },
       };
       wrapper.setProps({ activeNode: perusteDataStore.current });
+
+      await Vue.nextTick();
 
       expect(wrapper.html()).toContain('Alitaso 1');
       expect(wrapper.html()).toContain('Oppiaineet');

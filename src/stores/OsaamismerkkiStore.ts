@@ -1,6 +1,6 @@
 import { Osaamismerkit } from '@shared/api/eperusteet';
-import { computed, reactive } from '@vue/composition-api';
 import { OsaamismerkkiBaseDto } from '@shared/generated/eperusteet';
+import { computed, reactive } from 'vue';
 
 export class OsaamismerkkiStore {
   public state = reactive({

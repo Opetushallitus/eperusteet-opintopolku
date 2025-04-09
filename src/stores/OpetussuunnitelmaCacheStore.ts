@@ -1,6 +1,6 @@
-import { ref } from '@vue/composition-api';
 import { defineStore } from 'pinia';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { ref } from 'vue';
 
 export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCacheStore', () => {
   const opetussuunnitelmat = ref({});
@@ -17,8 +17,7 @@ export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCach
     if (!opetussuunnitelmat.value[key]) {
       addOpetussuunnitelmaStore(opetussuunnitelmaId, revision);
     }
-    else {
-    }
+
     return opetussuunnitelmat.value[key];
   };
 

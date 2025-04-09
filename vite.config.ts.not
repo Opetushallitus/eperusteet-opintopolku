@@ -1,0 +1,84 @@
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import path from 'path';
+
+const eperusteetService = process.env.EPERUSTEET_SERVICE || 'http://localhost:8080';
+const eperusteetYlopsService = process.env.EPERUSTEET_YLOPS_SERVICE || 'http://localhost:8081';
+const eperusteetAmosaaService = process.env.EPERUSTEET_AMOSAA_SERVICE || 'http://localhost:8082';
+
+if (process.env.EPERUSTEET_SERVICE) {
+  console.log('Using eperusteet-service proxy:', process.env.EPERUSTEET_SERVICE);
+} else {
+  console.log('EPERUSTEET_SERVICE not defined. Using local eperusteet-service.');
+}
+
+if (process.env.EPERUSTEET_YLOPS_SERVICE) {
+  console.log('Using eperusteet-ylops-service proxy:', process.env.EPERUSTEET_YLOPS_SERVICE);
+} else {
+  console.log('EPERUSTEET_YLOPS_SERVICE not defined. Using local eperusteet-ylops-service.');
+}
+
+if (process.env.EPERUSTEET_AMOSAA_SERVICE) {
+  console.log('Using eperusteet-amosaa-service proxy:', process.env.EPERUSTEET_AMOSAA_SERVICE);
+} else {
+  console.log('EPERUSTEET_AMOSAA_SERVICE not defined. Using local eperusteet-amosaa-service.');
+}
+
+export default defineConfig({
+  plugins: [vue()],
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm-bundler.js',
+      '@shared': path.resolve(__dirname, 'eperusteet-frontend-utils/vue/src'),
+      '@assets': path.resolve(__dirname, 'eperusteet-frontend-utils/vue/public'),
+    },
+  },
+  server: {
+    port: 9020,
+    proxy: {
+      '/eperusteet-service': {
+        target: eperusteetService,
+        secure: false,
+        changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet');
+          });
+        },
+      },
+      '/eperusteet-ylops-service': {
+        target: eperusteetYlopsService,
+        secure: false,
+        changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-ylops');
+          });
+        },
+      },
+      '/eperusteet-amosaa-service': {
+        target: eperusteetAmosaaService,
+        secure: false,
+        changeOrigin: true,
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.setHeader('Caller-Id', '1.2.246.562.10.00000000001.eperusteet-amosaa');
+          });
+        },
+      },
+    },
+  },
+  build: {
+    sourcemap: !!process.env.USE_SOURCEMAP,
+    rollupOptions: {
+      output: {
+        sourcemapPathTransform: (relativeSourcePath) => {
+          if (relativeSourcePath.endsWith('.vue')) {
+            return `src://${relativeSourcePath}?script`;
+          }
+          return relativeSourcePath;
+        },
+      },
+    },
+  },
+});

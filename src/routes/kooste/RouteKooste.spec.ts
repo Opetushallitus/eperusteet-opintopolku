@@ -1,14 +1,16 @@
 import { mount, createLocalVue } from '@vue/test-utils';
 import RouteKooste from './RouteKooste.vue';
-import { mock, mocks, stubs } from '@shared/utils/jestutils';
+import { createMockedStore, mock, mocks, stubs } from '@shared/utils/jestutils';
 import * as _ from 'lodash';
 import { OpasStore } from '@/stores/OpasStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
-import { computed } from '@vue/composition-api';
 import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 import JotpaPaikalliset from '@/routes/kooste/JotpaPaikalliset.vue';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
+import Vue, { computed } from 'vue';
+import { vi } from 'vitest';
+import { computedValue } from '@shared/utils/interfaces';
 
 describe('RouteKooste', () => {
   const localVue = createLocalVue();
@@ -16,25 +18,30 @@ describe('RouteKooste', () => {
     params: { lang: 'fi' },
   };
 
-  const koosteTiedotteetStore = mock(KoosteTiedotteetStore);
-  koosteTiedotteetStore.state.tiedotteet = [{
-    luotu: new Date(100),
-    id: 100,
-    otsikko: {
-      fi: 'tiedote101',
-    } as any,
-  }, {
-    luotu: new Date(200),
-    id: 200,
-    otsikko: {
-      fi: 'tiedote102',
-    } as any,
-  }];
+  const koosteTiedotteetStore = createMockedStore(KoosteTiedotteetStore, {
+    tiedotteet: {
+      value: [{
+        luotu: new Date(100),
+        id: 100,
+        otsikko: {
+          fi: 'tiedote101',
+        } as any,
+      }, {
+        luotu: new Date(200),
+        id: 200,
+        otsikko: {
+          fi: 'tiedote102',
+        } as any,
+      }],
+    },
+    fetch: () => new Promise<void>(resolve => resolve()),
+    fetchTiedotteet: () => new Promise<void>(resolve => resolve()),
+  });
 
   test('Renders', async () => {
     const perusteKoosteStore: IPerusteKoosteStore = {
-      koulutustyyppi: computed(() => 'koulutustyyppi_2'),
-      perusteJulkaisut: computed(() => [{
+      koulutustyyppi: computedValue(() => 'koulutustyyppi_2'),
+      perusteJulkaisut: computedValue(() => [{
         nimi: {
           fi: 'peruste42',
         } as any,
@@ -47,15 +54,34 @@ describe('RouteKooste', () => {
       fetch: () => new Promise<void>(resolve => resolve()),
     };
 
-    const opasStore = mock(OpasStore);
-    opasStore.state.oppaat = [{
+    const OpasStore = vi.fn();
+    OpasStore.prototype.oppaat = computed(() => [{
       nimi: {
         fi: 'ohje1',
       } as any,
-    }] as any;
+      id: 1,
+    }]);
+    const opasStore = new OpasStore();
+
+    // const opasStore = vi.fn();
+    // opasStore.oppaat = computed(() => [{
+    //   nimi: {
+    //     fi: 'ohje1',
+    //   } as any,
+    //   id: 1,
+    // }]);
+    // const opasStore = createMockedStore(OpasStore, {
+    //   oppaat: computed(() => [{
+    //     nimi: {
+    //       fi: 'ohje1',
+    //     } as any,
+    //   }] as any,
+    //   ),
+    //   fetch: async () => {},
+    // });
 
     const paikallinenStore: IPaikallinenStore = {
-      opetussuunnitelmatPaged: computed(() => ({
+      opetussuunnitelmatPaged: computedValue(() => ({
         data: [{
           id: 100,
           nimi: {
@@ -102,7 +128,9 @@ describe('RouteKooste', () => {
       },
     });
 
-    await localVue.nextTick();
+    await Vue.nextTick();
+    await Vue.nextTick();
+
     expect(_.map((wrapper.vm as any).tiedotteet, 'id')).toEqual([200, 100]);
     expect(wrapper.html()).toContain('ops100');
     expect(wrapper.html()).toContain('tiedote101');
@@ -128,7 +156,7 @@ describe('RouteKooste', () => {
       },
     }];
     const paikallinenStore: IPaikallinenStore = {
-      opetussuunnitelmat: computed(() => opetussuunnitelmat),
+      opetussuunnitelmat: computedValue(() => opetussuunnitelmat),
       opetussuunnitelmatPaged: computed(() => ({
         data: opetussuunnitelmat,
         sivu: 0,
