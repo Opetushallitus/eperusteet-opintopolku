@@ -206,9 +206,18 @@ export default class RouteKooste extends Vue {
           perusteId: _.toString(julkaisu.id),
           kaannettyNimi: this.$kaanna(julkaisu.nimi!),
         }))
-        .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
+        .orderBy([
+          peruste => _.find(this.perusteJarjestykset, jarjestys => jarjestys.id === peruste.id)?.julkisivuJarjestysNro || 0,
+          'voimassaoloAlkaa',
+          'kaannettyNimi',
+        ],
+        ['asc', 'desc', 'asc'])
         .value();
     }
+  }
+
+  get perusteJarjestykset() {
+    return this.perusteKoosteStore.perusteJarjestykset?.value;
   }
 
   get visibleJulkaistutPerusteet() {
@@ -219,11 +228,13 @@ export default class RouteKooste extends Vue {
   }
 
   get julkaistutVoimassaolevatPerusteet() {
-    return _.filter(this.julkaistutPerusteet, (peruste) => !peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu);
+    return _.filter(this.julkaistutPerusteet, (peruste) => (!peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu)
+      && !_.find(this.perusteJarjestykset, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
   }
 
   get julkaistutEraantyneetPerusteet() {
-    return _.filter(this.julkaistutPerusteet, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
+    return _.filter(this.julkaistutPerusteet, (peruste) => (peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu)
+      || _.find(this.perusteJarjestykset, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
   }
 
   get muutTilet() {
