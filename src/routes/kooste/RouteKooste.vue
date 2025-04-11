@@ -109,6 +109,7 @@ import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
+import { julkisivuPerusteKoosteJarjestys } from '@shared/utils/perusteet';
 
 @Component({
   components: {
@@ -205,13 +206,9 @@ export default class RouteKooste extends Vue {
           ...julkaisu,
           perusteId: _.toString(julkaisu.id),
           kaannettyNimi: this.$kaanna(julkaisu.nimi!),
+          julkisivuJarjestysNro: _.find(this.perusteJarjestykset, jarjestys => jarjestys.id === julkaisu.id)?.julkisivuJarjestysNro,
         }))
-        .orderBy([
-          peruste => _.find(this.perusteJarjestykset, jarjestys => jarjestys.id === peruste.id)?.julkisivuJarjestysNro || 0,
-          'voimassaoloAlkaa',
-          'kaannettyNimi',
-        ],
-        ['asc', 'desc', 'asc'])
+        .orderBy(julkisivuPerusteKoosteJarjestys.keys, julkisivuPerusteKoosteJarjestys.sortby)
         .value();
     }
   }
