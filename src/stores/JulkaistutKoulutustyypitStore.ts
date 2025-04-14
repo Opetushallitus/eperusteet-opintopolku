@@ -1,4 +1,4 @@
-import Vue, { computed, reactive } from 'vue';
+import  { reactive, computed } from '@vue/composition-api';
 import _ from 'lodash';
 import { Perusteet, KoulutustyyppiLukumaara, findAllJulkaisut, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { createLogger } from '@shared/utils/logger';

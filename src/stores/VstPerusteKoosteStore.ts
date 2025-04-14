@@ -4,7 +4,7 @@ import { julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
 import OsaamismerkkiTile from '@/routes/osaamismerkit/OsaamismerkkiTile.vue';
-import Vue, { computed, reactive } from 'vue';
+import  { reactive, computed } from '@vue/composition-api';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 
 export class VstPerusteKoosteStore implements IPerusteKoosteStore {

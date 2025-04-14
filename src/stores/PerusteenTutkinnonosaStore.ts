@@ -1,4 +1,4 @@
-import Vue, { computed, reactive } from 'vue';
+import  { reactive, computed } from '@vue/composition-api';
 import _ from 'lodash';
 import { PerusteenOsatApi, Laaja, TutkinnonRakenne, TutkinnonOsaViiteDto, Arviointiasteikot, GeneerinenArviointiasteikko, ArviointiAsteikkoDto, PerusteDto } from '@shared/api/eperusteet';
 

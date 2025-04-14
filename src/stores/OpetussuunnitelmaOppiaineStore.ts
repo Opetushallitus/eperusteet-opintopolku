@@ -1,4 +1,4 @@
-import Vue, { computed, reactive } from 'vue';
+import  { reactive, computed } from '@vue/composition-api';
 import { Opetussuunnitelmat, OppiaineenVuosiluokat, PerusteOppiaineDto, Oppiaineet, UnwrappedOpsOppiaineDto,
   OppiaineenVuosiluokkakokonaisuudet, PerusteOppiaineenVuosiluokkakokonaisuusDto,
   OpetussuunnitelmaKevytDto, Vuosiluokkakokonaisuudet, UnwrappedOpsOppiaineDtoTyyppiEnum } from '@shared/api/ylops';

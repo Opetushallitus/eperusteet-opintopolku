@@ -1,4 +1,4 @@
-import Vue, { computed, reactive } from 'vue';
+import  { reactive, computed } from '@vue/composition-api';
 import _ from 'lodash';
 import { Aipeopetuksensisalto, AIPEOppiaineDto, AIPEOppiaineSuppeaDto, LaajaalainenOsaaminenDto } from '@shared/api/eperusteet';
 

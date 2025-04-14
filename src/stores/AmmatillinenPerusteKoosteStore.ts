@@ -1,4 +1,3 @@
-import Vue, { reactive } from 'vue';
 import _ from 'lodash';
 import { OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaQuery } from '@shared/api/amosaa';
 import { TiedoteDto, Perusteet, PerusteKaikkiDto } from '@shared/api/eperusteet';
@@ -8,6 +7,7 @@ import { Page } from '@shared/tyypit';
 import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
+import { computed, reactive } from '@vue/composition-api';
 
 export class AmmatillinenPerusteKoosteStore {
   public state = reactive({
