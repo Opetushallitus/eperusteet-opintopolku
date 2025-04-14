@@ -1,47 +1,85 @@
 <template>
-
   <router-view v-if="oppiaine" />
 
-  <div v-else class="content">
+  <div
+    v-else
+    class="content"
+  >
+    <h2>{{ $kaanna(vaihe.nimi) }}</h2>
 
-    <h2>{{$kaanna(vaihe.nimi)}}</h2>
-
-    <div class="mt-4" v-if="vaihe.siirtymaEdellisesta">
-      <h3>{{ $kaanna(vaihe.siirtymaEdellisesta.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.siirtymaEdellisesta.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.siirtymaEdellisesta"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.siirtymaEdellisesta.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.siirtymaEdellisesta.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="vaihe.tehtava">
-      <h3>{{ $kaanna(vaihe.tehtava.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.tehtava.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.tehtava"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.tehtava.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.tehtava.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="vaihe.siirtymaSeuraavaan">
-      <h3>{{ $kaanna(vaihe.siirtymaSeuraavaan.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.siirtymaSeuraavaan.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.siirtymaSeuraavaan"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.siirtymaSeuraavaan.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.siirtymaSeuraavaan.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="vaihe.paikallisestiPaatettavatAsiat">
-      <h3>{{ $kaanna(vaihe.paikallisestiPaatettavatAsiat.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.paikallisestiPaatettavatAsiat.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.paikallisestiPaatettavatAsiat"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.paikallisestiPaatettavatAsiat.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.paikallisestiPaatettavatAsiat.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-5" v-if="oppiaineet && oppiaineet.length > 0">
-      <h3>{{$t('oppiaineet')}}</h3>
-      <div v-for="oppiaine in oppiaineet" :key="'oppiaine'+oppiaine.id" class="taulukko-rivi-varitys px-2 py-3">
+    <div
+      v-if="oppiaineet && oppiaineet.length > 0"
+      class="mt-5"
+    >
+      <h3>{{ $t('oppiaineet') }}</h3>
+      <div
+        v-for="oppiaine in oppiaineet"
+        :key="'oppiaine'+oppiaine.id"
+        class="taulukko-rivi-varitys px-2 py-3"
+      >
         <router-link :to="oppiaine.route">
-          {{$kaanna(oppiaine.nimi)}}
+          {{ $kaanna(oppiaine.nimi) }}
         </router-link>
       </div>
     </div>
 
-    <div class="mt-5" v-if="tavoitealueet && tavoitealueet.length > 0">
-      <h3>{{$t('opetuksen-tavoitealueet')}}</h3>
-      <div v-for="tavoitealue in tavoitealueet" :key="'tavoitealue'+tavoitealue.id" class="taulukko-rivi-varitys px-2 py-3">
-        {{$kaanna(tavoitealue.nimi)}}
+    <div
+      v-if="tavoitealueet && tavoitealueet.length > 0"
+      class="mt-5"
+    >
+      <h3>{{ $t('opetuksen-tavoitealueet') }}</h3>
+      <div
+        v-for="tavoitealue in tavoitealueet"
+        :key="'tavoitealue'+tavoitealue.id"
+        class="taulukko-rivi-varitys px-2 py-3"
+      >
+        {{ $kaanna(tavoitealue.nimi) }}
       </div>
     </div>
-
   </div>
 </template>
 

@@ -1,10 +1,17 @@
 <template>
   <div class="content">
     <div v-if="laajaAlaisetOsaamiset">
-      <h2 class="otsikko">{{ $t('laaja-alaiset-osaamiset') }}</h2>
+      <h2 class="otsikko">
+        {{ $t('laaja-alaiset-osaamiset') }}
+      </h2>
 
-      <EpCollapse v-for="lao in laajaAlaisetOsaamiset" :key="'lao' + lao.id">
-        <h3 slot="header">{{$kaanna(lao.nimi)}}</h3>
+      <EpCollapse
+        v-for="lao in laajaAlaisetOsaamiset"
+        :key="'lao' + lao.id"
+      >
+        <h3 slot="header">
+          {{ $kaanna(lao.nimi) }}
+        </h3>
         <div v-html="$kaanna(lao.kuvaus)" />
       </EpCollapse>
 

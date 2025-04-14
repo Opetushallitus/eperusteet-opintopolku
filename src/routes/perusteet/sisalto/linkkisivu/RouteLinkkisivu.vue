@@ -1,17 +1,27 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">
-        <span v-if="numerointi">{{numerointi}}</span>
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko mb-4"
+      >
+        <span v-if="numerointi">{{ numerointi }}</span>
         {{ $kaanna(perusteenOsa.nimi) }}
       </h2>
 
-      <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.teksti)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
-      <div v-for="(alisivu, idx) in alisivut" :key="idx">
-          <router-link :to="alisivu.location">
-            {{ $kaanna(alisivu.label) }}
-          </router-link>
+      <div
+        v-for="(alisivu, idx) in alisivut"
+        :key="idx"
+      >
+        <router-link :to="alisivu.location">
+          {{ $kaanna(alisivu.label) }}
+        </router-link>
       </div>
 
       <slot name="previous-next-navigation" />

@@ -1,113 +1,205 @@
 <template>
-<div>
-  <div v-if="koodi">
-    <strong>{{ $t('koodi') }}</strong>
-    <p>{{ koodi.arvo }}</p>
-  </div>
-
-  <div v-if="hasTehtava" class="mt-4">
-    <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
-    <ep-content-viewer v-if="oppiaine.tehtava.kuvaus"
-                       :value="$kaanna(oppiaine.tehtava.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <div v-if="hasLaajaAlaiset" class="mt-4">
-    <h3>{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h3>
-    <ep-content-viewer v-if="oppiaine.laajaAlaisetOsaamiset.kuvaus"
-                       :value="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <div v-if="hasOpiskeluymparistoTyotavat" class="mt-4">
-    <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
-    <ep-content-viewer :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <div v-if="hasTavoitteet" class="mt-4">
-    <h3>{{ $t('tavoitteet') }}</h3>
-    <ep-content-viewer v-if="tavoitteet.kuvaus"
-                       :value="$kaanna(tavoitteet.kuvaus)"
-                       :termit="termit" :kuvat="kuvat" />
-    <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="idx">
-      <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
-      <p v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</p>
-      <ul>
-        <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
-          <span>{{ $kaanna(tavoite) }}</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div v-if="hasArviointi" class="mt-4">
-    <h3>{{ $t('arviointi') }}</h3>
-    <ep-content-viewer :value="$kaanna(oppiaine.arviointi.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <hr v-if="hasOpintojaksot || hasModuulit" class="mt-4 mb-4"/>
-
-  <div v-if="hasOpintojaksot" class="mb-4">
-    <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
-    <router-link :to="opintojakso.location" v-for="(opintojakso, idx) in opintojaksotExtended" :key="idx">
-      <div class="d-flex justify-content-between opintojakso mb-2" >
-        <div class="font-weight-bold">
-          <span>{{ $kaanna(opintojakso.nimi) }}</span>
-          <span v-if="opintojakso.koodiLabel" class="koodi ml-2">({{ opintojakso.koodiLabel }})</span>
-        </div>
-        <div v-if="opintojakso.laajuus" class="opintopiste">
-          {{opintojakso.laajuus}} {{$t('opintopiste')}}
-        </div>
-      </div>
-    </router-link>
-  </div>
-
-  <div v-if="hasModuulit" class="mt-4">
-    <h3 id="moduulit">{{ $t('moduulit') }}</h3>
-
-    <div v-if="hasPakollisetModuulit" class="mb-4">
-      <h4>{{ $t('pakolliset-moduulit') }}</h4>
-      <ep-content-viewer v-if="oppiaine.pakollisetModuulitKuvaus"
-                         :value="$kaanna(oppiaine.pakollisetModuulitKuvaus)"
-                         :termit="termit"
-                         :kuvat="kuvat" />
-
-      <router-link v-for="(moduuli, idx) in pakollisetModuulitExtended" :key="idx" :to="moduuli.location">
-        <ep-opintojakson-moduuli class="mb-2" :moduuli="moduuli"/>
-      </router-link>
+  <div>
+    <div v-if="koodi">
+      <strong>{{ $t('koodi') }}</strong>
+      <p>{{ koodi.arvo }}</p>
     </div>
 
-    <div v-if="hasValinnaisetModuulit" class="mb-4">
-      <h4>{{ $t('valinnaiset-moduulit') }}</h4>
-      <ep-content-viewer v-if="oppiaine.valinnaisetModuulitKuvaus"
-                         :value="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"
-                         :termit="termit"
-                         :kuvat="kuvat" />
-
-      <router-link v-for="(moduuli, idx) in valinnaisetModuulitExtended" :key="idx" :to="moduuli.location">
-        <ep-opintojakson-moduuli class="mb-2" :moduuli="moduuli"/>
-      </router-link>
+    <div
+      v-if="hasTehtava"
+      class="mt-4"
+    >
+      <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
+      <ep-content-viewer
+        v-if="oppiaine.tehtava.kuvaus"
+        :value="$kaanna(oppiaine.tehtava.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
     </div>
-  </div>
 
-  <div v-if="hasOppimaarat" class="mt-4">
-    <h3 id="oppimaarat">{{ $t('oppimaarat') }}</h3>
-    <div v-for="(oppimaara, idx) in oppimaaratExtended" :key="idx">
-      <router-link v-if="oppimaara.location" :to="oppimaara.location">
-        {{ $kaanna(oppimaara.nimi) }}
-      </router-link>
-      <div v-else>
-        {{ $kaanna(oppimaara.nimi) }}
+    <div
+      v-if="hasLaajaAlaiset"
+      class="mt-4"
+    >
+      <h3>{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h3>
+      <ep-content-viewer
+        v-if="oppiaine.laajaAlaisetOsaamiset.kuvaus"
+        :value="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+    </div>
+
+    <div
+      v-if="hasOpiskeluymparistoTyotavat"
+      class="mt-4"
+    >
+      <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+    </div>
+
+    <div
+      v-if="hasTavoitteet"
+      class="mt-4"
+    >
+      <h3>{{ $t('tavoitteet') }}</h3>
+      <ep-content-viewer
+        v-if="tavoitteet.kuvaus"
+        :value="$kaanna(tavoitteet.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+      <div
+        v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet"
+        :key="idx"
+      >
+        <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi ) }}</strong>
+        <p v-if="tavoitealue.kohde">
+          {{ $kaanna(tavoitealue.kohde) }}
+        </p>
+        <ul>
+          <li
+            v-for="(tavoite, idx) in tavoitealue.tavoitteet"
+            :key="idx"
+          >
+            <span>{{ $kaanna(tavoite) }}</span>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <div
+      v-if="hasArviointi"
+      class="mt-4"
+    >
+      <h3>{{ $t('arviointi') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.arviointi.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+    </div>
+
+    <hr
+      v-if="hasOpintojaksot || hasModuulit"
+      class="mt-4 mb-4"
+    >
+
+    <div
+      v-if="hasOpintojaksot"
+      class="mb-4"
+    >
+      <h3 id="opintojaksot">
+        {{ $t('opintojaksot') }}
+      </h3>
+      <router-link
+        v-for="(opintojakso, idx) in opintojaksotExtended"
+        :key="idx"
+        :to="opintojakso.location"
+      >
+        <div class="d-flex justify-content-between opintojakso mb-2">
+          <div class="font-weight-bold">
+            <span>{{ $kaanna(opintojakso.nimi) }}</span>
+            <span
+              v-if="opintojakso.koodiLabel"
+              class="koodi ml-2"
+            >({{ opintojakso.koodiLabel }})</span>
+          </div>
+          <div
+            v-if="opintojakso.laajuus"
+            class="opintopiste"
+          >
+            {{ opintojakso.laajuus }} {{ $t('opintopiste') }}
+          </div>
+        </div>
+      </router-link>
+    </div>
+
+    <div
+      v-if="hasModuulit"
+      class="mt-4"
+    >
+      <h3 id="moduulit">
+        {{ $t('moduulit') }}
+      </h3>
+
+      <div
+        v-if="hasPakollisetModuulit"
+        class="mb-4"
+      >
+        <h4>{{ $t('pakolliset-moduulit') }}</h4>
+        <ep-content-viewer
+          v-if="oppiaine.pakollisetModuulitKuvaus"
+          :value="$kaanna(oppiaine.pakollisetModuulitKuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+
+        <router-link
+          v-for="(moduuli, idx) in pakollisetModuulitExtended"
+          :key="idx"
+          :to="moduuli.location"
+        >
+          <ep-opintojakson-moduuli
+            class="mb-2"
+            :moduuli="moduuli"
+          />
+        </router-link>
+      </div>
+
+      <div
+        v-if="hasValinnaisetModuulit"
+        class="mb-4"
+      >
+        <h4>{{ $t('valinnaiset-moduulit') }}</h4>
+        <ep-content-viewer
+          v-if="oppiaine.valinnaisetModuulitKuvaus"
+          :value="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+
+        <router-link
+          v-for="(moduuli, idx) in valinnaisetModuulitExtended"
+          :key="idx"
+          :to="moduuli.location"
+        >
+          <ep-opintojakson-moduuli
+            class="mb-2"
+            :moduuli="moduuli"
+          />
+        </router-link>
+      </div>
+    </div>
+
+    <div
+      v-if="hasOppimaarat"
+      class="mt-4"
+    >
+      <h3 id="oppimaarat">
+        {{ $t('oppimaarat') }}
+      </h3>
+      <div
+        v-for="(oppimaara, idx) in oppimaaratExtended"
+        :key="idx"
+      >
+        <router-link
+          v-if="oppimaara.location"
+          :to="oppimaara.location"
+        >
+          {{ $kaanna(oppimaara.nimi) }}
+        </router-link>
+        <div v-else>
+          {{ $kaanna(oppimaara.nimi) }}
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

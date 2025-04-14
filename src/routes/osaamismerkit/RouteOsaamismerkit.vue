@@ -1,6 +1,9 @@
 <template>
   <div v-if="$route.name === 'osaamismerkit'">
-    <EpHeader :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
+    <EpHeader
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
       <template slot="header">
         {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
       </template>
@@ -15,33 +18,37 @@
             :max-width="true"
             :sr-placeholder="$t('hae-osaamismerkkeja')"
             :placeholder="''"
-            class="w-100 mr-3">
+            class="w-100 mr-3"
+          >
             <template #label>
-              <span class="font-weight-600">{{ $t('hae-osaamismerkkeja')}}</span>
+              <span class="font-weight-600">{{ $t('hae-osaamismerkkeja') }}</span>
             </template>
           </EpSearch>
 
           <EpMultiSelect
+            v-model="kategoria"
             :is-editing="false"
             :options="osaamismerkkiKategoriaOptions"
             :placeholder="$t('kaikki')"
             class="multiselect"
-            v-model="kategoria"
             :searchable="false"
             track-by="value"
-            label="text">
-          <template #label>
-            <span class="font-weight-600">{{ $t('teema')}}</span>
-          </template>
+            label="text"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('teema') }}</span>
+            </template>
           </EpMultiSelect>
         </div>
 
-        <EpOsaamismerkit :osaamismerkit="osaamismerkit"
-                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></EpOsaamismerkit>
+        <EpOsaamismerkit
+          :osaamismerkit="osaamismerkit"
+          :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+        />
       </div>
     </EpHeader>
   </div>
-  <router-view v-else/>
+  <router-view v-else />
 </template>
 
 <script lang="ts">

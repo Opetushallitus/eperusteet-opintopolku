@@ -1,12 +1,21 @@
 <template>
-  <div aria-live="polite" tabindex='-1'>
+  <div
+    aria-live="polite"
+    tabindex="-1"
+  >
     <slot>
       <div v-if="kokonaismaara">
         <template v-if="!piilotaNakyvaTulosmaara">
-          <span aria-hidden="true" class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
+          <span
+            aria-hidden="true"
+            class="font-weight-bold mr-1"
+          >{{ kokonaismaara }}</span>
           <span aria-hidden="true">{{ $t('hakutulosta') }}</span>
         </template>
-        <span class="sr-only" v-if="naytaRuudunlukijaLkm">{{ kokonaismaara }} {{ $t('hakutulosta') }}</span>
+        <span
+          v-if="naytaRuudunlukijaLkm"
+          class="sr-only"
+        >{{ kokonaismaara }} {{ $t('hakutulosta') }}</span>
       </div>
     </slot>
   </div>

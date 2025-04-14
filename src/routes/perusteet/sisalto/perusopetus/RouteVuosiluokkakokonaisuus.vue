@@ -2,58 +2,106 @@
   <div>
     <router-view v-if="oppiaine" />
 
-    <div v-else class="content">
-
+    <div
+      v-else
+      class="content"
+    >
       <ep-spinner v-if="!vuosiluokkakokonaisuus" />
 
       <div v-else>
-        <h2>{{$kaanna(vuosiluokkakokonaisuus.nimi)}}</h2>
+        <h2>{{ $kaanna(vuosiluokkakokonaisuus.nimi) }}</h2>
 
-        <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.tehtava)">
-          <h3>{{$kaanna(vuosiluokkakokonaisuus.tehtava.otsikko)}}</h3>
-          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.tehtava.teksti)" :kuvat="kuvat" />
+        <div
+          v-if="hasContent(vuosiluokkakokonaisuus.tehtava)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna(vuosiluokkakokonaisuus.tehtava.otsikko) }}</h3>
+          <ep-content-viewer
+            :value="$kaanna(vuosiluokkakokonaisuus.tehtava.teksti)"
+            :kuvat="kuvat"
+          />
         </div>
 
-        <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.siirtymaEdellisesta)">
-          <h3>{{$kaanna(vuosiluokkakokonaisuus.siirtymaEdellisesta.otsikko)}}</h3>
-         <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.siirtymaEdellisesta.teksti)" :kuvat="kuvat" />
+        <div
+          v-if="hasContent(vuosiluokkakokonaisuus.siirtymaEdellisesta)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna(vuosiluokkakokonaisuus.siirtymaEdellisesta.otsikko) }}</h3>
+          <ep-content-viewer
+            :value="$kaanna(vuosiluokkakokonaisuus.siirtymaEdellisesta.teksti)"
+            :kuvat="kuvat"
+          />
         </div>
 
-        <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.siirtymaSeuraavaan)">
-          <h3>{{$kaanna(vuosiluokkakokonaisuus.siirtymaSeuraavaan.otsikko)}}</h3>
-          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.siirtymaSeuraavaan.teksti)" :kuvat="kuvat" />
+        <div
+          v-if="hasContent(vuosiluokkakokonaisuus.siirtymaSeuraavaan)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna(vuosiluokkakokonaisuus.siirtymaSeuraavaan.otsikko) }}</h3>
+          <ep-content-viewer
+            :value="$kaanna(vuosiluokkakokonaisuus.siirtymaSeuraavaan.teksti)"
+            :kuvat="kuvat"
+          />
         </div>
 
-        <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.laajaalainenOsaaminen)">
-          <h3>{{$kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.otsikko)}}</h3>
-          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.teksti)" :kuvat="kuvat" />
+        <div
+          v-if="hasContent(vuosiluokkakokonaisuus.laajaalainenOsaaminen)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.otsikko) }}</h3>
+          <ep-content-viewer
+            :value="$kaanna(vuosiluokkakokonaisuus.laajaalainenOsaaminen.teksti)"
+            :kuvat="kuvat"
+          />
         </div>
 
         <template v-if="vuosiluokkakokonaisuus.vapaatTekstit && vuosiluokkakokonaisuus.vapaatTekstit.length > 0">
-          <div v-for="(vapaaTeksti, index) in vuosiluokkakokonaisuus.vapaatTekstit" :key="'vapaateksti'+index" class="mt-4">
-            <h3>{{$kaanna(vapaaTeksti.nimi)}}</h3>
-            <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat"/>
+          <div
+            v-for="(vapaaTeksti, index) in vuosiluokkakokonaisuus.vapaatTekstit"
+            :key="'vapaateksti'+index"
+            class="mt-4"
+          >
+            <h3>{{ $kaanna(vapaaTeksti.nimi) }}</h3>
+            <ep-content-viewer
+              :value="$kaanna(vapaaTeksti.teksti)"
+              :kuvat="kuvat"
+            />
           </div>
         </template>
 
-        <div class="mt-4" v-if="vuosiluokkakokonaisuus.laajaalaisetOsaamiset && vuosiluokkakokonaisuus.laajaalaisetOsaamiset.length > 0">
-          <h3 class="mt-4">{{$t('laaja-alaisen-osaamisen-alueet')}}</h3>
+        <div
+          v-if="vuosiluokkakokonaisuus.laajaalaisetOsaamiset && vuosiluokkakokonaisuus.laajaalaisetOsaamiset.length > 0"
+          class="mt-4"
+        >
+          <h3 class="mt-4">
+            {{ $t('laaja-alaisen-osaamisen-alueet') }}
+          </h3>
 
-          <div class="mt-4" v-for="(lao, index) in vuosiluokkakokonaisuus.laajaalaisetOsaamiset" :key="'lao'+index">
-            <h4>{{$kaanna(lao.nimi)}}</h4>
-            <ep-content-viewer :value="$kaanna(lao.kuvaus)" :kuvat="kuvat" />
+          <div
+            v-for="(lao, index) in vuosiluokkakokonaisuus.laajaalaisetOsaamiset"
+            :key="'lao'+index"
+            class="mt-4"
+          >
+            <h4>{{ $kaanna(lao.nimi) }}</h4>
+            <ep-content-viewer
+              :value="$kaanna(lao.kuvaus)"
+              :kuvat="kuvat"
+            />
           </div>
-
         </div>
 
-        <div class="mt-4" v-if="hasContent(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat)">
-          <h3>{{$kaanna(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat.otsikko)}}</h3>
-          <ep-content-viewer :value="$kaanna(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat.teksti)" :kuvat="kuvat" />
+        <div
+          v-if="hasContent(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat.otsikko) }}</h3>
+          <ep-content-viewer
+            :value="$kaanna(vuosiluokkakokonaisuus.paikallisestiPaatettavatAsiat.teksti)"
+            :kuvat="kuvat"
+          />
         </div>
-
       </div>
     </div>
-
   </div>
 </template>
 

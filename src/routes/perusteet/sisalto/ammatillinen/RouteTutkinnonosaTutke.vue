@@ -1,39 +1,61 @@
 <template>
   <div>
-    <EpHeader :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
+    <EpHeader
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
       <template slot="header">
         <span v-if="tutkinnonosa">{{ $kaanna(tutkinnonosa.nimi) }}</span>
-        <span v-if="laajuus">{{laajuus}} {{$t('osaamispiste')}}</span>
+        <span v-if="laajuus">{{ laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
     </EpHeader>
     <div class="container mt-4">
       <div class="content">
-        <EpSpinner v-if="!tutkinnonosa"></EpSpinner>
+        <EpSpinner v-if="!tutkinnonosa" />
         <div v-else>
-          <EpFormContent v-if="perusteet" class="col-md-12 mb-5">
-            <EpCollapse class="mb-3"
-                        :shadow="true"
-                        :borderBottom="false"
-                        :expandedByDefault="perusteet.length === 1">
-              <h2 class="header" slot="header">{{$t('tutkinnot-joilla-tutkinnon-osa-on')}}</h2>
+          <EpFormContent
+            v-if="perusteet"
+            class="col-md-12 mb-5"
+          >
+            <EpCollapse
+              class="mb-3"
+              :shadow="true"
+              :border-bottom="false"
+              :expanded-by-default="perusteet.length === 1"
+            >
+              <h2
+                slot="header"
+                class="header"
+              >
+                {{ $t('tutkinnot-joilla-tutkinnon-osa-on') }}
+              </h2>
               <hr>
-              <div v-for="(peruste, oidx) in perusteet" :key="oidx" class="nimikkeet">
+              <div
+                v-for="(peruste, oidx) in perusteet"
+                :key="oidx"
+                class="nimikkeet"
+              >
                 <div class="d-flex">
                   <router-link :to="{ name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: peruste.id }}">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
-                  <EpVoimassaolo :voimassaolo="peruste"></EpVoimassaolo>
-                  <span v-if="peruste.diaarinumero" class="ml-1">| {{ $t('diaarinumero') + ': ' + peruste.diaarinumero }}</span>
+                  <EpVoimassaolo :voimassaolo="peruste" />
+                  <span
+                    v-if="peruste.diaarinumero"
+                    class="ml-1"
+                  >| {{ $t('diaarinumero') + ': ' + peruste.diaarinumero }}</span>
                 </div>
               </div>
             </EpCollapse>
           </EpFormContent>
 
-          <EpTutkinnonosaTutke :tutkinnonosa="tutkinnonosa.tutkinnonosa" :arviointiasteikot="arviointiasteikot"/>
+          <EpTutkinnonosaTutke
+            :tutkinnonosa="tutkinnonosa.tutkinnonosa"
+            :arviointiasteikot="arviointiasteikot"
+          />
         </div>
       </div>
     </div>
-
   </div>
 </template>
 

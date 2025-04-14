@@ -1,39 +1,90 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2 class="otsikko mb-4">
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
 
-      <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
-      <div class="mt-5" v-for="(aihekokonaisuus, index) in perusteenOsa.aihekokonaisuudet" :key="'aihekokonaisuus'+index">
-        <h3>{{$kaanna(aihekokonaisuus.otsikko)}}</h3>
-        <ep-content-viewer :value="$kaanna(aihekokonaisuus.yleiskuvaus)" :termit="termit" :kuvat="kuvat" />
+      <div
+        v-for="(aihekokonaisuus, index) in perusteenOsa.aihekokonaisuudet"
+        :key="'aihekokonaisuus'+index"
+        class="mt-5"
+      >
+        <h3>{{ $kaanna(aihekokonaisuus.otsikko) }}</h3>
+        <ep-content-viewer
+          :value="$kaanna(aihekokonaisuus.yleiskuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </div>
 
-      <EpCollapse :borderBottom="false">
-        <h3 slot="header" class="collapse-header">{{ $kaanna(perusteenOsa.nimi) }} {{$t('varhaiskasvatuksessa-ja-esi-ja-perusopetuksessa')}}</h3>
+      <EpCollapse :border-bottom="false">
+        <h3
+          slot="header"
+          class="collapse-header"
+        >
+          {{ $kaanna(perusteenOsa.nimi) }} {{ $t('varhaiskasvatuksessa-ja-esi-ja-perusopetuksessa') }}
+        </h3>
 
         <b-tabs>
-          <b-tab :title="$t(kasitteisto.taso.toLowerCase())" v-for="kasitteisto in perusteenOsa.kasitteistot" :key="'kasitteisto' + kasitteisto.taso">
-            <ep-content-viewer class="mt-3" :value="$kaanna(kasitteisto.kuvaus)" :termit="termit" :kuvat="kuvat" />
+          <b-tab
+            v-for="kasitteisto in perusteenOsa.kasitteistot"
+            :key="'kasitteisto' + kasitteisto.taso"
+            :title="$t(kasitteisto.taso.toLowerCase())"
+          >
+            <ep-content-viewer
+              class="mt-3"
+              :value="$kaanna(kasitteisto.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
           </b-tab>
         </b-tabs>
       </EpCollapse>
 
-      <EpCollapse :borderBottom="false" v-if="perusteenOsa.keskeinenKasitteisto">
-        <h3 slot="header" class="collapse-header">{{$t('keskeinen-kasitteisto')}}</h3>
-        <ep-content-viewer :value="$kaanna(perusteenOsa.keskeinenKasitteisto)" :termit="termit" :kuvat="kuvat" />
+      <EpCollapse
+        v-if="perusteenOsa.keskeinenKasitteisto"
+        :border-bottom="false"
+      >
+        <h3
+          slot="header"
+          class="collapse-header"
+        >
+          {{ $t('keskeinen-kasitteisto') }}
+        </h3>
+        <ep-content-viewer
+          :value="$kaanna(perusteenOsa.keskeinenKasitteisto)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </EpCollapse>
 
-      <EpCollapse :borderBottom="false" :collapsable="false">
-        <h3 slot="header" class="collapse-header">{{$t('paa-alueet')}}</h3>
+      <EpCollapse
+        :border-bottom="false"
+        :collapsable="false"
+      >
+        <h3
+          slot="header"
+          class="collapse-header"
+        >
+          {{ $t('paa-alueet') }}
+        </h3>
         <div class="row">
           <router-link
             v-for="paaAlue in paaAlueet"
             :key="'paaAlue'+paaAlue.id"
             class="paa-alue col-3"
-            :to="{name: 'perusteOsaamiskokonaisuusPaaAlue', params: {osaamiskokonaisuusPaaAlueId: paaAlue.id + ''}}">
-            <div class="nimi">{{$kaanna(paaAlue.perusteenOsa.nimi)}}</div>
+            :to="{name: 'perusteOsaamiskokonaisuusPaaAlue', params: {osaamiskokonaisuusPaaAlueId: paaAlue.id + ''}}"
+          >
+            <div class="nimi">
+              {{ $kaanna(paaAlue.perusteenOsa.nimi) }}
+            </div>
           </router-link>
         </div>
       </EpCollapse>

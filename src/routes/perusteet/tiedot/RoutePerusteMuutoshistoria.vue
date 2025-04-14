@@ -5,16 +5,20 @@
     </h2>
 
     <div>
-      {{$t('peruste-muutoshistoria-kuvaus')}}
+      {{ $t('peruste-muutoshistoria-kuvaus') }}
       <router-link :to="{ name: 'perusteTiedot' }">
-        {{$t('palaa-perusteen-tietoihin')}}
+        {{ $t('palaa-perusteen-tietoihin') }}
       </router-link>
     </div>
 
-    <div class="mt-2" v-if="julkaisut && julkaisut.length > 0">
+    <div
+      v-if="julkaisut && julkaisut.length > 0"
+      class="mt-2"
+    >
       <EpJulkaisuHistoriaJulkinen
         :julkaisut="julkaisut"
-        naytaKaikki />
+        nayta-kaikki
+      />
     </div>
   </div>
 </template>

@@ -1,15 +1,15 @@
 <template>
-<div>
-  <EpJulkinenSidenav
-    :julkaistutKoulutustyypitStore="julkaistutKoulutustyypitStore"
-    :tietoapalvelustaStore="tietoapalvelustaStore"
-    :osaamismerkitStore="osaamismerkitStore"
+  <div>
+    <EpJulkinenSidenav
+      :julkaistut-koulutustyypit-store="julkaistutKoulutustyypitStore"
+      :tietoapalvelusta-store="tietoapalvelustaStore"
+      :osaamismerkit-store="osaamismerkitStore"
     />
-  <main role="main">
-    <router-view />
-  </main>
-  <ep-footer />
-</div>
+    <main role="main">
+      <router-view />
+    </main>
+    <ep-footer />
+  </div>
 </template>
 
 <script lang="ts">

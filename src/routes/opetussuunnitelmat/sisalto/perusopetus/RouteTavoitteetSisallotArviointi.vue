@@ -2,88 +2,138 @@
   <div class="content">
     <EpSpinner v-if="!vuosiluokat" />
     <template v-else>
+      <h2>{{ $t('tavoitteet-sisallot-ja-arviointi') }}</h2>
 
-      <h2>{{$t('tavoitteet-sisallot-ja-arviointi')}}</h2>
+      <div
+        v-if="vuosiluokat.length > 0"
+        v-html="$t('tavoitteet-sisallot-ja-arviointi-ohje')"
+      />
 
-      <div v-if="vuosiluokat.length > 0" v-html="$t('tavoitteet-sisallot-ja-arviointi-ohje')"></div>
-
-      <div class="row mt-4" :class="{'disabled-events': vuosiluokat.length === 0}">
-        <ep-form-content name="vuosiluokka" class="col-12 col-lg-3 mr-3">
-          <EpMultiSelect v-model="vuosiluokka"
-                  :enable-empty-option="true"
-                  :placeholder="$t('valitse') + '...'"
-                  :is-editing="true"
-                  :options="vuosiluokat"
-                  :searchable="false">
-            <template slot="singleLabel" slot-scope="{ option }">
+      <div
+        class="row mt-4"
+        :class="{'disabled-events': vuosiluokat.length === 0}"
+      >
+        <ep-form-content
+          name="vuosiluokka"
+          class="col-12 col-lg-3 mr-3"
+        >
+          <EpMultiSelect
+            v-model="vuosiluokka"
+            :enable-empty-option="true"
+            :placeholder="$t('valitse') + '...'"
+            :is-editing="true"
+            :options="vuosiluokat"
+            :searchable="false"
+          >
+            <template
+              slot="singleLabel"
+              slot-scope="{ option }"
+            >
               {{ $t(option + '-luokka') }}
             </template>
-            <template slot="option" slot-scope="{ option }">
+            <template
+              slot="option"
+              slot-scope="{ option }"
+            >
               {{ $t(option + '-luokka') }}
             </template>
           </EpMultiSelect>
         </ep-form-content>
 
-        <ep-form-content name="oppiaine" class="col-12 col-lg-6">
-          <EpMultiSelect v-model="oppiaine"
-                  :disabled="!vuosiluokka"
-                  :enable-empty-option="true"
-                  :placeholder="$t('valitse') + '...'"
-                  :is-editing="true"
-                  :options="oppiaineValinnat"
-                  :search-identity="searchIdentity">
-            <template slot="singleLabel" slot-scope="{ option }">
+        <ep-form-content
+          name="oppiaine"
+          class="col-12 col-lg-6"
+        >
+          <EpMultiSelect
+            v-model="oppiaine"
+            :disabled="!vuosiluokka"
+            :enable-empty-option="true"
+            :placeholder="$t('valitse') + '...'"
+            :is-editing="true"
+            :options="oppiaineValinnat"
+            :search-identity="searchIdentity"
+          >
+            <template
+              slot="singleLabel"
+              slot-scope="{ option }"
+            >
               {{ $kaanna(option.nimi) }}
             </template>
-            <template slot="option" slot-scope="{ option }">
+            <template
+              slot="option"
+              slot-scope="{ option }"
+            >
               <span :class="{'ml-3': option.isOppimaara}">{{ $kaanna(option.nimi) }}</span>
             </template>
           </EpMultiSelect>
         </ep-form-content>
       </div>
 
-    <div v-if="vuosiluokat.length === 0" class="mt-4">
-      <span class="font-italic">{{ $t('tavoitteet-sisallot-ja-arviointi-ei-vuosiluokkia') }}</span>
-    </div>
+      <div
+        v-if="vuosiluokat.length === 0"
+        class="mt-4"
+      >
+        <span class="font-italic">{{ $t('tavoitteet-sisallot-ja-arviointi-ei-vuosiluokkia') }}</span>
+      </div>
 
-      <ep-form-content name="tavoitteen-osiot" class="mt-4" v-if="oppiaine">
+      <ep-form-content
+        v-if="oppiaine"
+        name="tavoitteen-osiot"
+        class="mt-4"
+      >
         <b-form-checkbox-group v-model="osiot">
-          <b-form-checkbox v-for="osio in osioValinnat" :key="'osio-' + osio" :value="osio">{{$t(osio)}}</b-form-checkbox>
+          <b-form-checkbox
+            v-for="osio in osioValinnat"
+            :key="'osio-' + osio"
+            :value="osio"
+          >
+            {{ $t(osio) }}
+          </b-form-checkbox>
         </b-form-checkbox-group>
       </ep-form-content>
 
-      <hr class="mt-4" v-if="vuosiluokka"/>
+      <hr
+        v-if="vuosiluokka"
+        class="mt-4"
+      >
 
       <template v-if="!oppiaine && vuosiluokka">
-        <h3 class="mt-4 mb-3">{{$t(vuosiluokka + '-luokka')}}</h3>
+        <h3 class="mt-4 mb-3">
+          {{ $t(vuosiluokka + '-luokka') }}
+        </h3>
 
         <OppiaineenVuosiluokkaTiivistetty
-          class="mb-4"
           v-for="oppiaineJaTavoitteet in oppiaineidenVuosiluokkienTavoitteet"
           :key="oppiaineJaTavoitteet.oppiaine.id"
-          :oppiaineJaTavoitteet="oppiaineJaTavoitteet"
-          @selectOppiaine="selectOppiaine"/>
+          class="mb-4"
+          :oppiaine-ja-tavoitteet="oppiaineJaTavoitteet"
+          @selectOppiaine="selectOppiaine"
+        />
       </template>
 
       <template v-if="oppiaine && vuosiluokka">
         <div class="d-flex justify-content-between align-items-center">
           <h3 class="mb-0">
-            <span class="link-style clickable" @click="oppiaine = null">{{$t(vuosiluokka + '-luokka')}}</span>
+            <span
+              class="link-style clickable"
+              @click="oppiaine = null"
+            >{{ $t(vuosiluokka + '-luokka') }}</span>
             / {{ $kaanna(oppiaine.nimi) }}
           </h3>
 
-          <portal-target name="sulje-kaikki-tavoitteet-portal"></portal-target>
+          <portal-target name="sulje-kaikki-tavoitteet-portal" />
         </div>
 
         <oppiaineen-vuosiluokka
-          :oppiaineenVuosiluokka="oppiaineenVuosiluokka"
+          :oppiaineen-vuosiluokka="oppiaineenVuosiluokka"
           :valinnainen="oppiaine.tyyppi === 'muu_valinnainen'"
           :kuvat="kuvat"
           :termit="termit"
-          :naytaSisaltoalueet="naytaSisaltoalueet"
-          :naytaArviointikriteerit="naytaArviointikriteerit"
-          :naytaLaajaAlaisetOsaamiset="naytaLaajaAlaisetOsaamiset"
-          avaaSuljeSiirrettavissa/>
+          :nayta-sisaltoalueet="naytaSisaltoalueet"
+          :nayta-arviointikriteerit="naytaArviointikriteerit"
+          :nayta-laaja-alaiset-osaamiset="naytaLaajaAlaisetOsaamiset"
+          avaa-sulje-siirrettavissa
+        />
       </template>
     </template>
   </div>

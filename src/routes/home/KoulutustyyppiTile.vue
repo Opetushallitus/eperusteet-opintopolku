@@ -1,14 +1,23 @@
 <template>
   <router-link :to="tyyppi.route">
-      <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
+    <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
       <div class="p-2">
         <div class="ikoni">
-          <EpMaterialIcon v-if="icon"
-                          icon-shape="outlined"
-                          :color="rgbColor"
-                          size="38px"
-                          class="img">{{icon}}</EpMaterialIcon>
-          <img v-else :src="osaamimerkkiLogo" :alt="$t('osaamismerkit')" class="img"/>
+          <EpMaterialIcon
+            v-if="icon"
+            icon-shape="outlined"
+            :color="rgbColor"
+            size="38px"
+            class="img"
+          >
+            {{ icon }}
+          </EpMaterialIcon>
+          <img
+            v-else
+            :src="osaamimerkkiLogo"
+            :alt="$t('osaamismerkit')"
+            class="img"
+          >
         </div>
         <div class="nimi">
           <span>{{ name }}</span>

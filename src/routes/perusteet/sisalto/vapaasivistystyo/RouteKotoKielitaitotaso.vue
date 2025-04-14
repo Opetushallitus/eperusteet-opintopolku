@@ -1,20 +1,28 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">
-        <span v-if="numerointi">{{numerointi}}</span>
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko mb-4"
+      >
+        <span v-if="numerointi">{{ numerointi }}</span>
         {{ $kaanna(perusteenOsa.nimi) }}
       </h2>
 
       <div class="mb-4">
-        <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :termit="termit" :kuvat="kuvat" />
-        <hr/>
+        <ep-content-viewer
+          :value="$kaanna(perusteenOsa.kuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+        <hr>
       </div>
 
       <EpKotoTaitotasot
         :value="perusteenOsa.taitotasot"
         :termit="termit"
-        :kuvat="kuvat"/>
+        :kuvat="kuvat"
+      />
 
       <slot name="previous-next-navigation" />
     </div>

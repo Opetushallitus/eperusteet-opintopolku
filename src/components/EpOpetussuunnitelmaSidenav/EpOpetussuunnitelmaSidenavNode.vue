@@ -1,30 +1,53 @@
 <template>
-<div class="node" :class="{ 'node-root': isRoot }">
-  <div v-if="!isRoot">
-    <div class="indicator-wrapper" v-if="isModuuli">
-      <ep-color-indicator :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
+  <div
+    class="node"
+    :class="{ 'node-root': isRoot }"
+  >
+    <div v-if="!isRoot">
+      <div
+        v-if="isModuuli"
+        class="indicator-wrapper"
+      >
+        <ep-color-indicator :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
+      </div>
+      <div class="label-wrapper">
+        <b-link
+          v-if="node.location"
+          :to="node.location"
+        >
+          <span
+            class="label"
+            :class="{ 'label-match': isMatch }"
+          >
+            {{ $kaannaOlioTaiTeksti(node.label) }}
+          </span>
+        </b-link>
+        <span
+          v-else
+          class="label label-plain"
+          :class="{ 'label-match': isMatch }"
+        >
+          {{ $kaannaOlioTaiTeksti(node.label) }}
+        </span>
+      </div>
     </div>
-    <div class="label-wrapper">
-      <b-link v-if="node.location" :to="node.location">
-      <span class="label" :class="{ 'label-match': isMatch }">
-        {{ $kaannaOlioTaiTeksti(node.label) }}
-      </span>
-      </b-link>
-      <span v-else
-            class="label label-plain"
-            :class="{ 'label-match': isMatch }">
-        {{ $kaannaOlioTaiTeksti(node.label) }}
-    </span>
-    </div>
-  </div>
 
-  <!-- children -->
-  <ul :class="{ 'root-list': isRoot }" v-if="hasChildren">
-    <li v-for="(child, idx) in children" :key="idx">
-      <ep-opetussuunnitelma-sidenav-node :node="child" :current="current" />
-    </li>
-  </ul>
-</div>
+    <!-- children -->
+    <ul
+      v-if="hasChildren"
+      :class="{ 'root-list': isRoot }"
+    >
+      <li
+        v-for="(child, idx) in children"
+        :key="idx"
+      >
+        <ep-opetussuunnitelma-sidenav-node
+          :node="child"
+          :current="current"
+        />
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script lang="ts">

@@ -1,17 +1,23 @@
 <template>
   <div
-      id="notification-bar"
-      class="notifikaatio justify-content-center py-3 korostus"
-      :class="notifikaatioClass"
-      v-sticky
-      sticky-z-index="5000"
-      v-if="hasNotification"
-      ref="stickyElement">
-    <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
+    v-if="hasNotification"
+    id="notification-bar"
+    ref="stickyElement"
+    v-sticky
+    class="notifikaatio justify-content-center py-3 korostus"
+    :class="notifikaatioClass"
+    sticky-z-index="5000"
+  >
+    <EpMaterialIcon icon-shape="outlined">
+      info
+    </EpMaterialIcon>
     <slot>
       <span class="notifikaatio-text">{{ notifikaatio }}</span>
       <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">
-        <span class="btn-link clickable" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
+        <span
+          class="btn-link clickable"
+          @click="toUusimpaan"
+        >{{ $t('siirry-uusimpaan-julkaisuun') }}.</span>
       </div>
     </slot>
   </div>

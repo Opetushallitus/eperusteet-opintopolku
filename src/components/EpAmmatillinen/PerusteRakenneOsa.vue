@@ -1,49 +1,90 @@
 <template>
   <div :class="{'parentviiva': !viimeinen}">
     <div class="d-flex">
-      <div class="parentviiva viimeinen" v-if="!eiVanhempaa && viimeinen"></div>
-      <div class="liitosviiva" v-if="!eiVanhempaa"></div>
+      <div
+        v-if="!eiVanhempaa && viimeinen"
+        class="parentviiva viimeinen"
+      />
+      <div
+        v-if="!eiVanhempaa"
+        class="liitosviiva"
+      />
       <div class="w-100">
-        <div class="rakenne" :style="rakenneStyle">
-          <div class="d-flex w-100 justify-content-between" :class="{'kuvaukseton': !rakenneosa.kuvaus}" @click="toggleRakenne()">
+        <div
+          class="rakenne"
+          :style="rakenneStyle"
+        >
+          <div
+            class="d-flex w-100 justify-content-between"
+            :class="{'kuvaukseton': !rakenneosa.kuvaus}"
+            @click="toggleRakenne()"
+          >
             <div v-if="rakenneosa.osat && rakenneosa.osat.length > 0">
-              <EpMaterialIcon v-if="!naytaRakenne">expand_more</EpMaterialIcon>
-              <EpMaterialIcon v-else>expand_less</EpMaterialIcon>
+              <EpMaterialIcon v-if="!naytaRakenne">
+                expand_more
+              </EpMaterialIcon>
+              <EpMaterialIcon v-else>
+                expand_less
+              </EpMaterialIcon>
             </div>
-            <div class="w-75" :class="{'ml-3' : rakenneosa.osat && rakenneosa.osat.length > 0}">
-              <slot name="nimi" v-bind:rakenneosa="rakenneosa">
-                {{$kaanna(nimi)}}
+            <div
+              class="w-75"
+              :class="{'ml-3' : rakenneosa.osat && rakenneosa.osat.length > 0}"
+            >
+              <slot
+                name="nimi"
+                :rakenneosa="rakenneosa"
+              >
+                {{ $kaanna(nimi) }}
               </slot>
             </div>
-            <div class="w-25 text-right">{{laajuus}}</div>
+            <div class="w-25 text-right">
+              {{ laajuus }}
+            </div>
           </div>
 
-          <div class="text-center" v-if="rakenneosa.kuvaus || rakenneosa.paikallinenKuvaus && rakenneosa.paikallinenKuvaus.kuvaus" @click="toggleKuvaus()">
+          <div
+            v-if="rakenneosa.kuvaus || rakenneosa.paikallinenKuvaus && rakenneosa.paikallinenKuvaus.kuvaus"
+            class="text-center"
+            @click="toggleKuvaus()"
+          >
             <EpMaterialIcon>more_horiz</EpMaterialIcon>
           </div>
-          <div v-if="naytaKuvaus" class="kuvaus">
-            <div v-html="$kaanna(rakenneosa.kuvaus)"></div>
-            <div v-if="rakenneosa.paikallinenKuvaus && rakenneosa.paikallinenKuvaus.kuvaus" class="mt-3">
+          <div
+            v-if="naytaKuvaus"
+            class="kuvaus"
+          >
+            <div v-html="$kaanna(rakenneosa.kuvaus)" />
+            <div
+              v-if="rakenneosa.paikallinenKuvaus && rakenneosa.paikallinenKuvaus.kuvaus"
+              class="mt-3"
+            >
               <span class="paikallinen-kuvaus">{{ $t('koulutuksen-jarjestajan-tarkennus') }}</span>
-              <div v-html="$kaanna(rakenneosa.paikallinenKuvaus.kuvaus)"></div>
+              <div v-html="$kaanna(rakenneosa.paikallinenKuvaus.kuvaus)" />
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
-    <div class="rakenneosat" :class="{'viimeinen': viimeinen}" v-if="naytaRakenne">
+    <div
+      v-if="naytaRakenne"
+      class="rakenneosat"
+      :class="{'viimeinen': viimeinen}"
+    >
       <peruste-rakenne-osa
         v-for="(osa, index) in osat"
         :key="'osa'+index"
         ref="rakenneosa"
         :rakenneosa="osa"
         :class="{'rakennemargin': !eiVanhempaa}"
-        :viimeinen="index + 1 === rakenneosa.osat.length">
-
-        <template v-slot:nimi="{ rakenneosa }">
-          <slot name="nimi" v-bind:rakenneosa="rakenneosa"></slot>
+        :viimeinen="index + 1 === rakenneosa.osat.length"
+      >
+        <template #nimi="{ rakenneosa }">
+          <slot
+            name="nimi"
+            :rakenneosa="rakenneosa"
+          />
         </template>
       </peruste-rakenne-osa>
     </div>

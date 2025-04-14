@@ -1,138 +1,262 @@
 <template>
-<div class="content">
-  <div v-if="opintojakso">
-    <h2 class="otsikko mb-4">{{ $kaanna(opintojakso.nimi)}}</h2>
+  <div class="content">
+    <div v-if="opintojakso">
+      <h2 class="otsikko mb-4">
+        {{ $kaanna(opintojakso.nimi) }}
+      </h2>
 
-    <div class="teksti">
-      <div v-if="opintojakso.koodi" class="mb-4">
-        <h3 class="opintojakso-tieto-otsikko">{{ $t('koodi') }}</h3>
-        <p>{{ opintojakso.koodi }}</p>
+      <div class="teksti">
+        <div
+          v-if="opintojakso.koodi"
+          class="mb-4"
+        >
+          <h3 class="opintojakso-tieto-otsikko">
+            {{ $t('koodi') }}
+          </h3>
+          <p>{{ opintojakso.koodi }}</p>
+        </div>
+        <div
+          v-if="hasOppiaineet"
+          class="mb-4"
+        >
+          <h3 class="opintojakso-tieto-otsikko">
+            {{ $t('oppiaineet') }}
+          </h3>
+          <ul class="oppiaineet-list">
+            <li
+              v-for="(oppiaine, idx) in oppiaineetExtended"
+              :key="idx"
+            >
+              <div v-if="oppiaine.node">
+                <router-link
+                  v-if="oppiaine.node.location"
+                  :to="oppiaine.node.location"
+                >
+                  {{ $kaanna(oppiaine.node.label) }}
+                  <span
+                    v-if="oppiaine.koodiLabel"
+                    class="code-field"
+                  >({{ oppiaine.koodiLabel }})</span>
+                </router-link>
+              </div>
+              <div v-else>
+                {{ oppiaine.koodi }}
+                <span
+                  v-if="oppiaine.koodiLabel"
+                  class="code-field"
+                >({{ oppiaine.koodiLabel }})</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div
+          v-if="opintojakso.laajuus"
+          class="mb-5"
+        >
+          <h3 class="opintojakso-tieto-otsikko">
+            {{ $t('laajuus') }}
+          </h3>
+          <p>
+            {{ opintojakso.laajuus }} {{ $t('opintopiste') }}<template v-if="hasModulesWithLisalaajuus">
+              {{ laajuusInfo }}
+            </template>
+          </p>
+        </div>
       </div>
-      <div v-if="hasOppiaineet" class="mb-4">
-        <h3 class="opintojakso-tieto-otsikko">{{ $t('oppiaineet') }}</h3>
-        <ul class="oppiaineet-list">
-          <li v-for="(oppiaine, idx) in oppiaineetExtended" :key="idx">
-            <div v-if="oppiaine.node">
-              <router-link v-if="oppiaine.node.location" :to="oppiaine.node.location">
-                {{ $kaanna(oppiaine.node.label) }}
-                <span v-if="oppiaine.koodiLabel" class="code-field">({{ oppiaine.koodiLabel }})</span>
-              </router-link>
-            </div>
-            <div v-else>
-              {{ oppiaine.koodi }}
-              <span v-if="oppiaine.koodiLabel" class="code-field">({{ oppiaine.koodiLabel }})</span>
-            </div>
-          </li>
-        </ul>
+
+      <div class="osio">
+        <ep-collapse
+          tyyppi="opintojakson-tavoitteet"
+          :first="true"
+        >
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('tavoitteet') }}</h3>
+          </div>
+          <ep-opintojakson-tavoitteet
+            :value="opintojakso"
+            :moduulit-map="moduulitMap"
+            :show-empty-alert="false"
+          />
+        </ep-collapse>
       </div>
-      <div v-if="opintojakso.laajuus" class="mb-5">
-        <h3 class="opintojakso-tieto-otsikko">{{ $t('laajuus') }}</h3>
-        <p>{{ opintojakso.laajuus }} {{ $t('opintopiste') }}<template v-if="hasModulesWithLisalaajuus"> {{ laajuusInfo }}</template></p>
+
+      <div class="osio">
+        <ep-collapse>
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('keskeiset-sisallot') }}</h3>
+          </div>
+          <ep-opintojakson-keskeiset-sisallot
+            :value="opintojakso"
+            :moduulit-map="moduulitMap"
+            :show-empty-alert="false"
+          />
+        </ep-collapse>
       </div>
-    </div>
 
-    <div class="osio">
-      <ep-collapse tyyppi="opintojakson-tavoitteet" :first="true">
-        <div class="alueotsikko" slot="header"><h3>{{ $t('tavoitteet') }}</h3></div>
-        <ep-opintojakson-tavoitteet :value="opintojakso"
-                                    :moduulit-map="moduulitMap"
-                                    :show-empty-alert="false" />
-      </ep-collapse>
-    </div>
+      <div
+        v-if="hasLaajaAlainenOsaaminen"
+        class="osio"
+      >
+        <ep-collapse>
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('laaja-alaiset-sisallot') }}</h3>
+          </div>
+          <ep-opintojakson-laaja-alaiset-osaamiset
+            :value="opintojakso"
+            :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
+            :laaja-alaisten-koodit="laajaAlaistenKoodit"
+            :show-empty-alert="false"
+            :show-perustesisalto="false"
+          />
+        </ep-collapse>
+      </div>
 
-    <div class="osio">
-      <ep-collapse>
-        <div class="alueotsikko" slot="header"><h3>{{ $t('keskeiset-sisallot') }}</h3></div>
-        <ep-opintojakson-keskeiset-sisallot :value="opintojakso"
-                                            :moduulit-map="moduulitMap"
-                                            :show-empty-alert="false" />
-      </ep-collapse>
-    </div>
+      <div
+        v-if="hasArviointi"
+        class="opintojakson-arviointi"
+      >
+        <ep-collapse>
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('arviointi') }}</h3>
+          </div>
+          <ep-opintojakson-arviointi
+            :value="opintojakso"
+            :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
+            :show-empty-alert="false"
+            :show-perustesisalto="false"
+          />
+        </ep-collapse>
+      </div>
 
-    <div class="osio" v-if="hasLaajaAlainenOsaaminen">
-      <ep-collapse>
-        <div class="alueotsikko" slot="header"><h3>{{ $t('laaja-alaiset-sisallot') }}</h3></div>
-        <ep-opintojakson-laaja-alaiset-osaamiset :value="opintojakso"
-                                                 :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
-                                                 :laaja-alaisten-koodit="laajaAlaistenKoodit"
-                                                 :show-empty-alert="false"
-                                                 :showPerustesisalto="false" />
-      </ep-collapse>
-    </div>
-
-    <div class="opintojakson-arviointi" v-if="hasArviointi">
-      <ep-collapse>
-        <div class="alueotsikko" slot="header"><h3>{{ $t('arviointi') }}</h3></div>
-        <ep-opintojakson-arviointi :value="opintojakso"
-                                   :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
-                                   :show-empty-alert="false"
-                                   :showPerustesisalto="false" />
-      </ep-collapse>
-    </div>
-
-    <div class="opintojakson-opiskeluymparistoTyotavat" v-if="hasOpiskeluymparistoTyotavat">
-      <ep-collapse>
-        <div class="alueotsikko" slot="header"><h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3></div>
-        <ep-content-viewer
+      <div
+        v-if="hasOpiskeluymparistoTyotavat"
+        class="opintojakson-opiskeluymparistoTyotavat"
+      >
+        <ep-collapse>
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
+          </div>
+          <ep-content-viewer
             :value="$kaanna(opintojakso.opiskeluymparistoTyotavat)"
             :termit="termit"
-            :kuvat="kuvat" />
+            :kuvat="kuvat"
+          />
 
-        <div v-for="(paikallinenOpintojakso, index) in opintojakso.paikallisetOpintojaksot" :key="index+'paik-opiskeluymparistoTyotavat'" class="mt-4">
-          <div v-if="paikallinenOpintojakso.opiskeluymparistoTyotavat && paikallinenOpintojakso.opiskeluymparistoTyotavat">
-            <div class="moduuliotsikko"><h4>{{ $kaanna(paikallinenOpintojakso.nimi) }}</h4></div>
-             <ep-content-viewer
-              :value="$kaanna(paikallinenOpintojakso.opiskeluymparistoTyotavat)"
-              :termit="termit"
-              :kuvat="kuvat" />
+          <div
+            v-for="(paikallinenOpintojakso, index) in opintojakso.paikallisetOpintojaksot"
+            :key="index+'paik-opiskeluymparistoTyotavat'"
+            class="mt-4"
+          >
+            <div v-if="paikallinenOpintojakso.opiskeluymparistoTyotavat && paikallinenOpintojakso.opiskeluymparistoTyotavat">
+              <div class="moduuliotsikko">
+                <h4>{{ $kaanna(paikallinenOpintojakso.nimi) }}</h4>
+              </div>
+              <ep-content-viewer
+                :value="$kaanna(paikallinenOpintojakso.opiskeluymparistoTyotavat)"
+                :termit="termit"
+                :kuvat="kuvat"
+              />
+            </div>
           </div>
-        </div>
-      </ep-collapse>
-    </div>
+        </ep-collapse>
+      </div>
 
-    <div class="opintojakson-vapaa-kuvaus" v-if="hasKuvaus">
-      <ep-collapse>
-        <div class="alueotsikko" slot="header"><h3>{{ $t('opintojakson-vapaa-kuvaus') }}</h3></div>
-        <ep-content-viewer v-if="opintojakso.kuvaus"
-                            :value="$kaanna(opintojakso.kuvaus)"
-                            :termit="termit"
-                            :kuvat="kuvat" />
-      </ep-collapse>
-    </div>
+      <div
+        v-if="hasKuvaus"
+        class="opintojakson-vapaa-kuvaus"
+      >
+        <ep-collapse>
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('opintojakson-vapaa-kuvaus') }}</h3>
+          </div>
+          <ep-content-viewer
+            v-if="opintojakso.kuvaus"
+            :value="$kaanna(opintojakso.kuvaus)"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
+        </ep-collapse>
+      </div>
 
-    <div class="opintojakson-moduulit" v-if="opintojakso && opintojakso.moduulit">
-      <ep-collapse :border-bottom="false">
-        <div class="alueotsikko" slot="header"><h3>{{ $t('opintojakson-moduulit') }}</h3></div>
-        <div class="oppiaineet">
-          <div class="moduulit">
-            <div v-for="(moduuli, idx) in opintojakso.moduulit" :key="idx" class="mb-2">
-              <div v-if="moduulitMap[moduuli.koodiUri]">
-                <router-link v-if="moduulitMap[moduuli.koodiUri].location" :to="moduulitMap[moduuli.koodiUri].location">
-                  <ep-opintojakson-moduuli :moduuli="moduulitMap[moduuli.koodiUri]"/>
-                </router-link>
-                <ep-opintojakson-moduuli v-else :moduuli="moduulitMap[moduuli.koodiUri]"/>
+      <div
+        v-if="opintojakso && opintojakso.moduulit"
+        class="opintojakson-moduulit"
+      >
+        <ep-collapse :border-bottom="false">
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('opintojakson-moduulit') }}</h3>
+          </div>
+          <div class="oppiaineet">
+            <div class="moduulit">
+              <div
+                v-for="(moduuli, idx) in opintojakso.moduulit"
+                :key="idx"
+                class="mb-2"
+              >
+                <div v-if="moduulitMap[moduuli.koodiUri]">
+                  <router-link
+                    v-if="moduulitMap[moduuli.koodiUri].location"
+                    :to="moduulitMap[moduuli.koodiUri].location"
+                  >
+                    <ep-opintojakson-moduuli :moduuli="moduulitMap[moduuli.koodiUri]" />
+                  </router-link>
+                  <ep-opintojakson-moduuli
+                    v-else
+                    :moduuli="moduulitMap[moduuli.koodiUri]"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </ep-collapse>
-    </div>
+        </ep-collapse>
+      </div>
 
-    <div class="paikallisen-oppiaineen-opintojaksot" v-if="esitettavaPaikallistenOppiaineidenOpintojaksot.length > 0">
-      <ep-collapse :border-bottom="false">
-        <div class="alueotsikko" slot="header"><h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3></div>
-        <Ep-opintojakson-opintojaksot :value="opintojakso"
-                                      :opintojaksot="opintojaksot"
-                                      :oppiaineet-map="oppiaineetMap"
-                                      :oppiaineet-ja-oppimaarat="oppiaineetJaOppimaarat"
-                                      :oppiaineet="oppiaineetExtended" />
-      </ep-collapse>
-    </div>
+      <div
+        v-if="esitettavaPaikallistenOppiaineidenOpintojaksot.length > 0"
+        class="paikallisen-oppiaineen-opintojaksot"
+      >
+        <ep-collapse :border-bottom="false">
+          <div
+            slot="header"
+            class="alueotsikko"
+          >
+            <h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3>
+          </div>
+          <Ep-opintojakson-opintojaksot
+            :value="opintojakso"
+            :opintojaksot="opintojaksot"
+            :oppiaineet-map="oppiaineetMap"
+            :oppiaineet-ja-oppimaarat="oppiaineetJaOppimaarat"
+            :oppiaineet="oppiaineetExtended"
+          />
+        </ep-collapse>
+      </div>
 
-    <slot name="previous-next-navigation" />
+      <slot name="previous-next-navigation" />
+    </div>
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

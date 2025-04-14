@@ -1,13 +1,27 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 class="otsikko mb-4">{{ $kaanna(perusteenOsa.otsikko) }}</h2>
+      <h2 class="otsikko mb-4">
+        {{ $kaanna(perusteenOsa.otsikko) }}
+      </h2>
 
-      <ep-content-viewer :value="$kaanna(perusteenOsa.yleiskuvaus)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.yleiskuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
-      <div class="mt-5" v-for="(aihekokonaisuus, index) in perusteenOsa.aihekokonaisuudet" :key="'aihekokonaisuus'+index">
-        <h3>{{$kaanna(aihekokonaisuus.otsikko)}}</h3>
-        <ep-content-viewer :value="$kaanna(aihekokonaisuus.yleiskuvaus)" :termit="termit" :kuvat="kuvat" />
+      <div
+        v-for="(aihekokonaisuus, index) in perusteenOsa.aihekokonaisuudet"
+        :key="'aihekokonaisuus'+index"
+        class="mt-5"
+      >
+        <h3>{{ $kaanna(aihekokonaisuus.otsikko) }}</h3>
+        <ep-content-viewer
+          :value="$kaanna(aihekokonaisuus.yleiskuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </div>
 
       <slot name="previous-next-navigation" />

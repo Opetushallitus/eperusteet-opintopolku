@@ -1,27 +1,36 @@
 <template>
-<div class="sidebar">
-  <ep-spinner v-if="sidenavLoading" />
-  <div v-else>
-    <div class="search">
-      <ep-search
-        :value="query"
-        @input="setValue"
-        :placeholder="$t('hae-sisallysluettelosta')"
-        :srOnlyLabelText="$t('hae-suunnitelman-sisallysluettelosta')"/>
-    </div>
-    <div class="navigation-tree">
-      <EpHakutulosmaara :kokonaismaara="hakutuloksetKokonaismaara" piilotaNakyvaTulosmaara>
-        <span v-if="!!hakutuloksetKokonaismaara && hakutuloksetKokonaismaara === 1" class="sr-only">
-          <span class="sr-only">{{ $t('hakuasi-vastaava-tulos') }}: {{ $kaanna(hakutulokset[0].label)}}</span>
-        </span>
-      </EpHakutulosmaara>
-      <ep-sidenav-node v-if="treeData"
-                        :node="treeData"
-                        :current="current"
-                        :getChildren="getChildren" />
+  <div class="sidebar">
+    <ep-spinner v-if="sidenavLoading" />
+    <div v-else>
+      <div class="search">
+        <ep-search
+          :value="query"
+          :placeholder="$t('hae-sisallysluettelosta')"
+          :sr-only-label-text="$t('hae-suunnitelman-sisallysluettelosta')"
+          @input="setValue"
+        />
+      </div>
+      <div class="navigation-tree">
+        <EpHakutulosmaara
+          :kokonaismaara="hakutuloksetKokonaismaara"
+          piilota-nakyva-tulosmaara
+        >
+          <span
+            v-if="!!hakutuloksetKokonaismaara && hakutuloksetKokonaismaara === 1"
+            class="sr-only"
+          >
+            <span class="sr-only">{{ $t('hakuasi-vastaava-tulos') }}: {{ $kaanna(hakutulokset[0].label) }}</span>
+          </span>
+        </EpHakutulosmaara>
+        <ep-sidenav-node
+          v-if="treeData"
+          :node="treeData"
+          :current="current"
+          :get-children="getChildren"
+        />
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

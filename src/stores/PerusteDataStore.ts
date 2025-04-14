@@ -256,7 +256,7 @@ export class PerusteDataStore {
     if (this.dokumentti === null) {
       this.dokumentti = '';
     }
-  };
+  }
 
   private async getLiite(lang: string) {
     try {

@@ -2,20 +2,30 @@
   <div>
     <b-row>
       <b-col>
-        <h3 class="mb-4">{{ $t('kansalliset-perustaitojen-osaamismerkit') }}</h3>
+        <h3 class="mb-4">
+          {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
+        </h3>
       </b-col>
     </b-row>
     <b-row v-if="sisaltoviite.osaamismerkkiKappale.kuvaus">
       <b-col>
-        <h4 class="mb-4">{{ $t('osaamismerkkien-suorittaminen') }}</h4>
-        <ep-content-viewer :value="$kaanna(sisaltoviite.osaamismerkkiKappale.kuvaus)" :kuvat="kuvat" class="mb-5"/>
+        <h4 class="mb-4">
+          {{ $t('osaamismerkkien-suorittaminen') }}
+        </h4>
+        <ep-content-viewer
+          :value="$kaanna(sisaltoviite.osaamismerkkiKappale.kuvaus)"
+          :kuvat="kuvat"
+          class="mb-5"
+        />
       </b-col>
     </b-row>
     <b-row v-if="osaamisMerkkiKoodit.length > 0">
       <b-col>
-        <EpOsaamismerkit :osaamismerkit="osaamismerkit"
-                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
-                         hide-kuvaus></EpOsaamismerkit>
+        <EpOsaamismerkit
+          :osaamismerkit="osaamismerkit"
+          :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+          hide-kuvaus
+        />
       </b-col>
     </b-row>
   </div>

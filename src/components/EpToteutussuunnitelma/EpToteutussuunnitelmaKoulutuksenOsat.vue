@@ -1,28 +1,33 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
+    <portal-target name="toteutussuunnitelma-sisalto-header" />
 
-    <EpSpinner v-if="!koulutuksenosat"/>
+    <EpSpinner v-if="!koulutuksenosat" />
 
     <template v-else>
-      <div v-if="yhteisetKoulutuksenosat.length > 0" class="mb-4">
-        <h3>{{$t('yhteiset-opinnot')}}</h3>
+      <div
+        v-if="yhteisetKoulutuksenosat.length > 0"
+        class="mb-4"
+      >
+        <h3>{{ $t('yhteiset-opinnot') }}</h3>
 
         <EpKoulutuksenOsaKortti
           v-for="koulutuksenosaViite in yhteisetKoulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
+        />
       </div>
 
       <template v-if="valinnaisetKoulutuksenosat.length > 0">
-        <h3>{{$t('valinnaiset-opinnot')}}</h3>
+        <h3>{{ $t('valinnaiset-opinnot') }}</h3>
 
         <EpKoulutuksenOsaKortti
           v-for="koulutuksenosaViite in valinnaisetKoulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
+        />
       </template>
 
       <template v-if="yhteisetKoulutuksenosat.length === 0 && valinnaisetKoulutuksenosat.length === 0 && koulutuksenosat.length > 0">
@@ -30,10 +35,10 @@
           v-for="koulutuksenosaViite in koulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
+        />
       </template>
     </template>
-
   </div>
 </template>
 
@@ -70,7 +75,7 @@ export default class EpToteutussuunnitelmaKoulutuksenOsat extends Vue {
       let perusteenOsa;
       if (viite.perusteenOsaId) {
         perusteenOsa = this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: viite.perusteenOsaId });
-      };
+      }
 
       return {
         ...viite,

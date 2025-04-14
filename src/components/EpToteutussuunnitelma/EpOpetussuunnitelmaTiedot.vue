@@ -1,59 +1,129 @@
 <template>
   <div class="content">
-    <h2 class="mb-4" slot="header">{{ $t('opetussuunnitelman-tiedot') }}</h2>
+    <h2
+      slot="header"
+      class="mb-4"
+    >
+      {{ $t('opetussuunnitelman-tiedot') }}
+    </h2>
     <ep-spinner v-if="!opetussuunnitelma" />
 
     <template v-else>
-      <ep-form-content name="opetussuunnitelman-nimi" headerType="h3" headerClass="h6">
-        <span>{{$kaanna(opetussuunnitelma.nimi)}}</span>
+      <ep-form-content
+        name="opetussuunnitelman-nimi"
+        header-type="h3"
+        header-class="h6"
+      >
+        <span>{{ $kaanna(opetussuunnitelma.nimi) }}</span>
       </ep-form-content>
 
-      <ep-form-content v-if="opetussuunnitelma.kuvaus" name="opetussuunnitelma-tiivistelma" headerType="h3" headerClass="h6">
-        <ep-content-viewer :value="$kaanna(opetussuunnitelma.kuvaus)" :kuvat="kuvat" />
+      <ep-form-content
+        v-if="opetussuunnitelma.kuvaus"
+        name="opetussuunnitelma-tiivistelma"
+        header-type="h3"
+        header-class="h6"
+      >
+        <ep-content-viewer
+          :value="$kaanna(opetussuunnitelma.kuvaus)"
+          :kuvat="kuvat"
+        />
       </ep-form-content>
 
-      <ep-form-content name="hyvaksyja" headerType="h3" headerClass="h6">
+      <ep-form-content
+        name="hyvaksyja"
+        header-type="h3"
+        header-class="h6"
+      >
         <ep-field v-model="opetussuunnitelma.hyvaksyja" />
       </ep-form-content>
 
-      <ep-form-content v-if="opetussuunnitelma.voimaantulo" name="voimaantulo-pvm" headerType="h3" headerClass="h6">
+      <ep-form-content
+        v-if="opetussuunnitelma.voimaantulo"
+        name="voimaantulo-pvm"
+        header-type="h3"
+        header-class="h6"
+      >
         <span>{{ $sd(opetussuunnitelma.voimaantulo) }}</span>
       </ep-form-content>
 
-      <ep-form-content v-if="opetussuunnitelma.voimassaoloLoppuu" name="voimassaolo-paattymispvm" headerType="h3" headerClass="h6">
+      <ep-form-content
+        v-if="opetussuunnitelma.voimassaoloLoppuu"
+        name="voimassaolo-paattymispvm"
+        header-type="h3"
+        header-class="h6"
+      >
         <span>{{ $sd(opetussuunnitelma.voimassaoloLoppuu) }}</span>
       </ep-form-content>
 
-      <ep-form-content v-if="koulutustyyppiName" name="koulutustyyppi" headerType="h3" headerClass="h6">
+      <ep-form-content
+        v-if="koulutustyyppiName"
+        name="koulutustyyppi"
+        header-type="h3"
+        header-class="h6"
+      >
         <ep-field v-model="koulutustyyppiName" />
       </ep-form-content>
 
-      <ep-form-content name="organisaatio" headerType="h3" headerClass="h6">
-        <span>{{$kaanna(koulutustoimija.nimi)}}</span>
+      <ep-form-content
+        name="organisaatio"
+        header-type="h3"
+        header-class="h6"
+      >
+        <span>{{ $kaanna(koulutustoimija.nimi) }}</span>
       </ep-form-content>
 
-      <ep-form-content name="oppilaitoksen-tyyppi" headerType="h3" headerClass="h6" v-if="opetussuunnitelma.koulutustoimija.oppilaitostyyppi">
-        {{$kaanna(opetussuunnitelma.koulutustoimija.oppilaitostyyppi)}}
+      <ep-form-content
+        v-if="opetussuunnitelma.koulutustoimija.oppilaitostyyppi"
+        name="oppilaitoksen-tyyppi"
+        header-type="h3"
+        header-class="h6"
+      >
+        {{ $kaanna(opetussuunnitelma.koulutustoimija.oppilaitostyyppi) }}
       </ep-form-content>
 
-      <ep-form-content v-else-if="oppilaitosTyyppiNimi" name="oppilaitoksen-tyyppi" headerType="h3" headerClass="h6">
+      <ep-form-content
+        v-else-if="oppilaitosTyyppiNimi"
+        name="oppilaitoksen-tyyppi"
+        header-type="h3"
+        header-class="h6"
+      >
         <ep-field v-model="oppilaitosTyyppiNimi" />
       </ep-form-content>
 
-      <ep-form-content name="luotu" headerType="h3" headerClass="h6">
+      <ep-form-content
+        name="luotu"
+        header-type="h3"
+        header-class="h6"
+      >
         <span>{{ $sd(opetussuunnitelma.luotu) }}</span>
       </ep-form-content>
 
-      <ep-form-content name="muokattu" headerType="h3" headerClass="h6">
+      <ep-form-content
+        name="muokattu"
+        header-type="h3"
+        header-class="h6"
+      >
         <span>{{ $sd(opetussuunnitelma.muokattu) }}</span>
       </ep-form-content>
 
-      <ep-form-content v-if="opetussuunnitelma.jotpatyyppi" name="jotpa-koulutus" headerType="h3" headerClass="h6">
-        <span>{{ $t('koulutus-on-jotpa-rahoitteinen')}}</span>
+      <ep-form-content
+        v-if="opetussuunnitelma.jotpatyyppi"
+        name="jotpa-koulutus"
+        header-type="h3"
+        header-class="h6"
+      >
+        <span>{{ $t('koulutus-on-jotpa-rahoitteinen') }}</span>
       </ep-form-content>
 
-      <ep-form-content v-if="dokumenttiUrl" name="opetussuunnitelma-pdfna" headerType="h3" headerClass="h6">
-        <EpPdfLink :url="dokumenttiUrl">{{ $t('avaa-opetussuunnitelma-pdf') }}</EpPdfLink>
+      <ep-form-content
+        v-if="dokumenttiUrl"
+        name="opetussuunnitelma-pdfna"
+        header-type="h3"
+        header-class="h6"
+      >
+        <EpPdfLink :url="dokumenttiUrl">
+          {{ $t('avaa-opetussuunnitelma-pdf') }}
+        </EpPdfLink>
       </ep-form-content>
     </template>
   </div>

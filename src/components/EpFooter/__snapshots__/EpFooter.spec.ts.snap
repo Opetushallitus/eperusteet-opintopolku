@@ -13,13 +13,13 @@ exports[`EpFooter > Renders 1`] = `
         <div data-v-d45b1334="" class="d-flex">
           <epmaterialicon data-v-d45b1334="">chevron_right</epmaterialicon>
           <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste" rel="noopener noreferrer" target="_blank">
-              <!---->saavutettavuusseloste
+              <!----> saavutettavuusseloste
               <!----></a></div>
         </div>
         <div data-v-d45b1334="" class="d-flex">
           <epmaterialicon data-v-d45b1334="">chevron_right</epmaterialicon>
           <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank">
-              <!---->siirry-virkailijanakymaan<span data-v-5adf8627="" data-v-93539af8="" class="icon ml-1 material-icons" style="font-size: 18px;" alt="avautuu-uuteen-valilehteen"> launch </span></a></div>
+              <!----> siirry-virkailijanakymaan <span data-v-5adf8627="" data-v-93539af8="" class="icon ml-1 material-icons" style="font-size: 18px;" alt="avautuu-uuteen-valilehteen"> launch </span></a></div>
         </div>
       </div>
     </div>

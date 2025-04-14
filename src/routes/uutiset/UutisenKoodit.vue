@@ -1,31 +1,50 @@
 <template>
   <div v-if="kooditPerusteilla && kooditPerusteilla.length > 0">
     <div class="d-flex">
-
       <slot name="header" />
 
       <template v-if="perusteelliset.length > 0">
-        <a href="javascript:;" :id="popovertarget" class="peruste-popover ml-3">
-          {{$t('nayta-perusteet')}}
+        <a
+          :id="popovertarget"
+          href="javascript:;"
+          class="peruste-popover ml-3"
+        >
+          {{ $t('nayta-perusteet') }}
         </a>
-        <b-popover :target="popovertarget" :placement="'right'" triggers="hover">
+        <b-popover
+          :target="popovertarget"
+          :placement="'right'"
+          triggers="hover"
+        >
           <div class="p-1">
             <slot name="popover-header" />
-            <div v-for="koodi in perusteelliset" :key="koodi.uri" class="mt-4 koodi">
-              <h4>{{$kaanna(koodi.nimi)}}</h4>
-              <div v-for="peruste in koodi.perusteet" :key="koodi.uri+peruste.id" class="peruste p-2">
-                <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id, koulutustyyppi: 'ammatillinen' } }">{{$kaanna(peruste.nimi)}}</router-link>
+            <div
+              v-for="koodi in perusteelliset"
+              :key="koodi.uri"
+              class="mt-4 koodi"
+            >
+              <h4>{{ $kaanna(koodi.nimi) }}</h4>
+              <div
+                v-for="peruste in koodi.perusteet"
+                :key="koodi.uri+peruste.id"
+                class="peruste p-2"
+              >
+                <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id, koulutustyyppi: 'ammatillinen' } }">
+                  {{ $kaanna(peruste.nimi) }}
+                </router-link>
               </div>
             </div>
           </div>
         </b-popover>
       </template>
     </div>
-    <span v-for="(koodi,index) in kooditPerusteilla" :key="'koodi'+koodi.uri">
+    <span
+      v-for="(koodi,index) in kooditPerusteilla"
+      :key="'koodi'+koodi.uri"
+    >
       <span v-if="index > 0">, </span>
-      <span>{{$kaanna(koodi.nimi)}}</span>
+      <span>{{ $kaanna(koodi.nimi) }}</span>
     </span>
-
   </div>
 </template>
 

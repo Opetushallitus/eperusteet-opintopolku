@@ -1,24 +1,47 @@
 <template>
   <div>
-    <ep-form-content class="col-md-12" v-if="tutkinnonosa.koodiArvo" name="koodi">
+    <ep-form-content
+      v-if="tutkinnonosa.koodiArvo"
+      class="col-md-12"
+      name="koodi"
+    >
       <span v-html="tutkinnonosa.koodiArvo" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" v-if="tutkinnonosa.tavoitteet" name="tavoitteet">
+    <ep-form-content
+      v-if="tutkinnonosa.tavoitteet"
+      class="col-md-12 mb-5"
+      name="tavoitteet"
+    >
       <span v-html="$kaanna(tutkinnonosa.tavoitteet)" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" v-if="!tutkinnonosa.ammattitaitovaatimukset2019 && tutkinnonosa.ammattitaitovaatimukset" name="ammattitaitovaatimukset">
+    <ep-form-content
+      v-if="!tutkinnonosa.ammattitaitovaatimukset2019 && tutkinnonosa.ammattitaitovaatimukset"
+      class="col-md-12 mb-5"
+      name="ammattitaitovaatimukset"
+    >
       <span v-html="$kaanna(tutkinnonosa.ammattitaitovaatimukset)" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" :showHeader="false" v-if="tutkinnonosa.kuvaus">
+    <ep-form-content
+      v-if="tutkinnonosa.kuvaus"
+      class="col-md-12 mb-5"
+      :show-header="false"
+    >
       <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" v-if="tutkinnonosa.ammattitaitovaatimukset2019" name="ammattitaitovaatimukset">
-      <EpAmmattitaitovaatimukset v-model="tutkinnonosa.ammattitaitovaatimukset2019" :is-editing="false">
-        <template v-slot:koodi="{koodi}">
+    <ep-form-content
+      v-if="tutkinnonosa.ammattitaitovaatimukset2019"
+      class="col-md-12 mb-5"
+      name="ammattitaitovaatimukset"
+    >
+      <EpAmmattitaitovaatimukset
+        v-model="tutkinnonosa.ammattitaitovaatimukset2019"
+        :is-editing="false"
+      >
+        <template #koodi="{koodi}">
           <span>{{ $kaanna(koodi.nimi) }}</span>
         </template>
       </EpAmmattitaitovaatimukset>
@@ -27,11 +50,16 @@
     <template v-if="hasArviointi">
       <template v-if="!tutkinnonosa.geneerinenArviointiasteikko">
         <ep-ammatillinen-arvioinnin-kohdealueet
-                v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.arvioinninKohdealueet && tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0"
-                :arviointiasteikot="arviointiasteikot"
-                :arvioinninKohdealueet="tutkinnonosa.arviointi.arvioinninKohdealueet"/>
+          v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.arvioinninKohdealueet && tutkinnonosa.arviointi.arvioinninKohdealueet.length > 0"
+          :arviointiasteikot="arviointiasteikot"
+          :arvioinnin-kohdealueet="tutkinnonosa.arviointi.arvioinninKohdealueet"
+        />
 
-        <ep-form-content class="col-md-12" v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot" name="arviointi">
+        <ep-form-content
+          v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot"
+          class="col-md-12"
+          name="arviointi"
+        >
           <span v-html="$kaanna(tutkinnonosa.arviointi.lisatiedot)" />
         </ep-form-content>
       </template>
@@ -40,39 +68,59 @@
         <GeneerinenArviointiTaulukko :arviointi="tutkinnonosa.geneerinenArviointiasteikko" />
       </div>
 
-      <hr class="mt-5 mb-5"/>
+      <hr class="mt-5 mb-5">
     </template>
 
-    <ep-form-content class="col-md-12" v-if="tutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
+    <ep-form-content
+      v-if="tutkinnonosa.ammattitaidonOsoittamistavat"
+      class="col-md-12"
+      name="ammattitaidon-osoittamistavat"
+    >
       <span v-html="$kaanna(tutkinnonosa.ammattitaidonOsoittamistavat)" />
 
-      <hr class="mt-5 mb-5" v-if="tutkinnonosa.vapaatTekstit && tutkinnonosa.vapaatTekstit.length > 0"/>
+      <hr
+        v-if="tutkinnonosa.vapaatTekstit && tutkinnonosa.vapaatTekstit.length > 0"
+        class="mt-5 mb-5"
+      >
     </ep-form-content>
 
-    <div v-for="(vapaaTeksti, index) in tutkinnonosa.vapaatTekstit" :key="'vapaateksti'+index">
-      <ep-form-content class="col-md-12" :name="$kaanna(vapaaTeksti.nimi)">
+    <div
+      v-for="(vapaaTeksti, index) in tutkinnonosa.vapaatTekstit"
+      :key="'vapaateksti'+index"
+    >
+      <ep-form-content
+        class="col-md-12"
+        :name="$kaanna(vapaaTeksti.nimi)"
+      >
         <span v-html="$kaanna(vapaaTeksti.teksti)" />
       </ep-form-content>
 
-      <hr class="mt-5 mb-5"/>
+      <hr class="mt-5 mb-5">
     </div>
 
     <div v-if="tutkinnonosa.valmaTelmaSisalto">
       <template v-if="tutkinnonosa.valmaTelmaSisalto.osaamistavoite && tutkinnonosa.valmaTelmaSisalto.osaamistavoite.length > 0">
-        <div v-for="(osaamistavoite, index) in tutkinnonosa.valmaTelmaSisalto.osaamistavoite" :key="'osaamistavoite'+index" class="mb-5">
-          <h3>{{$kaanna(osaamistavoite.nimi)}}</h3>
-          <h4 class="mt-3">{{$kaanna(osaamistavoite.kohde)}}</h4>
+        <div
+          v-for="(osaamistavoite, index) in tutkinnonosa.valmaTelmaSisalto.osaamistavoite"
+          :key="'osaamistavoite'+index"
+          class="mb-5"
+        >
+          <h3>{{ $kaanna(osaamistavoite.nimi) }}</h3>
+          <h4 class="mt-3">
+            {{ $kaanna(osaamistavoite.kohde) }}
+          </h4>
           <ul>
-            <li v-for="(tavoite, tindex) in osaamistavoite.tavoitteet" :key="'osaamistavoitetavoite'+tindex">
-              {{$kaanna(tavoite)}}
+            <li
+              v-for="(tavoite, tindex) in osaamistavoite.tavoitteet"
+              :key="'osaamistavoitetavoite'+tindex"
+            >
+              {{ $kaanna(tavoite) }}
             </li>
           </ul>
         </div>
-
       </template>
 
-      <EpValmaTelmaSisalto :valmaTelmaSisalto="tutkinnonosa.valmaTelmaSisalto" />
-
+      <EpValmaTelmaSisalto :valma-telma-sisalto="tutkinnonosa.valmaTelmaSisalto" />
     </div>
   </div>
 </template>

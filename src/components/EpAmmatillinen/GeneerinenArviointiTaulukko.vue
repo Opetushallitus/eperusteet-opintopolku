@@ -3,23 +3,44 @@
     <slot name="header">
       <label>{{ $t('arviointi') }}</label>
     </slot>
-    <div class="mb-3">{{$kaanna(arviointi.kohde)}}</div>
-    <div v-if="kriteeriton">{{$kaanna(osaamistasonOtsikko)}}</div>
-    <b-container fluid="lg" class="osaamistasot mt-3" v-else>
-      <b-row v-for="(osaamistasonKriteeri,index) in osaamistasonKriteeritSorted" :key="'osaamistasokriteeri'+index">
-        <b-col class="pt-3" md="12" lg="4">
-          <span>{{$kaanna(osaamistasonKriteeri.osaamistaso.otsikko)}}</span>
+    <div class="mb-3">
+      {{ $kaanna(arviointi.kohde) }}
+    </div>
+    <div v-if="kriteeriton">
+      {{ $kaanna(osaamistasonOtsikko) }}
+    </div>
+    <b-container
+      v-else
+      fluid="lg"
+      class="osaamistasot mt-3"
+    >
+      <b-row
+        v-for="(osaamistasonKriteeri,index) in osaamistasonKriteeritSorted"
+        :key="'osaamistasokriteeri'+index"
+      >
+        <b-col
+          class="pt-3"
+          md="12"
+          lg="4"
+        >
+          <span>{{ $kaanna(osaamistasonKriteeri.osaamistaso.otsikko) }}</span>
         </b-col>
-        <b-col class="pt-3" md="12" lg="8">
+        <b-col
+          class="pt-3"
+          md="12"
+          lg="8"
+        >
           <ul class="pl-3">
-            <li v-for="(kriteeri, index) in osaamistasonKriteeri.kriteerit" :key="'kriteeri'+index">
-              {{$kaanna(kriteeri)}}
+            <li
+              v-for="(kriteeri, index) in osaamistasonKriteeri.kriteerit"
+              :key="'kriteeri'+index"
+            >
+              {{ $kaanna(kriteeri) }}
             </li>
           </ul>
         </b-col>
       </b-row>
     </b-container>
-
   </ep-form-content>
 </template>
 

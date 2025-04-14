@@ -1,19 +1,34 @@
 <template>
   <div class="haku">
-    <EpButton link @click="$emit('clear')" class="mb-2" noPadding>
-      <span class="font-weight-bold">&#60;</span> {{$t('takaisin-edelliseen-nakymaan')}}
+    <EpButton
+      link
+      class="mb-2"
+      no-padding
+      @click="$emit('clear')"
+    >
+      <span class="font-weight-bold">&#60;</span> {{ $t('takaisin-edelliseen-nakymaan') }}
     </EpButton>
 
-    <EpHakutulosmaara class="tulos font-weight-600 mt-2" :kokonaismaara="kokonaismaara"/>
+    <EpHakutulosmaara
+      class="tulos font-weight-600 mt-2"
+      :kokonaismaara="kokonaismaara"
+    />
 
     <ep-spinner v-if="!tulokset" />
-    <div v-else-if="tulokset.length === 0" class="alert alert-info">
+    <div
+      v-else-if="tulokset.length === 0"
+      class="alert alert-info"
+    >
       {{ $t('ei-hakutuloksia') }}
     </div>
 
     <template v-else>
       <div class="tulokset mt-4">
-        <div class="tulos" v-for="(tulos,index) in tuloksetSorted" :key="'tulos' + index">
+        <div
+          v-for="(tulos,index) in tuloksetSorted"
+          :key="'tulos' + index"
+          class="tulos"
+        >
           <div class="osantyyppi">
             {{ $t(tulos.target.perusteenOsa.osanTyyppi) }}
           </div>
@@ -21,21 +36,32 @@
             <div v-if="!tulos.location || !tulos.location.name">
               {{ $kaanna(tulos.target.perusteenOsa.nimi) }}
             </div>
-            <slot v-else name="nimi" :tulos="tulos">
-              <router-link :to="tulos.location" @click.native="clear">
+            <slot
+              v-else
+              name="nimi"
+              :tulos="tulos"
+            >
+              <router-link
+                :to="tulos.location"
+                @click.native="clear"
+              >
                 {{ tulos.nimi }}
               </router-link>
             </slot>
           </div>
-          <div class="osuma" v-if="tulos.type === 'sisalto'" v-html="tulos.result[0]"></div>
+          <div
+            v-if="tulos.type === 'sisalto'"
+            class="osuma"
+            v-html="tulos.result[0]"
+          />
         </div>
 
         <EpBPagination
           v-model="sivu"
           :items-per-page="sivukoko"
           :total="tulokset.length"
-          aria-controls="sisaltohakutulos-lista">
-      </EpBPagination>
+          aria-controls="sisaltohakutulos-lista"
+        />
       </div>
     </template>
   </div>

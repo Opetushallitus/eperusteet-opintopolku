@@ -1,43 +1,67 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2 class="otsikko mb-4">
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
 
-      <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
-      <b-form-group :label="$t('suodata-ikaryhman-mukaan')" class="mt-5 d-flex">
+      <b-form-group
+        :label="$t('suodata-ikaryhman-mukaan')"
+        class="mt-5 d-flex"
+      >
         <b-form-checkbox
-            v-for="taso in tasot"
-            :key="taso"
-            :value="taso"
-            v-model="selectedTasot"
-            :options="tasot"
-            button
-            size="sm"
-            button-variant="primary"
-            class="mr-2 mb-2 taso-chk">
-            <div class="d-flex align-items-center">
-              <EpMaterialIcon v-if="selectedTaso(taso)" class="mr-2" icon-shape="outlined" size="1rem">done</EpMaterialIcon>
-              <div>{{$t(taso)}}</div>
-            </div>
+          v-for="taso in tasot"
+          :key="taso"
+          v-model="selectedTasot"
+          :value="taso"
+          :options="tasot"
+          button
+          size="sm"
+          button-variant="primary"
+          class="mr-2 mb-2 taso-chk"
+        >
+          <div class="d-flex align-items-center">
+            <EpMaterialIcon
+              v-if="selectedTaso(taso)"
+              class="mr-2"
+              icon-shape="outlined"
+              size="1rem"
+            >
+              done
+            </EpMaterialIcon>
+            <div>{{ $t(taso) }}</div>
+          </div>
         </b-form-checkbox>
       </b-form-group>
 
-      <EpCollapse :borderBottom="false" v-for="osaAlue in osaAlueet" :key="'osaalue' + osaAlue.id">
-        <h3 slot="header" class="collapse-header">{{ $kaanna(osaAlue.nimi) }}</h3>
+      <EpCollapse
+        v-for="osaAlue in osaAlueet"
+        :key="'osaalue' + osaAlue.id"
+        :border-bottom="false"
+      >
+        <h3
+          slot="header"
+          class="collapse-header"
+        >
+          {{ $kaanna(osaAlue.nimi) }}
+        </h3>
 
         <EpOsaAlue :value="osaAlue">
           <div slot="nimi" />
-          <hr slot="tasokuvaus-postfix"/>
+          <hr slot="tasokuvaus-postfix">
         </EpOsaAlue>
-
       </EpCollapse>
 
       <slot name="previous-next-navigation" />
     </div>
     <ep-spinner v-else />
   </div>
-
 </template>
 
 <script lang="ts">

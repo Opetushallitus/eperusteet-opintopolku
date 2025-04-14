@@ -1,10 +1,12 @@
 <template>
   <div>
-    <span v-if="numerointi">{{numerointi}} </span>
+    <span v-if="numerointi">{{ numerointi }} </span>
     {{ $kaannaOlioTaiTeksti(node.label) }}
-    <span v-if="koodi" class="code-field">({{ koodi }})</span>
+    <span
+      v-if="koodi"
+      class="code-field"
+    >({{ koodi }})</span>
   </div>
-
 </template>
 
 <script lang="ts">

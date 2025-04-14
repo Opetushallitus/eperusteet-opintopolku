@@ -1,5 +1,8 @@
 <template>
-  <ep-header tyyppi="maarayskokoelma" :murupolku="murupolku">
+  <ep-header
+    tyyppi="maarayskokoelma"
+    :murupolku="murupolku"
+  >
     <template slot="header">
       {{ $t('opetushallituksen-maaraykset') }}
     </template>
@@ -9,74 +12,123 @@
 
     <div class="d-flex flex-column flex-lg-row">
       <div class="w-100 mr-2 mb-3">
-        <EpSearch v-model="query.nimi" :placeholder="$t('')">
+        <EpSearch
+          v-model="query.nimi"
+          :placeholder="$t('')"
+        >
           <template #label>
-            <span class="font-weight-600">{{$t('hae-maarayksia')}}</span>
+            <span class="font-weight-600">{{ $t('hae-maarayksia') }}</span>
           </template>
         </EpSearch>
       </div>
 
       <div class="w-100 mr-2 mb-3">
-        <EpMultiSelect v-model="query.tyyppi"
-                :enable-empty-option="true"
-                :placeholder="$t('kaikki')"
-                :is-editing="true"
-                :options="tyyppiVaihtoehdot"
-                :search-identity="searchIdentity"
-                :closeOnSelect="false">
-        <template #label>
-          <span class="font-weight-600">{{$t('tyyppi')}}</span>
-        </template>
+        <EpMultiSelect
+          v-model="query.tyyppi"
+          :enable-empty-option="true"
+          :placeholder="$t('kaikki')"
+          :is-editing="true"
+          :options="tyyppiVaihtoehdot"
+          :search-identity="searchIdentity"
+          :close-on-select="false"
+        >
+          <template #label>
+            <span class="font-weight-600">{{ $t('tyyppi') }}</span>
+          </template>
 
-          <template slot="singleLabel" slot-scope="{ option }">
+          <template
+            slot="singleLabel"
+            slot-scope="{ option }"
+          >
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
-          <template slot="option" slot-scope="{ option }">
+          <template
+            slot="option"
+            slot-scope="{ option }"
+          >
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
         </EpMultiSelect>
       </div>
 
       <div class="w-100 mb-3">
-        <label class="font-weight-600">{{$t('koulutus-tai-tutkinto')}}</label>
+        <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
         <EpMaarayskokoelmaKoulutustyyppiSelect
-          class="maarayskokoelma-koulutustyyppi-select"
           v-if="koulutustyyppiVaihtoehdot"
-          :isEditing="true"
           v-model="query.koulutustyypit"
-          :koulutustyypit="koulutustyyppiVaihtoehdot" />
+          class="maarayskokoelma-koulutustyyppi-select"
+          :is-editing="true"
+          :koulutustyypit="koulutustyyppiVaihtoehdot"
+        />
       </div>
     </div>
 
-    <EpVoimassaoloFilter v-model="query" class="mb-0"></EpVoimassaoloFilter>
+    <EpVoimassaoloFilter
+      v-model="query"
+      class="mb-0"
+    />
 
-    <EpHakutulosmaara :kokonaismaara="maarayksetCount" piilotaNakyvaTulosmaara/>
+    <EpHakutulosmaara
+      :kokonaismaara="maarayksetCount"
+      piilota-nakyva-tulosmaara
+    />
 
     <ep-spinner v-if="!maaraykset" />
 
-    <div class="mt-4" v-else-if="maaraykset.length === 0">
-      {{$t('ei-maarayksia')}}
+    <div
+      v-else-if="maaraykset.length === 0"
+      class="mt-4"
+    >
+      {{ $t('ei-maarayksia') }}
     </div>
 
-    <div class="maaraykset" v-else>
-      <div class="jarjestys d-flex justify-content-end align-items-center mb-2" >
-        <a @click="vaihdaJarjestys()" class="clickable" href="javascript:void(0)">
-          <span v-if="query.jarjestys === 'DESC'">{{$t('uusimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_down</EpMaterialIcon></span>
-          <span v-if="query.jarjestys === 'ASC'">{{$t('vanhimmat-ensin')}} <EpMaterialIcon iconShape="outlined">arrow_drop_up</EpMaterialIcon></span>
+    <div
+      v-else
+      class="maaraykset"
+    >
+      <div class="jarjestys d-flex justify-content-end align-items-center mb-2">
+        <a
+          class="clickable"
+          href="javascript:void(0)"
+          @click="vaihdaJarjestys()"
+        >
+          <span v-if="query.jarjestys === 'DESC'">{{ $t('uusimmat-ensin') }} <EpMaterialIcon icon-shape="outlined">arrow_drop_down</EpMaterialIcon></span>
+          <span v-if="query.jarjestys === 'ASC'">{{ $t('vanhimmat-ensin') }} <EpMaterialIcon icon-shape="outlined">arrow_drop_up</EpMaterialIcon></span>
         </a>
       </div>
 
-      <router-link class="maarays d-flex shadow-tile" v-for="maarays in maaraykset" :key="maarays.id" :to="{name: 'maarays', params: {maaraysId: maarays.id}}">
-        <img :src="kuva" :alt="$t('maarays')" class="kuva"/>
+      <router-link
+        v-for="maarays in maaraykset"
+        :key="maarays.id"
+        class="maarays d-flex shadow-tile"
+        :to="{name: 'maarays', params: {maaraysId: maarays.id}}"
+      >
+        <img
+          :src="kuva"
+          :alt="$t('maarays')"
+          class="kuva"
+        >
         <div class="tiedot">
-          <div class="nimi font-weight-bold mb-2">{{ $kaanna(maarays.nimi) }}</div>
+          <div class="nimi font-weight-bold mb-2">
+            {{ $kaanna(maarays.nimi) }}
+          </div>
           <div class="alatiedot d-flex">
-            <div class="mr-2">{{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa)}}</div>
-            <EpVoimassaolo :voimassaolo="maarays"></EpVoimassaolo>
-            <div class="mx-2 valiviiva" v-if="maarays.asiasanat[kieli].asiasana.length > 0">|</div>
+            <div class="mr-2">
+              {{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}
+            </div>
+            <EpVoimassaolo :voimassaolo="maarays" />
+            <div
+              v-if="maarays.asiasanat[kieli].asiasana.length > 0"
+              class="mx-2 valiviiva"
+            >
+              |
+            </div>
             <div v-if="maarays.asiasanat[kieli].asiasana.length > 0">
-              {{ $t('asiasana')}}:
-              <span v-for="(asiasana, index) in maarays.asiasanat[kieli].asiasana" :key="'asiasana' + index">
+              {{ $t('asiasana') }}:
+              <span
+                v-for="(asiasana, index) in maarays.asiasanat[kieli].asiasana"
+                :key="'asiasana' + index"
+              >
                 {{ asiasana }}<span v-if="index < maarays.asiasanat[kieli].asiasana.length -1">, </span>
               </span>
             </div>
@@ -89,10 +141,9 @@
         v-model="sivu"
         :items-per-page="perPage"
         :total="maarayksetCount"
-        aria-controls="maarayskokoelma-lista">
-      </EpBPagination>
+        aria-controls="maarayskokoelma-lista"
+      />
     </div>
-
   </ep-header>
 </template>
 

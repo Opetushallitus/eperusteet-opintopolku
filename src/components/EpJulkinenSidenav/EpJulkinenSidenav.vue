@@ -1,41 +1,73 @@
 <template>
-  <div id="navigation-bar" class="navbar" v-sticky sticky-z-index="600">
+  <div
+    id="navigation-bar"
+    v-sticky
+    class="navbar"
+    sticky-z-index="600"
+  >
     <div>
-      <b-button v-b-toggle.sidebar-no-header variant="transparent">
+      <b-button
+        v-b-toggle.sidebar-no-header
+        variant="transparent"
+      >
         <div class="menu">
-          <EpMaterialIcon icon-shape="outlined" size="30px">{{ icon }}</EpMaterialIcon>
-          <span class="text">{{ $t('valikko')}}</span>
+          <EpMaterialIcon
+            icon-shape="outlined"
+            size="30px"
+          >
+            {{ icon }}
+          </EpMaterialIcon>
+          <span class="text">{{ $t('valikko') }}</span>
         </div>
       </b-button>
       <router-link :to="{ name: 'root'}">
-        <img :src="navImage" :alt="$t('eperusteet')" class="ml-3" />
+        <img
+          :src="navImage"
+          :alt="$t('eperusteet')"
+          class="ml-3"
+        >
       </router-link>
     </div>
     <div class="d-inline-flex ml-auto">
       <b-navbar-nav :aria-label="$t('kielivalinta')">
-        <b-nav-item-dropdown class="kielivalikko" right>
+        <b-nav-item-dropdown
+          class="kielivalikko"
+          right
+        >
           <template slot="button-content">
             <EpMaterialIcon>language</EpMaterialIcon>
             <span class="ml-2 dropdown-text mr-2">{{ $t(sisaltoKieli) }}</span>
           </template>
-          <b-dropdown-item v-for="(kieli, idx) in kielet"
-                           :key=idx
-                           @click="valitseKieli(kieli)">{{ $t(kieli) }}</b-dropdown-item>
+          <b-dropdown-item
+            v-for="(kieli, idx) in kielet"
+            :key="idx"
+            @click="valitseKieli(kieli)"
+          >
+            {{ $t(kieli) }}
+          </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </div>
-    <b-sidebar id="sidebar-no-header"
-               v-model="isActive"
-               aria-labelledby="sidebar-no-header-title"
-               no-header
-               bg-variant="white"
-               no-close-on-route-change>
+    <b-sidebar
+      id="sidebar-no-header"
+      v-model="isActive"
+      aria-labelledby="sidebar-no-header-title"
+      no-header
+      bg-variant="white"
+      no-close-on-route-change
+    >
       <template>
         <div class="pl-3 pr-3 pb-3">
           <div class="mt-3 mb-4">
-            <router-link :to="{ name: 'root'}" @click.native="closeSidebar()">
+            <router-link
+              :to="{ name: 'root'}"
+              @click.native="closeSidebar()"
+            >
               <span class="navi-home">
-                <EpMaterialIcon icon-shape="outlined" size="22px">home</EpMaterialIcon>
+                <EpMaterialIcon
+                  icon-shape="outlined"
+                  size="22px"
+                >home</EpMaterialIcon>
                 {{ $t('etusivu') }}
               </span>
             </router-link>
@@ -45,13 +77,21 @@
           </div>
           <nav class="mb-5">
             <EpSpinner v-if="!koulutustyyppiItems" />
-            <b-nav vertical v-for="(item, idx1) in koulutustyyppiItems" :key="idx1">
-              <b-nav-item :to="item.route"
-                          @click="closeSidebar()"
-                          link-classes="navi nav-btn"
-                          active
-                          active-class="active-item">
-                <div class="ml-3">{{ $t(item.name) }}</div>
+            <b-nav
+              v-for="(item, idx1) in koulutustyyppiItems"
+              :key="idx1"
+              vertical
+            >
+              <b-nav-item
+                :to="item.route"
+                link-classes="navi nav-btn"
+                active
+                active-class="active-item"
+                @click="closeSidebar()"
+              >
+                <div class="ml-3">
+                  {{ $t(item.name) }}
+                </div>
               </b-nav-item>
             </b-nav>
           </nav>
@@ -60,13 +100,21 @@
           </div>
           <nav class="mb-5">
             <EpSpinner v-if="!otherItems" />
-            <b-nav vertical v-for="(item, idx2) in otherItems" :key="idx2">
-              <b-nav-item :to="item.route"
-                          @click="closeSidebar()"
-                          link-classes="navi nav-btn"
-                          active
-                          active-class="active-item">
-                <div class="ml-3">{{ $t(item.name) }}</div>
+            <b-nav
+              v-for="(item, idx2) in otherItems"
+              :key="idx2"
+              vertical
+            >
+              <b-nav-item
+                :to="item.route"
+                link-classes="navi nav-btn"
+                active
+                active-class="active-item"
+                @click="closeSidebar()"
+              >
+                <div class="ml-3">
+                  {{ $t(item.name) }}
+                </div>
               </b-nav-item>
             </b-nav>
           </nav>
@@ -74,20 +122,34 @@
             <span>{{ $t('tietoa-palvelusta') }}</span>
           </div>
           <nav>
-            <b-nav vertical v-for="(item, idx3) in muutLinkit" :key="idx3">
-              <b-nav-item v-if="item.link" :href="$kaanna(item.link)"
-                          link-classes="navi nav-btn"
-                          active
-                          active-class="active-item"
-                          target="_blank">
-                <div class="ml-3">{{ $t(item.name) }}</div>
+            <b-nav
+              v-for="(item, idx3) in muutLinkit"
+              :key="idx3"
+              vertical
+            >
+              <b-nav-item
+                v-if="item.link"
+                :href="$kaanna(item.link)"
+                link-classes="navi nav-btn"
+                active
+                active-class="active-item"
+                target="_blank"
+              >
+                <div class="ml-3">
+                  {{ $t(item.name) }}
+                </div>
               </b-nav-item>
-              <b-nav-item v-else :to="item.route"
-                          link-classes="navi nav-btn"
-                          active
-                          active-class="active-item"
-                          @click="closeSidebar()">
-                <div class="ml-3">{{ $t(item.name) }}</div>
+              <b-nav-item
+                v-else
+                :to="item.route"
+                link-classes="navi nav-btn"
+                active
+                active-class="active-item"
+                @click="closeSidebar()"
+              >
+                <div class="ml-3">
+                  {{ $t(item.name) }}
+                </div>
               </b-nav-item>
             </b-nav>
           </nav>

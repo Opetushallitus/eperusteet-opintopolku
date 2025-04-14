@@ -1,8 +1,15 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
-    <ep-content-viewer :value="$kaanna(perusteenTeksti)" :kuvat="kuvat" v-if="sisaltoviite.naytaPerusteenTeksti && perusteenTeksti"/>
-    <ep-content-viewer :value="$kaanna(sisaltoviite.tuvaLaajaAlainenOsaaminen.teksti)" :kuvat="kuvat"/>
+    <portal-target name="toteutussuunnitelma-sisalto-header" />
+    <ep-content-viewer
+      v-if="sisaltoviite.naytaPerusteenTeksti && perusteenTeksti"
+      :value="$kaanna(perusteenTeksti)"
+      :kuvat="kuvat"
+    />
+    <ep-content-viewer
+      :value="$kaanna(sisaltoviite.tuvaLaajaAlainenOsaaminen.teksti)"
+      :kuvat="kuvat"
+    />
   </div>
 </template>
 

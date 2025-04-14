@@ -1,21 +1,29 @@
 <template>
   <div class="content">
-
-    <ep-spinner v-if="!tutkinnonosat"></ep-spinner>
+    <ep-spinner v-if="!tutkinnonosat" />
 
     <div v-else>
-      <h2>{{$t('tutkinnonosat')}}</h2>
-      <EpSearch class="mt-3 mb-3" v-model="queryNimi" :placeholder="$t('etsi')"/>
+      <h2>{{ $t('tutkinnonosat') }}</h2>
+      <EpSearch
+        v-model="queryNimi"
+        class="mt-3 mb-3"
+        :placeholder="$t('etsi')"
+      />
 
-      <b-table striped hover responsive :items="tutkinnonosat" :fields="fields">
-        <template v-slot:cell(nimi)="data">
+      <b-table
+        striped
+        hover
+        responsive
+        :items="tutkinnonosat"
+        :fields="fields"
+      >
+        <template #cell(nimi)="data">
           <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: data.item.id}}">
             {{ $kaanna(data.item.tekstiKappale.nimi) }}
           </router-link>
         </template>
       </b-table>
     </div>
-
   </div>
 </template>
 

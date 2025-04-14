@@ -1,31 +1,54 @@
 <template>
   <div>
     <ep-spinner v-if="!peruste" />
-    <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
+    <ep-header
+      v-else
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
       <template slot="header">
-        {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
+        {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
       <div class="selaus">
         <b-container fluid>
           <b-row class="mb-0">
-            <b-col cols="12" lg="6" class="tile mb-5">
-              <h2 class="otsikko mb-4">{{ $t('peruste') }}</h2>
+            <b-col
+              cols="12"
+              lg="6"
+              class="tile mb-5"
+            >
+              <h2 class="otsikko mb-4">
+                {{ $t('peruste') }}
+              </h2>
               <router-link :to="perusteRoute">
-                <peruste-tile :julkaisu="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+                <peruste-tile
+                  :julkaisu="peruste"
+                  :koulutustyyppi="koulutustyyppi"
+                />
               </router-link>
             </b-col>
-            <b-col cols="12" lg="6" class="mb-5">
-              <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
-              <ep-spinner v-if="!tiedotteet"/>
-              <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote" v-else>
-                <template v-slot:lisaaBtnText>
+            <b-col
+              cols="12"
+              lg="6"
+              class="mb-5"
+            >
+              <h2 class="mb-4">
+                {{ $t('ajankohtaista') }}
+              </h2>
+              <ep-spinner v-if="!tiedotteet" />
+              <ep-julki-lista
+                v-else
+                :tiedot="tiedotteet"
+                @avaaTieto="avaaTiedote"
+              >
+                <template #lisaaBtnText>
                   <div class="mt-2">
-                    {{$t('katso-lisaa-ajankohtaisia')}}
+                    {{ $t('katso-lisaa-ajankohtaisia') }}
                   </div>
                 </template>
-                <template v-slot:eiTietoja>
+                <template #eiTietoja>
                   <div class="mt-2">
-                    {{$t('ei-tiedotteita')}}
+                    {{ $t('ei-tiedotteita') }}
                   </div>
                 </template>
               </ep-julki-lista>
@@ -33,12 +56,20 @@
           </b-row>
           <b-row>
             <b-col>
-              <h2 class="otsikko mb-2">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
+              <h2 class="otsikko mb-2">
+                {{ $t('paikalliset-toteutussuunnitelmat') }}
+              </h2>
               <div class="search mb-2">
-                <div class="mb-2">{{$t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla')}}</div>
-                <ep-search v-model="query.haku" :placeholder="$t('')" class="my-3">
+                <div class="mb-2">
+                  {{ $t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla') }}
+                </div>
+                <ep-search
+                  v-model="query.haku"
+                  :placeholder="$t('')"
+                  class="my-3"
+                >
                   <template #label>
-                    <span class="font-weight-600">{{$t('hae-toteutussuunnitelmaa')}}</span>
+                    <span class="font-weight-600">{{ $t('hae-toteutussuunnitelmaa') }}</span>
                   </template>
                 </ep-search>
               </div>
@@ -53,22 +84,36 @@
                   {{ $t('ei-hakutuloksia') }}
                 </div>
               </div>
-              <div v-else id="opetussuunnitelmat-lista" class="opetussuunnitelma-container">
+              <div
+                v-else
+                id="opetussuunnitelmat-lista"
+                class="opetussuunnitelma-container"
+              >
+                <EpHakutulosmaara
+                  :kokonaismaara="opetussuunnitelmatPage.kokonaismäärä"
+                  piilota-nakyva-tulosmaara
+                />
 
-                <EpHakutulosmaara :kokonaismaara="opetussuunnitelmatPage.kokonaismäärä" piilotaNakyvaTulosmaara/>
-
-                <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
-
-                  <router-link :to="ops.route" class="d-block">
-                    <opetussuunnitelma-tile :ops="ops" :query="query.haku"/>
+                <div
+                  v-for="(ops, idx) in opetussuunnitelmat"
+                  :key="idx"
+                >
+                  <router-link
+                    :to="ops.route"
+                    class="d-block"
+                  >
+                    <opetussuunnitelma-tile
+                      :ops="ops"
+                      :query="query.haku"
+                    />
                   </router-link>
-
                 </div>
-                <EpBPagination v-model="page"
-                              :items-per-page="perPage"
-                              :total="opetussuunnitelmatPage.kokonaismäärä"
-                              aria-controls="opetussuunnitelmat-lista">
-                </EpBPagination>
+                <EpBPagination
+                  v-model="page"
+                  :items-per-page="perPage"
+                  :total="opetussuunnitelmatPage.kokonaismäärä"
+                  aria-controls="opetussuunnitelmat-lista"
+                />
               </div>
             </b-col>
           </b-row>

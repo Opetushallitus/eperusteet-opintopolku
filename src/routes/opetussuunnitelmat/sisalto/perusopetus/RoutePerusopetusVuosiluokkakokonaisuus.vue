@@ -2,76 +2,128 @@
   <div>
     <router-view v-if="oppiaine" />
 
-    <div v-else class="content">
-      <h2>{{$kaanna(vuosiluokkakokonaisuus.nimi)}}</h2>
+    <div
+      v-else
+      class="content"
+    >
+      <h2>{{ $kaanna(vuosiluokkakokonaisuus.nimi) }}</h2>
 
       <ep-peruste-content
-        :perusteObject="perusteenVuosiluokkakokonaisuus.tehtava"
-        :pohjaObject="pohjanVuosiluokkakokonaisuus.tehtava"
+        :peruste-object="perusteenVuosiluokkakokonaisuus.tehtava"
+        :pohja-object="pohjanVuosiluokkakokonaisuus.tehtava"
         :object="vuosiluokkakokonaisuus.tehtava"
       />
 
       <template v-if="perusteVlkVapaatTekstit">
-        <div v-for="(vapaaTeksti, index) in perusteVlkVapaatTekstit" :key="'vapaateksti'+index" class="mt-5">
-          <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
-          <EpContentViewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+        <div
+          v-for="(vapaaTeksti, index) in perusteVlkVapaatTekstit"
+          :key="'vapaateksti'+index"
+          class="mt-5"
+        >
+          <h4>{{ $kaanna(vapaaTeksti.nimi) }}</h4>
+          <EpContentViewer
+            :value="$kaanna(vapaaTeksti.teksti)"
+            :kuvat="kuvat"
+            :termit="termit"
+          />
 
-          <EpPaikallinenTarkennus headerh4 v-if="vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus">
-            <EpContentViewer :value="$kaanna(vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus)" :kuvat="kuvat" :termit="termit"/>
+          <EpPaikallinenTarkennus
+            v-if="vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus"
+            headerh4
+          >
+            <EpContentViewer
+              :value="$kaanna(vapaaTeksti.vlkVapaaTeksti.paikallinenTarkennus)"
+              :kuvat="kuvat"
+              :termit="termit"
+            />
           </EpPaikallinenTarkennus>
-
         </div>
       </template>
 
-      <h2 class="mt-5" v-if="siirtymia">{{$t('siirtymavaiheet')}}</h2>
+      <h2
+        v-if="siirtymia"
+        class="mt-5"
+      >
+        {{ $t('siirtymavaiheet') }}
+      </h2>
 
       <ep-peruste-content
-        :perusteObject="perusteenVuosiluokkakokonaisuus.siirtymaEdellisesta"
-        :pohjaObject="pohjanVuosiluokkakokonaisuus.siirtymaEdellisesta"
+        :peruste-object="perusteenVuosiluokkakokonaisuus.siirtymaEdellisesta"
+        :pohja-object="pohjanVuosiluokkakokonaisuus.siirtymaEdellisesta"
         :object="vuosiluokkakokonaisuus.siirtymaEdellisesta"
       />
 
       <ep-peruste-content
-        :perusteObject="perusteenVuosiluokkakokonaisuus.siirtymaSeuraavaan"
-        :pohjaObject="pohjanVuosiluokkakokonaisuus.siirtymaSeuraavaan"
+        :peruste-object="perusteenVuosiluokkakokonaisuus.siirtymaSeuraavaan"
+        :pohja-object="pohjanVuosiluokkakokonaisuus.siirtymaSeuraavaan"
         :object="vuosiluokkakokonaisuus.siirtymaSeuraavaan"
       />
 
-      <h2 class="mt-5" v-if="laajaaAlainenOsaaminen">{{$t('laaja-alainen-osaaminen')}}</h2>
+      <h2
+        v-if="laajaaAlainenOsaaminen"
+        class="mt-5"
+      >
+        {{ $t('laaja-alainen-osaaminen') }}
+      </h2>
 
       <ep-peruste-content
-        :perusteObject="perusteenVuosiluokkakokonaisuus.laajaalainenOsaaminen"
-        :pohjaObject="pohjanVuosiluokkakokonaisuus.laajaalainenOsaaminen"
+        :peruste-object="perusteenVuosiluokkakokonaisuus.laajaalainenOsaaminen"
+        :pohja-object="pohjanVuosiluokkakokonaisuus.laajaalainenOsaaminen"
         :object="vuosiluokkakokonaisuus.laajaalainenosaaminen"
       />
 
-      <h2 class="mt-5">{{$t('laaja-alaisen-osaamisen-alueet')}}</h2>
+      <h2 class="mt-5">
+        {{ $t('laaja-alaisen-osaamisen-alueet') }}
+      </h2>
 
-      <div v-for="(laajaalainen, index) in laajaalaisetOsaamiset" :key="index" class="mb-5">
-        <h3 class="mb-3">{{ $kaanna(laajaalainen.nimi) }}</h3>
+      <div
+        v-for="(laajaalainen, index) in laajaalaisetOsaamiset"
+        :key="index"
+        class="mb-5"
+      >
+        <h3 class="mb-3">
+          {{ $kaanna(laajaalainen.nimi) }}
+        </h3>
 
-        <ep-collapse tyyppi="perusteteksti" :border-bottom="false" :border-top="false" :use-padding="false" class="mb-4"
-          v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao || laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">
-          <template v-slot:header><h4>{{$t('perusteen-teksti')}}</h4></template>
-          <ep-content-viewer :value="$kaanna(laajaalainen.kuvaus)" v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao" />
+        <ep-collapse
+          v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao || laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao"
+          tyyppi="perusteteksti"
+          :border-bottom="false"
+          :border-top="false"
+          :use-padding="false"
+          class="mb-4"
+        >
+          <template #header>
+            <h4>{{ $t('perusteen-teksti') }}</h4>
+          </template>
+          <ep-content-viewer
+            v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao"
+            :value="$kaanna(laajaalainen.kuvaus)"
+          />
 
           <template v-if="perusteenVlkByLaoId[laajaalainen.id] && laajaalainen.opetussuunnitelmanLao.naytaPerusteenVlkTarkennettuLao">
-            <h5 v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao">{{$t('laaja-alaisen-osaamisen-alueen-vuosiluokkakokonaisuuden-kuvaus')}}</h5>
+            <h5 v-if="laajaalainen.opetussuunnitelmanLao.naytaPerusteenPaatasonLao">
+              {{ $t('laaja-alaisen-osaamisen-alueen-vuosiluokkakokonaisuuden-kuvaus') }}
+            </h5>
             <ep-content-viewer :value="$kaanna(perusteenVlkByLaoId[laajaalainen.id].kuvaus)" />
           </template>
         </ep-collapse>
 
-        <template v-if="laajaalainen.pohjanLao
-          && laajaalainen.pohjanLao.kuvaus
-          && (!laajaalainen.opetussuunnitelmanLao.kuvaus || $kaanna(laajaalainen.pohjanLao.kuvaus) !== $kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus))">
+        <template
+          v-if="laajaalainen.pohjanLao
+            && laajaalainen.pohjanLao.kuvaus
+            && (!laajaalainen.opetussuunnitelmanLao.kuvaus || $kaanna(laajaalainen.pohjanLao.kuvaus) !== $kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus))"
+        >
           <h4>{{ $kaanna(pohjaNimi) }}</h4>
-          <ep-content-viewer :value="$kaanna(laajaalainen.pohjanLao.kuvaus)"/>
+          <ep-content-viewer :value="$kaanna(laajaalainen.pohjanLao.kuvaus)" />
         </template>
 
-        <EpPaikallinenTarkennus headerh4 v-if="laajaalainen.opetussuunnitelmanLao.kuvaus">
-          <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)"/>
+        <EpPaikallinenTarkennus
+          v-if="laajaalainen.opetussuunnitelmanLao.kuvaus"
+          headerh4
+        >
+          <ep-content-viewer :value="$kaanna(laajaalainen.opetussuunnitelmanLao.kuvaus)" />
         </EpPaikallinenTarkennus>
-
       </div>
     </div>
   </div>

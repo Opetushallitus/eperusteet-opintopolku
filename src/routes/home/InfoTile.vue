@@ -1,15 +1,28 @@
 <template>
   <div class="tile">
     <div class="text">
-      <h2 class="mb-2">{{ $t(header) }}</h2>
-      <span v-if="translatedText" v-html="$kaanna(translatedText)"></span>
-      <span v-if="text">{{$t(text)}}</span>
+      <h2 class="mb-2">
+        {{ $t(header) }}
+      </h2>
+      <span
+        v-if="translatedText"
+        v-html="$kaanna(translatedText)"
+      />
+      <span v-if="text">{{ $t(text) }}</span>
       <div class="d-flex mt-4 link">
         <EpMaterialIcon>chevron_right</EpMaterialIcon>
-        <EpLinkki v-if="infoLink" :url="infoLink" icon="launch" iconRight>
+        <EpLinkki
+          v-if="infoLink"
+          :url="infoLink"
+          icon="launch"
+          icon-right
+        >
           <span class="link-text">{{ $t(linkText) }}</span>
         </EpLinkki>
-        <router-link v-if="route" :to="route">
+        <router-link
+          v-if="route"
+          :to="route"
+        >
           <span class="link-text">{{ $t(linkText) }}</span>
         </router-link>
       </div>

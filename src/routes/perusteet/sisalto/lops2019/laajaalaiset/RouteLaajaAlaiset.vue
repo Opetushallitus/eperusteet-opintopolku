@@ -1,24 +1,42 @@
 <template>
-<div class="content">
-  <div v-if="laajaAlaisetKokonaisuus">
-    <h2 class="otsikko" slot="header">{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h2>
-    <div>
-      <div v-if="hasLaajaAlaiset" class="laaja-alaiset">
-        <div v-for="(laajaAlainen, idx) in laajaAlaiset" :key="idx" :id="getLaajaAlainenId(laajaAlainen)">
-          <h3 class="otsikko">{{ $kaanna(laajaAlainen.nimi) }}</h3>
-          <div v-if="laajaAlainen.koodi">
-            <strong>{{ $t('koodi') }}</strong>
-            <p>{{ laajaAlainen.koodi.arvo }}</p>
+  <div class="content">
+    <div v-if="laajaAlaisetKokonaisuus">
+      <h2
+        slot="header"
+        class="otsikko"
+      >
+        {{ $t('laaja-alaisen-osaamisen-osa-alueet') }}
+      </h2>
+      <div>
+        <div
+          v-if="hasLaajaAlaiset"
+          class="laaja-alaiset"
+        >
+          <div
+            v-for="(laajaAlainen, idx) in laajaAlaiset"
+            :id="getLaajaAlainenId(laajaAlainen)"
+            :key="idx"
+          >
+            <h3 class="otsikko">
+              {{ $kaanna(laajaAlainen.nimi) }}
+            </h3>
+            <div v-if="laajaAlainen.koodi">
+              <strong>{{ $t('koodi') }}</strong>
+              <p>{{ laajaAlainen.koodi.arvo }}</p>
+            </div>
+            <ep-content-viewer
+              :value="$kaanna(laajaAlainen.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
           </div>
-          <ep-content-viewer :value="$kaanna(laajaAlainen.kuvaus)" :termit="termit" :kuvat="kuvat" />
         </div>
       </div>
-    </div>
 
-    <slot name="previous-next-navigation" />
+      <slot name="previous-next-navigation" />
+    </div>
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

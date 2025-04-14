@@ -1,27 +1,46 @@
 <template>
   <div class="peruste-rakenne">
-    <ep-search class="query" v-model="query" :placeholder="$t('etsi-rakenteesta')"/>
+    <ep-search
+      v-model="query"
+      class="query"
+      :placeholder="$t('etsi-rakenteesta')"
+    />
 
     <div class="rakennepohja mt-3">
       <div class="d-flex">
-        <ep-button class="rakennetoggle" variant="link" @click="toggleRakenne()">{{$t(rakenneOsaSuljeTeksti)}}</ep-button>
-        <ep-button class="kuvaustoggle" variant="link" @click="toggleKuvaukset()">{{$t(rakenneOsaKuvasTeksti)}}</ep-button>
-
+        <ep-button
+          class="rakennetoggle"
+          variant="link"
+          @click="toggleRakenne()"
+        >
+          {{ $t(rakenneOsaSuljeTeksti) }}
+        </ep-button>
+        <ep-button
+          class="kuvaustoggle"
+          variant="link"
+          @click="toggleKuvaukset()"
+        >
+          {{ $t(rakenneOsaKuvasTeksti) }}
+        </ep-button>
       </div>
-      <div class="text-right rakenneotsikko">{{laajuustyyppi}}</div>
+      <div class="text-right rakenneotsikko">
+        {{ laajuustyyppi }}
+      </div>
       <div class="rakenneosat">
         <peruste-rakenne-osa
-          ref="rakenneosa"
           v-for="(osa, index) in filteredRakenneOsat"
+          ref="rakenneosa"
           :key="'osa'+index"
           :rakenneosa="osa"
-          :eiVanhempaa="true"
-          :viimeinen="true">
-
-          <template v-slot:nimi="{ rakenneosa }">
-            <slot name="nimi" v-bind:rakenneosa="rakenneosa"></slot>
+          :ei-vanhempaa="true"
+          :viimeinen="true"
+        >
+          <template #nimi="{ rakenneosa }">
+            <slot
+              name="nimi"
+              :rakenneosa="rakenneosa"
+            />
           </template>
-
         </peruste-rakenne-osa>
       </div>
     </div>

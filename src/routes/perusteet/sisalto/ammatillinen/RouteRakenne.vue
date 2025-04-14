@@ -2,29 +2,43 @@
   <div class="content">
     <ep-spinner v-if="!rakenne || !peruste" />
     <div v-else>
+      <h2>{{ $t('tutkinnon-muodostuminen') }}</h2>
 
-      <h2>{{$t('tutkinnon-muodostuminen')}}</h2>
+      <div
+        class="mb-5"
+        v-html="$kaanna(rakenne.kuvaus)"
+      />
 
-      <div class="mb-5" v-html="$kaanna(rakenne.kuvaus)" />
+      <h3>{{ $kaanna(peruste.nimi) }} <span v-if="laajuus">{{ laajuus }} {{ $t('osaamispiste') }}</span></h3>
 
-      <h3>{{$kaanna(peruste.nimi)}} <span v-if="laajuus">{{laajuus}} {{$t('osaamispiste')}}</span></h3>
-
-      <ep-peruste-rakenne v-if="rakenneOsat" :rakenneOsat="rakenneOsat">
-        <template v-slot:nimi="{ rakenneosa }">
-
+      <ep-peruste-rakenne
+        v-if="rakenneOsat"
+        :rakenne-osat="rakenneOsat"
+      >
+        <template #nimi="{ rakenneosa }">
           <div class="d-flex">
             <div v-if="rakenneosa.tutkinnonosa">
               <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}">
-                <ep-color-indicator :tooltip="false" :id="'tutkinto'+rakenneosa._tutkinnonOsaViite" :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'" class="mr-2"/>
-                {{$kaanna(rakenneosa.tutkinnonosa.tutkinnonOsa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
+                <ep-color-indicator
+                  :id="'tutkinto'+rakenneosa._tutkinnonOsaViite"
+                  :tooltip="false"
+                  :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'"
+                  class="mr-2"
+                />
+                {{ $kaanna(rakenneosa.tutkinnonosa.tutkinnonOsa.nimi) }} <span v-if="rakenneosa.koodiArvo">({{ rakenneosa.koodiArvo }})</span>
               </router-link>
-              <b-popover :target="'tutkinto'+rakenneosa._tutkinnonOsaViite" :placement="'top'" triggers="hover" variant="primary">
-                <span v-if="rakenneosa.pakollinen">{{$t('pakollinen-tutkinnon-osa')}}</span>
-                <span v-if="!rakenneosa.pakollinen">{{$t('valinnainen-tutkinnon-osa')}}</span>
+              <b-popover
+                :target="'tutkinto'+rakenneosa._tutkinnonOsaViite"
+                :placement="'top'"
+                triggers="hover"
+                variant="primary"
+              >
+                <span v-if="rakenneosa.pakollinen">{{ $t('pakollinen-tutkinnon-osa') }}</span>
+                <span v-if="!rakenneosa.pakollinen">{{ $t('valinnainen-tutkinnon-osa') }}</span>
               </b-popover>
             </div>
             <span v-else>
-              {{$kaanna(rakenneosa.nimi)}} <span v-if="rakenneosa.koodiArvo">({{rakenneosa.koodiArvo}})</span>
+              {{ $kaanna(rakenneosa.nimi) }} <span v-if="rakenneosa.koodiArvo">({{ rakenneosa.koodiArvo }})</span>
             </span>
           </div>
         </template>

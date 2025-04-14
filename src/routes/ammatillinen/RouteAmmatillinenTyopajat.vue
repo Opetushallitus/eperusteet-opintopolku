@@ -1,42 +1,57 @@
 <template>
-<div>
-  <slot />
-  <p class="kuvaus">{{ $t('kooste-kuvaus-tyopajat') }}</p>
+  <div>
+    <slot />
+    <p class="kuvaus">
+      {{ $t('kooste-kuvaus-tyopajat') }}
+    </p>
 
-  <div class="search mb-4">
-    <ep-search v-model="query" :placeholder="$t('etsi')" :sr-placeholder="$t('etsi-tyopajoja')"/>
-  </div>
-  <ep-spinner v-if="!opetussuunnitelmat" />
-  <div v-else-if="opetussuunnitelmat.length === 0">
-    <div class="alert alert-info">
-      {{ $t('ei-toteutettuja-tyopajoja') }}
+    <div class="search mb-4">
+      <ep-search
+        v-model="query"
+        :placeholder="$t('etsi')"
+        :sr-placeholder="$t('etsi-tyopajoja')"
+      />
+    </div>
+    <ep-spinner v-if="!opetussuunnitelmat" />
+    <div v-else-if="opetussuunnitelmat.length === 0">
+      <div class="alert alert-info">
+        {{ $t('ei-toteutettuja-tyopajoja') }}
+      </div>
+    </div>
+    <div v-else-if="opetussuunnitelmatFiltered.length === 0">
+      <div class="alert alert-info">
+        {{ $t('ei-hakutuloksia') }}
+      </div>
+    </div>
+    <div
+      v-else
+      id="opetussuunnitelmat-lista"
+    >
+      <div
+        v-for="(ops, idx) in opetussuunnitelmatPaginated"
+        :key="idx"
+      >
+        <router-link :to="ops.route">
+          <opetussuunnitelma-tile
+            :ops="ops"
+            :query="query"
+          >
+            <div slot="icon">
+              <EpMaterialIcon class="icon">
+                decription
+              </EpMaterialIcon>
+            </div>
+          </opetussuunnitelma-tile>
+        </router-link>
+      </div>
+      <EpBPagination
+        v-model="page"
+        :items-per-page="perPage"
+        :total="opetussuunnitelmatFiltered.length"
+        aria-controls="opetussuunnitelmat-lista"
+      />
     </div>
   </div>
-  <div v-else-if="opetussuunnitelmatFiltered.length === 0">
-    <div class="alert alert-info">
-      {{ $t('ei-hakutuloksia') }}
-    </div>
-  </div>
-  <div v-else id="opetussuunnitelmat-lista">
-    <div v-for="(ops, idx) in opetussuunnitelmatPaginated" :key="idx">
-
-      <router-link :to="ops.route">
-        <opetussuunnitelma-tile :ops="ops" :query="query">
-          <div slot="icon">
-            <EpMaterialIcon class="icon">decription</EpMaterialIcon>
-          </div>
-        </opetussuunnitelma-tile>
-      </router-link>
-
-    </div>
-    <EpBPagination v-model="page"
-                   :items-per-page="perPage"
-                   :total="opetussuunnitelmatFiltered.length"
-                   aria-controls="opetussuunnitelmat-lista">
-    </EpBPagination>
-  </div>
-
-</div>
 </template>
 
 <script lang="ts">

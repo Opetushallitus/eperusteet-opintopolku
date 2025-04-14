@@ -1,10 +1,14 @@
 <template>
   <div class="tile tile-background-shadow-selected shadow-tile d-flex flex-column">
     <div class="ikoni">
-      <img :src="osaamimerkkiLogo" :alt="$t('osaamismerkit')" class="img"/>
+      <img
+        :src="osaamimerkkiLogo"
+        :alt="$t('osaamismerkit')"
+        class="img"
+      >
     </div>
     <div class="nimi">
-      {{ $t('kansalliset-perustaitojen-osaamismerkit')}}
+      {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
     </div>
   </div>
 </template>

@@ -1,9 +1,20 @@
 <template>
-  <div class="content" v-if="osa">
-    <h2 v-if="osa.nimi">{{$kaanna(osa.nimi)}}</h2>
-    <h2 v-else>{{$t(tekstikappaleenOsa)}}</h2>
+  <div
+    v-if="osa"
+    class="content"
+  >
+    <h2 v-if="osa.nimi">
+      {{ $kaanna(osa.nimi) }}
+    </h2>
+    <h2 v-else>
+      {{ $t(tekstikappaleenOsa) }}
+    </h2>
 
-    <ep-content-viewer :value="$kaanna(osa.teksti)" :termit="termit" :kuvat="kuvat" />
+    <ep-content-viewer
+      :value="$kaanna(osa.teksti)"
+      :termit="termit"
+      :kuvat="kuvat"
+    />
 
     <slot name="previous-next-navigation" />
   </div>

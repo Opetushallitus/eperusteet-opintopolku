@@ -1,41 +1,70 @@
 <template>
-  <b-navbar type="light"
-            role="navigation"
-            toggleable="lg"
-            class="navbar-ep"
-            :sticky="true"
-            id="navigation-bar">
-    <b-navbar-brand :to="{ name: 'root' }" :aria-label="$t('etusivu')">
-      <img src="../../../public/img/images/eperusteet-logo.svg" :alt="$t('eperusteet')" aria-hidden="true">
+  <b-navbar
+    id="navigation-bar"
+    type="light"
+    role="navigation"
+    toggleable="lg"
+    class="navbar-ep"
+    :sticky="true"
+  >
+    <b-navbar-brand
+      :to="{ name: 'root' }"
+      :aria-label="$t('etusivu')"
+    >
+      <img
+        src="../../../public/img/images/eperusteet-logo.svg"
+        :alt="$t('eperusteet')"
+        aria-hidden="true"
+      >
     </b-navbar-brand>
 
-    <b-navbar-toggle target="nav-collapse" :aria-label="$t('koulutustyyppi-valikko')"></b-navbar-toggle>
+    <b-navbar-toggle
+      target="nav-collapse"
+      :aria-label="$t('koulutustyyppi-valikko')"
+    />
 
-    <b-collapse id="nav-collapse" is-nav >
+    <b-collapse
+      id="nav-collapse"
+      is-nav
+    >
       <b-navbar-nav class="d-flex justify-content-center w-100">
         <EpSpinner v-if="loading" />
-        <div v-else class="d-flex flex-wrap">
-          <b-nav-item v-for="(item, idx) in items"
-                      :key="idx"
-                      active
-                      :active-class="activeClass"
-                      :class="item.activeClass"
-                      :to="item.route">
+        <div
+          v-else
+          class="d-flex flex-wrap"
+        >
+          <b-nav-item
+            v-for="(item, idx) in items"
+            :key="idx"
+            active
+            :active-class="activeClass"
+            :class="item.activeClass"
+            :to="item.route"
+          >
             {{ $t('navi-'+item.name) }}
           </b-nav-item>
         </div>
       </b-navbar-nav>
 
       <!-- Right aligned nav items -->
-      <b-navbar-nav class="ml-auto align-self-start" :aria-label="$t('kielivalinta')">
+      <b-navbar-nav
+        class="ml-auto align-self-start"
+        :aria-label="$t('kielivalinta')"
+      >
         <b-nav-item-dropdown right>
           <template slot="button-content">
-            <EpMaterialIcon class="mr-2">language</EpMaterialIcon>
+            <EpMaterialIcon class="mr-2">
+              language
+            </EpMaterialIcon>
             <span>{{ $t(sisaltoKieli) }}</span>
           </template>
-          <b-dropdown-item v-for="(kieli, idx) in kielet"
-                           :key=idx
-                           @click="valitseKieli(kieli)">{{ $t(kieli) }}</b-dropdown-item>
+          <b-dropdown-item
+            v-for="(kieli, idx) in kielet"
+            :key="idx"
+            @click="valitseKieli(kieli)"
+          >
+            {{ $t(kieli) }}
+          </b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
@@ -102,7 +131,7 @@ export default class EpNavigation extends Vue {
   get muuLukumaarat(): number {
     if (this.julkaistutKoulutustyypitStore.muuLukumaarat.value) {
       return this.julkaistutKoulutustyypitStore.muuLukumaarat.value as number;
-    };
+    }
 
     return 0;
   }

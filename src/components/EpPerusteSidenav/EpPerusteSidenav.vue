@@ -3,10 +3,12 @@
     <ep-spinner v-if="sidenavLoading" />
     <div v-else>
       <div class="navigation-tree">
-        <ep-sidenav-node v-if="treeData"
-                          :node="treeData"
-                          :current="current"
-                          :getChildren="getChildren" />
+        <ep-sidenav-node
+          v-if="treeData"
+          :node="treeData"
+          :current="current"
+          :get-children="getChildren"
+        />
       </div>
     </div>
   </div>

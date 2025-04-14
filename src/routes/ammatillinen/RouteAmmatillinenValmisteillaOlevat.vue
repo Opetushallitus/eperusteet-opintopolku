@@ -1,58 +1,96 @@
 <template>
   <div>
     <slot />
-    <p class="kuvaus">{{ $t('kooste-kuvaus-valmisteilla-olevat-perusteet') }}</p>
+    <p class="kuvaus">
+      {{ $t('kooste-kuvaus-valmisteilla-olevat-perusteet') }}
+    </p>
 
-    <ep-spinner v-if="!perusteet"/>
+    <ep-spinner v-if="!perusteet" />
     <template v-else>
-
-      <div class="valmisteilla-row m-2" v-for="peruste in perusteetMapped" :key="'peruste'+peruste.id">
+      <div
+        v-for="peruste in perusteetMapped"
+        :key="'peruste'+peruste.id"
+        class="valmisteilla-row m-2"
+      >
         <div class="d-flex m-2">
           <div class="valmisteilla-data pl-2">
-            <div class="nimi">{{ $kaanna(peruste.nimi) }}</div>
+            <div class="nimi">
+              {{ $kaanna(peruste.nimi) }}
+            </div>
             <div class="d-flex">
-              <div class="voimaantulo pr-1" v-if="peruste.voimassaoloAlkaa">
-                {{$t('peruste-astuu-voimaan')}} {{ $sd(peruste.voimassaoloAlkaa) }}.
+              <div
+                v-if="peruste.voimassaoloAlkaa"
+                class="voimaantulo pr-1"
+              >
+                {{ $t('peruste-astuu-voimaan') }} {{ $sd(peruste.voimassaoloAlkaa) }}.
               </div>
               <div @click="toggle(peruste)">
-                <div class="avaa-link btn-link" v-if="peruste.toggled">{{$t('piilota-aikataulu')}}</div>
-                <div class="avaa-link btn-link" v-else>{{$t('nayta-aikataulu')}}</div>
+                <div
+                  v-if="peruste.toggled"
+                  class="avaa-link btn-link"
+                >
+                  {{ $t('piilota-aikataulu') }}
+                </div>
+                <div
+                  v-else
+                  class="avaa-link btn-link"
+                >
+                  {{ $t('nayta-aikataulu') }}
+                </div>
               </div>
             </div>
           </div>
           <div class="ml-auto align-self-start">
-            <EpMaterialIcon v-if="peruste.toggled">expand_less</EpMaterialIcon>
-            <EpMaterialIcon v-else>expand_more</EpMaterialIcon>
+            <EpMaterialIcon v-if="peruste.toggled">
+              expand_less
+            </EpMaterialIcon>
+            <EpMaterialIcon v-else>
+              expand_more
+            </EpMaterialIcon>
           </div>
         </div>
 
-        <div class="footer mt-3 ml-3 mr-3" v-if="peruste.toggled">
-          <div v-for="(aikataulu, index) in peruste.perusteenAikataulut" :key="'aikataulu'+aikataulu.id" class="row perusteen-aikataulu">
-
+        <div
+          v-if="peruste.toggled"
+          class="footer mt-3 ml-3 mr-3"
+        >
+          <div
+            v-for="(aikataulu, index) in peruste.perusteenAikataulut"
+            :key="'aikataulu'+aikataulu.id"
+            class="row perusteen-aikataulu"
+          >
             <div class="col col-auto center-block mb-4 pl-4 pr-0">
               <div class="paiva d-inline-block text-center">
-                {{$sdm(aikataulu.tapahtumapaiva)}}
+                {{ $sdm(aikataulu.tapahtumapaiva) }}
               </div>
-              <div class="aikajana" v-if="index != peruste.perusteenAikataulut.length - 1">&nbsp;</div>
+              <div
+                v-if="index != peruste.perusteenAikataulut.length - 1"
+                class="aikajana"
+              >
+&nbsp;
+              </div>
             </div>
 
             <div class="col pl-4">
               <div class="aikataulu px-3 py-2 mb-3">
-                <div class="tavoite">{{$kaanna(aikataulu.tavoite)}}</div>
-                <div class="voimaantulo">{{$sd(aikataulu.tapahtumapaiva)}}</div>
+                <div class="tavoite">
+                  {{ $kaanna(aikataulu.tavoite) }}
+                </div>
+                <div class="voimaantulo">
+                  {{ $sd(aikataulu.tapahtumapaiva) }}
+                </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
-      <EpBPagination v-model="page"
-                     :items-per-page="perPage"
-                     :total="total"
-                     aria-controls="perusteet-lista">
-      </EpBPagination>
+      <EpBPagination
+        v-model="page"
+        :items-per-page="perPage"
+        :total="total"
+        aria-controls="perusteet-lista"
+      />
     </template>
-
   </div>
 </template>
 

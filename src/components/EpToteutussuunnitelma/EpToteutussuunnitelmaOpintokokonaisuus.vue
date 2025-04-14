@@ -1,47 +1,71 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
+    <portal-target name="toteutussuunnitelma-sisalto-header" />
 
     <b-row>
       <b-col md="6">
-        <ep-form-content :name="$t(opintokokonaisuusNimiOtsikko(opintokokonaisuus.tyyppi))" headerType="h4">
-          <span>{{$kaanna(sisaltoviite.nimi)}}</span>
+        <ep-form-content
+          :name="$t(opintokokonaisuusNimiOtsikko(opintokokonaisuus.tyyppi))"
+          header-type="h4"
+        >
+          <span>{{ $kaanna(sisaltoviite.nimi) }}</span>
         </ep-form-content>
       </b-col>
       <b-col md="6">
-        <ep-form-content name="laajuus" headerType="h4">
+        <ep-form-content
+          name="laajuus"
+          header-type="h4"
+        >
           <span v-if="opintokokonaisuus.laajuus && laajuusYksikkoLyhenne">{{ opintokokonaisuus.laajuus }} {{ laajuusYksikkoLyhenne }}</span>
           <span v-else>-</span>
         </ep-form-content>
       </b-col>
     </b-row>
-    <b-row v-if="opintokokonaisuus.koodiArvo" class="mb-4">
+    <b-row
+      v-if="opintokokonaisuus.koodiArvo"
+      class="mb-4"
+    >
       <b-col>
-        <h4>{{$t('opintokokonaisuuden-koodi')}}</h4>
-        <div>{{opintokokonaisuus.koodiArvo}}</div>
+        <h4>{{ $t('opintokokonaisuuden-koodi') }}</h4>
+        <div>{{ opintokokonaisuus.koodiArvo }}</div>
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <h4 role="presentation">{{ $t('kuvaus') }}</h4>
-        <ep-content-viewer :value="$kaanna(opintokokonaisuus.kuvaus)" :kuvat="kuvat"/>
+        <h4 role="presentation">
+          {{ $t('kuvaus') }}
+        </h4>
+        <ep-content-viewer
+          :value="$kaanna(opintokokonaisuus.kuvaus)"
+          :kuvat="kuvat"
+        />
       </b-col>
     </b-row>
     <hr>
     <b-row>
-      <b-col><h3 class="mt-3 mb-4">{{ $t(opintokokonaisuusTavoiteOtsikko(opintokokonaisuus.tyyppi)) }}</h3></b-col>
+      <b-col>
+        <h3 class="mt-3 mb-4">
+          {{ $t(opintokokonaisuusTavoiteOtsikko(opintokokonaisuus.tyyppi)) }}
+        </h3>
+      </b-col>
     </b-row>
     <b-row v-if="opintokokonaisuus.tavoitteidenKuvaus">
       <b-col>
         <h4>{{ $t('tavoitteiden-kuvaus') }}</h4>
-        <ep-content-viewer :value="$kaanna(opintokokonaisuus.tavoitteidenKuvaus)" :kuvat="kuvat"/>
+        <ep-content-viewer
+          :value="$kaanna(opintokokonaisuus.tavoitteidenKuvaus)"
+          :kuvat="kuvat"
+        />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
         <h4>{{ $kaanna(opintokokonaisuus.opetuksenTavoiteOtsikko) }}</h4>
         <ul>
-          <li v-for="tavoiteItem in opintokokonaisuus.tavoitteet" :key="tavoiteItem.id">
+          <li
+            v-for="tavoiteItem in opintokokonaisuus.tavoitteet"
+            :key="tavoiteItem.id"
+          >
             {{ $kaanna(tavoiteItem.tavoite) }}
           </li>
         </ul>
@@ -51,28 +75,41 @@
       <hr>
       <b-row>
         <b-col>
-          <h3 class="mt-3 mb-4">{{ $t('keskeiset-sisallot') }}</h3>
-          <ep-content-viewer :value="$kaanna(opintokokonaisuus.keskeisetSisallot)" :kuvat="kuvat"/>
+          <h3 class="mt-3 mb-4">
+            {{ $t('keskeiset-sisallot') }}
+          </h3>
+          <ep-content-viewer
+            :value="$kaanna(opintokokonaisuus.keskeisetSisallot)"
+            :kuvat="kuvat"
+          />
         </b-col>
       </b-row>
     </template>
     <hr>
     <b-row>
       <b-col>
-        <h3 class="mt-3 mb-4">{{ $t('arviointi') }}</h3>
+        <h3 class="mt-3 mb-4">
+          {{ $t('arviointi') }}
+        </h3>
       </b-col>
     </b-row>
     <b-row v-if="opintokokonaisuus.arvioinninKuvaus">
       <b-col>
         <h4>{{ $t('arvioinnin-kuvaus') }}</h4>
-        <ep-content-viewer :value="$kaanna(opintokokonaisuus.arvioinninKuvaus)" :kuvat="kuvat"/>
+        <ep-content-viewer
+          :value="$kaanna(opintokokonaisuus.arvioinninKuvaus)"
+          :kuvat="kuvat"
+        />
       </b-col>
     </b-row>
     <b-row>
       <b-col>
         <h4>{{ $t('opiskelijan-osaamisen-arvioinnin-kohteet') }}</h4>
         <ul>
-          <li v-for="arviointiItem in opintokokonaisuus.arvioinnit" :key="arviointiItem.id">
+          <li
+            v-for="arviointiItem in opintokokonaisuus.arvioinnit"
+            :key="arviointiItem.id"
+          >
             {{ $kaanna(arviointiItem.arviointi) }}
           </li>
         </ul>
@@ -82,20 +119,30 @@
       <hr>
       <b-row>
         <b-col>
-          <h3 class="mb-4">{{ $t('kansalliset-perustaitojen-osaamismerkit') }}</h3>
+          <h3 class="mb-4">
+            {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
+          </h3>
         </b-col>
       </b-row>
       <b-row v-if="opintokokonaisuus.osaamismerkkiKappale.kuvaus">
         <b-col>
-          <h4 class="mb-4">{{ $t('osaamismerkkien-suorittaminen') }}</h4>
-          <ep-content-viewer :value="$kaanna(opintokokonaisuus.osaamismerkkiKappale.kuvaus)" :kuvat="kuvat" class="mb-5"/>
+          <h4 class="mb-4">
+            {{ $t('osaamismerkkien-suorittaminen') }}
+          </h4>
+          <ep-content-viewer
+            :value="$kaanna(opintokokonaisuus.osaamismerkkiKappale.kuvaus)"
+            :kuvat="kuvat"
+            class="mb-5"
+          />
         </b-col>
       </b-row>
       <b-row v-if="osaamisMerkkiKoodit.length > 0">
         <b-col>
-          <EpOsaamismerkit :osaamismerkit="osaamismerkit"
-                           :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
-                           hide-kuvaus></EpOsaamismerkit>
+          <EpOsaamismerkit
+            :osaamismerkit="osaamismerkit"
+            :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+            hide-kuvaus
+          />
         </b-col>
       </b-row>
     </template>

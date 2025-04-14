@@ -1,63 +1,84 @@
 <template>
-<div>
-  <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
-    <template slot="header">
-      <div v-if="tiedote">
-        {{ $kaanna(tiedote.otsikko) }}
-      </div>
-      <ep-spinner v-else />
-    </template>
-    <template slot="subheader">
-    <div v-if="tiedote">
-      <div class="aikaleima">
-        {{ $sd(tiedote.luotu) }}
-      </div>
-    </div>
-    <ep-spinner v-else />
-    </template>
-    <div v-if="tiedote" class="tiedote">
-
-      <div class="sisalto pb-4">
-        <ep-content-viewer :value="$kaanna(tiedote.sisalto)"/>
-      </div>
-
+  <div>
+    <ep-header
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
+      <template slot="header">
+        <div v-if="tiedote">
+          {{ $kaanna(tiedote.otsikko) }}
+        </div>
+        <ep-spinner v-else />
+      </template>
+      <template slot="subheader">
+        <div v-if="tiedote">
+          <div class="aikaleima">
+            {{ $sd(tiedote.luotu) }}
+          </div>
+        </div>
+        <ep-spinner v-else />
+      </template>
       <div
-        class="tiedote-lisainfo p-3"
-        v-if="tiedoteMapped.perusteet.length > 0 || tiedoteMapped.tutkinnonosat.length > 0 || tiedoteMapped.osaamisalat.length > 0">
-
-        <h3>{{$t('tiedotteeseen-liittyy')}}</h3>
-
-        <div class="mt-4" v-if="tiedoteMapped.perusteet.length > 0">
-          <h4>{{$t('perusteet')}}</h4>
-          <span class="peruste" v-for="(peruste, index) in tiedoteMapped.perusteet" :key="'peruste'+peruste.id">
-            <span v-if="index > 0">, </span>
-            <router-link :to="peruste.route">{{$kaanna(peruste.nimi)}}</router-link>
-          </span>
+        v-if="tiedote"
+        class="tiedote"
+      >
+        <div class="sisalto pb-4">
+          <ep-content-viewer :value="$kaanna(tiedote.sisalto)" />
         </div>
 
-        <ep-spinner v-if="!tutkinnonosienPerusteet" />
-        <uutisen-koodit
-          v-else
-          :kooditPerusteilla="tutkinnonosienPerusteet"
-          class="mt-4">
-          <h4 slot="header">{{$t('tutkinnonosat')}}</h4>
-          <h4 slot="popover-header">{{$t('perusteet-joissa-tutkinnon-osia-on')}}</h4>
-        </uutisen-koodit>
+        <div
+          v-if="tiedoteMapped.perusteet.length > 0 || tiedoteMapped.tutkinnonosat.length > 0 || tiedoteMapped.osaamisalat.length > 0"
+          class="tiedote-lisainfo p-3"
+        >
+          <h3>{{ $t('tiedotteeseen-liittyy') }}</h3>
 
-        <ep-spinner v-if="!osaamisalojenPerusteet" />
-        <uutisen-koodit
-          v-else
-          :kooditPerusteilla="osaamisalojenPerusteet"
-          class="mt-4">
-          <h4 slot="header">{{$t('osaamisalat')}}</h4>
-          <h4 slot="popover-header">{{$t('perusteet-joissa-osaamisaloja-on')}}</h4>
-        </uutisen-koodit>
+          <div
+            v-if="tiedoteMapped.perusteet.length > 0"
+            class="mt-4"
+          >
+            <h4>{{ $t('perusteet') }}</h4>
+            <span
+              v-for="(peruste, index) in tiedoteMapped.perusteet"
+              :key="'peruste'+peruste.id"
+              class="peruste"
+            >
+              <span v-if="index > 0">, </span>
+              <router-link :to="peruste.route">{{ $kaanna(peruste.nimi) }}</router-link>
+            </span>
+          </div>
 
+          <ep-spinner v-if="!tutkinnonosienPerusteet" />
+          <uutisen-koodit
+            v-else
+            :koodit-perusteilla="tutkinnonosienPerusteet"
+            class="mt-4"
+          >
+            <h4 slot="header">
+              {{ $t('tutkinnonosat') }}
+            </h4>
+            <h4 slot="popover-header">
+              {{ $t('perusteet-joissa-tutkinnon-osia-on') }}
+            </h4>
+          </uutisen-koodit>
+
+          <ep-spinner v-if="!osaamisalojenPerusteet" />
+          <uutisen-koodit
+            v-else
+            :koodit-perusteilla="osaamisalojenPerusteet"
+            class="mt-4"
+          >
+            <h4 slot="header">
+              {{ $t('osaamisalat') }}
+            </h4>
+            <h4 slot="popover-header">
+              {{ $t('perusteet-joissa-osaamisaloja-on') }}
+            </h4>
+          </uutisen-koodit>
+        </div>
       </div>
-    </div>
-    <ep-spinner v-else />
-  </ep-header>
-</div>
+      <ep-spinner v-else />
+    </ep-header>
+  </div>
 </template>
 
 <script lang="ts">

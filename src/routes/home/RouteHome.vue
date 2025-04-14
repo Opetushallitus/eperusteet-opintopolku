@@ -1,75 +1,105 @@
 <template>
-<div id="main">
-  <div class="ylaosa">
-    <div class="container">
-      <div class="laatikko">
-        <h1 class="otsikko">{{ $t('tervetuloa-palveluun') }}</h1>
-        <p>{{ $t('eperusteet-kuvaus') }}</p>
+  <div id="main">
+    <div class="ylaosa">
+      <div class="container">
+        <div class="laatikko">
+          <h1 class="otsikko">
+            {{ $t('tervetuloa-palveluun') }}
+          </h1>
+          <p>{{ $t('eperusteet-kuvaus') }}</p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="search">
-    <div class="container">
-      <b-container fluid>
-        <section class="section">
-          <EpEtusivuHaku :peruste-store="perusteStore"></EpEtusivuHaku>
-        </section>
-      </b-container>
+    <div class="search">
+      <div class="container">
+        <b-container fluid>
+          <section class="section">
+            <EpEtusivuHaku :peruste-store="perusteStore" />
+          </section>
+        </b-container>
+      </div>
     </div>
-  </div>
-  <div class="container">
-    <section class="section my-5">
-      <h2 class="tile-heading">{{ $t('ajankohtaista') }}</h2>
-      <EpSpinnerSlot :is-loading="!tiedotteet">
-        <EpJulkiLista :tiedot="tiedotteetMapped" @avaaTieto="avaaTiedote" tieto-maara="5" listaus-tyyppi="none">
-          <div slot="eiTietoja">{{$t('ei-tiedotteita')}}</div>
-        </EpJulkiLista>
-        <div class="nayta-kaikki">
-          <EpMaterialIcon size="18px">chevron_right</EpMaterialIcon>
-          <a :href="ajankohtaistaUrl()" target="_blank">{{ $t('siirry-ajankohtaista-sivulle') }}</a>
-        </div>
-      </EpSpinnerSlot>
-    </section>
-  </div>
-  <div class="info">
     <div class="container">
-      <b-container fluid>
-        <section class="section mt-4">
-          <h2 class="tile-heading">{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</h2>
-          <EpSpinner v-if="!julkaistutKoulutustyypit" />
-          <div class="d-md-flex flex-wrap justify-content-start">
-            <KoulutustyyppiTile :tyyppi="item" v-for="(item, idx) in koulutustyyppiItems" :key="idx" class="mr-3 mb-3"></KoulutustyyppiTile>
+      <section class="section my-5">
+        <h2 class="tile-heading">
+          {{ $t('ajankohtaista') }}
+        </h2>
+        <EpSpinnerSlot :is-loading="!tiedotteet">
+          <EpJulkiLista
+            :tiedot="tiedotteetMapped"
+            tieto-maara="5"
+            listaus-tyyppi="none"
+            @avaaTieto="avaaTiedote"
+          >
+            <div slot="eiTietoja">
+              {{ $t('ei-tiedotteita') }}
+            </div>
+          </EpJulkiLista>
+          <div class="nayta-kaikki">
+            <EpMaterialIcon size="18px">
+              chevron_right
+            </EpMaterialIcon>
+            <a
+              :href="ajankohtaistaUrl()"
+              target="_blank"
+            >{{ $t('siirry-ajankohtaista-sivulle') }}</a>
           </div>
-        </section>
-
-        <section class="section mt-4">
-          <h2 class="tile-heading">{{ $t('osaaminen-ja-maaraykset') }}</h2>
-          <EpSpinner v-if="!otherItems" />
-          <div class="d-md-flex flex-wrap justify-content-start">
-            <KoulutustyyppiTile :tyyppi="item" v-for="(item, idx) in otherItems" :key="idx" class="mr-2 mb-2"></KoulutustyyppiTile>
-          </div>
-        </section>
-      </b-container>
-    </div>
-  </div>
-  <div class="container">
-    <b-container fluid>
-      <section class="section d-md-flex flex-wrap justify-content-start mt-4">
-        <InfoTile
-          v-for="(infoLink, idx) in infoLinkit"
-          :key="'info-' + idx"
-          class="mr-2 mb-2"
-          :header="infoLink.name"
-          :text="infoLink.text"
-          :translatedText="infoLink.translatedText"
-          :link="infoLink.link"
-          :route="infoLink.route"
-          :link-text="infoLink.linkText">
-        </InfoTile>
+        </EpSpinnerSlot>
       </section>
-    </b-container>
+    </div>
+    <div class="info">
+      <div class="container">
+        <b-container fluid>
+          <section class="section mt-4">
+            <h2 class="tile-heading">
+              {{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}
+            </h2>
+            <EpSpinner v-if="!julkaistutKoulutustyypit" />
+            <div class="d-md-flex flex-wrap justify-content-start">
+              <KoulutustyyppiTile
+                v-for="(item, idx) in koulutustyyppiItems"
+                :key="idx"
+                :tyyppi="item"
+                class="mr-3 mb-3"
+              />
+            </div>
+          </section>
+
+          <section class="section mt-4">
+            <h2 class="tile-heading">
+              {{ $t('osaaminen-ja-maaraykset') }}
+            </h2>
+            <EpSpinner v-if="!otherItems" />
+            <div class="d-md-flex flex-wrap justify-content-start">
+              <KoulutustyyppiTile
+                v-for="(item, idx) in otherItems"
+                :key="idx"
+                :tyyppi="item"
+                class="mr-2 mb-2"
+              />
+            </div>
+          </section>
+        </b-container>
+      </div>
+    </div>
+    <div class="container">
+      <b-container fluid>
+        <section class="section d-md-flex flex-wrap justify-content-start mt-4">
+          <InfoTile
+            v-for="(infoLink, idx) in infoLinkit"
+            :key="'info-' + idx"
+            class="mr-2 mb-2"
+            :header="infoLink.name"
+            :text="infoLink.text"
+            :translated-text="infoLink.translatedText"
+            :link="infoLink.link"
+            :route="infoLink.route"
+            :link-text="infoLink.linkText"
+          />
+        </section>
+      </b-container>
+    </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
