@@ -317,7 +317,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
   }
 
   get valmisteillaOlevat() {
-    return this.valmisteillaOlevatStore.perusteet;
+    return this.valmisteillaOlevatStore.perusteet.value;
   }
 }
 </script>

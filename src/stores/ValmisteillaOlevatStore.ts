@@ -1,4 +1,4 @@
-import Vue, { computed, reactive } from 'vue';
+import  { reactive, computed } from '@vue/composition-api';
 import _ from 'lodash';
 import { PerusteBaseDto, Perusteet } from '@shared/api/eperusteet';
 import { Page } from '@shared/tyypit';

@@ -17,6 +17,7 @@ import { pinia } from '@/pinia';
 import { router } from '@/router';
 import fiLocale from '@shared/translations/locale-fi.json';
 import svLocale from '@shared/translations/locale-sv.json';
+import VueCompositionApi from '@vue/composition-api';
 
 Vue.config.devtools = true;
 Vue.use(Notifications);
@@ -25,6 +26,7 @@ Vue.use(PortalVue);
 Vue.use(Kaannos, { squareBrackets: false });
 Vue.use(Aikaleima);
 Vue.use(Vahvistus);
+Vue.use(VueCompositionApi);
 
 const isProduction = () => import.meta.env.NODE_ENV === 'production';
 const isTest = () => import.meta.env.NODE_ENV === 'test';

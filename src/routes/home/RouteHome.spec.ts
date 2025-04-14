@@ -5,12 +5,11 @@ import { tiedoteStoreMock, perusteStoreMock } from '@/storeMocks';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
-import { vi } from 'vitest';
-import { BrowserStore } from '@shared/stores/BrowserStore';
-import { computedValue } from '@shared/utils/interfaces';
 
 describe('RouteHome', () => {
   const localVue = createLocalVue();
+  const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
+  const osaamismerkitStore = mock(OsaamismerkitStore);
 
   const $route = {
     params: {
@@ -19,27 +18,10 @@ describe('RouteHome', () => {
   };
 
   test('Renders spinners and data', async () => {
-
     const perusteStore = perusteStoreMock();
     const tiedoteStore = tiedoteStoreMock();
-
-    const osaamismerkitStore = createMockedStore(OsaamismerkitStore, {
-      kategoriat: computedValue(() => []),
-      fetchKategoriat: () => Promise.resolve(),
-    });
-
-    const tietoapalvelustaStore = createMockedStore(TietoapalvelustaStore, {
-      tietoapalvelusta: computedValue(() => ({})),
-      tiedotteet: computedValue(() => []),
-    });
-
-    const julkaistutKoulutustyypitStore = createMockedStore(JulkaistutKoulutustyypitStore, {
-      julkaistutKoulutustyypit: computedValue(() => ['koulutustyyppi_muu']),
-      muuLukumaarat: computedValue(() => 1),
-      digitaalinenOsaaminen: computedValue(() => []),
-      koulutustyyppiLukumaarat: computedValue(() => [{ koulutustyyppi: 'koulutust', lukumaara: 1 }]),
-    });
-
+    const tietoapalvelustaStore = mock(TietoapalvelustaStore);
+    tietoapalvelustaStore.state.tietoapalvelusta = null;
 
     const wrapper = mount(RouteHome as any, {
       localVue,
@@ -58,6 +40,15 @@ describe('RouteHome', () => {
         $route,
       },
     });
+
+    await localVue.nextTick();
+
+    julkaistutKoulutustyypitStore.state.koulutustyyppiLukumaarat = [{ koulutustyyppi: 'koulutust', lukumaara: 1 }];
+    julkaistutKoulutustyypitStore.state.muuLukumaarat = 1;
+    julkaistutKoulutustyypitStore.state.digitaalinenOsaaminen = [];
+    osaamismerkitStore.state.kategoriat = [];
+
+    await localVue.nextTick();
 
     expect(tiedoteStore.getUusimmat).toBeCalledTimes(1);
     expect(wrapper.findAll('.oph-spinner').length).toEqual(1);
