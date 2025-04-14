@@ -1,19 +1,26 @@
 <template>
-<div class="content">
-  <div v-if="moduuli">
-    <h2 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')'  : '') }}</h2>
+  <div class="content">
+    <div v-if="moduuli">
+      <h2
+        slot="header"
+        class="otsikko"
+      >
+        {{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')' : '') }}
+      </h2>
 
-    <div class="teksti">
-      <moduuli-esitys :moduuli="moduuli"
-                      :termit="perusteTermit"
-                      :kuvat="perusteKuvat"
-                      :isPerusteView="false" />
+      <div class="teksti">
+        <moduuli-esitys
+          :moduuli="moduuli"
+          :termit="perusteTermit"
+          :kuvat="perusteKuvat"
+          :is-peruste-view="false"
+        />
+      </div>
+
+      <slot name="previous-next-navigation" />
     </div>
-
-    <slot name="previous-next-navigation" />
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

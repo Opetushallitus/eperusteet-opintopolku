@@ -1,98 +1,187 @@
 <template>
-  <ep-header tyyppi="maarayskokoelma" :murupolku="murupolku">
+  <ep-header
+    tyyppi="maarayskokoelma"
+    :murupolku="murupolku"
+  >
     <template slot="header">
       <div>
-        <EpSpinner v-if="!maarays"/>
+        <EpSpinner v-if="!maarays" />
         <template v-else>
-          {{$kaanna(maarays.nimi)}}
+          {{ $kaanna(maarays.nimi) }}
 
           <div class="d-flex mt-3">
-            <div class="asiasana mr-2" v-for="(asiasana, index) in maarays.asiasanat[kieli].asiasana" :key="'asiasana' + index">
+            <div
+              v-for="(asiasana, index) in maarays.asiasanat[kieli].asiasana"
+              :key="'asiasana' + index"
+              class="asiasana mr-2"
+            >
               {{ asiasana }}
             </div>
           </div>
         </template>
-
       </div>
     </template>
 
-    <EpSpinner v-if="!maarays"/>
+    <EpSpinner v-if="!maarays" />
 
-    <div v-else class="maarays d-flex flex-column-reverse flex-md-row">
+    <div
+      v-else
+      class="maarays d-flex flex-column-reverse flex-md-row"
+    >
       <div class="pdf mr-4 mb-4 mr-5">
-
-        <img :src="kuva" :alt="$t('maarays')" class="kuva"/>
+        <img
+          :src="kuva"
+          :alt="$t('maarays')"
+          class="kuva"
+        >
         <div class="nimi font-weight-bold d-flex align-items-end">
-          <div>{{$kaanna(maarays.nimi)}}</div>
+          <div>{{ $kaanna(maarays.nimi) }}</div>
         </div>
 
-        <a class="url d-inline-flex" v-if="maaraysPdfUrl" :href="maaraysPdfUrl" target="_blank" rel="noopener noreferrer">
-          <div>{{$t('avaa-maarays-pdf')}}</div>
+        <a
+          v-if="maaraysPdfUrl"
+          class="url d-inline-flex"
+          :href="maaraysPdfUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div>{{ $t('avaa-maarays-pdf') }}</div>
           <EpMaterialIcon class="ml-3">arrow_forward</EpMaterialIcon>
         </a>
       </div>
 
       <div class="tiedot flex-grow-1">
-        <ep-form-content name="voimaantulo" headerType="h3" headerClass="h6">
-          {{$sd(maarays.voimassaoloAlkaa)}} <EpVoimassaolo :voimassaolo="maarays"/>
+        <ep-form-content
+          name="voimaantulo"
+          header-type="h3"
+          header-class="h6"
+        >
+          {{ $sd(maarays.voimassaoloAlkaa) }} <EpVoimassaolo :voimassaolo="maarays" />
         </ep-form-content>
 
-        <ep-form-content name="maarayksen-paatospaivamaara" headerType="h3" headerClass="h6">
-          {{$sd(maarays.maarayspvm)}}
+        <ep-form-content
+          name="maarayksen-paatospaivamaara"
+          header-type="h3"
+          header-class="h6"
+        >
+          {{ $sd(maarays.maarayspvm) }}
         </ep-form-content>
 
-        <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
+        <ep-form-content
+          name="maarayksen-diaarinumero"
+          header-type="h3"
+          header-class="h6"
+        >
           {{ maarays.diaarinumero }}
         </ep-form-content>
 
-        <ep-form-content v-if="peruste" name="peruste" headerType="h3" headerClass="h6">
-          <router-link :to="perusteRoute" target="_blank">
-            {{$kaanna(peruste.nimi)}}
+        <ep-form-content
+          v-if="peruste"
+          name="peruste"
+          header-type="h3"
+          header-class="h6"
+        >
+          <router-link
+            :to="perusteRoute"
+            target="_blank"
+          >
+            {{ $kaanna(peruste.nimi) }}
           </router-link>
         </ep-form-content>
 
-        <ep-form-content name="koulutus-tai-tutkinto" headerType="h3" headerClass="h6">
-          <EpMaarayskokoelmaKoulutustyyppiSelect v-for="koulutustyyppi in maarays.koulutustyypit" :key="koulutustyyppi" :value="koulutustyyppi"/>
+        <ep-form-content
+          name="koulutus-tai-tutkinto"
+          header-type="h3"
+          header-class="h6"
+        >
+          <EpMaarayskokoelmaKoulutustyyppiSelect
+            v-for="koulutustyyppi in maarays.koulutustyypit"
+            :key="koulutustyyppi"
+            :value="koulutustyyppi"
+          />
         </ep-form-content>
 
-        <ep-form-content v-if="liittyykoToiseenMaaraykseenOtsikko" :name="liittyykoToiseenMaaraykseenOtsikko" headerType="h3" headerClass="h6">
-          <router-link v-for="muuttuva in maarays.muutettavatMaaraykset" :key="'muuttaa'+muuttuva.id" :to="{name: 'maarays', params: {maaraysId: muuttuva.id}}" class="d-block">
-            {{ $kaanna(muuttuva.nimi) }} ({{muuttuva.diaarinumero}})
+        <ep-form-content
+          v-if="liittyykoToiseenMaaraykseenOtsikko"
+          :name="liittyykoToiseenMaaraykseenOtsikko"
+          header-type="h3"
+          header-class="h6"
+        >
+          <router-link
+            v-for="muuttuva in maarays.muutettavatMaaraykset"
+            :key="'muuttaa'+muuttuva.id"
+            :to="{name: 'maarays', params: {maaraysId: muuttuva.id}}"
+            class="d-block"
+          >
+            {{ $kaanna(muuttuva.nimi) }} ({{ muuttuva.diaarinumero }})
           </router-link>
 
-          <router-link v-for="korvattava in maarays.korvattavatMaaraykset" :key="'korvaa'+korvattava.id" :to="{name: 'maarays', params: {maaraysId: korvattava.id}}" class="d-block">
-            {{ $kaanna(korvattava.nimi) }} ({{korvattava.diaarinumero}})
+          <router-link
+            v-for="korvattava in maarays.korvattavatMaaraykset"
+            :key="'korvaa'+korvattava.id"
+            :to="{name: 'maarays', params: {maaraysId: korvattava.id}}"
+            class="d-block"
+          >
+            {{ $kaanna(korvattava.nimi) }} ({{ korvattava.diaarinumero }})
           </router-link>
 
-          <div class="font-italic" v-if="maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset.length === 0">{{$t('maaraysta-ei-loydy-maarayskokoelmasta')}}</div>
-        </ep-form-content>
-
-        <ep-form-content name="kuvaus" headerType="h3" headerClass="h6">
-          <ep-content-viewer :value="$kaanna(maarays.kuvaus)"  />
-        </ep-form-content>
-
-        <ep-form-content name="liitteet" headerType="h3" headerClass="h6" v-if="liitteet.length > 0">
-          <div v-for="liite in liitteet" :key="'liite'+liite.id">
-            <a :href="liite.url" target="_blank" rel="noopener noreferrer">{{$kaanna(liite.nimi)}}</a> <span>(pdf)</span>
+          <div
+            v-if="maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset.length === 0"
+            class="font-italic"
+          >
+            {{ $t('maaraysta-ei-loydy-maarayskokoelmasta') }}
           </div>
         </ep-form-content>
 
-        <ep-form-content name="maaraykseen-liittyvat-uudemmat-maaraykset" headerType="h3" headerClass="h6" v-if="korvaavatMuuttavatMaaraykset && korvaavatMuuttavatMaaraykset.length > 0">
+        <ep-form-content
+          name="kuvaus"
+          header-type="h3"
+          header-class="h6"
+        >
+          <ep-content-viewer :value="$kaanna(maarays.kuvaus)" />
+        </ep-form-content>
+
+        <ep-form-content
+          v-if="liitteet.length > 0"
+          name="liitteet"
+          header-type="h3"
+          header-class="h6"
+        >
+          <div
+            v-for="liite in liitteet"
+            :key="'liite'+liite.id"
+          >
+            <a
+              :href="liite.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ $kaanna(liite.nimi) }}</a> <span>(pdf)</span>
+          </div>
+        </ep-form-content>
+
+        <ep-form-content
+          v-if="korvaavatMuuttavatMaaraykset && korvaavatMuuttavatMaaraykset.length > 0"
+          name="maaraykseen-liittyvat-uudemmat-maaraykset"
+          header-type="h3"
+          header-class="h6"
+        >
           <b-table
             :items="korvaavatMuuttavatMaaraykset"
             :fields="korvaavatMuuttavatFields"
-            striped>
-            <template v-slot:cell(nimi)="{ item }">
-              <router-link :to="{name: 'maarays', params: {maaraysId: item.id}}" class="d-block">
-                {{ $kaanna(item.nimi) }} ({{item.diaarinumero}})
+            striped
+          >
+            <template #cell(nimi)="{ item }">
+              <router-link
+                :to="{name: 'maarays', params: {maaraysId: item.id}}"
+                class="d-block"
+              >
+                {{ $kaanna(item.nimi) }} ({{ item.diaarinumero }})
               </router-link>
             </template>
           </b-table>
         </ep-form-content>
-
       </div>
     </div>
-
   </ep-header>
 </template>
 

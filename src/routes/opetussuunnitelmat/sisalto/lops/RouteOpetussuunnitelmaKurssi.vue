@@ -1,36 +1,61 @@
 <template>
   <div class="content">
-
     <div v-if="kurssi">
-      <h2 class="otsikko">{{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{kurssi.koodiArvo}})</span></h2>
+      <h2 class="otsikko">
+        {{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{ kurssi.koodiArvo }})</span>
+      </h2>
 
-      <EpCollapse v-if="kurssi.perusteen && kurssi.perusteen.kuvaus" :borderBottom="false" :shadow="true" class="mb-4" >
-        <div slot="header">{{$t('tukiteksti')}}</div>
+      <EpCollapse
+        v-if="kurssi.perusteen && kurssi.perusteen.kuvaus"
+        :border-bottom="false"
+        :shadow="true"
+        class="mb-4"
+      >
+        <div slot="header">
+          {{ $t('tukiteksti') }}
+        </div>
         <ep-content-viewer
-                    :value="$kaanna(kurssi.perusteen.kuvaus)"
-                    :termit="termit"
-                    :kuvat="kuvat" />
+          :value="$kaanna(kurssi.perusteen.kuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </EpCollapse>
 
-      <div v-for="(sisaltoavain, index) in sisaltoAvaimet" :key="'sisaltoavain'+index" class="mt-4">
-        <div class="mt-4" v-if="(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)
-        || (kurssi.perusteen && kurssi.perusteen[sisaltoavain] && kurssi.perusteen[sisaltoavain].teksti)">
-          <h3>{{$kaanna((kurssi[sisaltoavain] && kurssi[sisaltoavain].otsikko) || kurssi.perusteen[sisaltoavain].otsikko)}}</h3>
+      <div
+        v-for="(sisaltoavain, index) in sisaltoAvaimet"
+        :key="'sisaltoavain'+index"
+        class="mt-4"
+      >
+        <div
+          v-if="(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)
+            || (kurssi.perusteen && kurssi.perusteen[sisaltoavain] && kurssi.perusteen[sisaltoavain].teksti)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna((kurssi[sisaltoavain] && kurssi[sisaltoavain].otsikko) || kurssi.perusteen[sisaltoavain].otsikko) }}</h3>
 
-          <EpCollapse v-if="kurssi.perusteen && kurssi.perusteen[sisaltoavain]"
-                      :borderBottom="false" :shadow="true" class="mb-4" :expandedByDefault="!(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)">
-            <div slot="header">{{$t('tukiteksti')}}</div>
+          <EpCollapse
+            v-if="kurssi.perusteen && kurssi.perusteen[sisaltoavain]"
+            :border-bottom="false"
+            :shadow="true"
+            class="mb-4"
+            :expanded-by-default="!(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)"
+          >
+            <div slot="header">
+              {{ $t('tukiteksti') }}
+            </div>
             <ep-content-viewer
-                        :value="$kaanna(kurssi.perusteen[sisaltoavain].teksti)"
-                        :termit="termit"
-                        :kuvat="kuvat" />
+              :value="$kaanna(kurssi.perusteen[sisaltoavain].teksti)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
           </EpCollapse>
 
           <ep-content-viewer
-                        v-if="kurssi[sisaltoavain]"
-                        :value="$kaanna(kurssi[sisaltoavain].teksti)"
-                        :termit="termit"
-                        :kuvat="kuvat" />
+            v-if="kurssi[sisaltoavain]"
+            :value="$kaanna(kurssi[sisaltoavain].teksti)"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
         </div>
       </div>
 

@@ -1,30 +1,45 @@
 <template>
   <div>
-    <div class="nimikkeet" v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0">
+    <div
+      v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0"
+      class="nimikkeet"
+    >
       <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-      <span v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet" :key="tidx">
+      <span
+        v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet"
+        :key="tidx"
+      >
         {{ $kaanna(tutkintonimike.nimi) }}
       </span>
     </div>
-    <div class="nimikkeet" v-if="sisalto.osaamisalat && sisalto.osaamisalat.length > 0">
+    <div
+      v-if="sisalto.osaamisalat && sisalto.osaamisalat.length > 0"
+      class="nimikkeet"
+    >
       <span class="kohde">{{ $t('osaamisalat') }}:</span>
-      <span v-for="(osaamisala, oidx) in sisalto.osaamisalat" :key="oidx">
+      <span
+        v-for="(osaamisala, oidx) in sisalto.osaamisalat"
+        :key="oidx"
+      >
         {{ $kaanna(osaamisala.nimi) }}
       </span>
     </div>
     <div class="alatiedot">
-      <span v-for="(voimassaolotieto, index) in sisalto.voimassaoloTieto" :key="'voimassa' + index">
+      <span
+        v-for="(voimassaolotieto, index) in sisalto.voimassaoloTieto"
+        :key="'voimassa' + index"
+      >
         <span v-if="index > 0">|</span>
-        {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
+        {{ $t(voimassaolotieto.teksti) }}: {{ $sd(voimassaolotieto.paiva) }}
       </span>
-      <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
-      <span v-if="sisalto.diaarinumero">| {{$t('diaarinumero')}}: {{ sisalto.diaarinumero }}</span>
+      <EpVoimassaolo :voimassaolo="sisalto" />
+      <span v-if="sisalto.diaarinumero">| {{ $t('diaarinumero') }}: {{ sisalto.diaarinumero }}</span>
       <span v-if="sisalto.koulutukset && sisalto.koulutukset.length > 0">
         <template v-if="sisalto.koulutukset.length > 1">
-          | {{$t('koulutuskoodit')}}: {{ sisalto.koulutuskoodit }}
+          | {{ $t('koulutuskoodit') }}: {{ sisalto.koulutuskoodit }}
         </template>
         <template v-else>
-          | {{$t('koulutuskoodi')}}: {{ sisalto.koulutuskoodit }}
+          | {{ $t('koulutuskoodi') }}: {{ sisalto.koulutuskoodit }}
         </template>
       </span>
     </div>

@@ -1,71 +1,107 @@
 <template>
-<div>
-  <ep-spinner v-if="!koulutustyyppi" />
-  <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
-    <template slot="header">
-      {{ $t(ylaotsikko) }}
-    </template>
-  </ep-header>
-  <div id="main" class="container-lg">
-
-    <div v-if="$route.name === 'ammatillinenSelaus'">
-      <div class="d-flex justify-content-between flex-lg-row flex-column">
-
-        <router-link v-for="(linkki, index) in linkit" :key="'linkki'+index" :to="linkki.route">
-          <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
-            <EpMaterialIcon v-if="linkki.icon" icon-shape="outlined">{{linkki.icon}}</EpMaterialIcon>
-            <div class="align-self-center">
-              {{$t(linkki.text)}}
-            </div>
-          </div>
-        </router-link>
-
-      </div>
-
-      <div class="row mb-4">
-        <div class="col-12 col-lg-6 pr-5">
-          <h2 class="mb-2">{{$t('mita-ovat-ammatilliset-tutkinnot')}}</h2>
-
-          <p class="kuvaus">{{ $t('kooste-kuvaus-ammatillinen-koulutus') }}</p>
-          <p class="kuvaus">{{ $t('kooste-kuvaus-perusteet') }}</p>
-
-          <h2 class="mb-2 mt-4">{{$t('osallistu-kehitystyohon')}}</h2>
-          <p class="kuvaus">
-            {{ $t('ammatillinen-kehitystyo-kuvaus') }}
-            <EpLinkki :url="furtherFeedbackUrl" icon="launch" iconRight>{{ $t('kerro-ehdotuksesi') }}</EpLinkki>
-          </p>
-
-        </div>
-
-        <div class="col-12 col-lg-6">
-          <h2 class="mb-2">{{$t('ajankohtaista')}}</h2>
-          <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
-            <template v-slot:lisaaBtnText>
-              <div class="mt-2">
-                {{$t('katso-lisaa-ajankohtaisia')}}
+  <div>
+    <ep-spinner v-if="!koulutustyyppi" />
+    <ep-header
+      v-else
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
+      <template slot="header">
+        {{ $t(ylaotsikko) }}
+      </template>
+    </ep-header>
+    <div
+      id="main"
+      class="container-lg"
+    >
+      <div v-if="$route.name === 'ammatillinenSelaus'">
+        <div class="d-flex justify-content-between flex-lg-row flex-column">
+          <router-link
+            v-for="(linkki, index) in linkit"
+            :key="'linkki'+index"
+            :to="linkki.route"
+          >
+            <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
+              <EpMaterialIcon
+                v-if="linkki.icon"
+                icon-shape="outlined"
+              >
+                {{ linkki.icon }}
+              </EpMaterialIcon>
+              <div class="align-self-center">
+                {{ $t(linkki.text) }}
               </div>
-            </template>
-            <div slot="eiTietoja">{{$t('ei-tiedotteita')}}</div>
-          </ep-julki-lista>
+            </div>
+          </router-link>
         </div>
+
+        <div class="row mb-4">
+          <div class="col-12 col-lg-6 pr-5">
+            <h2 class="mb-2">
+              {{ $t('mita-ovat-ammatilliset-tutkinnot') }}
+            </h2>
+
+            <p class="kuvaus">
+              {{ $t('kooste-kuvaus-ammatillinen-koulutus') }}
+            </p>
+            <p class="kuvaus">
+              {{ $t('kooste-kuvaus-perusteet') }}
+            </p>
+
+            <h2 class="mb-2 mt-4">
+              {{ $t('osallistu-kehitystyohon') }}
+            </h2>
+            <p class="kuvaus">
+              {{ $t('ammatillinen-kehitystyo-kuvaus') }}
+              <EpLinkki
+                :url="furtherFeedbackUrl"
+                icon="launch"
+                icon-right
+              >
+                {{ $t('kerro-ehdotuksesi') }}
+              </EpLinkki>
+            </p>
+          </div>
+
+          <div class="col-12 col-lg-6">
+            <h2 class="mb-2">
+              {{ $t('ajankohtaista') }}
+            </h2>
+            <ep-julki-lista
+              :tiedot="tiedotteet"
+              @avaaTieto="avaaTiedote"
+            >
+              <template #lisaaBtnText>
+                <div class="mt-2">
+                  {{ $t('katso-lisaa-ajankohtaisia') }}
+                </div>
+              </template>
+              <div slot="eiTietoja">
+                {{ $t('ei-tiedotteita') }}
+              </div>
+            </ep-julki-lista>
+          </div>
+        </div>
+
+        <h2 class="mb-2">
+          {{ $t('tutkinnon-perusteet-ja-tutkinnon-osat') }}
+        </h2>
+        <peruste-ammatillinen-haku
+          :peruste-haku-store="ammatillinenPerusteHakuStore"
+          tyyppi="peruste"
+        />
       </div>
 
-      <h2 class="mb-2">{{$t('tutkinnon-perusteet-ja-tutkinnon-osat')}}</h2>
-      <peruste-ammatillinen-haku :peruste-haku-store="ammatillinenPerusteHakuStore" tyyppi="peruste"/>
+      <router-view v-else>
+        <div class="mb-4">
+          <router-link :to="{ name: 'ammatillinenSelaus' }">
+            <EpMaterialIcon>arrow_back</EpMaterialIcon>
+            {{ $t('palaa-ammatillinen-koulutus-sivulle') }}
+          </router-link>
+        </div>
+      </router-view>
     </div>
-
-    <router-view v-else>
-      <div class="mb-4">
-        <router-link :to="{ name: 'ammatillinenSelaus' }">
-          <EpMaterialIcon>arrow_back</EpMaterialIcon>
-          {{$t('palaa-ammatillinen-koulutus-sivulle')}}
-        </router-link>
-      </div>
-    </router-view>
-
   </div>
-
-</div>
 </template>
 
 <script lang="ts">

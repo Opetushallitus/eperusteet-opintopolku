@@ -1,64 +1,84 @@
 <template>
   <div>
-    <ep-collapse class="mb-3"
-                 v-for="(osaalue, index) in osaalueet"
-                 :key="'osaalue'+index"
-                 :shadow="false"
-                 :borderBottom="false"
-                 :use-padding="false"
-                 :expandedByDefault="osaalueet.length === 1"
-                 blue>
+    <ep-collapse
+      v-for="(osaalue, index) in osaalueet"
+      :key="'osaalue'+index"
+      class="mb-3"
+      :shadow="false"
+      :border-bottom="false"
+      :use-padding="false"
+      :expanded-by-default="osaalueet.length === 1"
+      blue
+    >
+      <h4
+        slot="header"
+        class="osaamistavoiteotsikko"
+      >
+        {{ $kaanna(osaalue.nimi) }} <span v-if="osaalue.koodi">({{ osaalue.koodi.arvo }})</span>
+      </h4>
 
-      <h4 class="osaamistavoiteotsikko" slot="header">{{$kaanna(osaalue.nimi)}} <span v-if="osaalue.koodi">({{osaalue.koodi.arvo}})</span></h4>
-
-      <div class="mt-2" v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet" :key="'osaamistavoite'+ index + otIndex">
+      <div
+        v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet"
+        :key="'osaamistavoite'+ index + otIndex"
+        class="mt-2"
+      >
         <div class="osaamistavoiteotsikko">
-          <span v-if="osaamistavoite.pakollinen">{{$t('pakolliset-osaamistavoitteet')}}</span>
-          <span v-else>{{$t('valinnaiset-osaamistavoitteet')}}</span>
-          <span>, {{osaamistavoite.laajuus}} {{$t('osaamispiste')}}</span>
+          <span v-if="osaamistavoite.pakollinen">{{ $t('pakolliset-osaamistavoitteet') }}</span>
+          <span v-else>{{ $t('valinnaiset-osaamistavoitteet') }}</span>
+          <span>, {{ osaamistavoite.laajuus }} {{ $t('osaamispiste') }}</span>
         </div>
 
-        <div class="mt-2" v-html="$kaanna(osaamistavoite.tavoitteet)"></div>
+        <div
+          class="mt-2"
+          v-html="$kaanna(osaamistavoite.tavoitteet)"
+        />
 
         <ep-ammatillinen-arvioinnin-kohdealueet
           v-if="osaamistavoite.arviointi && osaamistavoite.arviointi.arvioinninKohdealueet"
           :arviointiasteikot="arviointiasteikot"
-          :arvioinninKohdealueet="osaamistavoite.arviointi.arvioinninKohdealueet"/>
-
+          :arvioinnin-kohdealueet="osaamistavoite.arviointi.arvioinninKohdealueet"
+        />
       </div>
 
       <template v-if="osaalue.pakollisetOsaamistavoitteet">
-        <h4 class="mt-4">{{ $t('pakolliset-osaamistavoitteet') }}, {{osaalue.pakollisetOsaamistavoitteet.laajuus}} {{$t('osp')}}</h4>
-        <Osaamistavoite v-model="osaalue.pakollisetOsaamistavoitteet"
-                        v-if="osaalue.pakollisetOsaamistavoitteet"
-                        :is-valinnainen="false"
-                        :showLaajuus="false"
-                        :showKoodiArvo="false">
+        <h4 class="mt-4">
+          {{ $t('pakolliset-osaamistavoitteet') }}, {{ osaalue.pakollisetOsaamistavoitteet.laajuus }} {{ $t('osp') }}
+        </h4>
+        <Osaamistavoite
+          v-if="osaalue.pakollisetOsaamistavoitteet"
+          v-model="osaalue.pakollisetOsaamistavoitteet"
+          :is-valinnainen="false"
+          :show-laajuus="false"
+          :show-koodi-arvo="false"
+        >
           <div slot="osaamistavoitteet" />
         </Osaamistavoite>
       </template>
 
       <template v-if="osaalue.valinnaisetOsaamistavoitteet">
-        <hr/>
-        <h4>{{ $t('valinnaiset-osaamistavoitteet') }}, {{osaalue.valinnaisetOsaamistavoitteet.laajuus}} {{$t('osp')}}</h4>
-        <Osaamistavoite v-model="osaalue.valinnaisetOsaamistavoitteet"
-                        :is-valinnainen="true"
-                        :showLaajuus="false"
-                        :showKoodiArvo="false">
+        <hr>
+        <h4>{{ $t('valinnaiset-osaamistavoitteet') }}, {{ osaalue.valinnaisetOsaamistavoitteet.laajuus }} {{ $t('osp') }}</h4>
+        <Osaamistavoite
+          v-model="osaalue.valinnaisetOsaamistavoitteet"
+          :is-valinnainen="true"
+          :show-laajuus="false"
+          :show-koodi-arvo="false"
+        >
           <div slot="osaamistavoitteet" />
         </Osaamistavoite>
       </template>
 
-      <hr/>
+      <hr>
 
       <div v-if="osaalue.arviointi && osaalue.arviointi.osaamistasonKriteerit">
         <GeneerinenArviointiTaulukko :arviointi="osaalue.arviointi">
-          <h4 slot="header">{{ $t('arviointi')}} </h4>
+          <h4 slot="header">
+            {{ $t('arviointi') }}
+          </h4>
         </GeneerinenArviointiTaulukko>
       </div>
 
-      <EpValmaTelmaSisalto :valmaTelmaSisalto="osaalue.valmaTelmaSisalto" />
-
+      <EpValmaTelmaSisalto :valma-telma-sisalto="osaalue.valmaTelmaSisalto" />
     </ep-collapse>
   </div>
 </template>

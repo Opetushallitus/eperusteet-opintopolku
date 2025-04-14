@@ -1,27 +1,49 @@
 <template>
   <div v-if="perusteenOsa">
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
+    <portal-target name="toteutussuunnitelma-sisalto-header" />
 
-    <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :kuvat="kuvat" />
-    <hr class="my-4"/>
+    <ep-content-viewer
+      :value="$kaanna(perusteenOsa.kuvaus)"
+      :kuvat="kuvat"
+    />
+    <hr class="my-4">
 
     <EpKotoTaitotasot
-      :taitotasoTyyppi="taitotasoTyyppi"
+      :taitotaso-tyyppi="taitotasoTyyppi"
       :value="perusteenOsa.taitotasot"
-      :kuvat="kuvat">
-        <template #paikallinentarkennus="{ nimi }">
-          <ep-content-viewer :value="$kaanna(kotoTaitotasotByUri[nimi.uri].tavoiteTarkennus)" :kuvat="kuvat" />
-          <ep-content-viewer :value="$kaanna(kotoTaitotasotByUri[nimi.uri].sisaltoTarkennus)" :kuvat="kuvat" />
-        </template>
+      :kuvat="kuvat"
+    >
+      <template #paikallinentarkennus="{ nimi }">
+        <ep-content-viewer
+          :value="$kaanna(kotoTaitotasotByUri[nimi.uri].tavoiteTarkennus)"
+          :kuvat="kuvat"
+        />
+        <ep-content-viewer
+          :value="$kaanna(kotoTaitotasotByUri[nimi.uri].sisaltoTarkennus)"
+          :kuvat="kuvat"
+        />
+      </template>
     </EpKotoTaitotasot>
 
     <div v-if="laajaAlaisetOsaamiset && laajaAlaisetOsaamiset.length > 0">
-      <hr class="my-4"/>
-      <h2 class="mb-4">{{$t('laaja-alainen-osaaminen')}}</h2>
-      <div v-for="(lao, index) in laajaAlaisetOsaamiset" :key="'lao' + index" :class="{'mt-4': index > 0}">
+      <hr class="my-4">
+      <h2 class="mb-4">
+        {{ $t('laaja-alainen-osaaminen') }}
+      </h2>
+      <div
+        v-for="(lao, index) in laajaAlaisetOsaamiset"
+        :key="'lao' + index"
+        :class="{'mt-4': index > 0}"
+      >
         <h3>{{ $kaanna(perusteenLaotByUri[lao.koodiUri].koodi.nimi) }}</h3>
-        <ep-content-viewer :value="$kaanna(perusteenLaotByUri[lao.koodiUri].kuvaus)" :kuvat="kuvat" />
-        <ep-content-viewer :value="$kaanna(lao.teksti)" :kuvat="kuvat" />
+        <ep-content-viewer
+          :value="$kaanna(perusteenLaotByUri[lao.koodiUri].kuvaus)"
+          :kuvat="kuvat"
+        />
+        <ep-content-viewer
+          :value="$kaanna(lao.teksti)"
+          :kuvat="kuvat"
+        />
       </div>
     </div>
 

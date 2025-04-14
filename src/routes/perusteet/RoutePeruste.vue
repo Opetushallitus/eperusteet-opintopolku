@@ -1,73 +1,114 @@
 <template>
-<div class="peruste">
-  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku" :tyyppi="peruste.tyyppi" v-sticky sticky-side="top">
-    <template slot="header" v-if="peruste.tyyppi ==='opas' && peruste.opasTyyppi !== 'tietoapalvelusta'">
-      {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
-    </template>
-    <template slot="header" v-else>
-      {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
-    </template>
-    <template slot="subheader">
-      <div class="diaarinumero" v-if="peruste.tyyppi !=='opas'">
-        {{ peruste.diaarinumero }}
-      </div>
-      <ep-search
-        class="query mt-3"
-        v-model="query"
-        :maxlength="100"
-        :placeholder="$t('hae')"
-        :srOnlyLabelText="sisaltoHakuSrLabel"
-        />
-    </template>
-  </ep-header>
-
-  <EpPerusteNotificationBar :julkaisut="julkaisut" :peruste="peruste" />
-
-  <div class="container mt-4">
-    <div class="lower">
-      <div v-if="sisaltohaku">
-        <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="query" @clear="suljeSisaltohaku">
-          <template v-slot:nimi="{ tulos }">
-            <router-link :to="tulos.location" @click.native="sisaltohakuValinta(tulos.location)">
-              {{ tulos.nimi}}
-            </router-link>
-          </template>
-        </ep-peruste-haku>
-      </div>
-      <template v-else>
-        <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-        <ep-sidebar :scroll-enabled="scroll">
-          <template slot="bar">
-            <div>
-              <ep-peruste-sidenav
-                  :peruste-data-store="perusteDataStore">
-              </ep-peruste-sidenav>
-            </div>
-            <div class="tags">
-              <span class="tag"></span>
-            </div>
-          </template>
-
-          <template slot="view">
-            <router-view :key="$route.fullPath">
-              <template v-slot:header v-if="peruste.tyyppi ==='opas'">
-                {{$t('oppaan-tiedot')}}
-              </template>
-              <template v-slot:nimi v-if="peruste.tyyppi ==='opas'">
-                <ep-form-content name="oppaan-nimi" headerType="h3" headerClass="h6">
-                  <ep-field v-model="peruste.nimi"></ep-field>
-                </ep-form-content>
-              </template>
-              <template slot="previous-next-navigation">
-                <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
-              </template>
-            </router-view>
-          </template>
-        </ep-sidebar>
+  <div class="peruste">
+    <ep-header
+      v-sticky
+      :koulutustyyppi="koulutustyyppi"
+      :murupolku="murupolku"
+      :tyyppi="peruste.tyyppi"
+      sticky-side="top"
+    >
+      <template
+        v-if="peruste.tyyppi ==='opas' && peruste.opasTyyppi !== 'tietoapalvelusta'"
+        slot="header"
+      >
+        {{ $t('ohjeet-ja-materiaalit') }}: {{ $kaanna(peruste.nimi) }}
       </template>
+      <template
+        v-else
+        slot="header"
+      >
+        {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
+      </template>
+      <template slot="subheader">
+        <div
+          v-if="peruste.tyyppi !=='opas'"
+          class="diaarinumero"
+        >
+          {{ peruste.diaarinumero }}
+        </div>
+        <ep-search
+          v-model="query"
+          class="query mt-3"
+          :maxlength="100"
+          :placeholder="$t('hae')"
+          :sr-only-label-text="sisaltoHakuSrLabel"
+        />
+      </template>
+    </ep-header>
+
+    <EpPerusteNotificationBar
+      :julkaisut="julkaisut"
+      :peruste="peruste"
+    />
+
+    <div class="container mt-4">
+      <div class="lower">
+        <div v-if="sisaltohaku">
+          <ep-peruste-haku
+            :peruste-data-store="perusteDataStore"
+            :query="query"
+            @clear="suljeSisaltohaku"
+          >
+            <template #nimi="{ tulos }">
+              <router-link
+                :to="tulos.location"
+                @click.native="sisaltohakuValinta(tulos.location)"
+              >
+                {{ tulos.nimi }}
+              </router-link>
+            </template>
+          </ep-peruste-haku>
+        </div>
+        <template v-else>
+          <PortalTarget
+            ref="innerPortal"
+            name="globalNavigation"
+          />
+          <ep-sidebar :scroll-enabled="scroll">
+            <template slot="bar">
+              <div>
+                <ep-peruste-sidenav
+                  :peruste-data-store="perusteDataStore"
+                />
+              </div>
+              <div class="tags">
+                <span class="tag" />
+              </div>
+            </template>
+
+            <template slot="view">
+              <router-view :key="$route.fullPath">
+                <template
+                  v-if="peruste.tyyppi ==='opas'"
+                  #header
+                >
+                  {{ $t('oppaan-tiedot') }}
+                </template>
+                <template
+                  v-if="peruste.tyyppi ==='opas'"
+                  #nimi
+                >
+                  <ep-form-content
+                    name="oppaan-nimi"
+                    header-type="h3"
+                    header-class="h6"
+                  >
+                    <ep-field v-model="peruste.nimi" />
+                  </ep-form-content>
+                </template>
+                <template slot="previous-next-navigation">
+                  <ep-previous-next-navigation
+                    :active-node="current"
+                    :flattened-sidenav="flattenedSidenav"
+                  />
+                </template>
+              </router-view>
+            </template>
+          </ep-sidebar>
+        </template>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -225,7 +266,7 @@ export default class RoutePeruste extends Vue {
         return traverseNavigation(node, false).location;
       },
     } as ILinkkiHandler;
-  };
+  }
 
   get routeName() {
     return this.$route.name;

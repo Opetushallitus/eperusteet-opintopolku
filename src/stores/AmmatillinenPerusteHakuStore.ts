@@ -68,7 +68,7 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
     this.perPage = result.sivukoko;
     this.pages = result.sivuja;
     this.perusteet = result.data;
-  };
+  }
 
   async updateFilters(filters: JulkaistutPerusteetQuery) {
     this.filterdata = {

@@ -1,47 +1,61 @@
 <template>
-<div>
   <div>
-    <ep-header :murupolku="murupolku">
-      <template slot="header">
-        {{ $t('ajankohtaista') }}
-      </template>
-      <div class="search">
-        <ep-search :value="query" @input="setValue" />
-      </div>
-      <div v-if="tiedotteet.tiedotteet">
-        <div v-if="!isTiedotteetEmpty">
-          <div class="tiedotteet" id="tiedotteet-lista">
-            <div class="tiedote" v-for="(tiedote, idx) in tiedotteet.tiedotteet" :key="idx">
-              <div class="otsikko">
-                <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                  {{ $kaanna(tiedote.otsikko) }}
-                </router-link>
-              </div>
-              <div class="aikaleima">
-                {{ $sd(tiedote.luotu) }}
-              </div>
-              <div class="tiedote-sisalto">
-                <ep-content-viewer :value="$kaanna(tiedote.sisalto)"/>
+    <div>
+      <ep-header :murupolku="murupolku">
+        <template slot="header">
+          {{ $t('ajankohtaista') }}
+        </template>
+        <div class="search">
+          <ep-search
+            :value="query"
+            @input="setValue"
+          />
+        </div>
+        <div v-if="tiedotteet.tiedotteet">
+          <div v-if="!isTiedotteetEmpty">
+            <div
+              id="tiedotteet-lista"
+              class="tiedotteet"
+            >
+              <div
+                v-for="(tiedote, idx) in tiedotteet.tiedotteet"
+                :key="idx"
+                class="tiedote"
+              >
+                <div class="otsikko">
+                  <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
+                    {{ $kaanna(tiedote.otsikko) }}
+                  </router-link>
+                </div>
+                <div class="aikaleima">
+                  {{ $sd(tiedote.luotu) }}
+                </div>
+                <div class="tiedote-sisalto">
+                  <ep-content-viewer :value="$kaanna(tiedote.sisalto)" />
+                </div>
               </div>
             </div>
+            <b-pagination
+              :value="page"
+              :total-rows="tiedotteet.amount"
+              :per-page="tiedotteet.filter.sivukoko"
+              align="center"
+              aria-controls="tiedotteet-lista"
+              :first-text="$t('alkuun')"
+              prev-text="«"
+              next-text="»"
+              :last-text="$t('loppuun')"
+              @change="updatePage"
+            />
           </div>
-          <b-pagination :value="page"
-                        @change="updatePage"
-                        :total-rows="tiedotteet.amount"
-                        :per-page="tiedotteet.filter.sivukoko"
-                        align="center"
-                        aria-controls="tiedotteet-lista"
-                        :first-text="$t('alkuun')"
-                        prev-text="«"
-                        next-text="»"
-                        :last-text="$t('loppuun')" />
+          <div v-else>
+            {{ $t('ei-hakutuloksia') }}
+          </div>
         </div>
-      <div v-else>{{ $t('ei-hakutuloksia') }}</div>
-      </div>
-      <ep-spinner v-else />
-    </ep-header>
+        <ep-spinner v-else />
+      </ep-header>
+    </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

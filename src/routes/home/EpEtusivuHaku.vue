@@ -1,33 +1,58 @@
 <template>
   <div>
-    <EpSearch v-model="queryNimi" :placeholder="$t('')">
+    <EpSearch
+      v-model="queryNimi"
+      :placeholder="$t('')"
+    >
       <template #label>
         <span class="header">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</span>
       </template>
     </EpSearch>
-    <EpHakutulosmaara :kokonaismaara="kokonaismaara" class="my-3"/>
-    <div v-for="(item, idx) in opsitJaPerusteet" :key="idx" class="mb-3">
+    <EpHakutulosmaara
+      :kokonaismaara="kokonaismaara"
+      class="my-3"
+    />
+    <div
+      v-for="(item, idx) in opsitJaPerusteet"
+      :key="idx"
+      class="mb-3"
+    >
       <div class="list-item p-1 tile-background-shadow-selected shadow-tile">
-        <router-link :to="item.route" class="peruste-ops-linkki d-block">
+        <router-link
+          :to="item.route"
+          class="peruste-ops-linkki d-block"
+        >
           <div class="d-flex align-items-center">
             <div class="mx-2 my-2">
-              <div :class="item.theme"/>
+              <div :class="item.theme" />
             </div>
             <div class="my-2 mr-3">
               <div class="nimi">
                 {{ $kaanna(item.nimi) }}
               </div>
-              <div v-if="item.voimassaoloAlkaa" class="meta">
-                {{ $t('voimaantulo-pvm')}}: {{ $sd(item.voimassaoloAlkaa) }}
+              <div
+                v-if="item.voimassaoloAlkaa"
+                class="meta"
+              >
+                {{ $t('voimaantulo-pvm') }}: {{ $sd(item.voimassaoloAlkaa) }}
               </div>
-              <div v-if="item.organisaatiot && item.organisaatiot.length > 0" class="meta mr-2">
+              <div
+                v-if="item.organisaatiot && item.organisaatiot.length > 0"
+                class="meta mr-2"
+              >
                 <span class="mr-1">{{ $t('oppilaitokset') }}:</span>
-                <span v-for="(oppilaitos, tidx) in item.organisaatiot" :key="tidx">
+                <span
+                  v-for="(oppilaitos, tidx) in item.organisaatiot"
+                  :key="tidx"
+                >
                   <span>{{ $kaanna(oppilaitos.nimi) }}</span>
                   <span v-if="tidx < item.organisaatiot.length - 1">, </span>
                 </span>
               </div>
-              <div v-if="item.koulutustoimija" class="meta">
+              <div
+                v-if="item.koulutustoimija"
+                class="meta"
+              >
                 <span class="mr-1">{{ $t('organisaatiot') }}:</span>
                 <span>{{ $kaanna(item.koulutustoimija.nimi) }}</span>
               </div>
@@ -36,14 +61,21 @@
         </router-link>
       </div>
     </div>
-    <div v-if="kokonaismaara > 0" class="mt-4">
+    <div
+      v-if="kokonaismaara > 0"
+      class="mt-4"
+    >
       <EpBPagination
         v-model="sivu"
         :total="kokonaismaara"
-        :itemsPerPage="sivukoko"
-        aria-controls="opetussuunnitelmat-ja-perusteet-lista"/>
+        :items-per-page="sivukoko"
+        aria-controls="opetussuunnitelmat-ja-perusteet-lista"
+      />
     </div>
-    <EpSpinner v-if="isLoading" class="mt-4"></EpSpinner>
+    <EpSpinner
+      v-if="isLoading"
+      class="mt-4"
+    />
   </div>
 </template>
 

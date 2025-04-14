@@ -1,41 +1,57 @@
 <template>
-<div class="paikalliset">
-  <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
-  <span>{{ $t('voit-hakea-toteutussuunnitelman') }}</span>
-  <ep-search
-    class="my-3"
-    v-model="query.nimi"
-    max-width="true"
-    :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-    :placeholder="$t('')">
-    <template #label>
-      <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa')}}</span>
-    </template>
-  </ep-search>
+  <div class="paikalliset">
+    <h2 class="otsikko">
+      {{ $t('paikalliset-toteutussuunnitelmat') }}
+    </h2>
+    <span>{{ $t('voit-hakea-toteutussuunnitelman') }}</span>
+    <ep-search
+      v-model="query.nimi"
+      class="my-3"
+      max-width="true"
+      :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+      :placeholder="$t('')"
+    >
+      <template #label>
+        <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa') }}</span>
+      </template>
+    </ep-search>
 
-  <div class="opetussuunnitelma-container">
-    <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>
+    <div class="opetussuunnitelma-container">
+      <EpHakutulosmaara
+        :kokonaismaara="total"
+        piilota-nakyva-tulosmaara
+      />
 
-    <ep-spinner v-if="!opetussuunnitelmat" />
-    <div v-else-if="opetussuunnitelmat.length === 0">
-      <div class="alert alert-info">
-        {{ $t('ei-hakutuloksia') }}
+      <ep-spinner v-if="!opetussuunnitelmat" />
+      <div v-else-if="opetussuunnitelmat.length === 0">
+        <div class="alert alert-info">
+          {{ $t('ei-hakutuloksia') }}
+        </div>
       </div>
-    </div>
-    <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
-        <router-link :to="ops.route">
-          <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
-        </router-link>
+      <div
+        v-else
+        id="opetussuunnitelmat-lista"
+      >
+        <div
+          v-for="(ops, idx) in opetussuunnitelmatMapped"
+          :key="idx"
+        >
+          <router-link :to="ops.route">
+            <opetussuunnitelma-tile
+              :ops="ops"
+              :query="query.nimi"
+            />
+          </router-link>
+        </div>
+        <EpBPagination
+          v-model="page"
+          :items-per-page="perPage"
+          :total="total"
+          aria-controls="opetussuunnitelmat-lista"
+        />
       </div>
-      <EpBPagination v-model="page"
-                     :items-per-page="perPage"
-                     :total="total"
-                     aria-controls="opetussuunnitelmat-lista">
-      </EpBPagination>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

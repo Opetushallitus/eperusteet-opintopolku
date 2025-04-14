@@ -2,36 +2,69 @@
   <div class="content">
     <EpSpinner v-if="!oppiaine" />
     <template v-else>
-      <h2>{{$kaanna(oppiaine.nimi)}}</h2>
+      <h2>{{ $kaanna(oppiaine.nimi) }}</h2>
 
       <template v-if="perusteOppiaine">
         <ep-peruste-content
-          :naytaSisaltoTyhjana="false"
-          :perusteObject="perusteOppiaine.tehtava"
-          :pohjaObject="pohjanOppiaine.tehtava"
+          :nayta-sisalto-tyhjana="false"
+          :peruste-object="perusteOppiaine.tehtava"
+          :pohja-object="pohjanOppiaine.tehtava"
           :object="oppiaine.tehtava"
           :kuvat="kuvat"
-          :termit="termit"/>
+          :termit="termit"
+        />
 
         <template v-if="perusteOppiaineVapaatTekstit">
-          <div v-for="(vapaaTeksti, index) in perusteOppiaineVapaatTekstit" :key="'vapaateksti'+index" class="mt-5">
-            <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
-            <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+          <div
+            v-for="(vapaaTeksti, index) in perusteOppiaineVapaatTekstit"
+            :key="'vapaateksti'+index"
+            class="mt-5"
+          >
+            <h4>{{ $kaanna(vapaaTeksti.nimi) }}</h4>
+            <ep-content-viewer
+              :value="$kaanna(vapaaTeksti.teksti)"
+              :kuvat="kuvat"
+              :termit="termit"
+            />
 
-            <EpPaikallinenTarkennus headerh4 v-if="vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus">
-              <ep-content-viewer :value="$kaanna(vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus)" :kuvat="kuvat" :termit="termit"/>
+            <EpPaikallinenTarkennus
+              v-if="vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus"
+              headerh4
+            >
+              <ep-content-viewer
+                :value="$kaanna(vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus)"
+                :kuvat="kuvat"
+                :termit="termit"
+              />
             </EpPaikallinenTarkennus>
           </div>
         </template>
       </template>
 
-      <b-tabs class="ml-0 pl-0 mt-4" v-if="!vlkId">
-        <b-tab class="mt-4" v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudetSorted" :key="'vlk'+index" :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)">
-          <oppiaineen-vuosiluokkakokonaisuus :tietue="opVlk" :kuvat="kuvat" :termit="termit"/>
+      <b-tabs
+        v-if="!vlkId"
+        class="ml-0 pl-0 mt-4"
+      >
+        <b-tab
+          v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudetSorted"
+          :key="'vlk'+index"
+          class="mt-4"
+          :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)"
+        >
+          <oppiaineen-vuosiluokkakokonaisuus
+            :tietue="opVlk"
+            :kuvat="kuvat"
+            :termit="termit"
+          />
         </b-tab>
       </b-tabs>
 
-      <oppiaineen-vuosiluokkakokonaisuus v-else :tietue="oppiaineenVuosiluokkakokonaisuus" :kuvat="kuvat" :termit="termit"/>
+      <oppiaineen-vuosiluokkakokonaisuus
+        v-else
+        :tietue="oppiaineenVuosiluokkakokonaisuus"
+        :kuvat="kuvat"
+        :termit="termit"
+      />
     </template>
   </div>
 </template>

@@ -27,7 +27,7 @@ describe('EpPerusteRakenne', () => {
         ...mocks,
       },
     });
-  };
+  }
 
   test('Renders', async () => {
     const wrapper = createWrapper();

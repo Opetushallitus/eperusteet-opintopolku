@@ -1,100 +1,144 @@
 <template>
-<div class="haku">
-  <div class="search">
-
-    <div v-if="tyyppi === 'peruste'">
-      <div class="placeholderText">
-        <span class="pr-1">{{searchPlaceholder}}</span>
-        <span class="pr-1">{{$t('voit-hakea-tutkinnon-osia')}}</span>
-        <EpSpinner v-if="!valmisteillaOlevat" small/>
-        <span v-else-if="valmisteillaOlevat.data.length > 0">{{$t('katso-myos')}}
-          <router-link class="w-100" :to="{name: 'ammatillinenValmisteillaOlevat'}">
-            {{$t('valmisteilla-olevien-perusteiden-julkaisuaikataulu')}}
-          </router-link>
-        </span>
-      </div>
-
-      <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteetJaTutkinnonosat}">
-        <EpSearch
-          class="flex-fill ml-0 mt-3 mb-3 mr-3"
-          v-model="query"
-          :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
-          :placeholder="$t('')">
-          <template #label>
-            <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa')}}</span>
-          </template>
-        </EpSearch>
-        <EpMultiSelect
-          class="multiselect ml-0 mt-3 mb-3"
-          v-model="tutkintotyyppi"
-          :enable-empty-option="true"
-          :placeholder="$t('kaikki')"
-          :is-editing="true"
-          :options="tutkintotyypit"
-          :searchable="false">
-
-          <template #label>
-            <span class="font-weight-600">{{ $t('tutkintotyyppi')}}</span>
-          </template>
-
-          <template slot="singleLabel" slot-scope="{ option }">
-            {{ $t(option) }}
-          </template>
-
-          <template slot="option" slot-scope="{ option }">
-            {{ $t(option) }}
-          </template>
-        </EpMultiSelect>
-      </div>
-    </div>
-
-    <div v-else class="mb-3">
-      <EpSearch
-        v-model="query"
-        :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
-    </div>
-    <EpSisaltotyyppiFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpSisaltotyyppiFilter>
-  </div>
-
-  <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>
-
-  <div v-if="!perusteetJaTutkinnonosat">
-    <EpSpinner />
-  </div>
-
-  <div v-else class="content">
-    <div class="perusteet" id="perusteet-lista">
-      <EpAmmatillinenRow v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
-                           :key="idx"
-                           :route="sisalto.route"
-                           :class="sisalto.voimassaoloTieto[0].tyyppi">
-        <div class="list-item-header">
-          <div class="nimi">
-            {{ $kaanna(sisalto.nimi) }}
-            <div class="d-inline-flex">
-              <span v-if="sisalto.laajuus">{{sisalto.laajuus}} {{$t('osaamispiste')}}</span>
-            </div>
-            <span v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" class="koodi">({{ sisalto.tutkinnonosa.koodiArvo }})</span>
-          </div>
-          <div v-if="sisalto.tutkintotag">
-            <span class="tutkinto w-40" :class="sisalto.sisaltotyyppi">{{ $t(sisalto.tutkintotag)}}</span>
-          </div>
+  <div class="haku">
+    <div class="search">
+      <div v-if="tyyppi === 'peruste'">
+        <div class="placeholderText">
+          <span class="pr-1">{{ searchPlaceholder }}</span>
+          <span class="pr-1">{{ $t('voit-hakea-tutkinnon-osia') }}</span>
+          <EpSpinner
+            v-if="!valmisteillaOlevat"
+            small
+          />
+          <span v-else-if="valmisteillaOlevat.data.length > 0">{{ $t('katso-myos') }}
+            <router-link
+              class="w-100"
+              :to="{name: 'ammatillinenValmisteillaOlevat'}"
+            >
+              {{ $t('valmisteilla-olevien-perusteiden-julkaisuaikataulu') }}
+            </router-link>
+          </span>
         </div>
-        <EpAmmatillinenTutkinnonosaItem v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" :sisalto="sisalto"></EpAmmatillinenTutkinnonosaItem>
-        <EpAmmatillinenPerusteItem v-else :sisalto="sisalto"></EpAmmatillinenPerusteItem>
-      </EpAmmatillinenRow>
 
+        <div
+          class="d-flex flex-lg-row flex-column"
+          :class="{'disabled-events': !perusteetJaTutkinnonosat}"
+        >
+          <EpSearch
+            v-model="query"
+            class="flex-fill ml-0 mt-3 mb-3 mr-3"
+            :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
+            :placeholder="$t('')"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa') }}</span>
+            </template>
+          </EpSearch>
+          <EpMultiSelect
+            v-model="tutkintotyyppi"
+            class="multiselect ml-0 mt-3 mb-3"
+            :enable-empty-option="true"
+            :placeholder="$t('kaikki')"
+            :is-editing="true"
+            :options="tutkintotyypit"
+            :searchable="false"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('tutkintotyyppi') }}</span>
+            </template>
+
+            <template
+              slot="singleLabel"
+              slot-scope="{ option }"
+            >
+              {{ $t(option) }}
+            </template>
+
+            <template
+              slot="option"
+              slot-scope="{ option }"
+            >
+              {{ $t(option) }}
+            </template>
+          </EpMultiSelect>
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="mb-3"
+      >
+        <EpSearch
+          v-model="query"
+          :class="{'disabled-events': !perusteetJaTutkinnonosat}"
+        />
+      </div>
+      <EpSisaltotyyppiFilter
+        v-if="tyyppi === 'peruste'"
+        v-model="toggleQuery"
+      />
     </div>
-    <div class="pagination d-flex justify-content-center">
-      <EpBPagination v-model="page"
-                     :items-per-page="perPage"
-                     :total="total"
-                     aria-controls="perusteet-lista">
-      </EpBPagination>
+
+    <EpHakutulosmaara
+      :kokonaismaara="total"
+      piilota-nakyva-tulosmaara
+    />
+
+    <div v-if="!perusteetJaTutkinnonosat">
+      <EpSpinner />
+    </div>
+
+    <div
+      v-else
+      class="content"
+    >
+      <div
+        id="perusteet-lista"
+        class="perusteet"
+      >
+        <EpAmmatillinenRow
+          v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
+          :key="idx"
+          :route="sisalto.route"
+          :class="sisalto.voimassaoloTieto[0].tyyppi"
+        >
+          <div class="list-item-header">
+            <div class="nimi">
+              {{ $kaanna(sisalto.nimi) }}
+              <div class="d-inline-flex">
+                <span v-if="sisalto.laajuus">{{ sisalto.laajuus }} {{ $t('osaamispiste') }}</span>
+              </div>
+              <span
+                v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'"
+                class="koodi"
+              >({{ sisalto.tutkinnonosa.koodiArvo }})</span>
+            </div>
+            <div v-if="sisalto.tutkintotag">
+              <span
+                class="tutkinto w-40"
+                :class="sisalto.sisaltotyyppi"
+              >{{ $t(sisalto.tutkintotag) }}</span>
+            </div>
+          </div>
+          <EpAmmatillinenTutkinnonosaItem
+            v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'"
+            :sisalto="sisalto"
+          />
+          <EpAmmatillinenPerusteItem
+            v-else
+            :sisalto="sisalto"
+          />
+        </EpAmmatillinenRow>
+      </div>
+      <div class="pagination d-flex justify-content-center">
+        <EpBPagination
+          v-model="page"
+          :items-per-page="perPage"
+          :total="total"
+          aria-controls="perusteet-lista"
+        />
+      </div>
     </div>
   </div>
-
-</div>
 </template>
 
 <script lang="ts">

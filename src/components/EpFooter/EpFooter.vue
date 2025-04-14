@@ -3,7 +3,10 @@
     <footer>
       <div class="horizontal-line">
         <router-link :to="{ name: 'root'}">
-          <img :src="ophLogo" :alt="$t('eperusteet')"/>
+          <img
+            :src="ophLogo"
+            :alt="$t('eperusteet')"
+          >
         </router-link>
       </div>
       <div class="footer-row">
@@ -14,17 +17,29 @@
           <EpPalauteLinkki yllapito-avain="eperusteet-opintopolku-palaute-url" />
           <div class="d-flex">
             <EpMaterialIcon>chevron_right</EpMaterialIcon>
-            <ep-linkki :url="$kaanna(linkit.saavutettavuusseloste)">{{ $t('saavutettavuusseloste') }}</ep-linkki>
+            <ep-linkki :url="$kaanna(linkit.saavutettavuusseloste)">
+              {{ $t('saavutettavuusseloste') }}
+            </ep-linkki>
           </div>
           <div class="d-flex">
             <EpMaterialIcon>chevron_right</EpMaterialIcon>
-            <EpLinkki :url="$kaanna(linkit.virkailija)" icon="launch" iconRight>{{ $t('siirry-virkailijanakymaan') }}</EpLinkki>
+            <EpLinkki
+              :url="$kaanna(linkit.virkailija)"
+              icon="launch"
+              icon-right
+            >
+              {{ $t('siirry-virkailijanakymaan') }}
+            </EpLinkki>
           </div>
         </div>
       </div>
       <div class="horizontal-line">
         <a :href="$kaanna(linkit.oph)">
-          <img class="logo" :src="opintopolkuLogo" :alt="$t('oph')" />
+          <img
+            class="logo"
+            :src="opintopolkuLogo"
+            :alt="$t('oph')"
+          >
         </a>
       </div>
       <div class="footer-row">

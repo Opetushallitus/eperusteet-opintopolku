@@ -1,63 +1,89 @@
 <template>
-<div class="paikalliset" v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0">
-  <h2 class="otsikko">{{ $t('paikalliset-opetussuunnitelmat') }}</h2>
-  <span>{{ $t('voit-hakea-opetussuunnitelman-yleissivistava') }}</span>
-  <div class="d-flex flex-lg-row flex-column w-100">
-    <ep-search
-      class="flex-fill ml-0 mt-3 mb-3 mr-3"
-      v-model="query"
-      :max-width="true"
-      :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-      :placeholder="$t('')">
-      <template #label>
-        <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa')}}</span>
-      </template>
-    </ep-search>
-    <EpMultiSelect
-      v-if="julkaistutPerusteet"
-      :is-editing="false"
-      :options="perusteetOptions"
-      :placeholder="$t('kaikki')"
-      class="multiselect ml-0 mt-3 mb-3"
-      v-model="valittuPeruste"
-      :searchable="false">
-      <template #label>
-        <span class="font-weight-600">{{ $t('peruste')}}</span>
-      </template>
-      <template slot="singleLabel" slot-scope="{ option }">
-        {{ kaannaPerusteNimi(option) }}
-      </template>
-      <template slot="option" slot-scope="{ option }">
-        {{ kaannaPerusteNimi(option) }}
-      </template>
-    </EpMultiSelect>
-  </div>
+  <div
+    v-if="julkaistutPerusteet && julkaistutPerusteet.length > 0"
+    class="paikalliset"
+  >
+    <h2 class="otsikko">
+      {{ $t('paikalliset-opetussuunnitelmat') }}
+    </h2>
+    <span>{{ $t('voit-hakea-opetussuunnitelman-yleissivistava') }}</span>
+    <div class="d-flex flex-lg-row flex-column w-100">
+      <ep-search
+        v-model="query"
+        class="flex-fill ml-0 mt-3 mb-3 mr-3"
+        :max-width="true"
+        :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+        :placeholder="$t('')"
+      >
+        <template #label>
+          <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa') }}</span>
+        </template>
+      </ep-search>
+      <EpMultiSelect
+        v-if="julkaistutPerusteet"
+        v-model="valittuPeruste"
+        :is-editing="false"
+        :options="perusteetOptions"
+        :placeholder="$t('kaikki')"
+        class="multiselect ml-0 mt-3 mb-3"
+        :searchable="false"
+      >
+        <template #label>
+          <span class="font-weight-600">{{ $t('peruste') }}</span>
+        </template>
+        <template
+          slot="singleLabel"
+          slot-scope="{ option }"
+        >
+          {{ kaannaPerusteNimi(option) }}
+        </template>
+        <template
+          slot="option"
+          slot-scope="{ option }"
+        >
+          {{ kaannaPerusteNimi(option) }}
+        </template>
+      </EpMultiSelect>
+    </div>
 
-  <div class="opetussuunnitelma-container">
-    <EpHakutulosmaara :kokonaismaara="opetussuunnitelmatLength" piilotaNakyvaTulosmaara/>
+    <div class="opetussuunnitelma-container">
+      <EpHakutulosmaara
+        :kokonaismaara="opetussuunnitelmatLength"
+        piilota-nakyva-tulosmaara
+      />
 
-    <ep-spinner v-if="isLoading" />
-    <div v-else-if="opetussuunnitelmat.length === 0">
-      <div class="alert alert-info">
-        {{ $t('ei-hakutuloksia') }}
+      <ep-spinner v-if="isLoading" />
+      <div v-else-if="opetussuunnitelmat.length === 0">
+        <div class="alert alert-info">
+          {{ $t('ei-hakutuloksia') }}
+        </div>
+      </div>
+
+      <div
+        v-else
+        id="opetussuunnitelmat-lista"
+      >
+        <router-link
+          v-for="(ops, idx) in opetussuunnitelmat"
+          :key="idx"
+          :to="ops.route"
+          class="d-block"
+        >
+          <opetussuunnitelma-tile
+            :ops="ops"
+            :query="query"
+            @mouseover="mouseOver(ops)"
+          />
+        </router-link>
+        <EpBPagination
+          v-model="page"
+          :items-per-page="perPage"
+          :total="opetussuunnitelmatKokonaismaara"
+          aria-controls="opetussuunnitelmat-lista"
+        />
       </div>
     </div>
-
-    <div v-else id="opetussuunnitelmat-lista">
-      <router-link :to="ops.route" v-for="(ops, idx) in opetussuunnitelmat" :key="idx" class="d-block">
-        <opetussuunnitelma-tile
-          :ops="ops"
-          :query="query"
-          @mouseover="mouseOver(ops)"/>
-      </router-link>
-      <EpBPagination v-model="page"
-                     :items-per-page="perPage"
-                     :total="opetussuunnitelmatKokonaismaara"
-                     aria-controls="opetussuunnitelmat-lista">
-      </EpBPagination>
-    </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

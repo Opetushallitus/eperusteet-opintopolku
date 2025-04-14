@@ -1,133 +1,223 @@
 <template>
-
   <router-view v-if="kurssi" />
 
-  <div v-else class="content">
-    <h2>{{$kaanna(oppiaine.nimi)}}</h2>
+  <div
+    v-else
+    class="content"
+  >
+    <h2>{{ $kaanna(oppiaine.nimi) }}</h2>
 
-    <div class="mt-4" v-if="oppiaine.koodi">
-      <h3>{{ $t('koodi')}}</h3>
-      <span>{{oppiaine.koodi.arvo}}</span>
+    <div
+      v-if="oppiaine.koodi"
+      class="mt-4"
+    >
+      <h3>{{ $t('koodi') }}</h3>
+      <span>{{ oppiaine.koodi.arvo }}</span>
     </div>
 
-    <div class="mt-4" v-if="oppiaine.tehtava">
-      <h3>{{ $kaanna(oppiaine.tehtava.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.tehtava.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.tehtava"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(oppiaine.tehtava.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.tehtava.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="oppiaine.tyotavat">
-      <h3>{{ $kaanna(oppiaine.tyotavat.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.tyotavat.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.tyotavat"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(oppiaine.tyotavat.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.tyotavat.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="oppiaine.ohjaus">
-      <h3>{{ $kaanna(oppiaine.ohjaus.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.ohjaus.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.ohjaus"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(oppiaine.ohjaus.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.ohjaus.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="oppiaine.arviointi">
-      <h3>{{ $kaanna(oppiaine.arviointi.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.arviointi.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.arviointi"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(oppiaine.arviointi.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.arviointi.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="oppiaine.sisaltoalueinfo">
-      <h3>{{ $kaanna(oppiaine.sisaltoalueinfo.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.sisaltoalueinfo.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.sisaltoalueinfo"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(oppiaine.sisaltoalueinfo.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.sisaltoalueinfo.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="oppiaine.pakollinenKurssiKuvaus">
-      <h3>{{ $t('pakollinen-kurssi-kuvaus-header')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.pakollinenKurssiKuvaus)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.pakollinenKurssiKuvaus"
+      class="mt-4"
+    >
+      <h3>{{ $t('pakollinen-kurssi-kuvaus-header') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.pakollinenKurssiKuvaus)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="oppiaine.syventavaKurssiKuvaus">
-      <h3>{{ $t('syventava-kurssi-kuvaus-header')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.syventavaKurssiKuvaus)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.syventavaKurssiKuvaus"
+      class="mt-4"
+    >
+      <h3>{{ $t('syventava-kurssi-kuvaus-header') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.syventavaKurssiKuvaus)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="oppiaine.soveltavaKurssiKuvaus">
-      <h3>{{ $t('soveltava-kurssi-kuvaus-header')}}</h3>
-      <ep-content-viewer :value="$kaanna(oppiaine.soveltavaKurssiKuvaus)" :kuvat="kuvat" />
+    <div
+      v-if="oppiaine.soveltavaKurssiKuvaus"
+      class="mt-4"
+    >
+      <h3>{{ $t('soveltava-kurssi-kuvaus-header') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.soveltavaKurssiKuvaus)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-5" v-if="oppimaarat && oppimaarat.length > 0">
-      <h3>{{$t('oppimaarat')}}</h3>
-      <div v-for="oppimaara in oppimaarat" :key="'oppimaara'+oppimaara.id" class="taulukko-rivi-varitys px-2 py-3">
+    <div
+      v-if="oppimaarat && oppimaarat.length > 0"
+      class="mt-5"
+    >
+      <h3>{{ $t('oppimaarat') }}</h3>
+      <div
+        v-for="oppimaara in oppimaarat"
+        :key="'oppimaara'+oppimaara.id"
+        class="taulukko-rivi-varitys px-2 py-3"
+      >
         <router-link :to="oppimaara.route">
-          {{$kaanna(oppimaara.nimi)}}
+          {{ $kaanna(oppimaara.nimi) }}
         </router-link>
       </div>
     </div>
 
-    <div class="mt-5" v-if="kurssit && kurssit.length > 0">
-      <h3>{{$t('kurssit')}}</h3>
-      <div v-for="kurssi in kurssit" :key="'kurssi'+kurssi.id" class="taulukko-rivi-varitys px-2 py-3">
+    <div
+      v-if="kurssit && kurssit.length > 0"
+      class="mt-5"
+    >
+      <h3>{{ $t('kurssit') }}</h3>
+      <div
+        v-for="kurssi in kurssit"
+        :key="'kurssi'+kurssi.id"
+        class="taulukko-rivi-varitys px-2 py-3"
+      >
         <router-link :to="kurssi.route">
-          {{$kaanna(kurssi.nimi)}}
+          {{ $kaanna(kurssi.nimi) }}
         </router-link>
       </div>
     </div>
 
-    <ep-button class="mt-5" variant="link" @click="toggleTavoite()" v-if="tavoitteet.length > 0">
-      {{$t('avaa-sulje-kaikki')}}
+    <ep-button
+      v-if="tavoitteet.length > 0"
+      class="mt-5"
+      variant="link"
+      @click="toggleTavoite()"
+    >
+      {{ $t('avaa-sulje-kaikki') }}
     </ep-button>
 
     <ep-collapse
-      ref="tavoitecollapse"
       v-for="(tavoite, index) in tavoitteet"
+      ref="tavoitecollapse"
       :key="'tavoite'+index"
       :border-bottom="false"
-      :expandedByDefault="false"
-      :shadow="true">
-
-      <template v-slot:header>
-        <h3 v-html="$kaanna(tavoite.tavoite)"></h3>
+      :expanded-by-default="false"
+      :shadow="true"
+    >
+      <template #header>
+        <h3 v-html="$kaanna(tavoite.tavoite)" />
       </template>
 
       <div class="mt-4">
-
         <div v-if="tavoite.tavoitteistaJohdetutOppimisenTavoitteet">
-          <h4>{{$t('tavoitteista-johdetut-oppimisen-tavoitteet')}}</h4>
-          <span v-html="$kaanna(tavoite.tavoitteistaJohdetutOppimisenTavoitteet)"></span>
+          <h4>{{ $t('tavoitteista-johdetut-oppimisen-tavoitteet') }}</h4>
+          <span v-html="$kaanna(tavoite.tavoitteistaJohdetutOppimisenTavoitteet)" />
         </div>
 
         <div v-if="tavoite.kohdealue">
-          <h4>{{$t('kohdealueet')}}</h4>
-          <span v-html="$kaanna(tavoite.kohdealue.nimi)"></span>
+          <h4>{{ $t('kohdealueet') }}</h4>
+          <span v-html="$kaanna(tavoite.kohdealue.nimi)" />
         </div>
 
-        <div class="mt-4" v-if="tavoite.laajaalaisetosaamiset.length > 0">
-          <h4>{{$t('laaja-alaisen-osaamisen-alueet')}}</h4>
+        <div
+          v-if="tavoite.laajaalaisetosaamiset.length > 0"
+          class="mt-4"
+        >
+          <h4>{{ $t('laaja-alaisen-osaamisen-alueet') }}</h4>
 
-          <ep-collapse class="lao" v-for="(lao, index) in tavoite.laajaalaisetosaamiset" :key="'lao'+index"
-            :borderBottom="false" :expanded-by-default="false" chevronLocation="left">
-            <template v-slot:header>
-              <h5 v-html="$kaanna(lao.nimi)"></h5>
+          <ep-collapse
+            v-for="(lao, index) in tavoite.laajaalaisetosaamiset"
+            :key="'lao'+index"
+            class="lao"
+            :border-bottom="false"
+            :expanded-by-default="false"
+            chevron-location="left"
+          >
+            <template #header>
+              <h5 v-html="$kaanna(lao.nimi)" />
             </template>
 
             <div v-html="$kaanna(lao.kuvaus)" />
-
           </ep-collapse>
 
-          <div class="mt-4" v-if="tavoite.kohdeTeksti">
+          <div
+            v-if="tavoite.kohdeTeksti"
+            class="mt-4"
+          >
             <h4>{{ $t('arvioinnin-kohde') }}</h4>
-            <span v-html="$kaanna(tavoite.kohdeTeksti)"></span>
+            <span v-html="$kaanna(tavoite.kohdeTeksti)" />
           </div>
         </div>
 
-        <div class="mt-4" v-if="tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0">
-          <h4 class="mb-0 pb-0">{{$kaanna(tavoite.arvioinninOtsikko)}}</h4>
+        <div
+          v-if="tavoite.arvioinninkohteet && tavoite.arvioinninkohteet.length > 0"
+          class="mt-4"
+        >
+          <h4 class="mb-0 pb-0">
+            {{ $kaanna(tavoite.arvioinninOtsikko) }}
+          </h4>
           <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
         </div>
 
-        <div class="mt-4" v-if="tavoite.vapaaTeksti ">
-          <ep-content-viewer :value="$kaanna(tavoite.vapaaTeksti)" :kuvat="kuvat" />
+        <div
+          v-if="tavoite.vapaaTeksti "
+          class="mt-4"
+        >
+          <ep-content-viewer
+            :value="$kaanna(tavoite.vapaaTeksti)"
+            :kuvat="kuvat"
+          />
         </div>
-
       </div>
-
     </ep-collapse>
-
   </div>
 </template>
 
@@ -211,7 +301,7 @@ export default class RouteAipeOppiaine extends Vue {
     }
 
     return tavoite.arvioinninKuvaus;
-  };
+  }
 
   get laajaAlaisetOsaamisetById() {
     return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset'), 'id');

@@ -7,29 +7,50 @@
       </div>
     </div>
     <div v-else>
-      <div v-for="(group, index) in kategoriaGroup" :key="index" class="mb-4">
+      <div
+        v-for="(group, index) in kategoriaGroup"
+        :key="index"
+        class="mb-4"
+      >
         <div class="mb-4">
-          <h4>{{$kaanna(group.nimi)}}</h4>
+          <h4>{{ $kaanna(group.nimi) }}</h4>
         </div>
-        <div class="mb-4" v-if="group.kuvaus && !hideKuvaus">
-          {{$kaanna(group.kuvaus)}}
+        <div
+          v-if="group.kuvaus && !hideKuvaus"
+          class="mb-4"
+        >
+          {{ $kaanna(group.kuvaus) }}
         </div>
         <div class="d-md-flex flex-wrap justify-content-start">
-          <div v-for="(osaamismerkki, idx) in group.osaamismerkit" :key="'merkki-'+idx" class="mb-2 mr-2">
+          <div
+            v-for="(osaamismerkki, idx) in group.osaamismerkit"
+            :key="'merkki-'+idx"
+            class="mb-2 mr-2"
+          >
             <router-link :to="{ name: 'osaamismerkkiTiedot', params: { osaamismerkkiId: osaamismerkki.id } }">
-              <div class="tile tile-background-shadow-selected shadow-tile" :class="{ 'expand-voimassaolo': osaamismerkki.isVanhentunut }">
+              <div
+                class="tile tile-background-shadow-selected shadow-tile"
+                :class="{ 'expand-voimassaolo': osaamismerkki.isVanhentunut }"
+              >
                 <div class="tile-main d-flex">
                   <div class="image">
-                    <img :src="osaamismerkki.image" width="40" height="40">
+                    <img
+                      :src="osaamismerkki.image"
+                      width="40"
+                      height="40"
+                    >
                   </div>
                   <div class="ml-3 nimi">
                     <span class="">{{ $kaanna(osaamismerkki.nimi) }}</span>
                   </div>
                 </div>
                 <hr v-if="osaamismerkki.isVanhentunut">
-                <div v-if="osaamismerkki.isVanhentunut" class="tile-voimassaolo d-flex">
-                  <span>{{ $t('voimassaolo')}}:</span>
-                  <EpVoimassaolo :voimassaolo="osaamismerkki"></EpVoimassaolo>
+                <div
+                  v-if="osaamismerkki.isVanhentunut"
+                  class="tile-voimassaolo d-flex"
+                >
+                  <span>{{ $t('voimassaolo') }}:</span>
+                  <EpVoimassaolo :voimassaolo="osaamismerkki" />
                 </div>
               </div>
             </router-link>
@@ -60,7 +81,7 @@ export default class EpOsaamismerkit extends Vue {
   private osaamismerkkiKategoriat!: OsaamismerkkiKategoriaDto[];
 
   @Prop({ required: false, default: false, type: Boolean })
-  private hideKuvaus?: Boolean;
+  private hideKuvaus?: boolean;
 
   generateImageUrl(liite) {
     return liite ? 'data:' + liite.mime + ';base64,' + liite.binarydata : null;

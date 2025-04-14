@@ -1,19 +1,28 @@
 <template>
-<div class="content">
-  <div v-if="oppiaineet">
-    <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
-    <div class="teksti">
-      <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineet" :key="idx">
-        <router-link :to="oppiaine.location">
-          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
-        </router-link>
+  <div class="content">
+    <div v-if="oppiaineet">
+      <h2
+        slot="header"
+        class="otsikko"
+      >
+        {{ $t('oppiaineet') }}
+      </h2>
+      <div class="teksti">
+        <div
+          v-for="(oppiaine, idx) in oppiaineet"
+          :key="idx"
+          class="oppiaine"
+        >
+          <router-link :to="oppiaine.location">
+            {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
+          </router-link>
+        </div>
       </div>
-    </div>
 
-    <slot name="previous-next-navigation" />
+      <slot name="previous-next-navigation" />
+    </div>
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

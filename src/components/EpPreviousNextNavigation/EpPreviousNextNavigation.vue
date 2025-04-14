@@ -1,19 +1,30 @@
 <template>
-<div class="d-flex flex-lg-row justify-content-between mt-5" v-if="previous || next">
-  <b-link v-if="previous && previous.location" :to="previous.location" class="pb-3">
-    <div class="d-flex align-items-center">
-      <EpMaterialIcon>arrow_back</EpMaterialIcon>
-      <span class="mx-2">{{ $kaannaOlioTaiTeksti(previous.label) }}</span>
-    </div>
-  </b-link>
+  <div
+    v-if="previous || next"
+    class="d-flex flex-lg-row justify-content-between mt-5"
+  >
+    <b-link
+      v-if="previous && previous.location"
+      :to="previous.location"
+      class="pb-3"
+    >
+      <div class="d-flex align-items-center">
+        <EpMaterialIcon>arrow_back</EpMaterialIcon>
+        <span class="mx-2">{{ $kaannaOlioTaiTeksti(previous.label) }}</span>
+      </div>
+    </b-link>
 
-  <b-link v-if="next && next.location" :to="next.location" class="ml-auto pb-3">
-    <div class="d-flex align-items-center">
-      <span class="next mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
-      <EpMaterialIcon>arrow_forward</EpMaterialIcon>
-    </div>
-  </b-link>
-</div>
+    <b-link
+      v-if="next && next.location"
+      :to="next.location"
+      class="ml-auto pb-3"
+    >
+      <div class="d-flex align-items-center">
+        <span class="next mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
+        <EpMaterialIcon>arrow_forward</EpMaterialIcon>
+      </div>
+    </b-link>
+  </div>
 </template>
 
 <script lang="ts">

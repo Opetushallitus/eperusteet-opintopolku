@@ -1,16 +1,27 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko mb-4"
+      >
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
 
       <div class="mb-4">
-        <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
-        <hr/>
+        <ep-content-viewer
+          :value="$kaanna(perusteenOsa.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+        <hr>
       </div>
 
-      <h3 class="mb-4">{{$t('tavoitteet-ja-keskeiset-sisaltoalueet')}}</h3>
+      <h3 class="mb-4">
+        {{ $t('tavoitteet-ja-keskeiset-sisaltoalueet') }}
+      </h3>
 
-      <EpTavoitesisaltoalueTavoitealueet :value="perusteenOsa.tavoitealueet"/>
+      <EpTavoitesisaltoalueTavoitealueet :value="perusteenOsa.tavoitealueet" />
 
       <slot name="previous-next-navigation" />
     </div>

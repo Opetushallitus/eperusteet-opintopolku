@@ -1,47 +1,82 @@
 <template>
-  <div class="opetussuunnitelma shadow-tile" @mouseover="$emit('mouseover', $event)">
+  <div
+    class="opetussuunnitelma shadow-tile"
+    @mouseover="$emit('mouseover', $event)"
+  >
     <div class="d-flex align-items-center">
-      <div v-if="showOpsIcon" class="opsicon-wrapper">
+      <div
+        v-if="showOpsIcon"
+        class="opsicon-wrapper"
+      >
         <slot name="icon">
-          <img :src="opskorttiImage" class="opsicon"/>
+          <img
+            :src="opskorttiImage"
+            class="opsicon"
+          >
         </slot>
       </div>
       <div class="nimi flex-fill">
         <div class="ops d-flex align-items-center">
-          <div v-html="nimi"></div>
-          <div v-if="ops.jotpatyyppi && showJotpaInfo" class="nimi__jotpa ml-2">
-            {{$t('jotpa')}}
+          <div v-html="nimi" />
+          <div
+            v-if="ops.jotpatyyppi && showJotpaInfo"
+            class="nimi__jotpa ml-2"
+          >
+            {{ $t('jotpa') }}
           </div>
         </div>
         <div class="organisaatiot">
-          <div class="meta d-flex" v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0">
-            <div v-for="(voimassaolotieto, index) in voimassaoloTiedot" :key="'voimassa' + index">
+          <div
+            v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0"
+            class="meta d-flex"
+          >
+            <div
+              v-for="(voimassaolotieto, index) in voimassaoloTiedot"
+              :key="'voimassa' + index"
+            >
               <div v-if="voimassaolotieto.paiva">
                 <span v-if="index > 0"> | </span>
-                <span class="otsikko">{{$t(voimassaolotieto.teksti)}}: </span>
+                <span class="otsikko">{{ $t(voimassaolotieto.teksti) }}: </span>
                 <span>{{ $sd(voimassaolotieto.paiva) }}</span>
               </div>
             </div>
-            <EpVoimassaolo :voimassaolo="ops"></EpVoimassaolo>
+            <EpVoimassaolo :voimassaolo="ops" />
           </div>
-          <div class="meta mr-2" v-if="ops.toimijat && ops.toimijat.length > 0">
+          <div
+            v-if="ops.toimijat && ops.toimijat.length > 0"
+            class="meta mr-2"
+          >
             <span class="otsikko">{{ $t('toimijat') }}</span>
             <span class="mr-1">:</span>
-            <span class="toimijat" v-for="(toimija, tidx) in toimijat" :key="tidx">
-              <span v-html="toimija"></span><span v-if="tidx < ops.toimijat.length - 1">, </span>
+            <span
+              v-for="(toimija, tidx) in toimijat"
+              :key="tidx"
+              class="toimijat"
+            >
+              <span v-html="toimija" /><span v-if="tidx < ops.toimijat.length - 1">, </span>
             </span>
           </div>
-          <div class="meta mr-2" v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0">
+          <div
+            v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0"
+            class="meta mr-2"
+          >
             <span class="otsikko">{{ $t('oppilaitokset') }}</span>
             <span class="mr-1">:</span>
-            <span class="toimijat" v-for="(oppilaitos, tidx) in oppilaitokset" :key="tidx">
+            <span
+              v-for="(oppilaitos, tidx) in oppilaitokset"
+              :key="tidx"
+              class="toimijat"
+            >
               <span v-html="oppilaitos" /><span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
             </span>
           </div>
-          <div class="meta" v-if="ops.koulutustoimija">
+          <div
+            v-if="ops.koulutustoimija"
+            class="meta"
+          >
             <span class="otsikko">{{ $t('organisaatiot') }}</span>
             <span class="mr-1">:</span>
-            <span class="toimijat">{{$kaanna(ops.koulutustoimija.nimi)}}</span>
+            <span class="toimijat">{{ $kaanna(ops.koulutustoimija.nimi) }}</span>
           </div>
         </div>
       </div>
@@ -74,7 +109,7 @@ export default class OpetussuunnitelmaTile extends Vue {
   private voimassaoloTiedot!: VoimassaoloTieto[];
 
   @Prop({ required: false, default: false, type: Boolean })
-  private showJotpaInfo!: Boolean;
+  private showJotpaInfo!: boolean;
 
   @Prop({ required: false, default: true, type: Boolean })
   private showOpsIcon?: boolean;

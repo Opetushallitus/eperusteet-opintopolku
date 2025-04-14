@@ -1,35 +1,56 @@
 <template>
-<router-view v-if="tekstikappaleenOsa">
-  <template slot="previous-next-navigation">
-    <slot name="previous-next-navigation" />
-  </template>
-</router-view>
+  <router-view v-if="tekstikappaleenOsa">
+    <template slot="previous-next-navigation">
+      <slot name="previous-next-navigation" />
+    </template>
+  </router-view>
 
-<div v-else class="content">
-  <div v-if="perusteenOsa">
-    <h2 id="tekstikappale-otsikko" class="otsikko">
-      <span v-if="numerointi">{{numerointi}}</span>
-      {{ $kaanna(perusteenOsa.nimi) }}
-    </h2>
-    <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
+  <div
+    v-else
+    class="content"
+  >
+    <div v-if="perusteenOsa">
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko"
+      >
+        <span v-if="numerointi">{{ numerointi }}</span>
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.teksti)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
-    <!-- Alikappaleet -->
-    <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
-      <ep-heading class="otsikko"
-                  :level="alikappaleViite.level + 2">
-        <span v-if="alikappaleNumeroinnitById[alikappaleViite.id]">{{alikappaleNumeroinnitById[alikappaleViite.id]}}</span>
-        {{ $kaanna(alikappaleViite.perusteenOsa.nimi) }}
-      </ep-heading>
-      <ep-content-viewer :value="$kaanna(alikappaleViite.perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
+      <!-- Alikappaleet -->
+      <div
+        v-for="(alikappaleViite, idx) in alikappaleet"
+        :key="idx"
+      >
+        <ep-heading
+          class="otsikko"
+          :level="alikappaleViite.level + 2"
+        >
+          <span v-if="alikappaleNumeroinnitById[alikappaleViite.id]">{{ alikappaleNumeroinnitById[alikappaleViite.id] }}</span>
+          {{ $kaanna(alikappaleViite.perusteenOsa.nimi) }}
+        </ep-heading>
+        <ep-content-viewer
+          :value="$kaanna(alikappaleViite.perusteenOsa.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+      </div>
+
+      <EpOpasKiinnitysLinkki
+        v-if="osaamisalaKoodiUri"
+        :koodi-uri="osaamisalaKoodiUri"
+      />
+
+      <slot name="previous-next-navigation" />
     </div>
-
-    <EpOpasKiinnitysLinkki :koodiUri="osaamisalaKoodiUri" v-if="osaamisalaKoodiUri"/>
-
-    <slot name="previous-next-navigation" />
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-
-</div>
 </template>
 
 <script lang="ts">

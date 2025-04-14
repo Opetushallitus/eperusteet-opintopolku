@@ -101,7 +101,7 @@ describe('RouteKooste', () => {
           }],
           sivu: 0,
           kokonaismäärä: 1,
-        }
+        },
       })),
       perusteId: computed(() => 0),
       fetchQuery: () => new Promise<void>(resolve => resolve()),

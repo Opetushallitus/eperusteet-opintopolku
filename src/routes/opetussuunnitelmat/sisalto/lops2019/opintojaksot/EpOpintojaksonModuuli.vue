@@ -1,29 +1,42 @@
 <template>
-<div v-if="moduuli && moduuli.node && moduuli.node.location">
-  <router-link class="moduulibox" role="button" :to="moduuli.node.location" tabindex="0">
-    <div class="name">{{ $kaanna(moduuli.node.label) }} ({{ moduuli.node.meta.koodi.arvo }})</div>
-    <div class="bottom">
-      <div class="d-flex bd-highlight">
-        <div class="px-2 flex-grow-1">
-        </div>
-        <div class="px-2 info">
-          <span class="op">{{ moduuli.node.meta.laajuus }} {{ $t('opintopiste') }}</span>
-          <ep-color-indicator :kind="moduuli.node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
+  <div v-if="moduuli && moduuli.node && moduuli.node.location">
+    <router-link
+      class="moduulibox"
+      role="button"
+      :to="moduuli.node.location"
+      tabindex="0"
+    >
+      <div class="name">
+        {{ $kaanna(moduuli.node.label) }} ({{ moduuli.node.meta.koodi.arvo }})
+      </div>
+      <div class="bottom">
+        <div class="d-flex bd-highlight">
+          <div class="px-2 flex-grow-1" />
+          <div class="px-2 info">
+            <span class="op">{{ moduuli.node.meta.laajuus }} {{ $t('opintopiste') }}</span>
+            <ep-color-indicator :kind="moduuli.node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
+          </div>
         </div>
       </div>
-    </div>
-  </router-link>
-</div>
-<div v-else-if="moduuli">
-  <h3 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')'  : '') }}</h3>
-
-  <div class="teksti">
-  <moduuli-esitys :moduuli="moduuli"
-                  :termit="perusteTermit"
-                  :kuvat="perusteKuvat"
-                  :isPerusteView="false" />
+    </router-link>
   </div>
-</div>
+  <div v-else-if="moduuli">
+    <h3
+      slot="header"
+      class="otsikko"
+    >
+      {{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')' : '') }}
+    </h3>
+
+    <div class="teksti">
+      <moduuli-esitys
+        :moduuli="moduuli"
+        :termit="perusteTermit"
+        :kuvat="perusteKuvat"
+        :is-peruste-view="false"
+      />
+    </div>
+  </div>
 </template>
 
 <script lang="ts">

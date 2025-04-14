@@ -1,134 +1,204 @@
 <template>
-<div class="content">
-  <div v-if="oppiaine">
-    <h2 class="otsikko" slot="header">{{ $kaanna(oppiaine.nimi) }}</h2>
+  <div class="content">
+    <div v-if="oppiaine">
+      <h2
+        slot="header"
+        class="otsikko"
+      >
+        {{ $kaanna(oppiaine.nimi) }}
+      </h2>
 
-    <div class="teksti">
-      <div>
-        <div v-if="koodi">
-          <strong>{{ $t('koodi') }}</strong>
-          <p>{{ koodi }}</p>
-        </div>
+      <div class="teksti">
+        <div>
+          <div v-if="koodi">
+            <strong>{{ $t('koodi') }}</strong>
+            <p>{{ koodi }}</p>
+          </div>
 
-        <div v-if="hasTehtava || hasPerusteenOppianeenTehtava" class="mt-4">
-          <h3>{{ $t('tehtava') }}</h3>
-          <ep-content-viewer v-if="hasPerusteenOppianeenTehtava"
-                             :value="$kaanna(perusteenOppiaine.tehtava.kuvaus)"
-                             :termit="termit"
-                             :kuvat="kuvat" />
-          <ep-content-viewer v-if="hasTehtava"
-                             :value="$kaanna(oppiaine.tehtava.kuvaus)"
-                             :termit="termit"
-                             :kuvat="kuvat" />
-        </div>
+          <div
+            v-if="hasTehtava || hasPerusteenOppianeenTehtava"
+            class="mt-4"
+          >
+            <h3>{{ $t('tehtava') }}</h3>
+            <ep-content-viewer
+              v-if="hasPerusteenOppianeenTehtava"
+              :value="$kaanna(perusteenOppiaine.tehtava.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+            <ep-content-viewer
+              v-if="hasTehtava"
+              :value="$kaanna(oppiaine.tehtava.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </div>
 
-        <div v-if="hasTavoitteet || hasPerusteenOppiaineenTavoitteet" class="mt-4">
-          <h3>{{ $t('tavoitteet') }}</h3>
-          <div v-if="hasPerusteenOppiaineenTavoitteet">
-            <ep-content-viewer v-if="perusteenOppiaineenTavoitteet"
-                              :value="$kaanna(perusteenOppiaineenTavoitteet.kuvaus)"
-                              :termit="termit" :kuvat="kuvat" />
-            <div v-for="(tavoitealue, idx) in perusteenOppiaineenTavoitteet.tavoitealueet" :key="'perusteenoppianeentavoite'+idx">
-              <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
-              <div>
-                <em v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</em>
+          <div
+            v-if="hasTavoitteet || hasPerusteenOppiaineenTavoitteet"
+            class="mt-4"
+          >
+            <h3>{{ $t('tavoitteet') }}</h3>
+            <div v-if="hasPerusteenOppiaineenTavoitteet">
+              <ep-content-viewer
+                v-if="perusteenOppiaineenTavoitteet"
+                :value="$kaanna(perusteenOppiaineenTavoitteet.kuvaus)"
+                :termit="termit"
+                :kuvat="kuvat"
+              />
+              <div
+                v-for="(tavoitealue, idx) in perusteenOppiaineenTavoitteet.tavoitealueet"
+                :key="'perusteenoppianeentavoite'+idx"
+              >
+                <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi ) }}</strong>
+                <div>
+                  <em v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</em>
+                </div>
+                <ul>
+                  <li
+                    v-for="(tavoite, idx) in tavoitealue.tavoitteet"
+                    :key="idx"
+                  >
+                    <span>{{ $kaanna(tavoite) }}</span>
+                  </li>
+                </ul>
               </div>
-              <ul>
-                <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
-                  <span>{{ $kaanna(tavoite) }}</span>
-                </li>
-              </ul>
+            </div>
+
+            <div v-if="hasTavoitteet">
+              <ep-content-viewer
+                v-if="tavoitteet.kuvaus"
+                :value="$kaanna(tavoitteet.kuvaus)"
+                :termit="termit"
+                :kuvat="kuvat"
+              />
+              <div
+                v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet"
+                :key="'tavoite'+idx"
+              >
+                <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi ) }}</strong>
+                <div>
+                  <em v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</em>
+                </div>
+                <ul>
+                  <li
+                    v-for="(tavoite, idx) in tavoitealue.tavoitteet"
+                    :key="idx"
+                  >
+                    <span>{{ $kaanna(tavoite.tavoite) }}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
 
-          <div v-if="hasTavoitteet">
-            <ep-content-viewer v-if="tavoitteet.kuvaus"
-                              :value="$kaanna(tavoitteet.kuvaus)"
-                              :termit="termit" :kuvat="kuvat" />
-            <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="'tavoite'+idx">
-              <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
-              <div>
-                <em v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</em>
+          <div
+            v-if="hasArviointi || hasPerusteenOppianeenArviointi"
+            class="mt-4"
+          >
+            <h3>{{ $t('arviointi') }}</h3>
+
+            <ep-content-viewer
+              v-if="hasPerusteenOppianeenArviointi"
+              :value="$kaanna(perusteenOppiaine.arviointi.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+
+            <ep-content-viewer
+              v-if="hasArviointi"
+              :value="$kaanna(oppiaine.arviointi.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </div>
+
+          <div
+            v-if="hasLaajaAlainenOsaaminen || hasPerusteenOppiaineenLaajaAlainenOsaaminen"
+            class="mt-4"
+          >
+            <h3>{{ $t('laaja-alainen-osaaminen') }}</h3>
+
+            <ep-content-viewer
+              v-if="hasPerusteenOppiaineenLaajaAlainenOsaaminen"
+              :value="$kaanna(perusteenOppiaine.laajaAlaisetOsaamiset.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+
+            <div v-if="hasLaajaAlainenOsaaminen">
+              <ep-content-viewer
+                v-if="oppiaine.laajaAlainenOsaaminen.kuvaus"
+                :value="$kaanna(oppiaine.laajaAlainenOsaaminen.kuvaus)"
+                :termit="termit"
+                :kuvat="kuvat"
+              />
+              <div
+                v-for="(lao, idx) in oppiaine.laajaAlainenOsaaminen"
+                :key="'lao'+idx"
+              >
+                <div v-if="kooditFormatted[lao.koodi]">
+                  <strong>
+                    {{ $kaanna(kooditFormatted[lao.koodi].nimi) }}{{ kooditFormatted[lao.koodi].koodiArvo ? ' (' + kooditFormatted[lao.koodi].koodiArvo + ')' : '' }}
+                  </strong>
+                  <ep-content-viewer
+                    :value="$kaanna(lao.kuvaus)"
+                    :termit="termit"
+                    :kuvat="kuvat"
+                  />
+                </div>
               </div>
-              <ul>
-                <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
-                  <span>{{ $kaanna(tavoite.tavoite) }}</span>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
 
-        <div v-if="hasArviointi || hasPerusteenOppianeenArviointi" class="mt-4">
-          <h3>{{ $t('arviointi') }}</h3>
-
-          <ep-content-viewer v-if="hasPerusteenOppianeenArviointi"
-                            :value="$kaanna(perusteenOppiaine.arviointi.kuvaus)"
-                            :termit="termit"
-                            :kuvat="kuvat" />
-
-          <ep-content-viewer v-if="hasArviointi"
-                            :value="$kaanna(oppiaine.arviointi.kuvaus)"
-                            :termit="termit"
-                            :kuvat="kuvat" />
+        <div
+          v-if="hasOpiskeluymparistoTyotavat || hasPerusteenOpiskeluymparistoTyotavat"
+          class="mt-4"
+        >
+          <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
+          <ep-content-viewer
+            v-if="hasPerusteenOpiskeluymparistoTyotavat"
+            :value="$kaanna(perusteenOppiaine.opiskeluymparistoTyotavat.kuvaus)"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
+          <ep-content-viewer
+            v-if="hasOpiskeluymparistoTyotavat"
+            :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
         </div>
 
-        <div v-if="hasLaajaAlainenOsaaminen || hasPerusteenOppiaineenLaajaAlainenOsaaminen" class="mt-4">
-          <h3>{{ $t('laaja-alainen-osaaminen') }}</h3>
-
-          <ep-content-viewer v-if="hasPerusteenOppiaineenLaajaAlainenOsaaminen"
-                             :value="$kaanna(perusteenOppiaine.laajaAlaisetOsaamiset.kuvaus)"
-                             :termit="termit"
-                             :kuvat="kuvat" />
-
-          <div v-if="hasLaajaAlainenOsaaminen">
-            <ep-content-viewer v-if="oppiaine.laajaAlainenOsaaminen.kuvaus"
-                              :value="$kaanna(oppiaine.laajaAlainenOsaaminen.kuvaus)"
-                              :termit="termit"
-                              :kuvat="kuvat" />
-            <div v-for="(lao, idx) in oppiaine.laajaAlainenOsaaminen" :key="'lao'+idx">
-              <div v-if="kooditFormatted[lao.koodi]">
-                <strong>
-                  {{ $kaanna(kooditFormatted[lao.koodi].nimi) }}{{ kooditFormatted[lao.koodi].koodiArvo ? ' (' + kooditFormatted[lao.koodi].koodiArvo + ')' : ''}}
-                </strong>
-                <ep-content-viewer :value="$kaanna(lao.kuvaus)"
-                                  :termit="termit"
-                                  :kuvat="kuvat" />
-              </div>
-            </div>
+        <div
+          v-if="hasOpintojaksot"
+          class="mt-4"
+        >
+          <h3 id="opintojaksot">
+            {{ $t('opintojaksot') }}
+          </h3>
+          <div
+            v-for="(opintojakso, idx) in opintojaksotExtended"
+            :key="'opintojakso'+idx"
+          >
+            <router-link
+              v-if="opintojakso.location"
+              :to="opintojakso.location"
+            >
+              {{ $kaanna(opintojakso.nimi) }}
+              <span v-if="opintojakso.laajuus">
+                ({{ opintojakso.laajuus }} op)
+              </span>
+            </router-link>
           </div>
         </div>
       </div>
 
-      <div v-if="hasOpiskeluymparistoTyotavat || hasPerusteenOpiskeluymparistoTyotavat" class="mt-4">
-        <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
-        <ep-content-viewer v-if="hasPerusteenOpiskeluymparistoTyotavat"
-                            :value="$kaanna(perusteenOppiaine.opiskeluymparistoTyotavat.kuvaus)"
-                            :termit="termit"
-                            :kuvat="kuvat" />
-        <ep-content-viewer v-if="hasOpiskeluymparistoTyotavat"
-                            :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
-                            :termit="termit"
-                            :kuvat="kuvat" />
-      </div>
-
-      <div v-if="hasOpintojaksot" class="mt-4">
-        <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
-        <div v-for="(opintojakso, idx) in opintojaksotExtended" :key="'opintojakso'+idx">
-          <router-link v-if="opintojakso.location" :to="opintojakso.location">
-            {{ $kaanna(opintojakso.nimi) }}
-            <span v-if="opintojakso.laajuus">
-              ({{ opintojakso.laajuus }} op)
-            </span>
-          </router-link>
-        </div>
-      </div>
+      <slot name="previous-next-navigation" />
     </div>
-
-    <slot name="previous-next-navigation" />
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

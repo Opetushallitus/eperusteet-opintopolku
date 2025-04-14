@@ -1,81 +1,147 @@
 <template>
-<div class="content">
-  <div v-if="istekstiKappaleAllLoaded">
-    <h2 id="tekstikappale-otsikko" class="otsikko">
-      <span v-if="numerointi">{{numerointi}}</span>
-      {{ $kaanna(tekstiKappale.nimi) }}
-    </h2>
+  <div class="content">
+    <div v-if="istekstiKappaleAllLoaded">
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko"
+      >
+        <span v-if="numerointi">{{ numerointi }}</span>
+        {{ $kaanna(tekstiKappale.nimi) }}
+      </h2>
 
-    <!-- Perusteen teksti -->
-    <ep-collapse tyyppi="perusteteksti"
-                 v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && perusteTekstikappale && perusteTekstikappale.teksti">
-      <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
-      <ep-content-viewer v-if="perusteTekstikappale"
-                         :value="$kaanna(perusteTekstikappale.teksti)"
-                         :termit="perusteTermit"
-                         :kuvat="perusteKuvat" />
-    </ep-collapse>
+      <!-- Perusteen teksti -->
+      <ep-collapse
+        v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && perusteTekstikappale && perusteTekstikappale.teksti"
+        tyyppi="perusteteksti"
+      >
+        <div
+          slot="header"
+          class="collapse-header"
+        >
+          {{ $t('perusteen-teksti') }}
+        </div>
+        <ep-content-viewer
+          v-if="perusteTekstikappale"
+          :value="$kaanna(perusteTekstikappale.teksti)"
+          :termit="perusteTermit"
+          :kuvat="perusteKuvat"
+        />
+      </ep-collapse>
 
-    <template v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && laajaAlaisetOsaamiset">
-      <EpCollapse v-for="lao in laajaAlaisetOsaamiset" :key="'lao' + lao.id">
-        <h3 slot="header">{{$kaanna(lao.nimi)}}</h3>
-        <div v-html="$kaanna(lao.kuvaus)" />
-      </EpCollapse>
-    </template>
+      <template v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && laajaAlaisetOsaamiset">
+        <EpCollapse
+          v-for="lao in laajaAlaisetOsaamiset"
+          :key="'lao' + lao.id"
+        >
+          <h3 slot="header">
+            {{ $kaanna(lao.nimi) }}
+          </h3>
+          <div v-html="$kaanna(lao.kuvaus)" />
+        </EpCollapse>
+      </template>
 
-    <!-- Pohjan teksti -->
-    <ep-collapse tyyppi="pohjateksti"
-                 v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPohjanTeksti && hasTekstikappaleOriginalsTeksteja">
-      <div class="collapse-header" slot="header">
-        {{$kaanna(pohjaNimi)}}
+      <!-- Pohjan teksti -->
+      <ep-collapse
+        v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPohjanTeksti && hasTekstikappaleOriginalsTeksteja"
+        tyyppi="pohjateksti"
+      >
+        <div
+          slot="header"
+          class="collapse-header"
+        >
+          {{ $kaanna(pohjaNimi) }}
+        </div>
+        <ep-content-viewer
+          v-for="(tekstiKappaleOriginal, index) in tekstiKappaleOriginals"
+          :key="'tekstiKappaleOriginal'+index"
+          :value="$kaanna(tekstiKappaleOriginal.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+      </ep-collapse>
+
+      <!-- Opetussuunnitelman teksti -->
+      <EpPaikallinenTarkennus
+        v-if="tekstiKappale && tekstiKappale.teksti"
+        :noheader="!perusteTekstikappale"
+      >
+        <ep-content-viewer
+          :value="$kaanna(tekstiKappale.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+      </EpPaikallinenTarkennus>
+
+      <!-- Alikappaleet -->
+      <div v-if="alikappaleet">
+        <div
+          v-for="(alikappaleViite, idx) in alikappaleet"
+          :key="idx"
+        >
+          <ep-heading
+            class="aliotsikko"
+            :level="alikappaleViite.level + 2"
+          >
+            <span v-if="alikappaleNumeroinnitById[alikappaleViite.id]">{{ alikappaleNumeroinnitById[alikappaleViite.id] }}</span>
+            {{ $kaanna(alikappaleViite.tekstiKappale.nimi) }}
+          </ep-heading>
+
+          <!-- Perusteen teksti -->
+          <ep-collapse
+            v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId] && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti"
+            tyyppi="perusteteksti"
+          >
+            <div
+              slot="header"
+              class="collapse-header"
+            >
+              {{ $t('perusteen-teksti') }}
+            </div>
+            <ep-content-viewer
+              v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
+              :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
+              :termit="perusteTermit"
+              :kuvat="perusteKuvat"
+            />
+          </ep-collapse>
+
+          <!-- Pohjan teksti -->
+          <ep-collapse
+            v-if="alikappaleViite.naytaPohjanTeksti && alikappaleViite.original && alikappaleViite.original.tekstiKappale && alikappaleViite.original.tekstiKappale.teksti"
+            tyyppi="pohjateksti"
+          >
+            <div
+              slot="header"
+              class="collapse-header"
+            >
+              {{ $kaanna(pohjaNimi) }}
+            </div>
+            <ep-content-viewer
+              :value="$kaanna(alikappaleViite.original.tekstiKappale.teksti)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </ep-collapse>
+
+          <!-- Opetussuunnitelman teksti -->
+
+          <EpPaikallinenTarkennus
+            v-if="alikappaleViite.tekstiKappale.teksti"
+            :noheader="!perusteAlikappaleetObj || !perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
+          >
+            <ep-content-viewer
+              :value="$kaanna(alikappaleViite.tekstiKappale.teksti)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </EpPaikallinenTarkennus>
+        </div>
       </div>
-      <ep-content-viewer v-for="(tekstiKappaleOriginal, index) in tekstiKappaleOriginals" :key="'tekstiKappaleOriginal'+index" :value="$kaanna(tekstiKappaleOriginal.teksti)" :termit="termit" :kuvat="kuvat" />
-    </ep-collapse>
 
-    <!-- Opetussuunnitelman teksti -->
-    <EpPaikallinenTarkennus v-if="tekstiKappale && tekstiKappale.teksti" :noheader="!perusteTekstikappale">
-      <ep-content-viewer :value="$kaanna(tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
-    </EpPaikallinenTarkennus>
-
-    <!-- Alikappaleet -->
-    <div v-if="alikappaleet">
-      <div v-for="(alikappaleViite, idx) in alikappaleet" :key="idx">
-        <ep-heading class="aliotsikko" :level="alikappaleViite.level + 2">
-          <span v-if="alikappaleNumeroinnitById[alikappaleViite.id]">{{alikappaleNumeroinnitById[alikappaleViite.id]}}</span>
-          {{ $kaanna(alikappaleViite.tekstiKappale.nimi) }}
-        </ep-heading>
-
-        <!-- Perusteen teksti -->
-        <ep-collapse tyyppi="perusteteksti"
-                     v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId] && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti">
-          <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
-          <ep-content-viewer v-if="alikappaleViite.naytaPerusteenTeksti && perusteAlikappaleetObj && perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]"
-                             :value="$kaanna(perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId].teksti)"
-                             :termit="perusteTermit"
-                             :kuvat="perusteKuvat" />
-        </ep-collapse>
-
-        <!-- Pohjan teksti -->
-        <ep-collapse tyyppi="pohjateksti"
-                     v-if="alikappaleViite.naytaPohjanTeksti && alikappaleViite.original && alikappaleViite.original.tekstiKappale && alikappaleViite.original.tekstiKappale.teksti">
-          <div class="collapse-header" slot="header">{{$kaanna(pohjaNimi)}}</div>
-          <ep-content-viewer :value="$kaanna(alikappaleViite.original.tekstiKappale.teksti)"
-                             :termit="termit"
-                             :kuvat="kuvat" />
-        </ep-collapse>
-
-        <!-- Opetussuunnitelman teksti -->
-
-        <EpPaikallinenTarkennus v-if="alikappaleViite.tekstiKappale.teksti" :noheader="!perusteAlikappaleetObj || !perusteAlikappaleetObj[alikappaleViite.perusteTekstikappaleId]">
-          <ep-content-viewer :value="$kaanna(alikappaleViite.tekstiKappale.teksti)" :termit="termit" :kuvat="kuvat" />
-        </EpPaikallinenTarkennus>
-      </div>
+      <slot name="previous-next-navigation" />
     </div>
-
-    <slot name="previous-next-navigation" />
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

@@ -1,22 +1,28 @@
 <template>
   <div class="content">
-
-    <ep-spinner v-if="!sisaltoviite || !suorituspolut"></ep-spinner>
+    <ep-spinner v-if="!sisaltoviite || !suorituspolut" />
 
     <div v-else>
-      <h2>{{$t('suorituspolut')}}</h2>
-      <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
+      <h2>{{ $t('suorituspolut') }}</h2>
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.tekstiKappale.teksti)"
+        :kuvat="kuvat"
+      />
 
-       <b-table striped hover responsive :items="suorituspolut" :fields="fields">
-        <template v-slot:cell(nimi)="data">
+      <b-table
+        striped
+        hover
+        responsive
+        :items="suorituspolut"
+        :fields="fields"
+      >
+        <template #cell(nimi)="data">
           <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: data.item.id}}">
             {{ $kaanna(data.item.tekstiKappale.nimi) }}
           </router-link>
         </template>
       </b-table>
-
     </div>
-
   </div>
 </template>
 

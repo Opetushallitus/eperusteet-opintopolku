@@ -1,19 +1,27 @@
 <template>
-  <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column" >
+  <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column">
     <div class="upper">
       <div class="peruste-ikoni">
-        <EpMaterialIcon v-if="isHallitus"
-                        icon-shape="outlined"
-                        :color="rgbColor"
-                        size="38px"
-                        class="img">account_balance</EpMaterialIcon>
-        <EpMaterialIcon v-else
-                        :color="rgbColor"
-                        size="38px"
-                        class="img">menu_book</EpMaterialIcon>
+        <EpMaterialIcon
+          v-if="isHallitus"
+          icon-shape="outlined"
+          :color="rgbColor"
+          size="38px"
+          class="img"
+        >
+          account_balance
+        </EpMaterialIcon>
+        <EpMaterialIcon
+          v-else
+          :color="rgbColor"
+          size="38px"
+          class="img"
+        >
+          menu_book
+        </EpMaterialIcon>
       </div>
       <div class="nimi">
-        {{ $kaanna(julkaisu.nimi) }} <span v-if="julkaisu.laajuus">{{julkaisu.laajuus}} {{$t('osaamispiste')}}</span>
+        {{ $kaanna(julkaisu.nimi) }} <span v-if="julkaisu.laajuus">{{ julkaisu.laajuus }} {{ $t('osaamispiste') }}</span>
       </div>
     </div>
     <div class="mt-auto">

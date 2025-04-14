@@ -1,17 +1,33 @@
 <template>
-  <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle" :maxRevision="maxRevision">
+  <EpNotificationBar
+    :julkaisu-pvm="julkaisuPvm"
+    :has-sisalto-kielelle="hasSisaltoKielelle"
+    :max-revision="maxRevision"
+  >
     <template v-if="voimassaolo">
-      <div class="notifikaatio-text" v-if="voimassaolo === 'tuleva'">
+      <div
+        v-if="voimassaolo === 'tuleva'"
+        class="notifikaatio-text"
+      >
         <span>{{ $t('katselet-tulevaisuudessa-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
         <template v-if="uusinVoimassaolevaJulkaisu">
           <span>{{ $t('siirry-talla-hetkella') }} </span>
-          <a href="javascript:void(0)" @click="toVoimassaolevaanJulkaisuun">{{$t('voimassaolevaan-perusteeseen')}}.</a>
+          <a
+            href="javascript:void(0)"
+            @click="toVoimassaolevaanJulkaisuun"
+          >{{ $t('voimassaolevaan-perusteeseen') }}.</a>
         </template>
       </div>
-      <div class="notifikaatio-text" v-if="voimassaolo === 'voimassa'">
+      <div
+        v-if="voimassaolo === 'voimassa'"
+        class="notifikaatio-text"
+      >
         <span>{{ $t('katselet-talla-hetkella-voimassaolevaa-perustetta') }}. </span>
         <span>{{ $t('siirry') }} </span>
-        <a href="javascript:void(0)" @click="toUusimpaanJulkaisuun">{{$t('uusimpaan-perusteeseen')}}, </a>
+        <a
+          href="javascript:void(0)"
+          @click="toUusimpaanJulkaisuun"
+        >{{ $t('uusimpaan-perusteeseen') }}, </a>
         <span>{{ $t('joka-on-tulossa-voimaan', {voimaantulo: $sd(uusinJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }}.</span>
       </div>
     </template>

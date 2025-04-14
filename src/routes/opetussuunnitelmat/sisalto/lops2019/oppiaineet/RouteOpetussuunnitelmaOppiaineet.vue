@@ -1,24 +1,42 @@
 <template>
-<div class="content">
-  <div v-if="oppiaineetFormatted">
-    <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
-    <div class="teksti">
-      <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineetFormatted" :key="idx">
-        <router-link v-if="oppiaine.location" :to="oppiaine.location">
-          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
-          <span v-if="oppiaine.koodiLabel" class="code-field">({{ oppiaine.koodiLabel }})</span>
-        </router-link>
-        <span v-else>
-          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
-          <span v-if="oppiaine.koodiLabel" class="code-field">({{ oppiaine.koodiLabel }})</span>
-        </span>
+  <div class="content">
+    <div v-if="oppiaineetFormatted">
+      <h2
+        slot="header"
+        class="otsikko"
+      >
+        {{ $t('oppiaineet') }}
+      </h2>
+      <div class="teksti">
+        <div
+          v-for="(oppiaine, idx) in oppiaineetFormatted"
+          :key="idx"
+          class="oppiaine"
+        >
+          <router-link
+            v-if="oppiaine.location"
+            :to="oppiaine.location"
+          >
+            {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
+            <span
+              v-if="oppiaine.koodiLabel"
+              class="code-field"
+            >({{ oppiaine.koodiLabel }})</span>
+          </router-link>
+          <span v-else>
+            {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
+            <span
+              v-if="oppiaine.koodiLabel"
+              class="code-field"
+            >({{ oppiaine.koodiLabel }})</span>
+          </span>
+        </div>
       </div>
-    </div>
 
-    <slot name="previous-next-navigation" />
+      <slot name="previous-next-navigation" />
+    </div>
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

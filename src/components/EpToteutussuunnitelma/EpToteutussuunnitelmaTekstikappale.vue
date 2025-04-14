@@ -1,23 +1,45 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
+    <portal-target name="toteutussuunnitelma-sisalto-header" />
 
-    <ep-collapse tyyppi="perusteteksti" v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti">
-      <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
-      <ep-content-viewer :value="$kaanna(sisaltoviite.perusteteksti)" :kuvat="kuvat"/>
+    <ep-collapse
+      v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti"
+      tyyppi="perusteteksti"
+    >
+      <div
+        slot="header"
+        class="collapse-header"
+      >
+        {{ $t('perusteen-teksti') }}
+      </div>
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.perusteteksti)"
+        :kuvat="kuvat"
+      />
     </ep-collapse>
 
-    <ep-collapse tyyppi="pohjateksti" v-if="sisaltoviite.naytaPohjanTeksti && sisaltoviite.pohjanTekstikappale && sisaltoviite.pohjanTekstikappale.teksti">
-      <div class="collapse-header" slot="header">
+    <ep-collapse
+      v-if="sisaltoviite.naytaPohjanTeksti && sisaltoviite.pohjanTekstikappale && sisaltoviite.pohjanTekstikappale.teksti"
+      tyyppi="pohjateksti"
+    >
+      <div
+        slot="header"
+        class="collapse-header"
+      >
         {{ $t('pohjan-teksti') }}
       </div>
-      <ep-content-viewer :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)"
+        :kuvat="kuvat"
+      />
     </ep-collapse>
 
     <EpPaikallinenTarkennus v-if="sisaltoviite.tekstiKappale.teksti">
-      <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.tekstiKappale.teksti)"
+        :kuvat="kuvat"
+      />
     </EpPaikallinenTarkennus>
-
   </div>
 </template>
 

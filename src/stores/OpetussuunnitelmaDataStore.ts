@@ -36,7 +36,7 @@ import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { deepFind } from '@shared/utils/helpers';
 
 const PaikallisetKielet = new Set(['VK', 'EN', 'LA', 'RA', 'SM', 'SA', 'VE', 'IA', 'EA', 'PO', 'KI', 'JP', 'AR', 'KX']);
-interface NavigationQueryResult { parent: YlopsNavigationNodeDto | null, target: YlopsNavigationNodeDto };
+interface NavigationQueryResult { parent: YlopsNavigationNodeDto | null, target: YlopsNavigationNodeDto }
 
 @Store
 export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {

@@ -1,15 +1,31 @@
 <template>
   <div>
-    <ep-form-content class="col-md-12" v-if="tutkinnonosa.koodiArvo" name="koodi">
+    <ep-form-content
+      v-if="tutkinnonosa.koodiArvo"
+      class="col-md-12"
+      name="koodi"
+    >
       <span v-html="tutkinnonosa.koodiArvo" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" :showHeader="false" v-if="tutkinnonosa.kuvaus">
+    <ep-form-content
+      v-if="tutkinnonosa.kuvaus"
+      class="col-md-12 mb-5"
+      :show-header="false"
+    >
       <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mb-5" name="osa-alueet" v-if="tutkinnonosa.osaAlueet && osaAlueet.length > 0" header-type="h3">
-      <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="osaAlueet" />
+    <ep-form-content
+      v-if="tutkinnonosa.osaAlueet && osaAlueet.length > 0"
+      class="col-md-12 mb-5"
+      name="osa-alueet"
+      header-type="h3"
+    >
+      <ep-ammatillinen-osaalueet
+        :arviointiasteikot="arviointiasteikot"
+        :osaalueet="osaAlueet"
+      />
     </ep-form-content>
   </div>
 </template>

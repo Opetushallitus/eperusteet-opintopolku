@@ -108,7 +108,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
     catch (err) {
     }
-  };
+  }
 
   @Getter(state => ToteutussuunnitelmaDataStore.isAmmatillinenOpetussuunnitelma(state.opetussuunnitelma))
   public readonly isAmmatillinen!: boolean;

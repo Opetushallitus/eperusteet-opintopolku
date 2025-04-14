@@ -1,14 +1,30 @@
 <template>
   <div class="content">
-    <ep-spinner v-if="!tutkinnonosa"></ep-spinner>
+    <ep-spinner v-if="!tutkinnonosa" />
     <div v-else>
-      <h2 class="otsikko mb-4" slot="header">{{ $kaanna(tutkinnonosa.nimi)}}{{laajuusText}}</h2>
+      <h2
+        slot="header"
+        class="otsikko mb-4"
+      >
+        {{ $kaanna(tutkinnonosa.nimi) }}{{ laajuusText }}
+      </h2>
 
-      <ep-tutkinnonosa-normaali v-if="tutkinnonosa.tyyppi === 'normaali'" :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" />
-      <ep-tutkinnonosa-tutke v-else :tutkinnonosa="tutkinnonosa" :arviointiasteikot="arviointiasteikot" :perusteenKielet="perusteenKielet"/>
+      <ep-tutkinnonosa-normaali
+        v-if="tutkinnonosa.tyyppi === 'normaali'"
+        :tutkinnonosa="tutkinnonosa"
+        :arviointiasteikot="arviointiasteikot"
+      />
+      <ep-tutkinnonosa-tutke
+        v-else
+        :tutkinnonosa="tutkinnonosa"
+        :arviointiasteikot="arviointiasteikot"
+        :perusteen-kielet="perusteenKielet"
+      />
 
-      <EpOpasKiinnitysLinkki v-if="tutkinnonosaKoodiUri" :koodiUri="tutkinnonosaKoodiUri"/>
-
+      <EpOpasKiinnitysLinkki
+        v-if="tutkinnonosaKoodiUri"
+        :koodi-uri="tutkinnonosaKoodiUri"
+      />
     </div>
   </div>
 </template>

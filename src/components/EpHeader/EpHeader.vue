@@ -1,41 +1,70 @@
 <template>
-<div>
-  <div class="vari-header" :class="theme">
-    <div class="container header">
-      <div class="murupolku">
+  <div>
+    <div
+      class="vari-header"
+      :class="theme"
+    >
+      <div class="container header">
+        <div class="murupolku">
           <nav :aria-label="$t('sijaintisi-sivustolla')">
-            <ol class="breadcrumb" :class="{ 'black': isBlack, 'white': !isBlack }">
+            <ol
+              class="breadcrumb"
+              :class="{ 'black': isBlack, 'white': !isBlack }"
+            >
               <li class="breadcrumb-item">
-                <router-link class="breadcrumb-home" :to="{ name: 'root' }" :aria-label="$t('etusivu')">
-                  <EpMaterialIcon size="20px">home</EpMaterialIcon>
+                <router-link
+                  class="breadcrumb-home"
+                  :to="{ name: 'root' }"
+                  :aria-label="$t('etusivu')"
+                >
+                  <EpMaterialIcon size="20px">
+                    home
+                  </EpMaterialIcon>
                 </router-link>
               </li>
-              <li class="breadcrumb-item"
-                  v-for="(item, idx) in murupolkuFiltered"
-                  :key="idx">
-                <router-link class="breadcrumb-normal" :to="item.location" v-if="item.location">
+              <li
+                v-for="(item, idx) in murupolkuFiltered"
+                :key="idx"
+                class="breadcrumb-item"
+              >
+                <router-link
+                  v-if="item.location"
+                  class="breadcrumb-normal"
+                  :to="item.location"
+                >
                   {{ $kaannaOlioTaiTeksti(item.label) }}
                 </router-link>
-                <span v-else class="breadcrumb-normal">
+                <span
+                  v-else
+                  class="breadcrumb-normal"
+                >
                   {{ $kaannaOlioTaiTeksti(item.label) }}
                 </span>
               </li>
             </ol>
-        </nav>
-        <slot name="murupolku"></slot>
-      </div>
-      <h1 class="nimi" :style="style" tabindex="0">
-        <slot name="header"></slot>
-      </h1>
-      <div :style="style">
-        <slot name="subheader" />
+          </nav>
+          <slot name="murupolku" />
+        </div>
+        <h1
+          class="nimi"
+          :style="style"
+          tabindex="0"
+        >
+          <slot name="header" />
+        </h1>
+        <div :style="style">
+          <slot name="subheader" />
+        </div>
       </div>
     </div>
+    <div
+      v-if="$slots['default']"
+      id="main"
+      class="container-lg sisalto"
+    >
+      <slot />
+    </div>
   </div>
-  <div id="main" class="container-lg sisalto" v-if="$slots['default']">
-    <slot></slot>
-  </div>
-</div>
 </template>
 
 <script lang="ts">

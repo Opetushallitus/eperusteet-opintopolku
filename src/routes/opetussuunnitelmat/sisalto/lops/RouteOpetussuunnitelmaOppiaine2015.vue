@@ -1,6 +1,5 @@
 <template>
   <div class="content">
-
     <router-view v-if="kurssiId">
       <template slot="previous-next-navigation">
         <slot name="previous-next-navigation" />
@@ -8,31 +7,44 @@
     </router-view>
 
     <div v-else-if="oppiaine">
-      <h2 class="otsikko">{{ $kaanna(oppiaine.nimi) }} <span v-if="oppiaine.koodiArvo">({{oppiaine.koodiArvo}})</span></h2>
+      <h2 class="otsikko">
+        {{ $kaanna(oppiaine.nimi) }} <span v-if="oppiaine.koodiArvo">({{ oppiaine.koodiArvo }})</span>
+      </h2>
 
-      <div v-for="(sisaltoavain, index) in sisaltoAvaimet" :key="'sisaltoavain'+index" class="mt-4">
-        <div class="mt-4" v-if="(oppiaine[sisaltoavain] && oppiaine[sisaltoavain].teksti) || (oppiaine.perusteen[sisaltoavain] && oppiaine.perusteen[sisaltoavain].teksti)">
-          <h3>{{$kaanna((oppiaine[sisaltoavain] && oppiaine[sisaltoavain].otsikko) || oppiaine.perusteen[sisaltoavain].otsikko)}}</h3>
+      <div
+        v-for="(sisaltoavain, index) in sisaltoAvaimet"
+        :key="'sisaltoavain'+index"
+        class="mt-4"
+      >
+        <div
+          v-if="(oppiaine[sisaltoavain] && oppiaine[sisaltoavain].teksti) || (oppiaine.perusteen[sisaltoavain] && oppiaine.perusteen[sisaltoavain].teksti)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna((oppiaine[sisaltoavain] && oppiaine[sisaltoavain].otsikko) || oppiaine.perusteen[sisaltoavain].otsikko) }}</h3>
 
           <EpCollapse
             v-if="oppiaine.perusteen[sisaltoavain]"
-            :borderBottom="false"
+            :border-bottom="false"
             :shadow="true"
             class="mb-4"
-            :expandedByDefault="!(oppiaine[sisaltoavain] && oppiaine[sisaltoavain].teksti)">
-
-            <div slot="header">{{$t('tukiteksti')}}</div>
+            :expanded-by-default="!(oppiaine[sisaltoavain] && oppiaine[sisaltoavain].teksti)"
+          >
+            <div slot="header">
+              {{ $t('tukiteksti') }}
+            </div>
             <ep-content-viewer
-                        :value="$kaanna(oppiaine.perusteen[sisaltoavain].teksti)"
-                        :termit="termit"
-                        :kuvat="kuvat" />
+              :value="$kaanna(oppiaine.perusteen[sisaltoavain].teksti)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
           </EpCollapse>
 
           <ep-content-viewer
-                        v-if="oppiaine[sisaltoavain] && oppiaine[sisaltoavain].teksti"
-                        :value="$kaanna(oppiaine[sisaltoavain].teksti)"
-                        :termit="termit"
-                        :kuvat="kuvat" />
+            v-if="oppiaine[sisaltoavain] && oppiaine[sisaltoavain].teksti"
+            :value="$kaanna(oppiaine[sisaltoavain].teksti)"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
         </div>
       </div>
 

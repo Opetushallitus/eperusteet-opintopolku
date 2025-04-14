@@ -1,42 +1,69 @@
 <template>
   <div>
-    <ep-collapse class="mb-3"
-                 v-for="toteutus in toteutukset"
-                 :key="toteutus.id"
-                 :shadow="false"
-                 :borderBottom="false"
-                 :use-padding="false"
-                 :expandedByDefault="toteutukset.length === 1"
-                 blue>
-      <h4 slot="header">{{$kaanna(toteutus.otsikko)}}</h4>
+    <ep-collapse
+      v-for="toteutus in toteutukset"
+      :key="toteutus.id"
+      class="mb-3"
+      :shadow="false"
+      :border-bottom="false"
+      :use-padding="false"
+      :expanded-by-default="toteutukset.length === 1"
+      blue
+    >
+      <h4 slot="header">
+        {{ $kaanna(toteutus.otsikko) }}
+      </h4>
 
       <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat && toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">
-        <div class="font-600 mt-3">{{$t('tutkintonimikkeet-ja-osaamisalat')}}</div>
-        <b-table striped :items="toteutus.tutkintonimikkeetJaOsaamisalat" :fields="koodiFields" />
+        <div class="font-600 mt-3">
+          {{ $t('tutkintonimikkeet-ja-osaamisalat') }}
+        </div>
+        <b-table
+          striped
+          :items="toteutus.tutkintonimikkeetJaOsaamisalat"
+          :fields="koodiFields"
+        />
       </template>
 
       <div v-if="toteutus.tavatjaymparisto">
-        <ep-form-content class="col-md-12" name="tavat-ja-ymparisto">
-          <ep-content-viewer :value="$kaanna(toteutus.tavatjaymparisto.teksti)" :kuvat="kuvat"/>
+        <ep-form-content
+          class="col-md-12"
+          name="tavat-ja-ymparisto"
+        >
+          <ep-content-viewer
+            :value="$kaanna(toteutus.tavatjaymparisto.teksti)"
+            :kuvat="kuvat"
+          />
         </ep-form-content>
       </div>
 
       <div v-if="toteutus.arvioinnista">
-        <ep-form-content class="col-md-12" name="osaamisen-arvioinnista">
-          <ep-content-viewer :value="$kaanna(toteutus.arvioinnista.teksti)" :kuvat="kuvat"/>
+        <ep-form-content
+          class="col-md-12"
+          name="osaamisen-arvioinnista"
+        >
+          <ep-content-viewer
+            :value="$kaanna(toteutus.arvioinnista.teksti)"
+            :kuvat="kuvat"
+          />
         </ep-form-content>
       </div>
 
       <div v-if="toteutus.vapaat && toteutus.vapaat.length > 0">
-        <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in toteutus.vapaat" :key="'vapaa'+index">
-          <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
-          <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
-          <hr v-if="index < toteutus.length-1"/>
+        <ep-form-content
+          v-for="(vapaa, index) in toteutus.vapaat"
+          :key="'vapaa'+index"
+          class="col-md-12 mt-4"
+        >
+          <label slot="header">{{ $kaanna(vapaa.nimi) }}</label>
+          <ep-content-viewer
+            :value="$kaanna(vapaa.teksti)"
+            :kuvat="kuvat"
+          />
+          <hr v-if="index < toteutus.length-1">
         </ep-form-content>
       </div>
-
     </ep-collapse>
-
   </div>
 </template>
 

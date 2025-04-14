@@ -1,35 +1,49 @@
 <template>
-<div>
-  <slot />
-  <p class="kuvaus">{{ $t('kooste-kuvaus-jarjestajat') }}</p>
+  <div>
+    <slot />
+    <p class="kuvaus">
+      {{ $t('kooste-kuvaus-jarjestajat') }}
+    </p>
 
-  <div v-if="!koulutustoimijat">
-    <ep-spinner />
-  </div>
-  <div v-else class="haku">
-    <div class="search">
-      <ep-search v-model="query" :sr-placeholder="$t('etsi-koulutuksen-jarjestajia')"/>
+    <div v-if="!koulutustoimijat">
+      <ep-spinner />
     </div>
-    <div class="content">
+    <div
+      v-else
+      class="haku"
+    >
+      <div class="search">
+        <ep-search
+          v-model="query"
+          :sr-placeholder="$t('etsi-koulutuksen-jarjestajia')"
+        />
+      </div>
+      <div class="content">
+        <ep-ammatillinen-row
+          v-for="(koulutustoimija, index) in koulutustoimijatPaged"
+          :key="'koulutuksenjarjestaja' + index"
+          :route="{name:'ammatillinenKoulutuksenjarjestaja', params: {koulutuksenjarjestajaId: koulutustoimija.id}}"
+        >
+          <div :class="{'pt-2 pb-2': !koulutustoimija.kuvaus}">
+            <span class="nimi">{{ $kaanna(koulutustoimija.nimi) }}</span>
+            <span
+              class="kuvaus"
+              v-html="$kaanna(koulutustoimija.kuvaus)"
+            />
+          </div>
+        </ep-ammatillinen-row>
 
-      <ep-ammatillinen-row v-for="(koulutustoimija, index) in koulutustoimijatPaged" :key="'koulutuksenjarjestaja' + index"
-        :route="{name:'ammatillinenKoulutuksenjarjestaja', params: {koulutuksenjarjestajaId: koulutustoimija.id}}">
-        <div :class="{'pt-2 pb-2': !koulutustoimija.kuvaus}">
-          <span class="nimi">{{ $kaanna(koulutustoimija.nimi) }}</span>
-          <span class="kuvaus" v-html="$kaanna(koulutustoimija.kuvaus)"></span>
+        <div class="pagination d-flex justify-content-center">
+          <EpBPagination
+            v-model="page"
+            :items-per-page="perPage"
+            :total="total"
+            aria-controls="koulutuksenjarjestajat-lista"
+          />
         </div>
-      </ep-ammatillinen-row>
-
-      <div class="pagination d-flex justify-content-center">
-        <EpBPagination v-model="page"
-                       :items-per-page="perPage"
-                       :total="total"
-                       aria-controls="koulutuksenjarjestajat-lista">
-        </EpBPagination>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">

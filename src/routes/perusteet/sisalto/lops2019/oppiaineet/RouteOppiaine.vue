@@ -1,20 +1,27 @@
 <template>
-<div class="content">
-  <div v-if="oppiaine">
-    <h2 class="otsikko" slot="header">{{ $kaanna(oppiaine.nimi) }}</h2>
+  <div class="content">
+    <div v-if="oppiaine">
+      <h2
+        slot="header"
+        class="otsikko"
+      >
+        {{ $kaanna(oppiaine.nimi) }}
+      </h2>
 
-    <div class="teksti">
-      <oppiaine-esitys :oppiaine="oppiaine"
-                       :termit="termit"
-                       :kuvat="kuvat" />
+      <div class="teksti">
+        <oppiaine-esitys
+          :oppiaine="oppiaine"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+      </div>
+
+      <EpOpasKiinnitysLinkki :koodi-uri="oppiaineKoodiUri" />
+
+      <slot name="previous-next-navigation" />
     </div>
-
-    <EpOpasKiinnitysLinkki :koodiUri="oppiaineKoodiUri"/>
-
-    <slot name="previous-next-navigation" />
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
 <script lang="ts">

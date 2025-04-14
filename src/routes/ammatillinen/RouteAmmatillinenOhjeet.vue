@@ -1,9 +1,14 @@
 <template>
-<div>
-  <slot />
-  <p class="kuvaus">{{ $t('kooste-kuvaus-ohjeet') }}</p>
-  <peruste-ammatillinen-haku :peruste-haku-store="perusteHakuStoreOhjeet" tyyppi="opas"/>
-</div>
+  <div>
+    <slot />
+    <p class="kuvaus">
+      {{ $t('kooste-kuvaus-ohjeet') }}
+    </p>
+    <peruste-ammatillinen-haku
+      :peruste-haku-store="perusteHakuStoreOhjeet"
+      tyyppi="opas"
+    />
+  </div>
 </template>
 
 <script lang="ts">

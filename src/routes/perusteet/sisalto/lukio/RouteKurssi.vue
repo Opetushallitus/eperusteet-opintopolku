@@ -1,54 +1,75 @@
 <template>
   <div class="content">
     <div v-if="kurssi">
-      <h2 class="otsikko" slot="header">{{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{kurssi.koodiArvo}})</span></h2>
+      <h2
+        slot="header"
+        class="otsikko"
+      >
+        {{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{ kurssi.koodiArvo }})</span>
+      </h2>
 
       <ep-content-viewer
         v-if="kurssi.kuvaus"
         :value="$kaanna(kurssi.kuvaus)"
         :termit="termit"
-        :kuvat="kuvat" />
+        :kuvat="kuvat"
+      />
 
       <ep-content-viewer
         v-if="kurssi.tyyppi === 'PAKOLLINEN' && oppiaine.pakollinenKurssiKuvaus"
         :value="$kaanna( oppiaine.pakollinenKurssiKuvaus)"
         :termit="termit"
-        :kuvat="kuvat" />
+        :kuvat="kuvat"
+      />
 
       <ep-content-viewer
         v-if="kurssi.tyyppi === 'VALTAKUNNALLINEN_SYVENTAVA' && oppiaine.syventavaKurssiKuvaus"
         :value="$kaanna( oppiaine.syventavaKurssiKuvaus)"
         :termit="termit"
-        :kuvat="kuvat" />
+        :kuvat="kuvat"
+      />
 
       <ep-content-viewer
         v-if="kurssi.tyyppi === 'VALTAKUNNALLINEN_SOVELTAVA' && oppiaine.soveltavaKurssiKuvaus"
         :value="$kaanna( oppiaine.soveltavaKurssiKuvaus)"
         :termit="termit"
-        :kuvat="kuvat" />
+        :kuvat="kuvat"
+      />
 
-      <div class="mt-4" v-if="kurssi.tavoitteet">
-        <h3>{{$kaanna(kurssi.tavoitteet.otsikko)}}</h3>
+      <div
+        v-if="kurssi.tavoitteet"
+        class="mt-4"
+      >
+        <h3>{{ $kaanna(kurssi.tavoitteet.otsikko) }}</h3>
         <ep-content-viewer
-                      :value="$kaanna(kurssi.tavoitteet.teksti)"
-                      :termit="termit"
-                      :kuvat="kuvat" />
+          :value="$kaanna(kurssi.tavoitteet.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </div>
 
-      <div class="mt-4" v-if="kurssi.keskeisetSisallot">
-        <h3>{{$kaanna(kurssi.keskeisetSisallot.otsikko)}}</h3>
+      <div
+        v-if="kurssi.keskeisetSisallot"
+        class="mt-4"
+      >
+        <h3>{{ $kaanna(kurssi.keskeisetSisallot.otsikko) }}</h3>
         <ep-content-viewer
-                      :value="$kaanna(kurssi.keskeisetSisallot.teksti)"
-                      :termit="termit"
-                      :kuvat="kuvat" />
+          :value="$kaanna(kurssi.keskeisetSisallot.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </div>
 
-      <div class="mt-4" v-if="kurssi.tavoitteetJaKeskeisetSisallot">
-        <h3>{{$kaanna(kurssi.tavoitteetJaKeskeisetSisallot.otsikko)}}</h3>
+      <div
+        v-if="kurssi.tavoitteetJaKeskeisetSisallot"
+        class="mt-4"
+      >
+        <h3>{{ $kaanna(kurssi.tavoitteetJaKeskeisetSisallot.otsikko) }}</h3>
         <ep-content-viewer
-                      :value="$kaanna(kurssi.tavoitteetJaKeskeisetSisallot.teksti)"
-                      :termit="termit"
-                      :kuvat="kuvat" />
+          :value="$kaanna(kurssi.tavoitteetJaKeskeisetSisallot.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </div>
 
       <slot name="previous-next-navigation" />

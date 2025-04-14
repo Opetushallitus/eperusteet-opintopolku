@@ -1,81 +1,182 @@
 <template>
   <div class="content">
-    <h2 class="otsikko mb-4" tabindex="-1">
+    <h2
+      class="otsikko mb-4"
+      tabindex="-1"
+    >
       {{ $t(koulutustyyppiKohtaisetKaannokset.perusteentiedot) }}
     </h2>
     <div class="row">
-      <div class="col-md-12" v-if="peruste.nimi">
-        <ep-form-content :name="koulutustyyppiKohtaisetKaannokset.perusteennimi" headerType="h3" headerClass="h6">
-          <div>{{$kaanna(peruste.nimi)}} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
+      <div
+        v-if="peruste.nimi"
+        class="col-md-12"
+      >
+        <ep-form-content
+          :name="koulutustyyppiKohtaisetKaannokset.perusteennimi"
+          header-type="h3"
+          header-class="h6"
+        >
+          <div>{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span></div>
         </ep-form-content>
       </div>
       <template v-if="isAmmatillinen">
-        <div class="col-md-12" v-if="peruste.diaarinumero">
-          <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
-            <ep-field v-model="peruste.diaarinumero"></ep-field>
+        <div
+          v-if="peruste.diaarinumero"
+          class="col-md-12"
+        >
+          <ep-form-content
+            name="maarayksen-diaarinumero"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-field v-model="peruste.diaarinumero" />
           </ep-form-content>
         </div>
-        <div class="col-md-12" v-if="peruste.paatospvm">
-          <ep-form-content name="maarayksen-paatospaivamaara" headerType="h3" headerClass="h6">
-            <ep-datepicker v-model="peruste.paatospvm"></ep-datepicker>
+        <div
+          v-if="peruste.paatospvm"
+          class="col-md-12"
+        >
+          <ep-form-content
+            name="maarayksen-paatospaivamaara"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-datepicker v-model="peruste.paatospvm" />
           </ep-form-content>
         </div>
       </template>
-      <div class="col-md-12" v-if="peruste.voimassaoloAlkaa" >
-        <ep-form-content name="voimaantulo-pvm" headerType="h3" headerClass="h6">
-          <ep-datepicker v-model="peruste.voimassaoloAlkaa"></ep-datepicker>
+      <div
+        v-if="peruste.voimassaoloAlkaa"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="voimaantulo-pvm"
+          header-type="h3"
+          header-class="h6"
+        >
+          <ep-datepicker v-model="peruste.voimassaoloAlkaa" />
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="peruste.voimassaoloLoppuu">
-        <ep-form-content name="voimassaolo-paattymispvm" headerType="h3" headerClass="h6">
-          <ep-datepicker v-model="peruste.voimassaoloLoppuu"></ep-datepicker>
+      <div
+        v-if="peruste.voimassaoloLoppuu"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="voimassaolo-paattymispvm"
+          header-type="h3"
+          header-class="h6"
+        >
+          <ep-datepicker v-model="peruste.voimassaoloLoppuu" />
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="peruste.siirtymaPaattyy">
-        <ep-form-content name="siirtyman-paattyminen" headerType="h3" headerClass="h6">
-          <ep-datepicker v-model="peruste.siirtymaPaattyy"></ep-datepicker>
-          <p class="help">{{ $t('siirtyman-kuvaus') }}</p>
+      <div
+        v-if="peruste.siirtymaPaattyy"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="siirtyman-paattyminen"
+          header-type="h3"
+          header-class="h6"
+        >
+          <ep-datepicker v-model="peruste.siirtymaPaattyy" />
+          <p class="help">
+            {{ $t('siirtyman-kuvaus') }}
+          </p>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="dokumentti !== ''">
-        <ep-form-content :name="dokumenttiKielistykset.otsikko" headerType="h3" headerClass="h6" class="text-left">
-          <EpSpinner class="d-inline-block" v-if="!dokumentti"/>
-          <div class="pl-2" v-else>
-            <EpPdfLink :url="dokumentti">{{ $t(dokumenttiKielistykset.linkki) }}</EpPdfLink>
+      <div
+        v-if="dokumentti !== ''"
+        class="col-md-12"
+      >
+        <ep-form-content
+          :name="dokumenttiKielistykset.otsikko"
+          header-type="h3"
+          header-class="h6"
+          class="text-left"
+        >
+          <EpSpinner
+            v-if="!dokumentti"
+            class="d-inline-block"
+          />
+          <div
+            v-else
+            class="pl-2"
+          >
+            <EpPdfLink :url="dokumentti">
+              {{ $t(dokumenttiKielistykset.linkki) }}
+            </EpPdfLink>
           </div>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="hasMaaraykset">
-        <ep-form-content name="maaraykset" headerType="h3" headerClass="h6">
-
-          <div v-for="maarays in maaraykset" :key="'maarays'+maarays.id" class="taulukko-rivi-varitys px-2 py-3">
-            <EpPdfLink v-if="maarays.url" :url="maarays.url">{{ $kaanna(maarays.nimi) }}</EpPdfLink>
-            <router-link v-else :to="{ name: 'maarays', params: { maaraysId: maarays.id } }">{{ $kaanna(maarays.nimi) }}</router-link>
+      <div
+        v-if="hasMaaraykset"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="maaraykset"
+          header-type="h3"
+          header-class="h6"
+        >
+          <div
+            v-for="maarays in maaraykset"
+            :key="'maarays'+maarays.id"
+            class="taulukko-rivi-varitys px-2 py-3"
+          >
+            <EpPdfLink
+              v-if="maarays.url"
+              :url="maarays.url"
+            >
+              {{ $kaanna(maarays.nimi) }}
+            </EpPdfLink>
+            <router-link
+              v-else
+              :to="{ name: 'maarays', params: { maaraysId: maarays.id } }"
+            >
+              {{ $kaanna(maarays.nimi) }}
+            </router-link>
             <div class="mt-2">
-              <span v-if="maarays.voimassaoloAlkaa">{{ $t('voimaantulo')}}: {{ $sd(maarays.voimassaoloAlkaa)}}</span>
-              <span v-if="maarays.voimassaoloAlkaa && maarays.diaarinumero" class="px-2">|</span>
-              <span v-if="maarays.diaarinumero">{{ $t('diaarinumero')}}: {{ maarays.diaarinumero }}</span>
+              <span v-if="maarays.voimassaoloAlkaa">{{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}</span>
+              <span
+                v-if="maarays.voimassaoloAlkaa && maarays.diaarinumero"
+                class="px-2"
+              >|</span>
+              <span v-if="maarays.diaarinumero">{{ $t('diaarinumero') }}: {{ maarays.diaarinumero }}</span>
             </div>
           </div>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="hasKorvattavatDiaarinumerot">
-        <ep-form-content :name="koulutustyyppiKohtaisetKaannokset.korvattavatperusteet" headerType="h3" headerClass="h6">
-          <b-table striped
-                   fixed
-                   responsive
-                   hover
-                   :fields="korvattavatDiaarinumerotFields"
-                   :items="korvaavatPerusteet">
-            <template v-slot:cell(perusteet)="data">
+      <div
+        v-if="hasKorvattavatDiaarinumerot"
+        class="col-md-12"
+      >
+        <ep-form-content
+          :name="koulutustyyppiKohtaisetKaannokset.korvattavatperusteet"
+          header-type="h3"
+          header-class="h6"
+        >
+          <b-table
+            striped
+            fixed
+            responsive
+            hover
+            :fields="korvattavatDiaarinumerotFields"
+            :items="korvaavatPerusteet"
+          >
+            <template #cell(perusteet)="data">
               <div v-if="data.item.perusteet.length > 0">
-                <div v-for="(peruste, idx) in data.item.perusteet" :key="idx">
+                <div
+                  v-for="(peruste, idx) in data.item.perusteet"
+                  :key="idx"
+                >
                   <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
                 </div>
               </div>
-              <div v-else class="font-italic">
+              <div
+                v-else
+                class="font-italic"
+              >
                 {{ $t('peruste-saatavilla-opetushallituksen-arkistosta') }}
               </div>
             </template>
@@ -83,121 +184,242 @@
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="kaannokset && kaannokset.length > 0">
-        <ep-form-content name="saamen-kielelle-kaannetyt-perusteet" headerType="h3" headerClass="h6">
-          <div v-for="(kaannos, idx) in kaannokset" :key="idx">
-            <a :href="kaannos.url" target="_blank" rel="noopener noreferrer">{{ kaannos.nimi }}</a>
+      <div
+        v-if="kaannokset && kaannokset.length > 0"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="saamen-kielelle-kaannetyt-perusteet"
+          header-type="h3"
+          header-class="h6"
+        >
+          <div
+            v-for="(kaannos, idx) in kaannokset"
+            :key="idx"
+          >
+            <a
+              :href="kaannos.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ kaannos.nimi }}</a>
           </div>
         </ep-form-content>
       </div>
 
       <div v-if="isAmmatillinen">
-
-        <div class="col-md-12 mt-3" v-if="showKoulutusvienninOhje">
-          <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
-            <span v-if="isEiTarvitaOhjettaTyyppi">{{$t('voi-kayttaa-tutkintoviennissa')}}</span>
-            <span v-else-if="isEiVoiPoiketaTyyppi">{{$t('ei-voi-poiketa-tutkinnon-perusteista-tutkintoviennin-yhteydessa')}}</span>
+        <div
+          v-if="showKoulutusvienninOhje"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="koulutusviennin-ohje"
+            header-type="h3"
+            header-class="h6"
+          >
+            <span v-if="isEiTarvitaOhjettaTyyppi">{{ $t('voi-kayttaa-tutkintoviennissa') }}</span>
+            <span v-else-if="isEiVoiPoiketaTyyppi">{{ $t('ei-voi-poiketa-tutkinnon-perusteista-tutkintoviennin-yhteydessa') }}</span>
 
             <div v-if="isKoulutusvientiliiteTyyppi && koulutusvienninOhjeet && koulutusvienninOhjeet.length > 0">
-              <b-table striped
-                       fixed
-                       responsive
-                       :fields="koulutusvienninohjeFields"
-                       :items="koulutusvienninOhjeet">
-                <template v-slot:cell(nimi)="{ item }">
-                  <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
+              <b-table
+                striped
+                fixed
+                responsive
+                :fields="koulutusvienninohjeFields"
+                :items="koulutusvienninOhjeet"
+              >
+                <template #cell(nimi)="{ item }">
+                  <a
+                    :href="item.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >{{ item.nimi }}</a>
                 </template>
               </b-table>
             </div>
 
-            <ep-form-content v-if="peruste.poikkeamismaaraysTarkennus" name="tarkennus" headerClass="h6" class="ml-3 mt-3">
-              <ep-content-viewer :value="$kaanna(peruste.poikkeamismaaraysTarkennus)"/>
+            <ep-form-content
+              v-if="peruste.poikkeamismaaraysTarkennus"
+              name="tarkennus"
+              header-class="h6"
+              class="ml-3 mt-3"
+            >
+              <ep-content-viewer :value="$kaanna(peruste.poikkeamismaaraysTarkennus)" />
             </ep-form-content>
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
-          <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6">
-            <b-table striped
-                    fixed
-                    responsive
-                    hover
-                    :fields="koulutuskooditFields"
-                    :items="peruste.koulutukset">
-            </b-table>
+        <div
+          v-if="peruste.koulutukset && peruste.koulutukset.length > 0"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="koulutuskoodit"
+            header-type="h3"
+            header-class="h6"
+          >
+            <b-table
+              striped
+              fixed
+              responsive
+              hover
+              :fields="koulutuskooditFields"
+              :items="peruste.koulutukset"
+            />
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-          <ep-form-content name="osaamisalat" headerType="h3" headerClass="h6">
-            <b-table striped
-                    fixed
-                    responsive
-                    hover
-                    :fields="osaamisalatFields"
-                    :items="peruste.osaamisalat">
-            </b-table>
+        <div
+          v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="osaamisalat"
+            header-type="h3"
+            header-class="h6"
+          >
+            <b-table
+              striped
+              fixed
+              responsive
+              hover
+              :fields="osaamisalatFields"
+              :items="peruste.osaamisalat"
+            />
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
-          <ep-form-content name="tutkintonimikkeet" headerType="h3" headerClass="h6">
-            <b-table striped
-                    fixed
-                    responsive
-                    hover
-                    :fields="tutkintonimikkeetFields"
-                    :items="peruste.tutkintonimikkeet">
-            </b-table>
+        <div
+          v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="tutkintonimikkeet"
+            header-type="h3"
+            header-class="h6"
+          >
+            <b-table
+              striped
+              fixed
+              responsive
+              hover
+              :fields="tutkintonimikkeetFields"
+              :items="peruste.tutkintonimikkeet"
+            />
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.suorittaneenOsaaminen">
-          <ep-form-content name="suorittaneen-osaaminen" headerType="h3" headerClass="h6">
-            <ep-content-viewer :value="$kaanna(peruste.suorittaneenOsaaminen)"
+        <div
+          v-if="peruste.suorittaneenOsaaminen"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="suorittaneen-osaaminen"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-content-viewer
+              :value="$kaanna(peruste.suorittaneenOsaaminen)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </ep-form-content>
+        </div>
+
+        <div
+          v-if="peruste.tyotehtavatJoissaVoiToimia"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="tyotehtavat-joissa-voi-toimia"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-content-viewer
+              :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </ep-form-content>
+        </div>
+
+        <div
+          v-if="osaamisalaKuvaukset && osaamisalaKuvaukset.length > 0"
+          class="col-md-12"
+        >
+          <ep-form-content
+            name="osaamisalojen-kuvaukset"
+            header-type="h3"
+            header-class="h6"
+          >
+            <div
+              v-for="(osaamisalakuvaus, index) in osaamisalaKuvaukset"
+              :key="'osaamisalakuvaus'+index"
+            >
+              <h4>{{ $kaanna(osaamisalakuvaus.nimi) }}</h4>
+              <ep-content-viewer
+                :value="$kaanna(osaamisalakuvaus.teksti)"
                 :termit="termit"
-                :kuvat="kuvat" />
-          </ep-form-content>
-        </div>
-
-        <div class="col-md-12 mt-3" v-if="peruste.tyotehtavatJoissaVoiToimia">
-          <ep-form-content name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6">
-            <ep-content-viewer :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia)"
-                :termit="termit"
-                :kuvat="kuvat" />
-          </ep-form-content>
-        </div>
-
-        <div class="col-md-12" v-if="osaamisalaKuvaukset && osaamisalaKuvaukset.length > 0">
-          <ep-form-content name="osaamisalojen-kuvaukset" headerType="h3" headerClass="h6">
-            <div v-for="(osaamisalakuvaus, index) in osaamisalaKuvaukset" :key="'osaamisalakuvaus'+index">
-              <h4>{{$kaanna(osaamisalakuvaus.nimi)}}</h4>
-              <ep-content-viewer :value="$kaanna(osaamisalakuvaus.teksti)"
-                  :termit="termit"
-                  :kuvat="kuvat" />
+                :kuvat="kuvat"
+              />
             </div>
           </ep-form-content>
         </div>
       </div>
 
-      <div v-if="isAmmatillinen && !isOpas" class="col-md-12">
-        <ep-form-content name="englanninkieliset-sisallot" headerType="h3" headerClass="h6">
+      <div
+        v-if="isAmmatillinen && !isOpas"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="englanninkieliset-sisallot"
+          header-type="h3"
+          header-class="h6"
+        >
           <router-link :to="{name: 'perusteKoosteEng'}">
             <span>{{ $t('katso-tutkinnon-englanninkieliset-sisallot') }}</span>
           </router-link>
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="kvliitteita">
-        <ep-form-content name="kv-liitteet" headerType="h3" headerClass="h6">
-          <EpPdfLink v-if="kvliitteet['fi']" :url="kvliitteet['fi']">{{ $t('lataa-kvliite-fi') }}</EpPdfLink>
-          <EpPdfLink v-if="kvliitteet['sv']" :url="kvliitteet['sv']">{{ $t('lataa-kvliite-sv') }}</EpPdfLink>
-          <EpPdfLink v-if="kvliitteet['en']" :url="kvliitteet['en']">{{ $t('lataa-kvliite-en') }}</EpPdfLink>
+      <div
+        v-if="kvliitteita"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="kv-liitteet"
+          header-type="h3"
+          header-class="h6"
+        >
+          <EpPdfLink
+            v-if="kvliitteet['fi']"
+            :url="kvliitteet['fi']"
+          >
+            {{ $t('lataa-kvliite-fi') }}
+          </EpPdfLink>
+          <EpPdfLink
+            v-if="kvliitteet['sv']"
+            :url="kvliitteet['sv']"
+          >
+            {{ $t('lataa-kvliite-sv') }}
+          </EpPdfLink>
+          <EpPdfLink
+            v-if="kvliitteet['en']"
+            :url="kvliitteet['en']"
+          >
+            {{ $t('lataa-kvliite-en') }}
+          </EpPdfLink>
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="!isOpas">
-        <ep-form-content name="muutoshistoria" headerType="h3" headerClass="h6">
+      <div
+        v-if="!isOpas"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="muutoshistoria"
+          header-type="h3"
+          header-class="h6"
+        >
           <router-link :to="{ name: 'perusteMuutoshistoria' }">
             <span>{{ $t('katsele-perusteen-muutoshistoriaa') }}</span>
           </router-link>

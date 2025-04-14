@@ -1,72 +1,138 @@
 <template>
   <div class="content">
     <div>
-      <h2 class="otsikko mb-4" slot="header">
+      <h2
+        slot="header"
+        class="otsikko mb-4"
+      >
         <slot name="header">
           {{ $t('englanninkieliset-sisallot') }}
         </slot>
       </h2>
     </div>
 
-    <EpSpinner v-if="!peruste"></EpSpinner>
-    <div v-else class="row">
-
-      <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
-        <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6" kieli="en">
-          <b-table striped
-                   fixed
-                   responsive
-                   hover
-                   :fields="koulutuskooditFields"
-                   :items="peruste.koulutukset">
-          </b-table>
+    <EpSpinner v-if="!peruste" />
+    <div
+      v-else
+      class="row"
+    >
+      <div
+        v-if="peruste.koulutukset && peruste.koulutukset.length > 0"
+        class="col-md-12 mt-3"
+      >
+        <ep-form-content
+          name="koulutuskoodit"
+          header-type="h3"
+          header-class="h6"
+          kieli="en"
+        >
+          <b-table
+            striped
+            fixed
+            responsive
+            hover
+            :fields="koulutuskooditFields"
+            :items="peruste.koulutukset"
+          />
         </ep-form-content>
       </div>
 
-      <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-        <EpFormContent name="osaamisalat" headerType="h3" headerClass="h6" kieli="en">
-          <b-table striped
-                   fixed
-                   responsive
-                   hover
-                   :fields="osaamisalatFields"
-                   :items="peruste.osaamisalat">
-          </b-table>
+      <div
+        v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0"
+        class="col-md-12 mt-3"
+      >
+        <EpFormContent
+          name="osaamisalat"
+          header-type="h3"
+          header-class="h6"
+          kieli="en"
+        >
+          <b-table
+            striped
+            fixed
+            responsive
+            hover
+            :fields="osaamisalatFields"
+            :items="peruste.osaamisalat"
+          />
         </EpFormContent>
       </div>
 
-      <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
-        <EpFormContent name="tutkintonimikkeet" headerType="h3" headerClass="h6" kieli="en">
-          <b-table striped
-                   fixed
-                   responsive
-                   hover
-                   :fields="tutkintonimikkeetFields"
-                   :items="peruste.tutkintonimikkeet">
-          </b-table>
+      <div
+        v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0"
+        class="col-md-12 mt-3"
+      >
+        <EpFormContent
+          name="tutkintonimikkeet"
+          header-type="h3"
+          header-class="h6"
+          kieli="en"
+        >
+          <b-table
+            striped
+            fixed
+            responsive
+            hover
+            :fields="tutkintonimikkeetFields"
+            :items="peruste.tutkintonimikkeet"
+          />
         </EpFormContent>
       </div>
 
-      <div class="col-md-12 mt-3" v-if="peruste.suorittaneenOsaaminen">
-        <EpFormContent name="suorittaneen-osaaminen" headerType="h3" headerClass="h6" kieli="en">
-          <EpContentViewer :value="$kaanna(peruste.suorittaneenOsaaminen, false, true, 'en')"
-                           :termit="termit"
-                           :kuvat="kuvat" />
+      <div
+        v-if="peruste.suorittaneenOsaaminen"
+        class="col-md-12 mt-3"
+      >
+        <EpFormContent
+          name="suorittaneen-osaaminen"
+          header-type="h3"
+          header-class="h6"
+          kieli="en"
+        >
+          <EpContentViewer
+            :value="$kaanna(peruste.suorittaneenOsaaminen, false, true, 'en')"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
         </EpFormContent>
       </div>
 
-      <div class="col-md-12 mt-3" v-if="peruste.tyotehtavatJoissaVoiToimia">
-        <EpFormContent name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6" kieli="en">
-          <EpContentViewer :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia, false, true, 'en')"
-                           :termit="termit"
-                           :kuvat="kuvat" />
+      <div
+        v-if="peruste.tyotehtavatJoissaVoiToimia"
+        class="col-md-12 mt-3"
+      >
+        <EpFormContent
+          name="tyotehtavat-joissa-voi-toimia"
+          header-type="h3"
+          header-class="h6"
+          kieli="en"
+        >
+          <EpContentViewer
+            :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia, false, true, 'en')"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
         </EpFormContent>
       </div>
 
-      <div class="col-md-12 mt-3" v-if="tutkinnonOsaViitteet">
-        <EpFormContent name="tutkinnon-osat" headerType="h3" headerClass="h6" kieli="en">
-          <b-table striped hover responsive :items="tutkinnonOsaViitteet" :fields="tutkinnonOsaFields">
-            <template v-slot:cell(nimi)="data">
+      <div
+        v-if="tutkinnonOsaViitteet"
+        class="col-md-12 mt-3"
+      >
+        <EpFormContent
+          name="tutkinnon-osat"
+          header-type="h3"
+          header-class="h6"
+          kieli="en"
+        >
+          <b-table
+            striped
+            hover
+            responsive
+            :items="tutkinnonOsaViitteet"
+            :fields="tutkinnonOsaFields"
+          >
+            <template #cell(nimi)="data">
               <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: data.item.id}}">
                 {{ $kaanna(data.item.tutkinnonOsa.nimi, false, true, 'en') }}
               </router-link>
@@ -75,13 +141,12 @@
         </EpFormContent>
       </div>
 
-<!--      <div class="col-md-12 mt-3" v-if="geneerisetArvioinnit">-->
-<!--        <div v-for="(arviointi, idx) in geneerisetArvioinnit" :key="'arv-'+idx">-->
-<!--          <GeneerinenArviointiTaulukko :arviointi="arviointi" />-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="col-md-12 mt-3" v-if="geneerisetArvioinnit">-->
+      <!--        <div v-for="(arviointi, idx) in geneerisetArvioinnit" :key="'arv-'+idx">-->
+      <!--          <GeneerinenArviointiTaulukko :arviointi="arviointi" />-->
+      <!--        </div>-->
+      <!--      </div>-->
     </div>
-
   </div>
 </template>
 

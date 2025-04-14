@@ -2,25 +2,29 @@
   <div class="content">
     <ep-spinner v-if="fetching" />
 
-    <div v-else-if="sisaltoviite" class="content">
-
-      <portal to="toteutussuunnitelma-sisalto-header" >
+    <div
+      v-else-if="sisaltoviite"
+      class="content"
+    >
+      <portal to="toteutussuunnitelma-sisalto-header">
         <h2 v-if="sisaltoviite.nimi">
-          <span v-if="numerointi">{{numerointi}}</span>
-          {{$kaanna(sisaltoviite.nimi)}}
+          <span v-if="numerointi">{{ numerointi }}</span>
+          {{ $kaanna(sisaltoviite.nimi) }}
         </h2>
       </portal>
 
-      <ep-toteutussuunnitelma-tekstikappale v-if="sisaltoviite.tyyppi === 'tekstikappale'"
+      <ep-toteutussuunnitelma-tekstikappale
+        v-if="sisaltoviite.tyyppi === 'tekstikappale'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
-      <ep-toteutussuunnitelma-tutkinnonosa v-else-if="sisaltoviite.tyyppi === 'tutkinnonosa'"
+      <ep-toteutussuunnitelma-tutkinnonosa
+        v-else-if="sisaltoviite.tyyppi === 'tutkinnonosa'"
         :sisaltoviite="sisaltoviite"
-        :perusteenTutkinnonosa="perusteenTutkinnonosa"
-        :perusteenTutkinnonosaViite="perusteenTutkinnonosaViite"
+        :perusteen-tutkinnonosa="perusteenTutkinnonosa"
+        :perusteen-tutkinnonosa-viite="perusteenTutkinnonosaViite"
         :kuvat="kuvat"
         :arviointiasteikot="arviointiasteikot"
         :julkaisukielet="opetussuunnitelma.julkaisukielet"
@@ -30,7 +34,7 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
       <ep-toteutussuunnitelma-opintokokonaisuus
         v-else-if="sisaltoviite.tyyppi === 'opintokokonaisuus'"
@@ -42,7 +46,7 @@
         v-else-if="sisaltoviite.tyyppi === 'laajaalainenosaaminen'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koulutuksen-osat
@@ -50,7 +54,7 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koulutuksen-osa
@@ -58,7 +62,7 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen
@@ -66,7 +70,7 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koto-opinto-sisalto
@@ -74,8 +78,8 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
-        sisaltoViiteSisalto="kotoKielitaitotaso"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
+        sisalto-viite-sisalto="kotoKielitaitotaso"
       />
 
       <ep-toteutussuunnitelma-koto-opinto-sisalto
@@ -83,14 +87,15 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelmaDataStore="opetussuunnitelmaDataStore"
-        sisaltoViiteSisalto="kotoOpinto"
+        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
+        sisalto-viite-sisalto="kotoOpinto"
       />
 
-      <EpToteutussuunnitelmaOsaamismerkki v-else-if="sisaltoviite.tyyppi === 'osaamismerkki'"
-                                          :sisaltoviite="sisaltoviite"
-                                          :kuvat="kuvat">
-      </EpToteutussuunnitelmaOsaamismerkki>
+      <EpToteutussuunnitelmaOsaamismerkki
+        v-else-if="sisaltoviite.tyyppi === 'osaamismerkki'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+      />
     </div>
   </div>
 </template>

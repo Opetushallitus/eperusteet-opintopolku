@@ -1,36 +1,46 @@
 <template>
-<div class="opetussuunnitelma">
-  <ep-header :koulutustyyppi="koulutustyyppi" :tyyppi="tyyppi" :murupolku="murupolku">
-    <template slot="header">
-      {{ $kaanna(opetussuunnitelma.nimi) }}
-    </template>
-    <template slot="subheader">
-      <div class="diaarinumero">
-        {{ diaariNumero }}
+  <div class="opetussuunnitelma">
+    <ep-header
+      :koulutustyyppi="koulutustyyppi"
+      :tyyppi="tyyppi"
+      :murupolku="murupolku"
+    >
+      <template slot="header">
+        {{ $kaanna(opetussuunnitelma.nimi) }}
+      </template>
+      <template slot="subheader">
+        <div class="diaarinumero">
+          {{ diaariNumero }}
+        </div>
+      </template>
+    </ep-header>
+
+    <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle" />
+
+    <div class="container pt-4">
+      <div class="lower">
+        <PortalTarget
+          ref="innerPortal"
+          name="globalNavigation"
+        />
+        <ep-sidebar :scroll-enabled="true">
+          <template slot="bar">
+            <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
+          </template>
+          <template slot="view">
+            <router-view :key="$route.fullPath">
+              <template slot="previous-next-navigation">
+                <ep-previous-next-navigation
+                  :active-node="current"
+                  :flattened-sidenav="flattenedSidenav"
+                />
+              </template>
+            </router-view>
+          </template>
+        </ep-sidebar>
       </div>
-    </template>
-  </ep-header>
-
-  <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle"/>
-
-  <div class="container pt-4">
-    <div class="lower">
-      <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-      <ep-sidebar :scroll-enabled="true">
-        <template slot="bar">
-          <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
-        </template>
-        <template slot="view">
-          <router-view :key="$route.fullPath">
-            <template slot="previous-next-navigation">
-              <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
-            </template>
-          </router-view>
-        </template>
-      </ep-sidebar>
     </div>
   </div>
-</div>
 </template>
 
 <script lang="ts">
@@ -144,7 +154,7 @@ export default class RouteOpetussuunnitelma extends Vue {
         return traverseNavigation(node, true).location;
       },
     } as ILinkkiHandler;
-  };
+  }
 
   @ProvideReactive('opetussuunnitelma')
   get provideOpetussuunnitelma() {

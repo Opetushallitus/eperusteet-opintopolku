@@ -6,7 +6,7 @@ import { ActionPayload } from 'vuex';
 
 export interface KoodiPerusteella extends KoodiDto {
   perusteet: PerusteInfoDto[];
-};
+}
 
 @Store
 export class TiedoteStore {

@@ -2,10 +2,12 @@
   <div>
     <ep-toteutussuunnitelma-tiedot
       v-if="!isVapaasivistystyo"
-      :store="opetussuunnitelmaDataStore" />
+      :store="opetussuunnitelmaDataStore"
+    />
     <ep-opetussuunnitelma-tiedot
       v-if="isVapaasivistystyo"
-      :store="opetussuunnitelmaDataStore" />
+      :store="opetussuunnitelmaDataStore"
+    />
   </div>
 </template>
 

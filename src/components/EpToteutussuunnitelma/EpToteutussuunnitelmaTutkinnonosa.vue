@@ -1,68 +1,137 @@
 <template>
   <div v-if="sisaltoviite">
-    <h2 class="otsikko mb-4" slot="header">{{ $kaanna(sisaltoviite.tekstiKappale.nimi)}}, {{laajuus}} {{$t('osaamispiste')}}</h2>
+    <h2
+      slot="header"
+      class="otsikko mb-4"
+    >
+      {{ $kaanna(sisaltoviite.tekstiKappale.nimi) }}, {{ laajuus }} {{ $t('osaamispiste') }}
+    </h2>
 
-    <ep-form-content class="col-md-12 mt-4" name="tutkinnon-osan-kuvaus" v-if="perusteenTutkinnonosa && perusteenTutkinnonosa.kuvaus">
-      <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.kuvaus)" :kuvat="kuvat"/>
+    <ep-form-content
+      v-if="perusteenTutkinnonosa && perusteenTutkinnonosa.kuvaus"
+      class="col-md-12 mt-4"
+      name="tutkinnon-osan-kuvaus"
+    >
+      <ep-content-viewer
+        :value="$kaanna(perusteenTutkinnonosa.kuvaus)"
+        :kuvat="kuvat"
+      />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4" name="koulutuksen-jarjestajan-tarkennus" v-if="sisaltoviite.tekstiKappale.teksti">
-      <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
+    <ep-form-content
+      v-if="sisaltoviite.tekstiKappale.teksti"
+      class="col-md-12 mt-4"
+      name="koulutuksen-jarjestajan-tarkennus"
+    >
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.tekstiKappale.teksti)"
+        :kuvat="kuvat"
+      />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4" v-for="(vapaa, index) in sisaltoviite.tosa.vapaat" :key="'tosavapaateksti'+index">
-      <label slot="header">{{$kaanna(vapaa.nimi)}}</label>
-      <ep-content-viewer :value="$kaanna(vapaa.teksti)" :kuvat="kuvat"/>
+    <ep-form-content
+      v-for="(vapaa, index) in sisaltoviite.tosa.vapaat"
+      :key="'tosavapaateksti'+index"
+      class="col-md-12 mt-4"
+    >
+      <label slot="header">{{ $kaanna(vapaa.nimi) }}</label>
+      <ep-content-viewer
+        :value="$kaanna(vapaa.teksti)"
+        :kuvat="kuvat"
+      />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4 mb-4"
-                     name="koulutuksen-jarjestajan-toteutus"
-                     v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0 && (!osaAlueet || osaAlueet.length === 0)"
-                     header-type="h3">
-      <EpToteutukset :toteutukset="toteutukset" :kuvat="kuvat"/>
+    <ep-form-content
+      v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0 && (!osaAlueet || osaAlueet.length === 0)"
+      class="col-md-12 mt-4 mb-4"
+      name="koulutuksen-jarjestajan-toteutus"
+      header-type="h3"
+    >
+      <EpToteutukset
+        :toteutukset="toteutukset"
+        :kuvat="kuvat"
+      />
     </ep-form-content>
 
     <div v-if="sisaltoviite.tosa.omatutkinnonosa">
-
-      <ep-form-content class="col-md-12" v-if="sisaltoviite.tosa.omatutkinnonosa.koodi" name="koodi">
+      <ep-form-content
+        v-if="sisaltoviite.tosa.omatutkinnonosa.koodi"
+        class="col-md-12"
+        name="koodi"
+      >
         <span v-html="sisaltoviite.tosa.omatutkinnonosa.koodi" />
       </ep-form-content>
 
-      <div v-if="sisaltoviite.tosa.omatutkinnonosa.tavoitteet" class="mb-4">
-        <ep-form-content class="col-md-12" name="tavoitteet">
-          <ep-content-viewer :value="$kaanna(sisaltoviite.tosa.omatutkinnonosa.tavoitteet)" :kuvat="kuvat"/>
+      <div
+        v-if="sisaltoviite.tosa.omatutkinnonosa.tavoitteet"
+        class="mb-4"
+      >
+        <ep-form-content
+          class="col-md-12"
+          name="tavoitteet"
+        >
+          <ep-content-viewer
+            :value="$kaanna(sisaltoviite.tosa.omatutkinnonosa.tavoitteet)"
+            :kuvat="kuvat"
+          />
         </ep-form-content>
-        <hr/>
+        <hr>
       </div>
 
-      <div v-if="hasAmmattitaitovaatimuksetLista" class="mb-4">
-        <ep-form-content class="col-md-12" name="ammattitaitovaatimukset">
-
-          <div v-for="(ammattitaitovaatimus, index) in sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista" :key="'atv'+index">
-            <div v-for="(vaatimuskohde, index) in ammattitaitovaatimus.vaatimuksenKohteet" :key="'vkohde'+index">
-              <div class="font-600">{{$kaanna(vaatimuskohde.otsikko)}}</div>
+      <div
+        v-if="hasAmmattitaitovaatimuksetLista"
+        class="mb-4"
+      >
+        <ep-form-content
+          class="col-md-12"
+          name="ammattitaitovaatimukset"
+        >
+          <div
+            v-for="(ammattitaitovaatimus, index) in sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista"
+            :key="'atv'+index"
+          >
+            <div
+              v-for="(vaatimuskohde, index) in ammattitaitovaatimus.vaatimuksenKohteet"
+              :key="'vkohde'+index"
+            >
+              <div class="font-600">
+                {{ $kaanna(vaatimuskohde.otsikko) }}
+              </div>
               <ul>
-                <li v-for="(vaatimus, index) in vaatimuskohde.vaatimukset" :key="'vaatimus'+index">
-                  {{$kaanna(vaatimus.selite)}}
+                <li
+                  v-for="(vaatimus, index) in vaatimuskohde.vaatimukset"
+                  :key="'vaatimus'+index"
+                >
+                  {{ $kaanna(vaatimus.selite) }}
                 </li>
               </ul>
             </div>
           </div>
-
         </ep-form-content>
-        <hr/>
+        <hr>
       </div>
 
-      <div v-if="arvoinninTyyppi === 'tutkinnonosakohtainen'" class="mb-5">
+      <div
+        v-if="arvoinninTyyppi === 'tutkinnonosakohtainen'"
+        class="mb-5"
+      >
         <ep-ammatillinen-arvioinnin-kohdealueet
           :arviointiasteikot="arviointiasteikot"
-          :arvioinninKohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"/>
-        <hr/>
+          :arvioinnin-kohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"
+        />
+        <hr>
       </div>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="hasAmmattitaitovaatimukset" name="ammattitaitovaatimukset">
-        <EpAmmattitaitovaatimukset v-model="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset" :is-editing="false">
-          <template v-slot:koodi="{koodi}">
+      <ep-form-content
+        v-if="hasAmmattitaitovaatimukset"
+        class="col-md-12 mb-5"
+        name="ammattitaitovaatimukset"
+      >
+        <EpAmmattitaitovaatimukset
+          v-model="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset"
+          :is-editing="false"
+        >
+          <template #koodi="{koodi}">
             <span>{{ $kaanna(koodi.nimi) }}</span>
           </template>
         </EpAmmattitaitovaatimukset>
@@ -70,66 +139,133 @@
 
       <GeneerinenArviointiTaulukko
         v-if="arvoinninTyyppi === 'geneerinen'"
-        :arviointi="sisaltoviite.tosa.omatutkinnonosa.geneerinenArviointiasteikko" />
+        :arviointi="sisaltoviite.tosa.omatutkinnonosa.geneerinenArviointiasteikko"
+      />
 
-      <ep-form-content class="col-md-12" v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
-        <ep-content-viewer :value="$kaanna(sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
+      <ep-form-content
+        v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat"
+        class="col-md-12"
+        name="ammattitaidon-osoittamistavat"
+      >
+        <ep-content-viewer
+          :value="$kaanna(sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat)"
+          :kuvat="kuvat"
+        />
       </ep-form-content>
-
     </div>
 
     <div v-if="perusteenTutkinnonosa">
       <h3>{{ $t('perusteen-sisalto') }}</h3>
 
-      <ep-form-content class="col-md-12" v-if="perusteenTutkinnonosa.koodiArvo" name="koodi">
+      <ep-form-content
+        v-if="perusteenTutkinnonosa.koodiArvo"
+        class="col-md-12"
+        name="koodi"
+      >
         <span v-html="perusteenTutkinnonosa.koodiArvo" />
       </ep-form-content>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaitovaatimukset && perusteenTutkinnonosa.tyyppi === 'normaali'" name="ammattitaitovaatimukset">
-        <ep-content-viewer class="ammattitaitovaatimukset" :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)" :kuvat="kuvat"/>
+      <ep-form-content
+        v-if="perusteenTutkinnonosa.ammattitaitovaatimukset && perusteenTutkinnonosa.tyyppi === 'normaali'"
+        class="col-md-12 mb-5"
+        name="ammattitaitovaatimukset"
+      >
+        <ep-content-viewer
+          class="ammattitaitovaatimukset"
+          :value="$kaanna(perusteenTutkinnonosa.ammattitaitovaatimukset)"
+          :kuvat="kuvat"
+        />
       </ep-form-content>
 
       <ep-ammatillinen-arvioinnin-kohdealueet
         v-if="hasTutkinnonosakohtainenArviointi"
         :arviointiasteikot="arviointiasteikot"
-        :arvioinninKohdealueet="perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"/>
+        :arvioinnin-kohdealueet="perusteenTutkinnonosa.arviointi.arvioinninKohdealueet"
+      />
 
       <div v-if="perusteenTutkinnonosa.geneerinenArviointiasteikko && perusteenTutkinnonosa.geneerinenArviointiasteikko.osaamistasonKriteerit">
         <GeneerinenArviointiTaulukko :arviointi="perusteenTutkinnonosa.geneerinenArviointiasteikko" />
       </div>
 
-      <ep-form-content class="col-md-12 mb-5" v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat" name="ammattitaidon-osoittamistavat">
-        <ep-content-viewer :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)" :kuvat="kuvat"/>
+      <ep-form-content
+        v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat"
+        class="col-md-12 mb-5"
+        name="ammattitaidon-osoittamistavat"
+      >
+        <ep-content-viewer
+          :value="$kaanna(perusteenTutkinnonosa.ammattitaidonOsoittamistavat)"
+          :kuvat="kuvat"
+        />
       </ep-form-content>
 
       <template v-if="!osaAlueet || osaAlueet.length ===0">
-        <ep-form-content class="col-md-12 mb-5" v-if="perusteenOsaAlueet.length > 0" name="osa-alueet">
-          <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenOsaAlueet" />
+        <ep-form-content
+          v-if="perusteenOsaAlueet.length > 0"
+          class="col-md-12 mb-5"
+          name="osa-alueet"
+        >
+          <ep-ammatillinen-osaalueet
+            :arviointiasteikot="arviointiasteikot"
+            :osaalueet="perusteenOsaAlueet"
+          />
         </ep-form-content>
 
-        <ep-form-content class="col-md-12 mb-5" v-if="perusteenPakollisetOsaAlueet && perusteenPakollisetOsaAlueet.length > 0" name="pakolliset-osa-alueet">
-          <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenPakollisetOsaAlueet" />
+        <ep-form-content
+          v-if="perusteenPakollisetOsaAlueet && perusteenPakollisetOsaAlueet.length > 0"
+          class="col-md-12 mb-5"
+          name="pakolliset-osa-alueet"
+        >
+          <ep-ammatillinen-osaalueet
+            :arviointiasteikot="arviointiasteikot"
+            :osaalueet="perusteenPakollisetOsaAlueet"
+          />
         </ep-form-content>
 
-        <ep-form-content class="col-md-12 mb-5" v-if="perusteenValinnaisetOsaAlueet && perusteenValinnaisetOsaAlueet.length > 0" name="valinnaiset-osa-alueet">
-          <ep-ammatillinen-osaalueet :arviointiasteikot="arviointiasteikot" :osaalueet="perusteenValinnaisetOsaAlueet" />
+        <ep-form-content
+          v-if="perusteenValinnaisetOsaAlueet && perusteenValinnaisetOsaAlueet.length > 0"
+          class="col-md-12 mb-5"
+          name="valinnaiset-osa-alueet"
+        >
+          <ep-ammatillinen-osaalueet
+            :arviointiasteikot="arviointiasteikot"
+            :osaalueet="perusteenValinnaisetOsaAlueet"
+          />
         </ep-form-content>
       </template>
-
     </div>
 
-    <ep-form-content class="col-md-12 mt-4" name="pakolliset-osa-alueet" v-if="pakollisetOsaAlueet.length > 0">
-      <EpOsaAlueListaus :osaAlueet="pakollisetOsaAlueet" :sisaltoviiteId="sisaltoviite.id" />
+    <ep-form-content
+      v-if="pakollisetOsaAlueet.length > 0"
+      class="col-md-12 mt-4"
+      name="pakolliset-osa-alueet"
+    >
+      <EpOsaAlueListaus
+        :osa-alueet="pakollisetOsaAlueet"
+        :sisaltoviite-id="sisaltoviite.id"
+      />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4" name="valinnaiset-osa-alueet" v-if="valinnaisetOsaAlueet.length > 0">
-      <EpOsaAlueListaus :osaAlueet="valinnaisetOsaAlueet" :sisaltoviiteId="sisaltoviite.id" />
+    <ep-form-content
+      v-if="valinnaisetOsaAlueet.length > 0"
+      class="col-md-12 mt-4"
+      name="valinnaiset-osa-alueet"
+    >
+      <EpOsaAlueListaus
+        :osa-alueet="valinnaisetOsaAlueet"
+        :sisaltoviite-id="sisaltoviite.id"
+      />
     </ep-form-content>
 
-    <ep-form-content class="col-md-12 mt-4" name="paikalliset-osa-alueet" v-if="paikallisetOsaAlueet.length > 0">
-      <EpOsaAlueListaus :osaAlueet="paikallisetOsaAlueet" :sisaltoviiteId="sisaltoviite.id" />
+    <ep-form-content
+      v-if="paikallisetOsaAlueet.length > 0"
+      class="col-md-12 mt-4"
+      name="paikalliset-osa-alueet"
+    >
+      <EpOsaAlueListaus
+        :osa-alueet="paikallisetOsaAlueet"
+        :sisaltoviite-id="sisaltoviite.id"
+      />
     </ep-form-content>
-
   </div>
 </template>
 

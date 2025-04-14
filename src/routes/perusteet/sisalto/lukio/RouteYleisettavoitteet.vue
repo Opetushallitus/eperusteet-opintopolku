@@ -1,9 +1,15 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 class="otsikko mb-4">{{ $kaanna(perusteenOsa.otsikko) }}</h2>
+      <h2 class="otsikko mb-4">
+        {{ $kaanna(perusteenOsa.otsikko) }}
+      </h2>
 
-      <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
       <slot name="previous-next-navigation" />
     </div>
