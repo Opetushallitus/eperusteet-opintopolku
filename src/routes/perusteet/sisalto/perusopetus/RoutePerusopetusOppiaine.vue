@@ -267,18 +267,21 @@ export default class RoutePerusopetusOppiaine extends Vue {
   }
 
   get oppimaarat() {
-    return _.map(this.oppiaine!.oppimaarat, oppimaara => {
-      return {
-        ...oppimaara,
-        route: {
-          name: this.$route.params.vlkId ? 'vuosiluokanoppiaine' : 'perusopetusoppiaine',
-          params: {
-            oppiaineId: _.toString(oppimaara.id),
-            ...(this.$route.params.vlkId && { vlkId: this.$route.params.vlkId }),
+    return _.chain(this.oppiaine!.oppimaarat)
+      .filter(oppimaara => _.includes(_.map(oppimaara.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus'), _.toString(this.$route.params.vlkId)))
+      .map(oppimaara => {
+        return {
+          ...oppimaara,
+          route: {
+            name: this.$route.params.vlkId ? 'vuosiluokanoppiaine' : 'perusopetusoppiaine',
+            params: {
+              oppiaineId: _.toString(oppimaara.id),
+              ...(this.$route.params.vlkId && { vlkId: this.$route.params.vlkId }),
+            },
           },
-        },
-      };
-    });
+        };
+      })
+      .value();
   }
 
   toggleTavoitteet() {
