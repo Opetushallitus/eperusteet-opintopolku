@@ -3,7 +3,6 @@
     <ep-spinner v-if="!tutkinnonosa" />
     <div v-else>
       <h2
-        slot="header"
         class="otsikko mb-4"
       >
         {{ $kaanna(tutkinnonosa.nimi) }}{{ laajuusText }}

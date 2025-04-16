@@ -2,7 +2,6 @@
   <div class="content">
     <div>
       <h2
-        slot="header"
         class="otsikko mb-4"
       >
         <slot name="header">

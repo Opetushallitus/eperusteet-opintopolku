@@ -34,7 +34,7 @@
           class="kielivalikko"
           right
         >
-          <template slot="button-content">
+          <template #button-content>
             <EpMaterialIcon>language</EpMaterialIcon>
             <span class="ml-2 dropdown-text mr-2">{{ $t(sisaltoKieli) }}</span>
           </template>
@@ -203,7 +203,7 @@ export default class EpJulkinenSidenav extends Vue {
   get otherItems() {
     return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste);
   }
-  
+
   get muutLinkit() {
     return [
       ...(this.tietoapalvelusta ? [this.tietoapalvelusta] : []),

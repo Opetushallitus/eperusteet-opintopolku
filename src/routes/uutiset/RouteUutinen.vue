@@ -4,13 +4,13 @@
       :murupolku="murupolku"
       :koulutustyyppi="koulutustyyppi"
     >
-      <template slot="header">
+      <template #header>
         <div v-if="tiedote">
           {{ $kaanna(tiedote.otsikko) }}
         </div>
         <ep-spinner v-else />
       </template>
-      <template slot="subheader">
+      <template #subheader>
         <div v-if="tiedote">
           <div class="aikaleima">
             {{ $sd(tiedote.luotu) }}
@@ -53,12 +53,12 @@
             :koodit-perusteilla="tutkinnonosienPerusteet"
             class="mt-4"
           >
-            <h4 slot="header">
-              {{ $t('tutkinnonosat') }}
-            </h4>
-            <h4 slot="popover-header">
-              {{ $t('perusteet-joissa-tutkinnon-osia-on') }}
-            </h4>
+            <template #header>
+              <h4>{{ $t('tutkinnonosat') }}</h4>
+            </template>
+            <template #popover-header>
+              <h4>{{ $t('perusteet-joissa-tutkinnon-osia-on') }}</h4>
+            </template>
           </uutisen-koodit>
 
           <ep-spinner v-if="!osaamisalojenPerusteet" />
@@ -67,12 +67,12 @@
             :koodit-perusteilla="osaamisalojenPerusteet"
             class="mt-4"
           >
-            <h4 slot="header">
-              {{ $t('osaamisalat') }}
-            </h4>
-            <h4 slot="popover-header">
-              {{ $t('perusteet-joissa-osaamisaloja-on') }}
-            </h4>
+            <template #header>
+              <h4>{{ $t('osaamisalat') }}</h4>
+            </template>
+            <template #popover-header>
+              <h4>{{ $t('perusteet-joissa-osaamisaloja-on') }}</h4>
+            </template>
           </uutisen-koodit>
         </div>
       </div>

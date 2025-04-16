@@ -3,7 +3,7 @@
     :murupolku="murupolku"
     :koulutustyyppi="koulutustyyppi"
   >
-    <template slot="header">
+    <template #header>
       {{ $kaanna(osaamismerkki.nimi) }}
     </template>
     <div class="d-flex flex-lg-row flex-column mt-5">

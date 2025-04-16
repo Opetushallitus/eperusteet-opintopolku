@@ -37,7 +37,9 @@
         :key="'osaaluevapaa'+index"
         class="col-md-12 mt-4"
       >
-        <label slot="header">{{ $kaanna(vapaa.nimi) }}</label>
+        <template #header>
+          <label>{{ $kaanna(vapaa.nimi) }}</label>
+        </template>
         <ep-content-viewer
           :value="$kaanna(vapaa.teksti)"
           :kuvat="kuvat"
@@ -48,9 +50,9 @@
         v-if="osaalue.toteutukset && osaalue.toteutukset.length > 0"
         class="mt-4"
       >
-        <h3 slot="header">
-          {{ $t('koulutuksen-jarjestajan-toteutus') }}
-        </h3>
+        <template #header>
+          <h3>{{ $t('koulutuksen-jarjestajan-toteutus') }}</h3>
+        </template>
         <EpToteutukset
           :toteutukset="osaalue.toteutukset"
           :kuvat="kuvat"
@@ -58,20 +60,20 @@
       </ep-form-content>
 
       <ep-form-content class="mt-4">
-        <h3
-          v-if="perusteOsaAlue"
-          slot="header"
-          class="mb-4"
-        >
-          {{ $t('perusteen-sisalto') }}
-        </h3>
-        <h3
-          v-else
-          slot="header"
-          class="mb-4"
-        >
-          {{ $t('sisalto') }}
-        </h3>
+        <template #header>
+          <h3
+            v-if="perusteOsaAlue"
+            class="mb-4"
+          >
+            {{ $t('perusteen-sisalto') }}
+          </h3>
+          <h3
+            v-else
+            class="mb-4"
+          >
+            {{ $t('sisalto') }}
+          </h3>
+        </template>
 
         <h4>{{ osaamistavoitteetNimi }}</h4>
 
@@ -81,7 +83,9 @@
           :show-laajuus="false"
           :show-koodi-arvo="false"
         >
-          <div slot="osaamistavoitteet" />
+          <template #osaamistavoitteet>
+            <div />
+          </template>
         </Osaamistavoite>
 
         <Arviointi2020Taulukko
@@ -89,9 +93,9 @@
           :arviointi="arviointi"
           class="mt-4"
         >
-          <h4 slot="header">
-            {{ $t('arviointi') }}
-          </h4>
+          <template #header>
+            <h4>{{ $t('arviointi') }}</h4>
+          </template>
         </Arviointi2020Taulukko>
       </ep-form-content>
     </div>

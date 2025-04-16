@@ -1,6 +1,6 @@
 <template>
   <router-view v-if="tekstikappaleenOsa">
-    <template slot="previous-next-navigation">
+    <template #previous-next-navigation>
       <slot name="previous-next-navigation" />
     </template>
   </router-view>

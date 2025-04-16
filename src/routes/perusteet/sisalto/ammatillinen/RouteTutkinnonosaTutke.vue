@@ -4,7 +4,7 @@
       :murupolku="murupolku"
       :koulutustyyppi="koulutustyyppi"
     >
-      <template slot="header">
+      <template #header>
         <span v-if="tutkinnonosa">{{ $kaanna(tutkinnonosa.nimi) }}</span>
         <span v-if="laajuus">{{ laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
@@ -23,12 +23,13 @@
               :border-bottom="false"
               :expanded-by-default="perusteet.length === 1"
             >
-              <h2
-                slot="header"
-                class="header"
-              >
-                {{ $t('tutkinnot-joilla-tutkinnon-osa-on') }}
-              </h2>
+              <template #header>
+                <h2
+                  class="header"
+                >
+                  {{ $t('tutkinnot-joilla-tutkinnon-osa-on') }}
+                </h2>
+              </template>
               <hr>
               <div
                 v-for="(peruste, oidx) in perusteet"

@@ -2,7 +2,7 @@
   <div>
     <div>
       <ep-header :murupolku="murupolku">
-        <template slot="header">
+        <template #header>
           {{ $t('ajankohtaista') }}
         </template>
         <div class="search">

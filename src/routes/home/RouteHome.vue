@@ -31,9 +31,11 @@
             listaus-tyyppi="none"
             @avaaTieto="avaaTiedote"
           >
-            <div slot="eiTietoja">
-              {{ $t('ei-tiedotteita') }}
-            </div>
+            <template #eiTietoja>
+              <div>
+                {{ $t('ei-tiedotteita') }}
+              </div>
+            </template>
           </EpJulkiLista>
           <div class="nayta-kaikki">
             <EpMaterialIcon size="18px">

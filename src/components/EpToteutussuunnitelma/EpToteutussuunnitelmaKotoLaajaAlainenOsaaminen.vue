@@ -30,9 +30,11 @@
       v-if="sisaltoviite.kotoLaajaAlainenOsaaminen.teksti"
       class="mt-3"
     >
-      <h3 slot="header">
-        {{ $t('laaja-alaisen-osaamisen-paikallinen-tarkennus') }}
-      </h3>
+      <template #header>
+        <h3>
+          {{ $t('laaja-alaisen-osaamisen-paikallinen-tarkennus') }}
+        </h3>
+      </template>
       <ep-content-viewer
         :value="$kaanna(sisaltoviite.kotoLaajaAlainenOsaaminen.teksti)"
         :kuvat="kuvat"

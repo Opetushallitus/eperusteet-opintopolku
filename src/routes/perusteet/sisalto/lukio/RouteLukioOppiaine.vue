@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <router-view v-if="kurssiId">
-      <template slot="previous-next-navigation">
+      <template #previous-next-navigation>
         <slot name="previous-next-navigation" />
       </template>
     </router-view>

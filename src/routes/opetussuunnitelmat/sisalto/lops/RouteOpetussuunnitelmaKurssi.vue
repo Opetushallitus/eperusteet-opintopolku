@@ -11,9 +11,11 @@
         :shadow="true"
         class="mb-4"
       >
-        <div slot="header">
-          {{ $t('tukiteksti') }}
-        </div>
+        <template #header>
+          <div>
+            {{ $t('tukiteksti') }}
+          </div>
+        </template>
         <ep-content-viewer
           :value="$kaanna(kurssi.perusteen.kuvaus)"
           :termit="termit"
@@ -40,9 +42,11 @@
             class="mb-4"
             :expanded-by-default="!(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)"
           >
-            <div slot="header">
-              {{ $t('tukiteksti') }}
-            </div>
+            <template #header>
+              <div>
+                {{ $t('tukiteksti') }}
+              </div>
+            </template>
             <ep-content-viewer
               :value="$kaanna(kurssi.perusteen[sisaltoavain].teksti)"
               :termit="termit"

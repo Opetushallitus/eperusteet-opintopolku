@@ -2,7 +2,6 @@
   <div class="content">
     <div v-if="moduuli">
       <h2
-        slot="header"
         class="otsikko"
       >
         {{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')' : '') }}

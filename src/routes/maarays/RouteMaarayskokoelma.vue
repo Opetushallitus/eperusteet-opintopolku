@@ -3,10 +3,10 @@
     tyyppi="maarayskokoelma"
     :murupolku="murupolku"
   >
-    <template slot="header">
+    <template #header>
       {{ $t('opetushallituksen-maaraykset') }}
     </template>
-    <template slot="subheader">
+    <template #subheader>
       {{ $t('opetushallituksen-maaraykset-alaotsikko') }}
     </template>
 
@@ -37,14 +37,12 @@
           </template>
 
           <template
-            slot="singleLabel"
-            slot-scope="{ option }"
+            #singleLabel="{ option }"
           >
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>
           <template
-            slot="option"
-            slot-scope="{ option }"
+            #option="{ option }"
           >
             {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
           </template>

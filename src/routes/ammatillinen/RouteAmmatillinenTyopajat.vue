@@ -36,11 +36,13 @@
             :ops="ops"
             :query="query"
           >
-            <div slot="icon">
-              <EpMaterialIcon class="icon">
-                decription
-              </EpMaterialIcon>
-            </div>
+            <template #icon>
+              <div>
+                <EpMaterialIcon class="icon">
+                  decription
+                </EpMaterialIcon>
+              </div>
+            </template>
           </opetussuunnitelma-tile>
         </router-link>
       </div>

@@ -2,7 +2,6 @@
   <div class="content">
     <div v-if="kurssi">
       <h2
-        slot="header"
         class="otsikko"
       >
         {{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{ kurssi.koodiArvo }})</span>
