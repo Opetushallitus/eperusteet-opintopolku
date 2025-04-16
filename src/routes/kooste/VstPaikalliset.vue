@@ -32,15 +32,13 @@
         </template>
 
         <template
-          slot="singleLabel"
-          slot-scope="{ option }"
+          #singleLabel="{ option }"
         >
           {{ kaannaPerusteNimi(option) }}
         </template>
 
         <template
-          slot="option"
-          slot-scope="{ option }"
+          #option="{ option }"
         >
           {{ kaannaPerusteNimi(option) }}
         </template>

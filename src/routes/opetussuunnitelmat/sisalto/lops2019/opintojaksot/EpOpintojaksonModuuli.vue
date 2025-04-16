@@ -22,7 +22,6 @@
   </div>
   <div v-else-if="moduuli">
     <h3
-      slot="header"
       class="otsikko"
     >
       {{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')' : '') }}

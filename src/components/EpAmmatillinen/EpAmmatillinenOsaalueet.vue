@@ -10,12 +10,13 @@
       :expanded-by-default="osaalueet.length === 1"
       blue
     >
-      <h4
-        slot="header"
-        class="osaamistavoiteotsikko"
-      >
-        {{ $kaanna(osaalue.nimi) }} <span v-if="osaalue.koodi">({{ osaalue.koodi.arvo }})</span>
-      </h4>
+      <template #header>
+        <h4
+          class="osaamistavoiteotsikko"
+        >
+          {{ $kaanna(osaalue.nimi) }} <span v-if="osaalue.koodi">({{ osaalue.koodi.arvo }})</span>
+        </h4>
+      </template>
 
       <div
         v-for="(osaamistavoite, otIndex) in osaalue.osaamistavoitteet"
@@ -51,7 +52,9 @@
           :show-laajuus="false"
           :show-koodi-arvo="false"
         >
-          <div slot="osaamistavoitteet" />
+          <template #osaamistavoitteet>
+            <div />
+          </template>
         </Osaamistavoite>
       </template>
 
@@ -64,7 +67,9 @@
           :show-laajuus="false"
           :show-koodi-arvo="false"
         >
-          <div slot="osaamistavoitteet" />
+          <template #osaamistavoitteet>
+            <div />
+          </template>
         </Osaamistavoite>
       </template>
 
@@ -72,9 +77,11 @@
 
       <div v-if="osaalue.arviointi && osaalue.arviointi.osaamistasonKriteerit">
         <GeneerinenArviointiTaulukko :arviointi="osaalue.arviointi">
-          <h4 slot="header">
-            {{ $t('arviointi') }}
-          </h4>
+          <template #header>
+            <h4>
+              {{ $t('arviointi') }}
+            </h4>
+          </template>
         </GeneerinenArviointiTaulukko>
       </div>
 

@@ -25,12 +25,13 @@
       </div>
 
       <EpCollapse :border-bottom="false">
-        <h3
-          slot="header"
-          class="collapse-header"
-        >
-          {{ $kaanna(perusteenOsa.nimi) }} {{ $t('varhaiskasvatuksessa-ja-esi-ja-perusopetuksessa') }}
-        </h3>
+        <template #header>
+          <h3
+            class="collapse-header"
+          >
+            {{ $kaanna(perusteenOsa.nimi) }} {{ $t('varhaiskasvatuksessa-ja-esi-ja-perusopetuksessa') }}
+          </h3>
+        </template>
 
         <b-tabs>
           <b-tab
@@ -52,12 +53,13 @@
         v-if="perusteenOsa.keskeinenKasitteisto"
         :border-bottom="false"
       >
-        <h3
-          slot="header"
-          class="collapse-header"
-        >
-          {{ $t('keskeinen-kasitteisto') }}
-        </h3>
+        <template #header>
+          <h3
+            class="collapse-header"
+          >
+            {{ $t('keskeinen-kasitteisto') }}
+          </h3>
+        </template>
         <ep-content-viewer
           :value="$kaanna(perusteenOsa.keskeinenKasitteisto)"
           :termit="termit"
@@ -69,12 +71,13 @@
         :border-bottom="false"
         :collapsable="false"
       >
-        <h3
-          slot="header"
-          class="collapse-header"
-        >
-          {{ $t('paa-alueet') }}
-        </h3>
+        <template #header>
+          <h3
+            class="collapse-header"
+          >
+            {{ $t('paa-alueet') }}
+          </h3>
+        </template>
         <div class="row">
           <router-link
             v-for="paaAlue in paaAlueet"

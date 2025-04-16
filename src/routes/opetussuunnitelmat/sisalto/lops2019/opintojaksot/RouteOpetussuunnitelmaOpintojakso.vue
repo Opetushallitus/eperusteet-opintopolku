@@ -69,12 +69,13 @@
           tyyppi="opintojakson-tavoitteet"
           :first="true"
         >
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('tavoitteet') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('tavoitteet') }}</h3>
+            </div>
+          </template>
           <ep-opintojakson-tavoitteet
             :value="opintojakso"
             :moduulit-map="moduulitMap"
@@ -85,12 +86,13 @@
 
       <div class="osio">
         <ep-collapse>
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('keskeiset-sisallot') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('keskeiset-sisallot') }}</h3>
+            </div>
+          </template>
           <ep-opintojakson-keskeiset-sisallot
             :value="opintojakso"
             :moduulit-map="moduulitMap"
@@ -104,12 +106,13 @@
         class="osio"
       >
         <ep-collapse>
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('laaja-alaiset-sisallot') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('laaja-alaiset-sisallot') }}</h3>
+            </div>
+          </template>
           <ep-opintojakson-laaja-alaiset-osaamiset
             :value="opintojakso"
             :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
@@ -125,12 +128,13 @@
         class="opintojakson-arviointi"
       >
         <ep-collapse>
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('arviointi') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('arviointi') }}</h3>
+            </div>
+          </template>
           <ep-opintojakson-arviointi
             :value="opintojakso"
             :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
@@ -145,12 +149,13 @@
         class="opintojakson-opiskeluymparistoTyotavat"
       >
         <ep-collapse>
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
+            </div>
+          </template>
           <ep-content-viewer
             :value="$kaanna(opintojakso.opiskeluymparistoTyotavat)"
             :termit="termit"
@@ -181,12 +186,13 @@
         class="opintojakson-vapaa-kuvaus"
       >
         <ep-collapse>
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('opintojakson-vapaa-kuvaus') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('opintojakson-vapaa-kuvaus') }}</h3>
+            </div>
+          </template>
           <ep-content-viewer
             v-if="opintojakso.kuvaus"
             :value="$kaanna(opintojakso.kuvaus)"
@@ -201,12 +207,13 @@
         class="opintojakson-moduulit"
       >
         <ep-collapse :border-bottom="false">
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('opintojakson-moduulit') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('opintojakson-moduulit') }}</h3>
+            </div>
+          </template>
           <div class="oppiaineet">
             <div class="moduulit">
               <div
@@ -237,12 +244,13 @@
         class="paikallisen-oppiaineen-opintojaksot"
       >
         <ep-collapse :border-bottom="false">
-          <div
-            slot="header"
-            class="alueotsikko"
-          >
-            <h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3>
-          </div>
+          <template #header>
+            <div
+              class="alueotsikko"
+            >
+              <h3>{{ $t('paikallisen-oppiaineen-opintojaksot') }}</h3>
+            </div>
+          </template>
           <Ep-opintojakson-opintojaksot
             :value="opintojakso"
             :opintojaksot="opintojaksot"

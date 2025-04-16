@@ -6,7 +6,7 @@
         :murupolku="murupolku"
         :koulutustyyppi="koulutustyyppi"
       >
-        <template slot="header">
+        <template #header>
           {{ $kaanna(koulutustoimija.nimi) }}
         </template>
       </ep-header>

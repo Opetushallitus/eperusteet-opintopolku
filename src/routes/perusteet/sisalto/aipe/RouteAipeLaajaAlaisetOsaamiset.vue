@@ -9,9 +9,11 @@
         v-for="lao in laajaAlaisetOsaamiset"
         :key="'lao' + lao.id"
       >
-        <h3 slot="header">
-          {{ $kaanna(lao.nimi) }}
-        </h3>
+        <template #header>
+          <h3>
+            {{ $kaanna(lao.nimi) }}
+          </h3>
+        </template>
         <div v-html="$kaanna(lao.kuvaus)" />
       </EpCollapse>
 

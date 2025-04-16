@@ -26,14 +26,12 @@
             :searchable="false"
           >
             <template
-              slot="singleLabel"
-              slot-scope="{ option }"
+              #singleLabel="{ option }"
             >
               {{ $t(option + '-luokka') }}
             </template>
             <template
-              slot="option"
-              slot-scope="{ option }"
+              #option="{ option }"
             >
               {{ $t(option + '-luokka') }}
             </template>
@@ -54,14 +52,12 @@
             :search-identity="searchIdentity"
           >
             <template
-              slot="singleLabel"
-              slot-scope="{ option }"
+              #singleLabel="{ option }"
             >
               {{ $kaanna(option.nimi) }}
             </template>
             <template
-              slot="option"
-              slot-scope="{ option }"
+              #option="{ option }"
             >
               <span :class="{'ml-3': option.isOppimaara}">{{ $kaanna(option.nimi) }}</span>
             </template>

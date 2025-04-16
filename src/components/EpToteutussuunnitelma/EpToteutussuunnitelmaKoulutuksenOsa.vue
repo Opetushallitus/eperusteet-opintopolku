@@ -65,9 +65,11 @@
       <b-row>
         <b-col>
           <b-form-group>
-            <h3 slot="label">
-              {{ $t('laaja-alainen-osaaminen') }}
-            </h3>
+            <template #label>
+              <h3>
+                {{ $t('laaja-alainen-osaaminen') }}
+              </h3>
+            </template>
             <!-- laaaja-alainen sisältää ainoastaan ohjetekstin perusteessa -->
             <!-- <ep-content-viewer :value="$kaanna(koulutuksenosa.laajaAlaisenOsaamisenKuvaus)" :kuvat="kuvat"/> -->
           </b-form-group>
@@ -100,9 +102,11 @@
       <b-row>
         <b-col>
           <b-form-group>
-            <h3 slot="label">
-              {{ $t('keskeinen-sisalto') }}
-            </h3>
+            <template #label>
+              <h3>
+                {{ $t('keskeinen-sisalto') }}
+              </h3>
+            </template>
             <ep-content-viewer
               :value="$kaanna(perusteenOsa.keskeinenSisalto)"
               :kuvat="kuvat"
@@ -123,9 +127,11 @@
       <b-row>
         <b-col>
           <b-form-group>
-            <h3 slot="label">
-              {{ $t('arviointi-teksti') }}
-            </h3>
+            <template #label>
+              <h3>
+                {{ $t('arviointi-teksti') }}
+              </h3>
+            </template>
             <ep-content-viewer
               :value="$kaanna(perusteenOsa.arvioinninKuvaus)"
               :kuvat="kuvat"
@@ -145,9 +151,11 @@
       <b-row>
         <b-col>
           <b-form-group>
-            <h3 slot="label">
-              {{ $t('koulutuksen-jarjestajat') }}
-            </h3>
+            <template #label>
+              <h3>
+                {{ $t('koulutuksen-jarjestajat') }}
+              </h3>
+            </template>
 
             <div
               v-for="(koulutuksenjarjestaja, i) in koulutuksenosa.paikallinenTarkennus.koulutuksenJarjestajat"

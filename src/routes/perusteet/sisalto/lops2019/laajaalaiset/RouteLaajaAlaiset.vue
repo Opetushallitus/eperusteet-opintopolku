@@ -2,7 +2,6 @@
   <div class="content">
     <div v-if="laajaAlaisetKokonaisuus">
       <h2
-        slot="header"
         class="otsikko"
       >
         {{ $t('laaja-alaisen-osaamisen-osa-alueet') }}

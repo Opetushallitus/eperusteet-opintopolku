@@ -6,7 +6,7 @@
       :murupolku="murupolku"
       :koulutustyyppi="koulutustyyppi"
     >
-      <template slot="header">
+      <template #header>
         {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
       <div class="selaus">

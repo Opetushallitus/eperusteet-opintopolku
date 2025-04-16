@@ -4,10 +4,10 @@
       :murupolku="murupolku"
       :koulutustyyppi="koulutustyyppi"
     >
-      <template slot="header">
+      <template #header>
         {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
       </template>
-      <template slot="subheader">
+      <template #subheader>
         {{ $t('osaamismerkit-kuvaus') }}
       </template>
 

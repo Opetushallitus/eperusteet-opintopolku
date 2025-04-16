@@ -1,7 +1,6 @@
 <template>
   <div class="content">
     <h2
-      slot="header"
       class="otsikko"
     >
       {{ $t('opetussuunnitelman-tiedot') }}

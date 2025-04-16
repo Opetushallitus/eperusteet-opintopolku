@@ -9,17 +9,17 @@
     >
       <template
         v-if="peruste.tyyppi ==='opas' && peruste.opasTyyppi !== 'tietoapalvelusta'"
-        slot="header"
+        #header
       >
         {{ $t('ohjeet-ja-materiaalit') }}: {{ $kaanna(peruste.nimi) }}
       </template>
       <template
         v-else
-        slot="header"
+        #header
       >
         {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
-      <template slot="subheader">
+      <template #subheader>
         <div
           v-if="peruste.tyyppi !=='opas'"
           class="diaarinumero"
@@ -65,7 +65,7 @@
             name="globalNavigation"
           />
           <ep-sidebar :scroll-enabled="scroll">
-            <template slot="bar">
+            <template #bar>
               <div>
                 <ep-peruste-sidenav
                   :peruste-data-store="perusteDataStore"
@@ -76,7 +76,7 @@
               </div>
             </template>
 
-            <template slot="view">
+            <template #view>
               <router-view :key="$route.fullPath">
                 <template
                   v-if="peruste.tyyppi ==='opas'"
@@ -96,7 +96,7 @@
                     <ep-field v-model="peruste.nimi" />
                   </ep-form-content>
                 </template>
-                <template slot="previous-next-navigation">
+                <template #previous-next-navigation>
                   <ep-previous-next-navigation
                     :active-node="current"
                     :flattened-sidenav="flattenedSidenav"

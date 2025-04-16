@@ -2,7 +2,6 @@
   <div class="content">
     <div v-if="oppiaineet">
       <h2
-        slot="header"
         class="otsikko"
       >
         {{ $t('oppiaineet') }}

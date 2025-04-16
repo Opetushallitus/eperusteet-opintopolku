@@ -5,10 +5,10 @@
     :murupolku="murupolku"
     :koulutustyyppi="koulutustyyppi"
   >
-    <template slot="header">
+    <template #header>
       {{ $t(koulutustyyppi) }}
     </template>
-    <template slot="subheader">
+    <template #subheader>
       {{ $t(subheader) }}
     </template>
     <div>

@@ -1,7 +1,6 @@
 <template>
   <div v-if="sisaltoviite">
     <h2
-      slot="header"
       class="otsikko mb-4"
     >
       {{ $kaanna(sisaltoviite.tekstiKappale.nimi) }}, {{ laajuus }} {{ $t('osaamispiste') }}
@@ -34,7 +33,9 @@
       :key="'tosavapaateksti'+index"
       class="col-md-12 mt-4"
     >
-      <label slot="header">{{ $kaanna(vapaa.nimi) }}</label>
+      <template #header>
+        <label>{{ $kaanna(vapaa.nimi) }}</label>
+      </template>
       <ep-content-viewer
         :value="$kaanna(vapaa.teksti)"
         :kuvat="kuvat"

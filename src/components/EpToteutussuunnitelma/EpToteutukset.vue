@@ -10,9 +10,11 @@
       :expanded-by-default="toteutukset.length === 1"
       blue
     >
-      <h4 slot="header">
-        {{ $kaanna(toteutus.otsikko) }}
-      </h4>
+      <template #header>
+        <h4>
+          {{ $kaanna(toteutus.otsikko) }}
+        </h4>
+      </template>
 
       <template v-if="toteutus.tutkintonimikkeetJaOsaamisalat && toteutus.tutkintonimikkeetJaOsaamisalat.length > 0">
         <div class="font-600 mt-3">
@@ -55,7 +57,9 @@
           :key="'vapaa'+index"
           class="col-md-12 mt-4"
         >
-          <label slot="header">{{ $kaanna(vapaa.nimi) }}</label>
+          <template #header>
+            <label>{{ $kaanna(vapaa.nimi) }}</label>
+          </template>
           <ep-content-viewer
             :value="$kaanna(vapaa.teksti)"
             :kuvat="kuvat"

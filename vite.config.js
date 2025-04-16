@@ -66,17 +66,5 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    test: {
-      globals: true, // Jest-like global functions (describe, it, expect)
-      environment: 'jsdom', // Simulates browser environment
-      coverage: {
-        reporter: ['text', 'json', 'html'], // Optional coverage reports
-      },
-      exclude: [
-        ...configDefaults.exclude,
-        'eperusteet-frontend-utils/vue/**/*.spec.ts',
-      ],
-      alias: [{ find: /^vue$/, replacement: 'vue/dist/vue.runtime.common.js' }],
-    },
   };
 });

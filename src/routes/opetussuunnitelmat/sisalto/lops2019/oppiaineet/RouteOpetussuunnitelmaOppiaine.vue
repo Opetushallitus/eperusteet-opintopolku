@@ -2,7 +2,6 @@
   <div class="content">
     <div v-if="oppiaine">
       <h2
-        slot="header"
         class="otsikko"
       >
         {{ $kaanna(oppiaine.nimi) }}

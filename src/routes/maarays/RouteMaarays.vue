@@ -3,7 +3,7 @@
     tyyppi="maarayskokoelma"
     :murupolku="murupolku"
   >
-    <template slot="header">
+    <template #header>
       <div>
         <EpSpinner v-if="!maarays" />
         <template v-else>

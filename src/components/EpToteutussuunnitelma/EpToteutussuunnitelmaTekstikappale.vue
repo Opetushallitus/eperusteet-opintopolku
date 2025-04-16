@@ -6,12 +6,13 @@
       v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti"
       tyyppi="perusteteksti"
     >
-      <div
-        slot="header"
-        class="collapse-header"
-      >
-        {{ $t('perusteen-teksti') }}
-      </div>
+      <template #header>
+        <div
+          class="collapse-header"
+        >
+          {{ $t('perusteen-teksti') }}
+        </div>
+      </template>
       <ep-content-viewer
         :value="$kaanna(sisaltoviite.perusteteksti)"
         :kuvat="kuvat"
@@ -22,12 +23,13 @@
       v-if="sisaltoviite.naytaPohjanTeksti && sisaltoviite.pohjanTekstikappale && sisaltoviite.pohjanTekstikappale.teksti"
       tyyppi="pohjateksti"
     >
-      <div
-        slot="header"
-        class="collapse-header"
-      >
-        {{ $t('pohjan-teksti') }}
-      </div>
+      <template #header>
+        <div
+          class="collapse-header"
+        >
+          {{ $t('pohjan-teksti') }}
+        </div>
+      </template>
       <ep-content-viewer
         :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)"
         :kuvat="kuvat"

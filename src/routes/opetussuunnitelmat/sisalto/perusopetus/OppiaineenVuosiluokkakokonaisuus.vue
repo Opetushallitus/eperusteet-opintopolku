@@ -9,13 +9,14 @@
         :kuvat="kuvat"
         :termit="termit"
       >
-        <h3
-          v-if="!perusteenVuosiluokkakokonaisuus.tehtava"
-          slot="otsikko"
-          class="mb-3"
-        >
-          {{ $t('tehtava') }}
-        </h3>
+        <template #otsikko>
+          <h3
+            v-if="!perusteenVuosiluokkakokonaisuus.tehtava"
+            class="mb-3"
+          >
+            {{ $t('tehtava') }}
+          </h3>
+        </template>
       </ep-peruste-content>
 
       <template v-if="oppiaineenVuosiluokkakokonaisuus.yleistavoitteet && oppiaineenVuosiluokkakokonaisuus.yleistavoitteet.teksti">
@@ -37,13 +38,14 @@
         :kuvat="kuvat"
         :termit="termit"
       >
-        <h3
-          v-if="!perusteenVuosiluokkakokonaisuus.tyotavat"
-          slot="otsikko"
-          class="mb-3"
-        >
-          {{ $t('opiskeluymparisto-ja-tyotavat') }}
-        </h3>
+        <template #otsikko>
+          <h3
+            v-if="!perusteenVuosiluokkakokonaisuus.tyotavat"
+            class="mb-3"
+          >
+            {{ $t('opiskeluymparisto-ja-tyotavat') }}
+          </h3>
+        </template>
       </ep-peruste-content>
 
       <ep-peruste-content
@@ -54,13 +56,14 @@
         :kuvat="kuvat"
         :termit="termit"
       >
-        <h3
-          v-if="!perusteenVuosiluokkakokonaisuus.ohjaus"
-          slot="otsikko"
-          class="mb-3"
-        >
-          {{ $t('oppiaine-osio-ohjaus') }}
-        </h3>
+        <template #otsikko>
+          <h3
+            v-if="!perusteenVuosiluokkakokonaisuus.ohjaus"
+            class="mb-3"
+          >
+            {{ $t('oppiaine-osio-ohjaus') }}
+          </h3>
+        </template>
       </ep-peruste-content>
 
       <ep-peruste-content
@@ -71,13 +74,14 @@
         :kuvat="kuvat"
         :termit="termit"
       >
-        <h3
-          v-if="!perusteenVuosiluokkakokonaisuus.arviointi"
-          slot="otsikko"
-          class="mb-3"
-        >
-          {{ $t('osaamisen-arviointi') }}
-        </h3>
+        <template #otsikko>
+          <h3
+            v-if="!perusteenVuosiluokkakokonaisuus.arviointi"
+            class="mb-3"
+          >
+            {{ $t('osaamisen-arviointi') }}
+          </h3>
+        </template>
       </ep-peruste-content>
 
       <template v-if="perusteenVuosiluokkakokonaisuus.vapaatTekstit">

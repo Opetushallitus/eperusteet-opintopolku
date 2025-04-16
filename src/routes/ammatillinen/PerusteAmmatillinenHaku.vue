@@ -47,15 +47,13 @@
             </template>
 
             <template
-              slot="singleLabel"
-              slot-scope="{ option }"
+              #singleLabel="{ option }"
             >
               {{ $t(option) }}
             </template>
 
             <template
-              slot="option"
-              slot-scope="{ option }"
+              #option="{ option }"
             >
               {{ $t(option) }}
             </template>

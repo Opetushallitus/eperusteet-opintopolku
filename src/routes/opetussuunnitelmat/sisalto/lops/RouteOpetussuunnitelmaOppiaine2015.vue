@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <router-view v-if="kurssiId">
-      <template slot="previous-next-navigation">
+      <template #previous-next-navigation>
         <slot name="previous-next-navigation" />
       </template>
     </router-view>
@@ -29,9 +29,11 @@
             class="mb-4"
             :expanded-by-default="!(oppiaine[sisaltoavain] && oppiaine[sisaltoavain].teksti)"
           >
-            <div slot="header">
-              {{ $t('tukiteksti') }}
-            </div>
+            <template #header>
+              <div>
+                {{ $t('tukiteksti') }}
+              </div>
+            </template>
             <ep-content-viewer
               :value="$kaanna(oppiaine.perusteen[sisaltoavain].teksti)"
               :termit="termit"

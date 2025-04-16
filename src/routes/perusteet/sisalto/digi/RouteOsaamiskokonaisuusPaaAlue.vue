@@ -45,16 +45,21 @@
         :key="'osaalue' + osaAlue.id"
         :border-bottom="false"
       >
-        <h3
-          slot="header"
-          class="collapse-header"
-        >
-          {{ $kaanna(osaAlue.nimi) }}
-        </h3>
+        <template #header>
+          <h3
+            class="collapse-header"
+          >
+            {{ $kaanna(osaAlue.nimi) }}
+          </h3>
+        </template>
 
         <EpOsaAlue :value="osaAlue">
-          <div slot="nimi" />
-          <hr slot="tasokuvaus-postfix">
+          <template #nimi>
+            <div />
+          </template>
+          <template #tasokuvaus-postfix>
+            <hr>
+          </template>
         </EpOsaAlue>
       </EpCollapse>
 

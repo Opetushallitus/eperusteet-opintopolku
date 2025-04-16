@@ -6,7 +6,7 @@
       :murupolku="murupolku"
       :koulutustyyppi="koulutustyyppi"
     >
-      <template slot="header">
+      <template #header>
         {{ $t(ylaotsikko) }}
       </template>
     </ep-header>
@@ -76,9 +76,11 @@
                   {{ $t('katso-lisaa-ajankohtaisia') }}
                 </div>
               </template>
-              <div slot="eiTietoja">
-                {{ $t('ei-tiedotteita') }}
-              </div>
+              <template #eiTietoja>
+                <div>
+                  {{ $t('ei-tiedotteita') }}
+                </div>
+              </template>
             </ep-julki-lista>
           </div>
         </div>

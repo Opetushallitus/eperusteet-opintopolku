@@ -5,10 +5,10 @@
       :tyyppi="tyyppi"
       :murupolku="murupolku"
     >
-      <template slot="header">
+      <template #header>
         {{ $kaanna(opetussuunnitelma.nimi) }}
       </template>
-      <template slot="subheader">
+      <template #subheader>
         <div class="diaarinumero">
           {{ diaariNumero }}
         </div>
@@ -24,12 +24,12 @@
           name="globalNavigation"
         />
         <ep-sidebar :scroll-enabled="true">
-          <template slot="bar">
+          <template #bar>
             <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
           </template>
-          <template slot="view">
+          <template #view>
             <router-view :key="$route.fullPath">
-              <template slot="previous-next-navigation">
+              <template #previous-next-navigation>
                 <ep-previous-next-navigation
                   :active-node="current"
                   :flattened-sidenav="flattenedSidenav"

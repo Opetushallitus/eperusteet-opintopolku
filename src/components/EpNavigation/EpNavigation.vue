@@ -52,7 +52,7 @@
         :aria-label="$t('kielivalinta')"
       >
         <b-nav-item-dropdown right>
-          <template slot="button-content">
+          <template #button-content>
             <EpMaterialIcon class="mr-2">
               language
             </EpMaterialIcon>
