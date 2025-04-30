@@ -75,6 +75,7 @@
         <ep-form-content name="opetussuunnitelma-pdfna" headerType="h3" headerClass="h6">
           <EpSpinner class="d-inline-block" v-if="!dokumentti"/>
           <EpPdfLink :url="dokumentti" v-else>{{ $t('avaa-opetussuunnitelma-pdf') }}</EpPdfLink>
+          <EpLinkki v-if="dokumenttiHtml" class="mt-2" :url="dokumenttiHtml">{{$t('avaa-opetussuunnitelma-htmlna')}}</EpLinkki>
         </ep-form-content>
       </div>
 
@@ -140,6 +141,14 @@ export default class RouteOpetussuunnitelmaTiedot extends Vue {
 
   get dokumentti() {
     return this.opetussuunnitelmaDataStore.dokumentit;
+  }
+
+  get dokumenttiHtml() {
+    if (this.opetussuunnitelmaDataStore.dokumentinSallitutTyypit.includes('HTML') && this.opetussuunnitelmaDataStore.dokumentit) {
+      return this.opetussuunnitelmaDataStore.dokumentit[Kielet.getUiKieli.value] + '/html';
+    }
+
+    return undefined;
   }
 
   private getOrganisaatioNimi(organisaatio) {

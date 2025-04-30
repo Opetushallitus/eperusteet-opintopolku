@@ -61,6 +61,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public kuvat: object[] | null = null;
   @State() public perusteKaikki: PerusteKaikkiDto | null = null;
   @State() public julkaisut: any[] = [];
+  @State() public dokumentinSallitutTyypit = ['PDF'];
 
   public static async create(opetussuunnitelmaId: number, revision: number | undefined = undefined) {
     const result = new OpetussuunnitelmaDataStore(opetussuunnitelmaId, revision);
@@ -372,6 +373,7 @@ export class OpetussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
     }
     else {
       const julkaistuDokumentti = (await Dokumentit.getJulkaistuDokumentti(this.opetussuunnitelmaId, sisaltoKieli)).data;
+      this.dokumentinSallitutTyypit = julkaistuDokumentti.dataTyypit!;
       if (julkaistuDokumentti?.tila === _.toLower(DokumenttiDtoTilaEnum.VALMIS)) {
         this.asetaKielenDokumentti(julkaistuDokumentti.id);
       }

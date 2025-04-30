@@ -14,7 +14,10 @@
       <template v-slot:modal-header>
         <div class="d-flex flex-column w-100">
           <div class="d-flex w-100 align-items-center">
-            <h5 class="mr-auto header-text">{{'OpsAI, ' + $kaanna(sourceName)}}</h5>
+            <h5 class="mr-auto header-text d-flex">
+              {{'OpsAI, ' + $kaanna(sourceName)}}
+              <EpLinkki class="ml-2" v-if="lahde" :url="lahde">(Lähde)</EpLinkki>
+            </h5>
             <EpButton variant="link" icon="settings" v-b-toggle.opsai-settings v-if="sourceAvailable">Muokkaa OpsAI:n parametreja</EpButton>
             <div @click="close" class="clickable mt-1">
               <EpMaterialIcon>close</EpMaterialIcon>
@@ -22,9 +25,17 @@
           </div>
           <div class="text-left w-100" v-if="assistantSettings">
             <b-collapse id="opsai-settings" class="my-2">
-              <div class="d-flex w-50  mb-3 align-items-center">
-                <div class="mr-2">Malli</div>
-                <b-form-select v-model="assistantSettings.model" :options="models"/>
+              <div class="d-flex">
+                <div class="d-flex w-50  mb-3 align-items-center">
+                  <div class="mr-2">Malli</div>
+                  <b-form-select v-model="assistantSettings.model" :options="models"/>
+                </div>
+
+                <div class="d-flex w-50 ml-5 mb-3 align-items-center">
+                  <div class="mr-2">Lähdetyyppi</div>
+                  <b-form-radio v-model="fileType" name='PDF' :value="'PDF'" class="mr-2">PDF</b-form-radio>
+                  <b-form-radio v-model="fileType" name='HTML' :value="'HTML'" class="mr-2" :disabled="!supportedSourceTypes.includes('HTML')">HTML</b-form-radio>
+                </div>
               </div>
               <div>Ohjeet</div>
               <b-form-textarea
@@ -32,29 +43,29 @@
                 rows="3"
                 max-rows="6"/>
 
-                <div class="d-flex text-left justify-content-around">
-                  <div class="d-flex">
-                    <EpInfoPopover style="padding-top: 10px" uniqueId="temp">
-                      The “temperature” parameter is like a dial that controls how creative or predictable the language model is. If you turn the dial all the way down to the “cold” side, the language model will play it safe and stick to the things it knows how to write really well. But if you turn the dial all the way up to the “hot” side, the language model will get all creative and come up with lots of different ideas.
-                    </EpInfoPopover>
-                    <b-form-group label="Luovuus">
-                      <b-form-radio v-model="assistantSettings.temperature" name="temperature" value="0.25">Päättäväinen (0.25)</b-form-radio>
-                      <b-form-radio v-model="assistantSettings.temperature" name="temperature" value="0.5">Oletus (0.5)</b-form-radio>
-                      <b-form-radio v-model="assistantSettings.temperature" name="temperature" value="0.75">Satunnaisempi (0.75)</b-form-radio>
-                    </b-form-group>
-                  </div>
-                  <div class="d-flex">
-                    <EpInfoPopover style="padding-top: 10px" uniqueId="topp">
-                      The “top p” parameter is like a filter that controls how many different words or phrases the language model considers when it’s trying to predict the next word. If you set the “top p” value to 0.5, the language model will only consider the 50 most likely words or phrases that might come next. But if you set the “top p” value to 0.9, the language model will consider the 90 most likely words or phrases.
-                    </EpInfoPopover>
-                    <b-form-group label="Monimuotoisuus">
-                      <b-form-radio v-model="assistantSettings.top_p" name="topp" value="0.25">Vähän (0.25)</b-form-radio>
-                      <b-form-radio v-model="assistantSettings.top_p" name="topp" value="0.5">Oletus (0.5)</b-form-radio>
-                      <b-form-radio v-model="assistantSettings.top_p" name="topp" value="0.75">Enemmän (0.75)</b-form-radio>
-                    </b-form-group>
-                  </div>
+              <div class="d-flex text-left justify-content-around">
+                <div class="d-flex">
+                  <EpInfoPopover style="padding-top: 10px" uniqueId="temp">
+                    The “temperature” parameter is like a dial that controls how creative or predictable the language model is. If you turn the dial all the way down to the “cold” side, the language model will play it safe and stick to the things it knows how to write really well. But if you turn the dial all the way up to the “hot” side, the language model will get all creative and come up with lots of different ideas.
+                  </EpInfoPopover>
+                  <b-form-group label="Luovuus">
+                    <b-form-radio v-model="assistantSettings.temperature" name="temperature" value="0.25">Päättäväinen (0.25)</b-form-radio>
+                    <b-form-radio v-model="assistantSettings.temperature" name="temperature" value="0.5">Oletus (0.5)</b-form-radio>
+                    <b-form-radio v-model="assistantSettings.temperature" name="temperature" value="0.75">Satunnaisempi (0.75)</b-form-radio>
+                  </b-form-group>
                 </div>
-                <hr/>
+                <div class="d-flex">
+                  <EpInfoPopover style="padding-top: 10px" uniqueId="topp">
+                    The “top p” parameter is like a filter that controls how many different words or phrases the language model considers when it’s trying to predict the next word. If you set the “top p” value to 0.5, the language model will only consider the 50 most likely words or phrases that might come next. But if you set the “top p” value to 0.9, the language model will consider the 90 most likely words or phrases.
+                  </EpInfoPopover>
+                  <b-form-group label="Monimuotoisuus">
+                    <b-form-radio v-model="assistantSettings.top_p" name="topp" value="0.25">Vähän (0.25)</b-form-radio>
+                    <b-form-radio v-model="assistantSettings.top_p" name="topp" value="0.5">Oletus (0.5)</b-form-radio>
+                    <b-form-radio v-model="assistantSettings.top_p" name="topp" value="0.75">Enemmän (0.75)</b-form-radio>
+                  </b-form-group>
+                </div>
+              </div>
+              <hr/>
             </b-collapse>
           </div>
         </div>
@@ -93,7 +104,7 @@
 </template>
 
 <script lang="ts">
-import { OpsAiStore } from '@/stores/OpsAiStore';
+import { OpsAiStore, SourceFileTypeEnum } from '@/stores/OpsAiStore';
 import * as _ from 'lodash';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { Assistant } from '@shared/api/ai';
@@ -123,6 +134,7 @@ export default class EpOpsAiChat extends Vue {
   opsAiStore: OpsAiStore | null = null;
   message: string = '';
   assistantSettings: Assistant | null = null;
+  fileType: SourceFileTypeEnum = SourceFileTypeEnum.PDF;
 
   async mounted() {
     this.opsAiStore = new OpsAiStore(
@@ -131,6 +143,7 @@ export default class EpOpsAiChat extends Vue {
       this.revision,
       this.sourceName,
       this.educationLevel,
+      this,
     );
     await this.opsAiStore.init();
   }
@@ -142,6 +155,10 @@ export default class EpOpsAiChat extends Vue {
       return;
     }
 
+    await this.init();
+  }
+
+  async init() {
     this.message = '';
     await this.opsAiStore?.fetch();
     this.opsAiStore?.setWelcomeMessage('assistant', this.$t('opsai-keskustelun-avaus'));
@@ -193,6 +210,12 @@ export default class EpOpsAiChat extends Vue {
     }
   }
 
+  @Watch('fileType')
+  async fileTypeChanged() {
+    this.opsAiStore?.setFileType(this.fileType);
+    await this.init();
+  }
+
   async send() {
     const messageToSend = this.message;
     this.message = '';
@@ -222,7 +245,20 @@ export default class EpOpsAiChat extends Vue {
   }
 
   get models() {
-    return _.map(this.opsAiStore?.models.value, 'id');
+    return _.map(this.opsAiStore?.models?.value, (model: any) => {
+      return {
+        text: model.id + ' (' + model.description + ')',
+        value: model.id,
+      };
+    });
+  }
+
+  get lahde() {
+    return this.opsAiStore?.sourcefileUrl.value;
+  }
+
+  get supportedSourceTypes() {
+    return this.opsAiStore?.supportedSourceTypes.value;
   }
 }
 </script>
