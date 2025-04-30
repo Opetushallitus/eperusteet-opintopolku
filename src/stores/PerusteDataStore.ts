@@ -59,6 +59,7 @@ export class PerusteDataStore {
   @State() public julkaisut: JulkaisuBaseDto[] | null = null;
   @State() public muutosmaaraykset: MaaraysDto[] | null = null;
   @State() public maarays: MaaraysDto | null = null;
+  @State() public dokumentinSallitutTyypit = ['PDF'];
 
   public static async create(perusteId: number, revision: number | null = null) {
     const result = new PerusteDataStore(perusteId, revision);
@@ -237,6 +238,7 @@ export class PerusteDataStore {
 
           if (!this.esikatselu) {
             const dokumentti = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
+            this.dokumentinSallitutTyypit = dokumentti.dataTyypit!;
             if (dokumentti?.tila === _.toLower(DokumenttiDtoTilaEnum.VALMIS)) {
               dokumenttiId = dokumentti.id;
             }

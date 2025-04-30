@@ -3,6 +3,11 @@ import { computed, reactive } from '@vue/composition-api';
 import { Kielet } from '@shared/stores/kieli';
 import * as _ from 'lodash';
 
+export enum SourceFileTypeEnum {
+  PDF = 'PDF',
+  HTML = 'HTML'
+}
+
 export class OpsAiStore {
   public constructor(
     private sourceId: number,
@@ -22,6 +27,9 @@ export class OpsAiStore {
     messages: [] as MessageDto[],
     currentRun: null as Run | null,
     welcomeMessage: null as MessageDto | null,
+    sourceFileType: 'PDF' as SourceFileTypeEnum,
+    sourcefileUrl: null as string | null,
+    supportedSourceTypes: null as string[] | null,
   });
 
   public readonly isAvailable = computed(() => this.state.available);
@@ -34,25 +42,36 @@ export class OpsAiStore {
     && (this.state.currentRun.status === 'queued' || this.state.currentRun.status === 'in_progress'));
   public readonly models = computed(() => this.state.models);
   public readonly sourceAvailable = computed(() => this.state.sourceAvailable);
+  public readonly sourceFileType = computed(() => this.state.sourceFileType);
+  public readonly sourcefileUrl = computed(() => this.state.sourcefileUrl);
+  public readonly supportedSourceTypes = computed(() => this.state.supportedSourceTypes);
 
   public async init() {
     this.state.available = (await Api.get('/api/available')).data;
+    this.state.supportedSourceTypes = (await FileApi.getSupportedTypes(this.sourceType, this.sourceId, Kielet.getSisaltoKieli.value, this.sourceRevision)).data;
   }
 
   public async fetch() {
     try {
       this.state.messages = [];
-      [this.state.fileId, this.state.thread, this.state.models, this.state.assistant] = await Promise.all([
-        FileApi.upload(this.sourceType, this.sourceId, Kielet.getSisaltoKieli.value, this.sourceRevision).then(res => res.data.id!),
+      this.state.thread = null;
+      this.state.sourcefileUrl = null;
+      [this.state.fileId, this.state.thread, this.state.models, this.state.assistant, this.state.sourcefileUrl] = await Promise.all([
+        FileApi.upload(this.sourceType, this.sourceId, Kielet.getSisaltoKieli.value, this.sourceRevision, this.sourceFileType.value).then(res => res.data.id!),
         ChatApi.createThread().then(res => res.data),
         ModelApi.getModels().then(res => res.data),
         AssistantApi.getAssistants().then(res => res.data[0]),
+        FileApi.getSourceUrl(this.sourceType, this.sourceId, Kielet.getSisaltoKieli.value, this.sourceRevision, this.sourceFileType.value.toLowerCase()).then(res => res.data),
       ]);
     }
     catch (e) {
       console.log(e);
       this.state.sourceAvailable = false;
     }
+  }
+
+  public async setFileType(fileType: SourceFileTypeEnum) {
+    this.state.sourceFileType = fileType;
   }
 
   public setWelcomeMessage(role, message) {
@@ -175,6 +194,7 @@ export class OpsAiStore {
         sourceLanguage: Kielet.getSisaltoKieli.value,
         sourceRevision: this.sourceRevision,
         sourceName: this.sourceName,
+        sourceFileType: this.sourceFileType as any,
         educationLevel: this.educationLevel,
         instructions: this.state.assistant?.instructions,
         temperature: this.state.assistant?.temperature,

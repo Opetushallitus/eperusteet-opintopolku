@@ -42,6 +42,7 @@
           <EpSpinner class="d-inline-block" v-if="!dokumentti"/>
           <div class="pl-2" v-else>
             <EpPdfLink :url="dokumentti">{{ $t(dokumenttiKielistykset.linkki) }}</EpPdfLink>
+            <EpLinkki v-if="dokumenttiHtml" class="mt-2" :url="dokumenttiHtml">{{$t('avaa-peruste-htmlna')}}</EpLinkki>
           </div>
         </ep-form-content>
       </div>
@@ -221,6 +222,7 @@ import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
+import { FileApi } from '@shared/api/ai';
 
 @Component({
   components: {
@@ -497,6 +499,14 @@ export default class RoutePerusteTiedot extends Vue {
         ? 'korvattavat-perusteet-yleissivistava'
         : 'korvattavat-perusteet',
     };
+  }
+
+  get dokumenttiHtml() {
+    if (this.perusteDataStore.dokumentinSallitutTyypit.includes('HTML') && this.perusteDataStore.dokumentti) {
+      return this.perusteDataStore.dokumentti + '/html';
+    }
+
+    return undefined;
   }
 }
 </script>

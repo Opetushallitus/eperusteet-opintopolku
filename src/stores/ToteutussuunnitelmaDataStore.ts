@@ -37,6 +37,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
   @State() public perusteidenTutkinnonOsat: TutkinnonOsaKaikkiDto[] | null = null;
   @State() public perusteidenTutkinnonOsienViitteet: TutkinnonOsaViiteSuppeaDto[] | null = null;
   @State() public julkaisut: any[] = [];
+  @State() public dokumentinSallitutTyypit = ['PDF'];
 
   constructor(opetussuunnitelmaId: number, revision) {
     this.opetussuunnitelmaId = opetussuunnitelmaId;
@@ -116,6 +117,7 @@ export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
         else {
           this.dokumenttiTila = (await JulkinenApi.getJulkaistuDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!), this.revision)).data;
         }
+        this.dokumentinSallitutTyypit = this.dokumenttiTila.dataTyypit!;
       }
     }
     catch (err) {

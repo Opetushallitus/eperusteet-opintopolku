@@ -54,6 +54,7 @@
 
       <ep-form-content v-if="dokumenttiUrl" name="opetussuunnitelma-pdfna" headerType="h3" headerClass="h6">
         <EpPdfLink :url="dokumenttiUrl">{{ $t('avaa-opetussuunnitelma-pdf') }}</EpPdfLink>
+        <EpLinkki v-if="dokumenttiHtml" class="mt-2" :url="dokumenttiHtml">{{$t('avaa-opetussuunnitelma-htmlna')}}</EpLinkki>
       </ep-form-content>
     </template>
   </div>
@@ -112,6 +113,14 @@ export default class EpOpetussuunnitelmaTiedot extends Vue {
 
   get kuvat() {
     return this.store!.kuvat;
+  }
+
+  get dokumenttiHtml() {
+    if (this.store?.dokumentinSallitutTyypit.includes('HTML') && this.store?.dokumenttiTila) {
+      return this.store?.dokumenttiUrl + '/html';
+    }
+
+    return undefined;
   }
 }
 </script>

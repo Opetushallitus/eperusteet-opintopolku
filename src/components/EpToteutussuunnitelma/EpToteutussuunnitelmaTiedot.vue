@@ -36,6 +36,7 @@
 
       <ep-form-content name="toteutussuunnitelma-pdfna" headerType="h3" headerClass="h6" v-if="dokumenttiUrl">
         <EpPdfLink :url="dokumenttiUrl">{{ $t('avaa-toteutusuunnitelma-pdf') }}</EpPdfLink>
+        <EpLinkki v-if="dokumenttiHtml" class="mt-2" :url="dokumenttiHtml">{{$t('avaa-toteutussuunnitelma-htmlna')}}</EpLinkki>
       </ep-form-content>
 
       <ep-form-content name="koulutuksen-jarjestaja" headerType="h3" headerClass="h6">
@@ -110,6 +111,14 @@ export default class EpToteutussuunnitelmaTiedot extends Vue {
 
   get kuvausOtsikko() {
     return this.store?.isAmmatillinen ? 'tutkinnon-suorittaneen-osaaminen' : 'opetussuunnitelma-tiivistelma';
+  }
+
+  get dokumenttiHtml() {
+    if (this.store?.dokumentinSallitutTyypit.includes('HTML') && this.store?.dokumenttiTila) {
+      return this.store?.dokumenttiUrl + '/html';
+    }
+
+    return undefined;
   }
 }
 </script>
