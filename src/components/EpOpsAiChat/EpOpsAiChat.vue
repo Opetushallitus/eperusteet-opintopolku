@@ -222,7 +222,12 @@ export default class EpOpsAiChat extends Vue {
   }
 
   get models() {
-    return _.map(this.opsAiStore?.models.value, 'id');
+    return _.map(this.opsAiStore?.models?.value, (model: any) => {
+      return {
+        text: model.id + ' (' + model.description + ')',
+        value: model.id,
+      };
+    });
   }
 }
 </script>
