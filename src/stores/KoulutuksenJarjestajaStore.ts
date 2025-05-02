@@ -1,52 +1,45 @@
-import  { reactive, computed } from '@vue/composition-api';
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi, OpetussuunnitelmaDto, getJulkisetOpetussuunnitelmat } from '@shared/api/amosaa';
 import { Kielet } from '@shared/stores/kieli';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Page } from '@shared/tyypit';
-import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
+import { DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 
-export class KoulutuksenJarjestajaStore {
-  private state = reactive({
-    koulutustoimija: null as KoulutustoimijaJulkinenDto | null,
-    yhteisetOsuudet: null as OpetussuunnitelmaDto[] | null,
-    toteutussuunnitelmat: null as Page<OpetussuunnitelmaDto> | null,
-  });
+export const useKoulutuksenJarjestajaStore = defineStore('koulutuksenJarjestaja', () => {
+  const koulutustoimija = ref<KoulutustoimijaJulkinenDto | null>(null);
+  const yhteisetOsuudet = ref<OpetussuunnitelmaDto[] | null>(null);
+  const toteutussuunnitelmat = ref<Page<OpetussuunnitelmaDto> | null>(null);
+  const koulutustoimijaId = ref<number | null>(null);
 
-  public static async create(koulutustoimijaId) {
-    const result = new KoulutuksenJarjestajaStore(koulutustoimijaId);
-    await result.fetchKoulutustoimija();
-    return result;
-  }
+  const fetchKoulutustoimija = async () => {
+    if (koulutustoimijaId.value === null) return;
+    koulutustoimija.value = (await JulkinenApi.getKoulutustoimijaByKtId(koulutustoimijaId.value)).data;
+  };
 
-  constructor(private koulutustoimijaId: number) {
-    this.fetchKoulutustoimija();
-  }
+  const init = async (id: number) => {
+    koulutustoimijaId.value = id;
+    await fetchKoulutustoimija();
+  };
 
-  public readonly koulutustoimija = computed(() => this.state.koulutustoimija);
-  public readonly yhteisetOsuudet = computed(() => this.state.yhteisetOsuudet);
-  public readonly toteutussuunnitelmat = computed(() => this.state.toteutussuunnitelmat);
-
-  public async fetchKoulutustoimija() {
-    this.state.koulutustoimija = (await JulkinenApi.getKoulutustoimijaByKtId(this.koulutustoimijaId)).data;
-  }
-
-  public async fetch() {
-    this.state.yhteisetOsuudet = null;
-    this.state.yhteisetOsuudet = ((await getJulkisetOpetussuunnitelmat({
-      organisaatio: this.state.koulutustoimija!.organisaatio,
+  const fetch = async () => {
+    yhteisetOsuudet.value = null;
+    if (!koulutustoimija.value) return;
+    yhteisetOsuudet.value = ((await getJulkisetOpetussuunnitelmat({
+      organisaatio: koulutustoimija.value.organisaatio,
       tyyppi: ['yhteinen'],
       sivu: 0,
       sivukoko: 9999,
       kieli: Kielet.getUiKieli.value,
     })).data as any).data;
-  }
+  };
 
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  public async fetchToteutussuunnitelmat(nimi, sivu) {
-    this.state.toteutussuunnitelmat = null;
-    this.state.toteutussuunnitelmat = ((await getJulkisetOpetussuunnitelmat({
-      organisaatio: this.state.koulutustoimija!.organisaatio,
+  const fetchToteutussuunnitelmat = _.debounce(async (nimi: string, sivu: number) => {
+    toteutussuunnitelmat.value = null;
+    if (!koulutustoimija.value) return;
+    toteutussuunnitelmat.value = ((await getJulkisetOpetussuunnitelmat({
+      organisaatio: koulutustoimija.value.organisaatio,
       tyyppi: ['ops', 'yleinen'],
       nimi,
       sivu,
@@ -54,5 +47,15 @@ export class KoulutuksenJarjestajaStore {
       kieli: Kielet.getUiKieli.value,
       koulutustyyppi: AmmatillisetKoulutustyypit,
     })).data as any);
-  }
-}
+  }, DEFAULT_PUBLIC_WAIT_TIME_MS);
+
+  return {
+    koulutustoimija,
+    yhteisetOsuudet,
+    toteutussuunnitelmat,
+    init,
+    fetchKoulutustoimija,
+    fetch,
+    fetchToteutussuunnitelmat,
+  };
+});

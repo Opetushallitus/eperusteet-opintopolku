@@ -38,40 +38,39 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import { Lops2019ModuuliDto } from '@shared/api/eperusteet';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import ModuuliEsitys from '@shared/components/EpOpintojaksonModuuli/ModuuliEsitys.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpColorIndicator,
-    ModuuliEsitys,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => OpetussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class EpOpintojaksonModuuli extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+  moduuli: {
+    type: Object as () => Lops2019ModuuliDto,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private moduuli!: Lops2019ModuuliDto;
-
-  get koodi() {
-    if (this.moduuli) {
-      return this.moduuli.koodi;
-    }
+const koodi = computed(() => {
+  if (props.moduuli) {
+    return props.moduuli.koodi;
   }
+  return undefined;
+});
 
-  get perusteTermit() {
-    return this.opetussuunnitelmaDataStore.perusteTermit;
-  }
+const perusteTermit = computed(() => {
+  return opetussuunnitelmaDataStore.perusteTermit;
+});
 
-  get perusteKuvat() {
-    return this.opetussuunnitelmaDataStore.perusteKuvat;
-  }
-}
+const perusteKuvat = computed(() => {
+  return opetussuunnitelmaDataStore.perusteKuvat;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -128,5 +127,4 @@ export default class EpOpintojaksonModuuli extends Vue {
     }
   }
 }
-
 </style>

@@ -18,14 +18,13 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-
-@Component
-export default class EpAmmatillinenRow extends Vue {
-  @Prop({ required: true })
-  private route: any;
-}
+<script setup lang="ts">
+const props = defineProps({
+  route: {
+    type: Object,
+    required: true,
+  },
+});
 </script>
 
 <style scoped lang="scss">

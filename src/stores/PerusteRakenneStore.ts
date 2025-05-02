@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { TutkinnonRakenne, RakenneModuuliDto, PerusteDto } from '@shared/api/eperusteet';
 

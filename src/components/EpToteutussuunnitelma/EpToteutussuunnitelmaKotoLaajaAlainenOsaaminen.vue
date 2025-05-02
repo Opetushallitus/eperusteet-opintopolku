@@ -43,28 +43,28 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { SisaltoViiteExportDto } from '@shared/api/amosaa';
 import * as _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { $kaanna } from '@shared/utils/globals';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 
-@Component({
-  components: {
-    EpContentViewer,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => SisaltoViiteExportDto,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: SisaltoViiteExportDto;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
-
-  get perusteenOsa() {
-    return this.sisaltoviite.kotoLaajaAlainenOsaaminen?.perusteenOsa;
-  }
-}
+const perusteenOsa = computed(() => {
+  return props.sisaltoviite.kotoLaajaAlainenOsaaminen?.perusteenOsa;
+});
 </script>
 
 <style scoped lang="scss">

@@ -19,7 +19,7 @@
         <div class="ops d-flex align-items-center">
           <div v-html="nimi" />
           <div
-            v-if="ops.jotpatyyppi && showJotpaInfo"
+            v-if="props.ops.jotpatyyppi && props.showJotpaInfo"
             class="nimi__jotpa ml-2"
           >
             {{ $t('jotpa') }}
@@ -27,11 +27,11 @@
         </div>
         <div class="organisaatiot">
           <div
-            v-if="voimassaoloTiedot && voimassaoloTiedot.length > 0"
+            v-if="props.voimassaoloTiedot && props.voimassaoloTiedot.length > 0"
             class="meta d-flex"
           >
             <div
-              v-for="(voimassaolotieto, index) in voimassaoloTiedot"
+              v-for="(voimassaolotieto, index) in props.voimassaoloTiedot"
               :key="'voimassa' + index"
             >
               <div v-if="voimassaolotieto.paiva">
@@ -40,10 +40,10 @@
                 <span>{{ $sd(voimassaolotieto.paiva) }}</span>
               </div>
             </div>
-            <EpVoimassaolo :voimassaolo="ops" />
+            <EpVoimassaolo :voimassaolo="props.ops" />
           </div>
           <div
-            v-if="ops.toimijat && ops.toimijat.length > 0"
+            v-if="props.ops.toimijat && props.ops.toimijat.length > 0"
             class="meta mr-2"
           >
             <span class="otsikko">{{ $t('toimijat') }}</span>
@@ -53,11 +53,11 @@
               :key="tidx"
               class="toimijat"
             >
-              <span v-html="toimija" /><span v-if="tidx < ops.toimijat.length - 1">, </span>
+              <span v-html="toimija" /><span v-if="tidx < props.ops.toimijat.length - 1">, </span>
             </span>
           </div>
           <div
-            v-if="ops.oppilaitokset && ops.oppilaitokset.length > 0"
+            v-if="props.ops.oppilaitokset && props.ops.oppilaitokset.length > 0"
             class="meta mr-2"
           >
             <span class="otsikko">{{ $t('oppilaitokset') }}</span>
@@ -67,16 +67,16 @@
               :key="tidx"
               class="toimijat"
             >
-              <span v-html="oppilaitos" /><span v-if="tidx < ops.oppilaitokset.length - 1">, </span>
+              <span v-html="oppilaitos" /><span v-if="tidx < props.ops.oppilaitokset.length - 1">, </span>
             </span>
           </div>
           <div
-            v-if="ops.koulutustoimija"
+            v-if="props.ops.koulutustoimija"
             class="meta"
           >
             <span class="otsikko">{{ $t('organisaatiot') }}</span>
             <span class="mr-1">:</span>
-            <span class="toimijat">{{ $kaanna(ops.koulutustoimija.nimi) }}</span>
+            <span class="toimijat">{{ $kaanna(props.ops.koulutustoimija.nimi) }}</span>
           </div>
         </div>
       </div>
@@ -84,52 +84,54 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { highlight } from '@/utils/kieli';
 import _ from 'lodash';
 import { VoimassaoloTieto } from '@/utils/voimassaolo';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import opskorttiImage from '@assets/img/images/opskortti.svg';
+import { $t, $kaanna, $sd } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpVoimassaolo,
+const props = defineProps({
+  ops: {
+    type: Object as () => OpetussuunnitelmaDto,
+    required: true,
   },
-})
-export default class OpetussuunnitelmaTile extends Vue {
-  @Prop({ required: true })
-  private ops!: OpetussuunnitelmaDto;
+  query: {
+    type: String,
+    default: '',
+  },
+  voimassaoloTiedot: {
+    type: Array as () => VoimassaoloTieto[],
+    required: false,
+  },
+  showJotpaInfo: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
+  showOpsIcon: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+});
 
-  @Prop({ default: '' })
-  private query!: string;
+const emit = defineEmits(['mouseover']);
 
-  @Prop({ required: false })
-  private voimassaoloTiedot!: VoimassaoloTieto[];
+const nimi = computed(() => {
+  return highlight($kaanna((props.ops.nimi as Object)), props.query);
+});
 
-  @Prop({ required: false, default: false, type: Boolean })
-  private showJotpaInfo!: boolean;
+const toimijat = computed(() => {
+  return _.map((props.ops as any).toimijat, (toimija) => highlight($kaanna(toimija.nimi), props.query));
+});
 
-  @Prop({ required: false, default: true, type: Boolean })
-  private showOpsIcon?: boolean;
-
-  get nimi() {
-    return highlight(this.$kaanna((this.ops.nimi as Object)), this.query);
-  }
-
-  get toimijat() {
-    return _.map((this.ops as any).toimijat, (toimija) => highlight(this.$kaanna(toimija.nimi), this.query));
-  }
-
-  get oppilaitokset() {
-    return _.map((this.ops as any).oppilaitokset, (oppilaitos) => highlight(this.$kaanna(oppilaitos.nimi), this.query));
-  }
-
-  get opskorttiImage() {
-    return opskorttiImage;
-  }
-}
+const oppilaitokset = computed(() => {
+  return _.map((props.ops as any).oppilaitokset, (oppilaitos) => highlight($kaanna(oppilaitos.nimi), props.query));
+});
 </script>
 
 <style scoped lang="scss">

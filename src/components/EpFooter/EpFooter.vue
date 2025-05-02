@@ -51,51 +51,32 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { $kaanna } from '@shared/utils/globals';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import ophLogo from '@assets/img/banners/opintopolku/logo.svg';
 import opintopolkuLogo from '@assets/img/banners/opintopolku/oph_logo2.png';
 import EpPalauteLinkki from '@shared/components/EpPalauteLinkki/EpPalauteLinkki.vue';
 
-@Component({
-  name: 'EpFooter',
-  components: {
-    EpLinkki,
-    EpPalauteLinkki,
+const linkit = {
+  oph: {
+    fi: 'https://www.oph.fi/fi',
+    sv: 'https://www.oph.fi/sv',
+    en: 'https://www.oph.fi/en',
   },
-})
-export default class EpFooter extends Vue {
-  get ophLogo() {
-    return ophLogo;
-  }
-
-  get opintopolkuLogo() {
-    return opintopolkuLogo;
-  }
-
-  get linkit() {
-    return {
-      oph: {
-        fi: 'https://www.oph.fi/fi',
-        sv: 'https://www.oph.fi/sv',
-        en: 'https://www.oph.fi/en',
-      },
-      virkailija: {
-        fi: 'http://virkailija.opintopolku.fi',
-        sv: 'http://virkailija.opintopolku.fi',
-      },
-      palaute: {
-        fi: 'mailto:eperusteet@opintopolku.fi',
-        sv: 'mailto:eperusteet@opintopolku.fi',
-      },
-      saavutettavuusseloste: {
-        fi: 'https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste',
-        sv: 'https://opintopolku.fi/konfo/sv/sivu/tillganglighetsutlatande-for-egrunder',
-      },
-    };
-  }
-}
+  virkailija: {
+    fi: 'http://virkailija.opintopolku.fi',
+    sv: 'http://virkailija.opintopolku.fi',
+  },
+  palaute: {
+    fi: 'mailto:eperusteet@opintopolku.fi',
+    sv: 'mailto:eperusteet@opintopolku.fi',
+  },
+  saavutettavuusseloste: {
+    fi: 'https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste',
+    sv: 'https://opintopolku.fi/konfo/sv/sivu/tillganglighetsutlatande-for-egrunder',
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -173,7 +154,7 @@ footer {
   width: 200px;
 }
 
-::v-deep .linkki {
+:deep(.linkki) {
   font-size: 1rem;
   padding-bottom: 3px;
 
@@ -181,5 +162,4 @@ footer {
     color: $oph-green;
   }
 }
-
 </style>

@@ -94,8 +94,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -103,84 +103,83 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import * as _ from 'lodash';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpBPagination,
-    EpMaterialIcon,
+const props = defineProps({
+  valmisteillaOlevatStore: {
+    type: Object as () => ValmisteillaOlevatStore,
+    required: true,
   },
-})
-export default class RouteAmmatillinenValmisteillaOlevat extends Vue {
-  @Prop({ required: true })
-  private valmisteillaOlevatStore!: ValmisteillaOlevatStore;
-  private query = {
-    sivu: 0,
-    sivukoko: 10,
-    koulutustyyppit: AmmatillisetKoulutustyypit,
-  };
-  private toggled: number[] = [];
+});
 
-  async mounted() {
-    await this.fetch();
-  }
+const query = ref({
+  sivu: 0,
+  sivukoko: 10,
+  koulutustyyppit: AmmatillisetKoulutustyypit,
+});
 
-  async fetch() {
-    await this.valmisteillaOlevatStore.fetch(this.query.sivu, this.query.sivukoko, this.query.koulutustyyppit);
-  }
+const toggled = ref<number[]>([]);
 
-  @Watch('query')
-  onQueryChanged() {
-    this.page = 1;
-  }
+onMounted(async () => {
+  await fetch();
+});
 
-  get perusteet() {
-    return this.valmisteillaOlevatStore.perusteet.value;
-  }
+const fetch = async () => {
+  await props.valmisteillaOlevatStore.fetch(query.value.sivu, query.value.sivukoko, query.value.koulutustyyppit);
+};
 
-  get perusteetMapped() {
-    return _.map(this.perusteet!.data, peruste => {
-      return {
-        ...peruste,
-        toggled: _.includes(this.toggled, peruste.id),
-        perusteenAikataulut: _.sortBy(_.filter(peruste.perusteenAikataulut, 'julkinen'), 'tapahtumapaiva'),
-      };
-    });
-  }
+watch(() => query.value, () => {
+  page.value = 1;
+});
 
-  toggle(peruste) {
-    if (_.includes(this.toggled, peruste.id)) {
-      this.toggled = _.filter(this.toggled, id => id !== peruste.id);
-    }
-    else {
-      this.toggled = [
-        ...this.toggled,
-        peruste.id,
-      ];
-    }
-  }
+const perusteet = computed(() => {
+  return props.valmisteillaOlevatStore.perusteet.value;
+});
 
-  get total() {
-    return this.perusteet!.kokonaismäärä;
-  }
-  get pages() {
-    return this.perusteet!.sivuja;
-  }
-  get perPage() {
-    return this.perusteet!.sivukoko;
-  }
+const perusteetMapped = computed(() => {
+  return _.map(perusteet.value!.data, peruste => {
+    return {
+      ...peruste,
+      toggled: _.includes(toggled.value, peruste.id),
+      perusteenAikataulut: _.sortBy(_.filter(peruste.perusteenAikataulut, 'julkinen'), 'tapahtumapaiva'),
+    };
+  });
+});
 
-  get page() {
-    return this.perusteet!.sivu + 1;
+const toggle = (peruste) => {
+  if (_.includes(toggled.value, peruste.id)) {
+    toggled.value = _.filter(toggled.value, id => id !== peruste.id);
   }
-  set page(value) {
-    this.query.sivu = value - 1;
-    this.fetch();
+  else {
+    toggled.value = [
+      ...toggled.value,
+      peruste.id,
+    ];
   }
-}
+};
+
+const total = computed(() => {
+  return perusteet.value!.kokonaismäärä;
+});
+
+const pages = computed(() => {
+  return perusteet.value!.sivuja;
+});
+
+const perPage = computed(() => {
+  return perusteet.value!.sivukoko;
+});
+
+const page = computed({
+  get: () => {
+    return perusteet.value!.sivu + 1;
+  },
+  set: (value) => {
+    query.value.sivu = value - 1;
+    fetch();
+  },
+});
 </script>
 
 <style scoped lang="scss">
-
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 

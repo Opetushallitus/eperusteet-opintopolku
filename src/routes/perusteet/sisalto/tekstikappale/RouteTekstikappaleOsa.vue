@@ -20,57 +20,46 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { ViiteLaaja } from '@shared/api/eperusteet';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeading,
-    EpContentViewer,
-  },
-})
-export default class RouteTekstikappaleOsa extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.viiteId);
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
+
+const vapaaTekstiId = computed(() => {
+  return route.params.vapaatekstiId;
+});
+
+const tekstikappaleenOsa = computed(() => {
+  return route.params.osa;
+});
+
+const osa = computed(() => {
+  if (tekstikappaleenOsa.value) {
+    return _.get(perusteenOsaStore.perusteenOsaViite?.perusteenOsa, tekstikappaleenOsa.value);
   }
 
-  get termit() {
-    return this.perusteDataStore.termit;
+  if (vapaaTekstiId.value) {
+    return _.find(_.get(perusteenOsaStore.perusteenOsaViite?.perusteenOsa, 'vapaatTekstit'), { id: _.toNumber(vapaaTekstiId.value) });
   }
 
-  get osa() {
-    if (this.tekstikappaleenOsa) {
-      return _.get(this.perusteenOsaStore.perusteenOsaViite?.perusteenOsa, this.tekstikappaleenOsa);
-    }
-
-    if (this.vapaaTekstiId) {
-      return _.find(_.get(this.perusteenOsaStore.perusteenOsaViite?.perusteenOsa, 'vapaatTekstit'), { id: _.toNumber(this.vapaaTekstiId) });
-    }
-  }
-
-  get vapaaTekstiId() {
-    return this.$route.params.vapaatekstiId;
-  }
-
-  get tekstikappaleenOsa() {
-    return this.$route.params.osa;
-  }
-}
-
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">

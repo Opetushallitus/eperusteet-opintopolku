@@ -22,44 +22,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import ModuuliEsitys from '@shared/components/EpOpintojaksonModuuli/ModuuliEsitys.vue';
 import _ from 'lodash';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpSpinner,
-    ModuuliEsitys,
-  },
-})
-export default class RouteOpetussuunnitelmaModuuli extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get moduuliId() {
-    return _.toNumber(this.$route.params.moduuliId);
-  }
+const route = useRoute();
 
-  get moduuli() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: this.moduuliId });
-  }
+const moduuliId = computed(() => {
+  return _.toNumber(route.params.moduuliId);
+});
 
-  get koodi() {
-    if (this.moduuli) {
-      return this.moduuli.koodi;
-    }
-  }
-  get perusteTermit() {
-    return this.opetussuunnitelmaDataStore.perusteTermit;
-  }
+const moduuli = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: moduuliId.value });
+});
 
-  get perusteKuvat() {
-    return this.opetussuunnitelmaDataStore.perusteKuvat;
+const koodi = computed(() => {
+  if (moduuli.value) {
+    return moduuli.value.koodi;
   }
-}
+  return undefined;
+});
+
+const perusteTermit = computed(() => {
+  return opetussuunnitelmaDataStore.perusteTermit;
+});
+
+const perusteKuvat = computed(() => {
+  return opetussuunnitelmaDataStore.perusteKuvat;
+});
 </script>
 
 <style scoped lang="scss">

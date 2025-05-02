@@ -187,108 +187,109 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, InjectReactive } from 'vue-property-decorator';
+import { ref, computed, inject, useTemplateRef, nextTick } from 'vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpOrderColorBall from '@shared/components/EpColorIndicator/EpOrderColorBall.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
 import TavoitteenSisaltoalueet from './TavoitteenSisaltoalueet.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpButton,
-    EpArvioinninkohteetTable,
-    EpContentViewer,
-    EpOrderColorBall,
-    EpCollapse,
-    TavoitteenSisaltoalueet,
+const props = defineProps({
+  oppiaineenVuosiluokka: {
+    type: Object,
+    required: true,
   },
-})
-export default class OppiaineenVuosiluokka extends Vue {
-  @Prop({ required: true })
-  private oppiaineenVuosiluokka!: any;
+  pohjaOppiaineenVuosiluokka: {
+    type: Object,
+    required: false,
+  },
+  valinnainen: {
+    type: Boolean,
+    required: false,
+  },
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  naytaSisaltoalueet: {
+    type: Boolean,
+    default: true,
+  },
+  naytaArviointikriteerit: {
+    type: Boolean,
+    default: true,
+  },
+  naytaLaajaAlaisetOsaamiset: {
+    type: Boolean,
+    default: true,
+  },
+  avaaSuljeSiirrettavissa: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  @Prop({ required: false })
-  private pohjaOppiaineenVuosiluokka!: any;
+const tavoitteetAvattu = ref(false);
+const opetussuunnitelma = inject('opetussuunnitelma') as any;
 
-  @Prop({ required: false })
-  private valinnainen!: boolean;
+const tavoitecollapse = useTemplateRef('tavoitecollapse');
+const tavoitteenSisaltoalueet = useTemplateRef('tavoitteenSisaltoalueet');
+const tavoitteenLaajaAlaisetOsaamiset = useTemplateRef('tavoitteenLaajaAlaisetOsaamiset');
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const tavoitteet = computed(() => {
+  return _.map(props.oppiaineenVuosiluokka?.tavoitteet, tavoite => {
+    return {
+      ...tavoite,
+      tavoite: $kaanna(tavoite.tavoite)
+        .replace('<p>', '')
+        .replace('</p>', ''),
+    };
+  });
+});
 
-  @Prop({ default: true })
-  private naytaSisaltoalueet!: boolean;
+const tavoitealueet = computed(() => {
+  return _.chain(tavoitteet.value)
+    .map('kohdealueet')
+    .flatten()
+    .uniqBy('nimi')
+    .value();
+});
 
-  @Prop({ default: true })
-  private naytaArviointikriteerit!: boolean;
-
-  @Prop({ default: true })
-  private naytaLaajaAlaisetOsaamiset!: boolean;
-
-  @Prop({ default: false })
-  private avaaSuljeSiirrettavissa!: boolean;
-
-  tavoitteetAvattu = false;
-
-  @InjectReactive('opetussuunnitelma')
-  private opetussuunnitelma!: any;
-
-  get tavoitteet() {
-    return _.map(this.oppiaineenVuosiluokka?.tavoitteet, tavoite => {
-      return {
-        ...tavoite,
-        tavoite: this.$kaanna(tavoite.tavoite)
-          .replace('<p>', '')
-          .replace('</p>', ''),
-      };
-    });
+const tavoitteetAlueilla = computed(() => {
+  if (_.size(tavoitealueet.value) > 0) {
+    return [
+      ..._.map(tavoitealueet.value, tavoitealue => {
+        return {
+          nimi: tavoitealue.nimi,
+          tavoitteet: _.filter(tavoitteet.value, tavoite => _.find(tavoite.kohdealueet, { nimi: tavoitealue.nimi })),
+        };
+      }),
+    ];
   }
-
-  get tavoitteetAlueilla() {
-    if (_.size(this.tavoitealueet) > 0) {
-      return [
-        ..._.map(this.tavoitealueet, tavoitealue => {
-          return {
-            nimi: tavoitealue.nimi,
-            tavoitteet: _.filter(this.tavoitteet, tavoite => _.find(tavoite.kohdealueet, { nimi: tavoitealue.nimi })),
-          };
-        }),
-      ];
-    }
-    else {
-      return [{ nimi: '', tavoitteet: this.tavoitteet }];
-    }
+  else {
+    return [{ nimi: '', tavoitteet: tavoitteet.value }];
   }
+});
 
-  get pohjanTavoitteet() {
-    return _.keyBy(this.pohjaOppiaineenVuosiluokka?.tavoitteet, 'tunniste');
-  }
+const pohjanTavoitteet = computed(() => {
+  return _.keyBy(props.pohjaOppiaineenVuosiluokka?.tavoitteet, 'tunniste');
+});
 
-  async toggleTavoite() {
-    this.tavoitteetAvattu = !this.tavoitteetAvattu;
-    _.forEach(this.$refs.tavoitecollapse, (collapsable: any) => collapsable.toggle(this.tavoitteetAvattu));
-    await this.$nextTick();
-    _.forEach(this.$refs.tavoitteenSisaltoalueet, (collapsable: any) => collapsable.toggle(this.tavoitteetAvattu));
-    _.forEach(this.$refs.tavoitteenLaajaAlaisetOsaamiset, (collapsable: any) => collapsable.toggle(this.tavoitteetAvattu));
-  }
+const pohjaNimi = computed(() => {
+  return opetussuunnitelma?.pohja?.nimi;
+});
 
-  get tavoitealueet() {
-    return _.chain(this.tavoitteet)
-      .map('kohdealueet')
-      .flatten()
-      .uniqBy('nimi')
-      .value();
-  }
-
-  get pohjaNimi() {
-    return this.opetussuunnitelma?.pohja?.nimi;
-  }
-}
-
+const toggleTavoite = async () => {
+  tavoitteetAvattu.value = !tavoitteetAvattu.value;
+  _.forEach(tavoitecollapse.value, (collapsable: any) => collapsable.toggle(tavoitteetAvattu.value));
+  await nextTick();
+  _.forEach(tavoitteenSisaltoalueet.value, (collapsable: any) => collapsable.toggle(tavoitteetAvattu.value));
+  _.forEach(tavoitteenLaajaAlaisetOsaamiset.value, (collapsable: any) => collapsable.toggle(tavoitteetAvattu.value));
+};
 </script>
 
 <style scoped lang="scss">
@@ -301,7 +302,7 @@ export default class OppiaineenVuosiluokka extends Vue {
   padding-right: 1rem;
 }
 
-::v-deep .ep-button .btn-link {
+:deep(.ep-button .btn-link) {
   padding-left: 0;
 }
 
@@ -315,7 +316,7 @@ export default class OppiaineenVuosiluokka extends Vue {
   padding: 0.5rem 0.7rem;
 }
 
-::v-deep .ep-collapse {
+:deep(.ep-collapse) {
   margin-top: 0px;
 
   .collapse-button {
@@ -323,7 +324,7 @@ export default class OppiaineenVuosiluokka extends Vue {
   }
 }
 
-::v-deep .ep-button .btn{
+:deep(.ep-button .btn){
   padding: 0;
 }
 
@@ -332,5 +333,4 @@ export default class OppiaineenVuosiluokka extends Vue {
   background-color: $ylops-paikallinen-color;
   padding: 0.8rem;
 }
-
 </style>

@@ -105,64 +105,59 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { PerusteVuosiluokkakokonaisuusStore } from '@/stores/PerusteVuosiluokkakokonaisuusStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
-  },
-})
-export default class RouteVuosiluokkakokonaisuus extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const perusteDataStore = getCachedPerusteStore();
 
-  get oppiaine() {
-    return this.$route.params.oppiaineId;
-  }
+const oppiaine = computed(() => {
+  return route.params.oppiaineId;
+});
 
-  get vlkId() {
-    return _.toNumber(this.$route.params.vlkId);
-  }
-  get laajaalaisetOsaamisetById() {
-    return _.keyBy(this.laajaalaisetOsaamiset, 'id');
-  }
+const vlkId = computed(() => {
+  return _.toNumber(route.params.vlkId);
+});
 
-  get laajaalaisetOsaamiset() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset') as any;
-  }
+const laajaalaisetOsaamiset = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset') as any;
+});
 
-  get vuosiluokkakokonaisuus() {
-    let vuosiluokkakokonaisuus = this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vlkId }) as any;
-    return {
-      ...vuosiluokkakokonaisuus,
-      laajaalaisetOsaamiset: _.chain(vuosiluokkakokonaisuus.laajaalaisetOsaamiset)
-        .map(lao => {
-          return {
-            ...lao,
-            nimi: _.get(this.laajaalaisetOsaamisetById[_.get(lao, '_laajaalainenOsaaminen')], 'nimi'),
-          };
-        })
-        .sortBy(lao => this.$kaanna(lao.nimi))
-        .value(),
-    };
-  }
+const laajaalaisetOsaamisetById = computed(() => {
+  return _.keyBy(laajaalaisetOsaamiset.value, 'id');
+});
 
-  hasContent(obj) {
-    return obj?.teksti && _.get(obj, 'teksti')[Kielet.getSisaltoKieli.value];
-  }
+const vuosiluokkakokonaisuus = computed(() => {
+  let vuosiluokkakokonaisuus = perusteDataStore.getJulkaistuPerusteSisalto({ id: vlkId.value }) as any;
+  return {
+    ...vuosiluokkakokonaisuus,
+    laajaalaisetOsaamiset: _.chain(vuosiluokkakokonaisuus.laajaalaisetOsaamiset)
+      .map(lao => {
+        return {
+          ...lao,
+          nimi: _.get(laajaalaisetOsaamisetById.value[_.get(lao, '_laajaalainenOsaaminen')], 'nimi'),
+        };
+      })
+      .sortBy(lao => $kaanna(lao.nimi))
+      .value(),
+  };
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
+
+function hasContent(obj: any) {
+  return obj?.teksti && _.get(obj, 'teksti')[Kielet.getSisaltoKieli.value];
 }
 </script>
 

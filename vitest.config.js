@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import vue from '@vitejs/plugin-vue2';
+import vue  from '@vitejs/plugin-vue';
 import commonjs from 'vite-plugin-commonjs';
 import { fileURLToPath, URL } from 'node:url';
 import { configDefaults } from 'vitest/config';
@@ -32,7 +32,7 @@ export default defineConfig(({ mode }) => {
         ...configDefaults.exclude,
         'eperusteet-frontend-utils/vue/**/*.spec.ts',
       ],
-      alias: [{ find: /^vue$/, replacement: 'vue/dist/vue.runtime.common.js' }],
+      // alias: [{ find: /^vue$/, replacement: 'vue/dist/vue.runtime.common.js' }],
     },
   };
 });

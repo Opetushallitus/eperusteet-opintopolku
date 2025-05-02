@@ -1,47 +1,49 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
+import { vi, describe, test, expect, beforeEach, afterEach } from 'vitest';
 import RouteOppiaineet from './RouteOppiaineet.vue';
-import { lops2019OppiaineetStoreMock, perusteDataStoreMock } from '@/storeMocks';
-import { Kielet } from '@shared/stores/kieli';
-import { mocks, stubs } from '@shared/utils/jestutils';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
+import { globalStubs } from '@shared/utils/__tests__/stubs';
+
+// Mock the module that provides getCachedPerusteStore
+vi.mock('@/stores/PerusteCacheStore', () => ({
+  getCachedPerusteStore: vi.fn(),
+}));
+
+// Import the mocked function after mocking
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
 describe('RouteOppiaineet', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  Kielet.install(localVue);
-  localVue.use(new Kaannos());
+  // Reset all mocks before each test
+  beforeEach(() => {
+    vi.resetAllMocks();
+  });
 
   test('Renders', async () => {
-    const perusteDataStore = perusteDataStoreMock({
+    // Create the mock store
+    const perusteDataStore = {
       current: {
         children: [
           {
             label: {
               fi: 'Matematiikka',
             },
+            location: '/matematiikka',
           },
           {
             label: {
               fi: 'Äidinkieli ja kirjallisuus',
             },
+            location: '/aidinkieli',
           },
         ],
       } as any,
-    });
-    const lops2019OppiaineetStore = lops2019OppiaineetStoreMock();
+    };
+
+    // Make getCachedPerusteStore return our mock
+    (getCachedPerusteStore as any).mockReturnValue(perusteDataStore);
 
     const wrapper = mount(RouteOppiaineet as any, {
-      localVue,
-      propsData: {
-        perusteDataStore,
-        lops2019OppiaineetStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
+      global: {
+        ...globalStubs,
       },
     });
 

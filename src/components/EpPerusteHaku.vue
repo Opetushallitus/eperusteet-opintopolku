@@ -4,7 +4,7 @@
       link
       class="mb-2"
       no-padding
-      @click="$emit('clear')"
+      @click="emit('clear')"
     >
       <span class="font-weight-bold">&#60;</span> {{ $t('takaisin-edelliseen-nakymaan') }}
     </EpButton>
@@ -67,78 +67,70 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { ref, computed, watch } from 'vue';
+
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { deepFind, typeSort } from '@/utils/sisaltohaku';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { useSlots } from 'vue';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSearch,
-    EpSpinner,
-    EpBPagination,
-    EpHakutulosmaara,
-  },
-  watch: {
-    query: {
-      handler: 'queryImplDebounce',
-      immediate: true,
-    },
-  },
-})
-export default class EpPerusteHaku extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const props = defineProps<{
+  query: string;
+}>();
 
-  @Prop({ required: true })
-  private query!: string;
+const perusteDataStore = getCachedPerusteStore();
+const emit = defineEmits(['clear']);
+const tulokset = ref<any[] | null>(null);
+const sivu = ref(1);
+const sivukoko = ref(10);
 
-  private queryImplDebounce = _.debounce(this.queryImpl, 300);
-  private tulokset: any[] | null = null;
-  private sivu = 1;
-  private sivukoko = 10;
+const queryImplDebounce = _.debounce(queryImpl, 300);
 
-  async queryImpl(query) {
-    if (query.length > 2) {
-      this.tulokset = null;
-      const julkaisu = await this.perusteDataStore.peruste;
-      const result: any[] = [];
-      deepFind(julkaisu, [], result, _.toLower(query));
-      this.tulokset = result;
-    }
-  }
-
-  clear() {
-    this.query = '';
-  }
-
-  get tuloksetSorted() {
-    return _.chain(this.tulokset)
-      .map(tulos => {
-        var numerointi = _.find(this.perusteDataStore.flattenedSidenav, { location: tulos.location })?.meta?.numerointi;
-        return {
-          ...tulos,
-          numerointi,
-          nimi: (numerointi || '') + ' '
-                + (this.$kaanna(tulos.target.perusteenOsa.nimi) || this.$t(tulos.osanTyyppi))
-                + (tulos.target.perusteenOsa?.meta?.nimi ? ', ' + this.$t(tulos.target.perusteenOsa.meta?.nimi) : ''),
-        };
-      })
-      .sortBy(tulos => tulos.target.perusteenOsa?.meta?.nimi || 99)
-      .sortBy(tulos => typeSort[tulos.type])
-      .slice((this.sivu - 1) * this.sivukoko, this.sivu * this.sivukoko)
-      .value();
-  }
-
-  get kokonaismaara() {
-    return this.tulokset?.length;
+async function queryImpl(query: string) {
+  if (query.length > 2) {
+    tulokset.value = null;
+    const julkaisu = await perusteDataStore.peruste;
+    const result: any[] = [];
+    deepFind(julkaisu, [], result, _.toLower(query));
+    tulokset.value = result;
   }
 }
+
+function clear() {
+  emit('clear');
+}
+
+const tuloksetSorted = computed(() => {
+  return _.chain(tulokset.value)
+    .map(tulos => {
+      var numerointi = _.find(perusteDataStore.flattenedSidenav, { location: tulos.location })?.meta?.numerointi;
+      return {
+        ...tulos,
+        numerointi,
+        nimi: (numerointi || '') + ' '
+              + ($kaanna(tulos.target.perusteenOsa.nimi) || $t(tulos.osanTyyppi))
+              + (tulos.target.perusteenOsa?.meta?.nimi ? ', ' + $t(tulos.target.perusteenOsa.meta?.nimi) : ''),
+      };
+    })
+    .sortBy(tulos => tulos.target.perusteenOsa?.meta?.nimi || 99)
+    .sortBy(tulos => typeSort[tulos.type])
+    .slice((sivu.value - 1) * sivukoko.value, sivu.value * sivukoko.value)
+    .value();
+});
+
+const kokonaismaara = computed(() => {
+  return tulokset.value?.length;
+});
+
+watch(() => props.query, (newValue) => {
+  queryImplDebounce(newValue);
+}, { immediate: true });
 </script>
 
 <style scoped lang="scss">
@@ -163,5 +155,4 @@ export default class EpPerusteHaku extends Vue {
   }
 
 }
-
 </style>

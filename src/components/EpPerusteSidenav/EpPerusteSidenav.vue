@@ -14,63 +14,54 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { computed } from 'vue';
+
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSearch,
-    EpSpinner,
-    EpSidenavNode,
-  },
-})
-export default class EpPerusteSidenav extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  getChildren(node) {
-    const type = node.type;
-    const current = this.current;
-    const parent = node.path[_.size(node.path) - 2];
+const sidenavLoading = computed(() => {
+  return perusteDataStore.sidenavLoading;
+});
 
-    const isCurrentOrParentSelected = (current && (node.key === current.key
-        || (parent && parent.key === current.key && current.type !== 'oppiaineet')));
-    const isErikoistyyppi = type === 'oppiaineet'
-        || type === 'oppiaine'
-        || type === 'lukiooppiaineet_2015'
-        || type === 'lukiooppimaarat_2015'
-        || type === 'lukiokurssit'
-        || type === 'oppimaarat'
-        || type === 'poppiaine'
-        || type === 'moduulit'
-        || type === 'moduuli'
-        || type === 'kurssit';
+const treeData = computed(() => {
+  return perusteDataStore.collapsedSidenav;
+});
 
-    if (isCurrentOrParentSelected && isErikoistyyppi) {
-      return node.children;
-    }
-    else {
-      return _.filter(node.children, 'isVisible');
-    }
+const current = computed(() => {
+  return perusteDataStore.current;
+});
+
+const getChildren = (node) => {
+  const type = node.type;
+  const currentValue = current.value;
+  const parent = node.path[_.size(node.path) - 2];
+
+  const isCurrentOrParentSelected = (currentValue && (node.key === currentValue.key
+      || (parent && parent.key === currentValue.key && currentValue.type !== 'oppiaineet')));
+  const isErikoistyyppi = type === 'oppiaineet'
+      || type === 'oppiaine'
+      || type === 'lukiooppiaineet_2015'
+      || type === 'lukiooppimaarat_2015'
+      || type === 'lukiokurssit'
+      || type === 'oppimaarat'
+      || type === 'poppiaine'
+      || type === 'moduulit'
+      || type === 'moduuli'
+      || type === 'kurssit';
+
+  if (isCurrentOrParentSelected && isErikoistyyppi) {
+    return node.children;
   }
-
-  get sidenavLoading() {
-    return this.perusteDataStore.sidenavLoading;
+  else {
+    return _.filter(node.children, 'isVisible');
   }
-
-  get treeData() {
-    return this.perusteDataStore.collapsedSidenav;
-  }
-
-  get current() {
-    return this.perusteDataStore.current;
-  }
-}
+};
 </script>
 
 <style scoped lang="scss">

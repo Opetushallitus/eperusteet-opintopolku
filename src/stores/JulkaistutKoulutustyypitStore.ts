@@ -1,4 +1,5 @@
-import  { reactive, computed } from '@vue/composition-api';
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 import _ from 'lodash';
 import { Perusteet, KoulutustyyppiLukumaara, findAllJulkaisut, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { createLogger } from '@shared/utils/logger';
@@ -7,41 +8,52 @@ import { Page } from '@shared/tyypit';
 
 const logger = createLogger('Main');
 
-export class JulkaistutKoulutustyypitStore {
-  public state = reactive({
-    koulutustyyppiLukumaarat: null as KoulutustyyppiLukumaara[] | null,
-    muuLukumaarat: null as number | null,
-    digitaalinenOsaaminen: null as PerusteenJulkaisuData[] | null,
-  });
+export const useJulkaistutKoulutustyypitStore = defineStore('julkaistutKoulutustyypit', () => {
+  // State as refs
+  const koulutustyyppiLukumaarat = ref<KoulutustyyppiLukumaara[] | null>(null);
+  const muuLukumaarat = ref<number | null>(null);
+  const digitaalinenOsaaminen = ref<PerusteenJulkaisuData[] | null>(null);
 
-  public readonly koulutustyyppiLukumaarat = computed(() => this.state.koulutustyyppiLukumaarat);
-  public readonly julkaistutKoulutustyypit = computed(() => {
-    if (!this.state.koulutustyyppiLukumaarat || _.isNil(this.state.muuLukumaarat) || !this.state.digitaalinenOsaaminen) {
+  // Getters as computed properties
+  const julkaistutKoulutustyypit = computed(() => {
+    if (!koulutustyyppiLukumaarat.value || _.isNil(muuLukumaarat.value) || !digitaalinenOsaaminen.value) {
       return null;
     }
 
     return _.filter([
-      ..._.map(this.state.koulutustyyppiLukumaarat, 'koulutustyyppi'),
-      ...(!!this.state.muuLukumaarat && this.state.muuLukumaarat > 0 ? ['koulutustyyppi_muu'] : []),
-      ...(!!this.state.digitaalinenOsaaminen && this.state.digitaalinenOsaaminen.length > 0 ? ['koulutustyyppi_digi'] : []),
+      ..._.map(koulutustyyppiLukumaarat.value, 'koulutustyyppi'),
+      ...(!!muuLukumaarat.value && muuLukumaarat.value > 0 ? ['koulutustyyppi_muu'] : []),
+      ...(!!digitaalinenOsaaminen.value && digitaalinenOsaaminen.value.length > 0 ? ['koulutustyyppi_digi'] : []),
     ]);
   });
-  public readonly muuLukumaarat = computed(() => this.state.muuLukumaarat);
-  public readonly digitaalinenOsaaminen = computed(() => this.state.digitaalinenOsaaminen);
 
-  public async fetch(kieli) {
-    this.state.koulutustyyppiLukumaarat = null;
-    this.state.muuLukumaarat = null;
-    this.state.digitaalinenOsaaminen = null;
+  // Actions as functions
+  async function fetch(kieli) {
+    koulutustyyppiLukumaarat.value = null;
+    muuLukumaarat.value = null;
+    digitaalinenOsaaminen.value = null;
 
     try {
-      this.state.koulutustyyppiLukumaarat = (await Perusteet.getJulkaistutKoulutustyyppiLukumaarat(kieli)).data;
-      this.state.muuLukumaarat = (((await getJulkisetOpetussuunnitelmat({ jotpatyyppi: ['MUU', 'VST'], kieli, sivukoko: 1 })).data) as Page<OpetussuunnitelmaDto>).kokonaismäärä;
-      this.state.digitaalinenOsaaminen = ((((await findAllJulkaisut({ tyyppi: 'digitaalinen_osaaminen' })).data) as Page<PerusteenJulkaisuData>).data);
+      koulutustyyppiLukumaarat.value = (await Perusteet.getJulkaistutKoulutustyyppiLukumaarat(kieli)).data;
+      muuLukumaarat.value = (((await getJulkisetOpetussuunnitelmat({ jotpatyyppi: ['MUU', 'VST'], kieli, sivukoko: 1 })).data) as Page<OpetussuunnitelmaDto>).kokonaismäärä;
+      digitaalinenOsaaminen.value = ((((await findAllJulkaisut({ tyyppi: 'digitaalinen_osaaminen' })).data) as Page<PerusteenJulkaisuData>).data);
     }
     catch (e) {
       logger.error(e);
-      this.state.koulutustyyppiLukumaarat = [];
+      koulutustyyppiLukumaarat.value = [];
     }
   }
-}
+
+  return {
+    // State
+    koulutustyyppiLukumaarat,
+    muuLukumaarat,
+    digitaalinenOsaaminen,
+
+    // Getters
+    julkaistutKoulutustyypit,
+
+    // Actions
+    fetch,
+  };
+});

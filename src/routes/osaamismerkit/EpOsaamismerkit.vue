@@ -61,62 +61,64 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, getCurrentInstance } from 'vue';
 import _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpVoimassaolo,
+const props = defineProps({
+  osaamismerkit: {
+    type: Array as () => OsaamismerkkiBaseDto[],
+    required: true,
   },
-})
-export default class EpOsaamismerkit extends Vue {
-  @Prop({ required: true })
-  private osaamismerkit!: OsaamismerkkiBaseDto[];
+  osaamismerkkiKategoriat: {
+    type: Array as () => OsaamismerkkiKategoriaDto[],
+    required: true,
+  },
+  hideKuvaus: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  @Prop({ required: true })
-  private osaamismerkkiKategoriat!: OsaamismerkkiKategoriaDto[];
+const generateImageUrl = (liite) => {
+  return liite ? 'data:' + liite.mime + ';base64,' + liite.binarydata : null;
+};
 
-  @Prop({ required: false, default: false, type: Boolean })
-  private hideKuvaus?: boolean;
+const isVanhentunut = (osaamismerkki) => {
+  let currentDate = new Date(new Date().setHours(0, 0, 0, 0));
+  return osaamismerkki.voimassaoloLoppuu && _.toNumber(osaamismerkki.voimassaoloLoppuu) < currentDate.getTime();
+};
 
-  generateImageUrl(liite) {
-    return liite ? 'data:' + liite.mime + ';base64,' + liite.binarydata : null;
-  }
-
-  get osaamismerkitMapped() {
-    if (this.osaamismerkit) {
-      return _.chain(this.osaamismerkit)
-        .filter(osaamismerkki => !!osaamismerkki?.nimi && !!osaamismerkki.nimi[Kielet.getSisaltoKieli.value])
-        .map(osaamismerkki => ({
-          ...osaamismerkki,
-          image: this.generateImageUrl(osaamismerkki.kategoria?.liite),
-          isVanhentunut: this.isVanhentunut(osaamismerkki),
-        }))
-        .sortBy(om => Kielet.sortValue(om.nimi))
-        .value();
-    }
-  }
-
-  get kategoriaGroup() {
-    return _.chain(this.osaamismerkkiKategoriat)
-      .sortBy(kategoria => this.$kaanna(kategoria.nimi))
-      .map(kategoria => ({
-        ...kategoria,
-        osaamismerkit: _.filter(this.osaamismerkitMapped, osaamismerkki => osaamismerkki.kategoria?.id === kategoria.id),
+const osaamismerkitMapped = computed(() => {
+  if (props.osaamismerkit) {
+    return _.chain(props.osaamismerkit)
+      .filter(osaamismerkki => !!osaamismerkki?.nimi && !!osaamismerkki.nimi[Kielet.getSisaltoKieli.value])
+      .map(osaamismerkki => ({
+        ...osaamismerkki,
+        image: generateImageUrl(osaamismerkki.kategoria?.liite),
+        isVanhentunut: isVanhentunut(osaamismerkki),
       }))
-      .filter(kategoria => kategoria.osaamismerkit.length > 0)
+      .sortBy(om => Kielet.sortValue(om.nimi))
       .value();
   }
+  return [];
+});
 
-  private isVanhentunut(osaamismerkki) {
-    let currentDate = new Date(new Date().setHours(0, 0, 0, 0));
-    return osaamismerkki.voimassaoloLoppuu && _.toNumber(osaamismerkki.voimassaoloLoppuu) < currentDate.getTime();
-  }
-}
+const kategoriaGroup = computed(() => {
+  return _.chain(props.osaamismerkkiKategoriat)
+    .sortBy(kategoria => $kaanna(kategoria.nimi))
+    .map(kategoria => ({
+      ...kategoria,
+      osaamismerkit: _.filter(osaamismerkitMapped.value, osaamismerkki => osaamismerkki.kategoria?.id === kategoria.id),
+    }))
+    .filter(kategoria => kategoria.osaamismerkit.length > 0)
+    .value();
+});
 </script>
 
 <style scoped lang="scss">

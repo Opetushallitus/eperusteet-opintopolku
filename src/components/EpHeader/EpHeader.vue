@@ -58,7 +58,7 @@
       </div>
     </div>
     <div
-      v-if="$slots['default']"
+      v-if="hasDefaultSlot"
       id="main"
       class="container-lg sisalto"
     >
@@ -67,8 +67,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
 import {
   koulutustyyppiTheme,
   koulutustyyppiThemeColor,
@@ -78,60 +77,63 @@ import {
 import { MurupolkuOsa } from '@/tyypit';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import _ from 'lodash';
+import { hasSlotContent } from '@shared/utils/vue-utils';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useSlots } from 'vue';
+import { $kaannaOlioTaiTeksti, $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpMaterialIcon,
-  },
-})
-export default class EpHeader extends Vue {
-  @Prop({ required: true })
-  private murupolku!: MurupolkuOsa[];
+const props = defineProps<{
+  murupolku: MurupolkuOsa[];
+  koulutustyyppi?: string;
+  tyyppi?: string;
+}>();
 
-  @Prop({ required: false, type: String })
-  private koulutustyyppi!: string;
+const slots = useSlots();
+const route = useRoute();
 
-  @Prop({ required: false, type: String })
-  private tyyppi!: string;
+const hasDefaultSlot = computed(() => {
+  return hasSlotContent(slots.default);
+});
 
-  get murupolkuFiltered() {
-    return _.filter(this.murupolku, (muru) => muru.label && muru.type !== 'root');
+const murupolkuFiltered = computed(() => {
+  return _.filter(props.murupolku, (muru) => muru.label && muru.type !== 'root');
+});
+
+const routeKoulutustyyppi = computed(() => {
+  return route?.params?.koulutustyyppi as string | undefined;
+});
+
+const theme = computed(() => {
+  if (props.koulutustyyppi) {
+    return 'koulutustyyppi-' + koulutustyyppiTheme(props.koulutustyyppi);
   }
-
-  get theme() {
-    if (this.koulutustyyppi) {
-      return 'koulutustyyppi-' + koulutustyyppiTheme(this.koulutustyyppi);
-    }
-    else if (this.routeKoulutustyyppi && _.includes(kouluturtyyppiRyhmat, this.routeKoulutustyyppi)) {
-      return 'koulutustyyppi-' + this.routeKoulutustyyppi;
-    }
-    if (this.tyyppi) {
-      return 'tyyppi-' + this.tyyppi;
-    }
+  else if (routeKoulutustyyppi.value && _.includes(kouluturtyyppiRyhmat, routeKoulutustyyppi.value)) {
+    return 'koulutustyyppi-' + routeKoulutustyyppi.value;
   }
-
-  get routeKoulutustyyppi() {
-    return this.$route?.params?.koulutustyyppi;
+  if (props.tyyppi) {
+    return 'tyyppi-' + props.tyyppi;
   }
+  return '';
+});
 
-  get bgColor() {
-    return koulutustyyppiThemeColor(this.koulutustyyppi || this.tyyppi || this.routeKoulutustyyppi);
-  }
+const bgColor = computed(() => {
+  return koulutustyyppiThemeColor(props.koulutustyyppi || props.tyyppi || routeKoulutustyyppi.value);
+});
 
-  get textColor() {
-    return calculateVisibleColor(this.bgColor, 125);
-  }
+const textColor = computed(() => {
+  return calculateVisibleColor(bgColor.value, 125);
+});
 
-  get isBlack() {
-    return this.textColor === 'black';
-  }
+const isBlack = computed(() => {
+  return textColor.value === 'black';
+});
 
-  get style() {
-    return {
-      color: this.isBlack ? '#001A58' : '#fff',
-    };
-  }
-}
+const style = computed(() => {
+  return {
+    color: isBlack.value ? '#001A58' : '#fff',
+  };
+});
 </script>
 
 <style scoped lang="scss">
@@ -252,11 +254,11 @@ export default class EpHeader extends Vue {
       align-self: end
     }
 
-    &.black ::v-deep li, &.black ::v-deep li::before, &.black ::v-deep li a {
+    &.black :deep(li), &.black :deep(li::before), &.black :deep(li a) {
       color: #001A58;
     }
 
-    &.white ::v-deep li, &.white ::v-deep li::before, &.white ::v-deep li a {
+    &.white :deep(li), &.white :deep(li::before), &.white :deep(li a) {
       color: white;
     }
     .router-link-exact-active.router-link-active {
@@ -300,5 +302,4 @@ export default class EpHeader extends Vue {
   margin-top: $sisalto-container-margin;
   margin-bottom: $sisalto-container-margin;
 }
-
 </style>

@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import { PerusteHakuDto, Oppaat, PerusteQuery } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { ryhmat } from '@shared/utils/perusteet';

@@ -1,25 +1,47 @@
-import { Store, State } from '@shared/stores/store';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 import { LukioOpetussuunnitelmat, LukioOppiaineTiedotDto } from '@shared/api/ylops';
 
-@Store
+export const useLopsOpetussuunnitelmaOppiaineStore = defineStore('lopsOpetussuunnitelmaOppiaine', () => {
+  // State
+  const opsId = ref<number>(0);
+  const oppiaineId = ref<number>(0);
+  const oppiaine = ref<LukioOppiaineTiedotDto | null>(null);
+
+  // Actions
+  const create = async (oId: number, opId: number) => {
+    opsId.value = oId;
+    oppiaineId.value = opId;
+    await fetchOppiaine();
+    return {
+      opsId,
+      oppiaineId,
+      oppiaine,
+      fetchOppiaine,
+    };
+  };
+
+  const fetchOppiaine = async () => {
+    oppiaine.value = null;
+    oppiaine.value = (await LukioOpetussuunnitelmat.getLukioOppiaine(opsId.value, oppiaineId.value)).data;
+  };
+
+  return {
+    // State
+    opsId,
+    oppiaineId,
+    oppiaine,
+
+    // Actions
+    create,
+    fetchOppiaine,
+  };
+});
+
+// For backward compatibility with components that use the class directly
 export class LopsOpetussuunnitelmaOppiaineStore {
-  @State() public opsId: number;
-  @State() public oppiaineId: number;
-  @State() public oppiaine: LukioOppiaineTiedotDto | null = null;
-
-  public static async create(opsId: number, oppiaineId: number) {
-    const store = new LopsOpetussuunnitelmaOppiaineStore(opsId, oppiaineId);
-    store.fetchOppiaine();
-    return store;
-  }
-
-  constructor(opsId: number, oppiaineId: number) {
-    this.opsId = opsId;
-    this.oppiaineId = oppiaineId;
-  }
-
-  async fetchOppiaine() {
-    this.oppiaine = null;
-    this.oppiaine = (await LukioOpetussuunnitelmat.getLukioOppiaine(this.opsId, this.oppiaineId)).data;
+  static async create(opsId: number, oppiaineId: number) {
+    const store = useLopsOpetussuunnitelmaOppiaineStore();
+    return store.create(opsId, oppiaineId);
   }
 }

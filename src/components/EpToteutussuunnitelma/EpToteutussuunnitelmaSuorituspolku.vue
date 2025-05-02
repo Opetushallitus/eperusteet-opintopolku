@@ -54,173 +54,170 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { Matala, OpetussuunnitelmaKaikkiDto } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import * as _ from 'lodash';
-import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { flattenTree } from '@shared/utils/helpers';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpPerusteRakenne,
-    EpSpinner,
-    EpColorIndicator,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaSuorituspolku extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  opetussuunnitelma: {
+    type: Object as () => OpetussuunnitelmaKaikkiDto,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  @Prop({ required: true })
-  private opetussuunnitelma!: OpetussuunnitelmaKaikkiDto;
+const rakenne = computed((): any => {
+  const suorituspolku = _.find(props.opetussuunnitelma.suorituspolut, polku => polku.sisaltoviiteId === props.sisaltoviite.id);
 
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+  return {
+    ...suorituspolku,
+    osat: lisaaTutkinnonOsat(suorituspolku?.osat || []),
+  };
+});
 
-  get rakenne(): any {
-    const suorituspolku = _.find(this.opetussuunnitelma.suorituspolut, polku => polku.sisaltoviiteId === this.sisaltoviite.id);
-
+const lisaaTutkinnonOsat = (osat: any[]) => {
+  return _.map(osat, osa => {
+    const perusteenTutkinnonosaViite = perusteidenTutkinnonosienViitteetById.value[_.toNumber(osa['_tutkinnonOsaViite'])];
+    const tutkinnonosa = tutkinnonosaViitteetById.value[_.toNumber(osa['_tutkinnonOsaViite'])];
     return {
-      ...suorituspolku,
-      osat: this.lisaaTutkinnonOsat(suorituspolku?.osat || []),
+      ...osa,
+      tutkinnonosa: {
+        ...(!!tutkinnonosa && tutkinnonosa),
+        ...(!!perusteenTutkinnonosaViite && { perusteenTutkinnonosaViite: perusteenTutkinnonosaViite }),
+        ...(!!perusteenTutkinnonosaViite && { perusteenTutkinnonosa: perusteidenTutkinnonOsatById.value[_.toNumber(_.get(perusteenTutkinnonosaViite, '_tutkinnonOsa'))] }),
+      },
+      osat: lisaaTutkinnonOsat(osa.osat),
     };
-  }
+  });
+};
 
-  private lisaaTutkinnonOsat(osat: any[]) {
-    return _.map(osat, osa => {
-      const perusteenTutkinnonosaViite = this.perusteidenTutkinnonosienViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])];
-      const tutkinnonosa = this.tutkinnonosaViitteetById[_.toNumber(osa['_tutkinnonOsaViite'])];
+const rakenneTutkinnonOsilla = computed(() => {
+  if (rakenne.value) {
+    return setTutkinnonOsaViitteet(rakenne.value.osat);
+  }
+  return undefined;
+});
+
+const setTutkinnonOsaViitteet = (osat: any[]) => {
+  return _.chain(osat)
+    .map(osa => {
+      let paikallisetOsat: any[] = [];
+      if (_.size(osa.paikallinenKuvaus?.koodit) > 0) {
+        paikallisetOsat = paikallisetTutkinnonOsatKoodeistaOsiksi(_.map(osa.paikallinenKuvaus?.koodit, koodi => trimkoodiarvo(koodi)));
+      }
+
       return {
         ...osa,
-        tutkinnonosa: {
-          ...(!!tutkinnonosa && tutkinnonosa),
-          ...(!!perusteenTutkinnonosaViite && { perusteenTutkinnonosaViite: perusteenTutkinnonosaViite }),
-          ...(!!perusteenTutkinnonosaViite && { perusteenTutkinnonosa: this.perusteidenTutkinnonOsatById[_.toNumber(_.get(perusteenTutkinnonosaViite, '_tutkinnonOsa'))] }),
-        },
-        osat: this.lisaaTutkinnonOsat(osa.osat),
+        osat: setTutkinnonOsaViitteet([
+          ...(osa.osat ? osa.osat : []),
+          ...paikallisetOsat,
+        ]),
       };
-    });
+    })
+    .value();
+};
+
+const paikallisetTutkinnonOsatKoodeistaOsiksi = (koodit): any[] => {
+  return _.map(koodit, koodi => {
+    return {
+      tutkinnonosa: _.find(tutkinnonosaViitteet.value, tosaviite => trimkoodiarvo(tosaviite?.tosa?.omatutkinnonosa?.koodi) === koodi || trimkoodiarvo(tosaviite?.tosa?.koodi) === koodi),
+    };
+  });
+};
+
+const trimkoodiarvo = (koodi) => {
+  return _.trim(_.split(koodi, '_')[_.size(_.split(koodi, '_')) - 1]);
+};
+
+const filteredRakenneOsat = computed(() => {
+  if (rakenne.value) {
+    return filterRakenneOsat(rakenneTutkinnonOsilla.value);
   }
+  return undefined;
+});
 
-  get rakenneTutkinnonOsilla() {
-    if (this.rakenne) {
-      return this.setTutkinnonOsaViitteet(this.rakenne.osat);
-    }
-  }
-
-  private setTutkinnonOsaViitteet(osat: any[]) {
-    return _.chain(osat)
-      .map(osa => {
-        let paikallisetOsat: any[] = [];
-        if (_.size(osa.paikallinenKuvaus?.koodit) > 0) {
-          paikallisetOsat = this.paikallisetTutkinnonOsatKoodeistaOsiksi(_.map(osa.paikallinenKuvaus?.koodit, koodi => this.trimkoodiarvo(koodi)));
-        }
-
-        return {
-          ...osa,
-          osat: this.setTutkinnonOsaViitteet([
-            ...(osa.osat ? osa.osat : []),
-            ...paikallisetOsat,
-          ]),
-        };
-      })
-      .value();
-  }
-
-  paikallisetTutkinnonOsatKoodeistaOsiksi(koodit): any[] {
-    return _.map(koodit, koodi => {
+const filterRakenneOsat = (osat: any[]) => {
+  return _.chain(osat)
+    .filter(osa => !_.includes(piilotetutTunnisteet.value, osa.tunniste))
+    .map(osa => {
       return {
-        tutkinnonosa: _.find(this.tutkinnonosaViitteet, tosaviite => this.trimkoodiarvo(tosaviite?.tosa?.omatutkinnonosa?.koodi) === koodi || this.trimkoodiarvo(tosaviite?.tosa?.koodi) === koodi),
+        ...osa,
+        osat: filterRakenneOsat(osa.osat),
       };
-    });
-  }
+    })
+    .value();
+};
 
-  trimkoodiarvo(koodi) {
-    return _.trim(_.split(koodi, '_')[_.size(_.split(koodi, '_')) - 1]);
-  }
+const julkaistuTutkinnonosaViitteet = computed(() => {
+  const tutkinnonosatViite = opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' });
+  return _.filter(flattenTree(tutkinnonosatViite, 'lapset'), viite => viite.tyyppi === 'tutkinnonosa');
+});
 
-  get filteredRakenneOsat() {
-    if (this.rakenne) {
-      return this.filterRakenneOsat(this.rakenneTutkinnonOsilla);
-    }
-  }
+const julkaistutTutkinnonOsat = computed(() => {
+  return _.filter(opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat'), tosa => tosa.tyyppi === 'tutkinnonosa');
+});
 
-  private filterRakenneOsat(osat: any[]) {
-    return _.chain(osat)
-      .filter(osa => !_.includes(this.piilotetutTunnisteet, osa.tunniste))
-      .map(osa => {
-        return {
-          ...osa,
-          osat: this.filterRakenneOsat(osa.osat),
-        };
-      })
-      .value();
-  }
+const perusteenTutkinnonosaViite = (perusteenTutkinnonosaId) => {
+  return _.find(opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite => _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(perusteenTutkinnonosaId));
+};
 
-  get julkaistuTutkinnonosaViitteet() {
-    const tutkinnonosatViite = this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'tyyppi': 'tutkinnonosat' });
-    return _.filter(flattenTree(tutkinnonosatViite, 'lapset'), viite => viite.tyyppi === 'tutkinnonosa');
-  }
+const perusteenTutkinnonosa = (perusteenTutkinnonosaId) => {
+  return _.find(opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, perusteTosa => perusteTosa.id === perusteenTutkinnonosaId);
+};
 
-  get julkaistutTutkinnonOsat() {
-    return _.filter(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat'), tosa => tosa.tyyppi === 'tutkinnonosa');
-  }
+const tutkinnonosaViitteet = computed(() => {
+  return _.chain(julkaistuTutkinnonosaViitteet.value)
+    .map(tutkinnonosaViite => {
+      const tutkinnonosa = _.find(julkaistutTutkinnonOsat.value, tutkinnonosa => tutkinnonosa.tosa.id === tutkinnonosaViite.tosa.id);
+      return {
+        ...tutkinnonosaViite,
+        perusteenTutkinnonosaViite: perusteenTutkinnonosaViite(tutkinnonosa.tosa.perusteentutkinnonosa),
+        perusteenTutkinnonosa: perusteenTutkinnonosa(tutkinnonosa.tosa.perusteentutkinnonosa),
+        tosa: tutkinnonosa.tosa,
+      };
+    })
+    .sortBy('perusteenTutkinnonosaViite.jarjestys')
+    .value();
+});
 
-  get tutkinnonosaViitteet() {
-    return _.chain(this.julkaistuTutkinnonosaViitteet)
-      .map(tutkinnonosaViite => {
-        const tutkinnonosa = _.find(this.julkaistutTutkinnonOsat, tutkinnonosa => tutkinnonosa.tosa.id === tutkinnonosaViite.tosa.id);
-        return {
-          ...tutkinnonosaViite,
-          perusteenTutkinnonosaViite: this.perusteenTutkinnonosaViite(tutkinnonosa.tosa.perusteentutkinnonosa),
-          perusteenTutkinnonosa: this.perusteenTutkinnonosa(tutkinnonosa.tosa.perusteentutkinnonosa),
-          tosa: tutkinnonosa.tosa,
-        };
-      })
-      .sortBy('perusteenTutkinnonosaViite.jarjestys')
-      .value();
-  }
+const tutkinnonosaViitteetById = computed(() => {
+  return _.keyBy(tutkinnonosaViitteet.value, 'perusteenTutkinnonosaViite.id');
+});
 
-  get tutkinnonosaViitteetById() {
-    return _.keyBy(this.tutkinnonosaViitteet, 'perusteenTutkinnonosaViite.id');
-  }
+const perusteidenTutkinnonosienViitteetById = computed(() => {
+  return _.keyBy(opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, 'id');
+});
 
-  perusteenTutkinnonosaViite(perusteenTutkinnonosaId) {
-    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite => _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(perusteenTutkinnonosaId));
-  }
+const perusteidenTutkinnonOsatById = computed(() => {
+  return _.keyBy(opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, 'id');
+});
 
-  perusteenTutkinnonosa(perusteenTutkinnonosaId) {
-    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, perusteTosa => perusteTosa.id === perusteenTutkinnonosaId);
-  }
+const piilotetutTunnisteet = computed(() => {
+  return _.chain(props.sisaltoviite.suorituspolku!.rivit)
+    .filter('piilotettu')
+    .map('rakennemoduuli')
+    .value();
+});
 
-  get perusteidenTutkinnonosienViitteetById() {
-    return _.keyBy(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, 'id');
-  }
-
-  get perusteidenTutkinnonOsatById() {
-    return _.keyBy(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, 'id');
-  }
-
-  get piilotetutTunnisteet() {
-    return _.chain(this.sisaltoviite.suorituspolku!.rivit)
-      .filter('piilotettu')
-      .map('rakennemoduuli')
-      .value();
-  }
-
-  get laajuus() {
-    return this.sisaltoviite?.suorituspolku?.osasuorituspolkuLaajuus;
-  }
-}
+const laajuus = computed(() => {
+  return props.sisaltoviite?.suorituspolku?.osasuorituspolkuLaajuus;
+});
 </script>
 
 <style scoped lang="scss">

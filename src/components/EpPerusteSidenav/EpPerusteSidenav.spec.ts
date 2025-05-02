@@ -1,5 +1,5 @@
 import { mount, createLocalVue } from '@vue/test-utils';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+
 import EpPerusteSidenav from './EpPerusteSidenav.vue';
 import EpSidenavNode from '../EpSidenav/EpSidenavNode.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';

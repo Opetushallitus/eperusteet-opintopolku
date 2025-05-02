@@ -123,161 +123,155 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import PerusteTile from './PerusteTile.vue';
 import * as _ from 'lodash';
-import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
+import { useAmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import { Meta } from '@shared/utils/decorators';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { murupolkuAmmatillinenRoot } from '@/utils/murupolku';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { useHead  } from '@unhead/vue';
+import { $t, $kaanna } from '@shared/utils/globals';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    PerusteTile,
-    EpJulkiLista,
-    EpSearch,
-    OpetussuunnitelmaTile,
-    EpBPagination,
-    EpHakutulosmaara,
-  },
-})
-export default class RouteKoosteAmmatillinen extends Vue {
-  @Prop({ required: true })
-  private ammatillinenPerusteKoosteStore!: AmmatillinenPerusteKoosteStore;
+const route = useRoute();
+const router = useRouter();
+const ammatillinenPerusteKoosteStore = useAmmatillinenPerusteKoosteStore(pinia);
 
-  private query = {
-    haku: null,
-    sivu: 0,
-  };
+const query = ref({
+  haku: <null | string> null,
+  sivu: 0,
+});
 
-  get koulutustyyppi() {
-    return 'ammatillinen';
+const koulutustyyppi = computed(() => {
+  return 'ammatillinen';
+});
+
+const peruste = computed(() => {
+  if (ammatillinenPerusteKoosteStore?.peruste) {
+    return {
+      ...ammatillinenPerusteKoosteStore.peruste,
+      laajuus: _.get(ammatillinenPerusteKoosteStore.peruste, 'suoritustavat[0].rakenne.muodostumisSaanto.laajuus.minimi'),
+    } as any;
   }
 
-  get murupolku() {
-    return [
-      murupolkuAmmatillinenRoot(this.koulutustyyppi),
-      {
-        label: this.peruste!.nimi!,
-        location: {
-          ...this.$route,
-        } as RawLocation,
+  return undefined;
+});
+
+const murupolku = computed(() => {
+  return [
+    murupolkuAmmatillinenRoot(koulutustyyppi.value),
+    {
+      label: peruste.value!.nimi!,
+      location: {
+        ...route,
       },
-    ];
+    },
+  ];
+});
+
+const tiedotteet = computed(() => {
+  if (ammatillinenPerusteKoosteStore.tiedotteet) {
+    return _.chain(ammatillinenPerusteKoosteStore.tiedotteet)
+      .sortBy('luotu')
+      .reverse()
+      .value();
   }
 
-  get tiedotteet() {
-    if (this.ammatillinenPerusteKoosteStore.tiedotteet.value) {
-      return _.chain(this.ammatillinenPerusteKoosteStore.tiedotteet.value)
-        .sortBy('luotu')
-        .reverse()
-        .value();
-    }
-  }
+  return undefined;
+});
 
-  get peruste() {
-    if (this.ammatillinenPerusteKoosteStore.peruste.value) {
-      return {
-        ...this.ammatillinenPerusteKoosteStore.peruste.value,
-        laajuus: _.get(this.ammatillinenPerusteKoosteStore.peruste.value, 'suoritustavat[0].rakenne.muodostumisSaanto.laajuus.minimi'),
-      } as any;
-    }
-  }
+const perusteRoute = computed(() => {
+  return { name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: _.toString(peruste.value!.id) } };
+});
 
-  get perusteRoute() {
-    return { name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: _.toString(this.peruste!.id) } };
-  }
+const opetussuunnitelmatPage = computed(() => {
+  return ammatillinenPerusteKoosteStore.opetussuunnitelmat;
+});
 
-  get opetussuunnitelmatPage() {
-    return this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value;
-  }
-
-  get opetussuunnitelmat(): any {
-    if (this.opetussuunnitelmatPage) {
-      return _.map(this.opetussuunnitelmatPage.data, (opetussuunnitelma: OpetussuunnitelmaDto) => (
-        {
-          ...opetussuunnitelma,
-          route: {
-            name: 'toteutussuunnitelma',
-            params: {
-              toteutussuunnitelmaId: _.toString(opetussuunnitelma.id),
-              koulutustyyppi: 'ammatillinen',
-            },
+const opetussuunnitelmat = computed(() => {
+  if (opetussuunnitelmatPage.value) {
+    return _.map(opetussuunnitelmatPage.value.data, (opetussuunnitelma: OpetussuunnitelmaDto) => (
+      {
+        ...opetussuunnitelma,
+        route: {
+          name: 'toteutussuunnitelma',
+          params: {
+            toteutussuunnitelmaId: _.toString(opetussuunnitelma.id),
+            koulutustyyppi: 'ammatillinen',
           },
-        }
-      ));
-    }
+        },
+      }
+    ));
   }
+  return [];
+});
 
-  get page() {
-    return this.opetussuunnitelmatPage!.sivu + 1;
+const page = computed({
+  get: () => {
+    return opetussuunnitelmatPage.value!.sivu + 1;
+  },
+  set: (value) => {
+    query.value = {
+      ...query.value,
+      sivu: value - 1,
+    };
+  },
+});
+
+const perPage = computed(() => {
+  return opetussuunnitelmatPage.value!.sivukoko;
+});
+
+const queryNimi = computed(() => {
+  return query.value.haku;
+});
+
+watch(queryNimi, () => {
+  query.value.sivu = 0;
+});
+
+watch(query, async (oldVal, newVal) => {
+  await fetch(query.value);
+
+  if (oldVal.sivu !== newVal.sivu) {
+    document.querySelector('.opetussuunnitelma-container a')?.focus();
   }
+}, { deep: true });
 
-  set page(page) {
-    this.query = {
-      ...this.query,
-      sivu: page - 1,
+const fetch = async (query) => {
+  if (_.size(query.haku) === 0 || _.size(query.haku) > 2) {
+    await ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.haku, sivu: query.sivu });
+  }
+};
+
+const avaaTiedote = (tiedote: TiedoteDto) => {
+  router.push({
+    name: 'uutinen',
+    params: {
+      tiedoteId: '' + tiedote.id,
+    },
+  });
+};
+
+// Meta information for the page
+useHead(() => {
+  if (peruste.value) {
+    return {
+      title: $kaanna(peruste.value.nimi),
     };
   }
-
-  get perPage() {
-    return this.opetussuunnitelmatPage!.sivukoko;
-  }
-
-  get queryNimi() {
-    return this.query.haku;
-  }
-
-  @Watch('queryNimi')
-  nimiChange() {
-    this.query.sivu = 0;
-  }
-
-  @Watch('query', { deep: true })
-  async queryChange(oldVal, newVal) {
-    await this.fetch(this.query);
-
-    if (oldVal.sivu !== newVal.sivu) {
-      (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
-    }
-  }
-
-  async fetch(query) {
-    if (_.size(query.haku) === 0 || _.size(query.haku) > 2) {
-      await this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.haku, sivu: query.sivu });
-    }
-  }
-
-  avaaTiedote(tiedote: TiedoteDto) {
-    this.$router.push({
-      name: 'uutinen',
-      params: {
-        tiedoteId: '' + tiedote.id,
-      },
-    });
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.peruste) {
-      return {
-        title: (this as any).$kaanna(this.peruste.nimi),
-      };
-    }
-  }
-}
+  return {};
+});
 </script>
 
 <style scoped lang="scss">

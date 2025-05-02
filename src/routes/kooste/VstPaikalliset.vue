@@ -85,9 +85,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -101,179 +101,166 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { isVstLukutaito } from '@shared/utils/perusteet';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpHeader,
-    EpSearch,
-    EpSpinner,
-    OpetussuunnitelmaTile,
-    EpMultiSelect,
-    EpBPagination,
-    EpVoimassaoloFilter,
+const props = defineProps({
+  paikallinenStore: {
+    type: Object as () => VapaasivistystyoPaikallisetStore,
+    required: true,
   },
-})
-export default class VstPaikalliset extends Vue {
-  @Prop({ required: true })
-  private paikallinenStore!: VapaasivistystyoPaikallisetStore;
+  perusteKoosteStore: {
+    type: Object as () => PerusteKoosteStore,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private perusteKoosteStore!: PerusteKoosteStore;
+const instance = getCurrentInstance();
+const valittuPeruste = ref(null);
+const perPage = ref(10);
+const kieli = computed(() => Kielet.getSisaltoKieli.value);
 
-  private valittuPeruste = null;
-  private perPage = 10;
-  private query = this.initQuery();
+const initQuery = () => {
+  return {
+    perusteenDiaarinumero: null,
+    perusteId: 0,
+    koulutustyyppi: [
+      Koulutustyyppi.vapaasivistystyo,
+      Koulutustyyppi.vapaasivistystyolukutaito,
+    ],
+    oppilaitosTyyppiKoodiUri: null,
+    nimi: null,
+    sivu: 0,
+    sivukoko: 10,
+    kieli: kieli.value,
+    tuleva: true,
+    voimassaolo: true,
+    poistunut: false,
+    jotpatyyppi: [
+      'NULL',
+      'VST',
+    ],
+  };
+};
 
-  async mounted() {
-    this.fetch();
+const query = ref(initQuery());
+
+onMounted(() => {
+  fetch();
+});
+
+const fetch = async () => {
+  if (_.size(queryNimi.value) === 0 || _.size(queryNimi.value) > 2) {
+    await props.paikallinenStore.fetchQuery(query.value);
   }
+};
 
-  async fetch() {
-    if (_.size(this.queryNimi) === 0 || _.size(this.queryNimi) > 2) {
-      await this.paikallinenStore.fetchQuery(this.query);
-    }
+const julkaistutPerusteet = computed(() => {
+  if (props.perusteKoosteStore.perusteJulkaisut) {
+    return _.chain(props.perusteKoosteStore.perusteJulkaisut.value)
+      .filter(julkaistuPeruste => !isVstLukutaito(julkaistuPeruste.koulutustyyppi))
+      .map(julkaistuPeruste => ({
+        ...julkaistuPeruste,
+        kaannettyNimi: $kaanna(julkaistuPeruste.nimi!),
+      }))
+      .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
+      .value();
   }
+  return undefined;
+});
 
-  get perusteetOptions() {
-    if (this.julkaistutPerusteet) {
-      return [
-        {},
-        ...this.julkaistutPerusteet,
-      ];
-    }
-    return [];
+const perusteetOptions = computed(() => {
+  if (julkaistutPerusteet.value) {
+    return [
+      {},
+      ...julkaistutPerusteet.value,
+    ];
   }
+  return [];
+});
 
-  async setActivePeruste(perusteJulkaisu) {
-    if (perusteJulkaisu?.id) {
-      this.query.perusteId = _.toNumber(perusteJulkaisu.id);
-      this.query.perusteenDiaarinumero = perusteJulkaisu.diaarinumero;
-      this.query.sivu = 0;
-    }
-    else {
-      this.query = this.initQuery();
-    }
-    await this.fetch();
+const setActivePeruste = async (perusteJulkaisu) => {
+  if (perusteJulkaisu?.id) {
+    query.value.perusteId = _.toNumber(perusteJulkaisu.id);
+    query.value.perusteenDiaarinumero = perusteJulkaisu.diaarinumero;
+    query.value.sivu = 0;
   }
-
-  get julkaistutPerusteet() {
-    if (this.perusteKoosteStore.perusteJulkaisut) {
-      return _.chain(this.perusteKoosteStore.perusteJulkaisut.value)
-        .filter(julkaistuPeruste => !isVstLukutaito(julkaistuPeruste.koulutustyyppi))
-        .map(julkaistuPeruste => ({
-          ...julkaistuPeruste,
-          kaannettyNimi: this.$kaanna(julkaistuPeruste.nimi!),
-        }))
-        .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
-        .value();
-    }
+  else {
+    query.value = initQuery();
   }
+  await fetch();
+};
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get page() {
-    return this.opetussuunnitelmatPaged?.sivu! + 1;
-  }
-
-  set page(page) {
-    this.query = {
-      ...this.query,
+const page = computed({
+  get: () => opetussuunnitelmatPaged.value?.sivu! + 1,
+  set: (page) => {
+    query.value = {
+      ...query.value,
       sivu: page - 1,
     };
   }
+});
 
-  @Watch('kieli')
-  kieliChange(val) {
-    this.query = {
-      ...this.query,
-      kieli: val,
-    };
+const queryNimi = computed(() => query.value.nimi);
+
+watch(() => kieli.value, (val) => {
+  query.value = {
+    ...query.value,
+    kieli: val,
+  };
+});
+
+watch(() => queryNimi.value, () => {
+  query.value.sivu = 0;
+});
+
+watch(() => query.value, async (newVal, oldVal) => {
+  if (query.value.oppilaitosTyyppiKoodiUri === 'kaikki') {
+    query.value.oppilaitosTyyppiKoodiUri = null;
   }
+  await fetch();
 
-  get queryNimi() {
-    return this.query.nimi;
+  if (oldVal.sivu !== newVal.sivu && instance?.proxy?.$el) {
+    (instance?.proxy?.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
   }
+}, { deep: true });
 
-  @Watch('queryNimi')
-  nimiChange() {
-    this.query.sivu = 0;
-  }
+const opetussuunnitelmat = computed(() => {
+  return props.paikallinenStore.opetussuunnitelmat.value;
+});
 
-  @Watch('query', { deep: true })
-  async queryChange(oldVal, newVal) {
-    if (this.query.oppilaitosTyyppiKoodiUri === 'kaikki') {
-      this.query.oppilaitosTyyppiKoodiUri = null;
-    }
-    await this.fetch();
+const opetussuunnitelmatPaged = computed(() => {
+  return props.paikallinenStore.opetussuunnitelmatPaged.value;
+});
 
-    if (oldVal.sivu !== newVal.sivu) {
-      (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
-    }
-  }
+const total = computed(() => {
+  return opetussuunnitelmatPaged.value?.kokonaismäärä;
+});
 
-  get total() {
-    return this.opetussuunnitelmatPaged?.kokonaismäärä;
-  }
-
-  get opetussuunnitelmat() {
-    return this.paikallinenStore.opetussuunnitelmat.value;
-  }
-
-  get opetussuunnitelmatPaged() {
-    return this.paikallinenStore.opetussuunnitelmatPaged.value;
-  }
-
-  get opetussuunnitelmatMapped() {
-    return _.chain(this.opetussuunnitelmat)
-      .map(ops => ({
-        ...ops,
-        toimijat: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Koulutustoimija')),
-        oppilaitokset: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Oppilaitos')),
-        route: {
-          name: 'toteutussuunnitelma',
-          params: {
-            toteutussuunnitelmaId: _.toString(ops.id),
-            koulutustyyppi: 'vapaasivistystyo',
-          },
+const opetussuunnitelmatMapped = computed(() => {
+  return _.chain(opetussuunnitelmat.value)
+    .map(ops => ({
+      ...ops,
+      toimijat: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Koulutustoimija')),
+      oppilaitokset: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Oppilaitos')),
+      route: {
+        name: 'toteutussuunnitelma',
+        params: {
+          toteutussuunnitelmaId: _.toString(ops.id),
+          koulutustyyppi: 'vapaasivistystyo',
         },
-        voimassaoloTieto: voimassaoloTieto(ops),
-      }))
-      .sortBy(ops => Kielet.sortValue(ops.nimi))
-      .value();
-  }
+      },
+      voimassaoloTieto: voimassaoloTieto(ops),
+    }))
+    .sortBy(ops => Kielet.sortValue(ops.nimi))
+    .value();
+});
 
-  kaannaPerusteNimi(option) {
-    if (option.nimi) {
-      return this.$kaanna(option.nimi);
-    }
-    return this.$t('kaikki');
+const kaannaPerusteNimi = (option) => {
+  if (option.nimi) {
+    return $kaanna(option.nimi);
   }
-
-  private initQuery() {
-    return {
-      perusteenDiaarinumero: null,
-      perusteId: 0,
-      koulutustyyppi: [
-        Koulutustyyppi.vapaasivistystyo,
-        Koulutustyyppi.vapaasivistystyolukutaito,
-      ],
-      oppilaitosTyyppiKoodiUri: null,
-      nimi: null,
-      sivu: 0,
-      sivukoko: 10,
-      kieli: this.kieli,
-      tuleva: true,
-      voimassaolo: true,
-      poistunut: false,
-      jotpatyyppi: [
-        'NULL',
-        'VST',
-      ],
-    };
-  }
-}
+  return instance?.proxy?.$t('kaikki');
+};
 </script>
 
 <style scoped lang="scss">
@@ -282,7 +269,7 @@ export default class VstPaikalliset extends Vue {
 
 .paikalliset {
 
-  ::v-deep .filter {
+  :deep(.filter) {
     max-width: 100%;
   }
 

@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import { TiedoteDto, Tiedotteet, PageTiedoteDto } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { ITiedotteetProvider } from '@shared/stores/types';

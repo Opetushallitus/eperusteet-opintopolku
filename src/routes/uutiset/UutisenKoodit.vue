@@ -48,30 +48,27 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Prop, Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { KoodiPerusteella } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { KoodiDto } from '@shared/api/eperusteet';
+import { $kaanna } from '@shared/utils/globals';
 import _ from 'lodash';
 
-@Component({
-  components: {
-    EpSpinner,
+const props = defineProps({
+  kooditPerusteilla: {
+    type: Array as () => KoodiPerusteella[],
+    required: true,
   },
-})
-export default class UutisenKoodit extends Vue {
-  @Prop({ required: true })
-  private kooditPerusteilla!: KoodiPerusteella[];
+});
 
-  get popovertarget() {
-    return this.kooditPerusteilla[0].uri;
-  }
+const popovertarget = computed(() => {
+  return props.kooditPerusteilla[0].uri;
+});
 
-  get perusteelliset() {
-    return _.filter(this.kooditPerusteilla, koodi => !_.isEmpty(koodi.perusteet));
-  }
-}
+const perusteelliset = computed(() => {
+  return _.filter(props.kooditPerusteilla, koodi => !_.isEmpty(koodi.perusteet));
+});
 </script>
 
 <style scoped lang="scss">
@@ -89,5 +86,4 @@ export default class UutisenKoodit extends Vue {
     background-color: $table-odd-row-bg-color;
   }
 }
-
 </style>

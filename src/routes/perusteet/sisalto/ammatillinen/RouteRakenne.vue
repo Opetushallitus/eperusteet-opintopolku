@@ -47,126 +47,115 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { ref, computed, useTemplateRef } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import PerusteRakenneOsa from '@/components/EpAmmatillinen/PerusteRakenneOsa.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    PerusteRakenneOsa,
-    EpButton,
-    EpSearch,
-    EpPerusteRakenne,
-    EpColorIndicator,
-  },
-})
-export default class RouteRakenne extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  private naytaRakenteet = false;
-  private naytaKuvaukset = false;
-  private query = '';
+const naytaRakenteet = ref(false);
+const naytaKuvaukset = ref(false);
+const query = ref('');
+const rakenneosa = useTemplateRef('rakenneosa');
 
-  get peruste() {
-    return this.perusteDataStore.peruste;
-  }
+const peruste = computed(() => {
+  return perusteDataStore.peruste;
+});
 
-  get rakenne(): any {
-    return _.get(_.first(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat')), 'rakenne');
-  }
+const rakenne = computed((): any => {
+  return _.get(_.first(perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat')), 'rakenne');
+});
 
-  get rakenneOsat() {
-    return this.setRakenneOsaKoodi(this.rakenne?.osat);
-  }
+const perusteenTutkinnonosaViitteetById = computed(() => {
+  return _.keyBy(_.chain(perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat'))
+    .map(st => st.tutkinnonOsaViitteet)
+    .flatMap()
+    .value(), 'id');
+});
 
-  get perusteenTutkinnonosaViitteetById() {
-    return _.keyBy(_.chain(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat'))
-      .map(st => st.tutkinnonOsaViitteet)
-      .flatMap()
-      .value(), 'id');
-  }
+const perusteenTutkinnonosatById = computed(() => {
+  return _.keyBy(perusteDataStore.getJulkaistuPerusteSisalto('tutkinnonOsat'), 'id');
+});
 
-  get perusteenTutkinnonosatById() {
-    return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('tutkinnonOsat'), 'id');
-  }
-
-  setRakenneOsaKoodi(rakenneOsat) {
-    return _.map(rakenneOsat, rakenneosa => {
-      let tutkinnonosaviite;
-      let tutkinnonOsa;
-      if (_.get(rakenneosa, '_tutkinnonOsaViite')) {
-        tutkinnonosaviite = this.perusteenTutkinnonosaViitteetById[_.get(rakenneosa, '_tutkinnonOsaViite')];
-        tutkinnonOsa = this.perusteenTutkinnonosatById[_.get(tutkinnonosaviite, '_tutkinnonOsa')];
-      }
-      return {
-        ...rakenneosa,
-        koodiArvo: this.getRakenneosaKoodiArvo(rakenneosa),
-        osat: this.setRakenneOsaKoodi(rakenneosa.osat),
-        ...(tutkinnonosaviite && { tutkinnonosa: {
-          ...tutkinnonosaviite,
-          tutkinnonOsa,
-        } }),
-      };
-    });
-  }
-
-  getRakenneosaKoodiArvo(rakenneosa) {
-    if (rakenneosa.tutkintonimike?.arvo) {
-      return rakenneosa.tutkintonimike?.arvo;
+const setRakenneOsaKoodi = (rakenneOsat) => {
+  return _.map(rakenneOsat, rakenneosa => {
+    let tutkinnonosaviite;
+    let tutkinnonOsa;
+    if (_.get(rakenneosa, '_tutkinnonOsaViite')) {
+      tutkinnonosaviite = perusteenTutkinnonosaViitteetById.value[_.get(rakenneosa, '_tutkinnonOsaViite')];
+      tutkinnonOsa = perusteenTutkinnonosatById.value[_.get(tutkinnonosaviite, '_tutkinnonOsa')];
     }
+    return {
+      ...rakenneosa,
+      koodiArvo: getRakenneosaKoodiArvo(rakenneosa),
+      osat: setRakenneOsaKoodi(rakenneosa.osat),
+      ...(tutkinnonosaviite && { tutkinnonosa: {
+        ...tutkinnonosaviite,
+        tutkinnonOsa,
+      } }),
+    };
+  });
+};
 
-    if (rakenneosa.tutkinnonosa?.tutkinnonOsa?.koodi?.arvo) {
-      return rakenneosa.tutkinnonosa?.tutkinnonOsa?.koodi?.arvo;
-    }
-
-    if (rakenneosa.osaamisala?.osaamisalakoodiArvo) {
-      return rakenneosa.osaamisala?.osaamisalakoodiArvo;
-    }
+const getRakenneosaKoodiArvo = (rakenneosa) => {
+  if (rakenneosa.tutkintonimike?.arvo) {
+    return rakenneosa.tutkintonimike?.arvo;
   }
 
-  get laajuus() {
-    if (this.rakenne.muodostumisSaanto && this.rakenne.muodostumisSaanto.laajuus) {
-      return this.rakenne.muodostumisSaanto.laajuus.maksimi;
-    }
+  if (rakenneosa.tutkinnonosa?.tutkinnonOsa?.koodi?.arvo) {
+    return rakenneosa.tutkinnonosa?.tutkinnonOsa?.koodi?.arvo;
   }
 
-  get rakenneOsaSuljeTeksti() {
-    if (!this.naytaRakenteet) {
-      return 'avaa-kaikki';
-    }
-    else {
-      return 'sulje-kaikki';
-    }
+  if (rakenneosa.osaamisala?.osaamisalakoodiArvo) {
+    return rakenneosa.osaamisala?.osaamisalakoodiArvo;
   }
+};
 
-  get rakenneOsaKuvasTeksti() {
-    if (!this.naytaKuvaukset) {
-      return 'nayta-ryhmien-kuvaukset';
-    }
-    else {
-      return 'piilota-ryhmien-kuvaukset';
-    }
-  }
+const rakenneOsat = computed(() => {
+  return setRakenneOsaKoodi(rakenne.value?.osat);
+});
 
-  toggleRakenne() {
-    this.naytaRakenteet = !this.naytaRakenteet;
-    _.forEach(this.$refs.rakenneosa, (rakenneosa: any) => rakenneosa.toggleRakenne(this.naytaRakenteet));
+const laajuus = computed(() => {
+  if (rakenne.value.muodostumisSaanto && rakenne.value.muodostumisSaanto.laajuus) {
+    return rakenne.value.muodostumisSaanto.laajuus.maksimi;
   }
+});
 
-  toggleKuvaukset() {
-    this.naytaKuvaukset = !this.naytaKuvaukset;
-    _.forEach(this.$refs.rakenneosa, (rakenneosa: any) => rakenneosa.toggleKuvaus(this.naytaKuvaukset));
+const rakenneOsaSuljeTeksti = computed(() => {
+  if (!naytaRakenteet.value) {
+    return 'avaa-kaikki';
   }
-}
+  else {
+    return 'sulje-kaikki';
+  }
+});
+
+const rakenneOsaKuvasTeksti = computed(() => {
+  if (!naytaKuvaukset.value) {
+    return 'nayta-ryhmien-kuvaukset';
+  }
+  else {
+    return 'piilota-ryhmien-kuvaukset';
+  }
+});
+
+const toggleRakenne = () => {
+  naytaRakenteet.value = !naytaRakenteet.value;
+  _.forEach(rakenneosa.value, (rakenneosa: any) => rakenneosa.toggleRakenne(naytaRakenteet.value));
+};
+
+const toggleKuvaukset = () => {
+  naytaKuvaukset.value = !naytaKuvaukset.value;
+  _.forEach(rakenneosa.value, (rakenneosa: any) => rakenneosa.toggleKuvaus(naytaKuvaukset.value));
+};
 </script>
 
 <style scoped lang="scss">
