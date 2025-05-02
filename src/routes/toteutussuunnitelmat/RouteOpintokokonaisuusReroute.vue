@@ -4,50 +4,46 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
+import { ref, onMounted, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { SisaltoviiteOpintokokonaisuusExternalDto, ExternalApi } from '@shared/api/amosaa';
 
-@Component({
-  components: {
-    EpSpinner,
-  },
-})
-export default class RouteOpintokokonaisuusReroute extends Vue {
-  private haku: SisaltoviiteOpintokokonaisuusExternalDto | null = null;
+const route = useRoute();
+const router = useRouter();
 
-  async mounted() {
-    try {
-      this.haku = (await ExternalApi.getPublicOpintokokonaisuusKoodilla(this.koodiArvo)).data;
-      this.$router.push({
-        name: 'toteutussuunnitelmaSisalto',
-        params: {
-          toteutussuunnitelmaId: _.toString(this.haku.opetussuunnitelmaId),
-          sisaltoviiteId: _.toString(this.haku.id),
-          koulutustyyppi: 'vapaasivistystyo',
-        },
-      });
-    }
-    catch {
-      this.$router.push({
-        name: 'virhe',
-        params: {
-          lang: 'fi',
-          virhekoodi: '404',
-        },
-      });
-    }
-  }
+const haku = ref<SisaltoviiteOpintokokonaisuusExternalDto | null>(null);
 
-  get koodiArvo() {
-    return this.$route.params.koodiarvo;
+const koodiArvo = computed(() => {
+  return route.params.koodiarvo as string;
+});
+
+onMounted(async () => {
+  try {
+    haku.value = (await ExternalApi.getPublicOpintokokonaisuusKoodilla(koodiArvo.value)).data;
+    router.push({
+      name: 'toteutussuunnitelmaSisalto',
+      params: {
+        toteutussuunnitelmaId: _.toString(haku.value.opetussuunnitelmaId),
+        sisaltoviiteId: _.toString(haku.value.id),
+        koulutustyyppi: 'vapaasivistystyo',
+      },
+    });
   }
-}
+  catch {
+    router.push({
+      name: 'virhe',
+      params: {
+        lang: 'fi',
+        virhekoodi: '404',
+      },
+    });
+  }
+});
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
-
 </style>

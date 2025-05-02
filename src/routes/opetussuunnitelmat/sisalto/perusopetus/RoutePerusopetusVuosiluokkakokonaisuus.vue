@@ -129,111 +129,102 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, InjectReactive } from 'vue-property-decorator';
+import { computed, inject } from 'vue';
+import { useRoute } from 'vue-router';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import EpAlert from '@shared/components/EpAlert/EpAlert.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpAlert,
-    EpContentViewer,
-    EpPerusteContent,
-  },
-})
-export default class RoutePerusopetusVuosiluokkakokonaisuus extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  @InjectReactive('opetussuunnitelma')
-  private opetussuunnitelma!: any;
+const opetussuunnitelma = inject('opetussuunnitelma') as any;
+const route = useRoute();
 
-  get vlkId() {
-    return _.toNumber(this.$route.params.vlkId);
-  }
+const vlkId = computed(() => {
+  return _.toNumber(route.params.vlkId);
+});
 
-  get oppiaine() {
-    return this.$route.params.oppiaineId;
-  }
+const oppiaine = computed(() => {
+  return route.params.oppiaineId;
+});
 
-  get vuosiluokkakokonaisuus() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.vlkId });
-  }
+const vuosiluokkakokonaisuus = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: vlkId.value });
+});
 
-  get pohjanVuosiluokkakokonaisuus() {
-    const opsVlk = _.find(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet'), opsVlk => opsVlk?.pohjanVuosiluokkakokonaisuus?._tunniste === this.vuosiluokkakokonaisuus._tunniste);
-    return (opsVlk && opsVlk.pohjanVuosiluokkakokonaisuus) ?? {};
-  }
+const pohjanVuosiluokkakokonaisuus = computed(() => {
+  const opsVlk = _.find(opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet'),
+    opsVlk => opsVlk?.pohjanVuosiluokkakokonaisuus?._tunniste === vuosiluokkakokonaisuus.value._tunniste);
+  return (opsVlk && opsVlk.pohjanVuosiluokkakokonaisuus) ?? {};
+});
 
-  get perusteenVuosiluokkakokonaisuus() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: this.vuosiluokkakokonaisuus._tunniste });
-  }
+const perusteenVuosiluokkakokonaisuus = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: vuosiluokkakokonaisuus.value._tunniste });
+});
 
-  get laajaalaisetOsaamiset() {
-    return _.chain(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset'))
-      .map(lao => {
-        return {
-          ...lao,
-          opetussuunnitelmanLao: this.vuosiluokanLaot[lao.tunniste!],
-          pohjanLao: this.pohjanVuosiluokanLaot[lao.tunniste!],
-        };
-      })
-      .sortBy(lao => this.$kaanna(lao.nimi))
-      .value();
-  }
+const vuosiluokanLaot = computed(() => {
+  return _.keyBy(vuosiluokkakokonaisuus.value.laajaalaisetosaamiset, '_laajaalainenosaaminen');
+});
 
-  get siirtymia() {
-    return (this.perusteenVuosiluokkakokonaisuus && (this.perusteenVuosiluokkakokonaisuus.siirtymaEdellisesta || this.perusteenVuosiluokkakokonaisuus.siirtymaSeuraavaan))
-      || (this.vuosiluokkakokonaisuus && (this.vuosiluokkakokonaisuus.siirtymaEdellisesta || this.vuosiluokkakokonaisuus.siirtymaSeuraavaan));
-  }
+const pohjanVuosiluokanLaot = computed(() => {
+  return _.keyBy(pohjanVuosiluokkakokonaisuus.value.laajaalaisetosaamiset, '_laajaalainenosaaminen');
+});
 
-  get laajaaAlainenOsaaminen() {
-    return (this.perusteenVuosiluokkakokonaisuus && this.perusteenVuosiluokkakokonaisuus.laajaalainenOsaaminen)
-      || (this.vuosiluokkakokonaisuus && this.vuosiluokkakokonaisuus.laajaalainenosaaminen);
-  }
-
-  get vuosiluokanLaot() {
-    return _.keyBy(this.vuosiluokkakokonaisuus.laajaalaisetosaamiset, '_laajaalainenosaaminen');
-  }
-
-  get pohjanVuosiluokanLaot() {
-    return _.keyBy(this.pohjanVuosiluokkakokonaisuus.laajaalaisetosaamiset, '_laajaalainenosaaminen');
-  }
-
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
-
-  get termit() {
-    return this.opetussuunnitelmaDataStore.kaikkiTermit;
-  }
-
-  get perusteVlkVapaatTekstit() {
-    return _.map(this.perusteenVuosiluokkakokonaisuus.vapaatTekstit, pVlkVt => {
-      return {
-        ...pVlkVt,
-        vlkVapaaTeksti: _.find(this.vuosiluokkakokonaisuus.vapaatTekstit, vlkVt => _.toString(pVlkVt.id) === _.toString(vlkVt.perusteenVapaaTekstiId)) || {},
-      };
-    });
-  }
-
-  get perusteenVlkByLaoId() {
-    return _.keyBy(_.map(this.perusteenVuosiluokkakokonaisuus.laajaalaisetOsaamiset, lao => {
+const laajaalaisetOsaamiset = computed(() => {
+  return _.chain(opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset'))
+    .map(lao => {
       return {
         ...lao,
-        _laajaalainenOsaaminen: Number(lao._laajaalainenOsaaminen),
+        opetussuunnitelmanLao: vuosiluokanLaot.value[lao.tunniste!],
+        pohjanLao: pohjanVuosiluokanLaot.value[lao.tunniste!],
       };
-    }), '_laajaalainenOsaaminen');
-  }
+    })
+    .sortBy(lao => $kaanna(lao.nimi))
+    .value();
+});
 
-  get pohjaNimi() {
-    return this.opetussuunnitelma?.pohja?.nimi;
-  }
-}
+const siirtymia = computed(() => {
+  return (perusteenVuosiluokkakokonaisuus.value && (perusteenVuosiluokkakokonaisuus.value.siirtymaEdellisesta || perusteenVuosiluokkakokonaisuus.value.siirtymaSeuraavaan))
+    || (vuosiluokkakokonaisuus.value && (vuosiluokkakokonaisuus.value.siirtymaEdellisesta || vuosiluokkakokonaisuus.value.siirtymaSeuraavaan));
+});
 
+const laajaaAlainenOsaaminen = computed(() => {
+  return (perusteenVuosiluokkakokonaisuus.value && perusteenVuosiluokkakokonaisuus.value.laajaalainenOsaaminen)
+    || (vuosiluokkakokonaisuus.value && vuosiluokkakokonaisuus.value.laajaalainenosaaminen);
+});
+
+const kuvat = computed(() => {
+  return opetussuunnitelmaDataStore.kuvat;
+});
+
+const termit = computed(() => {
+  return opetussuunnitelmaDataStore.kaikkiTermit;
+});
+
+const perusteVlkVapaatTekstit = computed(() => {
+  return _.map(perusteenVuosiluokkakokonaisuus.value.vapaatTekstit, pVlkVt => {
+    return {
+      ...pVlkVt,
+      vlkVapaaTeksti: _.find(vuosiluokkakokonaisuus.value.vapaatTekstit, vlkVt => _.toString(pVlkVt.id) === _.toString(vlkVt.perusteenVapaaTekstiId)) || {},
+    };
+  });
+});
+
+const perusteenVlkByLaoId = computed(() => {
+  return _.keyBy(_.map(perusteenVuosiluokkakokonaisuus.value.laajaalaisetOsaamiset, lao => {
+    return {
+      ...lao,
+      _laajaalainenOsaaminen: Number(lao._laajaalainenOsaaminen),
+    };
+  }), '_laajaalainenOsaaminen');
+});
+
+const pohjaNimi = computed(() => {
+  return opetussuunnitelma?.pohja?.nimi;
+});
 </script>
 
 <style scoped lang="scss">

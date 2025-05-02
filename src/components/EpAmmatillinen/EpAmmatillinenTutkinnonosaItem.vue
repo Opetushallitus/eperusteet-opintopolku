@@ -66,21 +66,17 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpCollapse,
-    EpVoimassaolo,
+const props = defineProps({
+  sisalto: {
+    type: Object,
+    required: true,
   },
-})
-export default class EpAmmatillinenTutkinnonosaItem extends Vue {
-  @Prop({ required: true })
-  private sisalto!: any;
-}
+});
 </script>
 
 <style scoped lang="scss">
@@ -121,7 +117,7 @@ export default class EpAmmatillinenTutkinnonosaItem extends Vue {
   }
 }
 
-::v-deep .ep-collapse {
+:deep(.ep-collapse) {
   margin-top: 0;
 
   .ml-auto {

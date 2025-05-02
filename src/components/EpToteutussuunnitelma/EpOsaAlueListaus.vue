@@ -17,26 +17,25 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { $kaannaOlioTaiTeksti } from '@shared/utils/globals';
 
-@Component({
-  components: {
-
+const props = defineProps({
+  osaAlueet: {
+    type: Array,
+    required: true,
   },
-})
-export default class EpOsaAlueListaus extends Vue {
-  @Prop()
-  osaAlueet!: any[];
+  sisaltoviiteId: {
+    type: Number,
+    required: true,
+  },
+});
 
-  @Prop()
-  sisaltoviiteId!: number;
-
-  get randomKey() {
-    return (Math.random() + 1).toString(36).substring(7);
-  }
-}
+const randomKey = computed(() => {
+  return (Math.random() + 1).toString(36).substring(7);
+});
 </script>
 
 <style scoped lang="scss">

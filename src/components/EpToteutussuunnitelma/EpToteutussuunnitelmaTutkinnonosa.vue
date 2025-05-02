@@ -278,11 +278,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmatillinenOsaalueet from '@/components/EpAmmatillinen/EpAmmatillinenOsaalueet.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
@@ -292,192 +291,197 @@ import EpToteutukset from '@/components/EpToteutussuunnitelma/EpToteutukset.vue'
 import EpAmmattitaitovaatimukset from '@shared/components/EpAmmattitaitovaatimukset/EpAmmattitaitovaatimukset.vue';
 import * as _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
+import { $kaanna, $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpFormContent,
-    EpContentViewer,
-    EpCollapse,
-    EpAmmatillinenArvioinninKohdealueet,
-    EpAmmatillinenOsaalueet,
-    GeneerinenArviointiTaulukko,
-    EpOsaAlueListaus,
-    EpToteutukset,
-    EpAmmattitaitovaatimukset,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: any;
+  perusteenTutkinnonosaViite: {
+    type: Object,
+    required: true,
+  },
+  perusteenTutkinnonosa: {
+    type: Object,
+    required: true,
+  },
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  arviointiasteikot: {
+    type: Array,
+    required: true,
+  },
+  julkaisukielet: {
+    type: Array as () => OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum[],
+    required: false,
+    default: () => [],
+  },
+});
 
-  @Prop({ required: true })
-  private perusteenTutkinnonosaViite!: any;
+const tutkintonimikkeetJaOsaamisalatKoodit = ref<any | null>(null);
+const toteutukset = ref<any | null>(null);
 
-  @Prop({ required: true })
-  private perusteenTutkinnonosa!: any;
-
-  @Prop({ required: true })
-  private kuvat!: any[];
-
-  @Prop({ required: true })
-  private arviointiasteikot!: any[];
-
-  @Prop({ required: false })
-  private julkaisukielet?: OpetussuunnitelmaKaikkiDtoJulkaisukieletEnum[];
-
-  private tutkintonimikkeetJaOsaamisalatKoodit: any | null = null;
-  private toteutukset: any | null = null;
-
-  async mounted() {
-    this.tutkintonimikkeetJaOsaamisalatKoodit = _.chain(await Promise.all(
-      _.chain(this.sisaltoviite.tosa?.toteutukset)
-        .map(toteutus => toteutus.koodit)
-        .flatten()
-        .uniq()
-        .map(koodi => Koodistot.getKoodistoKoodiByUri(koodi))
-        .value()),
-    ).map('data')
-      .map(koodi => {
-        return {
-          ...koodi,
-          nimi: _.mapValues(_.keyBy(koodi.metadata, v => _.toLower(v.kieli)), v => v.nimi),
-        };
-      })
-      .keyBy('koodiUri')
-      .value();
-
-    this.toteutukset = _.map(this.sisaltoviite.tosa?.toteutukset, toteutus => {
+onMounted(async () => {
+  tutkintonimikkeetJaOsaamisalatKoodit.value = _.chain(await Promise.all(
+    _.chain(props.sisaltoviite.tosa?.toteutukset)
+      .map(toteutus => toteutus.koodit)
+      .flatten()
+      .uniq()
+      .map(koodi => Koodistot.getKoodistoKoodiByUri(koodi))
+      .value()),
+  ).map('data')
+    .map(koodi => {
       return {
-        ...toteutus,
-        tutkintonimikkeetJaOsaamisalat: _.map(toteutus.koodit, koodi => this.tutkintonimikkeetJaOsaamisalatKoodit[koodi]),
+        ...koodi,
+        nimi: _.mapValues(_.keyBy(koodi.metadata, v => _.toLower(v.kieli)), v => v.nimi),
       };
-    });
+    })
+    .keyBy('koodiUri')
+    .value();
+
+  toteutukset.value = _.map(props.sisaltoviite.tosa?.toteutukset, toteutus => {
+    return {
+      ...toteutus,
+      tutkintonimikkeetJaOsaamisalat: _.map(toteutus.koodit, koodi => tutkintonimikkeetJaOsaamisalatKoodit.value[koodi]),
+    };
+  });
+});
+
+const hasKuvaus = computed(() => {
+  return props.sisaltoviite.tekstiKappale.teksti || (props.perusteenTutkinnonosa && props.perusteenTutkinnonosa.kuvaus);
+});
+
+const luotu = computed(() => {
+  if (props.perusteenTutkinnonosa) {
+    return props.perusteenTutkinnonosa.luotu;
+  }
+  return undefined;
+});
+
+const muokattu = computed(() => {
+  if (props.perusteenTutkinnonosa) {
+    return props.perusteenTutkinnonosa.muokattu;
+  }
+  else if (props.sisaltoviite.tosa) {
+    return props.sisaltoviite.tosa.muokattu;
+  }
+  return undefined;
+});
+
+const laajuus = computed(() => {
+  if (props.perusteenTutkinnonosaViite) {
+    return props.perusteenTutkinnonosaViite.laajuus;
+  }
+  else if (props.sisaltoviite.tosa.omatutkinnonosa) {
+    return props.sisaltoviite.tosa.omatutkinnonosa.laajuus;
+  }
+  return undefined;
+});
+
+const koodiFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('nimi'),
+    thStyle: { width: '40%' },
+    formatter: (value: any) => {
+      return $kaanna(value);
+    },
+  }, {
+    key: 'koodiArvo',
+    label: $t('koodi'),
+  }] as any[];
+});
+
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+const osaAlueet = computed(() => {
+  return _.chain(props.sisaltoviite.osaAlueet)
+    .map(osaAlue => {
+      return {
+        ...osaAlue,
+        perusteenOsaAlue: _.find(perusteenOsaAlueet.value, pOsaAlue => pOsaAlue.id === osaAlue.perusteenOsaAlueId),
+      };
+    })
+    .filter(osaAlue => !!osaAlue.nimi[kieli.value])
+    .value();
+});
+
+const pakollisetOsaAlueet = computed(() => {
+  return _.filter(osaAlueet.value, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAKOLLINEN));
+});
+
+const valinnaisetOsaAlueet = computed(() => {
+  return _.filter(osaAlueet.value, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.VALINNAINEN));
+});
+
+const paikallisetOsaAlueet = computed(() => {
+  return _.filter(osaAlueet.value, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAIKALLINEN));
+});
+
+const perusteenOsaAlueet = computed(() => {
+  return props.perusteenTutkinnonosa?.osaAlueet;
+});
+
+const perusteenOsaAlueetFiltered = (osaamistavoiteFilter) => {
+  return _.chain(perusteenOsaAlueet.value)
+    .map(osaAlue => {
+      return {
+        ...osaAlue,
+        osaamistavoitteet: _.filter(osaAlue.osaamistavoitteet, osaamistavoiteFilter),
+      };
+    })
+    .filter(osaAlue => _.size(osaAlue.osaamistavoitteet) > 0)
+    .filter(osaAlue => !!osaAlue.nimi[kieli.value])
+    .value();
+};
+
+const perusteenPakollisetOsaAlueet = computed(() => {
+  if (props.perusteenTutkinnonosa) {
+    return perusteenOsaAlueetFiltered(['pakollinen', true]);
+  }
+  return undefined;
+});
+
+const perusteenValinnaisetOsaAlueet = computed(() => {
+  if (props.perusteenTutkinnonosa) {
+    return perusteenOsaAlueetFiltered(['pakollinen', false]);
+  }
+  return undefined;
+});
+
+const hasAmmattitaitovaatimukset = computed(() => {
+  return !_.isEmpty(props.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset?.kohdealueet)
+    || !_.isEmpty(props.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset?.vaatimukset);
+});
+
+const hasAmmattitaitovaatimuksetLista = computed(() => {
+  return !_.chain(props.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista)
+    .map('vaatimuksenKohteet')
+    .flatMap()
+    .isEmpty()
+    .value();
+});
+
+const hasTutkinnonosakohtainenArviointi = computed(() => {
+  return !_.isEmpty(props.perusteenTutkinnonosa?.arviointi?.arvioinninKohdealueet);
+});
+
+const arvoinninTyyppi = computed(() => {
+  if (props.sisaltoviite.tosa.omatutkinnonosa.geneerinenarviointi) {
+    return 'geneerinen';
   }
 
-  get hasKuvaus() {
-    return this.sisaltoviite.tekstiKappale.teksti || (this.perusteenTutkinnonosa && this.perusteenTutkinnonosa.kuvaus);
+  if (_.size(_.get(props.sisaltoviite.tosa, 'omaTutkinnonosa.arviointi.arvioinninKohdealueet')) > 0) {
+    return 'tutkinnonosakohtainen';
   }
 
-  get luotu() {
-    if (this.perusteenTutkinnonosa) {
-      return this.perusteenTutkinnonosa.luotu;
-    }
-  }
-
-  get muokattu() {
-    if (this.perusteenTutkinnonosa) {
-      return this.perusteenTutkinnonosa.muokattu;
-    }
-    else if (this.sisaltoviite.tosa) {
-      return this.sisaltoviite.tosa.muokattu;
-    }
-  }
-
-  get laajuus() {
-    if (this.perusteenTutkinnonosaViite) {
-      return this.perusteenTutkinnonosaViite.laajuus;
-    }
-    else if (this.sisaltoviite.tosa.omatutkinnonosa) {
-      return this.sisaltoviite.tosa.omatutkinnonosa.laajuus;
-    }
-  }
-
-  get koodiFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi') as string,
-      thStyle: { width: '40%' },
-      formatter: (value:any) => {
-        return this.$kaanna(value);
-      },
-    }, {
-      key: 'koodiArvo',
-      label: this.$t('koodi') as string,
-    }] as any[];
-  }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get osaAlueet() {
-    return _.chain(this.sisaltoviite.osaAlueet)
-      .map(osaAlue => {
-        return {
-          ...osaAlue,
-          perusteenOsaAlue: _.find(this.perusteenOsaAlueet, pOsaAlue => pOsaAlue.id === osaAlue.perusteenOsaAlueId),
-        };
-      })
-      .filter(osaAlue => !!osaAlue.nimi[this.kieli])
-      .value();
-  }
-
-  get pakollisetOsaAlueet() {
-    return _.filter(this.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAKOLLINEN));
-  }
-
-  get valinnaisetOsaAlueet() {
-    return _.filter(this.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.VALINNAINEN));
-  }
-
-  get paikallisetOsaAlueet() {
-    return _.filter(this.osaAlueet, oa => oa.tyyppi === _.toLower(OmaOsaAlueDtoTyyppiEnum.PAIKALLINEN));
-  }
-
-  get perusteenPakollisetOsaAlueet() {
-    if (this.perusteenTutkinnonosa) {
-      return this.perusteenOsaAlueetFiltered(['pakollinen', true]);
-    }
-  }
-  get perusteenValinnaisetOsaAlueet() {
-    if (this.perusteenTutkinnonosa) {
-      return this.perusteenOsaAlueetFiltered(['pakollinen', false]);
-    }
-  }
-
-  perusteenOsaAlueetFiltered(osaamistavoiteFilter) {
-    return _.chain(this.perusteenOsaAlueet)
-      .map(osaAlue => {
-        return {
-          ...osaAlue,
-          osaamistavoitteet: _.filter(osaAlue.osaamistavoitteet, osaamistavoiteFilter),
-        };
-      })
-      .filter(osaAlue => _.size(osaAlue.osaamistavoitteet) > 0)
-      .filter(osaAlue => !!osaAlue.nimi[this.kieli])
-      .value();
-  }
-
-  get perusteenOsaAlueet() {
-    return this.perusteenTutkinnonosa?.osaAlueet;
-  }
-
-  get hasAmmattitaitovaatimukset() {
-    return !_.isEmpty(this.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset?.kohdealueet) || !_.isEmpty(this.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset?.vaatimukset);
-  }
-
-  get hasAmmattitaitovaatimuksetLista() {
-    return !_.chain(this.sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimuksetLista)
-      .map('vaatimuksenKohteet')
-      .flatMap()
-      .isEmpty()
-      .value();
-  }
-
-  get hasTutkinnonosakohtainenArviointi() {
-    return !_.isEmpty(this.perusteenTutkinnonosa?.arviointi?.arvioinninKohdealueet);
-  }
-
-  get arvoinninTyyppi() {
-    if (this.sisaltoviite.tosa.omatutkinnonosa.geneerinenarviointi) {
-      return 'geneerinen';
-    }
-
-    if (_.size(_.get(this.sisaltoviite.tosa, 'omatutkinnonosa.arviointi.arvioinninKohdealueet')) > 0) {
-      return 'tutkinnonosakohtainen';
-    }
-  }
-}
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">
@@ -486,7 +490,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
   }
 
   .ammattitaitovaatimukset {
-    ::v-deep dd {
+    :deep(dd) {
       margin-left: 2.5rem;
       margin-bottom: 0;
     }

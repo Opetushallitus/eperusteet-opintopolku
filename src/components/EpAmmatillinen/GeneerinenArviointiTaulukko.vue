@@ -44,49 +44,47 @@
   </ep-form-content>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { $kaanna, $t } from '@shared/utils/globals';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import * as _ from 'lodash';
 
-@Component({
-  components: {
-    EpFormContent,
+const props = defineProps({
+  arviointi: {
+    type: Object,
+    required: true,
   },
-})
-export default class GeneerinenArviointiTaulukko extends Vue {
-  @Prop({ required: true })
-  private arviointi: any;
+});
 
-  get osaamistasonKriteeritSorted() {
-    return _.sortBy(this.arviointi.osaamistasonKriteerit, kriteeri => _.get(kriteeri, 'osaamistaso.koodi.arvo'));
-  }
+const osaamistasonKriteeritSorted = computed(() => {
+  return _.sortBy(props.arviointi.osaamistasonKriteerit, kriteeri => _.get(kriteeri, 'osaamistaso.koodi.arvo'));
+});
 
-  get osaamistasonKriteeritFields() {
-    return [{
-      key: 'osaamistaso',
-      label: this.$t('osaamistaso') as string,
-      thStyle: { display: 'none' },
-    }, {
-      key: 'kriteerit',
-      label: this.$t('kriteerit') as string,
-      thStyle: { display: 'none' },
-    }] as any[];
-  }
+const osaamistasonKriteeritFields = computed(() => {
+  return [{
+    key: 'osaamistaso',
+    label: $t('osaamistaso'),
+    thStyle: { display: 'none' },
+  }, {
+    key: 'kriteerit',
+    label: $t('kriteerit'),
+    thStyle: { display: 'none' },
+  }];
+});
 
-  get kriteeriton() {
-    return this.arviointi.osaamistasonKriteerit.length === 1
-      && _.chain(this.arviointi.osaamistasonKriteerit)
-        .map('kriteerit')
-        .flatten()
-        .isEmpty()
-        .value();
-  }
+const kriteeriton = computed(() => {
+  return props.arviointi.osaamistasonKriteerit.length === 1
+    && _.chain(props.arviointi.osaamistasonKriteerit)
+      .map('kriteerit')
+      .flatten()
+      .isEmpty()
+      .value();
+});
 
-  get osaamistasonOtsikko() {
-    return _.get(this.arviointi, 'osaamistasonKriteerit[0].osaamistaso.otsikko');
-  }
-}
+const osaamistasonOtsikko = computed(() => {
+  return _.get(props.arviointi, 'osaamistasonKriteerit[0].osaamistaso.otsikko');
+});
 </script>
 
 <style scoped lang="scss">

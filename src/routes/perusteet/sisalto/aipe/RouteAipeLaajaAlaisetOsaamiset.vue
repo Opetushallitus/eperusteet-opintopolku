@@ -23,27 +23,19 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+<script setup lang="ts">
+import { computed } from 'vue';
+
 import * as _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpCollapse,
-  },
-})
-export default class RouteAipeLaajaAlaisetOsaamiset extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  get laajaAlaisetOsaamiset() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset');
-  }
-}
+const laajaAlaisetOsaamiset = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset');
+});
 </script>
 
 <style scoped lang="scss">

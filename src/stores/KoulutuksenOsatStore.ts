@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { Sisaltoviitteet, SisaltoViiteDto } from '@shared/api/amosaa';
 

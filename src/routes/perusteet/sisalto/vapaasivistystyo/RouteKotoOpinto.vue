@@ -19,7 +19,7 @@
       </div>
 
       <EpKotoTaitotasot
-        :value="perusteenOsa.taitotasot"
+        :model-value="perusteenOsa.taitotasot"
         :termit="termit"
         :kuvat="kuvat"
       />
@@ -30,56 +30,45 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from 'vue';
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpKotoTaitotasot from '@shared/components/EpKotoTaitotasot/EpKotoTaitotasot.vue';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import { useRoute } from 'vue-router';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeading,
-    EpContentViewer,
-    EpKotoTaitotasot,
-  },
-})
-export default class RouteKotoOpinto extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.kotoOpintoId);
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get perusteenOsaViite() {
-    return this.perusteenOsaStore.perusteenOsaViite;
-  }
+const perusteenOsaViite = computed(() => {
+  return perusteenOsaStore.perusteenOsaViite;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-}
-
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
 </script>
 
 <style scoped lang="scss">

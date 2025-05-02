@@ -23,46 +23,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import OppiaineEsitys from './OppiaineEsitys.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 import * as _ from 'lodash';
 
-@Component({
-  components: {
-    EpSpinner,
-    OppiaineEsitys,
-    EpOpasKiinnitysLinkki,
-  },
-})
-export default class RouteOppiaine extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const perusteDataStore = getCachedPerusteStore();
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const route = useRoute();
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get oppiaine() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get oppiaineKoodiUri() {
-    return this.oppiaine?.koodi?.uri;
-  }
-}
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
+
+const oppiaine = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: oppiaineId.value }) as any;
+});
+
+const oppiaineKoodiUri = computed(() => {
+  return oppiaine.value?.koodi?.uri;
+});
 </script>
 
 <style scoped lang="scss">

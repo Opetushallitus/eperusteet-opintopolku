@@ -81,124 +81,110 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Prop, Component, Vue } from 'vue-property-decorator';
-import { TiedoteStore } from '@/stores/TiedoteStore';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
+import { useTiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { Meta } from '@shared/utils/decorators';
 import { koulutustyyppiStateName } from '@shared/utils/perusteet';
 import UutisenKoodit from './UutisenKoodit.vue';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { $kaanna, $sd, $t } from '@shared/utils/globals';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    EpSearch,
-    EpContentViewer,
-    UutisenKoodit,
-  },
-})
-export default class RouteUutinen extends Vue {
-  @Prop({ required: true })
-  private tiedoteStore!: TiedoteStore;
+const route = useRoute();
+const page = ref(1);
+const query = ref('');
+const tiedoteStore = useTiedoteStore(pinia);
+const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+const tiedote = computed(() => {
+  return tiedoteStore.tiedote;
+});
 
-  private page = 1;
-  private query = '';
+const julkaistutKoulutustyypit = computed(() => {
+  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
+});
 
-  mounted() {
-    if (this.$route) {
-      this.tiedoteStore.fetchUutinen(_.parseInt(this.$route.params.tiedoteId));
-    }
-  }
+const perusteet = computed(() => {
+  return _.filter(tiedoteStore.tiedote?.perusteet, peruste =>
+    _.includes(julkaistutKoulutustyypit.value, peruste.koulutustyyppi as any));
+});
 
-  get tiedote() {
-    return this.tiedoteStore.tiedote;
-  }
-
-  get tiedoteMapped() {
+const perusteRoutes = (perusteet) => {
+  return _.map(perusteet, peruste => {
     return {
-      ...this.tiedote,
-      perusteet: this.perusteRoutes(this.perusteet),
+      ...peruste,
+      route: {
+        name: 'peruste',
+        params: {
+          perusteId: peruste.id,
+          koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi!),
+        },
+      },
+    };
+  });
+};
+
+const tiedoteMapped = computed(() => {
+  return {
+    ...tiedote.value,
+    perusteet: perusteRoutes(perusteet.value),
+  };
+});
+
+const osaamisalojenPerusteet = computed(() => {
+  return tiedoteStore.tiedotteenOsaamisalaPerusteet;
+});
+
+const tutkinnonosienPerusteet = computed(() => {
+  return tiedoteStore.tiedotteenTutkinnonosaPerusteet;
+});
+
+const koulutustyyppi = computed(() => {
+  if (tiedote.value && tiedote.value.peruste) {
+    return tiedote.value.peruste.koulutustyyppi;
+  }
+  return undefined;
+});
+
+const murupolku = computed(() => {
+  const murut = [{
+    label: 'ajankohtaista',
+    location: {
+      name: 'uutiset',
+    },
+  }];
+
+  if (tiedote.value) {
+    murut.push({
+      label: tiedote.value.otsikko,
+      location: {
+        name: 'uutinen',
+        params: {
+          tiedoteId: tiedote.value.id,
+        },
+      },
+    } as any);
+  }
+
+  return murut;
+});
+
+// Meta information
+useHead(() => {
+  if (tiedote.value) {
+    return {
+      title: $kaanna(tiedote.value.otsikko),
     };
   }
-
-  get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
-  }
-
-  get perusteet() {
-    return _.filter(this.tiedoteStore.tiedote?.perusteet, peruste => _.includes(this.julkaistutKoulutustyypit, peruste.koulutustyyppi as any));
-  }
-
-  get osaamisalojenPerusteet() {
-    return this.tiedoteStore.tiedotteenOsaamisalaPerusteet;
-  }
-
-  get tutkinnonosienPerusteet() {
-    return this.tiedoteStore.tiedotteenTutkinnonosaPerusteet;
-  }
-
-  perusteRoutes(perusteet) {
-    return _.map(perusteet, peruste => {
-      return {
-        ...peruste,
-        route: {
-          name: 'peruste',
-          params: {
-            perusteId: peruste.id,
-            koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi!),
-          },
-        },
-      };
-    });
-  }
-
-  get koulutustyyppi() {
-    if (this.tiedote && this.tiedote.peruste) {
-      return this.tiedote.peruste.koulutustyyppi;
-    }
-  }
-
-  get murupolku() {
-    const murut = [{
-      label: 'ajankohtaista',
-      location: {
-        name: 'uutiset',
-      },
-    }];
-
-    if (this.tiedote) {
-      murut.push({
-        label: this.tiedote.otsikko,
-        location: {
-          name: 'uutinen',
-          params: {
-            tiedoteId: this.tiedote.id,
-          },
-        },
-      } as any);
-    }
-
-    return murut;
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.tiedote) {
-      return {
-        title: (this as any).$kaanna(this.tiedote.otsikko),
-      };
-    }
-  }
-}
+  return {};
+});
 </script>
 
 <style scoped lang="scss">
@@ -222,6 +208,5 @@ export default class RouteUutinen extends Vue {
     border: 1px solid $gray-lighten-3;
     border-radius: 3px;
   }
-
 }
 </style>

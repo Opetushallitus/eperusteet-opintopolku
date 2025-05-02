@@ -37,72 +37,72 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { computed } from 'vue';
 import TavoitteenSisaltoalueet from './TavoitteenSisaltoalueet.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    TavoitteenSisaltoalueet,
+const props = defineProps({
+  oppiaineJaTavoitteet: {
+    type: Object,
+    required: true,
   },
-})
-export default class OppiaineenVuosiluokkaTiivistetty extends Vue {
-  @Prop({ required: true })
-  private oppiaineJaTavoitteet!: any;
+});
 
-  get oppiaine() {
-    return this.oppiaineJaTavoitteet.oppiaine;
-  }
+const emit = defineEmits(['selectOppiaine']);
 
-  get tavoitteet() {
-    return _.map(this.oppiaineJaTavoitteet.vuosiluokka.tavoitteet, tavoite => {
-      return {
-        ...tavoite,
-        tavoite: this.$kaanna(tavoite.tavoite)
-          .replace('<p>', '')
-          .replace('</p>', ''),
-      };
-    });
-  }
+const oppiaine = computed(() => {
+  return props.oppiaineJaTavoitteet.oppiaine;
+});
 
-  get sisaltoalueet() {
-    return _.chain(this.tavoitteet)
-      .map('sisaltoalueet')
-      .flatten()
-      .filter('nimi')
-      .uniqBy('nimi')
-      .value();
-  }
+const tavoitteet = computed(() => {
+  return _.map(props.oppiaineJaTavoitteet.vuosiluokka.tavoitteet, tavoite => {
+    return {
+      ...tavoite,
+      tavoite: $kaanna(tavoite.tavoite)
+        .replace('<p>', '')
+        .replace('</p>', ''),
+    };
+  });
+});
 
-  get tavoitealueet() {
-    return _.chain(this.tavoitteet)
-      .map('kohdealueet')
-      .flatten()
-      .uniqBy('nimi')
-      .value();
-  }
+const sisaltoalueet = computed(() => {
+  return _.chain(tavoitteet.value)
+    .map('sisaltoalueet')
+    .flatten()
+    .filter('nimi')
+    .uniqBy('nimi')
+    .value();
+});
 
-  get tavoitteetAlueilla() {
-    if (_.size(this.tavoitealueet) > 0) {
-      return [
-        ..._.map(this.tavoitealueet, tavoitealue => {
-          return {
-            nimi: tavoitealue.nimi,
-            tavoitteet: _.filter(this.tavoitteet, tavoite => _.find(tavoite.kohdealueet, { nimi: tavoitealue.nimi })),
-          };
-        }),
-      ];
-    }
-    else {
-      return [{ nimi: '', tavoitteet: this.tavoitteet }];
-    }
-  }
+const tavoitealueet = computed(() => {
+  return _.chain(tavoitteet.value)
+    .map('kohdealueet')
+    .flatten()
+    .uniqBy('nimi')
+    .value();
+});
 
-  selectOppiaine(oppiaine) {
-    this.$emit('selectOppiaine', oppiaine);
+const tavoitteetAlueilla = computed(() => {
+  if (_.size(tavoitealueet.value) > 0) {
+    return [
+      ..._.map(tavoitealueet.value, tavoitealue => {
+        return {
+          nimi: tavoitealue.nimi,
+          tavoitteet: _.filter(tavoitteet.value, tavoite => _.find(tavoite.kohdealueet, { nimi: tavoitealue.nimi })),
+        };
+      }),
+    ];
   }
-}
+  else {
+    return [{ nimi: '', tavoitteet: tavoitteet.value }];
+  }
+});
+
+const selectOppiaine = (oppiaine) => {
+  emit('selectOppiaine', oppiaine);
+};
 </script>
 
 <style scoped lang="scss">
@@ -127,7 +127,7 @@ export default class OppiaineenVuosiluokkaTiivistetty extends Vue {
   line-height: 1.7;
 }
 
-::v-deep .ep-collapse {
+:deep(.ep-collapse) {
   margin-top: 0px;
 
   .collapse-button {
@@ -135,7 +135,7 @@ export default class OppiaineenVuosiluokkaTiivistetty extends Vue {
   }
 }
 
-::v-deep .ep-button .btn{
+:deep(.ep-button .btn){
   padding: 0;
 }
 
@@ -144,5 +144,4 @@ export default class OppiaineenVuosiluokkaTiivistetty extends Vue {
   background-color: $ylops-paikallinen-color;
   padding: 0.8rem;
 }
-
 </style>

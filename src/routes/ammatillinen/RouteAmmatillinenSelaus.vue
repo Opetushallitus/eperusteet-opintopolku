@@ -89,37 +89,37 @@
           {{ $t('tutkinnon-perusteet-ja-tutkinnon-osat') }}
         </h2>
         <peruste-ammatillinen-haku
-          :peruste-haku-store="ammatillinenPerusteHakuStore"
           tyyppi="peruste"
         />
       </div>
 
-      <router-view v-else>
+      <div v-else>
         <div class="mb-4">
           <router-link :to="{ name: 'ammatillinenSelaus' }">
             <EpMaterialIcon>arrow_back</EpMaterialIcon>
             {{ $t('palaa-ammatillinen-koulutus-sivulle') }}
           </router-link>
         </div>
-      </router-view>
+        <router-view />
+      </div>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import { useHead } from '@unhead/vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
-import { AmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
-import { Meta } from '@shared/utils/decorators';
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
 import { koulutustyyppiRyhmat, KoulutustyyppiRyhma } from '@shared/utils/perusteet';
 import * as _ from 'lodash';
 import { MaaraysDtoTyyppiEnum, TiedoteDto } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
+import { useRouter, useRoute } from 'vue-router';
 
 interface Ylalinkki {
   route: { name: string, query?: any, };
@@ -127,120 +127,104 @@ interface Ylalinkki {
   icon?: string;
 }
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    PerusteAmmatillinenHaku,
-    EpJulkiLista,
-    EpMaterialIcon,
-  },
-})
-export default class RouteAmmatillinenSelaus extends Vue {
-  @Prop({ required: true })
-  private ammatillistenTiedotteetStore!: AmmatillistenTiedoteStore;
+const route = useRoute();
+const router = useRouter();
+const ammatillistenTiedotteetStore = new AmmatillistenTiedoteStore();
 
-  @Prop({ required: true })
-  private ammatillinenPerusteHakuStore!: AmmatillinenPerusteHakuStore;
+onMounted(async () => {
+  ammatillistenTiedotteetStore.init({ koulutusTyyppi: ammatillisetkoulutusryhmat.value.koulutustyypit });
+  ammatillistenTiedotteetStore.fetch();
+});
 
-  async mounted() {
-    this.ammatillistenTiedotteetStore.init({ koulutusTyyppi: this.ammatillisetkoulutusryhmat.koulutustyypit });
-    this.ammatillistenTiedotteetStore.fetch();
-  }
+const tiedotteet = computed(() => {
+  return ammatillistenTiedotteetStore.tiedotteet.value;
+});
 
-  get tiedotteet() {
-    return this.ammatillistenTiedotteetStore.tiedotteet.value;
-  }
+const ammatillisetkoulutusryhmat = computed((): KoulutustyyppiRyhma => {
+  return _.filter(koulutustyyppiRyhmat(), koulutusryhma => koulutusryhma.ryhma === 'ammatillinen')[0];
+});
 
-  get ammatillisetkoulutusryhmat(): KoulutustyyppiRyhma {
-    return _.filter(koulutustyyppiRyhmat(), koulutusryhma => koulutusryhma.ryhma === 'ammatillinen')[0];
-  }
-
-  get linkit(): Ylalinkki[] {
-    return [
-      {
-        route: {
-          name: 'maaraykset',
-          query: {
-            tyyppi: MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
-          },
+const linkit = computed((): Ylalinkki[] => {
+  return [
+    {
+      route: {
+        name: 'maaraykset',
+        query: {
+          tyyppi: MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
         },
-        text: 'maaraykset',
-        icon: 'picture_as_pdf',
       },
-      {
-        route: { name: 'ammatillinenOhjeet' },
-        text: 'ohjeet-ja-materiaalit',
-        icon: 'menu_book',
-      },
-      {
-        route: { name: 'ammatillinenKoulutuksenjarjestajat' },
-        text: 'koulutuksen-jarjestajat',
-        icon: 'location_on',
-      },
-    ];
-  }
-
-  get ylaotsikko() {
-    switch (this.$route.name) {
-    case 'ammatillinenKoulutuksenjarjestajat': return 'koulutuksen-jarjestajat';
-    case 'ammatillinenOhjeet': return 'ohjeet-ja-materiaalit';
-    case 'ammatillinenKoulutusviennit': return 'koulutusviennit';
-    case 'ammatillinenTyopajat': return 'selaa-tyopajoja';
-    case 'ammatillinenValmisteillaOlevat': return 'valmisteilla-olevat-perusteet';
-    case 'ammatillinenMaaraykset': return 'maaraykset';
-    default: return 'ammatillinen-koulutus';
-    }
-  }
-
-  get koulutustyyppi() {
-    return 'koulutustyyppi_1';
-  }
-
-  get murupolku() {
-    return [{
-      label: 'ammatillinen-koulutus',
-      location: {
-        name: 'ammatillinenSelaus',
-      },
+      text: 'maaraykset',
+      icon: 'picture_as_pdf',
     },
-    ...this.alamurupolku,
-    ];
-  }
+    {
+      route: { name: 'ammatillinenOhjeet' },
+      text: 'ohjeet-ja-materiaalit',
+      icon: 'menu_book',
+    },
+    {
+      route: { name: 'ammatillinenKoulutuksenjarjestajat' },
+      text: 'koulutuksen-jarjestajat',
+      icon: 'location_on',
+    },
+  ];
+});
 
-  get alamurupolku() {
-    if (this.ylaotsikko !== 'ammatillinen-koulutus') {
-      return [{
-        label: this.ylaotsikko,
-      }];
-    }
-    return [];
+const ylaotsikko = computed(() => {
+  switch (route.name) {
+  case 'ammatillinenKoulutuksenjarjestajat': return 'koulutuksen-jarjestajat';
+  case 'ammatillinenOhjeet': return 'ohjeet-ja-materiaalit';
+  case 'ammatillinenKoulutusviennit': return 'koulutusviennit';
+  case 'ammatillinenTyopajat': return 'selaa-tyopajoja';
+  case 'ammatillinenValmisteillaOlevat': return 'valmisteilla-olevat-perusteet';
+  case 'ammatillinenMaaraykset': return 'maaraykset';
+  default: return 'ammatillinen-koulutus';
   }
+});
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t('ammatillinen-koulutus'),
-    };
-  }
+const koulutustyyppi = computed(() => {
+  return 'koulutustyyppi_1';
+});
 
-  avaaTiedote(tiedote: TiedoteDto) {
-    this.$router.push({
-      name: 'uutinen',
-      params: {
-        tiedoteId: '' + tiedote.id,
-      },
-    });
-  }
+const murupolku = computed(() => {
+  return [{
+    label: 'ammatillinen-koulutus',
+    location: {
+      name: 'ammatillinenSelaus',
+    },
+  },
+  ...alamurupolku.value,
+  ];
+});
 
-  get sisaltokieli() {
-    return Kielet.getSisaltoKieli.value;
+const alamurupolku = computed(() => {
+  if (ylaotsikko.value !== 'ammatillinen-koulutus') {
+    return [{
+      label: ylaotsikko.value,
+    }];
   }
+  return [];
+});
 
-  get furtherFeedbackUrl() {
-    return `https://www.oph.fi/${this.sisaltokieli}/koulutus-ja-tutkinnot/tutkintorakenne/lomake`;
-  }
-}
+useHead({
+  title: computed(() => `${ylaotsikko.value}`),
+});
+
+const avaaTiedote = (tiedote: TiedoteDto) => {
+  router.push({
+    name: 'uutinen',
+    params: {
+      tiedoteId: '' + tiedote.id,
+    },
+  });
+};
+
+const sisaltokieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+const furtherFeedbackUrl = computed(() => {
+  return `https://www.oph.fi/${sisaltokieli.value}/koulutus-ja-tutkinnot/tutkintorakenne/lomake`;
+});
 </script>
 
 <style scoped lang="scss">

@@ -125,49 +125,45 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { $kaanna } from '@shared/utils/globals';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import EpAmmattitaitovaatimukset from '@shared/components/EpAmmattitaitovaatimukset/EpAmmattitaitovaatimukset.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 import EpValmaTelmaSisalto from '@/components/EpAmmatillinen/EpValmaTelmaSisalto.vue';
 import _ from 'lodash';
+import { $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpFormContent,
-    EpAmmatillinenArvioinninKohdealueet,
-    EpAmmattitaitovaatimukset,
-    GeneerinenArviointiTaulukko,
-    EpValmaTelmaSisalto,
+const props = defineProps({
+  tutkinnonosa: {
+    type: Object,
+    required: true,
   },
-})
-export default class EpTutkinnonosaNormaali extends Vue {
-  @Prop({ required: true })
-  tutkinnonosa: any;
+  arviointiasteikot: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  arviointiasteikot!: any[];
+const hasArviointi = computed(() => {
+  return !_.isNil(props.tutkinnonosa.arviointi?.lisatiedot)
+    || !_.isEmpty(props.tutkinnonosa.arviointi?.arvioinninKohdealueet)
+    || !_.isNil(props.tutkinnonosa.geneerinenArviointiasteikko);
+});
 
-  get hasArviointi() {
-    return !_.isNil(this.tutkinnonosa.arviointi?.lisatiedot)
-      || !_.isEmpty(this.tutkinnonosa.arviointi?.arvioinninKohdealueet)
-      || !_.isNil(this.tutkinnonosa.geneerinenArviointiasteikko);
-  }
-
-  get osaamistasonKriteeritFields() {
-    return [{
-      key: 'osaamistaso',
-      label: this.$t('osaamistaso') as string,
-      thStyle: { display: 'none' },
-    }, {
-      key: 'kriteerit',
-      label: this.$t('kriteerit') as string,
-      thStyle: { display: 'none' },
-    }] as any[];
-  }
-}
+const osaamistasonKriteeritFields = computed(() => {
+  return [{
+    key: 'osaamistaso',
+    label: $t('osaamistaso'),
+    thStyle: { display: 'none' },
+  }, {
+    key: 'kriteerit',
+    label: $t('kriteerit'),
+    thStyle: { display: 'none' },
+  }];
+});
 </script>
 
 <style scoped lang="scss">

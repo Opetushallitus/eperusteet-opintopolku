@@ -271,148 +271,138 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed, ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { PerusopetusOppiaineStore } from '@/stores/PerusopetusOppiaineStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
 import { LaajaalainenOsaaminenDto } from '@shared/api/eperusteet';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
-    EpCollapse,
-    EpButton,
-    EpArvioinninkohteetTable,
-  },
-} as any)
-export default class RoutePerusopetusOppiaine extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const perusteDataStore = getCachedPerusteStore();
+const tabIndex = ref(0);
+const tavoitecollapse = ref<any[]>([]);
 
-  private tabIndex = 0;
-
-  mounted() {
-    if (this.$route.params.vlkId && this.oppiaine) {
-      const vlk = _.head(_.filter(this.oppiaine.vuosiluokkakokonaisuudet, vlk => _.toString(_.get(vlk, '_vuosiluokkaKokonaisuus')) === _.toString(this.$route.params.vlkId)));
-      this.tabIndex = _.indexOf(this.oppiaine.vuosiluokkakokonaisuudet, vlk);
-    }
+onMounted(() => {
+  if (route.params.vlkId && oppiaine.value) {
+    const vlk = _.head(_.filter(oppiaine.value.vuosiluokkakokonaisuudet, vlk => _.toString(_.get(vlk, '_vuosiluokkaKokonaisuus')) === _.toString(route.params.vlkId)));
+    tabIndex.value = _.indexOf(oppiaine.value.vuosiluokkakokonaisuudet, vlk);
   }
+});
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
 
-  get laajaalaisetOsaamiset() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset') as any;
-  }
+const laajaalaisetOsaamiset = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset') as any;
+});
 
-  get perusteenOppiaine() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
-  }
+const perusteenOppiaine = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: oppiaineId.value }) as any;
+});
 
-  get vuosiluokkakokonaisuudet() {
-    return _.get(this.perusteenOppiaine, 'vuosiluokkakokonaisuudet');
-  }
+const vuosiluokkakokonaisuudet = computed(() => {
+  return _.get(perusteenOppiaine.value, 'vuosiluokkakokonaisuudet');
+});
 
-  get perusteenVuosiluokkakokonaisuudet() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.vuosiluokkakokonaisuudet') as any;
-  }
+const perusteenVuosiluokkakokonaisuudet = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto('perusopetus.vuosiluokkakokonaisuudet') as any;
+});
 
-  get oppiaine() {
-    const vuosiluokkakokonaisuudetById = _.keyBy(this.perusteenVuosiluokkakokonaisuudet, 'id');
-    const laajaalaisetOsaamiset = _.keyBy(this.laajaalaisetOsaamiset, 'id');
-    return {
-      ...this.perusteenOppiaine,
-      vuosiluokkakokonaisuudet: _.chain(this.vuosiluokkakokonaisuudet)
-        .map(vlk => {
-          const vlkSisaltoalueetById = _.keyBy(vlk.sisaltoalueet, 'id');
-          return {
-            ...vlk,
-            nimi: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'nimi'),
-            vuosiluokat: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'vuosiluokat'),
-            tavoitteet: _.map(vlk.tavoitteet, tavoite => {
-              return {
-                ...tavoite,
-                laajattavoitteet: _.chain(tavoite.laajattavoitteet)
-                  .map((laajatavoitet: string) => {
-                    return laajaalaisetOsaamiset[laajatavoitet] as LaajaalainenOsaaminenDto;
-                  })
-                  .sortBy((ltavoite: any) => ltavoite.nimi[Kielet.getSisaltoKieli.value])
-                  .value() as any,
-                sisaltoalueet: _.chain(tavoite.sisaltoalueet)
-                  .map((sisaltoalue: string) => vlkSisaltoalueetById[sisaltoalue])
-                  .reject(_.isNil)
-                  .sortBy((sisaltoalue: any) => sisaltoalue.nimi[Kielet.getSisaltoKieli.value])
-                  .value() as any,
-              };
-            }),
-          };
-        })
-        .sortBy('vuosiluokat')
-        .value(),
-    };
-  }
-
-  hasContent(obj) {
-    return obj?.teksti && _.get(obj, 'teksti')[Kielet.getSisaltoKieli.value];
-  }
-
-  get oppimaaratFields() {
-    return [{
-      key: 'nimi',
-      thStyle: {
-        display: 'none',
-      },
-    }];
-  }
-
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
-
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
-
-  get oppimaarat() {
-    return _.chain(this.oppiaine!.oppimaarat)
-      .filter(oppimaara => _.includes(_.map(oppimaara.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus'), _.toString(this.$route.params.vlkId)))
-      .map(oppimaara => {
+const oppiaine = computed(() => {
+  const vuosiluokkakokonaisuudetById = _.keyBy(perusteenVuosiluokkakokonaisuudet.value, 'id');
+  const laajaalaisetOsaamisetMap = _.keyBy(laajaalaisetOsaamiset.value, 'id');
+  return {
+    ...perusteenOppiaine.value,
+    vuosiluokkakokonaisuudet: _.chain(vuosiluokkakokonaisuudet.value)
+      .map(vlk => {
+        const vlkSisaltoalueetById = _.keyBy(vlk.sisaltoalueet, 'id');
         return {
-          ...oppimaara,
-          route: {
-            name: this.$route.params.vlkId ? 'vuosiluokanoppiaine' : 'perusopetusoppiaine',
-            params: {
-              oppiaineId: _.toString(oppimaara.id),
-              ...(this.$route.params.vlkId && { vlkId: this.$route.params.vlkId }),
-            },
-          },
+          ...vlk,
+          nimi: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'nimi'),
+          vuosiluokat: _.get(vuosiluokkakokonaisuudetById[_.get(vlk, '_vuosiluokkaKokonaisuus')], 'vuosiluokat'),
+          tavoitteet: _.map(vlk.tavoitteet, tavoite => {
+            return {
+              ...tavoite,
+              laajattavoitteet: _.chain(tavoite.laajattavoitteet)
+                .map((laajatavoitet: string) => {
+                  return laajaalaisetOsaamisetMap[laajatavoitet] as LaajaalainenOsaaminenDto;
+                })
+                .sortBy((ltavoite: any) => ltavoite.nimi[Kielet.getSisaltoKieli.value])
+                .value() as any,
+              sisaltoalueet: _.chain(tavoite.sisaltoalueet)
+                .map((sisaltoalue: string) => vlkSisaltoalueetById[sisaltoalue])
+                .reject(_.isNil)
+                .sortBy((sisaltoalue: any) => sisaltoalue.nimi[Kielet.getSisaltoKieli.value])
+                .value() as any,
+            };
+          }),
         };
       })
-      .value();
-  }
+      .sortBy('vuosiluokat')
+      .value(),
+  };
+});
 
-  toggleTavoitteet() {
-    _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle());
-  }
-
-  get kohdealueetById() {
-    if (this.oppiaine) {
-      return _.keyBy(this.oppiaine.kohdealueet, 'id');
-    }
-    else {
-      return {};
-    }
-  }
+function hasContent(obj: any) {
+  return obj?.teksti && _.get(obj, 'teksti')[Kielet.getSisaltoKieli.value];
 }
+
+const oppimaaratFields = computed(() => {
+  return [{
+    key: 'nimi',
+    thStyle: {
+      display: 'none',
+    },
+  }];
+});
+
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
+
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
+
+const oppimaarat = computed(() => {
+  if (!oppiaine.value) return [];
+
+  return _.map(oppiaine.value.oppimaarat, oppimaara => {
+    return {
+      ...oppimaara,
+      route: {
+        name: route.params.vlkId ? 'vuosiluokanoppiaine' : 'perusopetusoppiaine',
+        params: {
+          oppiaineId: _.toString(oppimaara.id),
+          ...(route.params.vlkId && { vlkId: route.params.vlkId }),
+        },
+      },
+    };
+  });
+});
+
+function toggleTavoitteet() {
+  _.forEach(tavoitecollapse.value, (tavoite: any) => tavoite.toggle());
+}
+
+const kohdealueetById = computed(() => {
+  if (oppiaine.value) {
+    return _.keyBy(oppiaine.value.kohdealueet, 'id');
+  }
+  else {
+    return {};
+  }
+});
 </script>
 
 <style scoped lang="scss">

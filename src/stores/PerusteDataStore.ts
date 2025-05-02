@@ -1,4 +1,4 @@
-import { Store, Getter, State } from '@shared/stores/store';
+import { defineStore } from 'pinia';
 import * as _ from 'lodash';
 import {
   NavigationNodeDto,
@@ -33,258 +33,332 @@ import { Kielet } from '@shared/stores/kieli';
 import { isKoulutustyyppiAmmatillinen, isPerusteVanhaLukio, isYleissivistavaKoulutustyyppi } from '@shared/utils/perusteet';
 import { deepFind } from '@shared/utils/helpers';
 import { isAmmatillinenKoulutustyyppi } from '../../eperusteet-frontend-utils/vue/src/utils/perusteet';
-@Store
-export class PerusteDataStore {
-  @State() public perusteKaikki: PerusteKaikkiDto | null = null;
-  @State() public perusteId: number;
-  @State() public esikatselu: boolean | undefined = undefined;
-  @State() public revision: number | undefined = undefined;
-  @State() public navigation: NavigationNodeDto | null = null;
-  @State() public suoritustapa: string | null = null;
-  @State() public currentRoute: Location | null = null;
-  @State() public termit: TermiDto[] | null = null;
-  @State() public kuvat: LiiteDtoWrapper[] | null = null;
-  @State() public dokumentti: string | null = null;
-  @State() public korvaavatPerusteet: any[] = [];
-  @State() public sidenavFilter: NavigationFilter = {
-    label: '',
-    isEnabled: false,
-  };
-  @State() public kvLiitteet: any = {};
-  @State() public osaamisalaKuvaukset: { [key: string]: { [key: string]: Array<TekstiKappaleDto>; }; } = {};
-  @State() public liitteet: any = {};
-  @State() public lukioOppineet: any[] = [];
-  @State() public geneerisetArviointiasteikot: any[] = [];
-  @State() public arviointiasteikot: any[] = [];
-  @State() public julkaisut: JulkaisuBaseDto[] | null = null;
-  @State() public muutosmaaraykset: MaaraysDto[] | null = null;
-  @State() public maarays: MaaraysDto | null = null;
+import { ref, computed } from 'vue';
+import { pinia } from '@/pinia';
 
-  public static async create(perusteId: number, revision: number | null = null) {
-    const result = new PerusteDataStore(perusteId, revision);
-    await result.init();
+export const usePerusteDataStore = (key) => {
+  const store = defineStore('perusteStore-' + key, () => {
 
-    return result;
-  }
+    // State as refs
+    const perusteKaikki = ref<PerusteKaikkiDto | null>(null);
+    const perusteId = ref<number>(0);
+    const esikatselu = ref<boolean | undefined>(undefined);
+    const revision = ref<number | undefined>(undefined);
+    const navigation = ref<NavigationNodeDto | null>(null);
+    const suoritustapa = ref<string | null>(null);
+    const currentRoute = ref<Location | null>(null);
+    const termit = ref<TermiDto[] | null>(null);
+    const kuvat = ref<LiiteDtoWrapper[] | null>(null);
+    const dokumentti = ref<string | null>(null);
+    const korvaavatPerusteet = ref<any[]>([]);
+    const sidenavFilter = ref<NavigationFilter>({
+      label: '',
+      isEnabled: false,
+    });
+    const kvLiitteet = ref<any>({});
+    const osaamisalaKuvaukset = ref<{ [key: string]: { [key: string]: Array<TekstiKappaleDto>; }; }>({});
+    const liitteet = ref<any>({});
+    const lukioOppineet = ref<any[]>([]);
+    const geneerisetArviointiasteikot = ref<any[]>([]);
+    const arviointiasteikot = ref<any[]>([]);
+    const julkaisut = ref<JulkaisuBaseDto[] | null>(null);
+    const muutosmaaraykset = ref<MaaraysDto[] | null>(null);
+    const maarays = ref<MaaraysDto | null>(null);
 
-  constructor(perusteId: number, revision?) {
-    this.perusteId = perusteId;
-    this.esikatselu = revision === '0' ? true : undefined;
-    this.revision = _.isNull(revision) ? undefined : revision;
-  }
+    // Getters
+    const peruste = computed(() => perusteKaikki.value);
 
-  private async init() {
-    [
-      this.perusteKaikki,
-      this.termit,
-      this.liitteet,
-      this.muutosmaaraykset,
-      this.korvaavatPerusteet,
-      this.maarays,
-    ] = _.map(await Promise.all([
-      Perusteet.getKokoSisalto(this.perusteId, this.revision, this.esikatselu) as any,
-      Termit.getAllTermit(this.perusteId),
-      Liitetiedostot.getAllLiitteet(this.perusteId),
-      Maaraykset.getPerusteenJulkaistutMuutosmaaraykset(this.perusteId),
-      Perusteet.getKorvattavatPerusteet(this.perusteId),
-      Maaraykset.getMaaraysPerusteella(this.perusteId),
-    ]), 'data');
+    const sidenavLoading = computed(() => {
+      return !peruste.value || !navigation.value;
+    });
 
-    this.kuvat = _.map((await Liitetiedostot.getAllKuvat(this.perusteId)).data, kuva => ({
-      id: kuva.id!,
-      kuva,
-      src: baseURL + LiitetiedostotParam.getKuva(this.perusteId, kuva.id!).url,
-    }));
-
-    await Promise.all([
-      this.fetchNavigation(),
-      this.getDokumentti(),
-      this.fetchJulkaisut(),
-    ]);
-
-    if (isKoulutustyyppiAmmatillinen(this.perusteKaikki?.koulutustyyppi!)) {
-      try {
-        await this.getKvLiitteet();
-      }
-      catch (err) { }
-
-      [
-        this.osaamisalaKuvaukset,
-        this.arviointiasteikot,
-      ] = _.map(await Promise.all([
-        Perusteet.getOsaamisalat(this.perusteId) as any,
-        Arviointiasteikot.getAll(),
-      ]), 'data');
-    }
-
-    if (isPerusteVanhaLukio(this.peruste)) {
-      this.lukioOppineet = _.get(this.perusteKaikki, 'lukiokoulutus.rakenne.oppiaineet')!;
-    }
-  }
-
-  async fetchJulkaisut() {
-    this.julkaisut = (await Julkaisut.getJulkisetJulkaisut(this.perusteId!)).data;
-  }
-
-  public getJulkaistuPerusteSisalto(filter) {
-    return deepFind(filter, this.perusteKaikki);
-  }
-
-  private async fetchNavigation() {
-    this.navigation = (await Perusteet.getNavigationPublic(this.perusteId, Kielet.getUiKieli.value, this.esikatselu, this.revision)).data;
-  }
-
-  @Getter(state => {
-    return state.perusteKaikki;
-  })
-  public readonly peruste!: PerusteKaikkiDto | null;
-
-  @Getter((state, getters) => {
-    return !getters.peruste || !state.navigation;
-  })
-  public readonly sidenavLoading!: boolean;
-
-  @Getter((state, getters) => {
-    if (!getters.peruste || !state.navigation) {
-      return null;
-    }
-    else {
-      if (naytaPerusteTiedotNaviMenussa(getters.peruste)) {
-        const perusteenTiedotNimi = isYleissivistavaKoulutustyyppi(getters.peruste?.koulutustyyppi) ? 'perusteen-tiedot-yleissivistava' : 'perusteen-tiedot';
-        const nimi = getters.peruste?.tyyppi === 'normaali' ? perusteenTiedotNimi : 'oppaan-tiedot';
-        const tiedot = {
-          ...buildNavigationNode('tiedot', nimi, 'perusteTiedot', {
-            ...(state.revision && { revision: state.revision }),
-          }),
-        };
-
-        return buildNavigation(state.navigation, tiedot, false, state.revision);
+    const sidenav = computed(() => {
+      if (!peruste.value || !navigation.value) {
+        return null;
       }
       else {
-        return buildNavigation(state.navigation, null, false, state.revision);
+        if (naytaPerusteTiedotNaviMenussa(peruste.value)) {
+          const perusteenTiedotNimi = isYleissivistavaKoulutustyyppi(peruste.value?.koulutustyyppi) ? 'perusteen-tiedot-yleissivistava' : 'perusteen-tiedot';
+          const nimi = peruste.value?.tyyppi === 'normaali' ? perusteenTiedotNimi : 'oppaan-tiedot';
+          const tiedot = {
+            ...buildNavigationNode('tiedot', nimi, 'perusteTiedot', {
+              ...(revision.value && { revision: revision.value }),
+            }),
+          };
+
+          return buildNavigation(navigation.value, tiedot, false, revision.value);
+        }
+        else {
+          return buildNavigation(navigation.value, null, false, revision.value);
+        }
       }
-    }
-  })
-  public readonly sidenav!: NavigationNode | null;
+    });
 
-  @Getter((state, getters) => {
-    if (!getters.sidenav) {
+    const collapsedSidenav = computed(() => {
+      if (!sidenav.value) {
+        return null;
+      }
+
+      const pathKeys = _.map(_.get(current.value, 'path'), 'key');
+      const onPath = node => {
+        const parent = node.path[_.size(node.path) - 2];
+        return _.includes(pathKeys, node.key)
+            || (parent && _.includes(pathKeys, parent.key));
+      };
+
+      const map = (value, depth = 0) => {
+        return {
+          ...value,
+          isVisible: depth === 1 || onPath(value),
+          children: _.map(value.children, child => map(child, depth + 1)),
+        };
+      };
+
+      return map(sidenav.value);
+    });
+
+    const flattenedSidenav = computed(() => {
+      const root = sidenav.value;
+      const result: Array<NavigationNode> = [];
+
+      function traverseTree(node: NavigationNode) {
+        result.push(node);
+        (node.children || [])
+          .map(child => {
+            traverseTree(child);
+            return child;
+          });
+      }
+
+      if (root) {
+        traverseTree(root);
+      }
+
+      return result;
+    });
+
+    const current = computed(() => {
+      if (flattenedSidenav.value && currentRoute.value) {
+        for (const node of flattenedSidenav.value) {
+          if (node.location && _.isMatch(currentRoute.value, node.location)) {
+            return node || null;
+          }
+        }
+      }
       return null;
-    }
+    });
 
-    const pathKeys = _.map(_.get(getters, 'current.path'), 'key');
-    const onPath = node => {
-      const parent = node.path[_.size(node.path) - 2];
-      return _.includes(pathKeys, node.key)
-          || (parent && _.includes(pathKeys, parent.key));
+    // Actions
+    const create = async (id: number, rev: number | null = null) => {
+      perusteId.value = id;
+      esikatselu.value = rev === 0 ? true : undefined;
+      revision.value = _.isNull(rev) ? undefined : rev;
+      await init();
+
+      // return {
+      //   perusteKaikki,
+      //   perusteId,
+      //   esikatselu,
+      //   revision,
+      //   navigation,
+      //   suoritustapa,
+      //   currentRoute,
+      //   termit,
+      //   kuvat,
+      //   dokumentti,
+      //   korvaavatPerusteet,
+      //   sidenavFilter,
+      //   kvLiitteet,
+      //   osaamisalaKuvaukset,
+      //   liitteet,
+      //   lukioOppineet,
+      //   geneerisetArviointiasteikot,
+      //   arviointiasteikot,
+      //   julkaisut,
+      //   muutosmaaraykset,
+      //   maarays,
+      //   peruste,
+      //   sidenavLoading,
+      //   sidenav,
+      //   collapsedSidenav,
+      //   flattenedSidenav,
+      //   current,
+      //   fetchJulkaisut,
+      //   getJulkaistuPerusteSisalto,
+      //   getDokumentti,
+      //   getKvLiitteet,
+      //   getKvLiite,
+      //   updateRoute,
+      // };
     };
 
-    const map = (value, depth = 0) => {
-      return {
-        ...value,
-        isVisible: depth === 1 || onPath(value),
-        children: _.map(value.children, child => map(child, depth + 1)),
+    const init = async () => {
+      const responses = await Promise.all([
+        Perusteet.getKokoSisalto(perusteId.value, revision.value, esikatselu.value) as any,
+        Termit.getAllTermit(perusteId.value),
+        Liitetiedostot.getAllLiitteet(perusteId.value),
+        Maaraykset.getPerusteenJulkaistutMuutosmaaraykset(perusteId.value),
+        Perusteet.getKorvattavatPerusteet(perusteId.value),
+        Maaraykset.getMaaraysPerusteella(perusteId.value),
+      ]);
+
+      perusteKaikki.value = responses[0].data;
+      termit.value = responses[1].data;
+      liitteet.value = responses[2].data;
+      muutosmaaraykset.value = responses[3].data;
+      korvaavatPerusteet.value = responses[4].data;
+      maarays.value = responses[5].data;
+
+      kuvat.value = _.map((await Liitetiedostot.getAllKuvat(perusteId.value)).data, kuva => ({
+        id: kuva.id!,
+        kuva,
+        src: baseURL + LiitetiedostotParam.getKuva(perusteId.value, kuva.id!).url,
+      }));
+
+      await Promise.all([
+        fetchNavigation(),
+        getDokumentti(),
+        fetchJulkaisut(),
+      ]);
+
+      if (isKoulutustyyppiAmmatillinen(perusteKaikki.value?.koulutustyyppi!)) {
+        try {
+          await getKvLiitteet();
+        }
+        catch (err) { }
+
+        const results = await Promise.all([
+          Perusteet.getOsaamisalat(perusteId.value) as any,
+          Arviointiasteikot.getAll(),
+        ]);
+
+        osaamisalaKuvaukset.value = results[0].data;
+        arviointiasteikot.value = results[1].data;
+      }
+
+      if (isPerusteVanhaLukio(peruste.value)) {
+        lukioOppineet.value = _.get(perusteKaikki.value, 'lukiokoulutus.rakenne.oppiaineet')!;
+      }
+    };
+
+    const fetchJulkaisut = async () => {
+      julkaisut.value = (await Julkaisut.getJulkisetJulkaisut(perusteId.value!)).data;
+    };
+
+    const getJulkaistuPerusteSisalto = (filter) => {
+      return deepFind(filter, perusteKaikki.value);
+    };
+
+    const fetchNavigation = async () => {
+      navigation.value = (await Perusteet.getNavigationPublic(perusteId.value, Kielet.getUiKieli.value, esikatselu.value, revision.value)).data;
+    };
+
+    const getDokumentti = async () => {
+      dokumentti.value = null;
+      const sisaltoKieli = Kielet.getSisaltoKieli.value;
+      const suoritustavat = peruste.value!.suoritustavat ? peruste.value!.suoritustavat : [{ suoritustapakoodi: 'REFORMI' }] as any[];
+      if (suoritustavat) {
+        for (let i = 0; i < suoritustavat.length; i++) {
+          const st = suoritustavat[i];
+          const suoritustapakoodi = st.suoritustapakoodi;
+          if (suoritustapakoodi) {
+            let dokumenttiId;
+
+            if (!esikatselu.value) {
+              const dokumentti = (await Dokumentit.getJulkaistuDokumentti(perusteId.value, sisaltoKieli, revision.value)).data;
+              if (dokumentti?.tila === _.toLower(DokumenttiDtoTilaEnum.VALMIS)) {
+                dokumenttiId = dokumentti.id;
+              }
+            }
+
+            if (esikatselu.value) {
+              dokumenttiId = (await Dokumentit.getDokumenttiId(perusteId.value, sisaltoKieli, suoritustapakoodi)).data;
+            }
+
+            if (dokumenttiId) {
+              dokumentti.value = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
+            }
+          }
+        }
+      }
+
+      if (dokumentti.value === null) {
+        dokumentti.value = '';
+      }
+    };
+
+    const getLiite = async (lang: string) => {
+      try {
+        return await getKvLiite(lang);
+      }
+      catch (err) {
+        return null;
+      }
+    };
+
+    const getKvLiitteet = async () => {
+      kvLiitteet.value = {
+        fi: await getLiite('fi'),
+        sv: await getLiite('sv'),
+        en: await getLiite('en'),
       };
     };
 
-    return map(getters.sidenav);
-  })
-  public readonly collapsedSidenav!: NavigationNode | null;
-
-  @Getter((state, getters) => {
-    const root = getters.sidenav;
-    const result: Array<NavigationNode> = [];
-
-    function traverseTree(node: NavigationNode) {
-      result.push(node);
-      (node.children || [])
-        .map(child => {
-          traverseTree(child);
-          return child;
-        });
-    }
-
-    if (root) {
-      traverseTree(root);
-    }
-
-    return result;
-  })
-  public readonly flattenedSidenav!: NavigationNode[];
-
-  @Getter((state, getters) => {
-    if (getters.flattenedSidenav && state.currentRoute) {
-      for (const node of getters.flattenedSidenav) {
-        if (node.location && _.isMatch(state.currentRoute, node.location)) {
-          return node || null;
+    const getKvLiite = async (kieli) => {
+      if (peruste.value && peruste.value.suoritustavat) {
+        const dokumenttiId = (await Dokumentit.getKVLiiteDokumenttiId(perusteId.value, kieli, peruste.value.suoritustavat[0].suoritustapakoodi!)).data;
+        if (dokumenttiId) {
+          return baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
         }
       }
-    }
-    return null;
-  })
-  public readonly current!: NavigationNode | null;
-
-  public async getDokumentti() {
-    this.dokumentti = null;
-    const sisaltoKieli = Kielet.getSisaltoKieli.value;
-    const suoritustavat = this.peruste!.suoritustavat ? this.peruste!.suoritustavat : [{ suoritustapakoodi: 'REFORMI' }] as any[];
-    if (suoritustavat) {
-      for (let i = 0; i < suoritustavat.length; i++) {
-        const st = suoritustavat[i];
-        const suoritustapakoodi = st.suoritustapakoodi;
-        if (suoritustapakoodi) {
-          let dokumenttiId;
-
-          if (!this.esikatselu) {
-            const dokumentti = (await Dokumentit.getJulkaistuDokumentti(this.perusteId, sisaltoKieli, this.revision)).data;
-            if (dokumentti?.tila === _.toLower(DokumenttiDtoTilaEnum.VALMIS)) {
-              dokumenttiId = dokumentti.id;
-            }
-          }
-
-          if (this.esikatselu) {
-            dokumenttiId = (await Dokumentit.getDokumenttiId(this.perusteId, sisaltoKieli, suoritustapakoodi)).data;
-          }
-
-          if (dokumenttiId) {
-            this.dokumentti = baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
-          }
-        }
-      }
-    }
-
-    if (this.dokumentti === null) {
-      this.dokumentti = '';
-    }
-  }
-
-  private async getLiite(lang: string) {
-    try {
-      return await this.getKvLiite(lang);
-    }
-    catch (err) {
-      return null;
-    }
-  }
-
-  public async getKvLiitteet() {
-    this.kvLiitteet = {
-      fi: await this.getKvLiite('fi'),
-      sv: await this.getKvLiite('sv'),
-      en: await this.getKvLiite('en'),
     };
-  }
 
-  public async getKvLiite(kieli) {
-    if (this.peruste && this.peruste.suoritustavat) {
-      const dokumenttiId = (await Dokumentit.getKVLiiteDokumenttiId(this.perusteId, kieli, this.peruste.suoritustavat[0].suoritustapakoodi!)).data;
-      if (dokumenttiId) {
-        return baseURL + DokumentitParam.getDokumentti(_.toString(dokumenttiId)).url;
-      }
-    }
-  }
+    const updateRoute = (route) => {
+      currentRoute.value = route;
+    };
 
-  public updateRoute(route) {
-    this.currentRoute = route;
-  }
-}
+    return {
+      // State
+      perusteKaikki,
+      perusteId,
+      esikatselu,
+      revision,
+      navigation,
+      suoritustapa,
+      currentRoute,
+      termit,
+      kuvat,
+      dokumentti,
+      korvaavatPerusteet,
+      sidenavFilter,
+      kvLiitteet,
+      osaamisalaKuvaukset,
+      liitteet,
+      lukioOppineet,
+      geneerisetArviointiasteikot,
+      arviointiasteikot,
+      julkaisut,
+      muutosmaaraykset,
+      maarays,
+
+      // Getters
+      peruste,
+      sidenavLoading,
+      sidenav,
+      collapsedSidenav,
+      flattenedSidenav,
+      current,
+
+      // Actions
+      create,
+      fetchJulkaisut,
+      getJulkaistuPerusteSisalto,
+      getDokumentti,
+      getKvLiitteet,
+      getKvLiite,
+      updateRoute,
+    };
+  });
+
+  return store(pinia);
+};

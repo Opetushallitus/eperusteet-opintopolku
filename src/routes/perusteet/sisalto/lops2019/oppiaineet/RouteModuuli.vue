@@ -21,45 +21,42 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import ModuuliEsitys from '@shared/components/EpOpintojaksonModuuli/ModuuliEsitys.vue';
 import * as _ from 'lodash';
 
-@Component({
-  components: {
-    EpSpinner,
-    ModuuliEsitys,
-  },
-})
-export default class RouteModuuli extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-  get moduuliId() {
-    return _.toNumber(this.$route.params.moduuliId);
-  }
+const perusteDataStore = getCachedPerusteStore();
 
-  get moduuli() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.moduuliId }) as any;
-  }
+const route = useRoute();
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const moduuliId = computed(() => {
+  return _.toNumber(route.params.moduuliId);
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const moduuli = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: moduuliId.value }) as any;
+});
 
-  get koodi() {
-    if (this.moduuli) {
-      return this.moduuli.koodi;
-    }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
+
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
+
+const koodi = computed(() => {
+  if (moduuli.value) {
+    return moduuli.value.koodi;
   }
-}
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">

@@ -17,7 +17,6 @@
         v-if="sisaltoviite.tyyppi === 'tekstikappale'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-tutkinnonosa
@@ -34,7 +33,6 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
       <ep-toteutussuunnitelma-opintokokonaisuus
         v-else-if="sisaltoviite.tyyppi === 'opintokokonaisuus'"
@@ -46,7 +44,6 @@
         v-else-if="sisaltoviite.tyyppi === 'laajaalainenosaaminen'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koulutuksen-osat
@@ -54,7 +51,6 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koulutuksen-osa
@@ -62,7 +58,6 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen
@@ -70,7 +65,6 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
       />
 
       <ep-toteutussuunnitelma-koto-opinto-sisalto
@@ -78,7 +72,6 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
         sisalto-viite-sisalto="kotoKielitaitotaso"
       />
 
@@ -87,7 +80,6 @@
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-        :opetussuunnitelma-data-store="opetussuunnitelmaDataStore"
         sisalto-viite-sisalto="kotoOpinto"
       />
 
@@ -100,9 +92,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpToteutussuunnitelmaTekstikappale from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTekstikappale.vue';
 import EpToteutussuunnitelmaTutkinnonosa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTutkinnonosa.vue';
@@ -113,109 +106,93 @@ import EpToteutussuunnitelmaKoulutuksenOsat from '@/components/EpToteutussuunnit
 import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsa.vue';
 import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoOpintoSisalto.vue';
 import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
-import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import EpToteutussuunnitelmaOsaamismerkki from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOsaamismerkki.vue';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
-@Component({
-  components: {
-    EpToteutussuunnitelmaOsaamismerkki,
-    EpSpinner,
-    EpToteutussuunnitelmaTekstikappale,
-    EpToteutussuunnitelmaTutkinnonosa,
-    EpToteutussuunnitelmaSuorituspolku,
-    EpToteutussuunnitelmaOpintokokonaisuus,
-    EpToteutussuunnitelmaLaajaalainenOsaaminen,
-    EpToteutussuunnitelmaKoulutuksenOsat,
-    EpToteutussuunnitelmaKoulutuksenOsa,
-    EpToteutussuunnitelmaKotoOpintoSisalto,
-    EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen,
-  },
-})
-export default class RouteToteutussuunnitelmaSisalto extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+const route = useRoute();
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get fetching() {
-    return !this.sisaltoviite;
-  }
+const sisaltoviiteId = computed(() => {
+  return _.toNumber(route.params.sisaltoviiteId);
+});
 
-  get sisaltoviiteId() {
-    return _.toNumber(this.$route.params.sisaltoviiteId);
-  }
+const sisaltoviite = computed(() => {
+  const julkaistuSisalto = opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: sisaltoviiteId.value });
 
-  get sisaltoviite() {
-    const julkaistuSisalto = this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
+  if (_.get(julkaistuSisalto, 'tosa')) {
+    const tutkinnonosat = opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat');
+    const tutkinnonosa = _.find(tutkinnonosat, tutkinnonosa => tutkinnonosa.tosa.id === julkaistuSisalto.tosa.id);
 
-    if (_.get(julkaistuSisalto, 'tosa')) {
-      const tutkinnonosat = this.opetussuunnitelmaDataStore.getJulkaistuSisalto('tutkinnonOsat');
-      const tutkinnonosa = _.find(tutkinnonosat, tutkinnonosa => tutkinnonosa.tosa.id === julkaistuSisalto.tosa.id);
-
-      if (tutkinnonosa) {
-        return {
-          ...julkaistuSisalto,
-          tosa: tutkinnonosa.tosa,
-        };
-      }
+    if (tutkinnonosa) {
+      return {
+        ...julkaistuSisalto,
+        tosa: tutkinnonosa.tosa,
+      };
     }
-
-    return julkaistuSisalto;
   }
 
-  get perusteenTutkinnonOsanId() {
-    return this.sisaltoviite.tosa?.vierastutkinnonosa?.tosaId || this.sisaltoviite.tosa?.perusteentutkinnonosa;
+  return julkaistuSisalto;
+});
+
+const fetching = computed(() => {
+  return !sisaltoviite.value;
+});
+
+const perusteenTutkinnonOsanId = computed(() => {
+  return sisaltoviite.value.tosa?.vierastutkinnonosa?.tosaId || sisaltoviite.value.tosa?.perusteentutkinnonosa;
+});
+
+const perusteenTutkinnonosaViite = computed(() => {
+  return _.find(opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite =>
+    _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(perusteenTutkinnonOsanId.value));
+});
+
+const perusteenTutkinnonosa = computed(() => {
+  return _.find(opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, perusteTosaViite =>
+    _.get(perusteTosaViite, 'id') === _.toNumber(perusteenTutkinnonOsanId.value));
+});
+
+const opetussuunnitelma = computed(() => {
+  return opetussuunnitelmaDataStore.opetussuunnitelma;
+});
+
+const kuvat = computed(() => {
+  return [
+    ...opetussuunnitelmaDataStore.kuvat,
+    ...opetussuunnitelmaDataStore.perusteKuvat,
+  ];
+});
+
+const arviointiasteikot = computed(() => {
+  return opetussuunnitelmaDataStore.arviointiasteikot;
+});
+
+const current = computed((): NavigationNode | null => {
+  return opetussuunnitelmaDataStore.current;
+});
+
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
+
+const alikappaleNumeroinnitById = computed(() => {
+  if (current.value?.children) {
+    return current.value?.children?.reduce((acc: any, child: any) => {
+      acc[child.id] = child?.meta?.numerointi;
+      return acc;
+    }, {});
   }
 
-  get perusteenTutkinnonosaViite() {
-    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsienViitteet, perusteTosaViite => _.get(perusteTosaViite, '_tutkinnonOsa') === _.toString(this.perusteenTutkinnonOsanId));
-  }
-
-  get perusteenTutkinnonosa() {
-    return _.find(this.opetussuunnitelmaDataStore.perusteidenTutkinnonOsat, perusteTosaViite => _.get(perusteTosaViite, 'id') === _.toNumber(this.perusteenTutkinnonOsanId));
-  }
-
-  get opetussuunnitelma() {
-    return this.opetussuunnitelmaDataStore.opetussuunnitelma;
-  }
-
-  get kuvat() {
-    return [
-      ...this.opetussuunnitelmaDataStore.kuvat,
-      ...this.opetussuunnitelmaDataStore.perusteKuvat,
-    ];
-  }
-
-  get arviointiasteikot() {
-    return this.opetussuunnitelmaDataStore.arviointiasteikot;
-  }
-
-  get current(): NavigationNode | null {
-    return this.opetussuunnitelmaDataStore.current;
-  }
-
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-
-  get alikappaleNumeroinnitById() {
-    if (this.current?.children) {
-      return this.current?.children?.reduce((acc: any, child: any) => {
-        acc[child.id] = child?.meta?.numerointi;
-        return acc;
-      }, {});
-    }
-
-    return {};
-  }
-}
+  return {};
+});
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-  .content {
-    padding: 0 $content-padding;
-
-  }
-
+.content {
+  padding: 0 $content-padding;
+}
 </style>

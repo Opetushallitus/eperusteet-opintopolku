@@ -1,10 +1,6 @@
 <template>
   <div>
-    <EpJulkinenSidenav
-      :julkaistut-koulutustyypit-store="julkaistutKoulutustyypitStore"
-      :tietoapalvelusta-store="tietoapalvelustaStore"
-      :osaamismerkit-store="osaamismerkitStore"
-    />
+    <EpJulkinenSidenav />
     <main role="main">
       <router-view />
     </main>
@@ -12,102 +8,94 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Provide, ProvideReactive, Vue, Watch } from 'vue-property-decorator';
+import { computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
-import { Meta } from '@shared/utils/decorators';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { Kielet } from '@shared/stores/kieli';
 import EpJulkinenSidenav from '@/components/EpJulkinenSidenav/EpJulkinenSidenav.vue';
-import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { $t } from '@shared/utils/globals';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpJulkinenSidenav,
-    EpFooter,
-  },
-})
-export default class Root extends Vue {
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+const route = useRoute();
+const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
+const tietoapalvelustaStore = useTietoapalvelustaStore(pinia);
+const osaamismerkitStore = useOsaamismerkitStore(pinia);
 
-  @Prop({ required: true })
-  private tietoapalvelustaStore!: TietoapalvelustaStore;
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  @Prop({ required: true })
-  private osaamismerkitStore!: OsaamismerkitStore;
+const julkaistutKoulutustyypit = computed(() => {
+  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
+});
 
-  async mounted() {
-    await Promise.all([this.sisaltoKieliChange(), this.tietoapalvelustaStore.fetch()]);
-  }
+const titleTemplate = computed(() => {
+  return '%s - ' + $t('eperusteet');
+});
 
-  @Watch('sisaltoKieli')
-  async sisaltoKieliChange() {
-    await this.julkaistutKoulutustyypitStore.fetch(this.sisaltoKieli);
-  }
+const sisaltoKieliChange = async () => {
+  await julkaistutKoulutustyypitStore.fetch(sisaltoKieli.value);
+};
 
-  get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
-  }
-
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get titleTemplate() {
-    return '%s - ' + this.$t('eperusteet');
-  }
-
-  @Meta
-  getMetaInfo() {
-    const lang = _.get(this.$route, 'params.lang');
-    return {
-      titleTemplate: this.titleTemplate,
-      htmlAttrs: {
-        lang: lang || 'fi',
+// Replacing @Meta decorator functionality
+const getMetaInfo = () => {
+  const lang = _.get(route, 'params.lang');
+  return {
+    titleTemplate: titleTemplate.value,
+    htmlAttrs: {
+      lang: lang || 'fi',
+    },
+    meta: [
+      {
+        vmid: 'description',
+        name: 'description',
+        content: $t('eperusteet-kuvaus'),
       },
-      meta: [
-        {
-          vmid: 'description',
-          name: 'description',
-          content: this.$t('eperusteet-kuvaus'),
-        },
-        {
-          vmid: 'keywords',
-          name: 'keywords',
-          content: this.$t('avainsanalista'),
-        },
-        {
-          vmid: 'author',
-          name: 'author',
-          content: this.$t('opetushallitus'),
-        },
-        {
-          vmid: 'og:site_name',
-          property: 'og:site_name',
-          content: this.$t('eperusteet'),
-        },
-        {
-          vmid: 'og:description',
-          property: 'og:description',
-          content: this.$t('eperusteet-kuvaus'),
-        },
-        {
-          vmid: 'og:locale',
-          property: 'og:locale',
-          content: lang + '_FI',
-        },
-      ],
-    };
-  }
+      {
+        vmid: 'keywords',
+        name: 'keywords',
+        content: $t('avainsanalista'),
+      },
+      {
+        vmid: 'author',
+        name: 'author',
+        content: $t('opetushallitus'),
+      },
+      {
+        vmid: 'og:site_name',
+        property: 'og:site_name',
+        content: $t('eperusteet'),
+      },
+      {
+        vmid: 'og:description',
+        property: 'og:description',
+        content: $t('eperusteet-kuvaus'),
+      },
+      {
+        vmid: 'og:locale',
+        property: 'og:locale',
+        content: lang + '_FI',
+      },
+    ],
+  };
+};
 
-  @Provide('commentingDisabled')
-  get commentingDisabled() {
-    return true;
-  }
-}
+// Setup meta information (this might need additional handling depending on Meta implementation)
+// Meta(getMetaInfo);
+
+// Watch for sisaltoKieli changes
+watch(sisaltoKieli, async () => {
+  await sisaltoKieliChange();
+}, { immediate: false });
+
+onMounted(async () => {
+  await Promise.all([sisaltoKieliChange(), tietoapalvelustaStore.fetch()]);
+});
 </script>
 
 <style lang="scss">

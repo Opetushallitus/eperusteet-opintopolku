@@ -63,15 +63,13 @@
   </svg>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-
-@Component
-export default class Tausta extends Vue {
-  @Prop({ default: '#008800', type: String })
-  private color!: string;
-}
-
+<script setup lang="ts">
+defineProps({
+  color: {
+    type: String,
+    default: '#008800',
+  },
+});
 </script>
 
 <style scoped>

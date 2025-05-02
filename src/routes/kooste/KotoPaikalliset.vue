@@ -57,9 +57,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
 import { Kielet } from '@shared/stores/kieli';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -71,110 +71,93 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
-@Component({
-  components: {
-    EpHeader,
-    EpSearch,
-    EpSpinner,
-    OpetussuunnitelmaTile,
-    EpMultiSelect,
-    EpBPagination,
-    EpHakutulosmaara,
+const props = defineProps({
+  paikallinenStore: {
+    type: Object as () => YleisetPaikallisetStore,
+    required: true,
   },
-})
-export default class KotoPaikalliset extends Vue {
-  @Prop({ required: true })
-  private paikallinenStore!: YleisetPaikallisetStore;
+});
 
-  private perPage = 10;
-  private query = {
-    koulutustyyppi: Koulutustyyppi.maahanmuuttajienkotoutumiskoulutus,
-    nimi: null,
-    sivu: 0,
-    sivukoko: 10,
-    kieli: this.kieli,
-  };
+const instance = getCurrentInstance();
+const perPage = ref(10);
+const kieli = computed(() => Kielet.getSisaltoKieli.value);
+const query = ref({
+  koulutustyyppi: Koulutustyyppi.maahanmuuttajienkotoutumiskoulutus,
+  nimi: null as string | null,
+  sivu: 0,
+  sivukoko: 10,
+  kieli: kieli.value,
+});
 
-  async mounted() {
-    if (this.paikallinenStore) {
-      await this.fetch();
-    }
+const queryNimi = computed(() => query.value.nimi);
+
+onMounted(async () => {
+  if (props.paikallinenStore) {
+    await fetch();
   }
+});
 
-  async fetch() {
-    if (_.size(this.queryNimi) === 0 || _.size(this.queryNimi) > 2) {
-      await this.paikallinenStore.fetchQuery(this.query);
-    }
+const fetch = async () => {
+  if (_.size(queryNimi.value) === 0 || _.size(queryNimi.value) > 2) {
+    await props.paikallinenStore.fetchQuery(query.value);
   }
+};
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get page() {
-    return this.opetussuunnitelmatPaged?.sivu! + 1;
-  }
-
-  set page(page) {
-    this.query = {
-      ...this.query,
+const page = computed({
+  get: () => opetussuunnitelmatPaged.value?.sivu! + 1,
+  set: (page) => {
+    query.value = {
+      ...query.value,
       sivu: page - 1,
     };
   }
+});
 
-  get queryNimi() {
-    return this.query.nimi;
+watch(() => queryNimi.value, () => {
+  query.value.sivu = 0;
+});
+
+watch(() => kieli.value, (val) => {
+  query.value = {
+    ...query.value,
+    kieli: val,
+  };
+});
+
+watch(() => query.value, async (newVal, oldVal) => {
+  await fetch();
+  if (oldVal.sivu !== newVal.sivu && instance?.proxy?.$el) {
+    (instance?.proxy?.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
   }
+}, { deep: true });
 
-  @Watch('queryNimi')
-  nimiChange() {
-    this.query.sivu = 0;
-  }
+const opetussuunnitelmat = computed(() => {
+  return props.paikallinenStore.opetussuunnitelmat.value;
+});
 
-  @Watch('kieli')
-  kieliChange(val) {
-    this.query = {
-      ...this.query,
-      kieli: val,
-    };
-  }
+const opetussuunnitelmatPaged = computed(() => {
+  return props.paikallinenStore.opetussuunnitelmatPaged.value;
+});
 
-  @Watch('query', { deep: true })
-  async queryChange(oldVal, newVal) {
-    await this.fetch();
-    if (oldVal.sivu !== newVal.sivu) {
-      (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
-    }
-  }
+const total = computed(() => {
+  return opetussuunnitelmatPaged.value?.kokonaismäärä;
+});
 
-  get total() {
-    return this.opetussuunnitelmatPaged?.kokonaismäärä;
-  }
-
-  get opetussuunnitelmat() {
-    return this.paikallinenStore.opetussuunnitelmat.value;
-  }
-
-  get opetussuunnitelmatPaged() {
-    return this.paikallinenStore.opetussuunnitelmatPaged.value;
-  }
-
-  get opetussuunnitelmatMapped() {
-    return _.chain(this.opetussuunnitelmat)
-      .map(ops => ({
-        ...ops,
-        route: {
-          name: 'toteutussuunnitelma',
-          params: {
-            toteutussuunnitelmaId: _.toString(ops.id),
-            koulutustyyppi: 'kotoutumiskoulutus',
-          },
+const opetussuunnitelmatMapped = computed(() => {
+  return _.chain(opetussuunnitelmat.value)
+    .map(ops => ({
+      ...ops,
+      route: {
+        name: 'toteutussuunnitelma',
+        params: {
+          toteutussuunnitelmaId: _.toString(ops.id),
+          koulutustyyppi: 'kotoutumiskoulutus',
         },
-      }))
-      .sortBy(ops => Kielet.sortValue(ops.nimi))
-      .value();
-  }
-}
+      },
+    }))
+    .sortBy(ops => Kielet.sortValue(ops.nimi))
+    .value();
+});
 </script>
 
 <style scoped lang="scss">
@@ -183,7 +166,7 @@ export default class KotoPaikalliset extends Vue {
 
 .paikalliset {
 
-  ::v-deep .filter {
+  :deep(.filter) {
     max-width: 100%;
   }
 

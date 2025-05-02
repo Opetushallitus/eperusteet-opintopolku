@@ -145,16 +145,18 @@
   </ep-header>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Vue, Watch } from 'vue-property-decorator';
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
+import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
-import { Meta } from '@shared/utils/decorators';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { MaarayksetStore } from '@shared/stores/MaarayksetStore';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
@@ -166,138 +168,110 @@ import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaaraysk
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
-@Component({
-  components: {
-    EpHeader,
-    EpToggle,
-    EpSearch,
-    EpMultiSelect,
-    EpBPagination,
-    EpSpinner,
-    EpVoimassaoloFilter,
-    EpVoimassaolo,
-    EpButton,
-    EpMaterialIcon,
-    EpMaarayskokoelmaKoulutustyyppiSelect,
-    EpHakutulosmaara,
-  },
-})
-export default class RouteMaarayskokoelma extends Vue {
-  private maarayksetStore: MaarayksetStore | null = null;
+const route = useRoute();
+const instance = getCurrentInstance();
+const $el = instance?.proxy?.$el;
 
-  private perPage = 10;
-  private sivu = 1;
-  private query = {
-    nimi: '',
-    sivukoko: 10,
-    julkaistu: true,
-    laadinta: false,
-    jarjestysTapa: 'voimassaoloAlkaa',
-    jarjestys: 'DESC',
-    koulutustyypit: [],
-    tyyppi: null,
-    tuleva: true,
-    voimassaolo: true,
-  } as any;
+const maarayksetStore = new MaarayksetStore();
+const perPage = ref(10);
+const sivu = ref(1);
+const query = ref({
+  nimi: '',
+  sivukoko: 10,
+  julkaistu: true,
+  laadinta: false,
+  jarjestysTapa: 'voimassaoloAlkaa',
+  jarjestys: 'DESC',
+  koulutustyypit: [],
+  tyyppi: null,
+  tuleva: true,
+  voimassaolo: true,
+});
 
-  async mounted() {
-    if (this.$route.query.tyyppi) {
-      this.query.tyyppi = this.$route.query.tyyppi;
-    }
-
-    this.maarayksetStore = new MaarayksetStore();
-    await this.maarayksetStore.init();
-    await this.fetch();
+onMounted(async () => {
+  if (route.query.tyyppi) {
+    query.value.tyyppi = route.query.tyyppi as string;
   }
 
-  @Watch('sivu')
-  async sivuChange() {
-    await this.fetch();
-    (this.$el.querySelector('.maarays') as any)?.focus();
-  }
+  await maarayksetStore.init();
+  await fetch();
+});
 
-  @Watch('query', { deep: true })
-  async queryChange() {
-    if (this.maarayksetStore) {
-      this.sivu = 1;
-      await this.fetch();
-    }
-  }
+watch(sivu, async () => {
+  await fetch();
+  ($el?.querySelector('.maarays') as any)?.focus();
+});
 
-  async fetch() {
-    if (_.size(this.query.nimi) === 0 || _.size(this.query.nimi) > 2) {
-      await this.maarayksetStore?.fetch(
-        {
-          ...this.query,
-          tyyppi: this.query.tyyppi === 'kaikki' ? null : this.query.tyyppi,
-          kieli: this.kieli,
-          sivu: this.sivu - 1,
-        });
-    }
+watch(query, async () => {
+  if (maarayksetStore) {
+    sivu.value = 1;
+    await fetch();
   }
+}, { deep: true });
 
-  get maaraykset() {
-    return this.maarayksetStore?.maaraykset?.value?.data;
-  }
-
-  get maarayksetCount() {
-    return this.maarayksetStore?.maaraykset?.value?.kokonaismäärä;
-  }
-
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t('route-maarayskokoelma'),
-    };
-  }
-
-  get tyyppiVaihtoehdot() {
-    return [
-      'kaikki',
-      MaaraysDtoTyyppiEnum.OPETUSHALLITUKSENMUU,
-      MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
-      MaaraysDtoTyyppiEnum.PERUSTE,
-    ];
-  }
-
-  get voimasssaVaihtoehdot() {
-    return [
-      'KAIKKI',
-      'TULEVA',
-      'VOIMASSAOLO',
-      'POISTUNUT',
-    ];
-  }
-
-  get koulutustyyppiVaihtoehdot() {
-    return this.maarayksetStore?.koulutustyypit.value;
-  }
-
-  get kuva() {
-    return maaraysDocSmall;
-  }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get murupolku() {
-    return [
+async function fetch() {
+  if (_.size(query.value.nimi) === 0 || _.size(query.value.nimi) > 2) {
+    await maarayksetStore?.fetch(
       {
-        label: 'route-maarayskokoelma',
-        location: { name: 'maaraykset' },
-      },
-    ];
+        ...query.value,
+        tyyppi: query.value.tyyppi === 'kaikki' ? null : query.value.tyyppi,
+        kieli: kieli.value,
+        sivu: sivu.value - 1,
+      });
   }
+}
 
-  vaihdaJarjestys() {
-    this.query.jarjestys = this.query.jarjestys === 'DESC' ? 'ASC' : 'DESC';
-  }
+const maaraykset = computed(() => {
+  return maarayksetStore?.maaraykset?.value?.data;
+});
 
-  searchIdentity(kt: string) {
-    return _.toLower(this.$t(kt) as any);
-  }
+const maarayksetCount = computed(() => {
+  return maarayksetStore?.maaraykset?.value?.kokonaismäärä;
+});
 
+useHead({
+  title: $t('route-maarayskokoelma'),
+});
+
+const tyyppiVaihtoehdot = [
+  'kaikki',
+  MaaraysDtoTyyppiEnum.OPETUSHALLITUKSENMUU,
+  MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
+  MaaraysDtoTyyppiEnum.PERUSTE,
+];
+
+const voimasssaVaihtoehdot = [
+  'KAIKKI',
+  'TULEVA',
+  'VOIMASSAOLO',
+  'POISTUNUT',
+];
+
+const koulutustyyppiVaihtoehdot = computed(() => {
+  return maarayksetStore?.koulutustyypit.value;
+});
+
+const kuva = computed(() => {
+  return maaraysDocSmall;
+});
+
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+const murupolku = [
+  {
+    label: 'route-maarayskokoelma',
+    location: { name: 'maaraykset' },
+  },
+];
+
+function vaihdaJarjestys() {
+  query.value.jarjestys = query.value.jarjestys === 'DESC' ? 'ASC' : 'DESC';
+}
+
+function searchIdentity(kt: string) {
+  return _.toLower($t(kt) as any);
 }
 </script>
 
@@ -329,7 +303,7 @@ export default class RouteMaarayskokoelma extends Vue {
   }
 }
 
-::v-deep .toggles {
+:deep(.toggles) {
   margin-bottom: 0;
   padding-bottom: 0;
 }
@@ -338,5 +312,4 @@ export default class RouteMaarayskokoelma extends Vue {
   max-width: 400px;
   width: 400px;
 }
-
 </style>

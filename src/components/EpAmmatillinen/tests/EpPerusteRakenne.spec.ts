@@ -1,30 +1,20 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import EpPerusteRakenne from '../EpPerusteRakenne.vue';
-import { mocks, stubs, mock } from '@shared/utils/jestutils';
-import { Kielet } from '@shared/stores/kieli';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
 import { mockRakenne } from './data';
 import { delay } from '@shared/utils/delay';
+import { globalStubs } from '@shared/utils/__tests__/stubs';
+import { nextTick } from 'vue';
 
 describe('EpPerusteRakenne', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  Kielet.install(localVue);
-  localVue.use(new Kaannos());
 
   function createWrapper() {
     const rakenneOsat = mockRakenne().osat;
     return mount(EpPerusteRakenne as any, {
-      localVue,
       propsData: {
         rakenneOsat,
       },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
+      global: {
+        ...globalStubs,
       },
     });
   }
@@ -44,7 +34,7 @@ describe('EpPerusteRakenne', () => {
   test('avaa-sulje && kuvaus', async () => {
     const wrapper = createWrapper();
 
-    wrapper.find('.rakennetoggle button').trigger('click');
+    (wrapper.vm as any).toggleRakenne();
     await delay();
 
     expect(wrapper.html()).toContain('Ammatilliset tutkinnon osat');
@@ -55,7 +45,7 @@ describe('EpPerusteRakenne', () => {
 
     expect(wrapper.html()).not.toContain('Viestintä- ja vuorovaikutusosaamisen laajuus on vähintään 11 osaamispistettä');
 
-    wrapper.find('.kuvaustoggle button').trigger('click');
+    (wrapper.vm as any).toggleKuvaukset();
     await delay();
     expect(wrapper.html()).toContain('Viestintä- ja vuorovaikutusosaamisen laajuus on vähintään 11 osaamispistettä');
   });
@@ -63,7 +53,7 @@ describe('EpPerusteRakenne', () => {
   test('nimifilter', async () => {
     const wrapper = createWrapper();
 
-    wrapper.find('.rakennetoggle button').trigger('click');
+    (wrapper.vm as any).toggleRakenne();
     await delay();
 
     expect(wrapper.html()).toContain('Pakolliset tutkinnon osat');

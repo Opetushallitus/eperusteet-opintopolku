@@ -1,27 +1,38 @@
-import { Store, State } from '@shared/stores/store';
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import { Lops2019, Lops2019ModuuliDto } from '@shared/api/eperusteet';
 
-@Store
-export class Lops2019ModuuliStore {
-  @State() public perusteId: number;
-  @State() public oppiaineId: number;
-  @State() public moduuliId: number;
-  @State() public moduuli: Lops2019ModuuliDto | null = null;
+export const useLops2019ModuuliStore = defineStore('lops2019Moduuli', () => {
+  // State
+  const perusteId = ref<number>(0);
+  const oppiaineId = ref<number>(0);
+  const moduuliId = ref<number>(0);
+  const moduuli = ref<Lops2019ModuuliDto | null>(null);
 
-  public static async create(perusteId: number, oppiaineId: number, moduuliId: number) {
-    const result = new Lops2019ModuuliStore(perusteId, oppiaineId, moduuliId);
-    result.fetchModuuli();
-    return result;
-  }
+  // Actions
+  const fetchModuuli = async () => {
+    moduuli.value = null;
+    moduuli.value = (await Lops2019.getModuuli(perusteId.value, oppiaineId.value, moduuliId.value)).data;
+  };
 
-  constructor(perusteId: number, oppiaineId: number, moduuliId: number) {
-    this.perusteId = perusteId;
-    this.oppiaineId = oppiaineId;
-    this.moduuliId = moduuliId;
-  }
+  // Initialize store with required parameters
+  const init = async (newPerusteId: number, newOppiaineId: number, newModuuliId: number) => {
+    perusteId.value = newPerusteId;
+    oppiaineId.value = newOppiaineId;
+    moduuliId.value = newModuuliId;
+    await fetchModuuli();
+  };
 
-  async fetchModuuli() {
-    this.moduuli = null;
-    this.moduuli = (await Lops2019.getModuuli(this.perusteId, this.oppiaineId, this.moduuliId)).data;
-  }
-}
+  return {
+    // State
+    perusteId,
+    oppiaineId,
+    moduuliId,
+    moduuli,
+
+    // Actions
+    fetchModuuli,
+    init,
+  };
+});
+

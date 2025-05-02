@@ -149,161 +149,156 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import _ from 'lodash';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNormaali.vue';
 import EpTutkinnonosaTutke from '@/components/EpAmmatillinen/EpTutkinnonosaTutke.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
+import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { $t, $kaanna } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    GeneerinenArviointiTaulukko,
-    EpAmmatillinenArvioinninKohdealueet,
-    EpTutkinnonosaTutke,
-    EpTutkinnonosaNormaali,
-    EpContentViewer,
-  },
-})
-export default class RoutePerusteKoosteEng extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  get arviointiasteikot() {
-    return this.perusteDataStore.arviointiasteikot;
-  }
+const arviointiasteikot = computed(() => {
+  return perusteDataStore.arviointiasteikot;
+});
 
-  get peruste() {
-    return this.perusteDataStore.peruste;
-  }
+const peruste = computed(() => {
+  return perusteDataStore.peruste;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get perusteenTutkinnonosatById() {
-    return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('tutkinnonOsat'), 'id');
-  }
+const perusteenTutkinnonosatById = computed(() => {
+  return _.keyBy(perusteDataStore.getJulkaistuPerusteSisalto('tutkinnonOsat'), 'id');
+});
 
-  get perusteenTutkinnonosaViitteet() {
-    return _.chain(this.perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat'))
-      .map(st => st.tutkinnonOsaViitteet)
-      .flatMap()
-      .value();
-  }
+const perusteenTutkinnonosaViitteet = computed(() => {
+  return _.chain(perusteDataStore.getJulkaistuPerusteSisalto('suoritustavat'))
+    .map(st => st.tutkinnonOsaViitteet)
+    .flatMap()
+    .value();
+});
 
-  get tutkinnonOsaViitteet() {
-    if (this.perusteenTutkinnonosaViitteet) {
-      return _.chain(this.perusteenTutkinnonosaViitteet)
-        .map(viite => {
-          return {
-            ...viite,
-            tutkinnonOsa: this.perusteenTutkinnonosatById[viite._tutkinnonOsa],
-          };
-        })
-        .sortBy('jarjestys')
-        .map((tutkinnonosaViite, index) => ({
-          ...tutkinnonosaViite,
-          jarjestys: index + 1,
-        }))
-        .value();
-    }
-  }
-
-  get geneerisetArvioinnit() {
-    return _.chain(this.tutkinnonOsaViitteet)
+const tutkinnonOsaViitteet = computed(() => {
+  if (perusteenTutkinnonosaViitteet.value) {
+    return _.chain(perusteenTutkinnonosaViitteet.value)
       .map(viite => {
-        return viite.tutkinnonOsa.geneerinenArviointiasteikko;
+        return {
+          ...viite,
+          tutkinnonOsa: perusteenTutkinnonosatById.value[viite._tutkinnonOsa],
+        };
       })
-      .filter(viite => !_.isEmpty(viite))
-      .unionBy('id')
+      .sortBy('jarjestys')
+      .map((tutkinnonosaViite, index) => ({
+        ...tutkinnonosaViite,
+        jarjestys: index + 1,
+      }))
       .value();
   }
+  return [];
+});
 
-  get tutkinnonOsaFields() {
-    let baseFields = [{
-      key: 'jarjestys',
-      label: this.$t('nro', 'en') as string,
+const geneerisetArvioinnit = computed(() => {
+  return _.chain(tutkinnonOsaViitteet.value)
+    .map(viite => {
+      return viite.tutkinnonOsa.geneerinenArviointiasteikko;
+    })
+    .filter(viite => !_.isEmpty(viite))
+    .unionBy('id')
+    .value();
+});
+
+const tutkinnonOsaFields = computed(() => {
+  let baseFields = [{
+    key: 'jarjestys',
+    label: $t('nro', 'en'),
+    sortable: true,
+  }, {
+    key: 'nimi',
+    sortable: true,
+    sortByFormatted: true,
+    label: $t('nimi', 'en'),
+    formatter: (item: any) => {
+      return $kaanna(item?.tutkinnonOsa?.nimi, false, true, 'en');
+    },
+  }];
+
+  let showLaajuusColumn = _.some(tutkinnonOsaViitteet.value, viite => _.has(viite, 'laajuus'));
+
+  if (showLaajuusColumn) {
+    return [...baseFields, {
+      key: 'laajuus',
       sortable: true,
-    }, {
-      key: 'nimi',
-      sortable: true,
-      sortByFormatted: true,
-      label: this.$t('nimi', 'en') as string,
-      formatter: (item: any) => {
-        return this.$kaanna(item?.tutkinnonOsa?.nimi, false, true, 'en');
-      },
-    }];
-    let showLaajuusColumn = _.some(this.tutkinnonOsaViitteet, viite => _.has(viite, 'laajuus'));
-    if (showLaajuusColumn) {
-      return [...baseFields, {
-        key: 'laajuus',
-        sortable: true,
-        label: this.$t('laajuus', 'en') as string,
-        formatter: (value: any, key: string, item: any) => {
-          if (value) {
-            return value + ' ' + this.$t('osaamispiste', 'en');
-          }
-          if (_.isNumber(item.laajuus) && _.isNumber(item.laajuusMaksimi)) {
-            return item.laajuus + ' - ' + item.laajuusMaksimi + ' ' + this.$t('osaamispiste', 'en');
-          }
-        },
-      }];
-    }
-    return baseFields;
-  }
-
-  get osaamisalatFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi', 'en'),
-      thStyle: 'width: 75%',
-      formatter: (value: any) => {
-        return this.$kaanna(value, false, true, 'en');
-      },
-    }, {
-      key: 'arvo',
-      label: this.$t('koodi', 'en'),
-      thStyle: 'width: 15%',
-    }];
-  }
-
-  get tutkintonimikkeetFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi', 'en'),
-      thStyle: 'width: 75%',
-      formatter: (value: any) => {
-        return this.$kaanna(value, false, true, 'en');
-      },
-    }, {
-      key: 'tutkintonimikeArvo',
-      label: this.$t('koodi', 'en'),
-      thStyle: 'width: 15%',
-    }];
-  }
-
-  get koulutuskooditFields() {
-    return [{
-      key: 'koulutuskoodiArvo',
-      label: this.$t('koodi', 'en'),
-      thStyle: 'width: 15%',
-    }, {
-      key: 'nimi',
-      label: this.$t('koulutuksen-nimi', 'en'),
+      label: $t('laajuus', 'en'),
       formatter: (value: any, key: string, item: any) => {
-        return this.$kaanna(value, false, true, 'en');
+        if (value) {
+          return value + ' ' + $t('osaamispiste', 'en');
+        }
+        if (_.isNumber(item.laajuus) && _.isNumber(item.laajuusMaksimi)) {
+          return item.laajuus + ' - ' + item.laajuusMaksimi + ' ' + $t('osaamispiste', 'en');
+        }
       },
     }];
   }
-}
+  return baseFields;
+});
+
+const osaamisalatFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('nimi', 'en'),
+    thStyle: 'width: 75%',
+    formatter: (value: any) => {
+      return $kaanna(value, false, true, 'en');
+    },
+  }, {
+    key: 'arvo',
+    label: $t('koodi', 'en'),
+    thStyle: 'width: 15%',
+  }];
+});
+
+const tutkintonimikkeetFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('nimi', 'en'),
+    thStyle: 'width: 75%',
+    formatter: (value: any) => {
+      return $kaanna(value, false, true, 'en');
+    },
+  }, {
+    key: 'tutkintonimikeArvo',
+    label: $t('koodi', 'en'),
+    thStyle: 'width: 15%',
+  }];
+});
+
+const koulutuskooditFields = computed(() => {
+  return [{
+    key: 'koulutuskoodiArvo',
+    label: $t('koodi', 'en'),
+    thStyle: 'width: 15%',
+  }, {
+    key: 'nimi',
+    label: $t('koulutuksen-nimi', 'en'),
+    formatter: (value: any, key: string, item: any) => {
+      return $kaanna(value, false, true, 'en');
+    },
+  }];
+});
 </script>
 
 <style scoped lang="scss">

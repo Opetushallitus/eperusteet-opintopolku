@@ -83,64 +83,60 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-  },
-})
-export default class RouteAipeVaihe extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  get vaiheId() {
-    return _.toNumber(this.$route.params.vaiheId);
+const route = useRoute();
+
+const vaiheId = computed(() => {
+  return _.toNumber(route.params.vaiheId);
+});
+
+const vaihe = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: vaiheId.value });
+});
+
+const oppiaineet = computed(() => {
+  if (vaihe.value) {
+    return _.map(vaihe.value.oppiaineet, oppiaine => {
+      return {
+        ...oppiaine,
+        route: { name: 'aipeoppiaine', params: { oppiaineId: _.toString(oppiaine.id) } },
+      };
+    });
   }
+  return [];
+});
 
-  get vaihe() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vaiheId });
+const tavoitealueet = computed(() => {
+  if (vaihe.value) {
+    return vaihe.value.opetuksenKohdealueet;
   }
+  return [];
+});
 
-  get oppiaineet() {
-    if (this.vaihe) {
-      return _.map(this.vaihe.oppiaineet, oppiaine => {
-        return {
-          ...oppiaine,
-          route: { name: 'aipeoppiaine', params: { oppiaineId: _.toString(oppiaine.id) } },
-        };
-      });
-    }
-  }
+const oppiaine = computed(() => {
+  return route.params.oppiaineId;
+});
 
-  get tavoitealueet() {
-    if (this.vaihe) {
-      return this.vaihe.opetuksenKohdealueet;
-    }
-  }
+const fields = computed(() => {
+  return [{
+    key: 'nimi',
+    thStyle: {
+      display: 'none',
+    },
+  }];
+});
 
-  get oppiaine() {
-    return this.$route.params.oppiaineId;
-  }
-
-  get fields() {
-    return [{
-      key: 'nimi',
-      thStyle: {
-        display: 'none',
-      },
-    }];
-  }
-
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
-}
-
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 </script>
 
 <style scoped lang="scss">

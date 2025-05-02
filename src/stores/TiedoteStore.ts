@@ -1,33 +1,34 @@
 import _ from 'lodash';
-import { Store, Getter, State } from '@shared/stores/store';
+import { defineStore } from 'pinia';
+import { reactive, ref, computed } from 'vue';
 import { TiedoteDto, Tiedotteet, Perusteet, getAllPerusteet, PerusteInfoDto, KoodiDto, findTiedotteetBy } from '@shared/api/eperusteet';
 import { Page } from '@shared/tyypit';
-import { ActionPayload } from 'vuex';
 
 export interface KoodiPerusteella extends KoodiDto {
   perusteet: PerusteInfoDto[];
 }
 
-@Store
-export class TiedoteStore {
-  @State() public uusimmatTiedotteet: TiedoteDto[] | null = null;
-  @State() public tiedotteet: TiedoteDto[] | null = null;
-  @State() public tiedote: TiedoteDto | null = null;
-  @State() public tiedoteId: number | null = null;
-  @State() public amount = 0;
-  @State() public filter = {
+export const useTiedoteStore = defineStore('tiedote', () => {
+  // State as refs
+  const uusimmatTiedotteet = ref<TiedoteDto[] | null>(null);
+  const tiedotteet = ref<TiedoteDto[] | null>(null);
+  const tiedote = ref<TiedoteDto | null>(null);
+  const tiedoteId = ref<number | null>(null);
+  const amount = ref(0);
+  const filter = reactive({
     nimi: '',
     kieli: ['fi'],
     sivu: 0,
     sivukoko: 10,
-    koulutustyypit: undefined,
-  };
-  @State() public tiedotteenTutkinnonosaPerusteet: KoodiPerusteella[] | null = null;
-  @State() public tiedotteenOsaamisalaPerusteet: KoodiPerusteella[] | null = null;
+    koulutustyypit: undefined as undefined | string[],
+  });
+  const tiedotteenTutkinnonosaPerusteet = ref<KoodiPerusteella[] | null>(null);
+  const tiedotteenOsaamisalaPerusteet = ref<KoodiPerusteella[] | null>(null);
 
-  async getUusimmat(kieli, koulutustyypit) {
-    this.uusimmatTiedotteet = null;
-    this.uusimmatTiedotteet = ((await findTiedotteetBy({
+  // Actions
+  const getUusimmat = async (kieli: string[], koulutustyypit?: string[]) => {
+    uusimmatTiedotteet.value = null;
+    uusimmatTiedotteet.value = ((await findTiedotteetBy({
       sivu: 0,
       sivukoko: 10,
       kieli: kieli,
@@ -35,40 +36,37 @@ export class TiedoteStore {
       koulutusTyyppi: koulutustyypit,
       koulutustyypiton: true,
     })).data as any).data;
-  }
+  };
 
-  public readonly updateFilter = _.debounce(async (filter) => {
-    this.filter = {
-      ...this.filter,
-      ...filter,
-    };
-    this.tiedotteet = null;
-    this.fetchUutiset();
+  const updateFilter = _.debounce(async (newFilter: any) => {
+    Object.assign(filter, newFilter);
+    tiedotteet.value = null;
+    await fetchUutiset();
   }, 300);
 
-  async fetchUutiset() {
+  const fetchUutiset = async () => {
     const result = (await findTiedotteetBy({
-      ...this.filter,
-      kieli: this.filter.kieli,
-      nimi: this.filter.nimi,
+      ...filter,
+      kieli: filter.kieli,
+      nimi: filter.nimi,
       tiedoteJulkaisuPaikka: ['opintopolku_etusivu'],
-      koulutusTyyppi: this.filter.koulutustyypit,
+      koulutusTyyppi: filter.koulutustyypit,
       koulutustyypiton: true,
     })).data as any;
-    this.amount = result['kokonaismäärä'];
-    this.tiedotteet = result.data;
-  }
+    amount.value = result['kokonaismäärä'];
+    tiedotteet.value = result.data;
+  };
 
-  async fetchUutinen(tiedoteId: number) {
-    this.tiedoteId = tiedoteId;
-    this.tiedote = null;
-    this.tiedotteenTutkinnonosaPerusteet = null;
-    this.tiedotteenOsaamisalaPerusteet = null;
+  const fetchUutinen = async (id: number) => {
+    tiedoteId.value = id;
+    tiedote.value = null;
+    tiedotteenTutkinnonosaPerusteet.value = null;
+    tiedotteenOsaamisalaPerusteet.value = null;
 
-    this.tiedote = (await Tiedotteet.getTiedote(this.tiedoteId)).data;
+    tiedote.value = (await Tiedotteet.getTiedote(tiedoteId.value)).data;
 
-    if (!_.isEmpty(this.tiedote?.tutkinnonosat)) {
-      this.tiedotteenTutkinnonosaPerusteet = await Promise.all(_.map(this.tiedote?.tutkinnonosat, async tutkinnonosa => {
+    if (!_.isEmpty(tiedote.value?.tutkinnonosat)) {
+      tiedotteenTutkinnonosaPerusteet.value = await Promise.all(_.map(tiedote.value?.tutkinnonosat, async tutkinnonosa => {
         return {
           ...tutkinnonosa,
           perusteet: ((await getAllPerusteet({ tutkinnonosaKoodit: [tutkinnonosa.uri!] })).data as Page<PerusteInfoDto>).data,
@@ -76,11 +74,11 @@ export class TiedoteStore {
       }));
     }
     else {
-      this.tiedotteenTutkinnonosaPerusteet = [];
+      tiedotteenTutkinnonosaPerusteet.value = [];
     }
 
-    if (!_.isEmpty(this.tiedote?.osaamisalat)) {
-      this.tiedotteenOsaamisalaPerusteet = await Promise.all(_.map(this.tiedote?.osaamisalat, async osaamisala => {
+    if (!_.isEmpty(tiedote.value?.osaamisalat)) {
+      tiedotteenOsaamisalaPerusteet.value = await Promise.all(_.map(tiedote.value?.osaamisalat, async osaamisala => {
         return {
           ...osaamisala,
           perusteet: ((await getAllPerusteet({ osaamisalaKoodit: [osaamisala.uri!] })).data as Page<PerusteInfoDto>).data,
@@ -88,7 +86,27 @@ export class TiedoteStore {
       }));
     }
     else {
-      this.tiedotteenOsaamisalaPerusteet = [];
+      tiedotteenOsaamisalaPerusteet.value = [];
     }
-  }
-}
+  };
+
+  return {
+    // State
+    uusimmatTiedotteet,
+    tiedotteet,
+    tiedote,
+    tiedoteId,
+    amount,
+    filter,
+    tiedotteenTutkinnonosaPerusteet,
+    tiedotteenOsaamisalaPerusteet,
+
+    // Actions
+    getUusimmat,
+    updateFilter,
+    fetchUutiset,
+    fetchUutinen,
+  };
+});
+
+

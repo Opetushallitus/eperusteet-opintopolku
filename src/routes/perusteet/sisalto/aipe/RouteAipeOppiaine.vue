@@ -221,123 +221,119 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { computed, ref, useTemplateRef } from 'vue';
+import { useRoute } from 'vue-router';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+
 import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpCollapse,
-    EpButton,
-    EpContentViewer,
-    EpArvioinninkohteetTable,
-  },
-})
-export default class RouteAipeOppiaine extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
+const route = useRoute();
+const tavoitecollapse = useTemplateRef('tavoitecollapse');
+
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
+
+const oppiaine = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: oppiaineId.value });
+});
+
+const vaiheId = computed(() => {
+  return _.toNumber(route.params.vaiheId);
+});
+
+const vaihe = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: vaiheId.value });
+});
+
+const oppimaarat = computed(() => {
+  if (oppiaine.value.oppimaarat) {
+    return _.map(oppiaine.value.oppimaarat, oppimaara => {
+      return {
+        ...oppimaara,
+        route: { name: 'aipeoppiaine', params: { oppiaineId: _.toString(oppimaara.id) } },
+      };
+    });
+  }
+  return [];
+});
+
+const kurssit = computed(() => {
+  if (oppiaine.value) {
+    return _.map(oppiaine.value.kurssit, kurssi => {
+      return {
+        ...kurssi,
+        route: { name: 'aipekurssi', params: { kurssiId: _.toString(kurssi.id) } },
+      };
+    });
+  }
+  return [];
+});
+
+const laajaAlaisetOsaamisetById = computed(() => {
+  return _.keyBy(perusteDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset'), 'id');
+});
+
+const kohdealueetById = computed(() => {
+  if (vaihe.value) {
+    return _.keyBy(vaihe.value.opetuksenKohdealueet, 'id');
+  }
+  else {
+    return {};
+  }
+});
+
+const arvioinninKohteenTeksti = (tavoite) => {
+  const hyvanOsaamisenArvio = _.find(tavoite.arvioinninkohteet, (arvioinninkohde: any) => arvioinninkohde.arvosana === 8);
+
+  if (hyvanOsaamisenArvio && !_.isEmpty(hyvanOsaamisenArvio.arvioinninKohde)) {
+    return hyvanOsaamisenArvio.arvioinninKohde;
   }
 
-  get oppiaine() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId });
+  return tavoite.arvioinninKuvaus;
+};
+
+const tavoitteet = computed(() => {
+  if (oppiaine.value) {
+    return _.map(oppiaine.value.tavoitteet, (tavoite: any) => {
+      return {
+        ...tavoite,
+        kohdealue: kohdealueetById.value[_.head(tavoite.kohdealueet) as any],
+        laajaalaisetosaamiset: _.map(tavoite.laajattavoitteet, lao => laajaAlaisetOsaamisetById.value[lao as any]),
+        kohdeTeksti: arvioinninKohteenTeksti(tavoite),
+      };
+    });
   }
+  return [];
+});
 
-  get vaiheId() {
-    return _.toNumber(this.$route.params.vaiheId);
-  }
+const kurssi = computed(() => {
+  return route.params.kurssiId;
+});
 
-  get vaihe() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vaiheId });
-  }
+const fields = computed(() => {
+  return [{
+    key: 'nimi',
+    thStyle: {
+      display: 'none',
+    },
+  }];
+});
 
-  get oppimaarat() {
-    if (this.oppiaine.oppimaarat) {
-      return _.map(this.oppiaine.oppimaarat, oppimaara => {
-        return {
-          ...oppimaara,
-          route: { name: 'aipeoppiaine', params: { oppiaineId: _.toString(oppimaara.id) } },
-        };
-      });
-    }
-  }
+const toggleTavoite = () => {
+  _.forEach(tavoitecollapse.value, (tavoite: any) => tavoite.toggle());
+};
 
-  get kurssit() {
-    if (this.oppiaine) {
-      return _.map(this.oppiaine.kurssit, kurssi => {
-        return {
-          ...kurssi,
-          route: { name: 'aipekurssi', params: { kurssiId: _.toString(kurssi.id) } },
-        };
-      });
-    }
-  }
-
-  get tavoitteet() {
-    if (this.oppiaine) {
-      return _.map(this.oppiaine.tavoitteet, (tavoite: any) => {
-        return {
-          ...tavoite,
-          kohdealue: this.kohdealueetById[_.head(tavoite.kohdealueet) as any],
-          laajaalaisetosaamiset: _.map(tavoite.laajattavoitteet, lao => this.laajaAlaisetOsaamisetById[lao as any]),
-          kohdeTeksti: this.arvioinninKohteenTeksti(tavoite),
-        };
-      });
-    }
-  }
-
-  arvioinninKohteenTeksti(tavoite) {
-    const hyvanOsaamisenArvio = _.find(tavoite.arvioinninkohteet, (arvioinninkohde: any) => arvioinninkohde.arvosana === 8);
-
-    if (hyvanOsaamisenArvio && !_.isEmpty(hyvanOsaamisenArvio.arvioinninKohde)) {
-      return hyvanOsaamisenArvio.arvioinninKohde;
-    }
-
-    return tavoite.arvioinninKuvaus;
-  }
-
-  get laajaAlaisetOsaamisetById() {
-    return _.keyBy(this.perusteDataStore.getJulkaistuPerusteSisalto('aipe.laajaalaisetosaamiset'), 'id');
-  }
-
-  get kohdealueetById() {
-    if (this.vaihe) {
-      return _.keyBy(this.vaihe.opetuksenKohdealueet, 'id');
-    }
-    else {
-      return {};
-    }
-  }
-
-  get kurssi() {
-    return this.$route.params.kurssiId;
-  }
-
-  get fields() {
-    return [{
-      key: 'nimi',
-      thStyle: {
-        display: 'none',
-      },
-    }];
-  }
-
-  toggleTavoite() {
-    _.forEach(this.$refs.tavoitecollapse, (tavoite: any) => tavoite.toggle());
-  }
-
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
-}
-
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 </script>
 
 <style scoped lang="scss">

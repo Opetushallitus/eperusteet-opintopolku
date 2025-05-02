@@ -149,78 +149,77 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
 import { Matala, OpintokokonaisuusDtoTyyppiEnum } from '@shared/api/amosaa';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import * as _ from 'lodash';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpOsaamismerkit,
-    EpFormContent,
-    EpContentViewer,
+
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaOpintokokonaisuus extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const osaamismerkitStore = useOsaamismerkitStore(pinia);
 
-  private osaamismerkitStore = new OsaamismerkitStore();
-
-  async mounted() {
-    if (this.osaamisMerkkiKoodit.length > 0) {
-      await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: this.osaamisMerkkiKoodit, poistunut: true });
-      await this.osaamismerkitStore.fetchKategoriat({ poistunut: true });
-    }
+onMounted(async () => {
+  if (osaamisMerkkiKoodit.value.length > 0) {
+    await osaamismerkitStore.updateOsaamismerkitQuery({ koodit: osaamisMerkkiKoodit.value, poistunut: true });
+    await osaamismerkitStore.fetchKategoriat({ poistunut: true });
   }
+});
 
-  get osaamisMerkkiKoodit() {
-    return _.map(this.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
-  }
+const osaamisMerkkiKoodit = computed(() => {
+  return _.map(props.sisaltoviite.opintokokonaisuus?.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
+});
 
-  get osaamismerkit() {
-    return this.osaamismerkitStore.osaamismerkit.value;
-  }
+const osaamismerkit = computed(() => {
+  return osaamismerkitStore.osaamismerkit;
+});
 
-  get osaamismerkkiKategoriat() {
-    return _.chain(this.osaamismerkitStore.kategoriat.value)
-      .uniqWith(_.isEqual)
-      .sortBy(kategoria => this.$kaanna(kategoria.nimi))
-      .filter(kategoria => !!this.$kaanna(kategoria.nimi))
-      .value();
-  }
+const osaamismerkkiKategoriat = computed(() => {
+  return _.chain(osaamismerkitStore.kategoriat)
+    .uniqWith(_.isEqual)
+    .sortBy(kategoria => $kaanna(kategoria.nimi))
+    .filter(kategoria => !!$kaanna(kategoria.nimi))
+    .value();
+});
 
-  get opintokokonaisuus() {
-    return this.sisaltoviite.opintokokonaisuus;
-  }
+const opintokokonaisuus = computed(() => {
+  return props.sisaltoviite.opintokokonaisuus;
+});
 
-  opintokokonaisuusNimiOtsikko(tyyppi: OpintokokonaisuusDtoTyyppiEnum): string {
-    return {
-      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'opintokokonaisuuden-nimi',
-      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'osaamiskokonaisuuden-nimi',
-    }[tyyppi];
-  }
+const opintokokonaisuusNimiOtsikko = (tyyppi: OpintokokonaisuusDtoTyyppiEnum): string => {
+  return {
+    [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'opintokokonaisuuden-nimi',
+    [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'osaamiskokonaisuuden-nimi',
+  }[tyyppi];
+};
 
-  opintokokonaisuusTavoiteOtsikko(tyyppi: OpintokokonaisuusDtoTyyppiEnum): string {
-    return {
-      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'osaamistavoitteet',
-      [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'opetuksen-tavoitteet',
-    }[tyyppi];
-  }
+const opintokokonaisuusTavoiteOtsikko = (tyyppi: OpintokokonaisuusDtoTyyppiEnum): string => {
+  return {
+    [_.toLower(OpintokokonaisuusDtoTyyppiEnum.OMA)]: 'osaamistavoitteet',
+    [_.toLower(OpintokokonaisuusDtoTyyppiEnum.PERUSTEESTA)]: 'opetuksen-tavoitteet',
+  }[tyyppi];
+};
 
-  get laajuusYksikkoLyhenne() {
-    return this.opintokokonaisuus?.laajuusYksikko
-      ? this.$t(_.toLower(this.opintokokonaisuus?.laajuusYksikko) + '-lyhenne')
-      : this.$t('opintopiste');
-  }
-}
+const laajuusYksikkoLyhenne = computed(() => {
+  return opintokokonaisuus.value?.laajuusYksikko
+    ? $t(opintokokonaisuus.value?.laajuusYksikko.toLowerCase() + '-lyhenne')
+    : $t('opintopiste');
+});
 </script>
 
 <style scoped lang="scss">

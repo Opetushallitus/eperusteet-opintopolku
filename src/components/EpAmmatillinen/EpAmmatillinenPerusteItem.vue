@@ -46,19 +46,15 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 
-@Component({
-  components: {
-    EpVoimassaolo,
+const props = defineProps({
+  sisalto: {
+    type: Object,
+    required: true,
   },
-})
-export default class EpAmmatillinenPerusteItem extends Vue {
-  @Prop({ required: true })
-  private sisalto!: any;
-}
+});
 </script>
 
 <style scoped lang="scss">

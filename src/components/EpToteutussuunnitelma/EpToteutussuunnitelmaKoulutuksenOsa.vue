@@ -189,74 +189,72 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import { Matala, OpetussuunnitelmaDto, Sisaltoviitteet } from '@shared/api/amosaa';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 import _ from 'lodash';
-import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import { Kielet } from '@shared/stores/kieli';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpFormContent,
-    EpLinkki,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaKoulutuksenOsa extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  opetussuunnitelma: {
+    type: Object as () => OpetussuunnitelmaDto,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  @Prop({ required: true })
-  private opetussuunnitelma!: OpetussuunnitelmaDto;
+const koulutuksenosa = computed(() => {
+  return props.sisaltoviite.koulutuksenosa;
+});
 
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
-
-  get laajaAlaisetKoodilla() {
-    return _.keyBy(this.laajaAlaisetOsaamiset, 'tuvaLaajaAlainenOsaaminen.nimiKoodi');
+const koulutuksenosaKoodi = computed(() => {
+  if (koulutuksenosa.value?.nimiKoodi) {
+    return _.split(koulutuksenosa.value.nimiKoodi, '_')[1];
   }
+  return undefined;
+});
 
-  get koulutuksenosa() {
-    return this.sisaltoviite.koulutuksenosa;
-  }
+const laajaAlaisetOsaamiset = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuSisaltoList({ 'tyyppi': 'laajaalainenosaaminen' });
+});
 
-  get koulutuksenosaKoodi() {
-    if (this.koulutuksenosa?.nimiKoodi) {
-      return _.split(this.koulutuksenosa.nimiKoodi, '_')[1];
-    }
-  }
+const laajaAlaisetKoodilla = computed(() => {
+  return _.keyBy(laajaAlaisetOsaamiset.value, 'tuvaLaajaAlainenOsaaminen.nimiKoodi');
+});
 
-  get tavoitteet() {
-    return [
-      ...this.perusteenOsa?.tavoitteet!,
-      ...(this.koulutuksenosa?.paikallinenTarkennus ? this.koulutuksenosa?.paikallinenTarkennus?.tavoitteet! : []),
-    ];
-  }
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  get laajaAlaisetOsaamiset() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisaltoList({ 'tyyppi': 'laajaalainenosaaminen' });
+const perusteenOsa = computed(() => {
+  if (props.sisaltoviite.perusteenOsaId) {
+    return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: props.sisaltoviite.perusteenOsaId });
   }
+  else {
+    return koulutuksenosa.value;
+  }
+});
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get perusteenOsa() {
-    if (this.sisaltoviite.perusteenOsaId) {
-      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: this.sisaltoviite.perusteenOsaId });
-    }
-    else {
-      return this.koulutuksenosa;
-    }
-  }
-}
+const tavoitteet = computed(() => {
+  return [
+    ...perusteenOsa.value?.tavoitteet!,
+    ...(koulutuksenosa.value?.paikallinenTarkennus ? koulutuksenosa.value?.paikallinenTarkennus?.tavoitteet! : []),
+  ];
+});
 </script>
 
 <style scoped lang="scss">

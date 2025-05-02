@@ -1,22 +1,24 @@
-import  { reactive, computed } from '@vue/composition-api';
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi } from '@shared/api/amosaa';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 
-export class KoulutuksenJarjestajatStore {
-  private state = reactive({
-    koulutustoimijat: null as KoulutustoimijaJulkinenDto[] | null,
-  });
+export const useKoulutuksenJarjestajatStore = defineStore('koulutuksenJarjestajat', () => {
+  const koulutustoimijat = ref<KoulutustoimijaJulkinenDto[] | null>(null);
 
-  public readonly koulutustoimijat = computed(() => this.state.koulutustoimijat);
-
-  public async fetch() {
+  const fetch = async () => {
     const res = (await JulkinenApi.findKoulutustoimijat(
       0,
       9999,
       undefined,
       undefined,
       AmmatillisetKoulutustyypit)).data as any;
-    this.state.koulutustoimijat = res.data;
-  }
-}
+    koulutustoimijat.value = res.data;
+  };
+
+  return {
+    koulutustoimijat,
+    fetch,
+  };
+});

@@ -1,5 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
-import vue from '@vitejs/plugin-vue2';
+import createVuePlugin  from '@vitejs/plugin-vue';
 import commonjs from 'vite-plugin-commonjs';
 import { fileURLToPath, URL } from 'node:url';
 import { configDefaults } from 'vitest/config';
@@ -15,7 +15,15 @@ export default defineConfig(({ mode }) => {
   return {
     base: './',
     plugins: [
-      vue(),
+      createVuePlugin({
+        template: {
+          compilerOptions: {
+            compatConfig: {
+              MODE: 2,
+            },
+          },
+        },
+      }),
       commonjs(),
     ],
     define: {
@@ -29,6 +37,7 @@ export default defineConfig(({ mode }) => {
         '@assets': fileURLToPath(new URL('./eperusteet-frontend-utils/vue/public', import.meta.url)),
         '&': fileURLToPath(new URL('./tests', import.meta.url)),
         '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
+        vue: '@vue/compat',
       },
     },
     server: {
@@ -65,6 +74,12 @@ export default defineConfig(({ mode }) => {
           },
         },
       },
+    },
+    test: {
+      globals: true, // Jest-like global functions (describe, it, expect)
+      environment: 'jsdom', // Simulates browser environment
+      exclude: [...configDefaults.exclude, 'e2e/*'],
+      setupFiles: './test/setup.ts',
     },
   };
 });

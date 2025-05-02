@@ -1,22 +1,20 @@
-import { Store, Getter, State } from '@shared/stores/store';
+import { defineStore } from 'pinia';
 import { Arviointiasteikot, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
+import { ref, computed } from 'vue';
+import { DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import _ from 'lodash';
-import { IPerusteHakuStore } from './IPerusteHakuStore';
-import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 
-@Store
-export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
-  @State() public perusteet: PerusteenJulkaisuData[] | null = null;
-  @State() public page = 0;
-  @State() public pages = 0;
-  @State() public total = 0;
-  @State() public perPage = 10;
-  @State() public arviointiasteikot: any[] = [];
-
-  @State()
-  public filterdata: JulkaistutPerusteetQuery = {
+export const useAmmatillinenPerusteHakuStore = defineStore('ammatillinenPerusteHaku', () => {
+  // State
+  const perusteet = ref<PerusteenJulkaisuData[] | null>(null);
+  const page = ref(0);
+  const pages = ref(0);
+  const total = ref(0);
+  const perPage = ref(10);
+  const arviointiasteikot = ref<any[]>([]);
+  const filterdata = ref<JulkaistutPerusteetQuery>({
     nimiTaiKoodi: '',
     koulutustyyppi: [
       'koulutustyyppi_1',
@@ -31,54 +29,83 @@ export class AmmatillinenPerusteHakuStore implements IPerusteHakuStore {
     poistunut: false,
     perusteet: true,
     tutkinnonosat: false,
-  };
+  });
 
-  constructor(data: JulkaistutPerusteetQuery = { }) {
-    this.filterdata = {
-      ...this.filterdata,
+  // Getters
+  const toggles = computed(() => [
+    'tuleva',
+    'voimassaolo',
+    'siirtyma',
+    'poistunut',
+  ]);
+
+  const filters = computed(() => ({
+    ...filterdata.value,
+    sivu: page.value,
+    sivukoko: perPage.value,
+    kieli: Kielet.getSisaltoKieli.value,
+  }));
+
+  // Actions
+  function init(data: JulkaistutPerusteetQuery = {}) {
+    filterdata.value = {
+      ...filterdata.value,
       ...data,
     };
   }
 
-  @Getter((state) => {
-    return [
-      'tuleva',
-      'voimassaolo',
-      'siirtyma',
-      'poistunut',
-    ];
-  })
-  public readonly toggles!: string[];
+  // Debounce function for fetch
+  const debouncedFetch = _.debounce(async () => {
+    await performFetch();
+  }, DEFAULT_PUBLIC_WAIT_TIME_MS);
 
-  @Getter((state) => ({
-    ...state.filterdata,
-    sivu: state.page,
-    sivukoko: state.perPage,
-    kieli: Kielet.getSisaltoKieli.value,
-  }))
-  public readonly filters!: JulkaistutPerusteetQuery;
+  // Implement the actual fetch
+  async function performFetch() {
+    perusteet.value = null;
+    const result = await julkaistutPerusteet(filters.value);
 
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  async fetch() {
-    this.perusteet = null;
-    const result = await julkaistutPerusteet(this.filters);
-
-    this.total = result['kokonaismäärä'];
-    this.page = result.sivu;
-    this.perPage = result.sivukoko;
-    this.pages = result.sivuja;
-    this.perusteet = result.data;
+    total.value = result['kokonaismäärä'];
+    page.value = result.sivu;
+    perPage.value = result.sivukoko;
+    pages.value = result.sivuja;
+    perusteet.value = result.data;
   }
 
-  async updateFilters(filters: JulkaistutPerusteetQuery) {
-    this.filterdata = {
-      ...this.filters,
-      ...filters,
+  // Create a debounced version of fetch
+  async function fetch() {
+    debouncedFetch();
+  }
+
+  async function updateFilters(newFilters: JulkaistutPerusteetQuery) {
+    filterdata.value = {
+      ...filters.value,
+      ...newFilters,
     };
-    await this.fetch();
+    await fetch();
   }
 
-  async fetchArviointiasteikot() {
-    this.arviointiasteikot = (await Arviointiasteikot.getAll()).data;
+  async function fetchArviointiasteikot() {
+    arviointiasteikot.value = (await Arviointiasteikot.getAll()).data;
   }
-}
+
+  return {
+    // State
+    perusteet,
+    page,
+    pages,
+    total,
+    perPage,
+    arviointiasteikot,
+    filterdata,
+
+    // Getters
+    toggles,
+    filters,
+
+    // Actions
+    init,
+    fetch,
+    updateFilters,
+    fetchArviointiasteikot,
+  };
+});
