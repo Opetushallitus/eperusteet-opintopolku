@@ -17,43 +17,36 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+<script setup lang="ts">
+import { computed } from 'vue';
 import * as _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import { useRoute } from 'vue-router';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
-  },
-})
-export default class RouteYleisettavoitteet extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.yleistavoiteId);
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
-}
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 </script>
 
 <style scoped lang="scss">
@@ -62,5 +55,4 @@ export default class RouteYleisettavoitteet extends Vue {
 .content {
   padding: 0 $content-padding;
 }
-
 </style>

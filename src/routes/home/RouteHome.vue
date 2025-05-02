@@ -14,7 +14,7 @@
       <div class="container">
         <b-container fluid>
           <section class="section">
-            <EpEtusivuHaku :peruste-store="perusteStore" />
+            <EpEtusivuHaku />
           </section>
         </b-container>
       </div>
@@ -104,17 +104,16 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
-import { Meta } from '@shared/utils/decorators';
+import { computed, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import { onkoUusi } from '@shared/utils/tiedote';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
-import { PerusteStore } from '@/stores/PerusteStore';
-import { TiedoteStore } from '@/stores/TiedoteStore';
-import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { useTiedoteStore } from '@/stores/TiedoteStore';
+import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpEtusivuHaku from '@/routes/home/EpEtusivuHaku.vue';
 import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
@@ -122,124 +121,108 @@ import InfoTile from '@/routes/home/InfoTile.vue';
 import { navigoitavatKoulutustyyppiRyhmat, otherLinks, navigoitavatMuutRyhmat } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { pinia } from '@/pinia';
+import { useHead  } from '@unhead/vue';
 
-@Component({
-  components: {
-    EpJulkiLista,
-    InfoTile,
-    KoulutustyyppiTile,
-    EpEtusivuHaku,
-    EpSpinnerSlot,
-  },
-})
-export default class RouteHome extends Vue {
-  @Prop({ required: true })
-  private perusteStore!: PerusteStore;
+const router = useRouter();
+const browserStore = new BrowserStore();
+const tiedoteStore = useTiedoteStore(pinia);
+const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
+const tietoapalvelustaStore = useTietoapalvelustaStore(pinia);
+const osaamismerkitStore = useOsaamismerkitStore(pinia);
 
-  @Prop({ required: true })
-  private tiedoteStore!: TiedoteStore;
+onMounted(async () => {
+  await osaamismerkitStore.fetchKategoriat({ poistunut: false });
+  const h1 = document.querySelector('h1');
+  h1?.setAttribute('tabindex', '-1');
+  h1?.focus();
+  await fetchTiedotteet();
+});
 
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+const julkaistutKoulutustyypit = computed(() => {
+  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
+});
 
-  @Prop({ required: true })
-  private tietoapalvelustaStore!: TietoapalvelustaStore;
+watch(() => julkaistutKoulutustyypit.value, async () => {
+  await fetchTiedotteet();
+});
 
-  @Prop({ required: true })
-  private osaamismerkitStore!: OsaamismerkitStore;
-
-  private browserStore = new BrowserStore();
-
-  async mounted() {
-    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
-    const h1 = this.$el.querySelector('h1');
-    h1?.setAttribute('tabindex', '-1');
-    h1?.focus();
+const fetchTiedotteet = async () => {
+  if (julkaistutKoulutustyypit.value) {
+    await tiedoteStore.getUusimmat([sisaltoKieli.value], _.map(julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat, 'koulutustyyppi') as string[]);
   }
+};
 
-  @Watch('julkaistutKoulutustyypit', { immediate: true })
-  async julkaistutKoulutustyypitChange() {
-    if (this.julkaistutKoulutustyypit) {
-      await this.tiedoteStore.getUusimmat(this.sisaltoKieli, _.map(this.julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat.value, 'koulutustyyppi'));
-    }
-  }
+const avaaTiedote = (tiedote: TiedoteDto) => {
+  router.push({
+    name: 'uutinen',
+    params: {
+      tiedoteId: '' + tiedote.id,
+    },
+  });
+};
 
-  avaaTiedote(tiedote: TiedoteDto) {
-    this.$router.push({
-      name: 'uutinen',
-      params: {
-        tiedoteId: '' + tiedote.id,
-      },
-    });
-  }
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
-  }
+watch(() => sisaltoKieli.value, async () => {
+  await osaamismerkitStore.fetchKategoriat({ poistunut: false });
+  const h1 = document.querySelector('h1');
+  h1?.setAttribute('tabindex', '-1');
+  h1?.focus();
+});
 
-  @Watch('sisaltoKieli')
-  async sisaltoKieliChange() {
-    await this.mounted();
-  }
+const tiedotteet = computed(() => {
+  return tiedoteStore.uusimmatTiedotteet;
+});
 
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+const tiedotteetMapped = computed(() => {
+  return _.chain(tiedotteet.value)
+    .map(tiedote => {
+      return {
+        ...tiedote,
+        uusi: onkoUusi((tiedote as any).luotu),
+        perusteNimi: tiedote.perusteet && tiedote.perusteet.length === 1 ? tiedote.perusteet[0].nimi : null,
+        koulutustyyppi: tiedote.koulutustyypit && tiedote.koulutustyypit.length === 1 ? tiedote.koulutustyypit[0] : null,
+      };
+    })
+    .take(browserStore.window.value.width > 991 ? 10 : 3)
+    .value();
+});
 
-  get tiedotteet() {
-    return this.tiedoteStore.uusimmatTiedotteet;
-  }
+const digitaalinenOsaaminenPeruste = computed(() => {
+  return _.first(julkaistutKoulutustyypitStore.digitaalinenOsaaminen);
+});
 
-  get tiedotteetMapped() {
-    return _.chain(this.tiedotteet)
-      .map(tiedote => {
-        return {
-          ...tiedote,
-          uusi: onkoUusi((tiedote as any).luotu),
-          perusteNimi: tiedote.perusteet && tiedote.perusteet.length === 1 ? this.$kaanna(tiedote.perusteet[0].nimi) : null,
-          koulutustyyppi: tiedote.koulutustyypit && tiedote.koulutustyypit.length === 1 ? this.$t(tiedote.koulutustyypit[0]) : null,
-        };
-      })
-      .take(this.browserStore.window.value.width > 991 ? 10 : 3)
-      .value();
-  }
+const koulutustyyppiItems = computed(() => {
+  return navigoitavatKoulutustyyppiRyhmat(julkaistutKoulutustyypitStore.julkaistutKoulutustyypit as any);
+});
 
-  get digitaalinenOsaaminenPeruste() {
-    return _.first(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
-  }
+const otherItems = computed(() => {
+  return navigoitavatMuutRyhmat(osaamismerkitStore.kategoriat as any, digitaalinenOsaaminenPeruste.value ?? {});
+});
 
-  get koulutustyyppiItems() {
-    return navigoitavatKoulutustyyppiRyhmat(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value as any);
-  }
+const tietoapalvelusta = computed(() => {
+  return tietoapalvelustaStore.tietoapalvelusta;
+});
 
-  get otherItems() {
-    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste ?? {});
-  }
+const infoLinkit = computed(() => {
+  return [
+    ...(tietoapalvelusta.value ? [tietoapalvelusta.value] : []),
+    ...otherLinks(),
+  ];
+});
 
-  get tietoapalvelusta() {
-    return this.tietoapalvelustaStore.tietoapalvelusta.value;
-  }
+const ajankohtaistaUrl = () => {
+  return `${window.location.origin}/#/${sisaltoKieli.value}/ajankohtaista`;
+};
 
-  get infoLinkit() {
-    return [
-      ...(this.tietoapalvelusta ? [this.tietoapalvelusta] : []),
-      ...otherLinks(),
-    ];
-  }
-
-  ajankohtaistaUrl() {
-    return `${window.location.origin}/#/${this.sisaltoKieli}/ajankohtaista`;
-  }
-
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t('eperusteet'),
-      titleTemplate: null,
-    };
-  }
-}
+// Meta information
+useHead(() => ({
+  title: 'ePerusteet',
+}));
 </script>
 
 <style scoped lang="scss">
@@ -293,7 +276,7 @@ export default class RouteHome extends Vue {
     }
   }
 
-  ::v-deep a {
+  :deep(a) {
     color: $oph-green;
   }
 }
@@ -322,12 +305,12 @@ export default class RouteHome extends Vue {
     padding-right: 15px;
   }
 
-  ::v-deep .filter.query {
+  :deep(.filter.query) {
     max-width: 100%;
   }
 }
 
-::v-deep .content {
+:deep(.content) {
   .tieto {
     background-color: unset !important;
     padding-left: 0 !important;

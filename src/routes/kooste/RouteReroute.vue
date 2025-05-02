@@ -4,48 +4,43 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Perusteet } from '@shared/api/eperusteet';
 import { koulutustyypinRyhma } from '@shared/utils/perusteet';
 import * as _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
-@Component({
-  components: {
-    EpSpinner,
-  },
-})
-export default class RouteReroute extends Vue {
-  private peruste: any = null;
+const router = useRouter();
+const route = useRoute();
 
-  async mounted() {
-    this.peruste = (await Perusteet.getKokoSisalto(this.perusteId)).data;
-    if (koulutustyypinRyhma(this.peruste.koulutustyyppi!) === 'ammatillinen') {
-      this.$router.push(
-        {
-          name: 'ammatillinenkooste',
-          params: {
-            perusteId: _.toString(this.perusteId),
-          },
-        });
-    }
-    else {
-      this.$router.push(
-        {
-          name: 'kooste',
-          params: {
-            perusteId: _.toString(this.perusteId),
-            koulutustyyppi: koulutustyypinRyhma(this.peruste.koulutustyyppi!)!,
-          },
-        });
-    }
-  }
+const peruste = ref(<null | any> null);
 
-  get perusteId() {
-    return _.toNumber(this.$route.params.perusteId);
+const perusteId = computed(() => {
+  return _.toNumber(route.params.perusteId);
+});
+
+onMounted(async () => {
+  peruste.value = (await Perusteet.getKokoSisalto(perusteId.value)).data;
+  if (koulutustyypinRyhma(peruste.value.koulutustyyppi!) === 'ammatillinen') {
+    router.push({
+      name: 'ammatillinenkooste',
+      params: {
+        perusteId: _.toString(perusteId.value),
+      },
+    });
   }
-}
+  else {
+    router.push({
+      name: 'kooste',
+      params: {
+        perusteId: _.toString(perusteId.value),
+        koulutustyyppi: koulutustyypinRyhma(peruste.value.koulutustyyppi!)!,
+      },
+    });
+  }
+});
 </script>
 
 <style scoped lang="scss">

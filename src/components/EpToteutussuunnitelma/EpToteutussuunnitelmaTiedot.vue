@@ -133,60 +133,59 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, watch, onMounted } from 'vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
+import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import { Kielet } from '@shared/stores/kieli';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpFormContent,
-    EpField,
-    EpSpinner,
+const props = defineProps({
+  store: {
+    type: Object as () => ToteutussuunnitelmaDataStore | null,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaTiedot extends Vue {
-  @Prop({ required: true })
-  private store!: ToteutussuunnitelmaDataStore | null;
+});
 
-  async mounted() {
-    this.kieliChanged();
-  }
+const toteutussuunnitelma = computed(() => {
+  return props.store!.opetussuunnitelma;
+});
 
-  @Watch('kieli')
-  async kieliChanged() {
-    await this.store!.getDokumenttiTila();
-  }
+const dokumenttiUrl = computed(() => {
+  return props.store!.dokumenttiUrl;
+});
 
-  get toteutussuunnitelma() {
-    return this.store!.opetussuunnitelma;
-  }
+const kuvat = computed(() => {
+  return props.store!.kuvat;
+});
 
-  get dokumenttiUrl() {
-    return this.store!.dokumenttiUrl;
-  }
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  get kuvat() {
-    return this.store!.kuvat;
-  }
+const koulutustoimija = computed(() => {
+  return props.store?.koulutustoimija;
+});
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+const kuvausOtsikko = computed(() => {
+  return props.store?.isAmmatillinen ? 'tutkinnon-suorittaneen-osaaminen' : 'opetussuunnitelma-tiivistelma';
+});
 
-  get koulutustoimija() {
-    return this.store?.koulutustoimija;
-  }
+const kieliChanged = async () => {
+  await props.store!.getDokumenttiTila();
+};
 
-  get kuvausOtsikko() {
-    return this.store?.isAmmatillinen ? 'tutkinnon-suorittaneen-osaaminen' : 'opetussuunnitelma-tiivistelma';
-  }
-}
+onMounted(() => {
+  kieliChanged();
+});
+
+watch(kieli, async () => {
+  await kieliChanged();
+});
 </script>
 
 <style scoped lang="scss">

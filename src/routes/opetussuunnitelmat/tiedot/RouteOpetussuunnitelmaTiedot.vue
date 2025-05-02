@@ -188,92 +188,79 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { computed, watch } from 'vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { Kielet } from '@shared/stores/kieli';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import { useRoute, useRouter } from 'vue-router';
 
-@Component({
-  components: {
-    EpFormContent,
-    EpField,
-    EpDatepicker,
-    EpSpinner,
-    EpPreviousNextNavigation,
-    EpContentViewer,
-  },
-})
-export default class RouteOpetussuunnitelmaTiedot extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get opetussuunnitelma() {
-    return this.opetussuunnitelmaDataStore.opetussuunnitelma!;
+const opetussuunnitelma = computed(() => {
+  return opetussuunnitelmaDataStore.opetussuunnitelma!;
+});
+
+const koulutustyyppi = computed(() => {
+  return $kaanna(opetussuunnitelma.value.koulutustyyppi as string);
+});
+
+const kunnat = computed(() => {
+  return opetussuunnitelma.value.kunnat;
+});
+
+const hasKunnat = computed(() => {
+  return !_.isEmpty(kunnat.value);
+});
+
+const organisaatiot = computed(() => {
+  return _.sortBy(opetussuunnitelma.value.organisaatiot, (org: any) => getOrganisaatioNimi(org));
+});
+
+const hasOrganisaatiot = computed(() => {
+  return !_.isEmpty(organisaatiot.value);
+});
+
+const hasTiivistelma = computed(() => {
+  return !_.isEmpty(_.get(opetussuunnitelma.value.kuvaus, Kielet.getUiKieli.value));
+});
+
+const dokumentti = computed(() => {
+  return opetussuunnitelmaDataStore.dokumentti;
+});
+
+const termit = computed(() => {
+  return opetussuunnitelmaDataStore.termit;
+});
+
+const kuvat = computed(() => {
+  return opetussuunnitelmaDataStore.kuvat;
+});
+
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+const getOrganisaatioNimi = (organisaatio) => {
+  const nimi = $kaanna(organisaatio.nimi);
+  const tyypit = organisaatio.tyypit;
+  if (!_.isEmpty(tyypit)) {
+    return nimi + ' (' + _.join(tyypit, ', ') + ')';
   }
-
-  get koulutustyyppi() {
-    return this.$t(this.opetussuunnitelma.koulutustyyppi as string);
+  else {
+    return nimi;
   }
+};
 
-  get kunnat() {
-    return this.opetussuunnitelma.kunnat;
-  }
-
-  get hasKunnat() {
-    return !_.isEmpty(this.kunnat);
-  }
-
-  get organisaatiot() {
-    return _.sortBy(this.opetussuunnitelma.organisaatiot, (org: any) => this.getOrganisaatioNimi(org));
-  }
-
-  get hasOrganisaatiot() {
-    return !_.isEmpty(this.organisaatiot);
-  }
-
-  get hasTiivistelma() {
-    return !_.isEmpty(_.get(this.opetussuunnitelma.kuvaus, Kielet.getUiKieli.value));
-  }
-
-  get dokumentti() {
-    return this.opetussuunnitelmaDataStore.dokumentti;
-  }
-
-  private getOrganisaatioNimi(organisaatio) {
-    const nimi = (this as any).$kaanna(organisaatio.nimi);
-    const tyypit = organisaatio.tyypit;
-    if (!_.isEmpty(tyypit)) {
-      return nimi + ' (' + _.join(tyypit, ', ') + ')';
-    }
-    else {
-      return nimi;
-    }
-  }
-
-  get termit() {
-    return this.opetussuunnitelmaDataStore.termit;
-  }
-
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  @Watch('kieli')
-  async onKieliChange() {
-    await this.opetussuunnitelmaDataStore.getDokumentti();
-  }
-}
+watch(kieli, async () => {
+  await opetussuunnitelmaDataStore.getDokumentti();
+});
 </script>
 
 <style scoped lang="scss">

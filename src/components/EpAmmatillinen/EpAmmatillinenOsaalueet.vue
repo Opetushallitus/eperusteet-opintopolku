@@ -90,8 +90,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpAmmatillinenArvioinninKohdealueet from '@/components/EpAmmatillinen/EpAmmatillinenArvioinninKohdealueet.vue';
@@ -99,23 +98,16 @@ import Osaamistavoite from '@shared/components/EpOsaamistavoite/Osaamistavoite.v
 import GeneerinenArviointiTaulukko from '@/components/EpAmmatillinen/GeneerinenArviointiTaulukko.vue';
 import EpValmaTelmaSisalto from '@/components/EpAmmatillinen/EpValmaTelmaSisalto.vue';
 
-@Component({
-  components: {
-    EpFormContent,
-    EpCollapse,
-    EpAmmatillinenArvioinninKohdealueet,
-    Osaamistavoite,
-    GeneerinenArviointiTaulukko,
-    EpValmaTelmaSisalto,
+const props = defineProps({
+  osaalueet: {
+    type: Array,
+    required: true,
   },
-})
-export default class EpAmmatillinenOsaalueet extends Vue {
-  @Prop({ required: true })
-  private osaalueet: any;
-
-  @Prop({ required: true })
-  private arviointiasteikot!: any[];
-}
+  arviointiasteikot: {
+    type: Array,
+    required: true,
+  },
+});
 </script>
 
 <style scoped lang="scss">

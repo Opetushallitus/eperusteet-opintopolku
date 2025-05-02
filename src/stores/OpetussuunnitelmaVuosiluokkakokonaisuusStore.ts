@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import { Vuosiluokkakokonaisuudet, UnwrappedOpsVuosiluokkakokonaisuusDto, PerusteVuosiluokkakokonaisuusDto, Opetussuunnitelmat, PerusteLaajaalainenosaaminenDto } from '@shared/api/ylops';
 import _ from 'lodash';
 

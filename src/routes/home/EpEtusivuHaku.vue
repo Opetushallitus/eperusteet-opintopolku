@@ -79,203 +79,194 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { ref, watch, computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { koulutustyyppiStateName, koulutustyyppiTheme, yleissivistavatKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
-import { PerusteStore } from '@/stores/PerusteStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import { $kaanna, $sd } from '@shared/utils/globals';
+import { usePerusteStore } from '@/stores/PerusteStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpSpinnerSlot,
-    EpSearch,
-    EpHakutulosmaara,
-    EpBPagination,
+const perusteStore = usePerusteStore();
+const route = useRoute();
+const router = useRouter();
+
+const queryNimi = ref('');
+const sivu = ref(1);
+const sivukoko = ref(10);
+const isLoading = ref(false);
+
+const queryChange = async () => {
+  queryNimi.value = route?.query?.query as string || '';
+};
+
+onMounted(() => {
+  clear();
+  queryChange();
+});
+
+const query = computed(() => {
+  return route?.query?.query;
+});
+
+watch(query, () => {
+  queryChange();
+}, { immediate: true });
+
+watch(queryNimi, async () => {
+  if (_.size(queryNimi.value) > 2) {
+    page.value = 1;
+    await fetchOpsitJaPerusteet();
+  }
+  else {
+    perusteStore.clearOpsitJaPerusteet();
+  }
+}, { immediate: true });
+
+const kieli = computed(() => {
+  return Kielet.getUiKieli.value;
+});
+
+watch(kieli, async () => {
+  clear();
+});
+
+const clear = () => {
+  queryNimi.value = '';
+  perusteStore.clearOpsitJaPerusteet();
+};
+
+const page = computed({
+  get: () => sivu.value,
+  set: (value) => {
+    sivu.value = value;
   },
-})
-export default class EpEtusivuHaku extends Vue {
-  @Prop({ required: true })
-  private perusteStore!: PerusteStore;
+});
 
-  private queryNimi = '';
-  private sivu = 1;
-  private sivukoko = 10;
-  private isLoading: boolean = false;
-  OpasType = JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS;
+watch(sivu, async (value) => {
+  page.value = value;
+  await fetchOpsitJaPerusteet();
+  (document.querySelector('.peruste-ops-linkki') as any)?.focus();
+});
 
-  mounted() {
-    this.clear();
-    this.queryChange();
+const fetchOpsitJaPerusteet = async () => {
+  isLoading.value = true;
+  try {
+    await perusteStore.getOpsitJaPerusteet({
+      nimi: queryNimi.value,
+      kieli: sisaltoKieli.value,
+      sivu: sivu.value - 1,
+      sivukoko: sivukoko.value,
+    });
+
+    router.replace({
+      query: {
+        query: queryNimi.value,
+      },
+    }).catch(() => {});
   }
-
-  get query() {
-    return this.$route?.query?.query;
+  catch (e) {
+    console.error(e);
   }
+  isLoading.value = false;
+};
 
-  @Watch('query', { immediate: true })
-  private async queryChange() {
-    this.queryNimi = this.$route?.query?.query as string || '';
-  }
-
-  @Watch('queryNimi', { immediate: true })
-  private async queryNimiChange() {
-    if (_.size(this.queryNimi) > 2) {
-      this.page = 1;
-      await this.fetchOpsitJaPerusteet();
-    }
-    else {
-      this.perusteStore.opsitJaPerusteet = null;
-    }
-  }
-
-  get kieli() {
-    return Kielet.getUiKieli.value;
-  }
-
-  @Watch('kieli')
-  private async kieliChange() {
-    this.clear();
-  }
-
-  private clear() {
-    this.queryNimi = '';
-    this.perusteStore.opsitJaPerusteet = null;
-  }
-
-  @Watch('sivu')
-  async updatePage(value) {
-    this.page = value;
-    await this.fetchOpsitJaPerusteet();
-    (this.$el.querySelector('.peruste-ops-linkki') as any)?.focus();
-  }
-
-  async fetchOpsitJaPerusteet() {
-    this.isLoading = true;
-    try {
-      await this.perusteStore.getOpsitJaPerusteet({
-        nimi: this.queryNimi,
-        kieli: this.sisaltoKieli,
-        sivu: this.sivu - 1,
-        sivukoko: this.sivukoko,
-      });
-
-      this.$router.replace({ query: {
-        query: this.queryNimi,
-      } }).catch(() => {});
-    }
-    catch (e) {
-      console.error(e);
-    }
-    this.isLoading = false;
-  }
-
-  get opsitJaPerusteet() {
-    return _.chain(this.perusteStore.opsitJaPerusteet?.data)
-      .map(resultItem => {
-        return {
-          ...resultItem,
-          theme: {
-            ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
-            ['tyyppi-' + resultItem.etusivuTyyppi?.toLocaleLowerCase()]: true,
-            'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE
-            || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.DIGITAALINENOSAAMINEN,
-            'icon': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA
-            || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA
-            || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS,
-          },
-          koulutustyyppi: resultItem.jotpatyyppi === 'MUU' ? 'koulutustyyppi_muu' : resultItem.koulutustyyppi,
-        };
-      })
-      .map(resultItem => {
-        return {
-          ...resultItem,
-          route: this.generateRoute(resultItem),
-        };
-      })
-      .value();
-  }
-
-  generateRoute(resultItem) {
-    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS) {
+const opsitJaPerusteet = computed(() => {
+  return _.chain(perusteStore.opsitJaPerusteet?.data)
+    .map(resultItem => {
       return {
-        name: 'peruste',
-        params: {
-          koulutustyyppi: 'opas',
-          perusteId: _.toString(resultItem.id),
+        ...resultItem,
+        theme: {
+          ['koulutustyyppi-' + koulutustyyppiTheme(resultItem.koulutustyyppi!)]: true,
+          ['tyyppi-' + resultItem.etusivuTyyppi?.toLocaleLowerCase()]: true,
+          'raita': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE
+          || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.DIGITAALINENOSAAMINEN,
+          'icon': resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPETUSSUUNNITELMA
+          || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.TOTEUTUSSUUNNITELMA
+          || resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS,
         },
+        koulutustyyppi: resultItem.jotpatyyppi === 'MUU' ? 'koulutustyyppi_muu' : resultItem.koulutustyyppi,
       };
-    }
-    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE) {
+    })
+    .map(resultItem => {
       return {
-        name: 'peruste',
-        params: {
-          koulutustyyppi: koulutustyyppiStateName(resultItem.koulutustyyppi),
-          perusteId: _.toString(resultItem.id),
-        },
+        ...resultItem,
+        route: generateRoute(resultItem),
       };
-    }
+    })
+    .value();
+});
 
-    if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.DIGITAALINENOSAAMINEN) {
-      return {
-        name: 'peruste',
-        params: {
-          koulutustyyppi: 'digiosaaminen',
-          perusteId: _.toString(resultItem.id),
-        },
-      };
-    }
-
-    if (_.includes(yleissivistavatKoulutustyypit, resultItem.koulutustyyppi)) {
-      return {
-        name: 'opetussuunnitelma',
-        params: {
-          koulutustyyppi: koulutustyyppiStateName(resultItem.koulutustyyppi),
-          opetussuunnitelmaId: _.toString(resultItem.id),
-        },
-      };
-    }
-
-    if (!_.includes(yleissivistavatKoulutustyypit, resultItem.koulutustyyppi)) {
-      return {
-        name: 'toteutussuunnitelma',
-        params: {
-          koulutustyyppi: koulutustyyppiStateName(resultItem.koulutustyyppi),
-          toteutussuunnitelmaId: _.toString(resultItem.id),
-        },
-      };
-    }
-
-    return {};
+const generateRoute = (resultItem) => {
+  if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.OPAS) {
+    return {
+      name: 'peruste',
+      params: {
+        koulutustyyppi: 'opas',
+        perusteId: _.toString(resultItem.id),
+      },
+    };
+  }
+  if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.PERUSTE) {
+    return {
+      name: 'peruste',
+      params: {
+        koulutustyyppi: koulutustyyppiStateName(resultItem.koulutustyyppi),
+        perusteId: _.toString(resultItem.id),
+      },
+    };
   }
 
-  get kokonaismaara() {
-    return this.perusteStore.opsitJaPerusteet?.kokonaismäärä;
+  if (resultItem.etusivuTyyppi === JulkiEtusivuDtoEtusivuTyyppiEnum.DIGITAALINENOSAAMINEN) {
+    return {
+      name: 'peruste',
+      params: {
+        koulutustyyppi: 'digiosaaminen',
+        perusteId: _.toString(resultItem.id),
+      },
+    };
   }
 
-  get hasResults() {
-    return _.isNumber(this.kokonaismaara);
+  if (_.includes(yleissivistavatKoulutustyypit, resultItem.koulutustyyppi)) {
+    return {
+      name: 'opetussuunnitelma',
+      params: {
+        koulutustyyppi: koulutustyyppiStateName(resultItem.koulutustyyppi),
+        opetussuunnitelmaId: _.toString(resultItem.id),
+      },
+    };
   }
 
-  get page() {
-    return this.sivu;
+  if (!_.includes(yleissivistavatKoulutustyypit, resultItem.koulutustyyppi)) {
+    return {
+      name: 'toteutussuunnitelma',
+      params: {
+        koulutustyyppi: koulutustyyppiStateName(resultItem.koulutustyyppi),
+        toteutussuunnitelmaId: _.toString(resultItem.id),
+      },
+    };
   }
 
-  set page(value) {
-    this.sivu = value;
-  }
+  return {};
+};
 
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-}
+const kokonaismaara = computed(() => {
+  return perusteStore.opsitJaPerusteet?.kokonaismäärä;
+});
+
+const hasResults = computed(() => {
+  return _.isNumber(kokonaismaara.value);
+});
+
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 </script>
 
 <style scoped lang="scss">
@@ -284,12 +275,12 @@ export default class EpEtusivuHaku extends Vue {
 
 @include shadow-tile;
 
-::v-deep .filter .form-control {
+:deep(.filter .form-control) {
   padding: 20px 20px 20px 45px;
   height: 60px;
 }
 
-::v-deep .filter .form-control-feedback {
+:deep(.filter .form-control-feedback) {
   padding-top: 10px;
   padding-left: 10px;
   position: absolute;
@@ -303,16 +294,16 @@ export default class EpEtusivuHaku extends Vue {
   color: $gray;
 }
 
-::v-deep .page-item.disabled .page-link {
+:deep(.page-item.disabled .page-link) {
   color: $gray-lighten-3;
 }
 
-::v-deep .b-pagination li.page-item .page-link {
+:deep(.b-pagination li.page-item .page-link) {
   background-color: unset;
   color: $white;
 }
 
-::v-deep .b-pagination li.page-item.active .page-link {
+:deep(.b-pagination li.page-item.active .page-link) {
   background: $white;
   color: $oph-green;
 }
@@ -328,7 +319,7 @@ export default class EpEtusivuHaku extends Vue {
     color: $black;
     overflow-x: auto;
 
-    ::v-deep a, div.linkki a {
+    :deep(a), div.linkki a {
       color: $black;
     }
   }
@@ -409,7 +400,7 @@ export default class EpEtusivuHaku extends Vue {
   }
 }
 
-::v-deep .spinner .oph-bounce {
+:deep(.spinner .oph-bounce) {
   background-color: $white !important;
 }
 

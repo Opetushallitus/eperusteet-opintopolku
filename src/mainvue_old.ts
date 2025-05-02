@@ -17,7 +17,6 @@ import { pinia } from '@/pinia';
 import { router } from '@/router';
 import fiLocale from '@shared/translations/locale-fi.json';
 import svLocale from '@shared/translations/locale-sv.json';
-import VueCompositionApi from '@vue/composition-api';
 
 Vue.config.devtools = true;
 Vue.use(Notifications);
@@ -26,27 +25,26 @@ Vue.use(PortalVue);
 Vue.use(Kaannos, { squareBrackets: false });
 Vue.use(Aikaleima);
 Vue.use(Vahvistus);
-Vue.use(VueCompositionApi);
 
 const isProduction = () => import.meta.env.NODE_ENV === 'production';
 const isTest = () => import.meta.env.NODE_ENV === 'test';
 
-if (!isProduction() && !isTest()) {
-  const VueAxe = require('vue-axe');
-  Vue.use(VueAxe, {
-    config: {
-      rules: [
-        { id: 'heading-order', enabled: true },
-        { id: 'label-title-only', enabled: true },
-        { id: 'landmark-one-main', enabled: false },
-        { id: 'page-has-heading-one', enabled: false },
-        { id: 'region', enabled: false },
-        { id: 'scope-attr-valid', enabled: false }, // https://github.com/vue-a11y/vue-axe/issues/4
-      ],
-    },
-    clearConsoleOnUpdate: false,
-  });
-}
+// if (!isProduction() && !isTest()) {
+//   const VueAxe = require('vue-axe');
+//   Vue.use(VueAxe, {
+//     config: {
+//       rules: [
+//         { id: 'heading-order', enabled: true },
+//         { id: 'label-title-only', enabled: true },
+//         { id: 'landmark-one-main', enabled: false },
+//         { id: 'page-has-heading-one', enabled: false },
+//         { id: 'region', enabled: false },
+//         { id: 'scope-attr-valid', enabled: false }, // https://github.com/vue-a11y/vue-axe/issues/4
+//       ],
+//     },
+//     clearConsoleOnUpdate: false,
+//   });
+// }
 
 Vue.use(Loading, {
   fullPage: true,
@@ -64,14 +62,14 @@ const matomoSiteIds = {
   'localhost': 34,
 };
 
-if (matomoSiteIds[window.location.hostname]) {
-  Vue.use(VueMatomo, {
-    host: 'https://analytiikka.opintopolku.fi/matomo',
-    siteId: matomoSiteIds[window.location.hostname],
-    router: router,
-    disableCookies: true,
-  });
-}
+// if (matomoSiteIds[window.location.hostname]) {
+//   Vue.use(VueMatomo, {
+//     host: 'https://analytiikka.opintopolku.fi/matomo',
+//     siteId: matomoSiteIds[window.location.hostname],
+//     router: router,
+//     disableCookies: true,
+//   });
+// }
 
 Vue.use(Kielet, {
   messages: {

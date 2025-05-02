@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { IPaikallinenStore } from './IPaikallinenStore';
 import { OpetussuunnitelmaQuery, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto, JulkinenApi, KoulutustoimijaJulkinenDto } from '@shared/api/amosaa';

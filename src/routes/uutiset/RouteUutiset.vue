@@ -58,101 +58,86 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
-import { TiedoteStore } from '@/stores/TiedoteStore';
+<script setup lang="ts">
+import { computed, ref, onMounted, watch } from 'vue';
+import { useHead } from '@unhead/vue';
+import { useTiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Kielet } from '@shared/stores/kieli';
-import { Meta } from '@shared/utils/decorators';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { $kaanna, $sd, $t } from '@shared/utils/globals';
+import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    EpSearch,
-    EpContentViewer,
-  },
-})
-export default class RouteUutiset extends Vue {
-  @Prop({ required: true })
-  private tiedoteStore!: TiedoteStore;
+const page = ref(1);
+const query = ref('');
+const tiedoteStore = useTiedoteStore(pinia);
+const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+const julkaistutKoulutustyypit = computed(() => {
+  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
+});
 
-  private page = 1;
-  private query = '';
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  public mounted() {
-    this.tiedoteStore.updateFilter({
-      nimi: this.query,
-      koulutustyypit: this.julkaistutKoulutustyypit,
-      kieli: Kielet.getSisaltoKieli.value,
-    });
-  }
+const tiedotteet = computed(() => {
+  return {
+    tiedotteet: tiedoteStore.tiedotteet,
+    filter: tiedoteStore.filter,
+    amount: tiedoteStore.amount,
+  };
+});
 
-  get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
-  }
+const isTiedotteetEmpty = computed(() => {
+  return tiedotteet.value.amount === 0;
+});
 
-  @Watch('sisaltoKieli')
-  async sisaltoKieliChange() {
-    await this.tiedoteStore.updateFilter({
-      kieli: [Kielet.getSisaltoKieli.value],
-    });
-  }
+const murupolku = computed(() => {
+  return [{
+    label: 'ajankohtaista',
+    location: {
+      name: 'uutiset',
+    },
+  }];
+});
 
-  get tiedotteet() {
-    return {
-      tiedotteet: this.tiedoteStore.tiedotteet,
-      filter: this.tiedoteStore.filter,
-      amount: this.tiedoteStore.amount,
-    };
-  }
+onMounted(() => {
+  tiedoteStore.updateFilter({
+    nimi: query.value,
+    koulutustyypit: julkaistutKoulutustyypit.value,
+    kieli: Kielet.getSisaltoKieli.value,
+  });
+});
 
-  get isTiedotteetEmpty() {
-    return this.tiedotteet.amount === 0;
-  }
+watch(sisaltoKieli, async () => {
+  await tiedoteStore.updateFilter({
+    kieli: [Kielet.getSisaltoKieli.value],
+  });
+});
 
-  private updatePage(value) {
-    this.page = value;
-    this.tiedoteStore.updateFilter({
-      sivu: value - 1,
-    });
-  }
+const updatePage = (value) => {
+  page.value = value;
+  tiedoteStore.updateFilter({
+    sivu: value - 1,
+  });
+};
 
-  private setValue(value) {
-    this.page = 1;
-    this.tiedoteStore.updateFilter({
-      nimi: value,
-      sivu: 0,
-    });
-  }
+const setValue = (value) => {
+  page.value = 1;
+  tiedoteStore.updateFilter({
+    nimi: value,
+    sivu: 0,
+  });
+};
 
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get murupolku() {
-    return [{
-      label: 'ajankohtaista',
-      location: {
-        name: 'uutiset',
-      },
-    }];
-  }
-
-  @Meta
-  getMetaInfo() {
-    return {
-      title: (this as any).$t('ajankohtaista'),
-    };
-  }
-}
+// Meta information
+useHead({
+  title: $t('ajankohtaista'),
+});
 </script>
 
 <style scoped lang="scss">
@@ -184,5 +169,4 @@ export default class RouteUutiset extends Vue {
     }
   }
 }
-
 </style>

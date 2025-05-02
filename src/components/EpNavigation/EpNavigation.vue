@@ -71,227 +71,224 @@
   </b-navbar>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { ref, computed, getCurrentInstance } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import {
   koulutustyyppiTheme,
   stateToKoulutustyyppi,
-  yleissivistavat,
-  ammatilliset,
-  vapaasivistystyo,
-  tutkintoonvalmentava,
-  kotoutumiskoulutus,
-  muuKoulutus,
-  digitaalinenOsaaminen,
+  yleissivistavat as yleissivistavatPerusteet,
+  ammatilliset as ammatillisetPerusteet,
+  vapaasivistystyo as vapaasivistystyoPerusteet,
+  tutkintoonvalmentava as tutkintoonvalmentavaPerusteet,
+  kotoutumiskoulutus as kotoutumiskoulutusPerusteet,
+  muuKoulutus as muuKoulutusPerusteet,
+  digitaalinenOsaaminen as digitaalinenOsaaminenPerusteet,
 } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
-import { Route } from 'vue-router';
-import { VueRouter, RawLocation } from 'vue-router/types/router';
 import { createLogger } from '@shared/utils/logger';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import { Kieli } from '@shared/tyypit';
 
 const logger = createLogger('EpNavigation');
+const router = useRouter();
+const route = useRoute();
 
-@Component({
-  components: {
-    EpSpinner,
-    EpMaterialIcon,
+const props = defineProps({
+  julkaistutKoulutustyypitStore: {
+    type: Object,
+    required: true,
   },
-})
-export default class EpNavigation extends Vue {
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+});
 
-  get loading() {
-    return _.isNil(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value)
-    || _.isNil(this.julkaistutKoulutustyypitStore.muuLukumaarat.value)
-    || _.isNil(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
+const loading = computed(() => {
+  return _.isNil(props.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value)
+  || _.isNil(props.julkaistutKoulutustyypitStore.muuLukumaarat.value)
+  || _.isNil(props.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
+});
+
+const julkaistutKoulutustyypit = computed(() => {
+  return [
+    ...(props.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value || []),
+    ...(muuLukumaarat.value > 0 ? ['koulutustyyppi_muu'] : []),
+    ...(digitaalinenOsaaminenLkm.value > 0 ? ['koulutustyyppi_digi'] : []),
+  ];
+});
+
+const digitaalinenOsaaminenLkm = computed(() => {
+  return _.size(props.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
+});
+
+const digitaalinenOsaaminenPeruste = computed(() => {
+  return _.first(props.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
+});
+
+const muuLukumaarat = computed((): number => {
+  if (props.julkaistutKoulutustyypitStore.muuLukumaarat.value) {
+    return props.julkaistutKoulutustyypitStore.muuLukumaarat.value as number;
   }
 
-  get julkaistutKoulutustyypit() {
-    return [
-      ...(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value || []),
-      ...(this.muuLukumaarat > 0 ? ['koulutustyyppi_muu'] : []),
-      ...(this.digitaalinenOsaaminenLkm > 0 ? ['koulutustyyppi_digi'] : []),
-    ];
+  return 0;
+});
+
+const valittuKieli = computed(() => {
+  return Kielet.getUiKieli;
+});
+
+const kielet = computed(() => {
+  return [
+    'fi',
+    'sv',
+    'en',
+  ];
+});
+
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+const routeAmmatillinen = computed(() => {
+  if (route) {
+    return route.name === 'ammatillinenkooste';
+  }
+  return false;
+});
+
+const activeClass = computed(() => {
+  if (routeAmmatillinen.value) {
+    return 'router-link-active koulutustyyppi-ammatillinen';
+  }
+  else if (route && route.params.koulutustyyppi) {
+    const koulutustyyppi = stateToKoulutustyyppi(route.params.koulutustyyppi as string) || route.params.koulutustyyppi;
+    return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
+  }
+  else if (route?.name === 'maaraykset' || route?.name === 'maarays') {
+    return 'router-link-active oph-maaraykset';
+  }
+  else {
+    return 'router-link-active';
+  }
+});
+
+const isActiveRoute = (kt) => {
+  if (route) {
+    return kt.name === route.params.koulutustyyppi
+      || (routeAmmatillinen.value && kt.name === 'ammatillinen');
+  }
+  return false;
+};
+
+const setActiveClass = (kt) => {
+  if ((isActiveRoute(kt))) {
+    return {
+      activeClass: activeClass.value,
+    };
+  }
+  return {};
+};
+
+const ammatilliset = computed(() => {
+  return _.map(ammatillisetPerusteet(), am => {
+    return {
+      ...am,
+      ...setActiveClass({ name: 'ammatillinen' }),
+    };
+  });
+});
+
+const yleissivistavat = computed(() => {
+  return _.map(yleissivistavatPerusteet(), kt => ({
+    ...kt,
+    ...setActiveClass(kt),
+  }));
+});
+
+const vapaasivistystyo = computed(() => {
+  return _.map(vapaasivistystyoPerusteet(), kt => ({
+    ...kt,
+    ...setActiveClass(kt),
+  }));
+});
+
+const tutkintoonvalmentava = computed(() => {
+  return _.map(tutkintoonvalmentavaPerusteet(), kt => ({
+    ...kt,
+    ...setActiveClass(kt),
+  }));
+});
+
+const kotoutumiskoulutus = computed(() => {
+  return _.map(kotoutumiskoulutusPerusteet(), kt => ({
+    ...kt,
+    ...setActiveClass(kt),
+  }));
+});
+
+const muuKoulutus = computed(() => {
+  return _.map(muuKoulutusPerusteet(), kt => ({
+    ...kt,
+    ...setActiveClass(kt),
+  }));
+});
+
+const digitaalinenOsaaminen = computed(() => {
+  return digitaalinenOsaaminenPerusteet(digitaalinenOsaaminenPeruste.value?.id);
+});
+
+const maarayskokoelma = computed(() => {
+  if (sisaltoKieli.value === Kieli.en) {
+    return [];
   }
 
-  get digitaalinenOsaaminenLkm() {
-    return _.size(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
-  }
+  return [{
+    name: 'opetushallituksen-maaraykset',
+    route: {
+      name: 'maaraykset',
+    },
+  }];
+});
 
-  get digitaalinenOsaaminenPeruste() {
-    return _.first(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
-  }
+const items = computed(() => {
+  return [
+    ..._.filter([
+      ...yleissivistavat.value,
+      ...ammatilliset.value,
+      ...vapaasivistystyo.value,
+      ...tutkintoonvalmentava.value,
+      ...kotoutumiskoulutus.value,
+      ...muuKoulutus.value,
+      ...digitaalinenOsaaminen.value,
+    ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(julkaistutKoulutustyypit.value, alityyppi))),
+    ...maarayskokoelma.value,
+  ];
+});
 
-  get muuLukumaarat(): number {
-    if (this.julkaistutKoulutustyypitStore.muuLukumaarat.value) {
-      return this.julkaistutKoulutustyypitStore.muuLukumaarat.value as number;
-    }
+const valitseKieli = async (kieli) => {
+  // Vaihdetaan kieli päivittämällä route
+  const current = router.currentRoute;
 
-    return 0;
-  }
-
-  get valittuKieli() {
-    return Kielet.getUiKieli;
-  }
-
-  get kielet() {
-    return [
-      'fi',
-      'sv',
-      'en',
-    ];
-  }
-
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get activeClass() {
-    if (this.routeAmmatillinen) {
-      return 'router-link-active koulutustyyppi-ammatillinen';
-    }
-    else if (this.$route && this.$route.params.koulutustyyppi) {
-      const koulutustyyppi = stateToKoulutustyyppi(this.$route.params.koulutustyyppi) || this.$route.params.koulutustyyppi;
-      return 'router-link-active koulutustyyppi-' + koulutustyyppiTheme(koulutustyyppi);
-    }
-    else if (this.$route?.name === 'maaraykset' || this.$route?.name === 'maarays') {
-      return 'router-link-active oph-maaraykset';
-    }
-    else {
-      return 'router-link-active';
-    }
-  }
-
-  get routeAmmatillinen() {
-    if (this.$route) {
-      return this.$route.name === 'ammatillinenkooste';
-    }
-  }
-
-  private isActiveRoute(kt) {
-    if (this.$route) {
-      return kt.name === this.$route.params.koulutustyyppi
-        || (this.routeAmmatillinen && kt.name === 'ammatillinen');
-    }
-    return false;
-  }
-
-  private setActiveClass(kt) {
-    if ((this.isActiveRoute(kt))) {
-      return {
-        activeClass: this.activeClass,
-      };
-    }
-  }
-
-  get ammatilliset() {
-    return _.map(ammatilliset(), am => {
-      return {
-        ...am,
-        ...this.setActiveClass({ name: 'ammatillinen' }),
-      };
+  // Replacella ei muodostu historiatietoa
+  // Muut parametrit ja tiedot näyttäisi säilyvän replacella
+  try {
+    await router.replace({
+      name: current.name,
+      params: {
+        ...current.params,
+        lang: kieli || 'fi',
+      },
     });
   }
-
-  get yleissivistavat() {
-    return _.map(yleissivistavat(), kt => ({
-      ...kt,
-      ...this.setActiveClass(kt),
-    }));
-  }
-
-  get vapaasivistystyo() {
-    return _.map(vapaasivistystyo(), kt => ({
-      ...kt,
-      ...this.setActiveClass(kt),
-    }));
-  }
-
-  get tutkintoonvalmentava() {
-    return _.map(tutkintoonvalmentava(), kt => ({
-      ...kt,
-      ...this.setActiveClass(kt),
-    }));
-  }
-
-  get kotoutumiskoulutus() {
-    return _.map(kotoutumiskoulutus(), kt => ({
-      ...kt,
-      ...this.setActiveClass(kt),
-    }));
-  }
-
-  get muuKoulutus() {
-    return _.map(muuKoulutus(), kt => ({
-      ...kt,
-      ...this.setActiveClass(kt),
-    }));
-  }
-
-  get digitaalinenOsaaminen() {
-    return digitaalinenOsaaminen(this.digitaalinenOsaaminenPeruste?.id);
-  }
-
-  get maarayskokoelma() {
-    if (this.sisaltoKieli === Kieli.en) {
-      return [];
+  catch (e: any) {
+    if (e.name === 'NavigationDuplicated') {
+      logger.warn('Uusi kieli on sama kuin nykyinen');
     }
-
-    return [{
-      name: 'opetushallituksen-maaraykset',
-      route: {
-        name: 'maaraykset',
-      },
-    }];
-  }
-
-  get items() {
-    return [
-      ..._.filter([
-        ...this.yleissivistavat,
-        ...this.ammatilliset,
-        ...this.vapaasivistystyo,
-        ...this.tutkintoonvalmentava,
-        ...this.kotoutumiskoulutus,
-        ...this.muuKoulutus,
-        ...this.digitaalinenOsaaminen,
-      ], ylanavi => _.some(ylanavi.alityypit, alityyppi => _.includes(this.julkaistutKoulutustyypit, alityyppi))),
-      ...this.maarayskokoelma,
-    ];
-  }
-
-  async valitseKieli(kieli) {
-    // Vaihdetaan kieli päivittämällä route
-    const router: VueRouter = this.$router;
-    const current: Route = router.currentRoute;
-
-    // Replacella ei muodostu historiatietoa
-    // Muut parametrit ja tiedot näyttäisi säilyvän replacella
-    try {
-      await router.replace({
-        name: current.name,
-        params: {
-          ...current.params,
-          lang: kieli || this.$i18n.fallbackLocale,
-        },
-      } as RawLocation);
-    }
-    catch (e: any) {
-      if (e.name === 'NavigationDuplicated') {
-        logger.warn('Uusi kieli on sama kuin nykyinen');
-      }
-      else {
-        throw e;
-      }
+    else {
+      throw e;
     }
   }
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -312,7 +309,7 @@ export default class EpNavigation extends Vue {
   }
 
   .navbar-nav.ml-auto .nav-item.dropdown {
-    ::v-deep .nav-link.dropdown-toggle {
+    :deep(.nav-link.dropdown-toggle) {
       color: #001A58;
     }
   }
@@ -336,12 +333,12 @@ export default class EpNavigation extends Vue {
     .navbar-toggler {
       padding: 15px;
     }
-    ::v-deep .nav-link {
+    :deep(.nav-link) {
       padding: 0.5rem 0rem 0.5rem 0rem !important;
       margin-left: 1rem;
       margin-right: 1rem;
     }
-    ::v-deep .dropdown-menu {
+    :deep(.dropdown-menu) {
       border-radius: 0;
       border: 0;
       .dropdown-item {
@@ -413,63 +410,62 @@ export default class EpNavigation extends Vue {
 
   // Tätä ei tarvittaisi, jos nav-itemin alielementin router-link tilan voisi asettaa proppina
   .navbar-nav .nav-item.router-link-active {
-    ::v-deep .nav-link {
+    :deep(.nav-link) {
       padding-bottom: 0.25rem;
       border-bottom: #001A58 0.25rem solid;
     }
     &.koulutustyyppi-ammatillinen {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-ammatillinen-color;
       }
     }
     &.koulutustyyppi-esiopetus {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-esiopetus-color;
       }
     }
     &.koulutustyyppi-lukiokoulutus {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-lukiokoulutus-color;
       }
     }
     &.koulutustyyppi-perusopetus {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-perusopetus-color;
       }
     }
     &.koulutustyyppi-varhaiskasvatus {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-varhaiskasvatus-color;
       }
     }
     &.koulutustyyppi-taiteenperusopetus {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-taiteenperusopetus-color;
       }
     }
     &.koulutustyyppi-vapaasivistystyo {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-vapaasivistystyo-color;
       }
     }
     &.koulutustyyppi-tutkintoonvalmentava {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-tutkintoonvalmentava-color;
       }
     }
 
     &.koulutustyyppi-kotoutumiskoulutus {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-kotoutumiskoulutus-color;
       }
     }
 
     &.koulutustyyppi-muukoulutus {
-      ::v-deep .nav-link {
+      :deep(.nav-link) {
         border-bottom-color: $koulutustyyppi-muu-color;
       }
     }
   }
 }
-
 </style>

@@ -113,57 +113,46 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-
+<script setup lang="ts">
+import { computed } from 'vue';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 import _ from 'lodash';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { useRoute } from 'vue-router';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpFormContent,
-    EpSpinner,
-    EpOpasKiinnitysLinkki,
-  },
-})
-export default class RouteKoulutuksenOsa extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.koulutuksenosaId);
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get koulutuksenosaKoodiUri() {
-    return (this.perusteenOsa as any)?.nimiKoodi?.uri;
-  }
+const koulutuksenosaKoodiUri = computed(() => {
+  return (perusteenOsa.value as any)?.nimiKoodi?.uri;
+});
 
-  get nimi() {
-    return _.get(this.perusteenOsa, 'nimiKoodi') ? _.get(this.perusteenOsa, 'nimiKoodi.nimi') : _.get(this.perusteenOsa, 'nimi');
-  }
+const nimi = computed(() => {
+  return _.get(perusteenOsa.value, 'nimiKoodi') ? _.get(perusteenOsa.value, 'nimiKoodi.nimi') : _.get(perusteenOsa.value, 'nimi');
+});
 
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-}
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
 </script>
 
 <style scoped lang="scss">

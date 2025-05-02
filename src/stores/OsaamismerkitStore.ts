@@ -1,27 +1,22 @@
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 import { Osaamismerkit, OsaamismerkitQuery } from '@shared/api/eperusteet';
 import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { OsaamismerkkiBaseDto, OsaamismerkkiKategoriaDto } from '@shared/generated/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
-import { computed, reactive } from '@vue/composition-api';
+import { debounce } from 'lodash';
 
-export class OsaamismerkitStore {
-  public state = reactive({
-    osaamismerkit: null as OsaamismerkkiBaseDto[] | null,
-    query: {} as OsaamismerkitQuery,
-    kategoriat: [] as OsaamismerkkiKategoriaDto[] | null,
-  });
+export const useOsaamismerkitStore = defineStore('osaamismerkit', () => {
+  // State as refs
+  const osaamismerkit = ref<OsaamismerkkiBaseDto[] | null>(null);
+  const query = ref<OsaamismerkitQuery>({});
+  const kategoriat = ref<OsaamismerkkiKategoriaDto[] | null>([]);
 
-  public readonly osaamismerkit = computed(() => this.state.osaamismerkit);
-  public readonly options = computed(() => this.state.query);
-  public readonly kategoriat = computed(() => this.state.kategoriat);
+  // Getters as computed properties
+  const options = computed(() => query.value);
 
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  public async updateOsaamismerkkiQuery(query: OsaamismerkitQuery) {
-    this.state.osaamismerkit = null;
-    this.state.osaamismerkit = await this.fetchOsaamismerkitImpl(query);
-  }
-
-  public async fetchOsaamismerkitImpl(q: OsaamismerkitQuery) {
+  // Implementation functions
+  async function fetchOsaamismerkitImpl(q: OsaamismerkitQuery) {
     const res = (await Osaamismerkit.findJulkisetOsaamismerkitBy(
       q.nimi,
       q.kategoria,
@@ -32,8 +27,29 @@ export class OsaamismerkitStore {
     return res;
   }
 
-  public async fetchKategoriat(q: OsaamismerkitQuery) {
-    this.state.kategoriat = null;
-    this.state.kategoriat = (await Osaamismerkit.getJulkisetKategoriat(q.poistunut, Kielet.getSisaltoKieli.value)).data;
+  // Actions
+  const updateOsaamismerkitQuery = debounce(async (queryParams: OsaamismerkitQuery) => {
+    osaamismerkit.value = null;
+    query.value = queryParams;
+    osaamismerkit.value = await fetchOsaamismerkitImpl(queryParams);
+  }, DEFAULT_PUBLIC_WAIT_TIME_MS);
+
+  async function fetchKategoriat(q: OsaamismerkitQuery) {
+    kategoriat.value = null;
+    kategoriat.value = (await Osaamismerkit.getJulkisetKategoriat(q.poistunut, Kielet.getSisaltoKieli.value)).data;
   }
-}
+
+  return {
+    // State
+    osaamismerkit,
+    query,
+    kategoriat,
+
+    // Getters
+    options,
+
+    // Actions
+    updateOsaamismerkitQuery,
+    fetchKategoriat,
+  };
+});

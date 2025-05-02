@@ -53,7 +53,7 @@
           </h3>
         </template>
 
-        <EpOsaAlue :value="osaAlue">
+        <EpOsaAlue :model-value="osaAlue">
           <template #nimi>
             <div />
           </template>
@@ -69,77 +69,66 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { ref, computed } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpOsaAlue from '@shared/components/EpOsaamiskokonaisuus/EpOsaAlue.vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import { useRoute } from 'vue-router';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
-    EpCollapse,
-    EpOsaAlue,
-    EpMaterialIcon,
-  },
-})
-export default class RouteOsaamiskokonaisuusPaaAlue extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.osaamiskokonaisuusPaaAlueId);
 
-  private selectedTasot: any[] = ['varhaiskasvatus', 'esiopetus', 'vuosiluokka_12', 'vuosiluokka_3456', 'vuosiluokka_789'];
+const selectedTasot = ref(['varhaiskasvatus', 'esiopetus', 'vuosiluokka_12', 'vuosiluokka_3456', 'vuosiluokka_789']);
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get perusteenOsa(): any {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa as any;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get currentRoute() {
-    return this.perusteDataStore.currentRoute;
-  }
+const currentRoute = computed(() => {
+  return perusteDataStore.currentRoute;
+});
 
-  get osaAlueet() {
-    return _.map(this.perusteenOsa.osaAlueet, osaAlue => {
-      return {
-        ...osaAlue,
-        tasokuvaukset: _.filter(osaAlue.tasokuvaukset, tasokuvaus => this.selectedTaso(tasokuvaus.taso)),
-      };
-    });
-  }
+const osaAlueet = computed(() => {
+  return _.map(perusteenOsa.value.osaAlueet, osaAlue => {
+    return {
+      ...osaAlue,
+      tasokuvaukset: _.filter(osaAlue.tasokuvaukset, tasokuvaus => selectedTaso(tasokuvaus.taso)),
+    };
+  });
+});
 
-  get tasot() {
-    return _.chain(this.perusteenOsa.osaAlueet)
-      .map('tasokuvaukset')
-      .flatMap()
-      .map(tasokuvaus => _.toLower(tasokuvaus.taso))
-      .uniq()
-      .value();
-  }
+const tasot = computed(() => {
+  return _.chain(perusteenOsa.value.osaAlueet)
+    .map('tasokuvaukset')
+    .flatMap()
+    .map(tasokuvaus => _.toLower(tasokuvaus.taso))
+    .uniq()
+    .value();
+});
 
-  selectedTaso(taso) {
-    return _.find(this.selectedTasot, selected => selected === _.toLower(taso));
-  }
-}
+const selectedTaso = (taso) => {
+  return _.find(selectedTasot.value, selected => selected === _.toLower(taso));
+};
 </script>
 
 <style scoped lang="scss">

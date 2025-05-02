@@ -1,27 +1,39 @@
-import { Store, State } from '@shared/stores/store';
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import { Lops2019, Lops2019OppiaineDto } from '@shared/api/eperusteet';
 
-@Store
-export class Lops2019OppiaineetStore {
-  @State() public perusteId: number;
-  @State() public oppiaineet: Array<Lops2019OppiaineDto> | null = null;
+export const useLops2019OppiaineetStore = defineStore('lops2019Oppiaineet', () => {
+  // State
+  const perusteId = ref<number | null>(null);
+  const oppiaineet = ref<Array<Lops2019OppiaineDto> | null>(null);
 
-  public static async create(perusteId: number) {
-    const store = new Lops2019OppiaineetStore(perusteId);
-    // Jos halutaan näyttää enemmän tietoja kuin nimi
-    // store.fetchOppiaineet();
-    return store;
-  }
-
-  constructor(perusteId: number) {
-    this.perusteId = perusteId;
-  }
+  // Actions
+  const init = async (id: number) => {
+    perusteId.value = id;
+    // You can uncomment the next line if you want to fetch data immediately on init
+    // await fetchOppiaineet();
+    return {
+      perusteId,
+      oppiaineet,
+      fetchOppiaineet,
+    };
+  };
 
   /**
    * Haetaan oppiaineet jos perusteId on muuttunut
    */
-  async fetchOppiaineet() {
-    this.oppiaineet = null;
-    this.oppiaineet = (await Lops2019.getOppiaineet(this.perusteId)).data;
-  }
-}
+  const fetchOppiaineet = async () => {
+    oppiaineet.value = null;
+    oppiaineet.value = (await Lops2019.getOppiaineet(perusteId.value!)).data;
+  };
+
+  return {
+    // State
+    perusteId,
+    oppiaineet,
+
+    // Actions
+    init,
+    fetchOppiaineet,
+  };
+});

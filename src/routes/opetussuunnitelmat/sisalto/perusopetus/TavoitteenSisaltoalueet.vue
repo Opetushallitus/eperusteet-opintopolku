@@ -50,25 +50,36 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { useTemplateRef } from 'vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component
-export default class TavoitteenSisaltoalueet extends Vue {
-  @Prop()
-  private sisaltoalueet!: any;
+const props = defineProps({
+  sisaltoalueet: {
+    type: Array,
+    required: true,
+  },
+  naytaSisaltoalueet: {
+    type: Boolean,
+    default: true,
+  },
+  naytaOmaKuvaus: {
+    type: Boolean,
+    default: true,
+  },
+});
 
-  @Prop({ default: true })
-  private naytaSisaltoalueet!: boolean;
+const sisaltoaluecollapse = useTemplateRef('sisaltoaluecollapse');
 
-  @Prop({ default: true })
-  private naytaOmaKuvaus!: boolean;
+const toggle = (toggle: boolean | null = null) => {
+  _.forEach(sisaltoaluecollapse.value, (collapsable: any) => collapsable.toggle(toggle));
+};
 
-  toggle(toggle: boolean | null = null) {
-    _.forEach(this.$refs.sisaltoaluecollapse, (collapsable: any) => collapsable.toggle(toggle));
-  }
-}
+// Expose the toggle method to parent components
+defineExpose({
+  toggle,
+});
 </script>
 
 <style scoped lang="scss">
@@ -80,7 +91,7 @@ export default class TavoitteenSisaltoalueet extends Vue {
   padding: 0.8rem;
 }
 
-::v-deep .ep-collapse {
+:deep(.ep-collapse) {
   margin-top: 0px;
 
   .collapse-button {
@@ -91,5 +102,4 @@ export default class TavoitteenSisaltoalueet extends Vue {
 .nimi {
   line-height: 1.7;
 }
-
 </style>

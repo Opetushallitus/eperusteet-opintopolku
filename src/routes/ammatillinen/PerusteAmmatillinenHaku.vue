@@ -139,12 +139,11 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import _ from 'lodash';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import { IPerusteHakuStore } from '@/stores/IPerusteHakuStore';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
@@ -156,212 +155,204 @@ import EpSisaltotyyppiFilter from '@shared/components/EpSisaltotyyppiFilter/EpSi
 import EpAmmatillinenPerusteItem from '@/components/EpAmmatillinen/EpAmmatillinenPerusteItem.vue';
 import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmatillinenTutkinnonosaItem.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { useAmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
+import { useAmmatillinenOpasHakuStore } from '@/stores/AmmatillinenOpasHakuStore';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpSearch,
-    EpSpinner,
-    EpAmmatillinenRow,
-    EpMultiSelect,
-    EpBPagination,
-    EpSisaltotyyppiFilter,
-    EpAmmatillinenPerusteItem,
-    EpAmmatillinenTutkinnonosaItem,
-    EpHakutulosmaara,
+const props = defineProps({
+  tyyppi: {
+    type: String as () => 'peruste' | 'opas',
+    required: true,
   },
-})
-export default class PerusteAmmatillinenHaku extends Vue {
-  @Prop({ required: true })
-  private perusteHakuStore!: IPerusteHakuStore;
+});
 
-  @Prop({ type: String })
-  private tyyppi!: 'peruste' | 'opas';
+const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
+const tutkintotyyppi = ref('kaikki');
+const query = ref('');
+const toggleQuery = ref<any>({});
+const perusteHakuStore = props.tyyppi === 'peruste' ? useAmmatillinenPerusteHakuStore(pinia) : useAmmatillinenOpasHakuStore(pinia);
 
-  private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
-  private tutkintotyyppi = 'kaikki';
-  private query = '';
+const initQuery = () => {
+  filters.value.nimiTaiKoodi = undefined;
+  toggleQuery.value = {
+    tuleva: true,
+    voimassaolo: true,
+    siirtyma: false,
+    poistunut: false,
+    perusteet: true,
+    tutkinnonosat: false,
+  };
+};
 
-  private toggleQuery: any = {};
-
-  async mounted() {
-    this.initQuery();
-    this.page = 1;
-    await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
-
-    if (!this.perusteHakuStore.perusteet) {
-      await this.perusteHakuStore.fetch();
-    }
+const updateFilters = async (filters) => {
+  if (_.size(filters.nimiTaiKoodi) === 0 || _.size(filters.nimiTaiKoodi) > 2) {
+    await perusteHakuStore.updateFilters(filters);
   }
+};
 
-  async updateFilters(filters) {
-    if (_.size(filters.nimiTaiKoodi) === 0 || _.size(filters.nimiTaiKoodi) > 2) {
-      await this.perusteHakuStore.updateFilters(filters);
-    }
+onMounted(async () => {
+  initQuery();
+  page.value = 1;
+  await valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+
+  if (!perusteHakuStore.perusteet) {
+    await perusteHakuStore.fetch();
   }
+});
 
-  initQuery() {
-    this.filters.nimiTaiKoodi = undefined;
-    this.toggleQuery = {
-      tuleva: true,
-      voimassaolo: true,
-      siirtyma: false,
-      poistunut: false,
-      perusteet: true,
-      tutkinnonosat: false,
-    };
-  }
+const tutkintotyypit = computed(() => {
+  return [
+    'kaikki',
+    'koulutustyyppi_1',
+    'koulutustyyppi_11',
+    'koulutustyyppi_12',
+  ];
+});
 
-  get tutkintotyypit() {
-    return [
-      'kaikki',
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+watch(kieli, async () => {
+  await updateFilters({ kieli: kieli.value });
+});
+
+watch(tutkintotyyppi, async () => {
+  if (tutkintotyyppi.value === 'kaikki') {
+    await updateFilters({ koulutustyyppi: [
       'koulutustyyppi_1',
       'koulutustyyppi_11',
       'koulutustyyppi_12',
-    ];
+      'koulutustyyppi_5',
+      'koulutustyyppi_18',
+    ] });
   }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
+  else {
+    await updateFilters({ koulutustyyppi: [tutkintotyyppi.value] });
   }
+});
 
-  @Watch('kieli')
-  async kieliChange() {
-    await this.updateFilters({ kieli: this.kieli });
+watch(query, async () => {
+  page.value = 1;
+  await updateFilters({ nimiTaiKoodi: query.value });
+});
+
+const page = computed({
+  get: () => {
+    return perusteHakuStore.page + 1;
+  },
+  set: (value) => {
+    perusteHakuStore.page = value - 1;
+  },
+});
+
+watch(page, async () => {
+  await updateFilters({ sivu: perusteHakuStore.page });
+
+  // Wait for DOM update
+  await nextTick();
+  const firstRowLink = document.querySelector('.ammatillinen-row a') as HTMLElement;
+  if (firstRowLink) {
+    firstRowLink.focus();
   }
+});
 
-  @Watch('tutkintotyyppi')
-  async tutkintotyyppiChange() {
-    if (this.tutkintotyyppi === 'kaikki') {
-      await this.updateFilters({ koulutustyyppi: [
-        'koulutustyyppi_1',
-        'koulutustyyppi_11',
-        'koulutustyyppi_12',
-        'koulutustyyppi_5',
-        'koulutustyyppi_18',
-      ] });
-    }
-    else {
-      await this.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
-    }
+watch(toggleQuery, async () => {
+  await updateFilters(toggleQuery.value);
+  page.value = 1;
+}, { deep: true });
+
+const searchPlaceholder = computed(() => {
+  if (props.tyyppi === 'opas') {
+    return Kielet.t('ohjeen-tai-materiaalin-nimi');
   }
-
-  @Watch('query')
-  async onQueryChanged() {
-    this.page = 1;
-    await this.updateFilters({ nimiTaiKoodi: this.query });
+  else {
+    return Kielet.t('voit-hakea-tutkintoa-nimella');
   }
+});
 
-  @Watch('page')
-  async onPageChanged() {
-    await this.updateFilters({ sivu: this.perusteHakuStore.page });
-    (this.$el.querySelector('.ammatillinen-row a') as any)?.focus();
+const perusteTutkinnonosaRoute = (perusteTaiTutkinnonosa) => {
+  if (perusteTaiTutkinnonosa.sisaltotyyppi === 'tutkinnonosa' && perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'normaali' && perusteTaiTutkinnonosa.perusteet?.length > 1) {
+    return null;
   }
-
-  @Watch('toggleQuery', { deep: true })
-  async voimassaoloFilterChanged() {
-    await this.updateFilters(this.toggleQuery);
-    this.page = 1;
+  if (perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'reformi_tutke2') {
+    return {
+      name: 'yhteinentutkinnonosa',
+      params: {
+        koodi: perusteTaiTutkinnonosa.tutkinnonosa.koodiUri,
+      },
+    };
   }
-
-  get searchPlaceholder() {
-    if (this.tyyppi === 'opas') {
-      return this.$t('ohjeen-tai-materiaalin-nimi');
-    }
-    else {
-      return this.$t('voit-hakea-tutkintoa-nimella');
-    }
+  if (perusteTaiTutkinnonosa.perusteet?.length === 1) {
+    return {
+      name: 'tutkinnonosa',
+      params: {
+        perusteId: perusteTaiTutkinnonosa.perusteet[0].id,
+        tutkinnonOsaViiteId: perusteTaiTutkinnonosa.id,
+      },
+      query: { redirect: 'true' },
+    };
   }
-
-  get perusteetJaTutkinnonosat() {
-    if (this.perusteHakuStore.perusteet) {
-      return this.mapPerusteet(this.perusteHakuStore.perusteet);
-    }
+  if (props.tyyppi === 'opas') {
+    return {
+      name: 'peruste',
+      params: {
+        koulutustyyppi: 'ammatillinen',
+        perusteId: _.toString(perusteTaiTutkinnonosa.id || perusteTaiTutkinnonosa.perusteId),
+      },
+    };
   }
-
-  mapPerusteet(perusteet) {
-    return _.chain(perusteet)
-      .map(sisalto => ({
-        ...sisalto,
-        route: this.perusteTutkinnonosaRoute(sisalto),
-        voimassaoloTieto: voimassaoloTieto(sisalto),
-        koulutuskoodit: _.join(_.map(sisalto.koulutukset, 'koulutuskoodiArvo'), ', '),
-        perusteet: sisalto.perusteet ? this.mapPerusteet(sisalto.perusteet) : null,
-        ...(sisalto.sisaltotyyppi === 'peruste' && sisalto.tyyppi !== 'opas' && { tutkintotag: 'tutkinnon-peruste' }),
-        ...(sisalto.sisaltotyyppi === 'tutkinnonosa' && { tutkintotag: 'tutkinnon-osa' }),
-
-      }))
-      .value();
+  else {
+    return {
+      name: 'ammatillinenkooste',
+      params: {
+        perusteId: _.toString(perusteTaiTutkinnonosa.id),
+      },
+    };
   }
+};
 
-  perusteTutkinnonosaRoute(perusteTaiTutkinnonosa) {
-    if (perusteTaiTutkinnonosa.sisaltotyyppi === 'tutkinnonosa' && perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'normaali' && perusteTaiTutkinnonosa.perusteet?.length > 1) {
-      return null;
-    }
-    if (perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'reformi_tutke2') {
-      return {
-        name: 'yhteinentutkinnonosa',
-        params: {
-          koodi: perusteTaiTutkinnonosa.tutkinnonosa.koodiUri,
-        },
-      };
-    }
-    if (perusteTaiTutkinnonosa.perusteet?.length === 1) {
-      return {
-        name: 'tutkinnonosa',
-        params: {
-          perusteId: perusteTaiTutkinnonosa.perusteet[0].id,
-          tutkinnonOsaViiteId: perusteTaiTutkinnonosa.id,
-        },
-        query: { redirect: 'true' },
-      };
-    }
-    if (this.tyyppi === 'opas') {
-      return {
-        name: 'peruste',
-        params: {
-          koulutustyyppi: 'ammatillinen',
-          perusteId: _.toString(perusteTaiTutkinnonosa.id || perusteTaiTutkinnonosa.perusteId),
-        },
-      };
-    }
-    else {
-      return {
-        name: 'ammatillinenkooste',
-        params: {
-          perusteId: _.toString(perusteTaiTutkinnonosa.id),
-        },
-      };
-    }
-  }
+const mapPerusteet = (perusteet) => {
+  return _.chain(perusteet)
+    .map(sisalto => ({
+      ...sisalto,
+      route: perusteTutkinnonosaRoute(sisalto),
+      voimassaoloTieto: voimassaoloTieto(sisalto),
+      koulutuskoodit: _.join(_.map(sisalto.koulutukset, 'koulutuskoodiArvo'), ', '),
+      perusteet: sisalto.perusteet ? mapPerusteet(sisalto.perusteet) : null,
+      ...(sisalto.sisaltotyyppi === 'peruste' && sisalto.tyyppi !== 'opas' && { tutkintotag: 'tutkinnon-peruste' }),
+      ...(sisalto.sisaltotyyppi === 'tutkinnonosa' && { tutkintotag: 'tutkinnon-osa' }),
 
-  get total() {
-    return this.perusteHakuStore.total;
-  }
+    }))
+    .value();
+};
 
-  get pages() {
-    return this.perusteHakuStore.pages;
+const perusteetJaTutkinnonosat = computed(() => {
+  if (perusteHakuStore.perusteet) {
+    return mapPerusteet(perusteHakuStore.perusteet);
   }
+  return undefined;
+});
 
-  get perPage() {
-    return this.perusteHakuStore.perPage;
-  }
+const total = computed(() => {
+  return perusteHakuStore.total;
+});
 
-  get filters() {
-    return this.perusteHakuStore.filters;
-  }
+const pages = computed(() => {
+  return perusteHakuStore.pages;
+});
 
-  get page() {
-    return this.perusteHakuStore.page + 1;
-  }
+const perPage = computed(() => {
+  return perusteHakuStore.perPage;
+});
 
-  set page(value) {
-    this.perusteHakuStore.page = value - 1;
-  }
+const filters = computed(() => {
+  return perusteHakuStore.filters;
+});
 
-  get valmisteillaOlevat() {
-    return this.valmisteillaOlevatStore.perusteet.value;
-  }
-}
+const valmisteillaOlevat = computed(() => {
+  return valmisteillaOlevatStore.perusteet.value;
+});
 </script>
 
 <style scoped lang="scss">
@@ -391,7 +382,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
 .haku {
   width: 100%;
 
-  ::v-deep .filter {
+  :deep(.filter) {
     max-width: 100%;
   }
 
@@ -429,5 +420,4 @@ export default class PerusteAmmatillinenHaku extends Vue {
   font-weight: 300;
   color: $gray;
 }
-
 </style>

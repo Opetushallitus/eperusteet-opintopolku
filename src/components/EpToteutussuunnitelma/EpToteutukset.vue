@@ -71,40 +71,38 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { $kaanna } from '@shared/utils/globals';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import { $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpCollapse,
-    EpFormContent,
+const props = defineProps({
+  toteutukset: {
+    type: Array,
+    required: true,
   },
-})
-export default class EpToteutukset extends Vue {
-  @Prop({ required: true })
-  toteutukset!: any[];
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  kuvat!: any[];
-
-  get koodiFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi') as string,
-      thStyle: { width: '40%' },
-      formatter: (value:any) => {
-        return this.$kaanna(value);
-      },
-    }, {
-      key: 'koodiArvo',
-      label: this.$t('koodi') as string,
-    }] as any[];
-  }
-}
+const koodiFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('nimi'),
+    thStyle: { width: '40%' },
+    formatter: (value: any) => {
+      return $kaanna(value);
+    },
+  }, {
+    key: 'koodiArvo',
+    label: $t('koodi'),
+  }];
+});
 </script>
 
 <style scoped lang="scss">

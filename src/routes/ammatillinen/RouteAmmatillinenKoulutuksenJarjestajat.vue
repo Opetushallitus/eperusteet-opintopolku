@@ -46,9 +46,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
+import { useKoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
@@ -56,54 +56,41 @@ import * as _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpBPagination,
-    EpSpinner,
-    EpSearch,
-    EpExternalLink,
-    EpAmmatillinenRow,
-  },
-})
-export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
-  @Prop({ required: true })
-  koulutuksenJarjestajatStore!: KoulutuksenJarjestajatStore;
+const query = ref('');
+const page = ref(1);
+const perPage = ref(10);
+const koulutuksenJarjestajatStore = useKoulutuksenJarjestajatStore(pinia);
 
-  private query = '';
-  private page = 1;
-  private perPage = 10;
-
-  mounted() {
-    this.koulutuksenJarjestajatStore.fetch();
+const koulutustoimijat = computed(() => {
+  if (koulutuksenJarjestajatStore.koulutustoimijat) {
+    return _.chain(koulutuksenJarjestajatStore.koulutustoimijat)
+      .filter(koulutustoimija => Kielet.search(query.value, koulutustoimija.nimi))
+      .value();
   }
 
-  get koulutustoimijat() {
-    if (this.koulutuksenJarjestajatStore.koulutustoimijat.value) {
-      return _.chain(this.koulutuksenJarjestajatStore.koulutustoimijat.value)
-        .filter(koulutustoimija => Kielet.search(this.query, koulutustoimija.nimi))
-        .value();
-    }
+  return [];
+});
+
+const koulutustoimijatPaged = computed(() => {
+  if (koulutustoimijat.value) {
+    return _.chain(koulutustoimijat.value)
+      .drop(perPage.value * (page.value - 1))
+      .take(perPage.value)
+      .value();
   }
 
-  get koulutustoimijatPaged() {
-    if (this.koulutustoimijat) {
-      return _.chain(this.koulutustoimijat)
-        .drop(this.perPage * (this.page - 1))
-        .take(this.perPage)
-        .value();
-    }
-  }
+  return [];
+});
 
-  get total() {
-    return _.size(this.koulutustoimijat);
-  }
+const total = computed(() => {
+  return _.size(koulutustoimijat.value);
+});
 
-  @Watch('query')
-  onQueryChanged() {
-    this.page = 1;
-  }
-}
+watch(query, () => {
+  page.value = 1;
+});
 </script>
 
 <style scoped lang="scss">

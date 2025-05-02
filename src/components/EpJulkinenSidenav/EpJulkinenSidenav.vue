@@ -56,230 +56,220 @@
       bg-variant="white"
       no-close-on-route-change
     >
-      <template>
-        <div class="pl-3 pr-3 pb-3">
-          <div class="mt-3 mb-4">
-            <router-link
-              :to="{ name: 'root'}"
-              @click.native="closeSidebar()"
-            >
-              <span class="navi-home">
-                <EpMaterialIcon
-                  icon-shape="outlined"
-                  size="22px"
-                >home</EpMaterialIcon>
-                {{ $t('etusivu') }}
-              </span>
-            </router-link>
-          </div>
-          <div class="mb-2 navi-valiotsikko">
-            <span>{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</span>
-          </div>
-          <nav class="mb-5">
-            <EpSpinner v-if="!koulutustyyppiItems" />
-            <b-nav
-              v-for="(item, idx1) in koulutustyyppiItems"
-              :key="idx1"
-              vertical
-            >
-              <b-nav-item
-                :to="item.route"
-                link-classes="navi nav-btn"
-                active
-                active-class="active-item"
-                @click="closeSidebar()"
-              >
-                <div class="ml-3">
-                  {{ $t(item.name) }}
-                </div>
-              </b-nav-item>
-            </b-nav>
-          </nav>
-          <div class="mb-2 navi-valiotsikko">
-            <span>{{ $t('osaaminen-ja-maaraykset') }}</span>
-          </div>
-          <nav class="mb-5">
-            <EpSpinner v-if="!otherItems" />
-            <b-nav
-              v-for="(item, idx2) in otherItems"
-              :key="idx2"
-              vertical
-            >
-              <b-nav-item
-                :to="item.route"
-                link-classes="navi nav-btn"
-                active
-                active-class="active-item"
-                @click="closeSidebar()"
-              >
-                <div class="ml-3">
-                  {{ $t(item.name) }}
-                </div>
-              </b-nav-item>
-            </b-nav>
-          </nav>
-          <div class="mb-2 navi-valiotsikko">
-            <span>{{ $t('tietoa-palvelusta') }}</span>
-          </div>
-          <nav>
-            <b-nav
-              v-for="(item, idx3) in muutLinkit"
-              :key="idx3"
-              vertical
-            >
-              <b-nav-item
-                v-if="item.link"
-                :href="$kaanna(item.link)"
-                link-classes="navi nav-btn"
-                active
-                active-class="active-item"
-                target="_blank"
-              >
-                <div class="ml-3">
-                  {{ $t(item.name) }}
-                </div>
-              </b-nav-item>
-              <b-nav-item
-                v-else
-                :to="item.route"
-                link-classes="navi nav-btn"
-                active
-                active-class="active-item"
-                @click="closeSidebar()"
-              >
-                <div class="ml-3">
-                  {{ $t(item.name) }}
-                </div>
-              </b-nav-item>
-            </b-nav>
-          </nav>
+      <div class="pl-3 pr-3 pb-3">
+        <div class="mt-3 mb-4">
+          <router-link
+            :to="{ name: 'root'}"
+            @click.native="closeSidebar()"
+          >
+            <span class="navi-home">
+              <EpMaterialIcon
+                icon-shape="outlined"
+                size="22px"
+              >home</EpMaterialIcon>
+              {{ $t('etusivu') }}
+            </span>
+          </router-link>
         </div>
-      </template>
+        <div class="mb-2 navi-valiotsikko">
+          <span>{{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}</span>
+        </div>
+        <nav class="mb-5">
+          <EpSpinner v-if="!koulutustyyppiItems" />
+          <b-nav
+            v-for="(item, idx1) in koulutustyyppiItems"
+            :key="idx1"
+            vertical
+          >
+            <b-nav-item
+              :to="item.route"
+              link-classes="navi nav-btn"
+              active
+              active-class="active-item"
+              @click="closeSidebar()"
+            >
+              <div class="ml-3">
+                {{ $t(item.name) }}
+              </div>
+            </b-nav-item>
+          </b-nav>
+        </nav>
+        <div class="mb-2 navi-valiotsikko">
+          <span>{{ $t('osaaminen-ja-maaraykset') }}</span>
+        </div>
+        <nav class="mb-5">
+          <EpSpinner v-if="!otherItems" />
+          <b-nav
+            v-for="(item, idx2) in otherItems"
+            :key="idx2"
+            vertical
+          >
+            <b-nav-item
+              :to="item.route"
+              link-classes="navi nav-btn"
+              active
+              active-class="active-item"
+              @click="closeSidebar()"
+            >
+              <div class="ml-3">
+                {{ $t(item.name) }}
+              </div>
+            </b-nav-item>
+          </b-nav>
+        </nav>
+        <div class="mb-2 navi-valiotsikko">
+          <span>{{ $t('tietoa-palvelusta') }}</span>
+        </div>
+        <nav>
+          <b-nav
+            v-for="(item, idx3) in muutLinkit"
+            :key="idx3"
+            vertical
+          >
+            <b-nav-item
+              v-if="item.link"
+              :href="$kaanna(item.link)"
+              link-classes="navi nav-btn"
+              active
+              active-class="active-item"
+              target="_blank"
+            >
+              <div class="ml-3">
+                {{ $t(item.name) }}
+              </div>
+            </b-nav-item>
+            <b-nav-item
+              v-else
+              :to="item.route"
+              link-classes="navi nav-btn"
+              active
+              active-class="active-item"
+              @click="closeSidebar()"
+            >
+              <div class="ml-3">
+                {{ $t(item.name) }}
+              </div>
+            </b-nav-item>
+          </b-nav>
+        </nav>
+      </div>
     </b-sidebar>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
-import { TietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
-import Sticky from 'vue-sticky-directive';
 import { kansallisetOsaamismerkitRoute, koulutustyyppiLinks, navigoitavatKoulutustyyppiRyhmat, navigoitavatMuutRyhmat, ophMaarayksetRoute, otherLinks } from '@/utils/navigointi';
-import { RawLocation, VueRouter } from 'vue-router/types/router';
-import { Route } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import logo from '@assets/img/banners/opintopolku/logo.svg';
 import { createLogger } from '@shared/utils/logger';
 import { digitaalinenOsaaminen } from '@shared/utils/perusteet';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { $kaanna } from '@shared/utils/globals';
+import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
+import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { pinia } from '@/pinia';
+
 const logger = createLogger('EpJulkinenSidenav');
 
-@Component({
-  directives: {
-    Sticky,
+const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
+const tietoapalvelustaStore = useTietoapalvelustaStore(pinia);
+const osaamismerkitStore = useOsaamismerkitStore(pinia);
+
+
+// Setup router
+const router = useRouter();
+
+// Define reactive state
+const active = ref(false);
+
+// Computed properties
+const koulutustyyppiItems = computed(() => {
+  return navigoitavatKoulutustyyppiRyhmat(julkaistutKoulutustyypitStore.julkaistutKoulutustyypit as any);
+});
+
+const otherItems = computed(() => {
+  return navigoitavatMuutRyhmat(osaamismerkitStore.kategoriat as any, digitaalinenOsaaminenPeruste.value);
+});
+
+const tietoapalvelusta = computed(() => {
+  return tietoapalvelustaStore.tietoapalvelusta;
+});
+
+const muutLinkit = computed(() => {
+  return [
+    ...(tietoapalvelusta.value ? [tietoapalvelusta.value] : []),
+    ...otherLinks(),
+  ];
+});
+
+const digitaalinenOsaaminenPeruste = computed(() => {
+  return _.first(julkaistutKoulutustyypitStore.digitaalinenOsaaminen);
+});
+
+const isActive = computed({
+  get: () => active.value,
+  set: (value) => {
+    active.value = value;
   },
-  components: {
-    EpMaterialIcon,
-  },
-})
-export default class EpJulkinenSidenav extends Vue {
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+});
 
-  @Prop({ required: true })
-  private tietoapalvelustaStore!: TietoapalvelustaStore;
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  @Prop({ required: true })
-  private osaamismerkitStore!: OsaamismerkitStore;
+const kielet = computed(() => {
+  return [
+    'fi',
+    'sv',
+    'en',
+  ];
+});
 
-  private active: boolean = false;
+const navImage = computed(() => {
+  return logo;
+});
 
-  get koulutustyyppiItems() {
-    return navigoitavatKoulutustyyppiRyhmat(this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value as any);
+const icon = computed(() => {
+  return isActive.value ? 'close' : 'menu';
+});
+
+// Methods
+const valitseKieli = async (kieli) => {
+  const current = router.currentRoute.value;
+
+  try {
+    await router.replace({
+      name: current.name,
+      params: {
+        ...current.params,
+        lang: kieli || router.options.fallbackLocale,
+      },
+    } as RawLocation);
   }
-
-  get otherItems() {
-    return navigoitavatMuutRyhmat(this.osaamismerkitStore.kategoriat.value as any, this.digitaalinenOsaaminenPeruste);
-  }
-
-  get muutLinkit() {
-    return [
-      ...(this.tietoapalvelusta ? [this.tietoapalvelusta] : []),
-      ...otherLinks(),
-    ];
-  }
-
-  get tietoapalvelusta() {
-    return this.tietoapalvelustaStore.tietoapalvelusta.value;
-  }
-
-  get digitaalinenOsaaminenPeruste() {
-    return _.first(this.julkaistutKoulutustyypitStore.digitaalinenOsaaminen.value);
-  }
-
-  get isActive() {
-    return this.active;
-  }
-
-  set isActive(value) {
-    this.active = value;
-  }
-
-  async valitseKieli(kieli) {
-    const router: VueRouter = this.$router;
-    const current: Route = router.currentRoute;
-
-    try {
-      await router.replace({
-        name: current.name,
-        params: {
-          ...current.params,
-          lang: kieli || this.$i18n.fallbackLocale,
-        },
-      } as RawLocation);
+  catch (e: any) {
+    if (e.name === 'NavigationDuplicated') {
+      logger.warn('Uusi kieli on sama kuin nykyinen');
     }
-    catch (e: any) {
-      if (e.name === 'NavigationDuplicated') {
-        logger.warn('Uusi kieli on sama kuin nykyinen');
-      }
-      else {
-        throw e;
-      }
+    else {
+      throw e;
     }
   }
+};
 
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+const closeSidebar = () => {
+  active.value = false;
+};
 
-  get kielet() {
-    return [
-      'fi',
-      'sv',
-      'en',
-    ];
-  }
-
-  get navImage() {
-    return logo;
-  }
-
-  get icon() {
-    return this.isActive ? 'close' : 'menu';
-  }
-
-  closeSidebar() {
-    this.active = false;
-  }
-}
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-::v-deep .b-sidebar {
+:deep(.b-sidebar) {
   margin-top: 70px;
   padding-bottom: 70px;
   width: 400px;
@@ -290,28 +280,29 @@ export default class EpJulkinenSidenav extends Vue {
   }
 }
 
-::v-deep .tabs .nav-tabs .nav-item .nav-link:hover:not(.active) {
+:deep(.tabs .nav-tabs .nav-item .nav-link:hover:not(.active)) {
   background: unset;
   border-color: $oph-green;
   border-width: 0 0 2px 0;
   border-style: solid;
 }
 
-::v-deep .nav.nav-tabs .nav-link {
+:deep(.nav.nav-tabs .nav-link) {
   color: $black;
 }
 
-::v-deep .nav-link {
+:deep(.nav-link) {
   color: $black;
 }
 
 .navbar {
   height: 75px;
   background-color: $white;
-  padding: 0.25rem 1rem
+  padding: 0.25rem 1rem;
+  // position: sticky;
 }
 
-.navi {
+:deep(.navi) {
   color: $black;
   font-weight: 500;
   font-size: 15px;

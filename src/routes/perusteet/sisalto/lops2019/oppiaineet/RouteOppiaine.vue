@@ -23,8 +23,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -32,37 +33,31 @@ import OppiaineEsitys from './OppiaineEsitys.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 import * as _ from 'lodash';
 
-@Component({
-  components: {
-    EpSpinner,
-    OppiaineEsitys,
-    EpOpasKiinnitysLinkki,
-  },
-})
-export default class RouteOppiaine extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const props = defineProps<{
+  perusteDataStore: PerusteDataStore;
+}>();
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const route = useRoute();
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const termit = computed(() => {
+  return props.perusteDataStore.termit;
+});
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
+const kuvat = computed(() => {
+  return props.perusteDataStore.kuvat;
+});
 
-  get oppiaine() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
-  }
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
 
-  get oppiaineKoodiUri() {
-    return this.oppiaine?.koodi?.uri;
-  }
-}
+const oppiaine = computed(() => {
+  return props.perusteDataStore.getJulkaistuPerusteSisalto({ id: oppiaineId.value }) as any;
+});
+
+const oppiaineKoodiUri = computed(() => {
+  return oppiaine.value?.koodi?.uri;
+});
 </script>
 
 <style scoped lang="scss">

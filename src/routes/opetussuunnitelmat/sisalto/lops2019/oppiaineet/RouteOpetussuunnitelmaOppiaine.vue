@@ -24,75 +24,68 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import OppiaineEsitys from '@/routes/perusteet/sisalto/lops2019/oppiaineet/OppiaineEsitys.vue';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
-// import { Lops2019OpetussuunnitelmaOppiaineStore } from '@/stores/Lops2019OpetussuunnitelmaOppiaineStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpColorIndicator,
-    EpContentViewer,
-    OppiaineEsitys,
-  },
-})
-export default class RouteOpetussuunnitelmaOppiaine extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get perusteTermit() {
-    return this.opetussuunnitelmaDataStore.perusteTermit;
+const route = useRoute();
+
+const perusteTermit = computed(() => {
+  return opetussuunnitelmaDataStore.perusteTermit;
+});
+
+const kuvat = computed(() => {
+  return opetussuunnitelmaDataStore.kuvat;
+});
+
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
+
+const oppiaine = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: oppiaineId.value });
+});
+
+const opintojaksot = computed(() => {
+  if (oppiaine.value && oppiaine.value.koodi) {
+    return _.filter(opetussuunnitelmaDataStore.getJulkaistuSisalto('opintojaksot'), oj => {
+      const uri = oppiaine.value!.koodi!.uri;
+      return _.some(oj.oppiaineet, { koodi: uri });
+    });
   }
+  return undefined;
+});
 
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
-
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
-
-  get oppiaine() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.oppiaineId });
-  }
-
-  get opintojaksot() {
-    if (this.oppiaine && this.oppiaine.koodi) {
-      return _.filter(this.opetussuunnitelmaDataStore.getJulkaistuSisalto('opintojaksot'), oj => {
-        const uri = this.oppiaine!.koodi!.uri;
-        return _.some(oj.oppiaineet, { koodi: uri });
+const oppimaarat = computed(() => {
+  function traverseTree(node, result) {
+    (node.children || [])
+      .map(child => {
+        result.push(child);
+        traverseTree(child, result);
+        return child;
       });
-    }
   }
 
-  get oppimaarat() {
-    function traverseTree(node, result) {
-      (node.children || [])
-        .map(child => {
-          result.push(child);
-          traverseTree(child, result);
-          return child;
-        });
-    }
-
-    if (this.opetussuunnitelmaDataStore.current) {
-      const result: NavigationNode[] = [];
-      traverseTree(this.opetussuunnitelmaDataStore.current, result);
-      return _.filter(result, node => node.type === 'oppiaine' || node.type === 'poppiaine');
-    }
-    else {
-      return [];
-    }
+  if (opetussuunnitelmaDataStore.current) {
+    const result: NavigationNode[] = [];
+    traverseTree(opetussuunnitelmaDataStore.current, result);
+    return _.filter(result, node => node.type === 'oppiaine' || node.type === 'poppiaine');
   }
-}
+  else {
+    return [];
+  }
+});
 </script>
 
 <style scoped lang="scss">

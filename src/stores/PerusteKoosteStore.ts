@@ -3,7 +3,7 @@ import { ryhmat } from '@shared/utils/perusteet';
 import { julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 
 export class PerusteKoosteStore implements IPerusteKoosteStore {

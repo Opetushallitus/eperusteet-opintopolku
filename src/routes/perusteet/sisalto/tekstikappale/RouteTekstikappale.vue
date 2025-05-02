@@ -53,118 +53,107 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { ViiteLaaja } from '@shared/api/eperusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeading,
-    EpContentViewer,
-    EpOpasKiinnitysLinkki,
-  },
-})
-export default class RouteTekstikappale extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const router = useRouter();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.viiteId);
 
-  mounted() {
-    if (_.some(_.map(this.perusteenOsaViite?.lapset, 'perusteenOsa.osanTyyppi'), osanTyyppi => _.includes(this.redirectToLinkkiSivuLapsiTyypit, osanTyyppi))) {
-      this.$router.push({
-        name: 'linkkisivu',
-        params: {
-          linkkisivuId: this.$route.params.viiteId,
-        },
-      });
-    }
+const redirectToLinkkiSivuLapsiTyypit = ['koulutuksenosa', 'koto_opinto', 'koto_kielitaitotaso', 'koto_laajaalainenosaaminen', 'opintokokonaisuus'];
+
+onMounted(() => {
+  if (_.some(_.map(perusteenOsaViite.value?.lapset, 'perusteenOsa.osanTyyppi'), osanTyyppi => _.includes(redirectToLinkkiSivuLapsiTyypit, osanTyyppi))) {
+    router.push({
+      name: 'linkkisivu',
+      params: {
+        linkkisivuId: route.params.viiteId as string,
+      },
+    });
   }
+});
 
-  get redirectToLinkkiSivuLapsiTyypit() {
-    return ['koulutuksenosa', 'koto_opinto', 'koto_kielitaitotaso', 'koto_laajaalainenosaaminen', 'opintokokonaisuus'];
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsaViite = computed(() => {
+  return perusteenOsaStore.perusteenOsaViite;
+});
 
-  get perusteenOsaViite() {
-    return this.perusteenOsaStore.perusteenOsaViite;
-  }
+const alikappaleet = computed(() => {
+  if (!_.isEmpty(perusteenOsaViite.value)) {
+    const viitteet: ViiteLaaja[] = [];
 
-  get alikappaleet() {
-    if (!_.isEmpty(this.perusteenOsaViite)) {
-      const viitteet: ViiteLaaja[] = [];
+    const stack: ViiteLaaja[] = [perusteenOsaViite.value!];
 
-      const stack: ViiteLaaja[] = [this.perusteenOsaViite!];
+    while (!_.isEmpty(stack)) {
+      const head: any = stack.shift()!;
 
-      while (!_.isEmpty(stack)) {
-        const head: any = stack.shift()!;
-
-        if (head.perusteenOsa) {
-          viitteet.push(head);
-        }
-
-        stack.unshift(..._.map(head.lapset, viite => ({
-          ...viite,
-          level: (head.level || 0) + 1,
-        })));
+      if (head.perusteenOsa) {
+        viitteet.push(head);
       }
 
-      // Poistetaan nykyinen viite alikappaleista
-      return _.slice(viitteet, 1);
-    }
-    else {
-      return [];
-    }
-  }
-
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
-
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
-
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
-
-  get tekstikappaleenOsa() {
-    return this.$route.params.osa || this.$route.params.vapaatekstiId;
-  }
-
-  get osaamisalaKoodiUri() {
-    return (this.perusteenOsa as any)?.osaamisala?.uri;
-  }
-
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-
-  get alikappaleNumeroinnitById() {
-    if (this.current?.children) {
-      return this.current?.children?.reduce((acc: any, child: any) => {
-        acc[child.id] = child?.meta?.numerointi;
-        return acc;
-      }, {});
+      stack.unshift(..._.map(head.lapset, viite => ({
+        ...viite,
+        level: (head.level || 0) + 1,
+      })));
     }
 
-    return {};
+    // Poistetaan nykyinen viite alikappaleista
+    return _.slice(viitteet, 1);
   }
-}
+  else {
+    return [];
+  }
+});
 
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
+
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
+
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
+
+const tekstikappaleenOsa = computed(() => {
+  return route.params.osa || route.params.vapaatekstiId;
+});
+
+const osaamisalaKoodiUri = computed(() => {
+  return (perusteenOsa.value as any)?.osaamisala?.uri;
+});
+
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
+
+const alikappaleNumeroinnitById = computed(() => {
+  if (current.value?.children) {
+    return current.value?.children?.reduce((acc: any, child: any) => {
+      acc[child.id] = child?.meta?.numerointi;
+      return acc;
+    }, {});
+  }
+
+  return {};
+});
 </script>
 
 <style scoped lang="scss">

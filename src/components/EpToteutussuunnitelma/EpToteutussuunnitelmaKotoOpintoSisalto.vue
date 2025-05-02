@@ -51,57 +51,56 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { SisaltoViiteExportDto } from '@shared/api/amosaa';
 import * as _ from 'lodash';
-import { Prop, Component, Vue } from 'vue-property-decorator';
+import { computed } from 'vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpKotoTaitotasot from '@shared/components/EpKotoTaitotasot/EpKotoTaitotasot.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpKotoTaitotasot,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => ToteutussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaKotoOpintoSisalto extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+  sisaltoviite: {
+    type: Object as () => SisaltoViiteExportDto,
+    required: true,
+  },
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  sisaltoViiteSisalto: {
+    type: String as () => 'kotoKielitaitotaso' | 'kotoOpinto',
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private sisaltoviite!: SisaltoViiteExportDto;
+const taitotasoTyyppi = computed(() => {
+  return props.sisaltoViiteSisalto === 'kotoKielitaitotaso' ? 'kielitaitotaso' : 'opintokokonaisuus';
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const perusteenOsa = computed(() => {
+  return props.sisaltoviite[props.sisaltoViiteSisalto]!.perusteenOsa;
+});
 
-  @Prop({ required: true })
-  private sisaltoViiteSisalto!: 'kotoKielitaitotaso' | 'kotoOpinto';
+const kotoTaitotasotByUri = computed(() => {
+  return _.keyBy(props.sisaltoviite[props.sisaltoViiteSisalto]!.taitotasot, 'koodiUri');
+});
 
-  get taitotasoTyyppi() {
-    return this.sisaltoViiteSisalto === 'kotoKielitaitotaso' ? 'kielitaitotaso' : 'opintokokonaisuus';
-  }
+const laajaAlaisetOsaamiset = computed(() => {
+  return props.sisaltoviite[props.sisaltoViiteSisalto]!.laajaAlaisetOsaamiset;
+});
 
-  get perusteenOsa() {
-    return this.sisaltoviite[this.sisaltoViiteSisalto]!.perusteenOsa;
-  }
+const perusteenLaajaAlaisetOsaamiset = computed(() => {
+  return _.get(opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ 'osanTyyppi': 'koto_laajaalainenosaaminen' }), 'osaamisAlueet');
+});
 
-  get kotoTaitotasotByUri() {
-    return _.keyBy(this.sisaltoviite[this.sisaltoViiteSisalto]!.taitotasot, 'koodiUri');
-  }
-
-  get laajaAlaisetOsaamiset() {
-    return this.sisaltoviite[this.sisaltoViiteSisalto]!.laajaAlaisetOsaamiset;
-  }
-
-  get perusteenLaajaAlaisetOsaamiset() {
-    return _.get(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ 'osanTyyppi': 'koto_laajaalainenosaaminen' }), 'osaamisAlueet');
-  }
-
-  get perusteenLaotByUri() {
-    return _.keyBy(this.perusteenLaajaAlaisetOsaamiset, 'koodi.uri');
-  }
-}
+const perusteenLaotByUri = computed(() => {
+  return _.keyBy(perusteenLaajaAlaisetOsaamiset.value, 'koodi.uri');
+});
 </script>
 
 <style scoped lang="scss">

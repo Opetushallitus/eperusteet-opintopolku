@@ -45,49 +45,48 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { Matala } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpCollapse,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => ToteutussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaTekstikappale extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
+  },
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+const current = computed((): NavigationNode | null => {
+  return opetussuunnitelmaDataStore.current;
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
 
-  get current(): NavigationNode | null {
-    return this.opetussuunnitelmaDataStore.current;
+const alikappaleNumeroinnitById = computed(() => {
+  if (current.value?.children) {
+    return current.value?.children?.reduce((acc: any, child: any) => {
+      acc[child.id] = child?.meta?.numerointi;
+      return acc;
+    }, {});
   }
 
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-
-  get alikappaleNumeroinnitById() {
-    if (this.current?.children) {
-      return this.current?.children?.reduce((acc: any, child: any) => {
-        acc[child.id] = child?.meta?.numerointi;
-        return acc;
-      }, {});
-    }
-
-    return {};
-  }
-}
+  return {};
+});
 </script>
 
 <style scoped lang="scss">

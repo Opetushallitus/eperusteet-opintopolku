@@ -30,38 +30,41 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpLinkki,
+const props = defineProps({
+  header: {
+    type: [String, Object],
+    required: true,
   },
-})
-export default class InfoTile extends Vue {
-  @Prop({ required: true })
-  private header!: any;
+  text: {
+    type: [String, Object],
+    required: false,
+  },
+  translatedText: {
+    type: [String, Object],
+    required: false,
+  },
+  link: {
+    type: [String, Object],
+    required: false,
+  },
+  route: {
+    type: Object,
+    required: false,
+  },
+  linkText: {
+    type: [String, Object],
+    required: true,
+  },
+});
 
-  @Prop({ required: false })
-  private text!: any;
-
-  @Prop({ required: false })
-  private translatedText!: any;
-
-  @Prop({ required: false })
-  private link!: any;
-
-  @Prop({ required: false })
-  private route!: any;
-
-  @Prop({ required: true })
-  private linkText!: any;
-
-  get infoLink() {
-    return this.$kaanna(this.link);
-  }
-}
+const infoLink = computed(() => {
+  return $kaanna(props.link);
+});
 </script>
 
 <style scoped lang="scss">
@@ -104,7 +107,7 @@ export default class InfoTile extends Vue {
   }
 }
 
-::v-deep .icon {
+:deep(.icon) {
   color: white;
 }
 </style>

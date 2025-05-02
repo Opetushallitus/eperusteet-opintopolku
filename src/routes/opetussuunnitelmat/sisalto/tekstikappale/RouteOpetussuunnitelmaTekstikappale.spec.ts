@@ -10,7 +10,7 @@ import { TekstiKappaleDto } from '@shared/api/ylops';
 import * as _ from 'lodash';
 import { sassTrue } from 'sass';
 import { vi } from 'vitest';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import Vue from 'vue';
 
 describe('RouteOpetussuunnitelmaTekstikappale', () => {

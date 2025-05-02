@@ -2,33 +2,34 @@
   <div class="content" />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import { NavigationNodeDtoTypeEnum } from '@shared/api/eperusteet';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { useRoute } from 'vue-router';
 
-@Component
-export default class RotuePerusopetusOppiaineet extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const perusteDataStore = getCachedPerusteStore();
 
-  mounted() {
-    if (this.perusteDataStore.navigation) {
-      const oppiaineetNavi = _.head(_.filter(this.perusteDataStore.navigation.children, { type: NavigationNodeDtoTypeEnum.Perusopetusoppiaineet }));
-      if (oppiaineetNavi) {
-        const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
+const router = useRouter();
 
-        this.$router.push({
-          name: 'perusopetusoppiaine',
-          params: {
-            oppiaineId: _.toString(oppiaineId),
-          },
-        });
-      }
+onMounted(() => {
+  if (perusteDataStore.navigation) {
+    const oppiaineetNavi = _.head(_.filter(perusteDataStore.navigation.children, { type: NavigationNodeDtoTypeEnum.Perusopetusoppiaineet }));
+    if (oppiaineetNavi) {
+      const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
+
+      router.push({
+        name: 'perusopetusoppiaine',
+        params: {
+          oppiaineId: _.toString(oppiaineId),
+        },
+      });
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

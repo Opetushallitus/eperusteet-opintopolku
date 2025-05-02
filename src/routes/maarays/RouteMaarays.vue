@@ -185,10 +185,13 @@
   </ep-header>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { Maaraykset, MaarayksetParams, MaaraysDto, MaaraysLiiteDtoTyyppiEnum, baseURL, MaaraysDtoLiittyyTyyppiEnum, Perusteet, PerusteDto, MaaraysDtoTilaEnum } from '@shared/api/eperusteet';
 import * as _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
+import { $kaanna, $sd } from '@shared/utils/globals';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import { Kielet } from '@shared/stores/kieli';
@@ -196,169 +199,166 @@ import maaraysDoc from '@assets/img/images/maarays_doc.svg';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { Meta } from '@shared/utils/decorators';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 import { koulutustyyppiTheme } from '@shared/utils/perusteet';
 import { MaaraysKevytDtoTilaEnum } from '@shared/generated/eperusteet';
+import { $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    EpFormContent,
-    EpVoimassaolo,
-    EpContentViewer,
-    EpMaterialIcon,
-    EpMaarayskokoelmaKoulutustyyppiSelect,
-  },
-})
-export default class RouteMaarays extends Vue {
-  private maarays: MaaraysDto | null = null;
-  private peruste: PerusteDto | null = null;
+const route = useRoute();
 
-  @Watch('maaraysId', { immediate: true })
-  async maaraysChange() {
-    this.maarays = null;
-    this.maarays = (await Maaraykset.getMaarays(this.maaraysId)).data;
-    if (this.maarays.peruste) {
-      this.peruste = (await Perusteet.getPerusteenTiedot(this.maarays.peruste.id!)).data;
-    }
-  }
+const maarays = ref<MaaraysDto | null>(null);
+const peruste = ref<PerusteDto | null>(null);
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.maarays ? this.$kaanna(this.maarays.nimi) : this.$t('maarays'),
-    };
-  }
+const maaraysId = computed(() => {
+  return _.toNumber(route.params.maaraysId);
+});
 
-  get maaraysId() {
-    return _.toNumber(this.$route.params.maaraysId);
-  }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get kuva() {
-    return maaraysDoc;
-  }
-
-  get murupolku() {
-    return [
-      {
-        label: 'route-maarayskokoelma',
-        location: {
-          name: 'maaraykset',
-        },
-      },
-      {
-        label: 'tiedot',
-        location: {
-          name: 'maarays',
-          params: {
-            maaraysId: this.maaraysId,
-          },
-        },
-      },
-    ];
-  }
-
-  get liitteet() {
-    return _.chain(this.kaikkiLiitteet)
-      .filter(liite => liite.tyyppi !== MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI)
-      .map(liite => {
-        return {
-          ...liite,
-          url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(liite.id)).url,
-        };
-      })
-      .value();
-  }
-
-  get kaikkiLiitteet() {
-    if (this.maarays?.liitteet) {
-      return this.maarays?.liitteet[this.kieli].liitteet;
-    }
-  }
-
-  get maaraysPdfUrl() {
-    const maaraysLiite = _.find(this.kaikkiLiitteet, liite => liite.tyyppi === MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI);
-    if (maaraysLiite) {
-      return baseURL + MaarayksetParams.getMaaraysLiite(_.toString(maaraysLiite.id)).url;
-    }
-
-    if (this.peruste && this.maarayskirje) {
-      return `${baseURL}/api/perusteet/${this.peruste.id!}/liitteet/${this.maarayskirje.id}`;
-    }
-  }
-
-  get maarayskirje() {
-    if (this.peruste?.maarayskirje?.liitteet) {
-      return this.peruste?.maarayskirje?.liitteet[this.kieli] || null;
-    }
-  }
-
-  get liittyykoToiseenMaaraykseenOtsikko() {
-    if (this.maarays?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.EILIITY) {
-      return null;
-    }
-
-    if (this.maarays?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.MUUTTAA) {
-      return 'muuttaa-maaraysta';
-    }
-
-    if (this.maarays?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.KORVAA) {
-      return 'korvaa-maarayksen';
-    }
-  }
-
-  get perusteRoute() {
-    if (this.peruste) {
-      return {
-        name: 'peruste',
-        params: {
-          koulutustyyppi: koulutustyyppiTheme(this.peruste.koulutustyyppi!),
-          perusteId: _.toString(this.peruste.id),
-        },
-      };
-    }
-  }
-
-  get korvaavatMuuttavatMaaraykset() {
-    if (this.maarays) {
-      return _.chain([
-        ...(this.maarays.korvaavatMaaraykset || []),
-        ...(this.maarays.muuttavatMaaraykset || []),
-      ])
-        .filter({ tila: MaaraysKevytDtoTilaEnum.JULKAISTU })
-        .sortBy('voimassaoloAlkaa')
-        .reverse()
-        .value();
-    }
-  }
-
-  get korvaavatMuuttavatFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi'),
-      thStyle: { width: '60%' },
-      thClass: 'border-bottom-1',
-      tdClass: 'align-middle',
-      sortable: false,
-    }, {
-      key: 'voimassaoloAlkaa',
-      label: this.$t('voimassaolo-alkaa'),
-      thClass: 'border-bottom-1',
-      tdClass: 'align-middle',
-      sortable: false,
-      formatter: (value: any, key: any, item: any) => {
-        return (this as any).$sd(value);
-      },
-    }];
+async function fetchMaarays() {
+  maarays.value = null;
+  maarays.value = (await Maaraykset.getMaarays(maaraysId.value)).data;
+  if (maarays.value?.peruste) {
+    peruste.value = (await Perusteet.getPerusteenTiedot(maarays.value.peruste.id!)).data;
   }
 }
+
+watch(maaraysId, async () => {
+  await fetchMaarays();
+}, { immediate: true });
+
+useHead({
+  title: computed(() => maarays.value ? $kaanna(maarays.value.nimi) : $t('maarays')),
+});
+
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+const kuva = computed(() => {
+  return maaraysDoc;
+});
+
+const murupolku = computed(() => {
+  return [
+    {
+      label: 'route-maarayskokoelma',
+      location: {
+        name: 'maaraykset',
+      },
+    },
+    {
+      label: 'tiedot',
+      location: {
+        name: 'maarays',
+        params: {
+          maaraysId: maaraysId.value,
+        },
+      },
+    },
+  ];
+});
+
+const kaikkiLiitteet = computed(() => {
+  if (maarays.value?.liitteet) {
+    return maarays.value?.liitteet[kieli.value].liitteet;
+  }
+  return [];
+});
+
+const liitteet = computed(() => {
+  return _.chain(kaikkiLiitteet.value)
+    .filter(liite => liite.tyyppi !== MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI)
+    .map(liite => {
+      return {
+        ...liite,
+        url: baseURL + MaarayksetParams.getMaaraysLiite(_.toString(liite.id)).url,
+      };
+    })
+    .value();
+});
+
+const maarayskirje = computed(() => {
+  if (peruste.value?.maarayskirje?.liitteet) {
+    return peruste.value?.maarayskirje?.liitteet[kieli.value] || null;
+  }
+  return null;
+});
+
+const maaraysPdfUrl = computed(() => {
+  const maaraysLiite = _.find(kaikkiLiitteet.value, liite => liite.tyyppi === MaaraysLiiteDtoTyyppiEnum.MAARAYSDOKUMENTTI);
+  if (maaraysLiite) {
+    return baseURL + MaarayksetParams.getMaaraysLiite(_.toString(maaraysLiite.id)).url;
+  }
+
+  if (peruste.value && maarayskirje.value) {
+    return `${baseURL}/api/perusteet/${peruste.value.id!}/liitteet/${maarayskirje.value.id}`;
+  }
+
+  return null;
+});
+
+const liittyykoToiseenMaaraykseenOtsikko = computed(() => {
+  if (maarays.value?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.EILIITY) {
+    return null;
+  }
+
+  if (maarays.value?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.MUUTTAA) {
+    return 'muuttaa-maaraysta';
+  }
+
+  if (maarays.value?.liittyyTyyppi === MaaraysDtoLiittyyTyyppiEnum.KORVAA) {
+    return 'korvaa-maarayksen';
+  }
+
+  return null;
+});
+
+const perusteRoute = computed(() => {
+  if (peruste.value) {
+    return {
+      name: 'peruste',
+      params: {
+        koulutustyyppi: koulutustyyppiTheme(peruste.value.koulutustyyppi!),
+        perusteId: _.toString(peruste.value.id),
+      },
+    };
+  }
+  return null;
+});
+
+const korvaavatMuuttavatMaaraykset = computed(() => {
+  if (maarays.value) {
+    return _.chain([
+      ...(maarays.value.korvaavatMaaraykset || []),
+      ...(maarays.value.muuttavatMaaraykset || []),
+    ])
+      .filter({ tila: MaaraysKevytDtoTilaEnum.JULKAISTU })
+      .sortBy('voimassaoloAlkaa')
+      .reverse()
+      .value();
+  }
+  return [];
+});
+
+const korvaavatMuuttavatFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('nimi'),
+    thStyle: { width: '60%' },
+    thClass: 'border-bottom-1',
+    tdClass: 'align-middle',
+    sortable: false,
+  }, {
+    key: 'voimassaoloAlkaa',
+    label: $t('voimassaolo-alkaa'),
+    thClass: 'border-bottom-1',
+    tdClass: 'align-middle',
+    sortable: false,
+    formatter: (value: any) => {
+      return $sd(value);
+    },
+  }];
+});
 </script>
 
 <style scoped lang="scss">

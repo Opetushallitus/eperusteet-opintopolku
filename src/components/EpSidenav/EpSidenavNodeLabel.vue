@@ -9,24 +9,25 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import * as _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { computed } from 'vue';
 
-@Component
-export default class EpSidenavNodeLabel extends Vue {
-  @Prop({ required: true })
-  node!: NavigationNode;
+const props = defineProps({
+  node: {
+    type: Object as () => NavigationNode,
+    required: true,
+  },
+});
 
-  get koodi() {
-    return _.get(this.node, 'meta.koodi.arvo') || _.get(this.node, 'meta.koodi');
-  }
+const koodi = computed(() => {
+  return _.get(props.node, 'meta.koodi.arvo') || _.get(props.node, 'meta.koodi');
+});
 
-  get numerointi() {
-    return _.get(this.node, 'meta.numerointi');
-  }
-}
+const numerointi = computed(() => {
+  return _.get(props.node, 'meta.numerointi');
+});
 </script>
 
 <style scoped lang="scss">
