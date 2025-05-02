@@ -11,31 +11,25 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { computed } from 'vue';
 import EpToteutussuunnitelmaTiedot from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTiedot.vue';
 import EpOpetussuunnitelmaTiedot from '@/components/EpToteutussuunnitelma/EpOpetussuunnitelmaTiedot.vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
-import { AmmatillisetKoulutustyypit, VapaasivistystyoKoulutustyypit } from '@shared/utils/perusteet';
-import { Koulutustyyppi } from '@shared/tyypit';
+import { VapaasivistystyoKoulutustyypit } from '@shared/utils/perusteet';
 
-@Component({
-  components: {
-    EpToteutussuunnitelmaTiedot,
-    EpOpetussuunnitelmaTiedot,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => ToteutussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class RouteToteutussuunnitelmaTiedot extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+});
 
-  get isVapaasivistystyo() {
-    return _.includes(VapaasivistystyoKoulutustyypit, this.opetussuunnitelmaDataStore.koulutustyyppi);
-  }
-}
+const isVapaasivistystyo = computed(() => {
+  return _.includes(VapaasivistystyoKoulutustyypit, props.opetussuunnitelmaDataStore.koulutustyyppi);
+});
 </script>
 
 <style scoped lang="scss">
-
 </style>

@@ -43,9 +43,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch, ProvideReactive } from 'vue-property-decorator';
-import { Meta } from '@shared/utils/decorators';
+<script setup lang="ts">
+import { ref, computed, watch, provide, nextTick, onMounted, useTemplateRef } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import { NavigationNode, traverseNavigation } from '@shared/utils/NavigationBuilder';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
@@ -58,109 +59,105 @@ import * as _ from 'lodash';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpOpetussuunnitelmaSidenav,
-    EpHeader,
-    EpSidebar,
-    EpPreviousNextNavigation,
-    EpNotificationBar,
+const route = useRoute();
+const innerPortal = useTemplateRef('innerPortal');
+
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => IOpetussuunnitelmaStore,
+    required: true,
   },
-  inject: [],
-})
-export default class RouteOpetussuunnitelma extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: IOpetussuunnitelmaStore;
+});
 
-  get opetussuunnitelma() {
-    return this.opetussuunnitelmaDataStore.opetussuunnitelma;
+const opetussuunnitelma = computed(() => {
+  return props.opetussuunnitelmaDataStore.opetussuunnitelma;
+});
+
+const koulutustyyppi = computed(() => {
+  if (props.opetussuunnitelmaDataStore?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
+    return 'koulutustyyppi_muu';
   }
+  return tyyppi.value === 'yhteinen' ? 'koulutustyyppi_1' : props.opetussuunnitelmaDataStore.koulutustyyppi;
+});
 
-  get koulutustyyppi() {
-    if (this.opetussuunnitelmaDataStore?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
-      return 'koulutustyyppi_muu';
-    }
-    return this.tyyppi === 'yhteinen' ? 'koulutustyyppi_1' : this.opetussuunnitelmaDataStore.koulutustyyppi;
+const tyyppi = computed(() => {
+  return props.opetussuunnitelmaDataStore.opetussuunnitelma?.tyyppi;
+});
+
+const current = computed((): NavigationNode | null => {
+  return props.opetussuunnitelmaDataStore.current;
+});
+
+const flattenedSidenav = computed(() => {
+  return props.opetussuunnitelmaDataStore.flattenedSidenav;
+});
+
+const murupolku = computed(() => {
+  if (opetussuunnitelma.value && current.value) {
+    return [
+      ...createOpetussuunnitelmaMurupolku(opetussuunnitelma.value, koulutustyyppi.value),
+      ...current.value.path,
+    ];
   }
+  return [];
+});
 
-  get tyyppi() {
-    return this.opetussuunnitelmaDataStore.opetussuunnitelma?.tyyppi;
-  }
+const diaariNumero = computed((): string => {
+  return opetussuunnitelma.value.perusteenDiaarinumero || opetussuunnitelma.value.perusteDiaarinumero || '';
+});
 
-  get current(): NavigationNode | null {
-    return this.opetussuunnitelmaDataStore.current;
-  }
+const onRouteUpdate = async (newRoute) => {
+  props.opetussuunnitelmaDataStore.updateRoute(newRoute);
 
-  get flattenedSidenav() {
-    return this.opetussuunnitelmaDataStore.flattenedSidenav;
-  }
+  await nextTick();
+  const h2 = document.querySelector('h2');
+  h2?.setAttribute('tabindex', '-1');
+  h2?.focus();
+};
 
-  get murupolku() {
-    if (this.opetussuunnitelma && this.current) {
-      return [
-        ...createOpetussuunnitelmaMurupolku(this.opetussuunnitelma, this.koulutustyyppi),
-        ...this.current.path,
-      ];
-    }
-    return [];
-  }
+// Watch for route changes
+watch(() => route, onRouteUpdate, { deep: true, immediate: true });
 
-  get diaariNumero(): string {
-    return this.opetussuunnitelma.perusteenDiaarinumero || this.opetussuunnitelma.perusteDiaarinumero || '';
-  }
-
-  @Watch('$route', { deep: true, immediate: true })
-  async onRouteUpdate(route) {
-    this.opetussuunnitelmaDataStore.updateRoute(route);
-
-    await Vue.nextTick();
-    const h2 = this.$el.querySelector('h2');
-    h2?.setAttribute('tabindex', '-1');
-    h2?.focus();
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.opetussuunnitelma) {
-      return {
-        title: this.$kaanna(this.opetussuunnitelma.nimi),
-        meta: [
-          {
-            vmid: 'description',
-            name: 'description',
-            content: [
-              this.$kaanna(this.opetussuunnitelma.nimi),
-              this.$t(this.opetussuunnitelma.koulutustyyppi),
-            ],
-          },
-        ],
-      };
-    }
-  }
-
-  get opetussuunnitelmaEsikatselussa() {
-    return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(this.$route.query, 'esikatselu');
-  }
-
-  get hasSisaltoKielelle() {
-    return _.includes(this.opetussuunnitelma?.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value));
-  }
-
-  @ProvideReactive('linkkiHandler')
-  get linkkiHandler(): ILinkkiHandler {
+// Meta information
+const getMetaInfo = computed(() => {
+  if (opetussuunnitelma.value) {
     return {
-      nodeToRoute(node) {
-        return traverseNavigation(node, true).location;
-      },
-    } as ILinkkiHandler;
+      title: $kaanna(opetussuunnitelma.value.nimi),
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: [
+            $kaanna(opetussuunnitelma.value.nimi),
+            opetussuunnitelma.value.koulutustyyppi,
+          ],
+        },
+      ],
+    };
   }
+  return {};
+});
 
-  @ProvideReactive('opetussuunnitelma')
-  get provideOpetussuunnitelma() {
-    return this.opetussuunnitelma;
-  }
-}
+useHead(getMetaInfo);
+
+const opetussuunnitelmaEsikatselussa = computed(() => {
+  return props.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(route.query, 'esikatselu');
+});
+
+const hasSisaltoKielelle = computed(() => {
+  return _.includes(opetussuunnitelma.value?.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value));
+});
+
+const linkkiHandler = {
+  nodeToRoute(node) {
+    return traverseNavigation(node, true).location;
+  },
+} as ILinkkiHandler;
+
+provide('linkkiHandler', linkkiHandler);
+provide('opetussuunnitelma', opetussuunnitelma);
 </script>
 
 <style scoped lang="scss">
@@ -170,8 +167,8 @@ export default class RouteOpetussuunnitelma extends Vue {
   }
 }
 
-::v-deep .sidenav .view{
-  border:0;
+:deep(.sidenav .view) {
+  border: 0;
 }
 
 </style>

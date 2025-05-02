@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import { PerusopetuksenPerusteenSisalto, VuosiluokkaKokonaisuusDto } from '@shared/api/eperusteet';
 import _ from 'lodash';
 

@@ -24,30 +24,25 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
-@Component({
-  components: {
-    EpSpinner,
-  },
-})
-export default class RouteOppiaineet extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const props = defineProps<{
+  perusteDataStore: PerusteDataStore;
+}>();
 
-  get oppiaineet() {
-    if (this.current) {
-      return this.current.children;
-    }
-  }
+const current = computed(() => {
+  return props.perusteDataStore.current;
+});
 
-  get current() {
-    return this.perusteDataStore.current;
+const oppiaineet = computed(() => {
+  if (current.value) {
+    return current.value.children;
   }
-}
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">

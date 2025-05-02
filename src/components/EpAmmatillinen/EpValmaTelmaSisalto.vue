@@ -46,18 +46,15 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
 
-@Component({
-  components: {
+const props = defineProps({
+  valmaTelmaSisalto: {
+    type: Object,
+    required: true,
   },
-})
-export default class EpValmaTelmaSisalto extends Vue {
-  @Prop()
-  private valmaTelmaSisalto!: any;
-}
+});
 </script>
 
 <style scoped lang="scss">

@@ -56,53 +56,52 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import { $kaanna, $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
-    EpCollapse,
+const route = useRoute();
+
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => OpetussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class RouteOpetussuunnitelmaOppiaine2015 extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+});
 
-  get termit() {
-    return [
-      this.opetussuunnitelmaDataStore.perusteTermit,
-      this.opetussuunnitelmaDataStore.termit,
-    ];
-  }
+const termit = computed(() => {
+  return [
+    props.opetussuunnitelmaDataStore.perusteTermit,
+    props.opetussuunnitelmaDataStore.termit,
+  ];
+});
 
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return props.opetussuunnitelmaDataStore.kuvat;
+});
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
 
-  get oppiaine() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.oppiaineId });
-  }
+const oppiaine = computed(() => {
+  return props.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: oppiaineId.value });
+});
 
-  get kurssiId() {
-    return _.toNumber(this.$route.params.kurssiId);
-  }
+const kurssiId = computed(() => {
+  return _.toNumber(route.params.kurssiId);
+});
 
-  get sisaltoAvaimet() {
-    return ['tehtava', 'tavoitteet', 'arviointi'];
-  }
-}
+const sisaltoAvaimet = computed(() => {
+  return ['tehtava', 'tavoitteet', 'arviointi'];
+});
 </script>
 
 <style scoped lang="scss">

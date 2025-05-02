@@ -69,48 +69,52 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Prop, Component, Vue } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpCollapse,
-    EpContentViewer,
-    EpSpinner,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => OpetussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class RouteOpetussuunnitelmaKurssi extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+});
 
-  get termit() {
-    return [
-      this.opetussuunnitelmaDataStore.perusteTermit,
-      this.opetussuunnitelmaDataStore.termit,
-    ];
-  }
+const route = useRoute();
 
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
+const termit = computed(() => {
+  return [
+    props.opetussuunnitelmaDataStore.perusteTermit,
+    props.opetussuunnitelmaDataStore.termit,
+  ];
+});
 
-  get kurssiId() {
-    return _.toNumber(this.$route.params.kurssiId);
-  }
+const kuvat = computed(() => {
+  return props.opetussuunnitelmaDataStore.kuvat;
+});
 
-  get kurssi() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.kurssiId });
-  }
+const kurssiId = computed(() => {
+  return _.toNumber(route.params.kurssiId);
+});
 
-  get sisaltoAvaimet() {
-    return ['tavoitteetJaKeskeinenSisalto', 'tavoitteetJaKeskeisetSisallot', 'tehtava', 'tavoitteet', 'keskeinenSisalto', 'keskeisetSisallot'];
-  }
-}
+const kurssi = computed(() => {
+  return props.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: kurssiId.value });
+});
+
+const sisaltoAvaimet = [
+  'tavoitteetJaKeskeinenSisalto',
+  'tavoitteetJaKeskeisetSisallot',
+  'tehtava',
+  'tavoitteet',
+  'keskeinenSisalto',
+  'keskeisetSisallot',
+];
 </script>
 
 <style scoped lang="scss">

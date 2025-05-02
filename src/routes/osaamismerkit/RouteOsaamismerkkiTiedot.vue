@@ -93,58 +93,57 @@
   </EpHeader>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, getCurrentInstance } from 'vue';
+import { useRoute } from 'vue-router';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import _ from 'lodash';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
-import { Meta } from '@shared/utils/decorators';
+import { useHead } from '@unhead/vue';
 import { murupolkuOsaamismerkkiTiedot } from '@/utils/murupolku';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
+import { $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpVoimassaolo,
-    EpHeader,
+const props = defineProps({
+  osaamismerkkiStore: {
+    type: Object as () => OsaamismerkkiStore,
+    required: true,
   },
-})
-export default class RouteOsaamismerkkiTiedot extends Vue {
-  @Prop({ required: true })
-  private osaamismerkkiStore!: OsaamismerkkiStore;
+});
 
-  get koulutustyyppi() {
-    return _.get(this.$route.params, 'koulutustyyppi') || 'vapaasivistystyo';
-  }
+const route = useRoute();
 
-  get osaamismerkki() {
-    return this.osaamismerkkiStore.osaamismerkki.value;
-  }
+const koulutustyyppi = computed(() => {
+  return _.get(route.params, 'koulutustyyppi') || 'vapaasivistystyo';
+});
 
-  get kategoria() {
-    return this.osaamismerkki?.kategoria;
-  }
+const osaamismerkki = computed(() => {
+  return props.osaamismerkkiStore.osaamismerkki.value;
+});
 
-  get imageUrl() {
-    return this.kategoria ? 'data:' + this.kategoria.liite?.mime + ';base64,' + this.kategoria.liite?.binarydata : null;
-  }
+const kategoria = computed(() => {
+  return osaamismerkki.value?.kategoria;
+});
 
-  get murupolku() {
-    return murupolkuOsaamismerkkiTiedot(this.koulutustyyppi, this.osaamismerkki);
-  }
+const imageUrl = computed(() => {
+  return kategoria.value ? 'data:' + kategoria.value.liite?.mime + ';base64,' + kategoria.value.liite?.binarydata : null;
+});
 
-  get isVanhentunut() {
-    let currentDate = new Date();
-    currentDate.setHours(0, 0, 0, 0);
-    return this.osaamismerkki?.voimassaoloLoppuu && _.toNumber(this.osaamismerkki.voimassaoloLoppuu) < currentDate.getTime();
-  }
+const murupolku = computed(() => {
+  return murupolkuOsaamismerkkiTiedot(koulutustyyppi.value, osaamismerkki.value);
+});
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t('osaamismerkki'),
-    };
-  }
-}
+const isVanhentunut = computed(() => {
+  let currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+  return osaamismerkki.value?.voimassaoloLoppuu && _.toNumber(osaamismerkki.value.voimassaoloLoppuu) < currentDate.getTime();
+});
+
+useHead(() => {
+  return {
+    title: $t('osaamismerkki'),
+  };
+});
 </script>
 
 <style scoped lang="scss">

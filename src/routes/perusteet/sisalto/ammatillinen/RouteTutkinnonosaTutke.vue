@@ -60,9 +60,10 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Meta } from '@shared/utils/decorators';
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import { RawLocation } from 'vue-router';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNormaali.vue';
@@ -75,89 +76,80 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import _ from 'lodash';
+import { $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpVoimassaolo,
-    EpFormContent,
-    EpCollapse,
-    EpHeader,
-    EpSpinner,
-    EpTutkinnonosaNormaali,
-    EpTutkinnonosaTutke,
-    EpOpasKiinnitysLinkki,
+const props = defineProps({
+  ammatillinenPerusteHakuStore: {
+    type: Object as () => AmmatillinenPerusteHakuStore,
+    required: true,
   },
-})
-export default class RouteTutkinnonosaTutke extends Vue {
-  @Prop({ required: true })
-  private ammatillinenPerusteHakuStore!: AmmatillinenPerusteHakuStore;
+});
 
-  async mounted() {
-    await this.ammatillinenPerusteHakuStore.updateFilters({ perusteet: false, tutkinnonosat: true, koodi: this.koodi });
-    await this.ammatillinenPerusteHakuStore.fetchArviointiasteikot();
-  }
+const route = useRoute();
 
-  get arviointiasteikot() {
-    return this.ammatillinenPerusteHakuStore.arviointiasteikot;
-  }
+onMounted(async () => {
+  await props.ammatillinenPerusteHakuStore.updateFilters({ perusteet: false, tutkinnonosat: true, koodi: koodi.value });
+  await props.ammatillinenPerusteHakuStore.fetchArviointiasteikot();
+});
 
-  get tutkinnonosa() {
-    if (this.ammatillinenPerusteHakuStore.perusteet) {
-      return this.ammatillinenPerusteHakuStore.perusteet[0];
-    }
-  }
+const arviointiasteikot = computed(() => {
+  return props.ammatillinenPerusteHakuStore.arviointiasteikot;
+});
 
-  get perusteet() {
-    if (this.tutkinnonosa?.perusteet) {
-      return _.chain(this.tutkinnonosa.perusteet)
-        .map(peruste => ({
-          ...peruste,
-          route: this.perusteRoute(peruste),
-        }))
-        .value();
-    }
+const tutkinnonosa = computed(() => {
+  if (props.ammatillinenPerusteHakuStore.perusteet) {
+    return props.ammatillinenPerusteHakuStore.perusteet[0];
   }
+});
 
-  get laajuus() {
-    return this.tutkinnonosa?.laajuus;
+const perusteet = computed(() => {
+  if (tutkinnonosa.value?.perusteet) {
+    return _.chain(tutkinnonosa.value.perusteet)
+      .map(peruste => ({
+        ...peruste,
+        route: perusteRoute(peruste),
+      }))
+      .value();
   }
+});
 
-  perusteRoute(peruste) {
-    return {
-      name: 'ammatillinenkooste',
-      params: {
-        perusteId: _.toString(peruste.id),
-      },
-    };
-  }
+const laajuus = computed(() => {
+  return tutkinnonosa.value?.laajuus;
+});
 
-  get koodi() {
-    return this.$route.params.koodi;
-  }
+const perusteRoute = (peruste) => {
+  return {
+    name: 'ammatillinenkooste',
+    params: {
+      perusteId: _.toString(peruste.id),
+    },
+  };
+};
 
-  get koulutustyyppi() {
-    return 'ammatillinen';
-  }
+const koodi = computed(() => {
+  return route.params.koodi;
+});
 
-  get murupolku() {
-    return [
-      murupolkuAmmatillinenRoot(this.koulutustyyppi),
-      {
-        label: this.tutkinnonosa?.nimi,
-        location: {
-          ...this.$route,
-        } as RawLocation,
-      },
-    ];
-  }
+const koulutustyyppi = computed(() => {
+  return 'ammatillinen';
+});
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: (this as any).$t('yhteinen-tutkinnon-osa'),
-    };
-  }
-}
+const murupolku = computed(() => {
+  return [
+    murupolkuAmmatillinenRoot(koulutustyyppi.value),
+    {
+      label: tutkinnonosa.value?.nimi,
+      location: {
+        ...route,
+      } as RawLocation,
+    },
+  ];
+});
+
+// Meta info
+useHead({
+  title: computed(() => $t('yhteinen-tutkinnon-osa')),
+});
 </script>
 
 <style scoped lang="scss">

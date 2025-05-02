@@ -11,19 +11,12 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref } from 'vue';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { AmmatillinenOpasHakuStore } from '@/stores/AmmatillinenOpasHakuStore';
 
-@Component({
-  components: {
-    PerusteAmmatillinenHaku,
-  },
-})
-export default class RouteAmmatillinenOhjeet extends Vue {
-  private perusteHakuStoreOhjeet = new AmmatillinenOpasHakuStore();
-}
+const perusteHakuStoreOhjeet = new AmmatillinenOpasHakuStore();
 </script>
 
 <style scoped lang="scss">

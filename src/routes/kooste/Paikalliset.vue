@@ -84,9 +84,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { ref, computed, watch, onMounted } from 'vue';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { Kielet } from '@shared/stores/kieli';
@@ -99,145 +99,134 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ryhmanKoulutustyypit } from '@shared/utils/perusteet';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { $t, $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpHeader,
-    EpSearch,
-    EpSpinner,
-    EpExternalLink,
-    OpetussuunnitelmaTile,
-    EpBPagination,
-    EpMultiSelect,
-    EpHakutulosmaara,
+const props = defineProps({
+  paikallinenStore: {
+    type: Object as () => IPaikallinenStore,
+    required: true,
   },
-})
-export default class Paikalliset extends Vue {
-  @Prop({ required: true })
-  private paikallinenStore!: IPaikallinenStore;
+  perusteKoosteStore: {
+    type: Object as () => PerusteKoosteStore,
+    required: true,
+  },
+  koulutustyyppi: {
+    type: String,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private perusteKoosteStore!: PerusteKoosteStore;
+const query = ref('');
+const page = ref(1);
+const perPage = ref(10);
+const valittuPeruste = ref(null);
 
-  @Prop({ required: true })
-  private koulutustyyppi!: string;
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  private query = '';
-  private page = 1;
-  private perPage = 10;
-  private valittuPeruste: any | null = null;
-
-  async mounted() {
-    this.fetch();
+const fetch = async () => {
+  if (_.size(query.value) === 0 || _.size(query.value) > 2) {
+    await props.paikallinenStore.fetchQuery!({
+      query: query.value,
+      peruste: valittuPeruste.value,
+      ...(!valittuPeruste.value?.nimi && { koulutustyypit: ryhmanKoulutustyypit(props.koulutustyyppi) }),
+      page: page.value - 1,
+    });
   }
+};
 
-  @Watch('koulutustyyppi')
-  onKoulutustyyppiChanged() {
-    this.valittuPeruste = null;
-  }
+onMounted(() => {
+  fetch();
+});
 
-  @Watch('query')
-  async onQueryChanged() {
-    this.page = 1;
-    await this.fetch();
-  }
+watch(() => props.koulutustyyppi, () => {
+  valittuPeruste.value = null;
+});
 
-  @Watch('page')
-  async onPageChanged() {
-    await this.fetch();
-    (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
-  }
+watch(query, async () => {
+  page.value = 1;
+  await fetch();
+});
 
-  @Watch('valittuPeruste')
-  async onPerusteChange() {
-    await this.fetch();
-  }
+watch(page, async () => {
+  await fetch();
+  document.querySelector('.opetussuunnitelma-container a')?.focus();
+});
 
-  @Watch('kieli')
-  async onKieliChange() {
-    await this.fetch();
-  }
+watch(valittuPeruste, async () => {
+  await fetch();
+});
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+watch(kieli, async () => {
+  await fetch();
+});
 
-  async fetch() {
-    if (_.size(this.query) === 0 || _.size(this.query) > 2) {
-      await this.paikallinenStore.fetchQuery!({
-        query: this.query,
-        peruste: this.valittuPeruste,
-        ...(!this.valittuPeruste?.nimi && { koulutustyypit: ryhmanKoulutustyypit(this.koulutustyyppi) }),
-        page: this.page - 1,
-      });
-    }
-  }
-
-  get julkaistutPerusteet() {
-    if (this.perusteKoosteStore.perusteJulkaisut) {
-      return _.chain(this.perusteKoosteStore.perusteJulkaisut.value)
-        .map(julkaistuPeruste => ({
-          ...julkaistuPeruste,
-          kaannettyNimi: this.$kaanna(julkaistuPeruste.nimi!),
-        }))
-        .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
-        .value();
-    }
-  }
-
-  get perusteetOptions() {
-    if (this.julkaistutPerusteet) {
-      return [
-        {},
-        ...this.julkaistutPerusteet,
-      ];
-    }
-    return [];
-  }
-
-  get isLoading() {
-    return !this.paikallinenStore.opetussuunnitelmatPaged!.value;
-  }
-
-  get opetussuunnitelmatLength() {
-    return this.paikallinenStore.opetussuunnitelmatPaged?.value?.kokonaismäärä;
-  }
-
-  get opetussuunnitelmatKokonaismaara() {
-    if (this.paikallinenStore.opetussuunnitelmatPaged?.value) {
-      return this.paikallinenStore.opetussuunnitelmatPaged!.value['kokonaismäärä'];
-    }
-    return 0;
-  }
-
-  get opetussuunnitelmat() {
-    return _.chain(this.paikallinenStore.opetussuunnitelmatPaged?.value?.data)
-      .map(ops => ({
-        ...ops,
-        toimijat: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Koulutustoimija')),
-        oppilaitokset: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Oppilaitos')),
-        route: {
-          name: 'opetussuunnitelma',
-          params: {
-            opetussuunnitelmaId: _.toString(ops.id),
-          },
-        },
+const julkaistutPerusteet = computed(() => {
+  if (props.perusteKoosteStore.perusteJulkaisut) {
+    return _.chain(props.perusteKoosteStore.perusteJulkaisut.value)
+      .map(julkaistuPeruste => ({
+        ...julkaistuPeruste,
+        kaannettyNimi: $kaanna(julkaistuPeruste.nimi!),
       }))
-      .sortBy(ops => Kielet.sortValue(ops.nimi))
+      .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
       .value();
   }
+  return [];
+});
 
-  kaannaPerusteNimi(option) {
-    if (option?.nimi) {
-      return this.$kaanna(option.nimi);
-    }
-    return this.$t('kaikki');
+const perusteetOptions = computed(() => {
+  if (julkaistutPerusteet.value) {
+    return [
+      {},
+      ...julkaistutPerusteet.value,
+    ];
   }
+  return [];
+});
 
-  async mouseOver(opetussuunnitelma) {
-    await this.paikallinenStore.addToCache!(opetussuunnitelma.id);
+const isLoading = computed(() => {
+  return !props.paikallinenStore.opetussuunnitelmatPaged!.value;
+});
+
+const opetussuunnitelmatLength = computed(() => {
+  return props.paikallinenStore.opetussuunnitelmatPaged?.value?.kokonaismäärä;
+});
+
+const opetussuunnitelmatKokonaismaara = computed(() => {
+  if (props.paikallinenStore.opetussuunnitelmatPaged?.value) {
+    return props.paikallinenStore.opetussuunnitelmatPaged!.value['kokonaismäärä'];
   }
-}
+  return 0;
+});
+
+const opetussuunnitelmat = computed(() => {
+  return _.chain(props.paikallinenStore.opetussuunnitelmatPaged?.value?.data)
+    .map(ops => ({
+      ...ops,
+      toimijat: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Koulutustoimija')),
+      oppilaitokset: _.filter(ops.organisaatiot, org => _.includes(org.tyypit, 'Oppilaitos')),
+      route: {
+        name: 'opetussuunnitelma',
+        params: {
+          opetussuunnitelmaId: _.toString(ops.id),
+        },
+      },
+    }))
+    .sortBy(ops => Kielet.sortValue(ops.nimi))
+    .value();
+});
+
+const kaannaPerusteNimi = (option) => {
+  if (option?.nimi) {
+    return $kaanna(option.nimi);
+  }
+  return $t('kaikki');
+};
+
+const mouseOver = async (opetussuunnitelma) => {
+  await props.paikallinenStore.addToCache!(opetussuunnitelma.id);
+};
 </script>
 
 <style scoped lang="scss">

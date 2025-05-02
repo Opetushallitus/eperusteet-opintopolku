@@ -128,66 +128,63 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, watch } from 'vue';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { Koulutustyyppi } from '@shared/tyypit';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
 import * as _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
+import { $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpFormContent,
-    EpField,
-    EpSpinner,
+const props = defineProps({
+  store: {
+    type: Object as () => ToteutussuunnitelmaDataStore | null,
+    required: true,
   },
-})
-export default class EpOpetussuunnitelmaTiedot extends Vue {
-  @Prop({ required: true })
-  private store!: ToteutussuunnitelmaDataStore | null;
+});
 
-  @Watch('kieli')
-  async kieliChanged() {
-    await this.store!.getDokumenttiTila();
-  }
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  get dokumenttiUrl() {
-    return this.store!.dokumenttiUrl;
-  }
+watch(kieli, async () => {
+  await props.store!.getDokumenttiTila();
+});
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+const dokumenttiUrl = computed(() => {
+  return props.store!.dokumenttiUrl;
+});
 
-  get opetussuunnitelma() {
-    return this.store!.opetussuunnitelma;
-  }
+const opetussuunnitelma = computed(() => {
+  return props.store!.opetussuunnitelma;
+});
 
-  get koulutustoimija() {
-    return this.opetussuunnitelma?.koulutustoimija;
-  }
+const koulutustoimija = computed(() => {
+  return opetussuunnitelma.value?.koulutustoimija;
+});
 
-  get koulutustyyppiName() {
-    if (this.opetussuunnitelma?.jotpatyyppi !== 'MUU') {
-      return this.$t(this.store!.koulutustyyppi as Koulutustyyppi);
-    }
+const koulutustyyppiName = computed(() => {
+  if (opetussuunnitelma.value?.jotpatyyppi !== 'MUU') {
+    return $t(props.store!.koulutustyyppi as Koulutustyyppi);
   }
+  return undefined;
+});
 
-  get oppilaitosTyyppiNimi() {
-    if (this.opetussuunnitelma?.oppilaitosTyyppiKoodi) {
-      return _.mapValues(_.keyBy(this.opetussuunnitelma?.oppilaitosTyyppiKoodi.metadata, v => _.toLower(v.kieli)), v => v.nimi);
-    }
+const oppilaitosTyyppiNimi = computed(() => {
+  if (opetussuunnitelma.value?.oppilaitosTyyppiKoodi) {
+    return _.mapValues(_.keyBy(opetussuunnitelma.value?.oppilaitosTyyppiKoodi.metadata, v => _.toLower(v.kieli)), v => v.nimi);
   }
+  return undefined;
+});
 
-  get kuvat() {
-    return this.store!.kuvat;
-  }
-}
+const kuvat = computed(() => {
+  return props.store!.kuvat;
+});
 </script>
 
 <style scoped lang="scss">

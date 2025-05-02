@@ -303,76 +303,70 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch, InjectReactive } from 'vue-property-decorator';
+import { computed, inject } from 'vue';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import OppiaineenVuosiluokka from './OppiaineenVuosiluokka.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpPerusteContent,
-    OppiaineenVuosiluokka,
-    EpContentViewer,
+const props = defineProps({
+  tietue: {
+    type: Object,
+    required: true,
   },
-})
-export default class OppiaineenVuosiluokkakokonaisuus extends Vue {
-  @Prop({ required: true })
-  private tietue!: any;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  termit: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const opetussuunnitelma = inject('opetussuunnitelma') as any;
 
-  @Prop({ required: true })
-  private termit!: any[];
+const perusteenVuosiluokkakokonaisuus = computed(() => {
+  return props.tietue.perusteenOppiaineenVlk;
+});
 
-  @InjectReactive('opetussuunnitelma')
-  private opetussuunnitelma!: any;
+const oppiaineenVuosiluokkakokonaisuus = computed(() => {
+  return props.tietue.oppiaineenVuosiluokkakokonaisuus;
+});
 
-  get perusteenVuosiluokkakokonaisuus() {
-    return this.tietue.perusteenOppiaineenVlk;
-  }
+const oppiaineenPohjanVuosiluokkakokonaisuus = computed(() => {
+  return props.tietue.oppiaineenPohjanVuosiluokkakokonaisuus || {};
+});
 
-  get oppiaineenVuosiluokkakokonaisuus() {
-    return this.tietue.oppiaineenVuosiluokkakokonaisuus;
-  }
+const pohjanVuosiluokat = computed(() => {
+  return _.keyBy(oppiaineenPohjanVuosiluokkakokonaisuus.value.vuosiluokat, 'vuosiluokka');
+});
 
-  get oppiaineenPohjanVuosiluokkakokonaisuus() {
-    return this.tietue.oppiaineenPohjanVuosiluokkakokonaisuus || {};
-  }
+const vuosiluokkakokonaisuus = computed(() => {
+  return props.tietue.vuosiluokkakokonaisuus;
+});
 
-  get pohjanVuosiluokat() {
-    return _.keyBy(this.oppiaineenPohjanVuosiluokkakokonaisuus.vuosiluokat, 'vuosiluokka');
-  }
+const oppiaine = computed(() => {
+  return props.tietue.oppiaine;
+});
 
-  get vuosiluokkakokonaisuus() {
-    return this.tietue.vuosiluokkakokonaisuus;
-  }
+const vuosiluokat = computed(() => {
+  return _.sortBy(oppiaineenVuosiluokkakokonaisuus.value.vuosiluokat, 'vuosiluokka');
+});
 
-  get oppiaine() {
-    return this.tietue.oppiaine;
-  }
+const pohjaNimi = computed(() => {
+  return opetussuunnitelma?.pohja?.nimi;
+});
 
-  get vuosiluokat() {
-    return _.sortBy(this.oppiaineenVuosiluokkakokonaisuus.vuosiluokat, 'vuosiluokka');
-  }
-
-  hasTekstiContent(object, key) {
-    return object != null && object[key] != null && object[key].teksti != null;
-  }
-
-  get pohjaNimi() {
-    return this.opetussuunnitelma?.pohja?.nimi;
-  }
-}
-
+const hasTekstiContent = (object: any, key: string) => {
+  return object != null && object[key] != null && object[key].teksti != null;
+};
 </script>
 
 <style scoped lang="scss">
-
   .font-600 {
     font-weight: 600;
   }
-
 </style>

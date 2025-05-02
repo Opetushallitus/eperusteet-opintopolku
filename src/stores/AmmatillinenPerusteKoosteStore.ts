@@ -7,7 +7,7 @@ import { Page } from '@shared/tyypit';
 import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
-import { computed, reactive } from '@vue/composition-api';
+import { computed, reactive } from'vue';
 
 export class AmmatillinenPerusteKoosteStore {
   public state = reactive({

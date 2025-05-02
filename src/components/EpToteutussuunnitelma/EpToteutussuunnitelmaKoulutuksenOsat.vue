@@ -42,8 +42,8 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { KoulutuksenOsaDtoKoulutusOsanTyyppiEnum, Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import { KoulutuksenOsatStore } from '@/stores/KoulutuksenOsatStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -51,51 +51,52 @@ import EpKoulutuksenOsaKortti from '@shared/components/EpKoulutuksenosa/EpKoulut
 import * as _ from 'lodash';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpKoulutuksenOsaKortti,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaKoulutuksenOsat extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  opetussuunnitelma: {
+    type: Object as () => OpetussuunnitelmaDto,
+    required: true,
+  },
+  opetussuunnitelmaDataStore: {
+    type: Object as () => ToteutussuunnitelmaDataStore,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const koulutuksenosat = computed(() => {
+  return _.map(props.sisaltoviite.lapset, (viite: any) => {
+    let perusteenOsa;
+    if (viite.perusteenOsaId) {
+      perusteenOsa = props.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: viite.perusteenOsaId });
+    }
 
-  @Prop({ required: true })
-  private opetussuunnitelma!: OpetussuunnitelmaDto;
+    return {
+      ...viite,
+      koulutuksenosa: {
+        ...viite.koulutuksenosa,
+        laajuusMinimi: !_.isNil(perusteenOsa?.laajuusMinimi) ? perusteenOsa.laajuusMinimi : viite?.koulutuksenosa?.laajuusMinimi,
+        laajuusMaksimi: !_.isNil(perusteenOsa?.laajuusMaksimi) ? perusteenOsa?.laajuusMaksimi : viite?.koulutuksenosa?.laajuusMaksimi,
+      },
+    };
+  }) as any;
+});
 
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+const yhteisetKoulutuksenosat = computed(() => {
+  return _.filter(koulutuksenosat.value, koulutuksenosaViite =>
+    koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.YHTEINEN));
+});
 
-  get koulutuksenosat() {
-    return _.map(this.sisaltoviite.lapset, (viite: any) => {
-      let perusteenOsa;
-      if (viite.perusteenOsaId) {
-        perusteenOsa = this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: viite.perusteenOsaId });
-      }
-
-      return {
-        ...viite,
-        koulutuksenosa: {
-          ...viite.koulutuksenosa,
-          laajuusMinimi: !_.isNil(perusteenOsa?.laajuusMinimi) ? perusteenOsa.laajuusMinimi : viite?.koulutuksenosa?.laajuusMinimi,
-          laajuusMaksimi: !_.isNil(perusteenOsa?.laajuusMaksimi) ? perusteenOsa?.laajuusMaksimi : viite?.koulutuksenosa?.laajuusMaksimi,
-        },
-      };
-    }) as any;
-  }
-
-  get yhteisetKoulutuksenosat() {
-    return _.filter(this.koulutuksenosat, koulutuksenosaViite => koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.YHTEINEN));
-  }
-
-  get valinnaisetKoulutuksenosat() {
-    return _.filter(this.koulutuksenosat, koulutuksenosaViite => koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.VALINNAINEN));
-  }
-}
+const valinnaisetKoulutuksenosat = computed(() => {
+  return _.filter(koulutuksenosat.value, koulutuksenosaViite =>
+    koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.VALINNAINEN));
+});
 </script>
 
 <style scoped lang="scss">

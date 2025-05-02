@@ -38,41 +38,39 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
-
+import { computed } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 
-@Component({
-  components: {
-    EpSpinner,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => OpetussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class RouteOpetussuunnitelmaOppiaineet extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+});
 
-  get current() {
-    return this.opetussuunnitelmaDataStore.current;
-  }
+const current = computed(() => {
+  return props.opetussuunnitelmaDataStore.current;
+});
 
-  get oppiaineet() {
-    if (this.current) {
-      return this.current.children;
-    }
+const oppiaineet = computed(() => {
+  if (current.value) {
+    return current.value.children;
   }
+  return undefined;
+});
 
-  get oppiaineetFormatted() {
-    if (!_.isEmpty(this.oppiaineet)) {
-      return _.map(this.oppiaineet, oa => ({
-        ...oa,
-        koodiLabel: _.get(oa, 'meta.koodi.arvo') || _.get(oa, 'meta.koodi'),
-      }));
-    }
+const oppiaineetFormatted = computed(() => {
+  if (!_.isEmpty(oppiaineet.value)) {
+    return _.map(oppiaineet.value, oa => ({
+      ...oa,
+      koodiLabel: _.get(oa, 'meta.koodi.arvo') || _.get(oa, 'meta.koodi'),
+    }));
   }
-}
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">

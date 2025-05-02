@@ -58,101 +58,93 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, ref, onMounted, watch } from 'vue';
+import { useHead } from '@unhead/vue';
 import { TiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Kielet } from '@shared/stores/kieli';
-import { Meta } from '@shared/utils/decorators';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { $kaanna, $sd, $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    EpSearch,
-    EpContentViewer,
+const props = defineProps({
+  tiedoteStore: {
+    type: Object as () => TiedoteStore,
+    required: true,
   },
-})
-export default class RouteUutiset extends Vue {
-  @Prop({ required: true })
-  private tiedoteStore!: TiedoteStore;
+  julkaistutKoulutustyypitStore: {
+    type: Object,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+const page = ref(1);
+const query = ref('');
 
-  private page = 1;
-  private query = '';
+const julkaistutKoulutustyypit = computed(() => {
+  return props.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
+});
 
-  public mounted() {
-    this.tiedoteStore.updateFilter({
-      nimi: this.query,
-      koulutustyypit: this.julkaistutKoulutustyypit,
-      kieli: Kielet.getSisaltoKieli.value,
-    });
-  }
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
-  }
+const tiedotteet = computed(() => {
+  return {
+    tiedotteet: props.tiedoteStore.tiedotteet,
+    filter: props.tiedoteStore.filter,
+    amount: props.tiedoteStore.amount,
+  };
+});
 
-  @Watch('sisaltoKieli')
-  async sisaltoKieliChange() {
-    await this.tiedoteStore.updateFilter({
-      kieli: [Kielet.getSisaltoKieli.value],
-    });
-  }
+const isTiedotteetEmpty = computed(() => {
+  return tiedotteet.value.amount === 0;
+});
 
-  get tiedotteet() {
-    return {
-      tiedotteet: this.tiedoteStore.tiedotteet,
-      filter: this.tiedoteStore.filter,
-      amount: this.tiedoteStore.amount,
-    };
-  }
+const murupolku = computed(() => {
+  return [{
+    label: 'ajankohtaista',
+    location: {
+      name: 'uutiset',
+    },
+  }];
+});
 
-  get isTiedotteetEmpty() {
-    return this.tiedotteet.amount === 0;
-  }
+onMounted(() => {
+  props.tiedoteStore.updateFilter({
+    nimi: query.value,
+    koulutustyypit: julkaistutKoulutustyypit.value,
+    kieli: Kielet.getSisaltoKieli.value,
+  });
+});
 
-  private updatePage(value) {
-    this.page = value;
-    this.tiedoteStore.updateFilter({
-      sivu: value - 1,
-    });
-  }
+watch(sisaltoKieli, async () => {
+  await props.tiedoteStore.updateFilter({
+    kieli: [Kielet.getSisaltoKieli.value],
+  });
+});
 
-  private setValue(value) {
-    this.page = 1;
-    this.tiedoteStore.updateFilter({
-      nimi: value,
-      sivu: 0,
-    });
-  }
+const updatePage = (value) => {
+  page.value = value;
+  props.tiedoteStore.updateFilter({
+    sivu: value - 1,
+  });
+};
 
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+const setValue = (value) => {
+  page.value = 1;
+  props.tiedoteStore.updateFilter({
+    nimi: value,
+    sivu: 0,
+  });
+};
 
-  get murupolku() {
-    return [{
-      label: 'ajankohtaista',
-      location: {
-        name: 'uutiset',
-      },
-    }];
-  }
-
-  @Meta
-  getMetaInfo() {
-    return {
-      title: (this as any).$t('ajankohtaista'),
-    };
-  }
-}
+// Meta information
+useHead({
+  title: $t('ajankohtaista'),
+});
 </script>
 
 <style scoped lang="scss">
@@ -184,5 +176,4 @@ export default class RouteUutiset extends Vue {
     }
   }
 }
-
 </style>

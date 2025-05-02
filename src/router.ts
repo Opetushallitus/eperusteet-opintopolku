@@ -1,11 +1,10 @@
 import _ from 'lodash';
 import Vue from 'vue';
-import Router from 'vue-router';
 import VueScrollTo from 'vue-scrollto';
 import VueMeta from 'vue-meta';
 import Root from '@/routes/Root.vue';
 import EpErrorPage from '@shared/components/EpErrorPage/EpErrorPage.vue';
-import Home from '@/routes/home/RouteHome.vue';
+import RouteHome from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue';
 import RouteMaarayskokoelma from '@/routes/maarays/RouteMaarayskokoelma.vue';
@@ -64,9 +63,6 @@ import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiT
 import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
 import RoutePerusteMuutoshistoria from '@/routes/perusteet/tiedot/RoutePerusteMuutoshistoria.vue';
 
-import { PerusteStore } from '@/stores/PerusteStore';
-import { TiedoteStore } from '@/stores/TiedoteStore';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
 import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
 import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
 import { Virheet } from '@shared/stores/virheet';
@@ -100,37 +96,30 @@ import {
   getKoosteTiedotteetStore,
 } from '@/utils/toteutustypes';
 import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
-import { JulkaistutKoulutustyypitStore } from './stores/JulkaistutKoulutustyypitStore';
 import RouteKotoLaajaAlainenOsaaminen from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
 import { redirects } from './utils/redirects';
 import { AmmatillinenPerusteHakuStore } from './stores/AmmatillinenPerusteHakuStore';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { OsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
-import { TietoapalvelustaStore } from './stores/TietoapalvelustaStore';
 import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
 import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 import { pinia } from '@/pinia';
 import { useOpetussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
-
-Vue.use(Router);
-Vue.use(VueMeta, {
-  refreshOnceOnNavigation: true,
-});
+import { createRouter } from 'vue-router';
+import { createWebHistory } from 'vue-router';
+import RouteTemp from './routes/temp/RouteTemp.vue';
+import { useLoading } from 'vue-loading-overlay';
+import { loadingOptions } from './utils/loading';
+import { nextTick } from 'vue';
 
 const logger = createLogger('Router');
 
-const perusteStore = new PerusteStore();
-const tiedoteStore = new TiedoteStore();
 const ammatillistenTiedotteetStore = new AmmatillistenTiedoteStore();
 const koulutuksenJarjestajatStore = new KoulutuksenJarjestajatStore();
 const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
-const julkaistutKoulutustyypitStore = new JulkaistutKoulutustyypitStore();
 const ammatillinenPerusteHakuStore = new AmmatillinenPerusteHakuStore();
-const osaamismerkitStore = new OsaamismerkitStore();
-const tietoapalvelustaStore = new TietoapalvelustaStore();
 const perusteCacheStore = usePerusteCacheStore(pinia);
 const opetussuunnitelmaCacheStore = useOpetussuunnitelmaCacheStore(pinia);
 
@@ -141,7 +130,8 @@ const routeProps = (route: any) => {
   };
 };
 
-export const router = new Router({
+export const router = createRouter({
+  history: createWebHistory(),
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) {
       return savedPosition;
@@ -188,32 +178,12 @@ export const router = new Router({
   }, {
     path: '/:lang',
     component: Root,
-    props: {
-      julkaistutKoulutustyypitStore,
-      tietoapalvelustaStore,
-      osaamismerkitStore,
-    },
     children: [
       ...redirects,
       {
         path: '',
         name: 'root',
-        component: Home,
-        meta: {
-          resolve: {
-            async props() {
-              return {
-                default: {
-                  perusteStore,
-                  tiedoteStore,
-                  julkaistutKoulutustyypitStore,
-                  tietoapalvelustaStore,
-                  osaamismerkitStore,
-                },
-              };
-            },
-          },
-        },
+        component: RouteHome,
       }, {
         path: 'virhe',
         name: 'virhe',
@@ -222,12 +192,12 @@ export const router = new Router({
       }, {
         path: 'maaraykset',
         name: 'maaraykset',
-        component: RouteMaarayskokoelma,
+        component: RouteTemp,
         props: routeProps,
       }, {
         path: 'maaraykset/:maaraysId(\\d+)',
         name: 'maarays',
-        component: RouteMaarays,
+        component: RouteTemp,
         props: routeProps,
       }, {
         path: 'kooste/ammatillinen/:perusteId(\\d+)',
@@ -248,25 +218,6 @@ export const router = new Router({
         path: 'kooste/:koulutustyyppi([a-z]+)/:perusteId(\\d+)?',
         name: 'kooste',
         component: RouteKooste,
-        meta: {
-          resolve: {
-            cacheBy: ['koulutustyyppi'],
-            async props(route) {
-              return {
-                default: {
-                  perusteKoosteStore: getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
-                  opasStore: getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
-                  tiedotteetStore: getKoosteTiedotteetStore(stateToKoulutustyyppi(route.params.koulutustyyppi)),
-                  paikallinenStore: getKoostePaikallinenStore(route.params.koulutustyyppi)(),
-                  paikallinenComponent: getKoostePaikallinenComponent(route.params.koulutustyyppi),
-                  kuvaus: getKoosteKuvaus(route.params.koulutustyyppi),
-                  subheader: getKoosteSubheader(route.params.koulutustyyppi),
-                  perusteetHeader: getKoostePerusteHeader(route.params.koulutustyyppi),
-                },
-              };
-            },
-          },
-        },
       }, {
         path: 'osaamismerkki/:koodi',
         name: 'osaamismerkki',
@@ -286,17 +237,6 @@ export const router = new Router({
         path: 'osaamismerkit',
         name: 'osaamismerkit',
         component: RouteOsaamismerkit,
-        meta: {
-          resolve: {
-            async props() {
-              return {
-                default: {
-                  osaamismerkitStore: osaamismerkitStore,
-                },
-              };
-            },
-          },
-        },
         children: [{
           path: 'osaamismerkki/:osaamismerkkiId(\\d+)?',
           name: 'osaamismerkkiTiedot',
@@ -373,9 +313,8 @@ export const router = new Router({
             async props() {
               return {
                 default: {
-                  perusteStore,
-                  tiedoteStore,
-                  julkaistutKoulutustyypitStore,
+                  // tiedoteStore,
+                  // julkaistutKoulutustyypitStore,
                 },
               };
             },
@@ -390,9 +329,8 @@ export const router = new Router({
             async props() {
               return {
                 default: {
-                  perusteStore,
-                  tiedoteStore,
-                  julkaistutKoulutustyypitStore,
+                  // tiedoteStore,
+                  // julkaistutKoulutustyypitStore,
                 },
               };
             },
@@ -467,6 +405,7 @@ export const router = new Router({
             name: 'opetussuunnitelma',
           };
         },
+        children: [],
       }, {
         path: 'opetussuunnitelma/:opetussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi',
         name: 'opetussuunnitelma',
@@ -559,17 +498,9 @@ export const router = new Router({
         path: ':koulutustyyppi/:perusteId(\\d+)/:revision(\\d+)?',
         name: 'peruste',
         component: RoutePeruste,
-        meta: {
-          resolve: {
-            cacheBy: ['perusteId'],
-            async props(route) {
-              return {
-                default: {
-                  perusteDataStore: await perusteCacheStore.getPerusteStore(route.params.perusteId, route.params.revision),
-                },
-              };
-            },
-          },
+        beforeEnter: async (to, from, next) => {
+          await perusteCacheStore.addPerusteStore(to.params.perusteId, to.params.revision);
+          next();
         },
         children: [{
           path: 'tiedot',
@@ -587,16 +518,6 @@ export const router = new Router({
           path: 'tekstikappale/:viiteId',
           component: RouteTekstikappale,
           name: 'perusteTekstikappale',
-          meta: {
-            resolve: {
-              cacheBy: ['viiteId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.viiteId),
-                };
-              },
-            },
-          },
           children: [{
             path: 'osa/:osa',
             component: RouteTekstikappaleOsa,
@@ -684,177 +605,56 @@ export const router = new Router({
           path: 'opintokokonaisuus/:opintokokonaisuusId',
           component: RouteOpintokokonaisuus,
           name: 'perusteOpintokokonaisuus',
-          meta: {
-            resolve: {
-              cacheBy: ['opintokokonaisuusId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.opintokokonaisuusId),
-                };
-              },
-            },
-          },
         }, {
           path: 'tavoitesisaltoalue/:tavoitesisaltoalueId',
           component: RouteTavoitesisaltoalue,
           name: 'perusteTavoitesisaltoalue',
-          meta: {
-            resolve: {
-              cacheBy: ['tavoitesisaltoalueId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.tavoitesisaltoalueId),
-                };
-              },
-            },
-          },
         }, {
           path: 'koulutuksenosa/:koulutuksenosaId',
           component: RouteKoulutuksenOsa,
           name: 'perusteKoulutuksenOsa',
-          meta: {
-            resolve: {
-              cacheBy: ['koulutuksenosaId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.koulutuksenosaId),
-                };
-              },
-            },
-          },
         }, {
           path: 'laajaalainenosaaminen/:laajaalainenosaaminenId',
           component: RouteLaajaalainenOsaaminen,
           name: 'perusteLaajaalainenOsaaminen',
-          meta: {
-            resolve: {
-              cacheBy: ['laajaalainenosaaminenId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.laajaalainenosaaminenId),
-                };
-              },
-            },
-          },
         }, {
           path: 'koto/kielitaitotaso/:kotokielitaitotasoId',
           component: RouteKotoKielitaitotaso,
           name: 'perusteKotoKielitaitotaso',
-          meta: {
-            resolve: {
-              cacheBy: ['kotokielitaitotasoId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.kotokielitaitotasoId),
-                };
-              },
-            },
-          },
-
         }, {
           path: 'koto/opinto/:kotoOpintoId',
           component: RouteKotoOpinto,
           name: 'perusteKotoOpinto',
-          meta: {
-            resolve: {
-              cacheBy: ['kotoOpintoId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.kotoOpintoId),
-                };
-              },
-            },
-          },
         }, {
           path: 'koto/laajaalainenosaaminen/:kotoLaajaalainenOsaaminenId',
           component: RouteKotoLaajaAlainenOsaaminen,
           name: 'perusteKotoLaajaalainenOsaaminen',
-          meta: {
-            resolve: {
-              cacheBy: ['kotoLaajaalainenOsaaminenId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.kotoLaajaalainenOsaaminenId),
-                };
-              },
-            },
-          },
         }, {
           path: 'linkkisivu/:linkkisivuId',
           component: RouteLinkkisivu,
           name: 'linkkisivu',
-          meta: {
-            resolve: {
-              cacheBy: ['linkkisivuId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.linkkisivuId),
-                };
-              },
-            },
-          },
         }, {
           path: 'yleisettavoitteet/:yleistavoiteId',
           component: RouteYleisettavoitteet,
           name: 'perusteYleisettavoitteet',
-          meta: {
-            resolve: {
-              cacheBy: ['yleistavoiteId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.yleistavoiteId),
-                };
-              },
-            },
-          },
         }, {
           path: 'aihekokonaisuudet/:aihekokonaisuudetId',
           component: RouteAihekokonaisuudet,
           name: 'perusteAihekokonaisuudet',
-          meta: {
-            resolve: {
-              cacheBy: ['aihekokonaisuudetId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.aihekokonaisuudetId),
-                };
-              },
-            },
-          },
         }, {
           path: 'osaamiskokonaisuus/:osaamiskokonaisuusId',
           component: RouteOsaamiskokonaisuus,
           name: 'perusteOsaamiskokonaisuus',
-          meta: {
-            resolve: {
-              cacheBy: ['osaamiskokonaisuusId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.osaamiskokonaisuusId),
-                };
-              },
-            },
-          },
         }, {
           path: 'osaamiskokonaisuuspaaalue/:osaamiskokonaisuusPaaAlueId',
           component: RouteOsaamiskokonaisuusPaaAlue,
           name: 'perusteOsaamiskokonaisuusPaaAlue',
-          meta: {
-            resolve: {
-              cacheBy: ['osaamiskokonaisuusPaaAlueId'],
-              async props(route) {
-                return {
-                  default: await createPerusteOsaStore(route, route.params.osaamiskokonaisuusPaaAlueId),
-                };
-              },
-            },
-          },
         }],
       },
     ],
   },
   {
-    path: '*',
+    path: '/:catchAll(.*)',
     redirect: (to) => {
       logger.error('Unknown route', to);
       return {
@@ -868,10 +668,11 @@ export const router = new Router({
         },
       };
     },
-  }],
+  },
+  ],
 });
 
-let loader = null;
+
 
 router.beforeEach((to, from, next) => {
   const { pathname, origin, hash } = window.location;
@@ -897,8 +698,11 @@ router.beforeEach(async (to, from, next) => {
   next();
 });
 
+const $loading = useLoading(loadingOptions);
+let loader: any = null;
+
 router.beforeEach((to, from, next) => {
-  loader = (Vue as any).$loading.show();
+  loader = $loading.show();
   next();
 });
 
@@ -912,14 +716,9 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-router.beforeEach(async (to, from, next) => {
-  await resolveRouterMetaProps(to);
-  next();
-});
-
-router.afterEach((to, from) => {
-  removeQueryParam(to, router, 'paluuosoite');
-});
+// router.afterEach((to, from) => {
+//   removeQueryParam(to, router, 'paluuosoite');
+// });
 
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);
@@ -945,15 +744,6 @@ function hideLoading() {
     (loader as any).hide();
     loader = null;
   }
-}
-
-async function createPerusteOsaStore(route, perusteenOsaId) {
-  return {
-    perusteenOsaStore: await PerusteenOsaStore.create(
-      _.parseInt(perusteenOsaId),
-      getRouteStore(route, 'peruste', 'perusteDataStore').getJulkaistuPerusteSisalto({ id: _.parseInt(perusteenOsaId) }),
-    ),
-  };
 }
 
 function getElementHeighById(id: string) {

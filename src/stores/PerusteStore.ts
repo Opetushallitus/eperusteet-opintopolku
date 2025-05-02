@@ -1,8 +1,8 @@
-import { Store, State } from '@shared/stores/store';
+import { defineStore } from 'pinia';
 import { JulkiEtusivuDto, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { AmmatillisetKoulutustyypit, EperusteetKoulutustyypit } from '@shared/utils/perusteet';
-import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
+import { DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import {
   julkaistutOpsitJaPerusteet,
   julkaistutPerusteet,
@@ -10,19 +10,21 @@ import {
   JulkiEtusivuQuery,
 } from '@/api/eperusteet';
 import { Page } from '@shared/tyypit';
+import { ref } from 'vue';
+import { debounce } from 'lodash';
 
-@Store
-export class PerusteStore {
-  @State() public perusteet: PerusteenJulkaisuData[] | null = null;
-  @State() public query: JulkaistutPerusteetQuery | undefined = undefined;
-  @State() public opsitJaPerusteet: Page<JulkiEtusivuDto> | null = null;
-  @State() public julkiQuery: JulkiEtusivuQuery | undefined = undefined;
+export const usePerusteStore = defineStore('peruste', () => {
+  // State as refs
+  const perusteet = ref<PerusteenJulkaisuData[] | null>(null);
+  const query = ref<JulkaistutPerusteetQuery | undefined>(undefined);
+  const opsitJaPerusteet = ref<Page<JulkiEtusivuDto> | null>(null);
+  const julkiQuery = ref<JulkiEtusivuQuery | undefined>(undefined);
 
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  async getYleisetPerusteet(query?: JulkaistutPerusteetQuery) {
-    this.query = query;
-    this.perusteet = null;
-    this.perusteet = ((await julkaistutPerusteet(
+  // Actions
+  const getYleisetPerusteet = debounce(async (queryParams?: JulkaistutPerusteetQuery) => {
+    query.value = queryParams;
+    perusteet.value = null;
+    perusteet.value = ((await julkaistutPerusteet(
       {
         sivu: 0,
         sivukoko: 999,
@@ -31,15 +33,28 @@ export class PerusteStore {
         voimassaolo: true,
         poistunut: false,
         koulutustyyppi: _.filter(EperusteetKoulutustyypit, kt => !_.includes(AmmatillisetKoulutustyypit, kt)),
-        kieli: query?.kieli,
-        ...(query || {}),
+        kieli: queryParams?.kieli,
+        ...(queryParams || {}),
       },
     )).data as any);
-  }
+  }, DEFAULT_PUBLIC_WAIT_TIME_MS);
 
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  async getOpsitJaPerusteet(query: JulkiEtusivuQuery) {
-    this.julkiQuery = query;
-    this.opsitJaPerusteet = (await julkaistutOpsitJaPerusteet(this.julkiQuery));
-  }
-}
+  const getOpsitJaPerusteet = debounce(async (queryParams: JulkiEtusivuQuery) => {
+    julkiQuery.value = queryParams;
+    opsitJaPerusteet.value = (await julkaistutOpsitJaPerusteet(julkiQuery.value));
+  }, DEFAULT_PUBLIC_WAIT_TIME_MS);
+
+  const clearOpsitJaPerusteet = () => {
+    opsitJaPerusteet.value = null;
+  };
+
+  return {
+    perusteet,
+    query,
+    opsitJaPerusteet,
+    julkiQuery,
+    getYleisetPerusteet,
+    getOpsitJaPerusteet,
+    clearOpsitJaPerusteet,
+  };
+});

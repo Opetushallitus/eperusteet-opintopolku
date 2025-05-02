@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { KoulutustoimijaJulkinenDto, JulkinenApi } from '@shared/api/amosaa';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';

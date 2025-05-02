@@ -188,9 +188,9 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { computed, watch } from 'vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -199,81 +199,73 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { Kielet } from '@shared/stores/kieli';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpFormContent,
-    EpField,
-    EpDatepicker,
-    EpSpinner,
-    EpPreviousNextNavigation,
-    EpContentViewer,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => OpetussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class RouteOpetussuunnitelmaTiedot extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+});
 
-  get opetussuunnitelma() {
-    return this.opetussuunnitelmaDataStore.opetussuunnitelma!;
-  }
+const opetussuunnitelma = computed(() => {
+  return props.opetussuunnitelmaDataStore.opetussuunnitelma!;
+});
 
-  get koulutustyyppi() {
-    return this.$t(this.opetussuunnitelma.koulutustyyppi as string);
-  }
+const koulutustyyppi = computed(() => {
+  return $kaanna(opetussuunnitelma.value.koulutustyyppi as string);
+});
 
-  get kunnat() {
-    return this.opetussuunnitelma.kunnat;
-  }
+const kunnat = computed(() => {
+  return opetussuunnitelma.value.kunnat;
+});
 
-  get hasKunnat() {
-    return !_.isEmpty(this.kunnat);
-  }
+const hasKunnat = computed(() => {
+  return !_.isEmpty(kunnat.value);
+});
 
-  get organisaatiot() {
-    return _.sortBy(this.opetussuunnitelma.organisaatiot, (org: any) => this.getOrganisaatioNimi(org));
-  }
+const organisaatiot = computed(() => {
+  return _.sortBy(opetussuunnitelma.value.organisaatiot, (org: any) => getOrganisaatioNimi(org));
+});
 
-  get hasOrganisaatiot() {
-    return !_.isEmpty(this.organisaatiot);
-  }
+const hasOrganisaatiot = computed(() => {
+  return !_.isEmpty(organisaatiot.value);
+});
 
-  get hasTiivistelma() {
-    return !_.isEmpty(_.get(this.opetussuunnitelma.kuvaus, Kielet.getUiKieli.value));
-  }
+const hasTiivistelma = computed(() => {
+  return !_.isEmpty(_.get(opetussuunnitelma.value.kuvaus, Kielet.getUiKieli.value));
+});
 
-  get dokumentti() {
-    return this.opetussuunnitelmaDataStore.dokumentti;
-  }
+const dokumentti = computed(() => {
+  return props.opetussuunnitelmaDataStore.dokumentti;
+});
 
-  private getOrganisaatioNimi(organisaatio) {
-    const nimi = (this as any).$kaanna(organisaatio.nimi);
-    const tyypit = organisaatio.tyypit;
-    if (!_.isEmpty(tyypit)) {
-      return nimi + ' (' + _.join(tyypit, ', ') + ')';
-    }
-    else {
-      return nimi;
-    }
-  }
+const termit = computed(() => {
+  return props.opetussuunnitelmaDataStore.termit;
+});
 
-  get termit() {
-    return this.opetussuunnitelmaDataStore.termit;
-  }
+const kuvat = computed(() => {
+  return props.opetussuunnitelmaDataStore.kuvat;
+});
 
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
+const getOrganisaatioNimi = (organisaatio) => {
+  const nimi = $kaanna(organisaatio.nimi);
+  const tyypit = organisaatio.tyypit;
+  if (!_.isEmpty(tyypit)) {
+    return nimi + ' (' + _.join(tyypit, ', ') + ')';
   }
+  else {
+    return nimi;
+  }
+};
 
-  @Watch('kieli')
-  async onKieliChange() {
-    await this.opetussuunnitelmaDataStore.getDokumentti();
-  }
-}
+watch(kieli, async () => {
+  await props.opetussuunnitelmaDataStore.getDokumentti();
+});
 </script>
 
 <style scoped lang="scss">

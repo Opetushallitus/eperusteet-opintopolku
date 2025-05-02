@@ -26,79 +26,80 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
 import { SisaltoviiteStore } from '@/stores/SisaltoviiteStore';
 import { SuorituspolutStore } from '@/stores/SuorituspolutStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { $t, $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => ToteutussuunnitelmaDataStore,
+    required: true,
   },
-})
-export default class RouteToteutussuunnitelmaSuorituspolut extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+});
 
-  get sisaltoviiteId() {
-    return _.toNumber(this.$route.params.sisaltoviiteId);
-  }
+const route = useRoute();
 
-  get suorituspolut() {
-    return _.map(_.get(this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId }), 'lapset'), suorituspolku => {
-      return {
-        ...suorituspolku,
-        perusteenLaajuus: this.perusteLaajuus,
-      };
-    });
-  }
+const sisaltoviiteId = computed(() => {
+  return _.toNumber(route.params.sisaltoviiteId);
+});
 
-  get sisaltoviite() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.sisaltoviiteId });
-  }
+const sisaltoviite = computed(() => {
+  return props.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: sisaltoviiteId.value });
+});
 
-  get perusteLaajuus() {
-    return _.get(_.head(this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('suoritustavat')), 'rakenne.muodostumisSaanto');
-  }
+const perusteLaajuus = computed(() => {
+  return _.get(_.head(props.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('suoritustavat')), 'rakenne.muodostumisSaanto');
+});
 
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
+const suorituspolut = computed(() => {
+  return _.map(_.get(props.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: sisaltoviiteId.value }), 'lapset'), suorituspolku => {
+    return {
+      ...suorituspolku,
+      perusteenLaajuus: perusteLaajuus.value,
+    };
+  });
+});
 
-  get fields() {
-    return [{
-      key: 'nimi',
-      sortable: true,
-      sortByFormatted: true,
-      label: this.$t('nimi') as string,
-      formatter: (value: any, key: string, item: any) => {
-        return this.$kaanna(item.tekstiKappale.nimi);
-      },
-    }, {
-      key: 'laajuus',
-      sortable: true,
-      label: this.$t('laajuus') as string,
-      formatter: (value: any, key: string, item: any) => {
-        if (item.tyyppi === 'osasuorituspolku' && item.suorituspolku.osasuorituspolkuLaajuus) {
-          return item.suorituspolku.osasuorituspolkuLaajuus + ' ' + this.$t('osaamispiste');
-        }
-        else if (item.tyyppi === 'suorituspolku' && item.perusteenLaajuus) {
-          return item.perusteenLaajuus.laajuus.maksimi + ' ' + this.$t('osaamispiste');
-        }
-      },
-    }];
-  }
-}
+const kuvat = computed(() => {
+  return props.opetussuunnitelmaDataStore.kuvat;
+});
+
+const fields = computed(() => {
+  return [{
+    key: 'nimi',
+    sortable: true,
+    sortByFormatted: true,
+    label: $t('nimi'),
+    formatter: (value: any, key: string, item: any) => {
+      return $kaanna(item.tekstiKappale.nimi);
+    },
+  }, {
+    key: 'laajuus',
+    sortable: true,
+    label: $t('laajuus'),
+    formatter: (value: any, key: string, item: any) => {
+      if (item.tyyppi === 'osasuorituspolku' && item.suorituspolku.osasuorituspolkuLaajuus) {
+        return item.suorituspolku.osasuorituspolkuLaajuus + ' ' + $t('osaamispiste');
+      }
+      else if (item.tyyppi === 'suorituspolku' && item.perusteenLaajuus) {
+        return item.perusteenLaajuus.laajuus.maksimi + ' ' + $t('osaamispiste');
+      }
+    },
+  }];
+});
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
-  .content {
-    padding: 0 $content-padding;
-  }
+
+.content {
+  padding: 0 $content-padding;
+}
 </style>

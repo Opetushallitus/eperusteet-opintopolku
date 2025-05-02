@@ -1,4 +1,4 @@
-import  { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { TutkinnonRakenne, PerusteDto } from '@shared/api/eperusteet';
 import { perusteenSuoritustapa } from '@shared/utils/perusteet';

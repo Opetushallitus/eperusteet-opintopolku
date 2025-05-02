@@ -2,34 +2,37 @@
   <div />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
 import { NavigationNodeDtoTypeEnum } from '@shared/api/ylops';
 
-@Component
-export default class RouteOpetussuunnitelmaPerusopetusOppiaineet extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const props = defineProps({
+  opetussuunnitelmaDataStore: {
+    type: Object as () => OpetussuunnitelmaDataStore,
+    required: true,
+  },
+});
 
-  mounted() {
-    if (this.opetussuunnitelmaDataStore.navigation) {
-      const oppiaineetNavi = _.head(_.filter(this.opetussuunnitelmaDataStore.navigation.children, { type: NavigationNodeDtoTypeEnum.Perusopetusoppiaineet }));
-      if (oppiaineetNavi) {
-        const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
+const router = useRouter();
 
-        this.$router.push({
-          name: 'opetussuunnitelmaperusopetusoppiaine',
-          params: {
-            oppiaineId: _.toString(oppiaineId),
-          },
-        });
-      }
+onMounted(() => {
+  if (props.opetussuunnitelmaDataStore.navigation) {
+    const oppiaineetNavi = _.head(_.filter(props.opetussuunnitelmaDataStore.navigation.children, { type: NavigationNodeDtoTypeEnum.Perusopetusoppiaineet }));
+    if (oppiaineetNavi) {
+      const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
+
+      router.push({
+        name: 'opetussuunnitelmaperusopetusoppiaine',
+        params: {
+          oppiaineId: _.toString(oppiaineId),
+        },
+      });
     }
   }
-}
-
+});
 </script>
 
 <style scoped lang="scss">
