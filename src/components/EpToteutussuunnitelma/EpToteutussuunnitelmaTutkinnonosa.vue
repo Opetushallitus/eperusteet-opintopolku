@@ -53,20 +53,21 @@
         <hr/>
       </div>
 
-      <div v-if="arvoinninTyyppi === 'tutkinnonosakohtainen'" class="mb-5">
-        <ep-ammatillinen-arvioinnin-kohdealueet
-          :arviointiasteikot="arviointiasteikot"
-          :arvioinninKohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"/>
-        <hr/>
-      </div>
-
       <ep-form-content class="col-md-12 mb-5" v-if="hasAmmattitaitovaatimukset" name="ammattitaitovaatimukset">
         <EpAmmattitaitovaatimukset v-model="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset" :is-editing="false">
           <template v-slot:koodi="{koodi}">
             <span>{{ $kaanna(koodi.nimi) }}</span>
           </template>
         </EpAmmattitaitovaatimukset>
+        <hr/>
       </ep-form-content>
+
+      <div v-if="arvoinninTyyppi === 'tutkinnonosakohtainen'" class="mb-5">
+        <ep-ammatillinen-arvioinnin-kohdealueet
+          :arviointiasteikot="arviointiasteikot"
+          :arvioinninKohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"/>
+        <hr/>
+      </div>
 
       <GeneerinenArviointiTaulukko
         v-if="arvoinninTyyppi === 'geneerinen'"
@@ -328,7 +329,7 @@ export default class EpToteutussuunnitelmaTutkinnonosa extends Vue {
       return 'geneerinen';
     }
 
-    if (_.size(_.get(this.sisaltoviite.tosa, 'omaTutkinnonosa.arviointi.arvioinninKohdealueet')) > 0) {
+    if (_.size(_.get(this.sisaltoviite.tosa, 'omatutkinnonosa.arviointi.arvioinninKohdealueet')) > 0) {
       return 'tutkinnonosakohtainen';
     }
   }
