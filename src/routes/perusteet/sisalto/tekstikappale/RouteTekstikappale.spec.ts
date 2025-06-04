@@ -1,69 +1,15 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import '@/test/testInit';
 import RouteTekstikappale from './RouteTekstikappale.vue';
-import { mocks, stubs } from '@shared/utils/jestutils';
-import { perusteDataStoreMock, perusteenOsaStoreMock } from '@/storeMocks';
-import { Kielet } from '@shared/stores/kieli';
-import { ViiteLaaja } from '@shared/api/eperusteet';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
+import { createMount } from '@shared/utils/__tests__/stubs';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
 describe('RouteTekstikappale', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  Kielet.install(localVue);
-  localVue.use(new Kaannos());
 
   test('Renders', async () => {
-    const perusteDataStore = perusteDataStoreMock({});
-    const perusteenOsaStore = perusteenOsaStoreMock({});
 
-    perusteenOsaStore.perusteenOsaId = 2;
-    perusteenOsaStore.perusteenOsa = {
-      id: 2,
-      nimi: {
-        fi: 'tekstikappaleen nimi',
-      },
-      teksti: {
-        fi: 'tekstikappaleen teksti',
-      },
-    } as any;
-
-    const wrapper = mount(RouteTekstikappale as any, {
-      localVue,
-      propsData: {
-        perusteDataStore,
-        perusteenOsaStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-        $route: {
-          params: {},
-        },
-      },
-    });
-
-    expect(wrapper.html()).toContain('tekstikappaleen nimi');
-    expect(wrapper.html()).toContain('tekstikappaleen teksti');
-  });
-
-  test('Renders alikappaleet', async () => {
-    const perusteDataStore = perusteDataStoreMock();
-    const perusteenOsaStore = perusteenOsaStoreMock();
-
-    perusteenOsaStore.perusteenOsaId = 2;
-    perusteenOsaStore.perusteenOsa = {
-      id: 2,
-      nimi: {
-        fi: 'tekstikappaleen nimi',
-      },
-      teksti: {
-        fi: 'tekstikappaleen teksti',
-      },
-    } as any;
-    perusteenOsaStore.perusteenOsaViite = {
+    const perusteenOsaStore = {
+      perusteenOsaId: 2,
       perusteenOsa: {
         id: 2,
         nimi: {
@@ -73,48 +19,79 @@ describe('RouteTekstikappale', () => {
           fi: 'tekstikappaleen teksti',
         },
       },
-      lapset: [
-        {
-          perusteenOsa: {
-            nimi: {
-              fi: 'aliluvun nimi',
-            },
-            teksti: {
-              fi: 'aliluvun teksti',
-            },
+    };
+
+    const perusteDataStore = {
+      current: {},
+    };
+
+    (createPerusteOsaStore as any).mockReturnValue(perusteenOsaStore);
+    (getCachedPerusteStore as any).mockReturnValue(perusteDataStore);
+
+    const wrapper = createMount(RouteTekstikappale);
+
+    expect(wrapper.html()).toContain('tekstikappaleen nimi');
+    expect(wrapper.html()).toContain('tekstikappaleen teksti');
+  });
+
+  test('Renders alikappaleet', async () => {
+
+    const perusteenOsaStore = {
+      perusteenOsaId: 2,
+      perusteenOsa: {
+        id: 2,
+        nimi: {
+          fi: 'tekstikappaleen nimi',
+        },
+        teksti: {
+          fi: 'tekstikappaleen teksti',
+        },
+      },
+      perusteenOsaViite: {
+        perusteenOsa: {
+          id: 2,
+          nimi: {
+            fi: 'tekstikappaleen nimi',
           },
-          lapset: [
-            {
-              perusteenOsa: {
-                nimi: {
-                  fi: 'alialiluvun nimi',
-                },
-                teksti: {
-                  fi: 'alialiluvun teksti',
-                },
+          teksti: {
+            fi: 'tekstikappaleen teksti',
+          },
+        },
+        lapset: [
+          {
+            perusteenOsa: {
+              nimi: {
+                fi: 'aliluvun nimi',
+              },
+              teksti: {
+                fi: 'aliluvun teksti',
               },
             },
-          ],
-        },
-      ],
-    } as ViiteLaaja;
+            lapset: [
+              {
+                perusteenOsa: {
+                  nimi: {
+                    fi: 'alialiluvun nimi',
+                  },
+                  teksti: {
+                    fi: 'alialiluvun teksti',
+                  },
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
 
-    const wrapper = mount(RouteTekstikappale as any, {
-      localVue,
-      propsData: {
-        perusteDataStore,
-        perusteenOsaStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-        $route: {
-          params: {},
-        },
-      },
-    });
+    const perusteDataStore = {
+      current: {},
+    };
+
+    (createPerusteOsaStore as any).mockReturnValue(perusteenOsaStore);
+    (getCachedPerusteStore as any).mockReturnValue(perusteDataStore);
+
+    const wrapper = createMount(RouteTekstikappale);
 
     expect(wrapper.html()).toContain('tekstikappaleen nimi');
     expect(wrapper.html()).toContain('tekstikappaleen teksti');

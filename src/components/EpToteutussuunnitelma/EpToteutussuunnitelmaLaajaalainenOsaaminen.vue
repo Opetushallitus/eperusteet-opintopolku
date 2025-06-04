@@ -1,6 +1,5 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header" />
     <ep-content-viewer
       v-if="sisaltoviite.naytaPerusteenTeksti && perusteenTeksti"
       :value="$kaanna(perusteenTeksti)"

@@ -1,7 +1,5 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header" />
-
     <b-row>
       <b-col>
         <b-form-group :label="$t('laajuus')">

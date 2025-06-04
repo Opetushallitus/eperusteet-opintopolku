@@ -117,7 +117,7 @@
             / {{ $kaanna(oppiaine.nimi) }}
           </h3>
 
-          <portal-target name="sulje-kaikki-tavoitteet-portal" />
+          <div id="sulje-kaikki-tavoitteet-portal" />
         </div>
 
         <oppiaineen-vuosiluokka
@@ -165,7 +165,13 @@ const oppiaine = computed({
     return route.params.oppiaineId ? _.find(oppiaineetJaOppimaarat.value, { id: _.toNumber(route.params.oppiaineId) }) : null;
   },
   set: (value) => {
-    router.push({ params: { ...route.params, oppiaineId: value?.id } });
+    router.push({
+      name: route.name,
+      params: {
+        ...route.params,
+        oppiaineId: value?.id,
+      },
+    });
   },
 });
 

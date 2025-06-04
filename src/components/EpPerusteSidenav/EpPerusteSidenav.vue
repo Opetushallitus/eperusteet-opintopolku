@@ -17,8 +17,6 @@
 <script setup lang="ts">
 import _ from 'lodash';
 import { computed } from 'vue';
-
-import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSidenavNode from '@/components/EpSidenav/EpSidenavNode.vue';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';

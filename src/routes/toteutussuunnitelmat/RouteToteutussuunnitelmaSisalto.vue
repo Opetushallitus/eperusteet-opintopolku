@@ -6,12 +6,10 @@
       v-else-if="sisaltoviite"
       class="content"
     >
-      <portal to="toteutussuunnitelma-sisalto-header">
-        <h2 v-if="sisaltoviite.nimi">
-          <span v-if="numerointi">{{ numerointi }}</span>
-          {{ $kaanna(sisaltoviite.nimi) }}
-        </h2>
-      </portal>
+      <h2 v-if="sisaltoviite.nimi">
+        <span v-if="numerointi">{{ numerointi }}</span>
+        {{ $kaanna(sisaltoviite.nimi) }}
+      </h2>
 
       <ep-toteutussuunnitelma-tekstikappale
         v-if="sisaltoviite.tyyppi === 'tekstikappale'"
@@ -110,9 +108,16 @@ import EpToteutussuunnitelmaOsaamismerkki from '@/components/EpToteutussuunnitel
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import { $kaanna } from '@shared/utils/globals';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import { onMounted } from 'vue';
+import { ref } from 'vue';
 
 const route = useRoute();
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
+
+const mounted = ref(false);
+onMounted(() => {
+  mounted.value = true;
+});
 
 const sisaltoviiteId = computed(() => {
   return _.toNumber(route.params.sisaltoviiteId);

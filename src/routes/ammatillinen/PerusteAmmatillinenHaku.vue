@@ -146,7 +146,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
-import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
+import { useValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
@@ -166,7 +166,7 @@ const props = defineProps({
   },
 });
 
-const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
+const valmisteillaOlevatStore = useValmisteillaOlevatStore(pinia);
 const tutkintotyyppi = ref('kaikki');
 const query = ref('');
 const toggleQuery = ref<any>({});
@@ -351,7 +351,7 @@ const filters = computed(() => {
 });
 
 const valmisteillaOlevat = computed(() => {
-  return valmisteillaOlevatStore.perusteet.value;
+  return valmisteillaOlevatStore.perusteet;
 });
 </script>
 

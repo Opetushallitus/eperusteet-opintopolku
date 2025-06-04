@@ -1,7 +1,5 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header" />
-
     <ep-collapse
       v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti"
       tyyppi="perusteteksti"

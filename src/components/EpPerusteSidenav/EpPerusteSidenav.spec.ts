@@ -1,15 +1,28 @@
-import { mount, createLocalVue } from '@vue/test-utils';
-
 import EpPerusteSidenav from './EpPerusteSidenav.vue';
-import EpSidenavNode from '../EpSidenav/EpSidenavNode.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
-import { Kielet } from '@shared/stores/kieli';
-import { mocks, stubs } from '@shared/utils/jestutils';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
-import fiLocale from '@shared/translations/locale-fi.json';
-import svLocale from '@shared/translations/locale-sv.json';
-import Vue from 'vue';
+import { createMount, globalStubs } from '@shared/utils/__tests__/stubs';
+import { getCachedPerusteStore, usePerusteCacheStore } from '@/stores/PerusteCacheStore';
+import { nextTick } from 'vue';
+import { usePerusteDataStore } from '@/stores/PerusteDataStore';
+import { beforeEach, expect, test, vi } from 'vitest';
+import { createPinia, setActivePinia } from 'pinia';
+import { mount } from '@vue/test-utils';
+import { pinia } from '@/pinia';
+import { useRoute } from 'vue-router';
+import { ref } from 'vue';
+
+
+vi.mock('vue-router', () => ({ useRoute: vi.fn(), useRouter: vi.fn() }));
+vi.mocked(useRoute).mockReturnValue({ params: {
+  perusteId: '42',
+  viiteId: '1',
+  revision: '1',
+} } as any);
+
+vi.mock('@/stores/PerusteCacheStore', () => ({
+  getCachedPerusteStore: vi.fn(),
+  usePerusteCacheStore: vi.fn(),
+}));
 
 const navigationData = {
   type: 'root' as any,
@@ -97,220 +110,220 @@ const perusteData = {
 
 describe('EpPerusteSidenav', () => {
 
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  localVue.use(Kielet, {
-    messages: {
-      fi: {
-        ...fiLocale,
-      },
-      sv: {
-        ...svLocale,
-      },
-    },
+  const pinia = createPinia();
+  beforeEach(() => {
+    setActivePinia(pinia);
   });
-  localVue.use(new Kaannos());
+
+  const perusteDataStore = usePerusteDataStore('42-1');
+
+  (getCachedPerusteStore as any).mockReturnValue(perusteDataStore);
 
   describe('Rendering Root and spinners', () => {
-    const perusteDataStore = new PerusteDataStore(42);
 
     const wrapper = mount(EpPerusteSidenav as any, {
-      localVue,
-      propsData: {
-        perusteDataStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
+      global: {
+        ...globalStubs,
+        plugins: [
+          pinia,
+          ...globalStubs.plugins || [],
+        ],
       },
     });
 
     test('Works with incomplete data', async () => {
+      perusteDataStore.$patch({
+        perusteKaikki: null,
+      });
+      await nextTick();
       expect(wrapper.html()).toContain('oph-spinner');
     });
 
     test('Hides spinner', async () => {
-      perusteDataStore.perusteKaikki = perusteData;
-      perusteDataStore.navigation = {
-        ...navigationData,
-        children: [],
-      };
 
-      await Vue.nextTick();
+      perusteDataStore.$patch({
+        perusteKaikki: perusteData,
+        navigation: {
+          ...navigationData,
+          children: [],
+        }});
+
+      await nextTick();
 
       expect(wrapper.html()).not.toContain('oph-spinner');
     });
 
     test('Works with simple root node', () => {
-      const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
+      expect(wrapper.html()).toContain('perusteen-tiedot');
     });
 
     test('Works with complex data', async () => {
-      perusteDataStore.navigation = {
-        ...navigationData,
-        children: navigationDataViitteet as any,
-      };
+      perusteDataStore.$patch({
+        perusteKaikki: perusteData,
+        navigation: {
+          ...navigationData,
+          children: [
+            navigationDataViitteet as any,
+            ...navigationDataLoput as any,
+          ],
+        },
+      });
 
-      await Vue.nextTick();
+      await nextTick();
 
-      const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
-      expect(nodes.length).toEqual(7);
+      expect(wrapper.html()).toContain('perusteen-tiedot');
+      expect(wrapper.findAll('.node')).toHaveLength(4);
     });
 
     test('Works with oppiaineet', async () => {
-      perusteDataStore.navigation = {
+      perusteDataStore.$patch({
+        perusteKaikki: perusteData,
+        navigation: {
+          ...navigationData,
+          children: [
+            navigationDataViitteet as any,
+            ...navigationDataLoput as any,
+          ],
+        },
+      });
+
+      await nextTick();
+
+      expect(wrapper.findAll('.node')).toHaveLength(4);
+      expect(wrapper.findAll('.node').at(1)?.html()).toContain('perusteen-tiedot');
+      expect(wrapper.findAll('.node').at(2)?.html()).toContain('Päätaso');
+      expect(wrapper.findAll('.node').at(3)?.html()).toContain('oppiaineet');
+    });
+  });
+
+  describe('SidenavNode', async () => {
+    perusteDataStore.$patch({
+      perusteKaikki: {},
+      navigation: {
         ...navigationData,
         children: [
           navigationDataViitteet as any,
           ...navigationDataLoput as any,
         ],
-      };
-
-      await Vue.nextTick();
-
-      const nodes = wrapper.findAll(EpSidenavNode);
-
-      expect(nodes.length).toEqual(4);
-      expect(nodes.at(1).text()).toEqual('Perusteen tiedot');
-      expect(nodes.at(2).text()).toContain('Päätaso');
-      expect(nodes.at(3).text()).toContain('Oppiaineet');
-    });
-  });
-
-  describe('SidenavNode', async () => {
-    const perusteDataStore = new PerusteDataStore(42);
-
-    perusteDataStore.perusteKaikki = perusteData;
-    perusteDataStore.navigation = {
-      ...navigationData,
-      children: [
-        navigationDataViitteet as any,
-        ...navigationDataLoput as any,
-      ],
-    };
-
-    const wrapper = mount(EpPerusteSidenav as any, {
-      localVue,
-      propsData: {
-        perusteDataStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
       },
     });
 
-    await Vue.nextTick();
+    const wrapper = createMount(EpPerusteSidenav as any, {
+    });
+
+    await nextTick();
 
     test('Navigation with tiedot active', async () => {
-      perusteDataStore.currentRoute = {
-        name: 'perusteTiedot',
-        params: {
-          perusteId: '42',
-        },
-      };
+      perusteDataStore.$patch({
+        currentRoute: {
+          name: 'perusteTiedot',
+          params: {
+            perusteId: '42',
+          },
+        }});
 
-      await Vue.nextTick();
+      await nextTick();
 
-      const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.length).toEqual(4);
-      expect(nodes.at(1).text()).toContain('Perusteen tiedot');
-      expect(nodes.at(2).text()).toContain('Päätaso');
-      expect(nodes.at(3).text()).toContain('Oppiaineet');
+      expect(wrapper.findAll('.node')).toHaveLength(4);
+      expect(wrapper.findAll('.node').at(1)?.html()).toContain('perusteen-tiedot');
+      expect(wrapper.findAll('.node').at(2)?.html()).toContain('Päätaso');
+      expect(wrapper.findAll('.node').at(3)?.html()).toContain('oppiaineet');
     });
 
     test('Navigation with viite active', async () => {
-      perusteDataStore.currentRoute = {
-        name: 'perusteTekstikappale',
-        params: {
-          perusteId: '42',
-          viiteId: '1',
+      perusteDataStore.$patch({
+        perusteKaikki: perusteData,
+        navigation: {
+          ...navigationData,
+          children: [
+            navigationDataViitteet as any,
+            ...navigationDataLoput as any,
+          ],
         },
-      };
+        currentRoute: {
+          name: 'perusteTekstikappale',
+          params: {
+            perusteId: '42',
+            viiteId: '1',
+          },
+        }});
 
-      await Vue.nextTick();
+      await nextTick();
 
-      const nodes = wrapper.findAll(EpSidenavNode);
-      expect(nodes.length).toEqual(6);
-      expect(nodes.at(1).text()).toContain('Perusteen tiedot');
-      expect(nodes.at(2).text()).toContain('Päätaso');
-      expect(nodes.at(3).text()).toContain('Alitaso 1');
-      expect(nodes.at(4).text()).toContain('Alitaso 2');
-      expect(nodes.at(5).text()).toContain('Oppiaineet');
+      expect(wrapper.findAll('.node')).toHaveLength(6);
+      expect(wrapper.findAll('.node').at(1)?.html()).toContain('perusteen-tiedot');
+      expect(wrapper.findAll('.node').at(2)?.html()).toContain('Päätaso');
+      expect(wrapper.findAll('.node').at(3)?.html()).toContain('Alitaso 1');
+      expect(wrapper.findAll('.node').at(4)?.html()).toContain('Alitaso 2');
+      expect(wrapper.findAll('.node').at(5)?.html()).toContain('oppiaineet');
     });
   });
 
   describe('Navigation to previous and next', async () => {
-    const perusteDataStore = new PerusteDataStore(42);
-
-    perusteDataStore.perusteKaikki = perusteData;
-    perusteDataStore.navigation = {
-      ...navigationData,
-      children: [
-        navigationDataViitteet as any,
-        ...navigationDataLoput as any,
-      ],
-    };
-
-    perusteDataStore.currentRoute = {
-      name: 'perusteTiedot',
-      params: {
-        perusteId: '42',
-      },
-    };
-
-    const wrapper = mount(EpPreviousNextNavigation as any, {
-      localVue,
-      propsData: {
-        activeNode: perusteDataStore.current,
-        flattenedSidenav: perusteDataStore.flattenedSidenav,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-      },
-    });
-
-    await Vue.nextTick();
 
     test('Navigation next and previous', async () => {
+
+      perusteDataStore.$patch({
+        perusteKaikki: perusteData,
+        navigation: {
+          ...navigationData,
+          children: [
+            navigationDataViitteet as any,
+            ...navigationDataLoput as any,
+          ],
+        },
+        currentRoute: {
+          name: 'perusteTiedot',
+          params: {
+            perusteId: '42',
+          },
+        },
+      });
+
+      const wrapper = createMount(EpPreviousNextNavigation as any, {
+        props: {
+          activeNode: perusteDataStore.current,
+          flattenedSidenav: perusteDataStore.flattenedSidenav,
+        },
+      });
+
+      await nextTick();
+
       expect(wrapper.html()).toContain('Päätaso');
 
-      perusteDataStore.currentRoute = {
-        name: 'perusteTekstikappale',
-        params: {
-          perusteId: '42',
-          viiteId: '1',
+      perusteDataStore.$patch({
+        currentRoute: {
+          name: 'perusteTekstikappale',
+          params: {
+            perusteId: '42',
+            viiteId: '1',
+          },
         },
-      };
+      });
+
       wrapper.setProps({ activeNode: perusteDataStore.current });
 
-      await Vue.nextTick();
+      await nextTick();
 
-      expect(wrapper.html()).toContain('Perusteen tiedot');
-      expect(wrapper.html()).toContain('Oppiaineet');
+      expect(wrapper.html()).toContain('perusteen-tiedot');
+      expect(wrapper.html()).toContain('oppiaineet');
 
-      perusteDataStore.currentRoute = {
-        name: 'perusteTekstikappale',
-        params: {
-          perusteId: '42',
-          viiteId: '3',
+      perusteDataStore.$patch({
+        currentRoute: {
+          name: 'perusteTekstikappale',
+          params: {
+            perusteId: '42',
+            viiteId: '3',
+          },
         },
-      };
+      });
+
       wrapper.setProps({ activeNode: perusteDataStore.current });
 
-      await Vue.nextTick();
+      await nextTick();
 
       expect(wrapper.html()).toContain('Alitaso 1');
-      expect(wrapper.html()).toContain('Oppiaineet');
+      expect(wrapper.html()).toContain('oppiaineet');
     });
   });
 });

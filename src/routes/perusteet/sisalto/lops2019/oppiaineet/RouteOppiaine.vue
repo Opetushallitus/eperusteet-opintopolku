@@ -26,17 +26,13 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
-import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
-
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import OppiaineEsitys from './OppiaineEsitys.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 import * as _ from 'lodash';
-
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
 const perusteDataStore = getCachedPerusteStore();
-
 const route = useRoute();
 
 const termit = computed(() => {

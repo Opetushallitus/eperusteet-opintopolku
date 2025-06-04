@@ -1,18 +1,12 @@
 import * as _ from 'lodash';
 import Vue from 'vue';
-
 import { Kielet } from '@shared/stores/kieli';
-import { createLogger } from '@shared/utils/logger';
-import { getKaannokset, Lokalisointi } from '@shared/api/eperusteet';
 import { registerIconColorSchemeChange } from '@shared/utils/icon';
 import '@shared/config/styles';
-import { Virheet } from '@shared/stores/virheet';
 import { createApp } from 'vue';
 import App from './App.vue';
 import { createPinia } from 'pinia';
 import VueMatomo from 'vue-matomo';
-import Notifications from 'vue-notification';
-import PortalVue from 'portal-vue';
 import { createI18n } from 'vue-i18n';
 import { Kaannos } from '@shared/plugins/kaannos';
 import { Aikaleima } from '@shared/plugins/aikaleima';
@@ -30,7 +24,6 @@ import { configureCompat } from 'vue';
 import Sticky from 'vue-sticky-directive';
 import { LoadingPlugin } from 'vue-loading-overlay';
 import { createHead } from '@unhead/vue/client';
-// import Vuex from 'vuex';
 
 const app = createApp(App);
 
@@ -42,8 +35,6 @@ configureCompat({
 
 // Store app reference in globals utility
 setAppInstance(app);
-
-// Vue.use(Vuex);
 
 app.use(createPinia());
 app.use(router);
@@ -72,48 +63,24 @@ app.use(new Aikaleima());
 app.use(LoadingPlugin);
 app.use(createHead());
 
-// Register i18n's t function as a global property for use in templates and globals.ts
-app.config.globalProperties.$t = i18n.global.t;
-
-// legacy stuff for now
-
-Vue.use(Sticky);
-
-// Vue.use(Notifications);
-// Vue.use(PortalVue);
-
-// Vue.use(VueMeta, {
-//   refreshOnceOnNavigation: true,
-// });
-
-
-// Vue.use(Vahvistus);
-// Vue.use(Loading, {
-//   fullPage: true,
-//   color: '#159ecb',
-//   loader: 'dots',
-// });
-
 Vue.use(VueScrollTo, {
   duration: 1000,
 });
+Vue.use(Sticky);
 
-// const matomoSiteIds = {
-//   'eperusteet.opintopolku.fi': 11,
-//   'eperusteet.testiopintopolku.fi': 34,
-//   'localhost': 34,
-// };
+const matomoSiteIds = {
+  'eperusteet.opintopolku.fi': 11,
+  'eperusteet.testiopintopolku.fi': 34,
+  'localhost': 34,
+};
 
-// if (matomoSiteIds[window.location.hostname]) {
-//   Vue.use(VueMatomo, {
-//     host: 'https://analytiikka.opintopolku.fi/matomo',
-//     siteId: matomoSiteIds[window.location.hostname],
-//     router: router,
-//     disableCookies: true,
-//   });
-// }
+if (matomoSiteIds[window.location.hostname]) {
+  Vue.use(VueMatomo, {
+    host: 'https://analytiikka.opintopolku.fi/matomo',
+    siteId: matomoSiteIds[window.location.hostname],
+    router: router,
+    disableCookies: true,
+  });
+}
 
 app.mount('#app');
-// const logger = createLogger('Main');
-
-// Vue.config.productionTip = false;

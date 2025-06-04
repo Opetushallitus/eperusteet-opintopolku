@@ -60,9 +60,9 @@
           </ep-peruste-haku>
         </div>
         <template v-else>
-          <PortalTarget
+          <div
+            id="globalNavigation"
             ref="innerPortal"
-            name="globalNavigation"
           />
           <ep-sidebar :scroll-enabled="scroll">
             <template #bar>
