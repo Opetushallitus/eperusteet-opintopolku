@@ -1,7 +1,5 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header" />
-
     <EpSpinner v-if="!koulutuksenosat" />
 
     <template v-else>

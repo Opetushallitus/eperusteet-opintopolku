@@ -154,42 +154,6 @@ export const usePerusteDataStore = (key) => {
       esikatselu.value = rev === 0 ? true : undefined;
       revision.value = _.isNull(rev) ? undefined : rev;
       await init();
-
-      // return {
-      //   perusteKaikki,
-      //   perusteId,
-      //   esikatselu,
-      //   revision,
-      //   navigation,
-      //   suoritustapa,
-      //   currentRoute,
-      //   termit,
-      //   kuvat,
-      //   dokumentti,
-      //   korvaavatPerusteet,
-      //   sidenavFilter,
-      //   kvLiitteet,
-      //   osaamisalaKuvaukset,
-      //   liitteet,
-      //   lukioOppineet,
-      //   geneerisetArviointiasteikot,
-      //   arviointiasteikot,
-      //   julkaisut,
-      //   muutosmaaraykset,
-      //   maarays,
-      //   peruste,
-      //   sidenavLoading,
-      //   sidenav,
-      //   collapsedSidenav,
-      //   flattenedSidenav,
-      //   current,
-      //   fetchJulkaisut,
-      //   getJulkaistuPerusteSisalto,
-      //   getDokumentti,
-      //   getKvLiitteet,
-      //   getKvLiite,
-      //   updateRoute,
-      // };
     };
 
     const init = async () => {

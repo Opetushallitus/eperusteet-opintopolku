@@ -19,9 +19,9 @@
 
     <div class="container pt-4">
       <div class="lower">
-        <PortalTarget
+        <div
+          id="globalNavigation"
           ref="innerPortal"
-          name="globalNavigation"
         />
         <ep-sidebar :scroll-enabled="true">
           <template #bar>

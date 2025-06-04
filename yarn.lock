@@ -4352,7 +4352,6 @@ __metadata:
     mime: "npm:^4.0.6"
     moment: "npm:^2.24.0"
     pinia: "npm:^2.2.4"
-    portal-vue: "npm:^3.0.0"
     pretty: "npm:^2.0.0"
     qs: "npm:^6.9.0"
     register-service-worker: "npm:^1.6.2"
@@ -9388,18 +9387,6 @@ __metadata:
   peerDependencies:
     vue: ^2.5.18
   checksum: 10c0/7888e77dc2ea81509b560e3cd69e6f54e66af1a47bc82caa419996595912a3a3ca13ed0d5815fabf459dffc367643f92542fe5e574df00737dfc776de62b50cf
-  languageName: node
-  linkType: hard
-
-"portal-vue@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "portal-vue@npm:3.0.0"
-  peerDependencies:
-    vue: ^3.0.4
-  peerDependenciesMeta:
-    vue:
-      optional: true
-  checksum: 10c0/5d97fe41a2e8ec159dcd7f47802b2c39c62925fd76383909bd577699611539ea92284bfc9afe4c14cf1843091a921b5d2455f1bc17cb41e5e6ba9840c10a34bd
   languageName: node
   linkType: hard
 

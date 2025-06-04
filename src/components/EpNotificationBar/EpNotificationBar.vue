@@ -61,7 +61,11 @@ const navBarHeight = ref(0);
 onMounted(() => {
   if (hasNotification.value) {
     const navbar = document.getElementById('navigation-bar');
-    stickyElement.value['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
+    if (stickyElement?.value
+        && stickyElement.value['@@vue-sticky-directive']
+        && stickyElement.value['@@vue-sticky-directive'].options) {
+      stickyElement.value['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
+    }
   }
 });
 

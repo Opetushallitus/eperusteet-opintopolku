@@ -83,7 +83,6 @@ import RouteOpetussuunnitelmaKurssi from '@/routes/opetussuunnitelmat/sisalto/lo
 import { useKoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { useAmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { useKoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
-import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import RouteKotoLaajaAlainenOsaaminen from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
 import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
 import { redirects } from './utils/redirects';
@@ -95,15 +94,12 @@ import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 import { pinia } from '@/pinia';
 import { useOpetussuunnitelmaCacheStore, useToteutussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { createRouter, createWebHashHistory, useRoute } from 'vue-router';
-import { createWebHistory } from 'vue-router';
 import { useLoading } from 'vue-loading-overlay';
 import { loadingOptions } from './utils/loading';
-import { nextTick } from 'vue';
 import { useTiedoteStore } from './stores/TiedoteStore';
 
 const logger = createLogger('Router');
 
-const valmisteillaOlevatStore = new ValmisteillaOlevatStore();
 const perusteCacheStore = usePerusteCacheStore(pinia);
 const opetussuunnitelmaCacheStore = useOpetussuunnitelmaCacheStore(pinia);
 const toteutussuunnitelmaCacheStore = useToteutussuunnitelmaCacheStore(pinia);
@@ -236,7 +232,6 @@ export const router = createRouter({
             path: 'valmisteilla',
             component: RouteAmmatillinenValmisteillaOlevat,
             name: 'ammatillinenValmisteillaOlevat',
-            props: { valmisteillaOlevatStore },
           },
         ],
       }, {

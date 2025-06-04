@@ -1,69 +1,51 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import '@/test/testInit';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 import RouteModuuli from './RouteModuuli.vue';
-import { mocks, stubs } from '@shared/utils/jestutils';
-import { lops2019ModuuliStoreMock, perusteDataStoreMock } from '@/storeMocks';
-import { Kielet } from '@shared/stores/kieli';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
+import { createMount } from '@shared/utils/__tests__/stubs';
 
 describe('RouteModuuli', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  Kielet.install(localVue);
-  localVue.use(new Kaannos());
 
   test('Renders', async () => {
-    const perusteDataStore = perusteDataStoreMock();
-    perusteDataStore.getJulkaistuPerusteSisalto = () => {
-      return {
-        nimi: {
-          fi: 'Luvut ja yhtälöt',
-        } as any,
-        koodi: {
-          arvo: 'MAY',
-        },
-        pakollinen: true,
-        laajuus: 2,
-        tavoitteet: {
-          kohde: {
-            fi: 'Tavoitteiden kohde',
+    const perusteDataStore = {
+      getJulkaistuPerusteSisalto: () => {
+        return {
+          nimi: {
+            fi: 'Luvut ja yhtälöt',
           } as any,
-          tavoitteet: [
-            {
-              fi: 'Tavoitteiden tavoite',
-            } as any,
-          ],
-        },
-        sisallot: [
-          {
+          koodi: {
+            arvo: 'MAY',
+          },
+          pakollinen: true,
+          laajuus: 2,
+          tavoitteet: {
             kohde: {
-              fi: 'Sisältöjen kohde',
+              fi: 'Tavoitteiden kohde',
             } as any,
-            sisallot: [
+            tavoitteet: [
               {
-                fi: 'Sisältöjen sisältö',
+                fi: 'Tavoitteiden tavoite',
               } as any,
             ],
           },
-        ],
-      };
+          sisallot: [
+            {
+              kohde: {
+                fi: 'Sisältöjen kohde',
+              } as any,
+              sisallot: [
+                {
+                  fi: 'Sisältöjen sisältö',
+                } as any,
+              ],
+            },
+          ],
+        };
+      },
     };
 
-    const wrapper = mount(RouteModuuli as any, {
-      localVue,
-      propsData: {
-        perusteDataStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-        $route: {
-          params: {},
-        },
-      },
-    });
+    (getCachedPerusteStore as any).mockReturnValue(perusteDataStore);
+
+    const wrapper = createMount(RouteModuuli as any);
 
     expect(wrapper.html()).toContain('Luvut ja yhtälöt');
     expect(wrapper.html()).toContain('MAY');

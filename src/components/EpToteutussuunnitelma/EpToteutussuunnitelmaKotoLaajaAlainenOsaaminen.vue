@@ -1,7 +1,5 @@
 <template>
   <div v-if="perusteenOsa">
-    <portal-target name="toteutussuunnitelma-sisalto-header" />
-
     <div class="mb-4">
       <ep-content-viewer
         :value="$kaanna(perusteenOsa.yleiskuvaus)"

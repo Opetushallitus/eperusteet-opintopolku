@@ -83,7 +83,7 @@ jobs:
 
           yarn install --silent
           # yarn lint
-          # yarn test
+          yarn test
           yarn build
 
       - name: Upload eperusteet-opintopolku-ui

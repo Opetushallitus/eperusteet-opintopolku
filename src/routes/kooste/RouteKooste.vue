@@ -149,18 +149,12 @@ import { useHead } from '@unhead/vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
-import Paikalliset from './Paikalliset.vue';
 import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import _ from 'lodash';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import { OpasStore } from '@/stores/OpasStore';
-import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
-import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
-import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
-import { $t } from '@shared/utils/globals';
+import { $t, $kaanna } from '@shared/utils/globals';
 import {
   getKoosteKuvaus,
   getKoosteOpasStore,
@@ -177,7 +171,7 @@ const route = useRoute();
 const perusteKoosteStore = getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
 const opasStore = getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
 const tiedotteetStore = getKoosteTiedotteetStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
-const paikallinenStore = getKoostePaikallinenStore(route.params.koulutustyyppi)();
+const paikallinenStore = getKoostePaikallinenStore(route.params.koulutustyyppi);
 const paikallinenComponent = getKoostePaikallinenComponent(route.params.koulutustyyppi);
 const kuvaus = getKoosteKuvaus(route.params.koulutustyyppi);
 const subheader = getKoosteSubheader(route.params.koulutustyyppi);
@@ -206,6 +200,8 @@ const tiedotteet = computed(() => {
       .reverse()
       .value();
   }
+
+  return undefined;
 });
 
 const ohjeet = computed(() => {
@@ -221,6 +217,8 @@ const ohjeet = computed(() => {
       .reverse()
       .value();
   }
+
+  return undefined;
 });
 
 const julkaistutPerusteet = computed(() => {
@@ -233,11 +231,13 @@ const julkaistutPerusteet = computed(() => {
       .map(julkaisu => ({
         ...julkaisu,
         perusteId: _.toString(julkaisu.id),
-        kaannettyNimi: instance?.proxy?.$kaanna(julkaisu.nimi!),
+        kaannettyNimi: $kaanna(julkaisu.nimi!),
       }))
       .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
       .value();
   }
+
+  return undefined;
 });
 
 const julkaistutVoimassaolevatPerusteet = computed(() => {

@@ -96,19 +96,15 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue';
-import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
+import { useValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import * as _ from 'lodash';
+import { pinia } from '@/pinia';
 
-const props = defineProps({
-  valmisteillaOlevatStore: {
-    type: Object as () => ValmisteillaOlevatStore,
-    required: true,
-  },
-});
+const valmisteillaOlevatStore = useValmisteillaOlevatStore(pinia);
 
 const query = ref({
   sivu: 0,
@@ -123,7 +119,7 @@ onMounted(async () => {
 });
 
 const fetch = async () => {
-  await props.valmisteillaOlevatStore.fetch(query.value.sivu, query.value.sivukoko, query.value.koulutustyyppit);
+  await valmisteillaOlevatStore.fetch(query.value.sivu, query.value.sivukoko, query.value.koulutustyyppit);
 };
 
 watch(() => query.value, () => {
@@ -131,7 +127,7 @@ watch(() => query.value, () => {
 });
 
 const perusteet = computed(() => {
-  return props.valmisteillaOlevatStore.perusteet.value;
+  return valmisteillaOlevatStore.perusteet;
 });
 
 const perusteetMapped = computed(() => {

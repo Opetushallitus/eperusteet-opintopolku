@@ -1,30 +1,16 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import '@/test/testInit';
 import RouteOpetussuunnitelmaTekstikappale from './RouteOpetussuunnitelmaTekstikappale.vue';
-import { createMockedStore, mocks, stubs } from '@shared/utils/jestutils';
-import { opetussuunnitelmaDataStoreMock } from '@/storeMocks';
-import { Kielet } from '@shared/stores/kieli';
-import { Kieli } from '@shared/tyypit';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
-import { TekstiKappaleDto } from '@shared/api/ylops';
 import * as _ from 'lodash';
 import { sassTrue } from 'sass';
-import { vi } from 'vitest';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
-import Vue from 'vue';
+import { createMount } from '@shared/utils/__tests__/stubs';
+import { nextTick } from 'vue';
+import { delay } from '@shared/utils/delay';
 
 describe('RouteOpetussuunnitelmaTekstikappale', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  Kielet.install(localVue);
-  localVue.use(new Kaannos());
-
-  beforeEach(() => {
-    Kielet.setSisaltoKieli(Kieli.fi);
-  });
 
   const createOpetussuunnitelmaDataStore = (naytaPerusteenTeksti, naytaPohjanTeksti) => {
-    return createMockedStore(OpetussuunnitelmaDataStore, {
+    return {
       async fetchOpetussuunnitelma() {},
       perusteTermit: [
         {
@@ -182,35 +168,21 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
           ],
         };
       },
-    });
+    };
   };
 
 
-  function mountWrapper(propsData) {
-    return mount(RouteOpetussuunnitelmaTekstikappale as any, {
-      localVue,
-      propsData,
-      attachToDocument: true,
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-        $route: {
-          params: {},
-        },
-      },
-    });
+  function mountWrapper(naytaPerusteenTeksti, naytaPohjanTeksti) {
+    (getCachedOpetussuunnitelmaStore as any).mockReturnValue(createOpetussuunnitelmaDataStore(naytaPerusteenTeksti, naytaPohjanTeksti));
+    return createMount(RouteOpetussuunnitelmaTekstikappale);
   }
 
   test('Renders tekstikappaleen sisällöt', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(false, false),
-    });
+    const wrapper = mountWrapper(false, false);
 
     expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
 
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen nimi');
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
@@ -220,11 +192,9 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   });
 
   test('Renders tekstikappaleen ja perusteen sisällöt', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(true, false),
-    });
+    const wrapper = mountWrapper(true, false);
 
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen nimi');
     expect(wrapper.html()).toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
@@ -234,11 +204,9 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   });
 
   test('Renders tekstikappaleen ja pohjan sisällöt', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(false, true),
-    });
+    const wrapper = mountWrapper(false, true);
 
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen nimi');
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
@@ -249,11 +217,9 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   });
 
   test('Renders tekstikappaleen, pohjan ja perusteen sisällöt', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(true, true),
-    });
+    const wrapper = mountWrapper(true, true);
 
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen nimi');
     expect(wrapper.html()).toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
@@ -264,11 +230,9 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   });
 
   test('Renders tekstikappaleen alikappaleet', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(true, true),
-    });
+    const wrapper = mountWrapper(true, true);
 
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).toContain('tekstikappaleen nimi');
     expect(wrapper.html()).toContain('tekstikappaleen teksti');
     expect(wrapper.html()).toContain('tekstikappaleen alikappaleen nimi');
@@ -276,12 +240,10 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   });
 
   test('Renders tekstikappaleen, perusteen ja pohjan alikappaleet', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(true, sassTrue),
-    });
+    const wrapper = mountWrapper(true, sassTrue);
 
     // Kappale
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen nimi');
     expect(wrapper.html()).toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
@@ -300,32 +262,27 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   });
 
   test('Renders opsin kuvat', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(false, false),
-    });
+    const wrapper = mountWrapper(false, false);
 
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).toContain('<figure><img data-uid="d9dc2bb8-f694-46c9-b2d3-c7ca9b250917" src="eperusteet-ylops-service/api/opetussuunnitelmat/a/kuvat/b" alt="kuvituskuva"></figure>');
     expect(wrapper.html()).toContain('<figure><img data-uid="87259960-fa2c-48a8-8e4c-e52e67b46896" src="eperusteet-ylops-service/api/opetussuunnitelmat/c/kuvat/d" alt="kuvituskuva"></figure>');
   });
 
   test('Renders perusteen kuvat', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(true, false),
-    });
+    const wrapper = mountWrapper(true, false);
 
-    await Vue.nextTick();
+    await nextTick();
     expect(wrapper.html()).toContain('<figure><img data-uid="5777d209-1b61-4c48-a59b-9d7077bbfe15" src="eperusteet-service/api/perusteet/a/kuvat/b" alt="kuvituskuva"></figure>');
     expect(wrapper.html()).toContain('<figure><img data-uid="d6e37b6a-1aa9-4a21-b125-55c38a9e25d3" src="eperusteet-service/api/perusteet/c/kuvat/d" alt="kuvituskuva"></figure>');
   });
 
   test('Renders opsin termit', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(false, false),
-    });
+    const wrapper = mountWrapper(true, false);
 
-    await Vue.nextTick();
-    await Vue.nextTick();
+    await nextTick();
+    await nextTick();
+    await delay();
 
     // Testataan haetuilla termien datalla
     expect(wrapper.html()).toContain('<a class="termi" href="javascript:void(0)" data-viite="b68ae2c2-dbbf-478a-a5be-3cc767a36faa" title="Opsin termin otsikko" aria-label="Opsin termin otsikko">viite1</a>');
@@ -333,14 +290,14 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   });
 
   test('Renders perusteen termit', async () => {
-    const wrapper = mountWrapper({
-      opetussuunnitelmaDataStore: createOpetussuunnitelmaDataStore(true, false),
-    });
+    const wrapper = mountWrapper(true, false);
 
-    await Vue.nextTick();
-    await Vue.nextTick();
+    await nextTick();
+    await nextTick();
+    await delay();
 
     // Testataan haetuilla termien datalla
+
     expect(wrapper.html()).toContain('<a class="termi" href="javascript:void(0)" data-viite="Perusteenterminotsikko1572852406893" title="Perusteen termin otsikko" aria-label="Perusteen termin otsikko">perustetermi1</a>');
     expect(wrapper.html()).toContain('<a class="termi" href="javascript:void(0)" data-viite="Perusteentermi2notsikko1572852406893" title="Perusteen termin 2 otsikko" aria-label="Perusteen termin 2 otsikko">perustetermi2</a>');
   });

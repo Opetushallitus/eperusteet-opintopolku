@@ -17,8 +17,9 @@
             {{ $kaanna(alue.nimi) }}
           </h3>
 
-          <portal
-            to="sulje-kaikki-tavoitteet-portal"
+          <Teleport
+            v-if="mounted"
+            to="#sulje-kaikki-tavoitteet-portal"
             class="ml-auto"
             :disabled="avaaSuljeSiirrettavissa === false || !!alue.nimi"
           >
@@ -29,7 +30,7 @@
             >
               {{ $t('avaa-sulje-kaikki') }}
             </ep-button>
-          </portal>
+          </Teleport>
         </div>
 
         <ep-collapse
@@ -197,6 +198,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTable/EpArvioinninkohteetTable.vue';
 import TavoitteenSisaltoalueet from './TavoitteenSisaltoalueet.vue';
 import { $kaanna } from '@shared/utils/globals';
+import { onMounted } from 'vue';
 
 const props = defineProps({
   oppiaineenVuosiluokka: {
@@ -236,9 +238,14 @@ const props = defineProps({
 const tavoitteetAvattu = ref(false);
 const opetussuunnitelma = inject('opetussuunnitelma') as any;
 
-const tavoitecollapse = useTemplateRef('tavoitecollapse');
+const tavoitecollapse = ref<any[]>([]);
 const tavoitteenSisaltoalueet = useTemplateRef('tavoitteenSisaltoalueet');
 const tavoitteenLaajaAlaisetOsaamiset = useTemplateRef('tavoitteenLaajaAlaisetOsaamiset');
+const mounted = ref(false);
+
+onMounted(() => {
+  mounted.value = true;
+});
 
 const tavoitteet = computed(() => {
   return _.map(props.oppiaineenVuosiluokka?.tavoitteet, tavoite => {

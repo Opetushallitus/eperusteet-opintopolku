@@ -3,29 +3,29 @@
 exports[`EpFooter > Renders 1`] = `
 "<div data-v-d45b1334="" class="container">
   <footer data-v-d45b1334="">
-    <div data-v-d45b1334="" class="horizontal-line">
-      <routerlink-stub data-v-d45b1334="" to="[object Object]"><img data-v-d45b1334="" src="/eperusteet-frontend-utils/vue/public/img/banners/opintopolku/logo.svg" alt="eperusteet"></routerlink-stub>
-    </div>
+    <div data-v-d45b1334="" class="horizontal-line"><a data-v-d45b1334=""><img data-v-d45b1334="" src="/eperusteet-frontend-utils/vue/public/img/banners/opintopolku/logo.svg" alt="eperusteet"></a></div>
     <div data-v-d45b1334="" class="footer-row">
-      <div data-v-d45b1334="" class="footer-content"> footer-eperusteet-palvelu </div>
+      <div data-v-d45b1334="" class="footer-content">footer-eperusteet-palvelu</div>
       <div data-v-d45b1334="" class="footer-links">
-        <!---->
+        <!--v-if-->
         <div data-v-d45b1334="" class="d-flex">
           <epmaterialicon data-v-d45b1334="">chevron_right</epmaterialicon>
           <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste" rel="noopener noreferrer" target="_blank">
-              <!----> saavutettavuusseloste
-              <!----></a></div>
+              <!--v-if-->saavutettavuusseloste
+              <!--v-if-->
+            </a></div>
         </div>
         <div data-v-d45b1334="" class="d-flex">
           <epmaterialicon data-v-d45b1334="">chevron_right</epmaterialicon>
           <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank">
-              <!----> siirry-virkailijanakymaan <span data-v-5adf8627="" data-v-93539af8="" class="icon ml-1 material-icons" style="font-size: 18px;" alt="avautuu-uuteen-valilehteen"> launch </span></a></div>
+              <!--v-if-->siirry-virkailijanakymaan<span data-v-5adf8627="" data-v-93539af8="" class="material-icons icon ml-1" style="font-size: 18px;" alt="avautuu-uuteen-valilehteen">launch</span>
+            </a></div>
         </div>
       </div>
     </div>
-    <div data-v-d45b1334="" class="horizontal-line"><a data-v-d45b1334="" href="https://www.oph.fi/fi"><img data-v-d45b1334="" src="/eperusteet-frontend-utils/vue/public/img/banners/opintopolku/oph_logo2.png" alt="oph" class="logo"></a></div>
+    <div data-v-d45b1334="" class="horizontal-line"><a data-v-d45b1334="" href="https://www.oph.fi/fi"><img data-v-d45b1334="" class="logo" src="/eperusteet-frontend-utils/vue/public/img/banners/opintopolku/oph_logo2.png" alt="oph"></a></div>
     <div data-v-d45b1334="" class="footer-row">
-      <div data-v-d45b1334="" class="footer-oph"> footer-oph </div>
+      <div data-v-d45b1334="" class="footer-oph">footer-oph</div>
     </div>
   </footer>
 </div>"
