@@ -50,7 +50,8 @@
     </div>
     <b-sidebar
       id="sidebar-no-header"
-      v-model="isActive"
+      :visible="active"
+      @change="active = $event"
       aria-labelledby="sidebar-no-header-title"
       no-header
       bg-variant="white"
@@ -60,9 +61,8 @@
         <div class="mt-3 mb-4">
           <router-link
             :to="{ name: 'root'}"
-            @click.native="closeSidebar()"
           >
-            <span class="navi-home">
+            <span class="navi-home" @click="closeSidebar()">
               <EpMaterialIcon
                 icon-shape="outlined"
                 size="22px"
@@ -162,16 +162,16 @@ import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
-import { kansallisetOsaamismerkitRoute, koulutustyyppiLinks, navigoitavatKoulutustyyppiRyhmat, navigoitavatMuutRyhmat, ophMaarayksetRoute, otherLinks } from '@/utils/navigointi';
+import { navigoitavatKoulutustyyppiRyhmat, navigoitavatMuutRyhmat, otherLinks } from '@/utils/navigointi';
 import { Kielet } from '@shared/stores/kieli';
 import logo from '@assets/img/banners/opintopolku/logo.svg';
 import { createLogger } from '@shared/utils/logger';
-import { digitaalinenOsaaminen } from '@shared/utils/perusteet';
 import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { $kaanna } from '@shared/utils/globals';
 import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { pinia } from '@/pinia';
+import { Kieli } from '@shared/tyypit';
 
 const logger = createLogger('EpJulkinenSidenav');
 
@@ -210,13 +210,6 @@ const digitaalinenOsaaminenPeruste = computed(() => {
   return _.first(julkaistutKoulutustyypitStore.digitaalinenOsaaminen);
 });
 
-const isActive = computed({
-  get: () => active.value,
-  set: (value) => {
-    active.value = value;
-  },
-});
-
 const sisaltoKieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
 });
@@ -234,7 +227,7 @@ const navImage = computed(() => {
 });
 
 const icon = computed(() => {
-  return isActive.value ? 'close' : 'menu';
+  return active.value ? 'close' : 'menu';
 });
 
 // Methods
@@ -246,9 +239,9 @@ const valitseKieli = async (kieli) => {
       name: current.name,
       params: {
         ...current.params,
-        lang: kieli || router.options.fallbackLocale,
+        lang: kieli || Kieli.fi,
       },
-    } as RawLocation);
+    });
   }
   catch (e: any) {
     if (e.name === 'NavigationDuplicated') {

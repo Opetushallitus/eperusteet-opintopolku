@@ -142,7 +142,7 @@ const paaAlueet = computed((): any[] => {
   padding: $content-padding;
 }
 
-::v-deep .collapse-button {
+:deep(.collapse-button) {
   background-color: $digitaalinen-osaaminen-color;
   padding: 0.3rem 0.6rem;
   margin-bottom: 16px;

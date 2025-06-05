@@ -122,7 +122,7 @@ const props = defineProps({
 const emit = defineEmits(['mouseover']);
 
 const nimi = computed(() => {
-  return highlight($kaanna((props.ops.nimi as Object)), props.query);
+  return highlight($kaanna(props.ops.nimi), props.query);
 });
 
 const toimijat = computed(() => {

@@ -20,12 +20,21 @@ export default defineConfig(({ mode }) => {
           compilerOptions: {
             compatConfig: {
               MODE: 2,
+              COMPONENT_V_MODEL: false,
+              COMPILER_V_BIND_OBJECT_ORDER: false,
             },
           },
         },
       }),
       commonjs(),
     ],
+    css: {
+      preprocessorOptions: {
+        scss: {
+          silenceDeprecations: ['mixed-decls', 'color-functions', 'global-builtin', 'import', 'abs-percent'],
+        },
+      },
+    },
     define: {
       'process.env.BUILD': JSON.stringify(env.BUILD), // Define the BUILD environment variable
     },

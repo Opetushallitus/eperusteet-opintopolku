@@ -63,8 +63,7 @@ import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiT
 import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
 import RoutePerusteMuutoshistoria from '@/routes/perusteet/tiedot/RoutePerusteMuutoshistoria.vue';
 
-import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
-import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { changeLang } from '@shared/utils/router';
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
 import { createLogger } from '@shared/utils/logger';
@@ -312,7 +311,7 @@ export const router = createRouter({
           };
         },
         beforeEnter: async (to, from, next) => {
-          await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, to.params.revision);
+          await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, _.toNumber(to.params.revision));
           next();
         },
         children: [{

@@ -342,12 +342,12 @@ const kuvat = computed(() => {
 .content {
   padding: 0 $content-padding;
 
-  ::v-deep .ep-button .btn-link {
+  :deep(.ep-button .btn-link) {
     padding-left: 0px;
   }
 
   .lao {
-    ::v-deep .ep-collapse {
+    :deep(.ep-collapse) {
       padding-top: 0px;
       padding-bottom: 0px;
     }

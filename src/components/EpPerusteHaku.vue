@@ -43,9 +43,8 @@
             >
               <router-link
                 :to="tulos.location"
-                @click.native="clear"
               >
-                {{ tulos.nimi }}
+                <span @click="clear">{{ tulos.nimi }}</span>
               </router-link>
             </slot>
           </div>

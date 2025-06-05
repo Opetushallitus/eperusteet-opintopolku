@@ -32,7 +32,7 @@
           </ep-form-content>
         </div>
         <div
-          v-if="koulutustyyppi"
+          v-if="opetussuunnitelma.koulutustyyppi"
           class="col-md-12"
         >
           <ep-form-content
@@ -40,7 +40,7 @@
             header-type="h3"
             header-class="h6"
           >
-            <ep-field v-model="koulutustyyppi" />
+            {{ $t(opetussuunnitelma.koulutustyyppi) }}
           </ep-form-content>
         </div>
         <div
@@ -205,10 +205,6 @@ const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
 const opetussuunnitelma = computed(() => {
   return opetussuunnitelmaDataStore.opetussuunnitelma!;
-});
-
-const koulutustyyppi = computed(() => {
-  return $kaanna(opetussuunnitelma.value.koulutustyyppi as string);
 });
 
 const kunnat = computed(() => {

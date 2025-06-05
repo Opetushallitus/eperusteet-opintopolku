@@ -31,6 +31,7 @@
 import { computed } from 'vue';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import osaamismerkkiLogoFI from '@assets/img/images/osaamismerkki_main_FI.svg';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 const props = defineProps({
   tyyppi: {

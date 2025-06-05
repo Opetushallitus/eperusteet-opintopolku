@@ -85,6 +85,8 @@ const tutkinnonOsaViitteet = computed(() => {
       }))
       .value();
   }
+
+  return undefined;
 });
 
 const fields = computed(() => {

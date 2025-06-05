@@ -82,7 +82,7 @@ jobs:
           cd ../..
 
           yarn install --silent
-          # yarn lint
+          yarn lint
           yarn test
           yarn build
 

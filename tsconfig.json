@@ -27,6 +27,7 @@
       "scripthost"
     ],
     "resolveJsonModule": true,
+    "types": ["vitest/globals"],
   },
   "include": [
     "src/**/*.ts",
@@ -37,8 +38,6 @@
     "eperusteet-frontend-utils/vue/src/**/*.vue",
     "tests/integration/**/*.ts",
     "tests/integration/**/*.tsx",
-    "eperusteet-frontend-utils/components/utils/perusteet.ts",
-    "eperusteet-frontend-utils/components/utils/NavigationBuilder.ts"
   ],
   "exclude": [
     "node_modules",

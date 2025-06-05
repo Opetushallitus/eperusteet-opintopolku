@@ -147,7 +147,7 @@
 
 <script setup lang="ts">
 import * as _ from 'lodash';
-import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
@@ -169,8 +169,6 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 const route = useRoute();
-const instance = getCurrentInstance();
-const $el = instance?.proxy?.$el;
 
 const maarayksetStore = new MaarayksetStore();
 const perPage = ref(10);
@@ -199,7 +197,13 @@ onMounted(async () => {
 
 watch(sivu, async () => {
   await fetch();
-  ($el?.querySelector('.maarays') as any)?.focus();
+  await nextTick();
+  const firstMaarays = document.querySelector('.maarays') as HTMLElement;
+  if (firstMaarays) {
+    firstMaarays.setAttribute('tabindex', '-1');
+    firstMaarays.focus();
+    await nextTick();
+  }
 });
 
 watch(query, async () => {

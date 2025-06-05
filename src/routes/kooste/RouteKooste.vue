@@ -183,6 +183,7 @@ const instance = getCurrentInstance();
 const showEraantyneet = ref(false);
 
 onMounted(async () => {
+  await fetch();
   await nextTick();
   const h1 = instance?.proxy?.$el.querySelector('h1');
   h1?.setAttribute('tabindex', '-1');
@@ -191,6 +192,10 @@ onMounted(async () => {
 
 const koulutustyyppi = computed(() => {
   return perusteKoosteStore?.koulutustyyppi.value || _.get(route.params, 'koulutustyyppi');
+});
+
+const routeKoulutustyyppi = computed(() => {
+  return route.params.koulutustyyppi;
 });
 
 const tiedotteet = computed(() => {
@@ -291,8 +296,7 @@ const avaaOpas = (ohje: any) => {
   });
 };
 
-// Watch for changes to koulutustyyppi
-watch(koulutustyyppi, async () => {
+const fetch = async () => {
   if (perusteKoosteStore) {
     await perusteKoosteStore.fetch();
     await tiedotteetStore.fetch(perusteKoosteStore?.perusteJulkaisut?.value);
@@ -300,11 +304,20 @@ watch(koulutustyyppi, async () => {
   else {
     await tiedotteetStore.fetch();
   }
-}, { immediate: true });
+};
+
+// Watch for changes to koulutustyyppi
+watch(koulutustyyppi, async () => {
+  await fetch();
+});
 
 // Replace @Meta decorator with useHead
 useHead({
   title: computed(() => $t(koulutustyyppi.value)),
+});
+
+watch(routeKoulutustyyppi, async () => {
+  window.location.reload();
 });
 </script>
 
@@ -314,7 +327,7 @@ useHead({
 
 @include shadow-tile;
 
-::v-deep .ep-collapse .header {
+:deep(.ep-collapse .header) {
   color: #3367E3;
 }
 
