@@ -197,7 +197,7 @@ const page = computed({
       ...query.value,
       sivu: page - 1,
     };
-  }
+  },
 });
 
 const queryNimi = computed(() => query.value.nimi);

@@ -122,7 +122,7 @@ export const useToteutussuunnitelmaDataStore = (key) => {
         await Promise.all(
           _.map(
             perusteIds,
-            async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId)).data
+            async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId)).data,
           ),
         ),
       );
@@ -131,7 +131,7 @@ export const useToteutussuunnitelmaDataStore = (key) => {
         await Promise.all(
           _.map(
             perusteIds,
-            async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId)).data
+            async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId)).data,
           ),
         ),
       );

@@ -190,9 +190,12 @@ describe('EpPerusteSidenav', () => {
       await nextTick();
 
       expect(wrapper.findAll('.node')).toHaveLength(4);
-      expect(wrapper.findAll('.node').at(1)?.html()).toContain('perusteen-tiedot');
-      expect(wrapper.findAll('.node').at(2)?.html()).toContain('Päätaso');
-      expect(wrapper.findAll('.node').at(3)?.html()).toContain('oppiaineet');
+      expect(wrapper.findAll('.node').at(1)
+        ?.html()).toContain('perusteen-tiedot');
+      expect(wrapper.findAll('.node').at(2)
+        ?.html()).toContain('Päätaso');
+      expect(wrapper.findAll('.node').at(3)
+        ?.html()).toContain('oppiaineet');
     });
   });
 
@@ -225,9 +228,12 @@ describe('EpPerusteSidenav', () => {
       await nextTick();
 
       expect(wrapper.findAll('.node')).toHaveLength(4);
-      expect(wrapper.findAll('.node').at(1)?.html()).toContain('perusteen-tiedot');
-      expect(wrapper.findAll('.node').at(2)?.html()).toContain('Päätaso');
-      expect(wrapper.findAll('.node').at(3)?.html()).toContain('oppiaineet');
+      expect(wrapper.findAll('.node').at(1)
+        ?.html()).toContain('perusteen-tiedot');
+      expect(wrapper.findAll('.node').at(2)
+        ?.html()).toContain('Päätaso');
+      expect(wrapper.findAll('.node').at(3)
+        ?.html()).toContain('oppiaineet');
     });
 
     test('Navigation with viite active', async () => {
@@ -251,11 +257,16 @@ describe('EpPerusteSidenav', () => {
       await nextTick();
 
       expect(wrapper.findAll('.node')).toHaveLength(6);
-      expect(wrapper.findAll('.node').at(1)?.html()).toContain('perusteen-tiedot');
-      expect(wrapper.findAll('.node').at(2)?.html()).toContain('Päätaso');
-      expect(wrapper.findAll('.node').at(3)?.html()).toContain('Alitaso 1');
-      expect(wrapper.findAll('.node').at(4)?.html()).toContain('Alitaso 2');
-      expect(wrapper.findAll('.node').at(5)?.html()).toContain('oppiaineet');
+      expect(wrapper.findAll('.node').at(1)
+        ?.html()).toContain('perusteen-tiedot');
+      expect(wrapper.findAll('.node').at(2)
+        ?.html()).toContain('Päätaso');
+      expect(wrapper.findAll('.node').at(3)
+        ?.html()).toContain('Alitaso 1');
+      expect(wrapper.findAll('.node').at(4)
+        ?.html()).toContain('Alitaso 2');
+      expect(wrapper.findAll('.node').at(5)
+        ?.html()).toContain('oppiaineet');
     });
   });
 

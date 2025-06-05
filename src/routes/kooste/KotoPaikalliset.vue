@@ -110,7 +110,7 @@ const page = computed({
       ...query.value,
       sivu: page - 1,
     };
-  }
+  },
 });
 
 watch(() => queryNimi.value, () => {
