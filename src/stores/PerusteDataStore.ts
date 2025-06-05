@@ -185,11 +185,8 @@ export const usePerusteDataStore = (key) => {
         fetchJulkaisut(),
       ]);
 
-      if (isKoulutustyyppiAmmatillinen(perusteKaikki.value?.koulutustyyppi!)) {
-        try {
-          await getKvLiitteet();
-        }
-        catch (err) { }
+      if (perusteKaikki.value?.koulutustyyppi && isKoulutustyyppiAmmatillinen(perusteKaikki.value.koulutustyyppi)) {
+        await getKvLiitteet();
 
         const results = await Promise.all([
           Perusteet.getOsaamisalat(perusteId.value) as any,

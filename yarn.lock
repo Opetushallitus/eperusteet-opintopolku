@@ -1950,15 +1950,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/composition-api@npm:^1.7.2":
-  version: 1.7.2
-  resolution: "@vue/composition-api@npm:1.7.2"
-  peerDependencies:
-    vue: ">= 2.5 < 2.7"
-  checksum: 10c0/2b09af411e04c64e93fb1c40432d7994f81117becb819e9ac928447342194cd66b0cf3f9f7c6b992b2e8ab474017eae531ae1c48e8a6e9419c7b82df763ae881
-  languageName: node
-  linkType: hard
-
 "@vue/devtools-api@npm:^6.5.0, @vue/devtools-api@npm:^6.6.3, @vue/devtools-api@npm:^6.6.4":
   version: 6.6.4
   resolution: "@vue/devtools-api@npm:6.6.4"
@@ -4322,7 +4313,6 @@ __metadata:
     "@vitest/ui": "npm:^3.1.1"
     "@vue/compat": "npm:^3.5.13"
     "@vue/compiler-sfc": "npm:^3.5.13"
-    "@vue/composition-api": "npm:^1.7.2"
     "@vue/eslint-config-standard": "npm:^4.0.0"
     "@vue/eslint-config-typescript": "npm:^12.0.0"
     "@vue/test-utils": "npm:2.4.6"

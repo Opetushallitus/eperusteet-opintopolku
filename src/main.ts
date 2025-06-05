@@ -8,7 +8,7 @@ import App from './App.vue';
 import { createPinia } from 'pinia';
 import VueMatomo from 'vue-matomo';
 import { createI18n } from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
+import kaannos, { Kaannos } from '@shared/plugins/kaannos';
 import { Aikaleima } from '@shared/plugins/aikaleima';
 import VueScrollTo from 'vue-scrollto';
 import { Kieli } from '@shared/tyypit';
@@ -16,7 +16,6 @@ import { setAppInstance } from '@shared/utils/globals';
 import { router } from './router';
 import '@shared/config/bootstrap';
 import 'material-icons/iconfont/material-icons.css';
-import '@shared/config/defaultcomponents';
 import fiLocale from '@shared/translations/locale-fi.json';
 import svLocale from '@shared/translations/locale-sv.json';
 import enLocale from '@shared/translations/locale-en.json';
@@ -38,7 +37,7 @@ setAppInstance(app);
 
 app.use(createPinia());
 app.use(router);
-app.use(new Kaannos(), { squareBrackets: false });
+app.use(kaannos, { squareBrackets: false });
 
 export const i18n = createI18n({
   legacy: false, // Set to false to use Composition API

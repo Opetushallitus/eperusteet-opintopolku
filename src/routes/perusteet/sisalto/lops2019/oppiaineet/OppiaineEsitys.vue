@@ -262,42 +262,56 @@ const koodi = computed(() => {
   if (props.oppiaine) {
     return props.oppiaine.koodi;
   }
+
+  return undefined;
 });
 
 const hasTehtava = computed(() => {
   if (props.oppiaine) {
     return props.oppiaine.tehtava && props.oppiaine.tehtava.kuvaus;
   }
+
+  return undefined;
 });
 
 const hasLaajaAlaiset = computed(() => {
   if (props.oppiaine) {
     return props.oppiaine.laajaAlaisetOsaamiset && props.oppiaine.laajaAlaisetOsaamiset.kuvaus;
   }
+
+  return undefined;
 });
 
 const tavoitteet = computed(() => {
   if (props.oppiaine) {
     return props.oppiaine.tavoitteet;
   }
+
+  return undefined;
 });
 
 const hasTavoitteet = computed(() => {
   if (tavoitteet.value) {
     return !_.isEmpty(tavoitteet.value) && !_.isEmpty(tavoitteet.value.tavoitealueet);
   }
+
+  return undefined;
 });
 
 const hasArviointi = computed(() => {
   if (props.oppiaine) {
     return props.oppiaine.arviointi && props.oppiaine.arviointi.kuvaus;
   }
+
+  return undefined;
 });
 
 const hasOpiskeluymparistoTyotavat = computed(() => {
   if (props.oppiaine) {
     return props.oppiaine.opiskeluymparistoTyotavat && props.oppiaine.opiskeluymparistoTyotavat.kuvaus;
   }
+
+  return undefined;
 });
 
 const opintojaksojenModuuliUrit = computed(() => {
@@ -312,6 +326,8 @@ const moduulit = computed(() => {
   if (props.oppiaine) {
     return _.filter(props.oppiaine.moduulit, moduuli => _.size(opintojaksojenModuuliUrit.value) === 0 || _.includes(opintojaksojenModuuliUrit.value, _.get(moduuli, 'koodi.uri')));
   }
+
+  return undefined;
 });
 
 const hasModuulit = computed(() => {
@@ -335,6 +351,8 @@ const pakollisetModuulitExtended = computed(() => {
       };
     });
   }
+
+  return undefined;
 });
 
 const hasPakollisetModuulit = computed(() => {
@@ -358,6 +376,8 @@ const valinnaisetModuulitExtended = computed(() => {
       };
     });
   }
+
+  return undefined;
 });
 
 const hasValinnaisetModuulit = computed(() => {
@@ -368,6 +388,8 @@ const oppimaarat = computed(() => {
   if (props.oppiaine) {
     return props.oppiaine.oppimaarat;
   }
+
+  return undefined;
 });
 
 const oppimaaratExtended = computed(() => {
@@ -388,6 +410,8 @@ const oppimaaratExtended = computed(() => {
       };
     });
   }
+
+  return undefined;
 });
 
 const hasOppimaarat = computed(() => {
@@ -416,6 +440,8 @@ const opintojaksotExtended = computed(() => {
       .sortBy('jarjestys', ...koodiSorters())
       .value();
   }
+
+  return undefined;
 });
 </script>
 

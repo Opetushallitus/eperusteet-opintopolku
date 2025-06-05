@@ -63,8 +63,7 @@ import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiT
 import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
 import RoutePerusteMuutoshistoria from '@/routes/perusteet/tiedot/RoutePerusteMuutoshistoria.vue';
 
-import { changeLang, resolveRouterMetaProps, removeQueryParam } from '@shared/utils/router';
-import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { changeLang } from '@shared/utils/router';
 import { Virheet } from '@shared/stores/virheet';
 import { SovellusVirhe } from '@shared/tyypit';
 import { createLogger } from '@shared/utils/logger';

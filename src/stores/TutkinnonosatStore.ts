@@ -43,7 +43,7 @@ export class TutkinnonosatStore {
       return {
         jarjestysnro: index + 1,
         tutkinnonosaViite,
-        perusteenTutkinnonosaViite: perusteenTutkinnonosaViitteet[tutkinnonosaViite.tosa?.perusteentutkinnonosa!],
+        perusteenTutkinnonosaViite: tutkinnonosaViite.tosa?.perusteentutkinnonosa ? perusteenTutkinnonosaViitteet[tutkinnonosaViite.tosa.perusteentutkinnonosa] : undefined,
       };
     });
   }

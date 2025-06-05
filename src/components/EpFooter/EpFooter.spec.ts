@@ -15,7 +15,7 @@ describe('EpFooter', () => {
       },
     });
 
-    nextTick();
+    await nextTick();
     expect(wrapper.html()).toMatchSnapshot();
   });
 });
