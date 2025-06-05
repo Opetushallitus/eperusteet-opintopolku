@@ -4,7 +4,7 @@ import { OpetussuunnitelmaJulkinenDto, OpetussuunnitelmatJulkiset } from '@share
 import { IPaikallinenStore } from './IPaikallinenStore';
 import { useOpetussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { Page } from '@shared/tyypit';
-import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
+import { debounced } from '@shared/utils/delay';
 import { Kielet } from '@shared/stores/kieli';
 
 export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
@@ -14,8 +14,11 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
 
   public readonly opetussuunnitelmatPaged = computed(() => this.state.opetussuunnitelmat);
 
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  public async fetchQuery(query) {
+  addToCache = debounced(async (opetussuunnitelmaId) => {
+    useOpetussuunnitelmaCacheStore().addOpetussuunnitelmaStore(opetussuunnitelmaId, undefined);
+  });
+
+  fetchQuery = debounced(async (query) => {
     this.state.opetussuunnitelmat = null;
     this.state.opetussuunnitelmat = (await OpetussuunnitelmatJulkiset.getAllJulkaistutOpetussuunnitelmat(
       query.koulutustyypit,
@@ -25,10 +28,5 @@ export class YleissivistavatPaikallisetStore implements IPaikallinenStore {
       query.page,
       10,
     )).data as any;
-  }
-
-  @Debounced(1000)
-  public async addToCache(opetussuunnitelmaId) {
-    useOpetussuunnitelmaCacheStore().addOpetussuunnitelmaStore(opetussuunnitelmaId);
-  }
+  });
 }

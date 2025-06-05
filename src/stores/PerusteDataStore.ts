@@ -149,10 +149,10 @@ export const usePerusteDataStore = (key) => {
     });
 
     // Actions
-    const create = async (id: number, rev: number | null = null) => {
+    const create = async (id: number, rev?: number) => {
       perusteId.value = id;
       esikatselu.value = rev === 0 ? true : undefined;
-      revision.value = _.isNull(rev) ? undefined : rev;
+      revision.value = rev;
       await init();
     };
 
@@ -185,11 +185,8 @@ export const usePerusteDataStore = (key) => {
         fetchJulkaisut(),
       ]);
 
-      if (isKoulutustyyppiAmmatillinen(perusteKaikki.value?.koulutustyyppi!)) {
-        try {
-          await getKvLiitteet();
-        }
-        catch (err) { }
+      if (perusteKaikki.value?.koulutustyyppi && isKoulutustyyppiAmmatillinen(perusteKaikki.value.koulutustyyppi)) {
+        await getKvLiitteet();
 
         const results = await Promise.all([
           Perusteet.getOsaamisalat(perusteId.value) as any,

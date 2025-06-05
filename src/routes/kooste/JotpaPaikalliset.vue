@@ -112,7 +112,7 @@ const fetch = async () => {
 };
 
 const page = computed({
-  get: () => opetussuunnitelmatPaged.value?.sivu! + 1,
+  get: () => (opetussuunnitelmatPaged.value?.sivu ?? 0) + 1,
   set: (page) => {
     query.value = {
       ...query.value,

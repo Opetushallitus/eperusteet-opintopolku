@@ -3,6 +3,7 @@ import { usePerusteDataStore } from '@/stores/PerusteDataStore';
 import { ref } from 'vue';
 import { pinia } from '@/pinia';
 import { useRoute } from 'vue-router';
+import _ from 'lodash';
 
 export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
   const perusteet = ref({});
@@ -11,7 +12,7 @@ export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
     const key = perusteId + '-' + revision;
     if (!perusteet.value[key]) {
       const perusteDataStore = usePerusteDataStore(key);
-      await perusteDataStore.create(perusteId, revision);
+      await perusteDataStore.create(perusteId, _.isNumber(revision) ? _.toNumber(revision) : undefined);
       perusteet.value[key] = perusteDataStore;
     }
   };

@@ -129,7 +129,7 @@
         name="ammattitaitovaatimukset"
       >
         <EpAmmattitaitovaatimukset
-          v-model="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset"
+          :model-value="sisaltoviite.tosa.omatutkinnonosa.ammattitaitovaatimukset"
           :is-editing="false"
         >
           <template #koodi="{koodi}">

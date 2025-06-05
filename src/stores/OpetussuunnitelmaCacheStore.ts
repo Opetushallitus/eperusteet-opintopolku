@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { pinia } from '@/pinia';
 import { useRoute } from 'vue-router';
 import { useToteutussuunnitelmaDataStore } from './ToteutussuunnitelmaDataStore';
+import _ from 'lodash';
 
 export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCacheStore', () => {
   const opetussuunnitelmat = ref({});
@@ -12,7 +13,7 @@ export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCach
     const key = `${id}-${revision}`;
     if (!opetussuunnitelmat.value[key]) {
       const opetussuunnitelmaDataStore = useOpetussuunnitelmaDataStore(key);
-      await opetussuunnitelmaDataStore.create(id, revision);
+      await opetussuunnitelmaDataStore.create(id, _.isNumber(revision) ? _.toNumber(revision) : undefined);
       opetussuunnitelmat.value[key] = opetussuunnitelmaDataStore;
     }
   };
@@ -32,7 +33,7 @@ export const useToteutussuunnitelmaCacheStore = defineStore('toteutussuunnitelma
     const key = `${id}-${revision}`;
     if (!toteutussuunnitelmat.value[key]) {
       const opetussuunnitelmaDataStore = useToteutussuunnitelmaDataStore(key);
-      await opetussuunnitelmaDataStore.create(id, revision);
+      await opetussuunnitelmaDataStore.create(id, _.isNumber(revision) ? _.toNumber(revision) : undefined);
       toteutussuunnitelmat.value[key] = opetussuunnitelmaDataStore;
     }
   };

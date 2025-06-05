@@ -411,11 +411,11 @@ const kohdealueetById = computed(() => {
   .content {
     padding: 0 $content-padding;
 
-    ::v-deep .nav-tabs li a {
+    :deep(.nav-tabs li a) {
       margin-left: 0px !important;
     }
 
-    ::v-deep .ep-button .btn  {
+    :deep(.ep-button .btn) {
       padding-left: 0 !important;
       .teksti {
         padding-left: 0 !important;
@@ -423,7 +423,7 @@ const kohdealueetById = computed(() => {
     }
 
     .lao, .sisaltoalueet {
-      ::v-deep .ep-collapse {
+      :deep(.ep-collapse) {
         padding-top: 0px !important;
         padding-bottom: 0px !important;
       }

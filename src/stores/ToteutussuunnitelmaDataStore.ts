@@ -62,12 +62,11 @@ export const useToteutussuunnitelmaDataStore = (key) => {
     const perusteidenTutkinnonOsienViitteet = ref<TutkinnonOsaViiteSuppeaDto[] | null>(null);
 
     // Static create method as a regular function
-    const create = async (opsId: number, rev: number | undefined = undefined) => {
+    const create = async (opsId: number, rev?: number) => {
       opetussuunnitelmaId.value = opsId;
       esikatselu.value = rev === 0 ? true : undefined;
       revision.value = rev;
       await init();
-      // return store;
     };
 
     // Actions

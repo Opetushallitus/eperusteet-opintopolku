@@ -38,7 +38,7 @@
       name="ammattitaitovaatimukset"
     >
       <EpAmmattitaitovaatimukset
-        v-model="tutkinnonosa.ammattitaitovaatimukset2019"
+        :model-value="tutkinnonosa.ammattitaitovaatimukset2019"
         :is-editing="false"
       >
         <template #koodi="{koodi}">

@@ -47,15 +47,13 @@ import ModuuliEsitys from '@shared/components/EpOpintojaksonModuuli/ModuuliEsity
 import { $kaanna } from '@shared/utils/globals';
 
 const props = defineProps({
-  opetussuunnitelmaDataStore: {
-    type: Object as () => OpetussuunnitelmaDataStore,
-    required: true,
-  },
   moduuli: {
     type: Object as () => Lops2019ModuuliDto,
     required: true,
   },
 });
+
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
 const koodi = computed(() => {
   if (props.moduuli) {

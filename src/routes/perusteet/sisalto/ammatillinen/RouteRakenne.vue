@@ -127,6 +127,8 @@ const laajuus = computed(() => {
   if (rakenne.value.muodostumisSaanto && rakenne.value.muodostumisSaanto.laajuus) {
     return rakenne.value.muodostumisSaanto.laajuus.maksimi;
   }
+
+  return undefined;
 });
 
 const rakenneOsaSuljeTeksti = computed(() => {

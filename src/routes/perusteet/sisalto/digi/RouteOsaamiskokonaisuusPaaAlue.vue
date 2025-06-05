@@ -138,7 +138,7 @@ const selectedTaso = (taso) => {
   padding: $content-padding;
 }
 
-::v-deep .collapse-button {
+:deep(.collapse-button) {
   background-color: $digitaalinen-osaaminen-color;
   padding: 0.3rem 0.6rem;
   margin-bottom: 16px;
@@ -150,7 +150,7 @@ const selectedTaso = (taso) => {
 
 .taso-chk {
 
-  ::v-deep .btn, ::v-deep .btn-primary:not(:disabled):not(.disabled).active, ::v-deep .btn-primary:not(:disabled):not(.disabled):active {
+  :deep(.btn), :deep(.btn-primary:not(:disabled):not(.disabled).active), :deep(.btn-primary:not(:disabled):not(.disabled):active) {
     font-size: 0.8rem;
     border-radius: 10px;
     background-color: $digitaalinen-osaaminen-ikaryhma-color;
@@ -158,7 +158,7 @@ const selectedTaso = (taso) => {
   }
 }
 
-::v-deep .osa-alue {
+:deep(.osa-alue) {
   .edelleen-kehittyva-osaaminen {
     .otsikko {
       display: none;

@@ -2,7 +2,7 @@ import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { IPaikallinenStore } from './IPaikallinenStore';
 import { OpetussuunnitelmaQuery, getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto, JulkinenApi, KoulutustoimijaJulkinenDto } from '@shared/api/amosaa';
-import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
+import { debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import { Page, Koulutustyyppi } from '@shared/tyypit';
 
 export class VapaasivistystyoPaikallisetStore implements IPaikallinenStore {
@@ -26,9 +26,8 @@ export class VapaasivistystyoPaikallisetStore implements IPaikallinenStore {
     }
   }
 
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  async fetchQuery(query) {
+  fetchQuery = debounced(async (query) => {
     this.state.query = query;
     await this.fetch();
-  }
+  });
 }

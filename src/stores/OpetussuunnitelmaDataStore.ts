@@ -90,7 +90,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
         const perusteenJulkaisut = (await Julkaisut.getKaikkiJulkaisut(opetussuunnitelma.value.peruste.id!)).data;
         const maxRev = _.max(_.map(perusteenJulkaisut, 'revision'));
         const rev = _.chain(perusteenJulkaisut)
-          .filter(julkaisu => julkaisu.luotu! >= opetussuunnitelma.value.peruste.globalVersion?.aikaleima!)
+          .filter(julkaisu => julkaisu.luotu! >= (opetussuunnitelma.value?.peruste?.globalVersion?.aikaleima || 0))
           .sortBy('luotu')
           .first()
           .get('revision')
