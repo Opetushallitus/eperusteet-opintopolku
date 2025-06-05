@@ -532,9 +532,9 @@ const perusteenMaarays = computed(() => {
   if (perusteDataStore?.maarays) {
     return [{
       ...perusteDataStore.maarays,
-      voimassaoloAlkaa: _.size(perusteDataStore?.maarays?.korvattavatMaaraykset) > 0 ||
-        _.size(perusteDataStore.maarays?.muutettavatMaaraykset) > 0 ?
-        perusteDataStore.maarays?.voimassaoloAlkaa : null,
+      voimassaoloAlkaa: _.size(perusteDataStore?.maarays?.korvattavatMaaraykset) > 0
+        || _.size(perusteDataStore.maarays?.muutettavatMaaraykset) > 0
+        ? perusteDataStore.maarays?.voimassaoloAlkaa : null,
     }];
   }
 
@@ -563,9 +563,9 @@ const perusteenMuutosmaaraykset = computed(() => {
       return {
         ...muutosmaarays,
         url: baseURL + LiitetiedostotParam.getLiite(peruste.value!.id!, muutosmaarays.liitteet![kieli.value].id!).url,
-        nimi: !!muutosmaarays.nimi && muutosmaarays.nimi[kieli.value] ?
-          muutosmaarays.nimi[kieli.value] :
-          muutosmaarays.liitteet![kieli.value].nimi,
+        nimi: !!muutosmaarays.nimi && muutosmaarays.nimi[kieli.value]
+          ? muutosmaarays.nimi[kieli.value]
+          : muutosmaarays.liitteet![kieli.value].nimi,
       };
     })
     .value();
@@ -705,9 +705,9 @@ const isKoulutusvientiliiteTyyppi = computed(() => {
 });
 
 const showKoulutusvienninOhje = computed(() => {
-  return isEiTarvitaOhjettaTyyppi.value ||
-    isEiVoiPoiketaTyyppi.value ||
-    (isKoulutusvientiliiteTyyppi.value && koulutusvienninOhjeet.value && koulutusvienninOhjeet.value.length > 0);
+  return isEiTarvitaOhjettaTyyppi.value
+    || isEiVoiPoiketaTyyppi.value
+    || (isKoulutusvientiliiteTyyppi.value && koulutusvienninOhjeet.value && koulutusvienninOhjeet.value.length > 0);
 });
 
 const koulutustyyppiKohtaisetKaannokset = computed(() => {

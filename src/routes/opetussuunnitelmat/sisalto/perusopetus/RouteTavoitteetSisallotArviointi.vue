@@ -279,7 +279,7 @@ const oppiaineenVuosiluokkakokonaisuus = computed(() => {
 const findOpetussuunnitelmanVuosiluokkakokonaisuus = (oppiaineenVuosiluokkakokonaisuus) => {
   return _.get(_.find(opetussuunnitelmanVuosiluokkakokonaisuudet.value,
     vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')),
-    'vuosiluokkakokonaisuus');
+  'vuosiluokkakokonaisuus');
 };
 
 const opetussuunnitelmanVuosiluokkakokonaisuus = computed(() => {
@@ -370,8 +370,8 @@ const oppiaineenVuosiluokka = computed(() => {
       .map('vuosiluokat')
       .flatMap()
       .find(vlk => vlk.vuosiluokka === vuosiluokka.value)
-      .thru(vuosiluokka => oppiaineenVuosiluokkakokonaisuusPerusteDatoilla.value ?
-        oppiaineenVuosiluokkakokonaisuusPerusteDatoilla.value[vuosiluokka.vuosiluokka] : vuosiluokka)
+      .thru(vuosiluokka => oppiaineenVuosiluokkakokonaisuusPerusteDatoilla.value
+        ? oppiaineenVuosiluokkakokonaisuusPerusteDatoilla.value[vuosiluokka.vuosiluokka] : vuosiluokka)
       .value();
   }
   return undefined;
