@@ -249,8 +249,8 @@ const perusteenOsa = computed(() => {
 
 const tavoitteet = computed(() => {
   return [
-    ...perusteenOsa.value?.tavoitteet!,
-    ...(koulutuksenosa.value?.paikallinenTarkennus ? koulutuksenosa.value?.paikallinenTarkennus?.tavoitteet! : []),
+    ...(perusteenOsa.value?.tavoitteet ?? []),
+    ...(koulutuksenosa.value?.paikallinenTarkennus ? koulutuksenosa.value?.paikallinenTarkennus?.tavoitteet ?? [] : []),
   ];
 });
 </script>

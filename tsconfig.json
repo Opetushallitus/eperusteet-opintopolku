@@ -27,6 +27,7 @@
       "scripthost"
     ],
     "resolveJsonModule": true,
+    "types": ["vitest/globals"],
   },
   "include": [
     "src/**/*.ts",

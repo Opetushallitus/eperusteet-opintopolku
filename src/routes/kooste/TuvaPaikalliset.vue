@@ -99,7 +99,7 @@ const fetch = async () => {
 const queryNimi = computed(() => query.value.nimi);
 
 const page = computed({
-  get: () => opetussuunnitelmatPaged.value?.sivu! + 1,
+  get: () => (opetussuunnitelmatPaged.value?.sivu ?? 0) + 1,
   set: (page) => {
     query.value = {
       ...query.value,

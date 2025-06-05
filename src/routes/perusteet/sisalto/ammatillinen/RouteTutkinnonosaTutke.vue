@@ -100,6 +100,8 @@ const tutkinnonosa = computed(() => {
   if (props.ammatillinenPerusteHakuStore.perusteet) {
     return props.ammatillinenPerusteHakuStore.perusteet[0];
   }
+
+  return undefined;
 });
 
 const perusteet = computed(() => {
@@ -111,6 +113,8 @@ const perusteet = computed(() => {
       }))
       .value();
   }
+
+  return undefined;
 });
 
 const laajuus = computed(() => {
