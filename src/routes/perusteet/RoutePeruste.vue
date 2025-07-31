@@ -90,6 +90,7 @@ import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { Route } from 'vue-router';
 import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 
 @Component({
   components: {
@@ -127,6 +128,7 @@ export default class RoutePeruste extends Vue {
   private sisaltohaku = false;
   private oldLocation: Route | null = null;
   private queryImplDebounce = _.debounce(this.onQueryChange, 300);
+  private browserStore = new BrowserStore();
 
   mounted() {
     this.query = this.routeQuery;
@@ -265,7 +267,9 @@ export default class RoutePeruste extends Vue {
   }
 
   get scroll() {
-    return !_.has(this.$route.query, 'noscroll');
+    return !_.has(this.$route.query, 'noscroll')
+      && !_.includes(['peruste', 'perusteTiedot'], this.$route?.name)
+      && !this.browserStore.navigationVisible.value;
   }
 
   get sisaltoHakuSrLabel() {
