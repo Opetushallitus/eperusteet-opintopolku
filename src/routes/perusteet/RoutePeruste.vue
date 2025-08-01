@@ -36,7 +36,7 @@
       </div>
       <template v-else>
         <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-        <ep-sidebar :scroll-enabled="scroll">
+        <ep-sidebar :scroll-enabled="scrollEnabled">
           <template slot="bar">
             <div>
               <ep-peruste-sidenav
@@ -266,10 +266,8 @@ export default class RoutePeruste extends Vue {
     return this.perusteDataStore.julkaisut;
   }
 
-  get scroll() {
-    return !_.has(this.$route.query, 'noscroll')
-      && !_.includes(['peruste', 'perusteTiedot'], this.$route?.name)
-      && !this.browserStore.navigationVisible.value;
+  get scrollEnabled() {
+    return !this.browserStore.navigationVisible.value;
   }
 
   get sisaltoHakuSrLabel() {

@@ -16,7 +16,7 @@
   <div class="container pt-4">
     <div class="lower">
       <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-      <ep-sidebar :scroll-enabled="true">
+      <ep-sidebar :scroll-enabled="scrollEnabled">
         <template slot="bar">
           <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
         </template>
@@ -48,6 +48,7 @@ import * as _ from 'lodash';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 
 @Component({
   components: {
@@ -62,6 +63,8 @@ import { Kielet } from '@shared/stores/kieli';
 export default class RouteOpetussuunnitelma extends Vue {
   @Prop({ required: true })
   private opetussuunnitelmaDataStore!: IOpetussuunnitelmaStore;
+
+  private browserStore = new BrowserStore();
 
   get opetussuunnitelma() {
     return this.opetussuunnitelmaDataStore.opetussuunnitelma;
@@ -149,6 +152,10 @@ export default class RouteOpetussuunnitelma extends Vue {
   @ProvideReactive('opetussuunnitelma')
   get provideOpetussuunnitelma() {
     return this.opetussuunnitelma;
+  }
+
+  get scrollEnabled() {
+    return !this.browserStore.navigationVisible.value;
   }
 }
 </script>
