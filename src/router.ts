@@ -598,6 +598,10 @@ export const router = new Router({
           component: RouteTutkinnonosat,
           name: 'tutkinnonosat',
         }, {
+          path: 'koulutuksenosat',
+          component: RouteTutkinnonosat,
+          name: 'koulutuksenosat',
+        }, {
           path: 'vuosiluokkakokonaisuus/:vlkId',
           component: RouteVuosiluokkakokonaisuus,
           name: 'vuosiluokkakokonaisuus',
