@@ -2,27 +2,37 @@
   <div>
     <div
       v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0"
-      class="nimikkeet"
+      class="nimikkeet d-flex"
     >
-      <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-      <span
-        v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet"
-        :key="tidx"
-      >
-        {{ $kaanna(tutkintonimike.nimi) }}
-      </span>
+      <div class="kohde mr-1">
+        {{ $t('tutkintonimikkeet') }}:
+      </div>
+      <div>
+        <div
+          v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet"
+          :key="tidx"
+          class="d-inline-block mr-1"
+        >
+          {{ $kaanna(tutkintonimike.nimi) }}<span v-if="tidx < sisalto.tutkintonimikkeet.length - 1">,</span>
+        </div>
+      </div>
     </div>
     <div
       v-if="sisalto.osaamisalat && sisalto.osaamisalat.length > 0"
-      class="nimikkeet"
+      class="nimikkeet d-flex"
     >
-      <span class="kohde">{{ $t('osaamisalat') }}:</span>
-      <span
-        v-for="(osaamisala, oidx) in sisalto.osaamisalat"
-        :key="oidx"
-      >
-        {{ $kaanna(osaamisala.nimi) }}
-      </span>
+      <div class="kohde mr-1">
+        {{ $t('osaamisalat') }}:
+      </div>
+      <div>
+        <div
+          v-for="(osaamisala, oidx) in sisalto.osaamisalat"
+          :key="oidx"
+          class="d-inline-block mr-1"
+        >
+          {{ $kaanna(osaamisala.nimi) }}<span v-if="oidx < sisalto.osaamisalat.length - 1">,</span>
+        </div>
+      </div>
     </div>
     <div class="alatiedot">
       <span

@@ -1,3 +1,4 @@
+import '@/test/testInit';
 import { mount } from '@vue/test-utils';
 import RouteUutiset from './RouteUutiset.vue';
 import { createPinia, setActivePinia } from 'pinia';

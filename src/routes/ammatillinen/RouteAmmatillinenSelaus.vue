@@ -120,6 +120,8 @@ import * as _ from 'lodash';
 import { MaaraysDtoTyyppiEnum, TiedoteDto } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { useRouter, useRoute } from 'vue-router';
+import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import { $t } from '@shared/utils/globals';
 
 interface Ylalinkki {
   route: { name: string, query?: any, };
@@ -206,7 +208,7 @@ const alamurupolku = computed(() => {
 });
 
 useHead({
-  title: computed(() => `${ylaotsikko.value}`),
+  title: computed(() => ($t(`${ylaotsikko.value}`))),
 });
 
 const avaaTiedote = (tiedote: TiedoteDto) => {

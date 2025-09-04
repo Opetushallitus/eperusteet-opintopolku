@@ -96,12 +96,14 @@ import { createRouter, createWebHashHistory, useRoute } from 'vue-router';
 import { useLoading } from 'vue-loading-overlay';
 import { loadingOptions } from './utils/loading';
 import { useTiedoteStore } from './stores/TiedoteStore';
+import { unref } from 'vue';
 
 const logger = createLogger('Router');
 
 const perusteCacheStore = usePerusteCacheStore(pinia);
 const opetussuunnitelmaCacheStore = useOpetussuunnitelmaCacheStore(pinia);
 const toteutussuunnitelmaCacheStore = useToteutussuunnitelmaCacheStore(pinia);
+const browserStore = new BrowserStore();
 
 const routeProps = (route: any) => {
   return {
@@ -112,46 +114,19 @@ const routeProps = (route: any) => {
 
 export const router = createRouter({
   history: createWebHashHistory(),
-  scrollBehavior: (to, from, savedPosition) => {
-    if (savedPosition) {
-      return savedPosition;
-    }
-    const elementId = to.hash.substring(1);
-    if (elementId && document.getElementById(elementId)) {
-      const navbar = document.getElementById('navigation-bar');
-      const navbarHeight = navbar ? (-1 * navbar.getBoundingClientRect().height) : 0;
-      VueScrollTo.scrollTo(to.hash, {
-        offset: navbarHeight,
-        x: false,
-        y: true,
-      });
-      return {
-        selector: to.hash,
-        offset: {
-          x: 0,
-          y: navbarHeight,
-        },
-      };
-    }
-
-    const anchorElement = document.getElementById('scroll-anchor');
-    if (anchorElement) {
-      const offsetHeight = (getElementHeighById('navigation-bar') + getElementHeighById('notification-bar') + 20) * -1;
-      VueScrollTo.scrollTo('#scroll-anchor', {
-        offset: offsetHeight,
-        x: false,
-        y: true,
-      });
-      return {
-        selector: '#scroll-anchor',
-        offset: {
-          x: 0,
-          y: offsetHeight,
-        },
-      };
-    }
-    return { x: 0, y: 0 };
-  },
+  ...(browserStore.navigationVisible.value && {
+    scrollBehavior(to, from, savedPosition) {
+      if (savedPosition) {
+        return savedPosition;
+      }
+      else {
+        return {
+          top: 0,
+          behavior: 'smooth',
+        };
+      }
+    },
+  }),
   routes: [{
     path: '/',
     redirect: () => '/fi',
@@ -311,7 +286,7 @@ export const router = createRouter({
           };
         },
         beforeEnter: async (to, from, next) => {
-          await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, _.toNumber(to.params.revision));
+          await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, to.params.revision);
           next();
         },
         children: [{
@@ -368,7 +343,7 @@ export const router = createRouter({
           path: 'valinnaisetoppiaineet',
           component: RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet,
           name: 'opetussuunnitelmaperusopetusvalinnaisetoppiaineet',
-          alias: 'valinnaisetoppiaineet/:vlkId',
+          alias: 'valinnaisetoppiaineet/:vlkId?',
         }, {
           path: 'oppiaineet/:oppiaineId',
           component: RouteOpetussuunnitelmaPerusopetusOppiaine,
@@ -442,6 +417,10 @@ export const router = createRouter({
           path: 'tutkinnonosat',
           component: RouteTutkinnonosat,
           name: 'tutkinnonosat',
+        }, {
+          path: 'koulutuksenosat',
+          component: RouteTutkinnonosat,
+          name: 'koulutuksenosat',
         }, {
           path: 'vuosiluokkakokonaisuus/:vlkId',
           component: RouteVuosiluokkakokonaisuus,
@@ -583,16 +562,11 @@ router.beforeEach(async (to, from, next) => {
 });
 
 const $loading = useLoading(loadingOptions);
-let loader: any = null;
+const loaders: any[] = [];
 
 router.beforeEach((to, from, next) => {
-  loader = $loading.show();
+  loaders.push($loading.show());
   next();
-});
-
-router.afterEach(() => {
-  hideLoading();
-  BrowserStore.changeLocation(location.href);
 });
 
 router.beforeEach((to, from, next) => {
@@ -600,17 +574,20 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-// router.afterEach((to, from) => {
-//   removeQueryParam(to, router, 'paluuosoite');
-// });
+router.afterEach((to) => {
+  hideLoading();
+  BrowserStore.changeLocation(location.href);
+});
 
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);
   hideLoading();
-  if (router.currentRoute.name !== 'virhe') {
+  console.log('Virheet.onError', router);
+  if (unref(router.currentRoute).name !== 'virhe') {
     router.replace({
       name: 'virhe',
-      query: {
+      params: {
+        lang: 'fi',
         virhekoodi: virhe.err,
         ...(virhe.path && { kohdeUrl: virhe.path }),
       },
@@ -618,19 +595,9 @@ Virheet.onError((virhe: SovellusVirhe) => {
   }
 });
 
-function getRouteStore(route: any, routeName: string, store: string) {
-  const filteredRoute = _.head(_.filter(route.matched, match => match.name === routeName));
-  return _.get(filteredRoute, 'props.default.' + store);
-}
-
 function hideLoading() {
-  if (loader !== null) {
-    (loader as any).hide();
-    loader = null;
+  if (loaders.length > 0) {
+    (loaders[loaders.length - 1] as any).hide();
+    loaders.pop();
   }
-}
-
-function getElementHeighById(id: string) {
-  const element = document.getElementById(id);
-  return element ? element.getBoundingClientRect().height : 0;
 }

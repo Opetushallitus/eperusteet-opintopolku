@@ -13,7 +13,7 @@ export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCach
     const key = `${id}-${revision}`;
     if (!opetussuunnitelmat.value[key]) {
       const opetussuunnitelmaDataStore = useOpetussuunnitelmaDataStore(key);
-      await opetussuunnitelmaDataStore.create(id, _.isNumber(revision) ? _.toNumber(revision) : undefined);
+      await opetussuunnitelmaDataStore.create(id, revision ? _.toNumber(revision) : undefined);
       opetussuunnitelmat.value[key] = opetussuunnitelmaDataStore;
     }
   };
@@ -33,7 +33,7 @@ export const useToteutussuunnitelmaCacheStore = defineStore('toteutussuunnitelma
     const key = `${id}-${revision}`;
     if (!toteutussuunnitelmat.value[key]) {
       const opetussuunnitelmaDataStore = useToteutussuunnitelmaDataStore(key);
-      await opetussuunnitelmaDataStore.create(id, _.isNumber(revision) ? _.toNumber(revision) : undefined);
+      await opetussuunnitelmaDataStore.create(id, revision ? _.toNumber(revision) : undefined);
       toteutussuunnitelmat.value[key] = opetussuunnitelmaDataStore;
     }
   };

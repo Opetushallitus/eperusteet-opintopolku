@@ -61,7 +61,6 @@ export const useOpetussuunnitelmaDataStore = (key) => {
     const kuvat = ref<object[] | null>(null);
     const perusteKaikki = ref<PerusteKaikkiDto | null>(null);
 
-    // Static create method as a regular function
     const create = async (opsId: number, rev: number | undefined = undefined) => {
       opetussuunnitelmaId.value = opsId;
       revision.value = rev;

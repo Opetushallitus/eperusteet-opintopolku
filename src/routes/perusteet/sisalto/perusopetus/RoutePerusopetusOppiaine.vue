@@ -377,18 +377,21 @@ const termit = computed(() => {
 const oppimaarat = computed(() => {
   if (!oppiaine.value) return [];
 
-  return _.map(oppiaine.value.oppimaarat, oppimaara => {
-    return {
-      ...oppimaara,
-      route: {
-        name: route.params.vlkId ? 'vuosiluokanoppiaine' : 'perusopetusoppiaine',
-        params: {
-          oppiaineId: _.toString(oppimaara.id),
-          ...(route.params.vlkId && { vlkId: route.params.vlkId }),
+  return _.chain(oppiaine.value.oppimaarat)
+    .filter(oppimaara => _.includes(_.map(oppimaara.vuosiluokkakokonaisuudet, '_vuosiluokkaKokonaisuus'), _.toString(route.params.vlkId)))
+    .map(oppimaara => {
+      return {
+        ...oppimaara,
+        route: {
+          name: route.params.vlkId ? 'vuosiluokanoppiaine' : 'perusopetusoppiaine',
+          params: {
+            oppiaineId: _.toString(oppimaara.id),
+            ...(route.params.vlkId && { vlkId: route.params.vlkId }),
+          },
         },
-      },
-    };
-  });
+      };
+    })
+    .value();
 });
 
 function toggleTavoitteet() {

@@ -34,6 +34,7 @@
 import { computed } from 'vue';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import { $kaanna } from '@shared/utils/globals';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 const props = defineProps({
   header: {

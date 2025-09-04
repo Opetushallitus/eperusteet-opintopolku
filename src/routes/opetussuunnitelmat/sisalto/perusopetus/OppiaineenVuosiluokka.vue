@@ -199,6 +199,7 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
 import TavoitteenSisaltoalueet from './TavoitteenSisaltoalueet.vue';
 import { $kaanna } from '@shared/utils/globals';
 import { onMounted } from 'vue';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 
 const props = defineProps({
   oppiaineenVuosiluokka: {

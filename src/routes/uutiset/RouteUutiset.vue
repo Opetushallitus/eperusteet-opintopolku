@@ -7,8 +7,7 @@
         </template>
         <div class="search">
           <ep-search
-            :value="query"
-            @input="setValue"
+            v-model="query"
           />
         </div>
         <div v-if="tiedotteet.tiedotteet">
@@ -70,9 +69,14 @@ import { Kielet } from '@shared/stores/kieli';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { pinia } from '@/pinia';
+import { useRoute, useRouter } from 'vue-router';
 
 const page = ref(1);
 const query = ref('');
+const route = useRoute();
+const router = useRouter();
+const mounted = ref(false);
+
 const tiedoteStore = useTiedoteStore(pinia);
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 
@@ -105,33 +109,51 @@ const murupolku = computed(() => {
   }];
 });
 
-onMounted(() => {
-  tiedoteStore.updateFilter({
-    nimi: query.value,
-    koulutustyypit: julkaistutKoulutustyypit.value,
-    kieli: Kielet.getSisaltoKieli.value,
-  });
+onMounted(async () => {
+  setQueryParams();
+  await fetch();
+  mounted.value = true;
 });
 
-watch(sisaltoKieli, async () => {
-  await tiedoteStore.updateFilter({
-    kieli: [Kielet.getSisaltoKieli.value],
-  });
-});
-
-const updatePage = (value) => {
-  page.value = value;
-  tiedoteStore.updateFilter({
-    sivu: value - 1,
-  });
+const setQueryParams = () => {
+  query.value = route?.query?.haku as string || '';
+  page.value = route?.query?.sivu as number || 1;
 };
 
-const setValue = (value) => {
-  page.value = 1;
-  tiedoteStore.updateFilter({
-    nimi: value,
-    sivu: 0,
+watch(sisaltoKieli, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    await fetch();
+  }
+});
+
+watch(query, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    await fetch();
+  }
+});
+
+const updatePage = async (value) => {
+  if (mounted.value) {
+    page.value = value;
+    await fetch();
+  }
+};
+
+const fetch = async () => {
+  await tiedoteStore.updateFilter({
+    nimi: query.value,
+    kieli: Kielet.getSisaltoKieli.value,
+    sivu: page.value - 1,
   });
+
+  router.replace({
+    query: {
+      haku: query.value,
+      sivu: page.value,
+    },
+  }).catch(() => {});
 };
 
 // Meta information

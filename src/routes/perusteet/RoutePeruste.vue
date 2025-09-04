@@ -64,7 +64,7 @@
             id="globalNavigation"
             ref="innerPortal"
           />
-          <ep-sidebar :scroll-enabled="scroll">
+          <ep-sidebar :scroll-enabled="scrollEnabled">
             <template #bar>
               <div>
                 <ep-peruste-sidenav
@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, provide, onMounted, getCurrentInstance } from 'vue';
+import { ref, computed, watch, nextTick, provide, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import { NavigationNode, traverseNavigation } from '@shared/utils/NavigationBuilder';
@@ -132,16 +132,17 @@ import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { $kaanna, $t } from '@shared/utils/globals';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 import { pinia } from '@/pinia';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 
 const route = useRoute();
 const router = useRouter();
-const instance = getCurrentInstance();
 
 const perusteDataStore = getCachedPerusteStore();
 
 const query = ref('');
 const sisaltohaku = ref(false);
 const oldLocation = ref(null);
+const browserStore = new BrowserStore();
 
 // Replace debounce method
 const queryImplDebounce = _.debounce((value) => {
@@ -218,8 +219,8 @@ const ensimainenNavi = computed(() => {
   return _.find(flattenedSidenav.value, navi => navi.type !== 'root');
 });
 
-const scroll = computed(() => {
-  return !_.has(route.query, 'noscroll');
+const scrollEnabled = computed(() => {
+  return !browserStore.navigationVisible.value;
 });
 
 const sisaltoHakuSrLabel = computed(() => {
@@ -257,7 +258,7 @@ watch(query, (value) => {
 
 watch(route, async () => {
   await nextTick();
-  const h2 = instance?.proxy?.$el.querySelector('h2');
+  const h2 = document.querySelector('h2');
   h2?.setAttribute('tabindex', '-1');
   // h2?.focus();
 }, { deep: true, immediate: true });
