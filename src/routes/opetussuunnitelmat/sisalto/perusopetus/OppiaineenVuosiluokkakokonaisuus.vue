@@ -310,6 +310,8 @@ import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteConte
 import OppiaineenVuosiluokka from './OppiaineenVuosiluokka.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { $kaanna } from '@shared/utils/globals';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 
 const props = defineProps({
   tietue: {

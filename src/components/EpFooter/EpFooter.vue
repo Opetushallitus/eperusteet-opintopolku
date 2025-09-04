@@ -57,6 +57,7 @@ import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import ophLogo from '@assets/img/banners/opintopolku/logo.svg';
 import opintopolkuLogo from '@assets/img/banners/opintopolku/oph_logo2.png';
 import EpPalauteLinkki from '@shared/components/EpPalauteLinkki/EpPalauteLinkki.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 const linkit = {
   oph: {

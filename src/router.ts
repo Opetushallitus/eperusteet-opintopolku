@@ -112,46 +112,6 @@ const routeProps = (route: any) => {
 
 export const router = createRouter({
   history: createWebHashHistory(),
-  scrollBehavior: (to, from, savedPosition) => {
-    if (savedPosition) {
-      return savedPosition;
-    }
-    const elementId = to.hash.substring(1);
-    if (elementId && document.getElementById(elementId)) {
-      const navbar = document.getElementById('navigation-bar');
-      const navbarHeight = navbar ? (-1 * navbar.getBoundingClientRect().height) : 0;
-      VueScrollTo.scrollTo(to.hash, {
-        offset: navbarHeight,
-        x: false,
-        y: true,
-      });
-      return {
-        selector: to.hash,
-        offset: {
-          x: 0,
-          y: navbarHeight,
-        },
-      };
-    }
-
-    const anchorElement = document.getElementById('scroll-anchor');
-    if (anchorElement) {
-      const offsetHeight = (getElementHeighById('navigation-bar') + getElementHeighById('notification-bar') + 20) * -1;
-      VueScrollTo.scrollTo('#scroll-anchor', {
-        offset: offsetHeight,
-        x: false,
-        y: true,
-      });
-      return {
-        selector: '#scroll-anchor',
-        offset: {
-          x: 0,
-          y: offsetHeight,
-        },
-      };
-    }
-    return { x: 0, y: 0 };
-  },
   routes: [{
     path: '/',
     redirect: () => '/fi',
@@ -311,7 +271,7 @@ export const router = createRouter({
           };
         },
         beforeEnter: async (to, from, next) => {
-          await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, _.toNumber(to.params.revision));
+          await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, to.params.revision);
           next();
         },
         children: [{
@@ -368,7 +328,7 @@ export const router = createRouter({
           path: 'valinnaisetoppiaineet',
           component: RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet,
           name: 'opetussuunnitelmaperusopetusvalinnaisetoppiaineet',
-          alias: 'valinnaisetoppiaineet/:vlkId',
+          alias: 'valinnaisetoppiaineet/:vlkId?',
         }, {
           path: 'oppiaineet/:oppiaineId',
           component: RouteOpetussuunnitelmaPerusopetusOppiaine,
@@ -442,6 +402,10 @@ export const router = createRouter({
           path: 'tutkinnonosat',
           component: RouteTutkinnonosat,
           name: 'tutkinnonosat',
+        }, {
+          path: 'koulutuksenosat',
+          component: RouteTutkinnonosat,
+          name: 'koulutuksenosat',
         }, {
           path: 'vuosiluokkakokonaisuus/:vlkId',
           component: RouteVuosiluokkakokonaisuus,

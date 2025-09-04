@@ -63,6 +63,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
 
     // Static create method as a regular function
     const create = async (opsId: number, rev: number | undefined = undefined) => {
+      console.log('create', opsId, rev);
       opetussuunnitelmaId.value = opsId;
       revision.value = rev;
       await init();
