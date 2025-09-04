@@ -23,7 +23,7 @@
           id="globalNavigation"
           ref="innerPortal"
         />
-        <ep-sidebar :scroll-enabled="true">
+        <ep-sidebar :scroll-enabled="scrollEnabled">
           <template #bar>
             <ep-opetussuunnitelma-sidenav />
           </template>
@@ -60,10 +60,11 @@ import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
 import { $kaanna } from '@shared/utils/globals';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 
 const route = useRoute();
 const innerPortal = useTemplateRef('innerPortal');
-
+const browserStore = new BrowserStore();
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
 const opetussuunnitelma = computed(() => {
@@ -101,6 +102,10 @@ const murupolku = computed(() => {
 
 const diaariNumero = computed((): string => {
   return opetussuunnitelma.value.perusteenDiaarinumero || opetussuunnitelma.value.perusteDiaarinumero || '';
+});
+
+const scrollEnabled = computed(() => {
+  return !browserStore.navigationVisible.value;
 });
 
 const onRouteUpdate = async (newRoute) => {

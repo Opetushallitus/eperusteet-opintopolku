@@ -20,6 +20,7 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
   public readonly perusteJarjestykset = computed(() => _.filter(this.state.julkaistutKoostePerusteet, peruste => _.includes(_.map(this.state.perusteJulkaisut, 'id'), peruste.id)));
 
   constructor(koulutustyyppi: string) {
+    this.state.julkaistutKoostePerusteet = null;
     this.state.koulutustyyppi = koulutustyyppi;
   }
 
@@ -27,7 +28,6 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
     this.state.julkaistutKoostePerusteet = null;
     this.state.perusteJulkaisut = null;
-
     this.state.julkaistutKoostePerusteet = (await Perusteet.getJulkaistutKoostePerusteet()).data;
     this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, poistunut: true })), 'data');
 

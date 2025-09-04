@@ -112,16 +112,6 @@
         <hr>
       </div>
 
-      <div
-        v-if="arvoinninTyyppi === 'tutkinnonosakohtainen'"
-        class="mb-5"
-      >
-        <ep-ammatillinen-arvioinnin-kohdealueet
-          :arviointiasteikot="arviointiasteikot"
-          :arvioinnin-kohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"
-        />
-        <hr>
-      </div>
 
       <ep-form-content
         v-if="hasAmmattitaitovaatimukset"
@@ -139,11 +129,15 @@
         <hr/>
       </ep-form-content>
 
-      <div v-if="arvoinninTyyppi === 'tutkinnonosakohtainen'" class="mb-5">
+      <div
+        v-if="arvoinninTyyppi === 'tutkinnonosakohtainen'"
+        class="mb-5"
+      >
         <ep-ammatillinen-arvioinnin-kohdealueet
           :arviointiasteikot="arviointiasteikot"
-          :arvioinninKohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"/>
-        <hr/>
+          :arvioinnin-kohdealueet="sisaltoviite.tosa.omatutkinnonosa.arviointi.arvioinninKohdealueet"
+        />
+        <hr>
       </div>
 
       <GeneerinenArviointiTaulukko
@@ -476,7 +470,7 @@ const arvoinninTyyppi = computed(() => {
     return 'geneerinen';
   }
 
-  if (_.size(_.get(props.sisaltoviite.tosa, 'omaTutkinnonosa.arviointi.arvioinninKohdealueet')) > 0) {
+  if (_.size(_.get(props.sisaltoviite.tosa, 'omatutkinnonosa.arviointi.arvioinninKohdealueet')) > 0) {
     return 'tutkinnonosakohtainen';
   }
 

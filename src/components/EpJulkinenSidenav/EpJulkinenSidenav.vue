@@ -51,18 +51,21 @@
     <b-sidebar
       id="sidebar-no-header"
       :visible="active"
-      @change="active = $event"
       aria-labelledby="sidebar-no-header-title"
       no-header
       bg-variant="white"
       no-close-on-route-change
+      @change="active = $event"
     >
       <div class="pl-3 pr-3 pb-3">
         <div class="mt-3 mb-4">
           <router-link
             :to="{ name: 'root'}"
           >
-            <span class="navi-home" @click="closeSidebar()">
+            <span
+              class="navi-home"
+              @click="closeSidebar()"
+            >
               <EpMaterialIcon
                 icon-shape="outlined"
                 size="22px"
@@ -172,13 +175,13 @@ import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { pinia } from '@/pinia';
 import { Kieli } from '@shared/tyypit';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
 const logger = createLogger('EpJulkinenSidenav');
 
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 const tietoapalvelustaStore = useTietoapalvelustaStore(pinia);
 const osaamismerkitStore = useOsaamismerkitStore(pinia);
-
 
 // Setup router
 const router = useRouter();

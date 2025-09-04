@@ -200,6 +200,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { $kaanna } from '@shared/utils/globals';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { useRoute, useRouter } from 'vue-router';
+import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
 
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 

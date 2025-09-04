@@ -27,6 +27,10 @@ export class VstPerusteKoosteStore implements IPerusteKoosteStore {
   }
 
   async fetch() {
+    this.state.julkaistutKoostePerusteet = null;
+    this.state.perusteJulkaisut = null;
+
+    this.state.julkaistutKoostePerusteet = (await Perusteet.getJulkaistutKoostePerusteet()).data;
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
     this.state.julkaistutKoostePerusteet = null;
     this.state.perusteJulkaisut = null;

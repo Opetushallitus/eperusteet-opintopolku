@@ -1,5 +1,5 @@
 <template>
-  <ep-spinner v-if="!koulutustyyppi && !julkaistutPerusteet" />
+  <ep-spinner v-if="!koulutustyyppi || (perusteKoosteStore && !julkaistutPerusteet)" />
   <ep-header
     v-else
     :murupolku="murupolku"
@@ -165,7 +165,7 @@ import {
   getKoosteSubheader,
   getKoosteTiedotteetStore,
 } from '@/utils/toteutustypes';
-import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { julkisivuPerusteKoosteJarjestys, stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 const route = useRoute();
 const perusteKoosteStore = getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
@@ -226,31 +226,34 @@ const ohjeet = computed(() => {
   return undefined;
 });
 
+const perusteJarjestykset = computed(() => {
+  return perusteKoosteStore.perusteJarjestykset?.value;
+});
+
 const julkaistutPerusteet = computed(() => {
-  if (!perusteKoosteStore) {
-    return [];
+  if (!perusteKoosteStore?.perusteJulkaisut?.value) {
+    return undefined;
   }
 
-  if (perusteKoosteStore?.perusteJulkaisut?.value) {
-    return _.chain(perusteKoosteStore.perusteJulkaisut?.value)
-      .map(julkaisu => ({
-        ...julkaisu,
-        perusteId: _.toString(julkaisu.id),
-        kaannettyNimi: $kaanna(julkaisu.nimi!),
-      }))
-      .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
-      .value();
-  }
-
-  return undefined;
+  return _.chain(perusteKoosteStore.perusteJulkaisut?.value)
+    .map(julkaisu => ({
+      ...julkaisu,
+      perusteId: _.toString(julkaisu.id),
+      kaannettyNimi: $kaanna(julkaisu.nimi!),
+      julkisivuJarjestysNro: _.find(perusteJarjestykset.value, jarjestys => jarjestys.id === julkaisu.id)?.julkisivuJarjestysNro,
+    }))
+    .orderBy(julkisivuPerusteKoosteJarjestys.keys, julkisivuPerusteKoosteJarjestys.sortby)
+    .value();
 });
 
 const julkaistutVoimassaolevatPerusteet = computed(() => {
-  return _.filter(julkaistutPerusteet.value, (peruste) => !peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu);
+  return _.filter(julkaistutPerusteet.value, (peruste) => (!peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu)
+      && !_.find(perusteJarjestykset.value, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
 });
 
 const julkaistutEraantyneetPerusteet = computed(() => {
-  return _.filter(julkaistutPerusteet.value, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
+  return _.filter(julkaistutPerusteet.value, (peruste) => (peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu)
+      || _.find(perusteJarjestykset.value, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
 });
 
 const visibleJulkaistutPerusteet = computed(() => {

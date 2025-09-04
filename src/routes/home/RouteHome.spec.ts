@@ -1,4 +1,5 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import '@/test/testInit';
+import { mount } from '@vue/test-utils';
 import RouteHome from './RouteHome.vue';
 import { createMockedStore, mock, mocks, stubs } from '@shared/utils/jestutils';
 import { createPinia, setActivePinia } from 'pinia';
@@ -21,12 +22,23 @@ vi.mock('@/stores/OsaamismerkitStore', () => ({
 
 vi.mock('@/stores/TiedoteStore', () => ({
   useTiedoteStore: () => ({
+    getUusimmat: vi.fn(),
     uusimmatTiedotteet: [{
       luotu: 'aikaleima_1234' as any,
       otsikko: {
         fi: 'uutinen_1234',
       } as any,
     }],
+  }),
+}));
+
+vi.mock('@/stores/JulkaistutKoulutustyypitStore', () => ({
+  useJulkaistutKoulutustyypitStore: () => ({
+    koulutustyyppiLukumaarat: [],
+    muuLukumaarat: 0,
+    digitaalinenOsaaminen: [],
+    julkaistutKoulutustyypit: [],
+    fetch: vi.fn(),
   }),
 }));
 
@@ -55,10 +67,6 @@ describe('RouteHome', () => {
     const tietoapalvelustaStore = useTietoapalvelustaStore(pinia);
     const osaamismerkitStore = useOsaamismerkitStore(pinia);
     const tiedoteStore = useTiedoteStore(pinia);
-
-    julkaistutKoulutustyypitStore.$state.koulutustyyppiLukumaarat = [{ koulutustyyppi: 'koulutust', lukumaara: 1 }];
-    julkaistutKoulutustyypitStore.$state.muuLukumaarat = 1;
-    julkaistutKoulutustyypitStore.$state.digitaalinenOsaaminen = [];
 
     await nextTick();
 

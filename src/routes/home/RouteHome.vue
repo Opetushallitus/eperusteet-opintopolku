@@ -27,7 +27,7 @@
         <EpSpinnerSlot :is-loading="!tiedotteet">
           <EpJulkiLista
             :tiedot="tiedotteetMapped"
-            tieto-maara="5"
+            :tieto-maara="5"
             listaus-tyyppi="none"
             @avaaTieto="avaaTiedote"
           >
@@ -111,6 +111,8 @@ import { useRouter } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import { onkoUusi } from '@shared/utils/tiedote';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { useTiedoteStore } from '@/stores/TiedoteStore';
 import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';

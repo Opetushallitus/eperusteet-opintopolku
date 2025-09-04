@@ -29,10 +29,9 @@ const app = createApp(App);
 
 registerIconColorSchemeChange();
 
-// configureCompat({
-//   COMPONENT_V_MODEL: false,
-//   COMPILER_V_BIND_OBJECT_ORDER: false,
-// });
+configureCompat({
+  COMPONENT_V_MODEL: false,
+});
 
 // Store app reference in globals utility
 setAppInstance(app);
@@ -69,6 +68,21 @@ Vue.use(VueScrollTo, {
   duration: 1000,
 });
 Vue.use(Sticky);
+
+app.config.errorHandler = (err, instance, info) => {
+  console.error('Global error handler:', err, info);
+  router.replace({
+    name: 'virhe',
+    query: {
+      virhekoodi: '500',
+    },
+  });
+};
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+  app.config.errorHandler?.(event.reason, null, 'unhandledrejection');
+});
 
 const matomoSiteIds = {
   'eperusteet.opintopolku.fi': 11,
