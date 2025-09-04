@@ -29,10 +29,9 @@ const app = createApp(App);
 
 registerIconColorSchemeChange();
 
-// configureCompat({
-//   COMPONENT_V_MODEL: false,
-//   COMPILER_V_BIND_OBJECT_ORDER: false,
-// });
+configureCompat({
+  COMPONENT_V_MODEL: false,
+});
 
 // Store app reference in globals utility
 setAppInstance(app);

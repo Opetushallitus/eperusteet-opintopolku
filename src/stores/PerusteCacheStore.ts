@@ -12,7 +12,7 @@ export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
     const key = perusteId + '-' + revision;
     if (!perusteet.value[key]) {
       const perusteDataStore = usePerusteDataStore(key);
-      await perusteDataStore.create(perusteId, _.isNumber(revision) ? _.toNumber(revision) : undefined);
+      await perusteDataStore.create(perusteId, revision ? _.toNumber(revision) : undefined);
       perusteet.value[key] = perusteDataStore;
     }
   };

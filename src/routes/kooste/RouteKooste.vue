@@ -165,7 +165,7 @@ import {
   getKoosteSubheader,
   getKoosteTiedotteetStore,
 } from '@/utils/toteutustypes';
-import { stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { julkisivuPerusteKoosteJarjestys, stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 const route = useRoute();
 const perusteKoosteStore = getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
@@ -226,6 +226,10 @@ const ohjeet = computed(() => {
   return undefined;
 });
 
+const perusteJarjestykset = computed(() => {
+  return perusteKoosteStore.perusteJarjestykset?.value;
+});
+
 const julkaistutPerusteet = computed(() => {
   if (!perusteKoosteStore) {
     return [];
@@ -237,8 +241,9 @@ const julkaistutPerusteet = computed(() => {
         ...julkaisu,
         perusteId: _.toString(julkaisu.id),
         kaannettyNimi: $kaanna(julkaisu.nimi!),
+        julkisivuJarjestysNro: _.find(perusteJarjestykset.value, jarjestys => jarjestys.id === julkaisu.id)?.julkisivuJarjestysNro,
       }))
-      .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
+      .orderBy(julkisivuPerusteKoosteJarjestys.keys, julkisivuPerusteKoosteJarjestys.sortby)
       .value();
   }
 
@@ -246,11 +251,13 @@ const julkaistutPerusteet = computed(() => {
 });
 
 const julkaistutVoimassaolevatPerusteet = computed(() => {
-  return _.filter(julkaistutPerusteet.value, (peruste) => !peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu);
+  return _.filter(julkaistutPerusteet.value, (peruste) => (!peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu)
+      && !_.find(perusteJarjestykset.value, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
 });
 
 const julkaistutEraantyneetPerusteet = computed(() => {
-  return _.filter(julkaistutPerusteet.value, (peruste) => peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu);
+  return _.filter(julkaistutPerusteet.value, (peruste) => (peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu)
+      || _.find(perusteJarjestykset.value, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
 });
 
 const visibleJulkaistutPerusteet = computed(() => {

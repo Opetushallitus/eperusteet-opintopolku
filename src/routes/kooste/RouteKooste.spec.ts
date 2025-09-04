@@ -65,6 +65,7 @@ describe('RouteKooste', () => {
         voimassaoloAlkaa: 123456,
       }])),
       fetch: () => new Promise<void>(resolve => resolve()),
+      perusteJarjestykset: computed(() => []),
     };
 
     (getKoostePerusteStore as any).mockReturnValue(perusteKoosteStore);

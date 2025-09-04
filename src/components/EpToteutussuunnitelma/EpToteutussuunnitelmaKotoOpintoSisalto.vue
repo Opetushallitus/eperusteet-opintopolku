@@ -11,15 +11,17 @@
       :model-value="perusteenOsa.taitotasot"
       :kuvat="kuvat"
     >
-      <template #paikallinentarkennus="{ nimi }">
-        <ep-content-viewer
-          :value="$kaanna(kotoTaitotasotByUri[nimi.uri].tavoiteTarkennus)"
-          :kuvat="kuvat"
-        />
-        <ep-content-viewer
-          :value="$kaanna(kotoTaitotasotByUri[nimi.uri].sisaltoTarkennus)"
-          :kuvat="kuvat"
-        />
+      <template #paikallinentarkennus="{ taitotaso }">
+        <template v-if="taitotaso && taitotaso.nimi && kotoTaitotasotByUri[taitotaso.nimi.uri]">
+          <ep-content-viewer
+            :value="$kaanna(kotoTaitotasotByUri[taitotaso.nimi.uri].tavoiteTarkennus)"
+            :kuvat="kuvat"
+          />
+          <ep-content-viewer
+            :value="$kaanna(kotoTaitotasotByUri[taitotaso.nimi.uri].sisaltoTarkennus)"
+            :kuvat="kuvat"
+          />
+        </template>
       </template>
     </EpKotoTaitotasot>
 
