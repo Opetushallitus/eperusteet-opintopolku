@@ -14,5 +14,12 @@ vi.mock('@/stores/OpetussuunnitelmaCacheStore', () => ({
   getCachedOpetussuunnitelmaStore: vi.fn(),
 }));
 
-vi.mock('vue-router', () => ({ useRoute: vi.fn(), useRouter: vi.fn() }));
+vi.mock('vue-router', () => ({
+  useRoute: vi.fn(),
+  useRouter: vi.fn(() => ({
+    replace: vi.fn(() => Promise.resolve()),
+    push: vi.fn(() => Promise.resolve()),
+    currentRoute: { value: { params: {} } },
+  })),
+}));
 vi.mocked(useRoute).mockReturnValue({ params: {} } as any);

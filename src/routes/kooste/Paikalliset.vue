@@ -100,6 +100,7 @@ import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { ryhmanKoulutustyypit } from '@shared/utils/perusteet';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import { $t, $kaanna } from '@shared/utils/globals';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   paikallinenStore: {
@@ -120,6 +121,9 @@ const query = ref('');
 const page = ref(1);
 const perPage = ref(10);
 const valittuPeruste = ref(null);
+const route = useRoute();
+const router = useRouter();
+const mounted = ref(false);
 
 const kieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
@@ -133,19 +137,37 @@ const fetch = async () => {
       ...(!valittuPeruste.value?.nimi && { koulutustyypit: ryhmanKoulutustyypit(props.koulutustyyppi) }),
       page: page.value - 1,
     });
+
+    router.replace({
+      query: {
+        ...(query.value && { haku: query.value }),
+        sivu: page.value,
+        ...(valittuPeruste.value && { perustediaarinumero: valittuPeruste.value?.diaarinumero }),
+      },
+    }).catch(() => {});
   }
 };
 
-onMounted(() => {
-  fetch();
+onMounted(async () => {
+  setQueryParams();
+  await fetch();
+  mounted.value = true;
 });
+
+const setQueryParams = () => {
+  query.value = route?.query?.haku as string || '';
+  page.value = route?.query?.sivu as number || 1;
+  valittuPeruste.value = _.find(julkaistutPerusteet.value, (peruste) => peruste.diaarinumero === route?.query?.perustediaarinumero as string) || null;
+};
 
 watch(() => props.koulutustyyppi, () => {
   valittuPeruste.value = null;
 });
 
 watch(query, async () => {
-  page.value = 1;
+  if (mounted.value) {
+    page.value = 1;
+  }
   await fetch();
 });
 
@@ -163,7 +185,7 @@ watch(kieli, async () => {
 });
 
 const julkaistutPerusteet = computed(() => {
-  if (props.perusteKoosteStore.perusteJulkaisut) {
+  if (props.perusteKoosteStore.perusteJulkaisut.value) {
     return _.chain(props.perusteKoosteStore.perusteJulkaisut.value)
       .map(julkaistuPeruste => ({
         ...julkaistuPeruste,

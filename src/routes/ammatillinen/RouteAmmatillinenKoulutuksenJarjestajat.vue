@@ -57,11 +57,29 @@ import { Kielet } from '@shared/stores/kieli';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { pinia } from '@/pinia';
+import { useRoute, useRouter } from 'vue-router';
+import { nextTick } from 'vue';
+
+const route = useRoute();
+const router = useRouter();
 
 const query = ref('');
 const page = ref(1);
 const perPage = ref(10);
+const mounted = ref(false);
 const koulutuksenJarjestajatStore = useKoulutuksenJarjestajatStore(pinia);
+
+onMounted(async () => {
+  setQueryParams();
+  await nextTick();
+  mounted.value = true;
+});
+
+const setQueryParams = () => {
+  query.value = route?.query?.haku as string || '';
+  page.value = route?.query?.sivu as number || 1;
+};
+
 
 const koulutustoimijat = computed(() => {
   if (koulutuksenJarjestajatStore.koulutustoimijat) {
@@ -84,13 +102,32 @@ const koulutustoimijatPaged = computed(() => {
   return [];
 });
 
+watch(query, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    routerReplace();
+  }
+});
+
+watch(page, async () => {
+  if (mounted.value) {
+    routerReplace();
+  }
+});
+
+const routerReplace = () => {
+  router.replace({
+    query: {
+      haku: query.value,
+      sivu: page.value,
+    },
+  }).catch(() => {});
+};
+
 const total = computed(() => {
   return _.size(koulutustoimijat.value);
 });
 
-watch(query, () => {
-  page.value = 1;
-});
 </script>
 
 <style scoped lang="scss">

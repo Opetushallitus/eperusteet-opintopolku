@@ -101,33 +101,25 @@ const queryNimi = ref('');
 const sivu = ref(1);
 const sivukoko = ref(10);
 const isLoading = ref(false);
+const mounted = ref(false);
 
-const queryChange = async () => {
-  queryNimi.value = route?.query?.query as string || '';
+onMounted(async () => {
+  setQueryParams();
+  await fetchOpsitJaPerusteet();
+  mounted.value = true;
+});
+
+const setQueryParams = () => {
+  queryNimi.value = route?.query?.haku as string || '';
+  sivu.value = route?.query?.sivu as number || 1;
 };
 
-onMounted(() => {
-  clear();
-  queryChange();
-});
-
-const query = computed(() => {
-  return route?.query?.query;
-});
-
-watch(query, () => {
-  queryChange();
-}, { immediate: true });
-
 watch(queryNimi, async () => {
-  if (_.size(queryNimi.value) > 2) {
+  if (mounted.value) {
     page.value = 1;
     await fetchOpsitJaPerusteet();
   }
-  else {
-    perusteStore.clearOpsitJaPerusteet();
-  }
-}, { immediate: true });
+});
 
 const kieli = computed(() => {
   return Kielet.getUiKieli.value;
@@ -150,30 +142,33 @@ const page = computed({
 });
 
 watch(sivu, async (value) => {
-  page.value = value;
-  await fetchOpsitJaPerusteet();
-  (document.querySelector('.peruste-ops-linkki') as any)?.focus();
+  if (mounted.value) {
+    page.value = value;
+    await fetchOpsitJaPerusteet();
+    (document.querySelector('.peruste-ops-linkki') as any)?.focus();
+  }
 });
 
 const fetchOpsitJaPerusteet = async () => {
-  isLoading.value = true;
-  try {
+  if (_.size(queryNimi.value) > 2) {
+    isLoading.value = true;
     await perusteStore.getOpsitJaPerusteet({
       nimi: queryNimi.value,
       kieli: sisaltoKieli.value,
       sivu: sivu.value - 1,
       sivukoko: sivukoko.value,
     });
+  }
+  else {
+    perusteStore.clearOpsitJaPerusteet();
+  }
 
-    router.replace({
-      query: {
-        query: queryNimi.value,
-      },
-    }).catch(() => {});
-  }
-  catch (e) {
-    console.error(e);
-  }
+  router.replace({
+    query: {
+      haku: queryNimi.value,
+      sivu: sivu.value,
+    },
+  }).catch(() => {});
   isLoading.value = false;
 };
 

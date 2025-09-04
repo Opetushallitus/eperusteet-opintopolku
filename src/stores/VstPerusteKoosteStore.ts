@@ -1,4 +1,4 @@
-import { Osaamismerkit, PerusteenJulkaisuData } from '@shared/api/eperusteet';
+import { Osaamismerkit, PerusteenJulkaisuData, Perusteet, PerusteKevytDto } from '@shared/api/eperusteet';
 import { ryhmat } from '@shared/utils/perusteet';
 import { julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
@@ -12,12 +12,14 @@ export class VstPerusteKoosteStore implements IPerusteKoosteStore {
     koulutustyyppi: '' as string | '',
     perusteJulkaisut: null as PerusteenJulkaisuData[] | null,
     muutTilet: [] as any[],
+    julkaistutKoostePerusteet: null as PerusteKevytDto[] | null,
   });
 
   public readonly koulutustyyppi = computed(() => this.state.koulutustyyppi);
   public readonly perusteJulkaisut = computed(() => this.state.perusteJulkaisut);
   public readonly muutTilet = computed(() => this.state.muutTilet);
   public readonly perusteCacheStore = usePerusteCacheStore();
+  public readonly perusteJarjestykset = computed(() => _.filter(this.state.julkaistutKoostePerusteet, peruste => _.includes(_.map(this.state.perusteJulkaisut, 'id'), peruste.id)));
 
   constructor(koulutustyyppi: string) {
     this.state.koulutustyyppi = koulutustyyppi;
@@ -25,6 +27,10 @@ export class VstPerusteKoosteStore implements IPerusteKoosteStore {
   }
 
   async fetch() {
+    this.state.julkaistutKoostePerusteet = null;
+    this.state.perusteJulkaisut = null;
+
+    this.state.julkaistutKoostePerusteet = (await Perusteet.getJulkaistutKoostePerusteet()).data;
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
     this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, poistunut: true })), 'data');
 

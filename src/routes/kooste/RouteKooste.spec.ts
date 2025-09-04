@@ -14,6 +14,11 @@ import { createMount } from '@shared/utils/__tests__/stubs';
 import { nextTick } from 'vue';
 import { getCachedPerusteStore, usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 import { getKoosteOpasStore, getKoostePaikallinenComponent, getKoostePaikallinenStore, getKoostePerusteStore, getKoosteTiedotteetStore } from '@/utils/toteutustypes';
+import { useRoute } from 'vue-router';
+
+vi.mocked(useRoute).mockReturnValue({ params: {
+  koulutustyyppi: 'koulutustyyppi_2',
+} } as any);
 
 vi.mock('@/utils/toteutustypes', () => ({
   getKoostePerusteStore: vi.fn(),
@@ -65,6 +70,7 @@ describe('RouteKooste', () => {
         voimassaoloAlkaa: 123456,
       }])),
       fetch: () => new Promise<void>(resolve => resolve()),
+      perusteJarjestykset: computed(() => []),
     };
 
     (getKoostePerusteStore as any).mockReturnValue(perusteKoosteStore);
@@ -158,6 +164,7 @@ describe('RouteKooste', () => {
     const wrapper = createMount(RouteKooste as any);
 
     nextTick();
+
     expect(wrapper.html()).not.toContain(' perusteet ');
     expect(wrapper.html()).toContain('ajankohtaista');
     expect(wrapper.html()).toContain('ohjeet-ja-materiaalit');

@@ -142,15 +142,32 @@ import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import { useHead  } from '@unhead/vue';
 import { $t, $kaanna } from '@shared/utils/globals';
 import { pinia } from '@/pinia';
+import { onMounted } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
 const ammatillinenPerusteKoosteStore = useAmmatillinenPerusteKoosteStore(pinia);
+const mounted = ref(false);
 
 const query = ref({
   haku: <null | string> null,
   sivu: 0,
 });
+
+onMounted(async () => {
+  setQueryParams();
+  await fetch(query.value);
+
+  mounted.value = true;
+});
+
+const setQueryParams = () => {
+  query.value = {
+    ...query.value,
+    haku: route?.query?.haku as string || null,
+    sivu: (route?.query?.sivu as number || 1) - 1,
+  };
+};
 
 const koulutustyyppi = computed(() => {
   return 'ammatillinen';
@@ -237,11 +254,16 @@ const queryNimi = computed(() => {
 });
 
 watch(queryNimi, () => {
-  query.value.sivu = 0;
+  if (mounted.value) {
+    query.value.sivu = 0;
+  }
 });
 
 watch(query, async (oldVal, newVal) => {
-  await fetch(query.value);
+  if (mounted.value) {
+    query.value.sivu = 0;
+    await fetch(query.value);
+  }
 
   if (oldVal.sivu !== newVal.sivu) {
     document.querySelector('.opetussuunnitelma-container a')?.focus();
@@ -251,6 +273,13 @@ watch(query, async (oldVal, newVal) => {
 const fetch = async (query) => {
   if (_.size(query.haku) === 0 || _.size(query.haku) > 2) {
     await ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.haku, sivu: query.sivu });
+
+    router.replace({
+      query: {
+        ...(query.haku && { haku: query.haku }),
+        sivu: query.sivu + 1,
+      },
+    }).catch(() => {});
   }
 };
 

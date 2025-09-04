@@ -8,15 +8,13 @@ exports[`EpFooter > Renders 1`] = `
       <div data-v-d45b1334="" class="footer-content">footer-eperusteet-palvelu</div>
       <div data-v-d45b1334="" class="footer-links">
         <!--v-if-->
-        <div data-v-d45b1334="" class="d-flex">
-          <epmaterialicon data-v-d45b1334="">chevron_right</epmaterialicon>
+        <div data-v-d45b1334="" class="d-flex"><span data-v-5adf8627="" data-v-d45b1334="" class="material-icons icon">chevron_right</span>
           <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste" rel="noopener noreferrer" target="_blank">
               <!--v-if-->saavutettavuusseloste
               <!--v-if-->
             </a></div>
         </div>
-        <div data-v-d45b1334="" class="d-flex">
-          <epmaterialicon data-v-d45b1334="">chevron_right</epmaterialicon>
+        <div data-v-d45b1334="" class="d-flex"><span data-v-5adf8627="" data-v-d45b1334="" class="material-icons icon">chevron_right</span>
           <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank">
               <!--v-if-->siirry-virkailijanakymaan<span data-v-5adf8627="" data-v-93539af8="" class="material-icons icon ml-1" style="font-size: 18px;" alt="avautuu-uuteen-valilehteen">launch</span>
             </a></div>

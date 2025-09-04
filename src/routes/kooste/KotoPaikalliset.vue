@@ -70,6 +70,7 @@ import { Koulutustyyppi } from '@shared/tyypit';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   paikallinenStore: {
@@ -88,18 +89,39 @@ const query = ref({
   sivukoko: 10,
   kieli: kieli.value,
 });
+const mounted = ref(false);
 
 const queryNimi = computed(() => query.value.nimi);
+const route = useRoute();
+const router = useRouter();
 
 onMounted(async () => {
   if (props.paikallinenStore) {
+    setQueryParams();
     await fetch();
   }
+
+  mounted.value = true;
 });
+
+const setQueryParams = () => {
+  query.value = {
+    ...query.value,
+    nimi: route?.query?.haku as string || null,
+    sivu: (route?.query?.sivu as number || 1) - 1,
+  };
+};
 
 const fetch = async () => {
   if (_.size(queryNimi.value) === 0 || _.size(queryNimi.value) > 2) {
     await props.paikallinenStore.fetchQuery(query.value);
+
+    router.replace({
+      query: {
+        ...(query.value.nimi && { haku: query.value.nimi }),
+        sivu: query.value.sivu + 1,
+      },
+    }).catch(() => {});
   }
 };
 
@@ -114,7 +136,9 @@ const page = computed({
 });
 
 watch(() => queryNimi.value, () => {
-  query.value.sivu = 0;
+  if (mounted.value) {
+    query.value.sivu = 0;
+  }
 });
 
 watch(() => kieli.value, (val) => {

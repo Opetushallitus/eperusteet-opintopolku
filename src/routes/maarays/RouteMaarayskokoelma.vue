@@ -13,7 +13,7 @@
     <div class="d-flex flex-column flex-lg-row">
       <div class="w-100 mr-2 mb-3">
         <EpSearch
-          v-model="query.nimi"
+          v-model="filters.nimi"
           :placeholder="$t('')"
         >
           <template #label>
@@ -24,7 +24,7 @@
 
       <div class="w-100 mr-2 mb-3">
         <EpMultiSelect
-          v-model="query.tyyppi"
+          v-model="filters.tyyppi"
           :enable-empty-option="true"
           :placeholder="$t('kaikki')"
           :is-editing="true"
@@ -53,7 +53,7 @@
         <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
         <EpMaarayskokoelmaKoulutustyyppiSelect
           v-if="koulutustyyppiVaihtoehdot"
-          v-model="query.koulutustyypit"
+          v-model="filters.koulutustyypit"
           class="maarayskokoelma-koulutustyyppi-select"
           :is-editing="true"
           :koulutustyypit="koulutustyyppiVaihtoehdot"
@@ -62,7 +62,7 @@
     </div>
 
     <EpVoimassaoloFilter
-      v-model="query"
+      v-model="filters"
       class="mb-0"
     />
 
@@ -90,8 +90,8 @@
           href="javascript:void(0)"
           @click="vaihdaJarjestys()"
         >
-          <span v-if="query.jarjestys === 'DESC'">{{ $t('uusimmat-ensin') }} <EpMaterialIcon icon-shape="outlined">arrow_drop_down</EpMaterialIcon></span>
-          <span v-if="query.jarjestys === 'ASC'">{{ $t('vanhimmat-ensin') }} <EpMaterialIcon icon-shape="outlined">arrow_drop_up</EpMaterialIcon></span>
+          <span v-if="filters.jarjestys === 'DESC'">{{ $t('uusimmat-ensin') }} <EpMaterialIcon icon-shape="outlined">arrow_drop_down</EpMaterialIcon></span>
+          <span v-if="filters.jarjestys === 'ASC'">{{ $t('vanhimmat-ensin') }} <EpMaterialIcon icon-shape="outlined">arrow_drop_up</EpMaterialIcon></span>
         </a>
       </div>
 
@@ -136,7 +136,7 @@
 
       <EpBPagination
         v-if="maarayksetCount > perPage"
-        v-model="sivu"
+        v-model="page"
         :items-per-page="perPage"
         :total="maarayksetCount"
         aria-controls="maarayskokoelma-lista"
@@ -148,7 +148,7 @@
 <script setup lang="ts">
 import * as _ from 'lodash';
 import { ref, computed, watch, onMounted, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
@@ -169,13 +169,13 @@ import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 
 const route = useRoute();
+const router = useRouter();
 
 const maarayksetStore = new MaarayksetStore();
 const perPage = ref(10);
-const sivu = ref(1);
-const query = ref({
+const page = ref(1);
+const filters = ref({
   nimi: '',
-  sivukoko: 10,
   julkaistu: true,
   laadinta: false,
   jarjestysTapa: 'voimassaoloAlkaa',
@@ -185,43 +185,74 @@ const query = ref({
   tuleva: true,
   voimassaolo: true,
 });
+const mounted = ref(false);
+
+const filterToQueryParams = {
+  nimi: 'haku',
+  tyyppi: 'tyyppi',
+  koulutustyypit: 'koulutustyypit',
+  tuleva: 'tuleva',
+  voimassaolo: 'voimassaolo',
+  poistunut: 'poistunut',
+  sivu: 'sivu',
+  jarjestys: 'jarjestys',
+};
+
+const queryParamsToFilter = _.invert(filterToQueryParams);
 
 onMounted(async () => {
-  if (route.query.tyyppi) {
-    query.value.tyyppi = route.query.tyyppi as string;
-  }
+  setQueryParams();
 
   await maarayksetStore.init();
   await fetch();
+  mounted.value = true;
 });
 
-watch(sivu, async () => {
-  await fetch();
-  await nextTick();
-  const firstMaarays = document.querySelector('.maarays') as HTMLElement;
-  if (firstMaarays) {
-    firstMaarays.setAttribute('tabindex', '-1');
-    firstMaarays.focus();
+const setQueryParams = () => {
+  filters.value = {
+    ...filters.value,
+    ..._.mapKeys(_.pickBy(route?.query, (value, key) => key in queryParamsToFilter), (value, key) => queryParamsToFilter[key as keyof typeof queryParamsToFilter]),
+  };
+  page.value = (route?.query?.sivu as number || 1);
+};
+
+watch(page, async () => {
+  if (mounted.value) {
+    await fetch();
     await nextTick();
+    const firstMaarays = document.querySelector('.maarays') as HTMLElement;
+    if (firstMaarays) {
+      firstMaarays.setAttribute('tabindex', '-1');
+      firstMaarays.focus();
+      await nextTick();
+    }
   }
 });
 
-watch(query, async () => {
-  if (maarayksetStore) {
-    sivu.value = 1;
+watch(filters, async () => {
+  if (mounted.value) {
+    page.value = 1;
     await fetch();
   }
 }, { deep: true });
 
 async function fetch() {
-  if (_.size(query.value.nimi) === 0 || _.size(query.value.nimi) > 2) {
+  if (_.size(filters.value.nimi) === 0 || _.size(filters.value.nimi) > 2) {
     await maarayksetStore?.fetch(
       {
-        ...query.value,
-        tyyppi: query.value.tyyppi === 'kaikki' ? null : query.value.tyyppi,
+        ...filters.value,
+        tyyppi: filters.value.tyyppi === 'kaikki' ? null : filters.value.tyyppi,
         kieli: kieli.value,
-        sivu: sivu.value - 1,
+        sivu: page.value - 1,
+        sivukoko: perPage.value,
       });
+
+    router.replace({
+      query: {
+        ..._.mapKeys(_.pickBy(filters.value, (value, key) => key in filterToQueryParams), (value, key) => filterToQueryParams[key as keyof typeof filterToQueryParams]),
+        sivu: page.value,
+      },
+    }).catch(() => {});
   }
 }
 
@@ -270,8 +301,9 @@ const murupolku = [
   },
 ];
 
-function vaihdaJarjestys() {
-  query.value.jarjestys = query.value.jarjestys === 'DESC' ? 'ASC' : 'DESC';
+async function vaihdaJarjestys() {
+  filters.value.jarjestys = filters.value.jarjestys === 'DESC' ? 'ASC' : 'DESC';
+  await fetch();
 }
 
 function searchIdentity(kt: string) {

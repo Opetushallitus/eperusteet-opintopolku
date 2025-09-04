@@ -24,7 +24,7 @@
           :class="{'disabled-events': !perusteetJaTutkinnonosat}"
         >
           <EpSearch
-            v-model="query"
+            v-model="filters.nimiTaiKoodi"
             class="flex-fill ml-0 mt-3 mb-3 mr-3"
             :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
             :placeholder="$t('')"
@@ -34,7 +34,7 @@
             </template>
           </EpSearch>
           <EpMultiSelect
-            v-model="tutkintotyyppi"
+            v-model="filters.tutkintotyyppi"
             class="multiselect ml-0 mt-3 mb-3"
             :enable-empty-option="true"
             :placeholder="$t('kaikki')"
@@ -66,13 +66,13 @@
         class="mb-3"
       >
         <EpSearch
-          v-model="query"
+          v-model="filters.nimiTaiKoodi"
           :class="{'disabled-events': !perusteetJaTutkinnonosat}"
         />
       </div>
       <EpSisaltotyyppiFilter
         v-if="tyyppi === 'peruste'"
-        v-model="toggleQuery"
+        v-model="filters"
       />
     </div>
 
@@ -158,6 +158,7 @@ import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import { useAmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
 import { useAmmatillinenOpasHakuStore } from '@/stores/AmmatillinenOpasHakuStore';
 import { pinia } from '@/pinia';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   tyyppi: {
@@ -167,38 +168,70 @@ const props = defineProps({
 });
 
 const valmisteillaOlevatStore = useValmisteillaOlevatStore(pinia);
-const tutkintotyyppi = ref('kaikki');
-const query = ref('');
-const toggleQuery = ref<any>({});
 const perusteHakuStore = props.tyyppi === 'peruste' ? useAmmatillinenPerusteHakuStore(pinia) : useAmmatillinenOpasHakuStore(pinia);
+const mounted = ref(false);
 
-const initQuery = () => {
-  filters.value.nimiTaiKoodi = undefined;
-  toggleQuery.value = {
-    tuleva: true,
-    voimassaolo: true,
-    siirtyma: false,
-    poistunut: false,
-    perusteet: true,
-    tutkinnonosat: false,
-  };
-};
+const perPage = ref(10);
+const page = ref(0);
 
-const updateFilters = async (filters) => {
-  if (_.size(filters.nimiTaiKoodi) === 0 || _.size(filters.nimiTaiKoodi) > 2) {
-    await perusteHakuStore.updateFilters(filters);
-  }
-};
+const filters = ref<any>({
+  nimiTaiKoodi: '',
+  tutkintotyyppi: 'kaikki',
+  koulutustyyppi: [
+    'koulutustyyppi_1',
+    'koulutustyyppi_11',
+    'koulutustyyppi_12',
+    'koulutustyyppi_5',
+    'koulutustyyppi_18',
+  ],
+  tuleva: true,
+  voimassaolo: true,
+  siirtyma: false,
+  poistunut: false,
+  perusteet: true,
+  tutkinnonosat: false,
+  sivukoko: 10,
+});
+
+const queryParamsToFilter = _.invert(perusteHakuStore.filterToQueryParams);
+
+const route = useRoute();
+const router = useRouter();
 
 onMounted(async () => {
-  initQuery();
-  page.value = 1;
+  setQueryParams();
   await valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+  await fetch();
 
-  if (!perusteHakuStore.perusteet) {
-    await perusteHakuStore.fetch();
-  }
+  mounted.value = true;
 });
+
+const fetch = async () => {
+  if (_.size(filters.value.nimiTaiKoodi) === 0 || _.size(filters.value.nimiTaiKoodi) > 2) {
+    await perusteHakuStore.fetch(
+      {
+        ...filters.value,
+        sivu: page.value - 1,
+      });
+
+    router.replace({
+      query: {
+        ...(filters.value.nimiTaiKoodi && { query: filters.value.nimiTaiKoodi }),
+        ..._.mapKeys(_.pickBy(filters.value, (value, key) => key in perusteHakuStore.filterToQueryParams), (value, key) => perusteHakuStore.filterToQueryParams[key as keyof typeof perusteHakuStore.filterToQueryParams]),
+        page: page.value,
+      },
+    }).catch(() => {});
+  }
+};
+
+
+const setQueryParams = () => {
+  filters.value = {
+    ...filters.value,
+    ..._.mapKeys(_.pickBy(route?.query, (value, key) => key in queryParamsToFilter), (value, key) => queryParamsToFilter[key as keyof typeof queryParamsToFilter]),
+  };
+  page.value = (route?.query?.page as number || 1);
+};
 
 const tutkintotyypit = computed(() => {
   return [
@@ -214,53 +247,40 @@ const kieli = computed(() => {
 });
 
 watch(kieli, async () => {
-  await updateFilters({ kieli: kieli.value });
+  await fetch();
+});
+
+const tutkintotyyppi = computed(() => {
+  return filters.value.tutkintotyyppi;
 });
 
 watch(tutkintotyyppi, async () => {
   if (tutkintotyyppi.value === 'kaikki') {
-    await updateFilters({ koulutustyyppi: [
+    filters.value.koulutustyyppi = [
       'koulutustyyppi_1',
       'koulutustyyppi_11',
       'koulutustyyppi_12',
       'koulutustyyppi_5',
       'koulutustyyppi_18',
-    ] });
+    ];
   }
   else {
-    await updateFilters({ koulutustyyppi: [tutkintotyyppi.value] });
+    filters.value.koulutustyyppi = [tutkintotyyppi.value];
   }
 });
 
-watch(query, async () => {
-  page.value = 1;
-  await updateFilters({ nimiTaiKoodi: query.value });
-});
-
-const page = computed({
-  get: () => {
-    return perusteHakuStore.page + 1;
-  },
-  set: (value) => {
-    perusteHakuStore.page = value - 1;
-  },
-});
+watch(filters, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    await fetch();
+  }
+}, { deep: true });
 
 watch(page, async () => {
-  await updateFilters({ sivu: perusteHakuStore.page });
-
-  // Wait for DOM update
-  await nextTick();
-  const firstRowLink = document.querySelector('.ammatillinen-row a') as HTMLElement;
-  if (firstRowLink) {
-    firstRowLink.focus();
+  if (mounted.value) {
+    await fetch();
   }
 });
-
-watch(toggleQuery, async () => {
-  await updateFilters(toggleQuery.value);
-  page.value = 1;
-}, { deep: true });
 
 const searchPlaceholder = computed(() => {
   if (props.tyyppi === 'opas') {
@@ -329,25 +349,17 @@ const mapPerusteet = (perusteet) => {
 
 const perusteetJaTutkinnonosat = computed(() => {
   if (perusteHakuStore.perusteet) {
-    return mapPerusteet(perusteHakuStore.perusteet);
+    return mapPerusteet(perusteHakuStore.perusteet.data);
   }
   return undefined;
 });
 
 const total = computed(() => {
-  return perusteHakuStore.total;
+  return perusteHakuStore.perusteet?.kokonaismäärä;
 });
 
 const pages = computed(() => {
-  return perusteHakuStore.pages;
-});
-
-const perPage = computed(() => {
-  return perusteHakuStore.perPage;
-});
-
-const filters = computed(() => {
-  return perusteHakuStore.filters;
+  return perusteHakuStore.perusteet?.sivuja;
 });
 
 const valmisteillaOlevat = computed(() => {

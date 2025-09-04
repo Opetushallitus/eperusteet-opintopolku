@@ -25,7 +25,7 @@
         :placeholder="$t('kaikki')"
         class="multiselect ml-0 mt-3 mb-3"
         :searchable="false"
-        @input="setActivePeruste($event)"
+        @update:model-value="setActivePeruste($event)"
       >
         <template #label>
           <span class="font-weight-600">{{ $t('peruste') }}</span>
@@ -102,6 +102,7 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { isVstLukutaito } from '@shared/utils/perusteet';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { $kaanna } from '@shared/utils/globals';
+import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps({
   paikallinenStore: {
@@ -118,6 +119,9 @@ const instance = getCurrentInstance();
 const valittuPeruste = ref(null);
 const perPage = ref(10);
 const kieli = computed(() => Kielet.getSisaltoKieli.value);
+const route = useRoute();
+const router = useRouter();
+const mounted = ref(false);
 
 const initQuery = () => {
   return {
@@ -128,7 +132,7 @@ const initQuery = () => {
       Koulutustyyppi.vapaasivistystyolukutaito,
     ],
     oppilaitosTyyppiKoodiUri: null,
-    nimi: null,
+    nimi: null as string | null,
     sivu: 0,
     sivukoko: 10,
     kieli: kieli.value,
@@ -144,13 +148,44 @@ const initQuery = () => {
 
 const query = ref(initQuery());
 
-onMounted(() => {
-  fetch();
+onMounted(async () => {
+  setQueryParams();
+  await fetch();
+
+  mounted.value = true;
 });
+
+const setQueryParams = () => {
+
+  const peruste = _.find(julkaistutPerusteet.value, (peruste) => peruste.diaarinumero === route?.query?.perustediaarinumero as string);
+
+  query.value = {
+    ...query.value,
+    nimi: route?.query?.haku as string || null,
+    sivu: (route?.query?.sivu as number || 1) - 1,
+    perusteId: peruste?.id || 0,
+    voimassaolo: _.has(route?.query, 'voimassaolo') ? route?.query?.voimassaolo === 'true' ? true : false : true,
+    poistunut: _.has(route?.query, 'poistunut') ? route?.query?.poistunut === 'true' ? true : false : false,
+    tuleva: _.has(route?.query, 'tuleva') ? route?.query?.tuleva === 'true' ? true : false : true,
+  };
+
+  valittuPeruste.value = peruste || null;
+};
 
 const fetch = async () => {
   if (_.size(queryNimi.value) === 0 || _.size(queryNimi.value) > 2) {
     await props.paikallinenStore.fetchQuery(query.value);
+
+    router.replace({
+      query: {
+        ...(query.value.nimi && { haku: query.value.nimi }),
+        sivu: query.value.sivu + 1,
+        ...(query.value.perusteId && { perustediaarinumero: _.find(julkaistutPerusteet.value, (peruste) => peruste.id === query.value.perusteId)?.diaarinumero }),
+        voimassaolo: query.value.voimassaolo ? 'true' : 'false',
+        poistunut: query.value.poistunut ? 'true' : 'false',
+        tuleva: query.value.tuleva ? 'true' : 'false',
+      },
+    }).catch(() => {});
   }
 };
 
@@ -210,7 +245,9 @@ watch(() => kieli.value, (val) => {
 });
 
 watch(() => queryNimi.value, () => {
-  query.value.sivu = 0;
+  if (mounted.value) {
+    query.value.sivu = 0;
+  }
 });
 
 watch(() => query.value, async (newVal, oldVal) => {

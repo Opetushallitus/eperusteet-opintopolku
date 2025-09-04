@@ -26,7 +26,7 @@
           </EpSearch>
 
           <EpMultiSelect
-            v-model="kategoria"
+            v-model="query.kategoria"
             :is-editing="false"
             :options="osaamismerkkiKategoriaOptions"
             :placeholder="$t('kaikki')"
@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -66,17 +66,20 @@ import { murupolkuOsaamismerkkiRoot } from '@/utils/murupolku';
 import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
 import { $kaanna, $t } from '@shared/utils/globals';
 import { pinia } from '@/pinia';
+import { Kielet } from '@shared/stores/kieli';
 
 const route = useRoute();
+const router = useRouter();
 const osaamismerkitStore = useOsaamismerkitStore(pinia);
+const mounted = ref(false);
 
 const initQuery = () => {
   return {
     sivu: 0,
     sivukoko: 9999,
-    nimi: '',
+    nimi: '' as string | null,
     tila: ['JULKAISTU'],
-    kategoria: undefined,
+    kategoria: undefined as object | undefined,
     voimassa: true,
     tuleva: false,
     poistunut: false,
@@ -88,23 +91,44 @@ const kategoria = ref(null);
 
 onMounted(async () => {
   await osaamismerkitStore.fetchKategoriat({ poistunut: false });
+  await osaamismerkitStore.updateOsaamismerkitQuery(query.value);
+  setQueryParams();
+  mounted.value = true;
 });
 
+const setQueryParams = () => {
+  query.value = {
+    ...query.value,
+    nimi: route?.query?.query as string || null,
+    kategoria: _.find(osaamismerkkiKategoriaOptionsMapped.value, (kategoria) => kategoria.value === _.toNumber(route?.query?.category)) || null,
+  };
+};
+
 const osaamismerkit = computed(() => {
-  return osaamismerkitStore.osaamismerkit;
+  if (!osaamismerkitStore.osaamismerkit) {
+    return undefined;
+  }
+
+  return _.chain(osaamismerkitStore.osaamismerkit)
+    .filter(osaamismerkki => Kielet.search(query.value.nimi, osaamismerkki.nimi))
+    .filter(osaamismerkki => query.value.kategoria ? osaamismerkki.kategoria?.id === query.value.kategoria.value : true)
+    .value();
 });
+
+watch(query, async () => {
+  if (mounted.value) {
+    router.replace({
+      query: {
+        query: query.value.nimi,
+        category: query.value.kategoria?.value,
+      },
+    }).catch(() => {});
+  }
+}, { deep: true });
 
 const osaamismerkkiKategoriat = computed(() => {
   return osaamismerkitStore.kategoriat;
 });
-
-watch(query, async (newQuery: OsaamismerkitQuery) => {
-  if (_.size(newQuery.nimi) === 0 || _.size(newQuery.nimi) > 2) {
-    await osaamismerkitStore.updateOsaamismerkitQuery({
-      ...newQuery,
-    });
-  }
-}, { deep: true, immediate: true });
 
 watch(kategoria, (newKategoria) => {
   query.value.kategoria = newKategoria ? newKategoria.value : null;

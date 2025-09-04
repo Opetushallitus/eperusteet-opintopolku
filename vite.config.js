@@ -20,7 +20,6 @@ export default defineConfig(({ mode }) => {
           compilerOptions: {
             compatConfig: {
               MODE: 2,
-              COMPONENT_V_MODEL: false,
               COMPILER_V_BIND_OBJECT_ORDER: false,
             },
           },
