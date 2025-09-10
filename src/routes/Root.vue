@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { Component, Prop, Provide, ProvideReactive, Vue, Watch } from 'vue-property-decorator';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import { Meta } from '@shared/utils/decorators';
 import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
@@ -101,6 +101,11 @@ export default class Root extends Vue {
         },
       ],
     };
+  }
+
+  @Provide('commentingDisabled')
+  get commentingDisabled() {
+    return true;
   }
 }
 </script>
