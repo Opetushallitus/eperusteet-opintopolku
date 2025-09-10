@@ -82,7 +82,9 @@ export class OpsAiStore {
   }
 
   public addErrorMessage() {
-    this.state.messages.push(this.createMessage('assistant', this.$el.$t('virhe-palvelu-virhe'), 'error'));
+    if (!_.find(this.state.messages, message => message.role === 'assistant' && (message as any).type === 'error')) {
+      this.state.messages.push(this.createMessage('assistant', this.$el.$t('virhe-palvelu-virhe'), 'error'));
+    }
   }
 
   public addMessage(role, message?) {
@@ -99,22 +101,28 @@ export class OpsAiStore {
   }
 
   public async sendThreadMessage(message: string, assistant: Assistant) {
-    if (this.state.thread) {
-      this.state.currentRun = {
-        status: 'queued',
-      };
+    try {
+      if (this.state.thread) {
+        this.state.currentRun = {
+          status: 'queued',
+        };
 
-      this.state.assistant = {
-        ...this.state.assistant,
-        ...assistant,
-      };
+        this.state.assistant = {
+          ...this.state.assistant,
+          ...assistant,
+        };
 
-      this.addMessage('user', message);
-      this.addMessage('assistant');
+        this.addMessage('user', message);
+        this.addMessage('assistant');
 
-      await ChatApi.addMessageToThread(this.state.thread.id!, this.state.fileId!, message);
-      this.state.currentRun = (await ChatApi.runThread(this.state.thread.id!, assistant.model, assistant.instructions, assistant.temperature, assistant.top_p)).data;
-      await this.waitRunStatus();
+        await ChatApi.addMessageToThread(this.state.thread.id!, this.state.fileId!, message);
+        this.state.currentRun = (await ChatApi.runThread(this.state.thread.id!, assistant.model, assistant.instructions, assistant.temperature, assistant.top_p)).data;
+        await this.waitRunStatus();
+      }
+    }
+    catch (e) {
+      this.markRunErrorronous();
+      this.addErrorMessage();
     }
   }
 
@@ -145,6 +153,7 @@ export class OpsAiStore {
     try {
       while (this.prosessingMessage.value) {
         await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log('waiting for run status', this.state.currentRun?.status);
         this.state.currentRun = (await ChatApi.getRun(this.state.thread?.id!, this.state.currentRun!.id!)).data;
       }
 
@@ -203,7 +212,7 @@ export class OpsAiStore {
         sourceLanguage: Kielet.getSisaltoKieli.value,
         sourceRevision: this.sourceRevision,
         sourceName: this.sourceName,
-        sourceFileType: this.sourceFileType as any,
+        sourceFileType: this.sourceFileType.value as any,
         educationLevel: this.educationLevel,
         instructions: this.state.assistant?.instructions,
         temperature: this.state.assistant?.temperature,
