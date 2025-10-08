@@ -51,6 +51,21 @@
       />
     </div>
 
+    <template v-if="vaihe.vapaatTekstit">
+        <div
+          v-for="(vapaaTeksti, index) in vaihe.vapaatTekstit"
+          :key="'vapaateksti'+index"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna(vapaaTeksti.nimi) }}</h3>
+          <ep-content-viewer
+            :value="$kaanna(vapaaTeksti.teksti)"
+            :kuvat="kuvat"
+            :termit="termit"
+          />
+        </div>
+      </template>
+
     <div
       v-if="oppiaineet && oppiaineet.length > 0"
       class="mt-5"
@@ -137,6 +152,11 @@ const fields = computed(() => {
 const kuvat = computed(() => {
   return perusteDataStore.kuvat;
 });
+
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
+
 </script>
 
 <style scoped lang="scss">

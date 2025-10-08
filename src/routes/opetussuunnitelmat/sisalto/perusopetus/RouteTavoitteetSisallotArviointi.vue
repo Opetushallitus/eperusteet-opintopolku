@@ -103,7 +103,7 @@
           :key="oppiaineJaTavoitteet.oppiaine.id"
           class="mb-4"
           :oppiaine-ja-tavoitteet="oppiaineJaTavoitteet"
-          @selectOppiaine="selectOppiaine"
+          @select-oppiaine="selectOppiaine"
         />
       </template>
 

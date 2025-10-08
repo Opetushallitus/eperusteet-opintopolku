@@ -1,3 +1,0 @@
-{
-  "./src/*": [ "vue-cli-service lint --no-fix" ]
-}
