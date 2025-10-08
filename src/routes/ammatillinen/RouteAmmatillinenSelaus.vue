@@ -69,7 +69,7 @@
             </h2>
             <ep-julki-lista
               :tiedot="tiedotteet"
-              @avaaTieto="avaaTiedote"
+              @avaa-tieto="avaaTiedote"
             >
               <template #lisaaBtnText>
                 <div class="mt-2">

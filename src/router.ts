@@ -116,6 +116,11 @@ export const router = createRouter({
   history: createWebHashHistory(),
   ...(browserStore.navigationVisible.value && {
     scrollBehavior(to, from, savedPosition) {
+      if (to.name === from.name) {
+        return;
+      }
+
+
       if (savedPosition) {
         return savedPosition;
       }

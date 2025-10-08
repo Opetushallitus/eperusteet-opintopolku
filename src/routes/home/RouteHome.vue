@@ -29,7 +29,7 @@
             :tiedot="tiedotteetMapped"
             :tieto-maara="5"
             listaus-tyyppi="none"
-            @avaaTieto="avaaTiedote"
+            @avaa-tieto="avaaTiedote"
           >
             <template #eiTietoja>
               <div>

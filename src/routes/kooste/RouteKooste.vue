@@ -100,7 +100,7 @@
               <ep-spinner-slot :is-loading="!tiedotteet">
                 <ep-julki-lista
                   :tiedot="tiedotteet"
-                  @avaaTieto="avaaTiedote"
+                  @avaa-tieto="avaaTiedote"
                 >
                   <template #lisaaBtnText>
                     {{ $t('nayta-lisaa') }}
@@ -117,7 +117,7 @@
               <ep-spinner-slot :is-loading="!ohjeet">
                 <ep-julki-lista
                   :tiedot="ohjeet"
-                  @avaaTieto="avaaOpas"
+                  @avaa-tieto="avaaOpas"
                 >
                   <template #lisaaBtnText>
                     <div class="mt-2">
