@@ -1,5 +1,6 @@
 <template>
-  <div class="opetussuunnitelma">
+  <ep-spinner v-if="!opetussuunnitelma" />
+  <div v-else class="opetussuunnitelma">
     <ep-header
       :koulutustyyppi="koulutustyyppi"
       :tyyppi="tyyppi"
@@ -101,7 +102,7 @@ const murupolku = computed(() => {
 });
 
 const diaariNumero = computed((): string => {
-  return opetussuunnitelma.value.perusteenDiaarinumero || opetussuunnitelma.value.perusteDiaarinumero || '';
+  return opetussuunnitelma.value?.peruste?.diaarinumero || '';
 });
 
 const scrollEnabled = computed(() => {
@@ -124,14 +125,14 @@ watch(() => route, onRouteUpdate, { deep: true, immediate: true });
 const getMetaInfo = computed(() => {
   if (opetussuunnitelma.value) {
     return {
-      title: $kaanna(opetussuunnitelma.value.nimi),
+      title: $kaanna(opetussuunnitelma.value?.nimi),
       meta: [
         {
           vmid: 'description',
           name: 'description',
           content: [
-            $kaanna(opetussuunnitelma.value.nimi),
-            opetussuunnitelma.value.koulutustyyppi,
+            $kaanna(opetussuunnitelma.value?.nimi),
+            opetussuunnitelma.value?.koulutustyyppi,
           ],
         },
       ],

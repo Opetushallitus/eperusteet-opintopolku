@@ -109,11 +109,11 @@ const oppiaine = computed(() => {
 });
 
 const pohjanOppiaine = computed(() => {
-  return oppiaine.value.pohjanOppiaine ?? {};
+  return oppiaine.value?.pohjanOppiaine ?? {};
 });
 
 const perusteOppiaine = computed(() => {
-  return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: oppiaine.value.tunniste });
+  return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: oppiaine.value?.tunniste });
 });
 
 const opetussuunnitelmanVuosiluokkakokonaisuudet = computed(() => {
@@ -125,7 +125,7 @@ const perusteenVuosiluokkakokonaisuudet = computed(() => {
 });
 
 const perusteOppiaineVuosiluokkakokonaisuudet = computed(() => {
-  return _.map(perusteOppiaine.value.vuosiluokkakokonaisuudet, ovlk => {
+  return _.map(perusteOppiaine.value?.vuosiluokkakokonaisuudet, ovlk => {
     return {
       ...ovlk,
       tunniste: _.get(_.find(perusteenVuosiluokkakokonaisuudet.value, pvlk => _.toString(pvlk.id) === _.get(ovlk, '_vuosiluokkaKokonaisuus')), 'tunniste'),
@@ -134,16 +134,16 @@ const perusteOppiaineVuosiluokkakokonaisuudet = computed(() => {
 });
 
 const perusteOppiaineVapaatTekstit = computed(() => {
-  return _.map(perusteOppiaine.value.vapaatTekstit, povt => {
+  return _.map(perusteOppiaine.value?.vapaatTekstit, povt => {
     return {
       ...povt,
-      oppiaineVapaaTeksti: _.find(oppiaine.value.vapaatTekstit, ovt => _.toString(povt.id) === _.toString(ovt.perusteenVapaaTekstiId)) || {},
+      oppiaineVapaaTeksti: _.find(oppiaine.value?.vapaatTekstit, ovt => _.toString(povt.id) === _.toString(ovt.perusteenVapaaTekstiId)) || {},
     };
   });
 });
 
 const oppiaineenPohjanVuosiluokkakokonaisuudet = computed(() => {
-  return oppiaine.value.pohjanOppiaine?.vuosiluokkakokonaisuudet;
+  return oppiaine.value?.pohjanOppiaine?.vuosiluokkakokonaisuudet;
 });
 
 const laajaalaisetOsaamiset = computed(() => {
@@ -151,14 +151,14 @@ const laajaalaisetOsaamiset = computed(() => {
 });
 
 const oppiaineenVuosiluokkakokonaisuudet = computed(() => {
-  const oppiaineenVlk = _.filter(oppiaine.value.vuosiluokkakokonaisuudet, vlk =>
+  const oppiaineenVlk = _.filter(oppiaine.value?.vuosiluokkakokonaisuudet, vlk =>
     _.includes(_.map(opetussuunnitelmanVuosiluokkakokonaisuudet.value, 'vuosiluokkakokonaisuus._tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')));
 
   return _.map(oppiaineenVlk, (oppiaineenVuosiluokkakokonaisuus) => {
     const opetussuunnitelmanVuosiluokkakokonaisuus = _.get(_.find(opetussuunnitelmanVuosiluokkakokonaisuudet.value, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')), 'vuosiluokkakokonaisuus');
     const perusteenVuosiluokkakokonaisuus = _.find(perusteenVuosiluokkakokonaisuudet.value, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
 
-    if (oppiaine.value.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
+    if (oppiaine.value?.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
       const perusteenOppiaineenVlk = _.find(perusteOppiaineVuosiluokkakokonaisuudet.value, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
       const oppiaineenPohjanVuosiluokkakokonaisuus = _.find(oppiaineenPohjanVuosiluokkakokonaisuudet.value, ovlk => _.get(ovlk, '_vuosiluokkakokonaisuus') === _.get(opetussuunnitelmanVuosiluokkakokonaisuus, '_tunniste'));
 
