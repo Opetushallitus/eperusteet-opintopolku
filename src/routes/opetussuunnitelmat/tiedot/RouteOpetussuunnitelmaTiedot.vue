@@ -5,7 +5,9 @@
     >
       {{ $t('opetussuunnitelman-tiedot') }}
     </h2>
-    <div>
+
+    <ep-spinner v-if="!opetussuunnitelma" />
+    <div v-else>
       <div class="row">
         <div
           v-if="opetussuunnitelma.nimi"
@@ -205,7 +207,7 @@ import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
 const opetussuunnitelma = computed(() => {
-  return opetussuunnitelmaDataStore.opetussuunnitelma!;
+  return opetussuunnitelmaDataStore.opetussuunnitelma || {};
 });
 
 const kunnat = computed(() => {
