@@ -4,13 +4,10 @@ import _ from 'lodash';
 import { ryhmat } from '@shared/utils/perusteet';
 import { tiedoteQuery } from '@/api/eperusteet';
 
-export class KoosteTiedotteetStore {
+export class KieliKaantajaTutkintoTiedotteetStore {
   public state = reactive({
     tiedotteet: null as TiedoteDto[] | null,
   });
-
-  constructor(private koulutustyyppi?: string) {
-  }
 
   public readonly tiedotteet = computed(() => this.state.tiedotteet);
 
@@ -23,15 +20,6 @@ export class KoosteTiedotteetStore {
         ...(await tiedoteQuery({
           sivukoko: 100,
           perusteIds: _.map(perusteJulkaisut, julkaisu => julkaisu.id) as number[],
-        })),
-      ];
-    }
-
-    if (this.koulutustyyppi) {
-      tiedotteet = [...tiedotteet,
-        ...(await tiedoteQuery({
-          sivukoko: 100,
-          koulutusTyyppi: ryhmat(this.koulutustyyppi),
         })),
       ];
     }
