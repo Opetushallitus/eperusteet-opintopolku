@@ -112,7 +112,7 @@
               </ep-spinner-slot>
             </div>
 
-            <div class="list">
+            <div v-if="opasStore" class="list">
               <h2>{{ $t('ohjeet-ja-materiaalit') }}</h2>
               <ep-spinner-slot :is-loading="!ohjeet">
                 <ep-julki-lista

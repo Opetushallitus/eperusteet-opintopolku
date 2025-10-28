@@ -78,6 +78,7 @@ import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import { useSlots } from 'vue';
 import { $kaanna, $t } from '@shared/utils/globals';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
 
 const props = defineProps<{
   query: string;

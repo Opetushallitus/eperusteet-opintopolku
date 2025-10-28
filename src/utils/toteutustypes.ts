@@ -10,19 +10,24 @@ import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
 import { OpasStore } from '@/stores/OpasStore';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { VstPerusteKoosteStore } from '@/stores/VstPerusteKoosteStore';
+import _ from 'lodash';
+import { KieliKaantajaTutkintoTiedotteetStore } from '@/stores/KieliKaantajaTutkintoTiedotteetStore';
 
 export const koostePerusteStore = {
   'koulutustyyppi_10': (koulutustyyppi): any => new VstPerusteKoosteStore(koulutustyyppi),
   'default': (koulutustyyppi): any => new PerusteKoosteStore(koulutustyyppi),
   'koulutustyyppi_muu': (koulutustyyppi): any => null,
+  'kielikaantajatutkinto': (koulutustyyppi): any => new PerusteKoosteStore(undefined, 'kieli_kaantaja_tutkinto'),
 };
 
 export const koosteOpasStore = {
   'default': (koulutustyyppi): any => new OpasStore(koulutustyyppi),
+  'kielikaantajatutkinto': (koulutustyyppi): any => null,
 };
 
 export const koosteTiedotteetStore = {
   'default': (koulutustyyppi): any => new KoosteTiedotteetStore(koulutustyyppi),
+  'kielikaantajatutkinto': (koulutustyyppi): any => new KieliKaantajaTutkintoTiedotteetStore(),
 };
 
 export const koostePaikallinenStore = {
@@ -31,6 +36,7 @@ export const koostePaikallinenStore = {
   'vapaasivistystyo': new VapaasivistystyoPaikallisetStore(),
   'muukoulutus': new YleisetPaikallisetStore(),
   'default': new YleissivistavatPaikallisetStore(),
+  'kielikaantajatutkinto': null,
 };
 
 export const koostePaikallinenComponent = {
@@ -60,15 +66,16 @@ export const koosteSubheader = {
 
 export const koostePerusteHeader = {
   'vapaasivistystyo': 'valtakunnalliset-perusteet-ja-suositukset',
+  'kielikaantajatutkinto': 'kielikaantajatutkinnon-perusteet',
   'default': 'tile-perusteet',
 };
 
 export const getKoostePaikallinenStore = (koulutustyyppi) :any => {
-  return koostePaikallinenStore[koulutustyyppi] ? koostePaikallinenStore[koulutustyyppi] : koostePaikallinenStore['default'];
+  return _.has(koostePaikallinenStore, koulutustyyppi) ? koostePaikallinenStore[koulutustyyppi] : koostePaikallinenStore['default'];
 };
 
 export const getKoostePaikallinenComponent = (koulutustyyppi) :any => {
-  return koostePaikallinenComponent[koulutustyyppi] ? koostePaikallinenComponent[koulutustyyppi] : koostePaikallinenComponent['default'];
+  return _.has(koostePaikallinenComponent, koulutustyyppi) ? koostePaikallinenComponent[koulutustyyppi] : koostePaikallinenComponent['default'];
 };
 
 export const getKoostePerusteStore = (koulutustyyppi): any => {
@@ -76,11 +83,11 @@ export const getKoostePerusteStore = (koulutustyyppi): any => {
 };
 
 export const getKoosteOpasStore = (koulutustyyppi): any => {
-  return koosteOpasStore[koulutustyyppi] !== undefined ? koosteOpasStore[koulutustyyppi] : koosteOpasStore['default'](koulutustyyppi);
+  return koosteOpasStore[koulutustyyppi] !== undefined ? koosteOpasStore[koulutustyyppi](koulutustyyppi) : koosteOpasStore['default'](koulutustyyppi);
 };
 
 export const getKoosteTiedotteetStore = (koulutustyyppi): any => {
-  return koosteTiedotteetStore[koulutustyyppi] !== undefined ? koosteTiedotteetStore[koulutustyyppi] : koosteTiedotteetStore['default'](koulutustyyppi);
+  return koosteTiedotteetStore[koulutustyyppi] !== undefined ? koosteTiedotteetStore[koulutustyyppi](koulutustyyppi) : koosteTiedotteetStore['default'](koulutustyyppi);
 };
 
 export const getKoosteKuvaus = (koulutustyyppi): any => {

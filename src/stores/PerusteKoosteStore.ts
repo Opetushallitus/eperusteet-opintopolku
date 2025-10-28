@@ -9,6 +9,7 @@ import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 export class PerusteKoosteStore implements IPerusteKoosteStore {
   public state = reactive({
     koulutustyyppi: '' as string | '',
+    tyyppi: '' as string | '',
     perusteJulkaisut: null as PerusteenJulkaisuData[] | null,
     julkaistutKoostePerusteet: null as PerusteKevytDto[] | null,
   });
@@ -19,16 +20,17 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
   public readonly perusteJulkaisut = computed(() => this.state.perusteJulkaisut);
   public readonly perusteJarjestykset = computed(() => _.filter(this.state.julkaistutKoostePerusteet, peruste => _.includes(_.map(this.state.perusteJulkaisut, 'id'), peruste.id)));
 
-  constructor(koulutustyyppi: string) {
+  constructor(koulutustyyppi?: string, tyyppi?: string) {
     this.state.julkaistutKoostePerusteet = null;
     this.state.koulutustyyppi = koulutustyyppi;
+    this.state.tyyppi = tyyppi;
   }
 
   async fetch() {
-    const koulutustyypit = ryhmat(this.state.koulutustyyppi);
+    const koulutustyypit = this.state.koulutustyyppi ? ryhmat(this.state.koulutustyyppi) : undefined;
     this.state.perusteJulkaisut = null;
     this.state.julkaistutKoostePerusteet = (await Perusteet.getJulkaistutKoostePerusteet()).data;
-    this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, poistunut: true })), 'data');
+    this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, tyyppi: this.state.tyyppi, poistunut: true })), 'data');
 
     this.state.perusteJulkaisut.forEach(async (peruste) => {
       this.perusteCacheStore.addPerusteStore(peruste.id);
