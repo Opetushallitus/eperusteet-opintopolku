@@ -100,7 +100,7 @@ export default class RouteOpetussuunnitelma extends Vue {
   }
 
   get diaariNumero(): string {
-    return this.opetussuunnitelma.perusteenDiaarinumero || this.opetussuunnitelma.perusteDiaarinumero || '';
+    return this.opetussuunnitelma?.peruste?.diaarinumero || '';
   }
 
   @Watch('$route', { deep: true, immediate: true })
