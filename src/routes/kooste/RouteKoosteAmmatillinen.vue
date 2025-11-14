@@ -1,31 +1,54 @@
 <template>
   <div>
     <ep-spinner v-if="!peruste" />
-    <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
-      <template slot="header">
-        {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
+    <ep-header
+      v-else
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
+      <template #header>
+        {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
       <div class="selaus">
         <b-container fluid>
           <b-row class="mb-0">
-            <b-col cols="12" lg="6" class="tile mb-5">
-              <h2 class="otsikko mb-4">{{ $t('peruste') }}</h2>
+            <b-col
+              cols="12"
+              lg="6"
+              class="tile mb-5"
+            >
+              <h2 class="otsikko mb-4">
+                {{ $t('peruste') }}
+              </h2>
               <router-link :to="perusteRoute">
-                <peruste-tile :julkaisu="peruste" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+                <peruste-tile
+                  :julkaisu="peruste"
+                  :koulutustyyppi="koulutustyyppi"
+                />
               </router-link>
             </b-col>
-            <b-col cols="12" lg="6" class="mb-5">
-              <h2 class="mb-4">{{$t('ajankohtaista')}}</h2>
-              <ep-spinner v-if="!tiedotteet"/>
-              <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote" v-else>
-                <template v-slot:lisaaBtnText>
+            <b-col
+              cols="12"
+              lg="6"
+              class="mb-5"
+            >
+              <h2 class="mb-4">
+                {{ $t('ajankohtaista') }}
+              </h2>
+              <ep-spinner v-if="!tiedotteet" />
+              <ep-julki-lista
+                v-else
+                :tiedot="tiedotteet"
+                @avaa-tieto="avaaTiedote"
+              >
+                <template #lisaaBtnText>
                   <div class="mt-2">
-                    {{$t('katso-lisaa-ajankohtaisia')}}
+                    {{ $t('katso-lisaa-ajankohtaisia') }}
                   </div>
                 </template>
-                <template v-slot:eiTietoja>
+                <template #eiTietoja>
                   <div class="mt-2">
-                    {{$t('ei-tiedotteita')}}
+                    {{ $t('ei-tiedotteita') }}
                   </div>
                 </template>
               </ep-julki-lista>
@@ -33,12 +56,20 @@
           </b-row>
           <b-row>
             <b-col>
-              <h2 class="otsikko mb-2">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
+              <h2 class="otsikko mb-2">
+                {{ $t('paikalliset-toteutussuunnitelmat') }}
+              </h2>
               <div class="search mb-2">
-                <div class="mb-2">{{$t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla')}}</div>
-                <ep-search v-model="query.haku" :placeholder="$t('')" class="my-3">
+                <div class="mb-2">
+                  {{ $t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla') }}
+                </div>
+                <ep-search
+                  v-model="query.haku"
+                  :placeholder="$t('')"
+                  class="my-3"
+                >
                   <template #label>
-                    <span class="font-weight-600">{{$t('hae-toteutussuunnitelmaa')}}</span>
+                    <span class="font-weight-600">{{ $t('hae-toteutussuunnitelmaa') }}</span>
                   </template>
                 </ep-search>
               </div>
@@ -53,22 +84,36 @@
                   {{ $t('ei-hakutuloksia') }}
                 </div>
               </div>
-              <div v-else id="opetussuunnitelmat-lista" class="opetussuunnitelma-container">
+              <div
+                v-else
+                id="opetussuunnitelmat-lista"
+                class="opetussuunnitelma-container"
+              >
+                <EpHakutulosmaara
+                  :kokonaismaara="opetussuunnitelmatPage.kokonaismäärä"
+                  piilota-nakyva-tulosmaara
+                />
 
-                <EpHakutulosmaara :kokonaismaara="opetussuunnitelmatPage.kokonaismäärä" piilotaNakyvaTulosmaara/>
-
-                <div v-for="(ops, idx) in opetussuunnitelmat" :key="idx">
-
-                  <router-link :to="ops.route" class="d-block">
-                    <opetussuunnitelma-tile :ops="ops" :query="query.haku"/>
+                <div
+                  v-for="(ops, idx) in opetussuunnitelmat"
+                  :key="idx"
+                >
+                  <router-link
+                    :to="ops.route"
+                    class="d-block"
+                  >
+                    <opetussuunnitelma-tile
+                      :ops="ops"
+                      :query="query.haku"
+                    />
                   </router-link>
-
                 </div>
-                <EpBPagination v-model="page"
-                              :items-per-page="perPage"
-                              :total="opetussuunnitelmatPage.kokonaismäärä"
-                              aria-controls="opetussuunnitelmat-lista">
-                </EpBPagination>
+                <EpBPagination
+                  v-model="page"
+                  :items-per-page="perPage"
+                  :total="opetussuunnitelmatPage.kokonaismäärä"
+                  aria-controls="opetussuunnitelmat-lista"
+                />
               </div>
             </b-col>
           </b-row>
@@ -78,161 +123,184 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import PerusteTile from './PerusteTile.vue';
 import * as _ from 'lodash';
-import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import { AmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
+import { useAmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import { Meta } from '@shared/utils/decorators';
 import { OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { murupolkuAmmatillinenRoot } from '@/utils/murupolku';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { useHead  } from '@unhead/vue';
+import { $t, $kaanna } from '@shared/utils/globals';
+import { pinia } from '@/pinia';
+import { onMounted } from 'vue';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    PerusteTile,
-    EpJulkiLista,
-    EpSearch,
-    OpetussuunnitelmaTile,
-    EpBPagination,
-    EpHakutulosmaara,
-  },
-})
-export default class RouteKoosteAmmatillinen extends Vue {
-  @Prop({ required: true })
-  private ammatillinenPerusteKoosteStore!: AmmatillinenPerusteKoosteStore;
+const route = useRoute();
+const router = useRouter();
+const ammatillinenPerusteKoosteStore = useAmmatillinenPerusteKoosteStore(pinia);
+const mounted = ref(false);
 
-  private query = {
-    haku: null,
-    sivu: 0,
+const query = ref({
+  haku: <null | string> null,
+  sivu: 0,
+});
+
+onMounted(async () => {
+  setQueryParams();
+  await fetch(query.value);
+
+  mounted.value = true;
+});
+
+const setQueryParams = () => {
+  query.value = {
+    ...query.value,
+    haku: route?.query?.haku as string || null,
+    sivu: (route?.query?.sivu as number || 1) - 1,
   };
+};
 
-  get koulutustyyppi() {
-    return 'ammatillinen';
+const koulutustyyppi = computed(() => {
+  return 'ammatillinen';
+});
+
+const peruste = computed(() => {
+  if (ammatillinenPerusteKoosteStore?.peruste) {
+    return {
+      ...ammatillinenPerusteKoosteStore.peruste,
+      laajuus: _.get(ammatillinenPerusteKoosteStore.peruste, 'suoritustavat[0].rakenne.muodostumisSaanto.laajuus.minimi'),
+    } as any;
   }
 
-  get murupolku() {
-    return [
-      murupolkuAmmatillinenRoot(this.koulutustyyppi),
-      {
-        label: this.peruste!.nimi!,
-        location: {
-          ...this.$route,
-        } as RawLocation,
+  return undefined;
+});
+
+const murupolku = computed(() => {
+  return [
+    murupolkuAmmatillinenRoot(koulutustyyppi.value),
+    {
+      label: peruste.value!.nimi!,
+      location: {
+        ...route,
       },
-    ];
+    },
+  ];
+});
+
+const tiedotteet = computed(() => {
+  if (ammatillinenPerusteKoosteStore.tiedotteet) {
+    return _.chain(ammatillinenPerusteKoosteStore.tiedotteet)
+      .sortBy('luotu')
+      .reverse()
+      .value();
   }
 
-  get tiedotteet() {
-    if (this.ammatillinenPerusteKoosteStore.tiedotteet.value) {
-      return _.chain(this.ammatillinenPerusteKoosteStore.tiedotteet.value)
-        .sortBy('luotu')
-        .reverse()
-        .value();
-    }
-  }
+  return undefined;
+});
 
-  get peruste() {
-    if (this.ammatillinenPerusteKoosteStore.peruste.value) {
-      return {
-        ...this.ammatillinenPerusteKoosteStore.peruste.value,
-        laajuus: _.get(this.ammatillinenPerusteKoosteStore.peruste.value, 'suoritustavat[0].rakenne.muodostumisSaanto.laajuus.minimi'),
-      } as any;
-    }
-  }
+const perusteRoute = computed(() => {
+  return { name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: _.toString(peruste.value!.id) } };
+});
 
-  get perusteRoute() {
-    return { name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: _.toString(this.peruste!.id) } };
-  }
+const opetussuunnitelmatPage = computed(() => {
+  return ammatillinenPerusteKoosteStore.opetussuunnitelmat;
+});
 
-  get opetussuunnitelmatPage() {
-    return this.ammatillinenPerusteKoosteStore.opetussuunnitelmat.value;
-  }
-
-  get opetussuunnitelmat(): any {
-    if (this.opetussuunnitelmatPage) {
-      return _.map(this.opetussuunnitelmatPage.data, (opetussuunnitelma: OpetussuunnitelmaDto) => (
-        {
-          ...opetussuunnitelma,
-          route: {
-            name: 'toteutussuunnitelma',
-            params: {
-              toteutussuunnitelmaId: _.toString(opetussuunnitelma.id),
-              koulutustyyppi: 'ammatillinen',
-            },
+const opetussuunnitelmat = computed(() => {
+  if (opetussuunnitelmatPage.value) {
+    return _.map(opetussuunnitelmatPage.value.data, (opetussuunnitelma: OpetussuunnitelmaDto) => (
+      {
+        ...opetussuunnitelma,
+        route: {
+          name: 'toteutussuunnitelma',
+          params: {
+            toteutussuunnitelmaId: _.toString(opetussuunnitelma.id),
+            koulutustyyppi: 'ammatillinen',
           },
-        }
-      ));
-    }
+        },
+      }
+    ));
+  }
+  return [];
+});
+
+const page = computed({
+  get: () => {
+    return opetussuunnitelmatPage.value!.sivu + 1;
+  },
+  set: (value) => {
+    query.value = {
+      ...query.value,
+      sivu: value - 1,
+    };
+  },
+});
+
+const perPage = computed(() => {
+  return opetussuunnitelmatPage.value!.sivukoko;
+});
+
+const queryNimi = computed(() => {
+  return query.value.haku;
+});
+
+watch(queryNimi, () => {
+  if (mounted.value) {
+    query.value.sivu = 0;
+  }
+});
+
+watch(query, async (oldVal, newVal) => {
+  if (mounted.value) {
+    query.value.sivu = 0;
+    await fetch(query.value);
   }
 
-  get page() {
-    return this.opetussuunnitelmatPage!.sivu + 1;
+  if (oldVal.sivu !== newVal.sivu) {
+    document.querySelector('.opetussuunnitelma-container a')?.focus();
   }
+}, { deep: true });
 
-  set page(page) {
-    this.query = {
-      ...this.query,
-      sivu: page - 1,
+const fetch = async (query) => {
+  if (_.size(query.haku) === 0 || _.size(query.haku) > 2) {
+    await ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.haku, sivu: query.sivu });
+
+    router.replace({
+      query: {
+        ...(query.haku && { haku: query.haku }),
+        sivu: query.sivu + 1,
+      },
+    }).catch(() => {});
+  }
+};
+
+const avaaTiedote = (tiedote: TiedoteDto) => {
+  router.push({
+    name: 'uutinen',
+    params: {
+      tiedoteId: '' + tiedote.id,
+    },
+  });
+};
+
+// Meta information for the page
+useHead(() => {
+  if (peruste.value) {
+    return {
+      title: $kaanna(peruste.value.nimi),
     };
   }
-
-  get perPage() {
-    return this.opetussuunnitelmatPage!.sivukoko;
-  }
-
-  get queryNimi() {
-    return this.query.haku;
-  }
-
-  @Watch('queryNimi')
-  nimiChange() {
-    this.query.sivu = 0;
-  }
-
-  @Watch('query', { deep: true })
-  async queryChange(oldVal, newVal) {
-    await this.fetch(this.query);
-
-    if (oldVal.sivu !== newVal.sivu) {
-      (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
-    }
-  }
-
-  async fetch(query) {
-    if (_.size(query.haku) === 0 || _.size(query.haku) > 2) {
-      await this.ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.haku, sivu: query.sivu });
-    }
-  }
-
-  avaaTiedote(tiedote: TiedoteDto) {
-    this.$router.push({
-      name: 'uutinen',
-      params: {
-        tiedoteId: '' + tiedote.id,
-      },
-    });
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.peruste) {
-      return {
-        title: (this as any).$kaanna(this.peruste.nimi),
-      };
-    }
-  }
-}
+  return {};
+});
 </script>
 
 <style scoped lang="scss">

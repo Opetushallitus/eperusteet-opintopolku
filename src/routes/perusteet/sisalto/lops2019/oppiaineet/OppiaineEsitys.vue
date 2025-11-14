@@ -1,120 +1,212 @@
 <template>
-<div>
-  <div v-if="koodi">
-    <strong>{{ $t('koodi') }}</strong>
-    <p>{{ koodi.arvo }}</p>
-  </div>
-
-  <div v-if="hasTehtava" class="mt-4">
-    <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
-    <ep-content-viewer v-if="oppiaine.tehtava.kuvaus"
-                       :value="$kaanna(oppiaine.tehtava.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <div v-if="hasLaajaAlaiset" class="mt-4">
-    <h3>{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h3>
-    <ep-content-viewer v-if="oppiaine.laajaAlaisetOsaamiset.kuvaus"
-                       :value="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <div v-if="hasOpiskeluymparistoTyotavat" class="mt-4">
-    <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
-    <ep-content-viewer :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <div v-if="hasTavoitteet" class="mt-4">
-    <h3>{{ $t('tavoitteet') }}</h3>
-    <ep-content-viewer v-if="tavoitteet.kuvaus"
-                       :value="$kaanna(tavoitteet.kuvaus)"
-                       :termit="termit" :kuvat="kuvat" />
-    <div v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet" :key="idx">
-      <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi )}}</strong>
-      <p v-if="tavoitealue.kohde">{{ $kaanna(tavoitealue.kohde) }}</p>
-      <ul>
-        <li v-for="(tavoite, idx) in tavoitealue.tavoitteet" :key="idx">
-          <span>{{ $kaanna(tavoite) }}</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div v-if="hasArviointi" class="mt-4">
-    <h3>{{ $t('arviointi') }}</h3>
-    <ep-content-viewer :value="$kaanna(oppiaine.arviointi.kuvaus)"
-                       :termit="termit"
-                       :kuvat="kuvat" />
-  </div>
-
-  <hr v-if="hasOpintojaksot || hasModuulit" class="mt-4 mb-4"/>
-
-  <div v-if="hasOpintojaksot" class="mb-4">
-    <h3 id="opintojaksot">{{ $t('opintojaksot') }}</h3>
-    <router-link :to="opintojakso.location" v-for="(opintojakso, idx) in opintojaksotExtended" :key="idx">
-      <div class="d-flex justify-content-between opintojakso mb-2" >
-        <div class="font-weight-bold">
-          <span>{{ $kaanna(opintojakso.nimi) }}</span>
-          <span v-if="opintojakso.koodiLabel" class="koodi ml-2">({{ opintojakso.koodiLabel }})</span>
-        </div>
-        <div v-if="opintojakso.laajuus" class="opintopiste">
-          {{opintojakso.laajuus}} {{$t('opintopiste')}}
-        </div>
-      </div>
-    </router-link>
-  </div>
-
-  <div v-if="hasModuulit" class="mt-4">
-    <h3 id="moduulit">{{ $t('moduulit') }}</h3>
-
-    <div v-if="hasPakollisetModuulit" class="mb-4">
-      <h4>{{ $t('pakolliset-moduulit') }}</h4>
-      <ep-content-viewer v-if="oppiaine.pakollisetModuulitKuvaus"
-                         :value="$kaanna(oppiaine.pakollisetModuulitKuvaus)"
-                         :termit="termit"
-                         :kuvat="kuvat" />
-
-      <router-link v-for="(moduuli, idx) in pakollisetModuulitExtended" :key="idx" :to="moduuli.location">
-        <ep-opintojakson-moduuli class="mb-2" :moduuli="moduuli"/>
-      </router-link>
+  <div>
+    <div v-if="koodi">
+      <strong>{{ $t('koodi') }}</strong>
+      <p>{{ koodi.arvo }}</p>
     </div>
 
-    <div v-if="hasValinnaisetModuulit" class="mb-4">
-      <h4>{{ $t('valinnaiset-moduulit') }}</h4>
-      <ep-content-viewer v-if="oppiaine.valinnaisetModuulitKuvaus"
-                         :value="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"
-                         :termit="termit"
-                         :kuvat="kuvat" />
-
-      <router-link v-for="(moduuli, idx) in valinnaisetModuulitExtended" :key="idx" :to="moduuli.location">
-        <ep-opintojakson-moduuli class="mb-2" :moduuli="moduuli"/>
-      </router-link>
+    <div
+      v-if="hasTehtava"
+      class="mt-4"
+    >
+      <h3>{{ $t('oppiaine-ja-tehtava') }}</h3>
+      <ep-content-viewer
+        v-if="oppiaine.tehtava.kuvaus"
+        :value="$kaanna(oppiaine.tehtava.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
     </div>
-  </div>
 
-  <div v-if="hasOppimaarat" class="mt-4">
-    <h3 id="oppimaarat">{{ $t('oppimaarat') }}</h3>
-    <div v-for="(oppimaara, idx) in oppimaaratExtended" :key="idx">
-      <router-link v-if="oppimaara.location" :to="oppimaara.location">
-        {{ $kaanna(oppimaara.nimi) }}
-      </router-link>
-      <div v-else>
-        {{ $kaanna(oppimaara.nimi) }}
+    <div
+      v-if="hasLaajaAlaiset"
+      class="mt-4"
+    >
+      <h3>{{ $t('laaja-alaisen-osaamisen-osa-alueet') }}</h3>
+      <ep-content-viewer
+        v-if="oppiaine.laajaAlaisetOsaamiset.kuvaus"
+        :value="$kaanna(oppiaine.laajaAlaisetOsaamiset.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+    </div>
+
+    <div
+      v-if="hasOpiskeluymparistoTyotavat"
+      class="mt-4"
+    >
+      <h3>{{ $t('opiskeluymparisto-ja-tyotavat') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.opiskeluymparistoTyotavat.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+    </div>
+
+    <div
+      v-if="hasTavoitteet"
+      class="mt-4"
+    >
+      <h3>{{ $t('tavoitteet') }}</h3>
+      <ep-content-viewer
+        v-if="tavoitteet.kuvaus"
+        :value="$kaanna(tavoitteet.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+      <div
+        v-for="(tavoitealue, idx) in tavoitteet.tavoitealueet"
+        :key="idx"
+      >
+        <strong v-if="tavoitealue.nimi">{{ $kaanna(tavoitealue.nimi ) }}</strong>
+        <p v-if="tavoitealue.kohde">
+          {{ $kaanna(tavoitealue.kohde) }}
+        </p>
+        <ul>
+          <li
+            v-for="(tavoite, idx) in tavoitealue.tavoitteet"
+            :key="idx"
+          >
+            <span>{{ $kaanna(tavoite) }}</span>
+          </li>
+        </ul>
       </div>
     </div>
+
+    <div
+      v-if="hasArviointi"
+      class="mt-4"
+    >
+      <h3>{{ $t('arviointi') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.arviointi.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
+    </div>
+
+    <hr
+      v-if="hasOpintojaksot || hasModuulit"
+      class="mt-4 mb-4"
+    >
+
+    <div
+      v-if="hasOpintojaksot"
+      class="mb-4"
+    >
+      <h3 id="opintojaksot">
+        {{ $t('opintojaksot') }}
+      </h3>
+      <router-link
+        v-for="(opintojakso, idx) in opintojaksotExtended"
+        :key="idx"
+        :to="opintojakso.location"
+      >
+        <div class="d-flex justify-content-between opintojakso mb-2">
+          <div class="font-weight-bold">
+            <span>{{ $kaanna(opintojakso.nimi) }}</span>
+            <span
+              v-if="opintojakso.koodiLabel"
+              class="koodi ml-2"
+            >({{ opintojakso.koodiLabel }})</span>
+          </div>
+          <div
+            v-if="opintojakso.laajuus"
+            class="opintopiste"
+          >
+            {{ opintojakso.laajuus }} {{ $t('opintopiste') }}
+          </div>
+        </div>
+      </router-link>
+    </div>
+
+    <div
+      v-if="hasModuulit"
+      class="mt-4"
+    >
+      <h3 id="moduulit">
+        {{ $t('moduulit') }}
+      </h3>
+
+      <div
+        v-if="hasPakollisetModuulit"
+        class="mb-4"
+      >
+        <h4>{{ $t('pakolliset-moduulit') }}</h4>
+        <ep-content-viewer
+          v-if="oppiaine.pakollisetModuulitKuvaus"
+          :value="$kaanna(oppiaine.pakollisetModuulitKuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+
+        <router-link
+          v-for="(moduuli, idx) in pakollisetModuulitExtended"
+          :key="idx"
+          :to="moduuli.location"
+        >
+          <ep-opintojakson-moduuli
+            class="mb-2"
+            :moduuli="moduuli"
+          />
+        </router-link>
+      </div>
+
+      <div
+        v-if="hasValinnaisetModuulit"
+        class="mb-4"
+      >
+        <h4>{{ $t('valinnaiset-moduulit') }}</h4>
+        <ep-content-viewer
+          v-if="oppiaine.valinnaisetModuulitKuvaus"
+          :value="$kaanna(oppiaine.valinnaisetModuulitKuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+
+        <router-link
+          v-for="(moduuli, idx) in valinnaisetModuulitExtended"
+          :key="idx"
+          :to="moduuli.location"
+        >
+          <ep-opintojakson-moduuli
+            class="mb-2"
+            :moduuli="moduuli"
+          />
+        </router-link>
+      </div>
+    </div>
+
+    <div
+      v-if="hasOppimaarat"
+      class="mt-4"
+    >
+      <h3 id="oppimaarat">
+        {{ $t('oppimaarat') }}
+      </h3>
+      <div
+        v-for="(oppimaara, idx) in oppimaaratExtended"
+        :key="idx"
+      >
+        <router-link
+          v-if="oppimaara.location"
+          :to="oppimaara.location"
+        >
+          {{ $kaanna(oppimaara.nimi) }}
+        </router-link>
+        <div v-else>
+          {{ $kaanna(oppimaara.nimi) }}
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
 import VueScrollTo from 'vue-scrollto';
-import { Vue, Component, Prop } from 'vue-property-decorator';
-
+import { ref, computed, onUpdated, nextTick } from 'vue';
+import { useRoute } from 'vue-router';
 import { Lops2019OppiaineKaikkiDto, TermiDto, Lops2019OpintojaksoDto } from '@shared/api/ylops';
 import { LiiteDtoWrapper } from '@shared/tyypit';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
@@ -123,206 +215,234 @@ import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpOpintojaksonModuuli from '@shared/components/EpOpintojaksonModuuli/EpOpintojaksonModuuli.vue';
 import { koodiSorters } from '@shared/utils/perusteet';
 
-@Component({
-  components: {
-    EpColorIndicator,
-    EpContentViewer,
-    EpOpintojaksonModuuli,
+const props = defineProps({
+  isPerusteView: {
+    type: Boolean,
+    default: true,
   },
-})
-export default class OppiaineEsitys extends Vue {
-  @Prop({ required: false, default: true })
-  private isPerusteView!: boolean;
+  oppiaine: {
+    type: Object as () => Lops2019OppiaineKaikkiDto,
+    required: true,
+  },
+  termit: {
+    type: Array as () => TermiDto[],
+    default: () => [],
+  },
+  kuvat: {
+    type: Array as () => LiiteDtoWrapper[],
+    default: () => [],
+  },
+  navOppimaarat: {
+    type: Array as () => NavigationNode[],
+    default: () => [],
+  },
+  opintojaksot: {
+    type: Array as () => Lops2019OpintojaksoDto[],
+    default: () => [],
+  },
+});
 
-  @Prop({ required: true })
-  private oppiaine!: Lops2019OppiaineKaikkiDto;
+const route = useRoute();
 
-  @Prop({ required: false, type: Array })
-  private termit!: TermiDto[];
-
-  @Prop({ required: false, type: Array })
-  private kuvat!: LiiteDtoWrapper[];
-
-  @Prop({ required: false, type: Array })
-  private navOppimaarat!: NavigationNode[];
-
-  @Prop({ required: false })
-  private opintojaksot!: Lops2019OpintojaksoDto[];
-
-  updated() {
-    // Odotetaan myös alikomponenttien päivittymistä
-    this.$nextTick(() => {
-      if (this.$route && this.$route.hash && this.oppiaine) {
-        if (this.$route.hash === '#moduulit' && this.hasModuulit) {
-          VueScrollTo.scrollTo('#moduulit');
-        }
-        else if (this.$route.hash === '#oppimaarat' && this.hasOppimaarat) {
-          VueScrollTo.scrollTo('#oppimaarat');
-        }
+onUpdated(() => {
+  // Odotetaan myös alikomponenttien päivittymistä
+  nextTick(() => {
+    if (route && route.hash && props.oppiaine) {
+      if (route.hash === '#moduulit' && hasModuulit.value) {
+        VueScrollTo.scrollTo('#moduulit');
       }
+      else if (route.hash === '#oppimaarat' && hasOppimaarat.value) {
+        VueScrollTo.scrollTo('#oppimaarat');
+      }
+    }
+  });
+});
+
+const koodi = computed(() => {
+  if (props.oppiaine) {
+    return props.oppiaine.koodi;
+  }
+
+  return undefined;
+});
+
+const hasTehtava = computed(() => {
+  if (props.oppiaine) {
+    return props.oppiaine.tehtava && props.oppiaine.tehtava.kuvaus;
+  }
+
+  return undefined;
+});
+
+const hasLaajaAlaiset = computed(() => {
+  if (props.oppiaine) {
+    return props.oppiaine.laajaAlaisetOsaamiset && props.oppiaine.laajaAlaisetOsaamiset.kuvaus;
+  }
+
+  return undefined;
+});
+
+const tavoitteet = computed(() => {
+  if (props.oppiaine) {
+    return props.oppiaine.tavoitteet;
+  }
+
+  return undefined;
+});
+
+const hasTavoitteet = computed(() => {
+  if (tavoitteet.value) {
+    return !_.isEmpty(tavoitteet.value) && !_.isEmpty(tavoitteet.value.tavoitealueet);
+  }
+
+  return undefined;
+});
+
+const hasArviointi = computed(() => {
+  if (props.oppiaine) {
+    return props.oppiaine.arviointi && props.oppiaine.arviointi.kuvaus;
+  }
+
+  return undefined;
+});
+
+const hasOpiskeluymparistoTyotavat = computed(() => {
+  if (props.oppiaine) {
+    return props.oppiaine.opiskeluymparistoTyotavat && props.oppiaine.opiskeluymparistoTyotavat.kuvaus;
+  }
+
+  return undefined;
+});
+
+const opintojaksojenModuuliUrit = computed(() => {
+  return _.chain(props.opintojaksot)
+    .map(opintojakso => opintojakso.moduulit)
+    .flatMap()
+    .map(moduuli => moduuli.koodiUri)
+    .value() as any[];
+});
+
+const moduulit = computed(() => {
+  if (props.oppiaine) {
+    return _.filter(props.oppiaine.moduulit, moduuli => _.size(opintojaksojenModuuliUrit.value) === 0 || _.includes(opintojaksojenModuuliUrit.value, _.get(moduuli, 'koodi.uri')));
+  }
+
+  return undefined;
+});
+
+const hasModuulit = computed(() => {
+  return !_.isEmpty(moduulit.value);
+});
+
+const pakollisetModuulit = computed(() => {
+  return _.filter(moduulit.value, { pakollinen: true });
+});
+
+const pakollisetModuulitExtended = computed(() => {
+  if (pakollisetModuulit.value) {
+    return _.map(pakollisetModuulit.value, moduuli => {
+      return {
+        ...moduuli,
+        location: {
+          name: props.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
+          params: { moduuliId: _.toString(moduuli.id) },
+        },
+        koodiLabel: _.get(moduuli, 'koodi.arvo'),
+      };
     });
   }
 
-  get koodi() {
-    if (this.oppiaine) {
-      return this.oppiaine.koodi;
-    }
+  return undefined;
+});
+
+const hasPakollisetModuulit = computed(() => {
+  return !_.isEmpty(pakollisetModuulit.value);
+});
+
+const valinnaisetModuulit = computed(() => {
+  return _.filter(moduulit.value, { pakollinen: false });
+});
+
+const valinnaisetModuulitExtended = computed(() => {
+  if (valinnaisetModuulit.value) {
+    return _.map(valinnaisetModuulit.value, moduuli => {
+      return {
+        ...moduuli,
+        location: {
+          name: props.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
+          params: { moduuliId: _.toString(moduuli.id) },
+        },
+        koodiLabel: _.get(moduuli, 'koodi.arvo'),
+      };
+    });
   }
 
-  get hasTehtava() {
-    if (this.oppiaine) {
-      return this.oppiaine.tehtava && this.oppiaine.tehtava.kuvaus;
-    }
+  return undefined;
+});
+
+const hasValinnaisetModuulit = computed(() => {
+  return !_.isEmpty(valinnaisetModuulit.value);
+});
+
+const oppimaarat = computed(() => {
+  if (props.oppiaine) {
+    return props.oppiaine.oppimaarat;
   }
 
-  get hasLaajaAlaiset() {
-    if (this.oppiaine) {
-      return this.oppiaine.laajaAlaisetOsaamiset && this.oppiaine.laajaAlaisetOsaamiset.kuvaus;
-    }
-  }
+  return undefined;
+});
 
-  get tavoitteet() {
-    if (this.oppiaine) {
-      return this.oppiaine.tavoitteet;
-    }
+const oppimaaratExtended = computed(() => {
+  if (!_.isEmpty(props.navOppimaarat)) {
+    return _.map(props.navOppimaarat, oppimaara => ({
+      ...oppimaara,
+      nimi: oppimaara.label,
+    }));
   }
-
-  get hasTavoitteet() {
-    if (this.tavoitteet) {
-      return !_.isEmpty(this.tavoitteet) && !_.isEmpty(this.tavoitteet.tavoitealueet);
-    }
-  }
-
-  get hasArviointi() {
-    if (this.oppiaine) {
-      return this.oppiaine.arviointi && this.oppiaine.arviointi.kuvaus;
-    }
-  }
-
-  get hasOpiskeluymparistoTyotavat() {
-    if (this.oppiaine) {
-      return this.oppiaine.opiskeluymparistoTyotavat && this.oppiaine.opiskeluymparistoTyotavat.kuvaus;
-    }
-  }
-
-  get moduulit() {
-    if (this.oppiaine) {
-      return _.filter(this.oppiaine.moduulit, moduuli => _.size(this.opintojaksojenModuuliUrit) === 0 || _.includes(this.opintojaksojenModuuliUrit, _.get(moduuli, 'koodi.uri')));
-    }
-  }
-
-  get hasModuulit() {
-    return !_.isEmpty(this.moduulit);
-  }
-
-  get opintojaksojenModuuliUrit() {
-    return _.chain(this.opintojaksot)
-      .map(opintojakso => opintojakso.moduulit)
-      .flatMap()
-      .map(moduuli => moduuli.koodiUri)
-      .value() as any[];
-  }
-
-  get pakollisetModuulit() {
-    return _.filter(this.moduulit, { pakollinen: true });
-  }
-
-  get pakollisetModuulitExtended() {
-    if (this.pakollisetModuulit) {
-      return _.map(this.pakollisetModuulit, moduuli => {
-        return {
-          ...moduuli,
-          location: {
-            name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
-            params: { moduuliId: _.toString(moduuli.id) },
-          },
-          koodiLabel: _.get(moduuli, 'koodi.arvo'),
-        };
-      });
-    }
-  }
-
-  get hasPakollisetModuulit() {
-    return !_.isEmpty(this.pakollisetModuulit);
-  }
-
-  get valinnaisetModuulit() {
-    return _.filter(this.moduulit, { pakollinen: false });
-  }
-
-  get valinnaisetModuulitExtended() {
-    if (this.valinnaisetModuulit) {
-      return _.map(this.valinnaisetModuulit, moduuli => {
-        return {
-          ...moduuli,
-          location: {
-            name: this.isPerusteView ? 'lops2019moduuli' : 'lops2019OpetussuunnitelmaModuuli',
-            params: { moduuliId: _.toString(moduuli.id) },
-          },
-          koodiLabel: _.get(moduuli, 'koodi.arvo'),
-        };
-      });
-    }
-  }
-
-  get hasValinnaisetModuulit() {
-    return !_.isEmpty(this.valinnaisetModuulit);
-  }
-
-  get oppimaarat() {
-    if (this.oppiaine) {
-      return this.oppiaine.oppimaarat;
-    }
-  }
-
-  get oppimaaratExtended() {
-    if (!_.isEmpty(this.navOppimaarat)) {
-      return _.map(this.navOppimaarat, oppimaara => ({
+  else if (oppimaarat.value) {
+    return _.map(oppimaarat.value, oppimaara => {
+      return {
         ...oppimaara,
-        nimi: oppimaara.label,
-      }));
-    }
-    else if (this.oppimaarat) {
-      return _.map(this.oppimaarat, oppimaara => {
+        location: {
+          name: props.isPerusteView ? 'lops2019oppiaine' : 'lops2019OpetussuunnitelmaOppiaine',
+          params: { oppiaineId: _.toString(oppimaara.id) },
+        },
+      };
+    });
+  }
+
+  return undefined;
+});
+
+const hasOppimaarat = computed(() => {
+  return !_.isEmpty(oppimaarat.value);
+});
+
+const hasOpintojaksot = computed(() => {
+  return !_.isEmpty(props.opintojaksot);
+});
+
+const opintojaksotExtended = computed(() => {
+  if (props.opintojaksot) {
+    return _.chain(props.opintojaksot)
+      .map(oj => {
+        const ojOm: any = _.find(oj.oppiaineet, { koodi: props.oppiaine!.koodi!.uri });
         return {
-          ...oppimaara,
+          ...oj,
           location: {
-            name: this.isPerusteView ? 'lops2019oppiaine' : 'lops2019OpetussuunnitelmaOppiaine',
-            params: { oppiaineId: _.toString(oppimaara.id) },
+            name: 'lops2019OpetussuunnitelmaOpintojakso',
+            params: { opintojaksoId: _.toString(oj.id) },
           },
+          koodiLabel: _.get(oj, 'koodi'),
+          jarjestys: ojOm.jarjestys,
         };
-      });
-    }
+      })
+      .sortBy('jarjestys', ...koodiSorters())
+      .value();
   }
 
-  get hasOppimaarat() {
-    return !_.isEmpty(this.oppimaarat);
-  }
-
-  get hasOpintojaksot() {
-    return !_.isEmpty(this.opintojaksot);
-  }
-
-  get opintojaksotExtended() {
-    if (this.opintojaksot) {
-      return _.chain(this.opintojaksot)
-        .map(oj => {
-          const ojOm: any = _.find(oj.oppiaineet, { koodi: this.oppiaine!.koodi!.uri });
-          return {
-            ...oj,
-            location: {
-              name: 'lops2019OpetussuunnitelmaOpintojakso',
-              params: { opintojaksoId: _.toString(oj.id) },
-            },
-            koodiLabel: _.get(oj, 'koodi'),
-            jarjestys: ojOm.jarjestys,
-          };
-        })
-        .sortBy('jarjestys', ...koodiSorters())
-        .value();
-    }
-  }
-}
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">

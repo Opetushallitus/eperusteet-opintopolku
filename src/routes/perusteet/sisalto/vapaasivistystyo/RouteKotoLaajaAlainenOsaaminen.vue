@@ -1,21 +1,35 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">
-        <span v-if="numerointi">{{numerointi}}</span>
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko mb-4"
+      >
+        <span v-if="numerointi">{{ numerointi }}</span>
         {{ $kaanna(perusteenOsa.nimi) }}
       </h2>
 
       <div class="mb-4">
-        <ep-content-viewer :value="$kaanna(perusteenOsa.yleiskuvaus)" :termit="termit" :kuvat="kuvat" />
+        <ep-content-viewer
+          :value="$kaanna(perusteenOsa.yleiskuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </div>
 
-      <b-row v-if="perusteenOsa.osaamisAlueet.length > 0" class="mt-4">
+      <b-row
+        v-if="perusteenOsa.osaamisAlueet.length > 0"
+        class="mt-4"
+      >
         <b-col>
-          <div v-for="(osaamisalue, index) in perusteenOsa.osaamisAlueet"
-               :key="index+'kotoLaajaAlainenOsaaminen'">
-            <h3 class="mt-4">{{ $kaanna(osaamisalue.koodi.nimi) }}</h3>
-            <ep-content-viewer :value="$kaanna(osaamisalue.kuvaus)"></ep-content-viewer>
+          <div
+            v-for="(osaamisalue, index) in perusteenOsa.osaamisAlueet"
+            :key="index+'kotoLaajaAlainenOsaaminen'"
+          >
+            <h3 class="mt-4">
+              {{ $kaanna(osaamisalue.koodi.nimi) }}
+            </h3>
+            <ep-content-viewer :value="$kaanna(osaamisalue.kuvaus)" />
           </div>
         </b-col>
       </b-row>
@@ -24,48 +38,39 @@
   </div>
 </template>
 
-<script lang="ts">
-
-import Vue from 'vue';
-import { Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import { useRoute } from 'vue-router';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpSpinner,
-  },
-})
-export default class RouteKotoLaajaAlainenOsaaminen extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.kotoLaajaalainenOsaaminenId);
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-}
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
 </script>
 
 <style scoped lang="scss">

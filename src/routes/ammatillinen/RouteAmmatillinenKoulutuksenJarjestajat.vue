@@ -1,40 +1,54 @@
 <template>
-<div>
-  <slot />
-  <p class="kuvaus">{{ $t('kooste-kuvaus-jarjestajat') }}</p>
+  <div>
+    <slot />
+    <p class="kuvaus">
+      {{ $t('kooste-kuvaus-jarjestajat') }}
+    </p>
 
-  <div v-if="!koulutustoimijat">
-    <ep-spinner />
-  </div>
-  <div v-else class="haku">
-    <div class="search">
-      <ep-search v-model="query" :sr-placeholder="$t('etsi-koulutuksen-jarjestajia')"/>
+    <div v-if="!koulutustoimijat">
+      <ep-spinner />
     </div>
-    <div class="content">
+    <div
+      v-else
+      class="haku"
+    >
+      <div class="search">
+        <ep-search
+          v-model="query"
+          :sr-placeholder="$t('etsi-koulutuksen-jarjestajia')"
+        />
+      </div>
+      <div class="content">
+        <ep-ammatillinen-row
+          v-for="(koulutustoimija, index) in koulutustoimijatPaged"
+          :key="'koulutuksenjarjestaja' + index"
+          :route="{name:'ammatillinenKoulutuksenjarjestaja', params: {koulutuksenjarjestajaId: koulutustoimija.id}}"
+        >
+          <div :class="{'pt-2 pb-2': !koulutustoimija.kuvaus}">
+            <span class="nimi">{{ $kaanna(koulutustoimija.nimi) }}</span>
+            <span
+              class="kuvaus"
+              v-html="$kaanna(koulutustoimija.kuvaus)"
+            />
+          </div>
+        </ep-ammatillinen-row>
 
-      <ep-ammatillinen-row v-for="(koulutustoimija, index) in koulutustoimijatPaged" :key="'koulutuksenjarjestaja' + index"
-        :route="{name:'ammatillinenKoulutuksenjarjestaja', params: {koulutuksenjarjestajaId: koulutustoimija.id}}">
-        <div :class="{'pt-2 pb-2': !koulutustoimija.kuvaus}">
-          <span class="nimi">{{ $kaanna(koulutustoimija.nimi) }}</span>
-          <span class="kuvaus" v-html="$kaanna(koulutustoimija.kuvaus)"></span>
+        <div class="pagination d-flex justify-content-center">
+          <EpBPagination
+            v-model="page"
+            :items-per-page="perPage"
+            :total="total"
+            aria-controls="koulutuksenjarjestajat-lista"
+          />
         </div>
-      </ep-ammatillinen-row>
-
-      <div class="pagination d-flex justify-content-center">
-        <EpBPagination v-model="page"
-                       :items-per-page="perPage"
-                       :total="total"
-                       aria-controls="koulutuksenjarjestajat-lista">
-        </EpBPagination>
       </div>
     </div>
   </div>
-</div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { KoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
+import { useKoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
@@ -42,54 +56,78 @@ import * as _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
+import { pinia } from '@/pinia';
+import { useRoute, useRouter } from 'vue-router';
+import { nextTick } from 'vue';
 
-@Component({
-  components: {
-    EpBPagination,
-    EpSpinner,
-    EpSearch,
-    EpExternalLink,
-    EpAmmatillinenRow,
-  },
-})
-export default class RouteAmmatillinenKoulutuksenJarjestajat extends Vue {
-  @Prop({ required: true })
-  koulutuksenJarjestajatStore!: KoulutuksenJarjestajatStore;
+const route = useRoute();
+const router = useRouter();
 
-  private query = '';
-  private page = 1;
-  private perPage = 10;
+const query = ref('');
+const page = ref(1);
+const perPage = ref(10);
+const mounted = ref(false);
+const koulutuksenJarjestajatStore = useKoulutuksenJarjestajatStore(pinia);
 
-  mounted() {
-    this.koulutuksenJarjestajatStore.fetch();
+onMounted(async () => {
+  setQueryParams();
+  await nextTick();
+  mounted.value = true;
+});
+
+const setQueryParams = () => {
+  query.value = route?.query?.haku as string || '';
+  page.value = route?.query?.sivu as number || 1;
+};
+
+
+const koulutustoimijat = computed(() => {
+  if (koulutuksenJarjestajatStore.koulutustoimijat) {
+    return _.chain(koulutuksenJarjestajatStore.koulutustoimijat)
+      .filter(koulutustoimija => Kielet.search(query.value, koulutustoimija.nimi))
+      .value();
   }
 
-  get koulutustoimijat() {
-    if (this.koulutuksenJarjestajatStore.koulutustoimijat.value) {
-      return _.chain(this.koulutuksenJarjestajatStore.koulutustoimijat.value)
-        .filter(koulutustoimija => Kielet.search(this.query, koulutustoimija.nimi))
-        .value();
-    }
+  return [];
+});
+
+const koulutustoimijatPaged = computed(() => {
+  if (koulutustoimijat.value) {
+    return _.chain(koulutustoimijat.value)
+      .drop(perPage.value * (page.value - 1))
+      .take(perPage.value)
+      .value();
   }
 
-  get koulutustoimijatPaged() {
-    if (this.koulutustoimijat) {
-      return _.chain(this.koulutustoimijat)
-        .drop(this.perPage * (this.page - 1))
-        .take(this.perPage)
-        .value();
-    }
-  }
+  return [];
+});
 
-  get total() {
-    return _.size(this.koulutustoimijat);
+watch(query, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    routerReplace();
   }
+});
 
-  @Watch('query')
-  onQueryChanged() {
-    this.page = 1;
+watch(page, async () => {
+  if (mounted.value) {
+    routerReplace();
   }
-}
+});
+
+const routerReplace = () => {
+  router.replace({
+    query: {
+      haku: query.value,
+      sivu: page.value,
+    },
+  }).catch(() => {});
+};
+
+const total = computed(() => {
+  return _.size(koulutustoimijat.value);
+});
+
 </script>
 
 <style scoped lang="scss">

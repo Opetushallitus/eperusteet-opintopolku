@@ -1,49 +1,70 @@
 <template>
   <div>
-    <div class="nimikkeet" v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0">
-      <span class="kohde">{{ $t('tutkintonimikkeet') }}:</span>
-      <span v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet" :key="tidx">
-        {{ $kaanna(tutkintonimike.nimi) }}
-      </span>
+    <div
+      v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0"
+      class="nimikkeet d-flex"
+    >
+      <div class="kohde mr-1">
+        {{ $t('tutkintonimikkeet') }}:
+      </div>
+      <div>
+        <div
+          v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet"
+          :key="tidx"
+          class="d-inline-block mr-1"
+        >
+          {{ $kaanna(tutkintonimike.nimi) }}<span v-if="tidx < sisalto.tutkintonimikkeet.length - 1">,</span>
+        </div>
+      </div>
     </div>
-    <div class="nimikkeet" v-if="sisalto.osaamisalat && sisalto.osaamisalat.length > 0">
-      <span class="kohde">{{ $t('osaamisalat') }}:</span>
-      <span v-for="(osaamisala, oidx) in sisalto.osaamisalat" :key="oidx">
-        {{ $kaanna(osaamisala.nimi) }}
-      </span>
+    <div
+      v-if="sisalto.osaamisalat && sisalto.osaamisalat.length > 0"
+      class="nimikkeet d-flex"
+    >
+      <div class="kohde mr-1">
+        {{ $t('osaamisalat') }}:
+      </div>
+      <div>
+        <div
+          v-for="(osaamisala, oidx) in sisalto.osaamisalat"
+          :key="oidx"
+          class="d-inline-block mr-1"
+        >
+          {{ $kaanna(osaamisala.nimi) }}<span v-if="oidx < sisalto.osaamisalat.length - 1">,</span>
+        </div>
+      </div>
     </div>
     <div class="alatiedot">
-      <span v-for="(voimassaolotieto, index) in sisalto.voimassaoloTieto" :key="'voimassa' + index">
+      <span
+        v-for="(voimassaolotieto, index) in sisalto.voimassaoloTieto"
+        :key="'voimassa' + index"
+      >
         <span v-if="index > 0">|</span>
-        {{$t(voimassaolotieto.teksti)}}: {{ $sd(voimassaolotieto.paiva) }}
+        {{ $t(voimassaolotieto.teksti) }}: {{ $sd(voimassaolotieto.paiva) }}
       </span>
-      <EpVoimassaolo :voimassaolo="sisalto"></EpVoimassaolo>
-      <span v-if="sisalto.diaarinumero">| {{$t('diaarinumero')}}: {{ sisalto.diaarinumero }}</span>
+      <EpVoimassaolo :voimassaolo="sisalto" />
+      <span v-if="sisalto.diaarinumero">| {{ $t('diaarinumero') }}: {{ sisalto.diaarinumero }}</span>
       <span v-if="sisalto.koulutukset && sisalto.koulutukset.length > 0">
         <template v-if="sisalto.koulutukset.length > 1">
-          | {{$t('koulutuskoodit')}}: {{ sisalto.koulutuskoodit }}
+          | {{ $t('koulutuskoodit') }}: {{ sisalto.koulutuskoodit }}
         </template>
         <template v-else>
-          | {{$t('koulutuskoodi')}}: {{ sisalto.koulutuskoodit }}
+          | {{ $t('koulutuskoodi') }}: {{ sisalto.koulutuskoodit }}
         </template>
       </span>
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 
-@Component({
-  components: {
-    EpVoimassaolo,
+const props = defineProps({
+  sisalto: {
+    type: Object,
+    required: true,
   },
-})
-export default class EpAmmatillinenPerusteItem extends Vue {
-  @Prop({ required: true })
-  private sisalto!: any;
-}
+});
 </script>
 
 <style scoped lang="scss">

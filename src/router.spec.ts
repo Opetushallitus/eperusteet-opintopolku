@@ -1,8 +1,15 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import { describe, it, expect, vi } from 'vitest';
 import { router } from './router';
 
+// Mock necessary modules that router might depend on
+vi.mock('@shared/stores/virheet', () => ({
+  Virheet: {
+    onError: vi.fn(),
+  },
+}));
+
 describe('Router', () => {
-  test('Construction', async () => {
+  it('Construction', async () => {
     expect(router).toBeTruthy();
   });
 });

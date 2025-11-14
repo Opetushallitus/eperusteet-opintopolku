@@ -1,34 +1,102 @@
 import * as _ from 'lodash';
 import Vue from 'vue';
-
 import { Kielet } from '@shared/stores/kieli';
-import { rootConfig } from '@/mainvue';
-import { createLogger } from '@shared/utils/logger';
-import { Lokalisointi } from '@shared/api/eperusteet';
 import { registerIconColorSchemeChange } from '@shared/utils/icon';
 import '@shared/config/styles';
-import { Virheet } from '@shared/stores/virheet';
+import { createApp } from 'vue';
+import App from './App.vue';
+import { createPinia } from 'pinia';
+import VueMatomo from 'vue-matomo';
+import { createI18n } from 'vue-i18n';
+import kaannos, { Kaannos } from '@shared/plugins/kaannos';
+import { Aikaleima } from '@shared/plugins/aikaleima';
+import VueScrollTo from 'vue-scrollto';
+import { Kieli } from '@shared/tyypit';
+import { setAppInstance } from '@shared/utils/globals';
+import { router } from './router';
+import '@shared/config/bootstrap';
+import 'material-icons/iconfont/material-icons.css';
+import fiLocale from '@shared/translations/locale-fi.json';
+import svLocale from '@shared/translations/locale-sv.json';
+import enLocale from '@shared/translations/locale-en.json';
+import { configureCompat } from 'vue';
+import Sticky from 'vue-sticky-directive';
+import { LoadingPlugin } from 'vue-loading-overlay';
+import { createHead } from '@unhead/vue/client';
+import { Notifikaatiot } from '@shared/plugins/notifikaatiot';
 
-const logger = createLogger('Main');
+const app = createApp(App);
 
-Vue.config.productionTip = false;
+registerIconColorSchemeChange();
 
-async function getKaannokset() {
-  const [fi, sv, en] = _.map(await Promise.all(_.map(['fi', 'sv', 'en'], lang => Lokalisointi.getAllKaannokset(lang))), 'data');
-  return { fi, sv, en } as any;
+configureCompat({
+  COMPONENT_V_MODEL: false,
+});
+
+// Store app reference in globals utility
+setAppInstance(app);
+
+app.use(createPinia());
+app.use(router);
+app.use(kaannos, { squareBrackets: false });
+
+export const i18n = createI18n({
+  legacy: false, // Set to false to use Composition API
+  locale: Kieli.fi,
+  fallbackLocale: Kieli.fi,
+  messages: {
+    fi: {
+      ...fiLocale,
+    },
+    sv: {
+      ...svLocale,
+    },
+    en: {
+      ...enLocale,
+    },
+  },
+});
+
+app.use(i18n);
+app.use(Kielet, { i18n });
+app.use(new Aikaleima());
+app.use(LoadingPlugin);
+app.use(createHead());
+app.use(Notifikaatiot);
+
+Vue.use(VueScrollTo, {
+  duration: 1000,
+});
+Vue.use(Sticky);
+
+app.config.errorHandler = (err, instance, info) => {
+  console.error('Global error handler:', err, info);
+  router.replace({
+    name: 'virhe',
+    query: {
+      virhekoodi: '500',
+    },
+  });
+};
+
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
+  app.config.errorHandler?.(event.reason, null, 'unhandledrejection');
+});
+
+const matomoSiteIds = {
+  'eperusteet.opintopolku.fi': 11,
+  'eperusteet.testiopintopolku.fi': 34,
+  'localhost': 34,
+};
+
+if (matomoSiteIds[window.location.hostname]) {
+  Vue.use(VueMatomo, {
+    host: 'https://analytiikka.opintopolku.fi/matomo',
+    siteId: matomoSiteIds[window.location.hostname],
+    router: router,
+    disableCookies: true,
+  });
 }
 
-async function main() {
-  try {
-    logger.info('Mounting #app');
-    registerIconColorSchemeChange();
-    (new Vue(rootConfig)).$mount('#app');
-    Kielet.load(await getKaannokset());
-  }
-  catch (err) {
-    logger.error('Top level error:" ', err);
-    Virheet.lisaaVirhe({ err: '500' });
-  }
-}
-
-main();
+app.mount('#app');

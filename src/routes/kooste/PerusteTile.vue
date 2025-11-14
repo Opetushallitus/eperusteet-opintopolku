@@ -1,19 +1,27 @@
 <template>
-  <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column" >
+  <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column">
     <div class="upper">
       <div class="peruste-ikoni">
-        <EpMaterialIcon v-if="isHallitus"
-                        icon-shape="outlined"
-                        :color="rgbColor"
-                        size="38px"
-                        class="img">account_balance</EpMaterialIcon>
-        <EpMaterialIcon v-else
-                        :color="rgbColor"
-                        size="38px"
-                        class="img">menu_book</EpMaterialIcon>
+        <EpMaterialIcon
+          v-if="isHallitus"
+          icon-shape="outlined"
+          :color="rgbColor"
+          size="38px"
+          class="img"
+        >
+          account_balance
+        </EpMaterialIcon>
+        <EpMaterialIcon
+          v-else
+          :color="rgbColor"
+          size="38px"
+          class="img"
+        >
+          menu_book
+        </EpMaterialIcon>
       </div>
       <div class="nimi">
-        {{ $kaanna(julkaisu.nimi) }} <span v-if="julkaisu.laajuus">{{julkaisu.laajuus}} {{$t('osaamispiste')}}</span>
+        {{ $kaanna(julkaisu.nimi) }} <span v-if="julkaisu.laajuus">{{ julkaisu.laajuus }} {{ $t('osaamispiste') }}</span>
       </div>
     </div>
     <div class="mt-auto">
@@ -26,11 +34,12 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { isVstLukutaito, koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
+import { $kaanna, $t, $sd } from '@shared/utils/globals';
 
 interface PerusteJulkiData {
   nimi:{ [key: string]: string; };
@@ -40,27 +49,24 @@ interface PerusteJulkiData {
   koulutustyyppi?: string,
 }
 
-@Component({
-  components: {
-    EpMaterialIcon,
-    EpVoimassaolo,
+const props = defineProps({
+  julkaisu: {
+    type: Object as () => PerusteJulkiData,
+    required: true,
   },
-})
-export default class PerusteTile extends Vue {
-  @Prop({ required: true })
-  private julkaisu!: PerusteJulkiData;
+  koulutustyyppi: {
+    type: String,
+    required: false,
+  },
+});
 
-  @Prop({ required: false, type: String })
-  private koulutustyyppi!: string;
+const rgbColor = computed(() => {
+  return rgb2string(koulutustyyppiThemeColor(props.koulutustyyppi));
+});
 
-  get rgbColor() {
-    return rgb2string(koulutustyyppiThemeColor(this.koulutustyyppi));
-  }
-
-  get isHallitus() {
-    return !isVstLukutaito(this.julkaisu.koulutustyyppi!);
-  }
-}
+const isHallitus = computed(() => {
+  return !isVstLukutaito(props.julkaisu.koulutustyyppi!);
+});
 </script>
 
 <style scoped lang="scss">

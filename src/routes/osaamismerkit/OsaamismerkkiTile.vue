@@ -1,40 +1,37 @@
 <template>
   <div class="tile tile-background-shadow-selected shadow-tile d-flex flex-column">
     <div class="ikoni">
-      <img :src="osaamimerkkiLogo" :alt="$t('osaamismerkit')" class="img"/>
+      <img
+        :src="osaamimerkkiLogo"
+        :alt="$t('osaamismerkit')"
+        class="img"
+      >
     </div>
     <div class="nimi">
-      {{ $t('kansalliset-perustaitojen-osaamismerkit')}}
+      {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import osaamismerkkiLogoFI from '@assets/img/images/osaamismerkki_main_FI.svg';
 import osaamismerkkiLogoSV from '@assets/img/images/osaamismerkki_main_SV.svg';
 import { Kielet } from '@shared/stores/kieli';
 
-@Component({
-  components: {
-    EpMaterialIcon,
-  },
-})
-export default class OsaamismerkkiTile extends Vue {
-  get sisaltokieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+const sisaltokieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  get osaamimerkkiLogo() {
-    if (this.sisaltokieli === 'sv') {
-      return osaamismerkkiLogoSV;
-    }
-    else {
-      return osaamismerkkiLogoFI;
-    }
+const osaamimerkkiLogo = computed(() => {
+  if (sisaltokieli.value === 'sv') {
+    return osaamismerkkiLogoSV;
   }
-}
+  else {
+    return osaamismerkkiLogoFI;
+  }
+});
 </script>
 
 <style scoped lang="scss">

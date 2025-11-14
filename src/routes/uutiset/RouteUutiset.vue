@@ -1,144 +1,165 @@
 <template>
-<div>
   <div>
-    <ep-header :murupolku="murupolku">
-      <template slot="header">
-        {{ $t('ajankohtaista') }}
-      </template>
-      <div class="search">
-        <ep-search :value="query" @input="setValue" />
-      </div>
-      <div v-if="tiedotteet.tiedotteet">
-        <div v-if="!isTiedotteetEmpty">
-          <div class="tiedotteet" id="tiedotteet-lista">
-            <div class="tiedote" v-for="(tiedote, idx) in tiedotteet.tiedotteet" :key="idx">
-              <div class="otsikko">
-                <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
-                  {{ $kaanna(tiedote.otsikko) }}
-                </router-link>
-              </div>
-              <div class="aikaleima">
-                {{ $sd(tiedote.luotu) }}
-              </div>
-              <div class="tiedote-sisalto">
-                <ep-content-viewer :value="$kaanna(tiedote.sisalto)"/>
+    <div>
+      <ep-header :murupolku="murupolku">
+        <template #header>
+          {{ $t('ajankohtaista') }}
+        </template>
+        <div class="search">
+          <ep-search
+            v-model="query"
+          />
+        </div>
+        <div v-if="tiedotteet.tiedotteet">
+          <div v-if="!isTiedotteetEmpty">
+            <div
+              id="tiedotteet-lista"
+              class="tiedotteet"
+            >
+              <div
+                v-for="(tiedote, idx) in tiedotteet.tiedotteet"
+                :key="idx"
+                class="tiedote"
+              >
+                <div class="otsikko">
+                  <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
+                    {{ $kaanna(tiedote.otsikko) }}
+                  </router-link>
+                </div>
+                <div class="aikaleima">
+                  {{ $sd(tiedote.luotu) }}
+                </div>
+                <div class="tiedote-sisalto">
+                  <ep-content-viewer :value="$kaanna(tiedote.sisalto)" />
+                </div>
               </div>
             </div>
+            <b-pagination
+              :value="page"
+              :total-rows="tiedotteet.amount"
+              :per-page="tiedotteet.filter.sivukoko"
+              align="center"
+              aria-controls="tiedotteet-lista"
+              :first-text="$t('alkuun')"
+              prev-text="«"
+              next-text="»"
+              :last-text="$t('loppuun')"
+              @change="updatePage"
+            />
           </div>
-          <b-pagination :value="page"
-                        @change="updatePage"
-                        :total-rows="tiedotteet.amount"
-                        :per-page="tiedotteet.filter.sivukoko"
-                        align="center"
-                        aria-controls="tiedotteet-lista"
-                        :first-text="$t('alkuun')"
-                        prev-text="«"
-                        next-text="»"
-                        :last-text="$t('loppuun')" />
+          <div v-else>
+            {{ $t('ei-hakutuloksia') }}
+          </div>
         </div>
-      <div v-else>{{ $t('ei-hakutuloksia') }}</div>
-      </div>
-      <ep-spinner v-else />
-    </ep-header>
+        <ep-spinner v-else />
+      </ep-header>
+    </div>
   </div>
-</div>
 </template>
 
-<script lang="ts">
-import { Prop, Component, Vue, Watch } from 'vue-property-decorator';
-import { TiedoteStore } from '@/stores/TiedoteStore';
+<script setup lang="ts">
+import { computed, ref, onMounted, watch } from 'vue';
+import { useHead } from '@unhead/vue';
+import { useTiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Kielet } from '@shared/stores/kieli';
-import { Meta } from '@shared/utils/decorators';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { $kaanna, $sd, $t } from '@shared/utils/globals';
+import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { pinia } from '@/pinia';
+import { useRoute, useRouter } from 'vue-router';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    EpSearch,
-    EpContentViewer,
-  },
-})
-export default class RouteUutiset extends Vue {
-  @Prop({ required: true })
-  private tiedoteStore!: TiedoteStore;
+const page = ref(1);
+const query = ref('');
+const route = useRoute();
+const router = useRouter();
+const mounted = ref(false);
 
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+const tiedoteStore = useTiedoteStore(pinia);
+const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 
-  private page = 1;
-  private query = '';
+const julkaistutKoulutustyypit = computed(() => {
+  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
+});
 
-  public mounted() {
-    this.tiedoteStore.updateFilter({
-      nimi: this.query,
-      koulutustyypit: this.julkaistutKoulutustyypit,
-      kieli: Kielet.getSisaltoKieli.value,
-    });
+const sisaltoKieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+const tiedotteet = computed(() => {
+  return {
+    tiedotteet: tiedoteStore.tiedotteet,
+    filter: tiedoteStore.filter,
+    amount: tiedoteStore.amount,
+  };
+});
+
+const isTiedotteetEmpty = computed(() => {
+  return tiedotteet.value.amount === 0;
+});
+
+const murupolku = computed(() => {
+  return [{
+    label: 'ajankohtaista',
+    location: {
+      name: 'uutiset',
+    },
+  }];
+});
+
+onMounted(async () => {
+  setQueryParams();
+  await fetch();
+  mounted.value = true;
+});
+
+const setQueryParams = () => {
+  query.value = route?.query?.haku as string || '';
+  page.value = route?.query?.sivu as number || 1;
+};
+
+watch(sisaltoKieli, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    await fetch();
   }
+});
 
-  get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
+watch(query, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    await fetch();
   }
+});
 
-  @Watch('sisaltoKieli')
-  async sisaltoKieliChange() {
-    await this.tiedoteStore.updateFilter({
-      kieli: [Kielet.getSisaltoKieli.value],
-    });
+const updatePage = async (value) => {
+  if (mounted.value) {
+    page.value = value;
+    await fetch();
   }
+};
 
-  get tiedotteet() {
-    return {
-      tiedotteet: this.tiedoteStore.tiedotteet,
-      filter: this.tiedoteStore.filter,
-      amount: this.tiedoteStore.amount,
-    };
-  }
+const fetch = async () => {
+  await tiedoteStore.updateFilter({
+    nimi: query.value,
+    kieli: Kielet.getSisaltoKieli.value,
+    sivu: page.value - 1,
+  });
 
-  get isTiedotteetEmpty() {
-    return this.tiedotteet.amount === 0;
-  }
+  router.replace({
+    query: {
+      haku: query.value,
+      sivu: page.value,
+    },
+  }).catch(() => {});
+};
 
-  private updatePage(value) {
-    this.page = value;
-    this.tiedoteStore.updateFilter({
-      sivu: value - 1,
-    });
-  }
-
-  private setValue(value) {
-    this.page = 1;
-    this.tiedoteStore.updateFilter({
-      nimi: value,
-      sivu: 0,
-    });
-  }
-
-  get sisaltoKieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get murupolku() {
-    return [{
-      label: 'ajankohtaista',
-      location: {
-        name: 'uutiset',
-      },
-    }];
-  }
-
-  @Meta
-  getMetaInfo() {
-    return {
-      title: (this as any).$t('ajankohtaista'),
-    };
-  }
-}
+// Meta information
+useHead({
+  title: $t('ajankohtaista'),
+});
 </script>
 
 <style scoped lang="scss">
@@ -170,5 +191,4 @@ export default class RouteUutiset extends Vue {
     }
   }
 }
-
 </style>

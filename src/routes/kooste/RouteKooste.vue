@@ -1,282 +1,327 @@
 <template>
-<ep-spinner v-if="!koulutustyyppi && !julkaistutPerusteet" />
-<ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi" v-else>
-  <template slot="header">
-    {{ $t(koulutustyyppi) }}
-  </template>
-  <template slot="subheader">
-    {{ $t(subheader) }}
-  </template>
-  <div>
-    <b-container fluid>
-      <b-row class="mb-5" v-if="kuvaus">
-        <b-col cols="12" xl="auto" class="tile">
-          <h2 class="otsikko">{{ $t('kuvaus')}}</h2>
-          <div>{{$t(kuvaus)}}</div>
-        </b-col>
-      </b-row>
+  <ep-spinner v-if="!koulutustyyppi || (perusteKoosteStore && !julkaistutPerusteet)" />
+  <ep-header
+    v-else
+    :murupolku="murupolku"
+    :koulutustyyppi="koulutustyyppi"
+  >
+    <template #header>
+      {{ $t(koulutustyyppi) }}
+    </template>
+    <template #subheader>
+      {{ $t(subheader) }}
+    </template>
+    <div>
+      <b-container fluid>
+        <b-row
+          v-if="kuvaus"
+          class="mb-5"
+        >
+          <b-col
+            cols="12"
+            xl="auto"
+            class="tile"
+          >
+            <h2 class="otsikko">
+              {{ $t('kuvaus') }}
+            </h2>
+            <div>{{ $t(kuvaus) }}</div>
+          </b-col>
+        </b-row>
 
-      <b-row v-if="perusteKoosteStore">
-        <b-col cols="12" xl="auto" class="tile">
-          <h2 class="otsikko">{{ $t(perusteetHeader) }}</h2>
-          <div class="perustebox d-md-flex flex-wrap justify-content-start" v-if="julkaistutPerusteet">
-            <div v-if="julkaistutPerusteet.length === 0">
-              {{ $t('perusteita-ei-saatavilla') }}
-            </div>
-            <template v-else>
-              <router-link :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }" v-for="(julkaisu, idx) in visibleJulkaistutPerusteet" :key="idx" class="my-2 mr-2">
-                <peruste-tile :julkaisu="julkaisu" :koulutustyyppi="koulutustyyppi"></peruste-tile>
+        <b-row v-if="perusteKoosteStore">
+          <b-col
+            cols="12"
+            xl="auto"
+            class="tile"
+          >
+            <h2 class="otsikko">
+              {{ $t(perusteetHeader) }}
+            </h2>
+            <div
+              v-if="julkaistutPerusteet"
+              class="perustebox d-md-flex flex-wrap justify-content-start"
+            >
+              <div v-if="julkaistutPerusteet.length === 0">
+                {{ $t('perusteita-ei-saatavilla') }}
+              </div>
+              <template v-else>
+                <router-link
+                  v-for="(julkaisu, idx) in visibleJulkaistutPerusteet"
+                  :key="idx"
+                  :to="{ name: 'peruste', params: { perusteId: julkaisu.id } }"
+                  class="my-2 mr-2"
+                >
+                  <peruste-tile
+                    :julkaisu="julkaisu"
+                    :koulutustyyppi="koulutustyyppi"
+                  />
+                </router-link>
+              </template>
+              <router-link
+                v-for="(route, idx) in muutTilet"
+                :key="'muut' + idx"
+                :to="route.route"
+              >
+                <component
+                  :is="route.komponentti"
+                  :koulutustyyppi="koulutustyyppi"
+                />
               </router-link>
-            </template>
-            <router-link :to="route.route" v-for="(route, idx) in muutTilet" :key="'muut' + idx">
-              <component :is="route.komponentti" :koulutustyyppi="koulutustyyppi"/>
-            </router-link>
-          </div>
-          <ep-spinner v-else />
-        </b-col>
-        <b-col v-if="julkaistutEraantyneetPerusteet && julkaistutEraantyneetPerusteet.length > 0">
-          <b-button @click="toggleEraantyneet()" variant="link">
-            <span v-if="showEraantyneet">{{$t('piilota-ei-voimassa-olevat-perusteet')}}</span>
-            <span v-else>{{$t('nayta-ei-voimassa-olevat-perusteet')}}</span>
-          </b-button>
-        </b-col>
-      </b-row>
+            </div>
+            <ep-spinner v-else />
+          </b-col>
+          <b-col v-if="julkaistutEraantyneetPerusteet && julkaistutEraantyneetPerusteet.length > 0">
+            <b-button
+              variant="link"
+              @click="toggleEraantyneet()"
+            >
+              <span v-if="showEraantyneet">{{ $t('piilota-ei-voimassa-olevat-perusteet') }}</span>
+              <span v-else>{{ $t('nayta-ei-voimassa-olevat-perusteet') }}</span>
+            </b-button>
+          </b-col>
+        </b-row>
 
-      <b-row v-if="paikallinenStore">
-        <b-col>
-          <component :is="paikallinenComponent" :perusteKoosteStore="perusteKoosteStore" :paikallinenStore="paikallinenStore" :koulutustyyppi="koulutustyyppi"/>
-        </b-col>
-      </b-row>
+        <b-row v-if="paikallinenStore">
+          <b-col>
+            <component
+              :is="paikallinenComponent"
+              :peruste-kooste-store="perusteKoosteStore"
+              :paikallinen-store="paikallinenStore"
+              :koulutustyyppi="koulutustyyppi"
+            />
+          </b-col>
+        </b-row>
 
-      <b-row>
-        <div class="list-section">
-          <div class="list">
-            <h2>{{ $t('ajankohtaista') }}</h2>
-            <ep-spinner-slot :is-loading="!tiedotteet">
-              <ep-julki-lista :tiedot="tiedotteet" @avaaTieto="avaaTiedote">
-                <template v-slot:lisaaBtnText>
-                  {{$t('nayta-lisaa')}}
-                </template>
-                <template v-slot:eiTietoja>
-                  {{$t('ei-tiedotteita')}}
-                </template>
-              </ep-julki-lista>
-            </ep-spinner-slot>
-          </div>
+        <b-row>
+          <div class="list-section">
+            <div class="list">
+              <h2>{{ $t('ajankohtaista') }}</h2>
+              <ep-spinner-slot :is-loading="!tiedotteet">
+                <ep-julki-lista
+                  :tiedot="tiedotteet"
+                  @avaa-tieto="avaaTiedote"
+                >
+                  <template #lisaaBtnText>
+                    {{ $t('nayta-lisaa') }}
+                  </template>
+                  <template #eiTietoja>
+                    {{ $t('ei-tiedotteita') }}
+                  </template>
+                </ep-julki-lista>
+              </ep-spinner-slot>
+            </div>
 
-          <div class="list">
-            <h2>{{$t('ohjeet-ja-materiaalit')}}</h2>
-            <ep-spinner-slot :is-loading="!ohjeet">
-              <ep-julki-lista :tiedot="ohjeet" @avaaTieto="avaaOpas">
-                <template v-slot:lisaaBtnText>
-                  <div class="mt-2">
-                    {{$t('nayta-lisaa')}}
-                  </div>
-                </template>
-                <template v-slot:eiTietoja>
-                  <div class="mt-2">
-                    {{$t('ei-ohjeita')}}
-                  </div>
-                </template>
-                <template v-slot:muokkausaika="{ tieto }">
-                  {{$sd(tieto.julkaistu)}}
-                </template>
-              </ep-julki-lista>
-            </ep-spinner-slot>
+            <div class="list">
+              <h2>{{ $t('ohjeet-ja-materiaalit') }}</h2>
+              <ep-spinner-slot :is-loading="!ohjeet">
+                <ep-julki-lista
+                  :tiedot="ohjeet"
+                  @avaa-tieto="avaaOpas"
+                >
+                  <template #lisaaBtnText>
+                    <div class="mt-2">
+                      {{ $t('nayta-lisaa') }}
+                    </div>
+                  </template>
+                  <template #eiTietoja>
+                    <div class="mt-2">
+                      {{ $t('ei-ohjeita') }}
+                    </div>
+                  </template>
+                  <template #muokkausaika="{ tieto }">
+                    {{ $sd(tieto.julkaistu) }}
+                  </template>
+                </ep-julki-lista>
+              </ep-spinner-slot>
+            </div>
           </div>
-        </div>
-      </b-row>
-    </b-container>
-  </div>
-</ep-header>
+        </b-row>
+      </b-container>
+    </div>
+  </ep-header>
 </template>
 
-<script lang="ts">
-import { Vue, Prop, Component, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed, ref, watch, onMounted, getCurrentInstance, nextTick } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
-import Paikalliset from './Paikalliset.vue';
 import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
-import { Meta } from '@shared/utils/decorators';
-import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import _ from 'lodash';
-import { RawLocation } from 'vue-router';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
-import { OpasStore } from '@/stores/OpasStore';
-import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
-import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
-import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
-import { julkisivuPerusteKoosteJarjestys } from '@shared/utils/perusteet';
+import { $t, $kaanna } from '@shared/utils/globals';
+import {
+  getKoosteKuvaus,
+  getKoosteOpasStore,
+  getKoostePaikallinenComponent,
+  getKoostePaikallinenStore,
+  getKoostePerusteHeader,
+  getKoostePerusteStore,
+  getKoosteSubheader,
+  getKoosteTiedotteetStore,
+} from '@/utils/toteutustypes';
+import { julkisivuPerusteKoosteJarjestys, stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    Paikalliset,
-    EpExternalLink,
-    PerusteTile,
-    EpJulkiLista,
-    EpSpinnerSlot,
-  },
-})
-export default class RouteKooste extends Vue {
-  @Prop({ required: false })
-  private perusteKoosteStore!: IPerusteKoosteStore;
+const route = useRoute();
+const perusteKoosteStore = getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
+const opasStore = getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
+const tiedotteetStore = getKoosteTiedotteetStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
+const paikallinenStore = getKoostePaikallinenStore(route.params.koulutustyyppi);
+const paikallinenComponent = getKoostePaikallinenComponent(route.params.koulutustyyppi);
+const kuvaus = getKoosteKuvaus(route.params.koulutustyyppi);
+const subheader = getKoosteSubheader(route.params.koulutustyyppi);
+const perusteetHeader = getKoostePerusteHeader(route.params.koulutustyyppi);
 
-  @Prop({ required: true })
-  private paikallinenStore!: IPaikallinenStore;
+const router = useRouter();
+const instance = getCurrentInstance();
 
-  @Prop({ required: false })
-  private opasStore!: OpasStore;
+const showEraantyneet = ref(false);
 
-  @Prop({ required: true })
-  private tiedotteetStore!: KoosteTiedotteetStore;
+onMounted(async () => {
+  await fetch();
+  await nextTick();
+  const h1 = instance?.proxy?.$el.querySelector('h1');
+  h1?.setAttribute('tabindex', '-1');
+  h1?.focus();
+});
 
-  @Prop({ required: true })
-  private paikallinenComponent!: any;
+const koulutustyyppi = computed(() => {
+  return perusteKoosteStore?.koulutustyyppi.value || _.get(route.params, 'koulutustyyppi');
+});
 
-  @Prop({ required: false })
-  private kuvaus!: string;
+const routeKoulutustyyppi = computed(() => {
+  return route.params.koulutustyyppi;
+});
 
-  @Prop({ required: false })
-  private subheader!: string;
-
-  @Prop({ required: false })
-  private perusteetHeader!: string;
-
-  private showEraantyneet: boolean = false;
-
-  async mounted() {
-    await Vue.nextTick();
-    const h1 = this.$el.querySelector('h1');
-    h1?.setAttribute('tabindex', '-1');
-    h1?.focus();
+const tiedotteet = computed(() => {
+  if (tiedotteetStore?.tiedotteet?.value) {
+    return _.chain(tiedotteetStore.tiedotteet?.value)
+      .sortBy('luotu')
+      .reverse()
+      .value();
   }
 
-  @Watch('koulutustyyppi', { immediate: true })
-  async koulutustyyppiChange() {
-    if (this.perusteKoosteStore) {
-      await this.perusteKoosteStore.fetch();
-      await this.tiedotteetStore.fetch(this.perusteKoosteStore?.perusteJulkaisut?.value);
-    }
-    else {
-      await this.tiedotteetStore.fetch();
-    }
+  return undefined;
+});
+
+const ohjeet = computed(() => {
+  if (opasStore?.oppaat?.value) {
+    return _.chain(opasStore.oppaat?.value)
+      .map(opas => {
+        return {
+          ...opas,
+          otsikko: opas.nimi,
+        } as JulkiRivi;
+      })
+      .sortBy('muokattu')
+      .reverse()
+      .value();
   }
 
-  get koulutustyyppi() {
-    return this.perusteKoosteStore?.koulutustyyppi?.value || _.get(this.$route.params, 'koulutustyyppi');
+  return undefined;
+});
+
+const perusteJarjestykset = computed(() => {
+  return perusteKoosteStore.perusteJarjestykset?.value;
+});
+
+const julkaistutPerusteet = computed(() => {
+  if (!perusteKoosteStore?.perusteJulkaisut?.value) {
+    return undefined;
   }
 
-  get tiedotteet() {
-    if (this.tiedotteetStore?.tiedotteet?.value) {
-      return _.chain(this.tiedotteetStore.tiedotteet?.value)
-        .sortBy('luotu')
-        .reverse()
-        .value();
-    }
-  }
+  return _.chain(perusteKoosteStore.perusteJulkaisut?.value)
+    .map(julkaisu => ({
+      ...julkaisu,
+      perusteId: _.toString(julkaisu.id),
+      kaannettyNimi: $kaanna(julkaisu.nimi!),
+      julkisivuJarjestysNro: _.find(perusteJarjestykset.value, jarjestys => jarjestys.id === julkaisu.id)?.julkisivuJarjestysNro,
+    }))
+    .orderBy(julkisivuPerusteKoosteJarjestys.keys, julkisivuPerusteKoosteJarjestys.sortby)
+    .value();
+});
 
-  get ohjeet() {
-    if (this.opasStore?.oppaat?.value) {
-      return _.chain(this.opasStore.oppaat?.value)
-        .map(opas => {
-          return {
-            ...opas,
-            otsikko: opas.nimi,
-          } as JulkiRivi;
-        })
-        .sortBy('muokattu')
-        .reverse()
-        .value();
-    }
-  }
+const julkaistutVoimassaolevatPerusteet = computed(() => {
+  return _.filter(julkaistutPerusteet.value, (peruste) => (!peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu)
+      && !_.find(perusteJarjestykset.value, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
+});
 
-  get julkaistutPerusteet() {
-    if (!this.perusteKoosteStore) {
-      return [];
-    }
+const julkaistutEraantyneetPerusteet = computed(() => {
+  return _.filter(julkaistutPerusteet.value, (peruste) => (peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu)
+      || _.find(perusteJarjestykset.value, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
+});
 
-    if (this.perusteKoosteStore?.perusteJulkaisut?.value) {
-      return _.chain(this.perusteKoosteStore.perusteJulkaisut?.value)
-        .map(julkaisu => ({
-          ...julkaisu,
-          perusteId: _.toString(julkaisu.id),
-          kaannettyNimi: this.$kaanna(julkaisu.nimi!),
-          julkisivuJarjestysNro: _.find(this.perusteJarjestykset, jarjestys => jarjestys.id === julkaisu.id)?.julkisivuJarjestysNro,
-        }))
-        .orderBy(julkisivuPerusteKoosteJarjestys.keys, julkisivuPerusteKoosteJarjestys.sortby)
-        .value();
-    }
+const visibleJulkaistutPerusteet = computed(() => {
+  if (showEraantyneet.value) {
+    return [...julkaistutVoimassaolevatPerusteet.value, ...julkaistutEraantyneetPerusteet.value];
   }
+  return julkaistutVoimassaolevatPerusteet.value;
+});
 
-  get perusteJarjestykset() {
-    return this.perusteKoosteStore.perusteJarjestykset?.value;
-  }
+const muutTilet = computed(() => {
+  return perusteKoosteStore?.muutTilet?.value;
+});
 
-  get visibleJulkaistutPerusteet() {
-    if (this.showEraantyneet) {
-      return [...this.julkaistutVoimassaolevatPerusteet, ...this.julkaistutEraantyneetPerusteet];
-    }
-    return this.julkaistutVoimassaolevatPerusteet;
-  }
+const murupolku = computed((): Array<MurupolkuOsa> => {
+  return [{
+    label: koulutustyyppi.value,
+    location: {
+      ...route,
+    },
+  }];
+});
 
-  get julkaistutVoimassaolevatPerusteet() {
-    return _.filter(this.julkaistutPerusteet, (peruste) => (!peruste.voimassaoloLoppuu || Date.now() < peruste.voimassaoloLoppuu)
-      && !_.find(this.perusteJarjestykset, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
-  }
+const toggleEraantyneet = () => {
+  showEraantyneet.value = !showEraantyneet.value;
+};
 
-  get julkaistutEraantyneetPerusteet() {
-    return _.filter(this.julkaistutPerusteet, (peruste) => (peruste.voimassaoloLoppuu && Date.now() > peruste.voimassaoloLoppuu)
-      || _.find(this.perusteJarjestykset, jarjestys => jarjestys.id === peruste.id)?.piilotaJulkisivulta);
-  }
+const avaaTiedote = (tiedote: TiedoteDto) => {
+  router.push({
+    name: 'uutinen',
+    params: {
+      tiedoteId: '' + tiedote.id,
+    },
+  });
+};
 
-  get muutTilet() {
-    return this.perusteKoosteStore.muutTilet?.value;
-  }
+const avaaOpas = (ohje: any) => {
+  router.push({
+    name: 'peruste',
+    params: {
+      koulutustyyppi: 'opas',
+      perusteId: ohje.id,
+    },
+  });
+};
 
-  toggleEraantyneet() {
-    this.showEraantyneet = !this.showEraantyneet;
+const fetch = async () => {
+  if (perusteKoosteStore) {
+    await perusteKoosteStore.fetch();
+    await tiedotteetStore.fetch(perusteKoosteStore?.perusteJulkaisut?.value);
   }
+  else {
+    await tiedotteetStore.fetch();
+  }
+};
 
-  avaaTiedote(tiedote: TiedoteDto) {
-    this.$router.push({
-      name: 'uutinen',
-      params: {
-        tiedoteId: '' + tiedote.id,
-      },
-    });
-  }
+// Watch for changes to koulutustyyppi
+watch(koulutustyyppi, async () => {
+  await fetch();
+});
 
-  avaaOpas(ohje: any) {
-    this.$router.push({
-      name: 'peruste',
-      params: {
-        koulutustyyppi: 'opas',
-        perusteId: ohje.id,
-      },
-    });
-  }
+// Replace @Meta decorator with useHead
+useHead({
+  title: computed(() => $t(koulutustyyppi.value)),
+});
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t(this.koulutustyyppi),
-    };
-  }
-
-  get murupolku(): Array<MurupolkuOsa> {
-    return [{
-      label: this.koulutustyyppi,
-      location: {
-        ...this.$route,
-      } as RawLocation,
-    }];
-  }
-}
+watch(routeKoulutustyyppi, async () => {
+  window.location.reload();
+});
 </script>
 
 <style scoped lang="scss">
@@ -285,7 +330,7 @@ export default class RouteKooste extends Vue {
 
 @include shadow-tile;
 
-::v-deep .ep-collapse .header {
+:deep(.ep-collapse .header) {
   color: #3367E3;
 }
 

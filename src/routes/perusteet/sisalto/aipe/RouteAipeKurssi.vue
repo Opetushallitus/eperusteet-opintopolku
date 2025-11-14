@@ -1,89 +1,91 @@
 <template>
   <div class="content">
-    <h2>{{$kaanna(kurssi.nimi)}}</h2>
+    <h2>{{ $kaanna(kurssi.nimi) }}</h2>
 
-    <div class="mt-4" v-if="kurssi.koodi">
-      <h3>{{ $t('koodi')}}</h3>
-      <span>{{kurssi.koodi.arvo}}</span>
+    <div
+      v-if="kurssi.koodi"
+      class="mt-4"
+    >
+      <h3>{{ $t('koodi') }}</h3>
+      <span>{{ kurssi.koodi.arvo }}</span>
     </div>
 
-    <div class="mt-4" v-if="kurssi.kuvaus">
-      <h3>{{ $t('kuvaus')}}</h3>
-      <ep-content-viewer :value="$kaanna(kurssi.kuvaus)" :kuvat="kuvat" />
+    <div
+      v-if="kurssi.kuvaus"
+      class="mt-4"
+    >
+      <h3>{{ $t('kuvaus') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(kurssi.kuvaus)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-5" v-if="tavoitteet && tavoitteet.length > 0">
-      <h3>{{$t('liitetyt-tavoitteet')}}</h3>
-      <div v-for="tavoite in tavoitteet" :key="'tavoite'+tavoite.id" class="taulukko-rivi-varitys px-2 py-3">
-        {{$kaanna(tavoite.tavoite)}}
+    <div
+      v-if="tavoitteet && tavoitteet.length > 0"
+      class="mt-5"
+    >
+      <h3>{{ $t('liitetyt-tavoitteet') }}</h3>
+      <div
+        v-for="tavoite in tavoitteet"
+        :key="'tavoite'+tavoite.id"
+        class="taulukko-rivi-varitys px-2 py-3"
+      >
+        {{ $kaanna(tavoite.tavoite) }}
       </div>
     </div>
-
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { AipeKurssiStore } from '@/stores/AipeKurssiStore';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+
 import { getTavoiteNumero } from '@shared/utils/perusteet';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-  },
-})
-export default class RouteAipeKurssi extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  get kurssiId() {
-    return _.toNumber(this.$route.params.kurssiId);
+const route = useRoute();
+
+const kurssiId = computed(() => {
+  return _.toNumber(route.params.kurssiId);
+});
+
+const kurssi = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: kurssiId.value });
+});
+
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
+
+const oppiaine = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: oppiaineId.value });
+});
+
+const tavoitteetById = computed(() => {
+  if (oppiaine.value) {
+    return _.keyBy(oppiaine.value.tavoitteet, 'id');
   }
+  return {};
+});
 
-  get kurssi() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.kurssiId });
+const tavoitteet = computed(() => {
+  if (kurssi.value) {
+    return _.chain(kurssi.value.tavoitteet)
+      .map(tavoite => tavoitteetById.value![tavoite as any])
+      .sortBy(tavoite => getTavoiteNumero(tavoite.tavoite))
+      .value();
   }
+  return [];
+});
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
-
-  get oppiaine() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId });
-  }
-
-  get tavoitteet() {
-    if (this.kurssi) {
-      return _.chain(this.kurssi.tavoitteet)
-        .map(tavoite => this.tavoitteetById![tavoite as any])
-        .sortBy(tavoite => getTavoiteNumero(tavoite.tavoite))
-        .value();
-    }
-  }
-
-  get tavoitteetById() {
-    if (this.oppiaine) {
-      return _.keyBy(this.oppiaine.tavoitteet, 'id');
-    }
-  }
-
-  get fields() {
-    return [{
-      key: 'tavoite',
-      thStyle: {
-        display: 'none',
-      },
-    }];
-  }
-
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
-}
-
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 </script>
 
 <style scoped lang="scss">

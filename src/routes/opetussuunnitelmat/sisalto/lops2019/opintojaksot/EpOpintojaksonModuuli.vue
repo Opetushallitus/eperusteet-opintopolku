@@ -1,65 +1,74 @@
 <template>
-<div v-if="moduuli && moduuli.node && moduuli.node.location">
-  <router-link class="moduulibox" role="button" :to="moduuli.node.location" tabindex="0">
-    <div class="name">{{ $kaanna(moduuli.node.label) }} ({{ moduuli.node.meta.koodi.arvo }})</div>
-    <div class="bottom">
-      <div class="d-flex bd-highlight">
-        <div class="px-2 flex-grow-1">
-        </div>
-        <div class="px-2 info">
-          <span class="op">{{ moduuli.node.meta.laajuus }} {{ $t('opintopiste') }}</span>
-          <ep-color-indicator :kind="moduuli.node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
+  <div v-if="moduuli && moduuli.node && moduuli.node.location">
+    <router-link
+      class="moduulibox"
+      role="button"
+      :to="moduuli.node.location"
+      tabindex="0"
+    >
+      <div class="name">
+        {{ $kaanna(moduuli.node.label) }} ({{ moduuli.node.meta.koodi.arvo }})
+      </div>
+      <div class="bottom">
+        <div class="d-flex bd-highlight">
+          <div class="px-2 flex-grow-1" />
+          <div class="px-2 info">
+            <span class="op">{{ moduuli.node.meta.laajuus }} {{ $t('opintopiste') }}</span>
+            <ep-color-indicator :kind="moduuli.node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
+          </div>
         </div>
       </div>
-    </div>
-  </router-link>
-</div>
-<div v-else-if="moduuli">
-  <h3 class="otsikko" slot="header">{{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')'  : '') }}</h3>
-
-  <div class="teksti">
-  <moduuli-esitys :moduuli="moduuli"
-                  :termit="perusteTermit"
-                  :kuvat="perusteKuvat"
-                  :isPerusteView="false" />
+    </router-link>
   </div>
-</div>
+  <div v-else-if="moduuli">
+    <h3
+      class="otsikko"
+    >
+      {{ $kaanna(moduuli.nimi) + (koodi ? ' (' + koodi.arvo + ')' : '') }}
+    </h3>
+
+    <div class="teksti">
+      <moduuli-esitys
+        :moduuli="moduuli"
+        :termit="perusteTermit"
+        :kuvat="perusteKuvat"
+        :is-peruste-view="false"
+      />
+    </div>
+  </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import { Lops2019ModuuliDto } from '@shared/api/eperusteet';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import ModuuliEsitys from '@shared/components/EpOpintojaksonModuuli/ModuuliEsitys.vue';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpColorIndicator,
-    ModuuliEsitys,
+const props = defineProps({
+  moduuli: {
+    type: Object as () => Lops2019ModuuliDto,
+    required: true,
   },
-})
-export default class EpOpintojaksonModuuli extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+});
 
-  @Prop({ required: true })
-  private moduuli!: Lops2019ModuuliDto;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get koodi() {
-    if (this.moduuli) {
-      return this.moduuli.koodi;
-    }
+const koodi = computed(() => {
+  if (props.moduuli) {
+    return props.moduuli.koodi;
   }
+  return undefined;
+});
 
-  get perusteTermit() {
-    return this.opetussuunnitelmaDataStore.perusteTermit;
-  }
+const perusteTermit = computed(() => {
+  return opetussuunnitelmaDataStore.perusteTermit;
+});
 
-  get perusteKuvat() {
-    return this.opetussuunnitelmaDataStore.perusteKuvat;
-  }
-}
+const perusteKuvat = computed(() => {
+  return opetussuunnitelmaDataStore.perusteKuvat;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -116,5 +125,4 @@ export default class EpOpintojaksonModuuli extends Vue {
     }
   }
 }
-
 </style>

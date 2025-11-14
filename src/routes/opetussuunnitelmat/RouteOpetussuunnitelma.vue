@@ -1,163 +1,164 @@
 <template>
-<div class="opetussuunnitelma">
-  <ep-header :koulutustyyppi="koulutustyyppi" :tyyppi="tyyppi" :murupolku="murupolku">
-    <template slot="header">
-      {{ $kaanna(opetussuunnitelma.nimi) }}
-    </template>
-    <template slot="subheader">
-      <div class="diaarinumero">
-        {{ diaariNumero }}
+  <ep-spinner v-if="!opetussuunnitelma" />
+  <div v-else class="opetussuunnitelma">
+    <ep-header
+      :koulutustyyppi="koulutustyyppi"
+      :tyyppi="tyyppi"
+      :murupolku="murupolku"
+    >
+      <template #header>
+        {{ $kaanna(opetussuunnitelma.nimi) }}
+      </template>
+      <template #subheader>
+        <div class="diaarinumero">
+          {{ diaariNumero }}
+        </div>
+      </template>
+    </ep-header>
+
+    <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle" />
+
+    <div class="container pt-4">
+      <div class="lower">
+        <div
+          id="globalNavigation"
+          ref="innerPortal"
+        />
+        <ep-sidebar :scroll-enabled="scrollEnabled">
+          <template #bar>
+            <ep-opetussuunnitelma-sidenav />
+          </template>
+          <template #view>
+            <router-view :key="$route.fullPath">
+              <template #previous-next-navigation>
+                <ep-previous-next-navigation
+                  :active-node="current"
+                  :flattened-sidenav="flattenedSidenav"
+                />
+              </template>
+            </router-view>
+          </template>
+        </ep-sidebar>
       </div>
-    </template>
-  </ep-header>
-
-  <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle"/>
-
-  <div class="container pt-4">
-    <div class="lower">
-      <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-      <ep-sidebar :scroll-enabled="scrollEnabled">
-        <template slot="bar">
-          <ep-opetussuunnitelma-sidenav :opetussuunnitelma-data-store="opetussuunnitelmaDataStore" />
-        </template>
-        <template slot="view">
-          <router-view :key="$route.fullPath">
-            <template slot="previous-next-navigation">
-              <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
-            </template>
-          </router-view>
-        </template>
-      </ep-sidebar>
     </div>
   </div>
-</div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch, ProvideReactive } from 'vue-property-decorator';
-import { Meta } from '@shared/utils/decorators';
+<script setup lang="ts">
+import { ref, computed, watch, provide, nextTick, onMounted, useTemplateRef } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import { NavigationNode, traverseNavigation } from '@shared/utils/NavigationBuilder';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSidebar from '@shared/components/EpSidebar/EpSidebar.vue';
 import EpPreviousNextNavigation from '@/components/EpPreviousNextNavigation/EpPreviousNextNavigation.vue';
 import EpOpetussuunnitelmaSidenav from '@/components/EpOpetussuunnitelmaSidenav/EpOpetussuunnitelmaSidenav.vue';
-import { IOpetussuunnitelmaStore } from '@/stores/IOpetussuunitelmaStore';
 import EpNotificationBar from '@/components/EpNotificationBar/EpNotificationBar.vue';
 import { OpetussuunnitelmaKevytDtoTilaEnum } from '@shared/api/ylops';
 import * as _ from 'lodash';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 
-@Component({
-  components: {
-    EpOpetussuunnitelmaSidenav,
-    EpHeader,
-    EpSidebar,
-    EpPreviousNextNavigation,
-    EpNotificationBar,
-  },
-  inject: [],
-})
-export default class RouteOpetussuunnitelma extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: IOpetussuunnitelmaStore;
+const route = useRoute();
+const innerPortal = useTemplateRef('innerPortal');
+const browserStore = new BrowserStore();
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  private browserStore = new BrowserStore();
+const opetussuunnitelma = computed(() => {
+  return opetussuunnitelmaDataStore.opetussuunnitelma;
+});
 
-  get opetussuunnitelma() {
-    return this.opetussuunnitelmaDataStore.opetussuunnitelma;
+const koulutustyyppi = computed(() => {
+  if (opetussuunnitelmaDataStore?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
+    return 'koulutustyyppi_muu';
   }
+  return tyyppi.value === 'yhteinen' ? 'koulutustyyppi_1' : opetussuunnitelmaDataStore.koulutustyyppi;
+});
 
-  get koulutustyyppi() {
-    if (this.opetussuunnitelmaDataStore?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
-      return 'koulutustyyppi_muu';
-    }
-    return this.tyyppi === 'yhteinen' ? 'koulutustyyppi_1' : this.opetussuunnitelmaDataStore.koulutustyyppi;
+const tyyppi = computed(() => {
+  return opetussuunnitelmaDataStore.opetussuunnitelma?.tyyppi;
+});
+
+const current = computed((): NavigationNode | null => {
+  return opetussuunnitelmaDataStore.current;
+});
+
+const flattenedSidenav = computed(() => {
+  return opetussuunnitelmaDataStore.flattenedSidenav;
+});
+
+const murupolku = computed(() => {
+  if (opetussuunnitelma.value && current.value) {
+    return [
+      ...createOpetussuunnitelmaMurupolku(opetussuunnitelma.value, koulutustyyppi.value),
+      ...current.value.path,
+    ];
   }
+  return [];
+});
 
-  get tyyppi() {
-    return this.opetussuunnitelmaDataStore.opetussuunnitelma?.tyyppi;
-  }
+const diaariNumero = computed((): string => {
+  return opetussuunnitelma.value?.peruste?.diaarinumero || '';
+});
 
-  get current(): NavigationNode | null {
-    return this.opetussuunnitelmaDataStore.current;
-  }
+const scrollEnabled = computed(() => {
+  return !browserStore.navigationVisible.value;
+});
 
-  get flattenedSidenav() {
-    return this.opetussuunnitelmaDataStore.flattenedSidenav;
-  }
+const onRouteUpdate = async (newRoute) => {
+  opetussuunnitelmaDataStore.updateRoute(newRoute);
 
-  get murupolku() {
-    if (this.opetussuunnitelma && this.current) {
-      return [
-        ...createOpetussuunnitelmaMurupolku(this.opetussuunnitelma, this.koulutustyyppi),
-        ...this.current.path,
-      ];
-    }
-    return [];
-  }
+  await nextTick();
+  const h2 = document.querySelector('h2');
+  h2?.setAttribute('tabindex', '-1');
+  h2?.focus();
+};
 
-  get diaariNumero(): string {
-    return this.opetussuunnitelma?.peruste?.diaarinumero || '';
-  }
+// Watch for route changes
+watch(() => route, onRouteUpdate, { deep: true, immediate: true });
 
-  @Watch('$route', { deep: true, immediate: true })
-  async onRouteUpdate(route) {
-    this.opetussuunnitelmaDataStore.updateRoute(route);
-
-    await Vue.nextTick();
-    const h2 = this.$el.querySelector('h2');
-    h2?.setAttribute('tabindex', '-1');
-    h2?.focus();
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.opetussuunnitelma) {
-      return {
-        title: this.$kaanna(this.opetussuunnitelma.nimi),
-        meta: [
-          {
-            vmid: 'description',
-            name: 'description',
-            content: [
-              this.$kaanna(this.opetussuunnitelma.nimi),
-              this.$t(this.opetussuunnitelma.koulutustyyppi),
-            ],
-          },
-        ],
-      };
-    }
-  }
-
-  get opetussuunnitelmaEsikatselussa() {
-    return this.opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(this.$route.query, 'esikatselu');
-  }
-
-  get hasSisaltoKielelle() {
-    return _.includes(this.opetussuunnitelma?.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value));
-  }
-
-  @ProvideReactive('linkkiHandler')
-  get linkkiHandler(): ILinkkiHandler {
+// Meta information
+const getMetaInfo = computed(() => {
+  if (opetussuunnitelma.value) {
     return {
-      nodeToRoute(node) {
-        return traverseNavigation(node, true).location;
-      },
-    } as ILinkkiHandler;
-  };
-
-  @ProvideReactive('opetussuunnitelma')
-  get provideOpetussuunnitelma() {
-    return this.opetussuunnitelma;
+      title: $kaanna(opetussuunnitelma.value?.nimi),
+      meta: [
+        {
+          vmid: 'description',
+          name: 'description',
+          content: [
+            $kaanna(opetussuunnitelma.value?.nimi),
+            opetussuunnitelma.value?.koulutustyyppi,
+          ],
+        },
+      ],
+    };
   }
+  return {};
+});
 
-  get scrollEnabled() {
-    return !this.browserStore.navigationVisible.value;
-  }
-}
+useHead(getMetaInfo);
+
+const opetussuunnitelmaEsikatselussa = computed(() => {
+  return opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(route.query, 'esikatselu');
+});
+
+const hasSisaltoKielelle = computed(() => {
+  return _.includes(opetussuunnitelma.value?.julkaisukielet, _.toString(Kielet.getSisaltoKieli.value));
+});
+
+const linkkiHandler = {
+  nodeToRoute(node) {
+    return traverseNavigation(node, true).location;
+  },
+} as ILinkkiHandler;
+
+provide('linkkiHandler', linkkiHandler);
+provide('opetussuunnitelma', opetussuunnitelma.value);
 </script>
 
 <style scoped lang="scss">
@@ -167,8 +168,8 @@ export default class RouteOpetussuunnitelma extends Vue {
   }
 }
 
-::v-deep .sidenav .view{
-  border:0;
+:deep(.sidenav .view) {
+  border: 0;
 }
 
 </style>

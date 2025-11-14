@@ -1,9 +1,6 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import { getJulkisetOpetussuunnitelmat, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import { Kielet } from '@shared/stores/kieli';
-
-Vue.use(VueCompositionApi);
 
 export class TyopajatStore {
   public state = reactive({

@@ -1,79 +1,120 @@
 <template>
-<div class="peruste">
-  <ep-header :koulutustyyppi="koulutustyyppi" :murupolku="murupolku" :tyyppi="peruste.tyyppi" v-sticky sticky-side="top">
-    <template slot="header" v-if="peruste.tyyppi ==='opas' && peruste.opasTyyppi !== 'tietoapalvelusta'">
-      {{ $t('ohjeet-ja-materiaalit')}}: {{ $kaanna(peruste.nimi) }}
-    </template>
-    <template slot="header" v-else>
-      {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span>
-    </template>
-    <template slot="subheader">
-      <div class="diaarinumero" v-if="peruste.tyyppi !=='opas'">
-        {{ peruste.diaarinumero }}
-      </div>
-      <ep-search
-        class="query mt-3"
-        v-model="query"
-        :maxlength="100"
-        :placeholder="$t('hae')"
-        :srOnlyLabelText="sisaltoHakuSrLabel"
-        />
-    </template>
-  </ep-header>
-
-  <EpPerusteNotificationBar :julkaisut="julkaisut" :peruste="peruste" />
-
-  <div class="container mt-4">
-    <div class="lower">
-      <div v-if="sisaltohaku">
-        <ep-peruste-haku :peruste-data-store="perusteDataStore" :query="query" @clear="suljeSisaltohaku">
-          <template v-slot:nimi="{ tulos }">
-            <router-link :to="tulos.location" @click.native="sisaltohakuValinta(tulos.location)">
-              {{ tulos.nimi}}
-            </router-link>
-          </template>
-        </ep-peruste-haku>
-      </div>
-      <template v-else>
-        <PortalTarget ref="innerPortal" name="globalNavigation"></PortalTarget>
-        <ep-sidebar :scroll-enabled="scrollEnabled">
-          <template slot="bar">
-            <div>
-              <ep-peruste-sidenav
-                  :peruste-data-store="perusteDataStore">
-              </ep-peruste-sidenav>
-            </div>
-            <div class="tags">
-              <span class="tag"></span>
-            </div>
-          </template>
-
-          <template slot="view">
-            <router-view :key="$route.fullPath">
-              <template v-slot:header v-if="peruste.tyyppi ==='opas'">
-                {{$t('oppaan-tiedot')}}
-              </template>
-              <template v-slot:nimi v-if="peruste.tyyppi ==='opas'">
-                <ep-form-content name="oppaan-nimi" headerType="h3" headerClass="h6">
-                  <ep-field v-model="peruste.nimi"></ep-field>
-                </ep-form-content>
-              </template>
-              <template slot="previous-next-navigation">
-                <ep-previous-next-navigation :active-node="current" :flattened-sidenav="flattenedSidenav" />
-              </template>
-            </router-view>
-          </template>
-        </ep-sidebar>
+  <div class="peruste">
+    <ep-header
+      v-sticky
+      :koulutustyyppi="koulutustyyppi"
+      :murupolku="murupolku"
+      :tyyppi="peruste.tyyppi"
+      sticky-side="top"
+    >
+      <template
+        v-if="peruste.tyyppi ==='opas' && peruste.opasTyyppi !== 'tietoapalvelusta'"
+        #header
+      >
+        {{ $t('ohjeet-ja-materiaalit') }}: {{ $kaanna(peruste.nimi) }}
       </template>
+      <template
+        v-else
+        #header
+      >
+        {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
+      </template>
+      <template #subheader>
+        <div
+          v-if="peruste.tyyppi !=='opas'"
+          class="diaarinumero"
+        >
+          {{ peruste.diaarinumero }}
+        </div>
+        <ep-search
+          v-model="query"
+          class="query mt-3"
+          :maxlength="100"
+          :placeholder="$t('hae')"
+          :sr-only-label-text="sisaltoHakuSrLabel"
+        />
+      </template>
+    </ep-header>
+
+    <EpPerusteNotificationBar
+      :julkaisut="julkaisut"
+      :peruste="peruste"
+    />
+
+    <div class="container mt-4">
+      <div class="lower">
+        <div v-if="sisaltohaku">
+          <ep-peruste-haku
+            :peruste-data-store="perusteDataStore"
+            :query="query"
+            @clear="suljeSisaltohaku"
+          >
+            <template #nimi="{ tulos }">
+              <router-link
+                :to="tulos.location"
+                @click="sisaltohakuValinta(tulos.location)"
+              >
+                {{ tulos.nimi }}
+              </router-link>
+            </template>
+          </ep-peruste-haku>
+        </div>
+        <template v-else>
+          <div
+            id="globalNavigation"
+            ref="innerPortal"
+          />
+          <ep-sidebar :scroll-enabled="scrollEnabled">
+            <template #bar>
+              <div>
+                <ep-peruste-sidenav
+                  :peruste-data-store="perusteDataStore"
+                />
+              </div>
+              <div class="tags">
+                <span class="tag" />
+              </div>
+            </template>
+
+            <template #view>
+              <router-view :key="route.fullPath">
+                <template
+                  v-if="peruste.tyyppi ==='opas'"
+                  #header
+                >
+                  {{ $t('oppaan-tiedot') }}
+                </template>
+                <template
+                  v-if="peruste.tyyppi ==='opas'"
+                  #nimi
+                >
+                  <ep-form-content
+                    name="oppaan-nimi"
+                    header-type="h3"
+                    header-class="h6"
+                  >
+                    <ep-field v-model="peruste.nimi" />
+                  </ep-form-content>
+                </template>
+                <template #previous-next-navigation>
+                  <ep-previous-next-navigation
+                    :active-node="current"
+                    :flattened-sidenav="flattenedSidenav"
+                  />
+                </template>
+              </router-view>
+            </template>
+          </ep-sidebar>
+        </template>
+      </div>
     </div>
   </div>
-</div>
 </template>
 
-<script lang="ts">
-import { Vue, Prop, Component, Watch, ProvideReactive } from 'vue-property-decorator';
-import { Meta } from '@shared/utils/decorators';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+<script setup lang="ts">
+import { ref, computed, watch, nextTick, provide, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import { NavigationNode, traverseNavigation } from '@shared/utils/NavigationBuilder';
 import * as _ from 'lodash';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
@@ -86,198 +127,180 @@ import EpPerusteNotificationBar from '@/components/EpNotificationBar/EpPerusteNo
 import EpPerusteHaku from '@/components/EpPerusteHaku.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
-import Sticky from 'vue-sticky-directive';
 import { createPerusteMurupolku } from '@/utils/murupolku';
-import { Route } from 'vue-router';
 import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { pinia } from '@/pinia';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 
-@Component({
-  components: {
-    EpSidebar,
-    EpPerusteSidenav,
-    EpHeader,
-    EpPreviousNextNavigation,
-    EpFormContent,
-    EpField,
-    EpPerusteNotificationBar,
-    EpPerusteHaku,
-    EpSearch,
-  },
-  directives: {
-    Sticky,
-  },
-  watch: {
-    query: {
-      handler: 'queryImplDebounce',
-      immediate: true,
-    },
-    $route: {
-      handler: 'onRouteUpdate',
-      immediate: true,
-      deep: true,
-    },
-  },
-  inject: [],
-})
-export default class RoutePeruste extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const router = useRouter();
 
-  private query = '';
-  private sisaltohaku = false;
-  private oldLocation: Route | null = null;
-  private queryImplDebounce = _.debounce(this.onQueryChange, 300);
-  private browserStore = new BrowserStore();
+const perusteDataStore = getCachedPerusteStore();
 
-  mounted() {
-    this.query = this.routeQuery;
-  }
+const query = ref('');
+const sisaltohaku = ref(false);
+const oldLocation = ref(null);
+const browserStore = new BrowserStore();
 
-  get routeQuery() {
-    return this.$route.query.query as string || '';
-  }
-
-  onQueryChange(value) {
-    if (this.query.length > 2) {
-      this.sisaltohaku = true;
-      this.$router.replace({ query: {
+// Replace debounce method
+const queryImplDebounce = _.debounce((value) => {
+  if (query.value.length > 2) {
+    sisaltohaku.value = true;
+    router.replace({
+      query: {
         ...(value && { query: value }),
-      } }).catch(() => {});
+      },
+    }).catch(() => {});
+  }
+}, 300);
+
+onMounted(() => {
+  query.value = routeQuery.value;
+});
+
+const routeQuery = computed(() => {
+  return route.query.query as string || '';
+});
+
+// Computed properties
+const sidenav = computed(() => {
+  return perusteDataStore.sidenav;
+});
+
+const peruste = computed(() => {
+  return perusteDataStore.peruste;
+});
+
+const current = computed((): NavigationNode | null => {
+  return perusteDataStore.current;
+});
+
+const flattenedSidenav = computed(() => {
+  return perusteDataStore.flattenedSidenav;
+});
+
+const murupolku = computed(() => {
+  if (peruste.value) {
+    let currentPath = current.value ? current.value.path : [];
+    return [
+      ...createPerusteMurupolku(peruste.value, koulutustyyppi.value, routeKoulutustyyppi.value),
+      ...currentPath,
+    ];
+  }
+  return [];
+});
+
+const routeKoulutustyyppi = computed(() => {
+  return route.params?.koulutustyyppi;
+});
+
+const oppaanKoulutustyyppi = computed(() => {
+  if (_.size(peruste.value?.oppaanKoulutustyypit) === 1) {
+    return _.take((peruste.value?.oppaanKoulutustyypit as any[])).toString();
+  }
+  return undefined;
+});
+
+const koulutustyyppi = computed(() => {
+  return peruste.value?.koulutustyyppi || oppaanKoulutustyyppi.value;
+});
+
+const julkaisut = computed(() => {
+  return perusteDataStore.julkaisut;
+});
+
+const routeName = computed(() => {
+  return route.name;
+});
+
+const ensimainenNavi = computed(() => {
+  return _.find(flattenedSidenav.value, navi => navi.type !== 'root');
+});
+
+const scrollEnabled = computed(() => {
+  return !browserStore.navigationVisible.value;
+});
+
+const sisaltoHakuSrLabel = computed(() => {
+  if (peruste.value?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.DIGITAALINENOSAAMINEN)) {
+    return $t('hae-digitaalisten-osaamisten-kuvauksista');
+  }
+  return $t('hae-perusteen-sisallosta');
+});
+
+// Methods
+const suljeSisaltohaku = () => {
+  query.value = '';
+  sisaltohaku.value = false;
+};
+
+const sisaltohakuValinta = (location) => {
+  router.push(location).catch(() => { });
+  sisaltohaku.value = false;
+  query.value = '';
+  onRouteUpdate(route);
+};
+
+const onRouteUpdate = (currentRoute) => {
+  perusteDataStore.updateRoute(currentRoute);
+};
+
+// Watch handlers
+watch(routeQuery, () => {
+  query.value = routeQuery.value;
+});
+
+watch(query, (value) => {
+  queryImplDebounce(value);
+});
+
+watch(route, async () => {
+  await nextTick();
+  const h2 = document.querySelector('h2');
+  h2?.setAttribute('tabindex', '-1');
+  // h2?.focus();
+}, { deep: true, immediate: true });
+
+watch(flattenedSidenav, () => {
+  if (routeName.value === 'peruste') {
+    if (ensimainenNavi.value) {
+      router.replace(ensimainenNavi.value.location!);
     }
   }
+}, { immediate: true });
 
-  @Watch('routeQuery', { immediate: true })
-  private async routeQueryChange() {
-    this.query = this.routeQuery;
-  }
+// Initial route update
+onRouteUpdate(route);
 
-  @Watch('$route', { deep: true, immediate: true })
-  async routeChange() {
-    await Vue.nextTick();
-    const h2 = this.$el.querySelector('h2');
-    h2?.setAttribute('tabindex', '-1');
-    h2?.focus();
-  }
+// Provide 'linkkiHandler' for descendants
+const linkkiHandler: ILinkkiHandler = {
+  nodeToRoute(node) {
+    return traverseNavigation(node, false).location;
+  },
+};
 
-  get sidenav() {
-    return this.perusteDataStore.sidenav;
-  }
+provide('linkkiHandler', linkkiHandler);
 
-  get peruste() {
-    return this.perusteDataStore.peruste;
-  }
-
-  get current(): NavigationNode | null {
-    return this.perusteDataStore.current;
-  }
-
-  get flattenedSidenav() {
-    return this.perusteDataStore.flattenedSidenav;
-  }
-
-  get murupolku() {
-    if (this.peruste) {
-      let currentPath = this.current ? this.current.path : [];
+useHead({
+  title: computed(() => $kaanna(peruste.value?.nimi)),
+  meta: computed(() => {
+    if (peruste.value) {
       return [
-        ...createPerusteMurupolku(this.peruste, this.koulutustyyppi, this.routeKoulutustyyppi),
-        ...currentPath,
+        {
+          vmid: 'description',
+          name: 'description',
+          content: [
+            $kaanna(peruste.value.nimi),
+            ...(peruste.value.koulutustyyppi ? [$t(peruste.value.koulutustyyppi)] : []),
+          ],
+        },
       ];
     }
     return [];
-  }
-
-  get routeKoulutustyyppi() {
-    return this.$route.params?.koulutustyyppi;
-  }
-
-  get koulutustyyppi() {
-    return this.peruste?.koulutustyyppi || this.oppaanKoulutustyyppi;
-  }
-
-  get oppaanKoulutustyyppi() {
-    if (_.size(this.peruste?.oppaanKoulutustyypit) === 1) {
-      return _.take((this.peruste?.oppaanKoulutustyypit as any[])).toString();
-    }
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.peruste) {
-      return {
-        title: this.$kaanna(this.peruste.nimi),
-        meta: [
-          {
-            vmid: 'description',
-            name: 'description',
-            content: [
-              this.$kaanna(this.peruste.nimi),
-              ...(this.peruste.koulutustyyppi ? [this.$t(this.peruste.koulutustyyppi)] : []),
-            ],
-          },
-        ],
-      };
-    }
-  }
-
-  @ProvideReactive('linkkiHandler')
-  get linkkiHandler(): ILinkkiHandler {
-    return {
-      nodeToRoute(node) {
-        return traverseNavigation(node, false).location;
-      },
-    } as ILinkkiHandler;
-  };
-
-  get routeName() {
-    return this.$route.name;
-  }
-
-  get ensimainenNavi() {
-    return _.find(this.flattenedSidenav, navi => navi.type !== 'root');
-  }
-
-  @Watch('flattenedSidenav', { immediate: true })
-  flattenedSidenavChange() {
-    if (this.routeName === 'peruste') {
-      if (this.ensimainenNavi) {
-        this.$router.replace(this.ensimainenNavi.location!);
-      }
-    }
-  }
-
-  suljeSisaltohaku() {
-    this.query = '';
-    this.sisaltohaku = false;
-  }
-
-  sisaltohakuValinta(location) {
-    this.$router.push(location).catch(() => { });
-    this.sisaltohaku = false;
-    this.query = '';
-    this.onRouteUpdate(this.$route);
-  }
-
-  onRouteUpdate(route) {
-    this.perusteDataStore.updateRoute(route);
-  }
-
-  get julkaisut() {
-    return this.perusteDataStore.julkaisut;
-  }
-
-  get scrollEnabled() {
-    return !this.browserStore.navigationVisible.value;
-  }
-
-  get sisaltoHakuSrLabel() {
-    if (this.peruste?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.DIGITAALINENOSAAMINEN)) {
-      return this.$t('hae-digitaalisten-osaamisten-kuvauksista');
-    }
-
-    return this.$t('hae-perusteen-sisallosta');
-  }
-}
+  }),
+});
 </script>
 
 <style scoped lang="scss">
@@ -309,5 +332,4 @@ export default class RoutePeruste extends Vue {
     padding: $sidenav-padding;
   }
 }
-
 </style>

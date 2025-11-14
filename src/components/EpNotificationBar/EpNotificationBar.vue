@@ -1,124 +1,143 @@
 <template>
   <div
-      id="notification-bar"
-      class="notifikaatio justify-content-center py-3 korostus"
-      :class="notifikaatioClass"
-      v-sticky
-      sticky-z-index="5000"
-      v-if="hasNotification"
-      ref="stickyElement">
-    <EpMaterialIcon icon-shape="outlined">info</EpMaterialIcon>
+    v-if="hasNotification"
+    id="notification-bar"
+    ref="stickyElement"
+    v-sticky
+    class="notifikaatio justify-content-center py-3 korostus"
+    :class="notifikaatioClass"
+    sticky-z-index="5000"
+  >
+    <EpMaterialIcon icon-shape="outlined">
+      info
+    </EpMaterialIcon>
     <slot>
       <span class="notifikaatio-text">{{ notifikaatio }}</span>
       <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">
-        <span class="btn-link clickable" @click="toUusimpaan">{{$t('siirry-uusimpaan-julkaisuun')}}.</span>
+        <span
+          class="btn-link clickable"
+          @click="toUusimpaan"
+        >{{ $t('siirry-uusimpaan-julkaisuun') }}.</span>
       </div>
     </slot>
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, onMounted, useSlots, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import Sticky from 'vue-sticky-directive';
 import * as _ from 'lodash';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
+import { $t, $sd } from '@shared/utils/globals';
+import { hasSlotContent } from '@shared/utils/vue-utils';
 
-@Component({
-  components: {
-    EpMaterialIcon,
+import { useTemplateRef } from 'vue';
+
+const props = defineProps({
+  julkaisuPvm: {
+    type: [String, Number, Date, Object],
+    required: false,
+    default: undefined,
   },
-  directives: {
-    Sticky,
+  hasSisaltoKielelle: {
+    type: Boolean,
+    required: false,
+    default: true,
   },
-})
-export default class EpNotificationBar extends Vue {
-  @Prop({ required: false })
-  private julkaisuPvm?: any;
+  maxRevision: {
+    type: Number,
+    required: false,
+    default: undefined,
+  },
+});
 
-  @Prop({ required: false, default: true })
-  private hasSisaltoKielelle?: boolean;
+const route = useRoute();
+const router = useRouter();
+const slots = useSlots();
+const stickyElement = useTemplateRef('stickyElement');
+const navBarHeight = ref(0);
 
-  @Prop({ required: false })
-  private maxRevision?: number;
+onMounted(() => {
+  if (hasNotification.value) {
+    const navbar = document.getElementById('navigation-bar');
+    if (stickyElement?.value
+        && stickyElement.value['@@vue-sticky-directive']
+        && stickyElement.value['@@vue-sticky-directive'].options) {
+      stickyElement.value['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
+    }
+  }
+});
 
-  navBarHeight: number = 0;
+const hasNotification = computed(() => {
+  return notifikaatio.value || hasDefaultSlotContent.value;
+});
 
-  mounted() {
-    if (this.hasNotification) {
-      const navbar = document.getElementById('navigation-bar');
-      (this.$refs['stickyElement'] as any)['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
+const offset = computed(() => {
+  return `{top: ${navBarHeight.value}}`;
+});
+
+const notifikaatioClass = computed(() => {
+  return isEsikatselu.value ? 'esikatselu' : 'katselu';
+});
+
+const isEsikatselu = computed(() => {
+  return versio.value === '0';
+});
+
+const versio = computed(() => {
+  return route.params?.revision as string;
+});
+
+watch(() => versio.value, async () => {
+  router.go(0);
+});
+
+const tyyppi = computed((): 'peruste' | 'suunnitelma' => {
+  return (route.params?.perusteId ? 'peruste' : 'suunnitelma');
+});
+
+const notifikaatio = computed(() => {
+  if (isEsikatselu.value) {
+    if (tyyppi.value === 'peruste') {
+      return $t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu');
+    }
+    else {
+      return $t('olet-esikatselutilassa-suunnitelmaa-ei-ole-viela-julkaistu');
     }
   }
 
-  get hasNotification() {
-    return this.notifikaatio || this.hasDefaultSlotContent;
+  if (!props.hasSisaltoKielelle) {
+    return $t('sisaltoa-ei-saatavilla');
   }
 
-  get offset() {
-    return `{top: ${this.navBarHeight}}`;
-  }
-
-  get notifikaatioClass() {
-    return this.isEsikatselu ? 'esikatselu' : 'katselu';
-  }
-
-  get isEsikatselu() {
-    return this.versio === '0';
-  }
-
-  get versio() {
-    return this.$route.params?.revision;
-  }
-
-  @Watch('versio')
-  async revisionChange() {
-    this.$router.go(0);
-  }
-
-  get tyyppi(): 'peruste' | 'suunnitelma' {
-    return this.$route.params?.perusteId ? 'peruste' : 'suunnitelma';
-  }
-
-  get notifikaatio() {
-    if (this.isEsikatselu) {
-      if (this.tyyppi === 'peruste') {
-        return this.$t('olet-esikastelutilassa-perustetta-ei-ole-viela-julkaistu');
-      }
-      else {
-        return this.$t('olet-esikatselutilassa-suunnitelmaa-ei-ole-viela-julkaistu');
-      }
+  if (versio.value && (!props.maxRevision || _.toNumber(versio.value) < props.maxRevision)) {
+    if (tyyppi.value === 'peruste' && props.julkaisuPvm) {
+      return `${$t('katselet-perusteen-aiempaa-julkaisua')}${julkaisuPvmText.value}`;
     }
 
-    if (!this.hasSisaltoKielelle) {
-      return this.$t('sisaltoa-ei-saatavilla');
-    }
-
-    if (this.versio && (!this.maxRevision || _.toNumber(this.versio) < this.maxRevision)) {
-      if (this.tyyppi === 'peruste' && this.julkaisuPvm) {
-        return `${this.$t('katselet-perusteen-aiempaa-julkaisua')}${this.julkaisuPvmText}`;
-      }
-
-      if (this.tyyppi === 'suunnitelma') {
-        return `${this.$t('katselet-suunnitelman-vanhentunutta-versiota')} (${this.versio}).`;
-      }
+    if (tyyppi.value === 'suunnitelma') {
+      return `${$t('katselet-suunnitelman-vanhentunutta-versiota')} (${versio.value}).`;
     }
   }
 
-  get julkaisuPvmText() {
-    return this.julkaisuPvm ? ' (' + this.$sd(this.julkaisuPvm) + ').' : '.';
-  }
+  return undefined;
+});
 
-  async toUusimpaan() {
-    let route = _.assign({}, this.$route);
-    delete route.params.revision;
-    await this.$router.push({ name: route.name!, params: route.params });
-    this.$router.go(0);
-  }
+const julkaisuPvmText = computed(() => {
+  return props.julkaisuPvm ? ' (' + $sd(props.julkaisuPvm) + ').' : '.';
+});
 
-  get hasDefaultSlotContent() {
-    return !!this.$slots.default;
-  }
-}
+const toUusimpaan = async () => {
+  let routeObj = _.assign({}, route);
+  delete routeObj.params.revision;
+  await router.push({ name: routeObj.name!, params: routeObj.params });
+  router.go(0);
+};
+
+const hasDefaultSlotContent = computed(() => {
+  return hasSlotContent(slots.default);
+});
 </script>
 
 <style scoped lang="scss">

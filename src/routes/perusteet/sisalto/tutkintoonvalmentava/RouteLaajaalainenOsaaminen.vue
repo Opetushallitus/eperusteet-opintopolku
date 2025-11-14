@@ -1,8 +1,18 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko">{{ $kaanna(perusteenOsa.nimi) }}</h2>
-      <ep-content-viewer class="mt-4" :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko"
+      >
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
+      <ep-content-viewer
+        class="mt-4"
+        :value="$kaanna(perusteenOsa.teksti)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
       <slot name="previous-next-navigation" />
     </div>
@@ -10,55 +20,44 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { ViiteLaaja } from '@shared/api/eperusteet';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeading,
-    EpContentViewer,
-  },
-})
-export default class RouteLaajaalainenOsaaminen extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.laajaalainenosaaminenId);
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get perusteenOsaViite() {
-    return this.perusteenOsaStore.perusteenOsaViite;
-  }
+const perusteenOsaViite = computed(() => {
+  return perusteenOsaStore.perusteenOsaViite;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get tekstikappaleenOsa() {
-    return this.$route.params.osa;
-  }
-}
-
+const tekstikappaleenOsa = computed(() => {
+  return route.params.osa;
+});
 </script>
 
 <style scoped lang="scss">

@@ -1,57 +1,66 @@
 <template>
   <router-link :to="tyyppi.route">
-      <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
+    <div class="tyyppi-tile tile-background-shadow-selected shadow-tile">
       <div class="p-2">
         <div class="ikoni">
-          <EpMaterialIcon v-if="icon"
-                          icon-shape="outlined"
-                          :color="rgbColor"
-                          size="38px"
-                          class="img">{{icon}}</EpMaterialIcon>
-          <img v-else :src="osaamimerkkiLogo" :alt="$t('osaamismerkit')" class="img"/>
+          <EpMaterialIcon
+            v-if="icon"
+            icon-shape="outlined"
+            :color="rgbColor"
+            size="38px"
+            class="img"
+          >
+            {{ icon }}
+          </EpMaterialIcon>
+          <img
+            v-else
+            :src="osaamimerkkiLogo"
+            :alt="$t('osaamismerkit')"
+            class="img"
+          >
         </div>
         <div class="nimi">
-          <span>{{ name }}</span>
+          <span>{{ $t(name) }}</span>
         </div>
       </div>
     </div>
   </router-link>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
 import osaamismerkkiLogoFI from '@assets/img/images/osaamismerkki_main_FI.svg';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
-@Component({
-  components: {},
-})
-export default class KoulutustyyppiTile extends Vue {
-  @Prop({ required: true })
-  private tyyppi!: any;
+const props = defineProps({
+  tyyppi: {
+    type: Object,
+    required: true,
+  },
+});
 
-  get rgbColor() {
-    return rgb2string(koulutustyyppiThemeColor(this.tyyppi.route.params?.koulutustyyppi));
+const rgbColor = computed(() => {
+  return rgb2string(koulutustyyppiThemeColor(props.tyyppi.route.params?.koulutustyyppi));
+});
+
+const name = computed(() => {
+  return props.tyyppi.name;
+});
+
+const icon = computed(() => {
+  if (props.tyyppi.name === 'kansalliset-perustaitojen-osaamismerkit') {
+    return null;
   }
-
-  get name() {
-    return this.$t(this.tyyppi.name);
+  else if (props.tyyppi.name === 'opetushallituksen-maaraykset') {
+    return 'gavel';
   }
+  return 'account_balance';
+});
 
-  get icon() {
-    if (this.tyyppi.name === 'kansalliset-perustaitojen-osaamismerkit') {
-      return null;
-    }
-    else if (this.tyyppi.name === 'opetushallituksen-maaraykset') {
-      return 'gavel';
-    }
-    return 'account_balance';
-  }
-
-  get osaamimerkkiLogo() {
-    return osaamismerkkiLogoFI;
-  }
-}
+const osaamimerkkiLogo = computed(() => {
+  return osaamismerkkiLogoFI;
+});
 </script>
 
 <style scoped lang="scss">

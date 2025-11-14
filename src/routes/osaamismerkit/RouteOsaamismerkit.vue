@@ -1,10 +1,13 @@
 <template>
   <div v-if="$route.name === 'osaamismerkit'">
-    <EpHeader :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
-      <template slot="header">
+    <EpHeader
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
+      <template #header>
         {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
       </template>
-      <template slot="subheader">
+      <template #subheader>
         {{ $t('osaamismerkit-kuvaus') }}
       </template>
 
@@ -15,158 +18,175 @@
             :max-width="true"
             :sr-placeholder="$t('hae-osaamismerkkeja')"
             :placeholder="''"
-            class="w-100 mr-3">
+            class="w-100 mr-3"
+          >
             <template #label>
-              <span class="font-weight-600">{{ $t('hae-osaamismerkkeja')}}</span>
+              <span class="font-weight-600">{{ $t('hae-osaamismerkkeja') }}</span>
             </template>
           </EpSearch>
 
           <EpMultiSelect
+            v-model="query.kategoria"
             :is-editing="false"
             :options="osaamismerkkiKategoriaOptions"
             :placeholder="$t('kaikki')"
             class="multiselect"
-            v-model="kategoria"
             :searchable="false"
             track-by="value"
-            label="text">
-          <template #label>
-            <span class="font-weight-600">{{ $t('teema')}}</span>
-          </template>
+            label="text"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('teema') }}</span>
+            </template>
           </EpMultiSelect>
         </div>
 
-        <EpOsaamismerkit :osaamismerkit="osaamismerkit"
-                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"></EpOsaamismerkit>
+        <EpOsaamismerkit
+          :osaamismerkit="osaamismerkit"
+          :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+        />
       </div>
     </EpHeader>
   </div>
-  <router-view v-else/>
+  <router-view v-else />
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import _ from 'lodash';
 import { OsaamismerkitQuery } from '@shared/api/eperusteet';
-import { Meta } from '@shared/utils/decorators';
+import { useHead } from '@unhead/vue';
 import { murupolkuOsaamismerkkiRoot } from '@/utils/murupolku';
 import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { pinia } from '@/pinia';
+import { Kielet } from '@shared/stores/kieli';
 
-@Component({
-  components: {
-    EpOsaamismerkit,
-    EpHeader,
-    EpSearch,
-    EpSpinner,
-    EpMultiSelect,
-  },
-})
-export default class RouteOsaamismerkit extends Vue {
-  @Prop({ required: true })
-  private osaamismerkitStore!: OsaamismerkitStore;
+const route = useRoute();
+const router = useRouter();
+const osaamismerkitStore = useOsaamismerkitStore(pinia);
+const mounted = ref(false);
 
-  private query = this.initQuery();
-  private kategoria: any | null = null;
+const initQuery = () => {
+  return {
+    sivu: 0,
+    sivukoko: 9999,
+    nimi: '' as string | null,
+    tila: ['JULKAISTU'],
+    kategoria: undefined as object | undefined,
+    voimassa: true,
+    tuleva: false,
+    poistunut: false,
+  };
+};
 
-  async mounted() {
-    await this.osaamismerkitStore.fetchKategoriat({ poistunut: false });
+const query = ref(initQuery());
+const kategoria = ref(null);
+
+onMounted(async () => {
+  await osaamismerkitStore.fetchKategoriat({ poistunut: false });
+  await osaamismerkitStore.updateOsaamismerkitQuery(query.value);
+  setQueryParams();
+  mounted.value = true;
+});
+
+const setQueryParams = () => {
+  query.value = {
+    ...query.value,
+    nimi: route?.query?.query as string || null,
+    kategoria: _.find(osaamismerkkiKategoriaOptionsMapped.value, (kategoria) => kategoria.value === _.toNumber(route?.query?.category)) || null,
+  };
+};
+
+const osaamismerkit = computed(() => {
+  if (!osaamismerkitStore.osaamismerkit) {
+    return undefined;
   }
 
-  private initQuery() {
-    return {
-      sivu: 0,
-      sivukoko: 9999,
-      nimi: '',
-      tila: ['JULKAISTU'],
-      kategoria: undefined,
-      voimassa: true,
-      tuleva: false,
-      poistunut: false,
-    };
-  }
+  return _.chain(osaamismerkitStore.osaamismerkit)
+    .filter(osaamismerkki => Kielet.search(query.value.nimi, osaamismerkki.nimi))
+    .filter(osaamismerkki => query.value.kategoria ? osaamismerkki.kategoria?.id === query.value.kategoria.value : true)
+    .value();
+});
 
-  get osaamismerkit() {
-    return this.osaamismerkitStore.osaamismerkit.value;
-  }
-
-  get osaamismerkkiKategoriat() {
-    return this.osaamismerkitStore.kategoriat.value;
-  }
-
-  @Watch('query', { deep: true, immediate: true })
-  async onQueryChange(query: OsaamismerkitQuery) {
-    if (_.size(this.query.nimi) === 0 || _.size(this.query.nimi) > 2) {
-      await this.osaamismerkitStore.updateOsaamismerkkiQuery({
-        ...query,
-      });
-    }
-  }
-
-  @Watch('kategoria')
-  onKategoriaChange(kategoria) {
-    this.query.kategoria = kategoria ? kategoria.value : null;
-  }
-
-  get koulutustyyppi() {
-    return _.get(this.$route.params, 'koulutustyyppi') || 'vapaasivistystyo';
-  }
-
-  get osaamismerkkiKategoriaOptionsMapped() {
-    if (!this.osaamismerkitStore.kategoriat.value) {
-      return null;
-    }
-
-    return _.chain(this.osaamismerkitStore.kategoriat.value)
-      .map(kategoria => {
-        return {
-          text: this.$kaanna(kategoria.nimi),
-          value: kategoria.id,
-          data: kategoria,
-        };
-      })
-      .uniqWith(_.isEqual)
-      .sortBy('text')
-      .filter('text')
-      .value();
-  }
-
-  get osaamismerkkiKategoriaOptions() {
-    return [
-      {
-        text: this.$t('kaikki'),
-        value: null,
+watch(query, async () => {
+  if (mounted.value) {
+    router.replace({
+      query: {
+        query: query.value.nimi,
+        category: query.value.kategoria?.value,
       },
-      ...(this.osaamismerkkiKategoriaOptionsMapped ? this.osaamismerkkiKategoriaOptionsMapped : []),
-    ];
+    }).catch(() => {});
+  }
+}, { deep: true });
+
+const osaamismerkkiKategoriat = computed(() => {
+  return osaamismerkitStore.kategoriat;
+});
+
+watch(kategoria, (newKategoria) => {
+  query.value.kategoria = newKategoria ? newKategoria.value : null;
+});
+
+const koulutustyyppi = computed(() => {
+  return _.get(route.params, 'koulutustyyppi') || 'vapaasivistystyo';
+});
+
+const osaamismerkkiKategoriaOptionsMapped = computed(() => {
+  if (!osaamismerkitStore.kategoriat) {
+    return null;
   }
 
-  get murupolku() {
-    return murupolkuOsaamismerkkiRoot(this.koulutustyyppi);
-  }
+  return _.chain(osaamismerkitStore.kategoriat)
+    .map(kategoria => {
+      return {
+        text: $kaanna(kategoria.nimi),
+        value: kategoria.id,
+        data: kategoria,
+      };
+    })
+    .uniqWith(_.isEqual)
+    .sortBy('text')
+    .filter('text')
+    .value();
+});
 
-  @Meta
-  getMetaInfo() {
-    return {
-      title: this.$t('osaamismerkit'),
-    };
-  }
-}
+const osaamismerkkiKategoriaOptions = computed(() => {
+  return [
+    {
+      text: $t('kaikki'),
+      value: null,
+    },
+    ...(osaamismerkkiKategoriaOptionsMapped.value ? osaamismerkkiKategoriaOptionsMapped.value : []),
+  ];
+});
+
+const murupolku = computed(() => {
+  return murupolkuOsaamismerkkiRoot(koulutustyyppi.value);
+});
+
+useHead(() => {
+  return {
+    title: $t('osaamismerkit'),
+  };
+});
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
 
-::v-deep .filter {
+:deep(.filter) {
   max-width: 100%;
 }
 
-::v-deep h4 {
+:deep(h4) {
   font-size: 1.25rem !important;
   font-weight: 500 !important;
 }

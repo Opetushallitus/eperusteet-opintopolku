@@ -1,43 +1,54 @@
 <template>
-  <div aria-live="polite" tabindex='-1'>
+  <div
+    aria-live="polite"
+    tabindex="-1"
+  >
     <slot>
       <div v-if="kokonaismaara">
         <template v-if="!piilotaNakyvaTulosmaara">
-          <span aria-hidden="true" class="font-weight-bold mr-1">{{ kokonaismaara }}</span>
+          <span
+            aria-hidden="true"
+            class="font-weight-bold mr-1"
+          >{{ kokonaismaara }}</span>
           <span aria-hidden="true">{{ $t('hakutulosta') }}</span>
         </template>
-        <span class="sr-only" v-if="naytaRuudunlukijaLkm">{{ kokonaismaara }} {{ $t('hakutulosta') }}</span>
+        <span
+          v-if="naytaRuudunlukijaLkm"
+          class="sr-only"
+        >{{ kokonaismaara }} {{ $t('hakutulosta') }}</span>
       </div>
     </slot>
   </div>
 </template>
 
-<script lang="ts">
-import { Debounced } from '@shared/utils/delay';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import * as _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 
-@Component
-export default class EpHakutulosmaara extends Vue {
-  @Prop()
-  private kokonaismaara!: number | null;
+const props = defineProps({
+  kokonaismaara: {
+    type: Number,
+    required: false,
+    default: 0,
+  },
+  piilotaNakyvaTulosmaara: {
+    type: Boolean,
+    default: false,
+  },
+});
 
-  @Prop({ default: false, type: Boolean })
-  private piilotaNakyvaTulosmaara!: boolean;
+const naytaRuudunlukijaLkm = ref(false);
 
-  private naytaRuudunlukijaLkm = false;
+// Implementing debounce manually since the decorator is not directly compatible with setup
+const naytaRuudunlukijaLkmDebounced = _.debounce(async () => {
+  naytaRuudunlukijaLkm.value = true;
+}, 500);
 
-  @Watch('kokonaismaara', { immediate: true })
-  async kokonaismaaraUpdate() {
-    this.naytaRuudunlukijaLkm = false;
-    await this.naytaRuudunlukijaLkmDebounced();
-  }
+watch(() => props.kokonaismaara, async () => {
+  naytaRuudunlukijaLkm.value = false;
+  await naytaRuudunlukijaLkmDebounced();
+}, { immediate: true });
 
-  @Debounced(500)
-  async naytaRuudunlukijaLkmDebounced() {
-    this.naytaRuudunlukijaLkm = true;
-  }
-}
 </script>
 
 <style scoped lang="scss">

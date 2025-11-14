@@ -1,247 +1,354 @@
-import { Store, State, Getter } from '@shared/stores/store';
-import { OpetussuunnitelmaKaikkiDto, NavigationNodeDto, Opetussuunnitelmat, JulkinenApi, DokumenttiDto, baseURL, JulkinenApiParams, KoulutustoimijaJulkinenDto, Arviointiasteikot, ArviointiasteikkoDto, LiitetiedostotParam } from '@shared/api/amosaa';
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+import { Location } from 'vue-router';
 import * as _ from 'lodash';
-import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
-import { NavigationNode, buildTiedot, buildNavigation, filterNavigation, NavigationFilter } from '@shared/utils/NavigationBuilder';
-import { Kielet } from '@shared/stores/kieli';
-import { DokumenttiDtoTilaEnum,
+import mime from 'mime';
+import {
+  OpetussuunnitelmaKaikkiDto,
+  NavigationNodeDto,
+  Opetussuunnitelmat,
+  JulkinenApi,
+  DokumenttiDto,
+  baseURL,
+  JulkinenApiParams,
+  KoulutustoimijaJulkinenDto,
+  Arviointiasteikot,
+  ArviointiasteikkoDto,
+  LiitetiedostotParam,
+} from '@shared/api/amosaa';
+import {
+  DokumenttiDtoTilaEnum,
   baseURL as perusteBaseURL,
   Liitetiedostot as PerusteLiitetiedostot,
   LiitetiedostotParam as PerusteLiitetiedostotParam,
   PerusteKaikkiDto,
   Perusteet,
   TutkinnonOsaKaikkiDto,
-  TutkinnonOsaViiteSuppeaDto } from '@shared/api/eperusteet';
-import mime from 'mime';
+  TutkinnonOsaViiteSuppeaDto,
+} from '@shared/api/eperusteet';
+import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
+import {
+  NavigationNode,
+  buildTiedot,
+  buildNavigation,
+  filterNavigation,
+  NavigationFilter,
+} from '@shared/utils/NavigationBuilder';
+import { Kielet } from '@shared/stores/kieli';
 import { deepFilter, deepFind } from '@shared/utils/helpers';
 import { PerusteTyyppi } from '@/utils/peruste';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
+import { pinia } from '@/pinia';
 
-@Store
-export class ToteutussuunnitelmaDataStore implements IOpetussuunnitelmaStore {
-  @State() public opetussuunnitelmaId: number;
-  @State() public esikatselu: boolean | undefined = undefined;
-  @State() public revision: number | undefined = undefined;
-  @State() public navigation: NavigationNodeDto | null = null;
-  @State() public opetussuunnitelma: OpetussuunnitelmaKaikkiDto | null = null;
-  @State() public koulutustoimija: KoulutustoimijaJulkinenDto | null = null;
-  @State() public dokumenttiTila: DokumenttiDto | null = null;
-  @State() public currentRoute: Location | null = null;
-  @State() public sidenavFilter: NavigationFilter = {
-    label: '',
-    isEnabled: false,
-  };
-  @State() public arviointiasteikot: ArviointiasteikkoDto[] | null = null;
-  @State() public perusteKuvat: object[] = [];
-  @State() public perusteKaikki: PerusteKaikkiDto | null = null;
-  @State() public perusteidenTutkinnonOsat: TutkinnonOsaKaikkiDto[] | null = null;
-  @State() public perusteidenTutkinnonOsienViitteet: TutkinnonOsaViiteSuppeaDto[] | null = null;
+export const useToteutussuunnitelmaDataStore = (key) => {
+  const store = defineStore('toteutussuunnitelmaData-' + key, () => {
+    // Individual refs instead of state object
+    const opetussuunnitelmaId = ref<number>(0);
+    const esikatselu = ref<boolean | undefined>(undefined);
+    const revision = ref<number | undefined>(undefined);
+    const navigation = ref<NavigationNodeDto | null>(null);
+    const opetussuunnitelma = ref<OpetussuunnitelmaKaikkiDto | null>(null);
+    const koulutustoimija = ref<KoulutustoimijaJulkinenDto | null>(null);
+    const dokumenttiTila = ref<DokumenttiDto | null>(null);
+    const currentRoute = ref<Location | null>(null);
+    const sidenavFilter = ref<NavigationFilter>({
+      label: '',
+      isEnabled: false,
+    });
+    const arviointiasteikot = ref<ArviointiasteikkoDto[] | null>(null);
+    const perusteKuvat = ref<object[]>([]);
+    const perusteKaikki = ref<PerusteKaikkiDto | null>(null);
+    const perusteidenTutkinnonOsat = ref<TutkinnonOsaKaikkiDto[] | null>(null);
+    const perusteidenTutkinnonOsienViitteet = ref<TutkinnonOsaViiteSuppeaDto[] | null>(null);
 
-  constructor(opetussuunnitelmaId: number, revision) {
-    this.opetussuunnitelmaId = opetussuunnitelmaId;
-    this.esikatselu = revision === '0' ? true : undefined;
-    this.revision = revision;
-  }
-
-  public static async create(opetussuunnitelmaId: number, revision: number | undefined = undefined) {
-    const result = new ToteutussuunnitelmaDataStore(opetussuunnitelmaId, revision);
-    await result.init();
-    return result;
-  }
-
-  async init() {
-    this.koulutustoimija = (await JulkinenApi.getOpetussuunnitelmanToimija(this.opetussuunnitelmaId)).data;
-    this.opetussuunnitelma = (await JulkinenApi.getOpetussuunnitelmaJulkaistuSisalto(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id), this.esikatselu)).data;
-    this.getDokumenttiTila();
-    const navigation = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationPublic(this.opetussuunnitelmaId, _.toString(this.koulutustoimija.id), this.esikatselu)).data;
-    this.navigation = {
-      ...navigation,
-      children: _.filter(navigation.children, child => child.type !== 'tiedot'),
-    };
-    this.arviointiasteikot = (await Arviointiasteikot.getAllArviointiasteikot()).data;
-    if (this.opetussuunnitelma?.peruste) {
-      await this.fetchPerusteKuvat(this.opetussuunnitelma.peruste.perusteId!);
-    }
-
-    if (this.opetussuunnitelma?.peruste?.perusteId) {
-      this.perusteKaikki = (await Perusteet.getKokoSisalto(this.opetussuunnitelma.peruste.perusteId)).data;
-
-      if (ToteutussuunnitelmaDataStore.isAmmatillinenOpetussuunnitelma(this.opetussuunnitelma)) {
-        await this.setTutkinnonOsienSisallotPerusteista();
-      }
-    }
-  }
-
-  public async setTutkinnonOsienSisallotPerusteista() {
-    const tutkinnonOsat = this.getJulkaistuSisalto('tutkinnonOsat');
-    const perusteIds = _.uniq(
-      [
-        this.opetussuunnitelma!.peruste!.perusteId,
-        ..._.chain(tutkinnonOsat)
-          .filter(tosa => tosa.tosa?.vierastutkinnonosa || tosa.peruste?.perusteId || tosa.linkattuPerusteId)
-          .map(tosa => tosa.tosa?.vierastutkinnonosa?.perusteId || tosa.peruste?.perusteId || tosa.linkattuPerusteId)
-          .value(),
-      ]);
-
-    this.perusteidenTutkinnonOsat = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId)).data)));
-    this.perusteidenTutkinnonOsienViitteet = _.flatMap(await Promise.all(_.map(perusteIds, async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId)).data)));
-  }
-
-  @Getter(state => {
-    if (state.dokumenttiTila && state.dokumenttiTila.tila === _.lowerCase(DokumenttiDtoTilaEnum.VALMIS)) {
-      return baseURL + JulkinenApiParams.getDokumentti(state.opetussuunnitelma.id, Kielet.getSisaltoKieli.value, state.dokumenttiTila?.id, state.opetussuunnitelma.koulutustoimija.id).url;
-    }
-  })
-  public readonly dokumenttiUrl!: string;
-
-  public async getDokumenttiTila() {
-    try {
-      if (this.opetussuunnitelma) {
-        this.dokumenttiTila = null;
-        if (this.esikatselu) {
-          this.dokumenttiTila = (await JulkinenApi.queryDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!))).data;
-        }
-        else {
-          this.dokumenttiTila = (await JulkinenApi.getJulkaistuDokumentti(this.opetussuunnitelma!.id!, Kielet.getSisaltoKieli.value, _.toString(this.opetussuunnitelma!.koulutustoimija!.id!), this.revision)).data;
-        }
-      }
-    }
-    catch (err) {
-    }
-  };
-
-  @Getter(state => ToteutussuunnitelmaDataStore.isAmmatillinenOpetussuunnitelma(state.opetussuunnitelma))
-  public readonly isAmmatillinen!: boolean;
-
-  @Getter(state => state.opetussuunnitelma.peruste ? state.opetussuunnitelma.peruste.koulutustyyppi : state.opetussuunnitelma.koulutustyyppi)
-  public readonly koulutustyyppi!: string;
-
-  @Getter(state => state.opetussuunnitelma.tila)
-  public readonly tila!: string;
-
-  @Getter(state => _.map(state.opetussuunnitelma.liitteet, liite => ({
-    id: liite.id!,
-    src: baseURL + LiitetiedostotParam.getImage(state.opetussuunnitelma.id!, liite.id!).url,
-  })))
-  public readonly kuvat!: any[];
-
-  async fetchPerusteKuvat(perusteenId: number) {
-    this.perusteKuvat = _.map((await PerusteLiitetiedostot.getAllKuvat(perusteenId)).data, kuva => ({
-      id: kuva.id!,
-      kuva,
-      src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, kuva.id! + '.' + mime.getExtension(kuva.mime!)).url,
-    }));
-  }
-
-  public getJulkaistuSisalto(filter) {
-    return deepFind(filter, this.opetussuunnitelma);
-  }
-
-  public getJulkaistuSisaltoList(filter) {
-    return deepFilter(filter, this.opetussuunnitelma);
-  }
-
-  public getJulkaistuPerusteSisalto(filter) {
-    return deepFind(filter, this.perusteKaikki);
-  }
-
-  @Getter(state => {
-    return !state.opetussuunnitelma || !state.navigation;
-  })
-  public readonly sidenavLoading!: boolean;
-
-  @Getter((state, getters) => {
-    if (state.sidenavFilter.isEnabled) {
-      return filterNavigation(getters.sidenav, state.sidenavFilter);
-    }
-    else {
-      return getters.collapsedSidenav;
-    }
-  })
-  public readonly filteredSidenav!: NavigationNode | null;
-
-  @Getter(state => {
-    if (!state.opetussuunnitelma || !state.navigation) {
-      return null;
-    }
-    else {
-      const tiedot = buildTiedot('toteutussuunnitelmaTiedot', {
-        toteutussuunnitelmaId: _.toString(state.opetussuunnitelmaId),
-        ...(state.revision && { revision: state.revision }),
-      });
-      return buildNavigation(state.navigation, tiedot, true, state.revision);
-    }
-  })
-  public readonly sidenav!: NavigationNode | null;
-
-  @Getter((state, getters) => {
-    const root = getters.sidenav;
-    const result: Array<NavigationNode> = [];
-
-    function traverseTree(node: NavigationNode) {
-      result.push(node);
-      (node.children || [])
-        .map(child => {
-          traverseTree(child);
-          return child;
-        });
-    }
-
-    if (root) {
-      traverseTree(root);
-    }
-
-    return result;
-  })
-  public readonly flattenedSidenav!: NavigationNode[];
-
-  public updateRoute(route) {
-    this.currentRoute = route;
-  }
-
-  @Getter((state, getters) => {
-    if (getters.flattenedSidenav && state.currentRoute) {
-      for (const node of getters.flattenedSidenav) {
-        if (node.location && _.isMatch(state.currentRoute, node.location)) {
-          return node || null;
-        }
-      }
-    }
-    return null;
-  })
-  public readonly current!: NavigationNode | null;
-
-  public readonly updateFilter = _.debounce((filter: NavigationFilter) => {
-    this.sidenavFilter = filter;
-  }, 300);
-
-  @Getter((state, getters) => {
-    if (!getters.sidenav) {
-      return null;
-    }
-
-    const pathKeys = _.map(_.get(getters, 'current.path'), 'key');
-    const onPath = node => {
-      const parent = node.path[_.size(node.path) - 2];
-      return _.includes(pathKeys, node.key)
-          || (parent && _.includes(pathKeys, parent.key));
+    // Static create method as a regular function
+    const create = async (opsId: number, rev?: number) => {
+      opetussuunnitelmaId.value = opsId;
+      esikatselu.value = rev === 0 ? true : undefined;
+      revision.value = rev;
+      await init();
     };
 
-    const map = (value, depth = 0) => {
-      return {
-        ...value,
-        isVisible: !getters.current || depth === 1 || onPath(value) || getters.current.type === 'tiedot',
-        children: _.map(value.children, child => map(child, depth + 1)),
+    // Actions
+    const init = async () => {
+      koulutustoimija.value = (await JulkinenApi.getOpetussuunnitelmanToimija(opetussuunnitelmaId.value)).data;
+      opetussuunnitelma.value = (await JulkinenApi.getOpetussuunnitelmaJulkaistuSisalto(
+        opetussuunnitelmaId.value,
+        _.toString(koulutustoimija.value!.id),
+        esikatselu.value,
+      )).data;
+
+      await getDokumenttiTila();
+
+      const navData = (await Opetussuunnitelmat.getOpetussuunnitelmaNavigationPublic(
+        opetussuunnitelmaId.value,
+        _.toString(koulutustoimija.value!.id),
+        esikatselu.value,
+      )).data;
+
+      navigation.value = {
+        ...navData,
+        children: _.filter(navData.children, child => child.type !== 'tiedot'),
       };
+
+      arviointiasteikot.value = (await Arviointiasteikot.getAllArviointiasteikot()).data;
+
+      if (opetussuunnitelma.value?.peruste) {
+        await fetchPerusteKuvat(opetussuunnitelma.value.peruste.perusteId!);
+      }
+
+      if (opetussuunnitelma.value?.peruste?.perusteId) {
+        perusteKaikki.value = (await Perusteet.getKokoSisalto(opetussuunnitelma.value.peruste.perusteId)).data;
+
+        if (isAmmatillinenOpetussuunnitelma(opetussuunnitelma.value)) {
+          await setTutkinnonOsienSisallotPerusteista();
+        }
+      }
     };
 
-    return map(getters.sidenav);
-  })
-  public readonly collapsedSidenav!: NavigationNode | null;
+    const setTutkinnonOsienSisallotPerusteista = async () => {
+      const tutkinnonOsat = getJulkaistuSisalto('tutkinnonOsat');
+      const perusteIds = _.uniq(
+        [
+          opetussuunnitelma.value!.peruste!.perusteId,
+          ..._.chain(tutkinnonOsat)
+            .filter(tosa => tosa.tosa?.vierastutkinnonosa || tosa.peruste?.perusteId || tosa.linkattuPerusteId)
+            .map(tosa => tosa.tosa?.vierastutkinnonosa?.perusteId || tosa.peruste?.perusteId || tosa.linkattuPerusteId)
+            .value(),
+        ]);
 
-  public static isAmmatillinenOpetussuunnitelma(opetussuunnitelma: OpetussuunnitelmaKaikkiDto): boolean {
-    return _.includes(AmmatillisetKoulutustyypit, opetussuunnitelma.koulutustyyppi)
-      || _.includes(AmmatillisetKoulutustyypit, opetussuunnitelma.peruste?.koulutustyyppi)
-      || _.includes('yhteinen', opetussuunnitelma.tyyppi);
-  }
-}
+      perusteidenTutkinnonOsat.value = _.flatMap(
+        await Promise.all(
+          _.map(
+            perusteIds,
+            async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsat(perusteId)).data,
+          ),
+        ),
+      );
+
+      perusteidenTutkinnonOsienViitteet.value = _.flatMap(
+        await Promise.all(
+          _.map(
+            perusteIds,
+            async (perusteId) => (await Perusteet.getJulkaistutTutkinnonOsaViitteet(perusteId)).data,
+          ),
+        ),
+      );
+    };
+
+    const getDokumenttiTila = async () => {
+      try {
+        if (opetussuunnitelma.value) {
+          dokumenttiTila.value = null;
+          if (esikatselu.value) {
+            dokumenttiTila.value = (await JulkinenApi.queryDokumentti(
+              opetussuunnitelma.value!.id!,
+              Kielet.getSisaltoKieli.value,
+              _.toString(opetussuunnitelma.value!.koulutustoimija!.id!),
+            )).data;
+          }
+          else {
+            dokumenttiTila.value = (await JulkinenApi.getJulkaistuDokumentti(
+              opetussuunnitelma.value!.id!,
+              Kielet.getSisaltoKieli.value,
+              _.toString(opetussuunnitelma.value!.koulutustoimija!.id!),
+              revision.value,
+            )).data;
+          }
+        }
+      }
+      catch (err) {
+        // Error handling as in original code (empty catch block)
+      }
+    };
+
+    const fetchPerusteKuvat = async (perusteenId: number) => {
+      perusteKuvat.value = _.map(
+        (await PerusteLiitetiedostot.getAllKuvat(perusteenId)).data,
+        kuva => ({
+          id: kuva.id!,
+          kuva,
+          src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, kuva.id! + '.' + mime.getExtension(kuva.mime!)).url,
+        }),
+      );
+    };
+
+    const getJulkaistuSisalto = (filter: any) => {
+      return deepFind(filter, opetussuunnitelma.value);
+    };
+
+    const getJulkaistuSisaltoList = (filter: any) => {
+      return deepFilter(filter, opetussuunnitelma.value);
+    };
+
+    const getJulkaistuPerusteSisalto = (filter: any) => {
+      return deepFind(filter, perusteKaikki.value);
+    };
+
+    const updateRoute = (route: Location) => {
+      currentRoute.value = route;
+    };
+
+    const updateFilter = _.debounce((filter: NavigationFilter) => {
+      sidenavFilter.value = filter;
+    }, 300);
+
+    // Static method as a regular function
+    const isAmmatillinenOpetussuunnitelma = (ops?: OpetussuunnitelmaKaikkiDto): boolean => {
+      return _.includes(AmmatillisetKoulutustyypit, ops?.koulutustyyppi)
+        || _.includes(AmmatillisetKoulutustyypit, ops?.peruste?.koulutustyyppi)
+        || _.includes('yhteinen', ops?.tyyppi);
+    };
+
+    // Computed properties (getters)
+    const dokumenttiUrl = computed(() => {
+      if (opetussuunnitelma.value && dokumenttiTila.value && dokumenttiTila.value.tila === _.lowerCase(DokumenttiDtoTilaEnum.VALMIS)) {
+        return baseURL + JulkinenApiParams.getDokumentti(
+          opetussuunnitelma.value.id,
+          Kielet.getSisaltoKieli.value,
+          dokumenttiTila.value?.id,
+          opetussuunnitelma.value.koulutustoimija.id,
+        ).url;
+      }
+      return undefined;
+    });
+
+    const isAmmatillinen = computed(() => isAmmatillinenOpetussuunnitelma(opetussuunnitelma.value));
+
+    const koulutustyyppi = computed(() => opetussuunnitelma.value?.peruste
+      ? opetussuunnitelma.value?.peruste.koulutustyyppi
+      : opetussuunnitelma.value?.koulutustyyppi);
+
+    const tila = computed(() => opetussuunnitelma.value!.tila);
+
+    const kuvat = computed(() => _.map(opetussuunnitelma.value!.liitteet, liite => ({
+      id: liite.id!,
+      src: baseURL + LiitetiedostotParam.getImage(opetussuunnitelma.value!.id!, liite.id!).url,
+    })));
+
+    const sidenavLoading = computed(() => {
+      return !opetussuunnitelma.value || !navigation.value;
+    });
+
+    const sidenav = computed(() => {
+      if (!opetussuunnitelma.value || !navigation.value) {
+        return null;
+      }
+      else {
+        const tiedot = buildTiedot('toteutussuunnitelmaTiedot', {
+          toteutussuunnitelmaId: _.toString(opetussuunnitelmaId.value),
+          ...(revision.value && { revision: revision.value }),
+        });
+        return buildNavigation(navigation.value, tiedot, true, revision.value);
+      }
+    });
+
+    const flattenedSidenav = computed(() => {
+      const root = sidenav.value;
+      const result: Array<NavigationNode> = [];
+
+      function traverseTree(node: NavigationNode) {
+        result.push(node);
+        (node.children || [])
+          .map(child => {
+            traverseTree(child);
+            return child;
+          });
+      }
+
+      if (root) {
+        traverseTree(root);
+      }
+
+      return result;
+    });
+
+    const current = computed(() => {
+      if (flattenedSidenav.value && currentRoute.value) {
+        for (const node of flattenedSidenav.value) {
+          if (node.location && _.isMatch(currentRoute.value, node.location)) {
+            return node || null;
+          }
+        }
+      }
+      return null;
+    });
+
+    const collapsedSidenav = computed(() => {
+      if (!sidenav.value) {
+        return null;
+      }
+
+      const pathKeys = _.map(_.get(current.value, 'path'), 'key');
+      const onPath = (node: any) => {
+        const parent = node.path[_.size(node.path) - 2];
+        return _.includes(pathKeys, node.key)
+            || (parent && _.includes(pathKeys, parent.key));
+      };
+
+      const map = (value: any, depth = 0) => {
+        return {
+          ...value,
+          isVisible: !current.value || depth === 1 || onPath(value) || current.value.type === 'tiedot',
+          children: _.map(value.children, child => map(child, depth + 1)),
+        };
+      };
+
+      return map(sidenav.value);
+    });
+
+    const filteredSidenav = computed(() => {
+      if (sidenavFilter.value.isEnabled) {
+        return filterNavigation(sidenav.value, sidenavFilter.value);
+      }
+      else {
+        return collapsedSidenav.value;
+      }
+    });
+
+    return {
+      // Expose refs
+      opetussuunnitelmaId,
+      esikatselu,
+      revision,
+      navigation,
+      opetussuunnitelma,
+      koulutustoimija,
+      dokumenttiTila,
+      currentRoute,
+      sidenavFilter,
+      arviointiasteikot,
+      perusteKuvat,
+      perusteKaikki,
+      perusteidenTutkinnonOsat,
+      perusteidenTutkinnonOsienViitteet,
+
+      // Expose getters
+      dokumenttiUrl,
+      isAmmatillinen,
+      koulutustyyppi,
+      tila,
+      kuvat,
+      sidenavLoading,
+      sidenav,
+      flattenedSidenav,
+      current,
+      collapsedSidenav,
+      filteredSidenav,
+
+      // Expose actions
+      create,
+      init,
+      setTutkinnonOsienSisallotPerusteista,
+      getDokumenttiTila,
+      fetchPerusteKuvat,
+      getJulkaistuSisalto,
+      getJulkaistuSisaltoList,
+      getJulkaistuPerusteSisalto,
+      updateRoute,
+      updateFilter,
+    };
+  });
+
+  return store(pinia);
+};

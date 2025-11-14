@@ -1,6 +1,9 @@
-import { ref } from '@vue/composition-api';
 import { defineStore } from 'pinia';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { usePerusteDataStore } from '@/stores/PerusteDataStore';
+import { ref } from 'vue';
+import { pinia } from '@/pinia';
+import { useRoute } from 'vue-router';
+import _ from 'lodash';
 
 export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
   const perusteet = ref({});
@@ -8,19 +11,27 @@ export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
   const addPerusteStore = async (perusteId, revision?) => {
     const key = perusteId + '-' + revision;
     if (!perusteet.value[key]) {
-      perusteet.value[key] = PerusteDataStore.create(perusteId, revision);
+      const perusteDataStore = usePerusteDataStore(key);
+      await perusteDataStore.create(perusteId, revision ? _.toNumber(revision) : undefined);
+      perusteet.value[key] = perusteDataStore;
     }
   };
 
-  const getPerusteStore = async (perusteId, revision?) => {
+  const getPerusteStore = (perusteId, revision?) => {
+    if (!perusteId) {
+      return null;
+    }
+
     const key = perusteId + '-' + revision;
-    if (!perusteet.value[key]) {
-      addPerusteStore(perusteId, revision);
-    }
-    else {
-    }
+
     return perusteet.value[key];
   };
 
   return { perusteet, addPerusteStore, getPerusteStore };
 });
+
+export function getCachedPerusteStore() {
+  const route = useRoute();
+  const perusteCacheStore = usePerusteCacheStore(pinia);
+  return perusteCacheStore.getPerusteStore(route.params.perusteId, route.params.revision);
+}

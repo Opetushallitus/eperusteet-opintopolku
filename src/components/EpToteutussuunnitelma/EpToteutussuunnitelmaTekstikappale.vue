@@ -1,69 +1,88 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
-
-    <ep-collapse tyyppi="perusteteksti" v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti">
-      <div class="collapse-header" slot="header">{{ $t('perusteen-teksti') }}</div>
-      <ep-content-viewer :value="$kaanna(sisaltoviite.perusteteksti)" :kuvat="kuvat"/>
+    <ep-collapse
+      v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti"
+      tyyppi="perusteteksti"
+    >
+      <template #header>
+        <div
+          class="collapse-header"
+        >
+          {{ $t('perusteen-teksti') }}
+        </div>
+      </template>
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.perusteteksti)"
+        :kuvat="kuvat"
+      />
     </ep-collapse>
 
-    <ep-collapse tyyppi="pohjateksti" v-if="sisaltoviite.naytaPohjanTeksti && sisaltoviite.pohjanTekstikappale && sisaltoviite.pohjanTekstikappale.teksti">
-      <div class="collapse-header" slot="header">
-        {{ $t('pohjan-teksti') }}
-      </div>
-      <ep-content-viewer :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)" :kuvat="kuvat" />
+    <ep-collapse
+      v-if="sisaltoviite.naytaPohjanTeksti && sisaltoviite.pohjanTekstikappale && sisaltoviite.pohjanTekstikappale.teksti"
+      tyyppi="pohjateksti"
+    >
+      <template #header>
+        <div
+          class="collapse-header"
+        >
+          {{ $t('pohjan-teksti') }}
+        </div>
+      </template>
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)"
+        :kuvat="kuvat"
+      />
     </ep-collapse>
 
     <EpPaikallinenTarkennus v-if="sisaltoviite.tekstiKappale.teksti">
-      <ep-content-viewer :value="$kaanna(sisaltoviite.tekstiKappale.teksti)" :kuvat="kuvat"/>
+      <ep-content-viewer
+        :value="$kaanna(sisaltoviite.tekstiKappale.teksti)"
+        :kuvat="kuvat"
+      />
     </EpPaikallinenTarkennus>
-
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { Matala } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
-import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpCollapse,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaTekstikappale extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const current = computed((): NavigationNode | null => {
+  return opetussuunnitelmaDataStore.current;
+});
 
-  get current(): NavigationNode | null {
-    return this.opetussuunnitelmaDataStore.current;
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
+
+const alikappaleNumeroinnitById = computed(() => {
+  if (current.value?.children) {
+    return current.value?.children?.reduce((acc: any, child: any) => {
+      acc[child.id] = child?.meta?.numerointi;
+      return acc;
+    }, {});
   }
 
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-
-  get alikappaleNumeroinnitById() {
-    if (this.current?.children) {
-      return this.current?.children?.reduce((acc: any, child: any) => {
-        acc[child.id] = child?.meta?.numerointi;
-        return acc;
-      }, {});
-    }
-
-    return {};
-  }
-}
+  return {};
+});
 </script>
 
 <style scoped lang="scss">

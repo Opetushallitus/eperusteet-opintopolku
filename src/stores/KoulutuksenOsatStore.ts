@@ -1,9 +1,6 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { Sisaltoviitteet, SisaltoViiteDto } from '@shared/api/amosaa';
-
-Vue.use(VueCompositionApi);
 
 export class KoulutuksenOsatStore {
   public state = reactive({

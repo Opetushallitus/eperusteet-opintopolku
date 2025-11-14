@@ -1,17 +1,27 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">
-        <span v-if="numerointi">{{numerointi}}</span>
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko mb-4"
+      >
+        <span v-if="numerointi">{{ numerointi }}</span>
         {{ $kaanna(perusteenOsa.nimi) }}
       </h2>
 
-      <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.teksti)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
-      <div v-for="(alisivu, idx) in alisivut" :key="idx">
-          <router-link :to="alisivu.location">
-            {{ $kaanna(alisivu.label) }}
-          </router-link>
+      <div
+        v-for="(alisivu, idx) in alisivut"
+        :key="idx"
+      >
+        <router-link :to="alisivu.location">
+          {{ $kaanna(alisivu.label) }}
+        </router-link>
       </div>
 
       <slot name="previous-next-navigation" />
@@ -20,51 +30,43 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import { useRoute } from 'vue-router';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
-  },
-})
-export default class RouteLinkkisivu extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.linkkisivuId);
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get alisivut() {
-    return this.current?.children;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const alisivut = computed(() => {
+  return current.value?.children;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get numerointi() {
-    return this.current?.meta?.numerointi;
-  }
-}
-
+const numerointi = computed(() => {
+  return current.value?.meta?.numerointi;
+});
 </script>
 
 <style scoped lang="scss">

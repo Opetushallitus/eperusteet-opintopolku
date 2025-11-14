@@ -1,40 +1,65 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import '@/test/testInit';
 import RouteKooste from './RouteKooste.vue';
-import { mock, mocks, stubs } from '@shared/utils/jestutils';
+import { createMockedStore, mock, mocks, stubs } from '@shared/utils/jestutils';
 import * as _ from 'lodash';
 import { OpasStore } from '@/stores/OpasStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
-import { computed } from '@vue/composition-api';
 import Paikalliset from '@/routes/kooste/Paikalliset.vue';
 import JotpaPaikalliset from '@/routes/kooste/JotpaPaikalliset.vue';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
+import Vue, { computed } from 'vue';
+import { vi } from 'vitest';
+import { createMount } from '@shared/utils/__tests__/stubs';
+import { nextTick } from 'vue';
+import { getCachedPerusteStore, usePerusteCacheStore } from '@/stores/PerusteCacheStore';
+import { getKoosteOpasStore, getKoostePaikallinenComponent, getKoostePaikallinenStore, getKoostePerusteStore, getKoosteTiedotteetStore } from '@/utils/toteutustypes';
+import { useRoute } from 'vue-router';
+
+vi.mocked(useRoute).mockReturnValue({ params: {
+  koulutustyyppi: 'koulutustyyppi_2',
+} } as any);
+
+vi.mock('@/utils/toteutustypes', () => ({
+  getKoostePerusteStore: vi.fn(),
+  getKoosteOpasStore: vi.fn(),
+  getKoosteTiedotteetStore: vi.fn(),
+  getKoostePaikallinenStore: vi.fn(),
+  getKoostePaikallinenComponent: vi.fn(),
+  getKoosteKuvaus: () => null,
+  getKoosteSubheader: vi.fn(() => 'tile-perusteet'),
+  getKoostePerusteHeader: vi.fn(() => 'tile-perusteet'),
+}));
 
 describe('RouteKooste', () => {
-  const localVue = createLocalVue();
-  const $route = {
-    params: { lang: 'fi' },
-  };
 
-  const koosteTiedotteetStore = mock(KoosteTiedotteetStore);
-  koosteTiedotteetStore.state.tiedotteet = [{
-    luotu: new Date(100),
-    id: 100,
-    otsikko: {
-      fi: 'tiedote101',
-    } as any,
-  }, {
-    luotu: new Date(200),
-    id: 200,
-    otsikko: {
-      fi: 'tiedote102',
-    } as any,
-  }];
+  const koosteTiedotteetStore = createMockedStore(KoosteTiedotteetStore, {
+    tiedotteet: {
+      value: [{
+        luotu: new Date(100),
+        id: 100,
+        otsikko: {
+          fi: 'tiedote101',
+        } as any,
+      }, {
+        luotu: new Date(200),
+        id: 200,
+        otsikko: {
+          fi: 'tiedote102',
+        } as any,
+      }],
+    },
+    fetch: () => new Promise<void>(resolve => resolve()),
+    fetchTiedotteet: () => new Promise<void>(resolve => resolve()),
+  });
+
+  (getCachedPerusteStore as any).mockReturnValue({});
+  (usePerusteCacheStore as any).mockReturnValue({});
 
   test('Renders', async () => {
     const perusteKoosteStore: IPerusteKoosteStore = {
-      koulutustyyppi: computed(() => 'koulutustyyppi_2'),
-      perusteJulkaisut: computed(() => [{
+      koulutustyyppi: computed(() => ('koulutustyyppi_2')),
+      perusteJulkaisut: computed(() => ([{
         nimi: {
           fi: 'peruste42',
         } as any,
@@ -43,17 +68,21 @@ describe('RouteKooste', () => {
           id: 42,
         },
         voimassaoloAlkaa: 123456,
-      }]),
+      }])),
       fetch: () => new Promise<void>(resolve => resolve()),
       perusteJarjestykset: computed(() => []),
     };
 
-    const opasStore = mock(OpasStore);
-    opasStore.state.oppaat = [{
+    (getKoostePerusteStore as any).mockReturnValue(perusteKoosteStore);
+
+    const OpasStore = vi.fn();
+    OpasStore.prototype.oppaat = computed(() => [{
       nimi: {
         fi: 'ohje1',
       } as any,
-    }] as any;
+      id: 1,
+    }]);
+    const opasStore = new OpasStore();
 
     const paikallinenStore: IPaikallinenStore = {
       opetussuunnitelmatPaged: computed(() => ({
@@ -82,34 +111,20 @@ describe('RouteKooste', () => {
       addToCache: () => new Promise<void>(resolve => resolve()),
     };
 
-    const wrapper = mount(RouteKooste as any, {
-      localVue,
-      propsData: {
-        perusteKoosteStore,
-        opasStore,
-        paikallinenStore,
-        paikallinenComponent: Paikalliset,
-        tiedotteetStore: koosteTiedotteetStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-        $sd: (x) => 'sd_' + x,
-        $t: x => x,
-        $kaannaOlioTaiTeksti: x => x,
-        $route,
-      },
-    });
+    (getKoostePaikallinenStore as any).mockReturnValue(paikallinenStore);
+    (getKoostePaikallinenComponent as any).mockReturnValue(Paikalliset);
+    (getKoosteOpasStore as any).mockReturnValue(opasStore);
+    (getKoosteTiedotteetStore as any).mockReturnValue(koosteTiedotteetStore);
 
-    await localVue.nextTick();
+    const wrapper = createMount(RouteKooste as any);
+
+    await nextTick();
+
     expect(_.map((wrapper.vm as any).tiedotteet, 'id')).toEqual([200, 100]);
+    expect(wrapper.html()).toContain('peruste42');
     expect(wrapper.html()).toContain('ops100');
     expect(wrapper.html()).toContain('tiedote101');
     expect(wrapper.html()).toContain('tiedote102');
-    expect(wrapper.html()).toContain('peruste42');
-    expect(wrapper.html()).toContain('sd_123456');
     expect(wrapper.html()).toContain('peruste42');
     expect(wrapper.html()).toContain('Oppilaitoksen nimi');
     expect(wrapper.html()).toContain('Toimijan nimi');
@@ -129,7 +144,7 @@ describe('RouteKooste', () => {
       },
     }];
     const paikallinenStore: IPaikallinenStore = {
-      opetussuunnitelmat: computed(() => opetussuunnitelmat),
+      opetussuunnitelmat: computed(() => (opetussuunnitelmat)),
       opetussuunnitelmatPaged: computed(() => ({
         data: opetussuunnitelmat,
         sivu: 0,
@@ -139,26 +154,17 @@ describe('RouteKooste', () => {
       fetchQuery: (query) => new Promise<void>(resolve => resolve()),
     };
 
-    const wrapper = mount(RouteKooste as any, {
-      localVue,
-      propsData: {
-        paikallinenStore,
-        paikallinenComponent: JotpaPaikalliset,
-        tiedotteetStore: koosteTiedotteetStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
-        $sd: (x) => 'sd_' + x,
-        $t: x => x,
-        $kaannaOlioTaiTeksti: x => x,
-        $route,
-      },
-    });
+    (getKoostePerusteStore as any).mockReturnValue(null);
+    (getKoostePaikallinenStore as any).mockReturnValue(paikallinenStore);
+    (getKoostePaikallinenComponent as any).mockReturnValue(JotpaPaikalliset);
+    (getKoosteTiedotteetStore as any).mockReturnValue(koosteTiedotteetStore);
 
-    await localVue.nextTick();
+
+
+    const wrapper = createMount(RouteKooste as any);
+
+    nextTick();
+
     expect(wrapper.html()).not.toContain(' perusteet ');
     expect(wrapper.html()).toContain('ajankohtaista');
     expect(wrapper.html()).toContain('ohjeet-ja-materiaalit');

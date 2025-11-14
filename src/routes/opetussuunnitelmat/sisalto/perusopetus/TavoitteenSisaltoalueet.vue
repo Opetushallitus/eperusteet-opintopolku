@@ -1,52 +1,86 @@
 <template>
-  <div class="inner-collapse mb-4" v-if="sisaltoalueet.length > 0 && naytaSisaltoalueet">
-    <h5>{{$t('sisaltoalueet')}}</h5>
-    <ep-collapse v-for="(sisaltoalue, index) in sisaltoalueet"
-                :key="sisaltoalue.id + 'sisaltoalue'+index"
-                ref="sisaltoaluecollapse"
-                class="sisaltoalue"
-                :borderBottom="false"
-                :expanded-by-default="false"
-                chevronLocation="left"
-                :use-padding="false">
-      <template v-slot:header>
-        <h6 class="nimi" v-html="$kaanna(sisaltoalue.nimi)"></h6>
+  <div
+    v-if="sisaltoalueet.length > 0 && naytaSisaltoalueet"
+    class="inner-collapse mb-4"
+  >
+    <h5>{{ $t('sisaltoalueet') }}</h5>
+    <ep-collapse
+      v-for="(sisaltoalue, index) in sisaltoalueet"
+      :key="sisaltoalue.id + 'sisaltoalue'+index"
+      ref="sisaltoaluecollapse"
+      class="sisaltoalue"
+      :border-bottom="false"
+      :expanded-by-default="false"
+      chevron-location="left"
+      :use-padding="false"
+    >
+      <template #header>
+        <h6
+          class="nimi"
+          v-html="$kaanna(sisaltoalue.nimi)"
+        />
       </template>
 
-      <div class="pl-4 mb-4 sisaltoaluekuvaus" v-if="sisaltoalue.vuosiluokanSisaltoalue">
-        <div v-if="sisaltoalue.kuvaus" v-html="$kaanna(sisaltoalue.kuvaus)"></div>
-        <div v-if="(sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta && naytaOmaKuvaus) || sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus" class="paikallinen-tarkennus-alue">
-          <div class="font-weight-600">{{$t('paikallinen-teksti')}}</div>
-          <div v-if="sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta && naytaOmaKuvaus"
-            v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.omaKuvaus).replace('<p>', '').replace('</p>', '')"></div>
-          <div v-else-if="sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus"
-            v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus).replace('<p>', '').replace('</p>', '')"></div>
+      <div
+        v-if="sisaltoalue.vuosiluokanSisaltoalue"
+        class="pl-4 mb-4 sisaltoaluekuvaus"
+      >
+        <div
+          v-if="sisaltoalue.kuvaus"
+          v-html="$kaanna(sisaltoalue.kuvaus)"
+        />
+        <div
+          v-if="(sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta && naytaOmaKuvaus) || sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus"
+          class="paikallinen-tarkennus-alue"
+        >
+          <div class="font-weight-600">
+            {{ $t('paikallinen-teksti') }}
+          </div>
+          <div
+            v-if="sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta && naytaOmaKuvaus"
+            v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.omaKuvaus).replace('<p>', '').replace('</p>', '')"
+          />
+          <div
+            v-else-if="sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus"
+            v-html="$kaanna(sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus).replace('<p>', '').replace('</p>', '')"
+          />
         </div>
       </div>
-
     </ep-collapse>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { useTemplateRef } from 'vue';
+import { $kaanna } from '@shared/utils/globals';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 
-@Component
-export default class TavoitteenSisaltoalueet extends Vue {
-  @Prop()
-  private sisaltoalueet!: any;
+const props = defineProps({
+  sisaltoalueet: {
+    type: Array,
+    required: true,
+  },
+  naytaSisaltoalueet: {
+    type: Boolean,
+    default: true,
+  },
+  naytaOmaKuvaus: {
+    type: Boolean,
+    default: true,
+  },
+});
 
-  @Prop({ default: true })
-  private naytaSisaltoalueet!: boolean;
+const sisaltoaluecollapse = useTemplateRef('sisaltoaluecollapse');
 
-  @Prop({ default: true })
-  private naytaOmaKuvaus!: boolean;
+const toggle = (toggle: boolean | null = null) => {
+  _.forEach(sisaltoaluecollapse.value, (collapsable: any) => collapsable.toggle(toggle));
+};
 
-  toggle(toggle: boolean | null = null) {
-    _.forEach(this.$refs.sisaltoaluecollapse, (collapsable: any) => collapsable.toggle(toggle));
-  }
-}
+// Expose the toggle method to parent components
+defineExpose({
+  toggle,
+});
 </script>
 
 <style scoped lang="scss">
@@ -58,7 +92,7 @@ export default class TavoitteenSisaltoalueet extends Vue {
   padding: 0.8rem;
 }
 
-::v-deep .ep-collapse {
+:deep(.ep-collapse) {
   margin-top: 0px;
 
   .collapse-button {
@@ -69,5 +103,4 @@ export default class TavoitteenSisaltoalueet extends Vue {
 .nimi {
   line-height: 1.7;
 }
-
 </style>

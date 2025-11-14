@@ -13,10 +13,6 @@
     "sourceMap": true,
     "noImplicitAny": false,
     "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      "jest"
-    ],
     "paths": {
       "@shared/*": ["eperusteet-frontend-utils/vue/src/*"],
       "@assets/*": ["eperusteet-frontend-utils/vue/public/*"],
@@ -29,7 +25,9 @@
       "dom",
       "dom.iterable",
       "scripthost"
-    ]
+    ],
+    "resolveJsonModule": true,
+    "types": ["vitest/globals"],
   },
   "include": [
     "src/**/*.ts",
@@ -39,7 +37,7 @@
     "eperusteet-frontend-utils/vue/src/**/*.ts",
     "eperusteet-frontend-utils/vue/src/**/*.vue",
     "tests/integration/**/*.ts",
-    "tests/integration/**/*.tsx", "eperusteet-frontend-utils/components/utils/perusteet.ts", "eperusteet-frontend-utils/components/utils/NavigationBuilder.ts"
+    "tests/integration/**/*.tsx",
   ],
   "exclude": [
     "node_modules",

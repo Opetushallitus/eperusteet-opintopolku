@@ -1,107 +1,161 @@
 <template>
-
   <router-view v-if="oppiaine" />
 
-  <div v-else class="content">
+  <div
+    v-else
+    class="content"
+  >
+    <h2>{{ $kaanna(vaihe.nimi) }}</h2>
 
-    <h2>{{$kaanna(vaihe.nimi)}}</h2>
-
-    <div class="mt-4" v-if="vaihe.siirtymaEdellisesta">
-      <h3>{{ $kaanna(vaihe.siirtymaEdellisesta.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.siirtymaEdellisesta.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.siirtymaEdellisesta"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.siirtymaEdellisesta.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.siirtymaEdellisesta.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="vaihe.tehtava">
-      <h3>{{ $kaanna(vaihe.tehtava.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.tehtava.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.tehtava"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.tehtava.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.tehtava.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="vaihe.siirtymaSeuraavaan">
-      <h3>{{ $kaanna(vaihe.siirtymaSeuraavaan.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.siirtymaSeuraavaan.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.siirtymaSeuraavaan"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.siirtymaSeuraavaan.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.siirtymaSeuraavaan.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-4" v-if="vaihe.paikallisestiPaatettavatAsiat">
-      <h3>{{ $kaanna(vaihe.paikallisestiPaatettavatAsiat.otsikko)}}</h3>
-      <ep-content-viewer :value="$kaanna(vaihe.paikallisestiPaatettavatAsiat.teksti)" :kuvat="kuvat" />
+    <div
+      v-if="vaihe.paikallisestiPaatettavatAsiat"
+      class="mt-4"
+    >
+      <h3>{{ $kaanna(vaihe.paikallisestiPaatettavatAsiat.otsikko) }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(vaihe.paikallisestiPaatettavatAsiat.teksti)"
+        :kuvat="kuvat"
+      />
     </div>
 
-    <div class="mt-5" v-if="oppiaineet && oppiaineet.length > 0">
-      <h3>{{$t('oppiaineet')}}</h3>
-      <div v-for="oppiaine in oppiaineet" :key="'oppiaine'+oppiaine.id" class="taulukko-rivi-varitys px-2 py-3">
+    <template v-if="vaihe.vapaatTekstit">
+        <div
+          v-for="(vapaaTeksti, index) in vaihe.vapaatTekstit"
+          :key="'vapaateksti'+index"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna(vapaaTeksti.nimi) }}</h3>
+          <ep-content-viewer
+            :value="$kaanna(vapaaTeksti.teksti)"
+            :kuvat="kuvat"
+            :termit="termit"
+          />
+        </div>
+      </template>
+
+    <div
+      v-if="oppiaineet && oppiaineet.length > 0"
+      class="mt-5"
+    >
+      <h3>{{ $t('oppiaineet') }}</h3>
+      <div
+        v-for="oppiaine in oppiaineet"
+        :key="'oppiaine'+oppiaine.id"
+        class="taulukko-rivi-varitys px-2 py-3"
+      >
         <router-link :to="oppiaine.route">
-          {{$kaanna(oppiaine.nimi)}}
+          {{ $kaanna(oppiaine.nimi) }}
         </router-link>
       </div>
     </div>
 
-    <div class="mt-5" v-if="tavoitealueet && tavoitealueet.length > 0">
-      <h3>{{$t('opetuksen-tavoitealueet')}}</h3>
-      <div v-for="tavoitealue in tavoitealueet" :key="'tavoitealue'+tavoitealue.id" class="taulukko-rivi-varitys px-2 py-3">
-        {{$kaanna(tavoitealue.nimi)}}
+    <div
+      v-if="tavoitealueet && tavoitealueet.length > 0"
+      class="mt-5"
+    >
+      <h3>{{ $t('opetuksen-tavoitealueet') }}</h3>
+      <div
+        v-for="tavoitealue in tavoitealueet"
+        :key="'tavoitealue'+tavoitealue.id"
+        class="taulukko-rivi-varitys px-2 py-3"
+      >
+        {{ $kaanna(tavoitealue.nimi) }}
       </div>
     </div>
-
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
-  },
-})
-export default class RouteAipeVaihe extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  get vaiheId() {
-    return _.toNumber(this.$route.params.vaiheId);
+const route = useRoute();
+
+const vaiheId = computed(() => {
+  return _.toNumber(route.params.vaiheId);
+});
+
+const vaihe = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: vaiheId.value });
+});
+
+const oppiaineet = computed(() => {
+  if (vaihe.value) {
+    return _.map(vaihe.value.oppiaineet, oppiaine => {
+      return {
+        ...oppiaine,
+        route: { name: 'aipeoppiaine', params: { oppiaineId: _.toString(oppiaine.id) } },
+      };
+    });
   }
+  return [];
+});
 
-  get vaihe() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.vaiheId });
+const tavoitealueet = computed(() => {
+  if (vaihe.value) {
+    return vaihe.value.opetuksenKohdealueet;
   }
+  return [];
+});
 
-  get oppiaineet() {
-    if (this.vaihe) {
-      return _.map(this.vaihe.oppiaineet, oppiaine => {
-        return {
-          ...oppiaine,
-          route: { name: 'aipeoppiaine', params: { oppiaineId: _.toString(oppiaine.id) } },
-        };
-      });
-    }
-  }
+const oppiaine = computed(() => {
+  return route.params.oppiaineId;
+});
 
-  get tavoitealueet() {
-    if (this.vaihe) {
-      return this.vaihe.opetuksenKohdealueet;
-    }
-  }
+const fields = computed(() => {
+  return [{
+    key: 'nimi',
+    thStyle: {
+      display: 'none',
+    },
+  }];
+});
 
-  get oppiaine() {
-    return this.$route.params.oppiaineId;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get fields() {
-    return [{
-      key: 'nimi',
-      thStyle: {
-        display: 'none',
-      },
-    }];
-  }
-
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
-}
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
 </script>
 

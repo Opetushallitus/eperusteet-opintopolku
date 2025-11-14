@@ -1,28 +1,31 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
-
-    <EpSpinner v-if="!koulutuksenosat"/>
+    <EpSpinner v-if="!koulutuksenosat" />
 
     <template v-else>
-      <div v-if="yhteisetKoulutuksenosat.length > 0" class="mb-4">
-        <h3>{{$t('yhteiset-opinnot')}}</h3>
+      <div
+        v-if="yhteisetKoulutuksenosat.length > 0"
+        class="mb-4"
+      >
+        <h3>{{ $t('yhteiset-opinnot') }}</h3>
 
         <EpKoulutuksenOsaKortti
           v-for="koulutuksenosaViite in yhteisetKoulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
+        />
       </div>
 
       <template v-if="valinnaisetKoulutuksenosat.length > 0">
-        <h3>{{$t('valinnaiset-opinnot')}}</h3>
+        <h3>{{ $t('valinnaiset-opinnot') }}</h3>
 
         <EpKoulutuksenOsaKortti
           v-for="koulutuksenosaViite in valinnaisetKoulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
+        />
       </template>
 
       <template v-if="yhteisetKoulutuksenosat.length === 0 && valinnaisetKoulutuksenosat.length === 0 && koulutuksenosat.length > 0">
@@ -30,67 +33,66 @@
           v-for="koulutuksenosaViite in koulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
-          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"/>
+          :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
+        />
       </template>
     </template>
-
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { KoulutuksenOsaDtoKoulutusOsanTyyppiEnum, Matala, OpetussuunnitelmaDto } from '@shared/api/amosaa';
 import { KoulutuksenOsatStore } from '@/stores/KoulutuksenOsatStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpKoulutuksenOsaKortti from '@shared/components/EpKoulutuksenosa/EpKoulutuksenOsaKortti.vue';
 import * as _ from 'lodash';
-import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpKoulutuksenOsaKortti,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaKoulutuksenOsat extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+  opetussuunnitelma: {
+    type: Object as () => OpetussuunnitelmaDto,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  @Prop({ required: true })
-  private opetussuunnitelma!: OpetussuunnitelmaDto;
+const koulutuksenosat = computed(() => {
+  return _.map(props.sisaltoviite.lapset, (viite: any) => {
+    let perusteenOsa;
+    if (viite.perusteenOsaId) {
+      perusteenOsa = opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: viite.perusteenOsaId });
+    }
 
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
+    return {
+      ...viite,
+      koulutuksenosa: {
+        ...viite.koulutuksenosa,
+        laajuusMinimi: !_.isNil(perusteenOsa?.laajuusMinimi) ? perusteenOsa.laajuusMinimi : viite?.koulutuksenosa?.laajuusMinimi,
+        laajuusMaksimi: !_.isNil(perusteenOsa?.laajuusMaksimi) ? perusteenOsa?.laajuusMaksimi : viite?.koulutuksenosa?.laajuusMaksimi,
+      },
+    };
+  }) as any;
+});
 
-  get koulutuksenosat() {
-    return _.map(this.sisaltoviite.lapset, (viite: any) => {
-      let perusteenOsa;
-      if (viite.perusteenOsaId) {
-        perusteenOsa = this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: viite.perusteenOsaId });
-      };
+const yhteisetKoulutuksenosat = computed(() => {
+  return _.filter(koulutuksenosat.value, koulutuksenosaViite =>
+    koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.YHTEINEN));
+});
 
-      return {
-        ...viite,
-        koulutuksenosa: {
-          ...viite.koulutuksenosa,
-          laajuusMinimi: !_.isNil(perusteenOsa?.laajuusMinimi) ? perusteenOsa.laajuusMinimi : viite?.koulutuksenosa?.laajuusMinimi,
-          laajuusMaksimi: !_.isNil(perusteenOsa?.laajuusMaksimi) ? perusteenOsa?.laajuusMaksimi : viite?.koulutuksenosa?.laajuusMaksimi,
-        },
-      };
-    }) as any;
-  }
-
-  get yhteisetKoulutuksenosat() {
-    return _.filter(this.koulutuksenosat, koulutuksenosaViite => koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.YHTEINEN));
-  }
-
-  get valinnaisetKoulutuksenosat() {
-    return _.filter(this.koulutuksenosat, koulutuksenosaViite => koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.VALINNAINEN));
-  }
-}
+const valinnaisetKoulutuksenosat = computed(() => {
+  return _.filter(koulutuksenosat.value, koulutuksenosaViite =>
+    koulutuksenosaViite.koulutuksenosa?.koulutusOsanTyyppi === _.toLower(KoulutuksenOsaDtoKoulutusOsanTyyppiEnum.VALINNAINEN));
+});
 </script>
 
 <style scoped lang="scss">

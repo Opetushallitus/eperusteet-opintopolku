@@ -3,12 +3,9 @@ import { ryhmat } from '@shared/utils/perusteet';
 import { julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
-import VueCompositionApi, { computed, reactive } from '@vue/composition-api';
 import OsaamismerkkiTile from '@/routes/osaamismerkit/OsaamismerkkiTile.vue';
-import Vue from 'vue';
+import  { reactive, computed } from'vue';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
-
-Vue.use(VueCompositionApi);
 
 export class VstPerusteKoosteStore implements IPerusteKoosteStore {
   public state = reactive({
@@ -30,6 +27,10 @@ export class VstPerusteKoosteStore implements IPerusteKoosteStore {
   }
 
   async fetch() {
+    this.state.julkaistutKoostePerusteet = null;
+    this.state.perusteJulkaisut = null;
+
+    this.state.julkaistutKoostePerusteet = (await Perusteet.getJulkaistutKoostePerusteet()).data;
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
     this.state.julkaistutKoostePerusteet = null;
     this.state.perusteJulkaisut = null;

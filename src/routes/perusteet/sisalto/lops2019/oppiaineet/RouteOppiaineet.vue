@@ -1,45 +1,46 @@
 <template>
-<div class="content">
-  <div v-if="oppiaineet">
-    <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
-    <div class="teksti">
-      <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineet" :key="idx">
-        <router-link :to="oppiaine.location">
-          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
-        </router-link>
+  <div class="content">
+    <div v-if="oppiaineet">
+      <h2
+        class="otsikko"
+      >
+        {{ $t('oppiaineet') }}
+      </h2>
+      <div class="teksti">
+        <div
+          v-for="(oppiaine, idx) in oppiaineet"
+          :key="idx"
+          class="oppiaine"
+        >
+          <router-link :to="oppiaine.location">
+            {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
+          </router-link>
+        </div>
       </div>
-    </div>
 
-    <slot name="previous-next-navigation" />
+      <slot name="previous-next-navigation" />
+    </div>
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-  },
-})
-export default class RouteOppiaineet extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
 
-  get oppiaineet() {
-    if (this.current) {
-      return this.current.children;
-    }
+const current = computed(() => {
+  return perusteDataStore.current;
+});
+
+const oppiaineet = computed(() => {
+  if (current.value) {
+    return current.value.children;
   }
-
-  get current() {
-    return this.perusteDataStore.current;
-  }
-}
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">

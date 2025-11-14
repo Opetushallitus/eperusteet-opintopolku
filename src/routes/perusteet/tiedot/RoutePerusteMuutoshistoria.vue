@@ -5,47 +5,45 @@
     </h2>
 
     <div>
-      {{$t('peruste-muutoshistoria-kuvaus')}}
+      {{ $t('peruste-muutoshistoria-kuvaus') }}
       <router-link :to="{ name: 'perusteTiedot' }">
-        {{$t('palaa-perusteen-tietoihin')}}
+        {{ $t('palaa-perusteen-tietoihin') }}
       </router-link>
     </div>
 
-    <div class="mt-2" v-if="julkaisut && julkaisut.length > 0">
+    <div
+      v-if="julkaisut && julkaisut.length > 0"
+      class="mt-2"
+    >
       <EpJulkaisuHistoriaJulkinen
         :julkaisut="julkaisut"
-        naytaKaikki />
+        nayta-kaikki
+      />
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Prop, Vue, Component } from 'vue-property-decorator';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import EpFormContent from '@shared/components/forms/EpFormContent.vue';
-import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { computed } from 'vue';
+import { useRouter } from 'vue-router';
 import EpJulkaisuHistoriaJulkinen from '@shared/components/EpJulkaisuHistoriaJulkinen/EpJulkaisuHistoriaJulkinen.vue';
+import { $t } from '@shared/utils/globals';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { useRoute } from 'vue-router';
 
-@Component({
-  components: {
-    EpJulkaisuHistoriaJulkinen,
-    EpFormContent,
-    EpSpinner,
-  },
-})
-export default class RoutePerusteMuutoshistoria extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const perusteDataStore = getCachedPerusteStore();
 
-  get julkaisut() {
-    return this.perusteDataStore.julkaisut;
-  }
+const router = useRouter();
 
-  palaaTietoihin() {
-    this.$router.replace({ name: 'perusteTiedot' }).catch(() => {});
-  }
-}
+const julkaisut = computed(() => {
+  return perusteDataStore.julkaisut;
+});
+
+const palaaTietoihin = () => {
+  router.replace({ name: 'perusteTiedot' }).catch(() => {});
+};
 </script>
 
 <style scoped lang="scss">
@@ -54,5 +52,4 @@ export default class RoutePerusteMuutoshistoria extends Vue {
 .content {
   padding: $content-padding;
 }
-
 </style>

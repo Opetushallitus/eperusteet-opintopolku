@@ -1,61 +1,71 @@
 <template>
-<div class="content">
-  <div v-if="oppiaineetFormatted">
-    <h2 class="otsikko" slot="header">{{ $t('oppiaineet') }}</h2>
-    <div class="teksti">
-      <div class="oppiaine" v-for="(oppiaine, idx) in oppiaineetFormatted" :key="idx">
-        <router-link v-if="oppiaine.location" :to="oppiaine.location">
-          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
-          <span v-if="oppiaine.koodiLabel" class="code-field">({{ oppiaine.koodiLabel }})</span>
-        </router-link>
-        <span v-else>
-          {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
-          <span v-if="oppiaine.koodiLabel" class="code-field">({{ oppiaine.koodiLabel }})</span>
-        </span>
+  <div class="content">
+    <div v-if="oppiaineetFormatted">
+      <h2
+        class="otsikko"
+      >
+        {{ $t('oppiaineet') }}
+      </h2>
+      <div class="teksti">
+        <div
+          v-for="(oppiaine, idx) in oppiaineetFormatted"
+          :key="idx"
+          class="oppiaine"
+        >
+          <router-link
+            v-if="oppiaine.location"
+            :to="oppiaine.location"
+          >
+            {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
+            <span
+              v-if="oppiaine.koodiLabel"
+              class="code-field"
+            >({{ oppiaine.koodiLabel }})</span>
+          </router-link>
+          <span v-else>
+            {{ $kaannaOlioTaiTeksti(oppiaine.label) }}
+            <span
+              v-if="oppiaine.koodiLabel"
+              class="code-field"
+            >({{ oppiaine.koodiLabel }})</span>
+          </span>
+        </div>
       </div>
-    </div>
 
-    <slot name="previous-next-navigation" />
+      <slot name="previous-next-navigation" />
+    </div>
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
-
+import { computed } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-  },
-})
-export default class RouteOpetussuunnitelmaOppiaineet extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get current() {
-    return this.opetussuunnitelmaDataStore.current;
+const current = computed(() => {
+  return opetussuunnitelmaDataStore.current;
+});
+
+const oppiaineet = computed(() => {
+  if (current.value) {
+    return current.value.children;
   }
+  return undefined;
+});
 
-  get oppiaineet() {
-    if (this.current) {
-      return this.current.children;
-    }
+const oppiaineetFormatted = computed(() => {
+  if (!_.isEmpty(oppiaineet.value)) {
+    return _.map(oppiaineet.value, oa => ({
+      ...oa,
+      koodiLabel: _.get(oa, 'meta.koodi.arvo') || _.get(oa, 'meta.koodi'),
+    }));
   }
-
-  get oppiaineetFormatted() {
-    if (!_.isEmpty(this.oppiaineet)) {
-      return _.map(this.oppiaineet, oa => ({
-        ...oa,
-        koodiLabel: _.get(oa, 'meta.koodi.arvo') || _.get(oa, 'meta.koodi'),
-      }));
-    }
-  }
-}
+  return undefined;
+});
 </script>
 
 <style scoped lang="scss">

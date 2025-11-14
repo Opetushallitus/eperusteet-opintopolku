@@ -2,12 +2,9 @@ import { PerusteenJulkaisuData, Perusteet, PerusteKevytDto } from '@shared/api/e
 import { ryhmat } from '@shared/utils/perusteet';
 import { julkaistutPerusteet } from '@/api/eperusteet';
 import _ from 'lodash';
-import VueCompositionApi, { computed, reactive } from '@vue/composition-api';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
-import Vue from 'vue';
+import  { reactive, computed } from'vue';
 import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
-
-Vue.use(VueCompositionApi);
 
 export class PerusteKoosteStore implements IPerusteKoosteStore {
   public state = reactive({
@@ -23,6 +20,7 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
   public readonly perusteJarjestykset = computed(() => _.filter(this.state.julkaistutKoostePerusteet, peruste => _.includes(_.map(this.state.perusteJulkaisut, 'id'), peruste.id)));
 
   constructor(koulutustyyppi: string) {
+    this.state.julkaistutKoostePerusteet = null;
     this.state.koulutustyyppi = koulutustyyppi;
   }
 
@@ -30,7 +28,6 @@ export class PerusteKoosteStore implements IPerusteKoosteStore {
     const koulutustyypit = ryhmat(this.state.koulutustyyppi);
     this.state.julkaistutKoostePerusteet = null;
     this.state.perusteJulkaisut = null;
-
     this.state.julkaistutKoostePerusteet = (await Perusteet.getJulkaistutKoostePerusteet()).data;
     this.state.perusteJulkaisut = _.get((await julkaistutPerusteet({ koulutustyyppi: koulutustyypit, poistunut: true })), 'data');
 

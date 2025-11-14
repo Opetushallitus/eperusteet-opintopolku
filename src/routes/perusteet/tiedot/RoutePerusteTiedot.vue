@@ -1,81 +1,182 @@
 <template>
   <div class="content">
-    <h2 class="otsikko mb-4" tabindex="-1">
+    <h2
+      class="otsikko mb-4"
+      tabindex="-1"
+    >
       {{ $t(koulutustyyppiKohtaisetKaannokset.perusteentiedot) }}
     </h2>
     <div class="row">
-      <div class="col-md-12" v-if="peruste.nimi">
-        <ep-form-content :name="koulutustyyppiKohtaisetKaannokset.perusteennimi" headerType="h3" headerClass="h6">
-          <div>{{$kaanna(peruste.nimi)}} <span v-if="peruste.laajuus">{{peruste.laajuus}} {{$t('osaamispiste')}}</span></div>
+      <div
+        v-if="peruste.nimi"
+        class="col-md-12"
+      >
+        <ep-form-content
+          :name="koulutustyyppiKohtaisetKaannokset.perusteennimi"
+          header-type="h3"
+          header-class="h6"
+        >
+          <div>{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span></div>
         </ep-form-content>
       </div>
       <template v-if="isAmmatillinen">
-        <div class="col-md-12" v-if="peruste.diaarinumero">
-          <ep-form-content name="maarayksen-diaarinumero" headerType="h3" headerClass="h6">
-            <ep-field v-model="peruste.diaarinumero"></ep-field>
+        <div
+          v-if="peruste.diaarinumero"
+          class="col-md-12"
+        >
+          <ep-form-content
+            name="maarayksen-diaarinumero"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-field v-model="peruste.diaarinumero" />
           </ep-form-content>
         </div>
-        <div class="col-md-12" v-if="peruste.paatospvm">
-          <ep-form-content name="maarayksen-paatospaivamaara" headerType="h3" headerClass="h6">
-            <ep-datepicker v-model="peruste.paatospvm"></ep-datepicker>
+        <div
+          v-if="peruste.paatospvm"
+          class="col-md-12"
+        >
+          <ep-form-content
+            name="maarayksen-paatospaivamaara"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-datepicker v-model="peruste.paatospvm" />
           </ep-form-content>
         </div>
       </template>
-      <div class="col-md-12" v-if="peruste.voimassaoloAlkaa" >
-        <ep-form-content name="voimaantulo-pvm" headerType="h3" headerClass="h6">
-          <ep-datepicker v-model="peruste.voimassaoloAlkaa"></ep-datepicker>
+      <div
+        v-if="peruste.voimassaoloAlkaa"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="voimaantulo-pvm"
+          header-type="h3"
+          header-class="h6"
+        >
+          <ep-datepicker v-model="peruste.voimassaoloAlkaa" />
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="peruste.voimassaoloLoppuu">
-        <ep-form-content name="voimassaolo-paattymispvm" headerType="h3" headerClass="h6">
-          <ep-datepicker v-model="peruste.voimassaoloLoppuu"></ep-datepicker>
+      <div
+        v-if="peruste.voimassaoloLoppuu"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="voimassaolo-paattymispvm"
+          header-type="h3"
+          header-class="h6"
+        >
+          <ep-datepicker v-model="peruste.voimassaoloLoppuu" />
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="peruste.siirtymaPaattyy">
-        <ep-form-content name="siirtyman-paattyminen" headerType="h3" headerClass="h6">
-          <ep-datepicker v-model="peruste.siirtymaPaattyy"></ep-datepicker>
-          <p class="help">{{ $t('siirtyman-kuvaus') }}</p>
+      <div
+        v-if="peruste.siirtymaPaattyy"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="siirtyman-paattyminen"
+          header-type="h3"
+          header-class="h6"
+        >
+          <ep-datepicker v-model="peruste.siirtymaPaattyy" />
+          <p class="help">
+            {{ $t('siirtyman-kuvaus') }}
+          </p>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="dokumentti !== ''">
-        <ep-form-content :name="dokumenttiKielistykset.otsikko" headerType="h3" headerClass="h6" class="text-left">
-          <EpSpinner class="d-inline-block" v-if="!dokumentti"/>
-          <div class="pl-2" v-else>
-            <EpPdfLink :url="dokumentti">{{ $t(dokumenttiKielistykset.linkki) }}</EpPdfLink>
+      <div
+        v-if="dokumentti !== ''"
+        class="col-md-12"
+      >
+        <ep-form-content
+          :name="dokumenttiKielistykset.otsikko"
+          header-type="h3"
+          header-class="h6"
+          class="text-left"
+        >
+          <EpSpinner
+            v-if="!dokumentti"
+            class="d-inline-block"
+          />
+          <div
+            v-else
+            class="pl-2"
+          >
+            <EpPdfLink :url="dokumentti">
+              {{ $t(dokumenttiKielistykset.linkki) }}
+            </EpPdfLink>
           </div>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="hasMaaraykset">
-        <ep-form-content name="maaraykset" headerType="h3" headerClass="h6">
-
-          <div v-for="maarays in maaraykset" :key="'maarays'+maarays.id" class="taulukko-rivi-varitys px-2 py-3">
-            <EpPdfLink v-if="maarays.url" :url="maarays.url">{{ $kaanna(maarays.nimi) }}</EpPdfLink>
-            <router-link v-else :to="{ name: 'maarays', params: { maaraysId: maarays.id } }">{{ $kaanna(maarays.nimi) }}</router-link>
+      <div
+        v-if="hasMaaraykset"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="maaraykset"
+          header-type="h3"
+          header-class="h6"
+        >
+          <div
+            v-for="maarays in maaraykset"
+            :key="'maarays'+maarays.id"
+            class="taulukko-rivi-varitys px-2 py-3"
+          >
+            <EpPdfLink
+              v-if="maarays.url"
+              :url="maarays.url"
+            >
+              {{ $kaanna(maarays.nimi) }}
+            </EpPdfLink>
+            <router-link
+              v-else
+              :to="{ name: 'maarays', params: { maaraysId: maarays.id } }"
+            >
+              {{ $kaanna(maarays.nimi) }}
+            </router-link>
             <div class="mt-2">
-              <span v-if="maarays.voimassaoloAlkaa">{{ $t('voimaantulo')}}: {{ $sd(maarays.voimassaoloAlkaa)}}</span>
-              <span v-if="maarays.voimassaoloAlkaa && maarays.diaarinumero" class="px-2">|</span>
-              <span v-if="maarays.diaarinumero">{{ $t('diaarinumero')}}: {{ maarays.diaarinumero }}</span>
+              <span v-if="maarays.voimassaoloAlkaa">{{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}</span>
+              <span
+                v-if="maarays.voimassaoloAlkaa && maarays.diaarinumero"
+                class="px-2"
+              >|</span>
+              <span v-if="maarays.diaarinumero">{{ $t('diaarinumero') }}: {{ maarays.diaarinumero }}</span>
             </div>
           </div>
         </ep-form-content>
       </div>
-      <div class="col-md-12" v-if="hasKorvattavatDiaarinumerot">
-        <ep-form-content :name="koulutustyyppiKohtaisetKaannokset.korvattavatperusteet" headerType="h3" headerClass="h6">
-          <b-table striped
-                   fixed
-                   responsive
-                   hover
-                   :fields="korvattavatDiaarinumerotFields"
-                   :items="korvaavatPerusteet">
-            <template v-slot:cell(perusteet)="data">
+      <div
+        v-if="hasKorvattavatDiaarinumerot"
+        class="col-md-12"
+      >
+        <ep-form-content
+          :name="koulutustyyppiKohtaisetKaannokset.korvattavatperusteet"
+          header-type="h3"
+          header-class="h6"
+        >
+          <b-table
+            striped
+            fixed
+            responsive
+            hover
+            :fields="korvattavatDiaarinumerotFields"
+            :items="korvaavatPerusteet"
+          >
+            <template #cell(perusteet)="data">
               <div v-if="data.item.perusteet.length > 0">
-                <div v-for="(peruste, idx) in data.item.perusteet" :key="idx">
+                <div
+                  v-for="(peruste, idx) in data.item.perusteet"
+                  :key="idx"
+                >
                   <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
                 </div>
               </div>
-              <div v-else class="font-italic">
+              <div
+                v-else
+                class="font-italic"
+              >
                 {{ $t('peruste-saatavilla-opetushallituksen-arkistosta') }}
               </div>
             </template>
@@ -83,121 +184,242 @@
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="kaannokset && kaannokset.length > 0">
-        <ep-form-content name="saamen-kielelle-kaannetyt-perusteet" headerType="h3" headerClass="h6">
-          <div v-for="(kaannos, idx) in kaannokset" :key="idx">
-            <a :href="kaannos.url" target="_blank" rel="noopener noreferrer">{{ kaannos.nimi }}</a>
+      <div
+        v-if="kaannokset && kaannokset.length > 0"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="saamen-kielelle-kaannetyt-perusteet"
+          header-type="h3"
+          header-class="h6"
+        >
+          <div
+            v-for="(kaannos, idx) in kaannokset"
+            :key="idx"
+          >
+            <a
+              :href="kaannos.url"
+              target="_blank"
+              rel="noopener noreferrer"
+            >{{ kaannos.nimi }}</a>
           </div>
         </ep-form-content>
       </div>
 
       <div v-if="isAmmatillinen">
-
-        <div class="col-md-12 mt-3" v-if="showKoulutusvienninOhje">
-          <ep-form-content name="koulutusviennin-ohje" headerType="h3" headerClass="h6">
-            <span v-if="isEiTarvitaOhjettaTyyppi">{{$t('voi-kayttaa-tutkintoviennissa')}}</span>
-            <span v-else-if="isEiVoiPoiketaTyyppi">{{$t('ei-voi-poiketa-tutkinnon-perusteista-tutkintoviennin-yhteydessa')}}</span>
+        <div
+          v-if="showKoulutusvienninOhje"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="koulutusviennin-ohje"
+            header-type="h3"
+            header-class="h6"
+          >
+            <span v-if="isEiTarvitaOhjettaTyyppi">{{ $t('voi-kayttaa-tutkintoviennissa') }}</span>
+            <span v-else-if="isEiVoiPoiketaTyyppi">{{ $t('ei-voi-poiketa-tutkinnon-perusteista-tutkintoviennin-yhteydessa') }}</span>
 
             <div v-if="isKoulutusvientiliiteTyyppi && koulutusvienninOhjeet && koulutusvienninOhjeet.length > 0">
-              <b-table striped
-                       fixed
-                       responsive
-                       :fields="koulutusvienninohjeFields"
-                       :items="koulutusvienninOhjeet">
-                <template v-slot:cell(nimi)="{ item }">
-                  <a :href="item.url" target="_blank" rel="noopener noreferrer">{{item.nimi}}</a>
+              <b-table
+                striped
+                fixed
+                responsive
+                :fields="koulutusvienninohjeFields"
+                :items="koulutusvienninOhjeet"
+              >
+                <template #cell(nimi)="{ item }">
+                  <a
+                    :href="item.url"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >{{ item.nimi }}</a>
                 </template>
               </b-table>
             </div>
 
-            <ep-form-content v-if="peruste.poikkeamismaaraysTarkennus" name="tarkennus" headerClass="h6" class="ml-3 mt-3">
-              <ep-content-viewer :value="$kaanna(peruste.poikkeamismaaraysTarkennus)"/>
+            <ep-form-content
+              v-if="peruste.poikkeamismaaraysTarkennus"
+              name="tarkennus"
+              header-class="h6"
+              class="ml-3 mt-3"
+            >
+              <ep-content-viewer :value="$kaanna(peruste.poikkeamismaaraysTarkennus)" />
             </ep-form-content>
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.koulutukset && peruste.koulutukset.length > 0">
-          <ep-form-content name="koulutuskoodit" headerType="h3" headerClass="h6">
-            <b-table striped
-                    fixed
-                    responsive
-                    hover
-                    :fields="koulutuskooditFields"
-                    :items="peruste.koulutukset">
-            </b-table>
+        <div
+          v-if="peruste.koulutukset && peruste.koulutukset.length > 0"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="koulutuskoodit"
+            header-type="h3"
+            header-class="h6"
+          >
+            <b-table
+              striped
+              fixed
+              responsive
+              hover
+              :fields="koulutuskooditFields"
+              :items="peruste.koulutukset"
+            />
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0">
-          <ep-form-content name="osaamisalat" headerType="h3" headerClass="h6">
-            <b-table striped
-                    fixed
-                    responsive
-                    hover
-                    :fields="osaamisalatFields"
-                    :items="peruste.osaamisalat">
-            </b-table>
+        <div
+          v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="osaamisalat"
+            header-type="h3"
+            header-class="h6"
+          >
+            <b-table
+              striped
+              fixed
+              responsive
+              hover
+              :fields="osaamisalatFields"
+              :items="peruste.osaamisalat"
+            />
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0">
-          <ep-form-content name="tutkintonimikkeet" headerType="h3" headerClass="h6">
-            <b-table striped
-                    fixed
-                    responsive
-                    hover
-                    :fields="tutkintonimikkeetFields"
-                    :items="peruste.tutkintonimikkeet">
-            </b-table>
+        <div
+          v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="tutkintonimikkeet"
+            header-type="h3"
+            header-class="h6"
+          >
+            <b-table
+              striped
+              fixed
+              responsive
+              hover
+              :fields="tutkintonimikkeetFields"
+              :items="peruste.tutkintonimikkeet"
+            />
           </ep-form-content>
         </div>
 
-        <div class="col-md-12 mt-3" v-if="peruste.suorittaneenOsaaminen">
-          <ep-form-content name="suorittaneen-osaaminen" headerType="h3" headerClass="h6">
-            <ep-content-viewer :value="$kaanna(peruste.suorittaneenOsaaminen)"
+        <div
+          v-if="peruste.suorittaneenOsaaminen"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="suorittaneen-osaaminen"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-content-viewer
+              :value="$kaanna(peruste.suorittaneenOsaaminen)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </ep-form-content>
+        </div>
+
+        <div
+          v-if="peruste.tyotehtavatJoissaVoiToimia"
+          class="col-md-12 mt-3"
+        >
+          <ep-form-content
+            name="tyotehtavat-joissa-voi-toimia"
+            header-type="h3"
+            header-class="h6"
+          >
+            <ep-content-viewer
+              :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
+          </ep-form-content>
+        </div>
+
+        <div
+          v-if="osaamisalaKuvaukset && osaamisalaKuvaukset.length > 0"
+          class="col-md-12"
+        >
+          <ep-form-content
+            name="osaamisalojen-kuvaukset"
+            header-type="h3"
+            header-class="h6"
+          >
+            <div
+              v-for="(osaamisalakuvaus, index) in osaamisalaKuvaukset"
+              :key="'osaamisalakuvaus'+index"
+            >
+              <h4>{{ $kaanna(osaamisalakuvaus.nimi) }}</h4>
+              <ep-content-viewer
+                :value="$kaanna(osaamisalakuvaus.teksti)"
                 :termit="termit"
-                :kuvat="kuvat" />
-          </ep-form-content>
-        </div>
-
-        <div class="col-md-12 mt-3" v-if="peruste.tyotehtavatJoissaVoiToimia">
-          <ep-form-content name="tyotehtavat-joissa-voi-toimia" headerType="h3" headerClass="h6">
-            <ep-content-viewer :value="$kaanna(peruste.tyotehtavatJoissaVoiToimia)"
-                :termit="termit"
-                :kuvat="kuvat" />
-          </ep-form-content>
-        </div>
-
-        <div class="col-md-12" v-if="osaamisalaKuvaukset && osaamisalaKuvaukset.length > 0">
-          <ep-form-content name="osaamisalojen-kuvaukset" headerType="h3" headerClass="h6">
-            <div v-for="(osaamisalakuvaus, index) in osaamisalaKuvaukset" :key="'osaamisalakuvaus'+index">
-              <h4>{{$kaanna(osaamisalakuvaus.nimi)}}</h4>
-              <ep-content-viewer :value="$kaanna(osaamisalakuvaus.teksti)"
-                  :termit="termit"
-                  :kuvat="kuvat" />
+                :kuvat="kuvat"
+              />
             </div>
           </ep-form-content>
         </div>
       </div>
 
-      <div v-if="isAmmatillinen && !isOpas" class="col-md-12">
-        <ep-form-content name="englanninkieliset-sisallot" headerType="h3" headerClass="h6">
+      <div
+        v-if="isAmmatillinen && !isOpas"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="englanninkieliset-sisallot"
+          header-type="h3"
+          header-class="h6"
+        >
           <router-link :to="{name: 'perusteKoosteEng'}">
             <span>{{ $t('katso-tutkinnon-englanninkieliset-sisallot') }}</span>
           </router-link>
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="kvliitteita">
-        <ep-form-content name="kv-liitteet" headerType="h3" headerClass="h6">
-          <EpPdfLink v-if="kvliitteet['fi']" :url="kvliitteet['fi']">{{ $t('lataa-kvliite-fi') }}</EpPdfLink>
-          <EpPdfLink v-if="kvliitteet['sv']" :url="kvliitteet['sv']">{{ $t('lataa-kvliite-sv') }}</EpPdfLink>
-          <EpPdfLink v-if="kvliitteet['en']" :url="kvliitteet['en']">{{ $t('lataa-kvliite-en') }}</EpPdfLink>
+      <div
+        v-if="kvliitteita"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="kv-liitteet"
+          header-type="h3"
+          header-class="h6"
+        >
+          <EpPdfLink
+            v-if="kvliitteet['fi']"
+            :url="kvliitteet['fi']"
+          >
+            {{ $t('lataa-kvliite-fi') }}
+          </EpPdfLink>
+          <EpPdfLink
+            v-if="kvliitteet['sv']"
+            :url="kvliitteet['sv']"
+          >
+            {{ $t('lataa-kvliite-sv') }}
+          </EpPdfLink>
+          <EpPdfLink
+            v-if="kvliitteet['en']"
+            :url="kvliitteet['en']"
+          >
+            {{ $t('lataa-kvliite-en') }}
+          </EpPdfLink>
         </ep-form-content>
       </div>
 
-      <div class="col-md-12" v-if="!isOpas">
-        <ep-form-content name="muutoshistoria" headerType="h3" headerClass="h6">
+      <div
+        v-if="!isOpas"
+        class="col-md-12"
+      >
+        <ep-form-content
+          name="muutoshistoria"
+          header-type="h3"
+          header-class="h6"
+        >
           <router-link :to="{ name: 'perusteMuutoshistoria' }">
             <span>{{ $t('katsele-perusteen-muutoshistoriaa') }}</span>
           </router-link>
@@ -208,301 +430,299 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Prop, Vue, Component, Watch } from 'vue-property-decorator';
+import { computed, watch } from 'vue';
 import { baseURL, LiiteDtoTyyppiEnum, LiitetiedostotParam, PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { isKoulutustyyppiAmmatillinen, isKoulutustyyppiPdfTuettuOpintopolku, isYleissivistavaKoulutustyyppi } from '@shared/utils/perusteet';
 import { Kielet, UiKielet } from '@shared/stores/kieli';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpField from '@shared/components/forms/EpField.vue';
 import EpDatepicker from '@shared/components/forms/EpDatepicker.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
+import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
+import { $t, $kaanna, $sd } from '@shared/utils/globals';
+import { useRoute, useRouter } from 'vue-router';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpFormContent,
-    EpField,
-    EpDatepicker,
-    EpSpinner,
-    EpContentViewer,
-    EpExternalLink,
-  },
-})
-export default class RoutePerusteTiedot extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
+const perusteDataStore = getCachedPerusteStore();
 
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
 
-  @Watch('kieli')
-  async onKieliChange() {
-    await this.perusteDataStore.getDokumentti();
-  }
+// Watch for changes in the content language
+watch(kieli, async () => {
+  await perusteDataStore.getDokumentti();
+});
 
-  get isAmmatillinen() {
-    return this.peruste && isKoulutustyyppiAmmatillinen(this.peruste.koulutustyyppi!);
-  }
+const peruste = computed(() => {
+  return perusteDataStore.peruste;
+});
 
-  get isOpas() {
-    return this.peruste?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.OPAS);
-  }
+const isAmmatillinen = computed(() => {
+  return peruste.value && isKoulutustyyppiAmmatillinen(peruste.value.koulutustyyppi!);
+});
 
-  get korvaavatPerusteet() {
-    const perusteetByDiaarinumero = _.groupBy(this.perusteDataStore.korvaavatPerusteet, 'diaarinumero');
-    return _.map(this.peruste?.korvattavatDiaarinumerot, diaarinumero => ({
-      diaarinumero,
-      perusteet: perusteetByDiaarinumero[diaarinumero] || [],
-    }));
-  }
+const isOpas = computed(() => {
+  return peruste.value?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.OPAS);
+});
 
-  get peruste() {
-    return this.perusteDataStore.peruste;
-  }
+const korvaavatPerusteet = computed(() => {
+  const perusteetByDiaarinumero = _.groupBy(perusteDataStore.korvaavatPerusteet, 'diaarinumero');
+  return _.map(peruste.value?.korvattavatDiaarinumerot, diaarinumero => ({
+    diaarinumero,
+    perusteet: perusteetByDiaarinumero[diaarinumero] || [],
+  }));
+});
 
-  get kvliitteita() {
-    return _.some(UiKielet, uiKieli => {
-      return this.perusteDataStore.kvLiitteet[uiKieli];
-    });
-  }
+const kvliitteita = computed(() => {
+  return _.some(UiKielet, uiKieli => {
+    return perusteDataStore.kvLiitteet[uiKieli];
+  });
+});
 
-  get kvliitteet() {
-    return this.perusteDataStore.kvLiitteet;
-  }
+const kvliitteet = computed(() => {
+  return perusteDataStore.kvLiitteet;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get julkaisut() {
-    return this.perusteDataStore.julkaisut;
-  }
+const julkaisut = computed(() => {
+  return perusteDataStore.julkaisut;
+});
 
-  get liitteet() {
-    return _.map(this.perusteDataStore.liitteet, kvo => (
-      {
-        ...kvo,
-        url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, kvo.id!).url,
-      }
-    ));
-  }
-
-  get koulutusvienninOhjeet() {
-    return _.filter(this.liitteet, liite => liite.tyyppi === _.toLower(LiiteDtoTyyppiEnum.KOULUTUSVIENNINOHJE));
-  }
-
-  get kaannokset() {
-    return _.filter(this.liitteet, liite => liite.tyyppi === _.toLower(LiiteDtoTyyppiEnum.KAANNOS));
-  }
-
-  get osaamisalaKuvaukset() {
-    return _.chain((this.peruste?.suoritustavat as any[]))
-      .map(suoritustapa => this.perusteDataStore.osaamisalaKuvaukset[suoritustapa.suoritustapakoodi!])
-      .map(suoritustavanOsaamisalakuvaukset => _.values(suoritustavanOsaamisalakuvaukset))
-      .flatMap()
-      .flatMap()
-      .value();
-  }
-
-  get hasMaaraykset() {
-    return !_.isEmpty(this.maaraykset);
-  }
-
-  get maaraykset() {
-    return _.sortBy([
-      ...this.maarayskokoelmanMuutosmaaraykset,
-      ...this.perusteenMuutosmaaraykset,
-      ...this.perusteenMaarays,
-      ...(this.julkaisujenMuutosMaaraykset),
-    ], (maarays: any) => maarays.voimassaoloAlkaa || 0).reverse();
-  }
-
-  get perusteenMaarays() {
-    if (this.perusteDataStore?.maarays) {
-      return [{
-        ...this.perusteDataStore.maarays,
-        voimassaoloAlkaa: _.size(this.perusteDataStore?.maarays?.korvattavatMaaraykset) > 0 || _.size(this.perusteDataStore.maarays?.muutettavatMaaraykset) > 0 ? this.perusteDataStore.maarays?.voimassaoloAlkaa : null,
-      }];
+const liitteet = computed(() => {
+  return _.map(perusteDataStore.liitteet, kvo => (
+    {
+      ...kvo,
+      url: baseURL + LiitetiedostotParam.getLiite(peruste.value!.id!, kvo.id!).url,
     }
+  ));
+});
 
-    if (_.has(this.peruste?.maarayskirje?.liitteet, this.kieli)) {
-      const maaryskirje = this.peruste?.maarayskirje?.liitteet![this.kieli];
-      return [{
-        ...maaryskirje,
-        url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, maaryskirje!.id!).url,
-      }];
-    }
+const koulutusvienninOhjeet = computed(() => {
+  return _.filter(liitteet.value, liite => liite.tyyppi === _.toLower(LiiteDtoTyyppiEnum.KOULUTUSVIENNINOHJE));
+});
 
-    return [];
+const kaannokset = computed(() => {
+  return _.filter(liitteet.value, liite => liite.tyyppi === _.toLower(LiiteDtoTyyppiEnum.KAANNOS));
+});
+
+const osaamisalaKuvaukset = computed(() => {
+  return _.chain((peruste.value?.suoritustavat as any[]))
+    .map(suoritustapa => perusteDataStore.osaamisalaKuvaukset[suoritustapa.suoritustapakoodi!])
+    .map(suoritustavanOsaamisalakuvaukset => _.values(suoritustavanOsaamisalakuvaukset))
+    .flatMap()
+    .flatMap()
+    .value();
+});
+
+const perusteenMaarays = computed(() => {
+  if (perusteDataStore?.maarays) {
+    return [{
+      ...perusteDataStore.maarays,
+      voimassaoloAlkaa: _.size(perusteDataStore?.maarays?.korvattavatMaaraykset) > 0
+        || _.size(perusteDataStore.maarays?.muutettavatMaaraykset) > 0
+        ? perusteDataStore.maarays?.voimassaoloAlkaa : null,
+    }];
   }
 
-  get maarayskokoelmanMuutosmaaraykset() {
-    return _.chain(this.perusteDataStore.muutosmaaraykset)
-      .sortBy('voimassaoloAlkaa')
-      .reverse()
-      .value();
+  if (_.has(peruste.value?.maarayskirje?.liitteet, kieli.value)) {
+    const maaryskirje = peruste.value?.maarayskirje?.liitteet![kieli.value];
+    return [{
+      ...maaryskirje,
+      url: baseURL + LiitetiedostotParam.getLiite(peruste.value!.id!, maaryskirje!.id!).url,
+    }];
   }
 
-  get perusteenMuutosmaaraykset() {
-    return _.chain(this.peruste?.muutosmaaraykset)
-      .filter(muutosmaarays => _.has(muutosmaarays.liitteet, this.kieli))
-      .map(muutosmaarays => {
+  return [];
+});
+
+const maarayskokoelmanMuutosmaaraykset = computed(() => {
+  return _.chain(perusteDataStore.muutosmaaraykset)
+    .sortBy('voimassaoloAlkaa')
+    .reverse()
+    .value();
+});
+
+const perusteenMuutosmaaraykset = computed(() => {
+  return _.chain(peruste.value?.muutosmaaraykset)
+    .filter(muutosmaarays => _.has(muutosmaarays.liitteet, kieli.value))
+    .map(muutosmaarays => {
+      return {
+        ...muutosmaarays,
+        url: baseURL + LiitetiedostotParam.getLiite(peruste.value!.id!, muutosmaarays.liitteet![kieli.value].id!).url,
+        nimi: !!muutosmaarays.nimi && muutosmaarays.nimi[kieli.value]
+          ? muutosmaarays.nimi[kieli.value]
+          : muutosmaarays.liitteet![kieli.value].nimi,
+      };
+    })
+    .value();
+});
+
+const julkaisujenMuutosMaaraykset = computed(() => {
+  return _.chain(julkaisut.value)
+    .filter(julkaisu => (julkaisu.liitteet || []).length > 0)
+    .map(julkaisu => {
+      return _.map(julkaisu.liitteet, liite => {
         return {
-          ...muutosmaarays,
-          url: baseURL + LiitetiedostotParam.getLiite(this.peruste!.id!, muutosmaarays.liitteet![this.kieli].id!).url,
-          nimi: !!muutosmaarays.nimi && muutosmaarays.nimi[this.kieli] ? muutosmaarays.nimi[this.kieli] : muutosmaarays.liitteet![this.kieli].nimi,
+          voimassaoloAlkaa: julkaisu.muutosmaaraysVoimaan,
+          ...liite,
+          url: baseURL + LiitetiedostotParam.getJulkaisuLiite(peruste.value!.id!, liite.liite!.id!).url,
         };
-      })
-      .value();
+      });
+    })
+    .flatMap()
+    .filter(liite => liite.kieli === kieli.value)
+    .value();
+});
+
+const maaraykset = computed(() => {
+  return _.sortBy([
+    ...maarayskokoelmanMuutosmaaraykset.value,
+    ...perusteenMuutosmaaraykset.value,
+    ...perusteenMaarays.value,
+    ...julkaisujenMuutosMaaraykset.value,
+  ], (maarays: any) => maarays.voimassaoloAlkaa || 0).reverse();
+});
+
+const hasMaaraykset = computed(() => {
+  return !_.isEmpty(maaraykset.value);
+});
+
+const hasKorvattavatDiaarinumerot = computed(() => {
+  return !_.isEmpty(korvaavatPerusteet.value);
+});
+
+const korvattavatDiaarinumerotFields = computed(() => {
+  return [{
+    key: 'diaarinumero',
+    thStyle: 'width: 30%',
+    label: $t('diaarinumero'),
+  }, {
+    key: 'perusteet',
+    label: $t('perusteet'),
+  }];
+});
+
+const dokumentti = computed(() => {
+  if (isOpas.value || isKoulutustyyppiPdfTuettuOpintopolku(peruste.value?.koulutustyyppi)) {
+    return perusteDataStore.dokumentti;
   }
 
-  get julkaisujenMuutosMaaraykset() {
-    return _.chain(this.julkaisut)
-      .filter(julkaisu => (julkaisu.liitteet || []).length > 0)
-      .map(julkaisu => {
-        return _.map(julkaisu.liitteet, liite => {
-          return {
-            voimassaoloAlkaa: julkaisu.muutosmaaraysVoimaan,
-            ...liite,
-            url: baseURL + LiitetiedostotParam.getJulkaisuLiite(this.peruste!.id!, liite.liite!.id!).url,
-          };
-        });
-      })
-      .flatMap()
-      .filter(liite => liite.kieli === this.kieli)
-      .value();
-  }
+  return '';
+});
 
-  get hasKorvattavatDiaarinumerot() {
-    return !_.isEmpty(this.korvaavatPerusteet);
-  }
+const dokumenttiKielistykset = computed(() => {
+  return {
+    'opas': {
+      'otsikko': 'opas-pdfna',
+      'linkki': 'avaa-opas-pdfna',
+    },
+    'normaali': {
+      'otsikko': 'peruste-pdfna',
+      'linkki': 'avaa-peruste-pdfna',
+    },
+  }[peruste.value?.tyyppi || 'normaali'];
+});
 
-  get korvattavatDiaarinumerotFields() {
-    return [{
-      key: 'diaarinumero',
-      thStyle: 'width: 30%',
-      label: this.$t('diaarinumero'),
-    }, {
-      key: 'perusteet',
-      label: this.$t('perusteet'),
-    }];
-  }
+const koulutuskooditFields = computed(() => {
+  return [{
+    key: 'koulutuskoodiArvo',
+    label: $t('koodi'),
+    thStyle: 'width: 15%',
+  }, {
+    key: 'nimi',
+    label: $t('koulutuksen-nimi'),
+    formatter: (value: any, key: string, item: any) => {
+      return $kaanna(value);
+    },
+  }];
+});
 
-  get dokumentti() {
-    if (this.isOpas || isKoulutustyyppiPdfTuettuOpintopolku(this.peruste?.koulutustyyppi)) {
-      return this.perusteDataStore.dokumentti;
-    }
+const koulutusvienninohjeFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('tiedosto'),
+  }, {
+    key: 'lisatieto',
+    label: $t('diaarinumero'),
+    thStyle: 'width: 30%',
+  }];
+});
 
-    return '';
-  }
+const osaamisalatFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('nimi'),
+    thStyle: 'width: 75%',
+    formatter: (value: any, key: string, item: any) => {
+      return $kaanna(value);
+    },
+  }, {
+    key: 'arvo',
+    label: $t('koodi'),
+    thStyle: 'width: 15%',
+  }];
+});
 
-  get dokumenttiKielistykset() {
-    return {
-      'opas': {
-        'otsikko': 'opas-pdfna',
-        'linkki': 'avaa-opas-pdfna',
-      },
-      'normaali': {
-        'otsikko': 'peruste-pdfna',
-        'linkki': 'avaa-peruste-pdfna',
-      },
-    }[this.peruste?.tyyppi || 'normaali'];
-  }
+const tutkintonimikkeetFields = computed(() => {
+  return [{
+    key: 'nimi',
+    label: $t('nimi'),
+    thStyle: 'width: 75%',
+    formatter: (value: any, key: string, item: any) => {
+      return $kaanna(value);
+    },
+  }, {
+    key: 'tutkintonimikeArvo',
+    label: $t('koodi'),
+    thStyle: 'width: 15%',
+  }];
+});
 
-  get koulutuskooditFields() {
-    return [{
-      key: 'koulutuskoodiArvo',
-      label: this.$t('koodi'),
-      thStyle: 'width: 15%',
-    }, {
-      key: 'nimi',
-      label: this.$t('koulutuksen-nimi'),
-      formatter: (value: any, key: string, item: any) => {
-        return this.$kaanna(value);
-      },
-    }];
-  }
+const isEiTarvitaOhjettaTyyppi = computed(() => {
+  return peruste.value?.poikkeamismaaraysTyyppi?.valueOf() === 'ei_tarvita_ohjetta';
+});
 
-  get koulutusvienninohjeFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('tiedosto'),
-    }, {
-      key: 'lisatieto',
-      label: this.$t('diaarinumero'),
-      thStyle: 'width: 30%',
-    }];
-  }
+const isEiVoiPoiketaTyyppi = computed(() => {
+  return peruste.value?.poikkeamismaaraysTyyppi?.valueOf() === 'ei_voi_poiketa';
+});
 
-  get osaamisalatFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi'),
-      thStyle: 'width: 75%',
-      formatter: (value: any, key: string, item: any) => {
-        return this.$kaanna(value);
-      },
-    }, {
-      key: 'arvo',
-      label: this.$t('koodi'),
-      thStyle: 'width: 15%',
-    }];
-  }
+const isKoulutusvientiliiteTyyppi = computed(() => {
+  return peruste.value?.poikkeamismaaraysTyyppi?.valueOf() === 'koulutusvientiliite';
+});
 
-  get tutkintonimikkeetFields() {
-    return [{
-      key: 'nimi',
-      label: this.$t('nimi'),
-      thStyle: 'width: 75%',
-      formatter: (value: any, key: string, item: any) => {
-        return this.$kaanna(value);
-      },
-    }, {
-      key: 'tutkintonimikeArvo',
-      label: this.$t('koodi'),
-      thStyle: 'width: 15%',
-    }];
-  }
+const showKoulutusvienninOhje = computed(() => {
+  return isEiTarvitaOhjettaTyyppi.value
+    || isEiVoiPoiketaTyyppi.value
+    || (isKoulutusvientiliiteTyyppi.value && koulutusvienninOhjeet.value && koulutusvienninOhjeet.value.length > 0);
+});
 
-  get isEiTarvitaOhjettaTyyppi() {
-    return this.peruste?.poikkeamismaaraysTyyppi?.valueOf() === 'ei_tarvita_ohjetta';
-  }
-
-  get isEiVoiPoiketaTyyppi() {
-    return this.peruste?.poikkeamismaaraysTyyppi?.valueOf() === 'ei_voi_poiketa';
-  }
-
-  get isKoulutusvientiliiteTyyppi() {
-    return this.peruste?.poikkeamismaaraysTyyppi?.valueOf() === 'koulutusvientiliite';
-  }
-
-  get showKoulutusvienninOhje() {
-    return this.isEiTarvitaOhjettaTyyppi || this.isEiVoiPoiketaTyyppi || (this.isKoulutusvientiliiteTyyppi && this.koulutusvienninOhjeet && this.koulutusvienninOhjeet.length > 0);
-  }
-
-  protected get koulutustyyppiKohtaisetKaannokset() {
-    return {
-      perusteentiedot: isYleissivistavaKoulutustyyppi(this.peruste?.koulutustyyppi)
-        ? 'perusteen-tiedot-yleissivistava'
-        : 'perusteen-tiedot',
-      perusteennimi: isYleissivistavaKoulutustyyppi(this.peruste?.koulutustyyppi)
-        ? 'perusteen-nimi-yleissivistava'
-        : 'perusteen-nimi',
-      korvattavatperusteet: isYleissivistavaKoulutustyyppi(this.peruste?.koulutustyyppi)
-        ? 'korvattavat-perusteet-yleissivistava'
-        : 'korvattavat-perusteet',
-    };
-  }
-}
+const koulutustyyppiKohtaisetKaannokset = computed(() => {
+  return {
+    perusteentiedot: isYleissivistavaKoulutustyyppi(peruste.value?.koulutustyyppi)
+      ? 'perusteen-tiedot-yleissivistava'
+      : 'perusteen-tiedot',
+    perusteennimi: isYleissivistavaKoulutustyyppi(peruste.value?.koulutustyyppi)
+      ? 'perusteen-nimi-yleissivistava'
+      : 'perusteen-nimi',
+    korvattavatperusteet: isYleissivistavaKoulutustyyppi(peruste.value?.koulutustyyppi)
+      ? 'korvattavat-perusteet-yleissivistava'
+      : 'korvattavat-perusteet',
+  };
+});
 </script>
 
 <style scoped lang="scss">

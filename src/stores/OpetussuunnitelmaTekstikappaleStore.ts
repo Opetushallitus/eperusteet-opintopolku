@@ -1,122 +1,125 @@
 import _ from 'lodash';
-import { Store, State } from '@shared/stores/store';
+import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import { TekstiKappaleDto, Puu, OpetussuunnitelmanSisalto, TekstiKappaleViiteDto } from '@shared/api/ylops';
 import { Matala } from '@shared/api/eperusteet';
 import { createLogger } from '@shared/utils/logger';
 
 const logger = createLogger('OpetussuunnitelmaTekstikappaleStore');
 
-@Store
-export class OpetussuunnitelmaTekstikappaleStore {
-  @State() public opsId: number;
-  @State() public tekstiKappaleViiteId: number;
-  @State() public tekstiKappaleViite: Puu | null = null;
-  @State() public tekstiKappaleViitteet: number[] | null = null;
-  @State() public tekstiKappaleOriginalViites: Puu[] | null = null;
-  @State() public tekstiKappaleOriginals: TekstiKappaleDto[] | null = null;
-  @State() public tekstiKappaleOriginalViitteetObj: object | null = null;
-  @State() public tekstiKappale: TekstiKappaleDto | null = null;
-  @State() public perusteTekstikappaleViite: TekstiKappaleViiteDto | null = null;
-  @State() public tekstiKappaleAllLoaded: boolean = false;
-  @State() public opstoteutus: string | null = null;
+export const useOpetussuunnitelmaTekstikappaleStore = defineStore('opetussuunnitelmaTekstikappale', () => {
+  // State
+  const opsId = ref<number | null>(null);
+  const tekstiKappaleViiteId = ref<number | null>(null);
+  const tekstiKappaleViite = ref<Puu | null>(null);
+  const tekstiKappaleViitteet = ref<number[] | null>(null);
+  const tekstiKappaleOriginalViites = ref<Puu[] | null>(null);
+  const tekstiKappaleOriginals = ref<TekstiKappaleDto[] | null>(null);
+  const tekstiKappaleOriginalViitteetObj = ref<object | null>(null);
+  const tekstiKappale = ref<TekstiKappaleDto | null>(null);
+  const perusteTekstikappaleViite = ref<TekstiKappaleViiteDto | null>(null);
+  const tekstiKappaleAllLoaded = ref<boolean>(false);
+  const opstoteutus = ref<string | null>(null);
 
-  public static async create(opsId: number, tekstiKappaleViiteId: number, opstoteutus: string) {
-    return new OpetussuunnitelmaTekstikappaleStore(opsId, tekstiKappaleViiteId, opstoteutus);
-  }
+  // Actions
+  const init = (ops: number, tkviite: number, toteutus: string) => {
+    opsId.value = ops;
+    tekstiKappaleViiteId.value = tkviite;
+    opstoteutus.value = toteutus;
+    return {
+      opsId,
+      tekstiKappaleViiteId,
+      opstoteutus,
+    };
+  };
 
-  constructor(opsId: number, tekstiKappaleViiteId: number, opstoteutus: string) {
-    this.opsId = opsId;
-    this.tekstiKappaleViiteId = tekstiKappaleViiteId;
-    this.opstoteutus = opstoteutus;
-  }
+  const fetchTekstikappaleAll = async (deep: boolean = false) => {
+    tekstiKappaleAllLoaded.value = false;
+    tekstiKappaleViite.value = null;
+    tekstiKappale.value = null;
+    tekstiKappaleViitteet.value = null;
+    perusteTekstikappaleViite.value = null;
+    tekstiKappaleOriginalViites.value = null;
+    tekstiKappaleOriginals.value = null;
 
-  async fetchTekstikappaleAll(deep: boolean = false) {
-    this.tekstiKappaleAllLoaded = false;
-    this.tekstiKappaleViite = null;
-    this.tekstiKappale = null;
-    this.tekstiKappaleViitteet = null;
-    this.perusteTekstikappaleViite = null;
-    this.tekstiKappaleOriginalViites = null;
-    this.tekstiKappaleOriginals = null;
-
-    await this.fetchTekstikappale(deep);
+    await fetchTekstikappale(deep);
 
     await Promise.all([
-      this.tekstiKappaleViite!.naytaPerusteenTeksti ? this.fetchPerusteTekstikappale() : new Promise<void>(resolve => resolve()),
-      this.tekstiKappaleViite!.naytaPohjanTeksti ? this.fetchOriginalTekstikappaleDeep() : new Promise<void>(resolve => resolve()),
+      tekstiKappaleViite.value!.naytaPerusteenTeksti ? fetchPerusteTekstikappale() : new Promise<void>(resolve => resolve()),
+      tekstiKappaleViite.value!.naytaPohjanTeksti ? fetchOriginalTekstikappaleDeep() : new Promise<void>(resolve => resolve()),
     ]);
 
-    this.tekstiKappaleAllLoaded = true;
-  }
+    tekstiKappaleAllLoaded.value = true;
+  };
 
-  async fetchTekstikappale(deep: boolean = false) {
+  const fetchTekstikappale = async (deep: boolean = false) => {
     if (deep) {
-      this.tekstiKappaleViite = (await OpetussuunnitelmanSisalto
-        .getTekstiKappaleViiteSyva(this.opsId, this.tekstiKappaleViiteId)).data;
+      tekstiKappaleViite.value = (await OpetussuunnitelmanSisalto
+        .getTekstiKappaleViiteSyva(opsId.value!, tekstiKappaleViiteId.value!)).data;
     }
     else {
-      this.tekstiKappaleViite = (await OpetussuunnitelmanSisalto
-        .getTekstiKappaleViite(this.opsId, this.tekstiKappaleViiteId)).data as Puu;
+      tekstiKappaleViite.value = (await OpetussuunnitelmanSisalto
+        .getTekstiKappaleViite(opsId.value!, tekstiKappaleViiteId.value!)).data as Puu;
     }
 
-    if (this.tekstiKappaleViite.tekstiKappale) {
-      this.tekstiKappale = this.tekstiKappaleViite.tekstiKappale;
+    if (tekstiKappaleViite.value.tekstiKappale) {
+      tekstiKappale.value = tekstiKappaleViite.value.tekstiKappale;
     }
-  }
+  };
 
-  async fetchPerusteTekstikappale() {
-    this.perusteTekstikappaleViite = null;
-    if (this.tekstiKappaleViite && this.tekstiKappaleViite.perusteTekstikappaleId) {
+  const fetchPerusteTekstikappale = async () => {
+    perusteTekstikappaleViite.value = null;
+    if (tekstiKappaleViite.value && tekstiKappaleViite.value.perusteTekstikappaleId) {
       try {
-        this.perusteTekstikappaleViite = (await OpetussuunnitelmanSisalto.getPerusteTekstikappale(this.opsId, this.tekstiKappaleViiteId)).data;
+        perusteTekstikappaleViite.value = (await OpetussuunnitelmanSisalto.getPerusteTekstikappale(opsId.value!, tekstiKappaleViiteId.value!)).data;
       }
       catch (err) {
         logger.error(err);
       }
     }
-  }
+  };
 
-  async fetchOriginalTekstikappaleDeep() {
-    this.tekstiKappaleOriginalViites = null;
-    this.tekstiKappaleOriginals = null;
-    this.tekstiKappaleOriginalViitteetObj = {};
+  const fetchOriginalTekstikappaleDeep = async () => {
+    tekstiKappaleOriginalViites.value = null;
+    tekstiKappaleOriginals.value = null;
+    tekstiKappaleOriginalViitteetObj.value = {};
 
     // Saman tason pohjan viite
-    await this.fetchOriginalTekstikappale();
+    await fetchOriginalTekstikappale();
 
     // Haetaan alikappaleiden pohjien tekstit
-    this.getAliviiteIds();
-    if (this.tekstiKappaleViitteet) {
+    getAliviiteIds();
+    if (tekstiKappaleViitteet.value) {
       const viitteet: Matala[] = [];
-      await Promise.all(this.tekstiKappaleViitteet.map(async viite => {
-        const tekstiKappaleOriginal = await this.fetchOriginalAlikappale(viite);
+      await Promise.all(tekstiKappaleViitteet.value.map(async viite => {
+        const tekstiKappaleOriginal = await fetchOriginalAlikappale(viite);
         // Jos alkuperäinen ei löydy, rajapinta palauttaa tyhjän merkkijonon. Sen takia tarkistetaan onko objekti.
         if (_.isObject(tekstiKappaleOriginal)) {
           viitteet.push(tekstiKappaleOriginal);
         }
       }));
 
-      this.tekstiKappaleOriginalViitteetObj = _.keyBy(viitteet, 'id');
+      tekstiKappaleOriginalViitteetObj.value = _.keyBy(viitteet, 'id');
     }
-  }
+  };
 
-  async fetchOriginalAlikappale(viite: number): Promise<any> {
+  const fetchOriginalAlikappale = async (viite: number): Promise<any> => {
     return (await OpetussuunnitelmanSisalto
-      .getTekstiKappaleViiteOriginal(this.opsId, viite)).data;
-  }
+      .getTekstiKappaleViiteOriginal(opsId.value!, viite)).data;
+  };
 
-  async fetchOriginalTekstikappale() {
-    this.tekstiKappaleOriginalViites = (await OpetussuunnitelmanSisalto
-      .getTekstiKappaleViiteOriginals(this.opsId, this.tekstiKappaleViiteId)).data as Puu[];
-    if (_.size(_.filter(this.tekstiKappaleOriginalViites, 'tekstiKappale')) > 0) {
-      this.tekstiKappaleOriginals = _.map(this.tekstiKappaleOriginalViites, 'tekstiKappale') as TekstiKappaleDto[];
+  const fetchOriginalTekstikappale = async () => {
+    tekstiKappaleOriginalViites.value = (await OpetussuunnitelmanSisalto
+      .getTekstiKappaleViiteOriginals(opsId.value!, tekstiKappaleViiteId.value!)).data as Puu[];
+    if (_.size(_.filter(tekstiKappaleOriginalViites.value, 'tekstiKappale')) > 0) {
+      tekstiKappaleOriginals.value = _.map(tekstiKappaleOriginalViites.value, 'tekstiKappale') as TekstiKappaleDto[];
     }
-  }
+  };
 
-  private getAliviiteIds() {
-    if (!_.isEmpty(this.tekstiKappaleViite)) {
+  const getAliviiteIds = () => {
+    if (!_.isEmpty(tekstiKappaleViite.value)) {
       const viitteet: any[] = [];
-      const stack = [this.tekstiKappaleViite!];
+      const stack = [tekstiKappaleViite.value!];
 
       while (!_.isEmpty(stack)) {
         const head: any = stack.shift()!;
@@ -131,7 +134,32 @@ export class OpetussuunnitelmaTekstikappaleStore {
         })));
       }
 
-      this.tekstiKappaleViitteet = _.slice(viitteet, 1);
+      tekstiKappaleViitteet.value = _.slice(viitteet, 1);
     }
-  }
-}
+  };
+
+  return {
+    // State
+    opsId,
+    tekstiKappaleViiteId,
+    tekstiKappaleViite,
+    tekstiKappaleViitteet,
+    tekstiKappaleOriginalViites,
+    tekstiKappaleOriginals,
+    tekstiKappaleOriginalViitteetObj,
+    tekstiKappale,
+    perusteTekstikappaleViite,
+    tekstiKappaleAllLoaded,
+    opstoteutus,
+
+    // Actions
+    init,
+    fetchTekstikappaleAll,
+    fetchTekstikappale,
+    fetchPerusteTekstikappale,
+    fetchOriginalTekstikappaleDeep,
+    fetchOriginalAlikappale,
+    fetchOriginalTekstikappale,
+    getAliviiteIds,
+  };
+});

@@ -1,45 +1,69 @@
 <template>
   <div>
-    <EpHeader :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
-      <template slot="header">
+    <EpHeader
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
+      <template #header>
         <span v-if="tutkinnonosa">{{ $kaanna(tutkinnonosa.nimi) }}</span>
-        <span v-if="laajuus">{{laajuus}} {{$t('osaamispiste')}}</span>
+        <span v-if="laajuus">{{ laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
     </EpHeader>
     <div class="container mt-4">
       <div class="content">
-        <EpSpinner v-if="!tutkinnonosa"></EpSpinner>
+        <EpSpinner v-if="!tutkinnonosa" />
         <div v-else>
-          <EpFormContent v-if="perusteet" class="col-md-12 mb-5">
-            <EpCollapse class="mb-3"
-                        :shadow="true"
-                        :borderBottom="false"
-                        :expandedByDefault="perusteet.length === 1">
-              <h2 class="header" slot="header">{{$t('tutkinnot-joilla-tutkinnon-osa-on')}}</h2>
+          <EpFormContent
+            v-if="perusteet"
+            class="col-md-12 mb-5"
+          >
+            <EpCollapse
+              class="mb-3"
+              :shadow="true"
+              :border-bottom="false"
+              :expanded-by-default="perusteet.length === 1"
+            >
+              <template #header>
+                <h2
+                  class="header"
+                >
+                  {{ $t('tutkinnot-joilla-tutkinnon-osa-on') }}
+                </h2>
+              </template>
               <hr>
-              <div v-for="(peruste, oidx) in perusteet" :key="oidx" class="nimikkeet">
+              <div
+                v-for="(peruste, oidx) in perusteet"
+                :key="oidx"
+                class="nimikkeet"
+              >
                 <div class="d-flex">
                   <router-link :to="{ name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: peruste.id }}">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
-                  <EpVoimassaolo :voimassaolo="peruste"></EpVoimassaolo>
-                  <span v-if="peruste.diaarinumero" class="ml-1">| {{ $t('diaarinumero') + ': ' + peruste.diaarinumero }}</span>
+                  <EpVoimassaolo :voimassaolo="peruste" />
+                  <span
+                    v-if="peruste.diaarinumero"
+                    class="ml-1"
+                  >| {{ $t('diaarinumero') + ': ' + peruste.diaarinumero }}</span>
                 </div>
               </div>
             </EpCollapse>
           </EpFormContent>
 
-          <EpTutkinnonosaTutke :tutkinnonosa="tutkinnonosa.tutkinnonosa" :arviointiasteikot="arviointiasteikot"/>
+          <EpTutkinnonosaTutke
+            :tutkinnonosa="tutkinnonosa.tutkinnonosa"
+            :arviointiasteikot="arviointiasteikot"
+          />
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Meta } from '@shared/utils/decorators';
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
 import { RawLocation } from 'vue-router';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNormaali.vue';
@@ -52,89 +76,84 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import _ from 'lodash';
+import { $t } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpVoimassaolo,
-    EpFormContent,
-    EpCollapse,
-    EpHeader,
-    EpSpinner,
-    EpTutkinnonosaNormaali,
-    EpTutkinnonosaTutke,
-    EpOpasKiinnitysLinkki,
+const props = defineProps({
+  ammatillinenPerusteHakuStore: {
+    type: Object as () => AmmatillinenPerusteHakuStore,
+    required: true,
   },
-})
-export default class RouteTutkinnonosaTutke extends Vue {
-  @Prop({ required: true })
-  private ammatillinenPerusteHakuStore!: AmmatillinenPerusteHakuStore;
+});
 
-  async mounted() {
-    await this.ammatillinenPerusteHakuStore.updateFilters({ perusteet: false, tutkinnonosat: true, koodi: this.koodi });
-    await this.ammatillinenPerusteHakuStore.fetchArviointiasteikot();
+const route = useRoute();
+
+onMounted(async () => {
+  await props.ammatillinenPerusteHakuStore.updateFilters({ perusteet: false, tutkinnonosat: true, koodi: koodi.value });
+  await props.ammatillinenPerusteHakuStore.fetchArviointiasteikot();
+});
+
+const arviointiasteikot = computed(() => {
+  return props.ammatillinenPerusteHakuStore.arviointiasteikot;
+});
+
+const tutkinnonosa = computed(() => {
+  if (props.ammatillinenPerusteHakuStore.perusteet) {
+    return props.ammatillinenPerusteHakuStore.perusteet[0];
   }
 
-  get arviointiasteikot() {
-    return this.ammatillinenPerusteHakuStore.arviointiasteikot;
+  return undefined;
+});
+
+const perusteet = computed(() => {
+  if (tutkinnonosa.value?.perusteet) {
+    return _.chain(tutkinnonosa.value.perusteet)
+      .map(peruste => ({
+        ...peruste,
+        route: perusteRoute(peruste),
+      }))
+      .value();
   }
 
-  get tutkinnonosa() {
-    if (this.ammatillinenPerusteHakuStore.perusteet) {
-      return this.ammatillinenPerusteHakuStore.perusteet[0];
-    }
-  }
+  return undefined;
+});
 
-  get perusteet() {
-    if (this.tutkinnonosa?.perusteet) {
-      return _.chain(this.tutkinnonosa.perusteet)
-        .map(peruste => ({
-          ...peruste,
-          route: this.perusteRoute(peruste),
-        }))
-        .value();
-    }
-  }
+const laajuus = computed(() => {
+  return tutkinnonosa.value?.laajuus;
+});
 
-  get laajuus() {
-    return this.tutkinnonosa?.laajuus;
-  }
+const perusteRoute = (peruste) => {
+  return {
+    name: 'ammatillinenkooste',
+    params: {
+      perusteId: _.toString(peruste.id),
+    },
+  };
+};
 
-  perusteRoute(peruste) {
-    return {
-      name: 'ammatillinenkooste',
-      params: {
-        perusteId: _.toString(peruste.id),
-      },
-    };
-  }
+const koodi = computed(() => {
+  return route.params.koodi;
+});
 
-  get koodi() {
-    return this.$route.params.koodi;
-  }
+const koulutustyyppi = computed(() => {
+  return 'ammatillinen';
+});
 
-  get koulutustyyppi() {
-    return 'ammatillinen';
-  }
+const murupolku = computed(() => {
+  return [
+    murupolkuAmmatillinenRoot(koulutustyyppi.value),
+    {
+      label: tutkinnonosa.value?.nimi,
+      location: {
+        ...route,
+      } as RawLocation,
+    },
+  ];
+});
 
-  get murupolku() {
-    return [
-      murupolkuAmmatillinenRoot(this.koulutustyyppi),
-      {
-        label: this.tutkinnonosa?.nimi,
-        location: {
-          ...this.$route,
-        } as RawLocation,
-      },
-    ];
-  }
-
-  @Meta
-  getMetaInfo() {
-    return {
-      title: (this as any).$t('yhteinen-tutkinnon-osa'),
-    };
-  }
-}
+// Meta info
+useHead({
+  title: computed(() => $t('yhteinen-tutkinnon-osa')),
+});
 </script>
 
 <style scoped lang="scss">

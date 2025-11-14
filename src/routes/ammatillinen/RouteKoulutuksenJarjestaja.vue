@@ -2,55 +2,99 @@
   <div>
     <ep-spinner v-if="!koulutustoimija" />
     <div v-else>
-      <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
-        <template slot="header">
-          {{ $kaanna(this.koulutustoimija.nimi) }}
+      <ep-header
+        :murupolku="murupolku"
+        :koulutustyyppi="koulutustyyppi"
+      >
+        <template #header>
+          {{ $kaanna(koulutustoimija.nimi) }}
         </template>
       </ep-header>
       <div class="container-md mt-4">
-
-        <div v-if="this.koulutustoimija.kuvaus" class="mb-5">
-          <h2>{{$t('kuvaus')}}</h2>
-          <div v-html="$kaanna(this.koulutustoimija.kuvaus)"></div>
+        <div
+          v-if="koulutustoimija.kuvaus"
+          class="mb-5"
+        >
+          <h2>{{ $t('kuvaus') }}</h2>
+          <div v-html="$kaanna(koulutustoimija.kuvaus)" />
         </div>
 
-        <div v-if="!this.koulutustoimija.organisaatioRyhma" class="mb-5">
-          <h2>{{$t('koulutuksen-jarjestajan-yhteinen-osuus')}}</h2>
+        <div
+          v-if="!koulutustoimija.organisaatioRyhma"
+          class="mb-5"
+        >
+          <h2>{{ $t('koulutuksen-jarjestajan-yhteinen-osuus') }}</h2>
 
           <ep-spinner v-if="!yhteisetOsuudet" />
-          <div v-else-if="yhteisetOsuudet.length === 0">{{$t('koulutuksen-jarjestaja-ei-ole-lisannyt-yhteista-osuutta')}}</div>
+          <div v-else-if="yhteisetOsuudet.length === 0">
+            {{ $t('koulutuksen-jarjestaja-ei-ole-lisannyt-yhteista-osuutta') }}
+          </div>
           <div v-else>
-            <span v-if="yhteisetOsuudet.length === 1">{{$t('koulutuksen-jarjestaja-otsikko-selite-lyhyt')}}</span>
+            <span v-if="yhteisetOsuudet.length === 1">{{ $t('koulutuksen-jarjestaja-otsikko-selite-lyhyt') }}</span>
             <div v-else>
-              <span v-if="naytaOtsikkoKaikki" v-html="$t('koulutuksen-jarjestaja-otsikko-selite')" />
-              <span v-else v-html="$t('koulutuksen-jarjestaja-otsikko-selite-vahemman')" />
+              <span
+                v-if="naytaOtsikkoKaikki"
+                v-html="$t('koulutuksen-jarjestaja-otsikko-selite')"
+              />
+              <span
+                v-else
+                v-html="$t('koulutuksen-jarjestaja-otsikko-selite-vahemman')"
+              />
 
-              <ep-button v-if="naytaOtsikkoKaikki" variant="link" @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki">{{$t('nayta-vahemman')}}</ep-button>
-              <ep-button v-else variant="link" @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki">{{$t('nayta-lisaa')}}</ep-button>
+              <ep-button
+                v-if="naytaOtsikkoKaikki"
+                variant="link"
+                @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki"
+              >
+                {{ $t('nayta-vahemman') }}
+              </ep-button>
+              <ep-button
+                v-else
+                variant="link"
+                @click="naytaOtsikkoKaikki = !naytaOtsikkoKaikki"
+              >
+                {{ $t('nayta-lisaa') }}
+              </ep-button>
             </div>
 
-            <ep-search class="mt-3 mb-3" v-model="query" :placeholder="$t('etsi-yhteista-osuutta')"/>
-            <ep-ammatillinen-row v-for="(yhteinenOsuus, idx) in yhteisetOsuudetPaginated" :key="'yhteinenOsuus' + idx" :route="yhteinenOsuus.route">
-              <div class="nimi">{{ $kaanna(yhteinenOsuus.nimi) }}</div>
+            <ep-search
+              v-model="query"
+              class="mt-3 mb-3"
+              :placeholder="$t('etsi-yhteista-osuutta')"
+            />
+            <ep-ammatillinen-row
+              v-for="(yhteinenOsuus, idx) in yhteisetOsuudetPaginated"
+              :key="'yhteinenOsuus' + idx"
+              :route="yhteinenOsuus.route"
+            >
+              <div class="nimi">
+                {{ $kaanna(yhteinenOsuus.nimi) }}
+              </div>
             </ep-ammatillinen-row>
-            <b-pagination v-model="page"
-                          class="mt-4"
-                          :total-rows="yhteisetOsuudetFiltered.length"
-                          :per-page="perPage"
-                          align="center"
-                          aria-controls="yhteisetosuudet-lista"
-                          :first-text="$t('alkuun')"
-                          prev-text="«"
-                          next-text="»"
-                          :last-text="$t('loppuun')" />
+            <b-pagination
+              v-model="page"
+              class="mt-4"
+              :total-rows="yhteisetOsuudetFiltered.length"
+              :per-page="perPage"
+              align="center"
+              aria-controls="yhteisetosuudet-lista"
+              :first-text="$t('alkuun')"
+              prev-text="«"
+              next-text="»"
+              :last-text="$t('loppuun')"
+            />
           </div>
         </div>
 
-        <h2>{{$t('toteutussuunnitelmat')}}</h2>
+        <h2>{{ $t('toteutussuunnitelmat') }}</h2>
 
         <ep-spinner v-if="!toteutussuunnitelmat" />
         <div v-else>
-          <ep-search class="mb-3" v-model="opsQuery" :placeholder="$t('etsi-toteutussuunnitelmaa')"/>
+          <ep-search
+            v-model="opsQuery"
+            class="mb-3"
+            :placeholder="$t('etsi-toteutussuunnitelmaa')"
+          />
           <div v-if="toteutussuunnitelmat.length === 0 && opsQuery === ''">
             <div class="alert alert-info">
               {{ $t('ei-paikallisia-opetussuunnitelmia') }}
@@ -61,33 +105,39 @@
               {{ $t('ei-hakutuloksia') }}
             </div>
           </div>
-          <div v-else :class="{'disabled-events': !toteutussuunnitelmat}">
-            <div v-for="(ops, idx) in toteutussuunnitelmat" :key="idx">
-
+          <div
+            v-else
+            :class="{'disabled-events': !toteutussuunnitelmat}"
+          >
+            <div
+              v-for="(ops, idx) in toteutussuunnitelmat"
+              :key="idx"
+            >
               <router-link :to="ops.route">
-                <opetussuunnitelma-tile :ops="ops" :query="opsQuery"/>
+                <opetussuunnitelma-tile
+                  :ops="ops"
+                  :query="opsQuery"
+                />
               </router-link>
-
             </div>
-            <EpBPagination v-model="opsPage"
-                           :items-per-page="perPage"
-                           :total="toteutussuunnitelmaTotal"
-                           aria-controls="toteutussuunnitelmat-lista">
-            </EpBPagination>
+            <EpBPagination
+              v-model="opsPage"
+              :items-per-page="perPage"
+              :total="toteutussuunnitelmaTotal"
+              aria-controls="toteutussuunnitelmat-lista"
+            />
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted } from 'vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { KoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
-import { Meta } from '@shared/utils/decorators';
+import { useKoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
@@ -96,134 +146,124 @@ import * as _ from 'lodash';
 import OpetussuunnitelmaTile from '@/routes/kooste/OpetussuunnitelmaTile.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { murupolkuKoulutuksenJarjestaja } from '@/utils/murupolku';
+import { useHead } from '@unhead/vue';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpHeader,
-    EpSpinner,
-    EpButton,
-    EpAmmatillinenRow,
-    EpSearch,
-    OpetussuunnitelmaTile,
-    EpBPagination,
-  },
-})
-export default class RouteKoulutuksenJarjestaja extends Vue {
-  @Prop({ required: true })
-  private koulutuksenJarjestajaStore!: KoulutuksenJarjestajaStore;
+const koulutuksenJarjestajaStore = useKoulutuksenJarjestajaStore(pinia);
 
-  private naytaOtsikkoKaikki = false;
-  private query = '';
-  private page = 1;
+const naytaOtsikkoKaikki = ref(false);
+const query = ref('');
+const page = ref(1);
 
-  private opsQuery = '';
-  private opsPage = 1;
-  private perPage = 5;
+const opsQuery = ref('');
+const opsPage = ref(1);
+const perPage = ref(5);
 
-  get koulutustyyppi() {
-    return 'ammatillinen';
-  }
+onMounted(async () => {
+  await koulutuksenJarjestajaStore.fetch();
+  await doFetch();
+});
 
-  get koulutustoimija() {
-    return this.koulutuksenJarjestajaStore.koulutustoimija.value;
-  }
+const koulutustyyppi = computed(() => {
+  return 'ammatillinen';
+});
 
-  get yhteisetOsuudet() {
-    if (this.koulutuksenJarjestajaStore.yhteisetOsuudet.value) {
-      return _.map(this.koulutuksenJarjestajaStore.yhteisetOsuudet.value, yhteinenOsuus => {
-        return {
-          ...yhteinenOsuus,
-          route: { name: 'toteutussuunnitelma',
-            params: {
-              toteutussuunnitelmaId: _.toString(yhteinenOsuus.id),
-              koulutustyyppi: this.koulutustyyppi,
-            },
-          },
-        };
-      });
-    }
-  }
+const koulutustoimija = computed(() => {
+  return koulutuksenJarjestajaStore.koulutustoimija;
+});
 
-  get toteutussuunnitelmat() {
-    if (this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value) {
-      return _.map(this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value.data, toteutussuunnitelma => {
-        return {
-          ...toteutussuunnitelma,
-          route: {
-            name: 'toteutussuunnitelma',
-            params: { toteutussuunnitelmaId: _.toString(toteutussuunnitelma.id),
-              koulutustyyppi: this.koulutustyyppi,
-            },
-          },
-        };
-      });
-    }
-  }
-
-  get toteutussuunnitelmaTotal() {
-    return this.koulutuksenJarjestajaStore.toteutussuunnitelmat.value?.kokonaismäärä;
-  }
-
-  get yhteisetOsuudetFiltered() {
-    return _.chain(this.yhteisetOsuudet)
-      .filter(ops => Kielet.search(this.query, ops.nimi))
-      .value();
-  }
-
-  get yhteisetOsuudetPaginated() {
-    return _.chain(this.yhteisetOsuudetFiltered)
-      .drop(this.perPage * (this.page - 1))
-      .take(this.perPage)
-      .value();
-  }
-
-  @Watch('opsQuery')
-  async opsQueryChange() {
-    this.opsPage = 1;
-    await this.doFetch();
-  }
-
-  @Watch('opsPage')
-  async pageChange() {
-    await this.doFetch();
-  }
-
-  @Watch('kieli', { immediate: true })
-  async onKieliChange() {
-    await Promise.all([this.doFetch(), this.koulutuksenJarjestajaStore.fetch()]);
-  }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  async doFetch() {
-    await this.koulutuksenJarjestajaStore.fetchToteutussuunnitelmat(this.opsQuery, this.opsPage - 1);
-  }
-
-  get murupolku() {
-    return murupolkuKoulutuksenJarjestaja(this.koulutustyyppi, this.koulutustoimija);
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.koulutustoimija) {
+const yhteisetOsuudet = computed(() => {
+  if (koulutuksenJarjestajaStore.yhteisetOsuudet) {
+    return _.map(koulutuksenJarjestajaStore.yhteisetOsuudet, yhteinenOsuus => {
       return {
-        title: (this as any).$kaanna(this.koulutustoimija.nimi),
+        ...yhteinenOsuus,
+        route: { name: 'toteutussuunnitelma',
+          params: {
+            toteutussuunnitelmaId: _.toString(yhteinenOsuus.id),
+            koulutustyyppi: koulutustyyppi.value,
+          },
+        },
       };
-    }
+    });
   }
-}
+
+  return undefined;
+});
+
+const toteutussuunnitelmat = computed(() => {
+  if (koulutuksenJarjestajaStore.toteutussuunnitelmat) {
+    return _.map(koulutuksenJarjestajaStore.toteutussuunnitelmat.data, toteutussuunnitelma => {
+      return {
+        ...toteutussuunnitelma,
+        route: {
+          name: 'toteutussuunnitelma',
+          params: {
+            toteutussuunnitelmaId: _.toString(toteutussuunnitelma.id),
+            koulutustyyppi: koulutustyyppi.value,
+          },
+        },
+      };
+    });
+  }
+
+  return undefined;
+});
+
+const toteutussuunnitelmaTotal = computed(() => {
+  return koulutuksenJarjestajaStore.toteutussuunnitelmat?.kokonaismäärä;
+});
+
+const yhteisetOsuudetFiltered = computed(() => {
+  return _.chain(yhteisetOsuudet.value)
+    .filter(ops => Kielet.search(query.value, ops.nimi))
+    .value();
+});
+
+const yhteisetOsuudetPaginated = computed(() => {
+  return _.chain(yhteisetOsuudetFiltered.value)
+    .drop(perPage.value * (page.value - 1))
+    .take(perPage.value)
+    .value();
+});
+
+watch(opsQuery, async () => {
+  opsPage.value = 1;
+  await doFetch();
+});
+
+watch(opsPage, async () => {
+  await doFetch();
+});
+
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+watch(kieli, async () => {
+  await Promise.all([doFetch(), koulutuksenJarjestajaStore.fetch()]);
+});
+
+const doFetch = async () => {
+  await koulutuksenJarjestajaStore.fetchToteutussuunnitelmat(opsQuery.value, opsPage.value - 1);
+};
+
+const murupolku = computed(() => {
+  return murupolkuKoulutuksenJarjestaja(koulutustyyppi.value, koulutustoimija.value);
+});
+
+useHead({
+  title: computed(() => koulutustoimija.value ? Kielet.kaanna(koulutustoimija.value.nimi) : ''),
+});
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-::v-deep .ep-button .btn-link, ::v-deep .ep-button .btn-link .teksti {
+:deep(.ep-button .btn-link), :deep(.ep-button .btn-link .teksti) {
   padding-left: 0px !important;
 }
 
-::v-deep .ammatillinen-row .ammatillinen-data {
+:deep(.ammatillinen-row .ammatillinen-data) {
   color: $paletti-blue;
 }
 
@@ -233,5 +273,4 @@ export default class RouteKoulutuksenJarjestaja extends Vue {
   min-height: 80px;
   margin-bottom: 10px;
 }
-
 </style>

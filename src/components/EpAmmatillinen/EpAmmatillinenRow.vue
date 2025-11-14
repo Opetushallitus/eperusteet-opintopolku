@@ -1,24 +1,30 @@
 <template>
-  <div class="d-flex ammatillinen-row tile-background-shadow-selected shadow-tile" >
-    <router-link v-if="route" class="d-block w-100" :to="route">
+  <div class="d-flex ammatillinen-row tile-background-shadow-selected shadow-tile">
+    <router-link
+      v-if="route"
+      class="d-block w-100"
+      :to="route"
+    >
       <div class="ammatillinen-data">
-        <slot/>
+        <slot />
       </div>
     </router-link>
-    <div v-else class="w-100 ammatillinen-data">
-      <slot/>
+    <div
+      v-else
+      class="w-100 ammatillinen-data"
+    >
+      <slot />
     </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-
-@Component
-export default class EpAmmatillinenRow extends Vue {
-  @Prop({ required: true })
-  private route: any;
-}
+<script setup lang="ts">
+const props = defineProps({
+  route: {
+    type: Object,
+    required: true,
+  },
+});
 </script>
 
 <style scoped lang="scss">

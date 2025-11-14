@@ -1,37 +1,26 @@
-import { mount, createLocalVue } from '@vue/test-utils';
+import '@/test/testInit';
+import { mount } from '@vue/test-utils';
 import RouteUutiset from './RouteUutiset.vue';
-import { tiedoteStoreMock } from '@/storeMocks';
-import { mock, mocks, stubs } from '@shared/utils/jestutils';
-import { Kielet } from '@shared/stores/kieli';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
-import { TiedoteStore } from '@/stores/TiedoteStore';
+import { createPinia, setActivePinia } from 'pinia';
+import { globalStubs } from '@shared/utils/__tests__/stubs';
+import { nextTick } from 'vue';
+import { createHead } from '@unhead/vue/client';
 
 describe('RouteUutinen', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  Kielet.install(localVue);
-  localVue.use(new Kaannos());
+
+  beforeEach(() => {
+    setActivePinia(createPinia());
+  });
 
   test('Renders spinners and data', async () => {
-    const julkaistutKoulutustyypitStore = mock(JulkaistutKoulutustyypitStore);
-    const tiedoteStore = mock(TiedoteStore);
-
     const wrapper = mount(RouteUutiset as any, {
-      localVue,
-      propsData: {
-        tiedoteStore,
-        julkaistutKoulutustyypitStore,
-      },
-      stubs: {
-        ...stubs,
-      },
-      mocks: {
-        ...mocks,
+      global: {
+        ...globalStubs,
+        plugins: [createHead()],
       },
     });
 
-    await localVue.nextTick();
+    nextTick();
+    expect(wrapper).toBeTruthy();
   });
 });

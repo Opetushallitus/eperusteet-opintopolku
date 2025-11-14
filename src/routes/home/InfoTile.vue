@@ -1,15 +1,28 @@
 <template>
   <div class="tile">
     <div class="text">
-      <h2 class="mb-2">{{ $t(header) }}</h2>
-      <span v-if="translatedText" v-html="$kaanna(translatedText)"></span>
-      <span v-if="text">{{$t(text)}}</span>
+      <h2 class="mb-2">
+        {{ $t(header) }}
+      </h2>
+      <span
+        v-if="translatedText"
+        v-html="$kaanna(translatedText)"
+      />
+      <span v-if="text">{{ $t(text) }}</span>
       <div class="d-flex mt-4 link">
         <EpMaterialIcon>chevron_right</EpMaterialIcon>
-        <EpLinkki v-if="infoLink" :url="infoLink" icon="launch" iconRight>
+        <EpLinkki
+          v-if="infoLink"
+          :url="infoLink"
+          icon="launch"
+          icon-right
+        >
           <span class="link-text">{{ $t(linkText) }}</span>
         </EpLinkki>
-        <router-link v-if="route" :to="route">
+        <router-link
+          v-if="route"
+          :to="route"
+        >
           <span class="link-text">{{ $t(linkText) }}</span>
         </router-link>
       </div>
@@ -17,38 +30,42 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
+import { $kaanna } from '@shared/utils/globals';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
-@Component({
-  components: {
-    EpLinkki,
+const props = defineProps({
+  header: {
+    type: [String, Object],
+    required: true,
   },
-})
-export default class InfoTile extends Vue {
-  @Prop({ required: true })
-  private header!: any;
+  text: {
+    type: [String, Object],
+    required: false,
+  },
+  translatedText: {
+    type: [String, Object],
+    required: false,
+  },
+  link: {
+    type: [String, Object],
+    required: false,
+  },
+  route: {
+    type: Object,
+    required: false,
+  },
+  linkText: {
+    type: [String, Object],
+    required: true,
+  },
+});
 
-  @Prop({ required: false })
-  private text!: any;
-
-  @Prop({ required: false })
-  private translatedText!: any;
-
-  @Prop({ required: false })
-  private link!: any;
-
-  @Prop({ required: false })
-  private route!: any;
-
-  @Prop({ required: true })
-  private linkText!: any;
-
-  get infoLink() {
-    return this.$kaanna(this.link);
-  }
-}
+const infoLink = computed(() => {
+  return $kaanna(props.link);
+});
 </script>
 
 <style scoped lang="scss">
@@ -91,7 +108,7 @@ export default class InfoTile extends Vue {
   }
 }
 
-::v-deep .icon {
+:deep(.icon) {
   color: white;
 }
 </style>

@@ -26,11 +26,11 @@ export const koosteTiedotteetStore = {
 };
 
 export const koostePaikallinenStore = {
-  'tutkintoonvalmentava': (): any => new YleisetPaikallisetStore(),
-  'kotoutumiskoulutus': (): any => new YleisetPaikallisetStore(),
-  'vapaasivistystyo': (): any => new VapaasivistystyoPaikallisetStore(),
-  'muukoulutus': (): any => new YleisetPaikallisetStore(),
-  'default': (): any => new YleissivistavatPaikallisetStore(),
+  'tutkintoonvalmentava': new YleisetPaikallisetStore(),
+  'kotoutumiskoulutus': new YleisetPaikallisetStore(),
+  'vapaasivistystyo': new VapaasivistystyoPaikallisetStore(),
+  'muukoulutus': new YleisetPaikallisetStore(),
+  'default': new YleissivistavatPaikallisetStore(),
 };
 
 export const koostePaikallinenComponent = {

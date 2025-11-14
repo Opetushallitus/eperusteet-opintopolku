@@ -1,17 +1,29 @@
 <template>
-<div>
-  <router-view />
-</div>
+  <div>
+    <router-view />
+  </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
 import * as _ from 'lodash';
+import { onMounted, getCurrentInstance, computed } from 'vue';
+import { getKaannokset } from '@shared/api/eperusteet';
+import { i18n } from './main';
+import { Kielet } from '@shared/stores/kieli';
+import { ref } from 'vue';
+import { useLoading } from 'vue-loading-overlay';
+import { loadingOptions } from './utils/loading';
 
-@Component
-export default class App extends Vue {
+const $loading = useLoading({
+  ...loadingOptions,
+  opacity: 1,
+});
 
-}
+onMounted(async () => {
+  const loading = $loading.show();
+  Kielet.load(await getKaannokset());
+  loading.hide();
+});
 </script>
 
 <style lang="scss" src="@shared/styles/app.scss"></style>

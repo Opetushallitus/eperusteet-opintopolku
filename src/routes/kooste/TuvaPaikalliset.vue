@@ -1,161 +1,183 @@
 <template>
-<div class="paikalliset">
-  <h2 class="otsikko">{{ $t('paikalliset-toteutussuunnitelmat') }}</h2>
-  <span>{{ $t('voit-hakea-toteutussuunnitelman') }}</span>
-  <ep-search
-    class="my-3"
-    v-model="query.nimi"
-    max-width="true"
-    :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-    :placeholder="$t('')">
-    <template #label>
-      <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa')}}</span>
-    </template>
-  </ep-search>
+  <div class="paikalliset">
+    <h2 class="otsikko">
+      {{ $t('paikalliset-toteutussuunnitelmat') }}
+    </h2>
+    <span>{{ $t('voit-hakea-toteutussuunnitelman') }}</span>
+    <ep-search
+      v-model="query.nimi"
+      class="my-3"
+      max-width="true"
+      :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+      :placeholder="$t('')"
+    >
+      <template #label>
+        <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa') }}</span>
+      </template>
+    </ep-search>
 
-  <div class="opetussuunnitelma-container">
-    <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>
+    <div class="opetussuunnitelma-container">
+      <EpHakutulosmaara
+        :kokonaismaara="total"
+        piilota-nakyva-tulosmaara
+      />
 
-    <ep-spinner v-if="!opetussuunnitelmat" />
-    <div v-else-if="opetussuunnitelmat.length === 0">
-      <div class="alert alert-info">
-        {{ $t('ei-hakutuloksia') }}
+      <ep-spinner v-if="!opetussuunnitelmat" />
+      <div v-else-if="opetussuunnitelmat.length === 0">
+        <div class="alert alert-info">
+          {{ $t('ei-hakutuloksia') }}
+        </div>
       </div>
-    </div>
-    <div v-else id="opetussuunnitelmat-lista">
-      <div v-for="(ops, idx) in opetussuunnitelmatMapped" :key="idx">
-        <router-link :to="ops.route">
-          <opetussuunnitelma-tile :ops="ops" :query="query.nimi"/>
-        </router-link>
+      <div
+        v-else
+        id="opetussuunnitelmat-lista"
+      >
+        <div
+          v-for="(ops, idx) in opetussuunnitelmatMapped"
+          :key="idx"
+        >
+          <router-link :to="ops.route">
+            <opetussuunnitelma-tile
+              :ops="ops"
+              :query="query.nimi"
+            />
+          </router-link>
+        </div>
+        <EpBPagination
+          v-model="page"
+          :items-per-page="perPage"
+          :total="total"
+          aria-controls="opetussuunnitelmat-lista"
+        />
       </div>
-      <EpBPagination v-model="page"
-                     :items-per-page="perPage"
-                     :total="total"
-                     aria-controls="opetussuunnitelmat-lista">
-      </EpBPagination>
     </div>
   </div>
-</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+import { ref, computed, watch, onMounted, getCurrentInstance } from 'vue';
 import { Kielet } from '@shared/stores/kieli';
-import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import { Koulutustyyppi } from '@shared/tyypit';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { useRoute, useRouter } from 'vue-router';
 
-@Component({
-  components: {
-    EpHeader,
-    EpSearch,
-    EpSpinner,
-    OpetussuunnitelmaTile,
-    EpMultiSelect,
-    EpBPagination,
-    EpHakutulosmaara,
+const props = defineProps({
+  paikallinenStore: {
+    type: Object as () => YleisetPaikallisetStore,
+    required: true,
   },
-})
-export default class TuvaPaikalliset extends Vue {
-  @Prop({ required: true })
-  private paikallinenStore!: YleisetPaikallisetStore;
+});
 
-  private perPage = 10;
-  private query = {
-    koulutustyyppi: Koulutustyyppi.tutkintoonvalmentava,
-    nimi: null,
-    sivu: 0,
-    sivukoko: 10,
-    kieli: this.kieli,
+const instance = getCurrentInstance();
+const perPage = ref(10);
+const kieli = computed(() => Kielet.getSisaltoKieli.value);
+const query = ref({
+  koulutustyyppi: Koulutustyyppi.tutkintoonvalmentava,
+  nimi: null as string | null,
+  sivu: 0,
+  sivukoko: 10,
+  kieli: kieli.value,
+});
+const mounted = ref(false);
+
+const route = useRoute();
+const router = useRouter();
+
+onMounted(async () => {
+  if (props.paikallinenStore) {
+    setQueryParams();
+    await fetch();
+  }
+
+  mounted.value = true;
+});
+
+const fetch = async () => {
+  if (_.size(queryNimi.value) === 0 || _.size(queryNimi.value) > 2) {
+    await props.paikallinenStore.fetchQuery(query.value);
+
+    router.replace({
+      query: {
+        ...(query.value.nimi && { haku: query.value.nimi }),
+        sivu: query.value.sivu + 1,
+      },
+    }).catch(() => {});
+  }
+};
+
+const setQueryParams = () => {
+  query.value = {
+    ...query.value,
+    nimi: route?.query?.haku as string || null,
+    sivu: (route?.query?.sivu as number || 1) - 1,
   };
+};
 
-  async mounted() {
-    if (this.paikallinenStore) {
-      await this.fetch();
-    }
-  }
+const queryNimi = computed(() => query.value.nimi);
 
-  async fetch() {
-    if (_.size(this.queryNimi) === 0 || _.size(this.queryNimi) > 2) {
-      await this.paikallinenStore.fetchQuery(this.query);
-    }
-  }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
-  }
-
-  get page() {
-    return this.opetussuunnitelmatPaged?.sivu! + 1;
-  }
-
-  set page(page) {
-    this.query = {
-      ...this.query,
+const page = computed({
+  get: () => (opetussuunnitelmatPaged.value?.sivu ?? 0) + 1,
+  set: (page) => {
+    query.value = {
+      ...query.value,
       sivu: page - 1,
     };
-  }
+  },
+});
 
-  get queryNimi() {
-    return this.query.nimi;
+watch(() => queryNimi.value, () => {
+  if (mounted.value) {
+    query.value.sivu = 0;
   }
+});
 
-  @Watch('queryNimi')
-  nimiChange() {
-    this.query.sivu = 0;
+watch(() => kieli.value, (val) => {
+  query.value = {
+    ...query.value,
+    kieli: val,
+  };
+});
+
+watch(() => query.value, async (newVal, oldVal) => {
+  await fetch();
+  if (oldVal.sivu !== newVal.sivu && instance?.proxy?.$el) {
+    (instance?.proxy?.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
   }
+}, { deep: true });
 
-  @Watch('kieli')
-  kieliChange(val) {
-    this.query = {
-      ...this.query,
-      kieli: val,
-    };
-  }
+const opetussuunnitelmat = computed(() => {
+  return props.paikallinenStore.opetussuunnitelmat.value;
+});
 
-  @Watch('query', { deep: true })
-  async queryChange(oldVal, newVal) {
-    await this.fetch();
-    if (oldVal.sivu !== newVal.sivu) {
-      (this.$el.querySelector('.opetussuunnitelma-container a') as any)?.focus();
-    }
-  }
+const opetussuunnitelmatPaged = computed(() => {
+  return props.paikallinenStore.opetussuunnitelmatPaged.value;
+});
 
-  get total() {
-    return this.opetussuunnitelmatPaged?.kokonaismäärä;
-  }
+const total = computed(() => {
+  return opetussuunnitelmatPaged.value?.kokonaismäärä;
+});
 
-  get opetussuunnitelmat() {
-    return this.paikallinenStore.opetussuunnitelmat.value;
-  }
-
-  get opetussuunnitelmatPaged() {
-    return this.paikallinenStore.opetussuunnitelmatPaged.value;
-  }
-
-  get opetussuunnitelmatMapped() {
-    return _.chain(this.opetussuunnitelmat)
-      .map(ops => ({
-        ...ops,
-        route: {
-          name: 'toteutussuunnitelma',
-          params: {
-            toteutussuunnitelmaId: _.toString(ops.id),
-            koulutustyyppi: 'tutkintoonvalmentava',
-          },
+const opetussuunnitelmatMapped = computed(() => {
+  return _.chain(opetussuunnitelmat.value)
+    .map(ops => ({
+      ...ops,
+      route: {
+        name: 'toteutussuunnitelma',
+        params: {
+          toteutussuunnitelmaId: _.toString(ops.id),
+          koulutustyyppi: 'tutkintoonvalmentava',
         },
-      }))
-      .sortBy(ops => Kielet.sortValue(ops.nimi))
-      .value();
-  }
-}
+      },
+    }))
+    .sortBy(ops => Kielet.sortValue(ops.nimi))
+    .value();
+});
 </script>
 
 <style scoped lang="scss">
@@ -164,7 +186,7 @@ export default class TuvaPaikalliset extends Vue {
 
 .paikalliset {
 
-  ::v-deep .filter {
+  :deep(.filter) {
     max-width: 100%;
   }
 

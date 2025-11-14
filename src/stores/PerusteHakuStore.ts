@@ -1,21 +1,19 @@
-import { Store, Getter, State } from '@shared/stores/store';
+import { ref, computed } from 'vue';
+import { defineStore } from 'pinia';
 import { PerusteDto } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { PerusteQuery, perusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
-import { IPerusteHakuStore } from './IPerusteHakuStore';
-import { Debounced } from '@shared/utils/delay';
 
-@Store
-export class PerusteHakuStore implements IPerusteHakuStore {
-  @State() public perusteet: PerusteDto[] | null = null;
-  @State() public page = 0;
-  @State() public pages = 0;
-  @State() public total = 0;
-  @State() public perPage = 10;
+export const usePerusteHakuStore = defineStore('perusteHaku', () => {
+  // State
+  const perusteet = ref<PerusteDto[] | null>(null);
+  const page = ref(0);
+  const pages = ref(0);
+  const total = ref(0);
+  const perPage = ref(10);
 
-  @State()
-  public filterdata: PerusteQuery = {
+  const filterdata = ref<PerusteQuery>({
     nimi: '',
     koulutustyyppi: [
       'koulutustyyppi_1',
@@ -31,17 +29,11 @@ export class PerusteHakuStore implements IPerusteHakuStore {
     tutkintonimikkeet: true,
     tutkinnonosat: true,
     osaamisalat: true,
-  };
+  });
 
-  constructor(data: PerusteQuery = {}) {
-    this.filterdata = {
-      ...this.filterdata,
-      ...data,
-    };
-  }
-
-  @Getter((state) => {
-    if (state.filterdata.perusteTyyppi === 'opas') {
+  // Getters
+  const toggles = computed(() => {
+    if (filterdata.value.perusteTyyppi === 'opas') {
       return [
         'tuleva',
         'voimassaolo',
@@ -55,33 +47,58 @@ export class PerusteHakuStore implements IPerusteHakuStore {
         'poistunut',
       ];
     }
-  })
-  public readonly toggles!: string[];
+  });
 
-  @Getter((state) => ({
-    ...state.filterdata,
-    sivu: state.page,
-    sivukoko: state.perPage,
+  const filters = computed(() => ({
+    ...filterdata.value,
+    sivu: page.value,
+    sivukoko: perPage.value,
     kieli: Kielet.getSisaltoKieli.value,
-  }))
-  public readonly filters!: PerusteQuery;
+  }));
 
-  @Debounced(1000)
-  async fetch() {
-    this.perusteet = null;
-    const result = await perusteetQuery(this.filters);
-    this.total = result['kokonaismäärä'];
-    this.page = result.sivu;
-    this.perPage = result.sivukoko;
-    this.pages = result.sivuja;
-    this.perusteet = result.data;
-  }
+  // Actions
+  const fetch = _.debounce(async () => {
+    perusteet.value = null;
+    const result = await perusteetQuery(filters.value);
+    total.value = result['kokonaismäärä'];
+    page.value = result.sivu;
+    perPage.value = result.sivukoko;
+    pages.value = result.sivuja;
+    perusteet.value = result.data;
+  }, 1000);
 
-  async updateFilters(filters: PerusteQuery) {
-    this.filterdata = {
-      ...this.filters,
-      ...filters,
+  const updateFilters = async (newFilters: PerusteQuery) => {
+    filterdata.value = {
+      ...filters.value,
+      ...newFilters,
     };
-    await this.fetch();
-  }
-}
+    await fetch();
+  };
+
+  // Initialize with provided data if needed
+  const init = (data: PerusteQuery = {}) => {
+    filterdata.value = {
+      ...filterdata.value,
+      ...data,
+    };
+  };
+
+  return {
+    // State
+    perusteet,
+    page,
+    pages,
+    total,
+    perPage,
+    filterdata,
+
+    // Getters
+    toggles,
+    filters,
+
+    // Actions
+    fetch,
+    updateFilters,
+    init,
+  };
+});

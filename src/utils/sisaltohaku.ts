@@ -5,7 +5,7 @@ import { osaToLocation } from '@shared/utils/NavigationBuilder';
 export interface Tulos {
   [key: string]: Tulos | any;
   osanTyyppi?: string;
-};
+}
 
 export type Haettava = Tulos[] | Tulos;
 

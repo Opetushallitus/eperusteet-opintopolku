@@ -1,58 +1,74 @@
 <template>
   <div v-if="kooditPerusteilla && kooditPerusteilla.length > 0">
     <div class="d-flex">
-
       <slot name="header" />
 
       <template v-if="perusteelliset.length > 0">
-        <a href="javascript:;" :id="popovertarget" class="peruste-popover ml-3">
-          {{$t('nayta-perusteet')}}
+        <a
+          :id="popovertarget"
+          href="javascript:;"
+          class="peruste-popover ml-3"
+        >
+          {{ $t('nayta-perusteet') }}
         </a>
-        <b-popover :target="popovertarget" :placement="'right'" triggers="hover">
+        <b-popover
+          :target="popovertarget"
+          :placement="'right'"
+          triggers="hover"
+        >
           <div class="p-1">
             <slot name="popover-header" />
-            <div v-for="koodi in perusteelliset" :key="koodi.uri" class="mt-4 koodi">
-              <h4>{{$kaanna(koodi.nimi)}}</h4>
-              <div v-for="peruste in koodi.perusteet" :key="koodi.uri+peruste.id" class="peruste p-2">
-                <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id, koulutustyyppi: 'ammatillinen' } }">{{$kaanna(peruste.nimi)}}</router-link>
+            <div
+              v-for="koodi in perusteelliset"
+              :key="koodi.uri"
+              class="mt-4 koodi"
+            >
+              <h4>{{ $kaanna(koodi.nimi) }}</h4>
+              <div
+                v-for="peruste in koodi.perusteet"
+                :key="koodi.uri+peruste.id"
+                class="peruste p-2"
+              >
+                <router-link :to="{ name: 'peruste', params: { perusteId: peruste.id, koulutustyyppi: 'ammatillinen' } }">
+                  {{ $kaanna(peruste.nimi) }}
+                </router-link>
               </div>
             </div>
           </div>
         </b-popover>
       </template>
     </div>
-    <span v-for="(koodi,index) in kooditPerusteilla" :key="'koodi'+koodi.uri">
+    <span
+      v-for="(koodi,index) in kooditPerusteilla"
+      :key="'koodi'+koodi.uri"
+    >
       <span v-if="index > 0">, </span>
-      <span>{{$kaanna(koodi.nimi)}}</span>
+      <span>{{ $kaanna(koodi.nimi) }}</span>
     </span>
-
   </div>
 </template>
 
-<script lang="ts">
-import { Prop, Component, Vue } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { KoodiPerusteella } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { KoodiDto } from '@shared/api/eperusteet';
+import { $kaanna } from '@shared/utils/globals';
 import _ from 'lodash';
 
-@Component({
-  components: {
-    EpSpinner,
+const props = defineProps({
+  kooditPerusteilla: {
+    type: Array as () => KoodiPerusteella[],
+    required: true,
   },
-})
-export default class UutisenKoodit extends Vue {
-  @Prop({ required: true })
-  private kooditPerusteilla!: KoodiPerusteella[];
+});
 
-  get popovertarget() {
-    return this.kooditPerusteilla[0].uri;
-  }
+const popovertarget = computed(() => {
+  return props.kooditPerusteilla[0].uri;
+});
 
-  get perusteelliset() {
-    return _.filter(this.kooditPerusteilla, koodi => !_.isEmpty(koodi.perusteet));
-  }
-}
+const perusteelliset = computed(() => {
+  return _.filter(props.kooditPerusteilla, koodi => !_.isEmpty(koodi.perusteet));
+});
 </script>
 
 <style scoped lang="scss">
@@ -70,5 +86,4 @@ export default class UutisenKoodit extends Vue {
     background-color: $table-odd-row-bg-color;
   }
 }
-
 </style>

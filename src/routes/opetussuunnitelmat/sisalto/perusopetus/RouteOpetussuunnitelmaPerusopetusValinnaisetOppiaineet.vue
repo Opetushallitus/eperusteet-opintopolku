@@ -1,61 +1,59 @@
 <template>
-  <div>
-  </div>
+  <div />
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { computed, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { NavigationNodeDtoTypeEnum } from '@shared/api/ylops';
 
-@Component
-export default class RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  mounted() {
-    if (this.opetussuunnitelmaDataStore.navigation) {
-      if (this.vlkId) {
-        const oppiaineetNavi = _.head(_.filter(this.opetussuunnitelmaDataStore.flattenedSidenav, navi => {
-          return _.get(navi.meta as any, 'vlkId') === this.vlkId && navi.type === NavigationNodeDtoTypeEnum.Valinnaisetoppiaineet;
-        }));
+const route = useRoute();
+const router = useRouter();
 
-        if (oppiaineetNavi) {
-          const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
+const vlkId = computed(() => {
+  return route.params.vlkId;
+});
 
-          this.$router.push({
-            name: 'opetussuunnitelmaperusopetusvuosiluokanoppiaine',
-            params: {
-              oppiaineId: _.toString(oppiaineId),
-              vlkId: this.vlkId,
-            },
-          });
-        }
+onMounted(() => {
+  if (opetussuunnitelmaDataStore.navigation) {
+    if (vlkId.value) {
+      const oppiaineetNavi = _.head(_.filter(opetussuunnitelmaDataStore.flattenedSidenav, navi => {
+        return _.get(navi.meta as any, 'vlkId') === vlkId.value && navi.type === NavigationNodeDtoTypeEnum.Valinnaisetoppiaineet;
+      }));
+
+      if (oppiaineetNavi) {
+        const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
+
+        router.push({
+          name: 'opetussuunnitelmaperusopetusvuosiluokanoppiaine',
+          params: {
+            oppiaineId: _.toString(oppiaineId),
+            vlkId: vlkId.value,
+          },
+        });
       }
-      else {
-        const oppiaineetNavi = _.head(_.filter(this.opetussuunnitelmaDataStore.flattenedSidenav, navi => {
-          return _.get(navi.meta as any, 'vlkId') == null && navi.type === NavigationNodeDtoTypeEnum.Valinnaisetoppiaineet;
-        }));
-        if (oppiaineetNavi) {
-          const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
+    }
+    else {
+      const oppiaineetNavi = _.head(_.filter(opetussuunnitelmaDataStore.flattenedSidenav, navi => {
+        return _.get(navi.meta as any, 'vlkId') == null && navi.type === NavigationNodeDtoTypeEnum.Valinnaisetoppiaineet;
+      }));
+      if (oppiaineetNavi) {
+        const oppiaineId = _.get(_.head(oppiaineetNavi.children), 'id');
 
-          this.$router.push({
-            name: 'opetussuunnitelmaperusopetusoppiaine',
-            params: {
-              oppiaineId: _.toString(oppiaineId),
-            },
-          });
-        }
+        router.push({
+          name: 'opetussuunnitelmaperusopetusoppiaine',
+          params: {
+            oppiaineId: _.toString(oppiaineId),
+          },
+        });
       }
     }
   }
-
-  get vlkId() {
-    return this.$route.params.vlkId;
-  }
-}
-
+});
 </script>
 
 <style scoped lang="scss">

@@ -2,75 +2,83 @@
   <div>
     <b-row>
       <b-col>
-        <h3 class="mb-4">{{ $t('kansalliset-perustaitojen-osaamismerkit') }}</h3>
+        <h3 class="mb-4">
+          {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
+        </h3>
       </b-col>
     </b-row>
     <b-row v-if="sisaltoviite.osaamismerkkiKappale.kuvaus">
       <b-col>
-        <h4 class="mb-4">{{ $t('osaamismerkkien-suorittaminen') }}</h4>
-        <ep-content-viewer :value="$kaanna(sisaltoviite.osaamismerkkiKappale.kuvaus)" :kuvat="kuvat" class="mb-5"/>
+        <h4 class="mb-4">
+          {{ $t('osaamismerkkien-suorittaminen') }}
+        </h4>
+        <ep-content-viewer
+          :value="$kaanna(sisaltoviite.osaamismerkkiKappale.kuvaus)"
+          :kuvat="kuvat"
+          class="mb-5"
+        />
       </b-col>
     </b-row>
     <b-row v-if="osaamisMerkkiKoodit.length > 0">
       <b-col>
-        <EpOsaamismerkit :osaamismerkit="osaamismerkit"
-                         :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
-                         hide-kuvaus></EpOsaamismerkit>
+        <EpOsaamismerkit
+          :osaamismerkit="osaamismerkit"
+          :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
+          hide-kuvaus
+        />
       </b-col>
     </b-row>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { ref, computed, onMounted } from 'vue';
 import { SisaltoViiteExportDto } from '@shared/api/amosaa';
 import EpOsaamismerkit from '@/routes/osaamismerkit/EpOsaamismerkit.vue';
-import { OsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpContentViewer,
-    EpOsaamismerkit,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => SisaltoViiteExportDto,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaOsaamismerkki extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: SisaltoViiteExportDto;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const osaamismerkitStore = useOsaamismerkitStore(pinia);
 
-  private osaamismerkitStore = new OsaamismerkitStore();
+const osaamisMerkkiKoodit = computed(() => {
+  return _.map(props.sisaltoviite.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
+});
 
-  async mounted() {
-    if (this.osaamisMerkkiKoodit.length > 0) {
-      await this.osaamismerkitStore.updateOsaamismerkkiQuery({ koodit: this.osaamisMerkkiKoodit, poistunut: true });
-      await this.osaamismerkitStore.fetchKategoriat({ poistunut: true });
-    }
+const osaamismerkit = computed(() => {
+  return osaamismerkitStore.osaamismerkit;
+});
+
+const osaamismerkkiKategoriat = computed(() => {
+  return _.chain(osaamismerkitStore.kategoriat)
+    .uniqWith(_.isEqual)
+    .sortBy(kategoria => kategoria.nimi)
+    .filter(kategoria => !!kategoria.nimi)
+    .value();
+});
+
+const osaamismerkkiKappale = computed(() => {
+  return props.sisaltoviite.osaamismerkkiKappale;
+});
+
+onMounted(async () => {
+  if (osaamisMerkkiKoodit.value.length > 0) {
+    await osaamismerkitStore.updateOsaamismerkitQuery({ koodit: osaamisMerkkiKoodit.value, poistunut: true });
+    await osaamismerkitStore.fetchKategoriat({ poistunut: true });
   }
-
-  get osaamisMerkkiKoodit() {
-    return _.map(this.sisaltoviite.osaamismerkkiKappale?.osaamismerkkiKoodit, koodi => _.toNumber(koodi.koodi));
-  }
-
-  get osaamismerkit() {
-    return this.osaamismerkitStore.osaamismerkit.value;
-  }
-
-  get osaamismerkkiKategoriat() {
-    return _.chain(this.osaamismerkitStore.kategoriat.value)
-      .uniqWith(_.isEqual)
-      .sortBy(kategoria => this.$kaanna(kategoria.nimi))
-      .filter(kategoria => !!this.$kaanna(kategoria.nimi))
-      .value();
-  }
-
-  get osaamismerkkiKappale() {
-    return this.sisaltoviite.osaamismerkkiKappale;
-  }
-}
+});
 </script>
 
 <style scoped lang="scss">

@@ -2,183 +2,210 @@
   <div class="content">
     <EpSpinner v-if="!oppiaine" />
     <template v-else>
-      <h2>{{$kaanna(oppiaine.nimi)}}</h2>
+      <h2>{{ $kaanna(oppiaine.nimi) }}</h2>
 
       <template v-if="perusteOppiaine">
         <ep-peruste-content
-          :naytaSisaltoTyhjana="false"
-          :perusteObject="perusteOppiaine.tehtava"
-          :pohjaObject="pohjanOppiaine.tehtava"
+          :nayta-sisalto-tyhjana="false"
+          :peruste-object="perusteOppiaine.tehtava"
+          :pohja-object="pohjanOppiaine.tehtava"
           :object="oppiaine.tehtava"
           :kuvat="kuvat"
-          :termit="termit"/>
+          :termit="termit"
+        />
 
         <template v-if="perusteOppiaineVapaatTekstit">
-          <div v-for="(vapaaTeksti, index) in perusteOppiaineVapaatTekstit" :key="'vapaateksti'+index" class="mt-5">
-            <h4>{{$kaanna(vapaaTeksti.nimi)}}</h4>
-            <ep-content-viewer :value="$kaanna(vapaaTeksti.teksti)" :kuvat="kuvat" :termit="termit"/>
+          <div
+            v-for="(vapaaTeksti, index) in perusteOppiaineVapaatTekstit"
+            :key="'vapaateksti'+index"
+            class="mt-5"
+          >
+            <h4>{{ $kaanna(vapaaTeksti.nimi) }}</h4>
+            <ep-content-viewer
+              :value="$kaanna(vapaaTeksti.teksti)"
+              :kuvat="kuvat"
+              :termit="termit"
+            />
 
-            <EpPaikallinenTarkennus headerh4 v-if="vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus">
-              <ep-content-viewer :value="$kaanna(vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus)" :kuvat="kuvat" :termit="termit"/>
+            <EpPaikallinenTarkennus
+              v-if="vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus"
+              headerh4
+            >
+              <ep-content-viewer
+                :value="$kaanna(vapaaTeksti.oppiaineVapaaTeksti.paikallinenTarkennus)"
+                :kuvat="kuvat"
+                :termit="termit"
+              />
             </EpPaikallinenTarkennus>
           </div>
         </template>
       </template>
 
-      <b-tabs class="ml-0 pl-0 mt-4" v-if="!vlkId">
-        <b-tab class="mt-4" v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudetSorted" :key="'vlk'+index" :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)">
-          <oppiaineen-vuosiluokkakokonaisuus :tietue="opVlk" :kuvat="kuvat" :termit="termit"/>
+      <b-tabs
+        v-if="!vlkId"
+        class="ml-0 pl-0 mt-4"
+      >
+        <b-tab
+          v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudetSorted"
+          :key="'vlk'+index"
+          class="mt-4"
+          :title="$kaanna(opVlk.vuosiluokkakokonaisuus.nimi)"
+        >
+          <oppiaineen-vuosiluokkakokonaisuus
+            :tietue="opVlk"
+            :kuvat="kuvat"
+            :termit="termit"
+          />
         </b-tab>
       </b-tabs>
 
-      <oppiaineen-vuosiluokkakokonaisuus v-else :tietue="oppiaineenVuosiluokkakokonaisuus" :kuvat="kuvat" :termit="termit"/>
+      <oppiaineen-vuosiluokkakokonaisuus
+        v-else
+        :tietue="oppiaineenVuosiluokkakokonaisuus"
+        :kuvat="kuvat"
+        :termit="termit"
+      />
     </template>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Vue, Component, Prop } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteContent.vue';
 import OppiaineenVuosiluokkakokonaisuus from './OppiaineenVuosiluokkakokonaisuus.vue';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { UnwrappedOpsOppiaineDtoTyyppiEnum } from '@shared/api/ylops';
 import { Kielet } from '@shared/stores/kieli';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpAlert from '@shared/components/EpAlert/EpAlert.vue';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { oppiaineenVuosiluokkakokonaisuudenRakennin } from './vuosiluokka';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpPerusteContent,
-    OppiaineenVuosiluokkakokonaisuus,
-    EpContentViewer,
-    EpAlert,
-  },
-} as any)
-export default class RouteOpetussuunnitelmaPerusopetusOppiaine extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
+const route = useRoute();
 
-  get termit() {
-    return this.opetussuunnitelmaDataStore.kaikkiTermit;
-  }
+const kuvat = computed(() => {
+  return opetussuunnitelmaDataStore.kuvat;
+});
 
-  get vlkId() {
-    return this.$route.params.vlkId;
-  }
+const termit = computed(() => {
+  return opetussuunnitelmaDataStore.kaikkiTermit;
+});
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
+const vlkId = computed(() => {
+  return route.params.vlkId;
+});
 
-  get oppiaine() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.oppiaineId });
-  }
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
 
-  get pohjanOppiaine() {
-    return this.oppiaine.pohjanOppiaine ?? {};
-  }
+const oppiaine = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: oppiaineId.value });
+});
 
-  get perusteOppiaine() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: this.oppiaine.tunniste });
-  }
+const pohjanOppiaine = computed(() => {
+  return oppiaine.value?.pohjanOppiaine ?? {};
+});
 
-  get oppiaineenVuosiluokkakokonaisuudetSorted() {
-    return _.chain(this.oppiaineenVuosiluokkakokonaisuudet)
-      .map(ovlk => {
-        return {
-          ...ovlk,
-          oppiaineenPohjanVuosiluokkakokonaisuus: _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, opvlk => opvlk._vuosiluokkakokonaisuus === ovlk.vuosiluokkakokonaisuus._tunniste),
-        };
-      })
-      .sortBy(ovlk => this.$kaanna(ovlk.vuosiluokkakokonaisuus.nimi))
-      .value();
-  }
+const perusteOppiaine = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ tunniste: oppiaine.value?.tunniste });
+});
 
-  get oppiaineenVuosiluokkakokonaisuus() {
-    return _.chain(this.oppiaineenVuosiluokkakokonaisuudet)
-      .map(ovlk => {
-        return {
-          ...ovlk,
-          oppiaineenPohjanVuosiluokkakokonaisuus: _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, opvlk => opvlk._vuosiluokkakokonaisuus === ovlk.vuosiluokkakokonaisuus._tunniste),
-        };
-      })
-      .find(ovlk => _.toNumber(ovlk.vuosiluokkakokonaisuus.id) === _.toNumber(this.vlkId))
-      .value();
-  }
+const opetussuunnitelmanVuosiluokkakokonaisuudet = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet');
+});
 
-  get opetussuunnitelmanVuosiluokkakokonaisuudet() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto('vuosiluokkakokonaisuudet');
-  }
+const perusteenVuosiluokkakokonaisuudet = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.vuosiluokkakokonaisuudet');
+});
 
-  get perusteenVuosiluokkakokonaisuudet() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.vuosiluokkakokonaisuudet');
-  }
+const perusteOppiaineVuosiluokkakokonaisuudet = computed(() => {
+  return _.map(perusteOppiaine.value?.vuosiluokkakokonaisuudet, ovlk => {
+    return {
+      ...ovlk,
+      tunniste: _.get(_.find(perusteenVuosiluokkakokonaisuudet.value, pvlk => _.toString(pvlk.id) === _.get(ovlk, '_vuosiluokkaKokonaisuus')), 'tunniste'),
+    };
+  });
+});
 
-  get perusteOppiaineVuosiluokkakokonaisuudet() {
-    return _.map(this.perusteOppiaine.vuosiluokkakokonaisuudet, ovlk => {
+const perusteOppiaineVapaatTekstit = computed(() => {
+  return _.map(perusteOppiaine.value?.vapaatTekstit, povt => {
+    return {
+      ...povt,
+      oppiaineVapaaTeksti: _.find(oppiaine.value?.vapaatTekstit, ovt => _.toString(povt.id) === _.toString(ovt.perusteenVapaaTekstiId)) || {},
+    };
+  });
+});
+
+const oppiaineenPohjanVuosiluokkakokonaisuudet = computed(() => {
+  return oppiaine.value?.pohjanOppiaine?.vuosiluokkakokonaisuudet;
+});
+
+const laajaalaisetOsaamiset = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset');
+});
+
+const oppiaineenVuosiluokkakokonaisuudet = computed(() => {
+  const oppiaineenVlk = _.filter(oppiaine.value?.vuosiluokkakokonaisuudet, vlk =>
+    _.includes(_.map(opetussuunnitelmanVuosiluokkakokonaisuudet.value, 'vuosiluokkakokonaisuus._tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')));
+
+  return _.map(oppiaineenVlk, (oppiaineenVuosiluokkakokonaisuus) => {
+    const opetussuunnitelmanVuosiluokkakokonaisuus = _.get(_.find(opetussuunnitelmanVuosiluokkakokonaisuudet.value, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')), 'vuosiluokkakokonaisuus');
+    const perusteenVuosiluokkakokonaisuus = _.find(perusteenVuosiluokkakokonaisuudet.value, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
+
+    if (oppiaine.value?.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
+      const perusteenOppiaineenVlk = _.find(perusteOppiaineVuosiluokkakokonaisuudet.value, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
+      const oppiaineenPohjanVuosiluokkakokonaisuus = _.find(oppiaineenPohjanVuosiluokkakokonaisuudet.value, ovlk => _.get(ovlk, '_vuosiluokkakokonaisuus') === _.get(opetussuunnitelmanVuosiluokkakokonaisuus, '_tunniste'));
+
+      return oppiaineenVuosiluokkakokonaisuudenRakennin(
+        oppiaine.value,
+        perusteOppiaine.value,
+        laajaalaisetOsaamiset.value,
+        oppiaineenVuosiluokkakokonaisuus,
+        opetussuunnitelmanVuosiluokkakokonaisuus,
+        perusteenOppiaineenVlk,
+        oppiaineenPohjanVuosiluokkakokonaisuus,
+        perusteenVuosiluokkakokonaisuus,
+      );
+    }
+    else {
+      return {
+        vuosiluokkakokonaisuus: opetussuunnitelmanVuosiluokkakokonaisuus,
+        oppiaineenVuosiluokkakokonaisuus,
+        oppiaine: oppiaine.value,
+      };
+    }
+  });
+});
+
+const oppiaineenVuosiluokkakokonaisuudetSorted = computed(() => {
+  return _.chain(oppiaineenVuosiluokkakokonaisuudet.value)
+    .map(ovlk => {
       return {
         ...ovlk,
-        tunniste: _.get(_.find(this.perusteenVuosiluokkakokonaisuudet, pvlk => _.toString(pvlk.id) === _.get(ovlk, '_vuosiluokkaKokonaisuus')), 'tunniste'),
+        oppiaineenPohjanVuosiluokkakokonaisuus: _.find(oppiaineenPohjanVuosiluokkakokonaisuudet.value, opvlk => opvlk._vuosiluokkakokonaisuus === ovlk.vuosiluokkakokonaisuus._tunniste),
       };
-    });
-  }
+    })
+    .sortBy(ovlk => $kaanna(ovlk.vuosiluokkakokonaisuus.nimi))
+    .value();
+});
 
-  get perusteOppiaineVapaatTekstit() {
-    return _.map(this.perusteOppiaine.vapaatTekstit, povt => {
+const oppiaineenVuosiluokkakokonaisuus = computed(() => {
+  return _.chain(oppiaineenVuosiluokkakokonaisuudet.value)
+    .map(ovlk => {
       return {
-        ...povt,
-        oppiaineVapaaTeksti: _.find(this.oppiaine.vapaatTekstit, ovt => _.toString(povt.id) === _.toString(ovt.perusteenVapaaTekstiId)) || {},
+        ...ovlk,
+        oppiaineenPohjanVuosiluokkakokonaisuus: _.find(oppiaineenPohjanVuosiluokkakokonaisuudet.value, opvlk => opvlk._vuosiluokkakokonaisuus === ovlk.vuosiluokkakokonaisuus._tunniste),
       };
-    });
-  }
-
-  get oppiaineenPohjanVuosiluokkakokonaisuudet() {
-    return this.oppiaine.pohjanOppiaine?.vuosiluokkakokonaisuudet;
-  }
-
-  get laajaalaisetOsaamiset() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('perusopetus.laajaalaisetosaamiset');
-  }
-
-  get oppiaineenVuosiluokkakokonaisuudet() {
-    const oppiaineenVlk = _.filter(this.oppiaine.vuosiluokkakokonaisuudet, vlk =>
-      _.includes(_.map(this.opetussuunnitelmanVuosiluokkakokonaisuudet, 'vuosiluokkakokonaisuus._tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')));
-
-    return _.map(oppiaineenVlk, (oppiaineenVuosiluokkakokonaisuus) => {
-      const opetussuunnitelmanVuosiluokkakokonaisuus = _.get(_.find(this.opetussuunnitelmanVuosiluokkakokonaisuudet, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')), 'vuosiluokkakokonaisuus');
-      const perusteenVuosiluokkakokonaisuus = _.find(this.perusteenVuosiluokkakokonaisuudet, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
-
-      if (this.oppiaine.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {
-        const perusteenOppiaineenVlk = _.find(this.perusteOppiaineVuosiluokkakokonaisuudet, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
-        const oppiaineenPohjanVuosiluokkakokonaisuus = _.find(this.oppiaineenPohjanVuosiluokkakokonaisuudet, ovlk => _.get(ovlk, '_vuosiluokkakokonaisuus') === _.get(opetussuunnitelmanVuosiluokkakokonaisuus, '_tunniste'));
-
-        return oppiaineenVuosiluokkakokonaisuudenRakennin(
-          this.oppiaine,
-          this.perusteOppiaine,
-          this.laajaalaisetOsaamiset,
-          oppiaineenVuosiluokkakokonaisuus,
-          opetussuunnitelmanVuosiluokkakokonaisuus,
-          perusteenOppiaineenVlk,
-          oppiaineenPohjanVuosiluokkakokonaisuus,
-          perusteenVuosiluokkakokonaisuus,
-        );
-      }
-      else {
-        return {
-          vuosiluokkakokonaisuus: opetussuunnitelmanVuosiluokkakokonaisuus,
-          oppiaineenVuosiluokkakokonaisuus,
-          oppiaine: this.oppiaine,
-        };
-      }
-    });
-  }
-}
+    })
+    .find(ovlk => _.toNumber(ovlk.vuosiluokkakokonaisuus.id) === _.toNumber(vlkId.value))
+    .value();
+});
 </script>
 
 <style scoped lang="scss">

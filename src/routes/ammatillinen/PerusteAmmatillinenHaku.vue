@@ -1,111 +1,152 @@
 <template>
-<div class="haku">
-  <div class="search">
-
-    <div v-if="tyyppi === 'peruste'">
-      <div class="placeholderText">
-        <span class="pr-1">{{searchPlaceholder}}</span>
-        <span class="pr-1">{{$t('voit-hakea-tutkinnon-osia')}}</span>
-        <EpSpinner v-if="!valmisteillaOlevat" small/>
-        <span v-else-if="valmisteillaOlevat.data.length > 0">{{$t('katso-myos')}}
-          <router-link class="w-100" :to="{name: 'ammatillinenValmisteillaOlevat'}">
-            {{$t('valmisteilla-olevien-perusteiden-julkaisuaikataulu')}}
-          </router-link>
-        </span>
-      </div>
-
-      <div class="d-flex flex-lg-row flex-column" :class="{'disabled-events': !perusteetJaTutkinnonosat}">
-        <EpSearch
-          class="flex-fill ml-0 mt-3 mb-3 mr-3"
-          v-model="query"
-          :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
-          :placeholder="$t('')">
-          <template #label>
-            <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa')}}</span>
-          </template>
-        </EpSearch>
-        <EpMultiSelect
-          class="multiselect ml-0 mt-3 mb-3"
-          v-model="tutkintotyyppi"
-          :enable-empty-option="true"
-          :placeholder="$t('kaikki')"
-          :is-editing="true"
-          :options="tutkintotyypit"
-          :searchable="false">
-
-          <template #label>
-            <span class="font-weight-600">{{ $t('tutkintotyyppi')}}</span>
-          </template>
-
-          <template slot="singleLabel" slot-scope="{ option }">
-            {{ $t(option) }}
-          </template>
-
-          <template slot="option" slot-scope="{ option }">
-            {{ $t(option) }}
-          </template>
-        </EpMultiSelect>
-      </div>
-    </div>
-
-    <div v-else class="mb-3">
-      <EpSearch
-        v-model="query"
-        :class="{'disabled-events': !perusteetJaTutkinnonosat}"/>
-    </div>
-    <EpSisaltotyyppiFilter v-if="tyyppi === 'peruste'" v-model="toggleQuery"></EpSisaltotyyppiFilter>
-  </div>
-
-  <EpHakutulosmaara :kokonaismaara="total" piilotaNakyvaTulosmaara/>
-
-  <div v-if="!perusteetJaTutkinnonosat">
-    <EpSpinner />
-  </div>
-
-  <div v-else class="content">
-    <div class="perusteet" id="perusteet-lista">
-      <EpAmmatillinenRow v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
-                           :key="idx"
-                           :route="sisalto.route"
-                           :class="sisalto.voimassaoloTieto[0].tyyppi">
-        <div class="list-item-header">
-          <div class="nimi">
-            {{ $kaanna(sisalto.nimi) }}
-            <div class="d-inline-flex">
-              <span v-if="sisalto.laajuus">{{sisalto.laajuus}} {{$t('osaamispiste')}}</span>
-            </div>
-            <span v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" class="koodi">({{ sisalto.tutkinnonosa.koodiArvo }})</span>
-          </div>
-          <div v-if="sisalto.tutkintotag">
-            <span class="tutkinto w-40" :class="sisalto.sisaltotyyppi">{{ $t(sisalto.tutkintotag)}}</span>
-          </div>
+  <div class="haku">
+    <div class="search">
+      <div v-if="tyyppi === 'peruste'">
+        <div class="placeholderText">
+          <span class="pr-1">{{ searchPlaceholder }}</span>
+          <span class="pr-1">{{ $t('voit-hakea-tutkinnon-osia') }}</span>
+          <EpSpinner
+            v-if="!valmisteillaOlevat"
+            small
+          />
+          <span v-else-if="valmisteillaOlevat.data.length > 0">{{ $t('katso-myos') }}
+            <router-link
+              class="w-100"
+              :to="{name: 'ammatillinenValmisteillaOlevat'}"
+            >
+              {{ $t('valmisteilla-olevien-perusteiden-julkaisuaikataulu') }}
+            </router-link>
+          </span>
         </div>
-        <EpAmmatillinenTutkinnonosaItem v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'" :sisalto="sisalto"></EpAmmatillinenTutkinnonosaItem>
-        <EpAmmatillinenPerusteItem v-else :sisalto="sisalto"></EpAmmatillinenPerusteItem>
-      </EpAmmatillinenRow>
 
+        <div
+          class="d-flex flex-lg-row flex-column"
+          :class="{'disabled-events': !perusteetJaTutkinnonosat}"
+        >
+          <EpSearch
+            v-model="filters.nimiTaiKoodi"
+            class="flex-fill ml-0 mt-3 mb-3 mr-3"
+            :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
+            :placeholder="$t('')"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa') }}</span>
+            </template>
+          </EpSearch>
+          <EpMultiSelect
+            v-model="filters.tutkintotyyppi"
+            class="multiselect ml-0 mt-3 mb-3"
+            :enable-empty-option="true"
+            :placeholder="$t('kaikki')"
+            :is-editing="true"
+            :options="tutkintotyypit"
+            :searchable="false"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('tutkintotyyppi') }}</span>
+            </template>
+
+            <template
+              #singleLabel="{ option }"
+            >
+              {{ $t(option) }}
+            </template>
+
+            <template
+              #option="{ option }"
+            >
+              {{ $t(option) }}
+            </template>
+          </EpMultiSelect>
+        </div>
+      </div>
+
+      <div
+        v-else
+        class="mb-3"
+      >
+        <EpSearch
+          v-model="filters.nimiTaiKoodi"
+          :class="{'disabled-events': !perusteetJaTutkinnonosat}"
+        />
+      </div>
+      <EpSisaltotyyppiFilter
+        v-if="tyyppi === 'peruste'"
+        v-model="filters"
+      />
     </div>
-    <div class="pagination d-flex justify-content-center">
-      <EpBPagination v-model="page"
-                     :items-per-page="perPage"
-                     :total="total"
-                     aria-controls="perusteet-lista">
-      </EpBPagination>
+
+    <EpHakutulosmaara
+      :kokonaismaara="total"
+      piilota-nakyva-tulosmaara
+    />
+
+    <div v-if="!perusteetJaTutkinnonosat">
+      <EpSpinner />
+    </div>
+
+    <div
+      v-else
+      class="content"
+    >
+      <div
+        id="perusteet-lista"
+        class="perusteet"
+      >
+        <EpAmmatillinenRow
+          v-for="(sisalto, idx) in perusteetJaTutkinnonosat"
+          :key="idx"
+          :route="sisalto.route"
+          :class="sisalto.voimassaoloTieto[0].tyyppi"
+        >
+          <div class="list-item-header">
+            <div class="nimi">
+              {{ $kaanna(sisalto.nimi) }}
+              <div class="d-inline-flex">
+                <span v-if="sisalto.laajuus">{{ sisalto.laajuus }} {{ $t('osaamispiste') }}</span>
+              </div>
+              <span
+                v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'"
+                class="koodi"
+              >({{ sisalto.tutkinnonosa.koodiArvo }})</span>
+            </div>
+            <div v-if="sisalto.tutkintotag">
+              <span
+                class="tutkinto w-40"
+                :class="sisalto.sisaltotyyppi"
+              >{{ $t(sisalto.tutkintotag) }}</span>
+            </div>
+          </div>
+          <EpAmmatillinenTutkinnonosaItem
+            v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'"
+            :sisalto="sisalto"
+          />
+          <EpAmmatillinenPerusteItem
+            v-else
+            :sisalto="sisalto"
+          />
+        </EpAmmatillinenRow>
+      </div>
+      <div class="pagination d-flex justify-content-center">
+        <EpBPagination
+          v-model="page"
+          :items-per-page="perPage"
+          :total="total"
+          aria-controls="perusteet-lista"
+        />
+      </div>
     </div>
   </div>
-
-</div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import _ from 'lodash';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import { IPerusteHakuStore } from '@/stores/IPerusteHakuStore';
 import EpAmmatillinenRow from '@/components/EpAmmatillinen/EpAmmatillinenRow.vue';
 import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
-import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
+import { useValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { AmmatillisetKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { voimassaoloTieto } from '@/utils/voimassaolo';
@@ -114,212 +155,216 @@ import EpSisaltotyyppiFilter from '@shared/components/EpSisaltotyyppiFilter/EpSi
 import EpAmmatillinenPerusteItem from '@/components/EpAmmatillinen/EpAmmatillinenPerusteItem.vue';
 import EpAmmatillinenTutkinnonosaItem from '@/components/EpAmmatillinen/EpAmmatillinenTutkinnonosaItem.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import { useAmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
+import { useAmmatillinenOpasHakuStore } from '@/stores/AmmatillinenOpasHakuStore';
+import { pinia } from '@/pinia';
+import { useRoute, useRouter } from 'vue-router';
 
-@Component({
-  components: {
-    EpSearch,
-    EpSpinner,
-    EpAmmatillinenRow,
-    EpMultiSelect,
-    EpBPagination,
-    EpSisaltotyyppiFilter,
-    EpAmmatillinenPerusteItem,
-    EpAmmatillinenTutkinnonosaItem,
-    EpHakutulosmaara,
+const props = defineProps({
+  tyyppi: {
+    type: String as () => 'peruste' | 'opas',
+    required: true,
   },
-})
-export default class PerusteAmmatillinenHaku extends Vue {
-  @Prop({ required: true })
-  private perusteHakuStore!: IPerusteHakuStore;
+});
 
-  @Prop({ type: String })
-  private tyyppi!: 'peruste' | 'opas';
+const valmisteillaOlevatStore = useValmisteillaOlevatStore(pinia);
+const perusteHakuStore = props.tyyppi === 'peruste' ? useAmmatillinenPerusteHakuStore(pinia) : useAmmatillinenOpasHakuStore(pinia);
+const mounted = ref(false);
 
-  private valmisteillaOlevatStore: ValmisteillaOlevatStore = new ValmisteillaOlevatStore();
-  private tutkintotyyppi = 'kaikki';
-  private query = '';
+const perPage = ref(10);
+const page = ref(0);
 
-  private toggleQuery: any = {};
+const filters = ref<any>({
+  nimiTaiKoodi: '',
+  tutkintotyyppi: 'kaikki',
+  koulutustyyppi: [
+    'koulutustyyppi_1',
+    'koulutustyyppi_11',
+    'koulutustyyppi_12',
+    'koulutustyyppi_5',
+    'koulutustyyppi_18',
+  ],
+  tuleva: true,
+  voimassaolo: true,
+  siirtyma: false,
+  poistunut: false,
+  perusteet: true,
+  tutkinnonosat: false,
+  sivukoko: 10,
+});
 
-  async mounted() {
-    this.initQuery();
-    this.page = 1;
-    await this.valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+const queryParamsToFilter = _.invert(perusteHakuStore.filterToQueryParams);
 
-    if (!this.perusteHakuStore.perusteet) {
-      await this.perusteHakuStore.fetch();
-    }
+const route = useRoute();
+const router = useRouter();
+
+onMounted(async () => {
+  setQueryParams();
+  await valmisteillaOlevatStore.fetch(0, 1, AmmatillisetKoulutustyypit);
+  await fetch();
+
+  mounted.value = true;
+});
+
+const fetch = async () => {
+  if (_.size(filters.value.nimiTaiKoodi) === 0 || _.size(filters.value.nimiTaiKoodi) > 2) {
+    await perusteHakuStore.fetch(
+      {
+        ...filters.value,
+        sivu: page.value - 1,
+      });
+
+    router.replace({
+      query: {
+        ...(filters.value.nimiTaiKoodi && { query: filters.value.nimiTaiKoodi }),
+        ..._.mapKeys(_.pickBy(filters.value, (value, key) => key in perusteHakuStore.filterToQueryParams), (value, key) => perusteHakuStore.filterToQueryParams[key as keyof typeof perusteHakuStore.filterToQueryParams]),
+        page: page.value,
+      },
+    }).catch(() => {});
   }
+};
 
-  async updateFilters(filters) {
-    if (_.size(filters.nimiTaiKoodi) === 0 || _.size(filters.nimiTaiKoodi) > 2) {
-      await this.perusteHakuStore.updateFilters(filters);
-    }
-  }
 
-  initQuery() {
-    this.filters.nimiTaiKoodi = undefined;
-    this.toggleQuery = {
-      tuleva: true,
-      voimassaolo: true,
-      siirtyma: false,
-      poistunut: false,
-      perusteet: true,
-      tutkinnonosat: false,
-    };
-  }
+const setQueryParams = () => {
+  filters.value = {
+    ...filters.value,
+    ..._.mapKeys(_.pickBy(route?.query, (value, key) => key in queryParamsToFilter), (value, key) => queryParamsToFilter[key as keyof typeof queryParamsToFilter]),
+  };
+  page.value = (route?.query?.page as number || 1);
+};
 
-  get tutkintotyypit() {
-    return [
-      'kaikki',
+const tutkintotyypit = computed(() => {
+  return [
+    'kaikki',
+    'koulutustyyppi_1',
+    'koulutustyyppi_11',
+    'koulutustyyppi_12',
+  ];
+});
+
+const kieli = computed(() => {
+  return Kielet.getSisaltoKieli.value;
+});
+
+watch(kieli, async () => {
+  await fetch();
+});
+
+const tutkintotyyppi = computed(() => {
+  return filters.value.tutkintotyyppi;
+});
+
+watch(tutkintotyyppi, async () => {
+  if (tutkintotyyppi.value === 'kaikki') {
+    filters.value.koulutustyyppi = [
       'koulutustyyppi_1',
       'koulutustyyppi_11',
       'koulutustyyppi_12',
+      'koulutustyyppi_5',
+      'koulutustyyppi_18',
     ];
   }
-
-  get kieli() {
-    return Kielet.getSisaltoKieli.value;
+  else {
+    filters.value.koulutustyyppi = [tutkintotyyppi.value];
   }
+});
 
-  @Watch('kieli')
-  async kieliChange() {
-    await this.updateFilters({ kieli: this.kieli });
+watch(filters, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    await fetch();
   }
+}, { deep: true });
 
-  @Watch('tutkintotyyppi')
-  async tutkintotyyppiChange() {
-    if (this.tutkintotyyppi === 'kaikki') {
-      await this.updateFilters({ koulutustyyppi: [
-        'koulutustyyppi_1',
-        'koulutustyyppi_11',
-        'koulutustyyppi_12',
-        'koulutustyyppi_5',
-        'koulutustyyppi_18',
-      ] });
-    }
-    else {
-      await this.updateFilters({ koulutustyyppi: [this.tutkintotyyppi] });
-    }
+watch(page, async () => {
+  if (mounted.value) {
+    await fetch();
   }
+});
 
-  @Watch('query')
-  async onQueryChanged() {
-    this.page = 1;
-    await this.updateFilters({ nimiTaiKoodi: this.query });
+const searchPlaceholder = computed(() => {
+  if (props.tyyppi === 'opas') {
+    return Kielet.t('ohjeen-tai-materiaalin-nimi');
   }
-
-  @Watch('page')
-  async onPageChanged() {
-    await this.updateFilters({ sivu: this.perusteHakuStore.page });
-    (this.$el.querySelector('.ammatillinen-row a') as any)?.focus();
+  else {
+    return Kielet.t('voit-hakea-tutkintoa-nimella');
   }
+});
 
-  @Watch('toggleQuery', { deep: true })
-  async voimassaoloFilterChanged() {
-    await this.updateFilters(this.toggleQuery);
-    this.page = 1;
+const perusteTutkinnonosaRoute = (perusteTaiTutkinnonosa) => {
+  if (perusteTaiTutkinnonosa.sisaltotyyppi === 'tutkinnonosa' && perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'normaali' && perusteTaiTutkinnonosa.perusteet?.length > 1) {
+    return null;
   }
-
-  get searchPlaceholder() {
-    if (this.tyyppi === 'opas') {
-      return this.$t('ohjeen-tai-materiaalin-nimi');
-    }
-    else {
-      return this.$t('voit-hakea-tutkintoa-nimella');
-    }
+  if (perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'reformi_tutke2') {
+    return {
+      name: 'yhteinentutkinnonosa',
+      params: {
+        koodi: perusteTaiTutkinnonosa.tutkinnonosa.koodiUri,
+      },
+    };
   }
-
-  get perusteetJaTutkinnonosat() {
-    if (this.perusteHakuStore.perusteet) {
-      return this.mapPerusteet(this.perusteHakuStore.perusteet);
-    }
+  if (perusteTaiTutkinnonosa.perusteet?.length === 1) {
+    return {
+      name: 'tutkinnonosa',
+      params: {
+        perusteId: perusteTaiTutkinnonosa.perusteet[0].id,
+        tutkinnonOsaViiteId: perusteTaiTutkinnonosa.id,
+      },
+      query: { redirect: 'true' },
+    };
   }
-
-  mapPerusteet(perusteet) {
-    return _.chain(perusteet)
-      .map(sisalto => ({
-        ...sisalto,
-        route: this.perusteTutkinnonosaRoute(sisalto),
-        voimassaoloTieto: voimassaoloTieto(sisalto),
-        koulutuskoodit: _.join(_.map(sisalto.koulutukset, 'koulutuskoodiArvo'), ', '),
-        perusteet: sisalto.perusteet ? this.mapPerusteet(sisalto.perusteet) : null,
-        ...(sisalto.sisaltotyyppi === 'peruste' && sisalto.tyyppi !== 'opas' && { tutkintotag: 'tutkinnon-peruste' }),
-        ...(sisalto.sisaltotyyppi === 'tutkinnonosa' && { tutkintotag: 'tutkinnon-osa' }),
-
-      }))
-      .value();
+  if (props.tyyppi === 'opas') {
+    return {
+      name: 'peruste',
+      params: {
+        koulutustyyppi: 'ammatillinen',
+        perusteId: _.toString(perusteTaiTutkinnonosa.id || perusteTaiTutkinnonosa.perusteId),
+      },
+    };
   }
-
-  perusteTutkinnonosaRoute(perusteTaiTutkinnonosa) {
-    if (perusteTaiTutkinnonosa.sisaltotyyppi === 'tutkinnonosa' && perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'normaali' && perusteTaiTutkinnonosa.perusteet?.length > 1) {
-      return null;
-    }
-    if (perusteTaiTutkinnonosa.tutkinnonosa?.tyyppi === 'reformi_tutke2') {
-      return {
-        name: 'yhteinentutkinnonosa',
-        params: {
-          koodi: perusteTaiTutkinnonosa.tutkinnonosa.koodiUri,
-        },
-      };
-    }
-    if (perusteTaiTutkinnonosa.perusteet?.length === 1) {
-      return {
-        name: 'tutkinnonosa',
-        params: {
-          perusteId: perusteTaiTutkinnonosa.perusteet[0].id,
-          tutkinnonOsaViiteId: perusteTaiTutkinnonosa.id,
-        },
-        query: { redirect: 'true' },
-      };
-    }
-    if (this.tyyppi === 'opas') {
-      return {
-        name: 'peruste',
-        params: {
-          koulutustyyppi: 'ammatillinen',
-          perusteId: _.toString(perusteTaiTutkinnonosa.id || perusteTaiTutkinnonosa.perusteId),
-        },
-      };
-    }
-    else {
-      return {
-        name: 'ammatillinenkooste',
-        params: {
-          perusteId: _.toString(perusteTaiTutkinnonosa.id),
-        },
-      };
-    }
+  else {
+    return {
+      name: 'ammatillinenkooste',
+      params: {
+        perusteId: _.toString(perusteTaiTutkinnonosa.id),
+      },
+    };
   }
+};
 
-  get total() {
-    return this.perusteHakuStore.total;
-  }
+const mapPerusteet = (perusteet) => {
+  return _.chain(perusteet)
+    .map(sisalto => ({
+      ...sisalto,
+      route: perusteTutkinnonosaRoute(sisalto),
+      voimassaoloTieto: voimassaoloTieto(sisalto),
+      koulutuskoodit: _.join(_.map(sisalto.koulutukset, 'koulutuskoodiArvo'), ', '),
+      perusteet: sisalto.perusteet ? mapPerusteet(sisalto.perusteet) : null,
+      ...(sisalto.sisaltotyyppi === 'peruste' && sisalto.tyyppi !== 'opas' && { tutkintotag: 'tutkinnon-peruste' }),
+      ...(sisalto.sisaltotyyppi === 'tutkinnonosa' && { tutkintotag: 'tutkinnon-osa' }),
 
-  get pages() {
-    return this.perusteHakuStore.pages;
-  }
+    }))
+    .value();
+};
 
-  get perPage() {
-    return this.perusteHakuStore.perPage;
+const perusteetJaTutkinnonosat = computed(() => {
+  if (perusteHakuStore.perusteet) {
+    return mapPerusteet(perusteHakuStore.perusteet.data);
   }
+  return undefined;
+});
 
-  get filters() {
-    return this.perusteHakuStore.filters;
-  }
+const total = computed(() => {
+  return perusteHakuStore.perusteet?.kokonaismäärä;
+});
 
-  get page() {
-    return this.perusteHakuStore.page + 1;
-  }
+const pages = computed(() => {
+  return perusteHakuStore.perusteet?.sivuja;
+});
 
-  set page(value) {
-    this.perusteHakuStore.page = value - 1;
-  }
-
-  get valmisteillaOlevat() {
-    return this.valmisteillaOlevatStore.perusteet.value;
-  }
-}
+const valmisteillaOlevat = computed(() => {
+  return valmisteillaOlevatStore.perusteet;
+});
 </script>
 
 <style scoped lang="scss">
@@ -349,7 +394,7 @@ export default class PerusteAmmatillinenHaku extends Vue {
 .haku {
   width: 100%;
 
-  ::v-deep .filter {
+  :deep(.filter) {
     max-width: 100%;
   }
 
@@ -387,5 +432,4 @@ export default class PerusteAmmatillinenHaku extends Vue {
   font-weight: 300;
   color: $gray;
 }
-
 </style>

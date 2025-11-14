@@ -10,4 +10,4 @@ export interface IPerusteHakuStore {
   perPage: number;
   filters: any;
   updateFilters: (filter: any) => Promise<void>;
-};
+}

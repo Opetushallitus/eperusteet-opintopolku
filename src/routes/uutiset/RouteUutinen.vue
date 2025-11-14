@@ -1,183 +1,190 @@
 <template>
-<div>
-  <ep-header :murupolku="murupolku" :koulutustyyppi="koulutustyyppi">
-    <template slot="header">
-      <div v-if="tiedote">
-        {{ $kaanna(tiedote.otsikko) }}
-      </div>
-      <ep-spinner v-else />
-    </template>
-    <template slot="subheader">
-    <div v-if="tiedote">
-      <div class="aikaleima">
-        {{ $sd(tiedote.luotu) }}
-      </div>
-    </div>
-    <ep-spinner v-else />
-    </template>
-    <div v-if="tiedote" class="tiedote">
-
-      <div class="sisalto pb-4">
-        <ep-content-viewer :value="$kaanna(tiedote.sisalto)"/>
-      </div>
-
+  <div>
+    <ep-header
+      :murupolku="murupolku"
+      :koulutustyyppi="koulutustyyppi"
+    >
+      <template #header>
+        <div v-if="tiedote">
+          {{ $kaanna(tiedote.otsikko) }}
+        </div>
+        <ep-spinner v-else />
+      </template>
+      <template #subheader>
+        <div v-if="tiedote">
+          <div class="aikaleima">
+            {{ $sd(tiedote.luotu) }}
+          </div>
+        </div>
+        <ep-spinner v-else />
+      </template>
       <div
-        class="tiedote-lisainfo p-3"
-        v-if="tiedoteMapped.perusteet.length > 0 || tiedoteMapped.tutkinnonosat.length > 0 || tiedoteMapped.osaamisalat.length > 0">
-
-        <h3>{{$t('tiedotteeseen-liittyy')}}</h3>
-
-        <div class="mt-4" v-if="tiedoteMapped.perusteet.length > 0">
-          <h4>{{$t('perusteet')}}</h4>
-          <span class="peruste" v-for="(peruste, index) in tiedoteMapped.perusteet" :key="'peruste'+peruste.id">
-            <span v-if="index > 0">, </span>
-            <router-link :to="peruste.route">{{$kaanna(peruste.nimi)}}</router-link>
-          </span>
+        v-if="tiedote"
+        class="tiedote"
+      >
+        <div class="sisalto pb-4">
+          <ep-content-viewer :value="$kaanna(tiedote.sisalto)" />
         </div>
 
-        <ep-spinner v-if="!tutkinnonosienPerusteet" />
-        <uutisen-koodit
-          v-else
-          :kooditPerusteilla="tutkinnonosienPerusteet"
-          class="mt-4">
-          <h4 slot="header">{{$t('tutkinnonosat')}}</h4>
-          <h4 slot="popover-header">{{$t('perusteet-joissa-tutkinnon-osia-on')}}</h4>
-        </uutisen-koodit>
+        <div
+          v-if="tiedoteMapped.perusteet.length > 0 || tiedoteMapped.tutkinnonosat.length > 0 || tiedoteMapped.osaamisalat.length > 0"
+          class="tiedote-lisainfo p-3"
+        >
+          <h3>{{ $t('tiedotteeseen-liittyy') }}</h3>
 
-        <ep-spinner v-if="!osaamisalojenPerusteet" />
-        <uutisen-koodit
-          v-else
-          :kooditPerusteilla="osaamisalojenPerusteet"
-          class="mt-4">
-          <h4 slot="header">{{$t('osaamisalat')}}</h4>
-          <h4 slot="popover-header">{{$t('perusteet-joissa-osaamisaloja-on')}}</h4>
-        </uutisen-koodit>
+          <div
+            v-if="tiedoteMapped.perusteet.length > 0"
+            class="mt-4"
+          >
+            <h4>{{ $t('perusteet') }}</h4>
+            <span
+              v-for="(peruste, index) in tiedoteMapped.perusteet"
+              :key="'peruste'+peruste.id"
+              class="peruste"
+            >
+              <span v-if="index > 0">, </span>
+              <router-link :to="peruste.route">{{ $kaanna(peruste.nimi) }}</router-link>
+            </span>
+          </div>
 
+          <ep-spinner v-if="!tutkinnonosienPerusteet" />
+          <uutisen-koodit
+            v-else
+            :koodit-perusteilla="tutkinnonosienPerusteet"
+            class="mt-4"
+          >
+            <template #header>
+              <h4>{{ $t('tutkinnonosat') }}</h4>
+            </template>
+            <template #popover-header>
+              <h4>{{ $t('perusteet-joissa-tutkinnon-osia-on') }}</h4>
+            </template>
+          </uutisen-koodit>
+
+          <ep-spinner v-if="!osaamisalojenPerusteet" />
+          <uutisen-koodit
+            v-else
+            :koodit-perusteilla="osaamisalojenPerusteet"
+            class="mt-4"
+          >
+            <template #header>
+              <h4>{{ $t('osaamisalat') }}</h4>
+            </template>
+            <template #popover-header>
+              <h4>{{ $t('perusteet-joissa-osaamisaloja-on') }}</h4>
+            </template>
+          </uutisen-koodit>
+        </div>
       </div>
-    </div>
-    <ep-spinner v-else />
-  </ep-header>
-</div>
+      <ep-spinner v-else />
+    </ep-header>
+  </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import _ from 'lodash';
-import { Prop, Component, Vue } from 'vue-property-decorator';
-import { TiedoteStore } from '@/stores/TiedoteStore';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { useHead } from '@unhead/vue';
+import { useTiedoteStore } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { Meta } from '@shared/utils/decorators';
 import { koulutustyyppiStateName } from '@shared/utils/perusteet';
 import UutisenKoodit from './UutisenKoodit.vue';
-import { JulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
+import { $kaanna, $sd, $t } from '@shared/utils/globals';
+import { pinia } from '@/pinia';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeader,
-    EpSearch,
-    EpContentViewer,
-    UutisenKoodit,
-  },
-})
-export default class RouteUutinen extends Vue {
-  @Prop({ required: true })
-  private tiedoteStore!: TiedoteStore;
+const route = useRoute();
+const page = ref(1);
+const query = ref('');
+const tiedoteStore = useTiedoteStore(pinia);
+const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 
-  @Prop({ required: true })
-  private julkaistutKoulutustyypitStore!: JulkaistutKoulutustyypitStore;
+const tiedote = computed(() => {
+  return tiedoteStore.tiedote;
+});
 
-  private page = 1;
-  private query = '';
+const julkaistutKoulutustyypit = computed(() => {
+  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
+});
 
-  mounted() {
-    if (this.$route) {
-      this.tiedoteStore.fetchUutinen(_.parseInt(this.$route.params.tiedoteId));
-    }
-  }
+const perusteet = computed(() => {
+  return _.filter(tiedoteStore.tiedote?.perusteet, peruste =>
+    _.includes(julkaistutKoulutustyypit.value, peruste.koulutustyyppi as any));
+});
 
-  get tiedote() {
-    return this.tiedoteStore.tiedote;
-  }
-
-  get tiedoteMapped() {
+const perusteRoutes = (perusteet) => {
+  return _.map(perusteet, peruste => {
     return {
-      ...this.tiedote,
-      perusteet: this.perusteRoutes(this.perusteet),
+      ...peruste,
+      route: {
+        name: 'peruste',
+        params: {
+          perusteId: peruste.id,
+          koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi!),
+        },
+      },
+    };
+  });
+};
+
+const tiedoteMapped = computed(() => {
+  return {
+    ...tiedote.value,
+    perusteet: perusteRoutes(perusteet.value),
+  };
+});
+
+const osaamisalojenPerusteet = computed(() => {
+  return tiedoteStore.tiedotteenOsaamisalaPerusteet;
+});
+
+const tutkinnonosienPerusteet = computed(() => {
+  return tiedoteStore.tiedotteenTutkinnonosaPerusteet;
+});
+
+const koulutustyyppi = computed(() => {
+  if (tiedote.value && tiedote.value.peruste) {
+    return tiedote.value.peruste.koulutustyyppi;
+  }
+  return undefined;
+});
+
+const murupolku = computed(() => {
+  const murut = [{
+    label: 'ajankohtaista',
+    location: {
+      name: 'uutiset',
+    },
+  }];
+
+  if (tiedote.value) {
+    murut.push({
+      label: tiedote.value.otsikko,
+      location: {
+        name: 'uutinen',
+        params: {
+          tiedoteId: tiedote.value.id,
+        },
+      },
+    } as any);
+  }
+
+  return murut;
+});
+
+// Meta information
+useHead(() => {
+  if (tiedote.value) {
+    return {
+      title: $kaanna(tiedote.value.otsikko),
     };
   }
-
-  get julkaistutKoulutustyypit() {
-    return this.julkaistutKoulutustyypitStore.julkaistutKoulutustyypit.value;
-  }
-
-  get perusteet() {
-    return _.filter(this.tiedoteStore.tiedote?.perusteet, peruste => _.includes(this.julkaistutKoulutustyypit, peruste.koulutustyyppi as any));
-  }
-
-  get osaamisalojenPerusteet() {
-    return this.tiedoteStore.tiedotteenOsaamisalaPerusteet;
-  }
-
-  get tutkinnonosienPerusteet() {
-    return this.tiedoteStore.tiedotteenTutkinnonosaPerusteet;
-  }
-
-  perusteRoutes(perusteet) {
-    return _.map(perusteet, peruste => {
-      return {
-        ...peruste,
-        route: {
-          name: 'peruste',
-          params: {
-            perusteId: peruste.id,
-            koulutustyyppi: koulutustyyppiStateName(peruste.koulutustyyppi!),
-          },
-        },
-      };
-    });
-  }
-
-  get koulutustyyppi() {
-    if (this.tiedote && this.tiedote.peruste) {
-      return this.tiedote.peruste.koulutustyyppi;
-    }
-  }
-
-  get murupolku() {
-    const murut = [{
-      label: 'ajankohtaista',
-      location: {
-        name: 'uutiset',
-      },
-    }];
-
-    if (this.tiedote) {
-      murut.push({
-        label: this.tiedote.otsikko,
-        location: {
-          name: 'uutinen',
-          params: {
-            tiedoteId: this.tiedote.id,
-          },
-        },
-      } as any);
-    }
-
-    return murut;
-  }
-
-  @Meta
-  getMetaInfo() {
-    if (this.tiedote) {
-      return {
-        title: (this as any).$kaanna(this.tiedote.otsikko),
-      };
-    }
-  }
-}
+  return {};
+});
 </script>
 
 <style scoped lang="scss">
@@ -201,6 +208,5 @@ export default class RouteUutinen extends Vue {
     border: 1px solid $gray-lighten-3;
     border-radius: 3px;
   }
-
 }
 </style>

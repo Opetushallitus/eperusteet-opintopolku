@@ -1,16 +1,27 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 id="tekstikappale-otsikko" class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2
+        id="tekstikappale-otsikko"
+        class="otsikko mb-4"
+      >
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
 
       <div class="mb-4">
-        <ep-content-viewer :value="$kaanna(perusteenOsa.teksti)" :termit="termit" :kuvat="kuvat" />
-        <hr/>
+        <ep-content-viewer
+          :value="$kaanna(perusteenOsa.teksti)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+        <hr>
       </div>
 
-      <h3 class="mb-4">{{$t('tavoitteet-ja-keskeiset-sisaltoalueet')}}</h3>
+      <h3 class="mb-4">
+        {{ $t('tavoitteet-ja-keskeiset-sisaltoalueet') }}
+      </h3>
 
-      <EpTavoitesisaltoalueTavoitealueet :value="perusteenOsa.tavoitealueet"/>
+      <EpTavoitesisaltoalueTavoitealueet :model-value="perusteenOsa.tavoitealueet" />
 
       <slot name="previous-next-navigation" />
     </div>
@@ -18,52 +29,42 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import { computed } from 'vue';
 import _ from 'lodash';
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpTavoitesisaltoalueTavoitealueet from '@shared/components/EpTavoitesisaltoalue/EpTavoitesisaltoalueTavoitealueet.vue';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { useRoute } from 'vue-router';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpHeading,
-    EpContentViewer,
-    EpTavoitesisaltoalueTavoitealueet,
-  },
-})
-export default class RouteTavoitesisaltoalue extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.tavoitesisaltoalueId);
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get perusteenOsaViite() {
-    return this.perusteenOsaStore.perusteenOsaViite;
-  }
+const perusteenOsaViite = computed(() => {
+  return perusteenOsaStore.perusteenOsaViite;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
-}
-
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 </script>
 
 <style scoped lang="scss">

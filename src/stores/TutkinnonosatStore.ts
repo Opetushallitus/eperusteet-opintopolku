@@ -1,10 +1,6 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import _ from 'lodash';
 import { JulkinenApi, Perusteet, Sisaltoviitteet, Opetussuunnitelmat, OpetussuunnitelmaDto, SisaltoViiteKevytDtoTyyppiEnum } from '@shared/api/amosaa';
-import { perusteenSuoritustapa } from '@shared/utils/perusteet';
-
-Vue.use(VueCompositionApi);
 
 export class TutkinnonosatStore {
   private state = reactive({
@@ -47,7 +43,7 @@ export class TutkinnonosatStore {
       return {
         jarjestysnro: index + 1,
         tutkinnonosaViite,
-        perusteenTutkinnonosaViite: perusteenTutkinnonosaViitteet[tutkinnonosaViite.tosa?.perusteentutkinnonosa!],
+        perusteenTutkinnonosaViite: tutkinnonosaViite.tosa?.perusteentutkinnonosa ? perusteenTutkinnonosaViitteet[tutkinnonosaViite.tosa.perusteentutkinnonosa] : undefined,
       };
     });
   }

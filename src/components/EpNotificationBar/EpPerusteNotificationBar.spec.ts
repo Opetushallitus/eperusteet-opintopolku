@@ -1,27 +1,25 @@
-import { mount, createLocalVue } from '@vue/test-utils';
 import EpPerusteNotificationBar from './EpPerusteNotificationBar.vue';
-import { Kielet } from '@shared/stores/kieli';
-import { mocks, stubs } from '@shared/utils/jestutils';
-import VueI18n from 'vue-i18n';
-import { Kaannos } from '@shared/plugins/kaannos';
-import { Kieli } from '@shared/tyypit';
+import { createMount } from '@shared/utils/__tests__/stubs';
+import { vi, beforeEach, describe, test, expect } from 'vitest';
+import { useRoute } from 'vue-router';
+import { nextTick } from 'vue';
+import { wrap } from '../../../eperusteet-frontend-utils/vue/src/utils/jestutils';
+
+export const mockRoute: any = {
+  params: {},
+};
+
+vi.mock('vue-router', () => ({
+  useRoute: () => mockRoute,
+  useRouter: vi.fn(),
+}));
 
 describe('EpPerusteNotificationBar', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  localVue.use(Kielet, {
-    messages: {
-      fi: {
-        ...require('@shared/translations/locale-fi.json'),
-      },
-      sv: {
-        ...require('@shared/translations/locale-sv.json'),
-      },
-    },
-  });
-  localVue.use(new Kaannos());
 
-  Kielet.setUiKieli(Kieli.fi);
+  beforeEach(() => {
+    // Reset before each test
+    mockRoute.params = {};
+  });
 
   const datePlusDays = (days: number) => {
     const date = new Date();
@@ -34,56 +32,39 @@ describe('EpPerusteNotificationBar', () => {
     kielet: ['fi', 'sv'],
   };
 
-  const komponenttiStubit = {
-    ...stubs,
-    EpNotificationBar: true,
-  };
-
   const emptyResultTrue = (wrapper: any) => {
     expect(wrapper.html()).not.toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
     expect(wrapper.html()).not.toContain('katselet-talla-hetkella-voimassaolevaa-perustetta');
   };
 
-  describe('ilman muutosmaarayksia', () => {
-    const currentRoute = {
-      params: {
-        lang: 'fi',
-      },
-    };
-    const wrapper = mount(EpPerusteNotificationBar as any, {
-      localVue,
+  const createMountWithProps = (revision, props: any) => {
+    mockRoute.params.revision = revision;
+    return createMount(EpPerusteNotificationBar as any, {
       propsData: {
         peruste,
-        julkaisut: [
-          {
-            revision: 1,
-          },
-          {
-            revision: 2,
-          },
-        ],
-      },
-      stubs: {
-        ...komponenttiStubit,
-      },
-      mocks: {
-        ...mocks,
-        $route: currentRoute,
-        $router: {
-          async push(route) {
-            currentRoute.params = route.params || {};
-            wrapper.vm.$forceUpdate();
-          },
-        },
+        ...props,
       },
     });
+  };
+
+  describe('ilman muutosmaarayksia', () => {
+    const propsData = {
+      peruste,
+      julkaisut: [
+        {
+          revision: 1,
+        },
+        {
+          revision: 2,
+        },
+      ],
+    };
 
     test('current julkaisu', async () => {
+      let wrapper = createMountWithProps('2', propsData);
       emptyResultTrue(wrapper);
 
-      await wrapper.vm.$router.push({ params: { revision: '1' } });
-      await wrapper.vm.$nextTick();
-
+      wrapper = createMountWithProps('1', propsData);
       emptyResultTrue(wrapper);
     });
   });
@@ -94,93 +75,51 @@ describe('EpPerusteNotificationBar', () => {
         lang: 'fi',
       },
     };
-    const wrapper = mount(EpPerusteNotificationBar as any, {
-      localVue,
-      propsData: {
-        peruste,
-        julkaisut: [
-          {
-            revision: 1,
-          },
-          {
-            revision: 2,
-            muutosmaarays: {
-              voimassaoloAlkaa: datePlusDays(-1).getTime(),
-            },
-          },
-        ],
-      },
-      stubs: {
-        ...komponenttiStubit,
-      },
-      mocks: {
-        ...mocks,
-        $route: currentRoute,
-        $router: {
-          async push(route) {
-            currentRoute.params = route.params || {};
-            wrapper.vm.$forceUpdate();
+    const propsData = {
+      peruste,
+      julkaisut: [
+        {
+          revision: 1,
+        },
+        {
+          revision: 2,
+          muutosmaarays: {
+            voimassaoloAlkaa: datePlusDays(-1).getTime(),
           },
         },
-      },
-    });
+      ],
+    };
 
     test('current julkaisu', async () => {
+      let wrapper = createMountWithProps('2', propsData);
       emptyResultTrue(wrapper);
 
-      await wrapper.vm.$router.push({ params: { revision: '1' } });
-      await wrapper.vm.$nextTick();
-
+      wrapper = createMountWithProps('1', propsData);
       emptyResultTrue(wrapper);
     });
   });
 
   describe('muutosmaarays tulossa voimaan', () => {
-    const currentRoute = {
-      params: {
-        lang: 'fi',
-      },
-    };
-    const wrapper = mount(EpPerusteNotificationBar as any, {
-      localVue,
-      propsData: {
-        peruste,
-        julkaisut: [
-          {
-            revision: 1,
-          },
-          {
-            revision: 2,
-            muutosmaarays: {
-              voimassaoloAlkaa: datePlusDays(5).getTime(),
-            },
-          },
-        ],
-      },
-      stubs: {
-        ...komponenttiStubit,
-      },
-      mocks: {
-        ...mocks,
-        $route: currentRoute,
-        $router: {
-          async push(route) {
-            currentRoute.params = route.params || {};
-            wrapper.vm.$forceUpdate();
+    const propsData = {
+      peruste,
+      julkaisut: [
+        {
+          revision: 1,
+        },
+        {
+          revision: 2,
+          muutosmaarays: {
+            voimassaoloAlkaa: datePlusDays(5).getTime(),
           },
         },
-      },
-    });
+      ],
+    };
 
     test('one julkaisu', async () => {
-      await wrapper.vm.$router.push({ params: { revision: '2' } });
-      await wrapper.vm.$nextTick();
-
+      let wrapper = createMountWithProps('2', propsData);
       expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
-      await wrapper.vm.$router.push({ params: { revision: '1' } });
-      await wrapper.vm.$nextTick();
-
+      wrapper = createMountWithProps('1', propsData);
       expect(wrapper.html()).toContain('katselet-talla-hetkella-voimassaolevaa-perustetta');
     });
   });
@@ -191,52 +130,32 @@ describe('EpPerusteNotificationBar', () => {
         lang: 'fi',
       },
     };
-    const wrapper = mount(EpPerusteNotificationBar as any, {
-      localVue,
-      propsData: {
-        peruste,
-        julkaisut: [
-          {
-            revision: 1,
-          },
-          {
-            revision: 2,
-          },
-          {
-            revision: 3,
-            muutosmaarays: {
-              voimassaoloAlkaa: datePlusDays(1).getTime(),
-            },
-          },
-        ],
-      },
-      stubs: {
-        ...komponenttiStubit,
-      },
-      mocks: {
-        ...mocks,
-        $route: currentRoute,
-        $router: {
-          async push(route) {
-            currentRoute.params = route.params || {};
-            wrapper.vm.$forceUpdate();
+    const propsData= {
+      peruste,
+      julkaisut: [
+        {
+          revision: 1,
+        },
+        {
+          revision: 2,
+        },
+        {
+          revision: 3,
+          muutosmaarays: {
+            voimassaoloAlkaa: datePlusDays(1).getTime(),
           },
         },
-      },
-    });
+      ],
+    };
 
     test('ensimmainen julkaisu', async () => {
-      await wrapper.vm.$router.push({ params: { revision: '3' } });
-      await wrapper.vm.$nextTick();
+      let wrapper = createMountWithProps('3', propsData);
       expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
-      await wrapper.vm.$router.push({ params: { revision: '2' } });
-      await wrapper.vm.$nextTick();
+      wrapper = createMountWithProps('2', propsData);
       expect(wrapper.html()).toContain('katselet-talla-hetkella-voimassaolevaa-perustetta');
 
-      await wrapper.vm.$router.push({ params: { revision: '1' } });
-      await wrapper.vm.$nextTick();
-
+      wrapper = createMountWithProps('1', propsData);
       emptyResultTrue(wrapper);
     });
   });
@@ -248,76 +167,55 @@ describe('EpPerusteNotificationBar', () => {
       },
     };
 
-    const wrapper = mount(EpPerusteNotificationBar as any, {
-      localVue,
-      propsData: {
-        peruste,
-        julkaisut: [
-          {
-            revision: 1,
-          },
-          {
-            revision: 2,
-            muutosmaarays: {
-              voimassaoloAlkaa: datePlusDays(-1).getTime(),
-            },
-          },
-          {
-            revision: 3,
-          },
-          {
-            revision: 4,
-          },
-          {
-            revision: 5,
-            muutosmaarays: {
-              voimassaoloAlkaa: datePlusDays(2).getTime(),
-            },
-          },
-          {
-            revision: 6,
-          },
-        ],
-      },
-      stubs: {
-        ...komponenttiStubit,
-      },
-      mocks: {
-        ...mocks,
-        $route: currentRoute,
-        $router: {
-          async push(route) {
-            currentRoute.params = route.params || {};
-            wrapper.vm.$forceUpdate();
+    const propsData = {
+      peruste,
+      julkaisut: [
+        {
+          revision: 1,
+        },
+        {
+          revision: 2,
+          muutosmaarays: {
+            voimassaoloAlkaa: datePlusDays(-1).getTime(),
           },
         },
-      },
-    });
+        {
+          revision: 3,
+        },
+        {
+          revision: 4,
+        },
+        {
+          revision: 5,
+          muutosmaarays: {
+            voimassaoloAlkaa: datePlusDays(2).getTime(),
+          },
+        },
+        {
+          revision: 6,
+        },
+      ],
+    };
 
     test('muutosmaarays 6 julkaisua', async () => {
-      await wrapper.vm.$router.push({ params: { revision: '6' } });
-      await wrapper.vm.$nextTick();
+      let wrapper = createMountWithProps('6', propsData);
       expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
-      await wrapper.vm.$router.push({ params: { revision: '5' } });
-      await wrapper.vm.$nextTick();
+      wrapper = createMountWithProps('5', propsData);
       expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-perustetta');
 
-      await wrapper.vm.$router.push({ params: { revision: '4' } });
-      await wrapper.vm.$nextTick();
+      wrapper = createMountWithProps('4', propsData);
       expect(wrapper.html()).toContain('katselet-talla-hetkella-voimassaolevaa-perustetta');
 
-      await wrapper.vm.$router.push({ params: { revision: '3' } });
-      await wrapper.vm.$nextTick();
+      wrapper = createMountWithProps('3', propsData);
       emptyResultTrue(wrapper);
 
-      await wrapper.vm.$router.push({ params: { revision: '2' } });
-      await wrapper.vm.$nextTick();
+      wrapper = createMountWithProps('2', propsData);
       emptyResultTrue(wrapper);
 
-      await wrapper.vm.$router.push({ params: { revision: '1' } });
-      await wrapper.vm.$nextTick();
+      wrapper = createMountWithProps('1', propsData);
       emptyResultTrue(wrapper);
     });
   });
 });
+

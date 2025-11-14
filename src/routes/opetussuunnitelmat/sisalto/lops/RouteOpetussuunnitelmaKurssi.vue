@@ -1,36 +1,65 @@
 <template>
   <div class="content">
-
     <div v-if="kurssi">
-      <h2 class="otsikko">{{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{kurssi.koodiArvo}})</span></h2>
+      <h2 class="otsikko">
+        {{ $kaanna(kurssi.nimi) }} <span v-if="kurssi.koodiArvo">({{ kurssi.koodiArvo }})</span>
+      </h2>
 
-      <EpCollapse v-if="kurssi.perusteen && kurssi.perusteen.kuvaus" :borderBottom="false" :shadow="true" class="mb-4" >
-        <div slot="header">{{$t('tukiteksti')}}</div>
+      <EpCollapse
+        v-if="kurssi.perusteen && kurssi.perusteen.kuvaus"
+        :border-bottom="false"
+        :shadow="true"
+        class="mb-4"
+      >
+        <template #header>
+          <div>
+            {{ $t('tukiteksti') }}
+          </div>
+        </template>
         <ep-content-viewer
-                    :value="$kaanna(kurssi.perusteen.kuvaus)"
-                    :termit="termit"
-                    :kuvat="kuvat" />
+          :value="$kaanna(kurssi.perusteen.kuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </EpCollapse>
 
-      <div v-for="(sisaltoavain, index) in sisaltoAvaimet" :key="'sisaltoavain'+index" class="mt-4">
-        <div class="mt-4" v-if="(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)
-        || (kurssi.perusteen && kurssi.perusteen[sisaltoavain] && kurssi.perusteen[sisaltoavain].teksti)">
-          <h3>{{$kaanna((kurssi[sisaltoavain] && kurssi[sisaltoavain].otsikko) || kurssi.perusteen[sisaltoavain].otsikko)}}</h3>
+      <div
+        v-for="(sisaltoavain, index) in sisaltoAvaimet"
+        :key="'sisaltoavain'+index"
+        class="mt-4"
+      >
+        <div
+          v-if="(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)
+            || (kurssi.perusteen && kurssi.perusteen[sisaltoavain] && kurssi.perusteen[sisaltoavain].teksti)"
+          class="mt-4"
+        >
+          <h3>{{ $kaanna((kurssi[sisaltoavain] && kurssi[sisaltoavain].otsikko) || kurssi.perusteen[sisaltoavain].otsikko) }}</h3>
 
-          <EpCollapse v-if="kurssi.perusteen && kurssi.perusteen[sisaltoavain]"
-                      :borderBottom="false" :shadow="true" class="mb-4" :expandedByDefault="!(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)">
-            <div slot="header">{{$t('tukiteksti')}}</div>
+          <EpCollapse
+            v-if="kurssi.perusteen && kurssi.perusteen[sisaltoavain]"
+            :border-bottom="false"
+            :shadow="true"
+            class="mb-4"
+            :expanded-by-default="!(kurssi[sisaltoavain] && kurssi[sisaltoavain].teksti)"
+          >
+            <template #header>
+              <div>
+                {{ $t('tukiteksti') }}
+              </div>
+            </template>
             <ep-content-viewer
-                        :value="$kaanna(kurssi.perusteen[sisaltoavain].teksti)"
-                        :termit="termit"
-                        :kuvat="kuvat" />
+              :value="$kaanna(kurssi.perusteen[sisaltoavain].teksti)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
           </EpCollapse>
 
           <ep-content-viewer
-                        v-if="kurssi[sisaltoavain]"
-                        :value="$kaanna(kurssi[sisaltoavain].teksti)"
-                        :termit="termit"
-                        :kuvat="kuvat" />
+            v-if="kurssi[sisaltoavain]"
+            :value="$kaanna(kurssi[sisaltoavain].teksti)"
+            :termit="termit"
+            :kuvat="kuvat"
+          />
         </div>
       </div>
 
@@ -40,48 +69,47 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Prop, Component, Vue } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { OpetussuunnitelmaDataStore } from '@/stores/OpetussuunnitelmaDataStore';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import { $kaanna } from '@shared/utils/globals';
 
-@Component({
-  components: {
-    EpCollapse,
-    EpContentViewer,
-    EpSpinner,
-  },
-})
-export default class RouteOpetussuunnitelmaKurssi extends Vue {
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: OpetussuunnitelmaDataStore;
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  get termit() {
-    return [
-      this.opetussuunnitelmaDataStore.perusteTermit,
-      this.opetussuunnitelmaDataStore.termit,
-    ];
-  }
+const route = useRoute();
 
-  get kuvat() {
-    return this.opetussuunnitelmaDataStore.kuvat;
-  }
+const termit = computed(() => {
+  return [
+    opetussuunnitelmaDataStore.perusteTermit,
+    opetussuunnitelmaDataStore.termit,
+  ];
+});
 
-  get kurssiId() {
-    return _.toNumber(this.$route.params.kurssiId);
-  }
+const kuvat = computed(() => {
+  return opetussuunnitelmaDataStore.kuvat;
+});
 
-  get kurssi() {
-    return this.opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: this.kurssiId });
-  }
+const kurssiId = computed(() => {
+  return _.toNumber(route.params.kurssiId);
+});
 
-  get sisaltoAvaimet() {
-    return ['tavoitteetJaKeskeinenSisalto', 'tavoitteetJaKeskeisetSisallot', 'tehtava', 'tavoitteet', 'keskeinenSisalto', 'keskeisetSisallot'];
-  }
-}
+const kurssi = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: kurssiId.value });
+});
+
+const sisaltoAvaimet = [
+  'tavoitteetJaKeskeinenSisalto',
+  'tavoitteetJaKeskeisetSisallot',
+  'tehtava',
+  'tavoitteet',
+  'keskeinenSisalto',
+  'keskeisetSisallot',
+];
 </script>
 
 <style scoped lang="scss">

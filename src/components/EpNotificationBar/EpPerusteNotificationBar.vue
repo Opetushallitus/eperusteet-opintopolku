@@ -1,126 +1,150 @@
 <template>
-  <EpNotificationBar :julkaisu-pvm="julkaisuPvm" :has-sisalto-kielelle="hasSisaltoKielelle" :maxRevision="maxRevision">
+  <EpNotificationBar
+    :julkaisu-pvm="julkaisuPvm"
+    :has-sisalto-kielelle="hasSisaltoKielelle"
+    :max-revision="maxRevision"
+  >
     <template v-if="voimassaolo">
-      <div class="notifikaatio-text" v-if="voimassaolo === 'tuleva'">
+      <div
+        v-if="voimassaolo === 'tuleva'"
+        class="notifikaatio-text"
+      >
         <span>{{ $t('katselet-tulevaisuudessa-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
         <template v-if="uusinVoimassaolevaJulkaisu">
           <span>{{ $t('siirry-talla-hetkella') }} </span>
-          <a href="javascript:void(0)" @click="toVoimassaolevaanJulkaisuun">{{$t('voimassaolevaan-perusteeseen')}}.</a>
+          <a
+            href="javascript:void(0)"
+            @click="toVoimassaolevaanJulkaisuun"
+          >{{ $t('voimassaolevaan-perusteeseen') }}.</a>
         </template>
       </div>
-      <div class="notifikaatio-text" v-if="voimassaolo === 'voimassa'">
+      <div
+        v-if="voimassaolo === 'voimassa'"
+        class="notifikaatio-text"
+      >
         <span>{{ $t('katselet-talla-hetkella-voimassaolevaa-perustetta') }}. </span>
         <span>{{ $t('siirry') }} </span>
-        <a href="javascript:void(0)" @click="toUusimpaanJulkaisuun">{{$t('uusimpaan-perusteeseen')}}, </a>
+        <a
+          href="javascript:void(0)"
+          @click="toUusimpaanJulkaisuun"
+        >{{ $t('uusimpaan-perusteeseen') }}, </a>
         <span>{{ $t('joka-on-tulossa-voimaan', {voimaantulo: $sd(uusinJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }}.</span>
       </div>
     </template>
   </EpNotificationBar>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import EpNotificationBar from '@/components/EpNotificationBar/EpNotificationBar.vue';
 import { Kielet } from '@shared/stores/kieli';
 
-@Component({
-  components: {
-    EpNotificationBar,
+const props = defineProps({
+  julkaisut: {
+    type: Array,
+    required: false,
+    default: () => [],
   },
-})
-export default class EpPerusteNotificationBar extends Vue {
-  @Prop()
-  private julkaisut?: any[];
+  peruste: {
+    type: Object,
+    required: false,
+    default: undefined,
+  },
+});
 
-  @Prop()
-  private peruste?: any;
+const route = useRoute();
+const router = useRouter();
 
-  get julkaisutSorted() {
-    return _.sortBy(this.julkaisut, 'revision');
-  }
+const julkaisutSorted = computed(() => {
+  return _.sortBy(props.julkaisut, 'revision');
+});
 
-  get julkaisutReversed() {
-    return _.clone(this.julkaisutSorted).reverse();
-  }
+const julkaisutReversed = computed(() => {
+  return _.clone(julkaisutSorted.value).reverse();
+});
 
-  get ensimmainenTulevaMuutosmaarays() {
-    return _.find(this.julkaisutSorted, julkaisu => julkaisu.muutosmaarays && julkaisu.muutosmaarays.voimassaoloAlkaa > Date.now());
-  }
+const ensimmainenTulevaMuutosmaarays = computed(() => {
+  return _.find(julkaisutSorted.value, julkaisu => julkaisu.muutosmaarays && julkaisu.muutosmaarays.voimassaoloAlkaa > Date.now());
+});
 
-  get uusinTulevaMuutosmaarays() {
-    return _.find(this.julkaisutReversed, julkaisu => julkaisu.muutosmaarays && julkaisu.muutosmaarays.voimassaoloAlkaa > Date.now());
-  }
+const uusinTulevaMuutosmaarays = computed(() => {
+  return _.find(julkaisutReversed.value, julkaisu => julkaisu.muutosmaarays && julkaisu.muutosmaarays.voimassaoloAlkaa > Date.now());
+});
 
-  get uusinVoimassaolevaJulkaisu() {
-    return _.find(this.julkaisutReversed, julkaisu => julkaisu.revision < this.ensimmainenTulevaMuutosmaarays.revision);
-  }
+const uusinVoimassaolevaJulkaisu = computed(() => {
+  return _.find(julkaisutReversed.value, julkaisu => julkaisu.revision < ensimmainenTulevaMuutosmaarays.value.revision);
+});
 
-  get voimassaolo() {
-    if (this.ensimmainenTulevaMuutosmaarays) {
-      if (this.currentRevision >= this.ensimmainenTulevaMuutosmaarays?.revision) {
-        return 'tuleva';
-      }
+const voimassaolo = computed(() => {
+  if (ensimmainenTulevaMuutosmaarays.value) {
+    if (currentRevision.value >= ensimmainenTulevaMuutosmaarays.value?.revision) {
+      return 'tuleva';
+    }
 
-      if (this.currentRevision >= this.uusinVoimassaolevaJulkaisu?.revision) {
-        return 'voimassa';
-      }
+    if (currentRevision.value >= uusinVoimassaolevaJulkaisu.value?.revision) {
+      return 'voimassa';
     }
   }
 
-  get currentRevision() {
-    return _.toNumber(this.$route?.params?.revision || _.max(_.map(this.julkaisut, 'revision')));
-  }
+  return undefined;
+});
 
-  get maxRevision() {
-    return _.max(_.map(this.julkaisut, 'revision'));
-  }
+const currentRevision = computed(() => {
+  return _.toNumber(route?.params?.revision || _.max(_.map(props.julkaisut, 'revision')));
+});
 
-  get uusinJulkaisu() {
+const maxRevision = computed(() => {
+  return _.max(_.map(props.julkaisut, 'revision'));
+});
+
+const uusinJulkaisu = computed(() => {
+  return {
+    ..._.last(props.julkaisut),
+    muutosmaarays: uusinTulevaMuutosmaarays.value?.muutosmaarays,
+  };
+});
+
+const currentJulkaisu = computed(() => {
+  const currentJulkaisuObj = _.find(props.julkaisut, julkaisu => julkaisu.revision === currentRevision.value);
+
+  if (currentJulkaisuObj) {
     return {
-      ..._.last(this.julkaisut),
-      muutosmaarays: this.uusinTulevaMuutosmaarays?.muutosmaarays,
+      ...currentJulkaisuObj,
+      muutosmaarays: currentJulkaisuObj?.muutosmaarays || _.find(julkaisutReversed.value, j => j.revision < currentJulkaisuObj.revision && j.muutosmaarays)?.muutosmaarays,
     };
   }
 
-  get currentJulkaisu() {
-    const currentJulkaisu = _.find(this.julkaisut, julkaisu => julkaisu.revision === this.currentRevision);
+  return undefined;
+});
 
-    if (currentJulkaisu) {
-      return {
-        ...currentJulkaisu,
-        muutosmaarays: currentJulkaisu?.muutosmaarays || _.find(this.julkaisutReversed, j => j.revision < currentJulkaisu.revision && j.muutosmaarays)?.muutosmaarays,
-      };
-    }
-  }
+const julkaisuPvm = computed(() => {
+  return currentJulkaisu.value?.luotu;
+});
 
-  get julkaisuPvm() {
-    return this.currentJulkaisu?.luotu;
-  }
+const hasSisaltoKielelle = computed(() => {
+  return _.includes(props.peruste?.kielet, _.toString(Kielet.getSisaltoKieli.value));
+});
 
-  async toVoimassaolevaanJulkaisuun() {
-    let route = _.assign({}, this.$route);
-    await this.$router.push(
-      {
-        name: route.name!,
-        params: {
-          ...route.params,
-          revision: _.toString(this.uusinVoimassaolevaJulkaisu?.revision),
-        },
-      });
-  }
+const toVoimassaolevaanJulkaisuun = async () => {
+  let routeObj = _.assign({}, route);
+  await router.push(
+    {
+      name: routeObj.name!,
+      params: {
+        ...routeObj.params,
+        revision: _.toString(uusinVoimassaolevaJulkaisu.value?.revision),
+      },
+    });
+};
 
-  get hasSisaltoKielelle() {
-    return _.includes(this.peruste?.kielet, _.toString(Kielet.getSisaltoKieli.value));
-  }
-
-  async toUusimpaanJulkaisuun() {
-    let route = _.assign({}, this.$route);
-    delete route.params?.revision;
-    await this.$router.push({ name: route.name!, params: route.params });
-    this.$router.go(0);
-  }
-}
+const toUusimpaanJulkaisuun = async () => {
+  let routeObj = _.assign({}, route);
+  delete routeObj.params?.revision;
+  await router.push({ name: routeObj.name!, params: routeObj.params });
+  router.go(0);
+};
 </script>
 
 <style scoped lang="scss">

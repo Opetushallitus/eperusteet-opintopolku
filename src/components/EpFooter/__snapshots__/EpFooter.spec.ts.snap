@@ -1,30 +1,30 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`EpFooter Renders 1`] = `
-<div class="container">
-  <footer>
-    <div class="horizontal-line"><routerlink-stub to="[object Object]"><img src="" alt="eperusteet"></routerlink-stub></div>
-    <div class="footer-row">
-      <div class="footer-content">
-        footer-eperusteet-palvelu
-      </div>
-      <div class="footer-links"><!---->
-        <div class="d-flex"><span class="icon material-icons">chevron_right</span>
-          <div class="linkki"><a href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste" rel="noopener noreferrer" target="_blank"><!----> saavutettavuusseloste <!----></a></div>
+exports[`EpFooter > Renders 1`] = `
+"<div data-v-d45b1334="" class="container">
+  <footer data-v-d45b1334="">
+    <div data-v-d45b1334="" class="horizontal-line"><a data-v-d45b1334=""><img data-v-d45b1334="" src="/eperusteet-frontend-utils/vue/public/img/banners/opintopolku/logo.svg" alt="eperusteet"></a></div>
+    <div data-v-d45b1334="" class="footer-row">
+      <div data-v-d45b1334="" class="footer-content">footer-eperusteet-palvelu</div>
+      <div data-v-d45b1334="" class="footer-links">
+        <!--v-if-->
+        <div data-v-d45b1334="" class="d-flex"><span data-v-5adf8627="" data-v-d45b1334="" class="material-icons icon">chevron_right</span>
+          <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="https://opintopolku.fi/konfo/fi/sivu/eperusteet-saavutettavuusseloste" rel="noopener noreferrer" target="_blank">
+              <!--v-if-->saavutettavuusseloste
+              <!--v-if-->
+            </a></div>
         </div>
-        <div class="d-flex"><span class="icon material-icons">chevron_right</span>
-          <div class="linkki"><a href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank"><!----> siirry-virkailijanakymaan <span class="icon ml-1 material-icons" style="font-size: 18px;" alt="avautuu-uuteen-valilehteen">
-      launch
-    </span></a></div>
+        <div data-v-d45b1334="" class="d-flex"><span data-v-5adf8627="" data-v-d45b1334="" class="material-icons icon">chevron_right</span>
+          <div data-v-93539af8="" data-v-d45b1334="" class="linkki"><a data-v-93539af8="" href="http://virkailija.opintopolku.fi" rel="noopener noreferrer" target="_blank">
+              <!--v-if-->siirry-virkailijanakymaan<span data-v-5adf8627="" data-v-93539af8="" class="material-icons icon ml-1" style="font-size: 18px;" alt="avautuu-uuteen-valilehteen">launch</span>
+            </a></div>
         </div>
       </div>
     </div>
-    <div class="horizontal-line"><a href="https://www.oph.fi/fi"><img src="" alt="oph" class="logo"></a></div>
-    <div class="footer-row">
-      <div class="footer-oph">
-        footer-oph
-      </div>
+    <div data-v-d45b1334="" class="horizontal-line"><a data-v-d45b1334="" href="https://www.oph.fi/fi"><img data-v-d45b1334="" class="logo" src="/eperusteet-frontend-utils/vue/public/img/banners/opintopolku/oph_logo2.png" alt="oph"></a></div>
+    <div data-v-d45b1334="" class="footer-row">
+      <div data-v-d45b1334="" class="footer-oph">footer-oph</div>
     </div>
   </footer>
-</div>
+</div>"
 `;

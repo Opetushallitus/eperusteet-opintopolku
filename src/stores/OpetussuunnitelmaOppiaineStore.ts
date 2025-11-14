@@ -1,12 +1,9 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed, ref, watch } from '@vue/composition-api';
+import  { reactive, computed } from'vue';
 import { Opetussuunnitelmat, OppiaineenVuosiluokat, PerusteOppiaineDto, Oppiaineet, UnwrappedOpsOppiaineDto,
   OppiaineenVuosiluokkakokonaisuudet, PerusteOppiaineenVuosiluokkakokonaisuusDto,
   OpetussuunnitelmaKevytDto, Vuosiluokkakokonaisuudet, UnwrappedOpsOppiaineDtoTyyppiEnum } from '@shared/api/ylops';
 import * as _ from 'lodash';
 import { Kielet } from '@shared/stores/kieli';
-
-Vue.use(VueCompositionApi);
 
 export class OpetussuunnitelmaOppiaineStore {
   public state = reactive({

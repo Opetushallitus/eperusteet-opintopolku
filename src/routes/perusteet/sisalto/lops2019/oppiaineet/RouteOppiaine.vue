@@ -1,62 +1,59 @@
 <template>
-<div class="content">
-  <div v-if="oppiaine">
-    <h2 class="otsikko" slot="header">{{ $kaanna(oppiaine.nimi) }}</h2>
+  <div class="content">
+    <div v-if="oppiaine">
+      <h2
+        class="otsikko"
+      >
+        {{ $kaanna(oppiaine.nimi) }}
+      </h2>
 
-    <div class="teksti">
-      <oppiaine-esitys :oppiaine="oppiaine"
-                       :termit="termit"
-                       :kuvat="kuvat" />
+      <div class="teksti">
+        <oppiaine-esitys
+          :oppiaine="oppiaine"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
+      </div>
+
+      <EpOpasKiinnitysLinkki :koodi-uri="oppiaineKoodiUri" />
+
+      <slot name="previous-next-navigation" />
     </div>
-
-    <EpOpasKiinnitysLinkki :koodiUri="oppiaineKoodiUri"/>
-
-    <slot name="previous-next-navigation" />
+    <ep-spinner v-else />
   </div>
-  <ep-spinner v-else />
-</div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
-import { Lops2019OppiaineStore } from '@/stores/Lops2019OppiaineStore';
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import OppiaineEsitys from './OppiaineEsitys.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 import * as _ from 'lodash';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
-@Component({
-  components: {
-    EpSpinner,
-    OppiaineEsitys,
-    EpOpasKiinnitysLinkki,
-  },
-})
-export default class RouteOppiaine extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const perusteDataStore = getCachedPerusteStore();
+const route = useRoute();
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get oppiaineId() {
-    return _.toNumber(this.$route.params.oppiaineId);
-  }
+const oppiaineId = computed(() => {
+  return _.toNumber(route.params.oppiaineId);
+});
 
-  get oppiaine() {
-    return this.perusteDataStore.getJulkaistuPerusteSisalto({ id: this.oppiaineId }) as any;
-  }
+const oppiaine = computed(() => {
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: oppiaineId.value }) as any;
+});
 
-  get oppiaineKoodiUri() {
-    return this.oppiaine?.koodi?.uri;
-  }
-}
+const oppiaineKoodiUri = computed(() => {
+  return oppiaine.value?.koodi?.uri;
+});
 </script>
 
 <style scoped lang="scss">

@@ -1,75 +1,38 @@
-import { Store, Getter, State } from '@shared/stores/store';
+import { ref, computed } from 'vue';
+import { defineStore } from 'pinia';
 import { PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { julkaistutPerusteet, JulkaistutPerusteetQuery } from '@/api/eperusteet';
 import _ from 'lodash';
-import { IPerusteHakuStore } from './IPerusteHakuStore';
-import { Debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
+import { debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
+import { Page } from '@shared/tyypit';
 
-@Store
-export class AmmatillinenOpasHakuStore implements IPerusteHakuStore {
-  @State() public perusteet: PerusteenJulkaisuData[] | null = null;
-  @State() public page = 0;
-  @State() public pages = 0;
-  @State() public total = 0;
-  @State() public perPage = 10;
-
-  @State()
-  public filterdata: JulkaistutPerusteetQuery = {
-    nimi: '',
-    koulutustyyppi: [
-      'koulutustyyppi_1',
-      'koulutustyyppi_11',
-      'koulutustyyppi_12',
-      'koulutustyyppi_5',
-      'koulutustyyppi_18',
-    ],
-    tuleva: true,
-    voimassaolo: true,
-    siirtyma: false,
-    poistunut: false,
+export const useAmmatillinenOpasHakuStore = defineStore('ammatillinenOpasHaku', () => {
+  // State
+  const perusteet = ref<Page<PerusteenJulkaisuData> | null>(null);
+  const hardFilters = ref<JulkaistutPerusteetQuery>({
     tyyppi: 'opas',
+  });
+
+  const filterToQueryParams = {
+    nimiTaiKoodi: 'query',
+    sivu: 'page',
   };
 
-  constructor(data: JulkaistutPerusteetQuery = { }) {
-    this.filterdata = {
-      ...this.filterdata,
-      ...data,
-    };
-  }
+  const fetch = debounced(async (filters: JulkaistutPerusteetQuery) => {
+    perusteet.value = null;
+    perusteet.value = (await julkaistutPerusteet(
+      {
+        ...filters,
+        ...hardFilters.value,
+        sivukoko: 10,
+      },
+    ));
+  });
 
-  @Getter((state) => {
-    return [
-      'tuleva',
-      'voimassaolo',
-    ];
-  })
-  public readonly toggles!: string[];
-
-  @Getter((state) => ({
-    ...state.filterdata,
-    sivu: state.page,
-    sivukoko: state.perPage,
-    kieli: Kielet.getSisaltoKieli.value,
-  }))
-  public readonly filters!: JulkaistutPerusteetQuery;
-
-  @Debounced(DEFAULT_PUBLIC_WAIT_TIME_MS)
-  async fetch() {
-    this.perusteet = null;
-    const result = await julkaistutPerusteet(this.filters);
-    this.total = result['kokonaismäärä'];
-    this.page = result.sivu;
-    this.perPage = result.sivukoko;
-    this.pages = result.sivuja;
-    this.perusteet = result.data;
-  }
-
-  async updateFilters(filters: JulkaistutPerusteetQuery) {
-    this.filterdata = {
-      ...this.filters,
-      ...filters,
-    };
-    await this.fetch();
-  }
-}
+  return {
+    perusteet,
+    filterToQueryParams,
+    fetch,
+  };
+});

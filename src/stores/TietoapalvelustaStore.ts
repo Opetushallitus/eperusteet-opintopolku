@@ -1,40 +1,50 @@
-import Vue from 'vue';
-import VueCompositionApi, { reactive, computed } from '@vue/composition-api';
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 import { Julkinen, TietoaPalvelustaDto } from '@shared/api/eperusteet';
 import _ from 'lodash';
 
-Vue.use(VueCompositionApi);
+export const useTietoapalvelustaStore = defineStore('tietoapalvelusta', () => {
+  // State as refs
+  const tietoapalvelustaData = ref<TietoaPalvelustaDto | null>(null);
 
-export class TietoapalvelustaStore {
-  public state = reactive({
-    tietoapalvelusta: null as TietoaPalvelustaDto | null,
-  });
-
-  public readonly tietoapalvelusta = computed(() => {
-    if (!this.state.tietoapalvelusta) {
+  // Getters as computed properties
+  const tietoapalvelusta = computed(() => {
+    if (!tietoapalvelustaData.value) {
       return null;
     }
 
     return {
       name: 'tietoa-palvelusta',
       linkText: 'tutustu-palveluun',
-      translatedText: this.state.tietoapalvelusta.tietoapalvelustaKuvaus,
+      translatedText: tietoapalvelustaData.value.tietoapalvelustaKuvaus,
       route: {
         name: 'peruste',
         params: {
           koulutustyyppi: 'opas',
-          perusteId: _.toString(this.state.tietoapalvelusta.id),
+          perusteId: _.toString(tietoapalvelustaData.value.id),
         },
       },
     };
   });
 
-  public async fetch() {
+  // Actions as functions
+  async function fetch() {
     try {
-      this.state.tietoapalvelusta = (await Julkinen.getTietoaPalvelusta()).data;
+      tietoapalvelustaData.value = (await Julkinen.getTietoaPalvelusta()).data;
     }
     catch (e) {
-      this.state.tietoapalvelusta = null;
+      tietoapalvelustaData.value = null;
     }
   }
-}
+
+  return {
+    // State
+    tietoapalvelustaData,
+
+    // Getters
+    tietoapalvelusta,
+
+    // Actions
+    fetch,
+  };
+});

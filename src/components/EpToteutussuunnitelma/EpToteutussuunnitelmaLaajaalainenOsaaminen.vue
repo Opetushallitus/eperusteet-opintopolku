@@ -1,46 +1,52 @@
 <template>
   <div>
-    <portal-target name="toteutussuunnitelma-sisalto-header"></portal-target>
-    <ep-content-viewer :value="$kaanna(perusteenTeksti)" :kuvat="kuvat" v-if="sisaltoviite.naytaPerusteenTeksti && perusteenTeksti"/>
-    <ep-content-viewer :value="$kaanna(sisaltoviite.tuvaLaajaAlainenOsaaminen.teksti)" :kuvat="kuvat"/>
+    <ep-content-viewer
+      v-if="sisaltoviite.naytaPerusteenTeksti && perusteenTeksti"
+      :value="$kaanna(perusteenTeksti)"
+      :kuvat="kuvat"
+    />
+    <ep-content-viewer
+      :value="$kaanna(sisaltoviite.tuvaLaajaAlainenOsaaminen.teksti)"
+      :kuvat="kuvat"
+    />
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { computed } from 'vue';
 import { Matala } from '@shared/api/amosaa';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { ToteutussuunnitelmaDataStore } from '@/stores/ToteutussuunnitelmaDataStore';
+import { $kaanna } from '@shared/utils/globals';
+import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 
-@Component({
-  components: {
-    EpContentViewer,
+const props = defineProps({
+  sisaltoviite: {
+    type: Object as () => Matala,
+    required: true,
   },
-})
-export default class EpToteutussuunnitelmaLaajaalainenOsaaminen extends Vue {
-  @Prop({ required: true })
-  private sisaltoviite!: Matala;
+  kuvat: {
+    type: Array,
+    required: true,
+  },
+});
 
-  @Prop({ required: true })
-  private kuvat!: any[];
+const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
-  @Prop({ required: true })
-  private opetussuunnitelmaDataStore!: ToteutussuunnitelmaDataStore;
-
-  get perusteenTeksti(): any {
-    if (this.perusteenOsa) {
-      return this.perusteenOsa.teksti;
-    }
-
-    return (this.sisaltoviite as any).perusteteksti;
+const perusteenOsa = computed(() => {
+  if (props.sisaltoviite.perusteenOsaId) {
+    return opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: props.sisaltoviite.perusteenOsaId });
   }
 
-  get perusteenOsa() {
-    if (this.sisaltoviite.perusteenOsaId) {
-      return this.opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto({ id: this.sisaltoviite.perusteenOsaId });
-    }
+  return undefined;
+});
+
+const perusteenTeksti = computed((): any => {
+  if (perusteenOsa.value) {
+    return perusteenOsa.value.teksti;
   }
-}
+
+  return (props.sisaltoviite as any).perusteteksti;
+});
 </script>
 
 <style scoped lang="scss">

@@ -1,104 +1,88 @@
-import { mount, createLocalVue, RouterLinkStub } from '@vue/test-utils';
-import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
-import { Kielet } from '@shared/stores/kieli';
-import { Kaannos } from '@shared/plugins/kaannos';
-import VueI18n from 'vue-i18n';
+import { RouterLinkStub } from '@vue/test-utils';
 import RouteAmmatillinenValmisteillaOlevat from './RouteAmmatillinenValmisteillaOlevat.vue';
-import { ValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
-import { mock } from '@shared/utils/jestutils';
+import { createMockedStore, mock } from '@shared/utils/jestutils';
+import { createMount } from '@shared/utils/__tests__/stubs';
+import { nextTick } from 'vue';
+import { createPinia, setActivePinia } from 'pinia';
+import { useValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
+import { vi } from 'vitest';
 
-Vue.use(BootstrapVue);
+vi.mock('@/stores/ValmisteillaOlevatStore', () => ({
+  useValmisteillaOlevatStore: vi.fn(),
+}));
 
 describe('RouteAmmatillinenValmisteillaOlevat component', () => {
-  const localVue = createLocalVue();
-  localVue.use(VueI18n);
-  Kielet.install(localVue);
-  localVue.use(new Kaannos());
 
-  const valmisteillaOlevatStore = (perusteet) => {
-    const storemock = mock(ValmisteillaOlevatStore);
-    storemock.state.perusteet = {
-      sivu: 0,
-      sivuja: 1,
-      sivukoko: 10,
-      kokonaismäärä: 1,
-      data: perusteet,
-    } as any;
-    return storemock;
-  };
 
   test('Renders', async () => {
-    const wrapper = mount(RouteAmmatillinenValmisteillaOlevat, {
-      localVue,
-      propsData: {
-        valmisteillaOlevatStore: valmisteillaOlevatStore([]),
+    (useValmisteillaOlevatStore as any).mockReturnValue({
+      perusteet: {
+        sivu: 0,
+        sivuja: 0,
+        sivukoko: 10,
+        kokonaismäärä: 0,
+        data: [],
       },
-      mocks: {
-        $t: x => x,
-        $sd: x => x,
-        $sdm: x => x,
-      },
-      stubs: {
-        'router-link': RouterLinkStub,
-      },
+      fetch: () => new Promise<void>(resolve => resolve()),
     });
 
-    expect(wrapper.html()).toBeTruthy();
+    const wrapper = createMount(RouteAmmatillinenValmisteillaOlevat);
+    await nextTick();
 
+    expect(wrapper.html()).toBeTruthy();
     expect(wrapper.findAll('.valmisteilla-row')).toHaveLength(0);
   });
 
   test('valmisteilla data', async () => {
-    const wrapper = mount(RouteAmmatillinenValmisteillaOlevat, {
-      localVue,
-      propsData: {
-        valmisteillaOlevatStore: valmisteillaOlevatStore(
-          [
-            {
-              id: 1,
-              nimi: {
-                fi: 'perustenimi',
-              },
-              voimassaoloAlkaa: 1613032868150,
-              perusteenAikataulut: [
-                {
-                  id: 2,
-                  tapahtumapaiva: 1613858400000,
-                  tavoite: {
-                    fi: 'tavoite1',
-                  },
-                  julkinen: true,
-                },
-                {
-                  id: 3,
-                  tapahtumapaiva: 1613858400000,
-                  tavoite: {
-                    fi: 'tavoite2',
-                  },
-                  julkinen: true,
-                },
-                {
-                  id: 3,
-                  tapahtumapaiva: 1613858400000,
-                  tavoite: {
-                    fi: 'tavoite2',
-                  },
-                  julkinen: false,
-                },
-              ],
+    (useValmisteillaOlevatStore as any).mockReturnValue({
+      perusteet:{
+        sivu: 0,
+        sivuja: 1,
+        sivukoko: 10,
+        kokonaismäärä: 1,
+        data: [
+          {
+            id: 1,
+            nimi: {
+              fi: 'perustenimi',
             },
-          ]),
-      },
-      mocks: {
-        $t: x => x,
-        $sd: x => x,
-        $sdm: x => x,
-      },
-      stubs: {
-        'router-link': RouterLinkStub,
-      },
+            voimassaoloAlkaa: 1613032868150,
+            perusteenAikataulut: [
+              {
+                id: 2,
+                tapahtumapaiva: 1613858400000,
+                tavoite: {
+                  fi: 'tavoite1',
+                },
+                julkinen: true,
+              },
+              {
+                id: 3,
+                tapahtumapaiva: 1613858400000,
+                tavoite: {
+                  fi: 'tavoite2',
+                },
+                julkinen: true,
+              },
+              {
+                id: 3,
+                tapahtumapaiva: 1613858400000,
+                tavoite: {
+                  fi: 'tavoite2',
+                },
+                julkinen: false,
+              },
+            ],
+          },
+        ],
+      } as any,
+      fetch: () => new Promise<void>(resolve => resolve()),
     });
+
+    const wrapper = createMount(RouteAmmatillinenValmisteillaOlevat);
+
+
+    await nextTick();
 
     expect(wrapper.findAll('.valmisteilla-row')).toHaveLength(1);
     const valmisteilla = wrapper.findAll('.valmisteilla-row').at(0);
@@ -108,7 +92,7 @@ describe('RouteAmmatillinenValmisteillaOlevat component', () => {
     valmisteilla.find('.avaa-link')
       .trigger('click');
 
-    await localVue.nextTick();
+    await nextTick();
 
     expect(valmisteilla).not.toContain('nayta-aikataulu');
     expect(valmisteilla.html()).toContain('piilota-aikataulu');

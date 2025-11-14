@@ -10,7 +10,7 @@ export interface VoimassaoloTieto {
   tyyppi: 'tuleva' | 'voimassa' | 'siirtyma' | 'voimassaoloPaattynyt' | 'siirtymaPaattynyt';
   teksti: string;
   paiva: number;
-};
+}
 
 interface VoimassaoloTietue {
   voimassaoloAlkaa: number;

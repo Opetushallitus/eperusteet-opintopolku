@@ -1,24 +1,19 @@
 <template>
-<div>
-  <slot />
-  <p class="kuvaus">{{ $t('kooste-kuvaus-ohjeet') }}</p>
-  <peruste-ammatillinen-haku :peruste-haku-store="perusteHakuStoreOhjeet" tyyppi="opas"/>
-</div>
+  <div>
+    <slot />
+    <p class="kuvaus">
+      {{ $t('kooste-kuvaus-ohjeet') }}
+    </p>
+    <peruste-ammatillinen-haku
+      tyyppi="opas"
+    />
+  </div>
 </template>
 
-<script lang="ts">
-import { Vue, Component, Prop } from 'vue-property-decorator';
+<script setup lang="ts">
+import { ref } from 'vue';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
-import { AmmatillinenOpasHakuStore } from '@/stores/AmmatillinenOpasHakuStore';
 
-@Component({
-  components: {
-    PerusteAmmatillinenHaku,
-  },
-})
-export default class RouteAmmatillinenOhjeet extends Vue {
-  private perusteHakuStoreOhjeet = new AmmatillinenOpasHakuStore();
-}
 </script>
 
 <style scoped lang="scss">

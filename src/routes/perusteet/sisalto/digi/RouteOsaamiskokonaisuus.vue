@@ -1,39 +1,93 @@
 <template>
   <div class="content">
     <div v-if="perusteenOsa">
-      <h2 class="otsikko mb-4">{{ $kaanna(perusteenOsa.nimi) }}</h2>
+      <h2 class="otsikko mb-4">
+        {{ $kaanna(perusteenOsa.nimi) }}
+      </h2>
 
-      <ep-content-viewer :value="$kaanna(perusteenOsa.kuvaus)" :termit="termit" :kuvat="kuvat" />
+      <ep-content-viewer
+        :value="$kaanna(perusteenOsa.kuvaus)"
+        :termit="termit"
+        :kuvat="kuvat"
+      />
 
-      <div class="mt-5" v-for="(aihekokonaisuus, index) in perusteenOsa.aihekokonaisuudet" :key="'aihekokonaisuus'+index">
-        <h3>{{$kaanna(aihekokonaisuus.otsikko)}}</h3>
-        <ep-content-viewer :value="$kaanna(aihekokonaisuus.yleiskuvaus)" :termit="termit" :kuvat="kuvat" />
+      <div
+        v-for="(aihekokonaisuus, index) in perusteenOsa.aihekokonaisuudet"
+        :key="'aihekokonaisuus'+index"
+        class="mt-5"
+      >
+        <h3>{{ $kaanna(aihekokonaisuus.otsikko) }}</h3>
+        <ep-content-viewer
+          :value="$kaanna(aihekokonaisuus.yleiskuvaus)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </div>
 
-      <EpCollapse :borderBottom="false">
-        <h3 slot="header" class="collapse-header">{{ $kaanna(perusteenOsa.nimi) }} {{$t('varhaiskasvatuksessa-ja-esi-ja-perusopetuksessa')}}</h3>
+      <EpCollapse :border-bottom="false">
+        <template #header>
+          <h3
+            class="collapse-header"
+          >
+            {{ $kaanna(perusteenOsa.nimi) }} {{ $t('varhaiskasvatuksessa-ja-esi-ja-perusopetuksessa') }}
+          </h3>
+        </template>
 
         <b-tabs>
-          <b-tab :title="$t(kasitteisto.taso.toLowerCase())" v-for="kasitteisto in perusteenOsa.kasitteistot" :key="'kasitteisto' + kasitteisto.taso">
-            <ep-content-viewer class="mt-3" :value="$kaanna(kasitteisto.kuvaus)" :termit="termit" :kuvat="kuvat" />
+          <b-tab
+            v-for="kasitteisto in perusteenOsa.kasitteistot"
+            :key="'kasitteisto' + kasitteisto.taso"
+            :title="$t(kasitteisto.taso.toLowerCase())"
+          >
+            <ep-content-viewer
+              class="mt-3"
+              :value="$kaanna(kasitteisto.kuvaus)"
+              :termit="termit"
+              :kuvat="kuvat"
+            />
           </b-tab>
         </b-tabs>
       </EpCollapse>
 
-      <EpCollapse :borderBottom="false" v-if="perusteenOsa.keskeinenKasitteisto">
-        <h3 slot="header" class="collapse-header">{{$t('keskeinen-kasitteisto')}}</h3>
-        <ep-content-viewer :value="$kaanna(perusteenOsa.keskeinenKasitteisto)" :termit="termit" :kuvat="kuvat" />
+      <EpCollapse
+        v-if="perusteenOsa.keskeinenKasitteisto"
+        :border-bottom="false"
+      >
+        <template #header>
+          <h3
+            class="collapse-header"
+          >
+            {{ $t('keskeinen-kasitteisto') }}
+          </h3>
+        </template>
+        <ep-content-viewer
+          :value="$kaanna(perusteenOsa.keskeinenKasitteisto)"
+          :termit="termit"
+          :kuvat="kuvat"
+        />
       </EpCollapse>
 
-      <EpCollapse :borderBottom="false" :collapsable="false">
-        <h3 slot="header" class="collapse-header">{{$t('paa-alueet')}}</h3>
+      <EpCollapse
+        :border-bottom="false"
+        :collapsable="false"
+      >
+        <template #header>
+          <h3
+            class="collapse-header"
+          >
+            {{ $t('paa-alueet') }}
+          </h3>
+        </template>
         <div class="row">
           <router-link
             v-for="paaAlue in paaAlueet"
             :key="'paaAlue'+paaAlue.id"
             class="paa-alue col-3"
-            :to="{name: 'perusteOsaamiskokonaisuusPaaAlue', params: {osaamiskokonaisuusPaaAlueId: paaAlue.id + ''}}">
-            <div class="nimi">{{$kaanna(paaAlue.perusteenOsa.nimi)}}</div>
+            :to="{name: 'perusteOsaamiskokonaisuusPaaAlue', params: {osaamiskokonaisuusPaaAlueId: paaAlue.id + ''}}"
+          >
+            <div class="nimi">
+              {{ $kaanna(paaAlue.perusteenOsa.nimi) }}
+            </div>
           </router-link>
         </div>
       </EpCollapse>
@@ -44,49 +98,40 @@
   </div>
 </template>
 
-<script lang="ts">
-import { PerusteDataStore } from '@/stores/PerusteDataStore';
-import { PerusteenOsaStore } from '@/stores/PerusteenOsaStore';
+<script setup lang="ts">
 import * as _ from 'lodash';
-import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
+import { computed } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import { useRoute } from 'vue-router';
 
-@Component({
-  components: {
-    EpSpinner,
-    EpContentViewer,
-    EpCollapse,
-  },
-})
-export default class RouteOsaamiskokonaisuus extends Vue {
-  @Prop({ required: true })
-  private perusteDataStore!: PerusteDataStore;
+const route = useRoute();
 
-  @Prop({ required: true })
-  private perusteenOsaStore!: PerusteenOsaStore;
+const perusteDataStore = getCachedPerusteStore();
+const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.osaamiskokonaisuusId);
 
-  get current() {
-    return this.perusteDataStore.current || null;
-  }
+const current = computed(() => {
+  return perusteDataStore.current || null;
+});
 
-  get perusteenOsa() {
-    return this.perusteenOsaStore.perusteenOsa;
-  }
+const perusteenOsa = computed(() => {
+  return perusteenOsaStore.perusteenOsa;
+});
 
-  get termit() {
-    return this.perusteDataStore.termit;
-  }
+const termit = computed(() => {
+  return perusteDataStore.termit;
+});
 
-  get kuvat() {
-    return this.perusteDataStore.kuvat;
-  }
+const kuvat = computed(() => {
+  return perusteDataStore.kuvat;
+});
 
-  get paaAlueet(): any[] {
-    return _.filter(this.perusteenOsaStore.perusteenOsaViite?.lapset, lapsi => _.get(lapsi, 'perusteenOsa.osanTyyppi') === 'osaamiskokonaisuus_paa_alue');
-  }
-}
+const paaAlueet = computed((): any[] => {
+  return _.filter(perusteenOsaStore.perusteenOsaViite?.lapset, lapsi => _.get(lapsi, 'perusteenOsa.osanTyyppi') === 'osaamiskokonaisuus_paa_alue');
+});
 </script>
 
 <style scoped lang="scss">
@@ -97,7 +142,7 @@ export default class RouteOsaamiskokonaisuus extends Vue {
   padding: $content-padding;
 }
 
-::v-deep .collapse-button {
+:deep(.collapse-button) {
   background-color: $digitaalinen-osaaminen-color;
   padding: 0.3rem 0.6rem;
   margin-bottom: 16px;
