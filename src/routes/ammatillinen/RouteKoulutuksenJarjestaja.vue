@@ -241,7 +241,7 @@ const kieli = computed(() => {
 
 watch(kieli, async () => {
   await Promise.all([doFetch(), koulutuksenJarjestajaStore.fetch()]);
-}, { immediate: true });
+});
 
 const doFetch = async () => {
   await koulutuksenJarjestajaStore.fetchToteutussuunnitelmat(opsQuery.value, opsPage.value - 1);

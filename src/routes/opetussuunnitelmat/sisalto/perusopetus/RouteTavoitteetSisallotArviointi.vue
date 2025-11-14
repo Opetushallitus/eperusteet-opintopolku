@@ -77,15 +77,14 @@
         name="tavoitteen-osiot"
         class="mt-4"
       >
-        <b-form-checkbox-group v-model="osiot">
-          <b-form-checkbox
-            v-for="osio in osioValinnat"
-            :key="'osio-' + osio"
-            :value="osio"
-          >
-            {{ $t(osio) }}
-          </b-form-checkbox>
-        </b-form-checkbox-group>
+        <EpToggleGroup
+          v-model="osiot"
+          :items="osioValinnat"
+        >
+          <template #default="{ item }">
+            {{ $t(item) }}
+          </template>
+        </EpToggleGroup>
       </ep-form-content>
 
       <hr
@@ -144,6 +143,9 @@ import OppiaineenVuosiluokka from './OppiaineenVuosiluokka.vue';
 import OppiaineenVuosiluokkaTiivistetty from './OppiaineenVuosiluokkaTiivistetty.vue';
 import { oppiaineenVuosiluokkakokonaisuudenRakennin } from './vuosiluokka';
 import { $kaanna } from '@shared/utils/globals';
+import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
+import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import EpToggleGroup from '@shared/components/forms/EpToggleGroup.vue';
 
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 

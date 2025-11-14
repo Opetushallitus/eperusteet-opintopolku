@@ -11,7 +11,7 @@ export function oppiaineenVuosiluokkakokonaisuudenRakennin(
   perusteenOppiaineenVlk,
   oppiaineenPohjanVuosiluokkakokonaisuus,
   perusteenVuosiluokkakokonaisuus) {
-  if (oppiaine.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN && perusteOppiaine)) {
+  if (oppiaine.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN) && perusteOppiaine) {
     return {
       vuosiluokkakokonaisuus: opetussuunnitelmanVuosiluokkakokonaisuus,
       perusteenOppiaineenVlk,
