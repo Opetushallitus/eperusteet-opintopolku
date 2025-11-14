@@ -158,7 +158,7 @@ const linkkiHandler = {
 } as ILinkkiHandler;
 
 provide('linkkiHandler', linkkiHandler);
-provide('opetussuunnitelma', opetussuunnitelma);
+provide('opetussuunnitelma', opetussuunnitelma.value);
 </script>
 
 <style scoped lang="scss">
