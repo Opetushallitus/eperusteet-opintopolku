@@ -54,6 +54,7 @@
 import * as _ from 'lodash';
 import { useTemplateRef } from 'vue';
 import { $kaanna } from '@shared/utils/globals';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 
 const props = defineProps({
   sisaltoalueet: {
