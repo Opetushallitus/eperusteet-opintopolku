@@ -234,26 +234,22 @@ const icon = computed(() => {
 });
 
 // Methods
-const valitseKieli = async (kieli) => {
+const valitseKieli = async (kieli: string) => {
   const current = router.currentRoute.value;
 
-  try {
-    await router.replace({
-      name: current.name,
-      params: {
-        ...current.params,
-        lang: kieli || Kieli.fi,
-      },
-    });
-  }
-  catch (e: any) {
-    if (e.name === 'NavigationDuplicated') {
-      logger.warn('Uusi kieli on sama kuin nykyinen');
-    }
-    else {
-      throw e;
-    }
-  }
+  // Resolve the new route with updated language
+  const newRoute = router.resolve({
+    name: current.name,
+    params: {
+      ...current.params,
+      lang: kieli,
+    },
+    query: current.query,
+  });
+
+  // Force full page reload with new language
+  window.location.href = newRoute.href;
+  window.location.reload();
 };
 
 const closeSidebar = () => {

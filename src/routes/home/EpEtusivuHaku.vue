@@ -2,7 +2,7 @@
   <div>
     <EpSearch
       v-model="queryNimi"
-      :placeholder="$t('')"
+      :placeholder="''"
     >
       <template #label>
         <span class="header">{{ $t('hae-opetus-ja-toteutussuunnitelmia-tai-valtakunnallisia-perusteita') }}</span>

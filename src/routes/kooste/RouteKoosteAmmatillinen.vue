@@ -65,7 +65,7 @@
                 </div>
                 <ep-search
                   v-model="query.haku"
-                  :placeholder="$t('')"
+                  :placeholder="''"
                   class="my-3"
                 >
                   <template #label>

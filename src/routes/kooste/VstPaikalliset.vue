@@ -10,7 +10,7 @@
         class="flex-fill ml-0 mt-3 mb-3 mr-3"
         max-width="true"
         :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-        :placeholder="$t('')"
+        :placeholder="''"
       >
         <template #label>
           <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa') }}</span>

@@ -27,7 +27,7 @@
             v-model="filters.nimiTaiKoodi"
             class="flex-fill ml-0 mt-3 mb-3 mr-3"
             :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
-            :placeholder="$t('')"
+            :placeholder="''"
           >
             <template #label>
               <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa') }}</span>
