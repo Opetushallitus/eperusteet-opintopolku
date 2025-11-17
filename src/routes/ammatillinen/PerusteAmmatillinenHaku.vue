@@ -129,6 +129,7 @@
       </div>
       <div class="pagination d-flex justify-content-center">
         <EpBPagination
+          v-if="total > 0"
           v-model="page"
           :items-per-page="perPage"
           :total="total"
@@ -211,6 +212,7 @@ const fetch = async () => {
     await perusteHakuStore.fetch(
       {
         ...filters.value,
+        kieli: kieli.value,
         sivu: page.value - 1,
       });
 
