@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div class="content" v-if="peruste">
     <h2
       class="otsikko mb-4"
       tabindex="-1"
@@ -461,7 +461,7 @@ watch(kieli, async () => {
 });
 
 const peruste = computed(() => {
-  return perusteDataStore.peruste;
+  return perusteDataStore?.peruste;
 });
 
 const isAmmatillinen = computed(() => {
