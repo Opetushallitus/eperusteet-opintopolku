@@ -85,8 +85,7 @@
     "vue-sticky-directive": "^0.0.10",
     "vue-template-compiler": "^2.7.16",
     "vue-upload-component": "^2.8.22",
-    "webpack": "^5.58.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
+    "webpack": "^5.58.0"
   },
   "engines": {
     "node": "^21"
