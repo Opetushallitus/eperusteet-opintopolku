@@ -14,7 +14,7 @@
       <div class="w-100 mr-2 mb-3">
         <EpSearch
           v-model="filters.nimi"
-          :placeholder="$t('')"
+          :placeholder="''"
         >
           <template #label>
             <span class="font-weight-600">{{ $t('hae-maarayksia') }}</span>

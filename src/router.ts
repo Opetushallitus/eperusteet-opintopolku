@@ -587,7 +587,6 @@ router.afterEach((to) => {
 Virheet.onError((virhe: SovellusVirhe) => {
   logger.error('Route error', virhe);
   hideLoading();
-  console.log('Virheet.onError', router);
   if (unref(router.currentRoute).name !== 'virhe') {
     router.replace({
       name: 'virhe',
