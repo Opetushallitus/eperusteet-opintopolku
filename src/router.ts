@@ -570,7 +570,9 @@ const $loading = useLoading(loadingOptions);
 const loaders: any[] = [];
 
 router.beforeEach((to, from, next) => {
-  loaders.push($loading.show());
+  if (to.name !== from.name || !_.isEqual(to.params, from.params)) {
+    loaders.push($loading.show());
+  }
   next();
 });
 

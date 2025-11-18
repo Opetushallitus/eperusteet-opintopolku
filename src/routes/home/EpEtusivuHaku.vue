@@ -92,6 +92,7 @@ import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { $kaanna, $sd } from '@shared/utils/globals';
 import { usePerusteStore } from '@/stores/PerusteStore';
+import { debounced } from '@shared/utils/delay';
 
 const perusteStore = usePerusteStore();
 const route = useRoute();
@@ -149,7 +150,7 @@ watch(sivu, async (value) => {
   }
 });
 
-const fetchOpsitJaPerusteet = async () => {
+const fetchOpsitJaPerusteet = debounced(async () => {
   if (_.size(queryNimi.value) > 2) {
     isLoading.value = true;
     await perusteStore.getOpsitJaPerusteet({
@@ -170,7 +171,7 @@ const fetchOpsitJaPerusteet = async () => {
     },
   }).catch(() => {});
   isLoading.value = false;
-};
+});
 
 const opsitJaPerusteet = computed(() => {
   return _.chain(perusteStore.opsitJaPerusteet?.data)
