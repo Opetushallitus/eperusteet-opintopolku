@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {
   ammatilliset, digitaalinenOsaaminen, esiJaPerusaste,
+  kielikaantajatutkinto,
   kotoutumiskoulutus, lukioJaTaide, muuKoulutus,
   tutkintoonvalmentava,
   vapaasivistystyo,
@@ -64,9 +65,14 @@ export function otherLinks() {
 }
 
 export function navigoitavatKoulutustyyppiRyhmat(julkaistutKoulutustyypit: string[] | null) {
+  const links: any[] = [];
   if (julkaistutKoulutustyypit) {
-    return _.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(julkaistutKoulutustyypit, alityyppi)));
+    links.push(..._.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(julkaistutKoulutustyypit, alityyppi))));
   }
+  if (julkaistutKoulutustyypit && _.includes(julkaistutKoulutustyypit, 'kielikaantajatutkinto')) {
+    links.push(...kielikaantajatutkinto());
+  }
+  return links;
 }
 
 export function navigoitavatMuutRyhmat(kategoriat, digitaalinenOsaaminenPeruste) {

@@ -78,8 +78,14 @@ export const usePerusteDataStore = (key) => {
       }
       else {
         if (naytaPerusteTiedotNaviMenussa(peruste.value)) {
-          const perusteenTiedotNimi = isYleissivistavaKoulutustyyppi(peruste.value?.koulutustyyppi) ? 'perusteen-tiedot-yleissivistava' : 'perusteen-tiedot';
-          const nimi = peruste.value?.tyyppi === 'normaali' ? perusteenTiedotNimi : 'oppaan-tiedot';
+          let nimi = 'perusteen-tiedot';
+          if (isYleissivistavaKoulutustyyppi(peruste.value?.koulutustyyppi)) {
+            nimi = 'perusteen-tiedot-yleissivistava';
+          }
+          if (peruste.value?.tyyppi === 'opas') {
+            nimi = 'oppaan-tiedot';
+          }
+
           const tiedot = {
             ...buildNavigationNode('tiedot', nimi, 'perusteTiedot', {
               ...(revision.value && { revision: revision.value }),

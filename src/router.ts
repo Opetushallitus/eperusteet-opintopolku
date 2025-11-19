@@ -46,6 +46,8 @@ import RouteLukioOppiaine from '@/routes/perusteet/sisalto/lukio/RouteLukioOppia
 import RouteKurssi from '@/routes/perusteet/sisalto/lukio/RouteKurssi.vue';
 import RouteOsaamiskokonaisuus from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuus.vue';
 import RouteOsaamiskokonaisuusPaaAlue from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuusPaaAlue.vue';
+import RouteKaantajaTaito from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaito.vue';
+import RouteKaantajaTaitotasoasteikko from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaitotasoasteikko.vue';
 import RouteOsaamismerkit from '@/routes/osaamismerkit/RouteOsaamismerkit.vue';
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -517,6 +519,14 @@ export const router = createRouter({
           path: 'osaamiskokonaisuuspaaalue/:osaamiskokonaisuusPaaAlueId',
           component: RouteOsaamiskokonaisuusPaaAlue,
           name: 'perusteOsaamiskokonaisuusPaaAlue',
+        }, {
+          path: 'taito/:kaantajataitoId',
+          component: RouteKaantajaTaito,
+          name: 'perusteKaantajaTaito',
+        }, {
+          path: 'taitotasoasteikko/:kaantajataitotasoasteikkoId',
+          component: RouteKaantajaTaitotasoasteikko,
+          name: 'perusteKaantajaTaitotasoasteikko',
         }],
       },
     ],

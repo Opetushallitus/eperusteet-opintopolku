@@ -201,7 +201,7 @@ import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
-import { koulutustyyppiTheme } from '@shared/utils/perusteet';
+import { koulutustyyppiTheme, tyyppiTheme } from '@shared/utils/perusteet';
 import { MaaraysKevytDtoTilaEnum } from '@shared/generated/eperusteet';
 import { $t } from '@shared/utils/globals';
 
@@ -318,7 +318,7 @@ const perusteRoute = computed(() => {
     return {
       name: 'peruste',
       params: {
-        koulutustyyppi: koulutustyyppiTheme(peruste.value.koulutustyyppi!),
+        koulutustyyppi: peruste.value.koulutustyyppi ? koulutustyyppiTheme(peruste.value.koulutustyyppi!) : tyyppiTheme(peruste.value.tyyppi!),
         perusteId: _.toString(peruste.value.id),
       },
     };
