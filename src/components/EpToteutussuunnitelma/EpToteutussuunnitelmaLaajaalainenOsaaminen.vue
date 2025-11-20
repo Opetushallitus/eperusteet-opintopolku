@@ -1,5 +1,7 @@
 <template>
   <div>
+    <slot name="sisalto-nimi" />
+
     <ep-content-viewer
       v-if="sisaltoviite.naytaPerusteenTeksti && perusteenTeksti"
       :value="$kaanna(perusteenTeksti)"

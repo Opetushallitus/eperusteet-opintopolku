@@ -1,5 +1,7 @@
 <template>
   <div>
+    <slot name="sisalto-nimi" />
+
     <b-row>
       <b-col md="6">
         <ep-form-content
