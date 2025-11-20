@@ -1,5 +1,7 @@
 <template>
   <div v-if="perusteenOsa">
+    <slot name="sisalto-nimi" />
+
     <ep-content-viewer
       :value="$kaanna(perusteenOsa.kuvaus)"
       :kuvat="kuvat"

@@ -6,16 +6,18 @@
       v-else-if="sisaltoviite"
       class="content"
     >
-      <h2 v-if="sisaltoviite.nimi">
-        <span v-if="numerointi">{{ numerointi }}</span>
-        {{ $kaanna(sisaltoviite.nimi) }}
-      </h2>
-
       <ep-toteutussuunnitelma-tekstikappale
         v-if="sisaltoviite.tyyppi === 'tekstikappale'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-tekstikappale>
 
       <ep-toteutussuunnitelma-tutkinnonosa
         v-else-if="sisaltoviite.tyyppi === 'tutkinnonosa'"
@@ -26,44 +28,81 @@
         :arviointiasteikot="arviointiasteikot"
         :julkaisukielet="opetussuunnitelma.julkaisukielet"
       />
+
       <ep-toteutussuunnitelma-suorituspolku
         v-else-if="sisaltoviite.tyyppi === 'suorituspolku' || sisaltoviite.tyyppi === 'osasuorituspolku'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
       />
+
       <ep-toteutussuunnitelma-opintokokonaisuus
         v-else-if="sisaltoviite.tyyppi === 'opintokokonaisuus'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-opintokokonaisuus>
 
       <ep-toteutussuunnitelma-laajaalainen-osaaminen
         v-else-if="sisaltoviite.tyyppi === 'laajaalainenosaaminen'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-laajaalainen-osaaminen>
 
       <ep-toteutussuunnitelma-koulutuksen-osat
         v-else-if="sisaltoviite.tyyppi === 'koulutuksenosat'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-koulutuksen-osat>
 
       <ep-toteutussuunnitelma-koulutuksen-osa
         v-else-if="sisaltoviite.tyyppi === 'koulutuksenosa'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-koulutuksen-osa>
 
       <ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen
         v-else-if="sisaltoviite.tyyppi === 'koto_laajaalainenosaaminen'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen>
 
       <ep-toteutussuunnitelma-koto-opinto-sisalto
         v-else-if="sisaltoviite.tyyppi === 'koto_kielitaitotaso'"
@@ -71,7 +110,14 @@
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
         sisalto-viite-sisalto="kotoKielitaitotaso"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-koto-opinto-sisalto>
 
       <ep-toteutussuunnitelma-koto-opinto-sisalto
         v-else-if="sisaltoviite.tyyppi === 'koto_opinto'"
@@ -79,13 +125,27 @@
         :kuvat="kuvat"
         :opetussuunnitelma="opetussuunnitelma"
         sisalto-viite-sisalto="kotoOpinto"
-      />
+      >
+      <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-koto-opinto-sisalto>
 
-      <EpToteutussuunnitelmaOsaamismerkki
+      <ep-toteutussuunnitelma-osaamismerkki
         v-else-if="sisaltoviite.tyyppi === 'osaamismerkki'"
         :sisaltoviite="sisaltoviite"
         :kuvat="kuvat"
-      />
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-osaamismerkki>
     </div>
   </div>
 </template>
@@ -105,6 +165,7 @@ import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnite
 import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoOpintoSisalto.vue';
 import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
 import EpToteutussuunnitelmaOsaamismerkki from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOsaamismerkki.vue';
+import EpToteutussuunnitelmaSisaltoNimi from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaSisaltoNimi.vue';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import { $kaanna } from '@shared/utils/globals';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';

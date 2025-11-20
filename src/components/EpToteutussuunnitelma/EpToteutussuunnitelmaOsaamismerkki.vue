@@ -1,5 +1,7 @@
 <template>
   <div>
+    <slot name="sisalto-nimi" />
+
     <b-row>
       <b-col>
         <h3 class="mb-4">

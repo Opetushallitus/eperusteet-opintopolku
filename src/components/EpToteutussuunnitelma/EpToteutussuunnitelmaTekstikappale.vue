@@ -1,5 +1,7 @@
 <template>
   <div>
+    <slot name="sisalto-nimi" />
+    
     <ep-collapse
       v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti"
       tyyppi="perusteteksti"

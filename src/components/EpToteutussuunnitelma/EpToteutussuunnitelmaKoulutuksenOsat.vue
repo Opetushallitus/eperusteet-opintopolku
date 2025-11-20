@@ -1,5 +1,7 @@
 <template>
   <div>
+    <slot name="sisalto-nimi" />
+
     <EpSpinner v-if="!koulutuksenosat" />
 
     <template v-else>
