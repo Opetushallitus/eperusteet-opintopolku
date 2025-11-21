@@ -77,7 +77,7 @@
             </div>
           </template>
           <ep-opintojakson-tavoitteet
-            :value="opintojakso"
+            :model-value="opintojakso"
             :moduulit-map="moduulitMap"
             :show-empty-alert="false"
           />
@@ -114,7 +114,7 @@
             </div>
           </template>
           <ep-opintojakson-laaja-alaiset-osaamiset
-            :value="opintojakso"
+            :model-value="opintojakso"
             :opintojakson-oppiaineiden-tiedot="opintojaksonOppiaineidenTiedot"
             :laaja-alaisten-koodit="laajaAlaistenKoodit"
             :show-empty-alert="false"
