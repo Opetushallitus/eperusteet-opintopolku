@@ -161,6 +161,7 @@ import { Puu } from '@shared/api/ylops';
 import { $kaanna } from '@shared/utils/globals';
 import { useRoute } from 'vue-router';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 
 const route = useRoute();
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
