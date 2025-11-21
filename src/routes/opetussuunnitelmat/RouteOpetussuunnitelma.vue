@@ -62,6 +62,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { $kaanna } from '@shared/utils/globals';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
 const route = useRoute();
 const innerPortal = useTemplateRef('innerPortal');

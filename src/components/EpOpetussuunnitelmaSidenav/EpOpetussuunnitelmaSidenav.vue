@@ -7,7 +7,7 @@
           :model-value="query"
           :placeholder="$t('hae-sisallysluettelosta')"
           :sr-only-label-text="$t('hae-suunnitelman-sisallysluettelosta')"
-          @input="setValue"
+          @update:model-value="setValue"
         />
       </div>
       <div class="navigation-tree">
