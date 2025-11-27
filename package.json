@@ -65,7 +65,7 @@
     "uuid": "^7.0.2",
     "vite": "^6.4.1",
     "vite-plugin-commonjs": "^0.10.4",
-    "vue": "3.5.22",
+    "vue": "3.5.23",
     "vue-apexcharts": "^1.5.2",
     "vue-axe": "^1.0.7",
     "vue-class-component": "^7.0.2",
