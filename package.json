@@ -40,7 +40,7 @@
     "bootstrap-vue": "^2.23.1",
     "core-js": "^3.40.0",
     "deepdash": "^5.3.9",
-    "eslint": "9.37.0",
+    "eslint": "9.38.0",
     "eslint-plugin-vue": "^10.5.0",
     "file-loader": "^5.0.2",
     "file-saver": "^2.0.5",
