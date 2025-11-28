@@ -274,7 +274,8 @@ export const router = createRouter({
         component: RouteTutkinnonosaTutke,
         name: 'yhteinentutkinnonosa',
       }, {
-        path: 'ops/:opetussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi*',
+        path: 'ops/:opetussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi',
+        alias: 'ops/:opetussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi/tiedot',
         name: 'ops',
         component: RouteOpetussuunnitelma,
         redirect(to) {
