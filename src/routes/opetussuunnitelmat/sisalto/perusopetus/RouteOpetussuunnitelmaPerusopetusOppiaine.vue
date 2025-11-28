@@ -60,7 +60,7 @@
       </b-tabs>
 
       <oppiaineen-vuosiluokkakokonaisuus
-        v-else
+        v-else-if="oppiaineenVuosiluokkakokonaisuus"
         :tietue="oppiaineenVuosiluokkakokonaisuus"
         :kuvat="kuvat"
         :termit="termit"
@@ -83,6 +83,7 @@ import EpAlert from '@shared/components/EpAlert/EpAlert.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { oppiaineenVuosiluokkakokonaisuudenRakennin } from './vuosiluokka';
 import { $kaanna } from '@shared/utils/globals';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
@@ -151,11 +152,14 @@ const laajaalaisetOsaamiset = computed(() => {
 });
 
 const oppiaineenVuosiluokkakokonaisuudet = computed(() => {
-  const oppiaineenVlk = _.filter(oppiaine.value?.vuosiluokkakokonaisuudet, vlk =>
-    _.includes(_.map(opetussuunnitelmanVuosiluokkakokonaisuudet.value, 'vuosiluokkakokonaisuus._tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')));
+  const oppiaineenVlk = _.chain(oppiaine.value?.vuosiluokkakokonaisuudet)
+    .filter(vlk =>
+      _.includes(_.map(opetussuunnitelmanVuosiluokkakokonaisuudet.value, 'vuosiluokkakokonaisuus._tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')))
+    .filter(vlk => oppiaine.value?.tyyppi !== _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN) || _.includes(_.map(perusteOppiaineVuosiluokkakokonaisuudet.value, 'tunniste'), _.get(vlk, '_vuosiluokkakokonaisuus')))
+    .value();
 
   return _.map(oppiaineenVlk, (oppiaineenVuosiluokkakokonaisuus) => {
-    const opetussuunnitelmanVuosiluokkakokonaisuus = _.get(_.find(opetussuunnitelmanVuosiluokkakokonaisuudet.value, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')), 'vuosiluokkakokonaisuus');
+    const opetussuunnitelmanVuosiluokkakokonaisuus = _.get(_.find(opetussuunnitelmanVuosiluokkakokonaisuudet.value, vlk => _.get(vlk.vuosiluokkakokonaisuus, '_tunniste') === _.get(oppiaineenVuosiluokkakokonaisuus, '_vuosiluokkakokonaisuus')), 'vuosiluokkakokonaisuus') as any;
     const perusteenVuosiluokkakokonaisuus = _.find(perusteenVuosiluokkakokonaisuudet.value, vlk => vlk.tunniste === (opetussuunnitelmanVuosiluokkakokonaisuus as any)._tunniste);
 
     if (oppiaine.value?.tyyppi === _.toLower(UnwrappedOpsOppiaineDtoTyyppiEnum.YHTEINEN)) {

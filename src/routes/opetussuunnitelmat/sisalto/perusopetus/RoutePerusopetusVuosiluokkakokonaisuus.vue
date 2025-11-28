@@ -137,6 +137,8 @@ import EpPerusteContent from '@shared/components/EpPerusteContent/EpPerusteConte
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { $kaanna } from '@shared/utils/globals';
+import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
+import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 

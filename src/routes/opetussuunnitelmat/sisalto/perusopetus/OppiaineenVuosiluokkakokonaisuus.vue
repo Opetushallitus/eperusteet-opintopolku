@@ -113,10 +113,12 @@
         </li>
       </ul>
 
-      <div class="mt-4 font-600">
-        {{ $t('laajuus') }}
-      </div>
-      <div>{{ oppiaine.laajuus }} {{ $t('vuosiviikkotuntia') }}</div>
+      <template v-if="oppiaine">
+        <div class="mt-4 font-600">
+          {{ $t('laajuus') }}
+        </div>
+        <div>{{ oppiaine.laajuus }} {{ $t('vuosiviikkotuntia') }}</div>
+      </template>
 
       <template v-if="hasTekstiContent(oppiaineenVuosiluokkakokonaisuus, 'tehtava') || hasTekstiContent(oppiaineenPohjanVuosiluokkakokonaisuus, 'tehtava')">
         <hr class="mt-5 mb-5">
