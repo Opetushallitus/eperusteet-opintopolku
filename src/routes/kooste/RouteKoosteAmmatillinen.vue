@@ -64,7 +64,7 @@
                   {{ $t('voit-hakea-toteutussuunnitelmaa-nimella-tutkinnon-osalla-tai-organisaatiolla') }}
                 </div>
                 <ep-search
-                  v-model="query.haku"
+                  v-model="query"
                   :placeholder="''"
                   class="my-3"
                 >
@@ -74,12 +74,12 @@
                 </ep-search>
               </div>
               <ep-spinner v-if="!opetussuunnitelmatPage" />
-              <div v-else-if="opetussuunnitelmat.length === 0 && !query.haku">
+              <div v-else-if="opetussuunnitelmat.length === 0 && !query">
                 <div class="alert alert-info">
                   {{ $t('perusteen-pohjalta-ei-toteutettu-toteutussuunnitelmia') }}
                 </div>
               </div>
-              <div v-else-if="opetussuunnitelmat.length === 0 && query.haku">
+              <div v-else-if="opetussuunnitelmat.length === 0 && query">
                 <div class="alert alert-info">
                   {{ $t('ei-hakutuloksia') }}
                 </div>
@@ -104,7 +104,7 @@
                   >
                     <opetussuunnitelma-tile
                       :ops="ops"
-                      :query="query.haku"
+                      :query="query"
                     />
                   </router-link>
                 </div>
@@ -124,7 +124,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -142,31 +142,24 @@ import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import { useHead  } from '@unhead/vue';
 import { $t, $kaanna } from '@shared/utils/globals';
 import { pinia } from '@/pinia';
-import { onMounted } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
 const ammatillinenPerusteKoosteStore = useAmmatillinenPerusteKoosteStore(pinia);
 const mounted = ref(false);
+const page = ref(1);
 
-const query = ref({
-  haku: <null | string> null,
-  sivu: 0,
-});
+const query = ref('');
 
 onMounted(async () => {
   setQueryParams();
-  await fetch(query.value);
-
+  await nextTick();
   mounted.value = true;
 });
 
 const setQueryParams = () => {
-  query.value = {
-    ...query.value,
-    haku: route?.query?.haku as string || null,
-    sivu: (route?.query?.sivu as number || 1) - 1,
-  };
+  query.value = route?.query?.haku as string || null;
+  page.value = _.parseInt(route?.query?.sivu as unknown as string || '1');
 };
 
 const koulutustyyppi = computed(() => {
@@ -233,53 +226,35 @@ const opetussuunnitelmat = computed(() => {
   return [];
 });
 
-const page = computed({
-  get: () => {
-    return opetussuunnitelmatPage.value!.sivu + 1;
-  },
-  set: (value) => {
-    query.value = {
-      ...query.value,
-      sivu: value - 1,
-    };
-  },
-});
-
 const perPage = computed(() => {
   return opetussuunnitelmatPage.value!.sivukoko;
 });
 
-const queryNimi = computed(() => {
-  return query.value.haku;
-});
 
-watch(queryNimi, () => {
-  if (mounted.value) {
-    query.value.sivu = 0;
-  }
+watch(page, async () => {
+  await fetch();
 });
 
 watch(query, async (oldVal, newVal) => {
   if (mounted.value) {
-    query.value.sivu = 0;
-    await fetch(query.value);
-  }
-
-  if (oldVal.sivu !== newVal.sivu) {
-    document.querySelector('.opetussuunnitelma-container a')?.focus();
+    page.value = 1;
+    await fetch();
   }
 }, { deep: true });
 
-const fetch = async (query) => {
-  if (_.size(query.haku) === 0 || _.size(query.haku) > 2) {
-    await ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.haku, sivu: query.sivu });
+const fetch = async () => {
+  if (_.size(query.value) === 0 || _.size(query.value) > 2) {
+    await ammatillinenPerusteKoosteStore.fetchOpetussuunnitelmat({ nimi: query.value, sivu: page.value - 1 });
 
     router.replace({
       query: {
-        ...(query.haku && { haku: query.haku }),
-        sivu: query.sivu + 1,
+        haku: query.value,
+        sivu: page.value,
       },
     }).catch(() => {});
+
+    document.querySelector('.opetussuunnitelma-container a')?.focus();
+
   }
 };
 
