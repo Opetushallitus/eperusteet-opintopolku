@@ -106,7 +106,9 @@ const alikappaleet = computed(() => {
         viitteet.push(head);
       }
 
-      stack.unshift(..._.map(head.lapset, viite => ({
+      const lapsiTekstikappaleet = _.filter(head.lapset, lapsiViite => !!lapsiViite.perusteenOsa?.teksti);
+
+      stack.unshift(..._.map(lapsiTekstikappaleet, viite => ({
         ...viite,
         level: (head.level || 0) + 1,
       })));
