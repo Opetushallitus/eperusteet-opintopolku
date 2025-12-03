@@ -617,7 +617,7 @@ const korvattavatDiaarinumerotFields = computed(() => {
 });
 
 const dokumentti = computed(() => {
-  if (isOpas.value || isKoulutustyyppiPdfTuettuOpintopolku(peruste.value?.koulutustyyppi)) {
+  if (isKoulutustyyppiPdfTuettuOpintopolku(peruste.value)) {
     return perusteDataStore.dokumentti;
   }
 
@@ -633,6 +633,10 @@ const dokumenttiKielistykset = computed(() => {
     'normaali': {
       'otsikko': 'peruste-pdfna',
       'linkki': 'avaa-peruste-pdfna',
+    },
+    'kieli_kaantaja_tutkinto': {
+      'otsikko': 'kielikaantajatutkinto-pdfna',
+      'linkki': 'avaa-kielikaantajatutkinto-pdfna',
     },
   }[peruste.value?.tyyppi || 'normaali'];
 });
