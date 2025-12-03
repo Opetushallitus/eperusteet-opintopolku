@@ -62,7 +62,6 @@ const getChildren = (node) => {
   const type = node.type;
   const currentValue = current.value;
   const parent = node.path[_.size(node.path) - 2];
-
   const isCurrentOrParentSelected = (currentValue && (node.key === currentValue.key
       || (parent && parent.key === currentValue.key && currentValue.type !== 'oppiaineet')));
 
