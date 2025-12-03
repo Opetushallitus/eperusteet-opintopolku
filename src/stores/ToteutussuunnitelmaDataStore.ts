@@ -237,7 +237,7 @@ export const useToteutussuunnitelmaDataStore = (key) => {
       else {
         const tiedot = buildTiedot('toteutussuunnitelmaTiedot', {
           toteutussuunnitelmaId: _.toString(opetussuunnitelmaId.value),
-          ...(revision.value && { revision: revision.value }),
+          ...(revision.value && { revision: _.toString(revision.value) }),
         });
         return buildNavigation(navigation.value, tiedot, true, revision.value);
       }

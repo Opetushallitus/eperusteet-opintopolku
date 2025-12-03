@@ -88,7 +88,7 @@ export const usePerusteDataStore = (key) => {
 
           const tiedot = {
             ...buildNavigationNode('tiedot', nimi, 'perusteTiedot', {
-              ...(revision.value && { revision: revision.value }),
+              ...(revision.value && { revision: _.toString(revision.value) }),
             }),
           };
 
