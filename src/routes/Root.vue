@@ -20,6 +20,7 @@ import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
 import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { $t } from '@shared/utils/globals';
 import { pinia } from '@/pinia';
+import { useHead } from '@unhead/vue';
 
 const route = useRoute();
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
@@ -42,7 +43,6 @@ const sisaltoKieliChange = async () => {
   await julkaistutKoulutustyypitStore.fetch(sisaltoKieli.value);
 };
 
-// Replacing @Meta decorator functionality
 const getMetaInfo = () => {
   const lang = _.get(route, 'params.lang');
   return {
@@ -85,8 +85,7 @@ const getMetaInfo = () => {
   };
 };
 
-// Setup meta information (this might need additional handling depending on Meta implementation)
-// Meta(getMetaInfo);
+useHead(getMetaInfo);
 
 // Watch for sisaltoKieli changes
 watch(sisaltoKieli, async () => {
