@@ -1,6 +1,9 @@
 <template>
   <ep-spinner v-if="!opetussuunnitelma" />
-  <div v-else class="opetussuunnitelma">
+  <div
+    v-else
+    class="opetussuunnitelma"
+  >
     <ep-header
       :koulutustyyppi="koulutustyyppi"
       :tyyppi="tyyppi"

@@ -126,7 +126,7 @@
             <span>{{ $kaanna(koodi.nimi) }}</span>
           </template>
         </EpAmmattitaitovaatimukset>
-        <hr/>
+        <hr>
       </ep-form-content>
 
       <div

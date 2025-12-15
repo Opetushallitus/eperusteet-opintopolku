@@ -27,9 +27,14 @@
           {{ $kaanna(kohdealue.kohdealueOtsikko) || $t('nimeton-kohdealue') }}
         </h3>
 
-        <div class="mb-3" v-if="kohdealue.tutkintovaatimukset && kohdealue.tutkintovaatimukset.length > 0">
+        <div
+          v-if="kohdealue.tutkintovaatimukset && kohdealue.tutkintovaatimukset.length > 0"
+          class="mb-3"
+        >
           <h4>{{ $t('tutkintovaatimukset') }}</h4>
-          <div class="mb-2">{{ $kaanna(perusteenOsa.valiotsikko) }}</div>
+          <div class="mb-2">
+            {{ $kaanna(perusteenOsa.valiotsikko) }}
+          </div>
           <ul>
             <li
               v-for="(vaatimus, vIndex) in kohdealue.tutkintovaatimukset"
@@ -42,7 +47,9 @@
 
         <div v-if="kohdealue.arviointikriteerit && kohdealue.arviointikriteerit.length > 0">
           <h4>{{ $t('arviointikriteerit') }}</h4>
-          <div class="mb-2">{{ $kaanna(perusteenOsa.valiotsikko) }}</div>
+          <div class="mb-2">
+            {{ $kaanna(perusteenOsa.valiotsikko) }}
+          </div>
           <ul>
             <li
               v-for="(kriteeri, kIndex) in kohdealue.arviointikriteerit"

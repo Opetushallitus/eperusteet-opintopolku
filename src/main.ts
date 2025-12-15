@@ -91,11 +91,18 @@ const matomoSiteIds = {
 };
 
 if (matomoSiteIds[window.location.hostname]) {
-  Vue.use(VueMatomo, {
+  app.use(VueMatomo, {
     host: 'https://analytiikka.opintopolku.fi/matomo',
     siteId: matomoSiteIds[window.location.hostname],
     router: router,
     disableCookies: true,
+    trackSiteSearch: (to) => {
+      if (to.query.haku) {
+        return { keyword: to.query.haku };
+      }
+
+      return null;
+    },
   });
 }
 
