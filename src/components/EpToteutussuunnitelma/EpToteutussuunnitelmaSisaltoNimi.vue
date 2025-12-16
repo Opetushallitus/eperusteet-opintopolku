@@ -1,5 +1,8 @@
 <template>
-  <h2 v-if="sisaltoviite.nimi" class="mb-4">
+  <h2
+    v-if="sisaltoviite.nimi"
+    class="mb-4"
+  >
     <span v-if="numerointi">{{ numerointi }}</span>
     {{ $kaanna(sisaltoviite.nimi) }}
   </h2>

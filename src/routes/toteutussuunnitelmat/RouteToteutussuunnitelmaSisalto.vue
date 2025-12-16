@@ -126,7 +126,7 @@
         :opetussuunnitelma="opetussuunnitelma"
         sisalto-viite-sisalto="kotoOpinto"
       >
-      <template #sisalto-nimi>
+        <template #sisalto-nimi>
           <EpToteutussuunnitelmaSisaltoNimi
             :sisaltoviite="sisaltoviite"
             :numerointi="numerointi"

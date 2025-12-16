@@ -1,5 +1,8 @@
 <template>
-  <div class="content" v-if="peruste">
+  <div
+    v-if="peruste"
+    class="content"
+  >
     <h2
       class="otsikko mb-4"
       tabindex="-1"

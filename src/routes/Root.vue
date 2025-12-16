@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { computed, onMounted, watch } from 'vue';
+import { computed, onMounted, onUnmounted, watch, inject } from 'vue';
 import { useRoute } from 'vue-router';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
@@ -21,11 +21,13 @@ import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { $t } from '@shared/utils/globals';
 import { pinia } from '@/pinia';
 import { useHead } from '@unhead/vue';
+import { setupMatomoTitleTracking } from '@/utils/matomo';
 
 const route = useRoute();
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 const tietoapalvelustaStore = useTietoapalvelustaStore(pinia);
 const osaamismerkitStore = useOsaamismerkitStore(pinia);
+const matomo = inject<any>('Matomo');
 
 const sisaltoKieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
@@ -92,8 +94,18 @@ watch(sisaltoKieli, async () => {
   await sisaltoKieliChange();
 }, { immediate: false });
 
+let cleanupMatomoTracking: (() => void) | undefined;
+
 onMounted(async () => {
   await Promise.all([sisaltoKieliChange(), tietoapalvelustaStore.fetch()]);
+
+  cleanupMatomoTracking = setupMatomoTitleTracking(matomo);
+});
+
+onUnmounted(() => {
+  if (cleanupMatomoTracking) {
+    cleanupMatomoTracking();
+  }
 });
 </script>
 
