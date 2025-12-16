@@ -21,13 +21,13 @@ import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { $t } from '@shared/utils/globals';
 import { pinia } from '@/pinia';
 import { useHead } from '@unhead/vue';
-import { setupMatomoTitleTracking } from '@/utils/matomo';
+import { onBeforeUnmount } from 'vue';
 
 const route = useRoute();
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 const tietoapalvelustaStore = useTietoapalvelustaStore(pinia);
 const osaamismerkitStore = useOsaamismerkitStore(pinia);
-const matomo = inject<any>('Matomo');
+let observer: MutationObserver | null = null;
 
 const sisaltoKieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
@@ -94,18 +94,30 @@ watch(sisaltoKieli, async () => {
   await sisaltoKieliChange();
 }, { immediate: false });
 
-let cleanupMatomoTracking: (() => void) | undefined;
-
 onMounted(async () => {
   await Promise.all([sisaltoKieliChange(), tietoapalvelustaStore.fetch()]);
-
-  cleanupMatomoTracking = setupMatomoTitleTracking(matomo);
+  observeTitle();
 });
 
-onUnmounted(() => {
-  if (cleanupMatomoTracking) {
-    cleanupMatomoTracking();
+const observeTitle = () => {
+  observer = new MutationObserver(() => {
+    const title = document.title;
+    const pag = (window as any)._paq;
+
+    if (pag) {
+      pag.push(['setDocumentTitle', title]);
+      pag.push(['trackPageView']);
+    }
+  });
+
+  const titleEl = document.querySelector('title');
+  if (titleEl) {
+    observer?.observe(titleEl, { childList: true });
   }
+};
+
+onBeforeUnmount(() => {
+  observer?.disconnect();
 });
 </script>
 
