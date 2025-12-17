@@ -5,7 +5,7 @@ import { registerIconColorSchemeChange } from '@shared/utils/icon';
 import '@shared/config/styles';
 import { createApp } from 'vue';
 import App from './App.vue';
-import { createPinia } from 'pinia';
+import { pinia } from '@/pinia';
 import VueMatomo from 'vue-matomo';
 import { createI18n } from 'vue-i18n';
 import kaannos, { Kaannos } from '@shared/plugins/kaannos';
@@ -36,7 +36,7 @@ configureCompat({
 // Store app reference in globals utility
 setAppInstance(app);
 
-app.use(createPinia());
+app.use(pinia);
 app.use(router);
 app.use(kaannos, { squareBrackets: false });
 

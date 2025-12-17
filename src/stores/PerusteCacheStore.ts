@@ -8,7 +8,7 @@ import _ from 'lodash';
 export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
   const perusteet = ref({});
 
-  const addPerusteStore = async (perusteId, revision?) => {
+  const addPerusteStore = async (perusteId, revision = '') => {
     const key = perusteId + '-' + revision;
     if (!perusteet.value[key]) {
       const perusteDataStore = usePerusteDataStore(key);
@@ -17,12 +17,11 @@ export const usePerusteCacheStore = defineStore('perusteCacheStore', () => {
     }
   };
 
-  const getPerusteStore = (perusteId, revision?) => {
+  const getPerusteStore = (perusteId, revision = '') => {
+    const key = perusteId + '-' + revision;
     if (!perusteId) {
       return null;
     }
-
-    const key = perusteId + '-' + revision;
 
     return perusteet.value[key];
   };
