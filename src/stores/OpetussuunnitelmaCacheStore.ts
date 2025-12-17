@@ -9,7 +9,7 @@ import _ from 'lodash';
 export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCacheStore', () => {
   const opetussuunnitelmat = ref({});
 
-  const addOpetussuunnitelmaStore = async (id, revision) => {
+  const addOpetussuunnitelmaStore = async (id, revision = '') => {
     const key = `${id}-${revision}`;
     if (!opetussuunnitelmat.value[key]) {
       const opetussuunnitelmaDataStore = useOpetussuunnitelmaDataStore(key);
@@ -18,7 +18,7 @@ export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCach
     }
   };
 
-  const getOpetussuunnitelmaStore = (id, revision) => {
+  const getOpetussuunnitelmaStore = (id, revision = '') => {
     const key = `${id}-${revision}`;
     return opetussuunnitelmat.value[key];
   };
@@ -29,7 +29,7 @@ export const useOpetussuunnitelmaCacheStore = defineStore('opetussuunnitelmaCach
 export const useToteutussuunnitelmaCacheStore = defineStore('toteutussuunnitelmaCacheStore', () => {
   const toteutussuunnitelmat = ref({});
 
-  const addToteutussuunnitelmaStore = async (id, revision) => {
+  const addToteutussuunnitelmaStore = async (id, revision = '') => {
     const key = `${id}-${revision}`;
     if (!toteutussuunnitelmat.value[key]) {
       const opetussuunnitelmaDataStore = useToteutussuunnitelmaDataStore(key);
@@ -38,7 +38,7 @@ export const useToteutussuunnitelmaCacheStore = defineStore('toteutussuunnitelma
     }
   };
 
-  const getToteutussuunnitelmaStore = (id, revision) => {
+  const getToteutussuunnitelmaStore = (id, revision = '') => {
     const key = `${id}-${revision}`;
     return toteutussuunnitelmat.value[key];
   };

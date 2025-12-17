@@ -263,9 +263,9 @@ watch(route, async () => {
   // h2?.focus();
 }, { deep: true, immediate: true });
 
-watch(flattenedSidenav, () => {
+watch(flattenedSidenav, (newVal, oldVal) => {
   if (routeName.value === 'peruste') {
-    if (ensimainenNavi.value) {
+    if (ensimainenNavi.value && !oldVal) {
       router.replace(ensimainenNavi.value.location!);
     }
   }
