@@ -48,6 +48,10 @@ import RouteOsaamiskokonaisuus from '@/routes/perusteet/sisalto/digi/RouteOsaami
 import RouteOsaamiskokonaisuusPaaAlue from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuusPaaAlue.vue';
 import RouteKaantajaTaito from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaito.vue';
 import RouteKaantajaTaitotasoasteikko from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaitotasoasteikko.vue';
+import RouteKaantajaTodistusmalli from '@/routes/perusteet/sisalto/kios/RouteKaantajaTodistusmalli.vue';
+import RouteKaantajaAihealue from '@/routes/perusteet/sisalto/kios/RouteKaantajaAihealue.vue';
+import RouteKaantajaTaitotasokuvaus from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaitotasokuvaus.vue';
+import RouteKaantajaKielitaito from '@/routes/perusteet/sisalto/kios/RouteKaantajaKielitaito.vue';
 import RouteOsaamismerkit from '@/routes/osaamismerkit/RouteOsaamismerkit.vue';
 import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
 import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
@@ -528,6 +532,22 @@ export const router = createRouter({
           path: 'taitotasoasteikko/:kaantajataitotasoasteikkoId',
           component: RouteKaantajaTaitotasoasteikko,
           name: 'perusteKaantajaTaitotasoasteikko',
+        }, {
+          path: 'todistusmalli/:kaantajatodistusmalliId',
+          component: RouteKaantajaTodistusmalli,
+          name: 'perusteKaantajaTodistusmalli',
+        }, {
+          path: 'aihealue/:kaantajaaihealueId',
+          component: RouteKaantajaAihealue,
+          name: 'perusteKaantajaAihealue',
+        }, {
+          path: 'taitotasokuvaus/:kaantajataitotasokuvausId',
+          component: RouteKaantajaTaitotasokuvaus,
+          name: 'perusteKaantajaTaitotasokuvaus',
+        }, {
+          path: 'kielitaito/:kaantajakielitaitoId',
+          component: RouteKaantajaKielitaito,
+          name: 'perusteKaantajaKielitaito',
         }],
       },
     ],
