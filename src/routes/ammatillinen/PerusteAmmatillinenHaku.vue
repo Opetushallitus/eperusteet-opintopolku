@@ -257,6 +257,10 @@ const tutkintotyyppi = computed(() => {
 });
 
 watch(tutkintotyyppi, async () => {
+  if (!tutkintotyyppi.value) {
+    filters.value.tutkintotyyppi = 'kaikki';
+  }
+
   if (tutkintotyyppi.value === 'kaikki') {
     filters.value.koulutustyyppi = [
       'koulutustyyppi_1',
