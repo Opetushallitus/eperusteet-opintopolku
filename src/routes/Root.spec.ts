@@ -4,6 +4,12 @@ import { expect, vi } from 'vitest';
 import { createPinia, setActivePinia } from 'pinia';
 import { globalStubs } from '../../eperusteet-frontend-utils/vue/src/utils/__tests__/stubs';
 
+vi.mock('vue-router', () => (
+  {
+    useRoute: () => ({ fullPath: '/' }),
+    useRouter: vi.fn(),
+  }));
+  
 describe('Root', () => {
 
   beforeEach(() => {
@@ -20,4 +26,3 @@ describe('Root', () => {
     expect(wrapper).toBeTruthy();
   });
 });
-  

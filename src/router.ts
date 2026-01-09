@@ -70,8 +70,6 @@ import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/Rout
 import RoutePerusteMuutoshistoria from '@/routes/perusteet/tiedot/RoutePerusteMuutoshistoria.vue';
 
 import { changeLang } from '@shared/utils/router';
-import { Virheet } from '@shared/stores/virheet';
-import { SovellusVirhe } from '@shared/tyypit';
 import { createLogger } from '@shared/utils/logger';
 import RouteOpetussuunnitelmaOppiaineet
   from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaineet.vue';
@@ -102,7 +100,7 @@ import { createRouter, createWebHashHistory, useRoute } from 'vue-router';
 import { useLoading } from 'vue-loading-overlay';
 import { loadingOptions } from './utils/loading';
 import { useTiedoteStore } from './stores/TiedoteStore';
-import { unref } from 'vue';
+import { Virheet } from '@shared/stores/virheet';
 
 const logger = createLogger('Router');
 
@@ -168,8 +166,14 @@ export const router = createRouter({
         name: 'ammatillinenkooste',
         component: RouteKoosteAmmatillinen,
         beforeEnter: async (to, from, next) => {
-          await useAmmatillinenPerusteKoosteStore(pinia).fetch(_.parseInt(to.params.perusteId as string));
-          next();
+          try {
+            await useAmmatillinenPerusteKoosteStore(pinia).fetch(_.parseInt(to.params.perusteId as string));
+            next();
+          }
+          catch (err) {
+            Virheet.lisaaVirhe({ state: { error: err } });
+            next();
+          }
         },
       }, {
         path: 'kooste/:koulutustyyppi([a-z]+)/:perusteId(\\d+)?',
@@ -180,8 +184,14 @@ export const router = createRouter({
         name: 'osaamismerkki',
         component: RouteOsaamismerkkiTiedot,
         beforeEnter: async (to, from, next) => {
-          await useOsaamismerkkiStore(pinia).init(null, _.parseInt(to.params.koodi as string));
-          next();
+          try {
+            await useOsaamismerkkiStore(pinia).init(null, _.parseInt(to.params.koodi as string));
+            next();
+          }
+          catch (err) {
+            Virheet.lisaaVirhe({ state: { error: err } });
+            next();
+          }
         },
       }, {
         path: 'osaamismerkit',
@@ -192,8 +202,14 @@ export const router = createRouter({
           name: 'osaamismerkkiTiedot',
           component: RouteOsaamismerkkiTiedot,
           beforeEnter: async (to, from, next) => {
-            await useOsaamismerkkiStore(pinia).init(_.parseInt(to.params.osaamismerkkiId as string));
-            next();
+            try {
+              await useOsaamismerkkiStore(pinia).init(_.parseInt(to.params.osaamismerkkiId as string));
+              next();
+            }
+            catch (err) {
+              Virheet.lisaaVirhe({ state: { error: err } });
+              next();
+            }
           },
         }],
       }, {
@@ -206,8 +222,14 @@ export const router = createRouter({
             component: RouteAmmatillinenKoulutuksenJarjestajat,
             name: 'ammatillinenKoulutuksenjarjestajat',
             beforeEnter: async (to, from, next) => {
-              await useKoulutuksenJarjestajatStore(pinia).fetch();
-              next();
+              try {
+                await useKoulutuksenJarjestajatStore(pinia).fetch();
+                next();
+              }
+              catch (err) {
+                Virheet.lisaaVirhe({ state: { error: err } });
+                next();
+              }
             },
           }, {
             path: 'ohjeet',
@@ -224,8 +246,14 @@ export const router = createRouter({
         name: 'ammatillinenKoulutuksenjarjestaja',
         component: RouteKoulutuksenJarjestaja,
         beforeEnter: async (to, from, next) => {
-          await useKoulutuksenJarjestajaStore(pinia).init(_.parseInt(to.params.koulutuksenjarjestajaId as string));
-          next();
+          try {
+            await useKoulutuksenJarjestajaStore(pinia).init(_.parseInt(to.params.koulutuksenjarjestajaId as string));
+            next();
+          }
+          catch (err) {
+            Virheet.lisaaVirhe({ state: { error: err } });
+            next();
+          }
         },
       }, {
         path: 'ajankohtaista',
@@ -236,8 +264,14 @@ export const router = createRouter({
         name: 'uutinen',
         component: RouteUutinen,
         beforeEnter: async (to, from, next) => {
-          await useTiedoteStore(pinia).fetchUutinen(_.parseInt(to.params.tiedoteId as string));
-          next();
+          try {
+            await useTiedoteStore(pinia).fetchUutinen(_.parseInt(to.params.tiedoteId as string));
+            next();
+          }
+          catch (err) {
+            Virheet.lisaaVirhe({ state: { error: err } });
+            next();
+          }
         },
       }, {
         path: 'toteutussuunnitelma/:toteutussuunnitelmaId(\\d+)/:revision(\\d+)?/:koulutustyyppi',
@@ -249,8 +283,14 @@ export const router = createRouter({
           };
         },
         beforeEnter: async (to, from, next) => {
-          await toteutussuunnitelmaCacheStore.addToteutussuunnitelmaStore(to.params.toteutussuunnitelmaId, to.params.revision);
-          next();
+          try {
+            await toteutussuunnitelmaCacheStore.addToteutussuunnitelmaStore(to.params.toteutussuunnitelmaId, to.params.revision);
+            next();
+          }
+          catch (err) {
+            Virheet.lisaaVirhe({ state: { error: err } });
+            next();
+          }
         },
         children: [{
           path: 'tiedot',
@@ -298,8 +338,14 @@ export const router = createRouter({
           };
         },
         beforeEnter: async (to, from, next) => {
-          await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, to.params.revision);
-          next();
+          try {
+            await opetussuunnitelmaCacheStore.addOpetussuunnitelmaStore(to.params.opetussuunnitelmaId, to.params.revision);
+            next();
+          }
+          catch (err) {
+            Virheet.lisaaVirhe({ state: { error: err } });
+            next();
+          }
         },
         children: [{
           path: 'tiedot',
@@ -370,8 +416,14 @@ export const router = createRouter({
         name: 'peruste',
         component: RoutePeruste,
         beforeEnter: async (to, from, next) => {
-          await perusteCacheStore.addPerusteStore(to.params.perusteId, to.params.revision);
-          next();
+          try {
+            await perusteCacheStore.addPerusteStore(to.params.perusteId, to.params.revision);
+            next();
+          }
+          catch (err) {
+            Virheet.lisaaVirhe({ state: { error: err } });
+            next();
+          }
         },
         children: [{
           path: 'tiedot',
@@ -627,22 +679,6 @@ router.beforeEach((to, from, next) => {
 router.afterEach((to) => {
   hideLoading();
   BrowserStore.changeLocation(location.href);
-});
-
-Virheet.onError((virhe: SovellusVirhe) => {
-  logger.error('Route error', virhe);
-  console.error('Route error', virhe);
-  hideLoading();
-  if (unref(router.currentRoute).name !== 'virhe') {
-    router.replace({
-      name: 'virhe',
-      params: {
-        lang: 'fi',
-        virhekoodi: virhe.err,
-        ...(virhe.path && { kohdeUrl: virhe.path }),
-      },
-    });
-  }
 });
 
 function hideLoading() {
