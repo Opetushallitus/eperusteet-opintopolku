@@ -70,13 +70,7 @@ Vue.use(VueScrollTo, {
 Vue.use(Sticky);
 
 app.config.errorHandler = (err, instance, info) => {
-  console.error('Global error handler:', err, info);
-  router.replace({
-    name: 'virhe',
-    query: {
-      virhekoodi: '500',
-    },
-  });
+  console.error('Global error handler:', err, info, router);
 };
 
 window.addEventListener('unhandledrejection', (event) => {

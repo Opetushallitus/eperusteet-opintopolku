@@ -158,6 +158,7 @@ const queryImplDebounce = _.debounce((value) => {
 
 onMounted(() => {
   query.value = routeQuery.value;
+  throw new Error('test error');
 });
 
 const routeQuery = computed(() => {
