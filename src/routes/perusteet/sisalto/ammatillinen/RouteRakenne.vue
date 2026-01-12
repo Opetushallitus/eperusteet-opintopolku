@@ -38,7 +38,12 @@
               </b-popover>
             </div>
             <span v-else>
-              {{ $kaanna(rakenneosa.nimi) }} <span v-if="rakenneosa.koodiArvo">({{ rakenneosa.koodiArvo }})</span>
+              <template v-if="rakenneosa.nimi">
+                {{ $kaanna(rakenneosa.nimi) }} <span v-if="rakenneosa.koodiArvo">({{ rakenneosa.koodiArvo }})</span>
+              </template>
+              <template v-else>
+                {{ $t('kohteen-nimea-ei-saatavilla') }}
+              </template>
             </span>
           </div>
         </template>

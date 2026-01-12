@@ -32,15 +32,16 @@
               :class="{'ml-3' : rakenneosa.osat && rakenneosa.osat.length > 0}"
             >
               <slot
-                v-if="nimi"
                 name="nimi"
                 :rakenneosa="rakenneosa"
               >
-                {{ $kaanna(nimi) }}
+                <template v-if="nimi">
+                  {{ $kaanna(nimi) }}
+                </template>
+                <template v-else>
+                  {{ $t('kohteen-nimea-ei-saatavilla') }}
+                </template>
               </slot>
-              <span v-else>
-                {{ $t('kohteen-nimea-ei-saatavilla') }}
-              </span>
             </div>
             <div class="w-25 text-right">
               {{ laajuus }}
