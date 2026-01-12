@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import Vue from 'vue';
 import { Kielet } from '@shared/stores/kieli';
 import { registerIconColorSchemeChange } from '@shared/utils/icon';
 import '@shared/config/styles';
@@ -19,7 +18,7 @@ import 'material-icons/iconfont/material-icons.css';
 import fiLocale from '@shared/translations/locale-fi.json';
 import svLocale from '@shared/translations/locale-sv.json';
 import enLocale from '@shared/translations/locale-en.json';
-import { configureCompat } from 'vue';
+import { configureCompat } from '@vue/compat';
 import Sticky from 'vue-sticky-directive';
 import { LoadingPlugin } from 'vue-loading-overlay';
 import { createHead } from '@unhead/vue/client';
@@ -63,21 +62,10 @@ app.use(new Aikaleima());
 app.use(LoadingPlugin);
 app.use(createHead());
 app.use(Notifikaatiot);
-
-Vue.use(VueScrollTo, {
+app.use(VueScrollTo, {
   duration: 1000,
 });
-Vue.use(Sticky);
-
-app.config.errorHandler = (err, instance, info) => {
-  console.error('Global error handler:', err, info);
-  router.replace({
-    name: 'virhe',
-    query: {
-      virhekoodi: '500',
-    },
-  });
-};
+app.use(Sticky);
 
 window.addEventListener('unhandledrejection', (event) => {
   console.error('Unhandled promise rejection:', event.reason);

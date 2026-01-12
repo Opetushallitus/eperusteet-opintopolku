@@ -2,7 +2,9 @@
   <div>
     <EpJulkinenSidenav />
     <main role="main">
-      <router-view />
+      <RouterErrorBoundary>
+        <router-view />
+      </RouterErrorBoundary>
     </main>
     <ep-footer />
   </div>
@@ -10,7 +12,7 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { computed, onMounted, onUnmounted, watch, inject } from 'vue';
+import { computed, onMounted, onUnmounted, watch, onBeforeUnmount } from 'vue';
 import { useRoute } from 'vue-router';
 import EpFooter from '@/components/EpFooter/EpFooter.vue';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
@@ -21,7 +23,7 @@ import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { $t } from '@shared/utils/globals';
 import { pinia } from '@/pinia';
 import { useHead } from '@unhead/vue';
-import { onBeforeUnmount } from 'vue';
+import RouterErrorBoundary from '@/components/common/RouterErrorBoundary.vue';
 
 const route = useRoute();
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
@@ -119,6 +121,7 @@ const observeTitle = () => {
 onBeforeUnmount(() => {
   observer?.disconnect();
 });
+
 </script>
 
 <style lang="scss">
