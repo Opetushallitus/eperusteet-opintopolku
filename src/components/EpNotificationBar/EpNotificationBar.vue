@@ -14,10 +14,9 @@
     <slot>
       <span class="notifikaatio-text">{{ notifikaatio }}</span>
       <div v-if="!isEsikatselu && versio && hasSisaltoKielelle">
-        <span
-          class="btn-link clickable"
-          @click="toUusimpaan"
-        >{{ $t('siirry-uusimpaan-julkaisuun') }}.</span>
+        <router-link :to="uusinRoute">
+          {{ $t('siirry-uusimpaan-julkaisuun') }}.
+        </router-link>
       </div>
     </slot>
   </div>
@@ -128,12 +127,12 @@ const julkaisuPvmText = computed(() => {
   return props.julkaisuPvm ? ' (' + $sd(props.julkaisuPvm) + ').' : '.';
 });
 
-const toUusimpaan = async () => {
-  let routeObj = _.assign({}, route);
-  delete routeObj.params.revision;
-  await router.push({ name: routeObj.name!, params: routeObj.params });
-  router.go(0);
-};
+const uusinRoute = computed(() => {
+  return {
+    name: route.name,
+    params: { ...route.params, revision: '' },
+  };
+});
 
 const hasDefaultSlotContent = computed(() => {
   return hasSlotContent(slots.default);

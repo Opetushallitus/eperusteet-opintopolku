@@ -635,32 +635,6 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-router.beforeEach(async (to, from, next) => {
-  // Clean up empty revision parameter that might come from corrupted browser history
-  if (to.params.revision === '') {
-    const { revision, ...cleanParams } = to.params;
-    next({
-      ...to,
-      params: cleanParams,
-      replace: true,
-    } as any);
-    return;
-  }
-
-  if (from.params.revision && !to.params.revision && _.some(to.matched, match => _.includes(match.path, ':revision'))) {
-    next({
-      ...to,
-      params: {
-        ...to.params,
-        revision: from.params.revision,
-      },
-    } as any);
-    return;
-  }
-
-  next();
-});
-
 const $loading = useLoading(loadingOptions);
 const loaders: any[] = [];
 

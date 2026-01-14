@@ -141,7 +141,6 @@ const perusteDataStore = getCachedPerusteStore();
 
 const query = ref('');
 const sisaltohaku = ref(false);
-const oldLocation = ref(null);
 const browserStore = new BrowserStore();
 
 // Replace debounce method
