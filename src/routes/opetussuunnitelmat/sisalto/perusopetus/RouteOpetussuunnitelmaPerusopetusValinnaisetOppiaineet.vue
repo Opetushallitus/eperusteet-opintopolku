@@ -22,7 +22,7 @@ onMounted(() => {
   if (opetussuunnitelmaDataStore.navigation) {
     if (vlkId.value) {
       const oppiaineetNavi = _.head(_.filter(opetussuunnitelmaDataStore.flattenedSidenav, navi => {
-        return _.get(navi.meta as any, 'vlkId') === vlkId.value && navi.type === NavigationNodeDtoTypeEnum.Valinnaisetoppiaineet;
+        return _.get(navi.meta as any, 'vlkId') === Number(vlkId.value) && navi.type === NavigationNodeDtoTypeEnum.Valinnaisetoppiaineet;
       }));
 
       if (oppiaineetNavi) {
