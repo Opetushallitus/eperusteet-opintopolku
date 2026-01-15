@@ -35,6 +35,10 @@ export const usePerusteenOsaStore = defineStore('perusteenOsa', () => {
 });
 
 export function createPerusteOsaStore(perusteDataStore, perusteenOsaId) {
+  if (!perusteDataStore) {
+    return {};
+  }
+
   const store = usePerusteenOsaStore(pinia);
   store.create(
     _.parseInt(perusteenOsaId),
