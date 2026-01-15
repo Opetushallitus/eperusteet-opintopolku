@@ -12,10 +12,9 @@
         <span>{{ $t('katselet-tulevaisuudessa-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
         <template v-if="uusinVoimassaolevaJulkaisu">
           <span>{{ $t('siirry-talla-hetkella') }} </span>
-          <a
-            href="javascript:void(0)"
-            @click="toVoimassaolevaanJulkaisuun"
-          >{{ $t('voimassaolevaan-perusteeseen') }}.</a>
+          <router-link :to="voimassaolevaRoute">
+            {{ $t('voimassaolevaan-perusteeseen') }}.
+          </router-link>
         </template>
       </div>
       <div
@@ -23,11 +22,10 @@
         class="notifikaatio-text"
       >
         <span>{{ $t('katselet-talla-hetkella-voimassaolevaa-perustetta') }}. </span>
-        <span>{{ $t('siirry') }} </span>
-        <a
-          href="javascript:void(0)"
-          @click="toUusimpaanJulkaisuun"
-        >{{ $t('uusimpaan-perusteeseen') }}, </a>
+        <span class="mr-1">{{ $t('siirry') }}</span>
+        <router-link :to="uusimpaanJulkaisuunRoute">
+          {{ $t('uusimpaan-perusteeseen') }},
+        </router-link>
         <span>{{ $t('joka-on-tulossa-voimaan', {voimaantulo: $sd(uusinJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }}.</span>
       </div>
     </template>
@@ -127,24 +125,20 @@ const hasSisaltoKielelle = computed(() => {
   return _.includes(props.peruste?.kielet, _.toString(Kielet.getSisaltoKieli.value));
 });
 
-const toVoimassaolevaanJulkaisuun = async () => {
-  let routeObj = _.assign({}, route);
-  await router.push(
-    {
-      name: routeObj.name!,
-      params: {
-        ...routeObj.params,
-        revision: _.toString(uusinVoimassaolevaJulkaisu.value?.revision),
-      },
-    });
-};
+const voimassaolevaRoute = computed(() => {
+  return {
+    name: route.name,
+    params: { ...route.params, revision: uusinVoimassaolevaJulkaisu.value?.revision },
+  };
+});
 
-const toUusimpaanJulkaisuun = async () => {
-  let routeObj = _.assign({}, route);
-  delete routeObj.params?.revision;
-  await router.push({ name: routeObj.name!, params: routeObj.params });
-  router.go(0);
-};
+const uusimpaanJulkaisuunRoute = computed(() => {
+  return {
+    name: route.name,
+    params: { ...route.params, revision: '' },
+  };
+});
+
 </script>
 
 <style scoped lang="scss">
