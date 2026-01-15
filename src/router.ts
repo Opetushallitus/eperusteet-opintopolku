@@ -398,10 +398,9 @@ export const router = createRouter({
           component: RouteOpetussuunnitelmaPerusopetusOppiaineet,
           name: 'opetussuunnitelmaperusopetusoppiaineet',
         }, {
-          path: 'valinnaisetoppiaineet',
+          path: 'valinnaisetoppiaineet/:vlkId?',
           component: RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet,
           name: 'opetussuunnitelmaperusopetusvalinnaisetoppiaineet',
-          alias: 'valinnaisetoppiaineet/:vlkId?',
         }, {
           path: 'oppiaineet/:oppiaineId',
           component: RouteOpetussuunnitelmaPerusopetusOppiaine,
