@@ -1,5 +1,8 @@
 <template>
-  <ep-spinner v-if="!opetussuunnitelma" />
+  <ep-spinner
+    v-if="!opetussuunnitelma"
+    full-screen
+  />
   <div
     v-else
     class="opetussuunnitelma"
@@ -32,7 +35,7 @@
             <ep-opetussuunnitelma-sidenav />
           </template>
           <template #view>
-            <router-view :key="$route.fullPath">
+            <router-view :key="route.fullPath">
               <template #previous-next-navigation>
                 <ep-previous-next-navigation
                   :active-node="current"
@@ -63,36 +66,51 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createOpetussuunnitelmaMurupolku } from '@/utils/murupolku';
 import { Kielet } from '@shared/stores/kieli';
 import { $kaanna } from '@shared/utils/globals';
-import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import { addAndGetCachedStore, getCachedOpetussuunnitelmaStore, useOpetussuunnitelmaCacheStore, useToteutussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { pinia } from '@/pinia';
 
 const route = useRoute();
+const router = useRouter();
 const innerPortal = useTemplateRef('innerPortal');
 const browserStore = new BrowserStore();
-const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
+const opetussuunnitelmaDataStore = ref<any | null>(null);
+
+onMounted(async () => {
+  await init();
+});
+
+const init = async () => {
+  opetussuunnitelmaDataStore.value = null;
+  opetussuunnitelmaDataStore.value = await addAndGetCachedStore(route);
+};
+
+watch(() => route.params.opetussuunnitelmaId + _.toString(route.params.revision), async () => {
+  await init();
+});
 
 const opetussuunnitelma = computed(() => {
-  return opetussuunnitelmaDataStore.opetussuunnitelma;
+  return opetussuunnitelmaDataStore?.value?.opetussuunnitelma;
 });
 
 const koulutustyyppi = computed(() => {
-  if (opetussuunnitelmaDataStore?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
+  if (opetussuunnitelmaDataStore?.value?.opetussuunnitelma?.jotpatyyppi === 'MUU') {
     return 'koulutustyyppi_muu';
   }
-  return tyyppi.value === 'yhteinen' ? 'koulutustyyppi_1' : opetussuunnitelmaDataStore.koulutustyyppi;
+  return tyyppi.value === 'yhteinen' ? 'koulutustyyppi_1' : opetussuunnitelmaDataStore?.value?.koulutustyyppi;
 });
 
 const tyyppi = computed(() => {
-  return opetussuunnitelmaDataStore.opetussuunnitelma?.tyyppi;
+  return opetussuunnitelmaDataStore?.value?.opetussuunnitelma?.tyyppi;
 });
 
 const current = computed((): NavigationNode | null => {
-  return opetussuunnitelmaDataStore.current;
+  return opetussuunnitelmaDataStore?.value?.current;
 });
 
 const flattenedSidenav = computed(() => {
-  return opetussuunnitelmaDataStore.flattenedSidenav;
+  return opetussuunnitelmaDataStore?.value?.flattenedSidenav;
 });
 
 const murupolku = computed(() => {
@@ -114,7 +132,7 @@ const scrollEnabled = computed(() => {
 });
 
 const onRouteUpdate = async (newRoute) => {
-  opetussuunnitelmaDataStore.updateRoute(newRoute);
+  opetussuunnitelmaDataStore?.value?.updateRoute(newRoute);
 
   await nextTick();
   const h2 = document.querySelector('h2');
@@ -148,7 +166,7 @@ const getMetaInfo = computed(() => {
 useHead(getMetaInfo);
 
 const opetussuunnitelmaEsikatselussa = computed(() => {
-  return opetussuunnitelmaDataStore?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(route.query, 'esikatselu');
+  return opetussuunnitelmaDataStore?.value?.tila !== _.toLower(OpetussuunnitelmaKevytDtoTilaEnum.JULKAISTU) || _.has(route.query, 'esikatselu');
 });
 
 const hasSisaltoKielelle = computed(() => {

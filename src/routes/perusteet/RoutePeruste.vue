@@ -1,5 +1,12 @@
 <template>
-  <div class="peruste">
+  <ep-spinner
+    v-if="!peruste"
+    full-screen
+  />
+  <div
+    v-else
+    class="peruste"
+  >
     <ep-header
       v-sticky
       :koulutustyyppi="koulutustyyppi"
@@ -130,14 +137,16 @@ import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { $kaanna, $t } from '@shared/utils/globals';
-import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import { getCachedPerusteStore, usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 import { pinia } from '@/pinia';
 import { BrowserStore } from '@shared/stores/BrowserStore';
+import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 
 const route = useRoute();
 const router = useRouter();
 
-const perusteDataStore = getCachedPerusteStore();
+const perusteCacheStore = usePerusteCacheStore(pinia);
+const perusteDataStore = ref<any | null>(null);
 
 const query = ref('');
 const sisaltohaku = ref(false);
@@ -155,8 +164,19 @@ const queryImplDebounce = _.debounce((value) => {
   }
 }, 300);
 
-onMounted(() => {
+onMounted(async () => {
   query.value = routeQuery.value;
+  await init();
+});
+
+const init = async () => {
+  perusteDataStore.value = null;
+  await perusteCacheStore.addPerusteStore(route.params.perusteId, route.params.revision);
+  perusteDataStore.value = perusteCacheStore.getPerusteStore(route.params.perusteId, route.params.revision);
+};
+
+watch(() => route.params.perusteId + _.toString(route.params.revision), async () => {
+  await init();
 });
 
 const routeQuery = computed(() => {
@@ -165,19 +185,19 @@ const routeQuery = computed(() => {
 
 // Computed properties
 const sidenav = computed(() => {
-  return perusteDataStore.sidenav;
+  return perusteDataStore.value?.sidenav;
 });
 
 const peruste = computed(() => {
-  return perusteDataStore.peruste;
+  return perusteDataStore.value?.peruste;
 });
 
 const current = computed((): NavigationNode | null => {
-  return perusteDataStore.current;
+  return perusteDataStore.value?.current;
 });
 
 const flattenedSidenav = computed(() => {
-  return perusteDataStore.flattenedSidenav;
+  return perusteDataStore.value?.flattenedSidenav;
 });
 
 const murupolku = computed(() => {
@@ -207,7 +227,7 @@ const koulutustyyppi = computed(() => {
 });
 
 const julkaisut = computed(() => {
-  return perusteDataStore.julkaisut;
+  return perusteDataStore.value?.julkaisut;
 });
 
 const routeName = computed(() => {
@@ -243,7 +263,7 @@ const sisaltohakuValinta = (location) => {
 };
 
 const onRouteUpdate = (currentRoute) => {
-  perusteDataStore.updateRoute(currentRoute);
+  perusteDataStore.value?.updateRoute(currentRoute);
 };
 
 // Watch handlers

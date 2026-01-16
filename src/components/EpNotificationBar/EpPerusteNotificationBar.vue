@@ -127,14 +127,14 @@ const hasSisaltoKielelle = computed(() => {
 
 const voimassaolevaRoute = computed(() => {
   return {
-    name: route.name,
+    name: 'peruste',
     params: { ...route.params, revision: uusinVoimassaolevaJulkaisu.value?.revision },
   };
 });
 
 const uusimpaanJulkaisuunRoute = computed(() => {
   return {
-    name: route.name,
+    name: 'peruste',
     params: { ...route.params, revision: '' },
   };
 });
