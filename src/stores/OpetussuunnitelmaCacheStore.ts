@@ -46,14 +46,24 @@ export const useToteutussuunnitelmaCacheStore = defineStore('toteutussuunnitelma
   return { toteutussuunnitelmat, addToteutussuunnitelmaStore, getToteutussuunnitelmaStore };
 });
 
+export async function addAndGetCachedStore(route) {
+  if (route.params.opetussuunnitelmaId) {
+    await useOpetussuunnitelmaCacheStore(pinia).addOpetussuunnitelmaStore(route.params.opetussuunnitelmaId, route.params.revision);
+    return useOpetussuunnitelmaCacheStore(pinia).getOpetussuunnitelmaStore(route.params.opetussuunnitelmaId, route.params.revision);
+  }
+
+  await useToteutussuunnitelmaCacheStore(pinia).addToteutussuunnitelmaStore(route.params.toteutussuunnitelmaId, route.params.revision);
+  return useToteutussuunnitelmaCacheStore(pinia).getToteutussuunnitelmaStore(route.params.toteutussuunnitelmaId, route.params.revision);
+}
+
 export function getCachedOpetussuunnitelmaStore() {
   const route = useRoute();
 
   if (route.params.opetussuunnitelmaId) {
     const opetussuunnitelmaCacheStore = useOpetussuunnitelmaCacheStore(pinia);
-    return opetussuunnitelmaCacheStore.getOpetussuunnitelmaStore(route.params.opetussuunnitelmaId, route.params.revision);
+    return opetussuunnitelmaCacheStore.getOpetussuunnitelmaStore(route.params.opetussuunnitelmaId, route.params.revision) || {};
   }
 
   const toteutussuunnitelmaCacheStore = useToteutussuunnitelmaCacheStore(pinia);
-  return toteutussuunnitelmaCacheStore.getToteutussuunnitelmaStore(route.params.toteutussuunnitelmaId, route.params.revision);
+  return toteutussuunnitelmaCacheStore.getToteutussuunnitelmaStore(route.params.toteutussuunnitelmaId, route.params.revision) || {};
 }

@@ -88,10 +88,6 @@ const versio = computed(() => {
   return route.params?.revision as string;
 });
 
-watch(() => versio.value, async () => {
-  router.go(0);
-});
-
 const tyyppi = computed((): 'peruste' | 'suunnitelma' => {
   return (route.params?.perusteId ? 'peruste' : 'suunnitelma');
 });
@@ -127,9 +123,25 @@ const julkaisuPvmText = computed(() => {
   return props.julkaisuPvm ? ' (' + $sd(props.julkaisuPvm) + ').' : '.';
 });
 
+const routeName = computed(() => {
+  if (route.params.perusteId) {
+    return 'peruste';
+  }
+
+  if (route.params.opetussuunnitelmaId) {
+    return 'opetussuunnitelma';
+  }
+
+  if (route.params.toteutussuunnitelmaId) {
+    return 'toteutussuunnitelma';
+  }
+
+  return route.name;
+});
+
 const uusinRoute = computed(() => {
   return {
-    name: route.name,
+    name: routeName.value,
     params: { ...route.params, revision: '' },
   };
 });
