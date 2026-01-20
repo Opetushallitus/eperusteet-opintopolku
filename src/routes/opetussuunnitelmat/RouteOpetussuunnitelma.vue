@@ -84,6 +84,7 @@ onMounted(async () => {
 const init = async () => {
   opetussuunnitelmaDataStore.value = null;
   opetussuunnitelmaDataStore.value = await addAndGetCachedStore(route);
+  onRouteUpdate(route);
 };
 
 watch(() => route.params.opetussuunnitelmaId + _.toString(route.params.revision), async () => {

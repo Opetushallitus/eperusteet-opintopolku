@@ -173,6 +173,7 @@ const init = async () => {
   perusteDataStore.value = null;
   await perusteCacheStore.addPerusteStore(route.params.perusteId, route.params.revision);
   perusteDataStore.value = perusteCacheStore.getPerusteStore(route.params.perusteId, route.params.revision);
+  onRouteUpdate(route);
 };
 
 watch(() => route.params.perusteId + _.toString(route.params.revision), async () => {
@@ -183,7 +184,6 @@ const routeQuery = computed(() => {
   return route.query.query as string || '';
 });
 
-// Computed properties
 const sidenav = computed(() => {
   return perusteDataStore.value?.sidenav;
 });
@@ -276,6 +276,7 @@ watch(query, (value) => {
 });
 
 watch(route, async () => {
+  onRouteUpdate(route);
   await nextTick();
   const h2 = document.querySelector('h2');
   h2?.setAttribute('tabindex', '-1');
@@ -289,9 +290,6 @@ watch(flattenedSidenav, (newVal, oldVal) => {
     }
   }
 }, { immediate: true });
-
-// Initial route update
-onRouteUpdate(route);
 
 // Provide 'linkkiHandler' for descendants
 const linkkiHandler: ILinkkiHandler = {
