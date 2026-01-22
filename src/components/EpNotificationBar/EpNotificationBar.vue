@@ -4,7 +4,7 @@
     id="notification-bar"
     ref="stickyElement"
     v-sticky
-    class="notifikaatio justify-content-center py-3 korostus"
+    class="notifikaatio justify-center py-3 korostus"
     :class="notifikaatioClass"
     sticky-z-index="5000"
   >
@@ -159,11 +159,11 @@ const hasDefaultSlotContent = computed(() => {
     display: flex;
 
     &.esikatselu {
-      background-color: $gray-lighten-4;
+      background-color: $grey50;
     }
 
     &.katselu {
-      background-color: $blue-lighten-4;
+      background-color: $lightBlue2;
     }
 
     .notifikaatio-text {

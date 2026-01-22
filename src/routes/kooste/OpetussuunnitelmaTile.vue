@@ -3,7 +3,7 @@
     class="opetussuunnitelma shadow-tile"
     @mouseover="$emit('mouseover', $event)"
   >
-    <div class="d-flex align-items-center">
+    <div class="flex items-center">
       <div
         v-if="showOpsIcon"
         class="opsicon-wrapper"
@@ -15,8 +15,8 @@
           >
         </slot>
       </div>
-      <div class="nimi flex-fill">
-        <div class="ops d-flex align-items-center">
+      <div class="nimi flex-1">
+        <div class="ops flex items-center">
           <div v-html="nimi" />
           <div
             v-if="props.ops.jotpatyyppi && props.showJotpaInfo"
@@ -28,7 +28,7 @@
         <div class="organisaatiot">
           <div
             v-if="props.voimassaoloTiedot && props.voimassaoloTiedot.length > 0"
-            class="meta d-flex"
+            class="meta flex"
           >
             <div
               v-for="(voimassaolotieto, index) in props.voimassaoloTiedot"

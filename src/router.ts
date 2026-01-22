@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Vue from 'vue';
 import VueScrollTo from 'vue-scrollto';
 import VueMeta from 'vue-meta';
 import Root from '@/routes/Root.vue';

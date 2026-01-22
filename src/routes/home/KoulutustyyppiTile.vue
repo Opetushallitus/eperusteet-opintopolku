@@ -87,7 +87,7 @@ const osaamimerkkiLogo = computed(() => {
 }
 
 .ikoni {
-  color: $purple-lighten-1;
+  color: $red2;
   text-align: center;
 
   .img {

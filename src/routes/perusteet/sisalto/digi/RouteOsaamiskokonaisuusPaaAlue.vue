@@ -11,34 +11,30 @@
         :kuvat="kuvat"
       />
 
-      <b-form-group
+      <EpFormGroup
         :label="$t('suodata-ikaryhman-mukaan')"
-        class="mt-5 d-flex"
+        class="mt-5"
       >
-        <b-form-checkbox
-          v-for="taso in tasot"
-          :key="taso"
+        <EpToggleGroup
           v-model="selectedTasot"
-          :value="taso"
-          :options="tasot"
-          button
-          size="sm"
-          button-variant="primary"
-          class="mr-2 mb-2 taso-chk"
+          :items="tasot"
+          class="taso-group"
         >
-          <div class="d-flex align-items-center">
-            <EpMaterialIcon
-              v-if="selectedTaso(taso)"
-              class="mr-2"
-              icon-shape="outlined"
-              size="1rem"
-            >
-              done
-            </EpMaterialIcon>
-            <div>{{ $t(taso) }}</div>
-          </div>
-        </b-form-checkbox>
-      </b-form-group>
+          <template #default="{ item }">
+            <div class="taso-label">
+              <EpMaterialIcon
+                v-if="selectedTasot.includes(item)"
+                class="mr-2"
+                icon-shape="outlined"
+                size="1rem"
+              >
+                done
+              </EpMaterialIcon>
+              <div>{{ $t(item) }}</div>
+            </div>
+          </template>
+        </EpToggleGroup>
+      </EpFormGroup>
 
       <EpCollapse
         v-for="osaAlue in osaAlueet"
@@ -77,9 +73,11 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpOsaAlue from '@shared/components/EpOsaamiskokonaisuus/EpOsaAlue.vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
+import EpToggleGroup from '@shared/components/forms/EpToggleGroup.vue';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 import { useRoute } from 'vue-router';
+import EpFormGroup from '@shared/components/forms/EpFormGroup.vue';
 
 const route = useRoute();
 
@@ -127,7 +125,7 @@ const tasot = computed(() => {
 });
 
 const selectedTaso = (taso) => {
-  return _.find(selectedTasot.value, selected => selected === _.toLower(taso));
+  return selectedTasot.value.includes(_.toLower(taso));
 };
 </script>
 
@@ -148,13 +146,43 @@ const selectedTaso = (taso) => {
   margin: 0;
 }
 
-.taso-chk {
+.taso-group {
+  :deep(.checkbox-group) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
 
-  :deep(.btn), :deep(.btn-primary:not(:disabled):not(.disabled).active), :deep(.btn-primary:not(:disabled):not(.disabled):active) {
-    font-size: 0.8rem;
+  :deep(.checkbox-item) {
+    padding: 0.3rem 0.8rem;
     border-radius: 10px;
     background-color: $digitaalinen-osaaminen-ikaryhma-color;
-    border-color: $digitaalinen-osaaminen-ikaryhma-color;
+    border: 1px solid $digitaalinen-osaaminen-ikaryhma-color;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    .ep-toggle {
+      gap: 0;
+    }
+
+    .p-checkbox {
+      display: none;
+    }
+
+    .toggle-label {
+      margin: 0;
+    }
+
+    .taso-label {
+      display: flex;
+      align-items: center;
+      color: white;
+    }
   }
 }
 

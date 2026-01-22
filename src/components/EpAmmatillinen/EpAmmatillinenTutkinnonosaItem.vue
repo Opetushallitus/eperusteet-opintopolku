@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="sisalto.sisaltotyyppi === 'tutkinnonosa'"
-    class="d-flex"
+    class="flex"
     @click.prevent
   >
     <div v-if="sisalto.tutkinnonosa.tyyppi === 'normaali'">

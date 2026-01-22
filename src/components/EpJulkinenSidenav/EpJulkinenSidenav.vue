@@ -1,14 +1,14 @@
 <template>
   <div
-    id="navigation-bar"
     v-sticky
-    class="navbar"
+    class="navbar flex items-center"
     sticky-z-index="600"
   >
-    <div>
-      <b-button
-        v-b-toggle.sidebar-no-header
-        variant="transparent"
+    <div class="flex items-center">
+      <ep-button
+        class="valikko-button"
+        variant="link"
+        @click="active = !active"
       >
         <div class="menu">
           <EpMaterialIcon
@@ -19,45 +19,28 @@
           </EpMaterialIcon>
           <span class="text">{{ $t('valikko') }}</span>
         </div>
-      </b-button>
+      </ep-button>
       <router-link :to="{ name: 'root'}">
         <img
           :src="navImage"
           :alt="$t('eperusteet')"
-          class="ml-3"
+          class="ml-4"
         >
       </router-link>
     </div>
-    <div class="d-inline-flex ml-auto">
-      <b-navbar-nav :aria-label="$t('kielivalinta')">
-        <b-nav-item-dropdown
-          class="kielivalikko"
-          right
-        >
-          <template #button-content>
-            <EpMaterialIcon>language</EpMaterialIcon>
-            <span class="ml-2 dropdown-text mr-2">{{ $t(sisaltoKieli) }}</span>
-          </template>
-          <b-dropdown-item
-            v-for="(kieli, idx) in kielet"
-            :key="idx"
-            @click="valitseKieli(kieli)"
-          >
-            {{ $t(kieli) }}
-          </b-dropdown-item>
-        </b-nav-item-dropdown>
-      </b-navbar-nav>
+    <div class="inline-flex items-center ml-auto">
+      <EpKielivalinta
+        julkinen
+        @change="valitseKieli"
+      />
     </div>
-    <b-sidebar
-      id="sidebar-no-header"
-      :visible="active"
-      aria-labelledby="sidebar-no-header-title"
-      no-header
-      bg-variant="white"
-      no-close-on-route-change
-      @change="active = $event"
+    <Drawer
+      v-model:visible="active"
+      position="left"
+      :show-close-icon="false"
+      :header="null"
     >
-      <div class="pl-3 pr-3 pb-3">
+      <div class="pb-3 pl-3 pr-3">
         <div class="mt-3 mb-4">
           <router-link
             :to="{ name: 'root'}"
@@ -79,84 +62,70 @@
         </div>
         <nav class="mb-5">
           <EpSpinner v-if="!koulutustyyppiItems" />
-          <b-nav
+          <router-link
             v-for="(item, idx1) in koulutustyyppiItems"
             :key="idx1"
-            vertical
+            :to="item.route"
+            class="navi nav-btn"
+            active-class="active-item"
+            @click="closeSidebar()"
           >
-            <b-nav-item
-              :to="item.route"
-              link-classes="navi nav-btn"
-              active
-              active-class="active-item"
-              @click="closeSidebar()"
-            >
-              <div class="ml-3">
-                {{ $t(item.name) }}
-              </div>
-            </b-nav-item>
-          </b-nav>
+            <div class="ml-3">
+              {{ $t(item.name) }}
+            </div>
+          </router-link>
         </nav>
         <div class="mb-2 navi-valiotsikko">
           <span>{{ $t('osaaminen-ja-maaraykset') }}</span>
         </div>
         <nav class="mb-5">
           <EpSpinner v-if="!otherItems" />
-          <b-nav
+          <router-link
             v-for="(item, idx2) in otherItems"
             :key="idx2"
-            vertical
+            :to="item.route"
+            class="navi nav-btn"
+            active-class="active-item"
+            @click="closeSidebar()"
           >
-            <b-nav-item
-              :to="item.route"
-              link-classes="navi nav-btn"
-              active
-              active-class="active-item"
-              @click="closeSidebar()"
-            >
-              <div class="ml-3">
-                {{ $t(item.name) }}
-              </div>
-            </b-nav-item>
-          </b-nav>
+            <div class="ml-3">
+              {{ $t(item.name) }}
+            </div>
+          </router-link>
         </nav>
         <div class="mb-2 navi-valiotsikko">
           <span>{{ $t('tietoa-palvelusta') }}</span>
         </div>
         <nav>
-          <b-nav
+          <template
             v-for="(item, idx3) in muutLinkit"
             :key="idx3"
-            vertical
           >
-            <b-nav-item
+            <a
               v-if="item.link"
               :href="$kaanna(item.link)"
-              link-classes="navi nav-btn"
-              active
-              active-class="active-item"
+              class="navi nav-btn"
               target="_blank"
             >
               <div class="ml-3">
                 {{ $t(item.name) }}
               </div>
-            </b-nav-item>
-            <b-nav-item
+            </a>
+            <router-link
               v-else
               :to="item.route"
-              link-classes="navi nav-btn"
-              active
+              class="navi nav-btn"
               active-class="active-item"
               @click="closeSidebar()"
             >
               <div class="ml-3">
                 {{ $t(item.name) }}
               </div>
-            </b-nav-item>
-          </b-nav>
+            </router-link>
+          </template>
         </nav>
       </div>
-    </b-sidebar>
+    </Drawer>
   </div>
 </template>
 
@@ -165,6 +134,7 @@ import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
 import { navigoitavatKoulutustyyppiRyhmat, navigoitavatMuutRyhmat, otherLinks } from '@/utils/navigointi';
 import { Kielet } from '@shared/stores/kieli';
 import logo from '@assets/img/banners/opintopolku/logo.svg';
@@ -176,6 +146,8 @@ import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyy
 import { pinia } from '@/pinia';
 import { Kieli } from '@shared/tyypit';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import Drawer from 'primevue/drawer';
+import EpKielivalinta from '@shared/components/EpKielivalinta/EpKielivalinta.vue';
 
 const logger = createLogger('EpJulkinenSidenav');
 
@@ -261,15 +233,21 @@ const closeSidebar = () => {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-:deep(.b-sidebar) {
-  margin-top: 70px;
-  padding-bottom: 70px;
-  width: 400px;
-  box-shadow: 0 1rem 0.5rem rgba(0, 0, 0, 0.5) !important;
+.navbar {
+  height: 75px;
+  background-color: $white;
+  padding: 0.25rem 1rem;
 
-  @media (max-width: 900px) {
-    width: 100%;
+  :deep(.p-drawer) {
+    .p-drawer-content {
+      padding: 0 !important;
+    }
   }
+}
+
+:deep(.ep-button button) {
+  color: $black !important;
+  text-decoration: none !important;
 }
 
 :deep(.tabs .nav-tabs .nav-item .nav-link:hover:not(.active)) {
@@ -287,19 +265,28 @@ const closeSidebar = () => {
   color: $black;
 }
 
-.navbar {
-  height: 75px;
-  background-color: $white;
-  padding: 0.25rem 1rem;
-  // position: sticky;
-}
 
 :deep(.navi) {
   color: $black;
   font-weight: 500;
   font-size: 15px;
-  border-bottom: 1px solid $gray-lighten-8;
+  border-bottom: 1px solid $grey200;
   padding: 15px 0;
+}
+
+.navi {
+  display: block;
+  text-decoration: none;
+  color: $black;
+  font-weight: 500;
+  font-size: 15px;
+  border-bottom: 1px solid $grey200;
+  padding: 15px 0;
+
+  &:hover {
+    text-decoration: none;
+    color: $black;
+  }
 }
 
 .navi-home {
@@ -328,11 +315,11 @@ const closeSidebar = () => {
 
 .active-item {
   font-weight: 600;
-  background-color: $gray-lighten-5;
+  background-color: $grey50;
 }
 
 .nav-btn:hover {
-  background-color: $gray-lighten-5;
+  background-color: $grey50;
 }
 
 .btn:focus {
