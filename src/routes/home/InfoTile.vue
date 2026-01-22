@@ -9,7 +9,7 @@
         v-html="$kaanna(translatedText)"
       />
       <span v-if="text">{{ $t(text) }}</span>
-      <div class="d-flex mt-4 link">
+      <div class="flex mt-4 link">
         <EpMaterialIcon>chevron_right</EpMaterialIcon>
         <EpLinkki
           v-if="infoLink"

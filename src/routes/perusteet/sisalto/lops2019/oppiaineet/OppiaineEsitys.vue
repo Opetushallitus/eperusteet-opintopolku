@@ -102,8 +102,8 @@
         :key="idx"
         :to="opintojakso.location"
       >
-        <div class="d-flex justify-content-between opintojakso mb-2">
-          <div class="font-weight-bold">
+        <div class="flex justify-content-between opintojakso mb-2">
+          <div class="font-bold">
             <span>{{ $kaanna(opintojakso.nimi) }}</span>
             <span
               v-if="opintojakso.koodiLabel"

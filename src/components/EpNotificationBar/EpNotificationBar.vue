@@ -4,7 +4,7 @@
     id="notification-bar"
     ref="stickyElement"
     v-sticky
-    class="notifikaatio justify-content-center py-3 korostus"
+    class="notifikaatio justify-center py-3 korostus"
     :class="notifikaatioClass"
     sticky-z-index="5000"
   >

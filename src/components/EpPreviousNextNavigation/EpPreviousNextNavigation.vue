@@ -1,29 +1,29 @@
 <template>
   <div
     v-if="previous || next"
-    class="d-flex flex-lg-row justify-content-between mt-5"
+    class="flex lg:flex-row justify-content-between mt-5"
   >
-    <b-link
+    <router-link
       v-if="previous && previous.location"
       :to="previous.location"
       class="pb-3"
     >
-      <div class="d-flex align-items-center">
+      <div class="flex items-center">
         <EpMaterialIcon>arrow_back</EpMaterialIcon>
         <span class="mx-2">{{ $kaannaOlioTaiTeksti(previous.label) }}</span>
       </div>
-    </b-link>
+    </router-link>
 
-    <b-link
+    <router-link
       v-if="next && next.location"
       :to="next.location"
       class="ml-auto pb-3"
     >
-      <div class="d-flex align-items-center">
+      <div class="flex items-center">
         <span class="next mx-2">{{ $kaannaOlioTaiTeksti(next.label) }}</span>
         <EpMaterialIcon>arrow_forward</EpMaterialIcon>
       </div>
-    </b-link>
+    </router-link>
   </div>
 </template>
 

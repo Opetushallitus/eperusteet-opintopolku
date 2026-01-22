@@ -9,23 +9,22 @@
     >
       {{ $t(koulutustyyppiKohtaisetKaannokset.perusteentiedot) }}
     </h2>
-    <div class="row">
+    <div class="grid grid-cols-1 gap-4">
       <div
         v-if="peruste.nimi"
-        class="col-md-12"
       >
         <ep-form-content
           :name="koulutustyyppiKohtaisetKaannokset.perusteennimi"
           header-type="h3"
           header-class="h6"
         >
+          <slot name="nimi" />
           <div>{{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span></div>
         </ep-form-content>
       </div>
       <template v-if="isAmmatillinen">
         <div
           v-if="peruste.diaarinumero"
-          class="col-md-12"
         >
           <ep-form-content
             name="maarayksen-diaarinumero"
@@ -37,7 +36,6 @@
         </div>
         <div
           v-if="peruste.paatospvm"
-          class="col-md-12"
         >
           <ep-form-content
             name="maarayksen-paatospaivamaara"
@@ -50,7 +48,6 @@
       </template>
       <div
         v-if="peruste.voimassaoloAlkaa"
-        class="col-md-12"
       >
         <ep-form-content
           name="voimaantulo-pvm"
@@ -62,7 +59,6 @@
       </div>
       <div
         v-if="peruste.voimassaoloLoppuu"
-        class="col-md-12"
       >
         <ep-form-content
           name="voimassaolo-paattymispvm"
@@ -74,7 +70,6 @@
       </div>
       <div
         v-if="peruste.siirtymaPaattyy"
-        class="col-md-12"
       >
         <ep-form-content
           name="siirtyman-paattyminen"
@@ -89,7 +84,6 @@
       </div>
       <div
         v-if="dokumentti !== ''"
-        class="col-md-12"
       >
         <ep-form-content
           :name="dokumenttiKielistykset.otsikko"
@@ -99,7 +93,7 @@
         >
           <EpSpinner
             v-if="!dokumentti"
-            class="d-inline-block"
+            class="inline-block"
           />
           <div
             v-else
@@ -113,7 +107,6 @@
       </div>
       <div
         v-if="hasMaaraykset"
-        class="col-md-12"
       >
         <ep-form-content
           name="maaraykset"
@@ -150,14 +143,13 @@
       </div>
       <div
         v-if="hasKorvattavatDiaarinumerot"
-        class="col-md-12"
       >
         <ep-form-content
           :name="koulutustyyppiKohtaisetKaannokset.korvattavatperusteet"
           header-type="h3"
           header-class="h6"
         >
-          <b-table
+          <EpTable
             striped
             fixed
             responsive
@@ -165,10 +157,10 @@
             :fields="korvattavatDiaarinumerotFields"
             :items="korvaavatPerusteet"
           >
-            <template #cell(perusteet)="data">
-              <div v-if="data.item.perusteet.length > 0">
+            <template #cell(perusteet)="{ item }">
+              <div v-if="item && item.perusteet.length > 0">
                 <div
-                  v-for="(peruste, idx) in data.item.perusteet"
+                  v-for="(peruste, idx) in item.perusteet"
                   :key="idx"
                 >
                   <router-link :to="{ name: 'perusteTiedot', params: { perusteId: peruste.id } }">
@@ -183,13 +175,12 @@
                 {{ $t('peruste-saatavilla-opetushallituksen-arkistosta') }}
               </div>
             </template>
-          </b-table>
+          </EpTable>
         </ep-form-content>
       </div>
 
       <div
         v-if="kaannokset && kaannokset.length > 0"
-        class="col-md-12"
       >
         <ep-form-content
           name="saamen-kielelle-kaannetyt-perusteet"
@@ -223,7 +214,7 @@
             <span v-else-if="isEiVoiPoiketaTyyppi">{{ $t('ei-voi-poiketa-tutkinnon-perusteista-tutkintoviennin-yhteydessa') }}</span>
 
             <div v-if="isKoulutusvientiliiteTyyppi && koulutusvienninOhjeet && koulutusvienninOhjeet.length > 0">
-              <b-table
+              <EpTable
                 striped
                 fixed
                 responsive
@@ -237,7 +228,7 @@
                     rel="noopener noreferrer"
                   >{{ item.nimi }}</a>
                 </template>
-              </b-table>
+              </EpTable>
             </div>
 
             <ep-form-content
@@ -260,7 +251,7 @@
             header-type="h3"
             header-class="h6"
           >
-            <b-table
+            <EpTable
               striped
               fixed
               responsive
@@ -280,7 +271,7 @@
             header-type="h3"
             header-class="h6"
           >
-            <b-table
+            <EpTable
               striped
               fixed
               responsive
@@ -300,7 +291,7 @@
             header-type="h3"
             header-class="h6"
           >
-            <b-table
+            <EpTable
               striped
               fixed
               responsive
@@ -347,7 +338,6 @@
 
         <div
           v-if="osaamisalaKuvaukset && osaamisalaKuvaukset.length > 0"
-          class="col-md-12"
         >
           <ep-form-content
             name="osaamisalojen-kuvaukset"
@@ -371,7 +361,6 @@
 
       <div
         v-if="isAmmatillinen && !isOpas"
-        class="col-md-12"
       >
         <ep-form-content
           name="englanninkieliset-sisallot"
@@ -386,7 +375,6 @@
 
       <div
         v-if="kvliitteita"
-        class="col-md-12"
       >
         <ep-form-content
           name="kv-liitteet"
@@ -416,7 +404,6 @@
 
       <div
         v-if="!isOpas"
-        class="col-md-12"
       >
         <ep-form-content
           name="muutoshistoria"
@@ -446,6 +433,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import EpExternalLink from '@shared/components/EpExternalLink/EpExternalLink.vue';
 import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 import { $t, $kaanna, $sd } from '@shared/utils/globals';
 import { useRoute, useRouter } from 'vue-router';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';

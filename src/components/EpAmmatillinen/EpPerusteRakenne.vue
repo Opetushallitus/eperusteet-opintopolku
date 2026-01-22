@@ -7,7 +7,7 @@
     />
 
     <div class="rakennepohja mt-3">
-      <div class="d-flex">
+      <div class="flex">
         <ep-button
           class="rakennetoggle"
           variant="link"

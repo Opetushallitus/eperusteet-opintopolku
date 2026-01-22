@@ -18,18 +18,18 @@
         class="mb-5"
       >
         <div class="mb-2 mt-4">
-          <div class="font-weight-bold mb-3">
+          <div class="font-bold mb-3">
             {{ $kaanna(arvioinninkohde.otsikko) }}
           </div>
           <div>{{ $kaanna(arvioinninkohde.selite) }}</div>
         </div>
 
-        <b-table
+        <EpTable
           striped
           :items="arvioinninkohde.osaamistasonKriteerit"
           :fields="osaamistasonKriteeritFields"
           responsive
-          thead-class="d-none"
+          :show-headers="false"
         >
           <template #cell(osaamistaso)="{item}">
             <span v-if="item.osaamistaso"> {{ $kaanna(item.osaamistaso.otsikko) }}</span>
@@ -45,7 +45,7 @@
               </li>
             </ul>
           </template>
-        </b-table>
+        </EpTable>
       </div>
     </div>
 
@@ -57,6 +57,8 @@
 import { computed } from 'vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import * as _ from 'lodash';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
+import { $kaanna } from '@shared/utils/globals';
 
 const props = defineProps({
   arvioinninKohdealueet: {

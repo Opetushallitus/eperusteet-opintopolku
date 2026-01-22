@@ -12,35 +12,31 @@
       {{ $t(subheader) }}
     </template>
     <div>
-      <b-container fluid>
-        <b-row
+      <div class="w-full">
+        <div
           v-if="kuvaus"
-          class="mb-5"
+          class="flex flex-wrap mb-5"
         >
-          <b-col
-            cols="12"
-            xl="auto"
-            class="tile"
+          <div
+            class="w-full xl:w-auto tile"
           >
             <h2 class="otsikko">
               {{ $t('kuvaus') }}
             </h2>
             <div>{{ $t(kuvaus) }}</div>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
 
-        <b-row v-if="perusteKoosteStore">
-          <b-col
-            cols="12"
-            xl="auto"
-            class="tile"
+        <div v-if="perusteKoosteStore" class="flex flex-wrap mb-5">
+          <div
+            class="w-full xl:w-auto tile"
           >
             <h2 class="otsikko">
               {{ $t(perusteetHeader) }}
             </h2>
             <div
               v-if="julkaistutPerusteet"
-              class="perustebox d-md-flex flex-wrap justify-content-start"
+              class="perustebox md:flex flex-wrap justify-start"
             >
               <div v-if="julkaistutPerusteet.length === 0">
                 {{ $t('perusteita-ei-saatavilla') }}
@@ -70,30 +66,30 @@
               </router-link>
             </div>
             <ep-spinner v-else />
-          </b-col>
-          <b-col v-if="julkaistutEraantyneetPerusteet && julkaistutEraantyneetPerusteet.length > 0">
-            <b-button
-              variant="link"
+          </div>
+          <div v-if="julkaistutEraantyneetPerusteet && julkaistutEraantyneetPerusteet.length > 0" class="w-full">
+            <ep-button
+              link
               @click="toggleEraantyneet()"
             >
               <span v-if="showEraantyneet">{{ $t('piilota-ei-voimassa-olevat-perusteet') }}</span>
               <span v-else>{{ $t('nayta-ei-voimassa-olevat-perusteet') }}</span>
-            </b-button>
-          </b-col>
-        </b-row>
+            </ep-button>
+          </div>
+        </div>
 
-        <b-row v-if="paikallinenStore">
-          <b-col>
+        <div v-if="paikallinenStore" class="flex flex-wrap">
+          <div class="w-full">
             <component
               :is="paikallinenComponent"
               :peruste-kooste-store="perusteKoosteStore"
               :paikallinen-store="paikallinenStore"
               :koulutustyyppi="koulutustyyppi"
             />
-          </b-col>
-        </b-row>
+          </div>
+        </div>
 
-        <b-row>
+        <div class="flex flex-wrap">
           <div class="list-section">
             <div class="list">
               <h2>{{ $t('ajankohtaista') }}</h2>
@@ -139,8 +135,8 @@
               </ep-spinner-slot>
             </div>
           </div>
-        </b-row>
-      </b-container>
+        </div>
+      </div>
     </div>
   </ep-header>
 </template>
@@ -152,6 +148,7 @@ import { useHead } from '@unhead/vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
 import PerusteTile from './PerusteTile.vue';
 import { MurupolkuOsa } from '@/tyypit';
 import _ from 'lodash';
@@ -344,11 +341,6 @@ watch(routeKoulutustyyppi, async () => {
       &:not(:first-child) {
         margin-top: 30px;
       }
-    }
-
-    .perustebox {
-      margin-top: 30px;
-      margin-bottom: 30px;
     }
 
     .tiedotebox {

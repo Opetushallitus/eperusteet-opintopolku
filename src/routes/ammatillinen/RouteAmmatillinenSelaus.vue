@@ -12,31 +12,32 @@
     </ep-header>
     <div
       id="main"
-      class="container-lg"
+      class="container mx-auto px-3"
     >
       <div v-if="$route.name === 'ammatillinenSelaus'">
-        <div class="d-flex justify-content-between flex-lg-row flex-column">
+        <div class="flex items-center justify-between lg:flex-row flex-col">
           <router-link
             v-for="(linkki, index) in linkit"
             :key="'linkki'+index"
             :to="linkki.route"
+            class="w-full mr-4"
           >
-            <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
+            <div class="w-full box tile-background-shadow-selected shadow-tile flex justify-center items-cente">
               <EpMaterialIcon
                 v-if="linkki.icon"
                 icon-shape="outlined"
               >
                 {{ linkki.icon }}
               </EpMaterialIcon>
-              <div class="align-self-center">
+              <div class="self-center">
                 {{ $t(linkki.text) }}
               </div>
             </div>
           </router-link>
         </div>
 
-        <div class="row mb-4">
-          <div class="col-12 col-lg-6 pr-5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
+          <div class="pr-5">
             <h2 class="mb-2">
               {{ $t('mita-ovat-ammatilliset-tutkinnot') }}
             </h2>
@@ -63,7 +64,7 @@
             </p>
           </div>
 
-          <div class="col-12 col-lg-6">
+          <div>
             <h2 class="mb-2">
               {{ $t('ajankohtaista') }}
             </h2>
@@ -234,12 +235,8 @@ const furtherFeedbackUrl = computed(() => {
 @import '@shared/styles/_mixins.scss';
 @include shadow-tile;
 
-.container-lg {
+.container {
   margin-top: 1.5rem;
-}
-
-.container-md {
-  padding: 0 30px;
 }
 
 .box {
@@ -257,11 +254,5 @@ const furtherFeedbackUrl = computed(() => {
 .kuvaus {
   font-size: smaller;
   color: $gray-lighten-12;
-}
-
-@media (max-width: 991.98px) {
-  .container-md {
-    padding: 0 15px;
-  }
 }
 </style>

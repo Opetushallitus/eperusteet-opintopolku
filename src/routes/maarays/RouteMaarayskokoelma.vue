@@ -10,19 +10,19 @@
       {{ $t('opetushallituksen-maaraykset-alaotsikko') }}
     </template>
 
-    <div class="d-flex flex-column flex-lg-row">
-      <div class="w-100 mr-2 mb-3">
+    <div class="flex flex-col lg:flex-row">
+      <div class="w-full mr-2 mb-3">
         <EpSearch
           v-model="filters.nimi"
           :placeholder="''"
         >
           <template #label>
-            <span class="font-weight-600">{{ $t('hae-maarayksia') }}</span>
+            <span class="font-semibold">{{ $t('hae-maarayksia') }}</span>
           </template>
         </EpSearch>
       </div>
 
-      <div class="w-100 mr-2 mb-3">
+      <div class="w-full mr-2 mb-3">
         <EpMultiSelect
           v-model="filters.tyyppi"
           :enable-empty-option="true"
@@ -33,7 +33,7 @@
           :close-on-select="false"
         >
           <template #label>
-            <span class="font-weight-600">{{ $t('tyyppi') }}</span>
+            <span class="font-semibold">{{ $t('tyyppi') }}</span>
           </template>
 
           <template
@@ -49,8 +49,8 @@
         </EpMultiSelect>
       </div>
 
-      <div class="w-100 mb-3">
-        <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
+      <div class="w-full mb-3">
+        <label class="font-semibold">{{ $t('koulutus-tai-tutkinto') }}</label>
         <EpMaarayskokoelmaKoulutustyyppiSelect
           v-if="koulutustyyppiVaihtoehdot"
           v-model="filters.koulutustyypit"
@@ -84,7 +84,7 @@
       v-else
       class="maaraykset"
     >
-      <div class="jarjestys d-flex justify-content-end align-items-center mb-2">
+      <div class="jarjestys flex justify-end items-center mb-2">
         <a
           class="clickable"
           href="javascript:void(0)"
@@ -98,7 +98,7 @@
       <router-link
         v-for="maarays in maaraykset"
         :key="maarays.id"
-        class="maarays d-flex shadow-tile"
+        class="maarays flex shadow-tile"
         :to="{name: 'maarays', params: {maaraysId: maarays.id}}"
       >
         <img
@@ -107,10 +107,10 @@
           class="kuva"
         >
         <div class="tiedot">
-          <div class="nimi font-weight-bold mb-2">
+          <div class="nimi font-bold mb-2">
             {{ $kaanna(maarays.nimi) }}
           </div>
-          <div class="alatiedot d-flex">
+          <div class="alatiedot flex">
             <div class="mr-2">
               {{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}
             </div>
@@ -162,7 +162,6 @@ import { MaarayksetStore } from '@shared/stores/MaarayksetStore';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import { Kielet } from '@shared/stores/kieli';
-import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';

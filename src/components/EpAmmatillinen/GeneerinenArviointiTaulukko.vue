@@ -9,26 +9,22 @@
     <div v-if="kriteeriton">
       {{ $kaanna(osaamistasonOtsikko) }}
     </div>
-    <b-container
+    <div
       v-else
-      fluid="lg"
-      class="osaamistasot mt-3"
+      class="w-full max-w-screen-lg osaamistasot mt-3"
     >
-      <b-row
+      <div
         v-for="(osaamistasonKriteeri,index) in osaamistasonKriteeritSorted"
         :key="'osaamistasokriteeri'+index"
+        class="flex flex-wrap"
       >
-        <b-col
-          class="pt-3"
-          md="12"
-          lg="4"
+        <div
+          class="pt-3 w-full md:w-full lg:w-1/3"
         >
           <span>{{ $kaanna(osaamistasonKriteeri.osaamistaso.otsikko) }}</span>
-        </b-col>
-        <b-col
-          class="pt-3"
-          md="12"
-          lg="8"
+        </div>
+        <div
+          class="pt-3 w-full md:w-full lg:w-2/3"
         >
           <ul class="pl-3">
             <li
@@ -38,9 +34,9 @@
               {{ $kaanna(kriteeri) }}
             </li>
           </ul>
-        </b-col>
-      </b-row>
-    </b-container>
+        </div>
+      </div>
+    </div>
   </ep-form-content>
 </template>
 

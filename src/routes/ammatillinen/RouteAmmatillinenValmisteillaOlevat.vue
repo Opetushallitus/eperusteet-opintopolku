@@ -12,12 +12,12 @@
         :key="'peruste'+peruste.id"
         class="valmisteilla-row m-2"
       >
-        <div class="d-flex m-2">
+        <div class="flex m-2">
           <div class="valmisteilla-data pl-2">
             <div class="nimi">
               {{ $kaanna(peruste.nimi) }}
             </div>
-            <div class="d-flex">
+            <div class="flex">
               <div
                 v-if="peruste.voimassaoloAlkaa"
                 class="voimaantulo pr-1"
@@ -40,7 +40,7 @@
               </div>
             </div>
           </div>
-          <div class="ml-auto align-self-start">
+          <div class="ml-auto self-start">
             <EpMaterialIcon v-if="peruste.toggled">
               expand_less
             </EpMaterialIcon>
@@ -57,10 +57,10 @@
           <div
             v-for="(aikataulu, index) in peruste.perusteenAikataulut"
             :key="'aikataulu'+aikataulu.id"
-            class="row perusteen-aikataulu"
+            class="flex perusteen-aikataulu"
           >
-            <div class="col col-auto center-block mb-4 pl-4 pr-0">
-              <div class="paiva d-inline-block text-center">
+            <div class="w-auto center-block mb-4 pl-4 pr-0">
+              <div class="paiva inline-block text-center">
                 {{ $sdm(aikataulu.tapahtumapaiva) }}
               </div>
               <div
@@ -71,7 +71,7 @@
               </div>
             </div>
 
-            <div class="col pl-4">
+            <div class="flex-1 pl-4">
               <div class="aikataulu px-3 py-2 mb-3">
                 <div class="tavoite">
                   {{ $kaanna(aikataulu.tavoite) }}

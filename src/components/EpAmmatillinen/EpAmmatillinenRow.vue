@@ -1,8 +1,8 @@
 <template>
-  <div class="d-flex ammatillinen-row tile-background-shadow-selected shadow-tile">
+  <div class="flex ammatillinen-row tile-background-shadow-selected shadow-tile">
     <router-link
       v-if="route"
-      class="d-block w-100"
+      class="block w-full"
       :to="route"
     >
       <div class="ammatillinen-data">
@@ -11,7 +11,7 @@
     </router-link>
     <div
       v-else
-      class="w-100 ammatillinen-data"
+      class="w-full ammatillinen-data"
     >
       <slot />
     </div>

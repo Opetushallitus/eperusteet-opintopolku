@@ -1,7 +1,7 @@
 <template>
   <div class="tiivistetty-content">
     <h4
-      class="link-style clickable font-weight-bold"
+      class="link-style clickable font-bold"
       @click="selectOppiaine(oppiaine)"
     >
       {{ $kaanna(oppiaine.nimi) }}

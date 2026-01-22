@@ -25,7 +25,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             fixed
             responsive
@@ -46,7 +46,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             fixed
             responsive
@@ -67,7 +67,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             fixed
             responsive
@@ -124,7 +124,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             hover
             responsive
@@ -136,7 +136,7 @@
                 {{ $kaanna(data.item.tutkinnonOsa.nimi, false, true, 'en') }}
               </router-link>
             </template>
-          </b-table>
+          </EpTable>
         </EpFormContent>
       </div>
 
@@ -162,6 +162,7 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { $t, $kaanna } from '@shared/utils/globals';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 
 const perusteDataStore = getCachedPerusteStore();
 

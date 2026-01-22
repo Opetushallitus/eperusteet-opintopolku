@@ -34,17 +34,11 @@
                 </div>
               </div>
             </div>
-            <b-pagination
-              :value="page"
-              :total-rows="tiedotteet.amount"
-              :per-page="tiedotteet.filter.sivukoko"
-              align="center"
+            <EpBPagination
+              v-model="page"
+              :total="tiedotteet.amount"
+              :items-per-page="tiedotteet.filter.sivukoko"
               aria-controls="tiedotteet-lista"
-              :first-text="$t('alkuun')"
-              prev-text="«"
-              next-text="»"
-              :last-text="$t('loppuun')"
-              @change="updatePage"
             />
           </div>
           <div v-else>
@@ -65,6 +59,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
@@ -117,7 +112,7 @@ onMounted(async () => {
 
 const setQueryParams = () => {
   query.value = route?.query?.haku as string || '';
-  page.value = route?.query?.sivu as number || 1;
+  page.value = parseInt(route?.query?.sivu as string) || 1;
 };
 
 watch(sisaltoKieli, async () => {
@@ -134,12 +129,11 @@ watch(query, async () => {
   }
 });
 
-const updatePage = async (value) => {
+watch(page, async () => {
   if (mounted.value) {
-    page.value = value;
     await fetch();
   }
-};
+});
 
 const fetch = async () => {
   await tiedoteStore.updateFilter({

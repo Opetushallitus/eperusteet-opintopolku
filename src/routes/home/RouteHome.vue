@@ -12,11 +12,11 @@
     </div>
     <div class="search">
       <div class="container">
-        <b-container fluid>
+        <div class="w-full">
           <section class="section">
             <EpEtusivuHaku />
           </section>
-        </b-container>
+        </div>
       </div>
     </div>
     <div class="container">
@@ -51,13 +51,13 @@
     </div>
     <div class="info">
       <div class="container">
-        <b-container fluid>
+        <div class="w-full">
           <section class="section mt-4">
             <h2 class="tile-heading">
               {{ $t('valtakunnalliset-perusteet-ja-paikalliset-opetussuunnitelmat') }}
             </h2>
             <EpSpinner v-if="!julkaistutKoulutustyypit" />
-            <div class="d-md-flex flex-wrap justify-content-start">
+            <div class="md:flex flex-wrap justify-start">
               <KoulutustyyppiTile
                 v-for="(item, idx) in koulutustyyppiItems"
                 :key="idx"
@@ -72,7 +72,7 @@
               {{ $t('osaaminen-ja-maaraykset') }}
             </h2>
             <EpSpinner v-if="!otherItems" />
-            <div class="d-md-flex flex-wrap justify-content-start">
+            <div class="md:flex flex-wrap justify-start">
               <KoulutustyyppiTile
                 v-for="(item, idx) in otherItems"
                 :key="idx"
@@ -81,12 +81,12 @@
               />
             </div>
           </section>
-        </b-container>
+        </div>
       </div>
     </div>
     <div class="container">
-      <b-container fluid>
-        <section class="section d-md-flex flex-wrap justify-content-start mt-4">
+      <div class="w-full">
+        <div class="md:flex flex-wrap justify-start mt-4">
           <InfoTile
             v-for="(infoLink, idx) in infoLinkit"
             :key="'info-' + idx"
@@ -98,8 +98,8 @@
             :route="infoLink.route"
             :link-text="infoLink.linkText"
           />
-        </section>
-      </b-container>
+        </div>
+      </div>
     </div>
   </div>
 </template>

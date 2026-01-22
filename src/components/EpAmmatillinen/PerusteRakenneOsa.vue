@@ -1,6 +1,6 @@
 <template>
   <div :class="{'parentviiva': !viimeinen}">
-    <div class="d-flex">
+    <div class="flex">
       <div
         v-if="!eiVanhempaa && viimeinen"
         class="parentviiva viimeinen"
@@ -9,13 +9,13 @@
         v-if="!eiVanhempaa"
         class="liitosviiva"
       />
-      <div class="w-100">
+      <div class="w-full">
         <div
           class="rakenne"
           :style="rakenneStyle"
         >
           <div
-            class="d-flex w-100 justify-content-between"
+            class="flex w-full justify-content-between"
             :class="{'kuvaukseton': !rakenneosa.kuvaus}"
             @click="toggleRakenne()"
           >
@@ -28,7 +28,7 @@
               </EpMaterialIcon>
             </div>
             <div
-              class="w-75"
+              class="w-3/4"
               :class="{'ml-3' : rakenneosa.osat && rakenneosa.osat.length > 0}"
             >
               <slot
@@ -43,7 +43,7 @@
                 </template>
               </slot>
             </div>
-            <div class="w-25 text-right">
+            <div class="w-1/4 text-right">
               {{ laajuus }}
             </div>
           </div>
