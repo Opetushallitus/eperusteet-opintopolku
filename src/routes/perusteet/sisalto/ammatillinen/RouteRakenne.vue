@@ -16,26 +16,23 @@
         :rakenne-osat="rakenneOsat"
       >
         <template #nimi="{ rakenneosa }">
-          <div class="d-flex">
+          <div class="flex">
             <div v-if="rakenneosa.tutkinnonosa">
-              <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}">
-                <ep-color-indicator
-                  :id="'tutkinto'+rakenneosa._tutkinnonOsaViite"
-                  :tooltip="false"
-                  :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'"
-                  class="mr-2"
-                />
-                {{ $kaanna(rakenneosa.tutkinnonosa.tutkinnonOsa.nimi) }} <span v-if="rakenneosa.koodiArvo">({{ rakenneosa.koodiArvo }})</span>
-              </router-link>
-              <b-popover
-                :target="'tutkinto'+rakenneosa._tutkinnonOsaViite"
-                :placement="'top'"
-                triggers="hover"
-                variant="primary"
-              >
+              <EpPopover :triggers="['hover']">
+                <template #trigger>
+                  <router-link :to="{name: 'tutkinnonosa', params: { tutkinnonOsaViiteId: rakenneosa._tutkinnonOsaViite}}">
+                    <ep-color-indicator
+                      :id="'tutkinto'+rakenneosa._tutkinnonOsaViite"
+                      :tooltip="false"
+                      :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'"
+                      class="mr-2"
+                    />
+                    {{ $kaanna(rakenneosa.tutkinnonosa.tutkinnonOsa.nimi) }} <span v-if="rakenneosa.koodiArvo">({{ rakenneosa.koodiArvo }})</span>
+                  </router-link>
+                </template>
                 <span v-if="rakenneosa.pakollinen">{{ $t('pakollinen-tutkinnon-osa') }}</span>
                 <span v-if="!rakenneosa.pakollinen">{{ $t('valinnainen-tutkinnon-osa') }}</span>
-              </b-popover>
+              </EpPopover>
             </div>
             <span v-else>
               <template v-if="rakenneosa.nimi">
@@ -58,6 +55,7 @@ import { ref, computed, useTemplateRef } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import PerusteRakenneOsa from '@/components/EpAmmatillinen/PerusteRakenneOsa.vue';
+import EpPopover from '@shared/components/EpPopover/EpPopover.vue';
 
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';

@@ -6,7 +6,7 @@
     <template #header>
       {{ $kaanna(osaamismerkki.nimi) }}
     </template>
-    <div class="d-flex flex-lg-row flex-column mt-5">
+    <div class="flex lg:flex-row flex-col mt-5">
       <div class="m-3">
         <div class="tile tile-background-shadow-selected shadow-tile">
           <div class="img">
@@ -29,7 +29,7 @@
           <h2 class="header">
             {{ $t('voimassaolo') }}
           </h2>
-          <div class="mt-1 d-flex">
+          <div class="mt-1 flex">
             <span class="mr-1">{{ $t('voimassaolo-paattynyt') }}</span>
             <span class="mr-2">{{ $sd(osaamismerkki.voimassaoloLoppuu) }}</span>
             <EpVoimassaolo :voimassaolo="osaamismerkki" />

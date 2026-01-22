@@ -2,16 +2,16 @@
   <div>
     <slot name="sisalto-nimi" />
 
-    <b-row>
-      <b-col md="6">
+    <div class="flex flex-wrap">
+      <div class="w-full md:w-1/2">
         <ep-form-content
           :name="$t(opintokokonaisuusNimiOtsikko(opintokokonaisuus.tyyppi))"
           header-type="h4"
         >
           <span>{{ $kaanna(sisaltoviite.nimi) }}</span>
         </ep-form-content>
-      </b-col>
-      <b-col md="6">
+      </div>
+      <div class="w-full md:w-1/2">
         <ep-form-content
           name="laajuus"
           header-type="h4"
@@ -19,19 +19,19 @@
           <span v-if="opintokokonaisuus.laajuus && laajuusYksikkoLyhenne">{{ opintokokonaisuus.laajuus }} {{ laajuusYksikkoLyhenne }}</span>
           <span v-else>-</span>
         </ep-form-content>
-      </b-col>
-    </b-row>
-    <b-row
+      </div>
+    </div>
+    <div
       v-if="opintokokonaisuus.koodiArvo"
-      class="mb-4"
+      class="flex flex-wrap mb-4"
     >
-      <b-col>
+      <div class="w-full">
         <h4>{{ $t('opintokokonaisuuden-koodi') }}</h4>
         <div>{{ opintokokonaisuus.koodiArvo }}</div>
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
+      </div>
+    </div>
+    <div class="flex flex-wrap">
+      <div class="w-full">
         <h4 role="presentation">
           {{ $t('kuvaus') }}
         </h4>
@@ -39,27 +39,30 @@
           :value="$kaanna(opintokokonaisuus.kuvaus)"
           :kuvat="kuvat"
         />
-      </b-col>
-    </b-row>
+      </div>
+    </div>
     <hr>
-    <b-row>
-      <b-col>
+    <div class="flex flex-wrap">
+      <div class="w-full">
         <h3 class="mt-3 mb-4">
           {{ $t(opintokokonaisuusTavoiteOtsikko(opintokokonaisuus.tyyppi)) }}
         </h3>
-      </b-col>
-    </b-row>
-    <b-row v-if="opintokokonaisuus.tavoitteidenKuvaus">
-      <b-col>
+      </div>
+    </div>
+    <div
+      v-if="opintokokonaisuus.tavoitteidenKuvaus"
+      class="flex flex-wrap"
+    >
+      <div class="w-full">
         <h4>{{ $t('tavoitteiden-kuvaus') }}</h4>
         <ep-content-viewer
           :value="$kaanna(opintokokonaisuus.tavoitteidenKuvaus)"
           :kuvat="kuvat"
         />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
+      </div>
+    </div>
+    <div class="flex flex-wrap">
+      <div class="w-full">
         <h4>{{ $kaanna(opintokokonaisuus.opetuksenTavoiteOtsikko) }}</h4>
         <ul>
           <li
@@ -69,12 +72,12 @@
             {{ $kaanna(tavoiteItem.tavoite) }}
           </li>
         </ul>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
     <template v-if="opintokokonaisuus.keskeisetSisallot">
       <hr>
-      <b-row>
-        <b-col>
+      <div class="flex flex-wrap">
+        <div class="w-full">
           <h3 class="mt-3 mb-4">
             {{ $t('keskeiset-sisallot') }}
           </h3>
@@ -82,28 +85,31 @@
             :value="$kaanna(opintokokonaisuus.keskeisetSisallot)"
             :kuvat="kuvat"
           />
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </template>
     <hr>
-    <b-row>
-      <b-col>
+    <div class="flex flex-wrap">
+      <div class="w-full">
         <h3 class="mt-3 mb-4">
           {{ $t('arviointi') }}
         </h3>
-      </b-col>
-    </b-row>
-    <b-row v-if="opintokokonaisuus.arvioinninKuvaus">
-      <b-col>
+      </div>
+    </div>
+    <div
+      v-if="opintokokonaisuus.arvioinninKuvaus"
+      class="flex flex-wrap"
+    >
+      <div class="w-full">
         <h4>{{ $t('arvioinnin-kuvaus') }}</h4>
         <ep-content-viewer
           :value="$kaanna(opintokokonaisuus.arvioinninKuvaus)"
           :kuvat="kuvat"
         />
-      </b-col>
-    </b-row>
-    <b-row>
-      <b-col>
+      </div>
+    </div>
+    <div class="flex flex-wrap">
+      <div class="w-full">
         <h4>{{ $t('opiskelijan-osaamisen-arvioinnin-kohteet') }}</h4>
         <ul>
           <li
@@ -113,19 +119,22 @@
             {{ $kaanna(arviointiItem.arviointi) }}
           </li>
         </ul>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
     <template v-if="opintokokonaisuus.osaamismerkkiKappale && (opintokokonaisuus.osaamismerkkiKappale.kuvaus || osaamisMerkkiKoodit.length > 0)">
       <hr>
-      <b-row>
-        <b-col>
+      <div class="flex flex-wrap">
+        <div class="w-full">
           <h3 class="mb-4">
             {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
           </h3>
-        </b-col>
-      </b-row>
-      <b-row v-if="opintokokonaisuus.osaamismerkkiKappale.kuvaus">
-        <b-col>
+        </div>
+      </div>
+      <div
+        v-if="opintokokonaisuus.osaamismerkkiKappale.kuvaus"
+        class="flex flex-wrap"
+      >
+        <div class="w-full">
           <h4 class="mb-4">
             {{ $t('osaamismerkkien-suorittaminen') }}
           </h4>
@@ -134,17 +143,20 @@
             :kuvat="kuvat"
             class="mb-5"
           />
-        </b-col>
-      </b-row>
-      <b-row v-if="osaamisMerkkiKoodit.length > 0">
-        <b-col>
+        </div>
+      </div>
+      <div
+        v-if="osaamisMerkkiKoodit.length > 0"
+        class="flex flex-wrap"
+      >
+        <div class="w-full">
           <EpOsaamismerkit
             :osaamismerkit="osaamismerkit"
             :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
             hide-kuvaus
           />
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </template>
   </div>
 </template>

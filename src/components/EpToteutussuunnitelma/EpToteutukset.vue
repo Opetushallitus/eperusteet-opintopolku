@@ -20,7 +20,7 @@
         <div class="font-600 mt-3">
           {{ $t('tutkintonimikkeet-ja-osaamisalat') }}
         </div>
-        <b-table
+        <EpTable
           striped
           :items="toteutus.tutkintonimikkeetJaOsaamisalat"
           :fields="koodiFields"
@@ -29,7 +29,7 @@
 
       <div v-if="toteutus.tavatjaymparisto">
         <ep-form-content
-          class="col-md-12"
+          class="col-span-12"
           name="tavat-ja-ymparisto"
         >
           <ep-content-viewer
@@ -41,7 +41,7 @@
 
       <div v-if="toteutus.arvioinnista">
         <ep-form-content
-          class="col-md-12"
+          class="col-span-12"
           name="osaamisen-arvioinnista"
         >
           <ep-content-viewer
@@ -55,7 +55,7 @@
         <ep-form-content
           v-for="(vapaa, index) in toteutus.vapaat"
           :key="'vapaa'+index"
-          class="col-md-12 mt-4"
+          class="col-span-12 mt-4"
         >
           <template #header>
             <label>{{ $kaanna(vapaa.nimi) }}</label>
@@ -78,6 +78,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import { $t } from '@shared/utils/globals';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 
 const props = defineProps({
   toteutukset: {

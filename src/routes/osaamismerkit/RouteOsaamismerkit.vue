@@ -12,16 +12,16 @@
       </template>
 
       <div class="osaamismerkit">
-        <div class="d-flex flex-lg-row flex-column mb-5">
+        <div class="flex lg:flex-row flex-col mb-5">
           <EpSearch
             v-model="query.nimi"
             :max-width="true"
             :sr-placeholder="$t('hae-osaamismerkkeja')"
             :placeholder="''"
-            class="w-100 mr-3"
+            class="w-full mr-3"
           >
             <template #label>
-              <span class="font-weight-600">{{ $t('hae-osaamismerkkeja') }}</span>
+              <span class="font-semibold">{{ $t('hae-osaamismerkkeja') }}</span>
             </template>
           </EpSearch>
 
@@ -36,7 +36,7 @@
             label="text"
           >
             <template #label>
-              <span class="font-weight-600">{{ $t('teema') }}</span>
+              <span class="font-semibold">{{ $t('teema') }}</span>
             </template>
           </EpMultiSelect>
         </div>

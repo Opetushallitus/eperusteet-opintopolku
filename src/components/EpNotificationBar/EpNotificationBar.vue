@@ -3,10 +3,9 @@
     v-if="hasNotification"
     id="notification-bar"
     ref="stickyElement"
-    v-sticky
-    class="notifikaatio justify-content-center py-3 korostus"
+    v-sticky="{ zIndex: 5000, top: `${sidenavHeight}px` }"
+    class="notifikaatio justify-center py-3 korostus"
     :class="notifikaatioClass"
-    sticky-z-index="5000"
   >
     <EpMaterialIcon
       icon-shape="outlined"
@@ -28,7 +27,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, useSlots, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Sticky from 'vue-sticky-directive';
 import * as _ from 'lodash';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import { $t, $sd } from '@shared/utils/globals';
@@ -57,26 +55,14 @@ const props = defineProps({
 const route = useRoute();
 const router = useRouter();
 const slots = useSlots();
-const stickyElement = useTemplateRef('stickyElement');
-const navBarHeight = ref(0);
 
-onMounted(() => {
-  if (hasNotification.value) {
-    const navbar = document.getElementById('navigation-bar');
-    if (stickyElement?.value
-        && stickyElement.value['@@vue-sticky-directive']
-        && stickyElement.value['@@vue-sticky-directive'].options) {
-      stickyElement.value['@@vue-sticky-directive'].options.topOffset = navbar?.getBoundingClientRect().height || 0;
-    }
-  }
+const sidenavHeight = computed(() => {
+  const element = document.querySelector('.ep-julkinen-sidenav');
+  return element ? element.getBoundingClientRect().height : 0;
 });
 
 const hasNotification = computed(() => {
   return notifikaatio.value || hasDefaultSlotContent.value;
-});
-
-const offset = computed(() => {
-  return `{top: ${navBarHeight.value}}`;
 });
 
 const notifikaatioClass = computed(() => {
@@ -162,11 +148,11 @@ const hasDefaultSlotContent = computed(() => {
     display: flex;
 
     &.esikatselu {
-      background-color: $gray-lighten-4;
+      background-color: $grey50;
     }
 
     &.katselu {
-      background-color: $blue-lighten-4;
+      background-color: $lightBlue2;
     }
 
     .notifikaatio-text {
