@@ -23,7 +23,7 @@
 
       <ep-form-content
         v-if="osaalue.paikallinenTarkennus"
-        class="col-md-12 mt-4"
+        class="col-span-12 mt-4"
         name="koulutuksen-jarjestajan-tarkennus"
       >
         <ep-content-viewer
@@ -35,7 +35,7 @@
       <ep-form-content
         v-for="(vapaa, index) in osaalue.vapaat"
         :key="'osaaluevapaa'+index"
-        class="col-md-12 mt-4"
+        class="col-span-12 mt-4"
       >
         <template #header>
           <label>{{ $kaanna(vapaa.nimi) }}</label>

@@ -10,29 +10,25 @@
         {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
       <div class="selaus">
-        <b-container fluid>
-          <b-row class="mb-0">
-            <b-col
-              cols="12"
-              lg="6"
-              class="tile mb-5"
+        <div class="w-full">
+          <div class="flex flex-wrap justify-between mb-0">
+            <div
+              class="tile mb-8"
             >
-              <h2 class="otsikko mb-4">
+              <h2 class="otsikko !mb-4">
                 {{ $t('peruste') }}
               </h2>
-              <router-link :to="perusteRoute">
+              <router-link :to="perusteRoute" class="block">
                 <peruste-tile
                   :julkaisu="peruste"
                   :koulutustyyppi="koulutustyyppi"
                 />
               </router-link>
-            </b-col>
-            <b-col
-              cols="12"
-              lg="6"
-              class="mb-5"
+            </div>
+            <div
+              class="w-full lg:w-1/2 mb-5"
             >
-              <h2 class="mb-4">
+              <h2 class="!mb-2">
                 {{ $t('ajankohtaista') }}
               </h2>
               <ep-spinner v-if="!tiedotteet" />
@@ -47,15 +43,13 @@
                   </div>
                 </template>
                 <template #eiTietoja>
-                  <div class="mt-2">
-                    {{ $t('ei-tiedotteita') }}
-                  </div>
+                  {{ $t('ei-tiedotteita') }}
                 </template>
               </ep-julki-lista>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
+            </div>
+          </div>
+          <div class="flex flex-wrap">
+            <div class="w-full">
               <h2 class="otsikko mb-2">
                 {{ $t('paikalliset-toteutussuunnitelmat') }}
               </h2>
@@ -69,7 +63,7 @@
                   class="my-3"
                 >
                   <template #label>
-                    <span class="font-weight-600">{{ $t('hae-toteutussuunnitelmaa') }}</span>
+                    <span class="font-semibold">{{ $t('hae-toteutussuunnitelmaa') }}</span>
                   </template>
                 </ep-search>
               </div>
@@ -100,7 +94,7 @@
                 >
                   <router-link
                     :to="ops.route"
-                    class="d-block"
+                    class="block"
                   >
                     <opetussuunnitelma-tile
                       :ops="ops"
@@ -115,16 +109,16 @@
                   aria-controls="opetussuunnitelmat-lista"
                 />
               </div>
-            </b-col>
-          </b-row>
-        </b-container>
+            </div>
+          </div>
+        </div>
       </div>
     </ep-header>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, nextTick } from 'vue';
+import { ref, computed, watch, onMounted, nextTick, getCurrentInstance } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
@@ -148,13 +142,16 @@ const router = useRouter();
 const ammatillinenPerusteKoosteStore = useAmmatillinenPerusteKoosteStore(pinia);
 const mounted = ref(false);
 const page = ref(1);
-
+const instance = getCurrentInstance();
 const query = ref('');
 
 onMounted(async () => {
   setQueryParams();
   await nextTick();
   mounted.value = true;
+  const h1 = instance?.proxy?.$el.querySelector('h1');
+  h1?.setAttribute('tabindex', '-1');
+  h1?.focus();
 });
 
 const setQueryParams = () => {

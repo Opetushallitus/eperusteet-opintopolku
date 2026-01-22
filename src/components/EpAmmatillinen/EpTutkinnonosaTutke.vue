@@ -2,7 +2,7 @@
   <div>
     <ep-form-content
       v-if="tutkinnonosa.koodiArvo"
-      class="col-md-12"
+      class="col-span-12"
       name="koodi"
     >
       <span v-html="tutkinnonosa.koodiArvo" />
@@ -10,7 +10,7 @@
 
     <ep-form-content
       v-if="tutkinnonosa.kuvaus"
-      class="col-md-12 mb-5"
+      class="col-span-12 mb-5"
       :show-header="false"
     >
       <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
@@ -18,7 +18,7 @@
 
     <ep-form-content
       v-if="tutkinnonosa.osaAlueet && osaAlueet.length > 0"
-      class="col-md-12 mb-5"
+      class="col-span-12 mb-5"
       name="osa-alueet"
       header-type="h3"
     >
