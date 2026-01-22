@@ -177,7 +177,7 @@ const laajuus = computed(() => {
   if (props.rakenneosa.muodostumisSaanto) {
     const tyyppi = props.rakenneosa.muodostumisSaanto.laajuus || props.rakenneosa.muodostumisSaanto.koko;
 
-    if (!_.isNil(tyyppi.minimi) && !_.isNil(tyyppi.maksimi) && tyyppi.minimi !== tyyppi.maksimi) {
+    if (!_.isNil(tyyppi.minimi) && !_.isNil(tyyppi.maksimi) && tyyppi.maksimi !== 0 && tyyppi.minimi !== tyyppi.maksimi) {
       return tyyppi.minimi + ' - ' + tyyppi.maksimi;
     }
 
