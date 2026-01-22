@@ -7,7 +7,7 @@
     />
 
     <div class="rakennepohja mt-3">
-      <div class="d-flex">
+      <div class="flex gap-7">
         <ep-button
           class="rakennetoggle"
           variant="link"
@@ -178,7 +178,7 @@ const toggleKuvaukset = () => {
   .peruste-rakenne {
 
     .rakennepohja {
-      background-color: $gray-lighten-5;
+      background-color: $grey50;
       padding: 20px;
     }
 
