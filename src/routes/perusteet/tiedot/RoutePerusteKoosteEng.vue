@@ -13,11 +13,11 @@
     <EpSpinner v-if="!peruste" />
     <div
       v-else
-      class="row"
+      class="grid grid-cols-12 gap-4"
     >
       <div
         v-if="peruste.koulutukset && peruste.koulutukset.length > 0"
-        class="col-md-12 mt-3"
+        class="col-span-12 mt-3"
       >
         <ep-form-content
           name="koulutuskoodit"
@@ -25,7 +25,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             fixed
             responsive
@@ -38,7 +38,7 @@
 
       <div
         v-if="peruste.osaamisalat && peruste.osaamisalat.length > 0"
-        class="col-md-12 mt-3"
+        class="col-span-12 mt-3"
       >
         <EpFormContent
           name="osaamisalat"
@@ -46,7 +46,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             fixed
             responsive
@@ -59,7 +59,7 @@
 
       <div
         v-if="peruste.tutkintonimikkeet && peruste.tutkintonimikkeet.length > 0"
-        class="col-md-12 mt-3"
+        class="col-span-12 mt-3"
       >
         <EpFormContent
           name="tutkintonimikkeet"
@@ -67,7 +67,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             fixed
             responsive
@@ -80,7 +80,7 @@
 
       <div
         v-if="peruste.suorittaneenOsaaminen"
-        class="col-md-12 mt-3"
+        class="col-span-12 mt-3"
       >
         <EpFormContent
           name="suorittaneen-osaaminen"
@@ -98,7 +98,7 @@
 
       <div
         v-if="peruste.tyotehtavatJoissaVoiToimia"
-        class="col-md-12 mt-3"
+        class="col-span-12 mt-3"
       >
         <EpFormContent
           name="tyotehtavat-joissa-voi-toimia"
@@ -116,7 +116,7 @@
 
       <div
         v-if="tutkinnonOsaViitteet"
-        class="col-md-12 mt-3"
+        class="col-span-12 mt-3"
       >
         <EpFormContent
           name="tutkinnon-osat"
@@ -124,7 +124,7 @@
           header-class="h6"
           kieli="en"
         >
-          <b-table
+          <EpTable
             striped
             hover
             responsive
@@ -136,11 +136,11 @@
                 {{ $kaanna(data.item.tutkinnonOsa.nimi, false, true, 'en') }}
               </router-link>
             </template>
-          </b-table>
+          </EpTable>
         </EpFormContent>
       </div>
 
-      <!--      <div class="col-md-12 mt-3" v-if="geneerisetArvioinnit">-->
+      <!--      <div class="col-span-12 mt-3" v-if="geneerisetArvioinnit">-->
       <!--        <div v-for="(arviointi, idx) in geneerisetArvioinnit" :key="'arv-'+idx">-->
       <!--          <GeneerinenArviointiTaulukko :arviointi="arviointi" />-->
       <!--        </div>-->
@@ -162,6 +162,7 @@ import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { $t, $kaanna } from '@shared/utils/globals';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 
 const perusteDataStore = getCachedPerusteStore();
 

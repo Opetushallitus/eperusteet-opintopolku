@@ -10,12 +10,12 @@
       />
 
       <div
-        class="row mt-4"
+        class="grid grid-cols-12 gap-4 mt-4"
         :class="{'disabled-events': vuosiluokat.length === 0}"
       >
         <ep-form-content
           name="vuosiluokka"
-          class="col-12 col-lg-3 mr-3"
+          class="col-span-12 lg:col-span-3 mr-3"
         >
           <EpMultiSelect
             v-model="vuosiluokka"
@@ -40,7 +40,7 @@
 
         <ep-form-content
           name="oppiaine"
-          class="col-12 col-lg-6"
+          class="col-span-12 lg:col-span-6"
         >
           <EpMultiSelect
             v-model="oppiaine"
@@ -107,7 +107,7 @@
       </template>
 
       <template v-if="oppiaine && vuosiluokka">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="flex justify-between items-center">
           <h3 class="mb-0">
             <span
               class="link-style clickable"
@@ -426,7 +426,7 @@ const searchIdentity = (oppiaine: any) => {
   padding: 0 $content-padding;
 }
 
-.row {
+.grid {
   margin-left: 0;
 }
 

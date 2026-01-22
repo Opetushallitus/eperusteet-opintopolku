@@ -2,7 +2,7 @@
   <div>
     <ep-form-content
       v-if="tutkinnonosa.koodiArvo"
-      class="col-md-12"
+      class="col-span-12"
       name="koodi"
     >
       <span v-html="tutkinnonosa.koodiArvo" />
@@ -10,7 +10,7 @@
 
     <ep-form-content
       v-if="tutkinnonosa.tavoitteet"
-      class="col-md-12 mb-5"
+      class="col-span-12 mb-5"
       name="tavoitteet"
     >
       <span v-html="$kaanna(tutkinnonosa.tavoitteet)" />
@@ -18,7 +18,7 @@
 
     <ep-form-content
       v-if="!tutkinnonosa.ammattitaitovaatimukset2019 && tutkinnonosa.ammattitaitovaatimukset"
-      class="col-md-12 mb-5"
+      class="col-span-12 mb-5"
       name="ammattitaitovaatimukset"
     >
       <span v-html="$kaanna(tutkinnonosa.ammattitaitovaatimukset)" />
@@ -26,7 +26,7 @@
 
     <ep-form-content
       v-if="tutkinnonosa.kuvaus"
-      class="col-md-12 mb-5"
+      class="col-span-12 mb-5"
       :show-header="false"
     >
       <span v-html="$kaanna(tutkinnonosa.kuvaus)" />
@@ -34,7 +34,7 @@
 
     <ep-form-content
       v-if="tutkinnonosa.ammattitaitovaatimukset2019"
-      class="col-md-12 mb-5"
+      class="col-span-12 mb-5"
       name="ammattitaitovaatimukset"
     >
       <EpAmmattitaitovaatimukset
@@ -57,7 +57,7 @@
 
         <ep-form-content
           v-if="tutkinnonosa.arviointi && tutkinnonosa.arviointi.lisatiedot"
-          class="col-md-12"
+          class="col-span-12"
           name="arviointi"
         >
           <span v-html="$kaanna(tutkinnonosa.arviointi.lisatiedot)" />
@@ -73,7 +73,7 @@
 
     <ep-form-content
       v-if="tutkinnonosa.ammattitaidonOsoittamistavat"
-      class="col-md-12"
+      class="col-span-12"
       name="ammattitaidon-osoittamistavat"
     >
       <span v-html="$kaanna(tutkinnonosa.ammattitaidonOsoittamistavat)" />
@@ -89,7 +89,7 @@
       :key="'vapaateksti'+index"
     >
       <ep-form-content
-        class="col-md-12"
+        class="col-span-12"
         :name="$kaanna(vapaaTeksti.nimi)"
       >
         <span v-html="$kaanna(vapaaTeksti.teksti)" />

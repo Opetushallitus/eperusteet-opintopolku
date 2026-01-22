@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "esnext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "strict": true,
     "strictPropertyInitialization": true,
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "node",
     "experimentalDecorators": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

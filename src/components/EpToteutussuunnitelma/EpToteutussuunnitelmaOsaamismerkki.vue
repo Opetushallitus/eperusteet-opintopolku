@@ -2,15 +2,18 @@
   <div>
     <slot name="sisalto-nimi" />
 
-    <b-row>
-      <b-col>
+    <div class="flex flex-wrap">
+      <div class="w-full">
         <h3 class="mb-4">
           {{ $t('kansalliset-perustaitojen-osaamismerkit') }}
         </h3>
-      </b-col>
-    </b-row>
-    <b-row v-if="sisaltoviite.osaamismerkkiKappale.kuvaus">
-      <b-col>
+      </div>
+    </div>
+    <div
+      v-if="sisaltoviite.osaamismerkkiKappale.kuvaus"
+      class="flex flex-wrap"
+    >
+      <div class="w-full">
         <h4 class="mb-4">
           {{ $t('osaamismerkkien-suorittaminen') }}
         </h4>
@@ -19,17 +22,20 @@
           :kuvat="kuvat"
           class="mb-5"
         />
-      </b-col>
-    </b-row>
-    <b-row v-if="osaamisMerkkiKoodit.length > 0">
-      <b-col>
+      </div>
+    </div>
+    <div
+      v-if="osaamisMerkkiKoodit.length > 0"
+      class="flex flex-wrap"
+    >
+      <div class="w-full">
         <EpOsaamismerkit
           :osaamismerkit="osaamismerkit"
           :osaamismerkki-kategoriat="osaamismerkkiKategoriat"
           hide-kuvaus
         />
-      </b-col>
-    </b-row>
+      </div>
+    </div>
   </div>
 </template>
 

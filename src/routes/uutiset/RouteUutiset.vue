@@ -5,19 +5,19 @@
         <template #header>
           {{ $t('ajankohtaista') }}
         </template>
-        <div class="d-flex d-lg-flex flex-column flex-lg-row search w-100 justify-content-between mb-3">
+        <div class="flex flex-col lg:flex-row w-full justify-between mb-3 px-4">
           <ep-search
             v-model="query"
-            class="col-12 col-lg-7 p-0 mr-2 mb-2"
+            class="w-full lg:w-7/12 p-0 mr-2 mb-2"
             :placeholder="''"
           >
             <template #label>
-              <span class="font-weight-600">{{ $t('hae-ajankohtaista') }}</span>
+              <span class="font-semibold">{{ $t('hae-ajankohtaista') }}</span>
             </template>
           </ep-search>
 
-          <div class="col-12 col-lg-5 p-0">
-            <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
+          <div class="w-full lg:w-5/12 p-0">
+            <label class="font-semibold">{{ $t('koulutus-tai-tutkinto') }}</label>
             <EpKoulutustyyppiRyhmaSelect v-model="koulutusryypiRyhmat" />
           </div>
         </div>
@@ -25,34 +25,28 @@
           <div v-if="!isTiedotteetEmpty">
             <div
               id="tiedotteet-lista"
-              class="tiedotteet"
+              class="p-4"
             >
               <div
                 v-for="(tiedote, idx) in tiedotteet.tiedotteet"
                 :key="idx"
-                class="tiedote"
+                class="mb-5"
               >
-                <div class="otsikko">
+                <div>
                   <router-link :to="{ name: 'uutinen', params: { tiedoteId: tiedote.id } }">
                     {{ $kaanna(tiedote.otsikko) }}
                   </router-link>
                 </div>
-                <div class="aikaleima">
+                <div class="text-gray-600 font-light">
                   {{ $sd(tiedote.luotu) }}
                 </div>
               </div>
             </div>
-            <b-pagination
-              :value="page"
-              :total-rows="tiedotteet.amount"
-              :per-page="tiedotteet.filter.sivukoko"
-              align="center"
+            <EpBPagination
+              v-model="page"
+              :total="tiedotteet.amount"
+              :items-per-page="tiedotteet.filter.sivukoko"
               aria-controls="tiedotteet-lista"
-              :first-text="$t('alkuun')"
-              prev-text="«"
-              next-text="»"
-              :last-text="$t('loppuun')"
-              @change="updatePage"
             />
           </div>
           <div v-else>
@@ -73,6 +67,7 @@ import { pinia } from '@/pinia';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
+import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import { useRoute, useRouter } from 'vue-router';
@@ -150,12 +145,11 @@ watch(koulutusryypiRyhmat, async () => {
   }
 });
 
-const updatePage = async (value) => {
+watch(page, async () => {
   if (mounted.value) {
-    page.value = value;
     await fetch();
   }
-};
+});
 
 const fetch = async () => {
   await tiedoteStore.updateFilter({
@@ -183,27 +177,3 @@ useHead({
 });
 </script>
 
-<style scoped lang="scss">
-@import '@shared/styles/_variables.scss';
-
-.search {
-  padding: 0 15px;
-}
-
-.tiedotteet {
-  padding: 15px;
-
-  .tiedote {
-    margin-bottom: 20px;
-
-    .aikaleima {
-      color: #555;
-      font-weight: lighter;
-    }
-
-    .tiedote-sisalto {
-      margin-top: 10px;
-    }
-  }
-}
-</style>
