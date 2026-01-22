@@ -25,7 +25,7 @@
             >
               <template #header>
                 <h2
-                  class="header"
+                  class="header mb-0"
                 >
                   {{ $t('tutkinnot-joilla-tutkinnon-osa-on') }}
                 </h2>
@@ -70,35 +70,30 @@ import EpTutkinnonosaNormaali from '@/components/EpAmmatillinen/EpTutkinnonosaNo
 import EpTutkinnonosaTutke from '@/components/EpAmmatillinen/EpTutkinnonosaTutke.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
-import { AmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
+import { useAmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHakuStore';
 import { murupolkuAmmatillinenRoot } from '@/utils/murupolku';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
 import _ from 'lodash';
 import { $t } from '@shared/utils/globals';
-
-const props = defineProps({
-  ammatillinenPerusteHakuStore: {
-    type: Object as () => AmmatillinenPerusteHakuStore,
-    required: true,
-  },
-});
+import { pinia } from '@/pinia';
 
 const route = useRoute();
+const ammatillinenPerusteHakuStore = useAmmatillinenPerusteHakuStore(pinia);
 
 onMounted(async () => {
-  await props.ammatillinenPerusteHakuStore.updateFilters({ perusteet: false, tutkinnonosat: true, koodi: koodi.value });
-  await props.ammatillinenPerusteHakuStore.fetchArviointiasteikot();
+  await ammatillinenPerusteHakuStore.fetch({ perusteet: false, tutkinnonosat: true, koodi: koodi.value });
+  await ammatillinenPerusteHakuStore.fetchArviointiasteikot();
 });
 
 const arviointiasteikot = computed(() => {
-  return props.ammatillinenPerusteHakuStore.arviointiasteikot;
+  return ammatillinenPerusteHakuStore.arviointiasteikot;
 });
 
 const tutkinnonosa = computed(() => {
-  if (props.ammatillinenPerusteHakuStore.perusteet) {
-    return props.ammatillinenPerusteHakuStore.perusteet[0];
+  if (ammatillinenPerusteHakuStore.perusteet?.data) {
+    return ammatillinenPerusteHakuStore.perusteet.data[0];
   }
 
   return undefined;

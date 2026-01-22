@@ -6,13 +6,12 @@
       class="mb-3"
       :shadow="false"
       :border-bottom="false"
-      :use-padding="false"
       :expanded-by-default="osaalueet.length === 1"
       blue
     >
       <template #header>
         <h4
-          class="osaamistavoiteotsikko"
+          class="osaamistavoiteotsikko mb-0"
         >
           {{ $kaanna(osaalue.nimi) }} <span v-if="osaalue.koodi">({{ osaalue.koodi.arvo }})</span>
         </h4>
