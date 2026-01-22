@@ -5,10 +5,9 @@
         <span v-if="numerointi">{{ numerointi }}</span>
         {{ $kaanna(nimi) }}
       </h2>
-      <b-row>
-        <b-col
-          lg="6"
-          md="12"
+      <div class="flex flex-wrap">
+        <div
+          class="w-full lg:w-1/2 md:w-full"
         >
           <ep-form-content
             name="koulutuksen-osan-nimi"
@@ -16,10 +15,9 @@
           >
             <span>{{ $kaanna(nimi) }}</span>
           </ep-form-content>
-        </b-col>
-        <b-col
-          lg="6"
-          md="12"
+        </div>
+        <div
+          class="w-full lg:w-1/2 md:w-full"
         >
           <ep-form-content
             name="laajuus"
@@ -27,29 +25,32 @@
           >
             <span>{{ perusteenOsa.laajuusMinimi }} - {{ perusteenOsa.laajuusMaksimi }} {{ $t('viikkoa') }}</span>
           </ep-form-content>
-        </b-col>
-      </b-row>
-      <b-row v-if="perusteenOsa.kuvaus">
-        <b-col>
+        </div>
+      </div>
+      <div
+        v-if="perusteenOsa.kuvaus"
+        class="flex flex-wrap"
+      >
+        <div class="w-full">
           <h4>{{ $t('kuvaus') }}</h4>
           <ep-content-viewer
             name="kuvaus"
             :value="$kaanna(perusteenOsa.kuvaus)"
             :kuvat="kuvat"
           />
-        </b-col>
-      </b-row>
+        </div>
+      </div>
       <template v-if="perusteenOsa.tavoitteet.length > 0">
         <hr>
-        <b-row>
-          <b-col>
+        <div class="flex flex-wrap">
+          <div class="w-full">
             <h3 class="mt-3 mb-4">
               {{ $t('tavoitteet') }}
             </h3>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col>
+          </div>
+        </div>
+        <div class="flex flex-wrap">
+          <div class="w-full">
             <h4>{{ $t('opiskelija') }}</h4>
             <ul>
               <li
@@ -59,13 +60,13 @@
                 {{ $kaanna(tavoite) }}
               </li>
             </ul>
-          </b-col>
-        </b-row>
+          </div>
+        </div>
       </template>
       <template v-if="perusteenOsa.laajaAlaisenOsaamisenKuvaus">
         <hr>
-        <b-row>
-          <b-col>
+        <div class="flex flex-wrap">
+          <div class="w-full">
             <h3 class="mt-3 mb-4">
               {{ $t('laaja-alainen-osaaminen') }}
             </h3>
@@ -73,13 +74,13 @@
               :value="$kaanna(perusteenOsa.laajaAlaisenOsaamisenKuvaus)"
               :kuvat="kuvat"
             />
-          </b-col>
-        </b-row>
+          </div>
+        </div>
       </template>
       <template v-if="perusteenOsa.keskeinenSisalto">
         <hr>
-        <b-row>
-          <b-col>
+        <div class="flex flex-wrap">
+          <div class="w-full">
             <h3 class="mt-3 mb-4">
               {{ $t('keskeinen-sisalto') }}
             </h3>
@@ -87,13 +88,13 @@
               :value="$kaanna(perusteenOsa.keskeinenSisalto)"
               :kuvat="kuvat"
             />
-          </b-col>
-        </b-row>
+          </div>
+        </div>
       </template>
       <template v-if="perusteenOsa.arvioinninKuvaus">
         <hr>
-        <b-row>
-          <b-col>
+        <div class="flex flex-wrap">
+          <div class="w-full">
             <h3 class="mt-3 mb-4">
               {{ $t('arviointi') }}
             </h3>
@@ -101,8 +102,8 @@
               :value="$kaanna(perusteenOsa.arvioinninKuvaus)"
               :kuvat="kuvat"
             />
-          </b-col>
-        </b-row>
+          </div>
+        </div>
       </template>
 
       <EpOpasKiinnitysLinkki :koodi-uri="koulutuksenosaKoodiUri" />

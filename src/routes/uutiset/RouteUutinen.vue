@@ -205,7 +205,7 @@ useHead(() => {
   }
 
   .tiedote-lisainfo {
-    border: 1px solid $gray-lighten-3;
+    border: 1px solid $grey300;
     border-radius: 3px;
   }
 }

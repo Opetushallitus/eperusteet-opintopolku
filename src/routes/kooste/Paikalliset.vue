@@ -7,16 +7,16 @@
       {{ $t('paikalliset-opetussuunnitelmat') }}
     </h2>
     <span>{{ $t('voit-hakea-opetussuunnitelman-yleissivistava') }}</span>
-    <div class="d-flex flex-lg-row flex-column w-100">
+    <div class="flex lg:flex-row flex-col w-full">
       <ep-search
         v-model="query"
-        class="flex-fill ml-0 mt-3 mb-3 mr-3"
+        class="flex-1 ml-0 mt-3 mb-3 mr-3"
         :max-width="true"
         :sr-placeholder="$t('hae-opetussuunnitelmaa')"
         :placeholder="''"
       >
         <template #label>
-          <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa') }}</span>
+          <span class="font-semibold">{{ $t('hae-opetussuunnitelmaa') }}</span>
         </template>
       </ep-search>
       <EpMultiSelect
@@ -29,7 +29,7 @@
         :searchable="false"
       >
         <template #label>
-          <span class="font-weight-600">{{ $t('peruste') }}</span>
+          <span class="font-semibold">{{ $t('peruste') }}</span>
         </template>
         <template
           #singleLabel="{ option }"
@@ -65,7 +65,7 @@
           v-for="(ops, idx) in opetussuunnitelmat"
           :key="idx"
           :to="ops.route"
-          class="d-block"
+          class="block"
         >
           <opetussuunnitelma-tile
             :ops="ops"

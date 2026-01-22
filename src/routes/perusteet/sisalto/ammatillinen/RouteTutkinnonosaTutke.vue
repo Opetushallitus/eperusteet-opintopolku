@@ -36,7 +36,7 @@
                 :key="oidx"
                 class="nimikkeet"
               >
-                <div class="d-flex">
+                <div class="flex">
                   <router-link :to="{ name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: peruste.id }}">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>

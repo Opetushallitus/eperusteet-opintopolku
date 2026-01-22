@@ -18,11 +18,11 @@
         <h3 class="mb-3">
           {{ $t('aihe') }}
         </h3>
-        <div class="d-flex justify-content-between flex-column flex-lg-row aihe-boxes">
+        <div class="flex justify-between flex-col lg:flex-row aihe-boxes gap-4">
           <div
             v-for="vaihtoehto in tyyppiVaihtoehdot"
             :key="vaihtoehto.tyyppi"
-            class="aihe-box py-4 px-3 flex-fill"
+            class="aihe-box py-6 px-3 flex-1 rounded cursor-pointer text-center"
             :class="{ 'active': filters.tyyppi === vaihtoehto.tyyppi }"
             @click="toggleTyyppi(vaihtoehto.tyyppi)"
           >
@@ -37,20 +37,20 @@
         </div>
       </div>
 
-      <div class="d-flex flex-column flex-lg-row justify-content-between">
-        <div class="flex-fill mr-2 mb-3 col-12 col-lg-8 p-0">
+      <div class="flex flex-col lg:flex-row justify-between">
+        <div class="flex-1 mr-2 mb-3 w-full lg:w-8/12 p-0">
           <EpSearch
             v-model="filters.nimi"
             :placeholder="''"
           >
             <template #label>
-              <span class="font-weight-600">{{ $t('hae-maarayksia') }}</span>
+              <span class="font-semibold">{{ $t('hae-maarayksia') }}</span>
             </template>
           </EpSearch>
         </div>
 
-        <div class="mb-3 col-12 col-lg-4 p-0">
-          <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
+        <div class="mb-3 w-full lg:w-4/12 p-0">
+          <label class="font-semibold">{{ $t('koulutus-tai-tutkinto') }}</label>
           <EpMaarayskokoelmaKoulutustyyppiSelect
             v-if="koulutustyyppiVaihtoehdot"
             v-model="filters.koulutustyypit"
@@ -85,9 +85,9 @@
       v-else
       class="maaraykset mt-3"
     >
-      <div class="jarjestys d-flex align-items-center mb-2">
+      <div class="jarjestys flex items-center mb-2">
         <div v-if="maarayksetCount > 0">
-          <span class="font-weight-600">{{ maarayksetCount }}</span> {{ $t('maaraysta') }}
+          <span class="font-semibold">{{ maarayksetCount }}</span> {{ $t('maaraysta') }}
         </div>
         <div v-if="filters.maaraysId && maarayksetCount === 1">
           <ep-button
@@ -132,7 +132,6 @@ import { useRoute, useRouter } from 'vue-router';
 import { useHead } from '@unhead/vue';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
-import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
@@ -329,28 +328,20 @@ function toggleTyyppi(tyyppi: string) {
 
 .maarayskokoelma-koulutustyyppi-select {
   max-width: 400px;
-  // width: 400px;
-}
-
-.aihe-boxes {
-  gap: 1rem;
 }
 
 .aihe-box {
   @include tile-background-shadow;
-  border-radius: 4px;
-  cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
-    border-color: $blue-lighten-3;
+    border-color: $lightBlue2;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   &.active {
     background-color: $green;
-    color: white;
+    color: $white;
   }
-
 }
 </style>

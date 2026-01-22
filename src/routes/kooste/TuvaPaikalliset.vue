@@ -12,7 +12,7 @@
       :placeholder="''"
     >
       <template #label>
-        <span class="font-weight-600">{{ $t('hae-opetussuunnitelmaa') }}</span>
+        <span class="font-semibold">{{ $t('hae-opetussuunnitelmaa') }}</span>
       </template>
     </ep-search>
 

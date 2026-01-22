@@ -20,7 +20,7 @@
         <div class="font-600 mt-3">
           {{ $t('tutkintonimikkeet-ja-osaamisalat') }}
         </div>
-        <b-table
+        <EpTable
           striped
           :items="toteutus.tutkintonimikkeetJaOsaamisalat"
           :fields="koodiFields"
@@ -78,6 +78,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 import { $t } from '@shared/utils/globals';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 
 const props = defineProps({
   toteutukset: {
