@@ -286,8 +286,8 @@
 
       <h3>{{ $t('tavoitteet-ja-sisallot-vuosiluokittain') }}</h3>
 
-      <b-tabs>
-        <b-tab
+      <ep-tabs>
+        <ep-tab
           v-for="(vuosiluokka,index) in vuosiluokat"
           :key="'vuosiluokka'+index"
           :title="$t(vuosiluokka.vuosiluokka)"
@@ -299,8 +299,8 @@
             :kuvat="kuvat"
             :termit="termit"
           />
-        </b-tab>
-      </b-tabs>
+        </ep-tab>
+      </ep-tabs>
     </template>
   </div>
 </template>
@@ -314,6 +314,8 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import { $kaanna } from '@shared/utils/globals';
 import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
+import EpTabs from '@shared/components/EpTabs/EpTabs.vue';
+import EpTab from '@shared/components/EpTabs/EpTab.vue';
 
 const props = defineProps({
   tietue: {

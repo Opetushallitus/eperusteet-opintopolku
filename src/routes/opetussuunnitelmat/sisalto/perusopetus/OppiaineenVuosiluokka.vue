@@ -7,7 +7,7 @@
     >
       <template v-if="alue.tavoitteet.length > 0">
         <div
-          class="d-flex justify-content-between align-items-center mb-3"
+          class="flex justify-content-between items-center mb-3"
           :class="{'mt-5' : alueindex > 0, 'mt-4': !!alue.nimi}"
         >
           <h3
@@ -157,7 +157,7 @@
                 >
                   <h5>{{ $t('arvioinnin-kohde') }}</h5>
                   <div
-                    class="arvioinnin-kuvaus d-inline-block"
+                    class="arvioinnin-kuvaus inline-block"
                     v-html="$kaanna(tavoite.arvioinninKuvaus)"
                   />
                 </div>

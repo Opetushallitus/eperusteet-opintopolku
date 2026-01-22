@@ -9,7 +9,7 @@
         class="mt-3 mb-3"
         :placeholder="$t('etsi')"
       />
-      <b-table
+      <EpTable
         striped
         hover
         responsive
@@ -21,7 +21,7 @@
             {{ $kaanna(data.item.tutkinnonOsa.nimi) }}
           </router-link>
         </template>
-      </b-table>
+      </EpTable>
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { Koulutustyyppi } from '@shared/tyypit';
 import { $kaanna, $t } from '@shared/utils/globals';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 
 const perusteDataStore = getCachedPerusteStore();
 

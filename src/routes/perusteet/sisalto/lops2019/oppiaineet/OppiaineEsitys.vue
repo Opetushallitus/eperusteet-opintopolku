@@ -102,8 +102,8 @@
         :key="idx"
         :to="opintojakso.location"
       >
-        <div class="d-flex justify-content-between opintojakso mb-2">
-          <div class="font-weight-bold">
+        <div class="flex justify-content-between opintojakso mb-2">
+          <div class="font-bold">
             <span>{{ $kaanna(opintojakso.nimi) }}</span>
             <span
               v-if="opintojakso.koodiLabel"
@@ -456,8 +456,8 @@ const opintojaksotExtended = computed(() => {
   .opintojakso {
     border-radius: 1rem;
     padding: 10px 20px;
-    background-color: $blue-lighten-4;
-    color: $blue-darken-1;
+    background-color: $lightBlue2;
+    color: $blue1;
 
     .opintopiste {
       color: $gray;
@@ -465,6 +465,6 @@ const opintojaksotExtended = computed(() => {
   }
 
   .opintojakso:hover {
-    background-color: $blue-lighten-3;
+    background-color: $lightBlue2;
   }
 </style>

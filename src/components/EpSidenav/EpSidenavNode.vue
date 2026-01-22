@@ -19,8 +19,8 @@
           :tooltip="false"
         />
       </div>
-      <div class="label-wrapper d-flex align-items-center">
-        <b-link
+      <div class="label-wrapper flex items-center">
+        <router-link
           v-if="node.location && !subtype"
           :to="node.location"
         >
@@ -30,7 +30,7 @@
           >
             <EpSidenavNodeLabel :node="node" />
           </span>
-        </b-link>
+        </router-link>
         <div
           v-else
           class="label label-plain"
@@ -240,7 +240,7 @@ const koodi = computed(() => {
   .label-wrapper {
     .icon {
       font-size: 1rem;
-      color: $blue-lighten-5;
+      color: $blue3;
     }
   }
 

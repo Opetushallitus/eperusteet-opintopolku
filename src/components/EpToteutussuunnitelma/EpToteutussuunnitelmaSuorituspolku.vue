@@ -17,24 +17,21 @@
       <ep-peruste-rakenne :rakenne-osat="filteredRakenneOsat">
         <template #nimi="{ rakenneosa }">
           <div v-if="rakenneosa.tutkinnonosa && rakenneosa.tutkinnonosa.nimi">
-            <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: rakenneosa.tutkinnonosa.id}}">
-              <ep-color-indicator
-                :id="'tutkinto'+rakenneosa.tutkinnonosa.id"
-                :tooltip="false"
-                :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'"
-                class="mr-2"
-              />
-              <span>{{ $kaanna(rakenneosa.tutkinnonosa.nimi) }}</span>
-            </router-link>
-            <b-popover
-              :target="'tutkinto'+rakenneosa.tutkinnonosa.id"
-              :placement="'top'"
-              triggers="hover"
-              variant="primary"
-            >
+            <EpPopover :triggers="['hover']">
+              <template #trigger>
+                <router-link :to="{name: 'toteutussuunnitelmaSisalto', params: { sisaltoviiteId: rakenneosa.tutkinnonosa.id}}">
+                  <ep-color-indicator
+                    :id="'tutkinto'+rakenneosa.tutkinnonosa.id"
+                    :tooltip="false"
+                    :kind="rakenneosa.pakollinen ? 'pakollinen' : 'valinnainen'"
+                    class="mr-2"
+                  />
+                  <span>{{ $kaanna(rakenneosa.tutkinnonosa.nimi) }}</span>
+                </router-link>
+              </template>
               <span v-if="rakenneosa.pakollinen">{{ $t('pakollinen-tutkinnon-osa') }}</span>
               <span v-if="!rakenneosa.pakollinen">{{ $t('valinnainen-tutkinnon-osa') }}</span>
-            </b-popover>
+            </EpPopover>
           </div>
           <div v-else-if="rakenneosa.tutkinnonosa && rakenneosa.tutkinnonosa.perusteenTutkinnonosa">
             <ep-color-indicator
@@ -61,6 +58,7 @@ import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.
 import EpPerusteRakenne from '@/components/EpAmmatillinen/EpPerusteRakenne.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
+import EpPopover from '@shared/components/EpPopover/EpPopover.vue';
 import * as _ from 'lodash';
 import { flattenTree } from '@shared/utils/helpers';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';

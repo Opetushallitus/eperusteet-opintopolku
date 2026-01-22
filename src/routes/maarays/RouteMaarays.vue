@@ -9,7 +9,7 @@
         <template v-else>
           {{ $kaanna(maarays.nimi) }}
 
-          <div class="d-flex mt-3">
+          <div class="flex mt-3">
             <div
               v-for="(asiasana, index) in maarays.asiasanat[kieli].asiasana"
               :key="'asiasana' + index"
@@ -26,7 +26,7 @@
 
     <div
       v-else
-      class="maarays d-flex flex-column-reverse flex-md-row"
+      class="maarays flex flex-col-reverse flex-md-row"
     >
       <div class="pdf mr-4 mb-4 mr-5">
         <img
@@ -34,13 +34,13 @@
           :alt="$t('maarays')"
           class="kuva"
         >
-        <div class="nimi font-weight-bold d-flex align-items-end">
+        <div class="nimi font-bold flex items-end">
           <div>{{ $kaanna(maarays.nimi) }}</div>
         </div>
 
         <a
           v-if="maaraysPdfUrl"
-          class="url d-inline-flex"
+          class="url inline-flex"
           :href="maaraysPdfUrl"
           target="_blank"
           rel="noopener noreferrer"
@@ -50,7 +50,7 @@
         </a>
       </div>
 
-      <div class="tiedot flex-grow-1">
+      <div class="tiedot grow">
         <ep-form-content
           name="voimaantulo"
           header-type="h3"
@@ -111,7 +111,7 @@
             v-for="muuttuva in maarays.muutettavatMaaraykset"
             :key="'muuttaa'+muuttuva.id"
             :to="{name: 'maarays', params: {maaraysId: muuttuva.id}}"
-            class="d-block"
+            class="block"
           >
             {{ $kaanna(muuttuva.nimi) }} ({{ muuttuva.diaarinumero }})
           </router-link>
@@ -120,7 +120,7 @@
             v-for="korvattava in maarays.korvattavatMaaraykset"
             :key="'korvaa'+korvattava.id"
             :to="{name: 'maarays', params: {maaraysId: korvattava.id}}"
-            class="d-block"
+            class="block"
           >
             {{ $kaanna(korvattava.nimi) }} ({{ korvattava.diaarinumero }})
           </router-link>
@@ -165,7 +165,7 @@
           header-type="h3"
           header-class="h6"
         >
-          <b-table
+          <EpTable
             :items="korvaavatMuuttavatMaaraykset"
             :fields="korvaavatMuuttavatFields"
             striped
@@ -173,12 +173,12 @@
             <template #cell(nimi)="{ item }">
               <router-link
                 :to="{name: 'maarays', params: {maaraysId: item.id}}"
-                class="d-block"
+                class="block"
               >
                 {{ $kaanna(item.nimi) }} ({{ item.diaarinumero }})
               </router-link>
             </template>
-          </b-table>
+          </EpTable>
         </ep-form-content>
       </div>
     </div>
@@ -204,6 +204,7 @@ import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaaraysk
 import { koulutustyyppiTheme, tyyppiTheme } from '@shared/utils/perusteet';
 import { MaaraysKevytDtoTilaEnum } from '@shared/generated/eperusteet';
 import { $t } from '@shared/utils/globals';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 
 const route = useRoute();
 
@@ -369,9 +370,9 @@ const korvaavatMuuttavatFields = computed(() => {
     font-weight: 400;
 
     padding: 5px 10px;
-    border: 1px solid $gray-lighten-3;
+    border: 1px solid $grey300;
     border-radius: 10px;
-    background-color: $gray-lighten-5;
+    background-color: $grey50;
   }
 
   .maarays {
@@ -397,7 +398,7 @@ const korvaavatMuuttavatFields = computed(() => {
       }
       .url {
         color: $white;
-        background-color: $blue-lighten-5;
+        background-color: $blue3;
         padding: 10px 20px;
         display: inline-block;
         border-radius: 2rem;

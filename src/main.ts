@@ -12,28 +12,26 @@ import { Aikaleima } from '@shared/plugins/aikaleima';
 import VueScrollTo from 'vue-scrollto';
 import { Kieli } from '@shared/tyypit';
 import { setAppInstance } from '@shared/utils/globals';
+import { registerDefaultComponents } from '@shared/config/defaultcomponents';
 import { router } from './router';
-import '@shared/config/bootstrap';
+// import '@shared/config/bootstrap';
 import 'material-icons/iconfont/material-icons.css';
 import fiLocale from '@shared/translations/locale-fi.json';
 import svLocale from '@shared/translations/locale-sv.json';
 import enLocale from '@shared/translations/locale-en.json';
-import { configureCompat } from '@vue/compat';
 import Sticky from 'vue-sticky-directive';
 import { LoadingPlugin } from 'vue-loading-overlay';
 import { createHead } from '@unhead/vue/client';
 import { Notifikaatiot } from '@shared/plugins/notifikaatiot';
+import { setPrimeVue } from '@shared/primevue';
 
 const app = createApp(App);
 
 registerIconColorSchemeChange();
+registerDefaultComponents(app);
 
-configureCompat({
-  COMPONENT_V_MODEL: false,
-});
-
-// Store app reference in globals utility
 setAppInstance(app);
+setPrimeVue(app);
 
 app.use(pinia);
 app.use(router);

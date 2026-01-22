@@ -33,8 +33,8 @@
           </h3>
         </template>
 
-        <b-tabs>
-          <b-tab
+        <ep-tabs>
+          <ep-tab
             v-for="kasitteisto in perusteenOsa.kasitteistot"
             :key="'kasitteisto' + kasitteisto.taso"
             :title="$t(kasitteisto.taso.toLowerCase())"
@@ -45,8 +45,8 @@
               :termit="termit"
               :kuvat="kuvat"
             />
-          </b-tab>
-        </b-tabs>
+          </ep-tab>
+        </ep-tabs>
       </EpCollapse>
 
       <EpCollapse
@@ -107,6 +107,8 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 import { useRoute } from 'vue-router';
+import EpTabs from '@shared/components/EpTabs/EpTabs.vue';
+import EpTab from '@shared/components/EpTabs/EpTab.vue';
 
 const route = useRoute();
 
