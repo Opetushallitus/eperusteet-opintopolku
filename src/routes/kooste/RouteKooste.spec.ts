@@ -4,7 +4,7 @@ import { createMockedStore, mock, mocks, stubs } from '@shared/utils/jestutils';
 import * as _ from 'lodash';
 import { OpasStore } from '@/stores/OpasStore';
 import { IPaikallinenStore } from '@/stores/IPaikallinenStore';
-import Paikalliset from '@/routes/kooste/Paikalliset.vue';
+import YleissivistavatPaikalliset from '@/routes/kooste/YleissivistavatPaikalliset.vue';
 import JotpaPaikalliset from '@/routes/kooste/JotpaPaikalliset.vue';
 import { KoosteTiedotteetStore } from '@/stores/KoosteTiedotteetStore';
 import { IPerusteKoosteStore } from '@/stores/IPerusteKoosteStore';
@@ -112,7 +112,7 @@ describe('RouteKooste', () => {
     };
 
     (getKoostePaikallinenStore as any).mockReturnValue(paikallinenStore);
-    (getKoostePaikallinenComponent as any).mockReturnValue(Paikalliset);
+    (getKoostePaikallinenComponent as any).mockReturnValue(YleissivistavatPaikalliset);
     (getKoosteOpasStore as any).mockReturnValue(opasStore);
     (getKoosteTiedotteetStore as any).mockReturnValue(koosteTiedotteetStore);
 

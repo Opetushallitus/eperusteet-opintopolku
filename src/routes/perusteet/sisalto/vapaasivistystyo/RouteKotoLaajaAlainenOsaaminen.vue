@@ -17,22 +17,23 @@
         />
       </div>
 
-      <b-row
+      <div
         v-if="perusteenOsa.osaamisAlueet.length > 0"
-        class="mt-4"
+        class="flex flex-wrap mt-5"
       >
-        <b-col>
+        <div class="w-full">
           <div
             v-for="(osaamisalue, index) in perusteenOsa.osaamisAlueet"
             :key="index+'kotoLaajaAlainenOsaaminen'"
+            class="mb-5"
           >
-            <h3 class="mt-4">
+            <h3>
               {{ $kaanna(osaamisalue.koodi.nimi) }}
             </h3>
             <ep-content-viewer :value="$kaanna(osaamisalue.kuvaus)" />
           </div>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </div>
     <ep-spinner v-else />
   </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="peruste tile-background-shadow-selected shadow-tile d-flex flex-column">
+  <div class="peruste tile-background-shadow-selected shadow-tile flex flex-col">
     <div class="upper">
       <div class="peruste-ikoni">
         <EpMaterialIcon
@@ -85,6 +85,7 @@ const isHallitus = computed(() => {
   height: 172px;
   padding-left: 20px;
   padding-right: 20px;
+  overflow: hidden;
 
   @media(max-width: 767.98px) {
     width: 100%;

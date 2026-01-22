@@ -9,7 +9,7 @@
         :kuvat="kuvat"
       />
 
-      <b-table
+      <EpTable
         striped
         hover
         responsive
@@ -21,7 +21,7 @@
             {{ $kaanna(data.item.tekstiKappale.nimi) }}
           </router-link>
         </template>
-      </b-table>
+      </EpTable>
     </div>
   </div>
 </template>
@@ -34,6 +34,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { $t, $kaanna } from '@shared/utils/globals';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import EpTable from '@shared/components/EpTable/EpTable.vue';
 
 const route = useRoute();
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();

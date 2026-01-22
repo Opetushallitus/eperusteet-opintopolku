@@ -1,9 +1,6 @@
-import { RouterLinkStub } from '@vue/test-utils';
 import RouteAmmatillinenValmisteillaOlevat from './RouteAmmatillinenValmisteillaOlevat.vue';
-import { createMockedStore, mock } from '@shared/utils/jestutils';
 import { createMount } from '@shared/utils/__tests__/stubs';
 import { nextTick } from 'vue';
-import { createPinia, setActivePinia } from 'pinia';
 import { useValmisteillaOlevatStore } from '@/stores/ValmisteillaOlevatStore';
 import { vi } from 'vitest';
 

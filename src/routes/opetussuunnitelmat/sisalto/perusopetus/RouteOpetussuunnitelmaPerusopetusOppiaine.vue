@@ -41,11 +41,11 @@
         </template>
       </template>
 
-      <b-tabs
+      <ep-tabs
         v-if="!vlkId"
         class="ml-0 pl-0 mt-4"
       >
-        <b-tab
+        <ep-tab
           v-for="(opVlk, index) in oppiaineenVuosiluokkakokonaisuudetSorted"
           :key="'vlk'+index"
           class="mt-4"
@@ -56,8 +56,8 @@
             :kuvat="kuvat"
             :termit="termit"
           />
-        </b-tab>
-      </b-tabs>
+        </ep-tab>
+      </ep-tabs>
 
       <oppiaineen-vuosiluokkakokonaisuus
         v-else-if="oppiaineenVuosiluokkakokonaisuus"
@@ -84,6 +84,8 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { oppiaineenVuosiluokkakokonaisuudenRakennin } from './vuosiluokka';
 import { $kaanna } from '@shared/utils/globals';
 import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
+import EpTabs from '@shared/components/EpTabs/EpTabs.vue';
+import EpTab from '@shared/components/EpTabs/EpTab.vue';
 
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 

@@ -8,10 +8,9 @@
 
     <ep-spinner v-if="!opetussuunnitelma" />
     <div v-else>
-      <div class="row">
+      <div class="grid grid-cols-1 gap-4">
         <div
           v-if="opetussuunnitelma.nimi"
-          class="col-md-12"
         >
           <ep-form-content
             name="opetussuunnitelman-nimi"
@@ -23,7 +22,6 @@
         </div>
         <div
           v-if="opetussuunnitelma.perusteenDiaarinumero"
-          class="col-md-12"
         >
           <ep-form-content
             name="maarayksen-diaarinumero"
@@ -35,7 +33,6 @@
         </div>
         <div
           v-if="opetussuunnitelma.koulutustyyppi"
-          class="col-md-12"
         >
           <ep-form-content
             name="koulutustyyppi"
@@ -47,7 +44,6 @@
         </div>
         <div
           v-if="hasKunnat"
-          class="col-md-12"
         >
           <ep-form-content
             name="kunnat"
@@ -74,7 +70,6 @@
         </div>
         <div
           v-if="hasOrganisaatiot"
-          class="col-md-12"
         >
           <ep-form-content
             name="organisaatiot"
@@ -101,7 +96,6 @@
         </div>
         <div
           v-if="opetussuunnitelma.luotu"
-          class="col-md-12"
         >
           <ep-form-content
             name="luotu"
@@ -113,7 +107,6 @@
         </div>
         <div
           v-if="!opetussuunnitelma.viimeisinJulkaisuAika && opetussuunnitelma.muokattu"
-          class="col-md-12"
         >
           <ep-form-content
             name="muokattu"
@@ -125,7 +118,6 @@
         </div>
         <div
           v-if="opetussuunnitelma.viimeisinJulkaisuAika"
-          class="col-md-12"
         >
           <ep-form-content
             name="julkaistu"
@@ -137,7 +129,6 @@
         </div>
         <div
           v-if="opetussuunnitelma.paatospaivamaara"
-          class="col-md-12"
         >
           <ep-form-content
             name="paatospaivamaara"
@@ -149,7 +140,6 @@
         </div>
         <div
           v-if="hasTiivistelma"
-          class="col-md-12"
         >
           <ep-form-content
             name="ops-kuvaus"
@@ -165,7 +155,6 @@
         </div>
         <div
           v-if="dokumentti !== ''"
-          class="col-md-12"
         >
           <ep-form-content
             name="opetussuunnitelma-pdfna"
@@ -174,7 +163,7 @@
           >
             <EpSpinner
               v-if="!dokumentti"
-              class="d-inline-block"
+              class="inline-block"
             />
             <EpPdfLink
               v-else

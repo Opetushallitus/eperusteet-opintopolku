@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Vue from 'vue';
 import VueScrollTo from 'vue-scrollto';
 import VueMeta from 'vue-meta';
 import Root from '@/routes/Root.vue';
@@ -98,7 +97,7 @@ import { pinia } from '@/pinia';
 import { useOpetussuunnitelmaCacheStore, useToteutussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { createRouter, createWebHashHistory, useRoute } from 'vue-router';
 import { useLoading } from 'vue-loading-overlay';
-import { loadingOptions } from './utils/loading';
+import { loadingOptions } from '@shared/config/loading';
 import { useTiedoteStore } from './stores/TiedoteStore';
 import { Virheet } from '@shared/stores/virheet';
 

@@ -9,11 +9,11 @@
       />
     </div>
 
-    <b-row
+    <div
       v-if="perusteenOsa.osaamisAlueet.length > 0"
-      class="mt-4"
+      class="flex flex-wrap mt-4"
     >
-      <b-col>
+      <div class="w-full">
         <div
           v-for="(osaamisalue, index) in perusteenOsa.osaamisAlueet"
           :key="index+'kotoLaajaAlainenOsaaminen'"
@@ -23,8 +23,8 @@
           </h3>
           <ep-content-viewer :value="$kaanna(osaamisalue.kuvaus)" />
         </div>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
     <EpPaikallinenTarkennus
       v-if="sisaltoviite.kotoLaajaAlainenOsaaminen.teksti"

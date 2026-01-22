@@ -3,18 +3,18 @@
     <div v-if="perusteenOsa">
       <h2
         id="tekstikappale-otsikko"
-        class="otsikko mb-4"
+        class="otsikko !mb-4"
       >
         <span v-if="numerointi">{{ numerointi }}</span>
         {{ $kaanna(perusteenOsa.nimi) }}
       </h2>
 
-      <div class="row">
-        <div class="col-lg-6 col-md-12 mb-4">
+      <div class="grid grid-cols-12 gap-4">
+        <div class="col-span-12 lg:col-span-6 mb-4">
           <h3>{{ $t('osaamiskokonaisuuden-nimi') }}</h3>
           <div>{{ $kaanna(perusteenOsa.nimi) }}</div>
         </div>
-        <div class="col-lg-6 col-md-12 mb-4">
+        <div class="col-span-12 lg:col-span-6 mb-4">
           <h3>{{ $t('laajuus') }}</h3>
           <div>{{ perusteenOsa.minimilaajuus }}</div>
         </div>

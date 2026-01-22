@@ -33,7 +33,7 @@
           </div>
         </ep-ammatillinen-row>
 
-        <div class="pagination d-flex justify-content-center">
+        <div class="pagination flex justify-center">
           <EpBPagination
             v-model="page"
             :items-per-page="perPage"

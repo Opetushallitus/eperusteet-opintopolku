@@ -32,11 +32,11 @@
         </div>
       </template>
 
-      <b-tabs
+      <ep-tabs
         v-model="tabIndex"
         class="ml-0 pl-0 mt-4"
       >
-        <b-tab
+        <ep-tab
           v-for="(vlk, index) in oppiaine.vuosiluokkakokonaisuudet"
           :key="'vlk'+index"
           class="mt-4"
@@ -246,8 +246,8 @@
               </div>
             </ep-collapse>
           </div>
-        </b-tab>
-      </b-tabs>
+        </ep-tab>
+      </ep-tabs>
 
       <div
         v-if="oppimaarat.length > 0"
@@ -285,6 +285,8 @@ import EpArvioinninkohteetTable from '@shared/components/EpArvioinninkohteetTabl
 import { LaajaalainenOsaaminenDto } from '@shared/api/eperusteet';
 import { $kaanna, $t } from '@shared/utils/globals';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
+import EpTabs from '@shared/components/EpTabs/EpTabs.vue';
+import EpTab from '@shared/components/EpTabs/EpTab.vue';
 
 const route = useRoute();
 const perusteDataStore = getCachedPerusteStore();

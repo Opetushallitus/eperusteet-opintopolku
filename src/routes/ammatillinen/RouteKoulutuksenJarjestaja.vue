@@ -10,7 +10,7 @@
           {{ $kaanna(koulutustoimija.nimi) }}
         </template>
       </ep-header>
-      <div class="container-md mt-4">
+      <div class="container mx-auto mt-4 px-3">
         <div
           v-if="koulutustoimija.kuvaus"
           class="mb-5"
@@ -71,17 +71,12 @@
                 {{ $kaanna(yhteinenOsuus.nimi) }}
               </div>
             </ep-ammatillinen-row>
-            <b-pagination
+            <EpBPagination
               v-model="page"
               class="mt-4"
-              :total-rows="yhteisetOsuudetFiltered.length"
-              :per-page="perPage"
-              align="center"
+              :total="yhteisetOsuudetFiltered.length"
+              :items-per-page="perPage"
               aria-controls="yhteisetosuudet-lista"
-              :first-text="$t('alkuun')"
-              prev-text="«"
-              next-text="»"
-              :last-text="$t('loppuun')"
             />
           </div>
         </div>

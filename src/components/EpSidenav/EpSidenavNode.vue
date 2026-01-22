@@ -19,8 +19,8 @@
           :tooltip="false"
         />
       </div>
-      <div class="label-wrapper d-flex align-items-center">
-        <b-link
+      <div class="label-wrapper flex items-center">
+        <router-link
           v-if="node.location && !subtype"
           :to="node.location"
           class="flex-grow-1"
@@ -31,7 +31,7 @@
           >
             <EpSidenavNodeLabel :node="node" />
           </span>
-        </b-link>
+        </router-link>
         <div
           v-else
           class="label label-plain"
@@ -166,6 +166,10 @@ const naytaAlaKappaleMerkki = computed(() => {
   color: $sidenav-color;
   hyphens: auto;
 
+  hr {
+    border-color: $grey500;
+  }
+
   &:not(.node-root, .separator){
     padding-bottom: $sidenav-padding;
   }
@@ -258,7 +262,7 @@ const naytaAlaKappaleMerkki = computed(() => {
   .label-wrapper {
     .icon {
       font-size: 1rem;
-      color: $blue-lighten-5;
+      color: $blue3;
 
       &.alakappalemerkki {
         color: $black;

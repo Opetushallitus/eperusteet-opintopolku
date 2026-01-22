@@ -680,12 +680,12 @@ const esitettavaPaikallistenOppiaineidenOpintojaksot = computed(() => {
 
   .paikallinen-opintojakso-content {
     border-radius: 24px;
-    border: 1px solid #CDEEFF;
+    border: 1px solid $lightBlue2;
     padding: 14px 30px;
     display: flex;
     margin-top: 5px;
     margin-bottom: 5px;
-    background-color: #E6F6FF;
+    background-color: $lightBlue2;
 
     &.selectable{
       cursor:pointer;

@@ -13,7 +13,7 @@
         v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && perusteTekstikappale && perusteTekstikappale.koodi"
         class="mt-4 mb-0"
         name="koodi"
-        >
+      >
         <span v-html="perusteTekstikappale.koodi.arvo" />
       </ep-form-content>
 

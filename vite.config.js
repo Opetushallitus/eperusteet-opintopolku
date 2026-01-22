@@ -3,6 +3,7 @@ import createVuePlugin  from '@vitejs/plugin-vue';
 import commonjs from 'vite-plugin-commonjs';
 import { fileURLToPath, URL } from 'node:url';
 import { configDefaults } from 'vitest/config';
+import tailwindcss from '@tailwindcss/vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -15,22 +16,14 @@ export default defineConfig(({ mode }) => {
   return {
     base: './',
     plugins: [
-      createVuePlugin({
-        template: {
-          compilerOptions: {
-            compatConfig: {
-              MODE: 2,
-              COMPILER_V_BIND_OBJECT_ORDER: false,
-            },
-          },
-        },
-      }),
+      createVuePlugin(),
       commonjs(),
+      tailwindcss(),
     ],
     css: {
       preprocessorOptions: {
         scss: {
-          silenceDeprecations: ['mixed-decls', 'color-functions', 'global-builtin', 'import', 'abs-percent'],
+          silenceDeprecations: ['color-functions', 'global-builtin', 'import', 'abs-percent'],
         },
       },
     },
@@ -45,7 +38,6 @@ export default defineConfig(({ mode }) => {
         '@assets': fileURLToPath(new URL('./eperusteet-frontend-utils/vue/public', import.meta.url)),
         '&': fileURLToPath(new URL('./tests', import.meta.url)),
         '~': fileURLToPath(new URL('./node_modules', import.meta.url)),
-        vue: '@vue/compat',
       },
     },
     server: {

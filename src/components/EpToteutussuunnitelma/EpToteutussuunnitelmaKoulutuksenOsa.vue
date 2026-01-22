@@ -2,43 +2,43 @@
   <div>
     <slot name="sisalto-nimi" />
 
-    <b-row>
-      <b-col>
-        <b-form-group :label="$t('laajuus')">
+    <div class="flex flex-wrap">
+      <div class="w-full">
+        <EpFormGroup :label="$t('laajuus')">
           {{ perusteenOsa.laajuusMinimi }} - {{ perusteenOsa.laajuusMaksimi }} {{ $t('viikkoa') }}
-        </b-form-group>
-      </b-col>
-    </b-row>
+        </EpFormGroup>
+      </div>
+    </div>
 
-    <b-row
+    <div
       v-if="koulutuksenosaKoodi"
-      class="mb-4"
+      class="flex flex-wrap mb-4"
     >
-      <b-col>
+      <div class="w-full">
         <h4>{{ $t('koulutuksenosan-koodi') }}</h4>
         <div>{{ koulutuksenosaKoodi }}</div>
-      </b-col>
-    </b-row>
+      </div>
+    </div>
 
-    <b-row>
-      <b-col>
-        <b-form-group :label="$t('kuvaus')">
+    <div class="flex flex-wrap">
+      <div class="w-full">
+        <EpFormGroup :label="$t('kuvaus')">
           <ep-content-viewer
             :value="$kaanna(perusteenOsa.kuvaus)"
             :kuvat="kuvat"
           />
-        </b-form-group>
-      </b-col>
-    </b-row>
+        </EpFormGroup>
+      </div>
+    </div>
 
     <template v-if="tavoitteet.length > 0 || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.tavoitteetKuvaus)">
       <hr>
-      <b-row>
-        <b-col>
+      <div class="flex flex-wrap">
+        <div class="w-full">
           <h3 class="mb-4">
             {{ $t('tavoitteet') }}
           </h3>
-          <b-form-group :label="$t('opiskelija')">
+          <EpFormGroup :label="$t('opiskelija')">
             <template v-if="tavoitteet.length > 0">
               <ul class="mb-0">
                 <li
@@ -49,22 +49,22 @@
                 </li>
               </ul>
             </template>
-          </b-form-group>
+          </EpFormGroup>
           <EpPaikallinenTarkennus v-if="koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.tavoitteetKuvaus">
             <ep-content-viewer
               :value="$kaanna(koulutuksenosa.paikallinenTarkennus.tavoitteetKuvaus)"
               :kuvat="kuvat"
             />
           </EpPaikallinenTarkennus>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </template>
 
     <template v-if="perusteenOsa.laajaAlaisenOsaamisenKuvaus || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.laajaalaisetosaamiset.length > 0)">
       <hr>
-      <b-row>
-        <b-col>
-          <b-form-group>
+      <div class="flex flex-wrap">
+        <div class="w-full">
+          <EpFormGroup>
             <template #label>
               <h3>
                 {{ $t('laaja-alainen-osaaminen') }}
@@ -72,14 +72,14 @@
             </template>
             <!-- laaaja-alainen sisältää ainoastaan ohjetekstin perusteessa -->
             <!-- <ep-content-viewer :value="$kaanna(koulutuksenosa.laajaAlaisenOsaamisenKuvaus)" :kuvat="kuvat"/> -->
-          </b-form-group>
+          </EpFormGroup>
           <template v-if="koulutuksenosa.paikallinenTarkennus">
             <div
               v-for="(lao, index) in koulutuksenosa.paikallinenTarkennus.laajaalaisetosaamiset"
               :key="'lao'+index"
               class="mb-4"
             >
-              <div class="font-weight-bold">
+              <div class="font-bold">
                 {{ $kaanna(lao.nimi) }}
               </div>
               <ep-content-viewer
@@ -93,15 +93,15 @@
               />
             </div>
           </template>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </template>
 
     <template v-if="perusteenOsa.keskeinenSisalto || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.keskeinenSisalto)">
       <hr>
-      <b-row>
-        <b-col>
-          <b-form-group>
+      <div class="flex flex-wrap">
+        <div class="w-full">
+          <EpFormGroup>
             <template #label>
               <h3>
                 {{ $t('keskeinen-sisalto') }}
@@ -111,22 +111,22 @@
               :value="$kaanna(perusteenOsa.keskeinenSisalto)"
               :kuvat="kuvat"
             />
-          </b-form-group>
+          </EpFormGroup>
           <EpPaikallinenTarkennus v-if="koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.keskeinenSisalto">
             <ep-content-viewer
               :value="$kaanna(koulutuksenosa.paikallinenTarkennus.keskeinenSisalto)"
               :kuvat="kuvat"
             />
           </EpPaikallinenTarkennus>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </template>
 
     <template v-if="perusteenOsa.arvioinninKuvaus || (koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus)">
       <hr>
-      <b-row>
-        <b-col>
-          <b-form-group>
+      <div class="flex flex-wrap">
+        <div class="w-full">
+          <EpFormGroup>
             <template #label>
               <h3>
                 {{ $t('arviointi-teksti') }}
@@ -136,21 +136,21 @@
               :value="$kaanna(perusteenOsa.arvioinninKuvaus)"
               :kuvat="kuvat"
             />
-          </b-form-group>
+          </EpFormGroup>
           <EpPaikallinenTarkennus v-if="koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus">
             <ep-content-viewer
               :value="$kaanna(koulutuksenosa.paikallinenTarkennus.arvioinninKuvaus)"
               :kuvat="kuvat"
             />
           </EpPaikallinenTarkennus>
-        </b-col>
-      </b-row>
+        </div>
+      </div>
     </template>
     <template v-if="koulutuksenosa.paikallinenTarkennus && koulutuksenosa.paikallinenTarkennus.koulutuksenJarjestajat.length > 0">
       <hr>
-      <b-row>
-        <b-col>
-          <b-form-group>
+      <div class="flex flex-wrap">
+        <div class="w-full">
+          <EpFormGroup>
             <template #label>
               <h3>
                 {{ $t('koulutuksen-jarjestajat') }}
@@ -163,15 +163,15 @@
               class="pt-3 pb-2 px-3 mb-3"
             >
               <h3>{{ $kaanna(koulutuksenjarjestaja.nimi) }}</h3>
-              <b-form-group
+              <EpFormGroup
                 v-if="koulutuksenjarjestaja.url"
                 :label="$t('toteutussuunnitelman-tai-koulutuksen-jarjestajan-verkkosivut')"
                 class="mb-3"
               >
                 <EpLinkki :url="koulutuksenjarjestaja.url[kieli]" />
-              </b-form-group>
+              </EpFormGroup>
 
-              <b-form-group
+              <EpFormGroup
                 v-if="koulutuksenjarjestaja.kuvaus"
                 :label="$t('kaytannon-toteutus')"
                 class="mb-0"
@@ -180,11 +180,11 @@
                   :value="$kaanna(koulutuksenjarjestaja.kuvaus)"
                   :kuvat="kuvat"
                 />
-              </b-form-group>
+              </EpFormGroup>
             </div>
-          </b-form-group>
-        </b-col>
-      </b-row>
+          </EpFormGroup>
+        </div>
+      </div>
     </template>
   </div>
 </template>
@@ -199,6 +199,7 @@ import _ from 'lodash';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
+import EpFormGroup from '@shared/components/forms/EpFormGroup.vue';
 
 const props = defineProps({
   sisaltoviite: {
