@@ -27,3 +27,6 @@ coverage
 package-lock.json
 .nvmrc
 .yarn/*
+
+.cursor
+.agents
