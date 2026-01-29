@@ -718,6 +718,15 @@ const showKoulutusvienninOhje = computed(() => {
 });
 
 const koulutustyyppiKohtaisetKaannokset = computed(() => {
+
+  if (peruste.value?.tyyppi === _.toLower(PerusteKaikkiDtoTyyppiEnum.OPAS)) {
+    return {
+      perusteentiedot: 'oppaan-tiedot',
+      perusteennimi: 'oppaan-nimi',
+      korvattavatperusteet: 'korvattavat-perusteet',
+    };
+  }
+
   return {
     perusteentiedot: isYleissivistavaKoulutustyyppi(peruste.value?.koulutustyyppi)
       ? 'perusteen-tiedot-yleissivistava'
