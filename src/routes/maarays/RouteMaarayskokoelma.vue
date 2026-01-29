@@ -10,8 +10,31 @@
       {{ $t('opetushallituksen-maaraykset-alaotsikko') }}
     </template>
 
-    <div class="d-flex flex-column flex-lg-row">
-      <div class="w-100 mr-2 mb-3">
+    <div class="mb-4">
+      <h3 class="mb-3">
+        {{ $t('aihe') }}
+      </h3>
+      <div class="d-flex justify-content-between flex-column flex-lg-row aihe-boxes">
+        <div
+          v-for="vaihtoehto in tyyppiVaihtoehdot"
+          :key="vaihtoehto.tyyppi"
+          class="aihe-box py-4 px-3 flex-fill"
+          :class="{ 'active': filters.tyyppi === vaihtoehto.tyyppi }"
+          @click="toggleTyyppi(vaihtoehto.tyyppi)"
+        >
+          <EpMaterialIcon
+            icon-shape="outlined"
+            class="mr-2"
+          >
+            {{ vaihtoehto.icon }}
+          </EpMaterialIcon>
+          {{ $t(vaihtoehto.translationKey) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column flex-lg-row justify-content-between">
+      <div class="flex-fill mr-2 mb-3 col-12 col-lg-8 p-0">
         <EpSearch
           v-model="filters.nimi"
           :placeholder="''"
@@ -22,34 +45,7 @@
         </EpSearch>
       </div>
 
-      <div class="w-100 mr-2 mb-3">
-        <EpMultiSelect
-          v-model="filters.tyyppi"
-          :enable-empty-option="true"
-          :placeholder="$t('kaikki')"
-          :is-editing="true"
-          :options="tyyppiVaihtoehdot"
-          :search-identity="searchIdentity"
-          :close-on-select="false"
-        >
-          <template #label>
-            <span class="font-weight-600">{{ $t('tyyppi') }}</span>
-          </template>
-
-          <template
-            #singleLabel="{ option }"
-          >
-            {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
-          </template>
-          <template
-            #option="{ option }"
-          >
-            {{ $t('maarays-tyyppi-' + option.toLowerCase()) }}
-          </template>
-        </EpMultiSelect>
-      </div>
-
-      <div class="w-100 mb-3">
+      <div class="mb-3 col-12 col-lg-4 p-0">
         <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
         <EpMaarayskokoelmaKoulutustyyppiSelect
           v-if="koulutustyyppiVaihtoehdot"
@@ -82,9 +78,12 @@
 
     <div
       v-else
-      class="maaraykset"
+      class="maaraykset mt-3"
     >
-      <div class="jarjestys d-flex justify-content-end align-items-center mb-2">
+      <div class="jarjestys d-flex justify-content-between align-items-center mb-2">
+        <div v-if="maarayksetCount > 0">
+          <span class="font-weight-600">{{ maarayksetCount }}</span> {{ $t('maaraysta') }}
+        </div>
         <a
           class="clickable"
           href="javascript:void(0)"
@@ -95,44 +94,11 @@
         </a>
       </div>
 
-      <router-link
+      <EpMaarayskokoelmaMaarays
         v-for="maarays in maaraykset"
         :key="maarays.id"
-        class="maarays d-flex shadow-tile"
-        :to="{name: 'maarays', params: {maaraysId: maarays.id}}"
-      >
-        <img
-          :src="kuva"
-          :alt="$t('maarays')"
-          class="kuva"
-        >
-        <div class="tiedot">
-          <div class="nimi font-weight-bold mb-2">
-            {{ $kaanna(maarays.nimi) }}
-          </div>
-          <div class="alatiedot d-flex">
-            <div class="mr-2">
-              {{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}
-            </div>
-            <EpVoimassaolo :voimassaolo="maarays" />
-            <div
-              v-if="maarays.asiasanat[kieli].asiasana.length > 0"
-              class="mx-2 valiviiva"
-            >
-              |
-            </div>
-            <div v-if="maarays.asiasanat[kieli].asiasana.length > 0">
-              {{ $t('asiasana') }}:
-              <span
-                v-for="(asiasana, index) in maarays.asiasanat[kieli].asiasana"
-                :key="'asiasana' + index"
-              >
-                {{ asiasana }}<span v-if="index < maarays.asiasanat[kieli].asiasana.length -1">, </span>
-              </span>
-            </div>
-          </div>
-        </div>
-      </router-link>
+        :maarays="maarays"
+      />
 
       <EpBPagination
         v-if="maarayksetCount > perPage"
@@ -154,19 +120,16 @@ import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpToggle from '@shared/components/forms/EpToggle.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
-import EpMultiSelect from '@shared/components/forms/EpMultiSelect.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { MaarayksetStore } from '@shared/stores/MaarayksetStore';
-import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
-import EpVoimassaolo from '@shared/components/EpVoimassaolo/EpVoimassaolo.vue';
-import { Kielet } from '@shared/stores/kieli';
-import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpMaterialIcon from '@shared/components//EpMaterialIcon/EpMaterialIcon.vue';
 import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaarayskokoelmaKoulutustyyppiSelect/EpMaarayskokoelmaKoulutustyyppiSelect.vue';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
+import EpMaarayskokoelmaMaarays from '@/components/EpMaarayskokoelmaMaarays/EpMaarayskokoelmaMaarays.vue';
+import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
+import { Kielet } from '@shared/stores/kieli';
 
 const route = useRoute();
 const router = useRouter();
@@ -174,14 +137,24 @@ const router = useRouter();
 const maarayksetStore = new MaarayksetStore();
 const perPage = ref(10);
 const page = ref(1);
-const filters = ref({
+const filters = ref<{
+  nimi: string;
+  julkaistu: boolean;
+  laadinta: boolean;
+  jarjestysTapa: string;
+  jarjestys: string;
+  koulutustyypit: any[];
+  tyyppi: string | null;
+  tuleva: boolean;
+  voimassaolo: boolean;
+}>({
   nimi: '',
   julkaistu: true,
   laadinta: false,
   jarjestysTapa: 'voimassaoloAlkaa',
   jarjestys: 'DESC',
   koulutustyypit: [],
-  tyyppi: null,
+  tyyppi: MaaraysDtoTyyppiEnum.PERUSTE,
   tuleva: true,
   voimassaolo: true,
 });
@@ -241,7 +214,7 @@ async function fetch() {
     await maarayksetStore?.fetch(
       {
         ...filters.value,
-        tyyppi: filters.value.tyyppi === 'kaikki' ? null : filters.value.tyyppi,
+        tyyppi: (filters.value.tyyppi || undefined) as any,
         kieli: kieli.value,
         sivu: page.value - 1,
         sivukoko: perPage.value,
@@ -269,25 +242,25 @@ useHead({
 });
 
 const tyyppiVaihtoehdot = [
-  'kaikki',
-  MaaraysDtoTyyppiEnum.OPETUSHALLITUKSENMUU,
-  MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
-  MaaraysDtoTyyppiEnum.PERUSTE,
-];
-
-const voimasssaVaihtoehdot = [
-  'KAIKKI',
-  'TULEVA',
-  'VOIMASSAOLO',
-  'POISTUNUT',
+  {
+    tyyppi: MaaraysDtoTyyppiEnum.PERUSTE,
+    icon: 'school',
+    translationKey: 'maarayskokoelma-tyyppi-peruste',
+  },
+  {
+    tyyppi: MaaraysDtoTyyppiEnum.OPETUSHALLITUKSENMUU,
+    icon: 'gavel',
+    translationKey: 'maarayskokoelma-tyyppi-opetushallituksenmuu',
+  },
+  {
+    tyyppi: MaaraysDtoTyyppiEnum.AMMATILLINENMUU,
+    icon: 'construction',
+    translationKey: 'maarayskokoelma-tyyppi-ammatillinenmuu',
+  },
 ];
 
 const koulutustyyppiVaihtoehdot = computed(() => {
   return maarayksetStore?.koulutustyypit.value;
-});
-
-const kuva = computed(() => {
-  return maaraysDocSmall;
 });
 
 const kieli = computed(() => {
@@ -306,38 +279,14 @@ async function vaihdaJarjestys() {
   await fetch();
 }
 
-function searchIdentity(kt: string) {
-  return _.toLower($t(kt) as any);
+function toggleTyyppi(tyyppi: string) {
+  filters.value.tyyppi = tyyppi;
 }
 </script>
 
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
-
-@include shadow-tile-hover;
-
-.maaraykset {
-  .maarays {
-    border: 1px solid $gray-lighten-9;
-    border-radius: 2px;
-    padding: 12px 15px;
-    margin-bottom: 10px;
-    color: $black;
-
-    .kuva {
-      height: 55px;
-    }
-
-    .tiedot {
-      margin-left: 15px;
-
-      .valiviiva {
-        color: $gray-lighten-1;
-      }
-    }
-  }
-}
 
 :deep(.toggles) {
   margin-bottom: 0;
@@ -346,6 +295,28 @@ function searchIdentity(kt: string) {
 
 .maarayskokoelma-koulutustyyppi-select {
   max-width: 400px;
-  width: 400px;
+  // width: 400px;
+}
+
+.aihe-boxes {
+  gap: 1rem;
+}
+
+.aihe-box {
+  @include tile-background-shadow;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $blue-lighten-3;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &.active {
+    background-color: $green;
+    color: white;
+  }
+
 }
 </style>

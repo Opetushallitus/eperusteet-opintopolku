@@ -210,7 +210,7 @@ const style = computed(() => {
     background-image: url('@assets/img/banners/opintopolku/aallot_muukoulutus.svg');
   }
 
-  &.tyyppi-kieli_kaantaja_tutkinto {
+  &.koulutustyyppi-kielikaantajatutkinto {
     background-color: $koulutustyyppi-kielikaantajatutkinto-color;
     background-image: url('@assets/img/banners/opintopolku/aallot_kielikaantajatutkinto.svg');
   }

@@ -17,17 +17,15 @@ export const koostePerusteStore = {
   'koulutustyyppi_10': (koulutustyyppi): any => new VstPerusteKoosteStore(koulutustyyppi),
   'default': (koulutustyyppi): any => new PerusteKoosteStore(koulutustyyppi),
   'koulutustyyppi_muu': (koulutustyyppi): any => null,
-  'kielikaantajatutkinto': (koulutustyyppi): any => new PerusteKoosteStore(undefined, 'kieli_kaantaja_tutkinto'),
+  'koulutustyyppi_500': (koulutustyyppi): any => new PerusteKoosteStore(koulutustyyppi, 'kieli_kaantaja_tutkinto'),
 };
 
 export const koosteOpasStore = {
   'default': (koulutustyyppi): any => new OpasStore(koulutustyyppi),
-  'kielikaantajatutkinto': (koulutustyyppi): any => null,
 };
 
 export const koosteTiedotteetStore = {
   'default': (koulutustyyppi): any => new KoosteTiedotteetStore(koulutustyyppi),
-  'kielikaantajatutkinto': (koulutustyyppi): any => new KieliKaantajaTutkintoTiedotteetStore(),
 };
 
 export const koostePaikallinenStore = {
