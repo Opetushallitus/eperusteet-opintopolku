@@ -84,31 +84,21 @@
             </template>
 
             <template #view>
-              <router-view :key="route.fullPath">
-                <template
-                  v-if="peruste.tyyppi ==='opas'"
-                  #header
+              <router-view
+                :key="route.fullPath"
+                v-slot="{ Component }"
+              >
+                <component
+                  :is="Component"
+                  v-if="Component"
                 >
-                  {{ $t('oppaan-tiedot') }}
-                </template>
-                <template
-                  v-if="peruste.tyyppi ==='opas'"
-                  #nimi
-                >
-                  <ep-form-content
-                    name="oppaan-nimi"
-                    header-type="h3"
-                    header-class="h6"
-                  >
-                    <ep-field v-model="peruste.nimi" />
-                  </ep-form-content>
-                </template>
-                <template #previous-next-navigation>
-                  <ep-previous-next-navigation
-                    :active-node="current"
-                    :flattened-sidenav="flattenedSidenav"
-                  />
-                </template>
+                  <template #previous-next-navigation>
+                    <ep-previous-next-navigation
+                      :active-node="current"
+                      :flattened-sidenav="flattenedSidenav"
+                    />
+                  </template>
+                </component>
               </router-view>
             </template>
           </ep-sidebar>
