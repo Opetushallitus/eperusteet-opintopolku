@@ -35,14 +35,22 @@
             <ep-opetussuunnitelma-sidenav />
           </template>
           <template #view>
-            <router-view :key="route.fullPath">
-              <template #previous-next-navigation>
-                <ep-previous-next-navigation
-                  :active-node="current"
-                  :flattened-sidenav="flattenedSidenav"
-                />
-              </template>
-            </router-view>
+            <router-view
+                :key="route.fullPath"
+                v-slot="{ Component }"
+              >
+                <component
+                  :is="Component"
+                  v-if="Component"
+                >
+                  <template #previous-next-navigation>
+                    <ep-previous-next-navigation
+                      :active-node="current"
+                      :flattened-sidenav="flattenedSidenav"
+                    />
+                  </template>
+                </component>
+              </router-view>
           </template>
         </ep-sidebar>
       </div>
