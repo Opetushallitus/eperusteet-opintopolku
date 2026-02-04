@@ -23,6 +23,8 @@
               {{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}
             </div>
             <EpVoimassaolo :voimassaolo="maarays as any" />
+            <div v-if="maarays.diaarinumero" class="mx-2 valiviiva"> | </div>
+            <div v-if="maarays.diaarinumero">{{ $t('diaarinumero') }}: {{ maarays.diaarinumero }}</div>
             <div
               v-if="(maarays as any).asiasanat && (maarays as any).asiasanat[kieli] && (maarays as any).asiasanat[kieli].asiasana.length > 0"
               class="mx-2 valiviiva"
@@ -49,34 +51,35 @@
         v-else-if="maarays"
         class="details-content"
       >
-        <a
-          v-if="maaraysPdfUrl"
-          class="avaa-maarays-btn d-inline-flex align-items-center mb-3"
-          :href="maaraysPdfUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <span>{{ $t('avaa-maarays') }}</span>
-          <EpMaterialIcon class="ml-2">
-            picture_as_pdf
-          </EpMaterialIcon>
-        </a>
 
-        <ep-form-content
-          name="maarayksen-paatospaivamaara"
-          header-type="h3"
-          header-class="h6"
+      <ep-form-content
+        name="maarayksen-paatospaivamaara"
+        header-type="h3"
+        header-class="h6"
         >
-          {{ $sd(maarays.maarayspvm) }}
-        </ep-form-content>
+        {{ $sd(maarays.maarayspvm) }}
+      </ep-form-content>
 
-        <ep-form-content
-          name="maarayksen-diaarinumero"
-          header-type="h3"
-          header-class="h6"
+      <ep-form-content
+        name="maarayksen-diaarinumero"
+        header-type="h3"
+        header-class="h6"
         >
-          {{ maarays.diaarinumero }}
-        </ep-form-content>
+        {{ maarays.diaarinumero }}
+      </ep-form-content>
+
+      <a
+        v-if="maaraysPdfUrl"
+        class="avaa-maarays-btn d-inline-flex align-items-center"
+        :href="maaraysPdfUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span>{{ $t('avaa-maarays') }}</span>
+        <EpMaterialIcon class="ml-2">
+          picture_as_pdf
+        </EpMaterialIcon>
+      </a>
 
         <ep-form-content
           name="koulutus-tai-tutkinto"
@@ -141,7 +144,8 @@
           </div>
 
           <div
-            v-if="maarays.muutettavatMaaraykset && maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset && maarays.korvattavatMaaraykset.length === 0"
+            v-if="(maarays.muutettavatMaaraykset && maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset && maarays.korvattavatMaaraykset.length === 0)
+            || (muutettavatMaarayksetPdfUrls.length === 0 && korvattavatMaarayksetPdfUrls.length === 0)"
             class="font-italic"
           >
             {{ $t('maaraysta-ei-loydy-maarayskokoelmasta') }}
@@ -201,8 +205,8 @@ const props = defineProps<{
 
 const loading = ref(false);
 const peruste = ref<PerusteDto | null>(null);
-const korvattavatMaaraykset = ref<MaaraysDto[]>([]);
-const muutettavatMaaraykset = ref<MaaraysDto[]>([]);
+const korvattavatMaaraykset = ref<MaaraysDto[] | null>(null);
+const muutettavatMaaraykset = ref<MaaraysDto[] | null>(null);
 
 const kieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
@@ -373,6 +377,7 @@ async function handleClick() {
     padding: 10px 20px;
     display: inline-block;
     text-decoration: none;
+    margin-bottom: 30px;
 
     &:hover {
       background-color: darken($green, 5%);
