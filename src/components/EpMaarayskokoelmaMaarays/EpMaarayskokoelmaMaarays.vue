@@ -1,9 +1,9 @@
 <template>
   <EpCollapse
     :use-padding="false"
-    :expanded-by-default="false"
+    :expanded-by-default="expandedByDefault"
     chevron-location="right"
-    class="maarays-wrapper mb-3"
+    class="ep-maarayskokoelma-maarays maarays-wrapper mb-3"
     :border-bottom="false"
     @toggle="handleClick"
   >
@@ -178,13 +178,66 @@
           </div>
         </ep-form-content>
       </div>
+
+      <ep-button
+        class="share-maarays-btn"
+        :id="'share-maarays-btn-' + maarays.id"
+        no-padding
+        link
+      >
+        <div class="d-flex align-items-center">
+          <ep-material-icon class="mr-2">
+            share
+          </ep-material-icon>
+          <span>{{ $t('jaa-maarays') }}</span>
+        </div>
+      </ep-button>
+
+      <b-popover
+        :target="'share-maarays-btn-' + maarays.id"
+        triggers="click blur"
+        placement="right"
+        @show="async () => await onPopoverShown()"
+      >
+      <div class="wide">
+        <ep-input
+          :model-value="maaraysUrl"
+          :is-editing="true"
+          class="maarays-share-input"
+          on-focus-select-all
+          ref="maaraysShareInput"
+        >
+          <template #label>
+            {{ $t('jaa-maarays') }}
+          </template>
+        </ep-input>
+
+        <div class="d-flex align-items-center">
+          <ep-button
+            :id="'copy-maarays-url-btn-' + maarays.id"
+            no-padding
+            link
+            @click="copyMaaraysUrl"
+          >
+            <span v-if="!linkkiKopioitu">{{ $t('kopioi-linkki') }}</span>
+            <span v-if="linkkiKopioitu">
+              {{ $t('linkki-kopioitu') }}
+              <ep-material-icon >
+                check
+              </ep-material-icon>
+            </span>
+          </ep-button>
+        </div>
+      </div>
+      </b-popover>
+
     </div>
   </EpCollapse>
 </template>
 
 <script setup lang="ts">
 import * as _ from 'lodash';
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import { Maaraykset, MaarayksetParams, MaaraysDto, MaaraysLiiteDtoTyyppiEnum, baseURL, MaaraysDtoLiittyyTyyppiEnum, Perusteet, PerusteDto, MaaraysKevytDto } from '@shared/api/eperusteet';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
@@ -198,15 +251,20 @@ import { koulutustyyppiTheme, tyyppiTheme } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
 import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
+import EpInput from '@shared/components/forms/EpInput.vue';
 
 const props = defineProps<{
   maarays: MaaraysDto;
+  expandedByDefault?: boolean;
 }>();
 
 const loading = ref(false);
 const peruste = ref<PerusteDto | null>(null);
 const korvattavatMaaraykset = ref<MaaraysDto[] | null>(null);
 const muutettavatMaaraykset = ref<MaaraysDto[] | null>(null);
+const linkkiKopioitu = ref(false);
+const maaraysShareInput = ref<HTMLInputElement | null>(null);
 
 const kieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
@@ -338,6 +396,22 @@ async function handleClick() {
     loading.value = false;
   }
 }
+
+const maaraysUrl = computed(() => {
+  return `${window.location.origin}/#/${Kielet.getSisaltoKieli.value}/maaraykset/${props.maarays.id}`;
+});
+
+async function copyMaaraysUrl() {
+  await navigator.clipboard.writeText(maaraysUrl.value);
+  linkkiKopioitu.value = true;
+}
+
+async function onPopoverShown() {
+  await nextTick();
+  if (maaraysShareInput.value) {
+    maaraysShareInput.value.select();
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -384,5 +458,13 @@ async function handleClick() {
       color: $white;
     }
   }
+
+  :deep(.ep-button) {
+    &.share-maarays-btn .btn {
+      text-decoration: none;
+    }
+  }
+
 }
+
 </style>
