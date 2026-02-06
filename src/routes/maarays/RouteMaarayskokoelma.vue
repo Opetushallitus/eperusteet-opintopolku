@@ -10,62 +10,67 @@
       {{ $t('opetushallituksen-maaraykset-alaotsikko') }}
     </template>
 
-    <div class="mb-4">
-      <h3 class="mb-3">
-        {{ $t('aihe') }}
-      </h3>
-      <div class="d-flex justify-content-between flex-column flex-lg-row aihe-boxes">
-        <div
-          v-for="vaihtoehto in tyyppiVaihtoehdot"
-          :key="vaihtoehto.tyyppi"
-          class="aihe-box py-4 px-3 flex-fill"
-          :class="{ 'active': filters.tyyppi === vaihtoehto.tyyppi }"
-          @click="toggleTyyppi(vaihtoehto.tyyppi)"
-        >
-          <EpMaterialIcon
-            icon-shape="outlined"
-            class="mr-2"
+    <div
+      class="hakuehdot"
+      :class="{ 'disabled': filters.maaraysId > 0 }">
+      <div class="mb-4">
+        <h3 class="mb-3">
+          {{ $t('aihe') }}
+        </h3>
+        <div class="d-flex justify-content-between flex-column flex-lg-row aihe-boxes">
+          <div
+            v-for="vaihtoehto in tyyppiVaihtoehdot"
+            :key="vaihtoehto.tyyppi"
+            class="aihe-box py-4 px-3 flex-fill"
+            :class="{ 'active': filters.tyyppi === vaihtoehto.tyyppi }"
+            @click="toggleTyyppi(vaihtoehto.tyyppi)"
           >
-            {{ vaihtoehto.icon }}
-          </EpMaterialIcon>
-          {{ $t(vaihtoehto.translationKey) }}
+            <EpMaterialIcon
+              icon-shape="outlined"
+              class="mr-2"
+            >
+              {{ vaihtoehto.icon }}
+            </EpMaterialIcon>
+            {{ $t(vaihtoehto.translationKey) }}
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="d-flex flex-column flex-lg-row justify-content-between">
-      <div class="flex-fill mr-2 mb-3 col-12 col-lg-8 p-0">
-        <EpSearch
-          v-model="filters.nimi"
-          :placeholder="''"
-        >
-          <template #label>
-            <span class="font-weight-600">{{ $t('hae-maarayksia') }}</span>
-          </template>
-        </EpSearch>
+      <div class="d-flex flex-column flex-lg-row justify-content-between">
+        <div class="flex-fill mr-2 mb-3 col-12 col-lg-8 p-0">
+          <EpSearch
+            v-model="filters.nimi"
+            :placeholder="''"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('hae-maarayksia') }}</span>
+            </template>
+          </EpSearch>
+        </div>
+
+        <div class="mb-3 col-12 col-lg-4 p-0">
+          <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
+          <EpMaarayskokoelmaKoulutustyyppiSelect
+            v-if="koulutustyyppiVaihtoehdot"
+            v-model="filters.koulutustyypit"
+            class="maarayskokoelma-koulutustyyppi-select"
+            :is-editing="true"
+            :koulutustyypit="koulutustyyppiVaihtoehdot"
+          />
+        </div>
       </div>
 
-      <div class="mb-3 col-12 col-lg-4 p-0">
-        <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
-        <EpMaarayskokoelmaKoulutustyyppiSelect
-          v-if="koulutustyyppiVaihtoehdot"
-          v-model="filters.koulutustyypit"
-          class="maarayskokoelma-koulutustyyppi-select"
-          :is-editing="true"
-          :koulutustyypit="koulutustyyppiVaihtoehdot"
-        />
-      </div>
+      <EpVoimassaoloFilter
+        v-model="filters"
+        class="mb-0"
+      />
+
+      <EpHakutulosmaara
+        :kokonaismaara="maarayksetCount"
+        piilota-nakyva-tulosmaara
+      />
+
     </div>
-
-    <EpVoimassaoloFilter
-      v-model="filters"
-      class="mb-0"
-    />
-
-    <EpHakutulosmaara
-      :kokonaismaara="maarayksetCount"
-      piilota-nakyva-tulosmaara
-    />
 
     <ep-spinner v-if="!maaraykset" />
 
@@ -80,12 +85,20 @@
       v-else
       class="maaraykset mt-3"
     >
-      <div class="jarjestys d-flex justify-content-between align-items-center mb-2">
+      <div class="jarjestys d-flex align-items-center mb-2">
         <div v-if="maarayksetCount > 0">
           <span class="font-weight-600">{{ maarayksetCount }}</span> {{ $t('maaraysta') }}
         </div>
+        <div v-if="filters.maaraysId && maarayksetCount === 1">
+          <ep-button
+            link
+            @click="filters.maaraysId = undefined"
+          >
+            {{ $t('tyhjenna-hakuehdot') }}
+          </ep-button>
+        </div>
         <a
-          class="clickable"
+          class="clickable ml-auto"
           href="javascript:void(0)"
           @click="vaihdaJarjestys()"
         >
@@ -98,6 +111,7 @@
         v-for="maarays in maaraykset"
         :key="maarays.id"
         :maarays="maarays"
+        :expanded-by-default="_.toNumber(filters.maaraysId) === maarays.id"
       />
 
       <EpBPagination
@@ -130,6 +144,7 @@ import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import EpMaarayskokoelmaMaarays from '@/components/EpMaarayskokoelmaMaarays/EpMaarayskokoelmaMaarays.vue';
 import { MaaraysDtoTyyppiEnum } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -147,6 +162,7 @@ const filters = ref<{
   tyyppi: string | null;
   tuleva: boolean;
   voimassaolo: boolean;
+  maaraysId: number | undefined;
 }>({
   nimi: '',
   julkaistu: true,
@@ -157,6 +173,7 @@ const filters = ref<{
   tyyppi: MaaraysDtoTyyppiEnum.PERUSTE,
   tuleva: true,
   voimassaolo: true,
+  maaraysId: undefined,
 });
 const mounted = ref(false);
 
@@ -169,6 +186,7 @@ const filterToQueryParams = {
   poistunut: 'poistunut',
   sivu: 'sivu',
   jarjestys: 'jarjestys',
+  maaraysId: 'maaraysId',
 };
 
 const queryParamsToFilter = _.invert(filterToQueryParams);
@@ -197,7 +215,6 @@ watch(page, async () => {
     if (firstMaarays) {
       firstMaarays.setAttribute('tabindex', '-1');
       firstMaarays.focus();
-      await nextTick();
     }
   }
 });
@@ -205,6 +222,13 @@ watch(page, async () => {
 watch(filters, async () => {
   if (mounted.value) {
     page.value = 1;
+    await fetch();
+  }
+}, { deep: true });
+
+watch(() => route.query, async () => {
+  if (mounted.value) {
+    setQueryParams();
     await fetch();
   }
 }, { deep: true });
@@ -235,6 +259,18 @@ const maaraykset = computed(() => {
 
 const maarayksetCount = computed(() => {
   return maarayksetStore?.maaraykset?.value?.kokonaismäärä;
+});
+
+watch(maaraykset, async () => {
+  if (mounted.value && filters.value.maaraysId && maarayksetCount.value === 1) {
+    await nextTick();
+    const maarays = document.querySelector('.ep-maarayskokoelma-maarays') as HTMLElement;
+    if (maarays) {
+      maarays.setAttribute('tabindex', '-1');
+      maarays.scrollTo();
+      maarays.focus();
+    }
+  }
 });
 
 useHead({
@@ -287,6 +323,11 @@ function toggleTyyppi(tyyppi: string) {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 @import '@shared/styles/_mixins.scss';
+
+.hakuehdot.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
 
 :deep(.toggles) {
   margin-bottom: 0;

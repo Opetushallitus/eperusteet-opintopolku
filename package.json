@@ -6,6 +6,11 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "dev:prod": "EPERUSTEET_SERVICE=https://eperusteet.opintopolku.fi EPERUSTEET_YLOPS_SERVICE=https://eperusteet.opintopolku.fi EPERUSTEET_AMOSAA_SERVICE=https://eperusteet.opintopolku.fi vite",
+    "dev:qa": "EPERUSTEET_SERVICE=https://eperusteet.testiopintopolku.fi EPERUSTEET_YLOPS_SERVICE=https://eperusteet.testiopintopolku.fi EPERUSTEET_AMOSAA_SERVICE=https://eperusteet.testiopintopolku.fi vite",
+    "dev:untuva": "EPERUSTEET_SERVICE=https://eperusteet.untuvaopintopolku.fi EPERUSTEET_YLOPS_SERVICE=https://eperusteet.untuvaopintopolku.fi EPERUSTEET_AMOSAA_SERVICE=https://eperusteet.untuvaopintopolku.fi vite",
+    "dev:hahtuva": "EPERUSTEET_SERVICE=https://eperusteet.hahtuvaopintopolku.fi EPERUSTEET_YLOPS_SERVICE=https://eperusteet.hahtuvaopintopolku.fi EPERUSTEET_AMOSAA_SERVICE=https://eperusteet.hahtuvaopintopolku.fi vite",
+    "dev:local": "EPERUSTEET_SERVICE=http://localhost:8080 EPERUSTEET_AMOSAA_SERVICE=http://localhost:8082 EPERUSTEET_YLOPS_SERVICE=http://localhost:8081 vite",
     "lint": "eslint --ext .js,.vue,.ts src",
     "test": "TZ=Europe/Helsinki vitest",
     "genspec": "cd eperusteet-frontend-utils/vue && ./scripts/buildapi.sh -g -s ${0} && cd .. && cd .. && yarn run dev"

@@ -157,10 +157,17 @@ export const router = createRouter({
         path: 'maaraykset',
         name: 'maaraykset',
         component: RouteMaarayskokoelma,
-      }, {
+      },       {
         path: 'maaraykset/:maaraysId(\\d+)',
         name: 'maarays',
-        component: RouteMaarays,
+        redirect: (to) => {
+          return {
+            name: 'maaraykset',
+            query: {
+              maaraysId: to.params.maaraysId,
+            },
+          };
+        },
       }, {
         path: 'kooste/ammatillinen/:perusteId(\\d+)',
         name: 'ammatillinenkooste',
