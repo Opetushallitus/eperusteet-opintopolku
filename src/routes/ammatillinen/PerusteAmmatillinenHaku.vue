@@ -1,15 +1,19 @@
-<template>
+3<template>
   <div class="haku">
     <div class="search">
       <div v-if="tyyppi === 'peruste'">
-        <div class="placeholderText">
+        <div>
           <span class="pr-1">{{ searchPlaceholder }}</span>
           <span class="pr-1">{{ $t('voit-hakea-tutkinnon-osia') }}</span>
           <EpSpinner
             v-if="!valmisteillaOlevat"
             small
           />
-          <span v-else-if="valmisteillaOlevat.data.length > 0">{{ $t('katso-myos') }}
+          <span
+            v-else-if="valmisteillaOlevat.data.length > 0"
+            class="pr-1"
+          >
+            {{ $t('katso-myos') }}
             <router-link
               class="w-100"
               :to="{name: 'ammatillinenValmisteillaOlevat'}"
@@ -17,6 +21,7 @@
               {{ $t('valmisteilla-olevien-perusteiden-julkaisuaikataulu') }}
             </router-link>
           </span>
+          <span>{{ $t('koulutuksen-jarjestajien-totsut-perustesivulta') }}</span>
         </div>
 
         <div
@@ -378,10 +383,6 @@ const valmisteillaOlevat = computed(() => {
 @import '@shared/styles/_mixins.scss';
 
 @include shadow-tile-hover;
-
-.placeholderText {
-  font-size: small;
-}
 
 @media(min-width: 992px){
   .multiselect {

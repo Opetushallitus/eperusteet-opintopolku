@@ -82,6 +82,28 @@
           </b-col>
         </b-row>
 
+        <b-row>
+          <b-col>
+            <h2>{{ $t('ajankohtaista') }}</h2>
+            <ep-spinner-slot :is-loading="!tiedotteet">
+              <ep-julki-lista
+                :tiedot="tiedotteet"
+                :tieto-maara="2"
+                @avaa-tieto="avaaTiedote"
+              >
+                <template #lisaaBtn>
+                  <EpSecondaryButton
+                    class="mt-2"
+                    :to="{ name: 'uutiset', query: { koulutustyypit: koulutustyyppi } }"
+                  >
+                    {{ $t('kaikki-ajankohtaiset') }}
+                  </EpSecondaryButton>
+                </template>
+              </ep-julki-lista>
+            </ep-spinner-slot>
+          </b-col>
+        </b-row>
+
         <b-row v-if="paikallinenStore">
           <b-col>
             <component
@@ -95,23 +117,6 @@
 
         <b-row>
           <div class="list-section">
-            <div class="list">
-              <h2>{{ $t('ajankohtaista') }}</h2>
-              <ep-spinner-slot :is-loading="!tiedotteet">
-                <ep-julki-lista
-                  :tiedot="tiedotteet"
-                  @avaa-tieto="avaaTiedote"
-                >
-                  <template #lisaaBtnText>
-                    {{ $t('nayta-lisaa') }}
-                  </template>
-                  <template #eiTietoja>
-                    {{ $t('ei-tiedotteita') }}
-                  </template>
-                </ep-julki-lista>
-              </ep-spinner-slot>
-            </div>
-
             <div
               v-if="opasStore"
               class="list"
@@ -120,12 +125,11 @@
               <ep-spinner-slot :is-loading="!ohjeet">
                 <ep-julki-lista
                   :tiedot="ohjeet"
+                  :tieto-maara="3"
                   @avaa-tieto="avaaOpas"
                 >
                   <template #lisaaBtnText>
-                    <div class="mt-2">
-                      {{ $t('nayta-lisaa') }}
-                    </div>
+                    {{ $t('nayta-lisaa') }}
                   </template>
                   <template #eiTietoja>
                     <div class="mt-2">
@@ -157,6 +161,7 @@ import { MurupolkuOsa } from '@/tyypit';
 import _ from 'lodash';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import EpJulkiLista, { JulkiRivi } from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import EpSecondaryButton from '@shared/components/EpSecondaryButton/EpSecondaryButton.vue';
 import { $t, $kaanna } from '@shared/utils/globals';
 import {
   getKoosteKuvaus,

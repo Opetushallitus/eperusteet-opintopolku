@@ -4,7 +4,7 @@
       class="vari-header"
       :class="theme"
     >
-      <div class="container header">
+      <div class="container-lg header">
         <div class="murupolku">
           <nav :aria-label="$t('sijaintisi-sivustolla')">
             <ol
@@ -143,18 +143,16 @@ const style = computed(() => {
   min-height: 238px;
   padding: 50px 0;
 
-  // .header {
-    // padding-left: 10px;
-  // }
+  background-size: auto 200px, auto;
 
-  // Todo: käytä muuttujia
   @media (max-width: 991.98px) {
     padding-top: 40px;
     padding-bottom: 40px;
     min-height: 0;
     background-size: auto 160px;
+    margin-left: 0 !important;
   }
-  // Todo: käytä muuttujia
+
   @media (max-width: 767.98px) {
     background-size: auto 80px;
 
@@ -229,7 +227,6 @@ const style = computed(() => {
     background-image: url('@assets/img/banners/opintopolku/aallot_maarayskokoelma.svg'), url('@assets/img/banners/opintopolku/aallot_maarayskokoelma_tausta.svg');
     background-repeat: no-repeat, repeat;
     background-position: right top, left top;
-    background-size: auto auto, auto 100%;
     margin-top: -2px;
 
     @media (max-width: 991.98px) {

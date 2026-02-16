@@ -4,7 +4,7 @@
       <div class="container">
         <div class="laatikko">
           <h1 class="otsikko">
-            {{ $t('tervetuloa-palveluun') }}
+            {{ $t('eperusteet-opintopolku-etusivu-otsikko') }}
           </h1>
           <p>{{ $t('eperusteet-kuvaus') }}</p>
         </div>
@@ -27,7 +27,7 @@
         <EpSpinnerSlot :is-loading="!tiedotteet">
           <EpJulkiLista
             :tiedot="tiedotteetMapped"
-            :tieto-maara="5"
+            :tieto-maara="3"
             listaus-tyyppi="none"
             @avaa-tieto="avaaTiedote"
           >
@@ -37,15 +37,12 @@
               </div>
             </template>
           </EpJulkiLista>
-          <div class="nayta-kaikki">
-            <EpMaterialIcon size="18px">
-              chevron_right
-            </EpMaterialIcon>
-            <a
-              :href="ajankohtaistaUrl()"
-              target="_blank"
-            >{{ $t('siirry-ajankohtaista-sivulle') }}</a>
-          </div>
+          <EpSecondaryButton
+            class="mt-2"
+            :to="{ name: 'uutiset' }"
+          >
+            {{ $t('kaikki-ajankohtaiset') }}
+          </EpSecondaryButton>
         </EpSpinnerSlot>
       </section>
     </div>
@@ -122,10 +119,12 @@ import KoulutustyyppiTile from '@/routes/home/KoulutustyyppiTile.vue';
 import InfoTile from '@/routes/home/InfoTile.vue';
 import { navigoitavatKoulutustyyppiRyhmat, otherLinks, navigoitavatMuutRyhmat } from '@/utils/navigointi';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import EpSecondaryButton from '@shared/components/EpSecondaryButton/EpSecondaryButton.vue';
 import { TiedoteDto } from '@shared/api/eperusteet';
 import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { pinia } from '@/pinia';
 import { useHead  } from '@unhead/vue';
+import EpButton from '@shared/components/EpButton/EpButton.vue';
 
 const router = useRouter();
 const browserStore = new BrowserStore();
@@ -233,11 +232,12 @@ useHead(() => ({
 
 .ylaosa {
   background-image: url('@assets/img/banners/opintopolku/aallot_etusivu.svg'), url('@assets/img/banners/opintopolku/aallot_etusivu_bg.svg');
+  background-size: auto 200px, auto;
   background-position: right top, right top;
   background-repeat: no-repeat, repeat;
   margin-top: -1px;
 
-  @media (max-width: 767.98px) {
+  @media (max-width: 991.98px) {
     background-blend-mode: color-burn;
   }
 
@@ -249,15 +249,15 @@ useHead(() => ({
     }
 
     @media (min-width: 768px) {
-      min-height: 315px;
-      padding-top: 60px;
+      min-height: 260px;
+      padding-top: 30px;
     }
   }
 
   .laatikko {
     padding: 15px;
     color: $black;
-    max-width: 600px;
+    max-width: 680px;
 
     h1.otsikko {
       font-size: 1.8rem;
@@ -284,7 +284,7 @@ useHead(() => ({
 }
 
 .search {
-  padding: 40px 0;
+  padding: 30px 0;
   background-color: $oph-green;
   color: $white;
 }

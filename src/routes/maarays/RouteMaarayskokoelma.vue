@@ -12,7 +12,8 @@
 
     <div
       class="hakuehdot"
-      :class="{ 'disabled': filters.maaraysId > 0 }">
+      :class="{ 'disabled': filters.maaraysId > 0 }"
+    >
       <div class="mb-4">
         <h3 class="mb-3">
           {{ $t('aihe') }}
@@ -69,7 +70,6 @@
         :kokonaismaara="maarayksetCount"
         piilota-nakyva-tulosmaara
       />
-
     </div>
 
     <ep-spinner v-if="!maaraykset" />
