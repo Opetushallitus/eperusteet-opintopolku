@@ -237,7 +237,7 @@
 
 <script setup lang="ts">
 import * as _ from 'lodash';
-import { ref, computed, nextTick } from 'vue';
+import { ref, computed, nextTick, onMounted } from 'vue';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import { Maaraykset, MaarayksetParams, MaaraysDto, MaaraysLiiteDtoTyyppiEnum, baseURL, MaaraysDtoLiittyyTyyppiEnum, Perusteet, PerusteDto, MaaraysKevytDto } from '@shared/api/eperusteet';
 import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
@@ -412,6 +412,10 @@ async function onPopoverShown() {
     maaraysShareInput.value.select();
   }
 }
+
+onMounted(async () => {
+  await handleClick();
+});
 </script>
 
 <style scoped lang="scss">
