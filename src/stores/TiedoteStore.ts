@@ -21,6 +21,7 @@ export const useTiedoteStore = defineStore('tiedote', () => {
     sivu: 0,
     sivukoko: 10,
     koulutustyypit: undefined as undefined | string[],
+    koulutustyypiton: true,
   });
   const tiedotteenTutkinnonosaPerusteet = ref<KoodiPerusteella[] | null>(null);
   const tiedotteenOsaamisalaPerusteet = ref<KoodiPerusteella[] | null>(null);
@@ -51,7 +52,7 @@ export const useTiedoteStore = defineStore('tiedote', () => {
       nimi: filter.nimi,
       tiedoteJulkaisuPaikka: ['opintopolku_etusivu'],
       koulutusTyyppi: filter.koulutustyypit,
-      koulutustyypiton: true,
+      koulutustyypiton: filter.koulutustyypiton,
     })).data as any;
     amount.value = result['kokonaismäärä'];
     tiedotteet.value = result.data;

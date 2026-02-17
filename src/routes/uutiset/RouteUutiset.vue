@@ -18,11 +18,7 @@
 
           <div class="col-12 col-lg-5 p-0">
             <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
-            <KoulutustyyppiSelect
-              v-model="koulutustyypit"
-              :koulutustyypit="koulutustyyppiVaihtoehdot"
-              :is-editing="true"
-            />
+            <EpKoulutustyyppiRyhmaSelect v-model="koulutusryypiRyhmat" />
           </div>
         </div>
         <div v-if="tiedotteet.tiedotteet">
@@ -73,17 +69,16 @@
 import { computed, ref, onMounted, watch } from 'vue';
 import { useHead } from '@unhead/vue';
 import { useTiedoteStore } from '@/stores/TiedoteStore';
+import { pinia } from '@/pinia';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
-import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { $kaanna, $sd, $t } from '@shared/utils/globals';
-import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
-import { pinia } from '@/pinia';
 import { useRoute, useRouter } from 'vue-router';
-import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
-import { EperusteetKoulutustyypit, EperusteetKoulutustyyppiRyhmat, Toteutus } from '@shared/utils/perusteet';
+import EpKoulutustyyppiRyhmaSelect from '@shared/components/forms/EpKoulutustyyppiRyhmaSelect.vue';
+import { KoulutustyyppiRyhma, koulutustyyppiRyhmat } from '@shared/utils/perusteet';
+import _ from 'lodash';
 
 const page = ref(1);
 const query = ref('');
@@ -91,20 +86,9 @@ const route = useRoute();
 const router = useRouter();
 const mounted = ref(false);
 const koulutustyypit = ref<string[]>([]);
+const koulutusryypiRyhmat = ref<KoulutustyyppiRyhma[]>([]);
 
 const tiedoteStore = useTiedoteStore(pinia);
-const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
-
-const koulutustyyppiVaihtoehdot = [
-  ...EperusteetKoulutustyypit,
-  ...EperusteetKoulutustyyppiRyhmat[Toteutus.MUU],
-  ...EperusteetKoulutustyyppiRyhmat[Toteutus.KIELIKAANTAJATUTKINTO],
-
-];
-
-const julkaistutKoulutustyypit = computed(() => {
-  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
-});
 
 const sisaltoKieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
@@ -139,8 +123,11 @@ onMounted(async () => {
 
 const setQueryParams = () => {
   query.value = route?.query?.haku as string || '';
-  page.value = route?.query?.sivu as number || 1;
-  koulutustyypit.value = route?.query?.koulutustyypit as string[] || [];
+  page.value = (route?.query?.sivu as unknown as number) || 1;
+  const koulutusArray = _.castArray(route?.query?.koulutus || []).filter(Boolean) as string[];
+  koulutusryypiRyhmat.value = _.compact(_.map(koulutusArray, ryhma =>
+    koulutustyyppiRyhmat().find(k => k.ryhma === ryhma),
+  ));
 };
 
 watch(sisaltoKieli, async () => {
@@ -157,7 +144,7 @@ watch(query, async () => {
   }
 });
 
-watch(koulutustyypit, async () => {
+watch(koulutusryypiRyhmat, async () => {
   if (mounted.value) {
     page.value = 1;
     await fetch();
@@ -176,14 +163,17 @@ const fetch = async () => {
     nimi: query.value,
     kieli: Kielet.getSisaltoKieli.value,
     sivu: page.value - 1,
-    koulutustyypit: koulutustyypit.value,
+    koulutustyypit: _.chain(koulutusryypiRyhmat.value).map('koulutustyypit')
+      .flatten()
+      .value(),
+    koulutustyypiton: koulutusryypiRyhmat.value.length === 0,
   });
 
   router.replace({
     query: {
       haku: query.value,
       sivu: page.value,
-      koulutustyypit: koulutustyypit.value,
+      koulutus: _.map(koulutusryypiRyhmat.value, 'ryhma'),
     },
   }).catch(() => {});
 };
