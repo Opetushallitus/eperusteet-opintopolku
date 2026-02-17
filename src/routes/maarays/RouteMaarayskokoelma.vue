@@ -211,7 +211,7 @@ watch(page, async () => {
   if (mounted.value) {
     await fetch();
     await nextTick();
-    const firstMaarays = document.querySelector('.maarays') as HTMLElement;
+    const firstMaarays = document.querySelector('.ep-maarayskokoelma-maarays') as HTMLElement;
     if (firstMaarays) {
       firstMaarays.setAttribute('tabindex', '-1');
       firstMaarays.focus();
@@ -222,13 +222,6 @@ watch(page, async () => {
 watch(filters, async () => {
   if (mounted.value) {
     page.value = 1;
-    await fetch();
-  }
-}, { deep: true });
-
-watch(() => route.query, async () => {
-  if (mounted.value) {
-    setQueryParams();
     await fetch();
   }
 }, { deep: true });
