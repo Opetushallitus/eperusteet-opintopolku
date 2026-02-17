@@ -414,7 +414,9 @@ async function onPopoverShown() {
 }
 
 onMounted(async () => {
-  await handleClick();
+  if (props.expandedByDefault) {
+    await handleClick();
+  }
 });
 </script>
 
