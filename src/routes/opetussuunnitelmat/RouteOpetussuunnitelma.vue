@@ -36,21 +36,21 @@
           </template>
           <template #view>
             <router-view
-                :key="route.fullPath"
-                v-slot="{ Component }"
+              :key="route.fullPath"
+              v-slot="{ Component }"
+            >
+              <component
+                :is="Component"
+                v-if="Component"
               >
-                <component
-                  :is="Component"
-                  v-if="Component"
-                >
-                  <template #previous-next-navigation>
-                    <ep-previous-next-navigation
-                      :active-node="current"
-                      :flattened-sidenav="flattenedSidenav"
-                    />
-                  </template>
-                </component>
-              </router-view>
+                <template #previous-next-navigation>
+                  <ep-previous-next-navigation
+                    :active-node="current"
+                    :flattened-sidenav="flattenedSidenav"
+                  />
+                </template>
+              </component>
+            </router-view>
           </template>
         </ep-sidebar>
       </div>

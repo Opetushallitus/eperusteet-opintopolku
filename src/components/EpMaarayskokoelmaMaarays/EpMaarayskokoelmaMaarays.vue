@@ -23,8 +23,15 @@
               {{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}
             </div>
             <EpVoimassaolo :voimassaolo="maarays as any" />
-            <div v-if="maarays.diaarinumero" class="mx-2 valiviiva"> | </div>
-            <div v-if="maarays.diaarinumero">{{ $t('diaarinumero') }}: {{ maarays.diaarinumero }}</div>
+            <div
+              v-if="maarays.diaarinumero"
+              class="mx-2 valiviiva"
+            >
+              |
+            </div>
+            <div v-if="maarays.diaarinumero">
+              {{ $t('diaarinumero') }}: {{ maarays.diaarinumero }}
+            </div>
             <div
               v-if="(maarays as any).asiasanat && (maarays as any).asiasanat[kieli] && (maarays as any).asiasanat[kieli].asiasana.length > 0"
               class="mx-2 valiviiva"
@@ -51,35 +58,34 @@
         v-else-if="maarays"
         class="details-content"
       >
-
-      <ep-form-content
-        name="maarayksen-paatospaivamaara"
-        header-type="h3"
-        header-class="h6"
+        <ep-form-content
+          name="maarayksen-paatospaivamaara"
+          header-type="h3"
+          header-class="h6"
         >
-        {{ $sd(maarays.maarayspvm) }}
-      </ep-form-content>
+          {{ $sd(maarays.maarayspvm) }}
+        </ep-form-content>
 
-      <ep-form-content
-        name="maarayksen-diaarinumero"
-        header-type="h3"
-        header-class="h6"
+        <ep-form-content
+          name="maarayksen-diaarinumero"
+          header-type="h3"
+          header-class="h6"
         >
-        {{ maarays.diaarinumero }}
-      </ep-form-content>
+          {{ maarays.diaarinumero }}
+        </ep-form-content>
 
-      <a
-        v-if="maaraysPdfUrl"
-        class="avaa-maarays-btn d-inline-flex align-items-center"
-        :href="maaraysPdfUrl"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>{{ $t('avaa-maarays') }}</span>
-        <EpMaterialIcon class="ml-2">
-          picture_as_pdf
-        </EpMaterialIcon>
-      </a>
+        <a
+          v-if="maaraysPdfUrl"
+          class="avaa-maarays-btn d-inline-flex align-items-center"
+          :href="maaraysPdfUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span>{{ $t('avaa-maarays') }}</span>
+          <EpMaterialIcon class="ml-2">
+            picture_as_pdf
+          </EpMaterialIcon>
+        </a>
 
         <ep-form-content
           name="koulutus-tai-tutkinto"
@@ -145,7 +151,7 @@
 
           <div
             v-if="(maarays.muutettavatMaaraykset && maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset && maarays.korvattavatMaaraykset.length === 0)
-            || (muutettavatMaarayksetPdfUrls.length === 0 && korvattavatMaarayksetPdfUrls.length === 0)"
+              || (muutettavatMaarayksetPdfUrls.length === 0 && korvattavatMaarayksetPdfUrls.length === 0)"
             class="font-italic"
           >
             {{ $t('maaraysta-ei-loydy-maarayskokoelmasta') }}
@@ -180,8 +186,8 @@
       </div>
 
       <ep-button
-        class="share-maarays-btn"
         :id="'share-maarays-btn-' + maarays.id"
+        class="share-maarays-btn"
         no-padding
         link
       >
@@ -199,38 +205,37 @@
         placement="right"
         @show="async () => await onPopoverShown()"
       >
-      <div class="wide">
-        <ep-input
-          :model-value="maaraysUrl"
-          :is-editing="true"
-          class="maarays-share-input"
-          on-focus-select-all
-          ref="maaraysShareInput"
-        >
-          <template #label>
-            {{ $t('jaa-maarays') }}
-          </template>
-        </ep-input>
-
-        <div class="d-flex align-items-center">
-          <ep-button
-            :id="'copy-maarays-url-btn-' + maarays.id"
-            no-padding
-            link
-            @click="copyMaaraysUrl"
+        <div class="wide">
+          <ep-input
+            ref="maaraysShareInput"
+            :model-value="maaraysUrl"
+            :is-editing="true"
+            class="maarays-share-input"
+            on-focus-select-all
           >
-            <span v-if="!linkkiKopioitu">{{ $t('kopioi-linkki') }}</span>
-            <span v-if="linkkiKopioitu">
-              {{ $t('linkki-kopioitu') }}
-              <ep-material-icon >
-                check
-              </ep-material-icon>
-            </span>
-          </ep-button>
-        </div>
-      </div>
-      </b-popover>
+            <template #label>
+              {{ $t('jaa-maarays') }}
+            </template>
+          </ep-input>
 
+          <div class="d-flex align-items-center">
+            <ep-button
+              :id="'copy-maarays-url-btn-' + maarays.id"
+              no-padding
+              link
+              @click="copyMaaraysUrl"
+            >
+              <span v-if="!linkkiKopioitu">{{ $t('kopioi-linkki') }}</span>
+              <span v-if="linkkiKopioitu">
+                {{ $t('linkki-kopioitu') }}
+                <ep-material-icon>
+                  check
+                </ep-material-icon>
+              </span>
+            </ep-button>
+          </div>
+        </div>
+      </b-popover>
     </div>
   </EpCollapse>
 </template>

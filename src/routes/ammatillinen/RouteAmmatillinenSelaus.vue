@@ -9,6 +9,9 @@
       <template #header>
         {{ $t(ylaotsikko) }}
       </template>
+      <template #subheader>
+        {{ $t('kooste-kuvaus-ammatillinen-koulutus') }}
+      </template>
     </ep-header>
     <div
       id="main"
@@ -20,6 +23,7 @@
             v-for="(linkki, index) in linkit"
             :key="'linkki'+index"
             :to="linkki.route"
+            class="w-100 pr-3"
           >
             <div class="box tile-background-shadow-selected shadow-tile d-inline-block text-center d-flex align-items-center">
               <EpMaterialIcon
@@ -38,48 +42,20 @@
         <div class="row mb-4">
           <div class="col-12 col-lg-6 pr-5">
             <h2 class="mb-2">
-              {{ $t('mita-ovat-ammatilliset-tutkinnot') }}
-            </h2>
-
-            <p class="kuvaus">
-              {{ $t('kooste-kuvaus-ammatillinen-koulutus') }}
-            </p>
-            <p class="kuvaus">
-              {{ $t('kooste-kuvaus-perusteet') }}
-            </p>
-
-            <h2 class="mb-2 mt-4">
-              {{ $t('osallistu-kehitystyohon') }}
-            </h2>
-            <p class="kuvaus">
-              {{ $t('ammatillinen-kehitystyo-kuvaus') }}
-              <EpLinkki
-                :url="furtherFeedbackUrl"
-                icon="launch"
-                icon-right
-              >
-                {{ $t('kerro-ehdotuksesi') }}
-              </EpLinkki>
-            </p>
-          </div>
-
-          <div class="col-12 col-lg-6">
-            <h2 class="mb-2">
               {{ $t('ajankohtaista') }}
             </h2>
             <ep-julki-lista
               :tiedot="tiedotteet"
+              :tieto-maara="2"
               @avaa-tieto="avaaTiedote"
             >
-              <template #lisaaBtnText>
-                <div class="mt-2">
-                  {{ $t('katso-lisaa-ajankohtaisia') }}
-                </div>
-              </template>
-              <template #eiTietoja>
-                <div>
-                  {{ $t('ei-tiedotteita') }}
-                </div>
+              <template #lisaaBtn>
+                <EpSecondaryButton
+                  class="mt-2"
+                  :to="{ name: 'uutiset', query: { koulutustyypit: AmmatillisetKoulutustyypit } }"
+                >
+                  {{ $t('kaikki-ajankohtaiset') }}
+                </EpSecondaryButton>
               </template>
             </ep-julki-lista>
           </div>
@@ -91,6 +67,22 @@
         <peruste-ammatillinen-haku
           tyyppi="peruste"
         />
+
+        <div class="kehitystyo p-3 mt-3 py-4">
+          <h2>
+            {{ $t('osallistu-kehitystyohon') }}
+          </h2>
+          <div class="d-flex kuvaus flex-column flex-lg-row">
+            <span class="mr-2">{{ $t('ammatillinen-kehitystyo-kuvaus') }}</span>
+            <EpLinkki
+              :url="furtherFeedbackUrl"
+              icon="launch"
+              icon-right
+            >
+              {{ $t('kerro-ehdotuksesi') }}
+            </EpLinkki>
+          </div>
+        </div>
       </div>
 
       <div v-else>
@@ -112,6 +104,7 @@ import { useHead } from '@unhead/vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpJulkiLista from '@shared/components/EpJulkiLista/EpJulkiLista.vue';
+import EpSecondaryButton from '@shared/components/EpSecondaryButton/EpSecondaryButton.vue';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import PerusteAmmatillinenHaku from './PerusteAmmatillinenHaku.vue';
 import { AmmatillistenTiedoteStore } from '@/stores/AmmatillistenTiedoteStore';
@@ -122,6 +115,7 @@ import { Kielet } from '@shared/stores/kieli';
 import { useRouter, useRoute } from 'vue-router';
 import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import { $t } from '@shared/utils/globals';
+import { AmmatillisetKoulutustyypit } from '@shared/tyypit';
 
 interface Ylalinkki {
   route: { name: string, query?: any, };
@@ -254,9 +248,15 @@ const furtherFeedbackUrl = computed(() => {
   margin-right: 10px;
 }
 
-.kuvaus {
-  font-size: smaller;
-  color: $gray-lighten-12;
+.kehitystyo {
+  color: $white;
+  background-color: $oph-green;
+  border-radius: 10px;
+
+  :deep(a) {
+    color: $white !important;
+    text-decoration: underline !important;
+  }
 }
 
 @media (max-width: 991.98px) {

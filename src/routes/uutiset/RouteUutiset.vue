@@ -5,10 +5,25 @@
         <template #header>
           {{ $t('ajankohtaista') }}
         </template>
-        <div class="search">
+        <div class="d-flex d-lg-flex flex-column flex-lg-row search w-100 justify-content-between">
           <ep-search
             v-model="query"
-          />
+            class="col-12 col-lg-7 p-0 mr-2 mb-2"
+            :placeholder="''"
+          >
+            <template #label>
+              <span class="font-weight-600">{{ $t('hae-ajankohtaista') }}</span>
+            </template>
+          </ep-search>
+
+          <div class="col-12 col-lg-5 p-0">
+            <label class="font-weight-600">{{ $t('koulutus-tai-tutkinto') }}</label>
+            <KoulutustyyppiSelect
+              v-model="koulutustyypit"
+              :koulutustyypit="koulutustyyppiVaihtoehdot"
+              :is-editing="true"
+            />
+          </div>
         </div>
         <div v-if="tiedotteet.tiedotteet">
           <div v-if="!isTiedotteetEmpty">
@@ -28,9 +43,6 @@
                 </div>
                 <div class="aikaleima">
                   {{ $sd(tiedote.luotu) }}
-                </div>
-                <div class="tiedote-sisalto">
-                  <ep-content-viewer :value="$kaanna(tiedote.sisalto)" />
                 </div>
               </div>
             </div>
@@ -70,15 +82,25 @@ import { $kaanna, $sd, $t } from '@shared/utils/globals';
 import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
 import { pinia } from '@/pinia';
 import { useRoute, useRouter } from 'vue-router';
+import KoulutustyyppiSelect from '@shared/components/forms/EpKoulutustyyppiSelect.vue';
+import { EperusteetKoulutustyypit, EperusteetKoulutustyyppiRyhmat, Toteutus } from '@shared/utils/perusteet';
 
 const page = ref(1);
 const query = ref('');
 const route = useRoute();
 const router = useRouter();
 const mounted = ref(false);
+const koulutustyypit = ref<string[]>([]);
 
 const tiedoteStore = useTiedoteStore(pinia);
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
+
+const koulutustyyppiVaihtoehdot = [
+  ...EperusteetKoulutustyypit,
+  ...EperusteetKoulutustyyppiRyhmat[Toteutus.MUU],
+  ...EperusteetKoulutustyyppiRyhmat[Toteutus.KIELIKAANTAJATUTKINTO],
+
+];
 
 const julkaistutKoulutustyypit = computed(() => {
   return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
@@ -118,6 +140,7 @@ onMounted(async () => {
 const setQueryParams = () => {
   query.value = route?.query?.haku as string || '';
   page.value = route?.query?.sivu as number || 1;
+  koulutustyypit.value = route?.query?.koulutustyypit as string[] || [];
 };
 
 watch(sisaltoKieli, async () => {
@@ -128,6 +151,13 @@ watch(sisaltoKieli, async () => {
 });
 
 watch(query, async () => {
+  if (mounted.value) {
+    page.value = 1;
+    await fetch();
+  }
+});
+
+watch(koulutustyypit, async () => {
   if (mounted.value) {
     page.value = 1;
     await fetch();
@@ -146,12 +176,14 @@ const fetch = async () => {
     nimi: query.value,
     kieli: Kielet.getSisaltoKieli.value,
     sivu: page.value - 1,
+    koulutustyypit: koulutustyypit.value,
   });
 
   router.replace({
     query: {
       haku: query.value,
       sivu: page.value,
+      koulutustyypit: koulutustyypit.value,
     },
   }).catch(() => {});
 };
@@ -174,7 +206,7 @@ useHead({
   padding: 15px;
 
   .tiedote {
-    margin-bottom: 50px;
+    margin-bottom: 20px;
 
     .otsikko {
       color: #001A58;
