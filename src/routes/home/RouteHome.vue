@@ -316,10 +316,6 @@ useHead(() => ({
   .tieto {
     background-color: unset !important;
     padding-left: 0 !important;
-    .otsikko {
-      color: $oph-green;
-      font-weight: 600;
-    }
   }
 }
 </style>
