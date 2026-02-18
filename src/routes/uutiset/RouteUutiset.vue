@@ -5,7 +5,7 @@
         <template #header>
           {{ $t('ajankohtaista') }}
         </template>
-        <div class="d-flex d-lg-flex flex-column flex-lg-row search w-100 justify-content-between">
+        <div class="d-flex d-lg-flex flex-column flex-lg-row search w-100 justify-content-between mb-3">
           <ep-search
             v-model="query"
             class="col-12 col-lg-7 p-0 mr-2 mb-2"
@@ -187,7 +187,6 @@ useHead({
 @import '@shared/styles/_variables.scss';
 
 .search {
-  margin-bottom: 40px;
   padding: 0 15px;
 }
 
@@ -196,11 +195,6 @@ useHead({
 
   .tiedote {
     margin-bottom: 20px;
-
-    .otsikko {
-      color: #001A58;
-      font-size: 1.5rem;
-    }
 
     .aikaleima {
       color: #555;
