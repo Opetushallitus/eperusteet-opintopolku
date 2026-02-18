@@ -40,8 +40,8 @@ export const useJulkaistutKoulutustyypitStore = defineStore('julkaistutKoulutust
     try {
       koulutustyyppiLukumaarat.value = (await Perusteet.getJulkaistutKoulutustyyppiLukumaarat(kieli)).data;
       muuLukumaarat.value = (((await getJulkisetOpetussuunnitelmat({ jotpatyyppi: ['MUU', 'VST'], kieli, sivukoko: 1 })).data) as Page<OpetussuunnitelmaDto>).kokonaismäärä;
-      digitaalinenOsaaminen.value = ((((await findAllJulkaisut({ tyyppi: 'digitaalinen_osaaminen' })).data) as Page<PerusteenJulkaisuData>).data);
-      kielikaantajatutkinto.value = ((((await findAllJulkaisut({ tyyppi: 'kieli_kaantaja_tutkinto' })).data) as Page<PerusteenJulkaisuData>).data);
+      digitaalinenOsaaminen.value = ((((await findAllJulkaisut({ tyyppi: 'digitaalinen_osaaminen', kieli })).data) as Page<PerusteenJulkaisuData>).data);
+      kielikaantajatutkinto.value = ((((await findAllJulkaisut({ tyyppi: 'kieli_kaantaja_tutkinto', kieli })).data) as Page<PerusteenJulkaisuData>).data);
     }
     catch (e) {
       logger.error(e);
