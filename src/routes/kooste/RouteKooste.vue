@@ -94,7 +94,7 @@
                 <template #lisaaBtn>
                   <EpSecondaryButton
                     class="mt-2"
-                    :to="{ name: 'uutiset', query: { koulutustyypit: koulutustyyppi } }"
+                    :to="{ name: 'uutiset', query: { koulutus: koulutustyyppiRyhma } }"
                   >
                     {{ $t('kaikki-ajankohtaiset') }}
                   </EpSecondaryButton>
@@ -173,7 +173,7 @@ import {
   getKoosteSubheader,
   getKoosteTiedotteetStore,
 } from '@/utils/toteutustypes';
-import { julkisivuPerusteKoosteJarjestys, stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { julkisivuPerusteKoosteJarjestys, koulutustyyppiTheme, stateToKoulutustyyppi } from '@shared/utils/perusteet';
 
 const route = useRoute();
 const perusteKoosteStore = getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
@@ -316,6 +316,10 @@ const fetch = async () => {
     await tiedotteetStore.fetch();
   }
 };
+
+const koulutustyyppiRyhma = computed(() => {
+  return koulutustyyppiTheme(route.params.koulutustyyppi as string);
+});
 
 // Watch for changes to koulutustyyppi
 watch(koulutustyyppi, async () => {
