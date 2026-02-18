@@ -85,7 +85,6 @@ const query = ref('');
 const route = useRoute();
 const router = useRouter();
 const mounted = ref(false);
-const koulutustyypit = ref<string[]>([]);
 const koulutusryypiRyhmat = ref<KoulutustyyppiRyhma[]>([]);
 
 const tiedoteStore = useTiedoteStore(pinia);

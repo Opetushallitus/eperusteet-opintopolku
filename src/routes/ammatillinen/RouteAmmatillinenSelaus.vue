@@ -52,7 +52,7 @@
               <template #lisaaBtn>
                 <EpSecondaryButton
                   class="mt-2"
-                  :to="{ name: 'uutiset', query: { koulutustyypit: AmmatillisetKoulutustyypit } }"
+                  :to="{ name: 'uutiset', query: { koulutus: 'ammatillinen' } }"
                 >
                   {{ $t('kaikki-ajankohtaiset') }}
                 </EpSecondaryButton>
