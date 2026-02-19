@@ -10,12 +10,10 @@
         {{ $kaanna(peruste.nimi) }} <span v-if="peruste.laajuus">{{ peruste.laajuus }} {{ $t('osaamispiste') }}</span>
       </template>
       <div class="selaus">
-        <b-container fluid>
-          <b-row class="mb-0">
-            <b-col
-              cols="12"
-              lg="6"
-              class="tile mb-5"
+        <div class="w-full">
+          <div class="flex flex-wrap mb-0">
+            <div
+              class="w-full lg:w-1/2 tile mb-5"
             >
               <h2 class="otsikko mb-4">
                 {{ $t('peruste') }}
@@ -26,11 +24,9 @@
                   :koulutustyyppi="koulutustyyppi"
                 />
               </router-link>
-            </b-col>
-            <b-col
-              cols="12"
-              lg="6"
-              class="mb-5"
+            </div>
+            <div
+              class="w-full lg:w-1/2 mb-5"
             >
               <h2 class="mb-4">
                 {{ $t('ajankohtaista') }}
@@ -52,10 +48,10 @@
                   </div>
                 </template>
               </ep-julki-lista>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
+            </div>
+          </div>
+          <div class="flex flex-wrap">
+            <div class="w-full">
               <h2 class="otsikko mb-2">
                 {{ $t('paikalliset-toteutussuunnitelmat') }}
               </h2>
@@ -69,7 +65,7 @@
                   class="my-3"
                 >
                   <template #label>
-                    <span class="font-weight-600">{{ $t('hae-toteutussuunnitelmaa') }}</span>
+                    <span class="font-semibold">{{ $t('hae-toteutussuunnitelmaa') }}</span>
                   </template>
                 </ep-search>
               </div>
@@ -100,7 +96,7 @@
                 >
                   <router-link
                     :to="ops.route"
-                    class="d-block"
+                    class="block"
                   >
                     <opetussuunnitelma-tile
                       :ops="ops"
@@ -115,9 +111,9 @@
                   aria-controls="opetussuunnitelmat-lista"
                 />
               </div>
-            </b-col>
-          </b-row>
-        </b-container>
+            </div>
+          </div>
+        </div>
       </div>
     </ep-header>
   </div>

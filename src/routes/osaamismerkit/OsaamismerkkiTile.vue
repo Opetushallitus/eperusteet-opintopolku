@@ -1,5 +1,5 @@
 <template>
-  <div class="tile tile-background-shadow-selected shadow-tile d-flex flex-column">
+  <div class="tile tile-background-shadow-selected shadow-tile flex flex-col">
     <div class="ikoni">
       <img
         :src="osaamimerkkiLogo"

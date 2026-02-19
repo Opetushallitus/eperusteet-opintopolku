@@ -2,7 +2,7 @@
   <div>
     <div
       v-if="sisalto.tutkintonimikkeet && sisalto.tutkintonimikkeet.length > 0"
-      class="nimikkeet d-flex"
+      class="nimikkeet flex"
     >
       <div class="kohde mr-1">
         {{ $t('tutkintonimikkeet') }}:
@@ -11,7 +11,7 @@
         <div
           v-for="(tutkintonimike, tidx) in sisalto.tutkintonimikkeet"
           :key="tidx"
-          class="d-inline-block mr-1"
+          class="inline-block mr-1"
         >
           {{ $kaanna(tutkintonimike.nimi) }}<span v-if="tidx < sisalto.tutkintonimikkeet.length - 1">,</span>
         </div>
@@ -19,7 +19,7 @@
     </div>
     <div
       v-if="sisalto.osaamisalat && sisalto.osaamisalat.length > 0"
-      class="nimikkeet d-flex"
+      class="nimikkeet flex"
     >
       <div class="kohde mr-1">
         {{ $t('osaamisalat') }}:
@@ -28,7 +28,7 @@
         <div
           v-for="(osaamisala, oidx) in sisalto.osaamisalat"
           :key="oidx"
-          class="d-inline-block mr-1"
+          class="inline-block mr-1"
         >
           {{ $kaanna(osaamisala.nimi) }}<span v-if="oidx < sisalto.osaamisalat.length - 1">,</span>
         </div>

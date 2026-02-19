@@ -4,7 +4,7 @@
       class="vari-header"
       :class="theme"
     >
-      <div class="container-lg header">
+      <div class="container header">
         <div class="murupolku">
           <nav :aria-label="$t('sijaintisi-sivustolla')">
             <ol
@@ -13,9 +13,9 @@
             >
               <li class="breadcrumb-item">
                 <router-link
-                  class="breadcrumb-home"
                   :to="{ name: 'root' }"
                   :aria-label="$t('etusivu')"
+                  class="breadcrumb-link"
                 >
                   <EpMaterialIcon size="20px">
                     home
@@ -29,14 +29,14 @@
               >
                 <router-link
                   v-if="item.location"
-                  class="breadcrumb-normal"
                   :to="item.location"
+                  class="breadcrumb-link"
                 >
                   {{ $kaannaOlioTaiTeksti(item.label) }}
                 </router-link>
                 <span
                   v-else
-                  class="breadcrumb-normal"
+                  class="breadcrumb-link"
                 >
                   {{ $kaannaOlioTaiTeksti(item.label) }}
                 </span>
@@ -60,7 +60,7 @@
     <div
       v-if="hasDefaultSlot"
       id="main"
-      class="container-lg sisalto"
+      class="container mx-auto px-3 sisalto"
     >
       <slot />
     </div>
@@ -242,27 +242,48 @@ const style = computed(() => {
   nav ol.breadcrumb {
     font-size: 14px;
     background: none;
-    padding-left: 0;
-    padding-right: 0;
+    padding: .75rem 0;
     margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 
-    li {
+    .breadcrumb-item {
       font-weight: 600;
-      align-self: end
+      display: flex;
+      align-items: center;
+
+      .breadcrumb-link {
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+
+      &:last-child {
+        font-weight: 400;
+      }
+
+      // Separator
+      &:not(:first-child)::before {
+        content: "/";
+        padding: 0 0.5rem;
+        color: inherit;
+      }
     }
 
-    li:last-child {
-      font-weight: 400;
-      align-self: end
+    &.black {
+      .breadcrumb-item, .breadcrumb-link {
+        color: #001A58;
+      }
     }
 
-    &.black :deep(li), &.black :deep(li::before), &.black :deep(li a) {
-      color: #001A58;
+    &.white {
+      .breadcrumb-item, .breadcrumb-link {
+        color: white;
+      }
     }
 
-    &.white :deep(li), &.white :deep(li::before), &.white :deep(li a) {
-      color: white;
-    }
     .router-link-exact-active.router-link-active {
       cursor: auto;
     }
@@ -272,11 +293,10 @@ const style = computed(() => {
       display: block;
 
       .breadcrumb-item {
-        padding-left: 0;
-        content: '';
         margin-bottom: 10px;
+
         &::before {
-          content: '';
+          display: none;
         }
       }
     }
@@ -295,12 +315,12 @@ const style = computed(() => {
   }
 
   // Jos nimi tai murupolun osa ei mahdu ruudulle
-  .container-lg.header {
+  .container.header {
     overflow-x: auto;
   }
 }
 
-.container-lg.sisalto {
+.container.sisalto {
   margin-top: $sisalto-container-margin;
   margin-bottom: $sisalto-container-margin;
 }

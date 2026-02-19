@@ -15,7 +15,7 @@
           >
             {{ $t('katso-myos') }}
             <router-link
-              class="w-100"
+              class="w-full"
               :to="{name: 'ammatillinenValmisteillaOlevat'}"
             >
               {{ $t('valmisteilla-olevien-perusteiden-julkaisuaikataulu') }}
@@ -25,17 +25,17 @@
         </div>
 
         <div
-          class="d-flex flex-lg-row flex-column"
+          class="flex lg:flex-row flex-col"
           :class="{'disabled-events': !perusteetJaTutkinnonosat}"
         >
           <EpSearch
             v-model="filters.nimiTaiKoodi"
-            class="flex-fill ml-0 mt-3 mb-3 mr-3"
+            class="flex-1 ml-0 mt-3 mb-3 mr-3"
             :sr-placeholder="$t('tutkinnon-peruste-tai-tutkinnon-osa')"
             :placeholder="''"
           >
             <template #label>
-              <span class="font-weight-600">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa') }}</span>
+              <span class="font-semibold">{{ $t('tutkinnon-peruste-tai-tutkinnon-osa') }}</span>
             </template>
           </EpSearch>
           <EpMultiSelect
@@ -48,7 +48,7 @@
             :searchable="false"
           >
             <template #label>
-              <span class="font-weight-600">{{ $t('tutkintotyyppi') }}</span>
+              <span class="font-semibold">{{ $t('tutkintotyyppi') }}</span>
             </template>
 
             <template
@@ -107,7 +107,7 @@
           <div class="list-item-header">
             <div class="nimi">
               {{ $kaanna(sisalto.nimi) }}
-              <div class="d-inline-flex">
+              <div class="inline-flex">
                 <span v-if="sisalto.laajuus">{{ sisalto.laajuus }} {{ $t('osaamispiste') }}</span>
               </div>
               <span
@@ -132,7 +132,7 @@
           />
         </EpAmmatillinenRow>
       </div>
-      <div class="pagination d-flex justify-content-center">
+      <div class="pagination flex justify-center">
         <EpBPagination
           v-if="total > 0"
           v-model="page"
@@ -229,6 +229,8 @@ const fetch = async () => {
       },
     }).catch(() => {});
   }
+
+  await nextTick();
 };
 
 
@@ -427,7 +429,7 @@ const valmisteillaOlevat = computed(() => {
   font-size: 12px;
 
   &.peruste {
-    background: $blue-darken-1;
+    background: $blue1;
   }
   &.tutkinnonosa {
     background: $green;

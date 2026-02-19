@@ -107,7 +107,7 @@
       </template>
 
       <template v-if="oppiaine && vuosiluokka">
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="flex justify-content-between items-center">
           <h3 class="mb-0">
             <span
               class="link-style clickable"

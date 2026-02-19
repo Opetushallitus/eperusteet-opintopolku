@@ -17,12 +17,12 @@
       :key="idx"
       class="mb-3"
     >
-      <div class="list-item p-1 tile-background-shadow-selected shadow-tile">
+      <div class="lista p-1 tile-background-shadow-selected">
         <router-link
           :to="item.route"
-          class="peruste-ops-linkki d-block"
+          class="peruste-ops-linkki block"
         >
-          <div class="d-flex align-items-center">
+          <div class="flex items-center">
             <div class="mx-2 my-2">
               <div :class="item.theme" />
             </div>
@@ -290,21 +290,35 @@ const sisaltoKieli = computed(() => {
   color: $gray;
 }
 
-:deep(.page-item.disabled .page-link) {
-  color: $gray-lighten-3;
+:deep(.p-disabled) {
+  color: $grey300;
 }
 
-:deep(.b-pagination li.page-item .page-link) {
-  background-color: unset;
-  color: $white;
+:deep(.p-paginator) {
+  background: unset;
+
+  .p-paginator-pages {
+    .p-paginator-page {
+      background-color: unset;
+      color: $white;
+
+      &.p-paginator-page-selected {
+        background: $white;
+        color: $oph-green;
+      }
+    }
+  }
+
+  .p-paginator-first,
+  .p-paginator-prev,
+  .p-paginator-next,
+  .p-paginator-last {
+    background-color: unset;
+    color: $white;
+  }
 }
 
-:deep(.b-pagination li.page-item.active .page-link) {
-  background: $white;
-  color: $oph-green;
-}
-
-.list-item {
+.lista {
   border: 1px solid #DADADA;
   margin-bottom: 10px;
   border-radius: 2px;
