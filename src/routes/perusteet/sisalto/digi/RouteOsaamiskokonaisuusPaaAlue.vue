@@ -18,13 +18,13 @@
         <b-form-checkbox
           v-for="taso in tasot"
           :key="taso"
-          v-model="selectedTasot"
           :value="taso"
           :options="tasot"
           button
           size="sm"
           button-variant="primary"
           class="mr-2 mb-2 taso-chk"
+          @change="onTasoChange(taso)"
         >
           <div class="d-flex align-items-center">
             <EpMaterialIcon
@@ -128,6 +128,14 @@ const tasot = computed(() => {
 
 const selectedTaso = (taso) => {
   return _.find(selectedTasot.value, selected => selected === _.toLower(taso));
+};
+
+const onTasoChange = (taso: string) => {
+  if (selectedTasot.value.includes(taso)) {
+    selectedTasot.value = selectedTasot.value.filter(selected => selected !== taso);
+  } else {
+    selectedTasot.value = [...selectedTasot.value, taso];
+  }
 };
 </script>
 
