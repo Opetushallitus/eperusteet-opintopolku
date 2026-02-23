@@ -392,9 +392,9 @@ const oppimaarat = computed(() => {
       };
     })
     .sortBy([
-        o => o.jnro ?? Number.MAX_SAFE_INTEGER,
-        o => _.get(o.nimi, Kielet.getSisaltoKieli.value) ?? '',
-      ])
+      o => o.jnro ?? Number.MAX_SAFE_INTEGER,
+      o => _.get(o.nimi, Kielet.getSisaltoKieli.value) ?? '',
+    ])
     .value();
 });
 
