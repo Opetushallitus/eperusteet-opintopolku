@@ -133,7 +133,8 @@ const selectedTaso = (taso) => {
 const onTasoChange = (taso: string) => {
   if (selectedTasot.value.includes(taso)) {
     selectedTasot.value = selectedTasot.value.filter(selected => selected !== taso);
-  } else {
+  }
+  else {
     selectedTasot.value = [...selectedTasot.value, taso];
   }
 };
