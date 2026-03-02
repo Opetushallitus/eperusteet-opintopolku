@@ -23,6 +23,7 @@
         <b-link
           v-if="node.location && !subtype"
           :to="node.location"
+          class="flex-grow-1"
         >
           <span
             class="label"
@@ -44,6 +45,12 @@
           :node="node"
           class="ml-1"
         />
+        <EpMaterialIcon
+          v-if="naytaAlaKappaleMerkki"
+          class="ml-1 alakappalemerkki"
+        >
+          chevron_right
+        </EpMaterialIcon>
       </div>
     </div>
     <!-- children -->
@@ -75,6 +82,7 @@ import { NavigationNode } from '@shared/utils/NavigationBuilder';
 import EpColorIndicator from '@shared/components/EpColorIndicator/EpColorIndicator.vue';
 import EpNavigationPostFix from '@shared/components/EpTreeNavibar/EpNavigationPostFix.vue';
 import EpSidenavNodeLabel from '@/components/EpSidenav/EpSidenavNodeLabel.vue';
+import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
 const props = defineProps({
   node: {
@@ -134,6 +142,16 @@ const subtype = computed(() => {
 
 const koodi = computed(() => {
   return _.get(props.node, 'meta.koodi.arvo') || _.get(props.node, 'meta.koodi');
+});
+
+const naytaAlaKappaleMerkki = computed(() => {
+  return props.node.children?.length > 0
+    && (props.node.type === 'viite'
+    || props.node.type === 'tekstikappale'
+    || props.node.type === 'perusopetusoppiaine'
+    || props.node.type === 'taiteenala'
+    || props.node.type === 'linkkisivu'
+    || (props.node.type ==='oppiaine' && _.some(props.node.children, child => child.type === 'oppimaarat')));
 });
 </script>
 
@@ -241,6 +259,10 @@ const koodi = computed(() => {
     .icon {
       font-size: 1rem;
       color: $blue-lighten-5;
+
+      &.alakappalemerkki {
+        color: $black;
+      }
     }
   }
 
