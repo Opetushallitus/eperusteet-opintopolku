@@ -1,12 +1,10 @@
 import EpPerusteNotificationBar from './EpPerusteNotificationBar.vue';
 import { createMount } from '@shared/utils/__tests__/stubs';
 import { vi, beforeEach, describe, test, expect } from 'vitest';
-import { useRoute } from 'vue-router';
-import { nextTick } from 'vue';
-import { wrap } from '../../../eperusteet-frontend-utils/vue/src/utils/jestutils';
 
 export const mockRoute: any = {
   params: {},
+  matched: [{ name: 'peruste' }],
 };
 
 vi.mock('vue-router', () => ({
@@ -70,11 +68,6 @@ describe('EpPerusteNotificationBar', () => {
   });
 
   describe('muutosmaarays voimassa', () => {
-    const currentRoute = {
-      params: {
-        lang: 'fi',
-      },
-    };
     const propsData = {
       peruste,
       julkaisut: [
@@ -125,12 +118,7 @@ describe('EpPerusteNotificationBar', () => {
   });
 
   describe('muutosmaarays tulossa voimaan, selataan aiempaa', () => {
-    const currentRoute = {
-      params: {
-        lang: 'fi',
-      },
-    };
-    const propsData= {
+    const propsData = {
       peruste,
       julkaisut: [
         {
@@ -161,12 +149,6 @@ describe('EpPerusteNotificationBar', () => {
   });
 
   describe('muutosmaarays voimassa ja tulossa voimaan, selataan aiempia', () => {
-    const currentRoute = {
-      params: {
-        lang: 'fi',
-      },
-    };
-
     const propsData = {
       peruste,
       julkaisut: [

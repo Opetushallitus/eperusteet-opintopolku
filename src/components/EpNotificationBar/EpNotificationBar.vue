@@ -8,7 +8,10 @@
     :class="notifikaatioClass"
     sticky-z-index="5000"
   >
-    <EpMaterialIcon icon-shape="outlined">
+    <EpMaterialIcon
+      icon-shape="outlined"
+      class="mr-2"
+    >
       info
     </EpMaterialIcon>
     <slot>
