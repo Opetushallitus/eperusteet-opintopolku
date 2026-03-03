@@ -25,6 +25,7 @@ import {
   PerusteKaikkiDto,
   Termit,
   Julkaisut,
+  JulkaisuBaseDto,
 } from '@shared/api/eperusteet';
 import {
   buildNavigation,
@@ -60,6 +61,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
     const termit = ref<object[] | null>(null);
     const kuvat = ref<object[] | null>(null);
     const perusteKaikki = ref<PerusteKaikkiDto | null>(null);
+    const perusteJulkaisut = ref<JulkaisuBaseDto[] | null>(null);
 
     const create = async (opsId: number, rev: number | undefined = undefined) => {
       opetussuunnitelmaId.value = opsId;
@@ -86,9 +88,9 @@ export const useOpetussuunnitelmaDataStore = (key) => {
       }
 
       if (opetussuunnitelma.value?.peruste) {
-        const perusteenJulkaisut = (await Julkaisut.getKaikkiJulkaisut(opetussuunnitelma.value.peruste.id!)).data;
-        const maxRev = _.max(_.map(perusteenJulkaisut, 'revision'));
-        const rev = _.chain(perusteenJulkaisut)
+        perusteJulkaisut.value = (await Julkaisut.getKaikkiJulkaisut(opetussuunnitelma.value.peruste.id!)).data;
+        const maxRev = _.max(_.map(perusteJulkaisut.value, 'revision'));
+        const rev = _.chain(perusteJulkaisut.value)
           .filter(julkaisu => julkaisu.luotu! >= (opetussuunnitelma.value?.peruste?.globalVersion?.aikaleima || 0))
           .sortBy('luotu')
           .first()
@@ -426,6 +428,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
       termit,
       kuvat,
       perusteKaikki,
+      perusteJulkaisut,
 
       // Expose getters and actions
       ...getters,

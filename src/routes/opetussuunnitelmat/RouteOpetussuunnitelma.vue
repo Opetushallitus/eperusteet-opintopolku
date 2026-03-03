@@ -23,6 +23,10 @@
     </ep-header>
 
     <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle" />
+    <EpPerusteNotificationBar
+      :julkaisut="julkaisut"
+      :peruste="peruste"
+    />
 
     <div class="container pt-4">
       <div class="lower">
@@ -77,7 +81,7 @@ import { $kaanna } from '@shared/utils/globals';
 import { addAndGetCachedStore, getCachedOpetussuunnitelmaStore, useOpetussuunnitelmaCacheStore, useToteutussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import { pinia } from '@/pinia';
+import EpPerusteNotificationBar from '@/components/EpNotificationBar/EpPerusteNotificationBar.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -187,6 +191,14 @@ const linkkiHandler = {
     return traverseNavigation(node, true).location;
   },
 } as ILinkkiHandler;
+
+const julkaisut = computed(() => {
+  return opetussuunnitelmaDataStore?.value?.perusteJulkaisut;
+});
+
+const peruste = computed(() => {
+  return opetussuunnitelmaDataStore?.value?.perusteKaikki;
+});
 
 provide('linkkiHandler', linkkiHandler);
 provide('opetussuunnitelma', opetussuunnitelma.value);

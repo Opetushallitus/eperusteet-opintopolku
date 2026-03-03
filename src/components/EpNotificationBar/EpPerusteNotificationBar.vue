@@ -9,8 +9,8 @@
         v-if="voimassaolo === 'tuleva'"
         class="notifikaatio-text"
       >
-        <span>{{ $t('katselet-tulevaisuudessa-voimaantulevaa-perustetta', {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
-        <template v-if="uusinVoimassaolevaJulkaisu">
+        <span>{{ $t(kaannokset['katselet-tulevaisuudessa-voimaantulevaa'], {voimaantulo: $sd(currentJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }} </span>
+        <template v-if="uusinVoimassaolevaJulkaisu && voimassaolevaRoute">
           <span>{{ $t('siirry-talla-hetkella') }} </span>
           <router-link :to="voimassaolevaRoute">
             {{ $t('voimassaolevaan-perusteeseen') }}.
@@ -22,11 +22,14 @@
         class="notifikaatio-text"
       >
         <span>{{ $t('katselet-talla-hetkella-voimassaolevaa-perustetta') }}. </span>
-        <span class="mr-1">{{ $t('siirry') }}</span>
-        <router-link :to="uusimpaanJulkaisuunRoute">
-          {{ $t('uusimpaan-perusteeseen') }},
-        </router-link>
-        <span>{{ $t('joka-on-tulossa-voimaan', {voimaantulo: $sd(uusinJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }}.</span>
+
+        <template v-if="uusimpaanJulkaisuunRoute">
+          <span class="mr-1">{{ $t('siirry') }}</span>
+          <router-link :to="uusimpaanJulkaisuunRoute">
+            {{ $t('uusimpaan-perusteeseen') }},
+          </router-link>
+          <span>{{ $t('joka-on-tulossa-voimaan', {voimaantulo: $sd(uusinJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }}.</span>
+        </template>
       </div>
     </template>
   </EpNotificationBar>
@@ -126,16 +129,43 @@ const hasSisaltoKielelle = computed(() => {
 });
 
 const voimassaolevaRoute = computed(() => {
-  return {
-    name: 'peruste',
-    params: { ...route.params, revision: uusinVoimassaolevaJulkaisu.value?.revision },
-  };
+  if (sisaltoTyyppi.value === 'peruste') {
+    return {
+      name: 'peruste',
+      params: { ...route.params, revision: uusinVoimassaolevaJulkaisu.value?.revision },
+    };
+  }
+
+  return undefined;
 });
 
 const uusimpaanJulkaisuunRoute = computed(() => {
+  if (sisaltoTyyppi.value === 'peruste') {
+    return {
+      name: 'peruste',
+      params: { ...route.params, revision: '' },
+    };
+  }
+
+  return undefined;
+});
+
+const sisaltoTyyppi = computed(() => {
+  return _.some(route.matched, route => route.name === 'peruste') ? 'peruste' : 'opetussuunnitelma';
+});
+
+const kaannokset = computed(() => {
+  return sisaltoTyyppiKaannokset.value[sisaltoTyyppi.value];
+});
+
+const sisaltoTyyppiKaannokset = computed(() => {
   return {
-    name: 'peruste',
-    params: { ...route.params, revision: '' },
+    'peruste': {
+      'katselet-tulevaisuudessa-voimaantulevaa': 'katselet-tulevaisuudessa-voimaantulevaa-perustetta',
+    },
+    'opetussuunnitelma': {
+      'katselet-tulevaisuudessa-voimaantulevaa': 'katselet-tulevaisuudessa-voimaantulevaa-opetussuunnitelmaa',
+    },
   };
 });
 
