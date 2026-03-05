@@ -53,6 +53,11 @@ const props = defineProps({
     required: false,
     default: undefined,
   },
+  esitettavatVoimassaolot: {
+    type: Array,
+    required: false,
+    default: () => ['tuleva', 'voimassa'],
+  },
 });
 
 const route = useRoute();
@@ -80,11 +85,11 @@ const uusinVoimassaolevaJulkaisu = computed(() => {
 
 const voimassaolo = computed(() => {
   if (ensimmainenTulevaMuutosmaarays.value) {
-    if (currentRevision.value >= ensimmainenTulevaMuutosmaarays.value?.revision) {
+    if (props.esitettavatVoimassaolot.includes('tuleva') && currentRevision.value >= ensimmainenTulevaMuutosmaarays.value?.revision) {
       return 'tuleva';
     }
 
-    if (currentRevision.value >= uusinVoimassaolevaJulkaisu.value?.revision) {
+    if (props.esitettavatVoimassaolot.includes('voimassa') && currentRevision.value >= uusinVoimassaolevaJulkaisu.value?.revision) {
       return 'voimassa';
     }
   }
@@ -93,7 +98,7 @@ const voimassaolo = computed(() => {
 });
 
 const currentRevision = computed(() => {
-  return _.toNumber(route?.params?.revision || _.max(_.map(props.julkaisut, 'revision')));
+  return _.get(_.find(props.julkaisut, julkaisu => julkaisu.luotu === props.peruste?.viimeisinJulkaisuAika), 'revision');
 });
 
 const maxRevision = computed(() => {
