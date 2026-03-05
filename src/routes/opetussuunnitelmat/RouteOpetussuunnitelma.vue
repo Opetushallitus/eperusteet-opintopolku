@@ -26,6 +26,7 @@
     <EpPerusteNotificationBar
       :julkaisut="julkaisut"
       :peruste="peruste"
+      :esitettavat-voimassaolot="['tuleva']"
     />
 
     <div class="container pt-4">
