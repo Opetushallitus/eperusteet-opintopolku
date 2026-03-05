@@ -25,6 +25,7 @@ import {
   Perusteet,
   TutkinnonOsaKaikkiDto,
   TutkinnonOsaViiteSuppeaDto,
+  Termit,
 } from '@shared/api/eperusteet';
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import {
@@ -57,6 +58,7 @@ export const useToteutussuunnitelmaDataStore = (key) => {
     });
     const arviointiasteikot = ref<ArviointiasteikkoDto[] | null>(null);
     const perusteKuvat = ref<object[]>([]);
+    const perusteTermit = ref<object[] | null>(null);
     const perusteKaikki = ref<PerusteKaikkiDto | null>(null);
     const perusteidenTutkinnonOsat = ref<TutkinnonOsaKaikkiDto[] | null>(null);
     const perusteidenTutkinnonOsienViitteet = ref<TutkinnonOsaViiteSuppeaDto[] | null>(null);
@@ -95,6 +97,7 @@ export const useToteutussuunnitelmaDataStore = (key) => {
 
       if (opetussuunnitelma.value?.peruste) {
         await fetchPerusteKuvat(opetussuunnitelma.value.peruste.perusteId!);
+        await fetchPerusteTermit(opetussuunnitelma.value.peruste.perusteId!);
       }
 
       if (opetussuunnitelma.value?.peruste?.perusteId) {
@@ -171,6 +174,11 @@ export const useToteutussuunnitelmaDataStore = (key) => {
           src: perusteBaseURL + PerusteLiitetiedostotParam.getKuva(perusteenId, kuva.id! + '.' + mime.getExtension(kuva.mime!)).url,
         }),
       );
+    };
+
+    const fetchPerusteTermit = async (perusteenId: number) => {
+      perusteTermit.value = null;
+      perusteTermit.value = (await Termit.getAllTermit(perusteenId)).data;
     };
 
     const getJulkaistuSisalto = (filter: any) => {
@@ -319,6 +327,7 @@ export const useToteutussuunnitelmaDataStore = (key) => {
       sidenavFilter,
       arviointiasteikot,
       perusteKuvat,
+      perusteTermit,
       perusteKaikki,
       perusteidenTutkinnonOsat,
       perusteidenTutkinnonOsienViitteet,
