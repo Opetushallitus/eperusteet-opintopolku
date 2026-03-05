@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="sisalto-nimi" />
-    
+
     <ep-collapse
       v-if="sisaltoviite.naytaPerusteenTeksti && sisaltoviite.perusteteksti"
       tyyppi="perusteteksti"
@@ -16,6 +16,7 @@
       <ep-content-viewer
         :value="$kaanna(sisaltoviite.perusteteksti)"
         :kuvat="kuvat"
+        :termit="perusteTermit"
       />
     </ep-collapse>
 
@@ -33,6 +34,7 @@
       <ep-content-viewer
         :value="$kaanna(sisaltoviite.pohjanTekstikappale.teksti)"
         :kuvat="kuvat"
+        :termit="perusteTermit"
       />
     </ep-collapse>
 
@@ -40,6 +42,7 @@
       <ep-content-viewer
         :value="$kaanna(sisaltoviite.tekstiKappale.teksti)"
         :kuvat="kuvat"
+        :termit="perusteTermit"
       />
     </EpPaikallinenTarkennus>
   </div>
@@ -69,6 +72,10 @@ const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
 
 const current = computed((): NavigationNode | null => {
   return opetussuunnitelmaDataStore.current;
+});
+
+const perusteTermit = computed(() => {
+  return opetussuunnitelmaDataStore.perusteTermit;
 });
 
 const numerointi = computed(() => {
