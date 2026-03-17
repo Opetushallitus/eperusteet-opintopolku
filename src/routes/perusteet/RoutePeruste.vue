@@ -44,7 +44,7 @@
     </ep-header>
 
     <EpPerusteNotificationBar
-      :julkaisut="julkaisut"
+      :perusteen-julkaisut="julkaisut"
       :peruste="peruste"
     />
 

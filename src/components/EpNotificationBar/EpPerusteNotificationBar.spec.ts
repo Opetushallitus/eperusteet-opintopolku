@@ -70,7 +70,7 @@ describe('EpPerusteNotificationBar', () => {
   describe('ilman muutosmaarayksia', () => {
     const propsData = {
       peruste: perusteet[0],
-      julkaisut: [
+      perusteenJulkaisut: [
         {
           revision: 1,
         },
@@ -92,7 +92,7 @@ describe('EpPerusteNotificationBar', () => {
   describe('muutosmaarays voimassa', () => {
     const propsData = {
       peruste: perusteet[0],
-      julkaisut: [
+      perusteenJulkaisut: [
         { revision: 1, luotu: ts[0] },
         {
           revision: 2,
@@ -114,7 +114,7 @@ describe('EpPerusteNotificationBar', () => {
   describe('muutosmaarays tulossa voimaan', () => {
     const propsData = {
       peruste: perusteet[0],
-      julkaisut: [
+      perusteenJulkaisut: [
         { revision: 1, luotu: ts[0] },
         {
           revision: 2,
@@ -136,7 +136,7 @@ describe('EpPerusteNotificationBar', () => {
   describe('muutosmaarays tulossa voimaan, selataan aiempaa', () => {
     const propsData = {
       peruste: perusteet[0],
-      julkaisut: [
+      perusteenJulkaisut: [
         { revision: 1, luotu: ts[0] },
         { revision: 2, luotu: ts[1] },
         {
@@ -162,7 +162,7 @@ describe('EpPerusteNotificationBar', () => {
   describe('muutosmaarays voimassa ja tulossa voimaan, selataan aiempia', () => {
     const propsData = {
       peruste: perusteet[0],
-      julkaisut: [
+      perusteenJulkaisut: [
         { revision: 1, luotu: ts[0] },
         {
           revision: 2,

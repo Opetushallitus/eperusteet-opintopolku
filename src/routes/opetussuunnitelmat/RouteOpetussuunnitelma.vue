@@ -22,11 +22,10 @@
       </template>
     </ep-header>
 
-    <EpNotificationBar :has-sisalto-kielelle="hasSisaltoKielelle" />
     <EpPerusteNotificationBar
-      :julkaisut="julkaisut"
+      :perusteen-julkaisut="perusteenJulkaisut"
+      :opetussuunnitelman-julkaisut="opetussuunnitelmanJulkaisut"
       :peruste="peruste"
-      :esitettavat-voimassaolot="['tuleva']"
     />
 
     <div class="container pt-4">
@@ -193,8 +192,12 @@ const linkkiHandler = {
   },
 } as ILinkkiHandler;
 
-const julkaisut = computed(() => {
+const perusteenJulkaisut = computed(() => {
   return opetussuunnitelmaDataStore?.value?.perusteJulkaisut;
+});
+
+const opetussuunnitelmanJulkaisut = computed(() => {
+  return opetussuunnitelmaDataStore?.value?.opetussuunnitelmaJulkaisut;
 });
 
 const peruste = computed(() => {

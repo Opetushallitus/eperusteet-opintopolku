@@ -14,6 +14,8 @@ import { YlopsNavigationNodeDto,
   OpetussuunnitelmatJulkiset,
   OpetussuunnitelmaExportDto,
   DokumenttiDtoTilaEnum,
+  OpetussuunnitelmanJulkaisuKevytDto,
+  Julkaisut as OpsJulkaisut,
 } from '@shared/api/ylops';
 
 import { Kielet } from '@shared/stores/kieli';
@@ -24,7 +26,7 @@ import {
   Perusteet,
   PerusteKaikkiDto,
   Termit,
-  Julkaisut,
+  Julkaisut as PerusteJulkaisut,
   JulkaisuBaseDto,
 } from '@shared/api/eperusteet';
 import {
@@ -47,6 +49,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
     const opetussuunnitelma = ref<OpetussuunnitelmaExportDto | null>(null);
     const opetussuunnitelmaPerusteenId = ref<number | null>(null);
     const opetussuunnitelmaId = ref<number>(0);
+    const opetussuunnitelmaJulkaisut = ref<OpetussuunnitelmanJulkaisuKevytDto[] | null>(null);
     const esikatselu = ref<boolean | undefined>(undefined);
     const revision = ref<number | undefined>(undefined);
     const navigation = ref<YlopsNavigationNodeDto | null>(null);
@@ -88,7 +91,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
       }
 
       if (opetussuunnitelma.value?.peruste) {
-        perusteJulkaisut.value = (await Julkaisut.getKaikkiJulkaisut(opetussuunnitelma.value.peruste.id!)).data;
+        perusteJulkaisut.value = (await PerusteJulkaisut.getKaikkiJulkaisut(opetussuunnitelma.value.peruste.id!)).data;
         const maxRev = _.max(_.map(perusteJulkaisut.value, 'revision'));
         const rev = _.chain(perusteJulkaisut.value)
           .filter(julkaisu => julkaisu.luotu! >= (opetussuunnitelma.value?.peruste?.globalVersion?.aikaleima || 0))
@@ -98,6 +101,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
           .value();
 
         perusteKaikki.value = (await Perusteet.getKokoSisalto(opetussuunnitelma.value.peruste.id!, rev !== maxRev ? rev : undefined)).data;
+        opetussuunnitelmaJulkaisut.value = (await OpsJulkaisut.getJulkaisutKevyt(opetussuunnitelmaId.value)).data;
       }
     };
 
@@ -429,6 +433,7 @@ export const useOpetussuunnitelmaDataStore = (key) => {
       kuvat,
       perusteKaikki,
       perusteJulkaisut,
+      opetussuunnitelmaJulkaisut,
 
       // Expose getters and actions
       ...getters,
