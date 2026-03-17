@@ -44,28 +44,24 @@ import { Kielet } from '@shared/stores/kieli';
 import { JulkaisuBaseDto } from '@shared/api/eperusteet';
 import { OpetussuunnitelmanJulkaisuKevytDto } from '@shared/api/ylops';
 
-const props = defineProps({
-  perusteenJulkaisut: {
-    type: Array<JulkaisuBaseDto>,
-    required: false,
-    default: () => [],
+interface PerusteProps {
+  viimeisinJulkaisuAika?: string | number;
+  kielet?: string[];
+}
+
+const props = withDefaults(
+  defineProps<{
+    perusteenJulkaisut?: JulkaisuBaseDto[];
+    opetussuunnitelmanJulkaisut?: OpetussuunnitelmanJulkaisuKevytDto[];
+    peruste?: PerusteProps;
+    esitettavatVoimassaolot?: string[];
+  }>(),
+  {
+    perusteenJulkaisut: () => [],
+    opetussuunnitelmanJulkaisut: () => [],
+    esitettavatVoimassaolot: () => ['tuleva', 'voimassa'],
   },
-  opetussuunnitelmanJulkaisut: {
-    type: Array<OpetussuunnitelmanJulkaisuKevytDto>,
-    required: false,
-    default: () => [],
-  },
-  peruste: {
-    type: Object,
-    required: false,
-    default: undefined,
-  },
-  esitettavatVoimassaolot: {
-    type: Array,
-    required: false,
-    default: () => ['tuleva', 'voimassa'],
-  },
-});
+);
 
 const route = useRoute();
 const router = useRouter();
