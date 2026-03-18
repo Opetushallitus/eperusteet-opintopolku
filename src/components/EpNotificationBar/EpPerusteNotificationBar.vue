@@ -13,7 +13,7 @@
         <template v-if="uusinVoimassaolevaJulkaisu && voimassaolevaRoute">
           <span>{{ $t('siirry-talla-hetkella') }} </span>
           <router-link :to="voimassaolevaRoute">
-            {{ $t('voimassaolevaan-perusteeseen') }}.
+            {{ $t(kaannokset['voimassaolevaan']) }}.
           </router-link>
         </template>
       </div>
@@ -21,12 +21,12 @@
         v-if="voimassaolo === 'voimassa'"
         class="notifikaatio-text"
       >
-        <span>{{ $t('katselet-talla-hetkella-voimassaolevaa-perustetta') }}. </span>
+        <span>{{ $t(kaannokset['katselet-talla-hetkella-voimassaolevaa']) }}. </span>
 
         <template v-if="uusimpaanJulkaisuunRoute">
           <span class="mr-1">{{ $t('siirry') }}</span>
           <router-link :to="uusimpaanJulkaisuunRoute">
-            {{ $t('uusimpaan-perusteeseen') }},
+            {{ $t(kaannokset['uusimpaan']) }},
           </router-link>
           <span>{{ $t('joka-on-tulossa-voimaan', {voimaantulo: $sd(uusinJulkaisu.muutosmaarays.voimassaoloAlkaa)}) }}.</span>
         </template>
@@ -41,30 +41,33 @@ import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import EpNotificationBar from '@/components/EpNotificationBar/EpNotificationBar.vue';
 import { Kielet } from '@shared/stores/kieli';
+import { JulkaisuBaseDto } from '@shared/api/eperusteet';
+import { OpetussuunnitelmanJulkaisuKevytDto } from '@shared/api/ylops';
 
-const props = defineProps({
-  julkaisut: {
-    type: Array,
-    required: false,
-    default: () => [],
+interface PerusteProps {
+  viimeisinJulkaisuAika?: string | number;
+  kielet?: string[];
+}
+
+const props = withDefaults(
+  defineProps<{
+    perusteenJulkaisut?: JulkaisuBaseDto[];
+    opetussuunnitelmanJulkaisut?: OpetussuunnitelmanJulkaisuKevytDto[];
+    peruste?: PerusteProps;
+    esitettavatVoimassaolot?: string[];
+  }>(),
+  {
+    perusteenJulkaisut: () => [],
+    opetussuunnitelmanJulkaisut: () => [],
+    esitettavatVoimassaolot: () => ['tuleva', 'voimassa'],
   },
-  peruste: {
-    type: Object,
-    required: false,
-    default: undefined,
-  },
-  esitettavatVoimassaolot: {
-    type: Array,
-    required: false,
-    default: () => ['tuleva', 'voimassa'],
-  },
-});
+);
 
 const route = useRoute();
 const router = useRouter();
 
 const julkaisutSorted = computed(() => {
-  return _.sortBy(props.julkaisut, 'revision');
+  return _.sortBy(props.perusteenJulkaisut, 'revision');
 });
 
 const julkaisutReversed = computed(() => {
@@ -80,7 +83,9 @@ const uusinTulevaMuutosmaarays = computed(() => {
 });
 
 const uusinVoimassaolevaJulkaisu = computed(() => {
-  return _.find(julkaisutReversed.value, julkaisu => julkaisu.revision < ensimmainenTulevaMuutosmaarays.value.revision);
+  const firstRevision = ensimmainenTulevaMuutosmaarays.value?.revision;
+  if (firstRevision == null) return undefined;
+  return _.find(julkaisutReversed.value, julkaisu => julkaisu.revision! < firstRevision);
 });
 
 const voimassaolo = computed(() => {
@@ -98,22 +103,22 @@ const voimassaolo = computed(() => {
 });
 
 const currentRevision = computed(() => {
-  return _.get(_.find(props.julkaisut, julkaisu => julkaisu.luotu === props.peruste?.viimeisinJulkaisuAika), 'revision');
+  return _.get(_.find(props.perusteenJulkaisut, julkaisu => julkaisu.luotu === props.peruste?.viimeisinJulkaisuAika), 'revision');
 });
 
 const maxRevision = computed(() => {
-  return _.max(_.map(props.julkaisut, 'revision'));
+  return _.max(_.map(props.perusteenJulkaisut, 'revision'));
 });
 
 const uusinJulkaisu = computed(() => {
   return {
-    ..._.last(props.julkaisut),
+    ..._.last(props.perusteenJulkaisut),
     muutosmaarays: uusinTulevaMuutosmaarays.value?.muutosmaarays,
   };
 });
 
 const currentJulkaisu = computed(() => {
-  const currentJulkaisuObj = _.find(props.julkaisut, julkaisu => julkaisu.revision === currentRevision.value);
+  const currentJulkaisuObj = _.find(props.perusteenJulkaisut, julkaisu => julkaisu.revision === currentRevision.value);
 
   if (currentJulkaisuObj) {
     return {
@@ -141,6 +146,13 @@ const voimassaolevaRoute = computed(() => {
     };
   }
 
+  if (sisaltoTyyppi.value === 'opetussuunnitelma' && voimassaOlevaOpetussuunnitelmaJulkaisu.value) {
+    return {
+      name: 'opetussuunnitelma',
+      params: { ...route.params, revision: voimassaOlevaOpetussuunnitelmaJulkaisu.value?.revision },
+    };
+  }
+
   return undefined;
 });
 
@@ -148,6 +160,13 @@ const uusimpaanJulkaisuunRoute = computed(() => {
   if (sisaltoTyyppi.value === 'peruste') {
     return {
       name: 'peruste',
+      params: { ...route.params, revision: '' },
+    };
+  }
+
+  if (sisaltoTyyppi.value === 'opetussuunnitelma') {
+    return {
+      name: 'opetussuunnitelma',
       params: { ...route.params, revision: '' },
     };
   }
@@ -167,16 +186,30 @@ const sisaltoTyyppiKaannokset = computed(() => {
   return {
     'peruste': {
       'katselet-tulevaisuudessa-voimaantulevaa': 'katselet-tulevaisuudessa-voimaantulevaa-perustetta',
+      'voimassaolevaan': 'voimassaolevaan-perusteeseen',
+      'katselet-talla-hetkella-voimassaolevaa': 'katselet-talla-hetkella-voimassaolevaa-perustetta',
+      'uusimpaan': 'uusimpaan-perusteeseen',
     },
     'opetussuunnitelma': {
       'katselet-tulevaisuudessa-voimaantulevaa': 'katselet-tulevaisuudessa-voimaantulevaa-opetussuunnitelmaa',
+      'voimassaolevaan': 'voimassaolevaan-opetussuunnitelmaan',
+      'katselet-talla-hetkella-voimassaolevaa': 'katselet-talla-hetkella-voimassaolevaa-opetussuunnitelmaa',
+      'uusimpaan': 'uusimpaan-opetussuunnitelmaan',
     },
   };
 });
 
+const voimassaOlevaOpetussuunnitelmaJulkaisu = computed(() => {
+  if (voimassaolo.value === 'tuleva') {
+    const luotu = uusinVoimassaolevaJulkaisu.value?.luotu;
+    if (luotu == null) return undefined;
+    return _.chain(props.opetussuunnitelmanJulkaisut)
+      .filter(julkaisu => julkaisu.perusteJulkaisuAika === luotu)
+      .sortBy('luotu')
+      .last()
+      .value();
+  }
+
+  return undefined;
+});
 </script>
-
-<style scoped lang="scss">
-@import '@shared/styles/_variables.scss';
-
-</style>
