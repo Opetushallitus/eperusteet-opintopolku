@@ -15,8 +15,8 @@ vi.mock('vue-router', () => ({
 describe('EpPerusteNotificationBar', () => {
 
   beforeEach(() => {
-    // Reset before each test
     mockRoute.params = {};
+    mockRoute.matched = [{ name: 'peruste' }];
   });
 
   const datePlusDays = (days: number) => {
@@ -198,6 +198,42 @@ describe('EpPerusteNotificationBar', () => {
 
       wrapper = createMountWithProps(perusteet[1], propsData);
       emptyResultTrue(wrapper);
+    });
+  });
+
+  describe('opetussuunnitelmanJulkaisut', () => {
+    const perusteenJulkaisutTuleva = [
+      { revision: 1, luotu: ts[0] },
+      {
+        revision: 2,
+        luotu: ts[1],
+        muutosmaarays: { voimassaoloAlkaa: datePlusDays(5) },
+      },
+    ];
+
+    test('shows voimassaolevaan-opetussuunnitelmaan link when matching opetussuunnitelmanJulkaisut', () => {
+      mockRoute.matched = [{ name: 'opetussuunnitelma' }];
+      const opetussuunnitelmanJulkaisut = [
+        { revision: 1, luotu: ts[0], perusteJulkaisuAika: ts[0] },
+      ];
+      const wrapper = createMountWithProps(perusteet[2], {
+        peruste: perusteet[0],
+        perusteenJulkaisut: perusteenJulkaisutTuleva,
+        opetussuunnitelmanJulkaisut,
+      });
+      expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-opetussuunnitelmaa');
+      expect(wrapper.html()).toContain('voimassaolevaan-opetussuunnitelmaan');
+    });
+
+    test('hides voimassaolevaan link when no matching opetussuunnitelmanJulkaisut', () => {
+      mockRoute.matched = [{ name: 'opetussuunnitelma' }];
+      const wrapper = createMountWithProps(perusteet[2], {
+        peruste: perusteet[0],
+        perusteenJulkaisut: perusteenJulkaisutTuleva,
+        opetussuunnitelmanJulkaisut: [],
+      });
+      expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-opetussuunnitelmaa');
+      expect(wrapper.html()).not.toContain('voimassaolevaan-opetussuunnitelmaan');
     });
   });
 });
