@@ -235,6 +235,45 @@ describe('EpPerusteNotificationBar', () => {
       expect(wrapper.html()).toContain('katselet-tulevaisuudessa-voimaantulevaa-opetussuunnitelmaa');
       expect(wrapper.html()).not.toContain('voimassaolevaan-opetussuunnitelmaan');
     });
+
+    test('selects opetussuunnitelma julkaisu with latest luotu when multiple match voimassaOlevatPerusteenJulkaisut', () => {
+      mockRoute.matched = [{ name: 'opetussuunnitelma' }];
+      const perusteenJulkaisut = [
+        { revision: 1, luotu: ts[0] },
+        { revision: 2, luotu: ts[1] },
+        { revision: 3, luotu: ts[2], muutosmaarays: { voimassaoloAlkaa: datePlusDays(5) } },
+      ];
+      const opetussuunnitelmanJulkaisut = [
+        { revision: 1, luotu: ts[0], perusteJulkaisuAika: ts[0] },
+        { revision: 2, luotu: ts[1], perusteJulkaisuAika: ts[1] },
+      ];
+      const wrapper = createMountWithProps(perusteet[3], {
+        peruste: perusteet[0],
+        perusteenJulkaisut,
+        opetussuunnitelmanJulkaisut,
+      });
+      expect(wrapper.html()).toContain('voimassaolevaan-opetussuunnitelmaan');
+      expect(wrapper.find('a').exists()).toBe(true);
+    });
+
+    test('matches perusteJulkaisuAika against any voimassaoleva peruste luotu', () => {
+      mockRoute.matched = [{ name: 'opetussuunnitelma' }];
+      const perusteenJulkaisut = [
+        { revision: 1, luotu: ts[0] },
+        { revision: 2, luotu: ts[1] },
+        { revision: 3, luotu: ts[2], muutosmaarays: { voimassaoloAlkaa: datePlusDays(5) } },
+      ];
+      const opetussuunnitelmanJulkaisut = [
+        { revision: 1, luotu: ts[1], perusteJulkaisuAika: ts[1] },
+      ];
+      const wrapper = createMountWithProps(perusteet[3], {
+        peruste: perusteet[0],
+        perusteenJulkaisut,
+        opetussuunnitelmanJulkaisut,
+      });
+      expect(wrapper.html()).toContain('voimassaolevaan-opetussuunnitelmaan');
+      expect(wrapper.find('a').exists()).toBe(true);
+    });
   });
 });
 

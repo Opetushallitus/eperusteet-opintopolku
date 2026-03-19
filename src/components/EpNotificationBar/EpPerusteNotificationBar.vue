@@ -54,12 +54,10 @@ const props = withDefaults(
     perusteenJulkaisut?: JulkaisuBaseDto[];
     opetussuunnitelmanJulkaisut?: OpetussuunnitelmanJulkaisuKevytDto[];
     peruste?: PerusteProps;
-    esitettavatVoimassaolot?: string[];
   }>(),
   {
     perusteenJulkaisut: () => [],
     opetussuunnitelmanJulkaisut: () => [],
-    esitettavatVoimassaolot: () => ['tuleva', 'voimassa'],
   },
 );
 
@@ -96,12 +94,18 @@ const voimassaOlevatPerusteenJulkaisut = computed(() => {
 
 const voimassaolo = computed(() => {
   if (ensimmainenTulevaMuutosmaarays.value) {
-    if (props.esitettavatVoimassaolot.includes('tuleva') && currentRevision.value >= ensimmainenTulevaMuutosmaarays.value?.revision) {
+    if (currentRevision.value >= ensimmainenTulevaMuutosmaarays.value?.revision) {
       return 'tuleva';
     }
 
-    if (props.esitettavatVoimassaolot.includes('voimassa') && currentRevision.value >= uusinVoimassaolevaJulkaisu.value?.revision) {
+    if (currentRevision.value >= uusinVoimassaolevaJulkaisu.value?.revision) {
       return 'voimassa';
+    }
+
+    if (sisaltoTyyppi.value === 'opetussuunnitelma') {
+      if (route.params.revision === _.toString(voimassaOlevaOpetussuunnitelmaJulkaisu.value?.revision)) {
+        return 'voimassa';
+      }
     }
   }
 
@@ -206,14 +210,10 @@ const sisaltoTyyppiKaannokset = computed(() => {
 });
 
 const voimassaOlevaOpetussuunnitelmaJulkaisu = computed(() => {
-  if (voimassaolo.value === 'tuleva') {
-    return _.chain(props.opetussuunnitelmanJulkaisut)
-      .filter(julkaisu => _.includes(_.map(voimassaOlevatPerusteenJulkaisut.value, 'luotu'), julkaisu.perusteJulkaisuAika))
-      .sortBy('luotu')
-      .last()
-      .value();
-  }
-
-  return undefined;
+  return _.chain(props.opetussuunnitelmanJulkaisut)
+    .filter(julkaisu => _.includes(_.map(voimassaOlevatPerusteenJulkaisut.value, 'luotu'), julkaisu.perusteJulkaisuAika))
+    .sortBy('luotu')
+    .last()
+    .value();
 });
 </script>
