@@ -88,6 +88,12 @@ const uusinVoimassaolevaJulkaisu = computed(() => {
   return _.find(julkaisutReversed.value, julkaisu => julkaisu.revision! < firstRevision);
 });
 
+const voimassaOlevatPerusteenJulkaisut = computed(() => {
+  const firstRevision = ensimmainenTulevaMuutosmaarays.value?.revision;
+  if (firstRevision == null) return undefined;
+  return _.filter(julkaisutReversed.value, julkaisu => julkaisu.revision! < firstRevision);
+});
+
 const voimassaolo = computed(() => {
   if (ensimmainenTulevaMuutosmaarays.value) {
     if (props.esitettavatVoimassaolot.includes('tuleva') && currentRevision.value >= ensimmainenTulevaMuutosmaarays.value?.revision) {
@@ -201,10 +207,8 @@ const sisaltoTyyppiKaannokset = computed(() => {
 
 const voimassaOlevaOpetussuunnitelmaJulkaisu = computed(() => {
   if (voimassaolo.value === 'tuleva') {
-    const luotu = uusinVoimassaolevaJulkaisu.value?.luotu;
-    if (luotu == null) return undefined;
     return _.chain(props.opetussuunnitelmanJulkaisut)
-      .filter(julkaisu => julkaisu.perusteJulkaisuAika === luotu)
+      .filter(julkaisu => _.includes(_.map(voimassaOlevatPerusteenJulkaisut.value, 'luotu'), julkaisu.perusteJulkaisuAika))
       .sortBy('luotu')
       .last()
       .value();
