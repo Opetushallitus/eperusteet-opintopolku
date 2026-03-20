@@ -18,10 +18,10 @@ jobs:
           java-version: '17'
           distribution: 'corretto'
 
-      - name: Set up Node 21
+      - name: Set up Node 24
         uses: actions/setup-node@v6
         with:
-          node-version: '21.7.3'
+          node-version: '24'
 
       - name: Enable corepack for nodejs
         run: corepack enable
@@ -100,7 +100,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download eperusteet-opintopolku-ui
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: eperusteet-opintopolku-ui
           path: eperusteet-opintopolku-app/src/main/resources/static
@@ -133,7 +133,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Download eperusteet-opintopolku-app-jar
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: eperusteet-opintopolku-app-jar
 
