@@ -93,6 +93,10 @@ const voimassaOlevatPerusteenJulkaisut = computed(() => {
 });
 
 const voimassaolo = computed(() => {
+  if (route.params.revision === '0') {
+    return undefined;
+  }
+
   if (ensimmainenTulevaMuutosmaarays.value) {
     if (currentRevision.value >= ensimmainenTulevaMuutosmaarays.value?.revision) {
       return 'tuleva';
