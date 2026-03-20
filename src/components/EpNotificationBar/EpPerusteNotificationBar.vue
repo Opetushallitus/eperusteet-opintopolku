@@ -98,14 +98,17 @@ const voimassaolo = computed(() => {
       return 'tuleva';
     }
 
-    if (currentRevision.value >= uusinVoimassaolevaJulkaisu.value?.revision) {
+    if (sisaltoTyyppi.value === 'peruste'
+      && currentRevision.value >= uusinVoimassaolevaJulkaisu.value?.revision
+    ) {
       return 'voimassa';
     }
 
-    if (sisaltoTyyppi.value === 'opetussuunnitelma') {
-      if (route.params.revision === _.toString(voimassaOlevaOpetussuunnitelmaJulkaisu.value?.revision)) {
-        return 'voimassa';
-      }
+    if (sisaltoTyyppi.value === 'opetussuunnitelma'
+      && uusimpaanJulkaisuunRoute.value
+      && route.params.revision === _.toString(voimassaOlevaOpetussuunnitelmaJulkaisu.value?.revision)
+    ) {
+      return 'voimassa';
     }
   }
 
@@ -167,14 +170,14 @@ const voimassaolevaRoute = computed(() => {
 });
 
 const uusimpaanJulkaisuunRoute = computed(() => {
-  if (sisaltoTyyppi.value === 'peruste') {
+  if (sisaltoTyyppi.value === 'peruste' && !!route.params.revision) {
     return {
       name: 'peruste',
       params: { ...route.params, revision: '' },
     };
   }
 
-  if (sisaltoTyyppi.value === 'opetussuunnitelma') {
+  if (sisaltoTyyppi.value === 'opetussuunnitelma' && !!route.params.revision) {
     return {
       name: 'opetussuunnitelma',
       params: { ...route.params, revision: '' },
