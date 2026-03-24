@@ -9,7 +9,14 @@
         {{ $kaanna(tekstiKappale.nimi) }}
       </h2>
 
-      <!-- Perusteen teksti -->
+      <ep-form-content
+        v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && perusteTekstikappale && perusteTekstikappale.koodi"
+        class="mt-4 mb-0"
+        name="koodi"
+        >
+        <span v-html="perusteTekstikappale.koodi.arvo" />
+      </ep-form-content>
+
       <ep-collapse
         v-if="tekstiKappaleViite && tekstiKappaleViite.naytaPerusteenTeksti && perusteTekstikappale && perusteTekstikappale.teksti"
         tyyppi="perusteteksti"
@@ -162,6 +169,8 @@ import { $kaanna } from '@shared/utils/globals';
 import { useRoute } from 'vue-router';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
+import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+
 
 const route = useRoute();
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();

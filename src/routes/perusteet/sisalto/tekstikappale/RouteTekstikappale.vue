@@ -17,6 +17,15 @@
         <span v-if="numerointi">{{ numerointi }}</span>
         {{ $kaanna(perusteenOsa.nimi) }}
       </h2>
+
+      <ep-form-content
+        v-if="perusteenOsa.koodi"
+        class="mt-4"
+        name="koodi"
+      >
+        <span v-html="perusteenOsa.koodi.arvo" />
+      </ep-form-content>
+
       <ep-content-viewer
         :value="$kaanna(perusteenOsa.teksti)"
         :termit="termit"
@@ -65,6 +74,7 @@ import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOp
 import { $kaanna } from '@shared/utils/globals';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
+import EpFormContent from '@shared/components/forms/EpFormContent.vue';
 
 const route = useRoute();
 const router = useRouter();
