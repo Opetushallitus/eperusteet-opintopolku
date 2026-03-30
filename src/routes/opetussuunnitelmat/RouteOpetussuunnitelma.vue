@@ -26,6 +26,7 @@
       :perusteen-julkaisut="perusteenJulkaisut"
       :opetussuunnitelman-julkaisut="opetussuunnitelmanJulkaisut"
       :peruste="peruste"
+      :has-sisalto-kielelle="hasSisaltoKielelle"
     />
 
     <div class="container pt-4">

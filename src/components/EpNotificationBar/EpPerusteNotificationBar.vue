@@ -54,10 +54,12 @@ const props = withDefaults(
     perusteenJulkaisut?: JulkaisuBaseDto[];
     opetussuunnitelmanJulkaisut?: OpetussuunnitelmanJulkaisuKevytDto[];
     peruste?: PerusteProps;
+    hasSisaltoKielelle?: boolean;
   }>(),
   {
     perusteenJulkaisut: () => [],
     opetussuunnitelmanJulkaisut: () => [],
+    hasSisaltoKielelle: true,
   },
 );
 
@@ -124,7 +126,15 @@ const currentRevision = computed(() => {
 });
 
 const maxRevision = computed(() => {
-  return _.max(_.map(props.perusteenJulkaisut, 'revision'));
+  if (sisaltoTyyppi.value === 'peruste') {
+    return _.max(_.map(props.perusteenJulkaisut, 'revision'));
+  }
+
+  if (sisaltoTyyppi.value === 'opetussuunnitelma') {
+    return _.max(_.map(props.opetussuunnitelmanJulkaisut, 'revision'));
+  }
+
+  return undefined;
 });
 
 const uusinJulkaisu = computed(() => {
@@ -149,10 +159,6 @@ const currentJulkaisu = computed(() => {
 
 const julkaisuPvm = computed(() => {
   return currentJulkaisu.value?.luotu;
-});
-
-const hasSisaltoKielelle = computed(() => {
-  return _.includes(props.peruste?.kielet, _.toString(Kielet.getSisaltoKieli.value));
 });
 
 const voimassaolevaRoute = computed(() => {

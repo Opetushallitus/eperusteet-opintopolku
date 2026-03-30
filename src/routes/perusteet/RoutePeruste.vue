@@ -46,6 +46,7 @@
     <EpPerusteNotificationBar
       :perusteen-julkaisut="julkaisut"
       :peruste="peruste"
+      :has-sisalto-kielelle="hasSisaltoKielelle"
     />
 
     <div class="container mt-4">
@@ -131,6 +132,7 @@ import { getCachedPerusteStore, usePerusteCacheStore } from '@/stores/PerusteCac
 import { pinia } from '@/pinia';
 import { BrowserStore } from '@shared/stores/BrowserStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
+import { Kielet } from '@shared/stores/kieli';
 
 const route = useRoute();
 const router = useRouter();
@@ -237,6 +239,10 @@ const sisaltoHakuSrLabel = computed(() => {
     return $t('hae-digitaalisten-osaamisten-kuvauksista');
   }
   return $t('hae-perusteen-sisallosta');
+});
+
+const hasSisaltoKielelle = computed(() => {
+  return _.includes(peruste.value?.kielet, _.toString(Kielet.getSisaltoKieli.value));
 });
 
 // Methods
