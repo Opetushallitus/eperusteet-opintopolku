@@ -8,11 +8,9 @@
     class="peruste"
   >
     <ep-header
-      v-sticky
       :koulutustyyppi="koulutustyyppi"
       :murupolku="murupolku"
       :tyyppi="peruste.tyyppi"
-      sticky-side="top"
     >
       <template
         v-if="peruste.tyyppi ==='opas' && peruste.opasTyyppi !== 'tietoapalvelusta'"

@@ -33,7 +33,7 @@
           v-if="(sisaltoalue.vuosiluokanSisaltoalue.kaytaOmaaKuvausta && naytaOmaKuvaus) || sisaltoalue.vuosiluokanSisaltoalue.sisaltoalueet.kuvaus"
           class="paikallinen-tarkennus-alue"
         >
-          <div class="font-weight-600">
+          <div class="font-semibold">
             {{ $t('paikallinen-teksti') }}
           </div>
           <div

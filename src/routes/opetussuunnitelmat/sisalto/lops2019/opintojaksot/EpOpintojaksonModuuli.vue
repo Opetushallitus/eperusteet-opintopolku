@@ -10,8 +10,8 @@
         {{ $kaanna(moduuli.node.label) }} ({{ moduuli.node.meta.koodi.arvo }})
       </div>
       <div class="bottom">
-        <div class="d-flex bd-highlight">
-          <div class="px-2 flex-grow-1" />
+        <div class="flex bd-highlight">
+          <div class="px-2 grow" />
           <div class="px-2 info">
             <span class="op">{{ moduuli.node.meta.laajuus }} {{ $t('opintopiste') }}</span>
             <ep-color-indicator :kind="moduuli.node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
@@ -81,7 +81,7 @@ const perusteKuvat = computed(() => {
   padding: 20px 10px 44px 20px;
   position: relative;
   width: 158px;
-  color: $blue-darken-1;
+  color: $blue1;
   user-select: none;
   cursor: pointer;
   display: block;
@@ -94,10 +94,10 @@ const perusteKuvat = computed(() => {
       width: 0.5em;
     }
     &::-webkit-scrollbar-track {
-      background-color: $blue-lighten-4;
+      background-color: $lightBlue2;
     }
     &::-webkit-scrollbar-thumb {
-      background-color: $blue-lighten-3;
+      background-color: $lightBlue2;
       border-radius: 0.5em;
     }
   }

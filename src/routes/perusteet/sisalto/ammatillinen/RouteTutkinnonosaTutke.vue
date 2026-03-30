@@ -15,7 +15,7 @@
         <div v-else>
           <EpFormContent
             v-if="perusteet"
-            class="col-md-12 mb-5"
+            class="col-span-12 mb-5"
           >
             <EpCollapse
               class="mb-3"
@@ -36,7 +36,7 @@
                 :key="oidx"
                 class="nimikkeet"
               >
-                <div class="d-flex">
+                <div class="flex">
                   <router-link :to="{ name: 'peruste', params: { koulutustyyppi: 'ammatillinen', perusteId: peruste.id }}">
                     {{ $kaanna(peruste.nimi) }}
                   </router-link>
