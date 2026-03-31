@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import { reactive, ref, computed } from 'vue';
 import { TiedoteDto, Tiedotteet, Perusteet, getAllPerusteet, PerusteInfoDto, KoodiDto, findTiedotteetBy } from '@shared/api/eperusteet';
 import { Page } from '@shared/tyypit';
+import { debounced } from '@shared/utils/delay';
 
 export interface KoodiPerusteella extends KoodiDto {
   perusteet: PerusteInfoDto[];
@@ -27,7 +28,7 @@ export const useTiedoteStore = defineStore('tiedote', () => {
   const tiedotteenOsaamisalaPerusteet = ref<KoodiPerusteella[] | null>(null);
 
   // Actions
-  const getUusimmat = async (kieli: string[], koulutustyypit?: string[]) => {
+  const getUusimmat = debounced(async (kieli: string[], koulutustyypit?: string[]) => {
     uusimmatTiedotteet.value = null;
     uusimmatTiedotteet.value = ((await findTiedotteetBy({
       sivu: 0,
@@ -37,7 +38,7 @@ export const useTiedoteStore = defineStore('tiedote', () => {
       koulutusTyyppi: koulutustyypit,
       koulutustyypiton: true,
     })).data as any).data;
-  };
+  }, 300);
 
   const updateFilter = _.debounce(async (newFilter: any) => {
     Object.assign(filter, newFilter);

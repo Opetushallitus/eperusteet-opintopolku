@@ -35,10 +35,6 @@ const sisaltoKieli = computed(() => {
   return Kielet.getSisaltoKieli.value;
 });
 
-const julkaistutKoulutustyypit = computed(() => {
-  return julkaistutKoulutustyypitStore.julkaistutKoulutustyypit;
-});
-
 const titleTemplate = computed(() => {
   return '%s - ' + $t('eperusteet');
 });

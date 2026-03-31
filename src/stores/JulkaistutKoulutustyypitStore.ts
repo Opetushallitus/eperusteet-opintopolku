@@ -27,7 +27,7 @@ export const useJulkaistutKoulutustyypitStore = defineStore('julkaistutKoulutust
       ..._.map(koulutustyyppiLukumaarat.value, 'koulutustyyppi'),
       ...(!!muuLukumaarat.value && muuLukumaarat.value > 0 ? ['koulutustyyppi_muu'] : []),
       ...(!!digitaalinenOsaaminen.value && digitaalinenOsaaminen.value.length > 0 ? ['koulutustyyppi_digi'] : []),
-      ...(!!kielikaantajatutkinto.value && kielikaantajatutkinto.value.length > 0 ? ['kielikaantajatutkinto'] : []),
+      ...(!!kielikaantajatutkinto.value && kielikaantajatutkinto.value.length > 0 ? ['koulutustyyppi_500'] : []),
     ]);
   });
 

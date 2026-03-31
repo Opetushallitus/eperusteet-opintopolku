@@ -69,7 +69,7 @@ export function navigoitavatKoulutustyyppiRyhmat(julkaistutKoulutustyypit: strin
   if (julkaistutKoulutustyypit) {
     links.push(..._.filter(koulutustyyppiLinks(), (ylanavi: any) => _.some(ylanavi.alityypit, alityyppi => _.includes(julkaistutKoulutustyypit, alityyppi))));
   }
-  if (julkaistutKoulutustyypit && _.includes(julkaistutKoulutustyypit, 'kielikaantajatutkinto')) {
+  if (julkaistutKoulutustyypit && _.includes(julkaistutKoulutustyypit, 'koulutustyyppi_500')) {
     links.push(...kielikaantajatutkinto());
   }
   return links;
