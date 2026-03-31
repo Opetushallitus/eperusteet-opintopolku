@@ -108,7 +108,6 @@ import { useRouter } from 'vue-router';
 import { Kielet } from '@shared/stores/kieli';
 import { onkoUusi } from '@shared/utils/tiedote';
 import EpSpinnerSlot from '@shared/components/EpSpinner/EpSpinnerSlot.vue';
-import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { useTiedoteStore } from '@/stores/TiedoteStore';
 import { useTietoapalvelustaStore } from '@/stores/TietoapalvelustaStore';
@@ -124,7 +123,6 @@ import { TiedoteDto } from '@shared/api/eperusteet';
 import { useOsaamismerkitStore } from '@/stores/OsaamismerkitStore';
 import { pinia } from '@/pinia';
 import { useHead  } from '@unhead/vue';
-import EpButton from '@shared/components/EpButton/EpButton.vue';
 
 const router = useRouter();
 const browserStore = new BrowserStore();
@@ -151,7 +149,7 @@ watch(() => julkaistutKoulutustyypit.value, async () => {
 
 const fetchTiedotteet = async () => {
   if (julkaistutKoulutustyypit.value) {
-    await tiedoteStore.getUusimmat([sisaltoKieli.value], _.map(julkaistutKoulutustyypitStore.koulutustyyppiLukumaarat, 'koulutustyyppi') as string[]);
+    await tiedoteStore.getUusimmat([sisaltoKieli.value], julkaistutKoulutustyypitStore.julkaistutKoulutustyypit as string[]);
   }
 };
 
