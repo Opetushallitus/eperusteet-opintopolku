@@ -35,7 +35,7 @@ export const useTiedoteStore = defineStore('tiedote', () => {
     uusimmatTiedotteet.value = null;
     uusimmatTiedotteet.value = ((await findTiedotteetBy({
       sivu: 0,
-      sivukoko: 10,
+      sivukoko: 3,
       kieli: kieli,
       tiedoteJulkaisuPaikka: ['opintopolku_etusivu'],
       koulutusTyyppi: _.filter(koulutustyypit, koulutustyyppi => _.includes(sallitutKoulutustyypit, koulutustyyppi)),
