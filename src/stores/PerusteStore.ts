@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 import { JulkiEtusivuDto, PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import _ from 'lodash';
 import { AmmatillisetKoulutustyypit, EperusteetKoulutustyypit } from '@shared/utils/perusteet';
-import { DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
+import { debounced, DEFAULT_PUBLIC_WAIT_TIME_MS } from '@shared/utils/delay';
 import {
   julkaistutOpsitJaPerusteet,
   julkaistutPerusteet,
@@ -39,10 +39,10 @@ export const usePerusteStore = defineStore('peruste', () => {
     )).data as any);
   }, DEFAULT_PUBLIC_WAIT_TIME_MS);
 
-  const getOpsitJaPerusteet = debounce(async (queryParams: JulkiEtusivuQuery) => {
+  const getOpsitJaPerusteet = debounced(async (queryParams: JulkiEtusivuQuery) => {
     julkiQuery.value = queryParams;
     opsitJaPerusteet.value = (await julkaistutOpsitJaPerusteet(julkiQuery.value));
-  }, DEFAULT_PUBLIC_WAIT_TIME_MS);
+  });
 
   const clearOpsitJaPerusteet = () => {
     opsitJaPerusteet.value = null;

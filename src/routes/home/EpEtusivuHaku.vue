@@ -12,6 +12,9 @@
       :kokonaismaara="kokonaismaara"
       class="my-3"
     />
+    <EpAlertInfo v-if="kokonaismaara === 0">
+      {{ $t('ei-hakutuloksia') }}
+    </EpAlertInfo>
     <div
       v-for="(item, idx) in opsitJaPerusteet"
       :key="idx"
@@ -85,6 +88,7 @@ import { ref, watch, computed, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { koulutustyyppiStateName, koulutustyyppiTheme, yleissivistavatKoulutustyypit } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
+import EpAlertInfo from '@shared/components/EpAlert/EpAlertInfo.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { JulkiEtusivuDtoEtusivuTyyppiEnum } from '@shared/api/eperusteet';
@@ -150,7 +154,7 @@ watch(sivu, async (value) => {
   }
 });
 
-const fetchOpsitJaPerusteet = debounced(async () => {
+const fetchOpsitJaPerusteet = async () => {
   if (_.size(queryNimi.value) > 2) {
     isLoading.value = true;
     await perusteStore.getOpsitJaPerusteet({
@@ -171,7 +175,7 @@ const fetchOpsitJaPerusteet = debounced(async () => {
     },
   }).catch(() => {});
   isLoading.value = false;
-});
+};
 
 const opsitJaPerusteet = computed(() => {
   return _.chain(perusteStore.opsitJaPerusteet?.data)

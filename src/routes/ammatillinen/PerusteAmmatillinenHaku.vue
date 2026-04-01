@@ -90,6 +90,9 @@
       <EpSpinner />
     </div>
 
+    <EpAlertInfo v-if="total === 0">
+      {{ $t('ei-hakutuloksia') }}
+    </EpAlertInfo>
     <div
       v-else
       class="content"
@@ -165,6 +168,7 @@ import { useAmmatillinenPerusteHakuStore } from '@/stores/AmmatillinenPerusteHak
 import { useAmmatillinenOpasHakuStore } from '@/stores/AmmatillinenOpasHakuStore';
 import { pinia } from '@/pinia';
 import { useRoute, useRouter } from 'vue-router';
+import EpAlertInfo from '@shared/components/EpAlert/EpAlertInfo.vue';
 
 const props = defineProps({
   tyyppi: {
