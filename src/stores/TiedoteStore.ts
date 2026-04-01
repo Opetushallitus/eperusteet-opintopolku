@@ -4,10 +4,13 @@ import { reactive, ref, computed } from 'vue';
 import { TiedoteDto, Tiedotteet, Perusteet, getAllPerusteet, PerusteInfoDto, KoodiDto, findTiedotteetBy } from '@shared/api/eperusteet';
 import { Page } from '@shared/tyypit';
 import { debounced } from '@shared/utils/delay';
+import { EperusteetKoulutustyypit } from '@shared/utils/perusteet';
 
 export interface KoodiPerusteella extends KoodiDto {
   perusteet: PerusteInfoDto[];
 }
+
+const sallitutKoulutustyypit = [...EperusteetKoulutustyypit, 'koulutustyyppi_500'];
 
 export const useTiedoteStore = defineStore('tiedote', () => {
   // State as refs
@@ -35,7 +38,7 @@ export const useTiedoteStore = defineStore('tiedote', () => {
       sivukoko: 10,
       kieli: kieli,
       tiedoteJulkaisuPaikka: ['opintopolku_etusivu'],
-      koulutusTyyppi: koulutustyypit,
+      koulutusTyyppi: _.filter(koulutustyypit, koulutustyyppi => _.includes(sallitutKoulutustyypit, koulutustyyppi)),
       koulutustyypiton: true,
     })).data as any).data;
   }, 300);
