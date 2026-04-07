@@ -59,6 +59,7 @@ export const koosteSubheader = {
   'tutkintoonvalmentava': 'tuvan-valtakunnalliset-perusteet',
   'kotoutumiskoulutus': 'kotouttamiskoulutuksen-valtakunnalliset-perusteet',
   'muukoulutus': 'jatkuvan-oppimisen-opetussuunnitelmat',
+  'kielikaantajatutkinto': 'kielikaantajatutkinto-kooste-kuvaus',
   'default': null,
 };
 
