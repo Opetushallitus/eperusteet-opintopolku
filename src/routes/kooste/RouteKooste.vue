@@ -115,7 +115,7 @@
           </b-col>
         </b-row>
 
-        <b-row>
+        <b-row v-if="ohjeet && ohjeet.length > 0">
           <div class="list-section">
             <div
               v-if="opasStore"
