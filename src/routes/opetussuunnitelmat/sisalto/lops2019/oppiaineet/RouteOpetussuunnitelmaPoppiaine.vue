@@ -246,7 +246,8 @@ const oppiaine = computed(() => {
 const perusteenOppiaine = computed(() => {
   if (oppiaine.value.perusteenOppiaineUri) {
     return _.find(opetussuunnitelmaDataStore.getJulkaistuPerusteSisalto('lops2019.oppiaineet'),
-      oppiaine => oppiaine.koodi.uri === oppiaine.value.perusteenOppiaineUri);
+      opsOppiaine => opsOppiaine.koodi.uri === oppiaine.value.perusteenOppiaineUri,
+    );
   }
   return undefined;
 });
