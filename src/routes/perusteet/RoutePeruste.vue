@@ -144,7 +144,6 @@ const query = ref('');
 const sisaltohaku = ref(false);
 const browserStore = new BrowserStore();
 
-// Replace debounce method
 const queryImplDebounce = _.debounce((value) => {
   if (query.value.length > 2) {
     sisaltohaku.value = true;
