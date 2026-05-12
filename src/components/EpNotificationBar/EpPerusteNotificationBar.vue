@@ -66,8 +66,15 @@ const props = withDefaults(
 const route = useRoute();
 const router = useRouter();
 
+const perusteenJulkaisutTulevatMuutosmaaraykset = computed(() => {
+  return _.map(props.perusteenJulkaisut, julkaisu => ({
+    ...julkaisu,
+    muutosmaarays: (julkaisu.muutosmaarays?.voimassaoloAlkaa) as any > Date.now() ? julkaisu.muutosmaarays : null,
+  }));
+});
+
 const julkaisutSorted = computed(() => {
-  return _.sortBy(props.perusteenJulkaisut, 'revision');
+  return _.sortBy(perusteenJulkaisutTulevatMuutosmaaraykset.value, 'revision');
 });
 
 const julkaisutReversed = computed(() => {
@@ -122,12 +129,12 @@ const voimassaolo = computed(() => {
 });
 
 const currentRevision = computed(() => {
-  return _.get(_.find(props.perusteenJulkaisut, julkaisu => julkaisu.luotu === props.peruste?.viimeisinJulkaisuAika), 'revision');
+  return _.get(_.find(perusteenJulkaisutTulevatMuutosmaaraykset.value, julkaisu => julkaisu.luotu === props.peruste?.viimeisinJulkaisuAika), 'revision');
 });
 
 const maxRevision = computed(() => {
   if (sisaltoTyyppi.value === 'peruste') {
-    return _.max(_.map(props.perusteenJulkaisut, 'revision'));
+    return _.max(_.map(perusteenJulkaisutTulevatMuutosmaaraykset.value, 'revision'));
   }
 
   if (sisaltoTyyppi.value === 'opetussuunnitelma') {
@@ -139,13 +146,13 @@ const maxRevision = computed(() => {
 
 const uusinJulkaisu = computed(() => {
   return {
-    ..._.last(props.perusteenJulkaisut),
+    ..._.last(perusteenJulkaisutTulevatMuutosmaaraykset.value),
     muutosmaarays: uusinTulevaMuutosmaarays.value?.muutosmaarays,
   };
 });
 
 const currentJulkaisu = computed(() => {
-  const currentJulkaisuObj = _.find(props.perusteenJulkaisut, julkaisu => julkaisu.revision === currentRevision.value);
+  const currentJulkaisuObj = _.find(perusteenJulkaisutTulevatMuutosmaaraykset.value, julkaisu => julkaisu.revision === currentRevision.value);
 
   if (currentJulkaisuObj) {
     return {
