@@ -54,7 +54,7 @@ export const useTiedoteStore = defineStore('tiedote', () => {
       ...filter,
       kieli: filter.kieli,
       nimi: filter.nimi,
-      tiedoteJulkaisuPaikka: ['opintopolku_etusivu'],
+      tiedoteJulkaisuPaikka: ['opintopolku_etusivu', 'opintopolku'],
       koulutusTyyppi: filter.koulutustyypit,
       koulutustyypiton: filter.koulutustyypiton,
     })).data as any;
