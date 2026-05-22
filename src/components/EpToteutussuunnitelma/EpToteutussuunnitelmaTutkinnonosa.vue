@@ -3,7 +3,7 @@
     <h2
       class="otsikko mb-4"
     >
-      {{ $kaanna(sisaltoviite.tekstiKappale.nimi) }}, {{ laajuus }} {{ $t('osaamispiste') }}
+      {{ $kaanna(sisaltoviite.nimi) }}, {{ laajuus }} {{ $t('osaamispiste') }}
     </h2>
 
     <ep-form-content
