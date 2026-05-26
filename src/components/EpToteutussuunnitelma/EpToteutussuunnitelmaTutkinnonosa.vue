@@ -8,7 +8,7 @@
 
     <ep-form-content
       v-if="perusteenTutkinnonosa && perusteenTutkinnonosa.kuvaus"
-      class="col-md-12 mt-4"
+      class="col-span-12 mt-4"
       name="tutkinnon-osan-kuvaus"
     >
       <ep-content-viewer
@@ -19,7 +19,7 @@
 
     <ep-form-content
       v-if="sisaltoviite.tekstiKappale.teksti"
-      class="col-md-12 mt-4"
+      class="col-span-12 mt-4"
       name="koulutuksen-jarjestajan-tarkennus"
     >
       <ep-content-viewer
@@ -31,7 +31,7 @@
     <ep-form-content
       v-for="(vapaa, index) in sisaltoviite.tosa.vapaat"
       :key="'tosavapaateksti'+index"
-      class="col-md-12 mt-4"
+      class="col-span-12 mt-4"
     >
       <template #header>
         <label>{{ $kaanna(vapaa.nimi) }}</label>
@@ -44,7 +44,7 @@
 
     <ep-form-content
       v-if="sisaltoviite.tosa.toteutukset && sisaltoviite.tosa.toteutukset.length > 0 && (!osaAlueet || osaAlueet.length === 0)"
-      class="col-md-12 mt-4 mb-4"
+      class="col-span-12 mt-4 mb-4"
       name="koulutuksen-jarjestajan-toteutus"
       header-type="h3"
     >
@@ -57,7 +57,7 @@
     <div v-if="sisaltoviite.tosa.omatutkinnonosa">
       <ep-form-content
         v-if="sisaltoviite.tosa.omatutkinnonosa.koodi"
-        class="col-md-12"
+        class="col-span-12"
         name="koodi"
       >
         <span v-html="sisaltoviite.tosa.omatutkinnonosa.koodi" />
@@ -68,7 +68,7 @@
         class="mb-4"
       >
         <ep-form-content
-          class="col-md-12"
+          class="col-span-12"
           name="tavoitteet"
         >
           <ep-content-viewer
@@ -84,7 +84,7 @@
         class="mb-4"
       >
         <ep-form-content
-          class="col-md-12"
+          class="col-span-12"
           name="ammattitaitovaatimukset"
         >
           <div
@@ -115,7 +115,7 @@
 
       <ep-form-content
         v-if="hasAmmattitaitovaatimukset"
-        class="col-md-12 mb-5"
+        class="col-span-12 mb-5"
         name="ammattitaitovaatimukset"
       >
         <EpAmmattitaitovaatimukset
@@ -147,7 +147,7 @@
 
       <ep-form-content
         v-if="sisaltoviite.tosa.omatutkinnonosa.ammattitaidonOsoittamistavat"
-        class="col-md-12"
+        class="col-span-12"
         name="ammattitaidon-osoittamistavat"
       >
         <ep-content-viewer
@@ -162,7 +162,7 @@
 
       <ep-form-content
         v-if="perusteenTutkinnonosa.koodiArvo"
-        class="col-md-12"
+        class="col-span-12"
         name="koodi"
       >
         <span v-html="perusteenTutkinnonosa.koodiArvo" />
@@ -170,7 +170,7 @@
 
       <ep-form-content
         v-if="perusteenTutkinnonosa.ammattitaitovaatimukset && perusteenTutkinnonosa.tyyppi === 'normaali'"
-        class="col-md-12 mb-5"
+        class="col-span-12 mb-5"
         name="ammattitaitovaatimukset"
       >
         <ep-content-viewer
@@ -192,7 +192,7 @@
 
       <ep-form-content
         v-if="perusteenTutkinnonosa.ammattitaidonOsoittamistavat"
-        class="col-md-12 mb-5"
+        class="col-span-12 mb-5"
         name="ammattitaidon-osoittamistavat"
       >
         <ep-content-viewer
@@ -204,7 +204,7 @@
       <template v-if="!osaAlueet || osaAlueet.length ===0">
         <ep-form-content
           v-if="perusteenOsaAlueet.length > 0"
-          class="col-md-12 mb-5"
+          class="col-span-12 mb-5"
           name="osa-alueet"
         >
           <ep-ammatillinen-osaalueet
@@ -215,7 +215,7 @@
 
         <ep-form-content
           v-if="perusteenPakollisetOsaAlueet && perusteenPakollisetOsaAlueet.length > 0"
-          class="col-md-12 mb-5"
+          class="col-span-12 mb-5"
           name="pakolliset-osa-alueet"
         >
           <ep-ammatillinen-osaalueet
@@ -226,7 +226,7 @@
 
         <ep-form-content
           v-if="perusteenValinnaisetOsaAlueet && perusteenValinnaisetOsaAlueet.length > 0"
-          class="col-md-12 mb-5"
+          class="col-span-12 mb-5"
           name="valinnaiset-osa-alueet"
         >
           <ep-ammatillinen-osaalueet
@@ -239,7 +239,7 @@
 
     <ep-form-content
       v-if="pakollisetOsaAlueet.length > 0"
-      class="col-md-12 mt-4"
+      class="col-span-12 mt-4"
       name="pakolliset-osa-alueet"
     >
       <EpOsaAlueListaus
@@ -250,7 +250,7 @@
 
     <ep-form-content
       v-if="valinnaisetOsaAlueet.length > 0"
-      class="col-md-12 mt-4"
+      class="col-span-12 mt-4"
       name="valinnaiset-osa-alueet"
     >
       <EpOsaAlueListaus
@@ -261,7 +261,7 @@
 
     <ep-form-content
       v-if="paikallisetOsaAlueet.length > 0"
-      class="col-md-12 mt-4"
+      class="col-span-12 mt-4"
       name="paikalliset-osa-alueet"
     >
       <EpOsaAlueListaus

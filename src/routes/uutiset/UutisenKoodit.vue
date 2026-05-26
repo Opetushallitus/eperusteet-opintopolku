@@ -1,21 +1,19 @@
 <template>
   <div v-if="kooditPerusteilla && kooditPerusteilla.length > 0">
-    <div class="d-flex">
+    <div class="flex">
       <slot name="header" />
 
       <template v-if="perusteelliset.length > 0">
-        <a
-          :id="popovertarget"
-          href="javascript:;"
-          class="peruste-popover ml-3"
-        >
-          {{ $t('nayta-perusteet') }}
-        </a>
-        <b-popover
-          :target="popovertarget"
-          :placement="'right'"
-          triggers="hover"
-        >
+        <EpPopover :triggers="['hover']">
+          <template #trigger>
+            <a
+              :id="popovertarget"
+              href="javascript:;"
+              class="peruste-popover ml-3"
+            >
+              {{ $t('nayta-perusteet') }}
+            </a>
+          </template>
           <div class="p-1">
             <slot name="popover-header" />
             <div
@@ -35,7 +33,7 @@
               </div>
             </div>
           </div>
-        </b-popover>
+        </EpPopover>
       </template>
     </div>
     <span
@@ -53,6 +51,7 @@ import { computed } from 'vue';
 import { KoodiPerusteella } from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import { $kaanna } from '@shared/utils/globals';
+import EpPopover from '@shared/components/EpPopover/EpPopover.vue';
 import _ from 'lodash';
 
 const props = defineProps({

@@ -10,7 +10,7 @@ import { onMounted, getCurrentInstance, computed } from 'vue';
 import { getKaannokset } from '@shared/api/eperusteet';
 import { Kielet } from '@shared/stores/kieli';
 import { useLoading } from 'vue-loading-overlay';
-import { loadingOptions } from './utils/loading';
+import { loadingOptions } from '@shared/config/loading';
 
 const $loading = useLoading({
   ...loadingOptions,
