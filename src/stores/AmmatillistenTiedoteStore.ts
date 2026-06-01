@@ -30,7 +30,7 @@ export class AmmatillistenTiedoteStore implements ITiedotteetProvider {
     this.state.kokonaismaara = null;
     const res = (await Tiedotteet.findTiedotteetBy(
       0,
-      9999,
+      2,
       this.state.query.kieli,
       this.state.query.nimi,
       this.state.query.perusteId,
