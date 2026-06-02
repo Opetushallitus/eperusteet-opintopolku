@@ -99,6 +99,7 @@ import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaika
 import { voimassaoloTieto } from '@/utils/voimassaolo';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
+import type { PerusteenJulkaisuData } from '@shared/api/eperusteet';
 import { isVstLukutaito } from '@shared/utils/perusteet';
 import EpVoimassaoloFilter from '@shared/components/EpVoimassaoloFilter/EpVoimassaoloFilter.vue';
 import { $kaanna } from '@shared/utils/globals';
@@ -116,7 +117,7 @@ const props = defineProps({
 });
 
 const instance = getCurrentInstance();
-const valittuPeruste = ref(null);
+const valittuPeruste = ref<(PerusteenJulkaisuData & { kaannettyNimi?: string }) | null>(null);
 const perPage = ref(10);
 const kieli = computed(() => Kielet.getSisaltoKieli.value);
 const route = useRoute();
@@ -126,7 +127,7 @@ const mounted = ref(false);
 const initQuery = () => {
   return {
     perusteenDiaarinumero: null,
-    perusteId: 0,
+    perusteId: null as number | null,
     koulutustyyppi: [
       Koulutustyyppi.vapaasivistystyo,
       Koulutustyyppi.vapaasivistystyolukutaito,
@@ -163,7 +164,7 @@ const setQueryParams = () => {
     ...query.value,
     nimi: route?.query?.haku as string || null,
     sivu: (route?.query?.sivu as number || 1) - 1,
-    perusteId: peruste?.id || 0,
+    perusteId: peruste?.id || null,
     voimassaolo: _.has(route?.query, 'voimassaolo') ? route?.query?.voimassaolo === 'true' ? true : false : true,
     poistunut: _.has(route?.query, 'poistunut') ? route?.query?.poistunut === 'true' ? true : false : false,
     tuleva: _.has(route?.query, 'tuleva') ? route?.query?.tuleva === 'true' ? true : false : true,
