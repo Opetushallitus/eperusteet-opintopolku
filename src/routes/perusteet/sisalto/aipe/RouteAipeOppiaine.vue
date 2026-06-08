@@ -70,6 +70,20 @@
       />
     </div>
 
+    <template v-if="oppiaine.vapaatTekstit">
+      <div
+        v-for="(vapaaTeksti, index) in oppiaine.vapaatTekstit"
+        :key="'vapaateksti'+index"
+        class="mt-4"
+      >
+        <h3>{{ $kaanna(vapaaTeksti.nimi) }}</h3>
+        <ep-content-viewer
+          :value="$kaanna(vapaaTeksti.teksti)"
+          :kuvat="kuvat"
+        />
+      </div>
+    </template>
+
     <div
       v-if="oppiaine.pakollinenKurssiKuvaus"
       class="mt-4"
