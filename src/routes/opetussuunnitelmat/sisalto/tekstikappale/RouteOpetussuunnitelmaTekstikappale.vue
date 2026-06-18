@@ -159,7 +159,7 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpHeading from '@shared/components/EpHeading/EpHeading.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
@@ -170,17 +170,23 @@ import { useRoute } from 'vue-router';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import EpPaikallinenTarkennus from '@shared/components/EpPaikallinenTarkennus/EpPaikallinenTarkennus.vue';
 import EpFormContent from '@shared/components/forms/EpFormContent.vue';
+import { Virheet } from '@shared/stores/virheet';
 
 
 const route = useRoute();
 const opetussuunnitelmaDataStore = getCachedOpetussuunnitelmaStore();
+const tekstiKappaleViite = ref<any | null>(null);
+
+onMounted(() => {
+  tekstiKappaleViite.value = opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: tekstikappaleId.value });
+  if (!tekstiKappaleViite.value) {
+    Virheet.lisaaVirhe({ state: { error: {status: 404} } });
+    throw new Error();
+  }
+});
 
 const tekstikappaleId = computed(() => {
   return _.toNumber(route.params.viiteId);
-});
-
-const tekstiKappaleViite = computed(() => {
-  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: tekstikappaleId.value });
 });
 
 const tekstiKappale = computed(() => {
