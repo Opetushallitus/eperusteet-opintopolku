@@ -180,9 +180,8 @@ describe('RouteOpetussuunnitelmaTekstikappale', () => {
   test('Renders tekstikappaleen sisällöt', async () => {
     const wrapper = mountWrapper(false, false);
 
-    expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
-
     await nextTick();
+    expect(wrapper.findAll('.oph-spinner').length).toEqual(0);
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen nimi');
     expect(wrapper.html()).not.toContain('perusteen tekstikappaleen teksti');
     expect(wrapper.html()).not.toContain('pohjan tekstikappaleen nimi');
