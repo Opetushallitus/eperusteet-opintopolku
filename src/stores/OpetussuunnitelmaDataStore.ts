@@ -39,6 +39,7 @@ import {
 import { IOpetussuunnitelmaStore } from './IOpetussuunitelmaStore';
 import { deepFind } from '@shared/utils/helpers';
 import { pinia } from '@/pinia';
+import { Virheet } from '@shared/stores/virheet';
 
 const PaikallisetKielet = new Set(['VK', 'EN', 'LA', 'RA', 'SM', 'SA', 'VE', 'IA', 'EA', 'PO', 'KI', 'JP', 'AR', 'KX']);
 interface NavigationQueryResult { parent: YlopsNavigationNodeDto | null, target: YlopsNavigationNodeDto }
@@ -113,7 +114,12 @@ export const useOpetussuunnitelmaDataStore = (key) => {
     };
 
     const getJulkaistuSisalto = (filter: any) => {
-      return deepFind(filter, opetussuunnitelma.value);
+      const result = deepFind(filter, opetussuunnitelma.value);
+      if (result == null) {
+        Virheet.lisaaVirhe({ state: { error: {status: 404} } });
+        throw new Error();
+      }
+      return result;
     };
 
     const getJulkaistuPerusteSisalto = (filter: any) => {

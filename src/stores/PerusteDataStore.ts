@@ -35,6 +35,7 @@ import { deepFind } from '@shared/utils/helpers';
 import { isAmmatillinenKoulutustyyppi } from '../../eperusteet-frontend-utils/vue/src/utils/perusteet';
 import { ref, computed } from 'vue';
 import { pinia } from '@/pinia';
+import { Virheet } from '@shared/stores/virheet';
 
 export const usePerusteDataStore = (key) => {
   const store = defineStore('perusteStore-' + key, () => {
@@ -213,7 +214,12 @@ export const usePerusteDataStore = (key) => {
     };
 
     const getJulkaistuPerusteSisalto = (filter) => {
-      return deepFind(filter, perusteKaikki.value);
+      const result = deepFind(filter, perusteKaikki.value);
+      if (result == null) {
+        Virheet.lisaaVirhe({ state: { error: {status: 404} } });
+        throw new Error();
+      }
+      return result;
     };
 
     const fetchNavigation = async () => {
