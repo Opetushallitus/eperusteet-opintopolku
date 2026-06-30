@@ -11,7 +11,7 @@
         <ep-color-indicator :kind="node.meta.pakollinen ? 'pakollinen' : 'valinnainen'" />
       </div>
       <div class="label-wrapper">
-        <b-link
+        <router-link
           v-if="node.location"
           :to="node.location"
         >
@@ -21,7 +21,7 @@
           >
             {{ $kaannaOlioTaiTeksti(node.label) }}
           </span>
-        </b-link>
+        </router-link>
         <span
           v-else
           class="label label-plain"

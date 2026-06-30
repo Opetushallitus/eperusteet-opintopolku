@@ -8,17 +8,17 @@
     @toggle="handleClick"
   >
     <template #header>
-      <div class="maarays-header d-flex w-100 p-2">
+      <div class="maarays-header flex p-2">
         <img
           :src="kuva"
           :alt="$t('maarays')"
-          class="kuva"
+          class="maarays-kuva"
         >
-        <div class="tiedot flex-grow-1">
-          <div class="nimi font-weight-bold mb-2">
+        <div class="tiedot flex-1 ml-4">
+          <div class="nimi font-bold mb-2">
             {{ $kaanna(maarays.nimi) }}
           </div>
-          <div class="alatiedot d-flex flex-wrap">
+          <div class="alatiedot flex flex-wrap">
             <div class="mr-2">
               {{ $t('voimaantulo') }}: {{ $sd(maarays.voimassaoloAlkaa) }}
             </div>
@@ -52,7 +52,7 @@
       </div>
     </template>
 
-    <div class="maarays-details p-3">
+    <div class="maarays-details p-3 pt-5">
       <EpSpinner v-if="loading" />
       <div
         v-else-if="maarays"
@@ -76,7 +76,7 @@
 
         <a
           v-if="maaraysPdfUrl"
-          class="avaa-maarays-btn d-inline-flex align-items-center"
+          class="avaa-maarays-btn"
           :href="maaraysPdfUrl"
           target="_blank"
           rel="noopener noreferrer"
@@ -152,7 +152,7 @@
           <div
             v-if="(maarays.muutettavatMaaraykset && maarays.muutettavatMaaraykset.length === 0 && maarays.korvattavatMaaraykset && maarays.korvattavatMaaraykset.length === 0)
               || (muutettavatMaarayksetPdfUrls.length === 0 && korvattavatMaarayksetPdfUrls.length === 0)"
-            class="font-italic"
+            class="italic"
           >
             {{ $t('maaraysta-ei-loydy-maarayskokoelmasta') }}
           </div>
@@ -185,26 +185,26 @@
         </ep-form-content>
       </div>
 
-      <ep-button
-        :id="'share-maarays-btn-' + maarays.id"
-        class="share-maarays-btn"
-        no-padding
-        link
+      <EpPopover
+        :triggers="['click']"
+        class="wide"
+        @show="onPopoverShown"
       >
-        <div class="d-flex align-items-center">
-          <ep-material-icon class="mr-2">
-            share
-          </ep-material-icon>
-          <span>{{ $t('jaa-maarays') }}</span>
-        </div>
-      </ep-button>
-
-      <b-popover
-        :target="'share-maarays-btn-' + maarays.id"
-        triggers="click blur"
-        placement="right"
-        @show="async () => await onPopoverShown()"
-      >
+        <template #trigger>
+          <ep-button
+            :id="'share-maarays-btn-' + maarays.id"
+            class="share-maarays-btn"
+            no-padding
+            link
+          >
+            <div class="flex items-center">
+              <ep-material-icon class="mr-2">
+                share
+              </ep-material-icon>
+              <span>{{ $t('jaa-maarays') }}</span>
+            </div>
+          </ep-button>
+        </template>
         <div class="wide">
           <ep-input
             ref="maaraysShareInput"
@@ -218,7 +218,7 @@
             </template>
           </ep-input>
 
-          <div class="d-flex align-items-center">
+          <div class="flex items-center">
             <ep-button
               :id="'copy-maarays-url-btn-' + maarays.id"
               no-padding
@@ -235,7 +235,7 @@
             </ep-button>
           </div>
         </div>
-      </b-popover>
+      </EpPopover>
     </div>
   </EpCollapse>
 </template>
@@ -255,9 +255,9 @@ import EpMaarayskokoelmaKoulutustyyppiSelect from '@shared/components/EpMaaraysk
 import { koulutustyyppiTheme, tyyppiTheme } from '@shared/utils/perusteet';
 import { Kielet } from '@shared/stores/kieli';
 import maaraysDocSmall from '@assets/img/images/maarays_doc_small.svg';
-import EpPdfLink from '@shared/components/EpPdfLink/EpPdfLink.vue';
 import EpButton from '@shared/components/EpButton/EpButton.vue';
 import EpInput from '@shared/components/forms/EpInput.vue';
+import EpPopover from '@shared/components/EpPopover/EpPopover.vue';
 
 const props = defineProps<{
   maarays: MaaraysDto;
@@ -430,52 +430,53 @@ onMounted(async () => {
 
 .maarays-wrapper {
   :deep(.ep-collapse) {
-    border: 1px solid $gray-lighten-9;
+    border: 1px solid $grey200;
     border-radius: 2px;
   }
 }
 
 .maarays-header {
-  .kuva {
+  width: 100%;
+
+  .maarays-kuva {
     height: 55px;
   }
 
-  .tiedot {
-    margin-left: 15px;
-
-    .valiviiva {
-      color: $gray-lighten-1;
-    }
+  .valiviiva {
+    color: $grey400;
   }
 }
 
-.maarays-details {
-  padding-top: 20px;
+.details-content {
+  max-width: 900px;
+}
 
-  .details-content {
-    max-width: 900px;
-  }
+.avaa-maarays-btn {
+  color: $white;
+  background-color: $green;
+  padding: 10px 20px;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 30px;
 
-  .avaa-maarays-btn {
+  &:hover {
+    background-color: darken($green, 5%);
     color: $white;
-    background-color: $green;
-    padding: 10px 20px;
-    display: inline-block;
-    text-decoration: none;
-    margin-bottom: 30px;
-
-    &:hover {
-      background-color: darken($green, 5%);
-      color: $white;
-    }
   }
+}
 
-  :deep(.ep-button) {
-    &.share-maarays-btn .btn {
-      text-decoration: none;
-    }
+.maarays-details :deep(.ep-button.share-maarays-btn button) {
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: none !important;
   }
 
 }
 
+:deep(.p-popover) {
+  width: 600px !important;
+  max-width: 600px !important;
+}
 </style>

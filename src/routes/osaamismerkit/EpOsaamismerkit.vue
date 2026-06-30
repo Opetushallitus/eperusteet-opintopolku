@@ -21,7 +21,7 @@
         >
           {{ $kaanna(group.kuvaus) }}
         </div>
-        <div class="d-md-flex flex-wrap justify-content-start">
+        <div class="md:flex flex-wrap justify-start">
           <div
             v-for="(osaamismerkki, idx) in group.osaamismerkit"
             :key="'merkki-'+idx"
@@ -32,7 +32,7 @@
                 class="tile tile-background-shadow-selected shadow-tile"
                 :class="{ 'expand-voimassaolo': osaamismerkki.isVanhentunut }"
               >
-                <div class="tile-main d-flex">
+                <div class="tile-main flex">
                   <div class="image">
                     <img
                       :src="osaamismerkki.image"
@@ -47,7 +47,7 @@
                 <hr v-if="osaamismerkki.isVanhentunut">
                 <div
                   v-if="osaamismerkki.isVanhentunut"
-                  class="tile-voimassaolo d-flex"
+                  class="tile-voimassaolo flex"
                 >
                   <span>{{ $t('voimassaolo') }}:</span>
                   <EpVoimassaolo :voimassaolo="osaamismerkki" />

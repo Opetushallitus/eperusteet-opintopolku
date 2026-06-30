@@ -33,8 +33,8 @@
           </h3>
         </template>
 
-        <b-tabs>
-          <b-tab
+        <ep-tabs>
+          <ep-tab
             v-for="kasitteisto in perusteenOsa.kasitteistot"
             :key="'kasitteisto' + kasitteisto.taso"
             :title="$t(kasitteisto.taso.toLowerCase())"
@@ -45,8 +45,8 @@
               :termit="termit"
               :kuvat="kuvat"
             />
-          </b-tab>
-        </b-tabs>
+          </ep-tab>
+        </ep-tabs>
       </EpCollapse>
 
       <EpCollapse
@@ -78,11 +78,11 @@
             {{ $t('paa-alueet') }}
           </h3>
         </template>
-        <div class="row">
+        <div class="grid grid-cols-12 gap-1">
           <router-link
             v-for="paaAlue in paaAlueet"
             :key="'paaAlue'+paaAlue.id"
-            class="paa-alue col-3"
+            class="paa-alue col-span-3 p-2"
             :to="{name: 'perusteOsaamiskokonaisuusPaaAlue', params: {osaamiskokonaisuusPaaAlueId: paaAlue.id + ''}}"
           >
             <div class="nimi">
@@ -107,6 +107,8 @@ import EpCollapse from '@shared/components/EpCollapse/EpCollapse.vue';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 import { createPerusteOsaStore } from '@/stores/PerusteenOsaStore';
 import { useRoute } from 'vue-router';
+import EpTabs from '@shared/components/EpTabs/EpTabs.vue';
+import EpTab from '@shared/components/EpTabs/EpTab.vue';
 
 const route = useRoute();
 
@@ -161,7 +163,6 @@ const paaAlueet = computed((): any[] => {
   background-repeat: no-repeat;
 
   .nimi {
-    margin-top: 10px;
     font-weight: 500;
     color: $black;
     overflow-wrap: break-word;

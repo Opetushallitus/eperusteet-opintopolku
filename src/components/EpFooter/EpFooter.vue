@@ -1,53 +1,51 @@
 <template>
   <div class="container">
-    <footer>
-      <div class="horizontal-line">
-        <router-link :to="{ name: 'root'}">
-          <img
-            :src="ophLogo"
-            :alt="$t('eperusteet')"
+    <div class="horizontal-line">
+      <router-link :to="{ name: 'root'}">
+        <img
+          :src="ophLogo"
+          :alt="$t('eperusteet')"
+        >
+      </router-link>
+    </div>
+    <div class="footer-row">
+      <div class="footer-content">
+        {{ $t('footer-eperusteet-palvelu') }}
+      </div>
+      <div class="footer-links">
+        <EpPalauteLinkki yllapito-avain="eperusteet-opintopolku-palaute-url" />
+        <div class="flex">
+          <EpMaterialIcon>chevron_right</EpMaterialIcon>
+          <ep-linkki :url="$kaanna(linkit.saavutettavuusseloste)">
+            {{ $t('saavutettavuusseloste') }}
+          </ep-linkki>
+        </div>
+        <div class="flex">
+          <EpMaterialIcon>chevron_right</EpMaterialIcon>
+          <EpLinkki
+            :url="$kaanna(linkit.virkailija)"
+            icon="launch"
+            icon-right
           >
-        </router-link>
-      </div>
-      <div class="footer-row">
-        <div class="footer-content">
-          {{ $t('footer-eperusteet-palvelu') }}
-        </div>
-        <div class="footer-links">
-          <EpPalauteLinkki yllapito-avain="eperusteet-opintopolku-palaute-url" />
-          <div class="d-flex">
-            <EpMaterialIcon>chevron_right</EpMaterialIcon>
-            <ep-linkki :url="$kaanna(linkit.saavutettavuusseloste)">
-              {{ $t('saavutettavuusseloste') }}
-            </ep-linkki>
-          </div>
-          <div class="d-flex">
-            <EpMaterialIcon>chevron_right</EpMaterialIcon>
-            <EpLinkki
-              :url="$kaanna(linkit.virkailija)"
-              icon="launch"
-              icon-right
-            >
-              {{ $t('siirry-virkailijanakymaan') }}
-            </EpLinkki>
-          </div>
+            {{ $t('siirry-virkailijanakymaan') }}
+          </EpLinkki>
         </div>
       </div>
-      <div class="horizontal-line">
-        <a :href="$kaanna(linkit.oph)">
-          <img
-            class="logo"
-            :src="opintopolkuLogo"
-            :alt="$t('oph')"
-          >
-        </a>
+    </div>
+    <div class="horizontal-line">
+      <a :href="$kaanna(linkit.oph)">
+        <img
+          class="logo"
+          :src="opintopolkuLogo"
+          :alt="$t('oph')"
+        >
+      </a>
+    </div>
+    <div class="footer-row">
+      <div class="footer-oph">
+        {{ $t('footer-oph') }}
       </div>
-      <div class="footer-row">
-        <div class="footer-oph">
-          {{ $t('footer-oph') }}
-        </div>
-      </div>
-    </footer>
+    </div>
   </div>
 </template>
 
@@ -83,7 +81,7 @@ const linkit = {
 <style scoped lang="scss">
 @import '@shared/styles/_variables.scss';
 
-footer {
+.container {
   padding-bottom: 50px;
   hyphens: none;
   margin-top: 100px;
@@ -96,7 +94,7 @@ footer {
     overflow: visible;
     text-align: center;
     background-color: #FFF;
-    border-top-color: $gray-lighten-3;
+    border-top-color: $grey300;
     border-top-style: solid;
     border-top-width: 1px;
 
@@ -105,6 +103,7 @@ footer {
       padding: 0 50px;
       position: relative;
       background-color: #FFF;
+      display: inline-block;
     }
   }
 
