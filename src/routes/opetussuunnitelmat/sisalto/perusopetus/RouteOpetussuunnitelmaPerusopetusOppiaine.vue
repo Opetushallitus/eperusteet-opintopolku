@@ -105,12 +105,20 @@ const oppiaineId = computed(() => {
   return _.toNumber(route.params.oppiaineId);
 });
 
+const opsOppiaine = computed(() => {
+  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'oppiaine.id': oppiaineId.value });
+});
+
 const oppiaine = computed(() => {
-  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ id: oppiaineId.value });
+  return opsOppiaine.value?.oppiaine;
 });
 
 const pohjanOppiaine = computed(() => {
-  return oppiaine.value?.pohjanOppiaine ?? {};
+  if (opsOppiaine.value.oma) {
+    return oppiaine.value?.pohjanOppiaine ?? {};
+  }
+
+  return {};
 });
 
 const perusteOppiaine = computed(() => {
@@ -144,7 +152,7 @@ const perusteOppiaineVapaatTekstit = computed(() => {
 });
 
 const oppiaineenPohjanVuosiluokkakokonaisuudet = computed(() => {
-  return oppiaine.value?.pohjanOppiaine?.vuosiluokkakokonaisuudet;
+  return pohjanOppiaine?.value?.vuosiluokkakokonaisuudet;
 });
 
 const laajaalaisetOsaamiset = computed(() => {
