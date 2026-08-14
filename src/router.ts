@@ -1,106 +1,101 @@
-import _ from 'lodash';
-import Vue from 'vue';
-import VueScrollTo from 'vue-scrollto';
-import VueMeta from 'vue-meta';
-import Root from '@/routes/Root.vue';
-import EpErrorPage from '@shared/components/EpErrorPage/EpErrorPage.vue';
+import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
+import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
+import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
+import RouteAmmatillinenValmisteillaOlevat from '@/routes/ammatillinen/RouteAmmatillinenValmisteillaOlevat.vue';
+import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';
 import RouteHome from '@/routes/home/RouteHome.vue';
 import RouteKooste from '@/routes/kooste/RouteKooste.vue';
 import RouteKoosteAmmatillinen from '@/routes/kooste/RouteKoosteAmmatillinen.vue';
 import RouteMaarayskokoelma from '@/routes/maarays/RouteMaarayskokoelma.vue';
-import RouteMaarays from '@/routes/maarays/RouteMaarays.vue';
-import RouteAmmatillinenSelaus from '@/routes/ammatillinen/RouteAmmatillinenSelaus.vue';
-import RouteAmmatillinenKoulutuksenJarjestajat from '@/routes/ammatillinen/RouteAmmatillinenKoulutuksenJarjestajat.vue';
-import RouteAmmatillinenValmisteillaOlevat from '@/routes/ammatillinen/RouteAmmatillinenValmisteillaOlevat.vue';
-import RouteAmmatillinenOhjeet from '@/routes/ammatillinen/RouteAmmatillinenOhjeet.vue';
-import RouteKoulutuksenJarjestaja from '@/routes/ammatillinen/RouteKoulutuksenJarjestaja.vue';
-import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
-import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
+import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
+import RouteOpetussuunnitelmaPerusopetusOppiaine from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaine.vue';
+import RouteOpetussuunnitelmaPerusopetusOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaineet.vue';
+import RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet.vue';
+import RoutePerusopetusVuosiluokkakokonaisuus from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RoutePerusopetusVuosiluokkakokonaisuus.vue';
+import RouteOpetussuunnitelmaTaiteenala from '@/routes/opetussuunnitelmat/sisalto/taiteenperusopetus/RouteOpetussuunnitelmaTaiteenala.vue';
+import RouteOpetussuunnitelmaTaiteenosa from '@/routes/opetussuunnitelmat/sisalto/taiteenperusopetus/RouteOpetussuunnitelmaTaiteenosa.vue';
+import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sisalto/tekstikappale/RouteOpetussuunnitelmaTekstikappale.vue';
+import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
+import RouteOsaamismerkit from '@/routes/osaamismerkit/RouteOsaamismerkit.vue';
+import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiTiedot.vue';
 import RoutePeruste from '@/routes/perusteet/RoutePeruste.vue';
-import RoutePerusteTiedot from '@/routes/perusteet/tiedot/RoutePerusteTiedot.vue';
-import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
-import RouteTekstikappaleOsa from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappaleOsa.vue';
-import RouteLaajaAlaiset from '@/routes/perusteet/sisalto/lops2019/laajaalaiset/RouteLaajaAlaiset.vue';
-import RouteOppiaineet from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaineet.vue';
-import RouteOppiaine from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaine.vue';
-import RouteModuuli from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteModuuli.vue';
-import RouteTutkinnonosat from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosat.vue';
-import RouteTutkinnonosa from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosa.vue';
-import RouteRakenne from '@/routes/perusteet/sisalto/ammatillinen/RouteRakenne.vue';
-import RouteVuosiluokkakokonaisuus from '@/routes/perusteet/sisalto/perusopetus/RouteVuosiluokkakokonaisuus.vue';
-import RoutePerusopetusOppiaine from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaine.vue';
-import RoutePerusopetusOppiaineet from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaineet.vue';
 import RouteAipeKurssi from '@/routes/perusteet/sisalto/aipe/RouteAipeKurssi.vue';
+import RouteAipeLaajaAlaisetOsaamiset from '@/routes/perusteet/sisalto/aipe/RouteAipeLaajaAlaisetOsaamiset.vue';
 import RouteAipeOppiaine from '@/routes/perusteet/sisalto/aipe/RouteAipeOppiaine.vue';
 import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
-import RouteAipeLaajaAlaisetOsaamiset from '@/routes/perusteet/sisalto/aipe/RouteAipeLaajaAlaisetOsaamiset.vue';
-import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
-import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
-import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
-import RouteKotoKielitaitotaso from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoKielitaitotaso.vue';
-import RouteKotoOpinto from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoOpinto.vue';
-import RouteLaajaalainenOsaaminen from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteLaajaalainenOsaaminen.vue';
-import RouteYleisettavoitteet from '@/routes/perusteet/sisalto/lukio/RouteYleisettavoitteet.vue';
-import RouteAihekokonaisuudet from '@/routes/perusteet/sisalto/lukio/RouteAihekokonaisuudet.vue';
-import RouteLukioOppiaine from '@/routes/perusteet/sisalto/lukio/RouteLukioOppiaine.vue';
-import RouteKurssi from '@/routes/perusteet/sisalto/lukio/RouteKurssi.vue';
+import RouteRakenne from '@/routes/perusteet/sisalto/ammatillinen/RouteRakenne.vue';
+import RouteTutkinnonosa from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosa.vue';
+import RouteTutkinnonosat from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosat.vue';
+import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
 import RouteOsaamiskokonaisuus from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuus.vue';
 import RouteOsaamiskokonaisuusPaaAlue from '@/routes/perusteet/sisalto/digi/RouteOsaamiskokonaisuusPaaAlue.vue';
+import RouteKaantajaAihealue from '@/routes/perusteet/sisalto/kios/RouteKaantajaAihealue.vue';
+import RouteKaantajaKielitaito from '@/routes/perusteet/sisalto/kios/RouteKaantajaKielitaito.vue';
 import RouteKaantajaTaito from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaito.vue';
 import RouteKaantajaTaitotasoasteikko from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaitotasoasteikko.vue';
-import RouteKaantajaTodistusmalli from '@/routes/perusteet/sisalto/kios/RouteKaantajaTodistusmalli.vue';
-import RouteKaantajaAihealue from '@/routes/perusteet/sisalto/kios/RouteKaantajaAihealue.vue';
 import RouteKaantajaTaitotasokuvaus from '@/routes/perusteet/sisalto/kios/RouteKaantajaTaitotasokuvaus.vue';
-import RouteKaantajaKielitaito from '@/routes/perusteet/sisalto/kios/RouteKaantajaKielitaito.vue';
-import RouteOsaamismerkit from '@/routes/osaamismerkit/RouteOsaamismerkit.vue';
-import RouteOpetussuunnitelma from '@/routes/opetussuunnitelmat/RouteOpetussuunnitelma.vue';
-import RouteOpetussuunnitelmaTiedot from '@/routes/opetussuunnitelmat/tiedot/RouteOpetussuunnitelmaTiedot.vue';
-import RouteOpetussuunnitelmaTekstikappale from '@/routes/opetussuunnitelmat/sisalto/tekstikappale/RouteOpetussuunnitelmaTekstikappale.vue';
-import RouteToteutussuunnitelmaTiedot from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTiedot.vue';
-import RouteToteutussuunnitelmaSuorituspolut from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSuorituspolut.vue';
-import RouteToteutussuunnitelmaSisalto from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSisalto.vue';
-import RouteToteutussuunnitelmaOsaAlue from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaOsaAlue.vue';
-import RouteToteutussuunnitelmaTutkinnonosat from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTutkinnonosat.vue';
-import RoutePerusopetusVuosiluokkakokonaisuus from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RoutePerusopetusVuosiluokkakokonaisuus.vue';
-import RouteOpetussuunnitelmaPerusopetusOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaineet.vue';
-import RouteOpetussuunnitelmaPerusopetusOppiaine from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusOppiaine.vue';
-import RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet from '@/routes/opetussuunnitelmat/sisalto/perusopetus/RouteOpetussuunnitelmaPerusopetusValinnaisetOppiaineet.vue';
-import RouteOsaamismerkkiTiedot from '@/routes/osaamismerkit/RouteOsaamismerkkiTiedot.vue';
-import RouteTutkinnonosaTutke from '@/routes/perusteet/sisalto/ammatillinen/RouteTutkinnonosaTutke.vue';
+import RouteKaantajaTodistusmalli from '@/routes/perusteet/sisalto/kios/RouteKaantajaTodistusmalli.vue';
+import RouteLaajaAlaiset from '@/routes/perusteet/sisalto/lops2019/laajaalaiset/RouteLaajaAlaiset.vue';
+import RouteModuuli from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteModuuli.vue';
+import RouteOppiaine from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaine.vue';
+import RouteOppiaineet from '@/routes/perusteet/sisalto/lops2019/oppiaineet/RouteOppiaineet.vue';
+import RouteAihekokonaisuudet from '@/routes/perusteet/sisalto/lukio/RouteAihekokonaisuudet.vue';
+import RouteKurssi from '@/routes/perusteet/sisalto/lukio/RouteKurssi.vue';
+import RouteLukioOppiaine from '@/routes/perusteet/sisalto/lukio/RouteLukioOppiaine.vue';
+import RouteYleisettavoitteet from '@/routes/perusteet/sisalto/lukio/RouteYleisettavoitteet.vue';
+import RoutePerusopetusOppiaine from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaine.vue';
+import RoutePerusopetusOppiaineet from '@/routes/perusteet/sisalto/perusopetus/RoutePerusopetusOppiaineet.vue';
+import RouteVuosiluokkakokonaisuus from '@/routes/perusteet/sisalto/perusopetus/RouteVuosiluokkakokonaisuus.vue';
+import RouteTekstikappale from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappale.vue';
+import RouteTekstikappaleOsa from '@/routes/perusteet/sisalto/tekstikappale/RouteTekstikappaleOsa.vue';
+import RouteTaiteenala from '@/routes/perusteet/sisalto/tpo/RouteTaiteenala.vue';
+import RouteTaiteenosa from '@/routes/perusteet/sisalto/tpo/RouteTaiteenosa.vue';
+import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
+import RouteLaajaalainenOsaaminen from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteLaajaalainenOsaaminen.vue';
+import RouteKotoKielitaitotaso from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoKielitaitotaso.vue';
+import RouteKotoOpinto from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoOpinto.vue';
+import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
+import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
 import RoutePerusteMuutoshistoria from '@/routes/perusteet/tiedot/RoutePerusteMuutoshistoria.vue';
+import RoutePerusteTiedot from '@/routes/perusteet/tiedot/RoutePerusteTiedot.vue';
+import Root from '@/routes/Root.vue';
+import RouteToteutussuunnitelmaOsaAlue from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaOsaAlue.vue';
+import RouteToteutussuunnitelmaSisalto from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSisalto.vue';
+import RouteToteutussuunnitelmaSuorituspolut from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaSuorituspolut.vue';
+import RouteToteutussuunnitelmaTiedot from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTiedot.vue';
+import RouteToteutussuunnitelmaTutkinnonosat from '@/routes/toteutussuunnitelmat/RouteToteutussuunnitelmaTutkinnonosat.vue';
+import RouteUutinen from '@/routes/uutiset/RouteUutinen.vue';
+import RouteUutiset from '@/routes/uutiset/RouteUutiset.vue';
+import EpErrorPage from '@shared/components/EpErrorPage/EpErrorPage.vue';
+import _ from 'lodash';
 
-import { changeLang } from '@shared/utils/router';
-import { createLogger } from '@shared/utils/logger';
-import RouteOpetussuunnitelmaOppiaineet
-  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaineet.vue';
-import RouteOpetussuunnitelmaOppiaine
-  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaine.vue';
-import RouteOpetussuunnitelmaModuuli
-  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaModuuli.vue';
-import RouteOpetussuunnitelmaOpintojakso
-  from '@/routes/opetussuunnitelmat/sisalto/lops2019/opintojaksot/RouteOpetussuunnitelmaOpintojakso.vue';
-import RouteOpetussuunnitelmaPoppiaine
-  from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaPoppiaine.vue';
-import RouteOpetussuunnitelmaOppiaine2015 from '@/routes/opetussuunnitelmat/sisalto/lops/RouteOpetussuunnitelmaOppiaine2015.vue';
+import { pinia } from '@/pinia';
 import RouteOpetussuunnitelmaKurssi from '@/routes/opetussuunnitelmat/sisalto/lops/RouteOpetussuunnitelmaKurssi.vue';
-import { useKoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
+import RouteOpetussuunnitelmaOppiaine2015 from '@/routes/opetussuunnitelmat/sisalto/lops/RouteOpetussuunnitelmaOppiaine2015.vue';
+import RouteOpetussuunnitelmaOpintojakso from '@/routes/opetussuunnitelmat/sisalto/lops2019/opintojaksot/RouteOpetussuunnitelmaOpintojakso.vue';
+import RouteOpetussuunnitelmaModuuli from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaModuuli.vue';
+import RouteOpetussuunnitelmaOppiaine from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaine.vue';
+import RouteOpetussuunnitelmaOppiaineet from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaOppiaineet.vue';
+import RouteOpetussuunnitelmaPoppiaine from '@/routes/opetussuunnitelmat/sisalto/lops2019/oppiaineet/RouteOpetussuunnitelmaPoppiaine.vue';
+import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
+import RouteKotoLaajaAlainenOsaaminen from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
+import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
 import { useAmmatillinenPerusteKoosteStore } from '@/stores/AmmatillinenPerusteKoosteStore';
 import { useKoulutuksenJarjestajaStore } from '@/stores/KoulutuksenJarjestajaStore';
-import RouteKotoLaajaAlainenOsaaminen from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoLaajaAlainenOsaaminen.vue';
-import RouteLinkkisivu from '@/routes/perusteet/sisalto/linkkisivu/RouteLinkkisivu.vue';
-import { redirects } from './utils/redirects';
-import { useOsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
-import RoutePerusteKoosteEng from '@/routes/perusteet/tiedot/RoutePerusteKoosteEng.vue';
-import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
-import { BrowserStore } from '@shared/stores/BrowserStore';
-import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
-import { pinia } from '@/pinia';
+import { useKoulutuksenJarjestajatStore } from '@/stores/KoulutuksenJarjestajatStore';
 import { useOpetussuunnitelmaCacheStore, useToteutussuunnitelmaCacheStore } from '@/stores/OpetussuunnitelmaCacheStore';
-import { createRouter, createWebHashHistory, useRoute } from 'vue-router';
-import { useLoading } from 'vue-loading-overlay';
-import { loadingOptions } from './utils/loading';
-import { useTiedoteStore } from './stores/TiedoteStore';
+import { useOsaamismerkkiStore } from '@/stores/OsaamismerkkiStore';
+import { usePerusteCacheStore } from '@/stores/PerusteCacheStore';
+import { BrowserStore } from '@shared/stores/BrowserStore';
 import { Virheet } from '@shared/stores/virheet';
+import { createLogger } from '@shared/utils/logger';
+import { changeLang } from '@shared/utils/router';
+import { useLoading } from 'vue-loading-overlay';
+import { createRouter, createWebHashHistory } from 'vue-router';
+import RouteTavoitteetSisallotArviointi from './routes/opetussuunnitelmat/sisalto/perusopetus/RouteTavoitteetSisallotArviointi.vue';
+import { useTiedoteStore } from './stores/TiedoteStore';
+import { loadingOptions } from './utils/loading';
+import { redirects } from './utils/redirects';
 
 const logger = createLogger('Router');
 
@@ -413,6 +408,14 @@ export const router = createRouter({
           component: RouteOpetussuunnitelmaPerusopetusOppiaine,
           name: 'opetussuunnitelmaperusopetusoppiaine',
         }, {
+          path: 'taiteenalat/:taiteenalaId',
+          component: RouteOpetussuunnitelmaTaiteenala,
+          name: 'opetussuunnitelmaTaiteenala',
+        }, {
+          path: 'taiteenosat/:taiteenosaId',
+          component: RouteOpetussuunnitelmaTaiteenosa,
+          name: 'opetussuunnitelmaTaiteenosa',
+        }, {
           path: 'tavoitesisaltoarvioinnit/:vuosiluokka?/:oppiaineId?',
           component: RouteTavoitteetSisallotArviointi,
           name: 'tavoitteetSisallotArviointi',
@@ -443,6 +446,23 @@ export const router = createRouter({
           path: 'kooste',
           component: RoutePerusteKoosteEng,
           name: 'perusteKoosteEng',
+        }, {
+          path: 'taiteenala/:viiteId',
+          component: RouteTaiteenala,
+          name: 'perusteTaiteenala',
+          children: [{
+            path: 'osa/:osa',
+            component: RouteTekstikappaleOsa,
+            name: 'taiteenalaOsa',
+          }, {
+            path: 'vapaaOsa/:vapaatekstiId',
+            component: RouteTekstikappaleOsa,
+            name: 'taiteenalaVapaaOsa',
+          }, {
+            path: 'taiteenosa/:taiteenosaId',
+            component: RouteTaiteenosa,
+            name: 'taiteenosa',
+          }],
         }, {
           path: 'tekstikappale/:viiteId',
           component: RouteTekstikappale,
