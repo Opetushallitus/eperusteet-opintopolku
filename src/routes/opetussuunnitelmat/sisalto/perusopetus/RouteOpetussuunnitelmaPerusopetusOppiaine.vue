@@ -106,11 +106,20 @@ const oppiaineId = computed(() => {
 });
 
 const opsOppiaine = computed(() => {
-  return opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'oppiaine.id': oppiaineId.value });
+  const found = _.find(
+    opetussuunnitelmaDataStore.getJulkaistuSisalto('oppiaineet'),
+    ({ oppiaine }) => oppiaine?.id === oppiaineId.value
+      || _.some(oppiaine?.oppimaarat, oppimaara => oppimaara.id === oppiaineId.value),
+  );
+  return found || opetussuunnitelmaDataStore.getJulkaistuSisalto({ 'oppiaine.id': oppiaineId.value });
 });
 
 const oppiaine = computed(() => {
-  return opsOppiaine.value?.oppiaine;
+  const oa = opsOppiaine.value?.oppiaine;
+  if (oa?.id === oppiaineId.value) {
+    return oa;
+  }
+  return _.find(oa?.oppimaarat, { id: oppiaineId.value });
 });
 
 const pohjanOppiaine = computed(() => {
