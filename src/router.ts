@@ -33,6 +33,9 @@ import RoutePerusopetusOppiaineet from '@/routes/perusteet/sisalto/perusopetus/R
 import RouteAipeKurssi from '@/routes/perusteet/sisalto/aipe/RouteAipeKurssi.vue';
 import RouteAipeOppiaine from '@/routes/perusteet/sisalto/aipe/RouteAipeOppiaine.vue';
 import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
+import RouteOpetussuunnitelmaAipeVaihe from '@/routes/opetussuunnitelmat/sisalto/aipe/RouteAipeVaihe.vue';
+import RouteOpetussuunnitelmaAipeOppiaine from '@/routes/opetussuunnitelmat/sisalto/aipe/RouteAipeOppiaine.vue';
+import RouteOpetussuunnitelmaAipeKurssi from '@/routes/opetussuunnitelmat/sisalto/aipe/RouteAipeKurssi.vue';
 import RouteAipeLaajaAlaisetOsaamiset from '@/routes/perusteet/sisalto/aipe/RouteAipeLaajaAlaisetOsaamiset.vue';
 import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
 import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
@@ -416,6 +419,20 @@ export const router = createRouter({
           path: 'tavoitesisaltoarvioinnit/:vuosiluokka?/:oppiaineId?',
           component: RouteTavoitteetSisallotArviointi,
           name: 'tavoitteetSisallotArviointi',
+        }, {
+          path: 'vaihe/:vaiheId',
+          component: RouteOpetussuunnitelmaAipeVaihe,
+          name: 'opetussuunnitelmaaipevaihe',
+          children: [{
+            path: 'oppiaine/:oppiaineId',
+            component: RouteOpetussuunnitelmaAipeOppiaine,
+            name: 'opetussuunnitelmaaipeoppiaine',
+            children: [{
+              path: 'kurssi/:kurssiId',
+              component: RouteOpetussuunnitelmaAipeKurssi,
+              name: 'opetussuunnitelmaaipekurssi',
+            }],
+          }],
         }],
       }, {
         path: ':koulutustyyppi/:perusteId(\\d+)/:revision(\\d+)?',
