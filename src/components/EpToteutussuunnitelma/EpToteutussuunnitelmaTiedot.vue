@@ -172,7 +172,7 @@ const koulutustoimija = computed(() => {
 });
 
 const kuvausOtsikko = computed(() => {
-  return props.store?.isAmmatillinen ? 'tutkinnon-suorittaneen-osaaminen' : 'opetussuunnitelma-tiivistelma';
+  return props.store?.isAmmatillinen ? 'toteutussuunnitelma-tiivistelma' : 'opetussuunnitelma-tiivistelma';
 });
 
 const kieliChanged = async () => {
