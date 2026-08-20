@@ -194,6 +194,7 @@
             :border-bottom="false"
             :expanded-by-default="false"
             chevron-location="left"
+            :use-padding="false"
           >
             <template #header>
               <h5 v-html="$kaanna(lao.nimi)" />
