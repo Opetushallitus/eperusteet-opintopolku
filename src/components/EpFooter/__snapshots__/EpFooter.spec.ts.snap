@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`EpFooter > Renders 1`] = `
-"<div data-v-d45b1334="" class="container">
+"<footer data-v-d45b1334="" class="container">
   <div data-v-d45b1334="" class="horizontal-line"><a data-v-d45b1334=""><img data-v-d45b1334="" src="/eperusteet-frontend-utils/vue/public/img/banners/opintopolku/logo.svg" alt="eperusteet"></a></div>
   <div data-v-d45b1334="" class="footer-row">
     <div data-v-d45b1334="" class="footer-content">footer-eperusteet-palvelu</div>
@@ -24,5 +24,5 @@ exports[`EpFooter > Renders 1`] = `
   <div data-v-d45b1334="" class="footer-row">
     <div data-v-d45b1334="" class="footer-oph">footer-oph</div>
   </div>
-</div>"
+</footer>"
 `;

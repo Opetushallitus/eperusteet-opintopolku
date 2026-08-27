@@ -23,7 +23,7 @@
         <router-link
           v-if="node.location && !subtype"
           :to="node.location"
-          class="flex-grow-1"
+          class="flex-1"
         >
           <span
             class="label"

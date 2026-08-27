@@ -13,7 +13,7 @@
         <div class="w-full">
           <div class="flex flex-wrap justify-between mb-0">
             <div
-              class="tile mb-8"
+              class="tile mb-8 w-full lg:w-1/2"
             >
               <h2 class="otsikko !mb-4">
                 {{ $t('peruste') }}

@@ -19,14 +19,13 @@
           {{ $t('aihe') }}
         </h3>
         <div class="flex justify-between flex-col lg:flex-row aihe-boxes gap-4">
-          <div
+          <button
             v-for="vaihtoehto in tyyppiVaihtoehdot"
             :key="vaihtoehto.tyyppi"
+            type="button"
             class="aihe-box py-6 px-3 flex-1 rounded cursor-pointer text-center"
             :class="{ 'active': filters.tyyppi === vaihtoehto.tyyppi }"
             @click="toggleTyyppi(vaihtoehto.tyyppi)"
-            role="button"
-            tabindex="0"
           >
             <EpMaterialIcon
               icon-shape="outlined"
@@ -35,7 +34,7 @@
               {{ vaihtoehto.icon }}
             </EpMaterialIcon>
             {{ $t(vaihtoehto.translationKey) }}
-          </div>
+          </button>
         </div>
       </div>
 
@@ -335,10 +334,19 @@ function toggleTyyppi(tyyppi: string) {
 .aihe-box {
   @include tile-background-shadow;
   transition: all 0.2s ease;
+  appearance: none;
+  background-color: transparent;
+  font: inherit;
+  color: inherit;
 
   &:hover {
     border-color: $lightBlue2;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $blue3;
+    outline-offset: 2px;
   }
 
   &.active {

@@ -155,6 +155,7 @@ const selectedTaso = (taso) => {
   }
 
   :deep(.checkbox-item) {
+    position: relative;
     padding: 0.3rem 0.8rem;
     border-radius: 10px;
     background-color: $digitaalinen-osaaminen-ikaryhma-color;
@@ -167,12 +168,25 @@ const selectedTaso = (taso) => {
       opacity: 0.9;
     }
 
+    &:focus-within {
+      outline: 2px solid $white;
+      outline-offset: 2px;
+    }
+
     .ep-toggle {
       gap: 0;
     }
 
     .p-checkbox {
-      display: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     .toggle-label {

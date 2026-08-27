@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <footer class="container">
     <div class="horizontal-line">
       <router-link :to="{ name: 'root'}">
         <img
@@ -46,7 +46,7 @@
         {{ $t('footer-oph') }}
       </div>
     </div>
-  </div>
+  </footer>
 </template>
 
 <script setup lang="ts">

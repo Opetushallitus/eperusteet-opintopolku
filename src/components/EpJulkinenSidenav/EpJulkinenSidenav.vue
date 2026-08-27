@@ -7,6 +7,8 @@
       <ep-button
         class="valikko-button"
         variant="link"
+        :aria-expanded="active"
+        :aria-controls="active ? drawerId : undefined"
         @click="active = !active"
       >
         <div class="menu">
@@ -34,10 +36,12 @@
       />
     </div>
     <Drawer
+      :id="drawerId"
       v-model:visible="active"
       position="left"
       :show-close-icon="false"
       :header="null"
+      :aria-label="$t('valikko')"
     >
       <div class="pb-3 pl-3 pr-3">
         <div class="mt-3 mb-4">
@@ -158,6 +162,7 @@ const router = useRouter();
 
 // Define reactive state
 const active = ref(false);
+const drawerId = 'julkinen-sidenav-drawer';
 
 // Computed properties
 const koulutustyyppiItems = computed(() => {
