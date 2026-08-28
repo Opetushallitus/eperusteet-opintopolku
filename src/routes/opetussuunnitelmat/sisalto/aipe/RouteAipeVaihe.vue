@@ -95,20 +95,6 @@
         </div>
       </template>
 
-      <div
-        v-if="tavoitealueet.length > 0"
-        class="mt-5"
-      >
-        <h3 class="mb-3">{{ $t('opetuksen-tavoitealueet') }}</h3>
-        <div
-          v-for="tavoitealue in tavoitealueet"
-          :key="'tavoitealue'+tavoitealue.id"
-          class="taulukko-rivi-varitys px-2 py-3"
-        >
-          {{ $kaanna(tavoitealue.nimi) }}
-        </div>
-      </div>
-
       <EpPaikallinenTarkennus
         v-if="$kaanna(vaihe.paikallinenTarkennus)"
         class="mt-4"
