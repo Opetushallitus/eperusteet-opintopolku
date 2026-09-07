@@ -113,7 +113,7 @@
           :key="'oat' + index"
           class="mb-2"
         >
-          <div class="d-flex">
+          <div class="flex">
             <router-link
               v-if="oat.oatOpetussuunnitelma"
               :to="{ name: 'toteutussuunnitelma', params: { toteutussuunnitelmaId: oat.oatOpetussuunnitelma.id } }"

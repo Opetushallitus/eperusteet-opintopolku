@@ -6,11 +6,11 @@
       no-padding
       @click="emit('clear')"
     >
-      <span class="font-weight-bold">&#60;</span> {{ $t('takaisin-edelliseen-nakymaan') }}
+      <span class="font-bold">&#60;</span> {{ $t('takaisin-edelliseen-nakymaan') }}
     </EpButton>
 
     <EpHakutulosmaara
-      class="tulos font-weight-600 mt-2"
+      class="tulos font-semibold mt-2"
       :kokonaismaara="kokonaismaara"
     />
 

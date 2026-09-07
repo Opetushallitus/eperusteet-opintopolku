@@ -1,6 +1,6 @@
 import { VapaasivistystyoPaikallisetStore } from '@/stores/VapaasivistystyoPaikallisetStore';
 import { YleissivistavatPaikallisetStore } from '@/stores/YleissivistavatPaikallisetStore';
-import Paikalliset from '@/routes/kooste/Paikalliset.vue';
+import YleissivistavatPaikalliset from '@/routes/kooste/YleissivistavatPaikalliset.vue';
 import VstPaikalliset from '@/routes/kooste/VstPaikalliset.vue';
 import TuvaPaikalliset from '@/routes/kooste/TuvaPaikalliset.vue';
 import KotoPaikalliset from '@/routes/kooste/KotoPaikalliset.vue';
@@ -42,7 +42,7 @@ export const koostePaikallinenComponent = {
   'kotoutumiskoulutus': KotoPaikalliset,
   'vapaasivistystyo': VstPaikalliset,
   'muukoulutus': JotpaPaikalliset,
-  'default': Paikalliset,
+  'default': YleissivistavatPaikalliset,
 };
 
 export const koosteKuvaus = {

@@ -42,7 +42,7 @@ const randomKey = computed(() => {
 @import '@shared/styles/_variables.scss';
 
 .osaalue {
-  background: #e6f6ff;
+  background: $lightBlue2;
   padding: 14px;
   border-radius: 40px;
   margin-bottom: 5px;

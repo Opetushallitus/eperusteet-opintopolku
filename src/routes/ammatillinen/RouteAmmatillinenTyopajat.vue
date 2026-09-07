@@ -125,6 +125,6 @@ const opetussuunnitelmatPaginated = computed(() => {
 .icon {
   height: 40px;
   width: 40px;
-  color: $green-lighten-2;
+  color: $green3;
 }
 </style>

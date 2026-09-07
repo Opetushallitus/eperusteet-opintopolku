@@ -8,7 +8,7 @@
         <template v-if="!piilotaNakyvaTulosmaara">
           <span
             aria-hidden="true"
-            class="font-weight-bold mr-1"
+            class="font-bold mr-1"
           >{{ kokonaismaara }}</span>
           <span aria-hidden="true">{{ $t('hakutulosta') }}</span>
         </template>
