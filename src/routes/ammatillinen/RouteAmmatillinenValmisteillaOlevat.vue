@@ -24,7 +24,10 @@
               >
                 {{ $t('peruste-astuu-voimaan') }} {{ $sd(peruste.voimassaoloAlkaa) }}.
               </div>
-              <div @click="toggle(peruste)" class="btn-link cursor-pointer">
+              <div
+                class="btn-link cursor-pointer"
+                @click="toggle(peruste)"
+              >
                 <div
                   v-if="peruste.toggled"
                   class="avaa-link"

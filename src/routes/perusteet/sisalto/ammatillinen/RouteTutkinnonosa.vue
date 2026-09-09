@@ -47,23 +47,21 @@ const router = useRouter();
 onMounted(() => {
   if (route.query?.redirect) {
     const viite = _.find(perusteenTutkinnonosaViitteet.value, viite => _.toNumber(viite._tutkinnonOsa) === _.toNumber(route.params.tutkinnonOsaViiteId));
-    router.replace(
-      {
-        name: 'tutkinnonosa',
-        params: {
-          perusteId: _.toString(perusteDataStore.peruste?.id),
-          tutkinnonOsaViiteId: viite.id,
-        },
-      });
+    if (viite?.id) {
+      router.replace(
+        {
+          name: 'tutkinnonosa',
+          params: {
+            perusteId: _.toString(perusteDataStore.peruste?.id),
+            tutkinnonOsaViiteId: viite.id,
+          },
+        });
+    }
   }
 });
 
 const tutkinnonosaViiteId = computed(() => {
   return _.toNumber(route.params.tutkinnonOsaViiteId);
-});
-
-const tutkinnonosaViite = computed(() => {
-  return perusteDataStore.getJulkaistuPerusteSisalto({ id: tutkinnonosaViiteId.value }) as any;
 });
 
 const perusteenTutkinnonosaViitteet = computed(() => {
@@ -73,20 +71,31 @@ const perusteenTutkinnonosaViitteet = computed(() => {
     .value();
 });
 
+const tutkinnonosaViite = computed(() => {
+  if (route.query?.redirect) {
+    return null;
+  }
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: tutkinnonosaViiteId.value }) as any;
+});
+
 const perusteenTutkinnonosa = computed(() => {
-  return perusteDataStore.getJulkaistuPerusteSisalto({ id: _.toNumber(_.get(tutkinnonosaViite.value, '_tutkinnonOsa')) }) as any;
+  const tutkinnonOsaId = _.toNumber(_.get(tutkinnonosaViite.value, '_tutkinnonOsa'));
+  if (!tutkinnonOsaId) {
+    return null;
+  }
+  return perusteDataStore.getJulkaistuPerusteSisalto({ id: tutkinnonOsaId }) as any;
 });
 
 const laajuus = computed(() => {
-  if (_.isNumber(tutkinnonosaViite.value.laajuus) && _.isNumber(tutkinnonosaViite.value.laajuusMaksimi)) {
+  if (_.isNumber(tutkinnonosaViite.value?.laajuus) && _.isNumber(tutkinnonosaViite.value.laajuusMaksimi)) {
     return tutkinnonosaViite.value.laajuus + ' - ' + tutkinnonosaViite.value.laajuusMaksimi;
   }
 
-  return tutkinnonosaViite.value.laajuus;
+  return tutkinnonosaViite.value?.laajuus;
 });
 
 const laajuusText = computed(() => {
-  if (!tutkinnonosaViite.value.laajuus) {
+  if (!tutkinnonosaViite.value?.laajuus) {
     return '';
   }
   return ', ' + laajuus.value + ' ' + $t('osaamispiste');
