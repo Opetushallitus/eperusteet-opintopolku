@@ -55,7 +55,9 @@
             <EpMaterialIcon
               icon-shape="outlined"
               size="22px"
-            >home</EpMaterialIcon>
+            >
+              home
+            </EpMaterialIcon>
             {{ $t('etusivu') }}
           </router-link>
         </div>

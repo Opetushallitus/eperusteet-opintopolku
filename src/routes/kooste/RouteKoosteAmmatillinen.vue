@@ -18,7 +18,10 @@
               <h2 class="otsikko !mb-4">
                 {{ $t('peruste') }}
               </h2>
-              <router-link :to="perusteRoute" class="block">
+              <router-link
+                :to="perusteRoute"
+                class="block"
+              >
                 <peruste-tile
                   :julkaisu="peruste"
                   :koulutustyyppi="koulutustyyppi"
