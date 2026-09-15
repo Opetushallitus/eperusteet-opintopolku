@@ -360,7 +360,7 @@ const paikallisetOppiaineet = computed(() => {
     .value();
 });
 
-const laajaAlaistenKooditComputed = computed(() => {
+const laajaAlaistenKoodit = computed(() => {
   const lisatyt = _.map(opintojakso.value!.laajaAlainenOsaaminen!, 'koodi');
   return _.map(laajaAlaisetKoodit.value, lo => ({
     koodi: lo.koodiUri,
@@ -523,7 +523,7 @@ const laajaAlainenOsaaminen = computed(() => {
 });
 
 const laajaAlainenOsaaminenExtended = computed(() => {
-  return _.chain(laajaAlaistenKooditComputed.value)
+  return _.chain(laajaAlaistenKoodit.value)
     .map(lo => ({
       ...lo,
       ..._.find(laajaAlainenOsaaminen.value, { koodi: lo.koodiUri }) as any,
@@ -541,7 +541,7 @@ const paikallistenOpintojaksojenLaajaAlainenOsaaminenExtended = computed(() => {
     .filter((paikallinenOpintojakso) => !_.isEmpty(paikallinenOpintojakso.laajaAlainenOsaaminen))
     .map(paikallinenOpintojakso => ({
       ...paikallinenOpintojakso,
-      laajaAlainenOsaaminen: _.chain(laajaAlaistenKooditComputed.value)
+      laajaAlainenOsaaminen: _.chain(laajaAlaistenKoodit.value)
         .map(lo => ({
           ...lo,
           ..._.find(paikallinenOpintojakso.laajaAlainenOsaaminen, { koodi: lo.koodiUri }) as any,
