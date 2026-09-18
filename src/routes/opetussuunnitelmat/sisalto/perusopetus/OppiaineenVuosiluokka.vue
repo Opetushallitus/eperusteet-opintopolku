@@ -167,7 +167,12 @@
                   class="mb-4"
                 >
                   <h5 class="mb-0 pb-0">
-                    {{ $t('arviointi-vuosiluokan-paatteeksi') }}
+                    <span v-if="$kaanna(tavoite.arvioinninOtsikko)">
+                      {{ $kaanna(tavoite.arvioinninOtsikko) }}
+                    </span>
+                    <span v-else>
+                      {{ $t('arviointi-vuosiluokan-paatteeksi') }}
+                    </span>
                   </h5>
                   <ep-arvioinninkohteet-table :arvioinninkohteet="tavoite.arvioinninkohteet" />
                 </div>
