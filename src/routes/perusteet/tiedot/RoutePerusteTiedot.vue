@@ -4,12 +4,12 @@
     class="content"
   >
     <h2
-      class="otsikko mb-4"
+      class="otsikko mb-4!"
       tabindex="-1"
     >
       {{ $t(koulutustyyppiKohtaisetKaannokset.perusteentiedot) }}
     </h2>
-    <div class="grid grid-cols-1 gap-4">
+    <div class="grid grid-cols-1">
       <div
         v-if="peruste.nimi"
       >

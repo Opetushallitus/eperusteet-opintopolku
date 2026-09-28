@@ -8,7 +8,7 @@
 
     <ep-spinner v-if="!opetussuunnitelma" />
     <div v-else>
-      <div class="grid grid-cols-1 gap-4">
+      <div class="grid grid-cols-1">
         <div
           v-if="opetussuunnitelma.nimi"
         >
