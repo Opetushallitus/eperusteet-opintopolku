@@ -1,5 +1,6 @@
 <template>
   <div
+    id="navigation-bar"
     v-sticky="{ zIndex: 6000 }"
     class="ep-julkinen-sidenav flex items-center"
   >
