@@ -3,6 +3,7 @@ import {
   isAmmatillinenKoulutustyyppi,
   isAmmatillinenKoulutustyyppiOrRyhma,
   koulutustyypinRyhma,
+  koulutustyyppiTheme,
   yleissivistavatKoulutustyypit,
 } from '@shared/utils/perusteet';
 import _ from 'lodash';
@@ -119,10 +120,22 @@ export function murupolkuAmmatillinenRoot(koulutustyyppi) {
 }
 
 export function murupolkuOpetussuunnitelmaRoot(koulutustyyppi) {
+  if (isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi)) {
+    return {
+      label: koulutustyyppi,
+      location: {
+        name: 'ammatillinenSelaus',
+      },
+    };
+  }
+
   return {
     label: koulutustyyppi,
     location: {
-      name: isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi) ? 'ammatillinenSelaus' : 'kooste',
+      name: 'kooste',
+      params: {
+        koulutustyyppi: koulutustyyppiTheme(koulutustyyppi),
+      },
     },
   };
 }
