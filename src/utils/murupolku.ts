@@ -3,6 +3,8 @@ import {
   isAmmatillinenKoulutustyyppi,
   isAmmatillinenKoulutustyyppiOrRyhma,
   koulutustyypinRyhma,
+  koulutustyyppiRyhmaUrlParam,
+  koulutustyyppiTheme,
   yleissivistavatKoulutustyypit,
 } from '@shared/utils/perusteet';
 import _ from 'lodash';
@@ -50,7 +52,7 @@ export function murupolkuPerusteTiedot(peruste, koulutustyyppi) {
     location: {
       name: 'perusteTiedot',
       params: {
-        koulutustyyppi: koulutustyyppi,
+        koulutustyyppi: koulutustyyppiRyhmaUrlParam(koulutustyyppi),
         perusteId: peruste?.id,
       },
     },
@@ -86,7 +88,7 @@ export function murupolkuOpetussuunnitelma(ops, koulutustyyppi) {
     location: {
       name: 'opetussuunnitelmaTiedot',
       params: {
-        koulutustyyppi: koulutustyypinRyhma(koulutustyyppi),
+        koulutustyyppi: koulutustyyppiRyhmaUrlParam(koulutustyypinRyhma(koulutustyyppi)!),
         opetussuunnitelmaId: _.toString(ops?.id),
       },
     },
@@ -99,7 +101,7 @@ export function murupolkuToteutussuunnitelma(totsu, koulutustyyppi) {
     location: {
       name: 'toteutussuunnitelmaTiedot',
       params: {
-        koulutustyyppi: isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi) ? 'ammatillinen' : koulutustyypinRyhma(koulutustyyppi),
+        koulutustyyppi: isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi) ? 'ammatillinen' : koulutustyyppiRyhmaUrlParam(koulutustyypinRyhma(koulutustyyppi)!),
         toteutussuunnitelmaId: _.toString(totsu?.id),
       },
     },
@@ -119,22 +121,35 @@ export function murupolkuAmmatillinenRoot(koulutustyyppi) {
 }
 
 export function murupolkuOpetussuunnitelmaRoot(koulutustyyppi) {
+  if (isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi)) {
+    return {
+      label: koulutustyyppi,
+      location: {
+        name: 'ammatillinenSelaus',
+      },
+    };
+  }
+
   return {
     label: koulutustyyppi,
     location: {
-      name: isAmmatillinenKoulutustyyppiOrRyhma(koulutustyyppi) ? 'ammatillinenSelaus' : 'kooste',
+      name: 'kooste',
+      params: {
+        koulutustyyppi: koulutustyyppiRyhmaUrlParam(koulutustyyppiTheme(koulutustyyppi)),
+      },
     },
   };
 }
 
 export function murupolkuPerusteRoot(koulutustyyppi, routeKoulutustyyppi) {
   const kt = koulutustyyppi ? koulutustyypinRyhma(koulutustyyppi) : routeKoulutustyyppi;
+  const isAmmatillinen = isAmmatillinenKoulutustyyppiOrRyhma(kt);
   return {
     label: kt,
     location: {
-      name: isAmmatillinenKoulutustyyppiOrRyhma(kt) ? 'ammatillinenSelaus' : 'kooste',
+      name: isAmmatillinen ? 'ammatillinenSelaus' : 'kooste',
       params: {
-        koulutustyyppi: kt,
+        koulutustyyppi: isAmmatillinen ? kt : koulutustyyppiRyhmaUrlParam(kt),
       },
     },
   };

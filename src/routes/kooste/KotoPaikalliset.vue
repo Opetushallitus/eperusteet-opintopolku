@@ -4,17 +4,42 @@
       {{ $t('paikalliset-opetussuunnitelmat') }}
     </h2>
     <span>{{ $t('voit-hakea-opetussuunnitelman') }}</span>
-    <ep-search
-      v-model="query.nimi"
-      class="my-3"
-      max-width="true"
-      :sr-placeholder="$t('hae-opetussuunnitelmaa')"
-      :placeholder="''"
-    >
-      <template #label>
-        <span class="font-semibold">{{ $t('hae-opetussuunnitelmaa') }}</span>
-      </template>
-    </ep-search>
+    <div class="flex lg:flex-row flex-col w-full">
+      <ep-search
+        v-model="query.nimi"
+        class="flex-1 ml-0 mt-3 mb-3 mr-3"
+        :max-width="true"
+        :sr-placeholder="$t('hae-opetussuunnitelmaa')"
+        :placeholder="''"
+      >
+        <template #label>
+          <span class="font-semibold">{{ $t('hae-opetussuunnitelmaa') }}</span>
+        </template>
+      </ep-search>
+
+      <EpMultiSelect
+        v-if="julkaistutPerusteet"
+        v-model="valittuPeruste"
+        :is-editing="false"
+        :options="perusteetOptions"
+        :placeholder="$t('kaikki')"
+        class="multiselect ml-0 mt-3 mb-3"
+        :searchable="false"
+        @update:model-value="setActivePeruste($event)"
+      >
+        <template #label>
+          <span class="font-semibold">{{ $t('peruste') }}</span>
+        </template>
+
+        <template #singleLabel="{ option }">
+          {{ kaannaPerusteNimi(option) }}
+        </template>
+
+        <template #option="{ option }">
+          {{ kaannaPerusteNimi(option) }}
+        </template>
+      </EpMultiSelect>
+    </div>
 
     <div class="opetussuunnitelma-container">
       <EpHakutulosmaara
@@ -71,19 +96,29 @@ import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
 import { useRoute, useRouter } from 'vue-router';
+import { PerusteKoosteStore } from '@/stores/PerusteKoosteStore';
+import type { PerusteenJulkaisuData } from '@shared/api/eperusteet';
+import { $kaanna, $t } from '@shared/utils/globals';
+import { EperusteetKoulutustyyppiRyhmat, Toteutus } from '@shared/utils/perusteet.js';
 
 const props = defineProps({
   paikallinenStore: {
     type: Object as () => YleisetPaikallisetStore,
     required: true,
   },
+  perusteKoosteStore: {
+    type: Object as () => PerusteKoosteStore,
+    required: true,
+  },
 });
 
 const instance = getCurrentInstance();
+const valittuPeruste = ref<(PerusteenJulkaisuData & { kaannettyNimi?: string }) | null>(null);
 const perPage = ref(10);
 const kieli = computed(() => Kielet.getSisaltoKieli.value);
 const query = ref({
-  koulutustyyppi: Koulutustyyppi.maahanmuuttajienkotoutumiskoulutus,
+  perusteId: null as number | null,
+  koulutustyyppi: EperusteetKoulutustyyppiRyhmat[Toteutus.KOTOUTUMISKOULUTUS],
   nimi: null as string | null,
   sivu: 0,
   sivukoko: 10,
@@ -105,11 +140,16 @@ onMounted(async () => {
 });
 
 const setQueryParams = () => {
+  const peruste = _.find(julkaistutPerusteet.value, (peruste) => peruste.diaarinumero === route?.query?.perustediaarinumero as string);
+
   query.value = {
     ...query.value,
     nimi: route?.query?.haku as string || null,
     sivu: (route?.query?.sivu as number || 1) - 1,
+    perusteId: peruste?.id || null,
   };
+
+  valittuPeruste.value = peruste || null;
 };
 
 const fetch = async () => {
@@ -120,9 +160,48 @@ const fetch = async () => {
       query: {
         ...(query.value.nimi && { haku: query.value.nimi }),
         sivu: query.value.sivu + 1,
+        ...(query.value.perusteId && { perustediaarinumero: _.find(julkaistutPerusteet.value, (peruste) => peruste.id === query.value.perusteId)?.diaarinumero }),
       },
     }).catch(() => {});
   }
+};
+
+const julkaistutPerusteet = computed(() => {
+  if (props.perusteKoosteStore?.perusteJulkaisut) {
+    return _.chain(props.perusteKoosteStore.perusteJulkaisut.value)
+      .map(julkaistuPeruste => ({
+        ...julkaistuPeruste,
+        kaannettyNimi: $kaanna(julkaistuPeruste.nimi!),
+      }))
+      .orderBy(['voimassaoloAlkaa', 'kaannettyNimi'], ['desc', 'asc'])
+      .value();
+  }
+  return undefined;
+});
+
+const perusteetOptions = computed(() => {
+  if (julkaistutPerusteet.value) {
+    return [
+      {},
+      ...julkaistutPerusteet.value,
+    ];
+  }
+  return [];
+});
+
+const setActivePeruste = (perusteJulkaisu) => {
+  query.value = {
+    ...query.value,
+    perusteId: perusteJulkaisu?.id ? _.toNumber(perusteJulkaisu.id) : null,
+    sivu: 0,
+  };
+};
+
+const kaannaPerusteNimi = (option) => {
+  if (option.nimi) {
+    return $kaanna(option.nimi);
+  }
+  return $t('kaikki');
 };
 
 const page = computed({
@@ -175,7 +254,7 @@ const opetussuunnitelmatMapped = computed(() => {
         name: 'toteutussuunnitelma',
         params: {
           toteutussuunnitelmaId: _.toString(ops.id),
-          koulutustyyppi: 'kotoutumiskoulutus',
+          koulutustyyppi: 'kotoutuminen',
         },
       },
     }))

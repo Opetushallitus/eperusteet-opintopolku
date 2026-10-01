@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { koulutustyyppiThemeColor, rgb2string } from '@shared/utils/perusteet';
+import { koulutustyyppiThemeColor, rgb2string, urlParamKoulutustyyppiRyhma } from '@shared/utils/perusteet';
 import osaamismerkkiLogoFI from '@assets/img/images/osaamismerkki_main_FI.svg';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
 
@@ -41,7 +41,7 @@ const props = defineProps({
 });
 
 const rgbColor = computed(() => {
-  return rgb2string(koulutustyyppiThemeColor(props.tyyppi.route.params?.koulutustyyppi));
+  return rgb2string(koulutustyyppiThemeColor(urlParamKoulutustyyppiRyhma(props.tyyppi.route.params?.koulutustyyppi)));
 });
 
 const name = computed(() => {

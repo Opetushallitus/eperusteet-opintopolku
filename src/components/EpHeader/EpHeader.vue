@@ -73,6 +73,7 @@ import {
   koulutustyyppiThemeColor,
   calculateVisibleColor,
   kouluturtyyppiRyhmat,
+  urlParamKoulutustyyppiRyhma,
 } from '@shared/utils/perusteet';
 import { MurupolkuOsa } from '@/tyypit';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
@@ -101,7 +102,8 @@ const murupolkuFiltered = computed(() => {
 });
 
 const routeKoulutustyyppi = computed(() => {
-  return route?.params?.koulutustyyppi as string | undefined;
+  const koulutustyyppi = route?.params?.koulutustyyppi as string | undefined;
+  return koulutustyyppi ? urlParamKoulutustyyppiRyhma(koulutustyyppi) : undefined;
 });
 
 const theme = computed(() => {

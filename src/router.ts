@@ -103,6 +103,7 @@ import { useLoading } from 'vue-loading-overlay';
 import { loadingOptions } from '@shared/config/loading';
 import { useTiedoteStore } from './stores/TiedoteStore';
 import { Virheet } from '@shared/stores/virheet';
+import { koulutustyyppiRyhmaUrlParam } from '@shared/utils/perusteet';
 
 const logger = createLogger('Router');
 
@@ -651,6 +652,25 @@ router.beforeEach((to, from, next) => {
   const { pathname, origin, hash } = window.location;
   if (pathname === '/beta/') {
     window.location.assign(origin + '/' + hash);
+  }
+  else {
+    next();
+  }
+});
+
+router.beforeEach((to, from, next) => {
+  const koulutustyyppi = to.params.koulutustyyppi as string | undefined;
+  if (to.name && koulutustyyppi && koulutustyyppiRyhmaUrlParam(koulutustyyppi) !== koulutustyyppi) {
+    next({
+      name: to.name,
+      params: {
+        ...to.params,
+        koulutustyyppi: koulutustyyppiRyhmaUrlParam(koulutustyyppi),
+      },
+      query: to.query,
+      hash: to.hash,
+      replace: true,
+    });
   }
   else {
     next();
