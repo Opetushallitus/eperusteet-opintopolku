@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { Perusteet } from '@shared/api/eperusteet';
-import { koulutustyypinRyhma } from '@shared/utils/perusteet';
+import { koulutustyypinRyhma, koulutustyyppiRyhmaUrlParam } from '@shared/utils/perusteet';
 import * as _ from 'lodash';
 import { ref, computed, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
@@ -36,7 +36,7 @@ onMounted(async () => {
       name: 'kooste',
       params: {
         perusteId: _.toString(perusteId.value),
-        koulutustyyppi: koulutustyypinRyhma(peruste.value.koulutustyyppi!)!,
+        koulutustyyppi: koulutustyyppiRyhmaUrlParam(koulutustyypinRyhma(peruste.value.koulutustyyppi!)!),
       },
     });
   }

@@ -125,6 +125,7 @@ import EpSearch from '@shared/components/forms/EpSearch.vue';
 import { ILinkkiHandler } from '@shared/components/EpContent/LinkkiHandler';
 import { createPerusteMurupolku } from '@/utils/murupolku';
 import { PerusteKaikkiDtoTyyppiEnum } from '@shared/api/eperusteet';
+import { urlParamKoulutustyyppiRyhma } from '@shared/utils/perusteet';
 import { $kaanna, $t } from '@shared/utils/globals';
 import { getCachedPerusteStore, usePerusteCacheStore } from '@/stores/PerusteCacheStore';
 import { pinia } from '@/pinia';
@@ -201,7 +202,7 @@ const murupolku = computed(() => {
 });
 
 const routeKoulutustyyppi = computed(() => {
-  return route.params?.koulutustyyppi;
+  return urlParamKoulutustyyppiRyhma(route.params?.koulutustyyppi as string);
 });
 
 const oppaanKoulutustyyppi = computed(() => {

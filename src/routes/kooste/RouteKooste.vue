@@ -175,17 +175,18 @@ import {
   getKoosteSubheader,
   getKoosteTiedotteetStore,
 } from '@/utils/toteutustypes';
-import { julkisivuPerusteKoosteJarjestys, koulutustyyppiTheme, stateToKoulutustyyppi } from '@shared/utils/perusteet';
+import { julkisivuPerusteKoosteJarjestys, koulutustyyppiTheme, stateToKoulutustyyppi, urlParamKoulutustyyppiRyhma } from '@shared/utils/perusteet';
 
 const route = useRoute();
-const perusteKoosteStore = getKoostePerusteStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
-const opasStore = getKoosteOpasStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
-const tiedotteetStore = getKoosteTiedotteetStore(stateToKoulutustyyppi(route.params.koulutustyyppi));
-const paikallinenStore = getKoostePaikallinenStore(route.params.koulutustyyppi);
-const paikallinenComponent = getKoostePaikallinenComponent(route.params.koulutustyyppi);
-const kuvaus = getKoosteKuvaus(route.params.koulutustyyppi);
-const subheader = getKoosteSubheader(route.params.koulutustyyppi);
-const perusteetHeader = getKoostePerusteHeader(route.params.koulutustyyppi);
+const routeKoulutustyyppiRyhma = urlParamKoulutustyyppiRyhma(route.params.koulutustyyppi as string);
+const perusteKoosteStore = getKoostePerusteStore(stateToKoulutustyyppi(routeKoulutustyyppiRyhma));
+const opasStore = getKoosteOpasStore(stateToKoulutustyyppi(routeKoulutustyyppiRyhma));
+const tiedotteetStore = getKoosteTiedotteetStore(stateToKoulutustyyppi(routeKoulutustyyppiRyhma));
+const paikallinenStore = getKoostePaikallinenStore(routeKoulutustyyppiRyhma);
+const paikallinenComponent = getKoostePaikallinenComponent(routeKoulutustyyppiRyhma);
+const kuvaus = getKoosteKuvaus(routeKoulutustyyppiRyhma);
+const subheader = getKoosteSubheader(routeKoulutustyyppiRyhma);
+const perusteetHeader = getKoostePerusteHeader(routeKoulutustyyppiRyhma);
 
 const router = useRouter();
 const instance = getCurrentInstance();
@@ -201,7 +202,7 @@ onMounted(async () => {
 });
 
 const koulutustyyppi = computed(() => {
-  return perusteKoosteStore?.koulutustyyppi.value || _.get(route.params, 'koulutustyyppi');
+  return perusteKoosteStore?.koulutustyyppi.value || routeKoulutustyyppiRyhma;
 });
 
 const routeKoulutustyyppi = computed(() => {
@@ -320,7 +321,7 @@ const fetch = async () => {
 };
 
 const koulutustyyppiRyhma = computed(() => {
-  return koulutustyyppiTheme(route.params.koulutustyyppi as string);
+  return koulutustyyppiTheme(routeKoulutustyyppiRyhma);
 });
 
 // Watch for changes to koulutustyyppi
