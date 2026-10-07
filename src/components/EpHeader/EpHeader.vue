@@ -198,8 +198,8 @@ const style = computed(() => {
     background-color: $koulutustyyppi-tutkintoonvalmentava-color;
     background-image: url('@assets/img/banners/opintopolku/aallot_tuva.svg');
   }
-  &.koulutustyyppi-kotoutumiskoulutus {
-    background-color: $koulutustyyppi-kotoutumiskoulutus-color;
+  &.koulutustyyppi-kotoutuminen {
+    background-color: $koulutustyyppi-kotoutuminen-color;
     background-image: url('@assets/img/banners/opintopolku/aallot_kotoutumiskoulutus.svg');
   }
 

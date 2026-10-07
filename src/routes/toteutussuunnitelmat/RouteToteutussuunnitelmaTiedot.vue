@@ -25,7 +25,7 @@ const isVapaasivistystyo = computed(() => {
   return _.includes(
     [
       ...EperusteetKoulutustyyppiRyhmat[Toteutus.VAPAASIVISTYSTYO],
-      ...EperusteetKoulutustyyppiRyhmat[Toteutus.KOTOUTUMISKOULUTUS],
+      ...EperusteetKoulutustyyppiRyhmat[Toteutus.KOTOUTUMINEN],
     ],
     opetussuunnitelmaDataStore.koulutustyyppi,
   );

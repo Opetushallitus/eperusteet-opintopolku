@@ -30,7 +30,7 @@ export const koosteTiedotteetStore = {
 
 export const koostePaikallinenStore = {
   'tutkintoonvalmentava': new YleisetPaikallisetStore(),
-  'kotoutumiskoulutus': new YleisetPaikallisetStore(),
+  'kotoutuminen': new YleisetPaikallisetStore(),
   'vapaasivistystyo': new VapaasivistystyoPaikallisetStore(),
   'muukoulutus': new YleisetPaikallisetStore(),
   'default': new YleissivistavatPaikallisetStore(),
@@ -39,7 +39,7 @@ export const koostePaikallinenStore = {
 
 export const koostePaikallinenComponent = {
   'tutkintoonvalmentava': TuvaPaikalliset,
-  'kotoutumiskoulutus': KotoPaikalliset,
+  'kotoutuminen': KotoPaikalliset,
   'vapaasivistystyo': VstPaikalliset,
   'muukoulutus': JotpaPaikalliset,
   'default': YleissivistavatPaikalliset,
@@ -57,7 +57,7 @@ export const koosteSubheader = {
   'lukiokoulutus': 'lukiokoulutuksen-valtakunnalliset-perusteet',
   'vapaasivistystyo': 'vapaan-sivistystyon-valtakunnalliset-perusteet',
   'tutkintoonvalmentava': 'tuvan-valtakunnalliset-perusteet',
-  'kotoutumiskoulutus': 'kotouttamiskoulutuksen-valtakunnalliset-perusteet',
+  'kotoutuminen': 'kotouttamiskoulutuksen-valtakunnalliset-perusteet',
   'muukoulutus': 'jatkuvan-oppimisen-opetussuunnitelmat',
   'kielikaantajatutkinto': 'kielikaantajatutkinto-kooste-kuvaus',
   'default': null,

@@ -368,8 +368,8 @@ const sisaltoKieli = computed(() => {
     &.koulutustyyppi-tutkintoonvalmentava {
       background-color: $koulutustyyppi-tutkintoonvalmentava-color;
     }
-    &.koulutustyyppi-kotoutumiskoulutus {
-      background-color: $koulutustyyppi-kotoutumiskoulutus-color;
+    &.koulutustyyppi-kotoutuminen {
+      background-color: $koulutustyyppi-kotoutuminen-color;
     }
 
     &.tyyppi-digitaalinen_osaaminen {

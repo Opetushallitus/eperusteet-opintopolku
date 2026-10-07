@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {
   ammatilliset, digitaalinenOsaaminen, esiJaPerusaste,
   kielikaantajatutkinto,
-  kotoutumiskoulutus, lukioJaTaide, muuKoulutus,
+  kotoutuminen, lukioJaTaide, muuKoulutus,
   tutkintoonvalmentava,
   vapaasivistystyo,
 } from '@shared/utils/perusteet';
@@ -14,7 +14,7 @@ export function koulutustyyppiLinks() {
     ammatilliset(),
     lukioJaTaide(),
     vapaasivistystyo(),
-    kotoutumiskoulutus(),
+    kotoutuminen(),
     [
       {
         ..._.first(muuKoulutus()),
