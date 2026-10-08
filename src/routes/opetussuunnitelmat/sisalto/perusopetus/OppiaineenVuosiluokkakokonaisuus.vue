@@ -84,9 +84,9 @@
         </template>
       </ep-peruste-content>
 
-      <template v-if="perusteenVuosiluokkakokonaisuus.vapaatTekstit">
+      <template v-if="perusteenVapaatTekstit">
         <div
-          v-for="(vapaaTeksti, index) in perusteenVuosiluokkakokonaisuus.vapaatTekstit"
+          v-for="(vapaaTeksti, index) in perusteenVapaatTekstit"
           :key="'vapaateksti'+index"
           class="mt-4"
         >
@@ -96,6 +96,17 @@
             :kuvat="kuvat"
             :termit="termit"
           />
+
+          <EpPaikallinenTarkennus
+            v-if="vapaaTeksti.paikallinenTarkennus"
+            headerh4
+          >
+            <ep-content-viewer
+              :value="$kaanna(vapaaTeksti.paikallinenTarkennus)"
+              :kuvat="kuvat"
+              :termit="termit"
+            />
+          </EpPaikallinenTarkennus>
         </div>
       </template>
     </div>
@@ -336,6 +347,15 @@ const opetussuunnitelma = inject('opetussuunnitelma') as any;
 
 const perusteenVuosiluokkakokonaisuus = computed(() => {
   return props.tietue.perusteenOppiaineenVlk;
+});
+
+const perusteenVapaatTekstit = computed(() => {
+  return _.map(perusteenVuosiluokkakokonaisuus.value?.vapaatTekstit, pvt => {
+    return {
+      ...pvt,
+      paikallinenTarkennus: _.get(_.find(oppiaineenVuosiluokkakokonaisuus.value?.vapaatTekstit, vt => _.toString(pvt.id) === _.toString(vt.perusteenVapaaTekstiId)), 'paikallinenTarkennus'),
+    };
+  });
 });
 
 const oppiaineenVuosiluokkakokonaisuus = computed(() => {
