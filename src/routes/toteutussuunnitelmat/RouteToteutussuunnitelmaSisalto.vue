@@ -104,6 +104,19 @@
         </template>
       </ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen>
 
+      <ep-toteutussuunnitelma-lukutaitokoulutus-tavoitteet-ja-sisaltoalueet
+        v-else-if="sisaltoviite.tyyppi === 'lukutaitokoulutus_tavoitteetjasisaltoalueet'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-lukutaitokoulutus-tavoitteet-ja-sisaltoalueet>
+
       <ep-toteutussuunnitelma-koto-opinto-sisalto
         v-else-if="sisaltoviite.tyyppi === 'koto_kielitaitotaso'"
         :sisaltoviite="sisaltoviite"
@@ -164,6 +177,7 @@ import EpToteutussuunnitelmaKoulutuksenOsat from '@/components/EpToteutussuunnit
 import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsa.vue';
 import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoOpintoSisalto.vue';
 import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
+import EpToteutussuunnitelmaLukutaitokoulutusTavoitteetJaSisaltoalueet from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaLukutaitokoulutusTavoitteetJaSisaltoalueet.vue';
 import EpToteutussuunnitelmaOsaamismerkki from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOsaamismerkki.vue';
 import EpToteutussuunnitelmaSisaltoNimi from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaSisaltoNimi.vue';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';

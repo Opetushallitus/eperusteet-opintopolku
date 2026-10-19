@@ -38,6 +38,7 @@ import RouteOpetussuunnitelmaAipeKurssi from '@/routes/opetussuunnitelmat/sisalt
 import RouteAipeLaajaAlaisetOsaamiset from '@/routes/perusteet/sisalto/aipe/RouteAipeLaajaAlaisetOsaamiset.vue';
 import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
 import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
+import RouteLukutaitokoulutusTavoitteetJaSisaltoalueet from '@/routes/perusteet/sisalto/lukutaitokoulutus/RouteLukutaitokoulutusTavoitteetJaSisaltoalueet.vue';
 import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
 import RouteKotoKielitaitotaso from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoKielitaitotaso.vue';
 import RouteKotoOpinto from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoOpinto.vue';
@@ -558,6 +559,10 @@ export const router = createRouter({
           path: 'tavoitesisaltoalue/:tavoitesisaltoalueId',
           component: RouteTavoitesisaltoalue,
           name: 'perusteTavoitesisaltoalue',
+        }, {
+          path: 'lukutaitokoulutus/tavoitteetjasisaltoalueet/:tavoitteetJaSisaltoalueetId',
+          component: RouteLukutaitokoulutusTavoitteetJaSisaltoalueet,
+          name: 'perusteLukutaitokoulutusTavoitteetJaSisaltoalueet',
         }, {
           path: 'koulutuksenosa/:koulutuksenosaId',
           component: RouteKoulutuksenOsa,
