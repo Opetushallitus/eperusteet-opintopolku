@@ -158,8 +158,7 @@ const tiedoteMapped = computed(() => {
     perusteet: perusteRoutes(perusteet.value),
     tutkinnonosat: tiedote.value?.tutkinnonosat ?? [],
     osaamisalat: tiedote.value?.osaamisalat ?? [],
-    tiedotteet: (tiedote.value?.tiedotteet ?? [])
-      .filter(liittyvaTiedote => liittyvaTiedote.id != null),
+    tiedotteet: (tiedote.value?.tiedotteet ?? []),
   };
 });
 
@@ -167,7 +166,7 @@ const tiedoteMapped = computed(() => {
 // unless the store already has that ID selected or loading.
 watch(() => route.params.tiedoteId, async value => {
   const id = Number(value);
-  if (!Number.isSafeInteger(id) || id <= 0 || tiedoteStore.tiedoteId === id) {
+  if (tiedoteStore.tiedoteId === id) {
     return;
   }
 
