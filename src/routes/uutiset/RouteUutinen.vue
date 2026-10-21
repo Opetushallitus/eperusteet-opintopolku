@@ -27,7 +27,10 @@
         </div>
 
         <div
-          v-if="tiedoteMapped.perusteet.length > 0 || tiedoteMapped.tutkinnonosat.length > 0 || tiedoteMapped.osaamisalat.length > 0"
+          v-if="tiedoteMapped.perusteet.length > 0
+            || tiedoteMapped.tutkinnonosat.length > 0
+            || tiedoteMapped.osaamisalat.length > 0
+            || tiedoteMapped.tiedotteet.length > 0"
           class="tiedote-lisainfo p-3"
         >
           <h3>{{ $t('tiedotteeseen-liittyy') }}</h3>
@@ -74,6 +77,26 @@
               <h4>{{ $t('perusteet-joissa-osaamisaloja-on') }}</h4>
             </template>
           </uutisen-koodit>
+
+          <div
+            v-if="tiedoteMapped.tiedotteet.length > 0"
+            class="mt-4"
+          >
+            <h4>{{ $t('tiedotteet') }}</h4>
+            <div
+              v-for="liittyvaTiedote in tiedoteMapped.tiedotteet"
+              :key="liittyvaTiedote.id"
+            >
+              <router-link
+                :to="{
+                  name: 'uutinen',
+                  params: { tiedoteId: liittyvaTiedote.id },
+                }"
+              >
+                {{ $kaanna(liittyvaTiedote.otsikko) }}
+              </router-link>
+            </div>
+          </div>
         </div>
       </div>
       <ep-spinner v-else />
@@ -83,23 +106,21 @@
 
 <script setup lang="ts">
 import _ from 'lodash';
-import { computed, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { useHead } from '@unhead/vue';
-import { useTiedoteStore } from '@/stores/TiedoteStore';
+import {computed, watch} from 'vue';
+import {useRoute} from 'vue-router';
+import {useHead} from '@unhead/vue';
+import {useTiedoteStore} from '@/stores/TiedoteStore';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
-import EpSearch from '@shared/components/forms/EpSearch.vue';
 import EpHeader from '@/components/EpHeader/EpHeader.vue';
 import EpContentViewer from '@shared/components/EpContentViewer/EpContentViewer.vue';
-import { koulutustyyppiStateName } from '@shared/utils/perusteet';
+import {koulutustyyppiStateName} from '@shared/utils/perusteet';
 import UutisenKoodit from './UutisenKoodit.vue';
-import { useJulkaistutKoulutustyypitStore } from '@/stores/JulkaistutKoulutustyypitStore';
-import { $kaanna, $sd, $t } from '@shared/utils/globals';
-import { pinia } from '@/pinia';
+import {useJulkaistutKoulutustyypitStore} from '@/stores/JulkaistutKoulutustyypitStore';
+import {$fail, $kaanna, $sd, $t} from '@shared/utils/globals';
+import {pinia} from '@/pinia';
+import {PerusteKevytDto} from '@shared/api/eperusteet';
 
 const route = useRoute();
-const page = ref(1);
-const query = ref('');
 const tiedoteStore = useTiedoteStore(pinia);
 const julkaistutKoulutustyypitStore = useJulkaistutKoulutustyypitStore(pinia);
 
@@ -116,7 +137,7 @@ const perusteet = computed(() => {
     _.includes(julkaistutKoulutustyypit.value, peruste.koulutustyyppi as any));
 });
 
-const perusteRoutes = (perusteet) => {
+const perusteRoutes = (perusteet: PerusteKevytDto[]) => {
   return _.map(perusteet, peruste => {
     return {
       ...peruste,
@@ -135,7 +156,26 @@ const tiedoteMapped = computed(() => {
   return {
     ...tiedote.value,
     perusteet: perusteRoutes(perusteet.value),
+    tutkinnonosat: tiedote.value?.tutkinnonosat ?? [],
+    osaamisalat: tiedote.value?.osaamisalat ?? [],
+    tiedotteet: (tiedote.value?.tiedotteet ?? []),
   };
+});
+
+// Load the notice when its route ID changes,
+// unless the store already has that ID selected or loading.
+watch(() => route.params.tiedoteId, async value => {
+  const id = Number(value);
+  if (tiedoteStore.tiedoteId === id) {
+    return;
+  }
+
+  try {
+    await tiedoteStore.fetchUutinen(id);
+  }
+  catch {
+    $fail($t('tiedotteen-haku-epaonnistui'));
+  }
 });
 
 const osaamisalojenPerusteet = computed(() => {
