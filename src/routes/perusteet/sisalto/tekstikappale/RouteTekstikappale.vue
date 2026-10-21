@@ -82,7 +82,7 @@ const router = useRouter();
 const perusteDataStore = getCachedPerusteStore();
 const perusteenOsaStore = createPerusteOsaStore(perusteDataStore, route.params.viiteId);
 
-const redirectToLinkkiSivuLapsiTyypit = ['koulutuksenosa', 'koto_opinto', 'koto_kielitaitotaso', 'koto_laajaalainenosaaminen', 'opintokokonaisuus'];
+const redirectToLinkkiSivuLapsiTyypit = ['koulutuksenosa', 'koto_opinto', 'koto_kielitaitotaso', 'koto_laajaalainenosaaminen', 'lukutaitokoulutus_tavoitteetjasisaltoalueet', 'opintokokonaisuus'];
 
 onMounted(() => {
   if (_.some(_.map(perusteenOsaViite.value?.lapset, 'perusteenOsa.osanTyyppi'), osanTyyppi => _.includes(redirectToLinkkiSivuLapsiTyypit, osanTyyppi))) {
