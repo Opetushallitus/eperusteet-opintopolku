@@ -23,7 +23,7 @@
     >
       <template #header>
         <h3>
-          {{ $t('tavoitesisaltoalueen-paikallinen-tarkennus') }}
+          {{ $t('paikallinen-tarkennus') }}
         </h3>
       </template>
       <ep-content-viewer
