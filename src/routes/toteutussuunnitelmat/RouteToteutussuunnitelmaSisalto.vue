@@ -90,6 +90,19 @@
         </template>
       </ep-toteutussuunnitelma-koulutuksen-osa>
 
+      <ep-toteutussuunnitelma-tavoitesisaltoalue
+        v-else-if="sisaltoviite.tyyppi === 'tavoitesisaltoalue'"
+        :sisaltoviite="sisaltoviite"
+        :kuvat="kuvat"
+      >
+        <template #sisalto-nimi>
+          <EpToteutussuunnitelmaSisaltoNimi
+            :sisaltoviite="sisaltoviite"
+            :numerointi="numerointi"
+          />
+        </template>
+      </ep-toteutussuunnitelma-tavoitesisaltoalue>
+
       <ep-toteutussuunnitelma-koto-laaja-alainen-osaaminen
         v-else-if="sisaltoviite.tyyppi === 'koto_laajaalainenosaaminen'"
         :sisaltoviite="sisaltoviite"
@@ -164,6 +177,7 @@ import EpToteutussuunnitelmaKoulutuksenOsat from '@/components/EpToteutussuunnit
 import EpToteutussuunnitelmaKoulutuksenOsa from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKoulutuksenOsa.vue';
 import EpToteutussuunnitelmaKotoOpintoSisalto from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoOpintoSisalto.vue';
 import EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaKotoLaajaAlainenOsaaminen.vue';
+import EpToteutussuunnitelmaTavoitesisaltoalue from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaTavoitesisaltoalue.vue';
 import EpToteutussuunnitelmaOsaamismerkki from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaOsaamismerkki.vue';
 import EpToteutussuunnitelmaSisaltoNimi from '@/components/EpToteutussuunnitelma/EpToteutussuunnitelmaSisaltoNimi.vue';
 import { NavigationNode } from '@shared/utils/NavigationBuilder';
