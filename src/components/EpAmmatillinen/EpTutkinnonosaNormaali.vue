@@ -17,7 +17,7 @@
     </ep-form-content>
 
     <ep-form-content
-      v-if="!tutkinnonosa.ammattitaitovaatimukset2019 && tutkinnonosa.ammattitaitovaatimukset"
+      v-if="!ammattitaitovaatimuksia2019 && tutkinnonosa.ammattitaitovaatimukset"
       class="col-span-12 mb-5"
       name="ammattitaitovaatimukset"
     >
@@ -33,7 +33,7 @@
     </ep-form-content>
 
     <ep-form-content
-      v-if="tutkinnonosa.ammattitaitovaatimukset2019"
+      v-if="ammattitaitovaatimuksia2019"
       class="col-span-12 mb-5"
       name="ammattitaitovaatimukset"
     >
@@ -163,6 +163,11 @@ const osaamistasonKriteeritFields = computed(() => {
     label: $t('kriteerit'),
     thStyle: { display: 'none' },
   }];
+});
+
+const ammattitaitovaatimuksia2019 = computed(() => {
+  return props.tutkinnonosa.ammattitaitovaatimukset2019
+    && (props.tutkinnonosa.ammattitaitovaatimukset2019.kohdealueet?.length > 0 || props.tutkinnonosa.ammattitaitovaatimukset2019.vaatimukset?.length > 0);
 });
 </script>
 
