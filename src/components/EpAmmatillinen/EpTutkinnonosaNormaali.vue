@@ -166,8 +166,7 @@ const osaamistasonKriteeritFields = computed(() => {
 });
 
 const ammattitaitovaatimuksia2019 = computed(() => {
-  return props.tutkinnonosa.ammattitaitovaatimukset2019
-    && (props.tutkinnonosa.ammattitaitovaatimukset2019.kohdealueet?.length > 0 || props.tutkinnonosa.ammattitaitovaatimukset2019.vaatimukset?.length > 0);
+  return props.tutkinnonosa.ammattitaitovaatimukset2019?.kohdealueet?.length > 0 || props.tutkinnonosa.ammattitaitovaatimukset2019?.vaatimukset?.length > 0;
 });
 </script>
 
