@@ -118,6 +118,17 @@
     </div>
 
     <div
+      v-if="oppiaine.kielikasvatus"
+      class="mt-4"
+    >
+      <h3>{{ $t('kielikasvatus-kuvaus-header') }}</h3>
+      <ep-content-viewer
+        :value="$kaanna(oppiaine.kielikasvatus)"
+        :kuvat="kuvat"
+      />
+    </div>
+
+    <div
       v-if="oppimaarat && oppimaarat.length > 0"
       class="mt-5"
     >
