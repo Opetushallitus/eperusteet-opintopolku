@@ -101,7 +101,7 @@ import { ref, computed, nextTick } from 'vue';
 import _ from 'lodash';
 import { rakenneNodecolor } from '@shared/utils/perusterakenne';
 import EpMaterialIcon from '@shared/components/EpMaterialIcon/EpMaterialIcon.vue';
-import { $kaanna } from '@shared/utils/globals';
+import { $kaanna, $t } from '@shared/utils/globals';
 
 const props = defineProps({
   rakenneosa: {
@@ -125,7 +125,7 @@ const naytaKuvaus = ref(false);
 const rakenneosaRef = ref<any[]>([]);
 
 const pakollinen = () => {
-  return (props.rakenneosa.rooli === 'määritelty' && $kaanna(props.rakenneosa.nimi) === 'rakenne-moduuli-pakollinen') || props.rakenneosa.pakollinen;
+  return (props.rakenneosa.rooli === 'määritelty' && $kaanna(props.rakenneosa.nimi) === $t('rakenne-moduuli-pakollinen')) || props.rakenneosa.pakollinen;
 };
 
 const toggleKuvaus = (naytaKuvausArg?: boolean) => {
@@ -167,7 +167,7 @@ const osat = computed(() => {
     .map((osa: any) => {
       return {
         ...osa,
-        pakollinen: pakollinen(),
+        pakollinen: pakollinen() || osa.pakollinen,
       };
     })
     .value();
