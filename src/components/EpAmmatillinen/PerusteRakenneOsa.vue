@@ -167,7 +167,7 @@ const osat = computed(() => {
     .map((osa: any) => {
       return {
         ...osa,
-        pakollinen: pakollinen() || osa.pakollinen,
+        pakollinen: pakollinen(),
       };
     })
     .value();
