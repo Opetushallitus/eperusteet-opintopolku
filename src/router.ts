@@ -35,9 +35,13 @@ import RouteAipeVaihe from '@/routes/perusteet/sisalto/aipe/RouteAipeVaihe.vue';
 import RouteOpetussuunnitelmaAipeVaihe from '@/routes/opetussuunnitelmat/sisalto/aipe/RouteAipeVaihe.vue';
 import RouteOpetussuunnitelmaAipeOppiaine from '@/routes/opetussuunnitelmat/sisalto/aipe/RouteAipeOppiaine.vue';
 import RouteOpetussuunnitelmaAipeKurssi from '@/routes/opetussuunnitelmat/sisalto/aipe/RouteAipeKurssi.vue';
+import RouteOpetussuunnitelmaTaiteenala from '@/routes/opetussuunnitelmat/sisalto/taiteenperusopetus/RouteOpetussuunnitelmaTaiteenala.vue';
+import RouteOpetussuunnitelmaTaiteenalanVaihe from '@/routes/opetussuunnitelmat/sisalto/taiteenperusopetus/RouteOpetussuunnitelmaTaiteenalanVaihe.vue';
+import RouteOpetussuunnitelmaTaiteenOpintokokonaisuus from '@/routes/opetussuunnitelmat/sisalto/taiteenperusopetus/RouteOpetussuunnitelmaTaiteenOpintokokonaisuus.vue';
 import RouteAipeLaajaAlaisetOsaamiset from '@/routes/perusteet/sisalto/aipe/RouteAipeLaajaAlaisetOsaamiset.vue';
 import RouteOpintokokonaisuus from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteOpintokokonaisuus.vue';
 import RouteTavoitesisaltoalue from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteTavoitesisaltoalue.vue';
+import RouteTaiteenalaVaihe from '@/routes/perusteet/sisalto/taiteenperusopetus/RouteTaiteenalaVaihe.vue';
 import RouteKoulutuksenOsa from '@/routes/perusteet/sisalto/tutkintoonvalmentava/RouteKoulutuksenOsa.vue';
 import RouteKotoKielitaitotaso from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoKielitaitotaso.vue';
 import RouteKotoOpinto from '@/routes/perusteet/sisalto/vapaasivistystyo/RouteKotoOpinto.vue';
@@ -432,6 +436,20 @@ export const router = createRouter({
               name: 'opetussuunnitelmaaipekurssi',
             }],
           }],
+        }, {
+          path: 'taiteenala/:taiteenalaId',
+          component: RouteOpetussuunnitelmaTaiteenala,
+          name: 'opetussuunnitelmataiteenala',
+          children: [{
+            path: 'vaihe/:vaiheId',
+            component: RouteOpetussuunnitelmaTaiteenalanVaihe,
+            name: 'opetussuunnitelmataiteenalanvaihe',
+            children: [{
+              path: 'opintokokonaisuus/:opintokokonaisuusId',
+              component: RouteOpetussuunnitelmaTaiteenOpintokokonaisuus,
+              name: 'opetussuunnitelmataiteenopintokokonaisuus',
+            }],
+          }],
         }],
       }, {
         path: ':koulutustyyppi/:perusteId(\\d+)/:revision(\\d+)?',
@@ -558,6 +576,10 @@ export const router = createRouter({
           path: 'tavoitesisaltoalue/:tavoitesisaltoalueId',
           component: RouteTavoitesisaltoalue,
           name: 'perusteTavoitesisaltoalue',
+        }, {
+          path: 'taiteenalavaihe/:taiteenalaVaiheId',
+          component: RouteTaiteenalaVaihe,
+          name: 'perusteTaiteenalaVaihe',
         }, {
           path: 'koulutuksenosa/:koulutuksenosaId',
           component: RouteKoulutuksenOsa,
