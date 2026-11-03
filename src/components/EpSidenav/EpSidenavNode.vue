@@ -150,6 +150,7 @@ const naytaAlaKappaleMerkki = computed(() => {
     || props.node.type === 'tekstikappale'
     || props.node.type === 'perusopetusoppiaine'
     || props.node.type === 'taiteenala'
+    || props.node.type === 'taiteenala2026'
     || props.node.type === 'linkkisivu'
     || (props.node.type ==='oppiaine' && _.some(props.node.children, child => child.type === 'oppimaarat')));
 });
