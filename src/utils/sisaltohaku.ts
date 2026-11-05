@@ -22,18 +22,6 @@ export const typeSort = {
 
 const clearEl = document.createElement('div');
 
-function searchLocation(target: any, path: any[]) {
-  const type = target.perusteenOsa.osanTyyppi;
-  if (!['aipe_vaihe', 'aipe_oppiaine', 'aipe_kurssi'].includes(type)) {
-    return osaToLocation(target);
-  }
-  return osaToLocation({
-    ...target,
-    vaihe: target.vaihe || _.findLast(path, { perusteenOsa: { osanTyyppi: 'aipe_vaihe' } }),
-    perusteenOsa: { ...target.perusteenOsa, osanTyyppi: type.replace('_', '') },
-  });
-}
-
 function queryMatch(target, query: string) {
   clearEl.innerHTML = target;
   return _.includes(_.toLower(clearEl.innerText), _.toLower(query));
@@ -88,7 +76,7 @@ export function deepFind(target: any, path: any[], results: any[], query: string
         osanTyyppi,
         target,
         result,
-        location: searchLocation(target, path),
+        location: osaToLocation(target as any),
         type: 'otsikko',
       });
       return [];
@@ -100,7 +88,7 @@ export function deepFind(target: any, path: any[], results: any[], query: string
         osanTyyppi,
         target,
         result,
-        location: searchLocation(target, path),
+        location: osaToLocation(target as any),
         type: 'sisalto',
       });
       return [];
