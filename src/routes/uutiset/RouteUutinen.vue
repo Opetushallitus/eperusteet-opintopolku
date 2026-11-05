@@ -163,8 +163,6 @@ const tiedoteMapped = computed(() => {
   };
 });
 
-// Load the notice when its route ID changes,
-// unless the store already has that ID selected or loading.
 watch(() => route.params.tiedoteId, async value => {
   const id = Number(value);
   if (tiedoteStore.tiedoteId === id) {
