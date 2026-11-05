@@ -1,10 +1,17 @@
 import _ from 'lodash';
-import { defineStore } from 'pinia';
-import { reactive, ref, computed } from 'vue';
-import { TiedoteDto, Tiedotteet, Perusteet, getAllPerusteet, PerusteInfoDto, KoodiDto, findTiedotteetBy } from '@shared/api/eperusteet';
-import { Page } from '@shared/tyypit';
-import { debounced } from '@shared/utils/delay';
-import { EperusteetKoulutustyypit } from '@shared/utils/perusteet';
+import {defineStore} from 'pinia';
+import {reactive, ref} from 'vue';
+import {
+  findTiedotteetBy,
+  getAllPerusteet,
+  KoodiDto,
+  PerusteInfoDto,
+  TiedoteDto,
+  Tiedotteet,
+} from '@shared/api/eperusteet';
+import {Page} from '@shared/tyypit';
+import {debounced} from '@shared/utils/delay';
+import {EperusteetKoulutustyypit} from '@shared/utils/perusteet';
 
 export interface KoodiPerusteella extends KoodiDto {
   perusteet: PerusteInfoDto[];
@@ -92,6 +99,16 @@ export const useTiedoteStore = defineStore('tiedote', () => {
     }
     else {
       tiedotteenOsaamisalaPerusteet.value = [];
+    }
+
+    if (tiedote.value && !_.isEmpty(tiedote.value?.tiedotteet)) {
+      tiedote.value.tiedotteet = _.filter(
+        tiedote.value.tiedotteet,
+        child =>
+          _.size(child.julkaisupaikat) > 0
+          || _.size(child.koulutustyypit) > 0
+          || _.size(child.perusteet) > 0,
+      );
     }
   };
 
