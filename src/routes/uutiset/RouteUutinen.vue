@@ -93,6 +93,7 @@
                   params: { tiedoteId: liittyvaTiedote.id },
                 }"
               >
+                {{ $sd(liittyvaTiedote.luotu) }}
                 {{ $kaanna(liittyvaTiedote.otsikko) }}
               </router-link>
             </div>
