@@ -141,6 +141,12 @@ export function murupolkuOpetussuunnitelmaRoot(koulutustyyppi) {
 }
 
 export function murupolkuPerusteRoot(koulutustyyppi, routeKoulutustyyppi) {
+  if (!koulutustyyppi && routeKoulutustyyppi === 'opas') {
+    return {
+      label: 'route-opas',
+    };
+  }
+
   const kt = koulutustyyppi ? koulutustyypinRyhma(koulutustyyppi) : routeKoulutustyyppi;
   return {
     label: kt,
