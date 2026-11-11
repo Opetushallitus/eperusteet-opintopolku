@@ -205,9 +205,10 @@ const routeKoulutustyyppi = computed(() => {
 });
 
 const oppaanKoulutustyyppi = computed(() => {
-  if (_.size(peruste.value?.oppaanKoulutustyypit) === 1) {
-    return _.take((peruste.value?.oppaanKoulutustyypit as any[])).toString();
+  if (_.size(peruste.value?.oppaanKoulutustyypit) > 0) {
+    return _.first((peruste.value?.oppaanKoulutustyypit as any[])).toString();
   }
+
   return undefined;
 });
 
