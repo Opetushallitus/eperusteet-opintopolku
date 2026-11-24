@@ -20,6 +20,7 @@ export function uusiJulkinenToteutus(hasToteutus: HasKoulutustyyppiToteutus) {
         || hasToteutus.koulutustyyppi === Koulutustyyppi.vapaasivistystyo
         || hasToteutus.koulutustyyppi === Koulutustyyppi.aikuistenperusopetus
         || hasToteutus.koulutustyyppi === Koulutustyyppi.tutkintoonvalmentava
+        || hasToteutus.koulutustyyppi === Koulutustyyppi.telmavalmentava
         || koulutustyyppiTheme(hasToteutus.koulutustyyppi as string) === 'ammatillinen');
 }
 
