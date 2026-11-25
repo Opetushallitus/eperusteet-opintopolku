@@ -61,7 +61,7 @@ import { Kielet } from '@shared/stores/kieli';
 import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpSearch from '@shared/components/forms/EpSearch.vue';
 import OpetussuunnitelmaTile from './OpetussuunnitelmaTile.vue';
-import { Koulutustyyppi } from '@shared/tyypit';
+import { EperusteetKoulutustyyppiRyhmat, Toteutus } from '@shared/utils/perusteet';
 import { YleisetPaikallisetStore } from '@/stores/YleisetPaikallisetStore';
 import EpBPagination from '@shared/components/EpBPagination/EpBPagination.vue';
 import EpHakutulosmaara from '@/components/common/EpHakutulosmaara.vue';
@@ -78,7 +78,7 @@ const instance = getCurrentInstance();
 const perPage = ref(10);
 const kieli = computed(() => Kielet.getSisaltoKieli.value);
 const query = ref({
-  koulutustyyppi: Koulutustyyppi.tutkintoonvalmentava,
+  koulutustyyppi: EperusteetKoulutustyyppiRyhmat[Toteutus.TUTKINTOONVALMENTAVA],
   nimi: null as string | null,
   sivu: 0,
   sivukoko: 10,
