@@ -63,9 +63,11 @@
   "engines": {
     "node": "^24"
   },
+  "//": {
+    "qs": "CVE-2026-110816; transitive from url dependency."
+  },
   "resolutions": {
-    "uuid": "14.0.2",
-    "qs": "^6.16.0"
+    "qs": "6.17.1"
   },
   "packageManager": "yarn@4.13.0",
   "devDependencies": {
