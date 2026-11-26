@@ -233,6 +233,7 @@ const perPage = computed(() => {
 
 watch(page, async () => {
   await fetch();
+  document.querySelector('.opetussuunnitelma-container a')?.focus();
 });
 
 watch(query, async (oldVal, newVal) => {
@@ -252,9 +253,6 @@ const fetch = async () => {
         sivu: page.value,
       },
     }).catch(() => {});
-
-    document.querySelector('.opetussuunnitelma-container a')?.focus();
-
   }
 };
 
