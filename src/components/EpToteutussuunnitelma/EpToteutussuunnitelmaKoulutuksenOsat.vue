@@ -15,6 +15,7 @@
           v-for="koulutuksenosaViite in yhteisetKoulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
+          :koulutustyyppi="opetussuunnitelma.koulutustyyppi"
           :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
         />
       </div>
@@ -26,6 +27,7 @@
           v-for="koulutuksenosaViite in valinnaisetKoulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
+          :koulutustyyppi="opetussuunnitelma.koulutustyyppi"
           :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
         />
       </template>
@@ -35,6 +37,7 @@
           v-for="koulutuksenosaViite in koulutuksenosat"
           :key="'koulutuksenosa'+koulutuksenosaViite.id"
           :koulutuksenosa="koulutuksenosaViite.koulutuksenosa"
+          :koulutustyyppi="opetussuunnitelma.koulutustyyppi"
           :route="{name: 'toteutussuunnitelmaSisalto', params: {'sisaltoviiteId': koulutuksenosaViite.id}}"
         />
       </template>
