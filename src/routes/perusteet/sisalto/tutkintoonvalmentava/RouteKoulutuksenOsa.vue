@@ -23,7 +23,7 @@
             name="laajuus"
             header-type="h4"
           >
-            <span>{{ perusteenOsa.laajuusMinimi }} - {{ perusteenOsa.laajuusMaksimi }} {{ $t('viikkoa') }}</span>
+            <span>{{ perusteenOsa.laajuusMinimi }} - {{ perusteenOsa.laajuusMaksimi }} {{ $t(koulutuksenOsaLaajuusYksikko(koulutustyyppi)) }}</span>
           </ep-form-content>
         </div>
       </div>
@@ -45,7 +45,7 @@
         <div class="flex flex-wrap">
           <div class="w-full">
             <h3 class="mt-3 mb-4">
-              {{ $t('tavoitteet') }}
+              {{ $t(koulutuksenOsaTavoitteetOtsikko(koulutustyyppi)) }}
             </h3>
           </div>
         </div>
@@ -123,6 +123,7 @@ import EpSpinner from '@shared/components/EpSpinner/EpSpinner.vue';
 import EpOpasKiinnitysLinkki from '@shared/components/EpOpasKiinnitysLinkki/EpOpasKiinnitysLinkki.vue';
 import _ from 'lodash';
 import { $kaanna, $t } from '@shared/utils/globals';
+import { koulutuksenOsaLaajuusYksikko, koulutuksenOsaTavoitteetOtsikko } from '@shared/utils/perusteet';
 import { useRoute } from 'vue-router';
 import { getCachedPerusteStore } from '@/stores/PerusteCacheStore';
 
@@ -154,6 +155,8 @@ const nimi = computed(() => {
 const numerointi = computed(() => {
   return current.value?.meta?.numerointi;
 });
+const koulutustyyppi = computed(() => perusteDataStore.peruste?.koulutustyyppi);
+
 </script>
 
 <style scoped lang="scss">

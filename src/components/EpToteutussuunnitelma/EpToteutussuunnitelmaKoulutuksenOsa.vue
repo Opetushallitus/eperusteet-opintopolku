@@ -5,7 +5,7 @@
     <div class="flex flex-wrap">
       <div class="w-full">
         <EpFormGroup :label="$t('laajuus')">
-          {{ perusteenOsa.laajuusMinimi }} - {{ perusteenOsa.laajuusMaksimi }} {{ $t('viikkoa') }}
+          {{ perusteenOsa.laajuusMinimi }} - {{ perusteenOsa.laajuusMaksimi }} {{ $t(koulutuksenOsaLaajuusYksikko(koulutustyyppi)) }}
         </EpFormGroup>
       </div>
     </div>
@@ -36,7 +36,7 @@
       <div class="flex flex-wrap">
         <div class="w-full">
           <h3 class="mb-4">
-            {{ $t('tavoitteet') }}
+            {{ $t(koulutuksenOsaTavoitteetOtsikko(koulutustyyppi)) }}
           </h3>
           <EpFormGroup :label="$t('opiskelija')">
             <template v-if="tavoitteet.length > 0">
@@ -200,6 +200,7 @@ import EpLinkki from '@shared/components/EpLinkki/EpLinkki.vue';
 import { Kielet } from '@shared/stores/kieli';
 import { getCachedOpetussuunnitelmaStore } from '@/stores/OpetussuunnitelmaCacheStore';
 import EpFormGroup from '@shared/components/forms/EpFormGroup.vue';
+import { koulutuksenOsaLaajuusYksikko, koulutuksenOsaTavoitteetOtsikko } from '@shared/utils/perusteet';
 
 const props = defineProps({
   sisaltoviite: {
@@ -256,6 +257,8 @@ const tavoitteet = computed(() => {
     ...(koulutuksenosa.value?.paikallinenTarkennus ? koulutuksenosa.value?.paikallinenTarkennus?.tavoitteet ?? [] : []),
   ];
 });
+const koulutustyyppi = computed(() => props.opetussuunnitelma.koulutustyyppi);
+
 </script>
 
 <style scoped lang="scss">
